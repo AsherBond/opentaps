@@ -36,7 +36,7 @@
 -->
 
 
-<entity-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entity-eca.xsd">
+<entity-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entity-eca.xsd">
     <eca entity="TestEntity" operation="store" event="return">
         <action service="opentaps.testReturnStoreTestEntitySeca" mode="sync"/>
     </eca>

@@ -36,7 +36,7 @@ under the License.
 
 <!-- This file is partially based on an OFBIZ file and has been modified by Open Source Strategies, Inc.  -->
 
-<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>Purchasing Services</description>
     <vendor>Open Source Strategies, Inc.</vendor>
     <version>1.0</version>

@@ -20,7 +20,7 @@
 
 <ofbiz-component name="funambol"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/ofbiz-component.xsd">
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
  <resource-loader name="main" type="component"/>
  	
   <!-- Setup classpath (on standalone funambol would all be in WEB-INF/lib -->	

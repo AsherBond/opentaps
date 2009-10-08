@@ -19,7 +19,7 @@
 
 <!-- This file contains all the invoice specific screens for the various types of invoices, such as find and view invoice. -->
 
-<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
     <!-- This screen captures the common layout of the find and list invoices screens. -->
     <screen name="findAndListInvoices">

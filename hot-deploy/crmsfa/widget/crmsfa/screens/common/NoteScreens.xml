@@ -42,7 +42,7 @@
 
 <!-- This file contains Note screens for all sections. They are collected here because they are all essentially the same. -->
 
-<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
     <!-- all create note forms should include-screen this one, which will take care of common tasks including checking complex security -->
     <screen name="CommonCreateNoteForm">

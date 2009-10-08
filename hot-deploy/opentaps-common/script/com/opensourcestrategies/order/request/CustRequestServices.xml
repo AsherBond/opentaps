@@ -22,7 +22,7 @@ under the License.
 
 <!-- It copy from old ofbiz for it missing in ofbiz 9.04. -->
 <simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
 
     <simple-method method-name="createCustRequestRole" short-description="Create Customer RequestRole">
         <set from-field="parameters.partyId" field="lookupPKMap.partyId"/>

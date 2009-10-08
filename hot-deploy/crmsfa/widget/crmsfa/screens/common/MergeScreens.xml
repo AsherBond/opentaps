@@ -18,7 +18,7 @@
 
 <!-- This file contains merge party screens for merging two contacts, accounts or leads. They are here because they are all nearly the same. -->
 
-<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
     <screen name="mergeAccountsForm">
         <section>

@@ -50,7 +50,7 @@ In order to wrap an ofbiz screen in this application,
     There is no need to change the values of these, because this system works automagically.
 -->
 
-<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
     <!-- The basis for this solution is this screen.  When the original ofbiz screen definition is parsed, it will learn that the main-decorator it should be using is this specific one (via web.xml) -->
     <screen name="main-decorator">

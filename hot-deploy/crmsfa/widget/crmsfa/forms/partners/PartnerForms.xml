@@ -16,7 +16,7 @@
 -->
 
 <!-- To save time, these are just a copy paste of the partners. -->
-<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-form.xsd">
 
     <form name="createPartnerForm" type="single" target="createPartner" title="" 
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">

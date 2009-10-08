@@ -38,7 +38,7 @@
 
 <!-- use this to configure both the inbound and outbound processing of your emails for the crm/sfa application -->
 <service-mca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/service-mca.xsd">
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/service-mca.xsd">
         
      <!-- this can be used to process outgoing emails from your regular email client, like Outlook, Outlook Express, Thunderbird, even Gmail/Hotmail/Yahoo Mail,
           by sending a BCC to an address on your mail server which opentaps is listening on, or setting up an always_bcc for your email server -->

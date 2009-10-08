@@ -14,7 +14,7 @@
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
 -->
-<test-suite suite-name="Opentaps Unit Tests" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/test-suite.xsd">
+<test-suite suite-name="Opentaps Unit Tests" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/test-suite.xsd">
     <!-- opentaps general and meta tests: these verify the tools used for unit testing -->
     <test-case case-name="opentaps-meta-tests"><junit-test-suite class-name="org.opentaps.tests.OpentapsTests"/></test-case>
 

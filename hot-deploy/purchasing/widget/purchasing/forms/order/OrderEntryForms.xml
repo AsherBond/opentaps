@@ -21,7 +21,7 @@ under the License.
 <!-- This file has been modified by Open Source Strategies, Inc. -->
 
 <!-- Have to modify this form because we need to display the UPCA.  Will replace eventually with paginated list. -->
-<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-form.xsd">
 
     <form name="LookupBulkAddSupplierProducts" type="multi" use-row-submit="true" list-name="productList" title="" target="BulkAddProducts"
         default-title-style="tableheadtext" default-widget-style="inputBox" default-table-style="listTable"

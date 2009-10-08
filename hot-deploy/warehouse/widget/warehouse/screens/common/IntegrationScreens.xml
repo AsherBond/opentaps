@@ -28,7 +28,7 @@ To integrate a screen from OFBiz,
 3)  Our version of the screen should then <include-screen name="TargetScreenName" location="component://path/to/TargetScreen.xml"/>
 
 -->
-<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
     <!-- For screens imported from facility that use CommonFacilityDecorator.  Use parameters.commonFacilityDecoratorLocation. -->
     <screen name="CommonFacilityDecorator">

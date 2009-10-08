@@ -42,7 +42,7 @@
 
 <!-- This file contains all the editcontactmech screens in one location -->
 
-<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
     <!-- all edit contact mech screens should include-screen this screen, which will check complex security and invoke the editcontactmech script and ftl -->
     <screen name="CommonEditContactMech">

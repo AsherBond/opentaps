@@ -16,7 +16,7 @@
 -->
 
 <entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
 
     <title>NetSuite Data Import Entities</title>
     <description>Defines intermediate entities for importing data from NetSuite into Opentaps</description>

@@ -35,7 +35,7 @@ under the License.
 <!-- This file may have been based on one or more Apache OFBIZ files but has been modified -->
 <!-- This file has been modified by Open Source Strategies, Inc. -->
 
-<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/site-conf.xsd">
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
     <!-- Include requests for common opentaps features. -->
     <include location="component://opentaps-common/webapp/common/WEB-INF/common-controller.xml"/>
 

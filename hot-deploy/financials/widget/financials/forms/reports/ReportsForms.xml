@@ -21,7 +21,7 @@
 -->
 
 <forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-form.xsd">
         
      <form name="TaxSummary" type="list" title="Tax Authorities and Outstanding Balances"
             default-title-style="boxhead" default-widget-style="tabletext" default-tooltip-style="tabletext"

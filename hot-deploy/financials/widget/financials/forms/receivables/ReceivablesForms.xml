@@ -34,7 +34,7 @@ License for the specific language governing permissions and limitations
 under the License.
 -->
 
-<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-form.xsd">
 
     <form name="FindInvoicesForInterest" type="single" target="assessFinanceChargesForm" default-title-style="tableheadtext" default-widget-style="inputBox">
         <field name="partyId" title="${uiLabelMap.CommonPartyID}"><lookup target-form-name="LookupPartyName"/></field>

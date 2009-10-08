@@ -43,7 +43,7 @@
 <!-- This file contains lookup screens for all sections.  These are the screens that show up when you click on the lookup box next to fields.
     The screens have a simple layout. -->
 
-<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
     <!-- all lookup screens should use this decorator TODO: migrate to the decorator in opentaps-common LookupScreens -->
     <screen name="CommonLookup">

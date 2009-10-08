@@ -15,7 +15,7 @@
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
 -->
 
-<service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/service-eca.xsd">
+<service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/service-eca.xsd">
 
     <eca service="createPostalAddress" event="commit">
         <action service="upperCasePostalAddress" mode="sync"/>

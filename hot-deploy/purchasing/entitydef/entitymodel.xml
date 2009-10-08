@@ -16,7 +16,7 @@
 -->
 
 <entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
     <title>Entity definitions for the Opentaps Purchasing Application</title>
     <copyright>Copyright (c) 2005 - 2006 Open Source Strategies Inc.</copyright>
 

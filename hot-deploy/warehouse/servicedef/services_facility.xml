@@ -18,7 +18,7 @@
 <!-- This file may contain code which has been modified from that included with the Apache-licensed OFBiz product application -->
 <!-- This file has been modified by Open Source Strategies, Inc. -->
         
-<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>Opentaps Warehouse Home Services</description>
     <vendor>Open Source Strategies, Inc.</vendor>
     <version>0.9</version>

@@ -59,7 +59,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
 -->
 <!-- This file has been modified by Open Source Strategies, Inc. -->
 
-<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/site-conf.xsd">
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
     <!-- Special ofbiz legacy requests we should be paring down as we replace these screens with our own. -->
     <include location="component://crmsfa/webapp/crmsfa/WEB-INF/legacy-controller.xml"/>
 

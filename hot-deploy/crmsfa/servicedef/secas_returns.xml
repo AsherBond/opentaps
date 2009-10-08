@@ -17,7 +17,7 @@
 -->
 
 <service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/service-eca.xsd">
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/service-eca.xsd">
 
     <eca service="updateReturnHeader" event="commit">
         <condition field-name="returnId" operator="is-not-empty"/>

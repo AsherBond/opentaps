@@ -46,7 +46,7 @@ under the License.
 <!-- This file has been modified by Open Source Strategies, Inc. -->
 
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>Billing Account Convenience Services</description>
     <vendor>Open Source Strategies, Inc.</vendor>
     <version>1.0</version>

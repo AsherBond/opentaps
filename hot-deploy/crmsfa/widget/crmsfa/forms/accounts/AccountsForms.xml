@@ -15,7 +15,7 @@
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
 -->
 
-<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-form.xsd">
 
     <!-- update account form -->
     <form name="updateAccountForm" type="single" target="updateAccount" title="" default-map-name="partySummary"

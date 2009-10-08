@@ -17,7 +17,7 @@
 -->
 
 <service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/service-eca.xsd">
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/service-eca.xsd">
 
     <!-- Before allowing an invoice to be set ready, we should check if a credit limit is exceeded for the invoice party
          and anything else that needs to be checked.  If we cannot set to ready, a rollback will occur. -->

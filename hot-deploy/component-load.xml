@@ -22,7 +22,7 @@ under the License.
 
 
 <component-loader xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/component-loader.xsd">
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/component-loader.xsd">
     <load-component component-location="opentaps-common"/>
     <load-component component-location="crmsfa"/>
     <load-component component-location="financials"/>

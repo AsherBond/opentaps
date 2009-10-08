@@ -17,7 +17,7 @@
  *  @author Leon Torres (leon@opensourcestrategies.com)
 -->
 
-<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
     <!-- common payment decorator, use this as the decorator for all payment screens -->
     <screen name="main-section-decorator">

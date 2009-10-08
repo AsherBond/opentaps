@@ -35,7 +35,7 @@ under the License.
 
 <!-- This file has been modified by Open Source Strategies, Inc. -->
 
-<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
     <!-- XXX TODO as a new idea in organizing screens, we should create one separate file for each decorator and the screens which use it directly, such as this one -->
     <screen name="checkout-decorator">

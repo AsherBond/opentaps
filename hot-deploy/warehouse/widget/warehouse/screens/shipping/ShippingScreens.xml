@@ -37,7 +37,7 @@ under the License.
 <!-- This file may have been based on one or more Apache OFBIZ files but has been modified -->
 <!-- This file has been modified by Open Source Strategies, Inc. -->
         
-<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
 <!-- main decorator of shipping section. a sectionHeader is set for each screen -->
     <screen name="main-section-decorator">

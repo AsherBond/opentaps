@@ -17,7 +17,7 @@
  *  @author Leon Torres (leon@opensourcestrategies.com)
 -->
 
-<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
     <!-- This is no longer used but left here for backward compatibility in case somebody has a customized version that points to it.  It may be removed at some future date.  -->
     <screen name="createCustomerBillAcctForm">

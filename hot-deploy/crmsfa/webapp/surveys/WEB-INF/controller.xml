@@ -40,7 +40,7 @@
  *  @author Leon Torres (leon@opensourcestrategies.com)
 -->
 
-<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/site-conf.xsd">
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
     <include location="component://opentaps-common/webapp/common/WEB-INF/common-controller.xml"/>
 
     <description>CRMSFA External Surveys Module Site Configuration File</description>

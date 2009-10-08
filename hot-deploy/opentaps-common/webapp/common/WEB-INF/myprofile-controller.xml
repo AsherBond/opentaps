@@ -23,7 +23,7 @@
   for any kind of Party object.
 -->
 
-<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/site-conf.xsd">
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
     <description>My Profile and Contact Mech Controller</description>
     <owner>Open Source Strategies, Inc. (c) 2006-2007 </owner>
 

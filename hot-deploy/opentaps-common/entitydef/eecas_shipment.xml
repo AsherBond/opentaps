@@ -21,7 +21,7 @@
 -->
 
 
-<entity-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entity-eca.xsd">
+<entity-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entity-eca.xsd">
 
     <!-- When a ShipmentRouteSegment is created, populate the third-party information from the related OrderItemShipGroup. -->
     <eca entity="ShipmentRouteSegment" operation="create" event="return">

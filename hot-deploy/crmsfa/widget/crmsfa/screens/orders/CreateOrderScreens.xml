@@ -43,7 +43,7 @@ under the License.
 
 <!-- This file contains screens for the create Order section.  -->
 
-<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
     <!-- this section leaves sectionStyle up to the implementing decorators -->
     <screen name="main-section-decorator">

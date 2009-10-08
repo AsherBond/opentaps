@@ -36,7 +36,7 @@ under the License.
 
 <!-- This file has been modified by Open Source Strategies, Inc. -->        
 
-<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
     <title>Opentaps Commons Entity Definitions</title>
     <copyright>Copyright (c) 2006 - 2009 Open Source Strategies Inc.</copyright>
     <author>Leon Torres</author>

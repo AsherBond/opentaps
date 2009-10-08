@@ -38,7 +38,7 @@ under the License.
 <!-- This file has been modified by Open Source Strategies, Inc. -->
 
 <!--  TODO: these lookups are completely redundant, the can just be defined as view links.  At some point, remove this whole file.   -->       
-<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
     <screen name="LookupFacilityLocation">
         <section>

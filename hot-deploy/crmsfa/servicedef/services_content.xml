@@ -39,7 +39,7 @@ Hyperlinks and other text content that behave like URLs are created using a spec
 ending in UrlResource.  
 -->
 
-<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>CRM SFA Content Services</description>
     <vendor>Open Source Strategies, Inc.</vendor>
     <version>1.0</version>

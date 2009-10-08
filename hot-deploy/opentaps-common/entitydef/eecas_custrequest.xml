@@ -14,7 +14,7 @@
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
 -->
 
-<entity-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entity-eca.xsd">
+<entity-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entity-eca.xsd">
 
     <!-- Mark the entity as updated when various entities are created or updated. -->
     <eca entity="CustRequest" operation="store" event="return">

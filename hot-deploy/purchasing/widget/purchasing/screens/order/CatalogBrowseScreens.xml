@@ -40,7 +40,7 @@ and has been modified by Open Source Strategies, Inc.
 <!-- This file contains screens for browsing, searching and displaying the catalog within the create order main screen.  -->
 
 <screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
     <screen name="breadcrumbs">
         <section>

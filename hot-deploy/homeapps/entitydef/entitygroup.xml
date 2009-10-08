@@ -17,7 +17,7 @@
 <!-- /* @author: Michele Orru' (michele.orru@integratingweb.com) */ -->
 
 <entitygroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitygroup.xsd">
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitygroup.xsd">
 
     <entity-group group="org.ofbiz" entity="HomeWebApps" />
 </entitygroup>

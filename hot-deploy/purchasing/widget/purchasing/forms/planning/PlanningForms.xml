@@ -37,7 +37,7 @@ under the License.
 <!-- This file has form widgets that originate from the Apache OFBiz FacilityForms.xml file.  Modifications were made to these forms to better work with the purchasing app. -->
 
 
-<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-form.xsd">
 
     <form name="listInventory" type="list" target="" title="" list-name="inventoryByProduct" 
         default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext"
