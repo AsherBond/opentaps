@@ -49,7 +49,8 @@
         </td>
       </form>
         <td style="text-align:center;">
-          <@inputConfirm href="cancelSupplierRequirements?partyId=${requirement.partyId}" confirmText="${uiLabelMap.OpentapsAreYouSure}" title="${uiLabelMap.CommonCancelAll}"/>
+          <@form name="cancelSupplierRequirementsForm" url="cancelSupplierRequirements" partyId="${requirement.partyId}"/>
+          <@submitFormLinkConfirm form="cancelSupplierRequirementsForm" text=uiLabelMap.CommonCancelAll/>
         </td>
     </tr>
     </#list>
