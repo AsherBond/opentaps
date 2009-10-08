@@ -1426,7 +1426,7 @@ under the License.
     <view-map name="checkoutpayment" type="screen" page="component://order/widget/ordermgr/OrderEntryOrderScreens.xml#checkoutpayment"/>
 
     <view-map name="category" type="screen" page="component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#category"/>
-    <view-map name="product" type="screen" page="component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#product"/>
+    <view-map name="product" type="screen" page="component://purchasing/widget/purchasing/screens/order/CatalogBrowseScreens.xml#product"/>
     <view-map name="quickadd" type="screen" page="component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#quickadd"/>
 
     <view-map name="custsetting" type="screen" page="component://order/widget/ordermgr/OrderEntryOrderScreens.xml#CustSettings"/>

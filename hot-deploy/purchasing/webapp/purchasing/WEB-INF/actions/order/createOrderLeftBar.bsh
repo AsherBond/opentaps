@@ -17,8 +17,13 @@
 // This script is for the screenlets on the left bar of the create order main screen, especially order header
 
 import org.ofbiz.party.party.PartyHelper;
+import org.ofbiz.base.util.UtilValidate;
 
 cart = context.get("shoppingCart");
-supplierPartyId = cart.getPartyId();
-supplierName = PartyHelper.getPartyName(delegator, supplierPartyId, false);
-context.put("supplierName", supplierName + " (" + supplierPartyId + ")");
+if (cart != null) {
+    supplierPartyId = cart.getPartyId();
+    if (UtilValidate.isNotEmpty(supplierPartyId)) {
+        supplierName = PartyHelper.getPartyName(delegator, supplierPartyId, false);
+        context.put("supplierName", supplierName + " (" + supplierPartyId + ")");
+    }
+}

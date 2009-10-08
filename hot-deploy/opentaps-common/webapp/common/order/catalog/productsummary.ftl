@@ -37,7 +37,7 @@ under the License.
 
 <#if product?exists>
     <#-- variable setup -->
-    <#assign productUrl><@ofbizUrl>product/~category_id=${productCategoryId}/~product_id=${product.productId}</@ofbizUrl></#assign>
+    <#assign productUrl><@ofbizUrl>product/~product_id=${product.productId}</@ofbizUrl></#assign>
 
     <#if requestAttributes.productCategoryMember?exists>
         <#assign prodCatMem = requestAttributes.productCategoryMember>
