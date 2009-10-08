@@ -116,9 +116,9 @@
     <request-map uri="runReport">
         <security auth="true" https="true"/>
         <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="runReport"/>
-        <response name="export" type="request-redirect" value="exportReport"/>
-        <response name="print" type="request-redirect" value="printReport"/>
-        <response name="error" type="request-redirect" value="setupReport"/>
+        <response name="export" type="request" value="exportReport"/>
+        <response name="print" type="request" value="printReport"/>
+        <response name="error" type="view" value="setupReport"/>
     </request-map>
     
     <request-map uri="exportReport">
