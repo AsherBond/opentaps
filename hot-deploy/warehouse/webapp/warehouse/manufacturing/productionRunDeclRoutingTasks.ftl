@@ -16,6 +16,11 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
+<#-- these forms need to be out here, because we cannot nest them inside the ListProductionRunDeclRoutingTasks form below us -->
+<#list productionRunRoutingTasks as productionRunRoutingTask>
+ <@form name="changeProductionRunTaskStatusForm_${productionRunRoutingTask.workEffortParentId}_${productionRunRoutingTask.workEffortId}" url="changeProductionRunTaskStatus" workEffortId="${productionRunRoutingTask.workEffortId}" productionRunId="${productionRunRoutingTask.workEffortParentId}"/>
+</#list>
+
 <form name="ListProductionRunDeclRoutingTasks" action="<@ofbizUrl>ProductionRunDeclaration?productionRunId=${productionRunId}</@ofbizUrl>" method="post">
     <table class="listTable" cellspacing="0" style="width:100%">
         <tr class="listTableHeader">
@@ -40,14 +45,13 @@
                 <@displayCell text=productionRunRoutingTask.quantityProduced/>
                 <td class="tabletext" style="text-align:right">
                   <#if "PRUN_OUTSRC_PURCH" != productionRunRoutingTask.workEffortGoodStdTypeId && startTaskId?default("") = productionRunRoutingTask.workEffortId>`
-                    <@form name="changeProductionRunTaskStatusForm_${productionRunRoutingTask.workEffortParentId}_${productionRunRoutingTask.workEffortId}" url="changeProductionRunTaskStatus" workEffortId="${productionRunRoutingTask.workEffortId}" productionRunId="${productionRunRoutingTask.workEffortParentId}"/>
-                  <p><@submitFormLink form="changeProductionRunTaskStatusForm_${productionRunRoutingTask.workEffortParentId}_${productionRunRoutingTask.workEffortId}" text=uiLabelMap.ManufacturingStartProductionRunTask /></p>
+                    <p><@submitFormLink form="changeProductionRunTaskStatusForm_${productionRunRoutingTask.workEffortParentId}_${productionRunRoutingTask.workEffortId}" text=uiLabelMap.ManufacturingStartProductionRunTask /></p>
                   </#if>
                   <#if "PRUN_OUTSRC_PURCH" != productionRunRoutingTask.workEffortGoodStdTypeId && "PRUN_RUNNING" == productionRunRoutingTask.currentStatusId>
                     <p><@displayLink href="ProductionRunDeclaration?actionForm=EditRoutingTask&amp;routingTaskId=${productionRunRoutingTask.workEffortId}&amp;productionRunId=${productionRunRoutingTask.workEffortParentId}" text=uiLabelMap.ManufacturingDeclareProductionRunTask class="buttontext"/></p>
                   </#if>
                   <#if "PRUN_OUTSRC_PURCH" != productionRunRoutingTask.workEffortGoodStdTypeId && completeTaskId == productionRunRoutingTask.workEffortId>
-                    <p><@displayLink href="changeProductionRunTaskStatus?workEffortId=${productionRunRoutingTask.workEffortId}&amp;productionRunId=${productionRunRoutingTask.workEffortParentId}" text=uiLabelMap.ManufacturingCompleteProductionRunTask class="buttontext"/></p>
+                    <p><@submitFormLink form="changeProductionRunTaskStatusForm_${productionRunRoutingTask.workEffortParentId}_${productionRunRoutingTask.workEffortId}" text=uiLabelMap.ManufacturingCompleteProductionRunTask /></p>
                   </#if>
                 </td>
             </tr>
