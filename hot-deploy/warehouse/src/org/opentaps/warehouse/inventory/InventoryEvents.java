@@ -199,8 +199,9 @@ public class InventoryEvents {
             return serviceResult;
         }
 
-        Double quantityOnHandTotal = (Double) serviceResult.get("quantityOnHandTotal");
-        if ((UtilValidate.isNotEmpty(quantityOnHandTotal)) && quantityOnHandTotal.doubleValue() - quantity < 0) {
+        BigDecimal quantityOnHandTotal = (BigDecimal) serviceResult.get("quantityOnHandTotal");
+        // if quantityOnHandTotal < quantity
+        if ((UtilValidate.isNotEmpty(quantityOnHandTotal)) && quantityOnHandTotal.compareTo(new BigDecimal(quantity))< 0) {
             UtilMessage.addError(request, "WarehouseErrorInventoryItemProductQOHUnderZero", UtilMisc.toMap("productId", productId));
             doForceComplete = true;
         }
