@@ -19,7 +19,7 @@
   This file contains common requests for all opentaps applications.
   All applications should include this.
 -->
- 
+
 <site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
     <include location="component://opentaps-common/webapp/common/WEB-INF/myprofile-controller.xml"/>
     <include location="component://opentaps-common/webapp/common/WEB-INF/lookup-controller.xml"/>
@@ -73,21 +73,21 @@
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>
-    
+
     <request-map uri="checkExistOrderContentJSON">
         <security https="true" auth="true"/>
         <event type="java" path="org.opentaps.common.event.AjaxEvents" invoke="checkExistOrderContentJSON"/>
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>
-    
+
     <request-map uri="checkExistSupplierProductJSON">
         <security https="true" auth="true"/>
         <event type="java" path="org.opentaps.common.event.AjaxEvents" invoke="checkExistSupplierProductJSON"/>
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>    
-    
+
     <request-map uri="getCurrentIncomingNumberFromVoIPServer">
         <event type="json" invoke="getCurrentIncomingNumberFromFacetPhoneServer"/>
         <response name="success" type="none"/>
@@ -97,12 +97,12 @@
     <request-map uri="javascriptUiLabels.js">
         <response name="success" type="view" value="javascriptUiLabels.js"/>
     </request-map>
-    
+
     <request-map uri="showChart">
         <security auth="true" https="true"/>
         <response name="success" type="view" value="showChart"/>
     </request-map>
-    
+
     <request-map uri="setupReport">
         <security auth="true" https="true"/>
         <response name="success" type="view" value="setupReport"/>
@@ -112,25 +112,27 @@
         <security auth="true" https="true"/>
         <response name="success" type="view" value="manageReports"/>
     </request-map>
-    
+
     <request-map uri="runReport">
         <security auth="true" https="true"/>
         <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="runReport"/>
-        <response name="export" type="request" value="exportReport"/>
+        <response name="export" type="view" value="exportReport"/>
         <response name="print" type="request" value="printReport"/>
         <response name="error" type="view" value="setupReport"/>
     </request-map>
-    
+
     <request-map uri="exportReport">
         <security auth="true" https="true"/>
         <response name="success" type="view" value="exportReport"/>
-        <response name="error" type="request-redirect" value="setupReport"/>
     </request-map>
-    
+
     <request-map uri="printReport">
         <security auth="true" https="true"/>
         <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="printJRReport"/>
-        <response name="success" type="view" value="setupReport"/>
+        <response name="success" type="request-redirect" value="setupReport">
+            <redirect-parameter name="reportId"/>
+            <redirect-parameter name="reportType"/>
+        </response>
         <response name="error" type="view" value="setupReport"/>
     </request-map>
 
