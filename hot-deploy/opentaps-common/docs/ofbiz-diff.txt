@@ -208,3 +208,7 @@ r13477 change productsSoldThruTImestamp to timpstamp when it is a string value
 
 applications/order/webapp/ordermgr/WEB-INF/actions/order/OrderView.groovy
 r13479 fix view purchasing order NPE if facility is null
+
+framework/widget/src/org/ofbiz/widget/form/ModelFormField.java
+framework/widget/src/org/ofbiz/widget/html/HtmlFormRenderer.java
+r13551 add re-display search value for date/time calendar on submit support. 
