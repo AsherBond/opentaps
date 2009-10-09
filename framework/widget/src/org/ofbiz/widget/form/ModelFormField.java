@@ -667,6 +667,21 @@ public class ModelFormField {
     }
 
     public String getEntry(Map<String, Object> context , String defaultValue) {
+        return this.getEntry(context, "", null);
+    }
+
+    /**
+     * Gets the entry from the context that corresponds to this field; if this
+     * form is being rendered in an error condition (ie isError in the context
+     * is true) then the value will be retreived from the parameters Map in
+     * the context.
+     *
+     * @param context a <code>Map</code> value
+     * @param defaultValue a <code>String</code> value
+     * @param subControlName a <code>String</code> value
+     * @return a <code>String</code> value 
+     */
+    public String getEntry(Map<String, Object> context , String defaultValue, String subControlName) {
         Boolean isError = (Boolean) context.get("isError");
         Boolean useRequestParameters = (Boolean) context.get("useRequestParameters");
 
@@ -682,7 +697,7 @@ public class ModelFormField {
         if ((Boolean.TRUE.equals(isError) && !Boolean.FALSE.equals(useRequestParameters)) || (Boolean.TRUE.equals(useRequestParameters))) {
             //Debug.logInfo("Getting entry, isError true so getting from parameters for field " + this.getName() + " of form " + this.modelForm.getName(), module);
             Map<String, Object> parameters = UtilGenerics.checkMap(context.get("parameters"), String.class, Object.class);
-            String parameterName = this.getParameterName(context);
+            String parameterName = subControlName == null ? this.getParameterName(context) : this.getParameterName(context) + subControlName;
             if (parameters != null && parameters.get(parameterName) != null) {
                 Object parameterValue = parameters.get(parameterName);
                 if (parameterValue instanceof String) {
@@ -695,6 +710,7 @@ public class ModelFormField {
             } else {
                 returnValue = defaultValue;
             }
+            Debug.logInfo("parameterName : " + parameterName + ", return value : " + returnValue, module);
         } else {
             //Debug.logInfo("Getting entry, isError false so getting from Map in context for field " + this.getName() + " of form " + this.modelForm.getName(), module);
             Map<String, ? extends Object> dataMap = this.getMap(context);
@@ -769,7 +785,6 @@ public class ModelFormField {
         }
         return returnValue;
     }
-
     public Map<String, ? extends Object> getMap(Map<String, ? extends Object> context) {
         if (this.mapAcsr == null || this.mapAcsr.isEmpty()) {
             //Debug.logInfo("Getting Map from default of the form because of no mapAcsr for field " + this.getName(), module);

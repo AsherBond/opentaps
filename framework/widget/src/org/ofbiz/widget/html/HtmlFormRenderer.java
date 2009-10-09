@@ -2008,7 +2008,7 @@ public class HtmlFormRenderer extends HtmlWidgetRenderer implements FormStringRe
         writer.append(localizedInputTitle);
         writer.append('"');
 
-        String value = modelFormField.getEntry(context, dateFindField.getDefaultValue(context));
+        String value = modelFormField.getEntry(context, dateFindField.getDefaultValue(context), "_fld0_value");
         if (UtilValidate.isNotEmpty(value)) {
             if (value.length() > maxlength) {
                 value = value.substring(0, maxlength);
@@ -2062,7 +2062,12 @@ public class HtmlFormRenderer extends HtmlWidgetRenderer implements FormStringRe
             writer.append("\">");
         }
 
-        String defaultOptionFrom = dateFindField.getDefaultOptionFrom();
+        Map<String, Object> parameters = UtilGenerics.checkMap(context.get("parameters"), String.class, Object.class);
+        String defaultOptionFrom = (String) parameters.get(modelFormField.getParameterName(context) + "_fld0_op");
+        if (UtilValidate.isEmpty(defaultOptionFrom)) {
+            defaultOptionFrom = dateFindField.getDefaultOptionFrom();
+        }
+
         writer.append(" <select name=\"");
         writer.append(modelFormField.getParameterName(context));
         writer.append("_fld0_op\" class=\"selectBox\">");
@@ -2090,7 +2095,7 @@ public class HtmlFormRenderer extends HtmlWidgetRenderer implements FormStringRe
         writer.append(localizedInputTitle);
         writer.append('"');
 
-        value = modelFormField.getEntry(context);
+        value = modelFormField.getEntry(context, dateFindField.getDefaultValue(context), "_fld1_value");
         if (UtilValidate.isNotEmpty(value)) {
             if (value.length() > maxlength) {
                 value = value.substring(0, maxlength);
@@ -2139,7 +2144,10 @@ public class HtmlFormRenderer extends HtmlWidgetRenderer implements FormStringRe
             writer.append("\">");
         }
 
-        String defaultOptionThru = dateFindField.getDefaultOptionThru();
+        String defaultOptionThru = (String) parameters.get(modelFormField.getParameterName(context) + "_fld1_op");
+        if (UtilValidate.isEmpty(defaultOptionThru)) {
+            defaultOptionThru = dateFindField.getDefaultOptionThru();
+        }
         writer.append(" <select name=\"");
         writer.append(modelFormField.getParameterName(context));
         writer.append("_fld1_op\" class=\"selectBox\">");
