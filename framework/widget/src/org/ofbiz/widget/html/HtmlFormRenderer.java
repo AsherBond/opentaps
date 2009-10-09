@@ -2062,8 +2062,7 @@ public class HtmlFormRenderer extends HtmlWidgetRenderer implements FormStringRe
             writer.append("\">");
         }
 
-        Map<String, Object> parameters = UtilGenerics.checkMap(context.get("parameters"), String.class, Object.class);
-        String defaultOptionFrom = (String) parameters.get(modelFormField.getParameterName(context) + "_fld0_op");
+        String defaultOptionFrom = modelFormField.getEntry(context, null, "_fld0_op");
         if (UtilValidate.isEmpty(defaultOptionFrom)) {
             defaultOptionFrom = dateFindField.getDefaultOptionFrom();
         }
@@ -2144,7 +2143,7 @@ public class HtmlFormRenderer extends HtmlWidgetRenderer implements FormStringRe
             writer.append("\">");
         }
 
-        String defaultOptionThru = (String) parameters.get(modelFormField.getParameterName(context) + "_fld1_op");
+        String defaultOptionThru = modelFormField.getEntry(context, null, "_fld1_op");
         if (UtilValidate.isEmpty(defaultOptionThru)) {
             defaultOptionThru = dateFindField.getDefaultOptionThru();
         }
