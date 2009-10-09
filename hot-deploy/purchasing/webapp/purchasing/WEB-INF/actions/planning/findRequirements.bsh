@@ -47,6 +47,7 @@ import org.opentaps.common.util.UtilCommon;
  
 performFind = parameters.get("performFind");
 target = parameters.get("target");
+        
 if (target == null) {
     //if not set the target parameter, then use findRequirements as default target
     target = "findRequirements";
@@ -128,3 +129,4 @@ context.put("requirements", results);
 parameters.put("productId", productId);
 parameters.put("partyId", partyId);
 
+context.put("useRequestParameters", true);
