@@ -470,9 +470,9 @@ For more information, please see documentation/opentapsFormMacros.html
   </div>  
   <input dojoType="dijit.form.ComboBox"
     store="${realId}ComboBoxStore"
-    id="${realId}ComboBox"
+    id="ComboBox_${realId}"
     hiddenId="${realId}"
-    name="${indexedName}ComboBox"
+    name="ComboBox_${indexedName}"
     hasDownArrow="false"
     autoComplete="false"
     searchAttr="name"
@@ -486,7 +486,7 @@ For more information, please see documentation/opentapsFormMacros.html
   <input type="hidden" name="${indexedName}" id="${realId}" value="${defaultValue}" />
 
   <#if lookup?has_content && realId?has_content>
-    <#assign comboElement = "document.getElementById('${realId}ComboBox')"/>
+    <#assign comboElement = "document.getElementById('ComboBox_${realId}')"/>
     <#assign formElement = "document.getElementById('${realId}')"/>
     <a href="javascript:call_fieldlookup2autocomplete(${comboElement},${formElement},'${lookup}');"><img src="/images/fieldlookup.gif" alt="Lookup" border="0" height="14" width="15"/></a>
   </#if>
