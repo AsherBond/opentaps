@@ -307,7 +307,6 @@ public class Repository implements RepositoryInterface {
      */
     public static GenericValue genericValueFromEntity(GenericDelegator delegator, EntityInterface entity) throws RepositoryException {
         try {
-            Debug.logInfo("delegator is null ? " + (delegator == null) + ", entity : " + entity, Repository.class.getCanonicalName());
             ModelEntity model = delegator.getModelReader().getModelEntity(entity.getBaseEntityName());
             return GenericValue.create(model, entity.toMap());
         } catch (GenericEntityException e) {
