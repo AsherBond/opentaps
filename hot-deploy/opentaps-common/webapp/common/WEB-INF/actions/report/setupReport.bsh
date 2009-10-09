@@ -35,20 +35,27 @@ if (UtilValidate.isEmpty(reportId)) return;
 
 report = delegator.findByPrimaryKey("ReportRegistry", UtilMisc.toMap("reportId", reportId));
 if (UtilValidate.isEmpty(report)) {
-    //TODO: error handling
+    String msg = UtilMessage.expandLabel("OpentapsError_ReportNotFound", locale, UtilMisc.toMap("location", reportId));
+    UtilMessage.createAndLogEventError(request, "OpentapsError_ReportNotFound", UtilMisc.toMap("location", reportId), locale, "");
+    context{"error"} = msg;
+    return;
 }
 context{"report"} = report;
 
 //make navigation history entry
 reportName = report.getString("shortName");
-if (UtilValidate.isNotEmpty(reportName))
+if (UtilValidate.isNotEmpty(reportName)) {
 	context{"history"} = UtilCommon.makeHistoryEntry(reportName, "setupReport", UtilMisc.toList("reportId"));
-
+}
 
 reportParameters = FastList.newInstance();
 parametersType = FastMap.newInstance();
 
-location = report.getString("location");
+location = report.getString("reportLocation");
+if (UtilValidate.isEmpty(location)) {
+    Debug.logError("Location of the report [" + reportId + "] is undefined. Check seed data.", "setupReport.bsh");
+    return;
+}
 if (location.indexOf("analytics") > 0) {
     context.put("useQueryBuilder", Boolean.TRUE);
 }

@@ -16,7 +16,7 @@
 -->
 <entity-engine-xml>
 
-    <ReportRegistry reportId="FININVOICE" shortName="Financials Invoice Report" description="Report show you the invoice detail." location="component://financials/webapp/financials/reports/repository/Invoice.jrxml"/>
+    <ReportRegistry reportId="FININVOICE" shortName="Financials Invoice Report" description="Report show you the invoice detail." reportLocation="component://financials/webapp/financials/reports/repository/Invoice.jrxml"/>
 
     <ReportGroup reportGroupId="FIN_FORM" showInSelect="N" description="Financials Reports" application="financials" sequenceNum="1"/>
     <ReportGroupMember reportGroupId="FIN_FORM" reportId="FININVOICE" sequenceNum="1"/>

@@ -46,9 +46,9 @@ public class PurchasingRepository extends Repository implements PurchasingReposi
     public SupplierProduct getSupplierProduct(String supplierPartyId, String productId, BigDecimal quantityToPurchase, String currencyUomId) throws RepositoryException {
         GenericValue supplierProduct = null;
         Map<String, Object> params = UtilMisc.<String, Object>toMap("productId", productId,
-                                    "partyId", supplierPartyId,
-                                    "currencyUomId", currencyUomId,
-                                    "quantity", quantityToPurchase);
+                "partyId", supplierPartyId,
+                "currencyUomId", currencyUomId,
+                "quantity", quantityToPurchase);
         try {
             Map<String, Object> result = getDispatcher().runSync("getSuppliersForProduct", params);
             List<GenericValue> productSuppliers = (List<GenericValue>) result.get("supplierProducts");

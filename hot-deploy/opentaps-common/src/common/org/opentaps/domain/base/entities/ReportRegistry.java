@@ -55,7 +55,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("reportId", "REPORT_ID");
         fields.put("shortName", "SHORT_NAME");
         fields.put("description", "DESCRIPTION");
-        fields.put("location", "LOCATION");
+        fields.put("reportLocation", "REPORT_LOCATION");
+        fields.put("setupUri", "SETUP_URI");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -66,7 +67,8 @@ fieldMapColumns.put("ReportRegistry", fields);
     reportId("reportId"),
     shortName("shortName"),
     description("description"),
-    location("location"),
+    reportLocation("reportLocation"),
+    setupUri("setupUri"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -90,8 +92,10 @@ fieldMapColumns.put("ReportRegistry", fields);
    private String shortName;
    @Column(name="DESCRIPTION")
    private String description;
-   @Column(name="LOCATION")
-   private String location;
+   @Column(name="REPORT_LOCATION")
+   private String reportLocation;
+   @Column(name="SETUP_URI")
+   private String setupUri;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -116,7 +120,7 @@ fieldMapColumns.put("ReportRegistry", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("reportId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("reportId");this.allFieldsNames.add("shortName");this.allFieldsNames.add("description");this.allFieldsNames.add("location");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("reportId");this.allFieldsNames.add("shortName");this.allFieldsNames.add("description");this.allFieldsNames.add("reportLocation");this.allFieldsNames.add("setupUri");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -154,10 +158,17 @@ fieldMapColumns.put("ReportRegistry", fields);
     }
     /**
      * Auto generated value setter.
-     * @param location the location to set
+     * @param reportLocation the reportLocation to set
      */
-    public void setLocation(String location) {
-        this.location = location;
+    public void setReportLocation(String reportLocation) {
+        this.reportLocation = reportLocation;
+    }
+    /**
+     * Auto generated value setter.
+     * @param setupUri the setupUri to set
+     */
+    public void setSetupUri(String setupUri) {
+        this.setupUri = setupUri;
     }
     /**
      * Auto generated value setter.
@@ -213,8 +224,15 @@ fieldMapColumns.put("ReportRegistry", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getLocation() {
-        return this.location;
+    public String getReportLocation() {
+        return this.reportLocation;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSetupUri() {
+        return this.setupUri;
     }
     /**
      * Auto generated value accessor.
@@ -300,7 +318,8 @@ fieldMapColumns.put("ReportRegistry", fields);
         setReportId((String) mapValue.get("reportId"));
         setShortName((String) mapValue.get("shortName"));
         setDescription((String) mapValue.get("description"));
-        setLocation((String) mapValue.get("location"));
+        setReportLocation((String) mapValue.get("reportLocation"));
+        setSetupUri((String) mapValue.get("setupUri"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -315,7 +334,8 @@ fieldMapColumns.put("ReportRegistry", fields);
         mapValue.put("reportId", getReportId());
         mapValue.put("shortName", getShortName());
         mapValue.put("description", getDescription());
-        mapValue.put("location", getLocation());
+        mapValue.put("reportLocation", getReportLocation());
+        mapValue.put("setupUri", getSetupUri());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

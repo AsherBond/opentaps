@@ -42,7 +42,6 @@ import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -84,7 +83,6 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.jdbc.ConnectionFactory;
-import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.party.party.PartyHelper;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.webapp.control.ContextFilter;
@@ -158,9 +156,9 @@ public class JasperReportsViewHandler extends AbstractViewHandler {
             String location = null;
             String reportId = (String) parameters.get("reportId");
             if (UtilValidate.isNotEmpty(reportId)) {
-                GenericValue report = delegator.findByPrimaryKeyCache("ReportRegistry", UtilMisc.toMap("reportId", reportId));
-                if (UtilValidate.isNotEmpty(report)) {
-                    location = report.getString("location");
+                GenericValue reportRegistry = delegator.findByPrimaryKeyCache("ReportRegistry", UtilMisc.toMap("reportId", reportId));
+                if (UtilValidate.isNotEmpty(reportRegistry)) {
+                    location = reportRegistry.getString("reportLocation");
                 }
             }
 

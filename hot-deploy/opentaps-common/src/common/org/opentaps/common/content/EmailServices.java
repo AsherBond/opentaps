@@ -55,6 +55,7 @@ import java.util.TreeSet;
 import javolution.util.FastMap;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.StringUtil;
@@ -90,7 +91,6 @@ import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderRepositoryInterface;
-import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.entity.hibernate.Query;
 import org.opentaps.foundation.entity.hibernate.Session;
@@ -98,7 +98,6 @@ import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
-
 
 
 /**
@@ -110,8 +109,8 @@ public final class EmailServices {
     private EmailServices() { }
 
     private static String MODULE = EmailServices.class.getName();
-    public static List TEAM_MEMBER_ROLES = UtilMisc.toList("ACCOUNT_MANAGER", "ACCOUNT_REP", "CUST_SERVICE_REP");
-    public static List CLIENT_PARTY_ROLES = UtilMisc.toList("ACCOUNT", "CONTACT", "PROSPECT", "PARTNER");
+    public static List<String> TEAM_MEMBER_ROLES = UtilMisc.toList("ACCOUNT_MANAGER", "ACCOUNT_REP", "CUST_SERVICE_REP");
+    public static List<String> CLIENT_PARTY_ROLES = UtilMisc.toList("ACCOUNT", "CONTACT", "PROSPECT", "PARTNER");
     public static String QUOTE_JRXML_REPORT_ID = "SALESQUOTE";
     public static String SALES_ORDER_JRXML_REPORT_ID = "SALESORDER";
     public static String PURCHASING_ORDER_JRXML_REPORT_ID = "PRUCHORDER";
@@ -143,7 +142,7 @@ public final class EmailServices {
             return null;
         }
         ReportRegistry reportRegistry = list.get(0);
-        return reportRegistry.getLocation();
+        return reportRegistry.getReportLocation();
     }
 
     /**
@@ -319,7 +318,6 @@ public final class EmailServices {
             DomainsLoader dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
             DomainsDirectory domains = dl.loadDomainsDirectory();
             OrderRepositoryInterface orderRepository = domains.getOrderDomain().getOrderRepository();
-            PartyRepositoryInterface partyRepository = domains.getPartyDomain().getPartyRepository();
             // load order object and put it to report parameters
             Order order = orderRepository.getOrderById(orderId);
             String organizationPartyId = order.getBillFromPartyId();
@@ -460,13 +458,12 @@ public final class EmailServices {
      * @throws GenericServiceException if an error occurs
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private static void associateWorkEffortAndOrder(LocalDispatcher dispatcher, GenericDelegator delegator, GenericValue userLogin, String orderId, String workEffortId) throws GenericEntityException, GenericServiceException {
         // Associate the work effort any orders
         if (UtilValidate.isNotEmpty(orderId)) {
             GenericValue orderHeaderWorkEffort = delegator.findByPrimaryKey("OrderHeaderWorkEffort", UtilMisc.toMap("orderId", orderId, "workEffortId", workEffortId));
             if (UtilValidate.isEmpty(orderHeaderWorkEffort)) {
-                Map createOrderHeaderWEResult = dispatcher.runSync("createOrderHeaderWorkEffort", UtilMisc.toMap("orderId", orderId, "workEffortId", workEffortId, "userLogin", userLogin));
+                dispatcher.runSync("createOrderHeaderWorkEffort", UtilMisc.toMap("orderId", orderId, "workEffortId", workEffortId, "userLogin", userLogin));
             }
         }
     }
@@ -677,22 +674,20 @@ public final class EmailServices {
      * @throws GenericServiceException if an error occurs
      * @throws GenericEntityException if an error occurs
      */
-    private static void associateCommunicationEventWorkEffortAndParties(List partyAndContactMechs, String communicationEventId, String roleTypeId, String workEffortId, GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin)
+    private static void associateCommunicationEventWorkEffortAndParties(List<GenericValue> partyAndContactMechs, String communicationEventId, String roleTypeId, String workEffortId, GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin)
                    throws GenericEntityException, GenericServiceException {
         if (UtilValidate.isNotEmpty(partyAndContactMechs)) {
 
-            Map serviceResults = null;
-            Map input = null;
+            Map<String, Object> serviceResults = null;
+            Map<String, Object> input = null;
 
-            List validRoleTypeIds = new ArrayList(TEAM_MEMBER_ROLES);
+            List<String> validRoleTypeIds = new ArrayList<String>(TEAM_MEMBER_ROLES);
             validRoleTypeIds.addAll(CLIENT_PARTY_ROLES);
 
-            Set partyIds = new HashSet(EntityUtil.getFieldListFromEntityList(partyAndContactMechs, "partyId", true));
-            Set emailAddresses = new HashSet(EntityUtil.getFieldListFromEntityList(partyAndContactMechs, "infoString", true));      // for looking for the owner of this activity against an email
+            Set<String> partyIds = new HashSet<String>(EntityUtil.<String>getFieldListFromEntityList(partyAndContactMechs, "partyId", true));
+            Set<String> emailAddresses = new HashSet<String>(EntityUtil.<String>getFieldListFromEntityList(partyAndContactMechs, "infoString", true));      // for looking for the owner of this activity against an email
 
-            Iterator ipit = partyIds.iterator();
-            while (ipit.hasNext()) {
-                String partyId = (String) ipit.next();
+            for (String partyId : partyIds) {
 
                 // Add a CommunicationEventRole for the party, if one doesn't already exist
                 long commEventRoles = delegator.findCountByAnd("CommunicationEventRole", UtilMisc.toMap("communicationEventId", communicationEventId, "partyId", partyId, "roleTypeId", roleTypeId));
@@ -719,7 +714,7 @@ public final class EmailServices {
 
                 if (UtilValidate.isNotEmpty(workEffortId)) {
                     // Assign the party to the workeffort if they have a CRM role, and if they aren't already assigned
-                    List workEffortPartyAssignments = delegator.findByAnd("WorkEffortPartyAssignment", UtilMisc.toMap("partyId", partyId, "workEffortId", workEffortId));
+                    List<GenericValue> workEffortPartyAssignments = delegator.findByAnd("WorkEffortPartyAssignment", UtilMisc.toMap("partyId", partyId, "workEffortId", workEffortId));
                     workEffortPartyAssignments = EntityUtil.filterByDate(workEffortPartyAssignments);
                     if (UtilValidate.isEmpty(workEffortPartyAssignments)) {
                         String crmRoleTypeId = PartyHelper.getFirstValidRoleTypeId(partyId, validRoleTypeIds, delegator);
@@ -779,7 +774,7 @@ public final class EmailServices {
      * @return relate parties for activity
      * @throws GenericEntityException if an error occurs
      */
-    private static List<GenericValue> getActivityParties(GenericDelegator delegator, String workEffortId, List partyRoles) throws GenericEntityException {
+    private static List<GenericValue> getActivityParties(GenericDelegator delegator, String workEffortId, List<String> partyRoles) throws GenericEntityException {
         // add each role type id (ACCOUNT, CONTACT, etc) to an OR condition list
         List<EntityCondition> roleCondList = new ArrayList<EntityCondition>();
         for (Iterator<String> iter = partyRoles.iterator(); iter.hasNext();) {

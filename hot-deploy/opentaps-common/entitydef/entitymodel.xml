@@ -2062,7 +2062,8 @@ under the License.
         <field name="reportId" type="id-ne"/>
         <field name="shortName" type="short-varchar"/>
         <field name="description" type="very-long"/>
-        <field name="location" type="url"/>
+        <field name="reportLocation" type="url"/>
+        <field name="setupUri" type="url"/>
         <prim-key field="reportId"/>
     </entity>
 

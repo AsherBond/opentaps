@@ -48,13 +48,14 @@ import java.lang.String;
  * Auto generated base entity ReportGroupMemberRegistry.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectReportGroupMemberRegistrys", query="SELECT RR.REPORT_ID AS \"reportId\",RR.SHORT_NAME AS \"shortName\",RR.DESCRIPTION AS \"description\",RR.LOCATION AS \"location\",RGM.REPORT_GROUP_ID AS \"reportGroupId\",RGM.SEQUENCE_NUM AS \"sequenceNum\" FROM REPORT_GROUP_MEMBER RGM INNER JOIN REPORT_REGISTRY RR ON RGM.REPORT_ID = RR.REPORT_ID", resultSetMapping="ReportGroupMemberRegistryMapping")
+@NamedNativeQuery(name="selectReportGroupMemberRegistrys", query="SELECT RR.REPORT_ID AS \"reportId\",RR.SHORT_NAME AS \"shortName\",RR.DESCRIPTION AS \"description\",RR.REPORT_LOCATION AS \"reportLocation\",RR.SETUP_URI AS \"setupUri\",RGM.REPORT_GROUP_ID AS \"reportGroupId\",RGM.SEQUENCE_NUM AS \"sequenceNum\" FROM REPORT_GROUP_MEMBER RGM INNER JOIN REPORT_REGISTRY RR ON RGM.REPORT_ID = RR.REPORT_ID", resultSetMapping="ReportGroupMemberRegistryMapping")
 @SqlResultSetMapping(name="ReportGroupMemberRegistryMapping", entities={
 @EntityResult(entityClass=ReportGroupMemberRegistry.class, fields = {
 @FieldResult(name="reportId", column="reportId")
 ,@FieldResult(name="shortName", column="shortName")
 ,@FieldResult(name="description", column="description")
-,@FieldResult(name="location", column="location")
+,@FieldResult(name="reportLocation", column="reportLocation")
+,@FieldResult(name="setupUri", column="setupUri")
 ,@FieldResult(name="reportGroupId", column="reportGroupId")
 ,@FieldResult(name="sequenceNum", column="sequenceNum")
 })})
@@ -66,7 +67,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("reportId", "RR.REPORT_ID");
         fields.put("shortName", "RR.SHORT_NAME");
         fields.put("description", "RR.DESCRIPTION");
-        fields.put("location", "RR.LOCATION");
+        fields.put("reportLocation", "RR.REPORT_LOCATION");
+        fields.put("setupUri", "RR.SETUP_URI");
         fields.put("reportGroupId", "RGM.REPORT_GROUP_ID");
         fields.put("sequenceNum", "RGM.SEQUENCE_NUM");
 fieldMapColumns.put("ReportGroupMemberRegistry", fields);
@@ -75,7 +77,8 @@ fieldMapColumns.put("ReportGroupMemberRegistry", fields);
     reportId("reportId"),
     shortName("shortName"),
     description("description"),
-    location("location"),
+    reportLocation("reportLocation"),
+    setupUri("setupUri"),
     reportGroupId("reportGroupId"),
     sequenceNum("sequenceNum");
     private final String fieldName;
@@ -95,7 +98,9 @@ fieldMapColumns.put("ReportGroupMemberRegistry", fields);
     
    private String description;
     
-   private String location;
+   private String reportLocation;
+    
+   private String setupUri;
     @Id
    private String reportGroupId;
     
@@ -112,7 +117,7 @@ fieldMapColumns.put("ReportGroupMemberRegistry", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("reportId");this.primaryKeyNames.add("reportGroupId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("reportId");this.allFieldsNames.add("shortName");this.allFieldsNames.add("description");this.allFieldsNames.add("location");this.allFieldsNames.add("reportGroupId");this.allFieldsNames.add("sequenceNum");
+      this.allFieldsNames.add("reportId");this.allFieldsNames.add("shortName");this.allFieldsNames.add("description");this.allFieldsNames.add("reportLocation");this.allFieldsNames.add("setupUri");this.allFieldsNames.add("reportGroupId");this.allFieldsNames.add("sequenceNum");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -153,10 +158,17 @@ fieldMapColumns.put("ReportGroupMemberRegistry", fields);
     }
     /**
      * Auto generated value setter.
-     * @param location the location to set
+     * @param reportLocation the reportLocation to set
      */
-    private void setLocation(String location) {
-        this.location = location;
+    private void setReportLocation(String reportLocation) {
+        this.reportLocation = reportLocation;
+    }
+    /**
+     * Auto generated value setter.
+     * @param setupUri the setupUri to set
+     */
+    private void setSetupUri(String setupUri) {
+        this.setupUri = setupUri;
     }
     /**
      * Auto generated value setter.
@@ -198,8 +210,15 @@ fieldMapColumns.put("ReportGroupMemberRegistry", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getLocation() {
-        return this.location;
+    public String getReportLocation() {
+        return this.reportLocation;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSetupUri() {
+        return this.setupUri;
     }
     /**
      * Auto generated value accessor.
@@ -226,7 +245,8 @@ fieldMapColumns.put("ReportGroupMemberRegistry", fields);
         setReportId((String) mapValue.get("reportId"));
         setShortName((String) mapValue.get("shortName"));
         setDescription((String) mapValue.get("description"));
-        setLocation((String) mapValue.get("location"));
+        setReportLocation((String) mapValue.get("reportLocation"));
+        setSetupUri((String) mapValue.get("setupUri"));
         setReportGroupId((String) mapValue.get("reportGroupId"));
         setSequenceNum((Long) mapValue.get("sequenceNum"));
         postInit();
@@ -239,7 +259,8 @@ fieldMapColumns.put("ReportGroupMemberRegistry", fields);
         mapValue.put("reportId", getReportId());
         mapValue.put("shortName", getShortName());
         mapValue.put("description", getDescription());
-        mapValue.put("location", getLocation());
+        mapValue.put("reportLocation", getReportLocation());
+        mapValue.put("setupUri", getSetupUri());
         mapValue.put("reportGroupId", getReportGroupId());
         mapValue.put("sequenceNum", getSequenceNum());
         return mapValue;

@@ -568,7 +568,6 @@
   <mapping class="org.opentaps.domain.base.entities.ProductFacilityAndPostalAddress"/>
   <mapping class="org.opentaps.domain.base.entities.ProductConfigAndProduct"/>
   <mapping class="org.opentaps.domain.base.entities.OrderItemAndFacilityLocationView"/>
-  <mapping class="org.opentaps.domain.base.entities.OldFacilityRole"/>
   <mapping class="org.opentaps.domain.base.entities.ItemIssuance"/>
   <mapping class="org.opentaps.domain.base.entities.ItemIssuanceAndInventoryItem"/>
   <mapping class="org.opentaps.domain.base.entities.ItemIssuanceRole"/>
@@ -786,8 +785,6 @@
   <mapping class="org.opentaps.domain.base.entities.InvoiceItemCategorySummary"/>
   <mapping class="org.opentaps.domain.base.entities.OldValueLinkFulfillment"/>
   <mapping class="org.opentaps.domain.base.entities.OldPartyRate"/>
-  <mapping class="org.opentaps.domain.base.entities.SalesInvoiceItemFact"/>
-  <mapping class="org.opentaps.domain.base.entities.SalesInvoiceItemStarSchema"/>
   <mapping class="org.opentaps.domain.base.entities.PartyQual"/>
   <mapping class="org.opentaps.domain.base.entities.PartyQualType"/>
   <mapping class="org.opentaps.domain.base.entities.PartyResume"/>
@@ -839,6 +836,8 @@
   <mapping class="org.opentaps.domain.base.entities.OrderBlacklistType"/>
   <mapping class="org.opentaps.domain.base.entities.CommunicationEventOrder"/>
   <mapping class="org.opentaps.domain.base.entities.OrderContactMech"/>
+  <mapping class="org.opentaps.domain.base.entities.OrderContent"/>
+  <mapping class="org.opentaps.domain.base.entities.OrderContentType"/>
   <mapping class="org.opentaps.domain.base.entities.OrderDeliverySchedule"/>
   <mapping class="org.opentaps.domain.base.entities.OrderHeader"/>
   <mapping class="org.opentaps.domain.base.entities.OrderHeaderNote"/>
@@ -860,6 +859,7 @@
   <mapping class="org.opentaps.domain.base.entities.OrderItemTypeAttr"/>
   <mapping class="org.opentaps.domain.base.entities.OrderNotification"/>
   <mapping class="org.opentaps.domain.base.entities.OrderPaymentPreference"/>
+  <mapping class="org.opentaps.domain.base.entities.OrderProductPromoCode"/>
   <mapping class="org.opentaps.domain.base.entities.OrderRole"/>
   <mapping class="org.opentaps.domain.base.entities.OrderShipment"/>
   <mapping class="org.opentaps.domain.base.entities.OrderStatus"/>
@@ -869,8 +869,6 @@
   <mapping class="org.opentaps.domain.base.entities.OrderType"/>
   <mapping class="org.opentaps.domain.base.entities.OrderTypeAttr"/>
   <mapping class="org.opentaps.domain.base.entities.ProductOrderItem"/>
-  <mapping class="org.opentaps.domain.base.entities.OrderContent"/>
-  <mapping class="org.opentaps.domain.base.entities.OrderContentType"/>
   <mapping class="org.opentaps.domain.base.entities.WorkOrderItemFulfillment"/>
   <mapping class="org.opentaps.domain.base.entities.Quote"/>
   <mapping class="org.opentaps.domain.base.entities.QuoteAttribute"/>
@@ -1110,6 +1108,7 @@
   <mapping class="org.opentaps.domain.base.entities.InventoryEventPlannedType"/>
   <mapping class="org.opentaps.domain.base.entities.MrpInventoryEventPlanned"/>
   <mapping class="org.opentaps.domain.base.entities.CustRequestRole"/>
+  <mapping class="org.opentaps.domain.base.entities.FacilityRole"/>
   <mapping class="org.opentaps.domain.base.entities.PartyFromByRelnAndContactInfo"/>
   <mapping class="org.opentaps.domain.base.entities.PartyFromByRelnAndContactInfoAndPartyClassification"/>
   <mapping class="org.opentaps.domain.base.entities.PartyFromSummaryByRelationship"/>
@@ -1200,6 +1199,7 @@
   <mapping class="org.opentaps.domain.base.entities.TaxAuthorityDim"/>
   <mapping class="org.opentaps.domain.base.entities.DateDim"/>
   <mapping class="org.opentaps.domain.base.entities.CurrencyDim"/>
+  <mapping class="org.opentaps.domain.base.entities.SalesInvoiceItemFact"/>
   <mapping class="org.opentaps.domain.base.entities.TaxInvoiceItemFact"/>
   <mapping class="org.opentaps.domain.base.entities.GlAccountTransEntryFact"/>
   <mapping class="org.opentaps.domain.base.entities.LockboxBatch"/>
@@ -1261,5 +1261,6 @@
   <mapping class="org.opentaps.domain.base.entities.TestEntityItem"/>
   <mapping class="org.opentaps.domain.base.entities.TestEntityModifyHistory"/>
   <mapping class="org.opentaps.domain.base.entities.TestEntityAndItem"/>
+  <mapping class="org.opentaps.domain.base.entities.HomeWebApps"/>
   </session-factory>
 </hibernate-configuration>

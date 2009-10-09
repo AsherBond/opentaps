@@ -16,8 +16,8 @@
 -->
 <entity-engine-xml>
 
-    <ReportRegistry reportId="SALESORDER" shortName="Sales Order Report" description="Report show you the order detail." location="component://crmsfa/webapp/crmsfa/reports/repository/orderPDF/Order.jrxml"/>
-    <ReportRegistry reportId="SALESQUOTE" shortName="Sales Quote Report" description="Report show you the quote detail." location="component://crmsfa/webapp/crmsfa/reports/repository/quotePDF/Quote.jrxml"/>
+    <ReportRegistry reportId="SALESORDER" shortName="Sales Order Report" description="Report show you the order detail." reportLocation="component://crmsfa/webapp/crmsfa/reports/repository/orderPDF/Order.jrxml"/>
+    <ReportRegistry reportId="SALESQUOTE" shortName="Sales Quote Report" description="Report show you the quote detail." reportLocation="component://crmsfa/webapp/crmsfa/reports/repository/quotePDF/Quote.jrxml"/>
 
     <ReportGroup reportGroupId="CRMSFA_FORM" showInSelect="N" description="Order Reports" application="crmsfa" sequenceNum="1"/>
     <ReportGroupMember reportGroupId="CRMSFA_FORM" reportId="SALESORDER" sequenceNum="1"/>

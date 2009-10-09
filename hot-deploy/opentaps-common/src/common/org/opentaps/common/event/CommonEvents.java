@@ -88,10 +88,9 @@ public final class CommonEvents {
      * @param response a <code>HttpServletResponse</code> value
      * @return The donePage or DONE_PAGE parameter if it exists, otherwise "error"
      */
-    @SuppressWarnings("unchecked")
     public static String donePageRequestHelper(HttpServletRequest request, HttpServletResponse response) {
 
-        Map parameters = UtilHttp.getParameterMap(request);
+        Map<String, Object> parameters = UtilHttp.getParameterMap(request);
 
         String donePage = UtilCommon.getParameter(request, "donePage");
         if (donePage == null) {
@@ -180,7 +179,6 @@ public final class CommonEvents {
      * @param response a <code>HttpServletResponse</code> value
      * @return the event response string
      */
-    @SuppressWarnings("unchecked")
     public static String persistViewExpansionState(HttpServletRequest request, HttpServletResponse response) {
         String domId = request.getParameter("domId");
         String application = request.getParameter("application");
@@ -193,12 +191,12 @@ public final class CommonEvents {
         }
 
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
-        Map prefMap = UtilMisc.toMap("application", application, "screenName", screenName, "domId", domId, "userLoginId", userLogin.getString("userLoginId"));
+        Map<String, Object> prefMap = UtilMisc.<String, Object>toMap("application", application, "screenName", screenName, "domId", domId, "userLoginId", userLogin.getString("userLoginId"));
 
         try {
 
             // Find any existing stored preferences and use the first
-            List viewPrefs = delegator.findByAnd("ViewPrefAndLocation", prefMap, UtilMisc.toList("viewPrefTypeId DESC"));
+            List<GenericValue> viewPrefs = delegator.findByAnd("ViewPrefAndLocation", prefMap, UtilMisc.toList("viewPrefTypeId DESC"));
             GenericValue viewPrefAndLocation = EntityUtil.getFirst(viewPrefs);
 
             if (UtilValidate.isEmpty(viewPrefAndLocation)) {
@@ -244,7 +242,7 @@ public final class CommonEvents {
         String printerName = UtilCommon.getParameter(request, "printerName");
         String location = UtilCommon.getParameter(request, "reportPath");
 
-        Map<String, Object> parameters = (Map) request.getAttribute("jrParameters");
+        Map<String, Object> parameters = (Map<String, Object>) request.getAttribute("jrParameters");
         if (UtilValidate.isEmpty(parameters)) {
             parameters = UtilHttp.getParameterMap(request);
         }
@@ -407,7 +405,6 @@ public final class CommonEvents {
      * @param response a <code>HttpServletResponse</code> value
      * @return a <code>String</code> value
      */
-    @SuppressWarnings("unchecked")
     public static String forgotPassword(HttpServletRequest request, HttpServletResponse response) {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
@@ -455,14 +452,14 @@ public final class CommonEvents {
             }
         } catch (GenericEntityException e) {
             Debug.logWarning(e, "", MODULE);
-            Map messageMap = UtilMisc.toMap("errorMessage", e.toString());
+            Map<String, Object> messageMap = UtilMisc.<String, Object>toMap("errorMessage", e.toString());
             errMsg = UtilProperties.getMessage(resource, "loginevents.error_accessing_password", messageMap, UtilHttp.getLocale(request));
             request.setAttribute("_ERROR_MESSAGE_", errMsg);
             return "error";
         }
         if (supposedUserLogin == null) {
             // the Username was not found
-            Map messageMap = UtilMisc.toMap("userLoginId", userLoginId);
+            Map<String, Object> messageMap = UtilMisc.<String, Object>toMap("userLoginId", userLoginId);
             errMsg = UtilProperties.getMessage(resource, "loginevents.user_with_the_username_not_found", messageMap, UtilHttp.getLocale(request));
             request.setAttribute("_ERROR_MESSAGE_", errMsg);
             return "error";
@@ -478,9 +475,9 @@ public final class CommonEvents {
             party = null;
         }
         if (party != null) {
-            Iterator emailIter = UtilMisc.toIterator(ContactHelper.getContactMechByPurpose(party, "PRIMARY_EMAIL", false));
+            Iterator<GenericValue> emailIter = UtilMisc.toIterator(ContactHelper.getContactMechByPurpose(party, "PRIMARY_EMAIL", false));
             while (emailIter != null && emailIter.hasNext()) {
-                GenericValue email = (GenericValue) emailIter.next();
+                GenericValue email = emailIter.next();
                 emails.append(emails.length() > 0 ? "," : "").append(email.getString("infoString"));
             }
         }
@@ -501,15 +498,15 @@ public final class CommonEvents {
         body.append("When you log in, please change your password because this email is not secure.\n");
 
         // send the email
-        Map input = UtilMisc.toMap("subject", subject + userLoginId, "sendFrom", sendFrom, "contentType", "text/plain");
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("subject", subject + userLoginId, "sendFrom", sendFrom, "contentType", "text/plain");
         input.put("sendTo", emails.toString());
         input.put("body", body.toString());
 
         try {
-            Map result = dispatcher.runSync("sendMail", input);
+            Map<String, Object> result = dispatcher.runSync("sendMail", input);
 
             if (ServiceUtil.isError(result)) {
-                Map messageMap = UtilMisc.toMap("errorMessage", result.get(ModelService.ERROR_MESSAGE));
+                Map<String, Object> messageMap = UtilMisc.toMap("errorMessage", result.get(ModelService.ERROR_MESSAGE));
                 errMsg = UtilProperties.getMessage(resource, "loginevents.error_unable_email_password_contact_customer_service_errorwas", messageMap, UtilHttp.getLocale(request));
                 request.setAttribute("_ERROR_MESSAGE_", errMsg);
                 return "error";
@@ -527,7 +524,7 @@ public final class CommonEvents {
                 supposedUserLogin.store();
             } catch (GenericEntityException e) {
                 Debug.logWarning(e, "", MODULE);
-                Map messageMap = UtilMisc.toMap("errorMessage", e.toString());
+                Map<String, Object> messageMap = UtilMisc.<String, Object>toMap("errorMessage", e.toString());
                 errMsg = UtilProperties.getMessage(resource, "loginevents.error_saving_new_password_email_not_correct_password", messageMap, UtilHttp.getLocale(request));
                 request.setAttribute("_ERROR_MESSAGE_", errMsg);
                 return "error";
