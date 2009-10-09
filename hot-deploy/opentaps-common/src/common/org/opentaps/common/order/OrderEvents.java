@@ -771,9 +771,9 @@ public final class OrderEvents {
             }
 
             // Update the shipGroup shipping estimate
-            Double shipGroupEstimate = shipWrapper.getShippingEstimate(cart.getShipmentMethodTypeId(shipGroupSeqId), cart.getCarrierPartyId(shipGroupSeqId));
+            BigDecimal shipGroupEstimate = shipWrapper.getShippingEstimate(cart.getShipmentMethodTypeId(shipGroupSeqId), cart.getCarrierPartyId(shipGroupSeqId));
             if (UtilValidate.isNotEmpty(shipGroupEstimate)) {
-                cart.setItemShipGroupEstimate(BigDecimal.valueOf(shipGroupEstimate), shipGroupSeqId);
+                cart.setItemShipGroupEstimate(shipGroupEstimate, shipGroupSeqId);
             }
 
             if (cart instanceof OpentapsShoppingCart) {
@@ -916,7 +916,7 @@ public final class OrderEvents {
             shipEstimateMap.put("carrierName", carrierPartyName);
             shipEstimateMap.put("userDescription", carrierShipmentMethod.get("userDescription"));
 
-            Double shipEstimate = shipWrapper.getShippingEstimate(shipmentMethodTypeId, carrierPartyId);
+            BigDecimal shipEstimate = shipWrapper.getShippingEstimate(shipmentMethodTypeId, carrierPartyId);
             if (!"_NA_".equals(carrierPartyId) && shipEstimate != null && shipEstimate.doubleValue() <= 0.0) {
                 shipEstimate = null; // if a carrier estimate is 0, then avoid entering the shipEstimate so the UI can print Calculated Offline
             }

@@ -270,7 +270,7 @@ public class OpentapsShippingEstimateWrapper implements Serializable {
                     continue;
                 }
 
-                Double amount = (Double) upsRateCodeMap.get(carrierServiceCode);
+                BigDecimal amount = (BigDecimal) upsRateCodeMap.get(carrierServiceCode);
                 shippingEstimates.put(m, amount);
             }
         } catch (GenericServiceException e) {
@@ -287,10 +287,10 @@ public class OpentapsShippingEstimateWrapper implements Serializable {
                 Iterator eit = shippingEstimates.keySet().iterator();
                 while (eit.hasNext()) {
                     GenericValue carrierShipmentMethod = (GenericValue) eit.next();
-                    Double codSurcharge = carrierShipmentMethod.getDouble("codSurcharge");
-                    Double estimate = (Double) shippingEstimates.get(carrierShipmentMethod);
+                    BigDecimal codSurcharge = carrierShipmentMethod.getBigDecimal("codSurcharge");
+                    BigDecimal estimate = (BigDecimal) shippingEstimates.get(carrierShipmentMethod);
                     if (UtilValidate.isNotEmpty(estimate) && UtilValidate.isNotEmpty(codSurcharge)) {
-                        shippingEstimates.put(carrierShipmentMethod, new Double(estimate.doubleValue() + codSurcharge.doubleValue()));
+                        shippingEstimates.put(carrierShipmentMethod, estimate.add(codSurcharge));
                     }
                 }
             }
@@ -307,7 +307,7 @@ public class OpentapsShippingEstimateWrapper implements Serializable {
         return shippingEstimates;
     }
 
-    public Double getShippingEstimate(String shipmentMethodTypeId, String carrierPartyId) {
+    public BigDecimal getShippingEstimate(String shipmentMethodTypeId, String carrierPartyId) {
         GenericValue storeCarrierShipMethod = EntityUtil.getFirst(EntityUtil.filterByAnd(shippingMethods, UtilMisc.toMap("shipmentMethodTypeId", shipmentMethodTypeId, "partyId", carrierPartyId)));
         if (UtilValidate.isEmpty(storeCarrierShipMethod)) {
             return null;
@@ -316,11 +316,11 @@ public class OpentapsShippingEstimateWrapper implements Serializable {
         if (UtilValidate.isEmpty(est)) {
             return null;
         }
-        BigDecimal estBd = new BigDecimal(est.doubleValue()).setScale(DECIMALS, ROUNDING);
-        return new Double(estBd.doubleValue());
+        BigDecimal estBd = est.setScale(DECIMALS, ROUNDING);
+        return estBd;
     }
 
-    public Double getShippingEstimate(GenericValue storeCarrierShipMethod) {
+    public BigDecimal getShippingEstimate(GenericValue storeCarrierShipMethod) {
         if (UtilValidate.isEmpty(storeCarrierShipMethod)) {
             return null;
         }
