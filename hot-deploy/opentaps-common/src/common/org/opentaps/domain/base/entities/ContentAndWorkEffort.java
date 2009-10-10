@@ -215,6 +215,13 @@ fieldMapColumns.put("ContentAndWorkEffort", fields);
    )
    
    private DataResource dataResource = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="CLASSIFICATION_ENUM_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Enumeration enumeration = null;
 
   /**
    * Default constructor.
@@ -633,6 +640,17 @@ fieldMapColumns.put("ContentAndWorkEffort", fields);
         }
         return this.dataResource;
     }
+    /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>Enumeration</code>.
+     * @return the <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Enumeration getEnumeration() throws RepositoryException {
+        if (this.enumeration == null) {
+            this.enumeration = getRelatedOne(Enumeration.class, "Enumeration");
+        }
+        return this.enumeration;
+    }
 
     /**
      * Auto generated value setter.
@@ -647,6 +665,13 @@ fieldMapColumns.put("ContentAndWorkEffort", fields);
     */
     public void setDataResource(DataResource dataResource) {
         this.dataResource = dataResource;
+    }
+    /**
+     * Auto generated value setter.
+     * @param enumeration the enumeration to set
+    */
+    public void setEnumeration(Enumeration enumeration) {
+        this.enumeration = enumeration;
     }
 
 

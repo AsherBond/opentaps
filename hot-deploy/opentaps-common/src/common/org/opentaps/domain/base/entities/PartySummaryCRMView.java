@@ -51,7 +51,7 @@ import java.sql.Timestamp;
  * Auto generated base entity PartySummaryCRMView.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectPartySummaryCRMViews", query="SELECT PMPA.TO_NAME AS \"toName\",PMPA.ATTN_NAME AS \"attnName\",PMPA.ADDRESS1 AS \"address1\",PMPA.ADDRESS2 AS \"address2\",PMPA.DIRECTIONS AS \"directions\",PMPA.CITY AS \"city\",PMPA.POSTAL_CODE AS \"postalCode\",PMPA.POSTAL_CODE_EXT AS \"postalCodeExt\",PMPA.COUNTRY_GEO_ID AS \"countryGeoId\",PMPA.STATE_PROVINCE_GEO_ID AS \"stateProvinceGeoId\",PMPA.COUNTY_GEO_ID AS \"countyGeoId\",PMPA.POSTAL_CODE_GEO_ID AS \"postalCodeGeoId\",PMTN.COUNTRY_CODE AS \"countryCode\",PMTN.AREA_CODE AS \"areaCode\",PMTN.CONTACT_NUMBER AS \"contactNumber\",PMTN.ASK_FOR_NAME AS \"askForName\",CMEM.INFO_STRING AS \"infoString\",P.PARTY_ID AS \"partyId\",P.PARTY_TYPE_ID AS \"partyTypeId\",P.EXTERNAL_ID AS \"externalId\",P.PREFERRED_CURRENCY_UOM_ID AS \"preferredCurrencyUomId\",P.DESCRIPTION AS \"description\",P.STATUS_ID AS \"statusId\",P.CREATED_DATE AS \"createdDate\",P.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",P.LAST_MODIFIED_DATE AS \"lastModifiedDate\",P.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",P.DATA_SOURCE_ID AS \"dataSourceId\",P.IS_UNREAD AS \"isUnread\",PG.GROUP_NAME AS \"groupName\",PG.GROUP_NAME_LOCAL AS \"groupNameLocal\",PG.OFFICE_SITE_NAME AS \"officeSiteName\",PG.ANNUAL_REVENUE AS \"annualRevenue\",PG.NUM_EMPLOYEES AS \"numEmployees\",PG.TICKER_SYMBOL AS \"tickerSymbol\",PG.LOGO_IMAGE_URL AS \"logoImageUrl\",PG.IS_INCORPORATED AS \"isIncorporated\",PG.FEDERAL_TAX_ID AS \"federalTaxId\",PG.REQUIRES1099 AS \"requires1099\",PER.SALUTATION AS \"salutation\",PER.FIRST_NAME AS \"firstName\",PER.MIDDLE_NAME AS \"middleName\",PER.LAST_NAME AS \"lastName\",PER.PERSONAL_TITLE AS \"personalTitle\",PER.SUFFIX AS \"suffix\",PER.NICKNAME AS \"nickname\",PER.FIRST_NAME_LOCAL AS \"firstNameLocal\",PER.MIDDLE_NAME_LOCAL AS \"middleNameLocal\",PER.LAST_NAME_LOCAL AS \"lastNameLocal\",PER.OTHER_LOCAL AS \"otherLocal\",PER.MEMBER_ID AS \"memberId\",PER.GENDER AS \"gender\",PER.BIRTH_DATE AS \"birthDate\",PER.HEIGHT AS \"height\",PER.WEIGHT AS \"weight\",PER.MOTHERS_MAIDEN_NAME AS \"mothersMaidenName\",PER.MARITAL_STATUS AS \"maritalStatus\",PER.SOCIAL_SECURITY_NUMBER AS \"socialSecurityNumber\",PER.PASSPORT_NUMBER AS \"passportNumber\",PER.PASSPORT_EXPIRE_DATE AS \"passportExpireDate\",PER.TOTAL_YEARS_WORK_EXPERIENCE AS \"totalYearsWorkExperience\",PER.EMPLOYMENT_STATUS_ENUM_ID AS \"employmentStatusEnumId\",PER.RESIDENCE_STATUS_ENUM_ID AS \"residenceStatusEnumId\",PER.OCCUPATION AS \"occupation\",PER.YEARS_WITH_EMPLOYER AS \"yearsWithEmployer\",PER.MONTHS_WITH_EMPLOYER AS \"monthsWithEmployer\",PER.EXISTING_CUSTOMER AS \"existingCustomer\",PSD.PARENT_PARTY_ID AS \"parentPartyId\",PSD.DEPARTMENT_NAME AS \"departmentName\",PSD.GENERAL_PROF_TITLE AS \"generalProfTitle\",PSD.COMPANY_NAME AS \"companyName\",PSD.COMPANY_NAME_LOCAL AS \"companyNameLocal\",PSD.CURRENCY_UOM_ID AS \"currencyUomId\",PSD.NUMBER_EMPLOYEES AS \"numberEmployees\",PSD.INDUSTRY_ENUM_ID AS \"industryEnumId\",PSD.OWNERSHIP_ENUM_ID AS \"ownershipEnumId\",PSD.SIC_CODE AS \"sicCode\",PSD.IMPORTANT_NOTE AS \"importantNote\",PSD.PRIMARY_POSTAL_ADDRESS_ID AS \"primaryPostalAddressId\",PSD.PRIMARY_TELECOM_NUMBER_ID AS \"primaryTelecomNumberId\",PSD.PRIMARY_EMAIL_ID AS \"primaryEmailId\" FROM PARTY P LEFT JOIN PARTY_GROUP PG ON P.PARTY_ID = PG.PARTY_ID LEFT JOIN PERSON PER ON P.PARTY_ID = PER.PARTY_ID LEFT JOIN PARTY_SUPPLEMENTAL_DATA PSD ON P.PARTY_ID = PSD.PARTY_ID LEFT JOIN POSTAL_ADDRESS PMPA ON PSD.PRIMARY_POSTAL_ADDRESS_ID = PMPA.CONTACT_MECH_ID LEFT JOIN TELECOM_NUMBER PMTN ON PSD.PRIMARY_TELECOM_NUMBER_ID = PMTN.CONTACT_MECH_ID LEFT JOIN CONTACT_MECH CMEM ON PSD.PRIMARY_EMAIL_ID = CMEM.CONTACT_MECH_ID", resultSetMapping="PartySummaryCRMViewMapping")
+@NamedNativeQuery(name="selectPartySummaryCRMViews", query="SELECT PMPA.TO_NAME AS \"toName\",PMPA.ATTN_NAME AS \"attnName\",PMPA.ADDRESS1 AS \"address1\",PMPA.ADDRESS2 AS \"address2\",PMPA.DIRECTIONS AS \"directions\",PMPA.CITY AS \"city\",PMPA.POSTAL_CODE AS \"postalCode\",PMPA.POSTAL_CODE_EXT AS \"postalCodeExt\",PMPA.COUNTRY_GEO_ID AS \"countryGeoId\",PMPA.STATE_PROVINCE_GEO_ID AS \"stateProvinceGeoId\",PMPA.COUNTY_GEO_ID AS \"countyGeoId\",PMPA.POSTAL_CODE_GEO_ID AS \"postalCodeGeoId\",PMTN.COUNTRY_CODE AS \"countryCode\",PMTN.AREA_CODE AS \"areaCode\",PMTN.CONTACT_NUMBER AS \"contactNumber\",PMTN.ASK_FOR_NAME AS \"askForName\",CMEM.INFO_STRING AS \"infoString\",P.PARTY_ID AS \"partyId\",P.PARTY_TYPE_ID AS \"partyTypeId\",P.EXTERNAL_ID AS \"externalId\",P.PREFERRED_CURRENCY_UOM_ID AS \"preferredCurrencyUomId\",P.DESCRIPTION AS \"description\",P.STATUS_ID AS \"statusId\",P.CREATED_DATE AS \"createdDate\",P.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",P.LAST_MODIFIED_DATE AS \"lastModifiedDate\",P.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",P.DATA_SOURCE_ID AS \"dataSourceId\",P.IS_UNREAD AS \"isUnread\",PG.GROUP_NAME AS \"groupName\",PG.GROUP_NAME_LOCAL AS \"groupNameLocal\",PG.OFFICE_SITE_NAME AS \"officeSiteName\",PG.LOGO_IMAGE_URL AS \"logoImageUrl\",PG.IS_INCORPORATED AS \"isIncorporated\",PG.FEDERAL_TAX_ID AS \"federalTaxId\",PG.REQUIRES1099 AS \"requires1099\",PER.SALUTATION AS \"salutation\",PER.FIRST_NAME AS \"firstName\",PER.MIDDLE_NAME AS \"middleName\",PER.LAST_NAME AS \"lastName\",PER.PERSONAL_TITLE AS \"personalTitle\",PER.SUFFIX AS \"suffix\",PER.NICKNAME AS \"nickname\",PER.FIRST_NAME_LOCAL AS \"firstNameLocal\",PER.MIDDLE_NAME_LOCAL AS \"middleNameLocal\",PER.LAST_NAME_LOCAL AS \"lastNameLocal\",PER.OTHER_LOCAL AS \"otherLocal\",PER.MEMBER_ID AS \"memberId\",PER.GENDER AS \"gender\",PER.BIRTH_DATE AS \"birthDate\",PER.HEIGHT AS \"height\",PER.WEIGHT AS \"weight\",PER.MOTHERS_MAIDEN_NAME AS \"mothersMaidenName\",PER.MARITAL_STATUS AS \"maritalStatus\",PER.SOCIAL_SECURITY_NUMBER AS \"socialSecurityNumber\",PER.PASSPORT_NUMBER AS \"passportNumber\",PER.PASSPORT_EXPIRE_DATE AS \"passportExpireDate\",PER.TOTAL_YEARS_WORK_EXPERIENCE AS \"totalYearsWorkExperience\",PER.EMPLOYMENT_STATUS_ENUM_ID AS \"employmentStatusEnumId\",PER.RESIDENCE_STATUS_ENUM_ID AS \"residenceStatusEnumId\",PER.OCCUPATION AS \"occupation\",PER.YEARS_WITH_EMPLOYER AS \"yearsWithEmployer\",PER.MONTHS_WITH_EMPLOYER AS \"monthsWithEmployer\",PER.EXISTING_CUSTOMER AS \"existingCustomer\",PSD.PARENT_PARTY_ID AS \"parentPartyId\",PSD.DEPARTMENT_NAME AS \"departmentName\",PSD.GENERAL_PROF_TITLE AS \"generalProfTitle\",PSD.COMPANY_NAME AS \"companyName\",PSD.COMPANY_NAME_LOCAL AS \"companyNameLocal\",PSD.ANNUAL_REVENUE AS \"annualRevenue\",PSD.CURRENCY_UOM_ID AS \"currencyUomId\",PSD.NUMBER_EMPLOYEES AS \"numberEmployees\",PSD.INDUSTRY_ENUM_ID AS \"industryEnumId\",PSD.OWNERSHIP_ENUM_ID AS \"ownershipEnumId\",PSD.SIC_CODE AS \"sicCode\",PSD.TICKER_SYMBOL AS \"tickerSymbol\",PSD.IMPORTANT_NOTE AS \"importantNote\",PSD.PRIMARY_POSTAL_ADDRESS_ID AS \"primaryPostalAddressId\",PSD.PRIMARY_TELECOM_NUMBER_ID AS \"primaryTelecomNumberId\",PSD.PRIMARY_EMAIL_ID AS \"primaryEmailId\" FROM PARTY P LEFT JOIN PARTY_GROUP PG ON P.PARTY_ID = PG.PARTY_ID LEFT JOIN PERSON PER ON P.PARTY_ID = PER.PARTY_ID LEFT JOIN PARTY_SUPPLEMENTAL_DATA PSD ON P.PARTY_ID = PSD.PARTY_ID LEFT JOIN POSTAL_ADDRESS PMPA ON PSD.PRIMARY_POSTAL_ADDRESS_ID = PMPA.CONTACT_MECH_ID LEFT JOIN TELECOM_NUMBER PMTN ON PSD.PRIMARY_TELECOM_NUMBER_ID = PMTN.CONTACT_MECH_ID LEFT JOIN CONTACT_MECH CMEM ON PSD.PRIMARY_EMAIL_ID = CMEM.CONTACT_MECH_ID", resultSetMapping="PartySummaryCRMViewMapping")
 @SqlResultSetMapping(name="PartySummaryCRMViewMapping", entities={
 @EntityResult(entityClass=PartySummaryCRMView.class, fields = {
 @FieldResult(name="primaryToName", column="primaryToName")
@@ -86,9 +86,6 @@ import java.sql.Timestamp;
 ,@FieldResult(name="groupName", column="groupName")
 ,@FieldResult(name="groupNameLocal", column="groupNameLocal")
 ,@FieldResult(name="officeSiteName", column="officeSiteName")
-,@FieldResult(name="annualRevenue", column="annualRevenue")
-,@FieldResult(name="numEmployees", column="numEmployees")
-,@FieldResult(name="tickerSymbol", column="tickerSymbol")
 ,@FieldResult(name="logoImageUrl", column="logoImageUrl")
 ,@FieldResult(name="isIncorporated", column="isIncorporated")
 ,@FieldResult(name="federalTaxId", column="federalTaxId")
@@ -126,11 +123,13 @@ import java.sql.Timestamp;
 ,@FieldResult(name="generalProfTitle", column="generalProfTitle")
 ,@FieldResult(name="companyName", column="companyName")
 ,@FieldResult(name="companyNameLocal", column="companyNameLocal")
+,@FieldResult(name="annualRevenue", column="annualRevenue")
 ,@FieldResult(name="currencyUomId", column="currencyUomId")
 ,@FieldResult(name="numberEmployees", column="numberEmployees")
 ,@FieldResult(name="industryEnumId", column="industryEnumId")
 ,@FieldResult(name="ownershipEnumId", column="ownershipEnumId")
 ,@FieldResult(name="sicCode", column="sicCode")
+,@FieldResult(name="tickerSymbol", column="tickerSymbol")
 ,@FieldResult(name="importantNote", column="importantNote")
 ,@FieldResult(name="primaryPostalAddressId", column="primaryPostalAddressId")
 ,@FieldResult(name="primaryTelecomNumberId", column="primaryTelecomNumberId")
@@ -173,9 +172,6 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("groupName", "PG.GROUP_NAME");
         fields.put("groupNameLocal", "PG.GROUP_NAME_LOCAL");
         fields.put("officeSiteName", "PG.OFFICE_SITE_NAME");
-        fields.put("annualRevenue", "PG.ANNUAL_REVENUE");
-        fields.put("numEmployees", "PG.NUM_EMPLOYEES");
-        fields.put("tickerSymbol", "PG.TICKER_SYMBOL");
         fields.put("logoImageUrl", "PG.LOGO_IMAGE_URL");
         fields.put("isIncorporated", "PG.IS_INCORPORATED");
         fields.put("federalTaxId", "PG.FEDERAL_TAX_ID");
@@ -213,11 +209,13 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("generalProfTitle", "PSD.GENERAL_PROF_TITLE");
         fields.put("companyName", "PSD.COMPANY_NAME");
         fields.put("companyNameLocal", "PSD.COMPANY_NAME_LOCAL");
+        fields.put("annualRevenue", "PSD.ANNUAL_REVENUE");
         fields.put("currencyUomId", "PSD.CURRENCY_UOM_ID");
         fields.put("numberEmployees", "PSD.NUMBER_EMPLOYEES");
         fields.put("industryEnumId", "PSD.INDUSTRY_ENUM_ID");
         fields.put("ownershipEnumId", "PSD.OWNERSHIP_ENUM_ID");
         fields.put("sicCode", "PSD.SIC_CODE");
+        fields.put("tickerSymbol", "PSD.TICKER_SYMBOL");
         fields.put("importantNote", "PSD.IMPORTANT_NOTE");
         fields.put("primaryPostalAddressId", "PSD.PRIMARY_POSTAL_ADDRESS_ID");
         fields.put("primaryTelecomNumberId", "PSD.PRIMARY_TELECOM_NUMBER_ID");
@@ -257,9 +255,6 @@ fieldMapColumns.put("PartySummaryCRMView", fields);
     groupName("groupName"),
     groupNameLocal("groupNameLocal"),
     officeSiteName("officeSiteName"),
-    annualRevenue("annualRevenue"),
-    numEmployees("numEmployees"),
-    tickerSymbol("tickerSymbol"),
     logoImageUrl("logoImageUrl"),
     isIncorporated("isIncorporated"),
     federalTaxId("federalTaxId"),
@@ -297,11 +292,13 @@ fieldMapColumns.put("PartySummaryCRMView", fields);
     generalProfTitle("generalProfTitle"),
     companyName("companyName"),
     companyNameLocal("companyNameLocal"),
+    annualRevenue("annualRevenue"),
     currencyUomId("currencyUomId"),
     numberEmployees("numberEmployees"),
     industryEnumId("industryEnumId"),
     ownershipEnumId("ownershipEnumId"),
     sicCode("sicCode"),
+    tickerSymbol("tickerSymbol"),
     importantNote("importantNote"),
     primaryPostalAddressId("primaryPostalAddressId"),
     primaryTelecomNumberId("primaryTelecomNumberId"),
@@ -381,12 +378,6 @@ fieldMapColumns.put("PartySummaryCRMView", fields);
     
    private String officeSiteName;
     
-   private BigDecimal annualRevenue;
-    
-   private Long numEmployees;
-    
-   private String tickerSymbol;
-    
    private String logoImageUrl;
     
    private String isIncorporated;
@@ -461,6 +452,8 @@ fieldMapColumns.put("PartySummaryCRMView", fields);
     
    private String companyNameLocal;
     
+   private BigDecimal annualRevenue;
+    
    private String currencyUomId;
     
    private Long numberEmployees;
@@ -470,6 +463,8 @@ fieldMapColumns.put("PartySummaryCRMView", fields);
    private String ownershipEnumId;
     
    private String sicCode;
+    
+   private String tickerSymbol;
     
    private String importantNote;
     
@@ -490,7 +485,7 @@ fieldMapColumns.put("PartySummaryCRMView", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("primaryToName");this.allFieldsNames.add("primaryAttnName");this.allFieldsNames.add("primaryAddress1");this.allFieldsNames.add("primaryAddress2");this.allFieldsNames.add("primaryDirections");this.allFieldsNames.add("primaryCity");this.allFieldsNames.add("primaryPostalCode");this.allFieldsNames.add("primaryPostalCodeExt");this.allFieldsNames.add("primaryCountryGeoId");this.allFieldsNames.add("primaryStateProvinceGeoId");this.allFieldsNames.add("primaryCountyGeoId");this.allFieldsNames.add("primaryPostalCodeGeoId");this.allFieldsNames.add("primaryCountryCode");this.allFieldsNames.add("primaryAreaCode");this.allFieldsNames.add("primaryContactNumber");this.allFieldsNames.add("primaryAskForName");this.allFieldsNames.add("primaryEmail");this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("preferredCurrencyUomId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("isUnread");this.allFieldsNames.add("groupName");this.allFieldsNames.add("groupNameLocal");this.allFieldsNames.add("officeSiteName");this.allFieldsNames.add("annualRevenue");this.allFieldsNames.add("numEmployees");this.allFieldsNames.add("tickerSymbol");this.allFieldsNames.add("logoImageUrl");this.allFieldsNames.add("isIncorporated");this.allFieldsNames.add("federalTaxId");this.allFieldsNames.add("requires1099");this.allFieldsNames.add("salutation");this.allFieldsNames.add("firstName");this.allFieldsNames.add("middleName");this.allFieldsNames.add("lastName");this.allFieldsNames.add("personalTitle");this.allFieldsNames.add("suffix");this.allFieldsNames.add("nickname");this.allFieldsNames.add("firstNameLocal");this.allFieldsNames.add("middleNameLocal");this.allFieldsNames.add("lastNameLocal");this.allFieldsNames.add("otherLocal");this.allFieldsNames.add("memberId");this.allFieldsNames.add("gender");this.allFieldsNames.add("birthDate");this.allFieldsNames.add("height");this.allFieldsNames.add("weight");this.allFieldsNames.add("mothersMaidenName");this.allFieldsNames.add("maritalStatus");this.allFieldsNames.add("socialSecurityNumber");this.allFieldsNames.add("passportNumber");this.allFieldsNames.add("passportExpireDate");this.allFieldsNames.add("totalYearsWorkExperience");this.allFieldsNames.add("employmentStatusEnumId");this.allFieldsNames.add("residenceStatusEnumId");this.allFieldsNames.add("occupation");this.allFieldsNames.add("yearsWithEmployer");this.allFieldsNames.add("monthsWithEmployer");this.allFieldsNames.add("existingCustomer");this.allFieldsNames.add("parentPartyId");this.allFieldsNames.add("departmentName");this.allFieldsNames.add("generalProfTitle");this.allFieldsNames.add("companyName");this.allFieldsNames.add("companyNameLocal");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("numberEmployees");this.allFieldsNames.add("industryEnumId");this.allFieldsNames.add("ownershipEnumId");this.allFieldsNames.add("sicCode");this.allFieldsNames.add("importantNote");this.allFieldsNames.add("primaryPostalAddressId");this.allFieldsNames.add("primaryTelecomNumberId");this.allFieldsNames.add("primaryEmailId");
+      this.allFieldsNames.add("primaryToName");this.allFieldsNames.add("primaryAttnName");this.allFieldsNames.add("primaryAddress1");this.allFieldsNames.add("primaryAddress2");this.allFieldsNames.add("primaryDirections");this.allFieldsNames.add("primaryCity");this.allFieldsNames.add("primaryPostalCode");this.allFieldsNames.add("primaryPostalCodeExt");this.allFieldsNames.add("primaryCountryGeoId");this.allFieldsNames.add("primaryStateProvinceGeoId");this.allFieldsNames.add("primaryCountyGeoId");this.allFieldsNames.add("primaryPostalCodeGeoId");this.allFieldsNames.add("primaryCountryCode");this.allFieldsNames.add("primaryAreaCode");this.allFieldsNames.add("primaryContactNumber");this.allFieldsNames.add("primaryAskForName");this.allFieldsNames.add("primaryEmail");this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("preferredCurrencyUomId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("isUnread");this.allFieldsNames.add("groupName");this.allFieldsNames.add("groupNameLocal");this.allFieldsNames.add("officeSiteName");this.allFieldsNames.add("logoImageUrl");this.allFieldsNames.add("isIncorporated");this.allFieldsNames.add("federalTaxId");this.allFieldsNames.add("requires1099");this.allFieldsNames.add("salutation");this.allFieldsNames.add("firstName");this.allFieldsNames.add("middleName");this.allFieldsNames.add("lastName");this.allFieldsNames.add("personalTitle");this.allFieldsNames.add("suffix");this.allFieldsNames.add("nickname");this.allFieldsNames.add("firstNameLocal");this.allFieldsNames.add("middleNameLocal");this.allFieldsNames.add("lastNameLocal");this.allFieldsNames.add("otherLocal");this.allFieldsNames.add("memberId");this.allFieldsNames.add("gender");this.allFieldsNames.add("birthDate");this.allFieldsNames.add("height");this.allFieldsNames.add("weight");this.allFieldsNames.add("mothersMaidenName");this.allFieldsNames.add("maritalStatus");this.allFieldsNames.add("socialSecurityNumber");this.allFieldsNames.add("passportNumber");this.allFieldsNames.add("passportExpireDate");this.allFieldsNames.add("totalYearsWorkExperience");this.allFieldsNames.add("employmentStatusEnumId");this.allFieldsNames.add("residenceStatusEnumId");this.allFieldsNames.add("occupation");this.allFieldsNames.add("yearsWithEmployer");this.allFieldsNames.add("monthsWithEmployer");this.allFieldsNames.add("existingCustomer");this.allFieldsNames.add("parentPartyId");this.allFieldsNames.add("departmentName");this.allFieldsNames.add("generalProfTitle");this.allFieldsNames.add("companyName");this.allFieldsNames.add("companyNameLocal");this.allFieldsNames.add("annualRevenue");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("numberEmployees");this.allFieldsNames.add("industryEnumId");this.allFieldsNames.add("ownershipEnumId");this.allFieldsNames.add("sicCode");this.allFieldsNames.add("tickerSymbol");this.allFieldsNames.add("importantNote");this.allFieldsNames.add("primaryPostalAddressId");this.allFieldsNames.add("primaryTelecomNumberId");this.allFieldsNames.add("primaryEmailId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -731,27 +726,6 @@ fieldMapColumns.put("PartySummaryCRMView", fields);
      */
     private void setOfficeSiteName(String officeSiteName) {
         this.officeSiteName = officeSiteName;
-    }
-    /**
-     * Auto generated value setter.
-     * @param annualRevenue the annualRevenue to set
-     */
-    private void setAnnualRevenue(BigDecimal annualRevenue) {
-        this.annualRevenue = annualRevenue;
-    }
-    /**
-     * Auto generated value setter.
-     * @param numEmployees the numEmployees to set
-     */
-    private void setNumEmployees(Long numEmployees) {
-        this.numEmployees = numEmployees;
-    }
-    /**
-     * Auto generated value setter.
-     * @param tickerSymbol the tickerSymbol to set
-     */
-    private void setTickerSymbol(String tickerSymbol) {
-        this.tickerSymbol = tickerSymbol;
     }
     /**
      * Auto generated value setter.
@@ -1014,6 +988,13 @@ fieldMapColumns.put("PartySummaryCRMView", fields);
     }
     /**
      * Auto generated value setter.
+     * @param annualRevenue the annualRevenue to set
+     */
+    private void setAnnualRevenue(BigDecimal annualRevenue) {
+        this.annualRevenue = annualRevenue;
+    }
+    /**
+     * Auto generated value setter.
      * @param currencyUomId the currencyUomId to set
      */
     private void setCurrencyUomId(String currencyUomId) {
@@ -1046,6 +1027,13 @@ fieldMapColumns.put("PartySummaryCRMView", fields);
      */
     private void setSicCode(String sicCode) {
         this.sicCode = sicCode;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tickerSymbol the tickerSymbol to set
+     */
+    private void setTickerSymbol(String tickerSymbol) {
+        this.tickerSymbol = tickerSymbol;
     }
     /**
      * Auto generated value setter.
@@ -1299,27 +1287,6 @@ fieldMapColumns.put("PartySummaryCRMView", fields);
      */
     public String getOfficeSiteName() {
         return this.officeSiteName;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>BigDecimal</code>
-     */
-    public BigDecimal getAnnualRevenue() {
-        return this.annualRevenue;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>Long</code>
-     */
-    public Long getNumEmployees() {
-        return this.numEmployees;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getTickerSymbol() {
-        return this.tickerSymbol;
     }
     /**
      * Auto generated value accessor.
@@ -1582,6 +1549,13 @@ fieldMapColumns.put("PartySummaryCRMView", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getAnnualRevenue() {
+        return this.annualRevenue;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>String</code>
      */
     public String getCurrencyUomId() {
@@ -1614,6 +1588,13 @@ fieldMapColumns.put("PartySummaryCRMView", fields);
      */
     public String getSicCode() {
         return this.sicCode;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getTickerSymbol() {
+        return this.tickerSymbol;
     }
     /**
      * Auto generated value accessor.
@@ -1683,9 +1664,6 @@ fieldMapColumns.put("PartySummaryCRMView", fields);
         setGroupName((String) mapValue.get("groupName"));
         setGroupNameLocal((String) mapValue.get("groupNameLocal"));
         setOfficeSiteName((String) mapValue.get("officeSiteName"));
-        setAnnualRevenue(convertToBigDecimal(mapValue.get("annualRevenue")));
-        setNumEmployees((Long) mapValue.get("numEmployees"));
-        setTickerSymbol((String) mapValue.get("tickerSymbol"));
         setLogoImageUrl((String) mapValue.get("logoImageUrl"));
         setIsIncorporated((String) mapValue.get("isIncorporated"));
         setFederalTaxId((String) mapValue.get("federalTaxId"));
@@ -1723,11 +1701,13 @@ fieldMapColumns.put("PartySummaryCRMView", fields);
         setGeneralProfTitle((String) mapValue.get("generalProfTitle"));
         setCompanyName((String) mapValue.get("companyName"));
         setCompanyNameLocal((String) mapValue.get("companyNameLocal"));
+        setAnnualRevenue(convertToBigDecimal(mapValue.get("annualRevenue")));
         setCurrencyUomId((String) mapValue.get("currencyUomId"));
         setNumberEmployees((Long) mapValue.get("numberEmployees"));
         setIndustryEnumId((String) mapValue.get("industryEnumId"));
         setOwnershipEnumId((String) mapValue.get("ownershipEnumId"));
         setSicCode((String) mapValue.get("sicCode"));
+        setTickerSymbol((String) mapValue.get("tickerSymbol"));
         setImportantNote((String) mapValue.get("importantNote"));
         setPrimaryPostalAddressId((String) mapValue.get("primaryPostalAddressId"));
         setPrimaryTelecomNumberId((String) mapValue.get("primaryTelecomNumberId"));
@@ -1771,9 +1751,6 @@ fieldMapColumns.put("PartySummaryCRMView", fields);
         mapValue.put("groupName", getGroupName());
         mapValue.put("groupNameLocal", getGroupNameLocal());
         mapValue.put("officeSiteName", getOfficeSiteName());
-        mapValue.put("annualRevenue", getAnnualRevenue());
-        mapValue.put("numEmployees", getNumEmployees());
-        mapValue.put("tickerSymbol", getTickerSymbol());
         mapValue.put("logoImageUrl", getLogoImageUrl());
         mapValue.put("isIncorporated", getIsIncorporated());
         mapValue.put("federalTaxId", getFederalTaxId());
@@ -1811,11 +1788,13 @@ fieldMapColumns.put("PartySummaryCRMView", fields);
         mapValue.put("generalProfTitle", getGeneralProfTitle());
         mapValue.put("companyName", getCompanyName());
         mapValue.put("companyNameLocal", getCompanyNameLocal());
+        mapValue.put("annualRevenue", getAnnualRevenue());
         mapValue.put("currencyUomId", getCurrencyUomId());
         mapValue.put("numberEmployees", getNumberEmployees());
         mapValue.put("industryEnumId", getIndustryEnumId());
         mapValue.put("ownershipEnumId", getOwnershipEnumId());
         mapValue.put("sicCode", getSicCode());
+        mapValue.put("tickerSymbol", getTickerSymbol());
         mapValue.put("importantNote", getImportantNote());
         mapValue.put("primaryPostalAddressId", getPrimaryPostalAddressId());
         mapValue.put("primaryTelecomNumberId", getPrimaryTelecomNumberId());

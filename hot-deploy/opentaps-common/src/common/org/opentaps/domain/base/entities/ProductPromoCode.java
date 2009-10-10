@@ -157,6 +157,10 @@ fieldMapColumns.put("ProductPromoCode", fields);
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productPromoCode", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_PROMO_CODE_ID")
    
+   private List<OrderProductPromoCode> orderProductPromoCodes = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="productPromoCode", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_PROMO_CODE_ID")
+   
    private List<ProductPromoCodeEmail> productPromoCodeEmails = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productPromoCode", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_PROMO_CODE_ID")
@@ -457,6 +461,17 @@ fieldMapColumns.put("ProductPromoCode", fields);
         return this.relatedLastModifiedByUserLogin;
     }
     /**
+     * Auto generated method that gets the related <code>OrderProductPromoCode</code> by the relation named <code>OrderProductPromoCode</code>.
+     * @return the list of <code>OrderProductPromoCode</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OrderProductPromoCode> getOrderProductPromoCodes() throws RepositoryException {
+        if (this.orderProductPromoCodes == null) {
+            this.orderProductPromoCodes = getRelated(OrderProductPromoCode.class, "OrderProductPromoCode");
+        }
+        return this.orderProductPromoCodes;
+    }
+    /**
      * Auto generated method that gets the related <code>ProductPromoCodeEmail</code> by the relation named <code>ProductPromoCodeEmail</code>.
      * @return the list of <code>ProductPromoCodeEmail</code>
      * @throws RepositoryException if an error occurs
@@ -524,6 +539,13 @@ fieldMapColumns.put("ProductPromoCode", fields);
     }
     /**
      * Auto generated value setter.
+     * @param orderProductPromoCodes the orderProductPromoCodes to set
+    */
+    public void setOrderProductPromoCodes(List<OrderProductPromoCode> orderProductPromoCodes) {
+        this.orderProductPromoCodes = orderProductPromoCodes;
+    }
+    /**
+     * Auto generated value setter.
      * @param productPromoCodeEmails the productPromoCodeEmails to set
     */
     public void setProductPromoCodeEmails(List<ProductPromoCodeEmail> productPromoCodeEmails) {
@@ -551,6 +573,33 @@ fieldMapColumns.put("ProductPromoCode", fields);
         this.shoppingLists = shoppingLists;
     }
 
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addOrderProductPromoCode(OrderProductPromoCode orderProductPromoCode) {
+        if (this.orderProductPromoCodes == null) {
+            this.orderProductPromoCodes = new ArrayList<OrderProductPromoCode>();
+        }
+        this.orderProductPromoCodes.add(orderProductPromoCode);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeOrderProductPromoCode(OrderProductPromoCode orderProductPromoCode) {
+        if (this.orderProductPromoCodes == null) {
+            return;
+        }
+        this.orderProductPromoCodes.remove(orderProductPromoCode);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearOrderProductPromoCode() {
+        if (this.orderProductPromoCodes == null) {
+            return;
+        }
+        this.orderProductPromoCodes.clear();
+    }
     /**
      * Auto generated method that add item to collection.
      */

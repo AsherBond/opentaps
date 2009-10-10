@@ -276,6 +276,10 @@ fieldMapColumns.put("Facility", fields);
    @JoinColumn(name="FACILITY_ID")
    
    private List<FacilityPartyPermission> facilityPartyPermissions = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<FacilityRole> facilityRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID_FROM")
    
@@ -312,10 +316,6 @@ fieldMapColumns.put("Facility", fields);
    @JoinColumn(name="FACILITY_ID")
    
    private List<MrpInventoryEvent> mrpInventoryEvents = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="FACILITY_ID")
-   
-   private List<OldFacilityRole> oldFacilityRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_FACILITY_ID")
    
@@ -989,6 +989,17 @@ fieldMapColumns.put("Facility", fields);
         return this.facilityPartyPermissions;
     }
     /**
+     * Auto generated method that gets the related <code>FacilityRole</code> by the relation named <code>FacilityRole</code>.
+     * @return the list of <code>FacilityRole</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends FacilityRole> getFacilityRoles() throws RepositoryException {
+        if (this.facilityRoles == null) {
+            this.facilityRoles = getRelated(FacilityRole.class, "FacilityRole");
+        }
+        return this.facilityRoles;
+    }
+    /**
      * Auto generated method that gets the related <code>FacilityTransferPlan</code> by the relation named <code>FromFacilityTransferPlan</code>.
      * @return the list of <code>FacilityTransferPlan</code>
      * @throws RepositoryException if an error occurs
@@ -1086,17 +1097,6 @@ fieldMapColumns.put("Facility", fields);
             this.mrpInventoryEvents = getRelated(MrpInventoryEvent.class, "MrpInventoryEvent");
         }
         return this.mrpInventoryEvents;
-    }
-    /**
-     * Auto generated method that gets the related <code>OldFacilityRole</code> by the relation named <code>OldFacilityRole</code>.
-     * @return the list of <code>OldFacilityRole</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends OldFacilityRole> getOldFacilityRoles() throws RepositoryException {
-        if (this.oldFacilityRoles == null) {
-            this.oldFacilityRoles = getRelated(OldFacilityRole.class, "OldFacilityRole");
-        }
-        return this.oldFacilityRoles;
     }
     /**
      * Auto generated method that gets the related <code>OrderHeader</code> by the relation named <code>OriginOrderHeader</code>.
@@ -1518,6 +1518,13 @@ fieldMapColumns.put("Facility", fields);
     }
     /**
      * Auto generated value setter.
+     * @param facilityRoles the facilityRoles to set
+    */
+    public void setFacilityRoles(List<FacilityRole> facilityRoles) {
+        this.facilityRoles = facilityRoles;
+    }
+    /**
+     * Auto generated value setter.
      * @param fromFacilityTransferPlans the fromFacilityTransferPlans to set
     */
     public void setFromFacilityTransferPlans(List<FacilityTransferPlan> fromFacilityTransferPlans) {
@@ -1578,13 +1585,6 @@ fieldMapColumns.put("Facility", fields);
     */
     public void setMrpInventoryEvents(List<MrpInventoryEvent> mrpInventoryEvents) {
         this.mrpInventoryEvents = mrpInventoryEvents;
-    }
-    /**
-     * Auto generated value setter.
-     * @param oldFacilityRoles the oldFacilityRoles to set
-    */
-    public void setOldFacilityRoles(List<OldFacilityRole> oldFacilityRoles) {
-        this.oldFacilityRoles = oldFacilityRoles;
     }
     /**
      * Auto generated value setter.
@@ -2014,6 +2014,33 @@ fieldMapColumns.put("Facility", fields);
     /**
      * Auto generated method that add item to collection.
      */
+    public void addFacilityRole(FacilityRole facilityRole) {
+        if (this.facilityRoles == null) {
+            this.facilityRoles = new ArrayList<FacilityRole>();
+        }
+        this.facilityRoles.add(facilityRole);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeFacilityRole(FacilityRole facilityRole) {
+        if (this.facilityRoles == null) {
+            return;
+        }
+        this.facilityRoles.remove(facilityRole);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearFacilityRole() {
+        if (this.facilityRoles == null) {
+            return;
+        }
+        this.facilityRoles.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
     public void addMrpInventoryEvent(MrpInventoryEvent mrpInventoryEvent) {
         if (this.mrpInventoryEvents == null) {
             this.mrpInventoryEvents = new ArrayList<MrpInventoryEvent>();
@@ -2037,33 +2064,6 @@ fieldMapColumns.put("Facility", fields);
             return;
         }
         this.mrpInventoryEvents.clear();
-    }
-    /**
-     * Auto generated method that add item to collection.
-     */
-    public void addOldFacilityRole(OldFacilityRole oldFacilityRole) {
-        if (this.oldFacilityRoles == null) {
-            this.oldFacilityRoles = new ArrayList<OldFacilityRole>();
-        }
-        this.oldFacilityRoles.add(oldFacilityRole);
-    }
-    /**
-     * Auto generated method that remove item from collection.
-     */
-    public void removeOldFacilityRole(OldFacilityRole oldFacilityRole) {
-        if (this.oldFacilityRoles == null) {
-            return;
-        }
-        this.oldFacilityRoles.remove(oldFacilityRole);
-    }
-    /**
-     * Auto generated method that clear items from collection.
-     */
-    public void clearOldFacilityRole() {
-        if (this.oldFacilityRoles == null) {
-            return;
-        }
-        this.oldFacilityRoles.clear();
     }
     /**
      * Auto generated method that add item to collection.

@@ -422,6 +422,10 @@ fieldMapColumns.put("OrderHeader", fields);
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
+   private List<OrderProductPromoCode> orderProductPromoCodes = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="ORDER_ID")
+   
    private List<OrderRequirementCommitment> orderRequirementCommitments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
@@ -1509,6 +1513,17 @@ fieldMapColumns.put("OrderHeader", fields);
         return this.orderPaymentPreferences;
     }
     /**
+     * Auto generated method that gets the related <code>OrderProductPromoCode</code> by the relation named <code>OrderProductPromoCode</code>.
+     * @return the list of <code>OrderProductPromoCode</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OrderProductPromoCode> getOrderProductPromoCodes() throws RepositoryException {
+        if (this.orderProductPromoCodes == null) {
+            this.orderProductPromoCodes = getRelated(OrderProductPromoCode.class, "OrderProductPromoCode");
+        }
+        return this.orderProductPromoCodes;
+    }
+    /**
      * Auto generated method that gets the related <code>OrderRequirementCommitment</code> by the relation named <code>OrderRequirementCommitment</code>.
      * @return the list of <code>OrderRequirementCommitment</code>
      * @throws RepositoryException if an error occurs
@@ -2075,6 +2090,13 @@ fieldMapColumns.put("OrderHeader", fields);
     */
     public void setOrderPaymentPreferences(List<OrderPaymentPreference> orderPaymentPreferences) {
         this.orderPaymentPreferences = orderPaymentPreferences;
+    }
+    /**
+     * Auto generated value setter.
+     * @param orderProductPromoCodes the orderProductPromoCodes to set
+    */
+    public void setOrderProductPromoCodes(List<OrderProductPromoCode> orderProductPromoCodes) {
+        this.orderProductPromoCodes = orderProductPromoCodes;
     }
     /**
      * Auto generated value setter.
@@ -2844,6 +2866,33 @@ fieldMapColumns.put("OrderHeader", fields);
             return;
         }
         this.orderItemShipGrpInvReses.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addOrderProductPromoCode(OrderProductPromoCode orderProductPromoCode) {
+        if (this.orderProductPromoCodes == null) {
+            this.orderProductPromoCodes = new ArrayList<OrderProductPromoCode>();
+        }
+        this.orderProductPromoCodes.add(orderProductPromoCode);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeOrderProductPromoCode(OrderProductPromoCode orderProductPromoCode) {
+        if (this.orderProductPromoCodes == null) {
+            return;
+        }
+        this.orderProductPromoCodes.remove(orderProductPromoCode);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearOrderProductPromoCode() {
+        if (this.orderProductPromoCodes == null) {
+            return;
+        }
+        this.orderProductPromoCodes.clear();
     }
     /**
      * Auto generated method that add item to collection.

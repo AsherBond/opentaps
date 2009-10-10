@@ -77,6 +77,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
+        fields.put("description", "DESCRIPTION");
 fieldMapColumns.put("QuoteItem", fields);
 }
   public static enum Fields implements EntityFieldInterface<QuoteItem> {
@@ -103,7 +104,8 @@ fieldMapColumns.put("QuoteItem", fields);
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
-    createdTxStamp("createdTxStamp");
+    createdTxStamp("createdTxStamp"),
+    description("description");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -177,6 +179,8 @@ fieldMapColumns.put("QuoteItem", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
+   @Column(name="DESCRIPTION")
+   private String description;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="QUOTE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -250,7 +254,7 @@ fieldMapColumns.put("QuoteItem", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("quoteId");this.primaryKeyNames.add("quoteItemSeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("quoteId");this.allFieldsNames.add("quoteItemSeqId");this.allFieldsNames.add("productId");this.allFieldsNames.add("productFeatureId");this.allFieldsNames.add("deliverableTypeId");this.allFieldsNames.add("skillTypeId");this.allFieldsNames.add("uomId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("custRequestItemSeqId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("selectedAmount");this.allFieldsNames.add("quoteUnitPrice");this.allFieldsNames.add("reservStart");this.allFieldsNames.add("reservLength");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("configId");this.allFieldsNames.add("estimatedDeliveryDate");this.allFieldsNames.add("comments");this.allFieldsNames.add("isPromo");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("quoteId");this.allFieldsNames.add("quoteItemSeqId");this.allFieldsNames.add("productId");this.allFieldsNames.add("productFeatureId");this.allFieldsNames.add("deliverableTypeId");this.allFieldsNames.add("skillTypeId");this.allFieldsNames.add("uomId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("custRequestItemSeqId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("selectedAmount");this.allFieldsNames.add("quoteUnitPrice");this.allFieldsNames.add("reservStart");this.allFieldsNames.add("reservLength");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("configId");this.allFieldsNames.add("estimatedDeliveryDate");this.allFieldsNames.add("comments");this.allFieldsNames.add("isPromo");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("description");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -433,6 +437,13 @@ fieldMapColumns.put("QuoteItem", fields);
     public void setCreatedTxStamp(Timestamp createdTxStamp) {
         this.createdTxStamp = createdTxStamp;
     }
+    /**
+     * Auto generated value setter.
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     /**
      * Auto generated value accessor.
@@ -601,6 +612,13 @@ fieldMapColumns.put("QuoteItem", fields);
      */
     public Timestamp getCreatedTxStamp() {
         return this.createdTxStamp;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getDescription() {
+        return this.description;
     }
 
     /**
@@ -868,6 +886,7 @@ fieldMapColumns.put("QuoteItem", fields);
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
         setCreatedTxStamp((Timestamp) mapValue.get("createdTxStamp"));
+        setDescription((String) mapValue.get("description"));
         postInit();
     }
 
@@ -899,6 +918,7 @@ fieldMapColumns.put("QuoteItem", fields);
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());
         mapValue.put("createdTxStamp", getCreatedTxStamp());
+        mapValue.put("description", getDescription());
         return mapValue;
     }
 

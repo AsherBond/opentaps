@@ -31,21 +31,21 @@ import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.Field.TermVector;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.hibernate.search.bridge.TwoWayFieldBridge;
-import org.opentaps.domain.base.entities.OldFacilityRolePk;
+import org.opentaps.domain.base.entities.FacilityRolePk;
 
 /**
- * A FieldBridge for OldFacilityRolePk.
+ * A FieldBridge for FacilityRolePk.
  */
-public class OldFacilityRolePkBridge implements TwoWayFieldBridge {
+public class FacilityRolePkBridge implements TwoWayFieldBridge {
 
     /**
-     * getter method, return the OldFacilityRolePk.
+     * getter method, return the FacilityRolePk.
      * @param name a <code>String</code> value
      * @param document a <code>Document</code> value
      * @return a <code>Object</code> value
      */
     public Object get(String name, Document document) {
-        OldFacilityRolePk id = new OldFacilityRolePk();
+        FacilityRolePk id = new FacilityRolePk();
         Field field = null;
         field = document.getField(name + ".facilityId");
         id.setFacilityId(field.stringValue());
@@ -62,7 +62,7 @@ public class OldFacilityRolePkBridge implements TwoWayFieldBridge {
      * @return a <code>String</code> value
      */
     public String objectToString(Object object) {
-        OldFacilityRolePk id = (OldFacilityRolePk) object;
+        FacilityRolePk id = (FacilityRolePk) object;
         StringBuilder sb = new StringBuilder("");
         
         sb.append(id.getFacilityId());
@@ -81,7 +81,7 @@ public class OldFacilityRolePkBridge implements TwoWayFieldBridge {
      * @param luceneOptions a <code>LuceneOptions</code> value
      */
     public void set(String name, Object value, Document document, LuceneOptions luceneOptions) {
-        OldFacilityRolePk id = (OldFacilityRolePk) value;
+        FacilityRolePk id = (FacilityRolePk) value;
         Store store = luceneOptions.getStore();
         Index index = luceneOptions.getIndex();
         TermVector termVector = luceneOptions.getTermVector();

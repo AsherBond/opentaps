@@ -45,11 +45,11 @@ import java.lang.String;
 import java.sql.Timestamp;
 
 /**
- * Auto generated base entity OldFacilityRole.
+ * Auto generated base entity FacilityRole.
  */
 @javax.persistence.Entity
 @Table(name="FACILITY_ROLE")
-public class OldFacilityRole extends Entity {
+public class FacilityRole extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("facilityId", "FACILITY_ID");
@@ -59,9 +59,9 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
-fieldMapColumns.put("OldFacilityRole", fields);
+fieldMapColumns.put("FacilityRole", fields);
 }
-  public static enum Fields implements EntityFieldInterface<OldFacilityRole> {
+  public static enum Fields implements EntityFieldInterface<FacilityRole> {
     facilityId("facilityId"),
     partyId("partyId"),
     roleTypeId("roleTypeId"),
@@ -81,21 +81,21 @@ fieldMapColumns.put("OldFacilityRole", fields);
 
    @EmbeddedId
 
-   @FieldBridge(impl = org.opentaps.domain.base.entities.bridge.OldFacilityRolePkBridge.class)
-     private OldFacilityRolePk id = new OldFacilityRolePk();
+   @FieldBridge(impl = org.opentaps.domain.base.entities.bridge.FacilityRolePkBridge.class)
+     private FacilityRolePk id = new FacilityRolePk();
    
     /**
      * Auto generated Id accessor.
-     * @return <code>OldFacilityRolePk</code>
+     * @return <code>FacilityRolePk</code>
      */
-      public OldFacilityRolePk getId() {
+      public FacilityRolePk getId() {
          return id;
       }
     /**
      * Auto generated Id setter.
-     * @param id a <code>OldFacilityRolePk</code> value to set
+     * @param id a <code>FacilityRolePk</code> value to set
     */   
-      public void setId(OldFacilityRolePk id) {
+      public void setId(FacilityRolePk id) {
          this.id = id;
       }
    @Column(name="LAST_UPDATED_STAMP")
@@ -131,9 +131,9 @@ fieldMapColumns.put("OldFacilityRole", fields);
   /**
    * Default constructor.
    */
-  public OldFacilityRole() {
+  public FacilityRole() {
       super();
-      this.baseEntityName = "OldFacilityRole";
+      this.baseEntityName = "FacilityRole";
       this.isView = false;
       
       this.primaryKeyNames = new ArrayList<String>();
@@ -149,7 +149,7 @@ fieldMapColumns.put("OldFacilityRole", fields);
    * Constructor with a repository.
    * @param repository a <code>RepositoryInterface</code> value
    */
-  public OldFacilityRole(RepositoryInterface repository) {
+  public FacilityRole(RepositoryInterface repository) {
       this();
       initRepository(repository);
   }

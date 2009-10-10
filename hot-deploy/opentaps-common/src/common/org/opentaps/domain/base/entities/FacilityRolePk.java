@@ -25,7 +25,7 @@ import javax.persistence.*;
 import java.lang.String;
 
 @Embeddable
-public class OldFacilityRolePk implements Serializable {
+public class FacilityRolePk implements Serializable {
     @Column(name="FACILITY_ID")
     private String facilityId;
     @Column(name="PARTY_ID")

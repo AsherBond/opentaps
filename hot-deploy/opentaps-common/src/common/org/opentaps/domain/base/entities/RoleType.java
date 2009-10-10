@@ -178,6 +178,10 @@ fieldMapColumns.put("RoleType", fields);
    @OneToMany(fetch=FetchType.LAZY, mappedBy="roleType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ROLE_TYPE_ID")
    
+   private List<FacilityRole> facilityRoles = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="roleType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="ROLE_TYPE_ID")
+   
    private List<FinAccountRole> finAccountRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID")
@@ -203,10 +207,6 @@ fieldMapColumns.put("RoleType", fields);
    @JoinColumn(name="ROLE_TYPE_ID")
    
    private List<MarketingCampaignRole> marketingCampaignRoles = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="roleType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="ROLE_TYPE_ID")
-   
-   private List<OldFacilityRole> oldFacilityRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="roleType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ROLE_TYPE_ID")
    
@@ -683,6 +683,17 @@ fieldMapColumns.put("RoleType", fields);
         return this.facilityPartys;
     }
     /**
+     * Auto generated method that gets the related <code>FacilityRole</code> by the relation named <code>FacilityRole</code>.
+     * @return the list of <code>FacilityRole</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends FacilityRole> getFacilityRoles() throws RepositoryException {
+        if (this.facilityRoles == null) {
+            this.facilityRoles = getRelated(FacilityRole.class, "FacilityRole");
+        }
+        return this.facilityRoles;
+    }
+    /**
      * Auto generated method that gets the related <code>FinAccountRole</code> by the relation named <code>FinAccountRole</code>.
      * @return the list of <code>FinAccountRole</code>
      * @throws RepositoryException if an error occurs
@@ -758,17 +769,6 @@ fieldMapColumns.put("RoleType", fields);
             this.marketingCampaignRoles = getRelated(MarketingCampaignRole.class, "MarketingCampaignRole");
         }
         return this.marketingCampaignRoles;
-    }
-    /**
-     * Auto generated method that gets the related <code>OldFacilityRole</code> by the relation named <code>OldFacilityRole</code>.
-     * @return the list of <code>OldFacilityRole</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends OldFacilityRole> getOldFacilityRoles() throws RepositoryException {
-        if (this.oldFacilityRoles == null) {
-            this.oldFacilityRoles = getRelated(OldFacilityRole.class, "OldFacilityRole");
-        }
-        return this.oldFacilityRoles;
     }
     /**
      * Auto generated method that gets the related <code>OrderItemRole</code> by the relation named <code>OrderItemRole</code>.
@@ -1273,6 +1273,13 @@ fieldMapColumns.put("RoleType", fields);
     }
     /**
      * Auto generated value setter.
+     * @param facilityRoles the facilityRoles to set
+    */
+    public void setFacilityRoles(List<FacilityRole> facilityRoles) {
+        this.facilityRoles = facilityRoles;
+    }
+    /**
+     * Auto generated value setter.
      * @param finAccountRoles the finAccountRoles to set
     */
     public void setFinAccountRoles(List<FinAccountRole> finAccountRoles) {
@@ -1319,13 +1326,6 @@ fieldMapColumns.put("RoleType", fields);
     */
     public void setMarketingCampaignRoles(List<MarketingCampaignRole> marketingCampaignRoles) {
         this.marketingCampaignRoles = marketingCampaignRoles;
-    }
-    /**
-     * Auto generated value setter.
-     * @param oldFacilityRoles the oldFacilityRoles to set
-    */
-    public void setOldFacilityRoles(List<OldFacilityRole> oldFacilityRoles) {
-        this.oldFacilityRoles = oldFacilityRoles;
     }
     /**
      * Auto generated value setter.
@@ -1812,6 +1812,33 @@ fieldMapColumns.put("RoleType", fields);
     /**
      * Auto generated method that add item to collection.
      */
+    public void addFacilityRole(FacilityRole facilityRole) {
+        if (this.facilityRoles == null) {
+            this.facilityRoles = new ArrayList<FacilityRole>();
+        }
+        this.facilityRoles.add(facilityRole);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeFacilityRole(FacilityRole facilityRole) {
+        if (this.facilityRoles == null) {
+            return;
+        }
+        this.facilityRoles.remove(facilityRole);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearFacilityRole() {
+        if (this.facilityRoles == null) {
+            return;
+        }
+        this.facilityRoles.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
     public void addFinAccountRole(FinAccountRole finAccountRole) {
         if (this.finAccountRoles == null) {
             this.finAccountRoles = new ArrayList<FinAccountRole>();
@@ -1916,33 +1943,6 @@ fieldMapColumns.put("RoleType", fields);
             return;
         }
         this.marketingCampaignRoles.clear();
-    }
-    /**
-     * Auto generated method that add item to collection.
-     */
-    public void addOldFacilityRole(OldFacilityRole oldFacilityRole) {
-        if (this.oldFacilityRoles == null) {
-            this.oldFacilityRoles = new ArrayList<OldFacilityRole>();
-        }
-        this.oldFacilityRoles.add(oldFacilityRole);
-    }
-    /**
-     * Auto generated method that remove item from collection.
-     */
-    public void removeOldFacilityRole(OldFacilityRole oldFacilityRole) {
-        if (this.oldFacilityRoles == null) {
-            return;
-        }
-        this.oldFacilityRoles.remove(oldFacilityRole);
-    }
-    /**
-     * Auto generated method that clear items from collection.
-     */
-    public void clearOldFacilityRole() {
-        if (this.oldFacilityRoles == null) {
-            return;
-        }
-        this.oldFacilityRoles.clear();
     }
     /**
      * Auto generated method that add item to collection.
