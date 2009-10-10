@@ -281,17 +281,7 @@ under the License.
                 </entity-options>
             </drop-down>
         </field>
-        <field name="errorGlJournalId" tooltip="${uiLabelMap.${bsh:
-            (partyAcctgPreference==null&amp;&amp;agregatedPartyAcctgPreference!= null&amp;&amp;agregatedPartyAcctgPreference.get(&quot;errorGlJournalId&quot;)!=null) ||
-            (partyAcctgPreference!=null&amp;&amp;partyAcctgPreference.get(&quot;errorGlJournalId&quot;)==null&amp;&amp;agregatedPartyAcctgPreference!= null&amp;&amp;agregatedPartyAcctgPreference.get(&quot;errorGlJournalId&quot;)!=null)?
-            &quot;AccountingInheritedValue&quot;:&quot;&quot;}}">
-            <drop-down allow-empty="true">
-                <entity-options entity-name="GlJournal" key-field-name="glJournalId" description="${glJournalName} [${glJournalId}]">
-                    <entity-constraint name="organizationPartyId" operator="equals" env-name="organizationPartyId"/>
-                    <entity-order-by field-name="glJournalName"/>
-                </entity-options>
-            </drop-down>
-        </field>
+        <field name="errorGlJournalId"><hidden/></field>
     </form>
 
     <!-- forms for managing FX rates -->
