@@ -54,7 +54,7 @@
         <field use-when="glAccountTypeId!=void &amp;&amp; glAccountTypeId!=null" name="glAccountTypeId" title="Gl Account Type">
             <display-entity entity-name="GlAccountType" description="${description}" key-field-name="glAccountTypeId"/>
         </field>
-        <field name="glAccountId" title="${uiLabelMap.AccountingGlAcc}">            
+        <field name="glAccountId" title="${uiLabelMap.AccountingGlAccount}">            
             <drop-down>
                 <entity-options entity-name="GlAccountOrganizationAndClass" description="${accountCode}: ${accountName} (${glAccountId})">
                     <entity-constraint name="organizationPartyId" operator="equals" env-name="parameters.organizationPartyId"  />
@@ -86,7 +86,7 @@
             <display-entity entity-name="PaymentMethodType" description="${description}" key-field-name="paymentMethodTypeId"/>
         </field>
         <field name="description" widget-style="inputBox"><text size="30" maxlength="100"/></field>              
-        <field name="glAccountId" title="${uiLabelMap.AccountingGlAcc}">            
+        <field name="glAccountId" title="${uiLabelMap.AccountingGlAccount}">            
             <drop-down>
                 <entity-options entity-name="GlAccountOrganizationAndClass" description="${accountCode}: ${accountName} (${glAccountId})">
                     <entity-constraint name="organizationPartyId" operator="equals" env-name="parameters.organizationPartyId"  />
@@ -113,7 +113,7 @@
                 <entity-options entity-name="PaymentMethodType" description="${description}"/>
             </drop-down>
         </field>
-        <field name="glAccountId" title="${uiLabelMap.AccountingGlAcc}">            
+        <field name="glAccountId" title="${uiLabelMap.AccountingGlAccount}">            
             <drop-down>
                 <entity-options entity-name="GlAccountOrganizationAndClass" description="${accountCode}: ${accountName} (${glAccountId})">
                     <entity-constraint name="organizationPartyId" operator="equals" env-name="parameters.organizationPartyId"  />
@@ -184,7 +184,7 @@
         default-widget-style="tabletext" default-title-style="tableheadtext">
         <field name="organizationPartyId"><hidden value="${organizationPartyId}"/></field>
         <field name="roleTypeId"><hidden value=""/></field>    
-        <field name="glAccountId" title="${uiLabelMap.AccountingGlAcc}">            
+        <field name="glAccountId" title="${uiLabelMap.AccountingGlAccount}">            
             <drop-down>
                 <entity-options entity-name="GlAccount" description="${accountCode}: ${accountName} (${glAccountId})">
                     <entity-order-by field-name="accountCode"/>
