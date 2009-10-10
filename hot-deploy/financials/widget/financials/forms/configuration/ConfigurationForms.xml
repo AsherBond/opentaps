@@ -108,7 +108,7 @@
         default-widget-style="inputBox" default-title-style="tableheadtext">
         <auto-fields-service service-name="financials.createPaymentMethod"/>
         <field name="partyId"><hidden value="${organizationPartyId}"/></field>        
-        <field name="paymentMethodTypeId" title="${uiLabelMap.AccountingPaymentMethodType}">
+        <field name="paymentMethodTypeId" title="${uiLabelMap.FinancialsPaymentMethodType}">
             <drop-down allow-empty="false">
                 <entity-options entity-name="PaymentMethodType" description="${description}"/>
             </drop-down>
@@ -123,7 +123,8 @@
         </field>
         <field name="description"><text size="60"/></field>      
         <field name="fromDate"><hidden/></field>      
-        <field name="thruDate"><hidden/></field>      
+        <field name="thruDate"><hidden/></field>     
+        <field name="emailAddress"><hidden/></field>
         <field name="submitButton" title="Add" widget-style="buttontext"><submit/></field>
     </form>
     
