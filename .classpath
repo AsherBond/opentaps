@@ -196,5 +196,8 @@
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/spring-core-2.0.8.jar"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/iText-2.1.7.jar"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/jasperreports-3.5.2.jar"/>
+	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/etl/kettle-engine.jar"/>
+	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/etl/kettle-core.jar"/>
+	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/etl/kettle-db.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
