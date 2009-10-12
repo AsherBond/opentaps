@@ -36,7 +36,6 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.util.UtilDate;
@@ -380,7 +379,6 @@ public final class UtilEtl {
      *   surrogate key value - if only record found under the conditions<br>
      *   0 - in all other cases
      */
-    @SuppressWarnings("unchecked")
     public static Long lookupDimension(String entityName, String surrogateKeyName, EntityCondition lookupConditions, GenericDelegator delegator) {
         if (UtilValidate.isEmpty(entityName) || lookupConditions == null) {
             throw new IllegalArgumentException();
@@ -419,7 +417,7 @@ public final class UtilEtl {
         DateFormat nameMonthFmt = new SimpleDateFormat("MMMM");
 
         // clear DateDim
-        delegator.removeByCondition("DateDim", new EntityExpr("dateDimId", EntityOperator.NOT_EQUAL, null));
+        delegator.removeByCondition("DateDim", EntityCondition.makeCondition("dateDimId", EntityOperator.NOT_EQUAL, null));
 
         // default row w/ 0 key
         delegator.create("DateDim", UtilMisc.toMap("dateDimId", Long.valueOf(0L)));
