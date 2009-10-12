@@ -110,7 +110,14 @@ public abstract class UtilDate {
                 df = new SimpleDateFormat(dateTimeFormat, locale);
                 //df.setTimeZone(timeZone);
                 dateObj = df.parse(timestamp, pos);
-                if (dateObj != null && UtilDate.isDateTime(timestamp, dateTimeFormat, locale, timeZone)) {
+                if (
+                        dateObj != null &&
+                        (
+                                // validation method distinguish patterns with or without milliseconds placeholder
+                                UtilDate.isDateTime(timestamp, dateTimeFormat, locale, timeZone) ||
+                                UtilDate.isDateTime(timestamp, dateTimeFormat + ".S", locale, timeZone)
+                        )
+                ) {
                     hasTime = true;
                     hasDate = true;
                 }
