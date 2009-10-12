@@ -170,91 +170,91 @@ fieldMapColumns.put("ProductAndPriceView", fields);
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param productTypeId the productTypeId to set
      */
-    private void setProductTypeId(String productTypeId) {
+    public void setProductTypeId(String productTypeId) {
         this.productTypeId = productTypeId;
     }
     /**
      * Auto generated value setter.
      * @param productName the productName to set
      */
-    private void setProductName(String productName) {
+    public void setProductName(String productName) {
         this.productName = productName;
     }
     /**
      * Auto generated value setter.
      * @param internalName the internalName to set
      */
-    private void setInternalName(String internalName) {
+    public void setInternalName(String internalName) {
         this.internalName = internalName;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param primaryProductCategoryId the primaryProductCategoryId to set
      */
-    private void setPrimaryProductCategoryId(String primaryProductCategoryId) {
+    public void setPrimaryProductCategoryId(String primaryProductCategoryId) {
         this.primaryProductCategoryId = primaryProductCategoryId;
     }
     /**
      * Auto generated value setter.
      * @param isVirtual the isVirtual to set
      */
-    private void setIsVirtual(String isVirtual) {
+    public void setIsVirtual(String isVirtual) {
         this.isVirtual = isVirtual;
     }
     /**
      * Auto generated value setter.
      * @param productPriceTypeId the productPriceTypeId to set
      */
-    private void setProductPriceTypeId(String productPriceTypeId) {
+    public void setProductPriceTypeId(String productPriceTypeId) {
         this.productPriceTypeId = productPriceTypeId;
     }
     /**
      * Auto generated value setter.
      * @param productPricePurposeId the productPricePurposeId to set
      */
-    private void setProductPricePurposeId(String productPricePurposeId) {
+    public void setProductPricePurposeId(String productPricePurposeId) {
         this.productPricePurposeId = productPricePurposeId;
     }
     /**
      * Auto generated value setter.
      * @param currencyUomId the currencyUomId to set
      */
-    private void setCurrencyUomId(String currencyUomId) {
+    public void setCurrencyUomId(String currencyUomId) {
         this.currencyUomId = currencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param price the price to set
      */
-    private void setPrice(BigDecimal price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

@@ -228,154 +228,154 @@ fieldMapColumns.put("WorkEffortShoppingListView", fields);
      * Auto generated value setter.
      * @param shoppingListTypeDescription the shoppingListTypeDescription to set
      */
-    private void setShoppingListTypeDescription(String shoppingListTypeDescription) {
+    public void setShoppingListTypeDescription(String shoppingListTypeDescription) {
         this.shoppingListTypeDescription = shoppingListTypeDescription;
     }
     /**
      * Auto generated value setter.
      * @param shoppingListId the shoppingListId to set
      */
-    private void setShoppingListId(String shoppingListId) {
+    public void setShoppingListId(String shoppingListId) {
         this.shoppingListId = shoppingListId;
     }
     /**
      * Auto generated value setter.
      * @param workEffortId the workEffortId to set
      */
-    private void setWorkEffortId(String workEffortId) {
+    public void setWorkEffortId(String workEffortId) {
         this.workEffortId = workEffortId;
     }
     /**
      * Auto generated value setter.
      * @param shoppingListTypeId the shoppingListTypeId to set
      */
-    private void setShoppingListTypeId(String shoppingListTypeId) {
+    public void setShoppingListTypeId(String shoppingListTypeId) {
         this.shoppingListTypeId = shoppingListTypeId;
     }
     /**
      * Auto generated value setter.
      * @param parentShoppingListId the parentShoppingListId to set
      */
-    private void setParentShoppingListId(String parentShoppingListId) {
+    public void setParentShoppingListId(String parentShoppingListId) {
         this.parentShoppingListId = parentShoppingListId;
     }
     /**
      * Auto generated value setter.
      * @param productStoreId the productStoreId to set
      */
-    private void setProductStoreId(String productStoreId) {
+    public void setProductStoreId(String productStoreId) {
         this.productStoreId = productStoreId;
     }
     /**
      * Auto generated value setter.
      * @param visitorId the visitorId to set
      */
-    private void setVisitorId(String visitorId) {
+    public void setVisitorId(String visitorId) {
         this.visitorId = visitorId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param listName the listName to set
      */
-    private void setListName(String listName) {
+    public void setListName(String listName) {
         this.listName = listName;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param isPublic the isPublic to set
      */
-    private void setIsPublic(String isPublic) {
+    public void setIsPublic(String isPublic) {
         this.isPublic = isPublic;
     }
     /**
      * Auto generated value setter.
      * @param isActive the isActive to set
      */
-    private void setIsActive(String isActive) {
+    public void setIsActive(String isActive) {
         this.isActive = isActive;
     }
     /**
      * Auto generated value setter.
      * @param currencyUom the currencyUom to set
      */
-    private void setCurrencyUom(String currencyUom) {
+    public void setCurrencyUom(String currencyUom) {
         this.currencyUom = currencyUom;
     }
     /**
      * Auto generated value setter.
      * @param shipmentMethodTypeId the shipmentMethodTypeId to set
      */
-    private void setShipmentMethodTypeId(String shipmentMethodTypeId) {
+    public void setShipmentMethodTypeId(String shipmentMethodTypeId) {
         this.shipmentMethodTypeId = shipmentMethodTypeId;
     }
     /**
      * Auto generated value setter.
      * @param carrierPartyId the carrierPartyId to set
      */
-    private void setCarrierPartyId(String carrierPartyId) {
+    public void setCarrierPartyId(String carrierPartyId) {
         this.carrierPartyId = carrierPartyId;
     }
     /**
      * Auto generated value setter.
      * @param carrierRoleTypeId the carrierRoleTypeId to set
      */
-    private void setCarrierRoleTypeId(String carrierRoleTypeId) {
+    public void setCarrierRoleTypeId(String carrierRoleTypeId) {
         this.carrierRoleTypeId = carrierRoleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
-    private void setContactMechId(String contactMechId) {
+    public void setContactMechId(String contactMechId) {
         this.contactMechId = contactMechId;
     }
     /**
      * Auto generated value setter.
      * @param paymentMethodId the paymentMethodId to set
      */
-    private void setPaymentMethodId(String paymentMethodId) {
+    public void setPaymentMethodId(String paymentMethodId) {
         this.paymentMethodId = paymentMethodId;
     }
     /**
      * Auto generated value setter.
      * @param recurrenceInfoId the recurrenceInfoId to set
      */
-    private void setRecurrenceInfoId(String recurrenceInfoId) {
+    public void setRecurrenceInfoId(String recurrenceInfoId) {
         this.recurrenceInfoId = recurrenceInfoId;
     }
     /**
      * Auto generated value setter.
      * @param lastOrderedDate the lastOrderedDate to set
      */
-    private void setLastOrderedDate(Timestamp lastOrderedDate) {
+    public void setLastOrderedDate(Timestamp lastOrderedDate) {
         this.lastOrderedDate = lastOrderedDate;
     }
     /**
      * Auto generated value setter.
      * @param lastAdminModified the lastAdminModified to set
      */
-    private void setLastAdminModified(Timestamp lastAdminModified) {
+    public void setLastAdminModified(Timestamp lastAdminModified) {
         this.lastAdminModified = lastAdminModified;
     }
     /**
      * Auto generated value setter.
      * @param productPromoCodeId the productPromoCodeId to set
      */
-    private void setProductPromoCodeId(String productPromoCodeId) {
+    public void setProductPromoCodeId(String productPromoCodeId) {
         this.productPromoCodeId = productPromoCodeId;
     }
 

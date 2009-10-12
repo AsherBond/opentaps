@@ -145,56 +145,56 @@ fieldMapColumns.put("UserLoginAndProtectedView", fields);
      * Auto generated value setter.
      * @param userLoginId the userLoginId to set
      */
-    private void setUserLoginId(String userLoginId) {
+    public void setUserLoginId(String userLoginId) {
         this.userLoginId = userLoginId;
     }
     /**
      * Auto generated value setter.
      * @param groupId the groupId to set
      */
-    private void setGroupId(String groupId) {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param viewNameId the viewNameId to set
      */
-    private void setViewNameId(String viewNameId) {
+    public void setViewNameId(String viewNameId) {
         this.viewNameId = viewNameId;
     }
     /**
      * Auto generated value setter.
      * @param maxHits the maxHits to set
      */
-    private void setMaxHits(Long maxHits) {
+    public void setMaxHits(Long maxHits) {
         this.maxHits = maxHits;
     }
     /**
      * Auto generated value setter.
      * @param maxHitsDuration the maxHitsDuration to set
      */
-    private void setMaxHitsDuration(Long maxHitsDuration) {
+    public void setMaxHitsDuration(Long maxHitsDuration) {
         this.maxHitsDuration = maxHitsDuration;
     }
     /**
      * Auto generated value setter.
      * @param tarpitDuration the tarpitDuration to set
      */
-    private void setTarpitDuration(Long tarpitDuration) {
+    public void setTarpitDuration(Long tarpitDuration) {
         this.tarpitDuration = tarpitDuration;
     }
 

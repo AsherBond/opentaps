@@ -154,70 +154,70 @@ fieldMapColumns.put("ShipmentRouteSegmentDetail", fields);
      * Auto generated value setter.
      * @param shipmentId the shipmentId to set
      */
-    private void setShipmentId(String shipmentId) {
+    public void setShipmentId(String shipmentId) {
         this.shipmentId = shipmentId;
     }
     /**
      * Auto generated value setter.
      * @param shipmentRouteSegmentId the shipmentRouteSegmentId to set
      */
-    private void setShipmentRouteSegmentId(String shipmentRouteSegmentId) {
+    public void setShipmentRouteSegmentId(String shipmentRouteSegmentId) {
         this.shipmentRouteSegmentId = shipmentRouteSegmentId;
     }
     /**
      * Auto generated value setter.
      * @param originFacilityId the originFacilityId to set
      */
-    private void setOriginFacilityId(String originFacilityId) {
+    public void setOriginFacilityId(String originFacilityId) {
         this.originFacilityId = originFacilityId;
     }
     /**
      * Auto generated value setter.
      * @param carrierPartyId the carrierPartyId to set
      */
-    private void setCarrierPartyId(String carrierPartyId) {
+    public void setCarrierPartyId(String carrierPartyId) {
         this.carrierPartyId = carrierPartyId;
     }
     /**
      * Auto generated value setter.
      * @param carrierServiceStatusId the carrierServiceStatusId to set
      */
-    private void setCarrierServiceStatusId(String carrierServiceStatusId) {
+    public void setCarrierServiceStatusId(String carrierServiceStatusId) {
         this.carrierServiceStatusId = carrierServiceStatusId;
     }
     /**
      * Auto generated value setter.
      * @param shipmentMethodTypeId the shipmentMethodTypeId to set
      */
-    private void setShipmentMethodTypeId(String shipmentMethodTypeId) {
+    public void setShipmentMethodTypeId(String shipmentMethodTypeId) {
         this.shipmentMethodTypeId = shipmentMethodTypeId;
     }
     /**
      * Auto generated value setter.
      * @param billingWeight the billingWeight to set
      */
-    private void setBillingWeight(BigDecimal billingWeight) {
+    public void setBillingWeight(BigDecimal billingWeight) {
         this.billingWeight = billingWeight;
     }
     /**
      * Auto generated value setter.
      * @param billingWeightUomId the billingWeightUomId to set
      */
-    private void setBillingWeightUomId(String billingWeightUomId) {
+    public void setBillingWeightUomId(String billingWeightUomId) {
         this.billingWeightUomId = billingWeightUomId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param primaryOrderId the primaryOrderId to set
      */
-    private void setPrimaryOrderId(String primaryOrderId) {
+    public void setPrimaryOrderId(String primaryOrderId) {
         this.primaryOrderId = primaryOrderId;
     }
 

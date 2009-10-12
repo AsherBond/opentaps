@@ -113,14 +113,14 @@ fieldMapColumns.put("AgreementTermTypesByDocumentType", fields);
      * Auto generated value setter.
      * @param documentTypeId the documentTypeId to set
      */
-    private void setDocumentTypeId(String documentTypeId) {
+    public void setDocumentTypeId(String documentTypeId) {
         this.documentTypeId = documentTypeId;
     }
     /**
      * Auto generated value setter.
      * @param termTypeId the termTypeId to set
      */
-    private void setTermTypeId(String termTypeId) {
+    public void setTermTypeId(String termTypeId) {
         this.termTypeId = termTypeId;
     }
 

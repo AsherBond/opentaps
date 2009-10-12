@@ -125,28 +125,28 @@ fieldMapColumns.put("UspsContactListCountZip5", fields);
      * Auto generated value setter.
      * @param contactListId the contactListId to set
      */
-    private void setContactListId(String contactListId) {
+    public void setContactListId(String contactListId) {
         this.contactListId = contactListId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
-    private void setContactMechId(Long contactMechId) {
+    public void setContactMechId(Long contactMechId) {
         this.contactMechId = contactMechId;
     }
     /**
      * Auto generated value setter.
      * @param zip5 the zip5 to set
      */
-    private void setZip5(String zip5) {
+    public void setZip5(String zip5) {
         this.zip5 = zip5;
     }
     /**
      * Auto generated value setter.
      * @param processedTimestamp the processedTimestamp to set
      */
-    private void setProcessedTimestamp(Timestamp processedTimestamp) {
+    public void setProcessedTimestamp(Timestamp processedTimestamp) {
         this.processedTimestamp = processedTimestamp;
     }
 

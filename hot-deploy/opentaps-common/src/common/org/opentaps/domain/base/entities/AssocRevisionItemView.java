@@ -155,70 +155,70 @@ fieldMapColumns.put("AssocRevisionItemView", fields);
      * Auto generated value setter.
      * @param contentId the contentId to set
      */
-    private void setContentId(String contentId) {
+    public void setContentId(String contentId) {
         this.contentId = contentId;
     }
     /**
      * Auto generated value setter.
      * @param contentIdTo the contentIdTo to set
      */
-    private void setContentIdTo(String contentIdTo) {
+    public void setContentIdTo(String contentIdTo) {
         this.contentIdTo = contentIdTo;
     }
     /**
      * Auto generated value setter.
      * @param contentAssocTypeId the contentAssocTypeId to set
      */
-    private void setContentAssocTypeId(String contentAssocTypeId) {
+    public void setContentAssocTypeId(String contentAssocTypeId) {
         this.contentAssocTypeId = contentAssocTypeId;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param sequenceNum the sequenceNum to set
      */
-    private void setSequenceNum(Long sequenceNum) {
+    public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
     /**
      * Auto generated value setter.
      * @param rootRevisionContentId the rootRevisionContentId to set
      */
-    private void setRootRevisionContentId(String rootRevisionContentId) {
+    public void setRootRevisionContentId(String rootRevisionContentId) {
         this.rootRevisionContentId = rootRevisionContentId;
     }
     /**
      * Auto generated value setter.
      * @param itemContentId the itemContentId to set
      */
-    private void setItemContentId(String itemContentId) {
+    public void setItemContentId(String itemContentId) {
         this.itemContentId = itemContentId;
     }
     /**
      * Auto generated value setter.
      * @param contentRevisionSeqId the contentRevisionSeqId to set
      */
-    private void setContentRevisionSeqId(String contentRevisionSeqId) {
+    public void setContentRevisionSeqId(String contentRevisionSeqId) {
         this.contentRevisionSeqId = contentRevisionSeqId;
     }
     /**
      * Auto generated value setter.
      * @param maxRevisionSeqId the maxRevisionSeqId to set
      */
-    private void setMaxRevisionSeqId(String maxRevisionSeqId) {
+    public void setMaxRevisionSeqId(String maxRevisionSeqId) {
         this.maxRevisionSeqId = maxRevisionSeqId;
     }
 

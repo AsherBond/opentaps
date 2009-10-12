@@ -144,56 +144,56 @@ fieldMapColumns.put("ProductPromoUseCheck", fields);
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param promoSequenceId the promoSequenceId to set
      */
-    private void setPromoSequenceId(String promoSequenceId) {
+    public void setPromoSequenceId(String promoSequenceId) {
         this.promoSequenceId = promoSequenceId;
     }
     /**
      * Auto generated value setter.
      * @param productPromoId the productPromoId to set
      */
-    private void setProductPromoId(String productPromoId) {
+    public void setProductPromoId(String productPromoId) {
         this.productPromoId = productPromoId;
     }
     /**
      * Auto generated value setter.
      * @param productPromoCodeId the productPromoCodeId to set
      */
-    private void setProductPromoCodeId(String productPromoCodeId) {
+    public void setProductPromoCodeId(String productPromoCodeId) {
         this.productPromoCodeId = productPromoCodeId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param totalDiscountAmount the totalDiscountAmount to set
      */
-    private void setTotalDiscountAmount(BigDecimal totalDiscountAmount) {
+    public void setTotalDiscountAmount(BigDecimal totalDiscountAmount) {
         this.totalDiscountAmount = totalDiscountAmount;
     }
     /**
      * Auto generated value setter.
      * @param quantityLeftInActions the quantityLeftInActions to set
      */
-    private void setQuantityLeftInActions(BigDecimal quantityLeftInActions) {
+    public void setQuantityLeftInActions(BigDecimal quantityLeftInActions) {
         this.quantityLeftInActions = quantityLeftInActions;
     }
 

@@ -144,56 +144,56 @@ fieldMapColumns.put("InvoiceItemTypeAndOrgGlAccount", fields);
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param defaultGlAccountId the defaultGlAccountId to set
      */
-    private void setDefaultGlAccountId(String defaultGlAccountId) {
+    public void setDefaultGlAccountId(String defaultGlAccountId) {
         this.defaultGlAccountId = defaultGlAccountId;
     }
     /**
      * Auto generated value setter.
      * @param defaultSequenceNum the defaultSequenceNum to set
      */
-    private void setDefaultSequenceNum(Long defaultSequenceNum) {
+    public void setDefaultSequenceNum(Long defaultSequenceNum) {
         this.defaultSequenceNum = defaultSequenceNum;
     }
     /**
      * Auto generated value setter.
      * @param organizationPartyId the organizationPartyId to set
      */
-    private void setOrganizationPartyId(String organizationPartyId) {
+    public void setOrganizationPartyId(String organizationPartyId) {
         this.organizationPartyId = organizationPartyId;
     }
     /**
      * Auto generated value setter.
      * @param orgGlAccountId the orgGlAccountId to set
      */
-    private void setOrgGlAccountId(String orgGlAccountId) {
+    public void setOrgGlAccountId(String orgGlAccountId) {
         this.orgGlAccountId = orgGlAccountId;
     }
     /**
      * Auto generated value setter.
      * @param invoiceItemMapKey the invoiceItemMapKey to set
      */
-    private void setInvoiceItemMapKey(String invoiceItemMapKey) {
+    public void setInvoiceItemMapKey(String invoiceItemMapKey) {
         this.invoiceItemMapKey = invoiceItemMapKey;
     }
     /**
      * Auto generated value setter.
      * @param invoiceTypeId the invoiceTypeId to set
      */
-    private void setInvoiceTypeId(String invoiceTypeId) {
+    public void setInvoiceTypeId(String invoiceTypeId) {
         this.invoiceTypeId = invoiceTypeId;
     }
     /**
      * Auto generated value setter.
      * @param invoiceItemTypeId the invoiceItemTypeId to set
      */
-    private void setInvoiceItemTypeId(String invoiceItemTypeId) {
+    public void setInvoiceItemTypeId(String invoiceItemTypeId) {
         this.invoiceItemTypeId = invoiceItemTypeId;
     }
 

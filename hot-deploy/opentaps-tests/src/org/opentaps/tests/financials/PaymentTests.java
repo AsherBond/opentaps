@@ -16,6 +16,7 @@
 package org.opentaps.tests.financials;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Map;
 
 import com.opensourcestrategies.financials.accounts.AccountsHelper;
@@ -886,6 +887,54 @@ public class PaymentTests extends FinancialsTestCase {
         assertEquals("Parent Account balance is correct", AccountsHelper.getBalanceForCustomerPartyId(accountPartyId, organizationPartyId, "ACTUAL", UtilDateTime.nowTimestamp(), delegator), new BigDecimal(0.00));
         assertEquals("Sub account 1 balance is correct", AccountsHelper.getBalanceForCustomerPartyId(subAccountPartyId1, organizationPartyId, "ACTUAL", UtilDateTime.nowTimestamp(), delegator), new BigDecimal(0.00));
         assertEquals("Sub account 2 balance is correct", AccountsHelper.getBalanceForCustomerPartyId(subAccountPartyId2, organizationPartyId, "ACTUAL", UtilDateTime.nowTimestamp(), delegator), new BigDecimal(0.00));
+    }
+
+    /**
+     * This test verifies that the correct GL account postings take place
+     * when a payment is split between an override GL account and an invoice.
+     * @throws GeneralException if an error occurs
+     */
+    public void testPaymentWithOverrideGlAccount() throws GeneralException {
+        FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, demofinadmin);
+
+        // this payment will be split between the invoice and an override gl account
+        BigDecimal invoiceAmount = new BigDecimal("1000.0");
+        BigDecimal overrideAmount = new BigDecimal("1500.0");
+        BigDecimal paymentAmount = invoiceAmount.add(overrideAmount);
+
+        // create the invoice
+        String pi1 = fa.createInvoice("DemoSupplier", "PURCHASE_INVOICE", UtilDateTime.nowTimestamp(), null, null, null);
+        fa.createInvoiceItem(pi1, "PINV_SUPLPRD_ITEM", null, new BigDecimal("1.0"), invoiceAmount, null, null);
+        fa.updateInvoiceStatus(pi1, "INVOICE_READY");
+
+        // get the initial balances.  Payment will be split between consumer and gov, and enterprise should be zero throughout
+        Timestamp start = UtilDateTime.nowTimestamp();
+        Map initialBalances = fa.getFinancialBalances(start);
+
+        //create a vendor payment of $2500 to DemoSupplier
+        String paymentId = fa.createPaymentAndApplication(paymentAmount, organizationPartyId, "DemoSupplier", "VENDOR_PAYMENT", "CASH", null, null, null);
+        //apply $1000 of payment to PI1 with tags DIV_CONSUMER
+        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.toMap("userLogin", demofinadmin, "paymentId", paymentId, "invoiceId", pi1, "amountApplied", invoiceAmount));
+
+        // apply $1500 to 600000 with tag DIV_GOV
+        String overrideGlAccountId = "600000";
+        Map<String, Object> ctxt = FastMap.newInstance();
+        ctxt.put("userLogin", demofinadmin);
+        ctxt.put("paymentId", paymentId);
+        ctxt.put("amountApplied", overrideAmount);
+        ctxt.put("overrideGlAccountId", overrideGlAccountId);
+        runAndAssertServiceSuccess("createPaymentApplication", ctxt);
+
+        // post the payment
+        fa.updatePaymentStatus(paymentId, "PMNT_SENT");
+
+        Timestamp finish = UtilDateTime.nowTimestamp();
+        Map finalBalances = fa.getFinancialBalances(finish);
+
+        // overall, ACCOUNTS_PAYABLE +1000 and override GL account +1500
+        Map expectedChange = UtilFinancial.replaceGlAccountTypeWithGlAccountForOrg(organizationPartyId, UtilMisc.toMap("ACCOUNTS_PAYABLE", invoiceAmount), delegator);
+        expectedChange.put(overrideGlAccountId, overrideAmount);
+        assertMapDifferenceCorrect(initialBalances, finalBalances, expectedChange);
     }
 
     // sets PartySupplementalData.parentPartyId for the given partyId

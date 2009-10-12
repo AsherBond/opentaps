@@ -140,49 +140,49 @@ fieldMapColumns.put("OrderReportGroupByProduct", fields);
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param orderDate the orderDate to set
      */
-    private void setOrderDate(Timestamp orderDate) {
+    public void setOrderDate(Timestamp orderDate) {
         this.orderDate = orderDate;
     }
     /**
      * Auto generated value setter.
      * @param orderStatusId the orderStatusId to set
      */
-    private void setOrderStatusId(String orderStatusId) {
+    public void setOrderStatusId(String orderStatusId) {
         this.orderStatusId = orderStatusId;
     }
     /**
      * Auto generated value setter.
      * @param orderItemStatusId the orderItemStatusId to set
      */
-    private void setOrderItemStatusId(String orderItemStatusId) {
+    public void setOrderItemStatusId(String orderItemStatusId) {
         this.orderItemStatusId = orderItemStatusId;
     }
     /**
      * Auto generated value setter.
      * @param orderTypeId the orderTypeId to set
      */
-    private void setOrderTypeId(String orderTypeId) {
+    public void setOrderTypeId(String orderTypeId) {
         this.orderTypeId = orderTypeId;
     }
     /**
      * Auto generated value setter.
      * @param quantity the quantity to set
      */
-    private void setQuantity(BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
     /**
      * Auto generated value setter.
      * @param unitPrice the unitPrice to set
      */
-    private void setUnitPrice(BigDecimal unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 

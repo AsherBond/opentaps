@@ -288,217 +288,217 @@ fieldMapColumns.put("PartyRelationshipAndCaseRole", fields);
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param partyIdTo the partyIdTo to set
      */
-    private void setPartyIdTo(String partyIdTo) {
+    public void setPartyIdTo(String partyIdTo) {
         this.partyIdTo = partyIdTo;
     }
     /**
      * Auto generated value setter.
      * @param partyIdFrom the partyIdFrom to set
      */
-    private void setPartyIdFrom(String partyIdFrom) {
+    public void setPartyIdFrom(String partyIdFrom) {
         this.partyIdFrom = partyIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeIdFrom the roleTypeIdFrom to set
      */
-    private void setRoleTypeIdFrom(String roleTypeIdFrom) {
+    public void setRoleTypeIdFrom(String roleTypeIdFrom) {
         this.roleTypeIdFrom = roleTypeIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param custRequestId the custRequestId to set
      */
-    private void setCustRequestId(String custRequestId) {
+    public void setCustRequestId(String custRequestId) {
         this.custRequestId = custRequestId;
     }
     /**
      * Auto generated value setter.
      * @param custRequestTypeId the custRequestTypeId to set
      */
-    private void setCustRequestTypeId(String custRequestTypeId) {
+    public void setCustRequestTypeId(String custRequestTypeId) {
         this.custRequestTypeId = custRequestTypeId;
     }
     /**
      * Auto generated value setter.
      * @param custRequestCategoryId the custRequestCategoryId to set
      */
-    private void setCustRequestCategoryId(String custRequestCategoryId) {
+    public void setCustRequestCategoryId(String custRequestCategoryId) {
         this.custRequestCategoryId = custRequestCategoryId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param fromPartyId the fromPartyId to set
      */
-    private void setFromPartyId(String fromPartyId) {
+    public void setFromPartyId(String fromPartyId) {
         this.fromPartyId = fromPartyId;
     }
     /**
      * Auto generated value setter.
      * @param priority the priority to set
      */
-    private void setPriority(Long priority) {
+    public void setPriority(Long priority) {
         this.priority = priority;
     }
     /**
      * Auto generated value setter.
      * @param custRequestDate the custRequestDate to set
      */
-    private void setCustRequestDate(Timestamp custRequestDate) {
+    public void setCustRequestDate(Timestamp custRequestDate) {
         this.custRequestDate = custRequestDate;
     }
     /**
      * Auto generated value setter.
      * @param responseRequiredDate the responseRequiredDate to set
      */
-    private void setResponseRequiredDate(Timestamp responseRequiredDate) {
+    public void setResponseRequiredDate(Timestamp responseRequiredDate) {
         this.responseRequiredDate = responseRequiredDate;
     }
     /**
      * Auto generated value setter.
      * @param custRequestName the custRequestName to set
      */
-    private void setCustRequestName(String custRequestName) {
+    public void setCustRequestName(String custRequestName) {
         this.custRequestName = custRequestName;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param maximumAmountUomId the maximumAmountUomId to set
      */
-    private void setMaximumAmountUomId(String maximumAmountUomId) {
+    public void setMaximumAmountUomId(String maximumAmountUomId) {
         this.maximumAmountUomId = maximumAmountUomId;
     }
     /**
      * Auto generated value setter.
      * @param productStoreId the productStoreId to set
      */
-    private void setProductStoreId(String productStoreId) {
+    public void setProductStoreId(String productStoreId) {
         this.productStoreId = productStoreId;
     }
     /**
      * Auto generated value setter.
      * @param salesChannelEnumId the salesChannelEnumId to set
      */
-    private void setSalesChannelEnumId(String salesChannelEnumId) {
+    public void setSalesChannelEnumId(String salesChannelEnumId) {
         this.salesChannelEnumId = salesChannelEnumId;
     }
     /**
      * Auto generated value setter.
      * @param fulfillContactMechId the fulfillContactMechId to set
      */
-    private void setFulfillContactMechId(String fulfillContactMechId) {
+    public void setFulfillContactMechId(String fulfillContactMechId) {
         this.fulfillContactMechId = fulfillContactMechId;
     }
     /**
      * Auto generated value setter.
      * @param currencyUomId the currencyUomId to set
      */
-    private void setCurrencyUomId(String currencyUomId) {
+    public void setCurrencyUomId(String currencyUomId) {
         this.currencyUomId = currencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param openDateTime the openDateTime to set
      */
-    private void setOpenDateTime(Timestamp openDateTime) {
+    public void setOpenDateTime(Timestamp openDateTime) {
         this.openDateTime = openDateTime;
     }
     /**
      * Auto generated value setter.
      * @param closedDateTime the closedDateTime to set
      */
-    private void setClosedDateTime(Timestamp closedDateTime) {
+    public void setClosedDateTime(Timestamp closedDateTime) {
         this.closedDateTime = closedDateTime;
     }
     /**
      * Auto generated value setter.
      * @param internalComment the internalComment to set
      */
-    private void setInternalComment(String internalComment) {
+    public void setInternalComment(String internalComment) {
         this.internalComment = internalComment;
     }
     /**
      * Auto generated value setter.
      * @param reason the reason to set
      */
-    private void setReason(String reason) {
+    public void setReason(String reason) {
         this.reason = reason;
     }
     /**
      * Auto generated value setter.
      * @param createdDate the createdDate to set
      */
-    private void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
     /**
      * Auto generated value setter.
      * @param createdByUserLogin the createdByUserLogin to set
      */
-    private void setCreatedByUserLogin(String createdByUserLogin) {
+    public void setCreatedByUserLogin(String createdByUserLogin) {
         this.createdByUserLogin = createdByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedDate the lastModifiedDate to set
      */
-    private void setLastModifiedDate(Timestamp lastModifiedDate) {
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedByUserLogin the lastModifiedByUserLogin to set
      */
-    private void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
+    public void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
         this.lastModifiedByUserLogin = lastModifiedByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param fulfilledDateTime the fulfilledDateTime to set
      */
-    private void setFulfilledDateTime(Timestamp fulfilledDateTime) {
+    public void setFulfilledDateTime(Timestamp fulfilledDateTime) {
         this.fulfilledDateTime = fulfilledDateTime;
     }
 

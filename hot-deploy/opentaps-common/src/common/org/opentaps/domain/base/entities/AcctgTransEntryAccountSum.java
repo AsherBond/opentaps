@@ -212,140 +212,140 @@ fieldMapColumns.put("AcctgTransEntryAccountSum", fields);
      * Auto generated value setter.
      * @param transactionDate the transactionDate to set
      */
-    private void setTransactionDate(Timestamp transactionDate) {
+    public void setTransactionDate(Timestamp transactionDate) {
         this.transactionDate = transactionDate;
     }
     /**
      * Auto generated value setter.
      * @param glFiscalTypeId the glFiscalTypeId to set
      */
-    private void setGlFiscalTypeId(String glFiscalTypeId) {
+    public void setGlFiscalTypeId(String glFiscalTypeId) {
         this.glFiscalTypeId = glFiscalTypeId;
     }
     /**
      * Auto generated value setter.
      * @param organizationPartyId the organizationPartyId to set
      */
-    private void setOrganizationPartyId(String organizationPartyId) {
+    public void setOrganizationPartyId(String organizationPartyId) {
         this.organizationPartyId = organizationPartyId;
     }
     /**
      * Auto generated value setter.
      * @param debitCreditFlag the debitCreditFlag to set
      */
-    private void setDebitCreditFlag(String debitCreditFlag) {
+    public void setDebitCreditFlag(String debitCreditFlag) {
         this.debitCreditFlag = debitCreditFlag;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId1 the acctgTagEnumId1 to set
      */
-    private void setAcctgTagEnumId1(String acctgTagEnumId1) {
+    public void setAcctgTagEnumId1(String acctgTagEnumId1) {
         this.acctgTagEnumId1 = acctgTagEnumId1;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId2 the acctgTagEnumId2 to set
      */
-    private void setAcctgTagEnumId2(String acctgTagEnumId2) {
+    public void setAcctgTagEnumId2(String acctgTagEnumId2) {
         this.acctgTagEnumId2 = acctgTagEnumId2;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId3 the acctgTagEnumId3 to set
      */
-    private void setAcctgTagEnumId3(String acctgTagEnumId3) {
+    public void setAcctgTagEnumId3(String acctgTagEnumId3) {
         this.acctgTagEnumId3 = acctgTagEnumId3;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId4 the acctgTagEnumId4 to set
      */
-    private void setAcctgTagEnumId4(String acctgTagEnumId4) {
+    public void setAcctgTagEnumId4(String acctgTagEnumId4) {
         this.acctgTagEnumId4 = acctgTagEnumId4;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId5 the acctgTagEnumId5 to set
      */
-    private void setAcctgTagEnumId5(String acctgTagEnumId5) {
+    public void setAcctgTagEnumId5(String acctgTagEnumId5) {
         this.acctgTagEnumId5 = acctgTagEnumId5;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId6 the acctgTagEnumId6 to set
      */
-    private void setAcctgTagEnumId6(String acctgTagEnumId6) {
+    public void setAcctgTagEnumId6(String acctgTagEnumId6) {
         this.acctgTagEnumId6 = acctgTagEnumId6;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId7 the acctgTagEnumId7 to set
      */
-    private void setAcctgTagEnumId7(String acctgTagEnumId7) {
+    public void setAcctgTagEnumId7(String acctgTagEnumId7) {
         this.acctgTagEnumId7 = acctgTagEnumId7;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId8 the acctgTagEnumId8 to set
      */
-    private void setAcctgTagEnumId8(String acctgTagEnumId8) {
+    public void setAcctgTagEnumId8(String acctgTagEnumId8) {
         this.acctgTagEnumId8 = acctgTagEnumId8;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId9 the acctgTagEnumId9 to set
      */
-    private void setAcctgTagEnumId9(String acctgTagEnumId9) {
+    public void setAcctgTagEnumId9(String acctgTagEnumId9) {
         this.acctgTagEnumId9 = acctgTagEnumId9;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId10 the acctgTagEnumId10 to set
      */
-    private void setAcctgTagEnumId10(String acctgTagEnumId10) {
+    public void setAcctgTagEnumId10(String acctgTagEnumId10) {
         this.acctgTagEnumId10 = acctgTagEnumId10;
     }
     /**
      * Auto generated value setter.
      * @param amount the amount to set
      */
-    private void setAmount(BigDecimal amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
     /**
      * Auto generated value setter.
      * @param isPosted the isPosted to set
      */
-    private void setIsPosted(String isPosted) {
+    public void setIsPosted(String isPosted) {
         this.isPosted = isPosted;
     }
     /**
      * Auto generated value setter.
      * @param glAccountId the glAccountId to set
      */
-    private void setGlAccountId(String glAccountId) {
+    public void setGlAccountId(String glAccountId) {
         this.glAccountId = glAccountId;
     }
     /**
      * Auto generated value setter.
      * @param accountCode the accountCode to set
      */
-    private void setAccountCode(String accountCode) {
+    public void setAccountCode(String accountCode) {
         this.accountCode = accountCode;
     }
     /**
      * Auto generated value setter.
      * @param accountName the accountName to set
      */
-    private void setAccountName(String accountName) {
+    public void setAccountName(String accountName) {
         this.accountName = accountName;
     }
     /**
      * Auto generated value setter.
      * @param glAccountClassId the glAccountClassId to set
      */
-    private void setGlAccountClassId(String glAccountClassId) {
+    public void setGlAccountClassId(String glAccountClassId) {
         this.glAccountClassId = glAccountClassId;
     }
 

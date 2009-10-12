@@ -30,6 +30,7 @@
             <@inputDateTimeRow name="fromDate" form="BalanceReportSetupForm" title="${uiLabelMap.CommonFromDate}" default=thirtyDaysAgo?if_exists/>
             <@inputDateTimeRow name="thruDate" form="BalanceReportSetupForm" title="${uiLabelMap.CommonThruDate}" default=today?if_exists/>
             <@inputCurrencySelectRow name="currencyUomId" title=uiLabelMap.CommonCurrency defaultCurrencyUomId=parameters.orgCurrencyUomId />
+            <@inputIndicatorRow name="includeBudgetIncome" title=uiLabelMap.FinancialsIncludeIncomeInBudget default="N" />
             <#list tagTypes as tag>
               <@inputSelectRow title=tag.description name="tag${tag.index}" list=tag.tagValues key="enumId" required=true ; tagValue>
                 ${tagValue.description}

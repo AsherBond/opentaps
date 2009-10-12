@@ -98,6 +98,9 @@
     <!-- Common login template for all applications. -->
     <screen name="login">
         <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/setShortcutsForLogin.bsh"/>
+            </actions>        
             <widgets>
                 <decorator-screen name="main-application-decorator" location="${parameters.mainApplicationDecoratorLocation}">
                     <decorator-section name="section-layout">

@@ -23,8 +23,8 @@ import org.opentaps.common.util.UtilCommon;
 
 userLogin = request.getAttribute("userLogin");
 
-userEmailAddresses = delegator.findByAnd("PartyContactWithPurpose", UtilMisc.toMap("contactMechTypeId", "EMAIL_ADDRESS", "partyId", userLogin.getString("partyId")));
-userEmailAddresses = EntityUtil.filterByDate(userEmailAddresses, UtilDateTime.nowTimestamp(), "contactFromDate", "contactThruDate", true);
+userEmailAddresses = delegator.findByAnd("PartyAndContactMech", UtilMisc.toMap("contactMechTypeId", "EMAIL_ADDRESS", "partyId", userLogin.getString("partyId")));
+userEmailAddresses = EntityUtil.filterByDate(userEmailAddresses, UtilDateTime.nowTimestamp(), "fromDate", "thruDate", true);
 context.put("userEmailAddresses", userEmailAddresses);
 
 // if the emailType is MKTG_CAMPAIGN, get a list of active IN_PROGRESS campaigns to show

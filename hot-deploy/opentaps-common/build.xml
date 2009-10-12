@@ -70,6 +70,7 @@
             <fileset dir="${lib.dir}/asterisk" includes="*.jar"/>
             <fileset dir="${lib.dir}/hibernate" includes="*.jar"/>
             <fileset dir="${lib.dir}/aspectwerkz" includes="*.jar"/>
+            <fileset dir="${lib.dir}/etl" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/base/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/base/lib/commons" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/base/lib/scripting" includes="*.jar"/>

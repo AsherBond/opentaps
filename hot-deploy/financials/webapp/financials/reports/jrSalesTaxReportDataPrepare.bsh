@@ -12,67 +12,98 @@
  * You should have received a copy of the Honest Public License
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
- *  
+ *
  */
- 
- import org.ofbiz.base.util.UtilMisc;
- import org.ofbiz.base.util.UtilDateTime;
- import org.ofbiz.base.util.UtilValidate;
- import org.ofbiz.base.util.UtilHttp;
- import org.ofbiz.entity.model.DynamicViewEntity;
- import org.ofbiz.entity.model.ModelKeyMap;
- import org.ofbiz.entity.GenericDelegator;
- import org.ofbiz.entity.condition.*;
- import org.ofbiz.entity.util.*;
- import javolution.util.FastList;
- import javolution.util.FastMap;
- import org.ofbiz.content.report.*;
- import org.opentaps.common.util.UtilCommon;
- import org.opentaps.common.util.UtilMessage;
- import org.opentaps.analytics.UtilEtl;
- import java.text.ParseException;
- import org.opentaps.common.util.UtilDate;
-  
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.content.report.*;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.model.DynamicViewEntity;
+import org.ofbiz.entity.model.ModelKeyMap;
+import org.ofbiz.entity.util.*;
+import org.opentaps.common.reporting.etl.UtilEtl;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilDate;
+import org.opentaps.common.util.UtilMessage;
+
  GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
  locale = UtilHttp.getLocale(request.getSession());
  timeZone = UtilCommon.getTimeZone(request);
- uiLabelMap = UtilMessage.getUiLabels(locale); 
-  
+ uiLabelMap = UtilMessage.getUiLabels(locale);
+
  organizationPartyId = UtilCommon.getOrganizationPartyId(request);
- fromDateString = UtilCommon.getParameter(request, "fromDate_c_date");
- thruDateString = UtilCommon.getParameter(request, "thruDate_c_date");
- currencyUomId = UtilCommon.getParameter(request, "currencyUomId"); 
+ fromDateString = UtilCommon.getParameter(request, "fromDate");
+ thruDateString = UtilCommon.getParameter(request, "thruDate");
+ currencyUomId = UtilCommon.getParameter(request, "currencyUomId");
  fromDate = null;
  thruDate = null;
- 
+
+ DateFormat dayOfMonthFmt = new SimpleDateFormat("dd");
+ DateFormat monthOfYearFmt = new SimpleDateFormat("MM");
+ DateFormat yearNumberFmt = new SimpleDateFormat("yyyy");
+
+ // start and end date dimension id of a period
+ periodStart = null;
+ periodEnd = null;
+
  try {
      fromDate = UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(fromDateString, UtilDate.getDateFormat(locale), timeZone, locale), timeZone, locale);
-     // AG120208 : this is a better way to handle the localized date but it needs some more work
-     // fromDate = UtilDateTime.stringToTimeStamp(UtilHttp.makeParamValueFromComposite(request, "fromDate", locale), timeZone, locale);     
+     dayOfMonth = dayOfMonthFmt.format(fromDate);
+     monthOfYear = monthOfYearFmt.format(fromDate);
+     yearNumber = yearNumberFmt.format(fromDate);
+
+     dateDimConditions = new EntityConditionList(UtilMisc.toList(
+             new EntityExpr("dayOfMonth", EntityOperator.EQUALS, dayOfMonth),
+             new EntityExpr("monthOfYear", EntityOperator.EQUALS, monthOfYear),
+             new EntityExpr("yearNumber", EntityOperator.EQUALS, yearNumber)
+             ), EntityOperator.AND);
+     periodStart = UtilEtl.lookupDimension("DateDim", "dateDimId", dateDimConditions, delegator);
+
  } catch (ParseException) {
      if (UtilValidate.isNotEmpty(fromDateString)) {
          UtilMessage.addError(request, "FinancialsError_IllegalDateFormat", UtilMisc.toMap("fieldName", uiLabelMap.get("CommonFromDate")));
          return "error";
      }
  }
- 
+
  try {
      thruDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(thruDateString, UtilDate.getDateFormat(locale), timeZone, locale), timeZone, locale);
-     // AG120208 : this is a better way to handle the localized date but it needs some more work 
-     // thruDate = UtilDateTime.stringToTimeStamp(UtilHttp.makeParamValueFromComposite(request, "thruDate", locale), timeZone, locale);     
+
+     dayOfMonth = dayOfMonthFmt.format(thruDate);
+     monthOfYear = monthOfYearFmt.format(thruDate);
+     yearNumber = yearNumberFmt.format(thruDate);
+
+     dateDimConditions = new EntityConditionList(UtilMisc.toList(
+             new EntityExpr("dayOfMonth", EntityOperator.EQUALS, dayOfMonth),
+             new EntityExpr("monthOfYear", EntityOperator.EQUALS, monthOfYear),
+             new EntityExpr("yearNumber", EntityOperator.EQUALS, yearNumber)
+             ), EntityOperator.AND);
+     periodEnd = UtilEtl.lookupDimension("DateDim", "dateDimId", dateDimConditions, delegator);
+
  } catch (ParseException) {
      if (UtilValidate.isNotEmpty(thruDateString)) {
          UtilMessage.addError(request, "FinancialsError_IllegalDateFormat", UtilMisc.toMap("fieldName", uiLabelMap.get("CommonThruDate")));
          return "error";
      }
  }
- 
+
  HashMap jrParameters = new HashMap();
- jrParameters.put("organizationPartyId", organizationPartyId);  
+ jrParameters.put("organizationPartyId", organizationPartyId);
  jrParameters.put("fromDate", fromDate);
  jrParameters.put("thruDate", thruDate);
- jrParameters.put("currencyUomId", currencyUomId); 
- jrParameters.put("SUBREPORT_DIR", request.getSession().getServletContext().getRealPath("/"));
+ jrParameters.put("periodStart", periodStart);
+ jrParameters.put("periodEnd", periodEnd);
+ jrParameters.put("currencyUomId", currencyUomId);
  request.setAttribute("jrParameters", jrParameters);
  return "success";
- 
+

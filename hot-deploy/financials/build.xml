@@ -66,6 +66,7 @@
             <fileset dir="${ofbiz.dir}/applications/workeffort/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib/hibernate" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib/etl" includes="*.jar"/>
            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/build/lib" includes="*.jar"/>
         </path>
     </target>

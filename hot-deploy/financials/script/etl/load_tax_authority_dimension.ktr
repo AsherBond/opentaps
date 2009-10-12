@@ -73,7 +73,7 @@
   <connection>
     <name>ofbiz_dw</name>
     <server>${dwHostServer}</server>
-    <type>DERBY</type>
+    <type>GENERIC</type>
     <access>JNDI</access>
     <database>operational</database>
     <port>1527</port>

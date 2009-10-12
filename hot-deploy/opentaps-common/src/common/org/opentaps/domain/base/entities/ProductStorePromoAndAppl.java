@@ -145,56 +145,56 @@ fieldMapColumns.put("ProductStorePromoAndAppl", fields);
      * Auto generated value setter.
      * @param promoName the promoName to set
      */
-    private void setPromoName(String promoName) {
+    public void setPromoName(String promoName) {
         this.promoName = promoName;
     }
     /**
      * Auto generated value setter.
      * @param userEntered the userEntered to set
      */
-    private void setUserEntered(String userEntered) {
+    public void setUserEntered(String userEntered) {
         this.userEntered = userEntered;
     }
     /**
      * Auto generated value setter.
      * @param productStoreId the productStoreId to set
      */
-    private void setProductStoreId(String productStoreId) {
+    public void setProductStoreId(String productStoreId) {
         this.productStoreId = productStoreId;
     }
     /**
      * Auto generated value setter.
      * @param productPromoId the productPromoId to set
      */
-    private void setProductPromoId(String productPromoId) {
+    public void setProductPromoId(String productPromoId) {
         this.productPromoId = productPromoId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param sequenceNum the sequenceNum to set
      */
-    private void setSequenceNum(Long sequenceNum) {
+    public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
     /**
      * Auto generated value setter.
      * @param manualOnly the manualOnly to set
      */
-    private void setManualOnly(String manualOnly) {
+    public void setManualOnly(String manualOnly) {
         this.manualOnly = manualOnly;
     }
 

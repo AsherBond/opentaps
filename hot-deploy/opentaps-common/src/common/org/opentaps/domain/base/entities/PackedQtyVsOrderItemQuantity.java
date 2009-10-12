@@ -146,49 +146,49 @@ fieldMapColumns.put("PackedQtyVsOrderItemQuantity", fields);
      * Auto generated value setter.
      * @param shipmentId the shipmentId to set
      */
-    private void setShipmentId(String shipmentId) {
+    public void setShipmentId(String shipmentId) {
         this.shipmentId = shipmentId;
     }
     /**
      * Auto generated value setter.
      * @param shipmentPackageSeqId the shipmentPackageSeqId to set
      */
-    private void setShipmentPackageSeqId(String shipmentPackageSeqId) {
+    public void setShipmentPackageSeqId(String shipmentPackageSeqId) {
         this.shipmentPackageSeqId = shipmentPackageSeqId;
     }
     /**
      * Auto generated value setter.
      * @param packedQuantity the packedQuantity to set
      */
-    private void setPackedQuantity(BigDecimal packedQuantity) {
+    public void setPackedQuantity(BigDecimal packedQuantity) {
         this.packedQuantity = packedQuantity;
     }
     /**
      * Auto generated value setter.
      * @param issuedQuantity the issuedQuantity to set
      */
-    private void setIssuedQuantity(BigDecimal issuedQuantity) {
+    public void setIssuedQuantity(BigDecimal issuedQuantity) {
         this.issuedQuantity = issuedQuantity;
     }
     /**
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param orderItemSeqId the orderItemSeqId to set
      */
-    private void setOrderItemSeqId(String orderItemSeqId) {
+    public void setOrderItemSeqId(String orderItemSeqId) {
         this.orderItemSeqId = orderItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param orderedQuantity the orderedQuantity to set
      */
-    private void setOrderedQuantity(BigDecimal orderedQuantity) {
+    public void setOrderedQuantity(BigDecimal orderedQuantity) {
         this.orderedQuantity = orderedQuantity;
     }
 

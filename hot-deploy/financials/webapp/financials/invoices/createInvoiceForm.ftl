@@ -56,7 +56,7 @@
         <@inputDateTimeRow name="dueDate" title=uiLabelMap.AccountingDueDate form="createInvoiceForm" />
         <@inputTextRow name="referenceNumber" title=uiLabelMap.FinancialsReferenceNumber size=60 />
         <@inputTextRow name="description" title=uiLabelMap.CommonDescription size=60 />
-        <@inputTextRow name="invoiceMessage" title=uiLabelMap.CommonMessage size=60 />
+        <@inputTextareaRow name="invoiceMessage" title=uiLabelMap.CommonMessage />
         <@inputForceCompleteRow title=uiLabelMap.CommonCreate forceTitle=uiLabelMap.OpentapsForceCreate form="createInvoiceForm" /></td>
       </form>
     </table>

@@ -349,301 +349,301 @@ fieldMapColumns.put("PartyAndContactMech", fields);
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param partyTypeId the partyTypeId to set
      */
-    private void setPartyTypeId(String partyTypeId) {
+    public void setPartyTypeId(String partyTypeId) {
         this.partyTypeId = partyTypeId;
     }
     /**
      * Auto generated value setter.
      * @param externalId the externalId to set
      */
-    private void setExternalId(String externalId) {
+    public void setExternalId(String externalId) {
         this.externalId = externalId;
     }
     /**
      * Auto generated value setter.
      * @param preferredCurrencyUomId the preferredCurrencyUomId to set
      */
-    private void setPreferredCurrencyUomId(String preferredCurrencyUomId) {
+    public void setPreferredCurrencyUomId(String preferredCurrencyUomId) {
         this.preferredCurrencyUomId = preferredCurrencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param createdDate the createdDate to set
      */
-    private void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
     /**
      * Auto generated value setter.
      * @param createdByUserLogin the createdByUserLogin to set
      */
-    private void setCreatedByUserLogin(String createdByUserLogin) {
+    public void setCreatedByUserLogin(String createdByUserLogin) {
         this.createdByUserLogin = createdByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedDate the lastModifiedDate to set
      */
-    private void setLastModifiedDate(Timestamp lastModifiedDate) {
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedByUserLogin the lastModifiedByUserLogin to set
      */
-    private void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
+    public void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
         this.lastModifiedByUserLogin = lastModifiedByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param dataSourceId the dataSourceId to set
      */
-    private void setDataSourceId(String dataSourceId) {
+    public void setDataSourceId(String dataSourceId) {
         this.dataSourceId = dataSourceId;
     }
     /**
      * Auto generated value setter.
      * @param isUnread the isUnread to set
      */
-    private void setIsUnread(String isUnread) {
+    public void setIsUnread(String isUnread) {
         this.isUnread = isUnread;
     }
     /**
      * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
-    private void setContactMechId(String contactMechId) {
+    public void setContactMechId(String contactMechId) {
         this.contactMechId = contactMechId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param allowSolicitation the allowSolicitation to set
      */
-    private void setAllowSolicitation(String allowSolicitation) {
+    public void setAllowSolicitation(String allowSolicitation) {
         this.allowSolicitation = allowSolicitation;
     }
     /**
      * Auto generated value setter.
      * @param extension the extension to set
      */
-    private void setExtension(String extension) {
+    public void setExtension(String extension) {
         this.extension = extension;
     }
     /**
      * Auto generated value setter.
      * @param verified the verified to set
      */
-    private void setVerified(String verified) {
+    public void setVerified(String verified) {
         this.verified = verified;
     }
     /**
      * Auto generated value setter.
      * @param comments the comments to set
      */
-    private void setComments(String comments) {
+    public void setComments(String comments) {
         this.comments = comments;
     }
     /**
      * Auto generated value setter.
      * @param yearsWithContactMech the yearsWithContactMech to set
      */
-    private void setYearsWithContactMech(Long yearsWithContactMech) {
+    public void setYearsWithContactMech(Long yearsWithContactMech) {
         this.yearsWithContactMech = yearsWithContactMech;
     }
     /**
      * Auto generated value setter.
      * @param monthsWithContactMech the monthsWithContactMech to set
      */
-    private void setMonthsWithContactMech(Long monthsWithContactMech) {
+    public void setMonthsWithContactMech(Long monthsWithContactMech) {
         this.monthsWithContactMech = monthsWithContactMech;
     }
     /**
      * Auto generated value setter.
      * @param contactMechTypeId the contactMechTypeId to set
      */
-    private void setContactMechTypeId(String contactMechTypeId) {
+    public void setContactMechTypeId(String contactMechTypeId) {
         this.contactMechTypeId = contactMechTypeId;
     }
     /**
      * Auto generated value setter.
      * @param infoString the infoString to set
      */
-    private void setInfoString(String infoString) {
+    public void setInfoString(String infoString) {
         this.infoString = infoString;
     }
     /**
      * Auto generated value setter.
      * @param paContactMechId the paContactMechId to set
      */
-    private void setPaContactMechId(String paContactMechId) {
+    public void setPaContactMechId(String paContactMechId) {
         this.paContactMechId = paContactMechId;
     }
     /**
      * Auto generated value setter.
      * @param paToName the paToName to set
      */
-    private void setPaToName(String paToName) {
+    public void setPaToName(String paToName) {
         this.paToName = paToName;
     }
     /**
      * Auto generated value setter.
      * @param paAttnName the paAttnName to set
      */
-    private void setPaAttnName(String paAttnName) {
+    public void setPaAttnName(String paAttnName) {
         this.paAttnName = paAttnName;
     }
     /**
      * Auto generated value setter.
      * @param paAddress1 the paAddress1 to set
      */
-    private void setPaAddress1(String paAddress1) {
+    public void setPaAddress1(String paAddress1) {
         this.paAddress1 = paAddress1;
     }
     /**
      * Auto generated value setter.
      * @param paAddress2 the paAddress2 to set
      */
-    private void setPaAddress2(String paAddress2) {
+    public void setPaAddress2(String paAddress2) {
         this.paAddress2 = paAddress2;
     }
     /**
      * Auto generated value setter.
      * @param paDirections the paDirections to set
      */
-    private void setPaDirections(String paDirections) {
+    public void setPaDirections(String paDirections) {
         this.paDirections = paDirections;
     }
     /**
      * Auto generated value setter.
      * @param paCity the paCity to set
      */
-    private void setPaCity(String paCity) {
+    public void setPaCity(String paCity) {
         this.paCity = paCity;
     }
     /**
      * Auto generated value setter.
      * @param paPostalCode the paPostalCode to set
      */
-    private void setPaPostalCode(String paPostalCode) {
+    public void setPaPostalCode(String paPostalCode) {
         this.paPostalCode = paPostalCode;
     }
     /**
      * Auto generated value setter.
      * @param paPostalCodeExt the paPostalCodeExt to set
      */
-    private void setPaPostalCodeExt(String paPostalCodeExt) {
+    public void setPaPostalCodeExt(String paPostalCodeExt) {
         this.paPostalCodeExt = paPostalCodeExt;
     }
     /**
      * Auto generated value setter.
      * @param paCountryGeoId the paCountryGeoId to set
      */
-    private void setPaCountryGeoId(String paCountryGeoId) {
+    public void setPaCountryGeoId(String paCountryGeoId) {
         this.paCountryGeoId = paCountryGeoId;
     }
     /**
      * Auto generated value setter.
      * @param paStateProvinceGeoId the paStateProvinceGeoId to set
      */
-    private void setPaStateProvinceGeoId(String paStateProvinceGeoId) {
+    public void setPaStateProvinceGeoId(String paStateProvinceGeoId) {
         this.paStateProvinceGeoId = paStateProvinceGeoId;
     }
     /**
      * Auto generated value setter.
      * @param paCountyGeoId the paCountyGeoId to set
      */
-    private void setPaCountyGeoId(String paCountyGeoId) {
+    public void setPaCountyGeoId(String paCountyGeoId) {
         this.paCountyGeoId = paCountyGeoId;
     }
     /**
      * Auto generated value setter.
      * @param paPostalCodeGeoId the paPostalCodeGeoId to set
      */
-    private void setPaPostalCodeGeoId(String paPostalCodeGeoId) {
+    public void setPaPostalCodeGeoId(String paPostalCodeGeoId) {
         this.paPostalCodeGeoId = paPostalCodeGeoId;
     }
     /**
      * Auto generated value setter.
      * @param paGeoPointId the paGeoPointId to set
      */
-    private void setPaGeoPointId(String paGeoPointId) {
+    public void setPaGeoPointId(String paGeoPointId) {
         this.paGeoPointId = paGeoPointId;
     }
     /**
      * Auto generated value setter.
      * @param tnContactMechId the tnContactMechId to set
      */
-    private void setTnContactMechId(String tnContactMechId) {
+    public void setTnContactMechId(String tnContactMechId) {
         this.tnContactMechId = tnContactMechId;
     }
     /**
      * Auto generated value setter.
      * @param tnCountryCode the tnCountryCode to set
      */
-    private void setTnCountryCode(String tnCountryCode) {
+    public void setTnCountryCode(String tnCountryCode) {
         this.tnCountryCode = tnCountryCode;
     }
     /**
      * Auto generated value setter.
      * @param tnAreaCode the tnAreaCode to set
      */
-    private void setTnAreaCode(String tnAreaCode) {
+    public void setTnAreaCode(String tnAreaCode) {
         this.tnAreaCode = tnAreaCode;
     }
     /**
      * Auto generated value setter.
      * @param tnContactNumber the tnContactNumber to set
      */
-    private void setTnContactNumber(String tnContactNumber) {
+    public void setTnContactNumber(String tnContactNumber) {
         this.tnContactNumber = tnContactNumber;
     }
     /**
      * Auto generated value setter.
      * @param tnAskForName the tnAskForName to set
      */
-    private void setTnAskForName(String tnAskForName) {
+    public void setTnAskForName(String tnAskForName) {
         this.tnAskForName = tnAskForName;
     }
 

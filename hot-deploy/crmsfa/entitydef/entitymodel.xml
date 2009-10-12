@@ -993,5 +993,78 @@
         <key-map field-name="noteId"/>
       </relation>
     </entity>
+    <view-entity entity-name="CustRequestAndPartyRelationshipAndRole"
+                 package-name="com.opensourcestrategies.crmsfa.marketing"
+                 title="CustRequest plus status,type and category info">
+        <member-entity entity-alias="CR" entity-name="CustRequest"/>
+        <member-entity entity-alias="SI" entity-name="StatusItem"/>
+        <member-entity entity-alias="CRT" entity-name="CustRequestType"/>
+        <member-entity entity-alias="CRC" entity-name="CustRequestCategory"/>
+        <member-entity entity-alias="CRR" entity-name="CustRequestRole"/>
+        <member-entity entity-alias="PR" entity-name="PartyRelationship"/>        
+        <alias-all entity-alias="CR"/>
+		<alias entity-alias="SI" name="status" field="description"/>
+		<!-- this field value will replaced in CaseLookupService, I just want a field to contain the updated value -->
+		<alias entity-alias="SI" name="updated" field="statusCode"/>
+		<alias entity-alias="CRT" name="custRequestType" field="description"/>
+		<alias entity-alias="CRC" name="reason" field="description"/>
+        <alias entity-alias="CRR" name="partyId"/>
+        <alias entity-alias="CRR" name="roleTypeId"/>
+        <alias entity-alias="PR" name="partyIdTo"/>
+        <alias entity-alias="PR" name="partyIdFrom"/>
+        <alias entity-alias="PR" name="roleTypeIdFrom"/>
+        <alias entity-alias="PR" name="fromDate"/>
+        <alias entity-alias="PR" name="thruDate"/>
+        <view-link entity-alias="CR" rel-entity-alias="SI" rel-optional="true">
+            <key-map field-name="statusId" rel-field-name="statusId"/>
+        </view-link>		
+        <view-link entity-alias="CR" rel-entity-alias="CRT" rel-optional="true">
+            <key-map field-name="custRequestTypeId" rel-field-name="custRequestTypeId"/>
+        </view-link>		
+        <view-link entity-alias="CR" rel-entity-alias="CRC" rel-optional="true">
+            <key-map field-name="custRequestCategoryId" rel-field-name="custRequestCategoryId"/>
+        </view-link>		
+        <view-link entity-alias="CR" rel-entity-alias="CRR">
+            <key-map field-name="custRequestId"/>
+        </view-link>
+        <view-link entity-alias="CRR" rel-entity-alias="PR" rel-optional="true">
+            <key-map field-name="partyId" rel-field-name="partyIdFrom"/>
+        </view-link>
+    </view-entity>
+
+    <view-entity entity-name="SalesOpportunityAndPartyRelationshipAndStage"
+                 package-name="com.opensourcestrategies.crmsfa.opportunity"
+                 title="Used to find opportunities of accounts that a userLogin can view.">
+        <member-entity entity-alias="PR" entity-name="PartyRelationship"/>
+        <member-entity entity-alias="SOR" entity-name="SalesOpportunityRole"/>
+        <member-entity entity-alias="SO" entity-name="SalesOpportunity"/>
+        <member-entity entity-alias="SOS" entity-name="SalesOpportunityStage"/>
+        
+        <alias-all entity-alias="SO"/>
+        <alias entity-alias="SOS" name="opportunityStage" field="description"/>
+        <alias entity-alias="PR" name="partyIdFrom"/>
+		<!-- this fields value will replaced in OpportunityLookupService, I just want a field to contain the partyFromLink value -->
+		<alias entity-alias="PR" name="partyFromLink" field="partyIdFrom"/>
+		<!-- this fields value will replaced in OpportunityLookupService, I just want a field to contain the string of estimatedCloseDate value -->
+		<alias entity-alias="SO" name="estimatedCloseDateString" field="description"/>
+
+        <alias entity-alias="PR" name="roleTypeIdFrom"/>
+        <alias entity-alias="PR" name="partyIdTo"/>
+        <alias entity-alias="PR" name="partyRelationshipTypeId"/>
+        <alias entity-alias="PR" name="fromDate"/>
+        <alias entity-alias="PR" name="thruDate"/>
+        <view-link entity-alias="PR" rel-entity-alias="SOR">
+            <key-map field-name="partyIdFrom" rel-field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="SOR" rel-entity-alias="SO">
+            <key-map field-name="salesOpportunityId"/>
+        </view-link>
+        <relation fk-name="PRASO_SOQ" rel-entity-name="SalesOpportunityQuote" type="many">
+            <key-map field-name="salesOpportunityId"/>
+        </relation>
+        <view-link entity-alias="SO" rel-entity-alias="SOS" rel-optional="true">
+            <key-map field-name="opportunityStageId"/>
+        </view-link>        
+    </view-entity>
 
 </entitymodel>

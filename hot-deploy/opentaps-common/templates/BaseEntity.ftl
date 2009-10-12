@@ -214,7 +214,7 @@ fieldMapColumns.put("${name}", fields);
      * Auto generated value setter.
      * @param ${field} the ${field} to set
      */
-    <#if !isView>public<#else>private</#if> void ${setMethodNames.get(field)}(${fieldTypes.get(field)} ${field}) {
+    public void ${setMethodNames.get(field)}(${fieldTypes.get(field)} ${field}) {
         <#if !isView && (primaryKeys.size() > 1) && primaryKeys.contains(field)>
         <#-- if it is a field of composite key, the call id setter to set value -->
         id.${setMethodNames.get(field)}(${field});

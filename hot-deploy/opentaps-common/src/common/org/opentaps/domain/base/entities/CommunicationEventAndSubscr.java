@@ -265,224 +265,224 @@ fieldMapColumns.put("CommunicationEventAndSubscr", fields);
      * Auto generated value setter.
      * @param subscriptionId the subscriptionId to set
      */
-    private void setSubscriptionId(String subscriptionId) {
+    public void setSubscriptionId(String subscriptionId) {
         this.subscriptionId = subscriptionId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param subscriptionResourceId the subscriptionResourceId to set
      */
-    private void setSubscriptionResourceId(String subscriptionResourceId) {
+    public void setSubscriptionResourceId(String subscriptionResourceId) {
         this.subscriptionResourceId = subscriptionResourceId;
     }
     /**
      * Auto generated value setter.
      * @param communicationEventId the communicationEventId to set
      */
-    private void setCommunicationEventId(String communicationEventId) {
+    public void setCommunicationEventId(String communicationEventId) {
         this.communicationEventId = communicationEventId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
-    private void setContactMechId(String contactMechId) {
+    public void setContactMechId(String contactMechId) {
         this.contactMechId = contactMechId;
     }
     /**
      * Auto generated value setter.
      * @param originatedFromPartyId the originatedFromPartyId to set
      */
-    private void setOriginatedFromPartyId(String originatedFromPartyId) {
+    public void setOriginatedFromPartyId(String originatedFromPartyId) {
         this.originatedFromPartyId = originatedFromPartyId;
     }
     /**
      * Auto generated value setter.
      * @param originatedFromRoleTypeId the originatedFromRoleTypeId to set
      */
-    private void setOriginatedFromRoleTypeId(String originatedFromRoleTypeId) {
+    public void setOriginatedFromRoleTypeId(String originatedFromRoleTypeId) {
         this.originatedFromRoleTypeId = originatedFromRoleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param partyNeedId the partyNeedId to set
      */
-    private void setPartyNeedId(String partyNeedId) {
+    public void setPartyNeedId(String partyNeedId) {
         this.partyNeedId = partyNeedId;
     }
     /**
      * Auto generated value setter.
      * @param needTypeId the needTypeId to set
      */
-    private void setNeedTypeId(String needTypeId) {
+    public void setNeedTypeId(String needTypeId) {
         this.needTypeId = needTypeId;
     }
     /**
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param orderItemSeqId the orderItemSeqId to set
      */
-    private void setOrderItemSeqId(String orderItemSeqId) {
+    public void setOrderItemSeqId(String orderItemSeqId) {
         this.orderItemSeqId = orderItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param productCategoryId the productCategoryId to set
      */
-    private void setProductCategoryId(String productCategoryId) {
+    public void setProductCategoryId(String productCategoryId) {
         this.productCategoryId = productCategoryId;
     }
     /**
      * Auto generated value setter.
      * @param inventoryItemId the inventoryItemId to set
      */
-    private void setInventoryItemId(String inventoryItemId) {
+    public void setInventoryItemId(String inventoryItemId) {
         this.inventoryItemId = inventoryItemId;
     }
     /**
      * Auto generated value setter.
      * @param subscriptionTypeId the subscriptionTypeId to set
      */
-    private void setSubscriptionTypeId(String subscriptionTypeId) {
+    public void setSubscriptionTypeId(String subscriptionTypeId) {
         this.subscriptionTypeId = subscriptionTypeId;
     }
     /**
      * Auto generated value setter.
      * @param externalSubscriptionId the externalSubscriptionId to set
      */
-    private void setExternalSubscriptionId(String externalSubscriptionId) {
+    public void setExternalSubscriptionId(String externalSubscriptionId) {
         this.externalSubscriptionId = externalSubscriptionId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param purchaseFromDate the purchaseFromDate to set
      */
-    private void setPurchaseFromDate(Timestamp purchaseFromDate) {
+    public void setPurchaseFromDate(Timestamp purchaseFromDate) {
         this.purchaseFromDate = purchaseFromDate;
     }
     /**
      * Auto generated value setter.
      * @param purchaseThruDate the purchaseThruDate to set
      */
-    private void setPurchaseThruDate(Timestamp purchaseThruDate) {
+    public void setPurchaseThruDate(Timestamp purchaseThruDate) {
         this.purchaseThruDate = purchaseThruDate;
     }
     /**
      * Auto generated value setter.
      * @param maxLifeTime the maxLifeTime to set
      */
-    private void setMaxLifeTime(Long maxLifeTime) {
+    public void setMaxLifeTime(Long maxLifeTime) {
         this.maxLifeTime = maxLifeTime;
     }
     /**
      * Auto generated value setter.
      * @param maxLifeTimeUomId the maxLifeTimeUomId to set
      */
-    private void setMaxLifeTimeUomId(String maxLifeTimeUomId) {
+    public void setMaxLifeTimeUomId(String maxLifeTimeUomId) {
         this.maxLifeTimeUomId = maxLifeTimeUomId;
     }
     /**
      * Auto generated value setter.
      * @param availableTime the availableTime to set
      */
-    private void setAvailableTime(Long availableTime) {
+    public void setAvailableTime(Long availableTime) {
         this.availableTime = availableTime;
     }
     /**
      * Auto generated value setter.
      * @param availableTimeUomId the availableTimeUomId to set
      */
-    private void setAvailableTimeUomId(String availableTimeUomId) {
+    public void setAvailableTimeUomId(String availableTimeUomId) {
         this.availableTimeUomId = availableTimeUomId;
     }
     /**
      * Auto generated value setter.
      * @param useCountLimit the useCountLimit to set
      */
-    private void setUseCountLimit(Long useCountLimit) {
+    public void setUseCountLimit(Long useCountLimit) {
         this.useCountLimit = useCountLimit;
     }
     /**
      * Auto generated value setter.
      * @param useTime the useTime to set
      */
-    private void setUseTime(Long useTime) {
+    public void setUseTime(Long useTime) {
         this.useTime = useTime;
     }
     /**
      * Auto generated value setter.
      * @param useTimeUomId the useTimeUomId to set
      */
-    private void setUseTimeUomId(String useTimeUomId) {
+    public void setUseTimeUomId(String useTimeUomId) {
         this.useTimeUomId = useTimeUomId;
     }
     /**
      * Auto generated value setter.
      * @param automaticExtend the automaticExtend to set
      */
-    private void setAutomaticExtend(String automaticExtend) {
+    public void setAutomaticExtend(String automaticExtend) {
         this.automaticExtend = automaticExtend;
     }
     /**
      * Auto generated value setter.
      * @param canclAutmExtTime the canclAutmExtTime to set
      */
-    private void setCanclAutmExtTime(Long canclAutmExtTime) {
+    public void setCanclAutmExtTime(Long canclAutmExtTime) {
         this.canclAutmExtTime = canclAutmExtTime;
     }
     /**
      * Auto generated value setter.
      * @param canclAutmExtTimeUomId the canclAutmExtTimeUomId to set
      */
-    private void setCanclAutmExtTimeUomId(String canclAutmExtTimeUomId) {
+    public void setCanclAutmExtTimeUomId(String canclAutmExtTimeUomId) {
         this.canclAutmExtTimeUomId = canclAutmExtTimeUomId;
     }
 

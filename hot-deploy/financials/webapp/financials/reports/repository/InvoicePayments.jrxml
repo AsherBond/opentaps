@@ -55,7 +55,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsPaymentMethod}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement key="textField-7" x="320" y="13" width="90" height="13"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -68,7 +68,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsReferenceNumber}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement key="textField-8" x="410" y="13" width="90" height="13"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -131,7 +131,7 @@
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{paymentRefNum}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 				<reportElement key="textField-6" x="410" y="0" width="90" height="13"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>

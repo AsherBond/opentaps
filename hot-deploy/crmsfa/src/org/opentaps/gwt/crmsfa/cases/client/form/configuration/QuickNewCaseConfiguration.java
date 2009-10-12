@@ -15,17 +15,19 @@
  */
 
 package org.opentaps.gwt.crmsfa.cases.client.form.configuration;
-
+/**
+ * Configuration class for quick new case.
+ */
 public abstract class QuickNewCaseConfiguration {
 
 	public static final String URL = "/crmsfa/control/gwtQuickNewCase";
-	
+
 	public static final String SUBJECT = "custRequestName";
 	public static final String ACCOUNT_PARTY_ID = "accountPartyId";
 	public static final String CASE_TYPE_ID = "custRequestTypeId";
 	public static final String PRIORITY = "priority";
-	
+
 	// configure the default settings for crmsfa.createCase
 	public static final String DEFAULT_CASE_TYPE_ID = "RF_SUPPORT";
-        public static final String DEFAULT_PRIORITY = "5";	
+    public static final String DEFAULT_PRIORITY = "5";
 }

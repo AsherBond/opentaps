@@ -196,98 +196,98 @@ fieldMapColumns.put("PartyAndTelecomNumber", fields);
      * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
-    private void setContactMechId(String contactMechId) {
+    public void setContactMechId(String contactMechId) {
         this.contactMechId = contactMechId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param partyTypeId the partyTypeId to set
      */
-    private void setPartyTypeId(String partyTypeId) {
+    public void setPartyTypeId(String partyTypeId) {
         this.partyTypeId = partyTypeId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechTypeId the contactMechTypeId to set
      */
-    private void setContactMechTypeId(String contactMechTypeId) {
+    public void setContactMechTypeId(String contactMechTypeId) {
         this.contactMechTypeId = contactMechTypeId;
     }
     /**
      * Auto generated value setter.
      * @param infoString the infoString to set
      */
-    private void setInfoString(String infoString) {
+    public void setInfoString(String infoString) {
         this.infoString = infoString;
     }
     /**
      * Auto generated value setter.
      * @param comments the comments to set
      */
-    private void setComments(String comments) {
+    public void setComments(String comments) {
         this.comments = comments;
     }
     /**
      * Auto generated value setter.
      * @param extension the extension to set
      */
-    private void setExtension(String extension) {
+    public void setExtension(String extension) {
         this.extension = extension;
     }
     /**
      * Auto generated value setter.
      * @param allowSolicitation the allowSolicitation to set
      */
-    private void setAllowSolicitation(String allowSolicitation) {
+    public void setAllowSolicitation(String allowSolicitation) {
         this.allowSolicitation = allowSolicitation;
     }
     /**
      * Auto generated value setter.
      * @param countryCode the countryCode to set
      */
-    private void setCountryCode(String countryCode) {
+    public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
     /**
      * Auto generated value setter.
      * @param areaCode the areaCode to set
      */
-    private void setAreaCode(String areaCode) {
+    public void setAreaCode(String areaCode) {
         this.areaCode = areaCode;
     }
     /**
      * Auto generated value setter.
      * @param contactNumber the contactNumber to set
      */
-    private void setContactNumber(String contactNumber) {
+    public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
     }
 

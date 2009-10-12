@@ -173,63 +173,63 @@ fieldMapColumns.put("PhysicalInventoryAndVariance", fields);
      * Auto generated value setter.
      * @param physicalInventoryId the physicalInventoryId to set
      */
-    private void setPhysicalInventoryId(String physicalInventoryId) {
+    public void setPhysicalInventoryId(String physicalInventoryId) {
         this.physicalInventoryId = physicalInventoryId;
     }
     /**
      * Auto generated value setter.
      * @param physicalInventoryDate the physicalInventoryDate to set
      */
-    private void setPhysicalInventoryDate(Timestamp physicalInventoryDate) {
+    public void setPhysicalInventoryDate(Timestamp physicalInventoryDate) {
         this.physicalInventoryDate = physicalInventoryDate;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param generalComments the generalComments to set
      */
-    private void setGeneralComments(String generalComments) {
+    public void setGeneralComments(String generalComments) {
         this.generalComments = generalComments;
     }
     /**
      * Auto generated value setter.
      * @param inventoryItemId the inventoryItemId to set
      */
-    private void setInventoryItemId(String inventoryItemId) {
+    public void setInventoryItemId(String inventoryItemId) {
         this.inventoryItemId = inventoryItemId;
     }
     /**
      * Auto generated value setter.
      * @param varianceReasonId the varianceReasonId to set
      */
-    private void setVarianceReasonId(String varianceReasonId) {
+    public void setVarianceReasonId(String varianceReasonId) {
         this.varianceReasonId = varianceReasonId;
     }
     /**
      * Auto generated value setter.
      * @param availableToPromiseVar the availableToPromiseVar to set
      */
-    private void setAvailableToPromiseVar(BigDecimal availableToPromiseVar) {
+    public void setAvailableToPromiseVar(BigDecimal availableToPromiseVar) {
         this.availableToPromiseVar = availableToPromiseVar;
     }
     /**
      * Auto generated value setter.
      * @param quantityOnHandVar the quantityOnHandVar to set
      */
-    private void setQuantityOnHandVar(BigDecimal quantityOnHandVar) {
+    public void setQuantityOnHandVar(BigDecimal quantityOnHandVar) {
         this.quantityOnHandVar = quantityOnHandVar;
     }
     /**
      * Auto generated value setter.
      * @param comments the comments to set
      */
-    private void setComments(String comments) {
+    public void setComments(String comments) {
         this.comments = comments;
     }
 

@@ -179,91 +179,91 @@ fieldMapColumns.put("PartyNameView", fields);
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param partyTypeId the partyTypeId to set
      */
-    private void setPartyTypeId(String partyTypeId) {
+    public void setPartyTypeId(String partyTypeId) {
         this.partyTypeId = partyTypeId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param firstName the firstName to set
      */
-    private void setFirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
     /**
      * Auto generated value setter.
      * @param middleName the middleName to set
      */
-    private void setMiddleName(String middleName) {
+    public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
     /**
      * Auto generated value setter.
      * @param lastName the lastName to set
      */
-    private void setLastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
     /**
      * Auto generated value setter.
      * @param firstNameLocal the firstNameLocal to set
      */
-    private void setFirstNameLocal(String firstNameLocal) {
+    public void setFirstNameLocal(String firstNameLocal) {
         this.firstNameLocal = firstNameLocal;
     }
     /**
      * Auto generated value setter.
      * @param lastNameLocal the lastNameLocal to set
      */
-    private void setLastNameLocal(String lastNameLocal) {
+    public void setLastNameLocal(String lastNameLocal) {
         this.lastNameLocal = lastNameLocal;
     }
     /**
      * Auto generated value setter.
      * @param personalTitle the personalTitle to set
      */
-    private void setPersonalTitle(String personalTitle) {
+    public void setPersonalTitle(String personalTitle) {
         this.personalTitle = personalTitle;
     }
     /**
      * Auto generated value setter.
      * @param suffix the suffix to set
      */
-    private void setSuffix(String suffix) {
+    public void setSuffix(String suffix) {
         this.suffix = suffix;
     }
     /**
      * Auto generated value setter.
      * @param groupName the groupName to set
      */
-    private void setGroupName(String groupName) {
+    public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
     /**
      * Auto generated value setter.
      * @param groupNameLocal the groupNameLocal to set
      */
-    private void setGroupNameLocal(String groupNameLocal) {
+    public void setGroupNameLocal(String groupNameLocal) {
         this.groupNameLocal = groupNameLocal;
     }
 

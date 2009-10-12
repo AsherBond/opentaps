@@ -189,119 +189,119 @@ fieldMapColumns.put("WebSiteAndContent", fields);
      * Auto generated value setter.
      * @param webSiteId the webSiteId to set
      */
-    private void setWebSiteId(String webSiteId) {
+    public void setWebSiteId(String webSiteId) {
         this.webSiteId = webSiteId;
     }
     /**
      * Auto generated value setter.
      * @param siteName the siteName to set
      */
-    private void setSiteName(String siteName) {
+    public void setSiteName(String siteName) {
         this.siteName = siteName;
     }
     /**
      * Auto generated value setter.
      * @param httpHost the httpHost to set
      */
-    private void setHttpHost(String httpHost) {
+    public void setHttpHost(String httpHost) {
         this.httpHost = httpHost;
     }
     /**
      * Auto generated value setter.
      * @param httpPort the httpPort to set
      */
-    private void setHttpPort(String httpPort) {
+    public void setHttpPort(String httpPort) {
         this.httpPort = httpPort;
     }
     /**
      * Auto generated value setter.
      * @param httpsHost the httpsHost to set
      */
-    private void setHttpsHost(String httpsHost) {
+    public void setHttpsHost(String httpsHost) {
         this.httpsHost = httpsHost;
     }
     /**
      * Auto generated value setter.
      * @param httpsPort the httpsPort to set
      */
-    private void setHttpsPort(String httpsPort) {
+    public void setHttpsPort(String httpsPort) {
         this.httpsPort = httpsPort;
     }
     /**
      * Auto generated value setter.
      * @param enableHttps the enableHttps to set
      */
-    private void setEnableHttps(String enableHttps) {
+    public void setEnableHttps(String enableHttps) {
         this.enableHttps = enableHttps;
     }
     /**
      * Auto generated value setter.
      * @param standardContentPrefix the standardContentPrefix to set
      */
-    private void setStandardContentPrefix(String standardContentPrefix) {
+    public void setStandardContentPrefix(String standardContentPrefix) {
         this.standardContentPrefix = standardContentPrefix;
     }
     /**
      * Auto generated value setter.
      * @param secureContentPrefix the secureContentPrefix to set
      */
-    private void setSecureContentPrefix(String secureContentPrefix) {
+    public void setSecureContentPrefix(String secureContentPrefix) {
         this.secureContentPrefix = secureContentPrefix;
     }
     /**
      * Auto generated value setter.
      * @param cookieDomain the cookieDomain to set
      */
-    private void setCookieDomain(String cookieDomain) {
+    public void setCookieDomain(String cookieDomain) {
         this.cookieDomain = cookieDomain;
     }
     /**
      * Auto generated value setter.
      * @param visualThemeSetId the visualThemeSetId to set
      */
-    private void setVisualThemeSetId(String visualThemeSetId) {
+    public void setVisualThemeSetId(String visualThemeSetId) {
         this.visualThemeSetId = visualThemeSetId;
     }
     /**
      * Auto generated value setter.
      * @param productStoreId the productStoreId to set
      */
-    private void setProductStoreId(String productStoreId) {
+    public void setProductStoreId(String productStoreId) {
         this.productStoreId = productStoreId;
     }
     /**
      * Auto generated value setter.
      * @param allowProductStoreChange the allowProductStoreChange to set
      */
-    private void setAllowProductStoreChange(String allowProductStoreChange) {
+    public void setAllowProductStoreChange(String allowProductStoreChange) {
         this.allowProductStoreChange = allowProductStoreChange;
     }
     /**
      * Auto generated value setter.
      * @param contentId the contentId to set
      */
-    private void setContentId(String contentId) {
+    public void setContentId(String contentId) {
         this.contentId = contentId;
     }
     /**
      * Auto generated value setter.
      * @param webSiteContentTypeId the webSiteContentTypeId to set
      */
-    private void setWebSiteContentTypeId(String webSiteContentTypeId) {
+    public void setWebSiteContentTypeId(String webSiteContentTypeId) {
         this.webSiteContentTypeId = webSiteContentTypeId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
 

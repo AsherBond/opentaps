@@ -7,6 +7,8 @@
     <trans_version/>
     <trans_status>0</trans_status>
     <directory>&#47;</directory>
+    <parameters>
+    </parameters>
     <log>
       <read/>
       <write/>
@@ -19,6 +21,7 @@
       <step_performance_table/>
       <use_batchid>Y</use_batchid>
       <use_logfield>N</use_logfield>
+      <size_limit_lines/>
     </log>
     <maxdate>
       <connection/>
@@ -51,27 +54,6 @@
   <notepads>
   </notepads>
   <connection>
-    <name>ofbiz_ods</name>
-    <server>localhost</server>
-    <type>GENERIC</type>
-    <access>JNDI</access>
-    <database>operational</database>
-    <port>-1</port>
-    <username>ofbiz</username>
-    <password>Encrypted 2be98afc86aa7f2e4cb79ce7fd890a6c0</password>
-    <servername/>
-    <data_tablespace/>
-    <index_tablespace/>
-    <attributes>
-      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
-      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
-      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
-      <attribute><code>PORT_NUMBER</code><attribute>-1</attribute></attribute>
-      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
-      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
-    </attributes>
-  </connection>
-  <connection>
     <name>ofbiz_dw</name>
     <server>localhost</server>
     <type>GENERIC</type>
@@ -92,8 +74,85 @@
       <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
     </attributes>
   </connection>
+  <connection>
+    <name>ofbiz_ods</name>
+    <server>localhost</server>
+    <type>GENERIC</type>
+    <access>JNDI</access>
+    <database>operational</database>
+    <port>-1</port>
+    <username>ofbiz</username>
+    <password>Encrypted 2be98afc86aa7f2e4cb79ce7fd890a6c0</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>-1</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
   <order>
-  <hop> <from>Extract data for DateDim</from><to>Lookup&#47;update DateDim</to><enabled>Y</enabled> </hop>  <hop> <from>Get invoice_item data</from><to>Select values #1 (hack to work with Derby)</to><enabled>Y</enabled> </hop>  <hop> <from>Get product_store_id</from><to>Lookup StoreDim</to><enabled>Y</enabled> </hop>  <hop> <from>Lookup StoreDim</from><to>Select values #2 (hack to work with Derby)</to><enabled>Y</enabled> </hop>  <hop> <from>Lookup&#47;update DateDim</from><to>Lookup&#47;update CurrencyDim</to><enabled>Y</enabled> </hop>  <hop> <from>Select values #1 (hack to work with Derby)</from><to>Extract data for DateDim</to><enabled>Y</enabled> </hop>  <hop> <from>Lookup&#47;update CurrencyDim</from><to>Get product_store_id</to><enabled>Y</enabled> </hop>  <hop> <from>Select values #2 (hack to work with Derby)</from><to>Set default values</to><enabled>Y</enabled> </hop>  <hop> <from>Lookup tax_authority keys</from><to>Lookup tax_authority_dim</to><enabled>Y</enabled> </hop>  <hop> <from>Set default values</from><to>Lookup tax_authority keys</to><enabled>Y</enabled> </hop>  <hop> <from>Lookup tax_authority_dim</from><to>Select tax_invoice_item_fact values</to><enabled>Y</enabled> </hop>  <hop> <from>Select tax_invoice_item_fact values</from><to>Sort rows</to><enabled>Y</enabled> </hop>  <hop> <from>Sort rows</from><to>Unique rows</to><enabled>Y</enabled> </hop>  <hop> <from>Unique rows</from><to>Insert &#47; Update tax_invoice_item_fact</to><enabled>Y</enabled> </hop>  <hop> <from>Insert &#47; Update tax_invoice_item_fact</from><to>Select sales_invoice_item_fact values</to><enabled>Y</enabled> </hop>  <hop> <from>Select sales_invoice_item_fact values</from><to>Sort rows 2</to><enabled>Y</enabled> </hop>  <hop> <from>Sort rows 2</from><to>Unique rows 2</to><enabled>Y</enabled> </hop>  <hop> <from>Unique rows 2</from><to>Insert &#47; Update sales_invoice_item_fact</to><enabled>Y</enabled> </hop>  </order>
+  <hop> <from>Get invoice_item data</from><to>Select values #1 (hack to work with Derby)</to><enabled>Y</enabled> </hop>  <hop> <from>Get product_store_id</from><to>Lookup StoreDim</to><enabled>Y</enabled> </hop>  <hop> <from>Lookup StoreDim</from><to>Select values #2 (hack to work with Derby)</to><enabled>Y</enabled> </hop>  <hop> <from>Select values #1 (hack to work with Derby)</from><to>Extract data for DateDim</to><enabled>Y</enabled> </hop>  <hop> <from>Lookup&#47;update CurrencyDim</from><to>Get product_store_id</to><enabled>Y</enabled> </hop>  <hop> <from>Select values #2 (hack to work with Derby)</from><to>Set default values</to><enabled>Y</enabled> </hop>  <hop> <from>Lookup tax_authority keys</from><to>Lookup tax_authority_dim</to><enabled>Y</enabled> </hop>  <hop> <from>Set default values</from><to>Lookup tax_authority keys</to><enabled>Y</enabled> </hop>  <hop> <from>Lookup tax_authority_dim</from><to>Select tax_invoice_item_fact values</to><enabled>Y</enabled> </hop>  <hop> <from>Select tax_invoice_item_fact values</from><to>Sort rows</to><enabled>Y</enabled> </hop>  <hop> <from>Sort rows</from><to>Unique rows</to><enabled>Y</enabled> </hop>  <hop> <from>Insert &#47; Update tax_invoice_item_fact</from><to>Select sales_invoice_item_fact values</to><enabled>Y</enabled> </hop>  <hop> <from>Select sales_invoice_item_fact values</from><to>Sort rows 2</to><enabled>Y</enabled> </hop>  <hop> <from>Sort rows 2</from><to>Unique rows 2</to><enabled>Y</enabled> </hop>  <hop> <from>Lookup OrganizationDim</from><to>Lookup&#47;update CurrencyDim</to><enabled>Y</enabled> </hop>  <hop> <from>Unique rows 2</from><to>Add sequential key #2</to><enabled>Y</enabled> </hop>  <hop> <from>Add sequential key #2</from><to>Insert &#47; Update sales_invoice_item_fact</to><enabled>Y</enabled> </hop>  <hop> <from>Unique rows</from><to>Add sequential key #1</to><enabled>Y</enabled> </hop>  <hop> <from>Add sequential key #1</from><to>Insert &#47; Update tax_invoice_item_fact</to><enabled>Y</enabled> </hop>  <hop> <from>Extract data for DateDim</from><to>Lookup DateDim</to><enabled>Y</enabled> </hop>  <hop> <from>Lookup DateDim</from><to>Lookup OrganizationDim</to><enabled>Y</enabled> </hop>  </order>
+  <step>
+    <name>Add sequential key #1</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <valuename>tax_inv_item_fact_id</valuename>
+      <use_database>N</use_database>
+      <connection/>
+      <schema/>
+      <seqname>SEQ_</seqname>
+      <use_counter>Y</use_counter>
+      <counter_name/>
+      <start_at>-1</start_at>
+      <increment_by>-1</increment_by>
+      <max_value>-999999999</max_value>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>948</xloc>
+      <yloc>318</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Add sequential key #2</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <valuename>sales_inv_item_fact_id</valuename>
+      <use_database>N</use_database>
+      <connection/>
+      <schema/>
+      <seqname>SEQ_</seqname>
+      <use_counter>Y</use_counter>
+      <counter_name/>
+      <start_at>-1</start_at>
+      <increment_by>-1</increment_by>
+      <max_value>-999999999</max_value>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>312</xloc>
+      <yloc>479</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
   <step>
     <name>Extract data for DateDim</name>
     <type>ScriptValueMod</type>
@@ -142,40 +201,47 @@ else {
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
+        <replace>N</replace>
       </field>      <field>        <name>week_of_year</name>
         <rename>week_of_year</rename>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
+        <replace>N</replace>
       </field>      <field>        <name>month_of_year</name>
         <rename>month_of_year</rename>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
+        <replace>N</replace>
       </field>      <field>        <name>year_number</name>
         <rename>year_number</rename>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
+        <replace>N</replace>
       </field>      <field>        <name>quarter</name>
         <rename>quarter</rename>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
+        <replace>N</replace>
       </field>      <field>        <name>name_day</name>
         <rename>name_day</rename>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
+        <replace>N</replace>
       </field>      <field>        <name>name_month</name>
         <rename>name_month</rename>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
+        <replace>N</replace>
       </field>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>507</xloc>
-      <yloc>32</yloc>
+      <xloc>434</xloc>
+      <yloc>33</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -194,7 +260,8 @@ else {
     <sql>SELECT INVOICE_ITEM.INVOICE_ID, INVOICE_ITEM_SEQ_ID,
 INVOICE_ITEM.QUANTITY*INVOICE_ITEM.AMOUNT AS TOTAL_PROMOTIONS,
 INVOICE.INVOICE_DATE,
-INVOICE.CURRENCY_UOM_ID
+INVOICE.CURRENCY_UOM_ID,
+INVOICE.PARTY_ID_FROM
 FROM INVOICE, INVOICE_ITEM
 WHERE INVOICE_ITEM.INVOICE_ID = INVOICE.INVOICE_ID
 AND INVOICE.INVOICE_TYPE_ID = &apos;SALES_INVOICE&apos;
@@ -232,6 +299,7 @@ FROM ORDER_HEADER, ORDER_ITEM_BILLING
 WHERE ORDER_ITEM_BILLING.INVOICE_ID = ?
 AND ORDER_HEADER.ORDER_ID = ORDER_ITEM_BILLING.ORDER_ID</sql>
     <outer_join>N</outer_join>
+    <replace_vars>N</replace_vars>
     <parameter>
       <field>
         <name>invoice_id</name>
@@ -261,7 +329,7 @@ AND ORDER_HEADER.ORDER_ID = ORDER_ITEM_BILLING.ORDER_ID</sql>
     <update_bypassed>N</update_bypassed>
     <lookup>
       <schema/>
-      <table>sales_invoice_item_fact</table>
+      <table>SALES_INVOICE_ITEM_FACT</table>
       <key>
         <name>date_dim_id</name>
         <field>date_dim_id</field>
@@ -337,11 +405,21 @@ AND ORDER_HEADER.ORDER_ID = ORDER_ITEM_BILLING.ORDER_ID</sql>
         <rename>net_amount</rename>
         <update>Y</update>
       </value>
+      <value>
+        <name>organization_dim_id</name>
+        <rename>organization_dim_id</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>sales_inv_item_fact_id</name>
+        <rename>sales_inv_item_fact_id</rename>
+        <update>Y</update>
+      </value>
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>189</xloc>
-      <yloc>478</yloc>
+      <xloc>135</xloc>
+      <yloc>479</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -361,7 +439,7 @@ AND ORDER_HEADER.ORDER_ID = ORDER_ITEM_BILLING.ORDER_ID</sql>
     <update_bypassed>N</update_bypassed>
     <lookup>
       <schema/>
-      <table>tax_invoice_item_fact</table>
+      <table>TAX_INVOICE_ITEM_FACT</table>
       <key>
         <name>date_dim_id</name>
         <field>date_dim_id</field>
@@ -453,11 +531,67 @@ AND ORDER_HEADER.ORDER_ID = ORDER_ITEM_BILLING.ORDER_ID</sql>
         <rename>tax_due</rename>
         <update>Y</update>
       </value>
+      <value>
+        <name>taxable</name>
+        <rename>taxable</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>organization_dim_id</name>
+        <rename>organization_dim_id</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>tax_inv_item_fact_id</name>
+        <rename>tax_inv_item_fact_id</rename>
+        <update>Y</update>
+      </value>
     </lookup>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>952</xloc>
-      <yloc>321</yloc>
+      <xloc>947</xloc>
+      <yloc>397</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Lookup OrganizationDim</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ofbiz_dw</connection>
+    <cache>Y</cache>
+    <cache_load_all>Y</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema/>
+      <table>ORGANIZATION_DIM</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>organization_party_id</name>
+        <field>organization_party_id</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>organization_dim_id</name>
+        <rename>organization_dim_id</rename>
+        <default>0</default>
+        <type>Integer</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>763</xloc>
+      <yloc>32</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -499,6 +633,10 @@ AND ORDER_HEADER.ORDER_ID = ORDER_ITEM_BILLING.ORDER_ID</sql>
       <min_year>1974</min_year>
       <max_year>2199</max_year>
       <cache_size>5000</cache_size>
+      <preload_cache>N</preload_cache>
+      <use_start_date_alternative>N</use_start_date_alternative>
+      <start_date_alternative>none</start_date_alternative>
+      <start_date_field_name/>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>715</xloc>
@@ -524,6 +662,7 @@ FROM INVOICE_ITEM
 WHERE PARENT_INVOICE_ID = ?
 AND INVOICE_ITEM_TYPE_ID = &apos;ITM_SALES_TAX&apos;</sql>
     <outer_join>N</outer_join>
+    <replace_vars>N</replace_vars>
     <parameter>
       <field>
         <name>invoice_id</name>
@@ -579,6 +718,10 @@ AND INVOICE_ITEM_TYPE_ID = &apos;ITM_SALES_TAX&apos;</sql>
       <min_year>1974</min_year>
       <max_year>2199</max_year>
       <cache_size>5000</cache_size>
+      <preload_cache>N</preload_cache>
+      <use_start_date_alternative>N</use_start_date_alternative>
+      <start_date_alternative>none</start_date_alternative>
+      <start_date_field_name/>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>62</xloc>
@@ -624,89 +767,13 @@ AND INVOICE_ITEM_TYPE_ID = &apos;ITM_SALES_TAX&apos;</sql>
       <min_year>1974</min_year>
       <max_year>2199</max_year>
       <cache_size>5000</cache_size>
+      <preload_cache>N</preload_cache>
+      <use_start_date_alternative>N</use_start_date_alternative>
+      <start_date_alternative>none</start_date_alternative>
+      <start_date_field_name/>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>950</xloc>
-      <yloc>32</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Lookup&#47;update DateDim</name>
-    <type>DimensionLookup</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <schema/>
-      <table>DATE_DIM</table>
-      <connection>ofbiz_dw</connection>
-      <commit>100</commit>
-      <update>Y</update>
-      <fields>
-        <key>
-          <name>_invoice_date</name>
-          <lookup>invoice_date</lookup>
-        </key>
-        <date>
-          <name/>
-          <from>date_from</from>
-          <to>date_to</to>
-        </date>
-        <field>
-          <name>day_of_month</name>
-          <lookup>day_of_month</lookup>
-          <update>Insert</update>
-        </field>
-        <field>
-          <name>week_of_year</name>
-          <lookup>week_of_year</lookup>
-          <update>Insert</update>
-        </field>
-        <field>
-          <name>month_of_year</name>
-          <lookup>month_of_year</lookup>
-          <update>Insert</update>
-        </field>
-        <field>
-          <name>year_number</name>
-          <lookup>year_number</lookup>
-          <update>Insert</update>
-        </field>
-        <field>
-          <name>quarter</name>
-          <lookup>quarter</lookup>
-          <update>Insert</update>
-        </field>
-        <field>
-          <name>name_day</name>
-          <lookup>name_day</lookup>
-          <update>Insert</update>
-        </field>
-        <field>
-          <name>name_month</name>
-          <lookup>name_month</lookup>
-          <update>Insert</update>
-        </field>
-        <return>
-          <name>date_dim_id</name>
-          <rename/>
-          <creation_method>tablemax</creation_method>
-          <use_autoinc>N</use_autoinc>
-          <version>dim_version</version>
-        </return>
-      </fields>
-      <sequence/>
-      <min_year>1974</min_year>
-      <max_year>2199</max_year>
-      <cache_size>5000</cache_size>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>715</xloc>
       <yloc>32</yloc>
       <draw>Y</draw>
       </GUI>
@@ -743,21 +810,25 @@ AND INVOICE_ITEM_TYPE_ID = &apos;ITM_SALES_TAX&apos;</sql>
         <length>-2</length>
         <precision>-2</precision>
       </field>      <field>        <name>gross_amount</name>
-        <rename>gross_amount</rename>
+        <rename/>
         <length>17</length>
         <precision>2</precision>
       </field>      <field>        <name>discounts</name>
-        <rename>discounts</rename>
+        <rename/>
         <length>17</length>
         <precision>2</precision>
       </field>      <field>        <name>refunds</name>
-        <rename>refunds</rename>
+        <rename/>
         <length>17</length>
         <precision>2</precision>
       </field>      <field>        <name>net_amount</name>
-        <rename>net_amount</rename>
+        <rename/>
         <length>17</length>
         <precision>2</precision>
+      </field>      <field>        <name>organization_dim_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
       </field>        <select_unspecified>N</select_unspecified>
     </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
@@ -821,6 +892,14 @@ AND INVOICE_ITEM_TYPE_ID = &apos;ITM_SALES_TAX&apos;</sql>
         <rename>tax_due</rename>
         <length>17</length>
         <precision>2</precision>
+      </field>      <field>        <name>taxable</name>
+        <rename/>
+        <length>17</length>
+        <precision>2</precision>
+      </field>      <field>        <name>organization_dim_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
       </field>        <select_unspecified>N</select_unspecified>
     </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
@@ -858,6 +937,10 @@ AND INVOICE_ITEM_TYPE_ID = &apos;ITM_SALES_TAX&apos;</sql>
         <precision>-2</precision>
       </field>      <field>        <name>currency_uom_id</name>
         <rename>uom_id</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>party_id_from</name>
+        <rename>organization_party_id</rename>
         <length>-2</length>
         <precision>-2</precision>
       </field>        <select_unspecified>N</select_unspecified>
@@ -939,6 +1022,10 @@ AND INVOICE_ITEM_TYPE_ID = &apos;ITM_SALES_TAX&apos;</sql>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
+      </field>      <field>        <name>organization_dim_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
       </field>        <select_unspecified>N</select_unspecified>
     </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
@@ -966,12 +1053,14 @@ var totalPromotions = 0.00;
 var totalRefunds = 0.00;
 var totalPromotionRefundAdj = 0.00;
 var netAmount = 0.00;
+var taxable = 0.00;
 var taxDue = 0.00;
 
 if (_total_promotions.getNumber() != null) 
 {
     totalPromotions = _total_promotions.Clone();
     netAmount = _total_promotions.Clone();
+    taxable = _total_promotions.Clone();
 }
 
 
@@ -981,31 +1070,43 @@ if (_total_promotions.getNumber() != null)
         <type>Number</type>
         <length>17</length>
         <precision>2</precision>
+        <replace>N</replace>
       </field>      <field>        <name>totalPromotions</name>
         <rename>totalPromotions</rename>
         <type>Number</type>
         <length>17</length>
         <precision>2</precision>
+        <replace>N</replace>
       </field>      <field>        <name>totalRefunds</name>
         <rename>totalRefunds</rename>
         <type>Number</type>
         <length>17</length>
         <precision>2</precision>
+        <replace>N</replace>
       </field>      <field>        <name>totalPromotionRefundAdj</name>
         <rename>totalPromotionRefundAdj</rename>
         <type>Number</type>
         <length>17</length>
         <precision>2</precision>
+        <replace>N</replace>
       </field>      <field>        <name>netAmount</name>
         <rename>netAmount</rename>
         <type>Number</type>
         <length>17</length>
         <precision>2</precision>
+        <replace>N</replace>
       </field>      <field>        <name>taxDue</name>
         <rename>taxDue</rename>
         <type>Number</type>
         <length>17</length>
         <precision>2</precision>
+        <replace>N</replace>
+      </field>      <field>        <name>taxable</name>
+        <rename>taxable</rename>
+        <type>Number</type>
+        <length>17</length>
+        <precision>2</precision>
+        <replace>N</replace>
       </field>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>245</xloc>
@@ -1244,6 +1345,59 @@ if (_total_promotions.getNumber() != null)
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>477</xloc>
       <yloc>478</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Lookup DateDim</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ofbiz_dw</connection>
+    <cache>Y</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema/>
+      <table>DATE_DIM</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>day_of_month</name>
+        <field>day_of_month</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>month_of_year</name>
+        <field>month_of_year</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>year_number</name>
+        <field>year_number</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>date_dim_id</name>
+        <rename>date_dim_id</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>593</xloc>
+      <yloc>32</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

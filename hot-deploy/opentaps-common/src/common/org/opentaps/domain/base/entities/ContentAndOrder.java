@@ -256,182 +256,182 @@ fieldMapColumns.put("ContentAndOrder", fields);
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param contentId the contentId to set
      */
-    private void setContentId(String contentId) {
+    public void setContentId(String contentId) {
         this.contentId = contentId;
     }
     /**
      * Auto generated value setter.
      * @param contentTypeId the contentTypeId to set
      */
-    private void setContentTypeId(String contentTypeId) {
+    public void setContentTypeId(String contentTypeId) {
         this.contentTypeId = contentTypeId;
     }
     /**
      * Auto generated value setter.
      * @param ownerContentId the ownerContentId to set
      */
-    private void setOwnerContentId(String ownerContentId) {
+    public void setOwnerContentId(String ownerContentId) {
         this.ownerContentId = ownerContentId;
     }
     /**
      * Auto generated value setter.
      * @param decoratorContentId the decoratorContentId to set
      */
-    private void setDecoratorContentId(String decoratorContentId) {
+    public void setDecoratorContentId(String decoratorContentId) {
         this.decoratorContentId = decoratorContentId;
     }
     /**
      * Auto generated value setter.
      * @param instanceOfContentId the instanceOfContentId to set
      */
-    private void setInstanceOfContentId(String instanceOfContentId) {
+    public void setInstanceOfContentId(String instanceOfContentId) {
         this.instanceOfContentId = instanceOfContentId;
     }
     /**
      * Auto generated value setter.
      * @param dataResourceId the dataResourceId to set
      */
-    private void setDataResourceId(String dataResourceId) {
+    public void setDataResourceId(String dataResourceId) {
         this.dataResourceId = dataResourceId;
     }
     /**
      * Auto generated value setter.
      * @param templateDataResourceId the templateDataResourceId to set
      */
-    private void setTemplateDataResourceId(String templateDataResourceId) {
+    public void setTemplateDataResourceId(String templateDataResourceId) {
         this.templateDataResourceId = templateDataResourceId;
     }
     /**
      * Auto generated value setter.
      * @param dataSourceId the dataSourceId to set
      */
-    private void setDataSourceId(String dataSourceId) {
+    public void setDataSourceId(String dataSourceId) {
         this.dataSourceId = dataSourceId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param privilegeEnumId the privilegeEnumId to set
      */
-    private void setPrivilegeEnumId(String privilegeEnumId) {
+    public void setPrivilegeEnumId(String privilegeEnumId) {
         this.privilegeEnumId = privilegeEnumId;
     }
     /**
      * Auto generated value setter.
      * @param serviceName the serviceName to set
      */
-    private void setServiceName(String serviceName) {
+    public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
     /**
      * Auto generated value setter.
      * @param contentName the contentName to set
      */
-    private void setContentName(String contentName) {
+    public void setContentName(String contentName) {
         this.contentName = contentName;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param localeString the localeString to set
      */
-    private void setLocaleString(String localeString) {
+    public void setLocaleString(String localeString) {
         this.localeString = localeString;
     }
     /**
      * Auto generated value setter.
      * @param mimeTypeId the mimeTypeId to set
      */
-    private void setMimeTypeId(String mimeTypeId) {
+    public void setMimeTypeId(String mimeTypeId) {
         this.mimeTypeId = mimeTypeId;
     }
     /**
      * Auto generated value setter.
      * @param characterSetId the characterSetId to set
      */
-    private void setCharacterSetId(String characterSetId) {
+    public void setCharacterSetId(String characterSetId) {
         this.characterSetId = characterSetId;
     }
     /**
      * Auto generated value setter.
      * @param childLeafCount the childLeafCount to set
      */
-    private void setChildLeafCount(Long childLeafCount) {
+    public void setChildLeafCount(Long childLeafCount) {
         this.childLeafCount = childLeafCount;
     }
     /**
      * Auto generated value setter.
      * @param childBranchCount the childBranchCount to set
      */
-    private void setChildBranchCount(Long childBranchCount) {
+    public void setChildBranchCount(Long childBranchCount) {
         this.childBranchCount = childBranchCount;
     }
     /**
      * Auto generated value setter.
      * @param createdDate the createdDate to set
      */
-    private void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
     /**
      * Auto generated value setter.
      * @param createdByUserLogin the createdByUserLogin to set
      */
-    private void setCreatedByUserLogin(String createdByUserLogin) {
+    public void setCreatedByUserLogin(String createdByUserLogin) {
         this.createdByUserLogin = createdByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedDate the lastModifiedDate to set
      */
-    private void setLastModifiedDate(Timestamp lastModifiedDate) {
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedByUserLogin the lastModifiedByUserLogin to set
      */
-    private void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
+    public void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
         this.lastModifiedByUserLogin = lastModifiedByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param classificationEnumId the classificationEnumId to set
      */
-    private void setClassificationEnumId(String classificationEnumId) {
+    public void setClassificationEnumId(String classificationEnumId) {
         this.classificationEnumId = classificationEnumId;
     }
 

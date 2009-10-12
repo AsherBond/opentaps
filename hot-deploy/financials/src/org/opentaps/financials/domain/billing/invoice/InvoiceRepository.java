@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.ofbiz.accounting.invoice.InvoiceServices;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -38,6 +39,8 @@ import org.opentaps.domain.base.entities.InvoiceContactMech;
 import org.opentaps.domain.base.entities.InvoiceItem;
 import org.opentaps.domain.base.entities.InvoiceItemType;
 import org.opentaps.domain.base.entities.InvoiceItemTypeAndOrgGlAccount;
+import org.opentaps.domain.base.entities.InvoiceItemTypeMap;
+import org.opentaps.domain.base.entities.OrderItem;
 import org.opentaps.domain.base.entities.PaymentAndApplication;
 import org.opentaps.domain.base.entities.PostalAddress;
 import org.opentaps.domain.base.entities.ProductInvoiceItemType;
@@ -286,6 +289,14 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
             return new ArrayList<AccountingTagConfigurationForOrganizationAndUsage>();
         }
         return getOrganizationRepository().validateTagParameters(item, organizationPartyId, accountingTagUsageTypeId);
+    }
+
+    /** {@inheritDoc} */
+    @SuppressWarnings("deprecation")
+    public InvoiceItemType getInvoiceItemType(OrderItem orderItem, String invoiceTypeId) throws RepositoryException {
+        org.opentaps.domain.base.entities.Product itemProduct = orderItem.getProduct();
+        String invoiceItemTypeId = InvoiceServices.getInvoiceItemType(getDelegator(), orderItem.getOrderItemTypeId(), itemProduct.getProductTypeId(), invoiceTypeId, "INV_FPROD_ITEM");
+        return findOneCache(InvoiceItemType.class, map(InvoiceItemType.Fields.invoiceItemTypeId, invoiceItemTypeId));
     }
 
     protected OrganizationRepositoryInterface getOrganizationRepository() throws RepositoryException {

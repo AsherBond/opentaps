@@ -884,12 +884,6 @@
         <response name="error" type="request-redirect" value="SalesTaxReportSetup"/>
     </request-map>
     <!-- balance report define  -->
-    <request-map uri="createEncumbranceSnapshotAndDetail">
-        <security https="true" auth="true"/>
-        <event type="bsf" path="/reports/" invoke="runEncumbranceSnapshot.bsh"/>
-        <response name="success" type="view" value="reportsMain"/>
-        <response name="error" type="view" value="reportsMain"/>
-    </request-map>
     <request-map uri="BalanceReportSetup">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="BalanceReportSetup"/>
@@ -1044,6 +1038,14 @@
     <request-map uri="JRComparativeCashFlowStatementXLS">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="JRComparativeCashFlowStatementXLS"/>
+    </request-map>
+
+    <!-- Budgeting  -->
+    <request-map uri="CreateGlAccountTransEntryFacts">
+        <security https="true" auth="true"/>
+        <event type="java" invoke="createGlAccountTransEntryFacts" path="com.opensourcestrategies.financials.reports.FinancialReports"/>
+        <response name="success" type="view" value="reportsMain"/>
+        <response name="error" type="request-redirect" value="reportsMain"/>
     </request-map>
 
     <!-- ========================= -->

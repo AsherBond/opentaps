@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Transaction;
 import org.ofbiz.base.util.Debug;
@@ -571,5 +572,32 @@ public class HibernateUtil {
         return encryptParameters;
     }
 
+    /**
+     * get real exception cause from a hibernate exception.
+     *
+     * @param e a <code>HibernateException</code> exception
+     * @return a <code>Throwable</code> instance
+     */
+    public static Throwable getHibernateExceptionCause(HibernateException e) {
+        Throwable cause = getExceptionCause(e);
+        if (cause instanceof java.sql.SQLException) {
+            return ((java.sql.SQLException) cause).getNextException();
+        } else {
+            return cause;
+        }
+    }
 
+    /**
+     * get cause from an exception.
+     *
+     * @param e a <code>Throwable</code> instance
+     * @return a <code>Throwable</code> instance
+     */
+    public static Throwable getExceptionCause(Throwable e) {
+        if (e.getCause() != null) {
+            return getExceptionCause(e.getCause());
+        } else {
+            return e;
+        }
+    }
 }

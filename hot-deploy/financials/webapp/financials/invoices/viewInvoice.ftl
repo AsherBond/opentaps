@@ -141,7 +141,7 @@ function notifyInvoiceItemsCount(n) {
           <@inputTextRow name="referenceNumber" title=uiLabelMap.FinancialsReferenceNumber size=60 default=invoice.referenceNumber />
           <@displayRow title="${uiLabelMap.OpentapsOrders}" text=ordersList?if_exists />
           <@inputTextRow name="description" title=uiLabelMap.CommonDescription size=60 default=invoice.description />
-          <@inputTextRow name="invoiceMessage" title=uiLabelMap.CommonMessage size=60 default=invoice.invoiceMessage />
+          <@inputTextareaRow name="invoiceMessage" title=uiLabelMap.CommonMessage default=invoice.invoiceMessage />
           <@inputForceCompleteRow title=uiLabelMap.CommonUpdate forceTitle=uiLabelMap.OpentapsForceUpdate form="updateInvoice" /></td>
         </form>
       <#else>
@@ -254,6 +254,7 @@ function notifyInvoiceItemsCount(n) {
             <td></td>
             <td>${uiLabelMap.CommonType}</td>
             <td>${uiLabelMap.ProductProductId}</td>
+            <td>${uiLabelMap.FinancialsOverrideGlAccount}</td>
             <td>${uiLabelMap.CommonDescription}</td>
             <td>${uiLabelMap.CommonQuantity}</td>
             <td align="right">${uiLabelMap.CommonAmount}</td>
@@ -284,6 +285,7 @@ function notifyInvoiceItemsCount(n) {
                 <@displayLinkCell href="updateInvoiceItemForm?invoiceId=${item.invoiceId}&invoiceItemSeqId=${item.invoiceItemSeqId}" text=item.invoiceItemSeqId />
                 <@displayCell text=item.getInvoiceItemType().get("description", locale) />
                 <@inputLookupCell name="productId" default=item.productId! lookup="LookupProduct" form="updateInvoiceItemMulti" size="10" index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
+                <@inputAutoCompleteGlAccountCell name="overrideGlAccountId" index=item_index default=item.overrideGlAccountId/>
                 <@inputTextCell name="description" default=item.description! size=60 index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
                 <@inputTextCell name="quantity" default=item.quantity! size=4 index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
                 <@inputTextCell name="amount" default=item.amount! size=6 index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
@@ -294,7 +296,8 @@ function notifyInvoiceItemsCount(n) {
                 <@displayCell text=displayItemSeqId blockClass="tabletextright" />
                 <@displayCell text=item.getInvoiceItemType().get("description", locale) style="white-space: nowrap" />
                 <@displayCell text=item.productId />
-                <@displayCell text=item.description blockStyle="width: 50%" />
+                <@displayCell text=item.overrideGlAccountId />
+                <@displayCell text=item.description blockStyle="width: 40%" />
                 <@displayCell text=item.quantity blockClass="tabletextright" />
                 <@displayCurrencyCell amount=item.amount currencyUomId=item.uomId?default(invoice.currencyUomId) />
                 <@displayCurrencyCell amount=rowTotal currencyUomId=item.uomId?default(invoice.currencyUomId) />
@@ -304,7 +307,7 @@ function notifyInvoiceItemsCount(n) {
             <#if tagTypes?has_content>
               <tr class="${tableRowClass(item_index)}">
                 <td colspan="2">&nbsp;</td>
-                <td colspan="<#if hasUpdatePermission>7<#else>5</#if>">
+                <td colspan="<#if hasUpdatePermission>8<#else>6</#if>">
                   <i><@accountingTagsDisplay tags=tagTypes entity=item /></i>
                 </td>
               </tr>
@@ -315,7 +318,7 @@ function notifyInvoiceItemsCount(n) {
 
           <#if invoiceItems.size() != 0>
             <tr>
-              <td colspan="6"></td>
+              <td colspan="7"></td>
               <@displayCurrencyCell amount=total currencyUomId=invoice.currencyUomId class="tableheadtext" />
             </tr>
           </#if>

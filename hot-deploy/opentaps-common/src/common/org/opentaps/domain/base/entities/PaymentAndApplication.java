@@ -334,252 +334,252 @@ fieldMapColumns.put("PaymentAndApplication", fields);
      * Auto generated value setter.
      * @param paymentId the paymentId to set
      */
-    private void setPaymentId(String paymentId) {
+    public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
     }
     /**
      * Auto generated value setter.
      * @param paymentTypeId the paymentTypeId to set
      */
-    private void setPaymentTypeId(String paymentTypeId) {
+    public void setPaymentTypeId(String paymentTypeId) {
         this.paymentTypeId = paymentTypeId;
     }
     /**
      * Auto generated value setter.
      * @param paymentMethodTypeId the paymentMethodTypeId to set
      */
-    private void setPaymentMethodTypeId(String paymentMethodTypeId) {
+    public void setPaymentMethodTypeId(String paymentMethodTypeId) {
         this.paymentMethodTypeId = paymentMethodTypeId;
     }
     /**
      * Auto generated value setter.
      * @param paymentMethodId the paymentMethodId to set
      */
-    private void setPaymentMethodId(String paymentMethodId) {
+    public void setPaymentMethodId(String paymentMethodId) {
         this.paymentMethodId = paymentMethodId;
     }
     /**
      * Auto generated value setter.
      * @param paymentGatewayResponseId the paymentGatewayResponseId to set
      */
-    private void setPaymentGatewayResponseId(String paymentGatewayResponseId) {
+    public void setPaymentGatewayResponseId(String paymentGatewayResponseId) {
         this.paymentGatewayResponseId = paymentGatewayResponseId;
     }
     /**
      * Auto generated value setter.
      * @param paymentPreferenceId the paymentPreferenceId to set
      */
-    private void setPaymentPreferenceId(String paymentPreferenceId) {
+    public void setPaymentPreferenceId(String paymentPreferenceId) {
         this.paymentPreferenceId = paymentPreferenceId;
     }
     /**
      * Auto generated value setter.
      * @param partyIdFrom the partyIdFrom to set
      */
-    private void setPartyIdFrom(String partyIdFrom) {
+    public void setPartyIdFrom(String partyIdFrom) {
         this.partyIdFrom = partyIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param partyIdTo the partyIdTo to set
      */
-    private void setPartyIdTo(String partyIdTo) {
+    public void setPartyIdTo(String partyIdTo) {
         this.partyIdTo = partyIdTo;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeIdTo the roleTypeIdTo to set
      */
-    private void setRoleTypeIdTo(String roleTypeIdTo) {
+    public void setRoleTypeIdTo(String roleTypeIdTo) {
         this.roleTypeIdTo = roleTypeIdTo;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param effectiveDate the effectiveDate to set
      */
-    private void setEffectiveDate(Timestamp effectiveDate) {
+    public void setEffectiveDate(Timestamp effectiveDate) {
         this.effectiveDate = effectiveDate;
     }
     /**
      * Auto generated value setter.
      * @param paymentRefNum the paymentRefNum to set
      */
-    private void setPaymentRefNum(String paymentRefNum) {
+    public void setPaymentRefNum(String paymentRefNum) {
         this.paymentRefNum = paymentRefNum;
     }
     /**
      * Auto generated value setter.
      * @param amount the amount to set
      */
-    private void setAmount(BigDecimal amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
     /**
      * Auto generated value setter.
      * @param currencyUomId the currencyUomId to set
      */
-    private void setCurrencyUomId(String currencyUomId) {
+    public void setCurrencyUomId(String currencyUomId) {
         this.currencyUomId = currencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param comments the comments to set
      */
-    private void setComments(String comments) {
+    public void setComments(String comments) {
         this.comments = comments;
     }
     /**
      * Auto generated value setter.
      * @param finAccountTransId the finAccountTransId to set
      */
-    private void setFinAccountTransId(String finAccountTransId) {
+    public void setFinAccountTransId(String finAccountTransId) {
         this.finAccountTransId = finAccountTransId;
     }
     /**
      * Auto generated value setter.
      * @param actualCurrencyAmount the actualCurrencyAmount to set
      */
-    private void setActualCurrencyAmount(BigDecimal actualCurrencyAmount) {
+    public void setActualCurrencyAmount(BigDecimal actualCurrencyAmount) {
         this.actualCurrencyAmount = actualCurrencyAmount;
     }
     /**
      * Auto generated value setter.
      * @param actualCurrencyUomId the actualCurrencyUomId to set
      */
-    private void setActualCurrencyUomId(String actualCurrencyUomId) {
+    public void setActualCurrencyUomId(String actualCurrencyUomId) {
         this.actualCurrencyUomId = actualCurrencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId1 the acctgTagEnumId1 to set
      */
-    private void setAcctgTagEnumId1(String acctgTagEnumId1) {
+    public void setAcctgTagEnumId1(String acctgTagEnumId1) {
         this.acctgTagEnumId1 = acctgTagEnumId1;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId2 the acctgTagEnumId2 to set
      */
-    private void setAcctgTagEnumId2(String acctgTagEnumId2) {
+    public void setAcctgTagEnumId2(String acctgTagEnumId2) {
         this.acctgTagEnumId2 = acctgTagEnumId2;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId3 the acctgTagEnumId3 to set
      */
-    private void setAcctgTagEnumId3(String acctgTagEnumId3) {
+    public void setAcctgTagEnumId3(String acctgTagEnumId3) {
         this.acctgTagEnumId3 = acctgTagEnumId3;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId4 the acctgTagEnumId4 to set
      */
-    private void setAcctgTagEnumId4(String acctgTagEnumId4) {
+    public void setAcctgTagEnumId4(String acctgTagEnumId4) {
         this.acctgTagEnumId4 = acctgTagEnumId4;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId5 the acctgTagEnumId5 to set
      */
-    private void setAcctgTagEnumId5(String acctgTagEnumId5) {
+    public void setAcctgTagEnumId5(String acctgTagEnumId5) {
         this.acctgTagEnumId5 = acctgTagEnumId5;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId6 the acctgTagEnumId6 to set
      */
-    private void setAcctgTagEnumId6(String acctgTagEnumId6) {
+    public void setAcctgTagEnumId6(String acctgTagEnumId6) {
         this.acctgTagEnumId6 = acctgTagEnumId6;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId7 the acctgTagEnumId7 to set
      */
-    private void setAcctgTagEnumId7(String acctgTagEnumId7) {
+    public void setAcctgTagEnumId7(String acctgTagEnumId7) {
         this.acctgTagEnumId7 = acctgTagEnumId7;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId8 the acctgTagEnumId8 to set
      */
-    private void setAcctgTagEnumId8(String acctgTagEnumId8) {
+    public void setAcctgTagEnumId8(String acctgTagEnumId8) {
         this.acctgTagEnumId8 = acctgTagEnumId8;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId9 the acctgTagEnumId9 to set
      */
-    private void setAcctgTagEnumId9(String acctgTagEnumId9) {
+    public void setAcctgTagEnumId9(String acctgTagEnumId9) {
         this.acctgTagEnumId9 = acctgTagEnumId9;
     }
     /**
      * Auto generated value setter.
      * @param acctgTagEnumId10 the acctgTagEnumId10 to set
      */
-    private void setAcctgTagEnumId10(String acctgTagEnumId10) {
+    public void setAcctgTagEnumId10(String acctgTagEnumId10) {
         this.acctgTagEnumId10 = acctgTagEnumId10;
     }
     /**
      * Auto generated value setter.
      * @param paymentApplicationId the paymentApplicationId to set
      */
-    private void setPaymentApplicationId(String paymentApplicationId) {
+    public void setPaymentApplicationId(String paymentApplicationId) {
         this.paymentApplicationId = paymentApplicationId;
     }
     /**
      * Auto generated value setter.
      * @param invoiceId the invoiceId to set
      */
-    private void setInvoiceId(String invoiceId) {
+    public void setInvoiceId(String invoiceId) {
         this.invoiceId = invoiceId;
     }
     /**
      * Auto generated value setter.
      * @param invoiceItemSeqId the invoiceItemSeqId to set
      */
-    private void setInvoiceItemSeqId(String invoiceItemSeqId) {
+    public void setInvoiceItemSeqId(String invoiceItemSeqId) {
         this.invoiceItemSeqId = invoiceItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param billingAccountId the billingAccountId to set
      */
-    private void setBillingAccountId(String billingAccountId) {
+    public void setBillingAccountId(String billingAccountId) {
         this.billingAccountId = billingAccountId;
     }
     /**
      * Auto generated value setter.
      * @param overrideGlAccountId the overrideGlAccountId to set
      */
-    private void setOverrideGlAccountId(String overrideGlAccountId) {
+    public void setOverrideGlAccountId(String overrideGlAccountId) {
         this.overrideGlAccountId = overrideGlAccountId;
     }
     /**
      * Auto generated value setter.
      * @param toPaymentId the toPaymentId to set
      */
-    private void setToPaymentId(String toPaymentId) {
+    public void setToPaymentId(String toPaymentId) {
         this.toPaymentId = toPaymentId;
     }
     /**
      * Auto generated value setter.
      * @param taxAuthGeoId the taxAuthGeoId to set
      */
-    private void setTaxAuthGeoId(String taxAuthGeoId) {
+    public void setTaxAuthGeoId(String taxAuthGeoId) {
         this.taxAuthGeoId = taxAuthGeoId;
     }
     /**
      * Auto generated value setter.
      * @param amountApplied the amountApplied to set
      */
-    private void setAmountApplied(BigDecimal amountApplied) {
+    public void setAmountApplied(BigDecimal amountApplied) {
         this.amountApplied = amountApplied;
     }
 

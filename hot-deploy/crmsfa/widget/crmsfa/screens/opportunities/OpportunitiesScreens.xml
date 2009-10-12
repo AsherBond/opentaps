@@ -47,6 +47,7 @@
    <screen name="main-section-decorator">
         <section>
             <actions>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.opportunities.opportunities" global="true"/>
                 <set field="sectionName" value="opportunities" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <set field="requiredPermission" value="CRMSFA_OPPS"/>
@@ -77,42 +78,34 @@
             <actions>
                 <set field="pageTitleLabel" value="CrmOpportunities"/>    <!-- this is uiLabelMap property for the title of the HTML page -->
                 <set field="sectionHeaderUiLabel" value="CrmOpportunities"/>  <!-- this is for the main section of this page, ie <h2> -->
-                <set field="listSortTarget" value="myOpportunities"/> <!-- target for the table sorting -->
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/opportunities/myOpportunities.bsh"/>
+                <set field="findOpportunityWidget" value="myOpportunities"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
                         <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/opportunities/submenus/myOpportunitiesMenu.ftl"/></html></platform-specific>
-                        <include-form name="ListOpportunities" location="component://crmsfa/widget/crmsfa/forms/opportunities/OpportunitiesForms.xml"/>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindCrmsfaOpportunities.ftl"/></html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
         </section>
     </screen>
 
-   <screen name="findOpportunities">
+     <screen name="findOpportunities">
         <section>
             <actions>
                 <set field="pageTitleLabel" value="CrmFindOpportunities"/>
                 <set field="sectionHeaderUiLabel" value="CrmFindOpportunities"/>
-                <set field="listSortTarget" value="findOpportunities"/> <!-- targets for order by links -->
-                <set field="parameters.listIteratorNameToUse" value="opportunitiesListIt"/> <!-- iterator for list of opportunities -->
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/opportunities/findOpportunities.bsh"/>
-                <set field="findOpportunitiesTarget" value="findOpportunities"/>
+                <set field="findOpportunityWidget" value="findOpportunities"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="subSectionBlock">
-                            <container style="form">
-                                <include-form name="FindOpportunitiesForm" location="component://crmsfa/widget/crmsfa/forms/opportunities/OpportunitiesForms.xml"/>
-                            </container>
-                        </container>
-                        <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmOpportunities}</label></container>
-                        <include-form name="ListOpportunities" location="component://crmsfa/widget/crmsfa/forms/opportunities/OpportunitiesForms.xml"/>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindCrmsfaOpportunities.ftl"/></html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

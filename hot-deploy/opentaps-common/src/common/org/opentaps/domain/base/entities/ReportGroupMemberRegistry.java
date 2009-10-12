@@ -139,49 +139,49 @@ fieldMapColumns.put("ReportGroupMemberRegistry", fields);
      * Auto generated value setter.
      * @param reportId the reportId to set
      */
-    private void setReportId(String reportId) {
+    public void setReportId(String reportId) {
         this.reportId = reportId;
     }
     /**
      * Auto generated value setter.
      * @param shortName the shortName to set
      */
-    private void setShortName(String shortName) {
+    public void setShortName(String shortName) {
         this.shortName = shortName;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param reportLocation the reportLocation to set
      */
-    private void setReportLocation(String reportLocation) {
+    public void setReportLocation(String reportLocation) {
         this.reportLocation = reportLocation;
     }
     /**
      * Auto generated value setter.
      * @param setupUri the setupUri to set
      */
-    private void setSetupUri(String setupUri) {
+    public void setSetupUri(String setupUri) {
         this.setupUri = setupUri;
     }
     /**
      * Auto generated value setter.
      * @param reportGroupId the reportGroupId to set
      */
-    private void setReportGroupId(String reportGroupId) {
+    public void setReportGroupId(String reportGroupId) {
         this.reportGroupId = reportGroupId;
     }
     /**
      * Auto generated value setter.
      * @param sequenceNum the sequenceNum to set
      */
-    private void setSequenceNum(Long sequenceNum) {
+    public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
 

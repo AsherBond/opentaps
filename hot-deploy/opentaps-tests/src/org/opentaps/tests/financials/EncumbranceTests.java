@@ -292,15 +292,15 @@ public class EncumbranceTests extends FinancialsTestCase {
 
     /**
      * This test is for verifying the features of the income/budget/encumbrances balances report.
-     * @throws GeneralException if an error occurs
+     * @throws Exception if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public void testIncomeBudgetEncumbrancesBalancesReport() throws GeneralException {
+    public void testIncomeBudgetEncumbrancesBalancesReport() throws Exception {
         // make a copy of "Company" with all its accounting tags.  all subsequent transactions will
         // use this organizationPartyId
         organizationPartyId = createOrganizationFromTemplate("Company", "Income Budget Encumbrances Balances Report Organization");
 
-        // create 2 test products.  In this test the focus is on the report, so a finished good is sufficient.
+        // create 2 finished good test products
         GenericValue physicalProduct = createTestProduct("First test product for testIncomeBudgetEncumbrancesBalancesReport", "FINISHED_GOOD", admin);
         String physicalProductId = physicalProduct.getString("productId");
         createMainSupplierForProduct(physicalProductId, DEMO_SUPPLIER, new BigDecimal("100.0"), "USD", new BigDecimal("0.0"), admin);
@@ -310,6 +310,11 @@ public class EncumbranceTests extends FinancialsTestCase {
         String physicalProductId2 = physicalProduct2.getString("productId");
         createMainSupplierForProduct(physicalProductId2, DEMO_SUPPLIER, new BigDecimal("100.0"), "USD", new BigDecimal("0.0"), admin);
         assignDefaultPrice(physicalProduct2, new BigDecimal("25.0"), admin);
+
+        // create a supplies test product
+        GenericValue suppliesProduct = createTestProduct("Supplies test product for testIncomeBudgetEncumbrancesBalancesReport", "SUPPLIES", admin);
+        String suppliesProductId = suppliesProduct.getString("productId");
+        createMainSupplierForProduct(suppliesProductId, DEMO_SUPPLIER, new BigDecimal("1.0"), "USD", BigDecimal.ZERO, admin);
 
         LedgerRepositoryInterface ledgerMethods = domainsDirectory.getLedgerDomain().getLedgerRepository();
 
@@ -336,8 +341,8 @@ public class EncumbranceTests extends FinancialsTestCase {
         AcctgTransEntry b1d4 = makeDebitEntry(organizationPartyId, "680000", new BigDecimal("5000"), "DIV_ENTERPRISE");
         // Debit glAccountId=900000   10000
         AcctgTransEntry b1d5 = makeDebitEntry(organizationPartyId, "900000", new BigDecimal("10000"), "DIV_ENTERPRISE");
-        // Debit glAccountId=336000  15000
-        AcctgTransEntry b1d6 = makeDebitEntry(organizationPartyId, "336000", new BigDecimal("15000"), "DIV_ENTERPRISE");
+        // Debit glAccountId=890000  15000  (budgeted net income)
+        AcctgTransEntry b1d6 = makeDebitEntry(organizationPartyId, "890000", new BigDecimal("15000"), "DIV_ENTERPRISE");
         // => total debit = 10000 + 5000 + 5000 + 15000 + 50000 +15000 = 100000
         // post this accounting transaction
         ledgerMethods.storeAcctgTransAndEntries(b1, Arrays.asList(b1c1, b1d1, b1d2, b1d3, b1d4, b1d5, b1d6));
@@ -366,8 +371,8 @@ public class EncumbranceTests extends FinancialsTestCase {
         // Debit glAccountId=900000 16000
         AcctgTransEntry b2d5 = makeDebitEntry(organizationPartyId, "900000", new BigDecimal("16000"), "DIV_CONSUMER");
         b2d5.setAcctgTagEnumId2("DPT_MANUFACTURING"); // adding another tag, it should not appear in the report
-        // Debit glAccountId=336000 24000
-        AcctgTransEntry b2d6 = makeDebitEntry(organizationPartyId, "336000", new BigDecimal("24000"), "DIV_CONSUMER");
+        // Debit glAccountId=890000 24000  (budgeted net income)
+        AcctgTransEntry b2d6 = makeDebitEntry(organizationPartyId, "890000", new BigDecimal("24000"), "DIV_CONSUMER");
         b2d6.setAcctgTagEnumId2("DPT_MANUFACTURING"); // adding another tag, it should not appear in the report
         // post this accounting transaction
         ledgerMethods.storeAcctgTransAndEntries(b2, Arrays.asList(b2c1, b2d1, b2d2, b2d3, b2d4, b2d5, b2d6));
@@ -456,47 +461,155 @@ public class EncumbranceTests extends FinancialsTestCase {
         // post the accounting transaction
         ledgerMethods.storeAcctgTransAndEntries(e2, Arrays.asList(e2c1, e2c2, e2d1, e2d2, e2d3));
 
-        // Create a PO for 2000 of physicalProduct at 50 tag DIV_ENTERPRISE and 10000 of physicalProduct2 at 10 tag DIV_CONSUMER
-        PurchaseOrderFactory po = createDefaultPurchaseOrderFactory(organizationPartyId, "PO for testIncomeBudgetEncumbrancesBalancesReport");
+        // create an accounting transaction of glFiscalTypeId=ACTUAL
+        AccountingTransaction e3 = new AccountingTransaction();
+        e3.setAcctgTransTypeId("INTERNAL_ACCTG_TRANS");
+        e3.setGlFiscalTypeId("ACTUAL");
+        e3.setTransactionDate(UtilDateTime.nowTimestamp());
+        // debit 601000 123456789 tag DIV_ENTERPRISE
+        AcctgTransEntry e3d1 = makeDebitEntry(organizationPartyId, "601000", new BigDecimal("123456789"), "DIV_ENTERPRISE");
+        // credit 210000 123456789 tag DIV_ENTERPRISE
+        AcctgTransEntry e3c1 = makeCreditEntry(organizationPartyId, "210000", new BigDecimal("123456789"), "DIV_ENTERPRISE");
+        // BUT DO NOT POST THIS TRANSACTION -- we will verify that unposted transactions have no effect
+        e3.setAutoPost(false);
+        ledgerMethods.storeAcctgTransAndEntries(e3, Arrays.asList(e3c1, e3d1));
+
+        // Create a PO (po1) for 2000 of physicalProduct at 50 tag DIV_ENTERPRISE and 5000 of physicalProduct2 at 10 tag DIV_CONSUMER
+        PurchaseOrderFactory po = createDefaultPurchaseOrderFactory(organizationPartyId, "PO 1 for testIncomeBudgetEncumbrancesBalancesReport");
         po.addProduct(physicalProduct, "PRODUCT_ORDER_ITEM", new BigDecimal("2000.0"), "00001", UtilMisc.toMap("price", new BigDecimal("50.0")), UtilMisc.toMap("acctgTagEnumId1", "DIV_ENTERPRISE"));
-        po.addProduct(physicalProduct2, "PRODUCT_ORDER_ITEM", new BigDecimal("10000.0"), "00001", UtilMisc.toMap("price", new BigDecimal("10.0")), UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"));
+        po.addProduct(physicalProduct2, "PRODUCT_ORDER_ITEM", new BigDecimal("5000.0"), "00001", UtilMisc.toMap("price", new BigDecimal("10.0")), UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"));
         po.storeOrder();
         po.approveOrder();
 
-        // Run the createEncumbranceSnapshotAndDetail service
-        runAndAssertServiceSuccess("createEncumbranceSnapshotAndDetail", UtilMisc.toMap("organizationPartyId", organizationPartyId, "userLogin", demofinadmin));
+        // Create a PO (po2) for 5000 of suppliesProduct at 10 tag DIV_CONSUMER
+        PurchaseOrderFactory po2 = createDefaultPurchaseOrderFactory(organizationPartyId, "PO 2 for testIncomeBudgetEncumbrancesBalancesReport");
+        po2.addProduct(suppliesProduct, "SUPPLIES_ORDER_ITEM", new BigDecimal("5000.0"), "00001", UtilMisc.toMap("price", new BigDecimal("10.0")), UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"));
+        po2.storeOrder();
+        // approve the PO
+        po2.approveOrder();
+
+        // Run the financials.collectEncumbranceAndTransEntryFacts service
+        runAndAssertServiceSuccess("financials.collectEncumbranceAndTransEntryFacts", UtilMisc.toMap("organizationPartyId", organizationPartyId, "userLogin", demofinadmin));
 
         // run the balances report.
-        Map results = runAndAssertServiceSuccess("balanceStatementReport", UtilMisc.toMap("userLogin", admin, "organizationPartyId", organizationPartyId, "fromDate", new Timestamp(timestamp.getTime() - 10000), "thruDate", new Timestamp(UtilDateTime.nowTimestamp().getTime() + 10000)));
+        Map results = runAndAssertServiceSuccess("balanceStatementReport", UtilMisc.toMap("userLogin", admin, "organizationPartyId", organizationPartyId, "fromDate", new Timestamp(timestamp.getTime() - 10000), "thruDate", new Timestamp(UtilDateTime.nowTimestamp().getTime() + 10000), "includeBudgetIncome", "Y"));
 
         // check the results:
         // for CONSUMER tag: Budget=24000 Income=100000 Expense=103000 Liens=100000 Balance=Budget + Income - Expense - Liens = -79000
         // for ENTERPRISE tag: Budget=15000 Income=75000 Expense=65100 Liens=100000 Balance= -75100
         List<Map<String, Object>> data = (List<Map<String, Object>>) results.get("reportData");
+        BigDecimal consumerBudgetTotal = BigDecimal.ZERO;
+        BigDecimal consumerIncomeTotal = BigDecimal.ZERO;
+        BigDecimal consumerExpenseTotal = BigDecimal.ZERO;
+        BigDecimal consumerLiensTotal = BigDecimal.ZERO;
+        BigDecimal consumerBalanceTotal = BigDecimal.ZERO;
+        BigDecimal enterpriseBudgetTotal = BigDecimal.ZERO;
+        BigDecimal enterpriseIncomeTotal = BigDecimal.ZERO;
+        BigDecimal enterprisExpenseTotal = BigDecimal.ZERO;
+        BigDecimal enterprisLiensTotal = BigDecimal.ZERO;
+        BigDecimal enterprisBalanceTotal = BigDecimal.ZERO;
         for (Map<String, Object> line : data) {
             Debug.logInfo("balanceStatementReport line: " + line, MODULE);
             String tag1 = (String) line.get("acctgTagEnumId1");
             // note, the enum codes are in the report data instead of the enum id
             if ("CONSUMER".equals(tag1)) {
-                assertEquals("Budget value incorrect for tag CONSUMER.", new BigDecimal("24000"), (BigDecimal) line.get("budget"));
-                assertEquals("Income value incorrect for tag CONSUMER.", new BigDecimal("100000"), (BigDecimal) line.get("income"));
-                assertEquals("Expense value incorrect for tag CONSUMER.", new BigDecimal("103000"), (BigDecimal) line.get("expense"));
-                assertEquals("Liens value incorrect for tag CONSUMER.", new BigDecimal("100000"), (BigDecimal) line.get("liens"));
-                assertEquals("Balance value incorrect for tag CONSUMER.", new BigDecimal("-79000"), (BigDecimal) line.get("balance"));
+                consumerBudgetTotal = consumerBudgetTotal.add((BigDecimal) line.get("budget"));
+                consumerIncomeTotal = consumerIncomeTotal.add((BigDecimal) line.get("income"));
+                consumerExpenseTotal = consumerExpenseTotal.add((BigDecimal) line.get("expense"));
+                consumerLiensTotal = consumerLiensTotal.add((BigDecimal) line.get("liens"));
+                consumerBalanceTotal = consumerBalanceTotal.add((BigDecimal) line.get("balance"));
             } else if ("ENTERPRISE".equals(tag1)) {
-                assertEquals("Budget value incorrect for tag ENTERPRISE.", new BigDecimal("15000"), (BigDecimal) line.get("budget"));
-                assertEquals("Income value incorrect for tag ENTERPRISE.", new BigDecimal("75000"), (BigDecimal) line.get("income"));
-                assertEquals("Expense value incorrect for tag ENTERPRISE.", new BigDecimal("65100"), (BigDecimal) line.get("expense"));
-                assertEquals("Liens value incorrect for tag ENTERPRISE.", new BigDecimal("100000"), (BigDecimal) line.get("liens"));
-                assertEquals("Balance value incorrect for tag ENTERPRISE.", new BigDecimal("-75100"), (BigDecimal) line.get("balance"));
+                enterpriseBudgetTotal = enterpriseBudgetTotal.add((BigDecimal) line.get("budget"));
+                enterpriseIncomeTotal = enterpriseIncomeTotal.add((BigDecimal) line.get("income"));
+                enterprisExpenseTotal = enterprisExpenseTotal.add((BigDecimal) line.get("expense"));
+                enterprisLiensTotal = enterprisLiensTotal.add((BigDecimal) line.get("liens"));
+                enterprisBalanceTotal = enterprisBalanceTotal.add((BigDecimal) line.get("balance"));
             } else {
                 fail("Unexpected tag in report data: " + tag1);
             }
-            // check other tags are empty on each line
-            for (int i = 2; i <= UtilAccountingTags.TAG_COUNT; i++) {
-                assertNull("The report line should not have a tag at index " + i, line.get("acctgTagEnumId" + i));
-            }
         }
+
+        assertEquals("Budget value incorrect for tag CONSUMER.", new BigDecimal("24000"), consumerBudgetTotal);
+        assertEquals("Income value incorrect for tag CONSUMER.", new BigDecimal("100000"), consumerIncomeTotal);
+        assertEquals("Expense value incorrect for tag CONSUMER.", new BigDecimal("103000"), consumerExpenseTotal);
+        assertEquals("Liens value incorrect for tag CONSUMER.", new BigDecimal("100000"), consumerLiensTotal);
+        assertEquals("Balance value incorrect for tag CONSUMER.", new BigDecimal("-79000"), consumerBalanceTotal);
+
+        assertEquals("Budget value incorrect for tag ENTERPRISE.", new BigDecimal("15000"), enterpriseBudgetTotal);
+        assertEquals("Income value incorrect for tag ENTERPRISE.", new BigDecimal("75000"), enterpriseIncomeTotal);
+        assertEquals("Expense value incorrect for tag ENTERPRISE.", new BigDecimal("65100"), enterprisExpenseTotal);
+        assertEquals("Liens value incorrect for tag ENTERPRISE.", new BigDecimal("100000"), enterprisLiensTotal);
+        assertEquals("Balance value incorrect for tag ENTERPRISE.", new BigDecimal("-75100"), enterprisBalanceTotal);
+
+        // now verify that the GlAccountTransEntryFact transformations are correct
+        // first verify the BUDGET accounting transactions
+        verifyAcctgTransEntryFact(b1c1, organizationPartyId, "401000", new BigDecimal("100000.0"), new BigDecimal("0"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(b1d1, organizationPartyId, "500000", new BigDecimal("50000"), new BigDecimal("0"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(b1d2, organizationPartyId, "601000", new BigDecimal("15000"), new BigDecimal("0"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(b1d3, organizationPartyId, "610000", new BigDecimal("5000"), new BigDecimal("0"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(b1d4, organizationPartyId, "680000", new BigDecimal("5000"), new BigDecimal("0"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(b1d5, organizationPartyId, "900000", new BigDecimal("10000"), new BigDecimal("0"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(b1d6, organizationPartyId, "890000", new BigDecimal("15000"), new BigDecimal("0"), new BigDecimal("0"));
+
+        verifyAcctgTransEntryFact(b2c1, organizationPartyId, "401000", new BigDecimal("200000"), new BigDecimal("0"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(b2d1, organizationPartyId, "500000", new BigDecimal("70000"), new BigDecimal("0"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(b2d2, organizationPartyId, "601000", new BigDecimal("60000"), new BigDecimal("0"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(b2d3, organizationPartyId, "610000", new BigDecimal("20000"), new BigDecimal("0"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(b2d4, organizationPartyId, "680000", new BigDecimal("10000"), new BigDecimal("0"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(b2d5, organizationPartyId, "900000", new BigDecimal("16000"), new BigDecimal("0"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(b2d6, organizationPartyId, "890000", new BigDecimal("24000"), new BigDecimal("0"), new BigDecimal("0"));
+
+        // now verify the ACTUAL accounting transactions
+        verifyAcctgTransEntryFact(e1c1, organizationPartyId, "210000", new BigDecimal("0"), new BigDecimal("27600"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(e1d1, organizationPartyId, "601000", new BigDecimal("0"), new BigDecimal("12000"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(e1d2, organizationPartyId, "610000", new BigDecimal("0"), new BigDecimal("6000"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(e1d3, organizationPartyId, "680000", new BigDecimal("0"), new BigDecimal("3000"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(e1d4, organizationPartyId, "900000", new BigDecimal("0"), new BigDecimal("6600"), new BigDecimal("0"));
+
+        verifyAcctgTransEntryFact(e2c1, organizationPartyId, "900000", new BigDecimal("0"), new BigDecimal("-2000"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(e2c2, organizationPartyId, "210000", new BigDecimal("0"), new BigDecimal("63000"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(e2d1, organizationPartyId, "601000", new BigDecimal("0"), new BigDecimal("50000"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(e2d2, organizationPartyId, "610000", new BigDecimal("0"), new BigDecimal("10000"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(e2d3, organizationPartyId, "680000", new BigDecimal("0"), new BigDecimal("5000"), new BigDecimal("0"));
+
+        OrderRepositoryInterface orderRepository = getOrderRepository(demopurch1);
+        // verify the POs
+        // find po1 order item1 and order item2.  these are orders for physical items
+        Order purchOrder1 = orderRepository.getOrderById(po.getOrderId());
+        OrderItem orderItemPo1_1 = orderRepository.getOrderItem(purchOrder1, "00001");
+        OrderItem orderItemPo1_2 = orderRepository.getOrderItem(purchOrder1, "00002");
+        verifyOrderItemEntryFact(orderItemPo1_1, organizationPartyId, "140000", new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("100000"));
+        verifyOrderItemEntryFact(orderItemPo1_2, organizationPartyId, "140000", new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("50000"));
+        // find po2 order item1.  this is a supplies item and should point to 650000
+        Order purchOrder2 = orderRepository.getOrderById(po2.getOrderId());
+        OrderItem orderItemPo2_1 = orderRepository.getOrderItem(purchOrder2, "00001");
+        verifyOrderItemEntryFact(orderItemPo2_1, organizationPartyId, "650000", new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("50000"));
+
+        // we use the sums to check the above accounting transactions and PO encumbrances
+        // then we use the sums to check the results of receiving inventory and shipping products
+        // we verify both aggregated and by accounting tag values
+
+        // revenue
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "401000", null, new BigDecimal("300000"), new BigDecimal("0"), new BigDecimal("0"));
+
+        // inventory
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "140000", null, new BigDecimal("0"), new BigDecimal("72500"), new BigDecimal("150000"));
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "140000", UtilMisc.toMap("acctgTagEnumId1", "DIV_ENTERPRISE"), new BigDecimal("0"), new BigDecimal("62500"), new BigDecimal("100000"));
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "140000", UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"), new BigDecimal("0"), new BigDecimal("10000"), new BigDecimal("50000"));
+
+        // wages
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "601000", null, new BigDecimal("75000"), new BigDecimal("62000"), new BigDecimal("0"));
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "601000", UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"), new BigDecimal("60000"), new BigDecimal("50000"), new BigDecimal("0"));
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "601000", UtilMisc.toMap("acctgTagEnumId1", "DIV_ENTERPRISE"), new BigDecimal("15000"), new BigDecimal("12000"), new BigDecimal("0"));
+
+        // cogs
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "500000", null, new BigDecimal("120000"), new BigDecimal("77500"), new BigDecimal("0"));
+
+        // tax expense
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "900000", null, new BigDecimal("26000"), new BigDecimal("4600"), new BigDecimal("0"));
+        // budget net amount is temporary changed from 100000.0 to 10000.0
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "900000", UtilMisc.toMap("acctgTagEnumId1", "DIV_ENTERPRISE"), new BigDecimal("10000"), new BigDecimal("6600"), new BigDecimal("0"));
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "900000", UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"), new BigDecimal("16000"), new BigDecimal("-2000"), new BigDecimal("0"));
 
     }
 
@@ -526,5 +639,97 @@ public class EncumbranceTests extends FinancialsTestCase {
         pof.addPaymentMethod("EXT_OFFLINE");
         pof.addShippingGroup("UPS", "NEXT_DAY");
         return pof;
+    }
+
+    /**
+     * This method verifies that the accounting transaction entry is recorded in correctly in the GlAccountTransEntryFact entity.
+     * @param acctgTransEntry
+     * @param organizationPartyId
+     * @param glAccountId
+     * @param netBudgetAmount
+     * @param netActualAmount
+     * @param netEncumberedAmount
+     * @throws GenericEntityException if an error occurs
+     */
+    @SuppressWarnings("unchecked")
+    private void verifyAcctgTransEntryFact(AcctgTransEntry acctgTransEntry, String organizationPartyId, String glAccountId, BigDecimal netBudgetAmount, BigDecimal netActualAmount, BigDecimal netEncumberedAmount) throws Exception {
+        // find the GlAccountTransEntryFact for the acctgTransEntry and the organizationPartyId
+        List<GenericValue> transEntryFacts = delegator.findByAnd("GlAccountTransEntryFact", UtilMisc.toMap("acctgTransId", acctgTransEntry.getAcctgTransId(), "acctgTransEntrySeqId", acctgTransEntry.getAcctgTransEntrySeqId(), "organizationPartyId", organizationPartyId));
+
+        // verify that one and only one GlAccountTransEntryFact exists
+        assertEquals("Transaction entry should be unique for GlAccountTransEntryFact entity", 1, transEntryFacts.size());
+        GenericValue transEntryFact = EntityUtil.getFirst(transEntryFacts);
+
+        // verify that the glAccountId, netBudgetAmount, netActualAmount, and netEncumberedAmount in GlAccountTransEntryFact are the same as the method parameters
+        assertEquals("Wrong GL account ID", glAccountId, transEntryFact.getString("glAccountId"));
+        assertEquals("Wrong budget net amount", netBudgetAmount, transEntryFact.getBigDecimal("budgetNetAmount"));
+        assertEquals("Wrong actual net amount", netActualAmount, transEntryFact.getBigDecimal("actualNetAmount"));
+        assertEquals("Wrong encumbered net amount", netEncumberedAmount, transEntryFact.getBigDecimal("encumberedNetAmount"));
+
+        // verify that the accounting tags for GlAccountTransEntryFact are the same as those for the acctgTransEntry
+        assertAccountingTagsEqual(acctgTransEntry, transEntryFact.getAllFields());
+    }
+
+    /**
+     * This method verifies that the order item is recorded in correctly in the GlAccountTransEntryFact entity.
+     * @param orderItem
+     * @param organizationPartyId
+     * @param glAccountId
+     * @param netBudgetAmount
+     * @param netActualAmount
+     * @param netEncumberedAmount
+     * @throws Exception if an error occurs
+     */
+    @SuppressWarnings("unchecked")
+    private void verifyOrderItemEntryFact(OrderItem orderItem, String organizationPartyId, String glAccountId, BigDecimal netBudgetAmount, BigDecimal netActualAmount, BigDecimal netEncumberedAmount) throws Exception {
+        // find the GlAccountTransEntryFact for the orderItem and the organizationPartyId
+        List<GenericValue> orderItemFacts = delegator.findByAnd("GlAccountTransEntryFact", UtilMisc.toMap("orderId", orderItem.getOrderId(), "orderItemSeqId", orderItem.getOrderItemSeqId(), "organizationPartyId", organizationPartyId));
+
+        // verify that one and only one GlAccountTransEntryFact exists
+        assertEquals("Order item should be unique for GlAccountTransEntryFact entity", 1, orderItemFacts.size());
+        GenericValue orderItemFact = EntityUtil.getFirst(orderItemFacts);
+
+        // verify that the glAccountId, netBudgetAmount, netActualAmount, and netEncumberedAmount in GlAccountTransEntryFact are the same as the method parameters
+        assertEquals("Wrong GL account ID", glAccountId, orderItemFact.getString("glAccountId"));
+        assertEquals("Wrong budget net amount", netBudgetAmount, orderItemFact.getBigDecimal("budgetNetAmount"));
+        assertEquals("Wrong actual net amount", netActualAmount, orderItemFact.getBigDecimal("actualNetAmount"));
+        assertEquals("Wrong encumbered net amount", netEncumberedAmount, orderItemFact.getBigDecimal("encumberedNetAmount"));
+
+        // verify that the accounting tags for GlAccountTransEntryFact are the same as those for the acctgTransEntry
+        assertAccountingTagsEqual(orderItem, orderItemFact.getAllFields());
+    }
+
+    /**
+     * This method verifies the sum of all the GlAccountTransEntryFact.
+     * @param organizationPartyId
+     * @param glAccountId
+     * @param accountingTags if null then the method checks for any accounting tags
+     * @param netBudgetAmount
+     * @param netActualAmount
+     * @param netEncumberedAmount
+     * @throws Exception if an error occurs
+     */
+    private void verifyGlAcctTransEntryFactSums(String organizationPartyId, String glAccountId, Map accountingTags, BigDecimal netBudgetAmount, BigDecimal netActualAmount, BigDecimal netEncumberedAmount) throws Exception {
+        // find all GlAccountTransEntryFact for organizationPartyId and glAccountId
+        Map<String, Object> conditions = UtilMisc.<String, Object>toMap("glAccountId", glAccountId, "organizationPartyId", organizationPartyId);
+        if (accountingTags != null) {
+            conditions.putAll(accountingTags);
+        }
+        List<GenericValue> facts = delegator.findByAnd("GlAccountTransEntryFact", conditions);
+
+        // calculate sum of netBudgetAmount, netActualAmount, and netEncumberedAmount for all GlAccountTransEntryFact
+        BigDecimal budgetNetAmountSum = BigDecimal.ZERO;
+        BigDecimal actualNetAmountSum = BigDecimal.ZERO;
+        BigDecimal encumberedNetAmountSum = BigDecimal.ZERO;
+        for (GenericValue fact : facts) {
+            budgetNetAmountSum = budgetNetAmountSum.add(fact.getBigDecimal("budgetNetAmount"));
+            actualNetAmountSum = actualNetAmountSum.add(fact.getBigDecimal("actualNetAmount"));
+            encumberedNetAmountSum = encumberedNetAmountSum.add(fact.getBigDecimal("encumberedNetAmount"));
+        }
+
+        // verify the sums are the same as the parameters
+        assertEquals("Wrong budget net amount total for account [" + glAccountId + "]", netBudgetAmount, budgetNetAmountSum);
+        assertEquals("Wrong actual net amounttotal for account [" + glAccountId + "]", netActualAmount, actualNetAmountSum);
+        assertEquals("Wrong encumbered net amount total for account [" + glAccountId + "]", netEncumberedAmount, encumberedNetAmountSum);
     }
 }

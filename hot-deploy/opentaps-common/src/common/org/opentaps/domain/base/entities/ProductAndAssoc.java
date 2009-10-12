@@ -135,42 +135,42 @@ fieldMapColumns.put("ProductAndAssoc", fields);
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param internalName the internalName to set
      */
-    private void setInternalName(String internalName) {
+    public void setInternalName(String internalName) {
         this.internalName = internalName;
     }
     /**
      * Auto generated value setter.
      * @param productIdTo the productIdTo to set
      */
-    private void setProductIdTo(String productIdTo) {
+    public void setProductIdTo(String productIdTo) {
         this.productIdTo = productIdTo;
     }
     /**
      * Auto generated value setter.
      * @param productAssocTypeId the productAssocTypeId to set
      */
-    private void setProductAssocTypeId(String productAssocTypeId) {
+    public void setProductAssocTypeId(String productAssocTypeId) {
         this.productAssocTypeId = productAssocTypeId;
     }
     /**
      * Auto generated value setter.
      * @param quantity the quantity to set
      */
-    private void setQuantity(BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
 

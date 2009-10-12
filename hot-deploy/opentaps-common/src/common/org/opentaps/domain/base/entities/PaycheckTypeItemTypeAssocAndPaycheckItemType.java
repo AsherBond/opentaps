@@ -128,35 +128,35 @@ fieldMapColumns.put("PaycheckTypeItemTypeAssocAndPaycheckItemType", fields);
      * Auto generated value setter.
      * @param paymentTypeId the paymentTypeId to set
      */
-    private void setPaymentTypeId(String paymentTypeId) {
+    public void setPaymentTypeId(String paymentTypeId) {
         this.paymentTypeId = paymentTypeId;
     }
     /**
      * Auto generated value setter.
      * @param paycheckItemTypeId the paycheckItemTypeId to set
      */
-    private void setPaycheckItemTypeId(String paycheckItemTypeId) {
+    public void setPaycheckItemTypeId(String paycheckItemTypeId) {
         this.paycheckItemTypeId = paycheckItemTypeId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param paycheckItemClassId the paycheckItemClassId to set
      */
-    private void setPaycheckItemClassId(String paycheckItemClassId) {
+    public void setPaycheckItemClassId(String paycheckItemClassId) {
         this.paycheckItemClassId = paycheckItemClassId;
     }
     /**
      * Auto generated value setter.
      * @param defaultSeqNum the defaultSeqNum to set
      */
-    private void setDefaultSeqNum(String defaultSeqNum) {
+    public void setDefaultSeqNum(String defaultSeqNum) {
         this.defaultSeqNum = defaultSeqNum;
     }
 

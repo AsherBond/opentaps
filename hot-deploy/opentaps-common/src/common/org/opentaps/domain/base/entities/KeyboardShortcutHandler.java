@@ -53,7 +53,7 @@ public class KeyboardShortcutHandler extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("actionTypeId", "ACTION_TYPE_ID");
-        fields.put("handler", "HANDLER");
+        fields.put("shortcutHandler", "SHORTCUT_HANDLER");
         fields.put("description", "DESCRIPTION");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
@@ -63,7 +63,7 @@ fieldMapColumns.put("KeyboardShortcutHandler", fields);
 }
   public static enum Fields implements EntityFieldInterface<KeyboardShortcutHandler> {
     actionTypeId("actionTypeId"),
-    handler("handler"),
+    shortcutHandler("shortcutHandler"),
     description("description"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
@@ -84,8 +84,8 @@ fieldMapColumns.put("KeyboardShortcutHandler", fields);
    @Id
    @Column(name="ACTION_TYPE_ID")
    private String actionTypeId;
-   @Column(name="HANDLER")
-   private String handler;
+   @Column(name="SHORTCUT_HANDLER")
+   private String shortcutHandler;
    @Column(name="DESCRIPTION")
    private String description;
    @Column(name="LAST_UPDATED_STAMP")
@@ -112,7 +112,7 @@ fieldMapColumns.put("KeyboardShortcutHandler", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("actionTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("actionTypeId");this.allFieldsNames.add("handler");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("actionTypeId");this.allFieldsNames.add("shortcutHandler");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -136,10 +136,10 @@ fieldMapColumns.put("KeyboardShortcutHandler", fields);
     }
     /**
      * Auto generated value setter.
-     * @param handler the handler to set
+     * @param shortcutHandler the shortcutHandler to set
      */
-    public void setHandler(String handler) {
-        this.handler = handler;
+    public void setShortcutHandler(String shortcutHandler) {
+        this.shortcutHandler = shortcutHandler;
     }
     /**
      * Auto generated value setter.
@@ -188,8 +188,8 @@ fieldMapColumns.put("KeyboardShortcutHandler", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getHandler() {
-        return this.handler;
+    public String getShortcutHandler() {
+        return this.shortcutHandler;
     }
     /**
      * Auto generated value accessor.
@@ -253,7 +253,7 @@ fieldMapColumns.put("KeyboardShortcutHandler", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setActionTypeId((String) mapValue.get("actionTypeId"));
-        setHandler((String) mapValue.get("handler"));
+        setShortcutHandler((String) mapValue.get("shortcutHandler"));
         setDescription((String) mapValue.get("description"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
@@ -267,7 +267,7 @@ fieldMapColumns.put("KeyboardShortcutHandler", fields);
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("actionTypeId", getActionTypeId());
-        mapValue.put("handler", getHandler());
+        mapValue.put("shortcutHandler", getShortcutHandler());
         mapValue.put("description", getDescription());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());

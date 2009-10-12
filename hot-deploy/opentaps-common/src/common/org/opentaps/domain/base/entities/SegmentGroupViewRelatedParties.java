@@ -304,280 +304,280 @@ fieldMapColumns.put("SegmentGroupViewRelatedParties", fields);
      * Auto generated value setter.
      * @param sgrSegmentGroupId the sgrSegmentGroupId to set
      */
-    private void setSgrSegmentGroupId(String sgrSegmentGroupId) {
+    public void setSgrSegmentGroupId(String sgrSegmentGroupId) {
         this.sgrSegmentGroupId = sgrSegmentGroupId;
     }
     /**
      * Auto generated value setter.
      * @param sgrPartyId the sgrPartyId to set
      */
-    private void setSgrPartyId(String sgrPartyId) {
+    public void setSgrPartyId(String sgrPartyId) {
         this.sgrPartyId = sgrPartyId;
     }
     /**
      * Auto generated value setter.
      * @param sgrRoleTypeId the sgrRoleTypeId to set
      */
-    private void setSgrRoleTypeId(String sgrRoleTypeId) {
+    public void setSgrRoleTypeId(String sgrRoleTypeId) {
         this.sgrRoleTypeId = sgrRoleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param sgrToSegmentGroupId the sgrToSegmentGroupId to set
      */
-    private void setSgrToSegmentGroupId(String sgrToSegmentGroupId) {
+    public void setSgrToSegmentGroupId(String sgrToSegmentGroupId) {
         this.sgrToSegmentGroupId = sgrToSegmentGroupId;
     }
     /**
      * Auto generated value setter.
      * @param sgrToPartyId the sgrToPartyId to set
      */
-    private void setSgrToPartyId(String sgrToPartyId) {
+    public void setSgrToPartyId(String sgrToPartyId) {
         this.sgrToPartyId = sgrToPartyId;
     }
     /**
      * Auto generated value setter.
      * @param sgrToRoleTypeId the sgrToRoleTypeId to set
      */
-    private void setSgrToRoleTypeId(String sgrToRoleTypeId) {
+    public void setSgrToRoleTypeId(String sgrToRoleTypeId) {
         this.sgrToRoleTypeId = sgrToRoleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param prSgrPartyIdFrom the prSgrPartyIdFrom to set
      */
-    private void setPrSgrPartyIdFrom(String prSgrPartyIdFrom) {
+    public void setPrSgrPartyIdFrom(String prSgrPartyIdFrom) {
         this.prSgrPartyIdFrom = prSgrPartyIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param prSgrPartyIdTo the prSgrPartyIdTo to set
      */
-    private void setPrSgrPartyIdTo(String prSgrPartyIdTo) {
+    public void setPrSgrPartyIdTo(String prSgrPartyIdTo) {
         this.prSgrPartyIdTo = prSgrPartyIdTo;
     }
     /**
      * Auto generated value setter.
      * @param prSgrRoleTypeIdFrom the prSgrRoleTypeIdFrom to set
      */
-    private void setPrSgrRoleTypeIdFrom(String prSgrRoleTypeIdFrom) {
+    public void setPrSgrRoleTypeIdFrom(String prSgrRoleTypeIdFrom) {
         this.prSgrRoleTypeIdFrom = prSgrRoleTypeIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param prSgrRoleTypeIdTo the prSgrRoleTypeIdTo to set
      */
-    private void setPrSgrRoleTypeIdTo(String prSgrRoleTypeIdTo) {
+    public void setPrSgrRoleTypeIdTo(String prSgrRoleTypeIdTo) {
         this.prSgrRoleTypeIdTo = prSgrRoleTypeIdTo;
     }
     /**
      * Auto generated value setter.
      * @param prSgrFromDate the prSgrFromDate to set
      */
-    private void setPrSgrFromDate(Timestamp prSgrFromDate) {
+    public void setPrSgrFromDate(Timestamp prSgrFromDate) {
         this.prSgrFromDate = prSgrFromDate;
     }
     /**
      * Auto generated value setter.
      * @param prSgrThruDate the prSgrThruDate to set
      */
-    private void setPrSgrThruDate(Timestamp prSgrThruDate) {
+    public void setPrSgrThruDate(Timestamp prSgrThruDate) {
         this.prSgrThruDate = prSgrThruDate;
     }
     /**
      * Auto generated value setter.
      * @param prSgrStatusId the prSgrStatusId to set
      */
-    private void setPrSgrStatusId(String prSgrStatusId) {
+    public void setPrSgrStatusId(String prSgrStatusId) {
         this.prSgrStatusId = prSgrStatusId;
     }
     /**
      * Auto generated value setter.
      * @param prSgrRelationshipName the prSgrRelationshipName to set
      */
-    private void setPrSgrRelationshipName(String prSgrRelationshipName) {
+    public void setPrSgrRelationshipName(String prSgrRelationshipName) {
         this.prSgrRelationshipName = prSgrRelationshipName;
     }
     /**
      * Auto generated value setter.
      * @param prSgrSecurityGroupId the prSgrSecurityGroupId to set
      */
-    private void setPrSgrSecurityGroupId(String prSgrSecurityGroupId) {
+    public void setPrSgrSecurityGroupId(String prSgrSecurityGroupId) {
         this.prSgrSecurityGroupId = prSgrSecurityGroupId;
     }
     /**
      * Auto generated value setter.
      * @param prSgrPriorityTypeId the prSgrPriorityTypeId to set
      */
-    private void setPrSgrPriorityTypeId(String prSgrPriorityTypeId) {
+    public void setPrSgrPriorityTypeId(String prSgrPriorityTypeId) {
         this.prSgrPriorityTypeId = prSgrPriorityTypeId;
     }
     /**
      * Auto generated value setter.
      * @param prSgrPartyRelationshipTypeId the prSgrPartyRelationshipTypeId to set
      */
-    private void setPrSgrPartyRelationshipTypeId(String prSgrPartyRelationshipTypeId) {
+    public void setPrSgrPartyRelationshipTypeId(String prSgrPartyRelationshipTypeId) {
         this.prSgrPartyRelationshipTypeId = prSgrPartyRelationshipTypeId;
     }
     /**
      * Auto generated value setter.
      * @param prSgrPermissionsEnumId the prSgrPermissionsEnumId to set
      */
-    private void setPrSgrPermissionsEnumId(String prSgrPermissionsEnumId) {
+    public void setPrSgrPermissionsEnumId(String prSgrPermissionsEnumId) {
         this.prSgrPermissionsEnumId = prSgrPermissionsEnumId;
     }
     /**
      * Auto generated value setter.
      * @param prSgrPositionTitle the prSgrPositionTitle to set
      */
-    private void setPrSgrPositionTitle(String prSgrPositionTitle) {
+    public void setPrSgrPositionTitle(String prSgrPositionTitle) {
         this.prSgrPositionTitle = prSgrPositionTitle;
     }
     /**
      * Auto generated value setter.
      * @param prSgrComments the prSgrComments to set
      */
-    private void setPrSgrComments(String prSgrComments) {
+    public void setPrSgrComments(String prSgrComments) {
         this.prSgrComments = prSgrComments;
     }
     /**
      * Auto generated value setter.
      * @param sgcSegmentGroupId the sgcSegmentGroupId to set
      */
-    private void setSgcSegmentGroupId(String sgcSegmentGroupId) {
+    public void setSgcSegmentGroupId(String sgcSegmentGroupId) {
         this.sgcSegmentGroupId = sgcSegmentGroupId;
     }
     /**
      * Auto generated value setter.
      * @param sgcPartyClassificationGroupId the sgcPartyClassificationGroupId to set
      */
-    private void setSgcPartyClassificationGroupId(String sgcPartyClassificationGroupId) {
+    public void setSgcPartyClassificationGroupId(String sgcPartyClassificationGroupId) {
         this.sgcPartyClassificationGroupId = sgcPartyClassificationGroupId;
     }
     /**
      * Auto generated value setter.
      * @param pcPartyId the pcPartyId to set
      */
-    private void setPcPartyId(String pcPartyId) {
+    public void setPcPartyId(String pcPartyId) {
         this.pcPartyId = pcPartyId;
     }
     /**
      * Auto generated value setter.
      * @param pcPartyClassificationGroupId the pcPartyClassificationGroupId to set
      */
-    private void setPcPartyClassificationGroupId(String pcPartyClassificationGroupId) {
+    public void setPcPartyClassificationGroupId(String pcPartyClassificationGroupId) {
         this.pcPartyClassificationGroupId = pcPartyClassificationGroupId;
     }
     /**
      * Auto generated value setter.
      * @param pcFromDate the pcFromDate to set
      */
-    private void setPcFromDate(Timestamp pcFromDate) {
+    public void setPcFromDate(Timestamp pcFromDate) {
         this.pcFromDate = pcFromDate;
     }
     /**
      * Auto generated value setter.
      * @param pcThruDate the pcThruDate to set
      */
-    private void setPcThruDate(Timestamp pcThruDate) {
+    public void setPcThruDate(Timestamp pcThruDate) {
         this.pcThruDate = pcThruDate;
     }
     /**
      * Auto generated value setter.
      * @param prPcPartyIdFrom the prPcPartyIdFrom to set
      */
-    private void setPrPcPartyIdFrom(String prPcPartyIdFrom) {
+    public void setPrPcPartyIdFrom(String prPcPartyIdFrom) {
         this.prPcPartyIdFrom = prPcPartyIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param prPcPartyIdTo the prPcPartyIdTo to set
      */
-    private void setPrPcPartyIdTo(String prPcPartyIdTo) {
+    public void setPrPcPartyIdTo(String prPcPartyIdTo) {
         this.prPcPartyIdTo = prPcPartyIdTo;
     }
     /**
      * Auto generated value setter.
      * @param prPcRoleTypeIdFrom the prPcRoleTypeIdFrom to set
      */
-    private void setPrPcRoleTypeIdFrom(String prPcRoleTypeIdFrom) {
+    public void setPrPcRoleTypeIdFrom(String prPcRoleTypeIdFrom) {
         this.prPcRoleTypeIdFrom = prPcRoleTypeIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param prPcRoleTypeIdTo the prPcRoleTypeIdTo to set
      */
-    private void setPrPcRoleTypeIdTo(String prPcRoleTypeIdTo) {
+    public void setPrPcRoleTypeIdTo(String prPcRoleTypeIdTo) {
         this.prPcRoleTypeIdTo = prPcRoleTypeIdTo;
     }
     /**
      * Auto generated value setter.
      * @param prPcFromDate the prPcFromDate to set
      */
-    private void setPrPcFromDate(Timestamp prPcFromDate) {
+    public void setPrPcFromDate(Timestamp prPcFromDate) {
         this.prPcFromDate = prPcFromDate;
     }
     /**
      * Auto generated value setter.
      * @param prPcThruDate the prPcThruDate to set
      */
-    private void setPrPcThruDate(Timestamp prPcThruDate) {
+    public void setPrPcThruDate(Timestamp prPcThruDate) {
         this.prPcThruDate = prPcThruDate;
     }
     /**
      * Auto generated value setter.
      * @param prPcStatusId the prPcStatusId to set
      */
-    private void setPrPcStatusId(String prPcStatusId) {
+    public void setPrPcStatusId(String prPcStatusId) {
         this.prPcStatusId = prPcStatusId;
     }
     /**
      * Auto generated value setter.
      * @param prPcRelationshipName the prPcRelationshipName to set
      */
-    private void setPrPcRelationshipName(String prPcRelationshipName) {
+    public void setPrPcRelationshipName(String prPcRelationshipName) {
         this.prPcRelationshipName = prPcRelationshipName;
     }
     /**
      * Auto generated value setter.
      * @param prPcSecurityGroupId the prPcSecurityGroupId to set
      */
-    private void setPrPcSecurityGroupId(String prPcSecurityGroupId) {
+    public void setPrPcSecurityGroupId(String prPcSecurityGroupId) {
         this.prPcSecurityGroupId = prPcSecurityGroupId;
     }
     /**
      * Auto generated value setter.
      * @param prPcPriorityTypeId the prPcPriorityTypeId to set
      */
-    private void setPrPcPriorityTypeId(String prPcPriorityTypeId) {
+    public void setPrPcPriorityTypeId(String prPcPriorityTypeId) {
         this.prPcPriorityTypeId = prPcPriorityTypeId;
     }
     /**
      * Auto generated value setter.
      * @param prPcPartyRelationshipTypeId the prPcPartyRelationshipTypeId to set
      */
-    private void setPrPcPartyRelationshipTypeId(String prPcPartyRelationshipTypeId) {
+    public void setPrPcPartyRelationshipTypeId(String prPcPartyRelationshipTypeId) {
         this.prPcPartyRelationshipTypeId = prPcPartyRelationshipTypeId;
     }
     /**
      * Auto generated value setter.
      * @param prPcPermissionsEnumId the prPcPermissionsEnumId to set
      */
-    private void setPrPcPermissionsEnumId(String prPcPermissionsEnumId) {
+    public void setPrPcPermissionsEnumId(String prPcPermissionsEnumId) {
         this.prPcPermissionsEnumId = prPcPermissionsEnumId;
     }
     /**
      * Auto generated value setter.
      * @param prPcPositionTitle the prPcPositionTitle to set
      */
-    private void setPrPcPositionTitle(String prPcPositionTitle) {
+    public void setPrPcPositionTitle(String prPcPositionTitle) {
         this.prPcPositionTitle = prPcPositionTitle;
     }
     /**
      * Auto generated value setter.
      * @param prPcComments the prPcComments to set
      */
-    private void setPrPcComments(String prPcComments) {
+    public void setPrPcComments(String prPcComments) {
         this.prPcComments = prPcComments;
     }
 

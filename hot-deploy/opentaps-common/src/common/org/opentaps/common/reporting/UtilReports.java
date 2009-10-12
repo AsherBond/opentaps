@@ -19,14 +19,13 @@ import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 import javax.print.PrintService;
 import javax.servlet.http.HttpServletRequest;
@@ -66,6 +65,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.cache.UtilCache;
+import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
@@ -319,7 +319,7 @@ public final class UtilReports {
             // if report hasn't loaded before try get it from cache or load/compile from design.
             if (UtilValidate.isEmpty(report)) {
                 try {
-                    report = (JasperReport) jasperReportsCompiledCache.get(cacheLineKey);
+                    report = jasperReportsCompiledCache.get(cacheLineKey);
                 } catch (Exception e) {
                     Debug.logError(e, "Error getting the report from the cache.", MODULE);
                 }
@@ -349,7 +349,6 @@ public final class UtilReports {
 
     /**
      * Use JasperReports exporter to generate pdf.
-     * 
      * @param jrParameters a <code>Map<String, Object></code> instance
      * @param jrDataSource a <code>JRMapCollectionDataSource</code> instance
      * @param locale a <code>Locale</code> instance
@@ -389,7 +388,9 @@ public final class UtilReports {
             exporter = new JRPdfExporter();
             // add product name as creator
             String opentaps = UtilProperties.getPropertyValue("OpentapsUiLabels.properties", "OpentapsProductName");
-            if (UtilValidate.isNotEmpty(opentaps)) exporterParameters.put(JRPdfExporterParameter.METADATA_CREATOR, opentaps);
+            if (UtilValidate.isNotEmpty(opentaps)) {
+                exporterParameters.put(JRPdfExporterParameter.METADATA_CREATOR, opentaps);
+            }
             if (UtilValidate.isNotEmpty(author)) {
                 exporterParameters.put(JRPdfExporterParameter.METADATA_AUTHOR, author);
             }
@@ -404,9 +405,9 @@ public final class UtilReports {
             exporter = new JRXmlExporter();
         } else if (contentType.equals(ContentType.CSV)) {
             exporter = new JRCsvExporter();
-        } else if (contentType.equals(ContentType.RTF)){
+        } else if (contentType.equals(ContentType.RTF)) {
             exporter = new JRRtfExporter();
-        } else if (contentType.equals(ContentType.TXT)){
+        } else if (contentType.equals(ContentType.TXT)) {
             exporter = new JRTextExporter();
             exporterParameters.put(JRTextExporterParameter.CHARACTER_WIDTH, new Integer(80));
             exporterParameters.put(JRTextExporterParameter.CHARACTER_HEIGHT, new Integer(25));
@@ -421,23 +422,31 @@ public final class UtilReports {
         exporter.exportReport();
     }
 
-    public static List<Map<String, Object>>getManagedReports(String componentName, GenericDelegator delegator, Locale locale) {
+    /**
+     * This method returns component specific grouped list of reports that must be displayed
+     * either in manageReports screen or displayReportGroup macro.
+     *
+     * @param componentName since the same report can appear in different applications we should define target component name.
+     * @param reportGroupId the method may return only group on behalf <code>displayReportGroup</code> macro, otherwise pass <code>null</code>.
+     * @param delegator an instance of <code>GenericDelegator</code>.
+     * @param locale target locale, because reports imported from analytics use name and description as resource key in Eclipse style and this method have to decode them.
+     * @return
+     *   List of groups and reports metadata.
+     */
+    public static List<Map<String, Object>> getManagedReports(String componentName, String reportGroupId, GenericDelegator delegator, Locale locale) {
         try {
-            EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+            List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
                     EntityCondition.makeCondition("application", componentName),
                     EntityCondition.makeCondition("showInSelect", "Y"));
-
-            List<GenericValue> applicationGroups = delegator.findByCondition("ReportGroup", conditions, null, null , UtilMisc.toList("sequenceNum", "description"), null); 
+            if (UtilValidate.isNotEmpty(reportGroupId)) {
+                conditions.add(EntityCondition.makeCondition("reportGroupId", EntityOperator.EQUALS, reportGroupId));
+            }
+            List<GenericValue> applicationGroups = delegator.findByCondition("ReportGroup", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, null , UtilMisc.toList("sequenceNum", "description"), null);
             if (UtilValidate.isEmpty(applicationGroups)) {
                 return null;
             }
 
-            ResourceBundle analyticsLabels = null;
-            try {
-                analyticsLabels= ResourceBundle.getBundle("org/opentaps/analytics/locale/messages", locale);
-            } catch (MissingResourceException e) {
-                // do nothing
-            }
+            ResourceBundleMapWrapper uiLabelsMap = UtilMessage.getUiLabels(locale);
 
             List<Map<String, Object>> reportsGroupedList = FastList.<Map<String, Object>>newInstance();
 
@@ -450,15 +459,15 @@ public final class UtilReports {
                 // In this case we try expand them to strings using analytics resources.
                 for (GenericValue registryEntry : members) {
                     String shortName = registryEntry.getString("shortName");
-                    if (shortName.startsWith("%") && analyticsLabels != null) {
-                        String label = analyticsLabels.getString(shortName.substring(1));
+                    if (UtilValidate.isNotEmpty(shortName) && shortName.startsWith("%")) {
+                        String label = (String) uiLabelsMap.get(shortName.substring(1));
                         if (UtilValidate.isNotEmpty(label)) {
                             registryEntry.set("shortName", label);
                         }
                     }
                     String description = registryEntry.getString("description");
-                    if (description.startsWith("%") && analyticsLabels != null) {
-                        String label = analyticsLabels.getString(description.substring(1));
+                    if (UtilValidate.isNotEmpty(description) && description.startsWith("%")) {
+                        String label = (String) uiLabelsMap.get(description.substring(1));
                         if (UtilValidate.isNotEmpty(label)) {
                             registryEntry.set("description", label);
                         }
@@ -475,6 +484,34 @@ public final class UtilReports {
                 return reportsGroupedList;
             }
 
+        } catch (GenericEntityException e) {
+            Debug.logError(e.getMessage(), MODULE);
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns last time of given transformation from <code>DataWarehouseTransform</code> entity.
+     * @param enumId transformation type, one of <code>EnumerationType.DATA_TRANSFORM</code> enumeration values
+     * @param delegator a <code>GenericDelegator</code> value
+     * @return Latest time the transformation was successfully run.
+     */
+    public static Timestamp getTrasformationTimeByType(String enumId, GenericDelegator delegator) {
+        if (UtilValidate.isEmpty(enumId) || delegator == null) {
+            throw new IllegalArgumentException();
+        }
+
+        try {
+            GenericValue transformation = EntityUtil.getFirst(
+                    delegator.findByAnd("DataWarehouseTransform",
+                            UtilMisc.toMap("transformEnumId", enumId), UtilMisc.toList("transformTimestamp DESC")
+                    )
+            );
+
+            if (transformation != null) {
+                return transformation.getTimestamp("transformTimestamp");
+            }
         } catch (GenericEntityException e) {
             Debug.logError(e.getMessage(), MODULE);
         }

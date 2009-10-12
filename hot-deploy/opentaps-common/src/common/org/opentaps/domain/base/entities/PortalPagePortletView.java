@@ -174,98 +174,98 @@ fieldMapColumns.put("PortalPagePortletView", fields);
      * Auto generated value setter.
      * @param portalPageId the portalPageId to set
      */
-    private void setPortalPageId(String portalPageId) {
+    public void setPortalPageId(String portalPageId) {
         this.portalPageId = portalPageId;
     }
     /**
      * Auto generated value setter.
      * @param portalPortletId the portalPortletId to set
      */
-    private void setPortalPortletId(String portalPortletId) {
+    public void setPortalPortletId(String portalPortletId) {
         this.portalPortletId = portalPortletId;
     }
     /**
      * Auto generated value setter.
      * @param portletSeqId the portletSeqId to set
      */
-    private void setPortletSeqId(String portletSeqId) {
+    public void setPortletSeqId(String portletSeqId) {
         this.portletSeqId = portletSeqId;
     }
     /**
      * Auto generated value setter.
      * @param columnSeqId the columnSeqId to set
      */
-    private void setColumnSeqId(String columnSeqId) {
+    public void setColumnSeqId(String columnSeqId) {
         this.columnSeqId = columnSeqId;
     }
     /**
      * Auto generated value setter.
      * @param sequenceNum the sequenceNum to set
      */
-    private void setSequenceNum(Long sequenceNum) {
+    public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
     /**
      * Auto generated value setter.
      * @param portletName the portletName to set
      */
-    private void setPortletName(String portletName) {
+    public void setPortletName(String portletName) {
         this.portletName = portletName;
     }
     /**
      * Auto generated value setter.
      * @param screenName the screenName to set
      */
-    private void setScreenName(String screenName) {
+    public void setScreenName(String screenName) {
         this.screenName = screenName;
     }
     /**
      * Auto generated value setter.
      * @param screenLocation the screenLocation to set
      */
-    private void setScreenLocation(String screenLocation) {
+    public void setScreenLocation(String screenLocation) {
         this.screenLocation = screenLocation;
     }
     /**
      * Auto generated value setter.
      * @param editFormName the editFormName to set
      */
-    private void setEditFormName(String editFormName) {
+    public void setEditFormName(String editFormName) {
         this.editFormName = editFormName;
     }
     /**
      * Auto generated value setter.
      * @param editFormLocation the editFormLocation to set
      */
-    private void setEditFormLocation(String editFormLocation) {
+    public void setEditFormLocation(String editFormLocation) {
         this.editFormLocation = editFormLocation;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param screenshot the screenshot to set
      */
-    private void setScreenshot(String screenshot) {
+    public void setScreenshot(String screenshot) {
         this.screenshot = screenshot;
     }
     /**
      * Auto generated value setter.
      * @param securityServiceName the securityServiceName to set
      */
-    private void setSecurityServiceName(String securityServiceName) {
+    public void setSecurityServiceName(String securityServiceName) {
         this.securityServiceName = securityServiceName;
     }
     /**
      * Auto generated value setter.
      * @param securityMainAction the securityMainAction to set
      */
-    private void setSecurityMainAction(String securityMainAction) {
+    public void setSecurityMainAction(String securityMainAction) {
         this.securityMainAction = securityMainAction;
     }
 

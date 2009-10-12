@@ -194,15 +194,29 @@ public interface LedgerRepositoryInterface extends RepositoryInterface {
     public List<AccountingTagConfigurationForOrganizationAndUsage> validateTagParameters(AcctgTransEntry entry) throws RepositoryException;
 
     /**
-     * Returns list of posted accounting transactions for given fiscal type.
+     * Returns list of posted accounting transactions for given fiscal type(s).
      *
      * @param organizationPartyId the company identifier
-     * @param glFiscalTypeId fiscal type id value
+     * @param glFiscalTypeId list of fiscal type id values
      * @param fromDate start of period or <code>null</code>.
      * @param trhuDate end of period
      * @return
      *   List of accounting transactions
      * @throws RepositoryException
      */
-    public List<AccountingTransaction> getPostedTransactions(String organizationPartyId, String glFiscalTypeId, Timestamp fromDate, Timestamp trhuDate) throws RepositoryException;
+    public List<AccountingTransaction> getPostedTransactions(String organizationPartyId, String glFiscalTypeId, Timestamp fromDate, Timestamp thruDate) throws RepositoryException;
+
+    /**
+     * Returns list of posted accounting transactions and entries for given fiscal type(s).
+     *
+     * @param organizationPartyId the company identifier
+     * @param glFiscalTypeId list of fiscal type id values
+     * @param fromDate start of period or <code>null</code>.
+     * @param trhuDate end of period
+     * @return
+     *   List of <code>AcctgTransAndEntries</code>
+     * @throws RepositoryException
+     */
+    public List<AcctgTransAndEntries> getPostedTransactionsAndEntries(String organizationPartyId, List<String> glFiscalTypeId, Timestamp fromDate, Timestamp thruDate) throws RepositoryException;
+
 }

@@ -126,28 +126,28 @@ fieldMapColumns.put("MarketingCampaignAndOrderHeader", fields);
      * Auto generated value setter.
      * @param grandTotal the grandTotal to set
      */
-    private void setGrandTotal(BigDecimal grandTotal) {
+    public void setGrandTotal(BigDecimal grandTotal) {
         this.grandTotal = grandTotal;
     }
     /**
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(Long orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param orderDate the orderDate to set
      */
-    private void setOrderDate(Timestamp orderDate) {
+    public void setOrderDate(Timestamp orderDate) {
         this.orderDate = orderDate;
     }
     /**
      * Auto generated value setter.
      * @param marketingCampaignId the marketingCampaignId to set
      */
-    private void setMarketingCampaignId(String marketingCampaignId) {
+    public void setMarketingCampaignId(String marketingCampaignId) {
         this.marketingCampaignId = marketingCampaignId;
     }
 

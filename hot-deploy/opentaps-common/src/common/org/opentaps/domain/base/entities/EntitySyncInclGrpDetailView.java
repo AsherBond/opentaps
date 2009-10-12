@@ -123,28 +123,28 @@ fieldMapColumns.put("EntitySyncInclGrpDetailView", fields);
      * Auto generated value setter.
      * @param entitySyncId the entitySyncId to set
      */
-    private void setEntitySyncId(String entitySyncId) {
+    public void setEntitySyncId(String entitySyncId) {
         this.entitySyncId = entitySyncId;
     }
     /**
      * Auto generated value setter.
      * @param entityGroupId the entityGroupId to set
      */
-    private void setEntityGroupId(String entityGroupId) {
+    public void setEntityGroupId(String entityGroupId) {
         this.entityGroupId = entityGroupId;
     }
     /**
      * Auto generated value setter.
      * @param entityOrPackage the entityOrPackage to set
      */
-    private void setEntityOrPackage(String entityOrPackage) {
+    public void setEntityOrPackage(String entityOrPackage) {
         this.entityOrPackage = entityOrPackage;
     }
     /**
      * Auto generated value setter.
      * @param applEnumId the applEnumId to set
      */
-    private void setApplEnumId(String applEnumId) {
+    public void setApplEnumId(String applEnumId) {
         this.applEnumId = applEnumId;
     }
 

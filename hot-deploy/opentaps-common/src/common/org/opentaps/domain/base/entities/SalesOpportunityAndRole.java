@@ -181,105 +181,105 @@ fieldMapColumns.put("SalesOpportunityAndRole", fields);
      * Auto generated value setter.
      * @param salesOpportunityId the salesOpportunityId to set
      */
-    private void setSalesOpportunityId(String salesOpportunityId) {
+    public void setSalesOpportunityId(String salesOpportunityId) {
         this.salesOpportunityId = salesOpportunityId;
     }
     /**
      * Auto generated value setter.
      * @param opportunityName the opportunityName to set
      */
-    private void setOpportunityName(String opportunityName) {
+    public void setOpportunityName(String opportunityName) {
         this.opportunityName = opportunityName;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param nextStep the nextStep to set
      */
-    private void setNextStep(String nextStep) {
+    public void setNextStep(String nextStep) {
         this.nextStep = nextStep;
     }
     /**
      * Auto generated value setter.
      * @param estimatedAmount the estimatedAmount to set
      */
-    private void setEstimatedAmount(BigDecimal estimatedAmount) {
+    public void setEstimatedAmount(BigDecimal estimatedAmount) {
         this.estimatedAmount = estimatedAmount;
     }
     /**
      * Auto generated value setter.
      * @param estimatedProbability the estimatedProbability to set
      */
-    private void setEstimatedProbability(BigDecimal estimatedProbability) {
+    public void setEstimatedProbability(BigDecimal estimatedProbability) {
         this.estimatedProbability = estimatedProbability;
     }
     /**
      * Auto generated value setter.
      * @param currencyUomId the currencyUomId to set
      */
-    private void setCurrencyUomId(String currencyUomId) {
+    public void setCurrencyUomId(String currencyUomId) {
         this.currencyUomId = currencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param marketingCampaignId the marketingCampaignId to set
      */
-    private void setMarketingCampaignId(String marketingCampaignId) {
+    public void setMarketingCampaignId(String marketingCampaignId) {
         this.marketingCampaignId = marketingCampaignId;
     }
     /**
      * Auto generated value setter.
      * @param dataSourceId the dataSourceId to set
      */
-    private void setDataSourceId(String dataSourceId) {
+    public void setDataSourceId(String dataSourceId) {
         this.dataSourceId = dataSourceId;
     }
     /**
      * Auto generated value setter.
      * @param estimatedCloseDate the estimatedCloseDate to set
      */
-    private void setEstimatedCloseDate(Timestamp estimatedCloseDate) {
+    public void setEstimatedCloseDate(Timestamp estimatedCloseDate) {
         this.estimatedCloseDate = estimatedCloseDate;
     }
     /**
      * Auto generated value setter.
      * @param opportunityStageId the opportunityStageId to set
      */
-    private void setOpportunityStageId(String opportunityStageId) {
+    public void setOpportunityStageId(String opportunityStageId) {
         this.opportunityStageId = opportunityStageId;
     }
     /**
      * Auto generated value setter.
      * @param typeEnumId the typeEnumId to set
      */
-    private void setTypeEnumId(String typeEnumId) {
+    public void setTypeEnumId(String typeEnumId) {
         this.typeEnumId = typeEnumId;
     }
     /**
      * Auto generated value setter.
      * @param createdByUserLogin the createdByUserLogin to set
      */
-    private void setCreatedByUserLogin(String createdByUserLogin) {
+    public void setCreatedByUserLogin(String createdByUserLogin) {
         this.createdByUserLogin = createdByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
 

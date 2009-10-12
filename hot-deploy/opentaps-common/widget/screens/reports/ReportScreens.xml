@@ -43,7 +43,7 @@
             </widgets>
         </section>
     </screen>
-    
+
     <screen name="setupReport">
         <section>
             <widgets>
@@ -55,7 +55,7 @@
             </widgets>
         </section>
     </screen>
-    
+
     <!-- Screen to manage base of available reports -->
     <screen name="manageReportsMain">
         <section>
@@ -77,7 +77,7 @@
             </widgets>
         </section>
     </screen>
-    
+
     <screen name="manageReports">
         <section>
             <actions>
@@ -93,6 +93,5 @@
             </widgets>
         </section>
     </screen>
-    
 
 </screens>

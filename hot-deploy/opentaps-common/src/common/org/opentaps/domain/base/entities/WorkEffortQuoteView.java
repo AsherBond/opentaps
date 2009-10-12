@@ -198,112 +198,112 @@ fieldMapColumns.put("WorkEffortQuoteView", fields);
      * Auto generated value setter.
      * @param statusItemDescription the statusItemDescription to set
      */
-    private void setStatusItemDescription(String statusItemDescription) {
+    public void setStatusItemDescription(String statusItemDescription) {
         this.statusItemDescription = statusItemDescription;
     }
     /**
      * Auto generated value setter.
      * @param quoteId the quoteId to set
      */
-    private void setQuoteId(String quoteId) {
+    public void setQuoteId(String quoteId) {
         this.quoteId = quoteId;
     }
     /**
      * Auto generated value setter.
      * @param workEffortId the workEffortId to set
      */
-    private void setWorkEffortId(String workEffortId) {
+    public void setWorkEffortId(String workEffortId) {
         this.workEffortId = workEffortId;
     }
     /**
      * Auto generated value setter.
      * @param quoteTypeId the quoteTypeId to set
      */
-    private void setQuoteTypeId(String quoteTypeId) {
+    public void setQuoteTypeId(String quoteTypeId) {
         this.quoteTypeId = quoteTypeId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param issueDate the issueDate to set
      */
-    private void setIssueDate(Timestamp issueDate) {
+    public void setIssueDate(Timestamp issueDate) {
         this.issueDate = issueDate;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param currencyUomId the currencyUomId to set
      */
-    private void setCurrencyUomId(String currencyUomId) {
+    public void setCurrencyUomId(String currencyUomId) {
         this.currencyUomId = currencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param productStoreId the productStoreId to set
      */
-    private void setProductStoreId(String productStoreId) {
+    public void setProductStoreId(String productStoreId) {
         this.productStoreId = productStoreId;
     }
     /**
      * Auto generated value setter.
      * @param salesChannelEnumId the salesChannelEnumId to set
      */
-    private void setSalesChannelEnumId(String salesChannelEnumId) {
+    public void setSalesChannelEnumId(String salesChannelEnumId) {
         this.salesChannelEnumId = salesChannelEnumId;
     }
     /**
      * Auto generated value setter.
      * @param validFromDate the validFromDate to set
      */
-    private void setValidFromDate(Timestamp validFromDate) {
+    public void setValidFromDate(Timestamp validFromDate) {
         this.validFromDate = validFromDate;
     }
     /**
      * Auto generated value setter.
      * @param validThruDate the validThruDate to set
      */
-    private void setValidThruDate(Timestamp validThruDate) {
+    public void setValidThruDate(Timestamp validThruDate) {
         this.validThruDate = validThruDate;
     }
     /**
      * Auto generated value setter.
      * @param quoteName the quoteName to set
      */
-    private void setQuoteName(String quoteName) {
+    public void setQuoteName(String quoteName) {
         this.quoteName = quoteName;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param contactPartyId the contactPartyId to set
      */
-    private void setContactPartyId(String contactPartyId) {
+    public void setContactPartyId(String contactPartyId) {
         this.contactPartyId = contactPartyId;
     }
     /**
      * Auto generated value setter.
      * @param createdByPartyId the createdByPartyId to set
      */
-    private void setCreatedByPartyId(String createdByPartyId) {
+    public void setCreatedByPartyId(String createdByPartyId) {
         this.createdByPartyId = createdByPartyId;
     }
 

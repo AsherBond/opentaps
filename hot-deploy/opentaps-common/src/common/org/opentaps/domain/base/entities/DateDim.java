@@ -54,10 +54,6 @@ public class DateDim extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("dateDimId", "DATE_DIM_ID");
-        fields.put("dimVersion", "DIM_VERSION");
-        fields.put("dateFrom", "DATE_FROM");
-        fields.put("dateTo", "DATE_TO");
-        fields.put("invoiceDate", "INVOICE_DATE");
         fields.put("dayOfMonth", "DAY_OF_MONTH");
         fields.put("weekOfYear", "WEEK_OF_YEAR");
         fields.put("monthOfYear", "MONTH_OF_YEAR");
@@ -73,10 +69,6 @@ fieldMapColumns.put("DateDim", fields);
 }
   public static enum Fields implements EntityFieldInterface<DateDim> {
     dateDimId("dateDimId"),
-    dimVersion("dimVersion"),
-    dateFrom("dateFrom"),
-    dateTo("dateTo"),
-    invoiceDate("invoiceDate"),
     dayOfMonth("dayOfMonth"),
     weekOfYear("weekOfYear"),
     monthOfYear("monthOfYear"),
@@ -103,14 +95,6 @@ fieldMapColumns.put("DateDim", fields);
    @Id
    @Column(name="DATE_DIM_ID")
    private Long dateDimId;
-   @Column(name="DIM_VERSION")
-   private Long dimVersion;
-   @Column(name="DATE_FROM")
-   private Timestamp dateFrom;
-   @Column(name="DATE_TO")
-   private Timestamp dateTo;
-   @Column(name="INVOICE_DATE")
-   private Timestamp invoiceDate;
    @Column(name="DAY_OF_MONTH")
    private String dayOfMonth;
    @Column(name="WEEK_OF_YEAR")
@@ -145,7 +129,7 @@ fieldMapColumns.put("DateDim", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("dateDimId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("dateDimId");this.allFieldsNames.add("dimVersion");this.allFieldsNames.add("dateFrom");this.allFieldsNames.add("dateTo");this.allFieldsNames.add("invoiceDate");this.allFieldsNames.add("dayOfMonth");this.allFieldsNames.add("weekOfYear");this.allFieldsNames.add("monthOfYear");this.allFieldsNames.add("yearNumber");this.allFieldsNames.add("quarter");this.allFieldsNames.add("nameDay");this.allFieldsNames.add("nameMonth");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("dateDimId");this.allFieldsNames.add("dayOfMonth");this.allFieldsNames.add("weekOfYear");this.allFieldsNames.add("monthOfYear");this.allFieldsNames.add("yearNumber");this.allFieldsNames.add("quarter");this.allFieldsNames.add("nameDay");this.allFieldsNames.add("nameMonth");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -166,34 +150,6 @@ fieldMapColumns.put("DateDim", fields);
      */
     public void setDateDimId(Long dateDimId) {
         this.dateDimId = dateDimId;
-    }
-    /**
-     * Auto generated value setter.
-     * @param dimVersion the dimVersion to set
-     */
-    public void setDimVersion(Long dimVersion) {
-        this.dimVersion = dimVersion;
-    }
-    /**
-     * Auto generated value setter.
-     * @param dateFrom the dateFrom to set
-     */
-    public void setDateFrom(Timestamp dateFrom) {
-        this.dateFrom = dateFrom;
-    }
-    /**
-     * Auto generated value setter.
-     * @param dateTo the dateTo to set
-     */
-    public void setDateTo(Timestamp dateTo) {
-        this.dateTo = dateTo;
-    }
-    /**
-     * Auto generated value setter.
-     * @param invoiceDate the invoiceDate to set
-     */
-    public void setInvoiceDate(Timestamp invoiceDate) {
-        this.invoiceDate = invoiceDate;
     }
     /**
      * Auto generated value setter.
@@ -282,34 +238,6 @@ fieldMapColumns.put("DateDim", fields);
     }
     /**
      * Auto generated value accessor.
-     * @return <code>Long</code>
-     */
-    public Long getDimVersion() {
-        return this.dimVersion;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>Timestamp</code>
-     */
-    public Timestamp getDateFrom() {
-        return this.dateFrom;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>Timestamp</code>
-     */
-    public Timestamp getDateTo() {
-        return this.dateTo;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>Timestamp</code>
-     */
-    public Timestamp getInvoiceDate() {
-        return this.invoiceDate;
-    }
-    /**
-     * Auto generated value accessor.
      * @return <code>String</code>
      */
     public String getDayOfMonth() {
@@ -394,10 +322,6 @@ fieldMapColumns.put("DateDim", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setDateDimId((Long) mapValue.get("dateDimId"));
-        setDimVersion((Long) mapValue.get("dimVersion"));
-        setDateFrom((Timestamp) mapValue.get("dateFrom"));
-        setDateTo((Timestamp) mapValue.get("dateTo"));
-        setInvoiceDate((Timestamp) mapValue.get("invoiceDate"));
         setDayOfMonth((String) mapValue.get("dayOfMonth"));
         setWeekOfYear((String) mapValue.get("weekOfYear"));
         setMonthOfYear((String) mapValue.get("monthOfYear"));
@@ -417,10 +341,6 @@ fieldMapColumns.put("DateDim", fields);
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("dateDimId", getDateDimId());
-        mapValue.put("dimVersion", getDimVersion());
-        mapValue.put("dateFrom", getDateFrom());
-        mapValue.put("dateTo", getDateTo());
-        mapValue.put("invoiceDate", getInvoiceDate());
         mapValue.put("dayOfMonth", getDayOfMonth());
         mapValue.put("weekOfYear", getWeekOfYear());
         mapValue.put("monthOfYear", getMonthOfYear());

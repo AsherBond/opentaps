@@ -10,6 +10,8 @@
   <created_date>2007&#47;12&#47;20 14:36:24.487</created_date>
   <modified_user>-</modified_user>
   <modified_date>2007&#47;12&#47;20 14:36:24.487</modified_date>
+    <parameters>
+    </parameters>
   <connection>
     <name>ofbiz_dw</name>
     <server/>
@@ -41,6 +43,7 @@
     </slaveservers>
   <logconnection/>
   <logtable/>
+  <size_limit_lines/>
    <use_batchid>Y</use_batchid>
    <pass_batchid>N</pass_batchid>
    <use_logfield>Y</use_logfield>
@@ -65,11 +68,15 @@
       <loglevel>Nothing</loglevel>
       <cluster>N</cluster>
       <slave_server_name/>
-      <parallel>N</parallel>
+      <set_append_logfile>N</set_append_logfile>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>195</xloc>
-      <yloc>74</yloc>
+      <xloc>152</xloc>
+      <yloc>53</yloc>
       </entry>
     <entry>
       <name>Load tax_authority_dim</name>
@@ -90,11 +97,15 @@
       <loglevel>Nothing</loglevel>
       <cluster>N</cluster>
       <slave_server_name/>
-      <parallel>N</parallel>
+      <set_append_logfile>N</set_append_logfile>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>320</xloc>
-      <yloc>91</yloc>
+      <xloc>279</xloc>
+      <yloc>54</yloc>
       </entry>
     <entry>
       <name>START</name>
@@ -135,36 +146,15 @@
       <loglevel>Nothing</loglevel>
       <cluster>N</cluster>
       <slave_server_name/>
-      <parallel>N</parallel>
+      <set_append_logfile>N</set_append_logfile>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>497</xloc>
-      <yloc>82</yloc>
-      </entry>
-    <entry>
-      <name>Load tax_invoice_item_fact</name>
-      <description>Transformation</description>
-      <type>TRANS</type>
-      <filename>${transformationsPath}&#47;load_tax_invoice_item_fact.ktr</filename>
-      <transname>load_tax_invoice_item_fact</transname>
-      <directory>&#47;</directory>
-      <arg_from_previous>N</arg_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <clear_rows>Y</clear_rows>
-      <clear_files>Y</clear_files>
-      <set_logfile>N</set_logfile>
-      <logfile/>
-      <logext/>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <loglevel>Nothing</loglevel>
-      <cluster>N</cluster>
-      <slave_server_name/>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>717</xloc>
-      <yloc>70</yloc>
+      <xloc>598</xloc>
+      <yloc>188</yloc>
       </entry>
     <entry>
       <name>load_invoice_level_promotions</name>
@@ -185,26 +175,50 @@
       <loglevel>Nothing</loglevel>
       <cluster>N</cluster>
       <slave_server_name/>
-      <parallel>N</parallel>
+      <set_append_logfile>N</set_append_logfile>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>861</xloc>
-      <yloc>119</yloc>
+      <xloc>790</xloc>
+      <yloc>188</yloc>
+      </entry>
+    <entry>
+      <name>Load organization_dim</name>
+      <description>Transformation</description>
+      <type>TRANS</type>
+      <filename>${transformationsPath}&#47;load_organization_dimension.ktr</filename>
+      <transname>load_organization_dimension</transname>
+      <directory>&#47;</directory>
+      <arg_from_previous>N</arg_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>Y</clear_rows>
+      <clear_files>Y</clear_files>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Nothing</loglevel>
+      <cluster>N</cluster>
+      <slave_server_name/>
+      <set_append_logfile>N</set_append_logfile>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>426</xloc>
+      <yloc>54</yloc>
       </entry>
   </entries>
   <hops>
     <hop>
       <from>Load store_dim</from>
       <to>Load tax_authority_dim</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Load tax_authority_dim</from>
-      <to>Load sales_invoice_item_fact</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -222,7 +236,7 @@
     </hop>
     <hop>
       <from>Load sales_invoice_item_fact</from>
-      <to>Load tax_invoice_item_fact</to>
+      <to>load_invoice_level_promotions</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -230,8 +244,17 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Load tax_invoice_item_fact</from>
-      <to>load_invoice_level_promotions</to>
+      <from>Load tax_authority_dim</from>
+      <to>Load organization_dim</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Load organization_dim</from>
+      <to>Load sales_invoice_item_fact</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

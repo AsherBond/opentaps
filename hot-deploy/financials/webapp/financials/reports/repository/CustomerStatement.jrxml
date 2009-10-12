@@ -461,7 +461,7 @@ $P{org_postal_code}]]></textFieldExpression>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{type}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤#,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement key="textField" x="228" y="0" width="82" height="13"/>
 				<box rightPadding="5">
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -474,7 +474,7 @@ $P{org_postal_code}]]></textFieldExpression>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{invoice_total}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤#,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement key="textField" x="352" y="0" width="82" height="13"/>
 				<box rightPadding="5">
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -500,7 +500,7 @@ $P{org_postal_code}]]></textFieldExpression>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{invoice_id_2}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤#,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement key="textField" x="534" y="0" width="100" height="13"/>
 				<box rightPadding="5">
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -575,7 +575,7 @@ $P{org_postal_code}]]></textFieldExpression>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsPleasePay}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤#,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement key="textField" x="534" y="0" width="100" height="46"/>
 				<box rightPadding="5">
 					<topPen lineWidth="0.5" lineColor="#000000"/>
@@ -588,7 +588,7 @@ $P{org_postal_code}]]></textFieldExpression>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[(Double) $P{party_data}.get($F{party_id} + "total_open")]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤#,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement key="textField" x="360" y="23" width="74" height="23"/>
 				<box rightPadding="5">
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -608,7 +608,7 @@ $P{org_postal_code}]]></textFieldExpression>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsPleasePay}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤#,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement key="textField-18" style="Statement Style" x="286" y="0" width="113" height="23"/>
 				<box rightPadding="5">
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -619,7 +619,7 @@ $P{org_postal_code}]]></textFieldExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.Double"><![CDATA[(Double) $P{party_data}.get($F{party_id} + "current")]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤#,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement key="textField-15" style="Statement Style" x="8" y="23" width="111" height="23"/>
 				<box rightPadding="5">
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -632,7 +632,7 @@ $P{org_postal_code}]]></textFieldExpression>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[(Double) $P{party_data}.get($F{party_id} + "over_3N")]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤#,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement key="textField-16" style="Statement Style" x="148" y="0" width="111" height="23"/>
 				<box rightPadding="5">
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -643,7 +643,7 @@ $P{org_postal_code}]]></textFieldExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.Double"><![CDATA[(Double) $P{party_data}.get($F{party_id} + "over_2N")]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤#,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement key="textField-17" style="Statement Style" x="148" y="23" width="111" height="23"/>
 				<box rightPadding="5">
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -654,7 +654,7 @@ $P{org_postal_code}]]></textFieldExpression>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.Double"><![CDATA[(Double) $P{party_data}.get($F{party_id} + "over_4N")]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤#,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement key="textField-13" style="Statement Style" x="8" y="0" width="111" height="23"/>
 				<box rightPadding="5">
 					<topPen lineWidth="0.0" lineColor="#000000"/>

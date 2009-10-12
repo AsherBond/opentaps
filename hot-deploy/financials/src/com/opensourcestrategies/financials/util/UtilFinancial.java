@@ -362,7 +362,7 @@ public final class UtilFinancial {
      * @exception GeneralException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static Map replaceGlAccountTypeWithGlAccountForOrg(String organizationPartyId, Map<String, Object> accountTypes, GenericDelegator delegator) throws GeneralException {
+    public static Map replaceGlAccountTypeWithGlAccountForOrg(String organizationPartyId, Map<String, ?> accountTypes, GenericDelegator delegator) throws GeneralException {
         Map accountMap = FastMap.newInstance();
         for (String glAccountTypeId : accountTypes.keySet()) {
             String glAccountId = getOrgGlAccountId(organizationPartyId, glAccountTypeId, delegator);

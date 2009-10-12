@@ -58,9 +58,12 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
-public class BillingAccountServices {
+/**
+ * Billing accounts related services.
+ */
+public final class BillingAccountServices {
 
-    public static String module = BillingAccountServices.class.getName();
+    private static String MODULE = BillingAccountServices.class.getName();
 
     public static Map<String, Object> createCustomerBillingAccount(DispatchContext dctx, Map<String, ?> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -80,7 +83,7 @@ public class BillingAccountServices {
 
             // set the default accountLimit if needed
             if (accountLimit == null) {
-                Debug.logWarning("No account limit specified for new billing account, assuming zero", module);
+                Debug.logWarning("No account limit specified for new billing account, assuming zero", MODULE);
                 accountLimit = 0.0;
             }
 
@@ -129,8 +132,8 @@ public class BillingAccountServices {
 
     }
 
-    public static Map<String, Object> receiveBillingAccountPayment(DispatchContext dctx, Map<String, ?> context) {
-        LocalDispatcher dispatcher = dctx.getDispatcher();    	
+    public static Map<String, Object> receiveBillingAccountPayment(DispatchContext dctx, Map<String, Object> context) {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Map<String, Object> results = ServiceUtil.returnSuccess();
 
@@ -156,7 +159,7 @@ public class BillingAccountServices {
             }
 
         } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError("Failed to receive payment: " + e.getMessage(), module);
+            return UtilMessage.createAndLogServiceError("Failed to receive payment: " + e.getMessage(), MODULE);
 
         }
         return results;
@@ -225,7 +228,7 @@ public class BillingAccountServices {
                         // referenceNum holds the relation to the order.
                         // todo: Extend PaymentGatewayResponse with a billingAccountId field?
                         pgResponse.set("referenceNum", billingAccountId);
-                        pgResponse.set("gatewayMessage", "Applied [" + captureAmount + "] towards invoice [" + invoiceId + "] from order [" + orderId +"]");
+                        pgResponse.set("gatewayMessage", "Applied [" + captureAmount + "] towards invoice [" + invoiceId + "] from order [" + orderId + "]");
 
                         // save the response.
                         tmpResult = dispatcher.runSync("savePaymentGatewayResponse", UtilMisc.toMap("paymentGatewayResponse", pgResponse, "userLogin", userLogin));
@@ -263,7 +266,7 @@ public class BillingAccountServices {
 
             return result;
         } catch (GenericEntityException e) {
-            Debug.logError(e, module);
+            Debug.logError(e, MODULE);
             return ServiceUtil.returnError("Error getting billing account or calculating balance for billing account #" + billingAccountId);
         }
     }

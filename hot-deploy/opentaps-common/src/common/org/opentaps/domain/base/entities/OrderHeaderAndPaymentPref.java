@@ -179,84 +179,84 @@ fieldMapColumns.put("OrderHeaderAndPaymentPref", fields);
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param orderDate the orderDate to set
      */
-    private void setOrderDate(Timestamp orderDate) {
+    public void setOrderDate(Timestamp orderDate) {
         this.orderDate = orderDate;
     }
     /**
      * Auto generated value setter.
      * @param originFacilityId the originFacilityId to set
      */
-    private void setOriginFacilityId(String originFacilityId) {
+    public void setOriginFacilityId(String originFacilityId) {
         this.originFacilityId = originFacilityId;
     }
     /**
      * Auto generated value setter.
      * @param productStoreId the productStoreId to set
      */
-    private void setProductStoreId(String productStoreId) {
+    public void setProductStoreId(String productStoreId) {
         this.productStoreId = productStoreId;
     }
     /**
      * Auto generated value setter.
      * @param terminalId the terminalId to set
      */
-    private void setTerminalId(String terminalId) {
+    public void setTerminalId(String terminalId) {
         this.terminalId = terminalId;
     }
     /**
      * Auto generated value setter.
      * @param webSiteId the webSiteId to set
      */
-    private void setWebSiteId(String webSiteId) {
+    public void setWebSiteId(String webSiteId) {
         this.webSiteId = webSiteId;
     }
     /**
      * Auto generated value setter.
      * @param currencyUom the currencyUom to set
      */
-    private void setCurrencyUom(String currencyUom) {
+    public void setCurrencyUom(String currencyUom) {
         this.currencyUom = currencyUom;
     }
     /**
      * Auto generated value setter.
      * @param orderPaymentPreferenceId the orderPaymentPreferenceId to set
      */
-    private void setOrderPaymentPreferenceId(String orderPaymentPreferenceId) {
+    public void setOrderPaymentPreferenceId(String orderPaymentPreferenceId) {
         this.orderPaymentPreferenceId = orderPaymentPreferenceId;
     }
     /**
      * Auto generated value setter.
      * @param paymentMethodTypeId the paymentMethodTypeId to set
      */
-    private void setPaymentMethodTypeId(String paymentMethodTypeId) {
+    public void setPaymentMethodTypeId(String paymentMethodTypeId) {
         this.paymentMethodTypeId = paymentMethodTypeId;
     }
     /**
      * Auto generated value setter.
      * @param orderStatusId the orderStatusId to set
      */
-    private void setOrderStatusId(String orderStatusId) {
+    public void setOrderStatusId(String orderStatusId) {
         this.orderStatusId = orderStatusId;
     }
     /**
      * Auto generated value setter.
      * @param paymentStatusId the paymentStatusId to set
      */
-    private void setPaymentStatusId(String paymentStatusId) {
+    public void setPaymentStatusId(String paymentStatusId) {
         this.paymentStatusId = paymentStatusId;
     }
     /**
      * Auto generated value setter.
      * @param maxAmount the maxAmount to set
      */
-    private void setMaxAmount(BigDecimal maxAmount) {
+    public void setMaxAmount(BigDecimal maxAmount) {
         this.maxAmount = maxAmount;
     }
 

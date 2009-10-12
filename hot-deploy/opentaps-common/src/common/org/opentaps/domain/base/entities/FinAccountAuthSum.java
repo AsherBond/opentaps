@@ -130,35 +130,35 @@ fieldMapColumns.put("FinAccountAuthSum", fields);
      * Auto generated value setter.
      * @param finAccountId the finAccountId to set
      */
-    private void setFinAccountId(String finAccountId) {
+    public void setFinAccountId(String finAccountId) {
         this.finAccountId = finAccountId;
     }
     /**
      * Auto generated value setter.
      * @param authorizationDate the authorizationDate to set
      */
-    private void setAuthorizationDate(Timestamp authorizationDate) {
+    public void setAuthorizationDate(Timestamp authorizationDate) {
         this.authorizationDate = authorizationDate;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param amount the amount to set
      */
-    private void setAmount(BigDecimal amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

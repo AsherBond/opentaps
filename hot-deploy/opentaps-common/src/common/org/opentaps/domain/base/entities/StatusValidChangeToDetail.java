@@ -151,56 +151,56 @@ fieldMapColumns.put("StatusValidChangeToDetail", fields);
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param statusIdTo the statusIdTo to set
      */
-    private void setStatusIdTo(String statusIdTo) {
+    public void setStatusIdTo(String statusIdTo) {
         this.statusIdTo = statusIdTo;
     }
     /**
      * Auto generated value setter.
      * @param conditionExpression the conditionExpression to set
      */
-    private void setConditionExpression(String conditionExpression) {
+    public void setConditionExpression(String conditionExpression) {
         this.conditionExpression = conditionExpression;
     }
     /**
      * Auto generated value setter.
      * @param transitionName the transitionName to set
      */
-    private void setTransitionName(String transitionName) {
+    public void setTransitionName(String transitionName) {
         this.transitionName = transitionName;
     }
     /**
      * Auto generated value setter.
      * @param statusTypeId the statusTypeId to set
      */
-    private void setStatusTypeId(String statusTypeId) {
+    public void setStatusTypeId(String statusTypeId) {
         this.statusTypeId = statusTypeId;
     }
     /**
      * Auto generated value setter.
      * @param statusCode the statusCode to set
      */
-    private void setStatusCode(String statusCode) {
+    public void setStatusCode(String statusCode) {
         this.statusCode = statusCode;
     }
     /**
      * Auto generated value setter.
      * @param sequenceId the sequenceId to set
      */
-    private void setSequenceId(String sequenceId) {
+    public void setSequenceId(String sequenceId) {
         this.sequenceId = sequenceId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 

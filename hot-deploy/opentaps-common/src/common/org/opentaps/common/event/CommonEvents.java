@@ -64,6 +64,7 @@ import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.webapp.event.EventHandlerException;
 import org.opentaps.common.reporting.UtilReports;
 import org.opentaps.common.reporting.jasper.JRResourceBundle;
+import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
@@ -333,6 +334,7 @@ public final class CommonEvents {
     @SuppressWarnings("unchecked")
     public static String runReport(HttpServletRequest request, HttpServletResponse response) throws EventHandlerException {
 
+        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         boolean printout = "Y".equals(UtilCommon.getParameter(request, "printout")) ? true : false;
         Locale locale = UtilHttp.getLocale(request);
         TimeZone timeZone = UtilCommon.getTimeZone(request);
@@ -350,6 +352,15 @@ public final class CommonEvents {
                 // skip this parameters
                 if (key.equals("parametersTypeJSON")) {
                     continue;
+                }
+
+                // parameters have accounting tags, add
+                // string formated tags for reporting purpose
+                if (key.startsWith("tag1")) {
+                    String accountingTags = UtilAccountingTags.formatTagsAsString(request, UtilCommon.getParameter(request, "acctgTagUsage"), delegator);
+                    if (UtilValidate.isNotEmpty(accountingTags)) {
+                        jrParameters.put("accountingTags", accountingTags);
+                    }
                 }
 
                 String typeInfo = parametersType.get(key);

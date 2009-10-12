@@ -190,119 +190,119 @@ fieldMapColumns.put("UserLoginAndSecurityGroup", fields);
      * Auto generated value setter.
      * @param userLoginId the userLoginId to set
      */
-    private void setUserLoginId(String userLoginId) {
+    public void setUserLoginId(String userLoginId) {
         this.userLoginId = userLoginId;
     }
     /**
      * Auto generated value setter.
      * @param groupId the groupId to set
      */
-    private void setGroupId(String groupId) {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param currentPassword the currentPassword to set
      */
-    private void setCurrentPassword(String currentPassword) {
+    public void setCurrentPassword(String currentPassword) {
         this.currentPassword = currentPassword;
     }
     /**
      * Auto generated value setter.
      * @param passwordHint the passwordHint to set
      */
-    private void setPasswordHint(String passwordHint) {
+    public void setPasswordHint(String passwordHint) {
         this.passwordHint = passwordHint;
     }
     /**
      * Auto generated value setter.
      * @param isSystem the isSystem to set
      */
-    private void setIsSystem(String isSystem) {
+    public void setIsSystem(String isSystem) {
         this.isSystem = isSystem;
     }
     /**
      * Auto generated value setter.
      * @param enabled the enabled to set
      */
-    private void setEnabled(String enabled) {
+    public void setEnabled(String enabled) {
         this.enabled = enabled;
     }
     /**
      * Auto generated value setter.
      * @param hasLoggedOut the hasLoggedOut to set
      */
-    private void setHasLoggedOut(String hasLoggedOut) {
+    public void setHasLoggedOut(String hasLoggedOut) {
         this.hasLoggedOut = hasLoggedOut;
     }
     /**
      * Auto generated value setter.
      * @param requirePasswordChange the requirePasswordChange to set
      */
-    private void setRequirePasswordChange(String requirePasswordChange) {
+    public void setRequirePasswordChange(String requirePasswordChange) {
         this.requirePasswordChange = requirePasswordChange;
     }
     /**
      * Auto generated value setter.
      * @param lastCurrencyUom the lastCurrencyUom to set
      */
-    private void setLastCurrencyUom(String lastCurrencyUom) {
+    public void setLastCurrencyUom(String lastCurrencyUom) {
         this.lastCurrencyUom = lastCurrencyUom;
     }
     /**
      * Auto generated value setter.
      * @param lastLocale the lastLocale to set
      */
-    private void setLastLocale(String lastLocale) {
+    public void setLastLocale(String lastLocale) {
         this.lastLocale = lastLocale;
     }
     /**
      * Auto generated value setter.
      * @param lastTimeZone the lastTimeZone to set
      */
-    private void setLastTimeZone(String lastTimeZone) {
+    public void setLastTimeZone(String lastTimeZone) {
         this.lastTimeZone = lastTimeZone;
     }
     /**
      * Auto generated value setter.
      * @param disabledDateTime the disabledDateTime to set
      */
-    private void setDisabledDateTime(Timestamp disabledDateTime) {
+    public void setDisabledDateTime(Timestamp disabledDateTime) {
         this.disabledDateTime = disabledDateTime;
     }
     /**
      * Auto generated value setter.
      * @param successiveFailedLogins the successiveFailedLogins to set
      */
-    private void setSuccessiveFailedLogins(Long successiveFailedLogins) {
+    public void setSuccessiveFailedLogins(Long successiveFailedLogins) {
         this.successiveFailedLogins = successiveFailedLogins;
     }
     /**
      * Auto generated value setter.
      * @param userLdapDn the userLdapDn to set
      */
-    private void setUserLdapDn(String userLdapDn) {
+    public void setUserLdapDn(String userLdapDn) {
         this.userLdapDn = userLdapDn;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
 

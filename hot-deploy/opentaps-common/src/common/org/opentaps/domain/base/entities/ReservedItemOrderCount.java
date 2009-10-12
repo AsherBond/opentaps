@@ -135,42 +135,42 @@ fieldMapColumns.put("ReservedItemOrderCount", fields);
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(Long orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param orderTypeId the orderTypeId to set
      */
-    private void setOrderTypeId(String orderTypeId) {
+    public void setOrderTypeId(String orderTypeId) {
         this.orderTypeId = orderTypeId;
     }
     /**
      * Auto generated value setter.
      * @param orderStatusId the orderStatusId to set
      */
-    private void setOrderStatusId(String orderStatusId) {
+    public void setOrderStatusId(String orderStatusId) {
         this.orderStatusId = orderStatusId;
     }
     /**
      * Auto generated value setter.
      * @param orderItemStatusId the orderItemStatusId to set
      */
-    private void setOrderItemStatusId(String orderItemStatusId) {
+    public void setOrderItemStatusId(String orderItemStatusId) {
         this.orderItemStatusId = orderItemStatusId;
     }
     /**
      * Auto generated value setter.
      * @param quantityNotAvailable the quantityNotAvailable to set
      */
-    private void setQuantityNotAvailable(BigDecimal quantityNotAvailable) {
+    public void setQuantityNotAvailable(BigDecimal quantityNotAvailable) {
         this.quantityNotAvailable = quantityNotAvailable;
     }
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
 

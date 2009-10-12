@@ -126,21 +126,21 @@ fieldMapColumns.put("ShipmentAndOrderItemShipGroup", fields);
      * Auto generated value setter.
      * @param shipmentId the shipmentId to set
      */
-    private void setShipmentId(String shipmentId) {
+    public void setShipmentId(String shipmentId) {
         this.shipmentId = shipmentId;
     }
     /**
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param shipGroupSeqId the shipGroupSeqId to set
      */
-    private void setShipGroupSeqId(String shipGroupSeqId) {
+    public void setShipGroupSeqId(String shipGroupSeqId) {
         this.shipGroupSeqId = shipGroupSeqId;
     }
 

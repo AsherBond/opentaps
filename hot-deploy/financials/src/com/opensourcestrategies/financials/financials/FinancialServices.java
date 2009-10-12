@@ -83,6 +83,9 @@ public final class FinancialServices {
 
     /** Default toplevel income statement glAccountTypeIds to group by. */
     public static final List<String> INCOME_STATEMENT_TYPES = Arrays.asList("REVENUE", "COGS", "OPERATING_EXPENSE", "OTHER_EXPENSE", "OTHER_INCOME", "TAX_EXPENSE");
+    /** The types that are expenses. */
+    public static final List<String> EXPENSES_TYPES = Arrays.asList("COGS", "OPERATING_EXPENSE", "OTHER_EXPENSE", "TAX_EXPENSE");
+ 
 
     /** Account classes to search when generating the income statement. */
     public static final List<String> INCOME_STATEMENT_CLASSES = Arrays.asList("REVENUE", "EXPENSE", "INCOME");

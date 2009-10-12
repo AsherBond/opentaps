@@ -196,119 +196,119 @@ fieldMapColumns.put("EmplPositionAndFulfillment", fields);
      * Auto generated value setter.
      * @param employeePartyId the employeePartyId to set
      */
-    private void setEmployeePartyId(String employeePartyId) {
+    public void setEmployeePartyId(String employeePartyId) {
         this.employeePartyId = employeePartyId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param emplPositionId the emplPositionId to set
      */
-    private void setEmplPositionId(String emplPositionId) {
+    public void setEmplPositionId(String emplPositionId) {
         this.emplPositionId = emplPositionId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param budgetId the budgetId to set
      */
-    private void setBudgetId(String budgetId) {
+    public void setBudgetId(String budgetId) {
         this.budgetId = budgetId;
     }
     /**
      * Auto generated value setter.
      * @param budgetItemSeqId the budgetItemSeqId to set
      */
-    private void setBudgetItemSeqId(String budgetItemSeqId) {
+    public void setBudgetItemSeqId(String budgetItemSeqId) {
         this.budgetItemSeqId = budgetItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param emplPositionTypeId the emplPositionTypeId to set
      */
-    private void setEmplPositionTypeId(String emplPositionTypeId) {
+    public void setEmplPositionTypeId(String emplPositionTypeId) {
         this.emplPositionTypeId = emplPositionTypeId;
     }
     /**
      * Auto generated value setter.
      * @param estimatedFromDate the estimatedFromDate to set
      */
-    private void setEstimatedFromDate(Timestamp estimatedFromDate) {
+    public void setEstimatedFromDate(Timestamp estimatedFromDate) {
         this.estimatedFromDate = estimatedFromDate;
     }
     /**
      * Auto generated value setter.
      * @param estimatedThruDate the estimatedThruDate to set
      */
-    private void setEstimatedThruDate(Timestamp estimatedThruDate) {
+    public void setEstimatedThruDate(Timestamp estimatedThruDate) {
         this.estimatedThruDate = estimatedThruDate;
     }
     /**
      * Auto generated value setter.
      * @param salaryFlag the salaryFlag to set
      */
-    private void setSalaryFlag(String salaryFlag) {
+    public void setSalaryFlag(String salaryFlag) {
         this.salaryFlag = salaryFlag;
     }
     /**
      * Auto generated value setter.
      * @param exemptFlag the exemptFlag to set
      */
-    private void setExemptFlag(String exemptFlag) {
+    public void setExemptFlag(String exemptFlag) {
         this.exemptFlag = exemptFlag;
     }
     /**
      * Auto generated value setter.
      * @param fulltimeFlag the fulltimeFlag to set
      */
-    private void setFulltimeFlag(String fulltimeFlag) {
+    public void setFulltimeFlag(String fulltimeFlag) {
         this.fulltimeFlag = fulltimeFlag;
     }
     /**
      * Auto generated value setter.
      * @param temporaryFlag the temporaryFlag to set
      */
-    private void setTemporaryFlag(String temporaryFlag) {
+    public void setTemporaryFlag(String temporaryFlag) {
         this.temporaryFlag = temporaryFlag;
     }
     /**
      * Auto generated value setter.
      * @param actualFromDate the actualFromDate to set
      */
-    private void setActualFromDate(Timestamp actualFromDate) {
+    public void setActualFromDate(Timestamp actualFromDate) {
         this.actualFromDate = actualFromDate;
     }
     /**
      * Auto generated value setter.
      * @param actualThruDate the actualThruDate to set
      */
-    private void setActualThruDate(Timestamp actualThruDate) {
+    public void setActualThruDate(Timestamp actualThruDate) {
         this.actualThruDate = actualThruDate;
     }
 

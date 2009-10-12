@@ -32,97 +32,124 @@ n St, Fifth Floor, Boston, MA  02110-1301  USA
         <description>Datawarehouse store dimension.</description>
         <field name="storeDimId" type="surrogate-key"/>
         <field name="dimVersion" type="version"/>
-        <field name="dateFrom" type="date-time"/>        
+        <field name="dateFrom" type="date-time"/>
         <field name="dateTo" type="date-time"/>
         <field name="productStoreId" type="id-ne"/>
-        <field name="storeDimName" type="name"/>        
+        <field name="storeDimName" type="name"/>
         <prim-key field="storeDimId"/>
+        <index name="SDIM_PSTOREID_IDX">
+            <index-field name="productStoreId"/>
+        </index>
+        <index name="SDIM_STOREDIMID_IDX" unique="true">
+            <index-field name="storeDimId"/>
+        </index>
     </entity>
-    
+
     <entity entity-name="TaxAuthorityDim" package-name="com.opensourcestrategies.financials.reporting"
         title="Tax Authority Dimension">
         <description>Datawarehouse tax authority dimension.</description>
         <field name="taxAuthorityDimId" type="surrogate-key"/>
         <field name="dimVersion" type="version"/>
-        <field name="dateFrom" type="date-time"/>        
+        <field name="dateFrom" type="date-time"/>
         <field name="dateTo" type="date-time"/>
         <field name="taxAuthPartyId" type="id-ne"/>
-        <field name="taxAuthGeoId" type="id-ne"/>        
+        <field name="taxAuthGeoId" type="id-ne"/>
         <field name="groupName" type="name"/>
         <field name="geoName" type="name"/>
-        <field name="geoCode" type="short-varchar"/>        
+        <field name="geoCode" type="short-varchar"/>
         <prim-key field="taxAuthorityDimId"/>
-    </entity>    
-    
+        <index name="TADIM_AUTHIDS_IDX">
+            <index-field name="taxAuthPartyId"/>
+            <index-field name="taxAuthGeoId"/>
+        </index>
+        <index name="TADIM_DIMID_IDX" unique="true">
+            <index-field name="taxAuthorityDimId"/>
+        </index>
+    </entity>
+
     <entity entity-name="DateDim" package-name="com.opensourcestrategies.financials.reporting"
         title="Date Dimension">
         <description>Datawarehouse date dimension.</description>
         <field name="dateDimId" type="surrogate-key"/>
-        <field name="dimVersion" type="version"/>
-        <field name="dateFrom" type="date-time"/>
-        <field name="dateTo" type="date-time"/>        
-        <field name="invoiceDate" type="date-time"/>        
         <field name="dayOfMonth" type="id"/>
         <field name="weekOfYear" type="id"/>
         <field name="monthOfYear" type="id"/>
         <field name="yearNumber" type="id"/>
-        <field name="quarter" type="id"/>                                
+        <field name="quarter" type="id"/>
         <field name="nameDay" type="id"/>
         <field name="nameMonth" type="id"/>
         <prim-key field="dateDimId"/>
+        <index name="DATEDIM_TRIP_IDX">
+            <index-field name="dayOfMonth"/>
+            <index-field name="monthOfYear"/>
+            <index-field name="yearNumber"/>
+        </index>
     </entity>
-    
+
     <entity entity-name="CurrencyDim" package-name="com.opensourcestrategies.financials.reporting"
         title="Currency Dimension">
         <description>Datawarehouse currency dimension.</description>
         <field name="currencyDimId" type="surrogate-key"/>
         <field name="dimVersion" type="version"/>
-        <field name="dateFrom" type="date-time"/>        
+        <field name="dateFrom" type="date-time"/>
         <field name="dateTo" type="date-time"/>
         <field name="uomId" type="id-ne"/>
         <prim-key field="currencyDimId"/>
+        <index name="CURDIM_UOMID_IDX" unique="true">
+            <index-field name="uomId"/>
+        </index>
+    </entity>
+
+    <entity entity-name="OrganizationDim" package-name="com.opensourcestrategies.financials.reporting"
+        title="Organization Dimension">
+        <field name="organizationDimId" type="surrogate-key"/>
+        <field name="dimVersion" type="version"/>
+        <field name="dateFrom" type="date-time"/>
+        <field name="dateTo" type="date-time"/>
+        <field name="organizationPartyId" type="id"/>
+        <field name="organizationName" type="name"/>
+        <prim-key field="organizationDimId"/>
+        <index name="ORGDIM_ORGPTID_IDX" unique="true">
+            <index-field name="organizationPartyId"/>
+        </index>
     </entity>
 
     <entity entity-name="SalesInvoiceItemFact" package-name="com.opensourcestrategies.financials.reporting"
         title="Sales Invoice Item Fact">
         <description>Datawarehouse sales invoice item fact.</description>
-        <field name="dateDimId" type="surrogate-key"/>        
-        <field name="storeDimId" type="surrogate-key"/>   
+        <field name="salesInvItemFactId" type="surrogate-key"/>
+        <field name="dateDimId" type="surrogate-key"/>
+        <field name="storeDimId" type="surrogate-key"/>
         <field name="currencyDimId" type="surrogate-key"/>
+        <field name="organizationDimId" type="surrogate-key"/>
         <field name="invoiceId" type="id"/>
-        <field name="invoiceItemSeqId" type="id"/>        
-        <field name="grossAmount" type="fact-amount"/>        
+        <field name="invoiceItemSeqId" type="id"/>
+        <field name="grossAmount" type="fact-amount"/>
         <field name="discounts" type="fact-amount"/>
-        <field name="refunds" type="fact-amount"/>                
-        <field name="netAmount" type="fact-amount"/>        
-        <prim-key field="dateDimId"/>
-        <prim-key field="storeDimId"/>
-        <prim-key field="currencyDimId"/>
-        <prim-key field="invoiceId"/>
-        <prim-key field="invoiceItemSeqId"/>
-    </entity>    
-    
+        <field name="refunds" type="fact-amount"/>
+        <field name="netAmount" type="fact-amount"/>
+        <prim-key field="salesInvItemFactId"/>
+    </entity>
+
     <entity entity-name="TaxInvoiceItemFact" package-name="com.opensourcestrategies.financials.reporting"
         title="Tax Invoice Item Fact">
         <description>Datawarehouse tax invoice item fact.</description>
-        <field name="dateDimId" type="surrogate-key"/>        
-        <field name="storeDimId" type="surrogate-key"/>        
+        <field name="taxInvItemFactId" type="surrogate-key"/>
+        <field name="dateDimId" type="surrogate-key"/>
+        <field name="storeDimId" type="surrogate-key"/>
         <field name="taxAuthorityDimId" type="surrogate-key"/>
-        <field name="currencyDimId" type="surrogate-key"/>                
+        <field name="currencyDimId" type="surrogate-key"/>
+        <field name="organizationDimId" type="surrogate-key"/>
         <field name="invoiceId" type="id"/>
-        <field name="invoiceItemSeqId" type="id"/>        
-        <field name="grossAmount" type="fact-amount"/>        
+        <field name="invoiceItemSeqId" type="id"/>
+        <field name="grossAmount" type="fact-amount"/>
         <field name="discounts" type="fact-amount"/>
-        <field name="refunds" type="fact-amount"/>                
-        <field name="netAmount" type="fact-amount"/>        
-        <field name="taxDue" type="fact-amount"/>        
-        <prim-key field="dateDimId"/>
-        <prim-key field="storeDimId"/>        
-        <prim-key field="taxAuthorityDimId"/>
-        <prim-key field="currencyDimId"/>
-        <prim-key field="invoiceId"/>
-        <prim-key field="invoiceItemSeqId"/>
-    </entity>        
+        <field name="refunds" type="fact-amount"/>
+        <field name="netAmount" type="fact-amount"/>
+        <field name="taxable" type="fact-amount"/>
+        <field name="taxDue" type="fact-amount"/>
+        <prim-key field="taxInvItemFactId"/>
+    </entity>
 
     <entity entity-name="GlAccountTransEntryFact" package-name="com.opensourcestrategies.financials.reporting"
         title="Budget Details versus Expenses and Encumbrances">
@@ -133,6 +160,8 @@ n St, Fifth Floor, Boston, MA  02110-1301  USA
         <field name="glAccountId" type="id"/>
         <field name="acctgTransId" type="id"/>
         <field name="acctgTransEntrySeqId" type="id"/>
+        <field name="orderId" type="id"/>
+        <field name="orderItemSeqId" type="id"/>
         <field name="budgetDebitAmount" type="currency-amount"/>
         <field name="budgetCreditAmount" type="currency-amount"/>
         <field name="actualDebitAmount" type="currency-amount"/>
@@ -142,6 +171,16 @@ n St, Fifth Floor, Boston, MA  02110-1301  USA
         <field name="budgetNetAmount" type="currency-amount"/>
         <field name="actualNetAmount" type="currency-amount"/>
         <field name="encumberedNetAmount" type="currency-amount"/>
+        <field name="acctgTagEnumId1" type="id"/>
+        <field name="acctgTagEnumId2" type="id"/>
+        <field name="acctgTagEnumId3" type="id"/>
+        <field name="acctgTagEnumId4" type="id"/>
+        <field name="acctgTagEnumId5" type="id"/>
+        <field name="acctgTagEnumId6" type="id"/>
+        <field name="acctgTagEnumId7" type="id"/>
+        <field name="acctgTagEnumId8" type="id"/>
+        <field name="acctgTagEnumId9" type="id"/>
+        <field name="acctgTagEnumId10" type="id"/>
 
         <prim-key field="glAccountTransEntryFactId"/>
 

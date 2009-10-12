@@ -205,140 +205,140 @@ fieldMapColumns.put("ProductVirtualAndVariantInfo", fields);
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param productName the productName to set
      */
-    private void setProductName(String productName) {
+    public void setProductName(String productName) {
         this.productName = productName;
     }
     /**
      * Auto generated value setter.
      * @param internalName the internalName to set
      */
-    private void setInternalName(String internalName) {
+    public void setInternalName(String internalName) {
         this.internalName = internalName;
     }
     /**
      * Auto generated value setter.
      * @param productAssocTypeId the productAssocTypeId to set
      */
-    private void setProductAssocTypeId(String productAssocTypeId) {
+    public void setProductAssocTypeId(String productAssocTypeId) {
         this.productAssocTypeId = productAssocTypeId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param variantProductId the variantProductId to set
      */
-    private void setVariantProductId(String variantProductId) {
+    public void setVariantProductId(String variantProductId) {
         this.variantProductId = variantProductId;
     }
     /**
      * Auto generated value setter.
      * @param productFeatureApplTypeId the productFeatureApplTypeId to set
      */
-    private void setProductFeatureApplTypeId(String productFeatureApplTypeId) {
+    public void setProductFeatureApplTypeId(String productFeatureApplTypeId) {
         this.productFeatureApplTypeId = productFeatureApplTypeId;
     }
     /**
      * Auto generated value setter.
      * @param variantFeatureApplFromDate the variantFeatureApplFromDate to set
      */
-    private void setVariantFeatureApplFromDate(Timestamp variantFeatureApplFromDate) {
+    public void setVariantFeatureApplFromDate(Timestamp variantFeatureApplFromDate) {
         this.variantFeatureApplFromDate = variantFeatureApplFromDate;
     }
     /**
      * Auto generated value setter.
      * @param variantFeatureApplThruDate the variantFeatureApplThruDate to set
      */
-    private void setVariantFeatureApplThruDate(Timestamp variantFeatureApplThruDate) {
+    public void setVariantFeatureApplThruDate(Timestamp variantFeatureApplThruDate) {
         this.variantFeatureApplThruDate = variantFeatureApplThruDate;
     }
     /**
      * Auto generated value setter.
      * @param productFeatureId the productFeatureId to set
      */
-    private void setProductFeatureId(String productFeatureId) {
+    public void setProductFeatureId(String productFeatureId) {
         this.productFeatureId = productFeatureId;
     }
     /**
      * Auto generated value setter.
      * @param productFeatureTypeId the productFeatureTypeId to set
      */
-    private void setProductFeatureTypeId(String productFeatureTypeId) {
+    public void setProductFeatureTypeId(String productFeatureTypeId) {
         this.productFeatureTypeId = productFeatureTypeId;
     }
     /**
      * Auto generated value setter.
      * @param productFeatureCategoryId the productFeatureCategoryId to set
      */
-    private void setProductFeatureCategoryId(String productFeatureCategoryId) {
+    public void setProductFeatureCategoryId(String productFeatureCategoryId) {
         this.productFeatureCategoryId = productFeatureCategoryId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param variantPriceTypeId the variantPriceTypeId to set
      */
-    private void setVariantPriceTypeId(String variantPriceTypeId) {
+    public void setVariantPriceTypeId(String variantPriceTypeId) {
         this.variantPriceTypeId = variantPriceTypeId;
     }
     /**
      * Auto generated value setter.
      * @param variantCurrencyUomId the variantCurrencyUomId to set
      */
-    private void setVariantCurrencyUomId(String variantCurrencyUomId) {
+    public void setVariantCurrencyUomId(String variantCurrencyUomId) {
         this.variantCurrencyUomId = variantCurrencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param variantProductStoreGroupId the variantProductStoreGroupId to set
      */
-    private void setVariantProductStoreGroupId(String variantProductStoreGroupId) {
+    public void setVariantProductStoreGroupId(String variantProductStoreGroupId) {
         this.variantProductStoreGroupId = variantProductStoreGroupId;
     }
     /**
      * Auto generated value setter.
      * @param variantPriceFromDate the variantPriceFromDate to set
      */
-    private void setVariantPriceFromDate(Timestamp variantPriceFromDate) {
+    public void setVariantPriceFromDate(Timestamp variantPriceFromDate) {
         this.variantPriceFromDate = variantPriceFromDate;
     }
     /**
      * Auto generated value setter.
      * @param variantPriceThruDate the variantPriceThruDate to set
      */
-    private void setVariantPriceThruDate(Timestamp variantPriceThruDate) {
+    public void setVariantPriceThruDate(Timestamp variantPriceThruDate) {
         this.variantPriceThruDate = variantPriceThruDate;
     }
     /**
      * Auto generated value setter.
      * @param variantPrice the variantPrice to set
      */
-    private void setVariantPrice(BigDecimal variantPrice) {
+    public void setVariantPrice(BigDecimal variantPrice) {
         this.variantPrice = variantPrice;
     }
 

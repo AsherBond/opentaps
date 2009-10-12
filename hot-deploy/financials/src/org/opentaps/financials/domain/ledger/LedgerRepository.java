@@ -324,6 +324,31 @@ public class LedgerRepository extends Repository implements LedgerRepositoryInte
         return UtilMisc.toList(acctgTrans);
     }
 
+    /** {@inheritDoc} */
+    @SuppressWarnings("unchecked")
+    public List<AcctgTransAndEntries> getPostedTransactionsAndEntries(String organizationPartyId, List<String> glFiscalTypeId, Timestamp fromDate, Timestamp thruDate) throws RepositoryException {
+        List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
+                EntityCondition.makeCondition(AcctgTransAndEntries.Fields.isPosted.getName(), EntityOperator.EQUALS, "Y"),
+                EntityCondition.makeCondition(AcctgTransAndEntries.Fields.organizationPartyId.getName(), EntityOperator.EQUALS, organizationPartyId),
+                EntityCondition.makeCondition(AcctgTransAndEntries.Fields.glFiscalTypeId.getName(), EntityOperator.IN, glFiscalTypeId)
+        );
+        if (fromDate != null) {
+            conditions.add(EntityCondition.makeCondition(AcctgTransAndEntries.Fields.transactionDate.getName(), EntityOperator.GREATER_THAN_EQUAL_TO, fromDate));
+        }
+        if (thruDate != null) {
+            conditions.add(EntityCondition.makeCondition(AcctgTransAndEntries.Fields.transactionDate.getName(), EntityOperator.LESS_THAN_EQUAL_TO, thruDate));
+        }
+
+        // add start time if any is specified
+        if (fromDate != null) {
+            conditions.add(EntityCondition.makeCondition(AcctgTransAndEntries.Fields.transactionDate.getName(), EntityOperator.GREATER_THAN_EQUAL_TO, fromDate));
+        }
+
+        List<AcctgTransAndEntries> transAndEntries = findList(AcctgTransAndEntries.class, EntityCondition.makeCondition(conditions, EntityOperator.AND), Arrays.asList("acctgTransId"));
+
+        return (UtilValidate.isEmpty(transAndEntries) ? FastList.<AcctgTransAndEntries>newInstance() : transAndEntries);
+    }
+
     protected OrganizationRepositoryInterface getOrganizationRepository() throws RepositoryException {
         if (organizationRepository == null) {
             organizationRepository = getDomainsDirectory().getOrganizationDomain().getOrganizationRepository();

@@ -171,91 +171,91 @@ fieldMapColumns.put("RequirementCustRequestView", fields);
      * Auto generated value setter.
      * @param custRequestId the custRequestId to set
      */
-    private void setCustRequestId(String custRequestId) {
+    public void setCustRequestId(String custRequestId) {
         this.custRequestId = custRequestId;
     }
     /**
      * Auto generated value setter.
      * @param custRequestItemSeqId the custRequestItemSeqId to set
      */
-    private void setCustRequestItemSeqId(String custRequestItemSeqId) {
+    public void setCustRequestItemSeqId(String custRequestItemSeqId) {
         this.custRequestItemSeqId = custRequestItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param requirementId the requirementId to set
      */
-    private void setRequirementId(String requirementId) {
+    public void setRequirementId(String requirementId) {
         this.requirementId = requirementId;
     }
     /**
      * Auto generated value setter.
      * @param requirementTypeId the requirementTypeId to set
      */
-    private void setRequirementTypeId(String requirementTypeId) {
+    public void setRequirementTypeId(String requirementTypeId) {
         this.requirementTypeId = requirementTypeId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param estimatedBudget the estimatedBudget to set
      */
-    private void setEstimatedBudget(BigDecimal estimatedBudget) {
+    public void setEstimatedBudget(BigDecimal estimatedBudget) {
         this.estimatedBudget = estimatedBudget;
     }
     /**
      * Auto generated value setter.
      * @param quantity the quantity to set
      */
-    private void setQuantity(BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
     /**
      * Auto generated value setter.
      * @param requirementStartDate the requirementStartDate to set
      */
-    private void setRequirementStartDate(Timestamp requirementStartDate) {
+    public void setRequirementStartDate(Timestamp requirementStartDate) {
         this.requirementStartDate = requirementStartDate;
     }
     /**
      * Auto generated value setter.
      * @param requiredByDate the requiredByDate to set
      */
-    private void setRequiredByDate(Timestamp requiredByDate) {
+    public void setRequiredByDate(Timestamp requiredByDate) {
         this.requiredByDate = requiredByDate;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param priority the priority to set
      */
-    private void setPriority(Long priority) {
+    public void setPriority(Long priority) {
         this.priority = priority;
     }
     /**
      * Auto generated value setter.
      * @param maximumAmount the maximumAmount to set
      */
-    private void setMaximumAmount(BigDecimal maximumAmount) {
+    public void setMaximumAmount(BigDecimal maximumAmount) {
         this.maximumAmount = maximumAmount;
     }
 

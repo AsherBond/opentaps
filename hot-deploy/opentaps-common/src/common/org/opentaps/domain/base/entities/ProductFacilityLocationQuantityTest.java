@@ -153,56 +153,56 @@ fieldMapColumns.put("ProductFacilityLocationQuantityTest", fields);
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
     /**
      * Auto generated value setter.
      * @param locationSeqId the locationSeqId to set
      */
-    private void setLocationSeqId(String locationSeqId) {
+    public void setLocationSeqId(String locationSeqId) {
         this.locationSeqId = locationSeqId;
     }
     /**
      * Auto generated value setter.
      * @param minimumStock the minimumStock to set
      */
-    private void setMinimumStock(BigDecimal minimumStock) {
+    public void setMinimumStock(BigDecimal minimumStock) {
         this.minimumStock = minimumStock;
     }
     /**
      * Auto generated value setter.
      * @param moveQuantity the moveQuantity to set
      */
-    private void setMoveQuantity(BigDecimal moveQuantity) {
+    public void setMoveQuantity(BigDecimal moveQuantity) {
         this.moveQuantity = moveQuantity;
     }
     /**
      * Auto generated value setter.
      * @param locationTypeEnumId the locationTypeEnumId to set
      */
-    private void setLocationTypeEnumId(String locationTypeEnumId) {
+    public void setLocationTypeEnumId(String locationTypeEnumId) {
         this.locationTypeEnumId = locationTypeEnumId;
     }
     /**
      * Auto generated value setter.
      * @param availableToPromiseTotal the availableToPromiseTotal to set
      */
-    private void setAvailableToPromiseTotal(BigDecimal availableToPromiseTotal) {
+    public void setAvailableToPromiseTotal(BigDecimal availableToPromiseTotal) {
         this.availableToPromiseTotal = availableToPromiseTotal;
     }
     /**
      * Auto generated value setter.
      * @param quantityOnHandTotal the quantityOnHandTotal to set
      */
-    private void setQuantityOnHandTotal(BigDecimal quantityOnHandTotal) {
+    public void setQuantityOnHandTotal(BigDecimal quantityOnHandTotal) {
         this.quantityOnHandTotal = quantityOnHandTotal;
     }
 

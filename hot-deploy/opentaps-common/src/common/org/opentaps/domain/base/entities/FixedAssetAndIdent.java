@@ -241,189 +241,189 @@ fieldMapColumns.put("FixedAssetAndIdent", fields);
      * Auto generated value setter.
      * @param fixedAssetId the fixedAssetId to set
      */
-    private void setFixedAssetId(String fixedAssetId) {
+    public void setFixedAssetId(String fixedAssetId) {
         this.fixedAssetId = fixedAssetId;
     }
     /**
      * Auto generated value setter.
      * @param fixedAssetTypeId the fixedAssetTypeId to set
      */
-    private void setFixedAssetTypeId(String fixedAssetTypeId) {
+    public void setFixedAssetTypeId(String fixedAssetTypeId) {
         this.fixedAssetTypeId = fixedAssetTypeId;
     }
     /**
      * Auto generated value setter.
      * @param parentFixedAssetId the parentFixedAssetId to set
      */
-    private void setParentFixedAssetId(String parentFixedAssetId) {
+    public void setParentFixedAssetId(String parentFixedAssetId) {
         this.parentFixedAssetId = parentFixedAssetId;
     }
     /**
      * Auto generated value setter.
      * @param instanceOfProductId the instanceOfProductId to set
      */
-    private void setInstanceOfProductId(String instanceOfProductId) {
+    public void setInstanceOfProductId(String instanceOfProductId) {
         this.instanceOfProductId = instanceOfProductId;
     }
     /**
      * Auto generated value setter.
      * @param classEnumId the classEnumId to set
      */
-    private void setClassEnumId(String classEnumId) {
+    public void setClassEnumId(String classEnumId) {
         this.classEnumId = classEnumId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param fixedAssetName the fixedAssetName to set
      */
-    private void setFixedAssetName(String fixedAssetName) {
+    public void setFixedAssetName(String fixedAssetName) {
         this.fixedAssetName = fixedAssetName;
     }
     /**
      * Auto generated value setter.
      * @param acquireOrderId the acquireOrderId to set
      */
-    private void setAcquireOrderId(String acquireOrderId) {
+    public void setAcquireOrderId(String acquireOrderId) {
         this.acquireOrderId = acquireOrderId;
     }
     /**
      * Auto generated value setter.
      * @param acquireOrderItemSeqId the acquireOrderItemSeqId to set
      */
-    private void setAcquireOrderItemSeqId(String acquireOrderItemSeqId) {
+    public void setAcquireOrderItemSeqId(String acquireOrderItemSeqId) {
         this.acquireOrderItemSeqId = acquireOrderItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param dateAcquired the dateAcquired to set
      */
-    private void setDateAcquired(Timestamp dateAcquired) {
+    public void setDateAcquired(Timestamp dateAcquired) {
         this.dateAcquired = dateAcquired;
     }
     /**
      * Auto generated value setter.
      * @param dateLastServiced the dateLastServiced to set
      */
-    private void setDateLastServiced(Timestamp dateLastServiced) {
+    public void setDateLastServiced(Timestamp dateLastServiced) {
         this.dateLastServiced = dateLastServiced;
     }
     /**
      * Auto generated value setter.
      * @param dateNextService the dateNextService to set
      */
-    private void setDateNextService(Timestamp dateNextService) {
+    public void setDateNextService(Timestamp dateNextService) {
         this.dateNextService = dateNextService;
     }
     /**
      * Auto generated value setter.
      * @param expectedEndOfLife the expectedEndOfLife to set
      */
-    private void setExpectedEndOfLife(Date expectedEndOfLife) {
+    public void setExpectedEndOfLife(Date expectedEndOfLife) {
         this.expectedEndOfLife = expectedEndOfLife;
     }
     /**
      * Auto generated value setter.
      * @param actualEndOfLife the actualEndOfLife to set
      */
-    private void setActualEndOfLife(Date actualEndOfLife) {
+    public void setActualEndOfLife(Date actualEndOfLife) {
         this.actualEndOfLife = actualEndOfLife;
     }
     /**
      * Auto generated value setter.
      * @param productionCapacity the productionCapacity to set
      */
-    private void setProductionCapacity(BigDecimal productionCapacity) {
+    public void setProductionCapacity(BigDecimal productionCapacity) {
         this.productionCapacity = productionCapacity;
     }
     /**
      * Auto generated value setter.
      * @param uomId the uomId to set
      */
-    private void setUomId(String uomId) {
+    public void setUomId(String uomId) {
         this.uomId = uomId;
     }
     /**
      * Auto generated value setter.
      * @param calendarId the calendarId to set
      */
-    private void setCalendarId(String calendarId) {
+    public void setCalendarId(String calendarId) {
         this.calendarId = calendarId;
     }
     /**
      * Auto generated value setter.
      * @param serialNumber the serialNumber to set
      */
-    private void setSerialNumber(String serialNumber) {
+    public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
     }
     /**
      * Auto generated value setter.
      * @param locatedAtFacilityId the locatedAtFacilityId to set
      */
-    private void setLocatedAtFacilityId(String locatedAtFacilityId) {
+    public void setLocatedAtFacilityId(String locatedAtFacilityId) {
         this.locatedAtFacilityId = locatedAtFacilityId;
     }
     /**
      * Auto generated value setter.
      * @param locatedAtLocationSeqId the locatedAtLocationSeqId to set
      */
-    private void setLocatedAtLocationSeqId(String locatedAtLocationSeqId) {
+    public void setLocatedAtLocationSeqId(String locatedAtLocationSeqId) {
         this.locatedAtLocationSeqId = locatedAtLocationSeqId;
     }
     /**
      * Auto generated value setter.
      * @param salvageValue the salvageValue to set
      */
-    private void setSalvageValue(BigDecimal salvageValue) {
+    public void setSalvageValue(BigDecimal salvageValue) {
         this.salvageValue = salvageValue;
     }
     /**
      * Auto generated value setter.
      * @param depreciation the depreciation to set
      */
-    private void setDepreciation(BigDecimal depreciation) {
+    public void setDepreciation(BigDecimal depreciation) {
         this.depreciation = depreciation;
     }
     /**
      * Auto generated value setter.
      * @param purchaseCost the purchaseCost to set
      */
-    private void setPurchaseCost(BigDecimal purchaseCost) {
+    public void setPurchaseCost(BigDecimal purchaseCost) {
         this.purchaseCost = purchaseCost;
     }
     /**
      * Auto generated value setter.
      * @param purchaseCostUomId the purchaseCostUomId to set
      */
-    private void setPurchaseCostUomId(String purchaseCostUomId) {
+    public void setPurchaseCostUomId(String purchaseCostUomId) {
         this.purchaseCostUomId = purchaseCostUomId;
     }
     /**
      * Auto generated value setter.
      * @param fixedAssetIdentTypeId the fixedAssetIdentTypeId to set
      */
-    private void setFixedAssetIdentTypeId(String fixedAssetIdentTypeId) {
+    public void setFixedAssetIdentTypeId(String fixedAssetIdentTypeId) {
         this.fixedAssetIdentTypeId = fixedAssetIdentTypeId;
     }
     /**
      * Auto generated value setter.
      * @param idValue the idValue to set
      */
-    private void setIdValue(String idValue) {
+    public void setIdValue(String idValue) {
         this.idValue = idValue;
     }
 

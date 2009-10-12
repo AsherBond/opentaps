@@ -139,49 +139,49 @@ fieldMapColumns.put("MaxContentApprovalView", fields);
      * Auto generated value setter.
      * @param contentTypeId the contentTypeId to set
      */
-    private void setContentTypeId(String contentTypeId) {
+    public void setContentTypeId(String contentTypeId) {
         this.contentTypeId = contentTypeId;
     }
     /**
      * Auto generated value setter.
      * @param contentId the contentId to set
      */
-    private void setContentId(String contentId) {
+    public void setContentId(String contentId) {
         this.contentId = contentId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param sequenceNum the sequenceNum to set
      */
-    private void setSequenceNum(Long sequenceNum) {
+    public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
     /**
      * Auto generated value setter.
      * @param contentRevisionSeqId the contentRevisionSeqId to set
      */
-    private void setContentRevisionSeqId(String contentRevisionSeqId) {
+    public void setContentRevisionSeqId(String contentRevisionSeqId) {
         this.contentRevisionSeqId = contentRevisionSeqId;
     }
     /**
      * Auto generated value setter.
      * @param maxContentRevisionSeqId the maxContentRevisionSeqId to set
      */
-    private void setMaxContentRevisionSeqId(String maxContentRevisionSeqId) {
+    public void setMaxContentRevisionSeqId(String maxContentRevisionSeqId) {
         this.maxContentRevisionSeqId = maxContentRevisionSeqId;
     }
 

@@ -128,35 +128,35 @@ fieldMapColumns.put("ProjectIdPartyRoleAndPhase", fields);
      * Auto generated value setter.
      * @param projectId the projectId to set
      */
-    private void setProjectId(String projectId) {
+    public void setProjectId(String projectId) {
         this.projectId = projectId;
     }
     /**
      * Auto generated value setter.
      * @param phaseId the phaseId to set
      */
-    private void setPhaseId(String phaseId) {
+    public void setPhaseId(String phaseId) {
         this.phaseId = phaseId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 

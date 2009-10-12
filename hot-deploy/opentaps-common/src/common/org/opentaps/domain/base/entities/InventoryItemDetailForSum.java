@@ -130,35 +130,35 @@ fieldMapColumns.put("InventoryItemDetailForSum", fields);
      * Auto generated value setter.
      * @param quantityOnHandSum the quantityOnHandSum to set
      */
-    private void setQuantityOnHandSum(BigDecimal quantityOnHandSum) {
+    public void setQuantityOnHandSum(BigDecimal quantityOnHandSum) {
         this.quantityOnHandSum = quantityOnHandSum;
     }
     /**
      * Auto generated value setter.
      * @param inventoryItemTypeId the inventoryItemTypeId to set
      */
-    private void setInventoryItemTypeId(String inventoryItemTypeId) {
+    public void setInventoryItemTypeId(String inventoryItemTypeId) {
         this.inventoryItemTypeId = inventoryItemTypeId;
     }
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param effectiveDate the effectiveDate to set
      */
-    private void setEffectiveDate(Timestamp effectiveDate) {
+    public void setEffectiveDate(Timestamp effectiveDate) {
         this.effectiveDate = effectiveDate;
     }
 

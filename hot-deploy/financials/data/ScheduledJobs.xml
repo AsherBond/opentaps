@@ -62,6 +62,6 @@
     </RuntimeData>
     <RecurrenceRule recurrenceRuleId="FINANCIALS_ENC_RULE" xName="Daily" frequency="DAILY" intervalNumber="1" countNumber="-1"/>
     <RecurrenceInfo recurrenceInfoId="FINANCIALS_ENC_INFO" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="FINANCIALS_ENC_RULE" recurenceCount="0"/>
-    <JobSandbox jobId="FINANCIALS_ENC_JOB" jobName="Create encumbrance snapshot" runTime="2007-01-01 03:00:00.000" serviceName="createEncumbranceSnapshotAndDetail" poolId="pool" runAsUser="system" recurrenceInfoId="FINANCIALS_ENC_INFO" runtimeDataId="FINANCIALS_ENC_DATA"/>
+    <JobSandbox jobId="FINANCIALS_ENC_JOB" jobName="Create encumbrance snapshot and transaction entry fact table" runTime="2007-01-01 03:00:00.000" serviceName="financials.collectEncumbranceAndTransEntryFacts" poolId="pool" runAsUser="system" recurrenceInfoId="FINANCIALS_ENC_INFO" runtimeDataId="FINANCIALS_ENC_DATA"/>
 
 </entity-engine-xml>

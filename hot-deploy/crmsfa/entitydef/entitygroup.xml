@@ -59,6 +59,7 @@
   <!-- ========================================================= -->
 
     <entity-group group="org.ofbiz" entity="PartyRelationshipAndCaseRole" />
+    <entity-group group="org.ofbiz" entity="CustRequestAndPartyRelationshipAndRole" />
 
   <!-- ========================================================= -->
   <!-- com.opensourcestrategies.crmsfa.teams                     -->
@@ -73,6 +74,7 @@
     <entity-group group="org.ofbiz" entity="PartyRelationshipAndSalesOpportunity" />
     <entity-group group="org.ofbiz" entity="SalesOpportunityAndRole" />
     <entity-group group="org.ofbiz" entity="SalesOpportunityEstimatedAmountTotalByStage" />
+    <entity-group group="org.ofbiz" entity="SalesOpportunityAndPartyRelationshipAndStage" />
 
   <!-- ========================================================= -->
   <!-- com.opensourcestrategies.crmsfa.security                  -->

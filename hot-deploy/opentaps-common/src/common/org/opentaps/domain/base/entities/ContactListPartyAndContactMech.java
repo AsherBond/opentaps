@@ -160,77 +160,77 @@ fieldMapColumns.put("ContactListPartyAndContactMech", fields);
      * Auto generated value setter.
      * @param contactFromDate the contactFromDate to set
      */
-    private void setContactFromDate(Timestamp contactFromDate) {
+    public void setContactFromDate(Timestamp contactFromDate) {
         this.contactFromDate = contactFromDate;
     }
     /**
      * Auto generated value setter.
      * @param contactThruDate the contactThruDate to set
      */
-    private void setContactThruDate(Timestamp contactThruDate) {
+    public void setContactThruDate(Timestamp contactThruDate) {
         this.contactThruDate = contactThruDate;
     }
     /**
      * Auto generated value setter.
      * @param contactListId the contactListId to set
      */
-    private void setContactListId(String contactListId) {
+    public void setContactListId(String contactListId) {
         this.contactListId = contactListId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param preferredContactMechId the preferredContactMechId to set
      */
-    private void setPreferredContactMechId(String preferredContactMechId) {
+    public void setPreferredContactMechId(String preferredContactMechId) {
         this.preferredContactMechId = preferredContactMechId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
-    private void setContactMechId(String contactMechId) {
+    public void setContactMechId(String contactMechId) {
         this.contactMechId = contactMechId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechTypeId the contactMechTypeId to set
      */
-    private void setContactMechTypeId(String contactMechTypeId) {
+    public void setContactMechTypeId(String contactMechTypeId) {
         this.contactMechTypeId = contactMechTypeId;
     }
     /**
      * Auto generated value setter.
      * @param infoString the infoString to set
      */
-    private void setInfoString(String infoString) {
+    public void setInfoString(String infoString) {
         this.infoString = infoString;
     }
 

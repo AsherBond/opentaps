@@ -181,105 +181,105 @@ fieldMapColumns.put("ProductVirtualAndAssocPrices", fields);
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param internalName the internalName to set
      */
-    private void setInternalName(String internalName) {
+    public void setInternalName(String internalName) {
         this.internalName = internalName;
     }
     /**
      * Auto generated value setter.
      * @param productName the productName to set
      */
-    private void setProductName(String productName) {
+    public void setProductName(String productName) {
         this.productName = productName;
     }
     /**
      * Auto generated value setter.
      * @param productAssocTypeId the productAssocTypeId to set
      */
-    private void setProductAssocTypeId(String productAssocTypeId) {
+    public void setProductAssocTypeId(String productAssocTypeId) {
         this.productAssocTypeId = productAssocTypeId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param assocProductId the assocProductId to set
      */
-    private void setAssocProductId(String assocProductId) {
+    public void setAssocProductId(String assocProductId) {
         this.assocProductId = assocProductId;
     }
     /**
      * Auto generated value setter.
      * @param assocProductCount the assocProductCount to set
      */
-    private void setAssocProductCount(Long assocProductCount) {
+    public void setAssocProductCount(Long assocProductCount) {
         this.assocProductCount = assocProductCount;
     }
     /**
      * Auto generated value setter.
      * @param assocPriceTypeId the assocPriceTypeId to set
      */
-    private void setAssocPriceTypeId(String assocPriceTypeId) {
+    public void setAssocPriceTypeId(String assocPriceTypeId) {
         this.assocPriceTypeId = assocPriceTypeId;
     }
     /**
      * Auto generated value setter.
      * @param assocCurrencyUomId the assocCurrencyUomId to set
      */
-    private void setAssocCurrencyUomId(String assocCurrencyUomId) {
+    public void setAssocCurrencyUomId(String assocCurrencyUomId) {
         this.assocCurrencyUomId = assocCurrencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param assocProductStoreGroupId the assocProductStoreGroupId to set
      */
-    private void setAssocProductStoreGroupId(String assocProductStoreGroupId) {
+    public void setAssocProductStoreGroupId(String assocProductStoreGroupId) {
         this.assocProductStoreGroupId = assocProductStoreGroupId;
     }
     /**
      * Auto generated value setter.
      * @param assocPriceFromDate the assocPriceFromDate to set
      */
-    private void setAssocPriceFromDate(Timestamp assocPriceFromDate) {
+    public void setAssocPriceFromDate(Timestamp assocPriceFromDate) {
         this.assocPriceFromDate = assocPriceFromDate;
     }
     /**
      * Auto generated value setter.
      * @param assocPriceThruDate the assocPriceThruDate to set
      */
-    private void setAssocPriceThruDate(Timestamp assocPriceThruDate) {
+    public void setAssocPriceThruDate(Timestamp assocPriceThruDate) {
         this.assocPriceThruDate = assocPriceThruDate;
     }
     /**
      * Auto generated value setter.
      * @param assocMinPrice the assocMinPrice to set
      */
-    private void setAssocMinPrice(BigDecimal assocMinPrice) {
+    public void setAssocMinPrice(BigDecimal assocMinPrice) {
         this.assocMinPrice = assocMinPrice;
     }
     /**
      * Auto generated value setter.
      * @param assocMaxPrice the assocMaxPrice to set
      */
-    private void setAssocMaxPrice(BigDecimal assocMaxPrice) {
+    public void setAssocMaxPrice(BigDecimal assocMaxPrice) {
         this.assocMaxPrice = assocMaxPrice;
     }
 

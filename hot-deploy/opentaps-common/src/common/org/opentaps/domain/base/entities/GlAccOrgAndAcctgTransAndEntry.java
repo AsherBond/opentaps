@@ -150,63 +150,63 @@ fieldMapColumns.put("GlAccOrgAndAcctgTransAndEntry", fields);
      * Auto generated value setter.
      * @param glAccountId the glAccountId to set
      */
-    private void setGlAccountId(String glAccountId) {
+    public void setGlAccountId(String glAccountId) {
         this.glAccountId = glAccountId;
     }
     /**
      * Auto generated value setter.
      * @param debitCreditFlag the debitCreditFlag to set
      */
-    private void setDebitCreditFlag(String debitCreditFlag) {
+    public void setDebitCreditFlag(String debitCreditFlag) {
         this.debitCreditFlag = debitCreditFlag;
     }
     /**
      * Auto generated value setter.
      * @param isPosted the isPosted to set
      */
-    private void setIsPosted(String isPosted) {
+    public void setIsPosted(String isPosted) {
         this.isPosted = isPosted;
     }
     /**
      * Auto generated value setter.
      * @param transactionDate the transactionDate to set
      */
-    private void setTransactionDate(Timestamp transactionDate) {
+    public void setTransactionDate(Timestamp transactionDate) {
         this.transactionDate = transactionDate;
     }
     /**
      * Auto generated value setter.
      * @param acctgTransId the acctgTransId to set
      */
-    private void setAcctgTransId(String acctgTransId) {
+    public void setAcctgTransId(String acctgTransId) {
         this.acctgTransId = acctgTransId;
     }
     /**
      * Auto generated value setter.
      * @param organizationPartyId the organizationPartyId to set
      */
-    private void setOrganizationPartyId(String organizationPartyId) {
+    public void setOrganizationPartyId(String organizationPartyId) {
         this.organizationPartyId = organizationPartyId;
     }
     /**
      * Auto generated value setter.
      * @param totalAmount the totalAmount to set
      */
-    private void setTotalAmount(BigDecimal totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
 

@@ -261,217 +261,217 @@ fieldMapColumns.put("OrderTaskList", fields);
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param orderTypeId the orderTypeId to set
      */
-    private void setOrderTypeId(String orderTypeId) {
+    public void setOrderTypeId(String orderTypeId) {
         this.orderTypeId = orderTypeId;
     }
     /**
      * Auto generated value setter.
      * @param orderDate the orderDate to set
      */
-    private void setOrderDate(Timestamp orderDate) {
+    public void setOrderDate(Timestamp orderDate) {
         this.orderDate = orderDate;
     }
     /**
      * Auto generated value setter.
      * @param entryDate the entryDate to set
      */
-    private void setEntryDate(Timestamp entryDate) {
+    public void setEntryDate(Timestamp entryDate) {
         this.entryDate = entryDate;
     }
     /**
      * Auto generated value setter.
      * @param grandTotal the grandTotal to set
      */
-    private void setGrandTotal(BigDecimal grandTotal) {
+    public void setGrandTotal(BigDecimal grandTotal) {
         this.grandTotal = grandTotal;
     }
     /**
      * Auto generated value setter.
      * @param orderRoleTypeId the orderRoleTypeId to set
      */
-    private void setOrderRoleTypeId(String orderRoleTypeId) {
+    public void setOrderRoleTypeId(String orderRoleTypeId) {
         this.orderRoleTypeId = orderRoleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param customerPartyId the customerPartyId to set
      */
-    private void setCustomerPartyId(String customerPartyId) {
+    public void setCustomerPartyId(String customerPartyId) {
         this.customerPartyId = customerPartyId;
     }
     /**
      * Auto generated value setter.
      * @param customerFirstName the customerFirstName to set
      */
-    private void setCustomerFirstName(String customerFirstName) {
+    public void setCustomerFirstName(String customerFirstName) {
         this.customerFirstName = customerFirstName;
     }
     /**
      * Auto generated value setter.
      * @param customerLastName the customerLastName to set
      */
-    private void setCustomerLastName(String customerLastName) {
+    public void setCustomerLastName(String customerLastName) {
         this.customerLastName = customerLastName;
     }
     /**
      * Auto generated value setter.
      * @param workEffortId the workEffortId to set
      */
-    private void setWorkEffortId(String workEffortId) {
+    public void setWorkEffortId(String workEffortId) {
         this.workEffortId = workEffortId;
     }
     /**
      * Auto generated value setter.
      * @param workEffortTypeId the workEffortTypeId to set
      */
-    private void setWorkEffortTypeId(String workEffortTypeId) {
+    public void setWorkEffortTypeId(String workEffortTypeId) {
         this.workEffortTypeId = workEffortTypeId;
     }
     /**
      * Auto generated value setter.
      * @param currentStatusId the currentStatusId to set
      */
-    private void setCurrentStatusId(String currentStatusId) {
+    public void setCurrentStatusId(String currentStatusId) {
         this.currentStatusId = currentStatusId;
     }
     /**
      * Auto generated value setter.
      * @param lastStatusUpdate the lastStatusUpdate to set
      */
-    private void setLastStatusUpdate(Timestamp lastStatusUpdate) {
+    public void setLastStatusUpdate(Timestamp lastStatusUpdate) {
         this.lastStatusUpdate = lastStatusUpdate;
     }
     /**
      * Auto generated value setter.
      * @param priority the priority to set
      */
-    private void setPriority(Long priority) {
+    public void setPriority(Long priority) {
         this.priority = priority;
     }
     /**
      * Auto generated value setter.
      * @param workEffortName the workEffortName to set
      */
-    private void setWorkEffortName(String workEffortName) {
+    public void setWorkEffortName(String workEffortName) {
         this.workEffortName = workEffortName;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param createdDate the createdDate to set
      */
-    private void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
     /**
      * Auto generated value setter.
      * @param createdByUserLogin the createdByUserLogin to set
      */
-    private void setCreatedByUserLogin(String createdByUserLogin) {
+    public void setCreatedByUserLogin(String createdByUserLogin) {
         this.createdByUserLogin = createdByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedDate the lastModifiedDate to set
      */
-    private void setLastModifiedDate(Timestamp lastModifiedDate) {
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedByUserLogin the lastModifiedByUserLogin to set
      */
-    private void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
+    public void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
         this.lastModifiedByUserLogin = lastModifiedByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param estimatedStartDate the estimatedStartDate to set
      */
-    private void setEstimatedStartDate(Timestamp estimatedStartDate) {
+    public void setEstimatedStartDate(Timestamp estimatedStartDate) {
         this.estimatedStartDate = estimatedStartDate;
     }
     /**
      * Auto generated value setter.
      * @param estimatedCompletionDate the estimatedCompletionDate to set
      */
-    private void setEstimatedCompletionDate(Timestamp estimatedCompletionDate) {
+    public void setEstimatedCompletionDate(Timestamp estimatedCompletionDate) {
         this.estimatedCompletionDate = estimatedCompletionDate;
     }
     /**
      * Auto generated value setter.
      * @param actualStartDate the actualStartDate to set
      */
-    private void setActualStartDate(Timestamp actualStartDate) {
+    public void setActualStartDate(Timestamp actualStartDate) {
         this.actualStartDate = actualStartDate;
     }
     /**
      * Auto generated value setter.
      * @param actualCompletionDate the actualCompletionDate to set
      */
-    private void setActualCompletionDate(Timestamp actualCompletionDate) {
+    public void setActualCompletionDate(Timestamp actualCompletionDate) {
         this.actualCompletionDate = actualCompletionDate;
     }
     /**
      * Auto generated value setter.
      * @param infoUrl the infoUrl to set
      */
-    private void setInfoUrl(String infoUrl) {
+    public void setInfoUrl(String infoUrl) {
         this.infoUrl = infoUrl;
     }
     /**
      * Auto generated value setter.
      * @param wepaPartyId the wepaPartyId to set
      */
-    private void setWepaPartyId(String wepaPartyId) {
+    public void setWepaPartyId(String wepaPartyId) {
         this.wepaPartyId = wepaPartyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param statusDateTime the statusDateTime to set
      */
-    private void setStatusDateTime(Timestamp statusDateTime) {
+    public void setStatusDateTime(Timestamp statusDateTime) {
         this.statusDateTime = statusDateTime;
     }
 

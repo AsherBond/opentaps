@@ -160,77 +160,77 @@ fieldMapColumns.put("EmplPositionTypeRateAndAmount", fields);
      * Auto generated value setter.
      * @param rateAmount the rateAmount to set
      */
-    private void setRateAmount(BigDecimal rateAmount) {
+    public void setRateAmount(BigDecimal rateAmount) {
         this.rateAmount = rateAmount;
     }
     /**
      * Auto generated value setter.
      * @param periodTypeId the periodTypeId to set
      */
-    private void setPeriodTypeId(String periodTypeId) {
+    public void setPeriodTypeId(String periodTypeId) {
         this.periodTypeId = periodTypeId;
     }
     /**
      * Auto generated value setter.
      * @param rateCurrencyUomId the rateCurrencyUomId to set
      */
-    private void setRateCurrencyUomId(String rateCurrencyUomId) {
+    public void setRateCurrencyUomId(String rateCurrencyUomId) {
         this.rateCurrencyUomId = rateCurrencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param rateAmountFromDate the rateAmountFromDate to set
      */
-    private void setRateAmountFromDate(Timestamp rateAmountFromDate) {
+    public void setRateAmountFromDate(Timestamp rateAmountFromDate) {
         this.rateAmountFromDate = rateAmountFromDate;
     }
     /**
      * Auto generated value setter.
      * @param rateAmountThruDate the rateAmountThruDate to set
      */
-    private void setRateAmountThruDate(Timestamp rateAmountThruDate) {
+    public void setRateAmountThruDate(Timestamp rateAmountThruDate) {
         this.rateAmountThruDate = rateAmountThruDate;
     }
     /**
      * Auto generated value setter.
      * @param emplPositionTypeId the emplPositionTypeId to set
      */
-    private void setEmplPositionTypeId(String emplPositionTypeId) {
+    public void setEmplPositionTypeId(String emplPositionTypeId) {
         this.emplPositionTypeId = emplPositionTypeId;
     }
     /**
      * Auto generated value setter.
      * @param rateTypeId the rateTypeId to set
      */
-    private void setRateTypeId(String rateTypeId) {
+    public void setRateTypeId(String rateTypeId) {
         this.rateTypeId = rateTypeId;
     }
     /**
      * Auto generated value setter.
      * @param payGradeId the payGradeId to set
      */
-    private void setPayGradeId(String payGradeId) {
+    public void setPayGradeId(String payGradeId) {
         this.payGradeId = payGradeId;
     }
     /**
      * Auto generated value setter.
      * @param salaryStepSeqId the salaryStepSeqId to set
      */
-    private void setSalaryStepSeqId(String salaryStepSeqId) {
+    public void setSalaryStepSeqId(String salaryStepSeqId) {
         this.salaryStepSeqId = salaryStepSeqId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
 

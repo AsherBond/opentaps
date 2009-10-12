@@ -238,133 +238,133 @@ fieldMapColumns.put("RequirementAndRole", fields);
      * Auto generated value setter.
      * @param requirementId the requirementId to set
      */
-    private void setRequirementId(String requirementId) {
+    public void setRequirementId(String requirementId) {
         this.requirementId = requirementId;
     }
     /**
      * Auto generated value setter.
      * @param requirementTypeId the requirementTypeId to set
      */
-    private void setRequirementTypeId(String requirementTypeId) {
+    public void setRequirementTypeId(String requirementTypeId) {
         this.requirementTypeId = requirementTypeId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
     /**
      * Auto generated value setter.
      * @param deliverableId the deliverableId to set
      */
-    private void setDeliverableId(String deliverableId) {
+    public void setDeliverableId(String deliverableId) {
         this.deliverableId = deliverableId;
     }
     /**
      * Auto generated value setter.
      * @param fixedAssetId the fixedAssetId to set
      */
-    private void setFixedAssetId(String fixedAssetId) {
+    public void setFixedAssetId(String fixedAssetId) {
         this.fixedAssetId = fixedAssetId;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param requirementStartDate the requirementStartDate to set
      */
-    private void setRequirementStartDate(Timestamp requirementStartDate) {
+    public void setRequirementStartDate(Timestamp requirementStartDate) {
         this.requirementStartDate = requirementStartDate;
     }
     /**
      * Auto generated value setter.
      * @param requiredByDate the requiredByDate to set
      */
-    private void setRequiredByDate(Timestamp requiredByDate) {
+    public void setRequiredByDate(Timestamp requiredByDate) {
         this.requiredByDate = requiredByDate;
     }
     /**
      * Auto generated value setter.
      * @param estimatedBudget the estimatedBudget to set
      */
-    private void setEstimatedBudget(BigDecimal estimatedBudget) {
+    public void setEstimatedBudget(BigDecimal estimatedBudget) {
         this.estimatedBudget = estimatedBudget;
     }
     /**
      * Auto generated value setter.
      * @param quantity the quantity to set
      */
-    private void setQuantity(BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
     /**
      * Auto generated value setter.
      * @param reason the reason to set
      */
-    private void setReason(String reason) {
+    public void setReason(String reason) {
         this.reason = reason;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedDate the lastModifiedDate to set
      */
-    private void setLastModifiedDate(Timestamp lastModifiedDate) {
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedByUserLogin the lastModifiedByUserLogin to set
      */
-    private void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
+    public void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
         this.lastModifiedByUserLogin = lastModifiedByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
 

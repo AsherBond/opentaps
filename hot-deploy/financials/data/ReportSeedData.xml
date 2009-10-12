@@ -21,4 +21,14 @@
     <ReportGroup reportGroupId="FIN_FORM" showInSelect="N" description="Financials Reports" application="financials" sequenceNum="1"/>
     <ReportGroupMember reportGroupId="FIN_FORM" reportId="FININVOICE" sequenceNum="1"/>
 
+    <ReportRegistry reportId="FIN_BALANCE" shortName="Budget vs. Actual plus Encumbrances Report" description="" reportLocation="component://financials/webapp/financials/reports/repository/BalanceReport.jrxml" setupUri="BalanceReportSetup?"/>
+    <ReportRegistry reportId="BDGT_ACTLEXP_GLACCT" shortName="Budget versus Actual Expenses by GL Account" description="" reportLocation="component://financials/webapp/financials/reports/repository/BudgetVsActualExpensesByGlAccount.jrxml" setupUri="setupReport?acctgTagUsage=FINANCIALS_REPORTS&amp;"/>
+    <ReportRegistry reportId="BDGT_ACTLEXP_DTL" shortName="Budget versus Actual Expenses Details" description="" reportLocation="component://financials/webapp/financials/reports/repository/BudgetVsActualExpensesDetail.jrxml" setupUri="setupReport?acctgTagUsage=FINANCIALS_REPORTS&amp;"/>
+    <ReportRegistry reportId="BDGT_ACTLEXP_ACCTP" shortName="Budget Versus Actual Expenses by GL Account Type" description="" reportLocation="component://financials/webapp/financials/reports/repository/BudgetVsActualExpensesByGlAccountType.jrxml" setupUri="setupReport?acctgTagUsage=FINANCIALS_REPORTS&amp;"/>
+    <ReportGroup reportGroupId="FIN_BUDGETING" showInSelect="Y" description="Budgeting" application="financials" sequenceNum="1"/>
+    <ReportGroupMember reportGroupId="FIN_BUDGETING" reportId="FIN_BALANCE" sequenceNum="1"/>
+    <ReportGroupMember reportGroupId="FIN_BUDGETING" reportId="BDGT_ACTLEXP_DTL" sequenceNum="5"/>
+    <ReportGroupMember reportGroupId="FIN_BUDGETING" reportId="BDGT_ACTLEXP_GLACCT" sequenceNum="10"/>
+    <ReportGroupMember reportGroupId="FIN_BUDGETING" reportId="BDGT_ACTLEXP_ACCTP" sequenceNum="15"/>
+
 </entity-engine-xml>

@@ -182,84 +182,84 @@ fieldMapColumns.put("ProductCategoryMemberAndRole", fields);
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param productCategoryId the productCategoryId to set
      */
-    private void setProductCategoryId(String productCategoryId) {
+    public void setProductCategoryId(String productCategoryId) {
         this.productCategoryId = productCategoryId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param comments the comments to set
      */
-    private void setComments(String comments) {
+    public void setComments(String comments) {
         this.comments = comments;
     }
     /**
      * Auto generated value setter.
      * @param sequenceNum the sequenceNum to set
      */
-    private void setSequenceNum(Long sequenceNum) {
+    public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
     /**
      * Auto generated value setter.
      * @param quantity the quantity to set
      */
-    private void setQuantity(BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param roleFromDate the roleFromDate to set
      */
-    private void setRoleFromDate(Timestamp roleFromDate) {
+    public void setRoleFromDate(Timestamp roleFromDate) {
         this.roleFromDate = roleFromDate;
     }
     /**
      * Auto generated value setter.
      * @param roleThruDate the roleThruDate to set
      */
-    private void setRoleThruDate(Timestamp roleThruDate) {
+    public void setRoleThruDate(Timestamp roleThruDate) {
         this.roleThruDate = roleThruDate;
     }
     /**
      * Auto generated value setter.
      * @param roleComments the roleComments to set
      */
-    private void setRoleComments(String roleComments) {
+    public void setRoleComments(String roleComments) {
         this.roleComments = roleComments;
     }
 

@@ -77,7 +77,8 @@
     <listener><listener-class>org.ofbiz.webapp.control.LoginEventListener</listener-class></listener>
     <!-- NOTE: not all app servers support mounting implementations of the HttpSessionActivationListener interface -->
     <!-- <listener><listener-class>org.ofbiz.webapp.control.ControlActivationEventListener</listener-class></listener> -->
-  
+    <listener><listener-class>org.opentaps.common.jndi.JNDIContextListener</listener-class></listener>
+
     <servlet>
         <servlet-name>ControlServlet</servlet-name>
         <display-name>ControlServlet</display-name>

@@ -210,147 +210,147 @@ fieldMapColumns.put("FinAccountAndRole", fields);
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param roleFromDate the roleFromDate to set
      */
-    private void setRoleFromDate(Timestamp roleFromDate) {
+    public void setRoleFromDate(Timestamp roleFromDate) {
         this.roleFromDate = roleFromDate;
     }
     /**
      * Auto generated value setter.
      * @param roleThruDate the roleThruDate to set
      */
-    private void setRoleThruDate(Timestamp roleThruDate) {
+    public void setRoleThruDate(Timestamp roleThruDate) {
         this.roleThruDate = roleThruDate;
     }
     /**
      * Auto generated value setter.
      * @param finAccountId the finAccountId to set
      */
-    private void setFinAccountId(String finAccountId) {
+    public void setFinAccountId(String finAccountId) {
         this.finAccountId = finAccountId;
     }
     /**
      * Auto generated value setter.
      * @param finAccountTypeId the finAccountTypeId to set
      */
-    private void setFinAccountTypeId(String finAccountTypeId) {
+    public void setFinAccountTypeId(String finAccountTypeId) {
         this.finAccountTypeId = finAccountTypeId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param finAccountName the finAccountName to set
      */
-    private void setFinAccountName(String finAccountName) {
+    public void setFinAccountName(String finAccountName) {
         this.finAccountName = finAccountName;
     }
     /**
      * Auto generated value setter.
      * @param finAccountCode the finAccountCode to set
      */
-    private void setFinAccountCode(String finAccountCode) {
+    public void setFinAccountCode(String finAccountCode) {
         this.finAccountCode = finAccountCode;
     }
     /**
      * Auto generated value setter.
      * @param finAccountPin the finAccountPin to set
      */
-    private void setFinAccountPin(String finAccountPin) {
+    public void setFinAccountPin(String finAccountPin) {
         this.finAccountPin = finAccountPin;
     }
     /**
      * Auto generated value setter.
      * @param currencyUomId the currencyUomId to set
      */
-    private void setCurrencyUomId(String currencyUomId) {
+    public void setCurrencyUomId(String currencyUomId) {
         this.currencyUomId = currencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param organizationPartyId the organizationPartyId to set
      */
-    private void setOrganizationPartyId(String organizationPartyId) {
+    public void setOrganizationPartyId(String organizationPartyId) {
         this.organizationPartyId = organizationPartyId;
     }
     /**
      * Auto generated value setter.
      * @param ownerPartyId the ownerPartyId to set
      */
-    private void setOwnerPartyId(String ownerPartyId) {
+    public void setOwnerPartyId(String ownerPartyId) {
         this.ownerPartyId = ownerPartyId;
     }
     /**
      * Auto generated value setter.
      * @param postToGlAccountId the postToGlAccountId to set
      */
-    private void setPostToGlAccountId(String postToGlAccountId) {
+    public void setPostToGlAccountId(String postToGlAccountId) {
         this.postToGlAccountId = postToGlAccountId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param isRefundable the isRefundable to set
      */
-    private void setIsRefundable(String isRefundable) {
+    public void setIsRefundable(String isRefundable) {
         this.isRefundable = isRefundable;
     }
     /**
      * Auto generated value setter.
      * @param replenishPaymentId the replenishPaymentId to set
      */
-    private void setReplenishPaymentId(String replenishPaymentId) {
+    public void setReplenishPaymentId(String replenishPaymentId) {
         this.replenishPaymentId = replenishPaymentId;
     }
     /**
      * Auto generated value setter.
      * @param replenishLevel the replenishLevel to set
      */
-    private void setReplenishLevel(BigDecimal replenishLevel) {
+    public void setReplenishLevel(BigDecimal replenishLevel) {
         this.replenishLevel = replenishLevel;
     }
     /**
      * Auto generated value setter.
      * @param actualBalance the actualBalance to set
      */
-    private void setActualBalance(BigDecimal actualBalance) {
+    public void setActualBalance(BigDecimal actualBalance) {
         this.actualBalance = actualBalance;
     }
     /**
      * Auto generated value setter.
      * @param availableBalance the availableBalance to set
      */
-    private void setAvailableBalance(BigDecimal availableBalance) {
+    public void setAvailableBalance(BigDecimal availableBalance) {
         this.availableBalance = availableBalance;
     }
 

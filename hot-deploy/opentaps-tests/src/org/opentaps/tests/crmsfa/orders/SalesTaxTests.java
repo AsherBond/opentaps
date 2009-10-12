@@ -20,6 +20,9 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import javolution.util.FastSet;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
@@ -32,6 +35,7 @@ import org.opentaps.common.order.SalesOrderFactory;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderItem;
 import org.opentaps.domain.order.OrderRepositoryInterface;
+import javolution.util.FastMap;
 
 /**
  * Order Sales Tax related unit tests.
@@ -41,15 +45,18 @@ public class SalesTaxTests extends OrderTestCase {
     private static final String MODULE = SalesTaxTests.class.getName();
 
     private GenericValue admin;
-    private GenericValue DemoCSR;
+    private GenericValue demoCSR;
     private GenericValue ca1;
     private GenericValue ca2;
+    private GenericValue demoAccount1;
     private GenericValue Product1;
     private GenericValue Product2;
-    private static String organizationPartyId = "Company";
+    private GenericValue Product3;
+    private static final String organizationPartyId = "Company";
     private static final String productStoreId = "9000";
     private static final String productId1 = "GZ-1005";
     private static final String productId2 = "WG-5569";
+    private static final String productId3 = "WG-1111";
     private static final String facilityId = "WebStoreWarehouse";
     private OrderSpecification specification;
 
@@ -59,20 +66,24 @@ public class SalesTaxTests extends OrderTestCase {
         admin = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "admin"));
         ca1 = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", "ca1"));
         ca2 = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", "ca2"));
-        DemoCSR = delegator.findByPrimaryKey("UserLogin", UtilMisc.toMap("userLoginId", "DemoCSR"));
+        demoAccount1 = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", "DemoAccount1"));
+        demoCSR = delegator.findByPrimaryKey("UserLogin", UtilMisc.toMap("userLoginId", "DemoCSR"));
         Product1 = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId1));
         Product2 = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId2));
+        Product3 = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId3));
         // set a default User
-        User = DemoCSR;
+        User = demoCSR;
 
         specification = new OrderSpecification();
 
         assertNotNull("admin not null", admin);
         assertNotNull("ca1 not null", ca1);
         assertNotNull("ca2 not null", ca2);
-        assertNotNull("DemoCSR not null", DemoCSR);
+        assertNotNull("DemoAccount1 not null", demoAccount1);
+        assertNotNull("DemoCSR not null", demoCSR);
         assertNotNull("Product1 not null", Product1);
         assertNotNull("Product2 not null", Product2);
+        assertNotNull("Product3 not null", Product3);
     }
 
     @Override
@@ -81,10 +92,12 @@ public class SalesTaxTests extends OrderTestCase {
         admin = null;
         ca1 = null;
         ca2 = null;
-        DemoCSR = null;
+        demoAccount1 = null;
+        demoCSR = null;
         User = null;
         Product1 = null;
         Product2 = null;
+        Product3 = null;
     }
 
     /**
@@ -139,6 +152,110 @@ public class SalesTaxTests extends OrderTestCase {
     }
 
     /**
+     * Verify summary gross sales, discounts, taxable and tax amount values in TaxInvoiceItemFact entity
+     * for an order.
+     * @param orderId a <code>String</code> value
+     * @param authPartyId a <code>String</code> value
+     * @param authGeoId a <code>String</code> value
+     * @param grossSales a <code>double</code> value
+     * @param discounts a <code>double</code> value
+     * @param refunds a <code>double</code> value
+     * @param netAmount a <code>double</code> value
+     * @param taxable a <code>double</code> value
+     * @param tax a <code>double</code> value
+     * @exception GeneralException if an error occurs
+     */
+    public void assertSalesTaxFact(String orderId, String authPartyId, String authGeoId, double grossSales, double discounts, double refunds, double netAmount, double taxable, double tax) throws GeneralException {
+
+        BigDecimal tempGrossSales = BigDecimal.ZERO;
+        BigDecimal tempDiscounts = BigDecimal.ZERO;
+        BigDecimal tempRefunds = BigDecimal.ZERO;
+        BigDecimal tempNetAmount = BigDecimal.ZERO;
+        BigDecimal tempTaxable = BigDecimal.ZERO;
+        BigDecimal tempTax = BigDecimal.ZERO;
+
+        // find tax authority
+        Long taxAuthDimId = -1L; //nonexistent key
+        GenericValue taxAuthDim = EntityUtil.getFirst(delegator.findByAnd("TaxAuthorityDim", UtilMisc.toMap("taxAuthPartyId", authPartyId, "taxAuthGeoId", authGeoId)));
+        if (taxAuthDim != null) {
+            taxAuthDimId = taxAuthDim.getLong("taxAuthorityDimId");
+        }
+
+        List<GenericValue> orderItemBillings = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("orderId", orderId));
+        String invoiceId = EntityUtil.getFirst(orderItemBillings).getString("invoiceId");
+
+        List<GenericValue> taxFacts = delegator.findByAnd(
+                "TaxInvoiceItemFact",
+                UtilMisc.toMap("invoiceId", invoiceId)
+        );
+        Set<String> uniqueItemId = FastSet.<String>newInstance();
+        for (GenericValue fact : taxFacts) {
+            String invoiceItemId = fact.getString("invoiceItemSeqId");
+            if (uniqueItemId.contains(invoiceItemId)) {
+                continue;
+            }
+            uniqueItemId.add(invoiceItemId);
+            tempGrossSales = tempGrossSales.add(fact.getBigDecimal("grossAmount"));
+            tempDiscounts = tempDiscounts.add(fact.getBigDecimal("discounts"));
+            tempRefunds = tempRefunds.add(fact.getBigDecimal("refunds"));
+            tempNetAmount = tempNetAmount.add(fact.getBigDecimal("netAmount"));
+            BigDecimal taxDue = fact.getBigDecimal("taxDue");
+            if (taxDue != null && taxDue.compareTo(BigDecimal.ZERO) != 0) {
+                tempTaxable = tempTaxable.add(fact.getBigDecimal("taxable"));
+            }
+        }
+
+        taxFacts = delegator.findByAnd(
+                "TaxInvoiceItemFact",
+                UtilMisc.toMap("invoiceId", invoiceId, "taxAuthorityDimId", taxAuthDimId)
+        );
+        for (GenericValue fact : taxFacts) {
+            tempTax = tempTax.add(fact.getBigDecimal("taxDue"));
+        }
+
+        assertEquals("TaxInvoiceItemFact entity contains wrong gross sales amount for invoice " + invoiceId, tempGrossSales, BigDecimal.valueOf(grossSales));
+        assertEquals("TaxInvoiceItemFact entity contains wrong discounts for invoice " + invoiceId, tempDiscounts, BigDecimal.valueOf(discounts));
+        assertEquals("TaxInvoiceItemFact entity contains wrong refunds for invoice " + invoiceId, tempRefunds, BigDecimal.valueOf(refunds));
+        assertEquals("TaxInvoiceItemFact entity contains wrong net amounts for invoice " + invoiceId, tempNetAmount, BigDecimal.valueOf(netAmount));
+        assertEquals("TaxInvoiceItemFact entity contains wrong taxable amounts for invoice " + invoiceId, tempTaxable, BigDecimal.valueOf(taxable));
+        assertEquals("TaxInvoiceItemFact entity contains wrong taxes for invoice " + invoiceId, tempTax, BigDecimal.valueOf(tax));
+    }
+
+    /**
+     * Verify summary gross sales, discounts, taxable and tax amount values in TaxInvoiceItemFact entity
+     * for an order.
+     * @param orderId a <code>String</code> value
+     * @param grossSales a <code>double</code> value
+     * @param discounts a <code>double</code> value
+     * @param refunds a <code>double</code> value
+     * @param netAmount a <code>double</code> value
+     * @exception GeneralException if an error occurs
+     */
+    public void assertSalesFact(String orderId, double grossSales, double discounts, double refunds, double netAmount) throws GeneralException {
+
+        BigDecimal tempGrossSales = BigDecimal.ZERO;
+        BigDecimal tempDiscounts = BigDecimal.ZERO;
+        BigDecimal tempRefunds = BigDecimal.ZERO;
+        BigDecimal tempNetAmount = BigDecimal.ZERO;
+
+        List<GenericValue> orderItemBillings = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("orderId", orderId));
+        String invoiceId = EntityUtil.getFirst(orderItemBillings).getString("invoiceId");
+
+        List<GenericValue> saleFacts = delegator.findByAnd("SalesInvoiceItemFact", UtilMisc.toMap("invoiceId", invoiceId));
+        for (GenericValue fact : saleFacts) {
+            tempGrossSales = tempGrossSales.add(fact.getBigDecimal("grossAmount"));
+            tempDiscounts = tempDiscounts.add(fact.getBigDecimal("discounts"));
+            tempRefunds = tempRefunds.add(fact.getBigDecimal("refunds"));
+            tempNetAmount = tempNetAmount.add(fact.getBigDecimal("netAmount"));
+        }
+
+        assertEquals("TaxInvoiceItemFact entity contains wrong gross sales amount for invoice " + invoiceId, tempGrossSales, BigDecimal.valueOf(grossSales));
+        assertEquals("TaxInvoiceItemFact entity contains wrong discounts for invoice " + invoiceId, tempDiscounts, BigDecimal.valueOf(discounts));
+        assertEquals("TaxInvoiceItemFact entity contains wrong refunds for invoice " + invoiceId, tempRefunds, BigDecimal.valueOf(refunds));
+        assertEquals("TaxInvoiceItemFact entity contains wrong net amounts for invoice " + invoiceId, tempNetAmount, BigDecimal.valueOf(netAmount));
+    }
+
+    /**
      * State and County Sales Tax Tests: these tests will verify state and county taxes
      * The particular product, payment, shipping methods don't really matter as much for this test.
      *
@@ -155,10 +272,11 @@ public class SalesTaxTests extends OrderTestCase {
      * 10.  Use testShipOrder to ship all 5 sales orders (#1, #3, #5, #7, #9)
      * 11.  Create a return for all items on sales order #9 and accept the return
      * 12.  Verify that the return item from #11 has a ReturnAdjustment of sales tax of 6.25% of item for taxAuthGeoId=CA and 1% for taxAuthGeoId=CA-LA
-     * @throws GeneralException in an error occurs
+     * 13.  Perform ETL transformations for sales tax report and verify results
+     * @throws Exception in an error occurs
      */
     @SuppressWarnings("unchecked")
-    public void testCATaxApplication() throws GeneralException {
+    public void testCATaxApplication() throws Exception {
 
         // Copy user ca1
         String customerPartyId1 = createPartyFromTemplate(ca1.getString("partyId"), "Copy of ca1 for testCATaxApplication");
@@ -186,7 +304,7 @@ public class SalesTaxTests extends OrderTestCase {
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
         order.put(Product1, new BigDecimal("1.0"));
         order.put(Product2, new BigDecimal("4.0"));
-        User = DemoCSR;
+        User = demoCSR;
         SalesOrderFactory salesOrder1 = testCreatesSalesOrder(order, customer1, productStoreId, "EXT_OFFLINE", customer1add1.getString("contactMechId"));
 
         /*
@@ -201,7 +319,7 @@ public class SalesTaxTests extends OrderTestCase {
         order = new HashMap<GenericValue, BigDecimal>();
         order.put(Product1, new BigDecimal("1.0"));
         order.put(Product2, new BigDecimal("4.0"));
-        User = DemoCSR;
+        User = demoCSR;
         SalesOrderFactory salesOrder3 = testCreatesSalesOrder(order, customer1, productStoreId, "EXT_OFFLINE", customer1add2.getString("contactMechId"));
 
         /*
@@ -216,7 +334,7 @@ public class SalesTaxTests extends OrderTestCase {
         order = new HashMap<GenericValue, BigDecimal>();
         order.put(Product1, new BigDecimal("1.0"));
         order.put(Product2, new BigDecimal("4.0"));
-        User = DemoCSR;
+        User = demoCSR;
         SalesOrderFactory salesOrder5 = testCreatesSalesOrder(order, customer2, productStoreId, "EXT_OFFLINE", customer2add1.getString("contactMechId"));
 
         /*
@@ -231,7 +349,7 @@ public class SalesTaxTests extends OrderTestCase {
         order = new HashMap<GenericValue, BigDecimal>();
         order.put(Product1, new BigDecimal("1.0"));
         order.put(Product2, new BigDecimal("4.0"));
-        User = DemoCSR;
+        User = demoCSR;
         SalesOrderFactory salesOrder7 = testCreatesSalesOrder(order, customer2, productStoreId, "EXT_OFFLINE", customer2add2.getString("contactMechId"));
 
         /*
@@ -246,7 +364,7 @@ public class SalesTaxTests extends OrderTestCase {
         order = new HashMap<GenericValue, BigDecimal>();
         order.put(Product1, new BigDecimal("1.0"));
         order.put(Product2, new BigDecimal("4.0"));
-        User = DemoCSR;
+        User = demoCSR;
         SalesOrderFactory salesOrder9 = testCreatesSalesOrder(order, customer1, productStoreId, "EXT_OFFLINE", customer1add1.getString("contactMechId"));
 
         /*
@@ -286,7 +404,7 @@ public class SalesTaxTests extends OrderTestCase {
         List<GenericValue> returnItemTypes = delegator.findByAnd("ReturnItemTypeMap", UtilMisc.toMap("returnHeaderTypeId", "CUSTOMER_RETURN"));
         Map returnItemTypeMap = new HashMap<String, String>();
         for (GenericValue returnItemType : returnItemTypes) {
-                returnItemTypeMap.put(returnItemType.getString("returnItemMapKey"), returnItemType.getString("returnItemTypeId"));
+            returnItemTypeMap.put(returnItemType.getString("returnItemMapKey"), returnItemType.getString("returnItemTypeId"));
         }
 
         for (GenericValue orderItem : orderItems) {
@@ -314,6 +432,31 @@ public class SalesTaxTests extends OrderTestCase {
         assertTaxReturn(returnId, "CA", new BigDecimal("6.25"));
         assertTaxReturn(returnId, "CA-LA", new BigDecimal("1.0"));
 
+        /*
+         * 13. Perform ETL transformations for sales tax report and verify results
+         */
+        runAndAssertServiceSuccess("loadSalesTaxData", UtilMisc.toMap("userLogin", admin));
+
+        assertSalesFact(salesOrder1.getOrderId(), 2991.99, 0.0, 0.0, 2991.99);
+        assertSalesTaxFact(salesOrder1.getOrderId(), "_NA_", "_NA_", 2991.99, 0.0, 0.0, 2991.99, 2991.99, 29.92);
+        assertSalesTaxFact(salesOrder1.getOrderId(), "CA_BOE", "CA-LA", 2991.99, 0.0, 0.0, 2991.99, 2991.99, 29.92);
+        assertSalesTaxFact(salesOrder1.getOrderId(), "CA_BOE", "CA", 2991.99, 0.0, 0.0, 2991.99, 2991.99, 187.00);
+
+        assertSalesFact(salesOrder3.getOrderId(), 2991.99, 0.0, 0.0, 2991.99);
+        assertSalesTaxFact(salesOrder3.getOrderId(), "_NA_", "_NA_", 2991.99, 0.0, 0.0, 2991.99, 2991.99, 29.92);
+        assertSalesTaxFact(salesOrder3.getOrderId(), "CA_BOE", "CA-SOLANO", 2991.99, 0.0, 0.0, 2991.99, 2991.99, 3.74);
+        assertSalesTaxFact(salesOrder3.getOrderId(), "CA_BOE", "CA", 2991.99, 0.0, 0.0, 2991.99, 2991.99, 187.00);
+
+        assertSalesFact(salesOrder5.getOrderId(), 2991.99, 0.0, 0.0, 2991.99);
+        assertSalesTaxFact(salesOrder5.getOrderId(), "_NA_", "_NA_", 2991.99, 0.0, 0.0, 2991.99, 2991.99, 29.92);
+
+        assertSalesFact(salesOrder7.getOrderId(), 2991.99, 0.0, 0.0, 2991.99);
+        assertSalesTaxFact(salesOrder7.getOrderId(), "_NA_", "_NA_", 2991.99, 0.0, 0.0, 2991.99, 2991.99, 29.92);
+
+        assertSalesFact(salesOrder9.getOrderId(), 2991.99, 0.0, 2991.99, 0.0);
+        assertSalesTaxFact(salesOrder9.getOrderId(), "_NA_", "_NA_", 2991.99, 0.0, 2991.99, 0.0, 0.0, 0.0);
+        assertSalesTaxFact(salesOrder9.getOrderId(), "CA_BOE", "CA-LA", 2991.99, 0.0, 2991.99, 0.0, 0.0, 0.0);
+        assertSalesTaxFact(salesOrder9.getOrderId(), "CA_BOE", "CA", 2991.99, 0.0, 2991.99, 0.0, 0.0, 0.0);
     }
 
     /**
@@ -346,7 +489,7 @@ public class SalesTaxTests extends OrderTestCase {
         Map<GenericValue, BigDecimal> orderItems = new HashMap<GenericValue, BigDecimal>();
         orderItems.put(testProduct1, new BigDecimal("5.0"));
         orderItems.put(testProduct2, new BigDecimal("3.0"));
-        User = DemoCSR;
+        User = demoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(orderItems, customer1, productStoreId, "EXT_OFFLINE", customer1add1.getString("contactMechId"));
         String orderId = salesOrder.getOrderId();
         Debug.logInfo("testTaxesAfterOrderUpdate created order [" + orderId + "]", MODULE);
@@ -561,14 +704,14 @@ public class SalesTaxTests extends OrderTestCase {
         callCtxt.put("userLogin", User);
         callCtxt.put("orderId", orderId);
         callCtxt.put("itemQtyMap", UtilMisc.toMap(orderItem1.getOrderItemSeqId() + ":00001", "5.0",
-                                                  orderItem2.getOrderItemSeqId() + ":00001", "0.0",
-                                                  orderItem3.getOrderItemSeqId() + ":00001", "1.0"));
+                orderItem2.getOrderItemSeqId() + ":00001", "0.0",
+                orderItem3.getOrderItemSeqId() + ":00001", "1.0"));
         callCtxt.put("itemPriceMap", UtilMisc.toMap(orderItem1.getOrderItemSeqId(), "15.88",
-                                                    orderItem2.getOrderItemSeqId(), "25.99",
-                                                    orderItem3.getOrderItemSeqId(), "75.77"));
+                orderItem2.getOrderItemSeqId(), "25.99",
+                orderItem3.getOrderItemSeqId(), "75.77"));
         callCtxt.put("overridePriceMap", UtilMisc.toMap(orderItem1.getOrderItemSeqId(), "15.88",
-                                                        orderItem2.getOrderItemSeqId(), "25.99",
-                                                        orderItem3.getOrderItemSeqId(), "75.77"));
+                orderItem2.getOrderItemSeqId(), "25.99",
+                orderItem3.getOrderItemSeqId(), "75.77"));
         runAndAssertServiceSuccess("opentaps.updateOrderItems", callCtxt);
 
         // reload entities
@@ -617,4 +760,69 @@ public class SalesTaxTests extends OrderTestCase {
         assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("12.17"));
 
     }
+
+    /**
+     * Verify that sales tax transformations calculate correct taxable/tax amounts for an order
+     * that has both order level promotions and item level promotions.
+     * @throws Exception if an error occurs
+     */
+    public void testSalesTaxAndPromo() throws Exception {
+        /*
+         * 1. Create a sales order for productStoreId=9000, partyId=DemoAccount1, address=DemoAddress1 and 10 WG-1111
+         */
+        Map<GenericValue, BigDecimal> orderItems = FastMap.<GenericValue, BigDecimal>newInstance();
+        orderItems.put(Product3, new BigDecimal("10.0"));
+        User = demoCSR;
+        SalesOrderFactory salesOrder = testCreatesSalesOrder(orderItems, demoAccount1, productStoreId, "EXT_OFFLINE", "DemoAddress1");
+
+        // we have to update order to get all adjustments recalculated
+        OrderRepositoryInterface repository = getOrderRepository(admin);
+        Order order = repository.getOrderById(salesOrder.getOrderId());
+
+        OrderItem orderItem = null;
+        for (OrderItem item : order.getOrderItems()) {
+            if (productId3.equals(item.getProductId())) {
+                orderItem = item;
+            }
+        }
+
+        Map<String, Object> callCtxt = new HashMap<String, Object>();
+        callCtxt.put("userLogin", User);
+        callCtxt.put("orderId", salesOrder.getOrderId());
+        callCtxt.put("itemQtyMap", UtilMisc.toMap(orderItem.getOrderItemSeqId() + ":00001", "10.0"));
+        callCtxt.put("itemPriceMap", UtilMisc.toMap(orderItem.getOrderItemSeqId(), "59.99"));
+        callCtxt.put("overridePriceMap", new HashMap<String, Object>());
+        runAndAssertServiceSuccess("opentaps.updateOrderItems", callCtxt);
+
+        // ... and approve order because an free product item was added during previous step
+        salesOrder.approveOrder();
+
+        /*
+         * 2. Use testShipOrder to ship sales order
+         */
+        Map<String, Object> input =
+            UtilMisc.toMap("userLogin", admin, "facilityId", facilityId, "orderId", salesOrder.getOrderId());
+        runAndAssertServiceSuccess("testShipOrder", input);
+
+        /*
+         * 3. Perform ETL transformations for sales tax report
+         */
+        runAndAssertServiceSuccess("loadSalesTaxData", UtilMisc.toMap("userLogin", admin));
+
+        /*
+         * 4. Verify transformation results for the order
+         *
+         * gross sales: $659.89
+         * discounts: $-335.94
+         * refunds: $0.0
+         * net amount: gross sales - refunds + discounts
+         * taxable amount: 599.9 - refunds + discounts
+         * tax: $26.097
+         */
+        assertSalesFact(salesOrder.getOrderId(), 659.89, -335.94, 0.0, 323.95);
+        assertSalesTaxFact(salesOrder.getOrderId(), "_NA_", "_NA_", 659.89, -335.94, 0.0, 323.95, 599.90, 3.60);
+        assertSalesTaxFact(salesOrder.getOrderId(), "CA_BOE", "CA", 659.89, -335.94, 0.0, 323.95, 599.90, 22.50);
+
+    }
+
 }

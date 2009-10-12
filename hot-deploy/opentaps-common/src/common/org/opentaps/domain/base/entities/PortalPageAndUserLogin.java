@@ -134,42 +134,42 @@ fieldMapColumns.put("PortalPageAndUserLogin", fields);
      * Auto generated value setter.
      * @param portalPageId the portalPageId to set
      */
-    private void setPortalPageId(String portalPageId) {
+    public void setPortalPageId(String portalPageId) {
         this.portalPageId = portalPageId;
     }
     /**
      * Auto generated value setter.
      * @param securityGroupId the securityGroupId to set
      */
-    private void setSecurityGroupId(String securityGroupId) {
+    public void setSecurityGroupId(String securityGroupId) {
         this.securityGroupId = securityGroupId;
     }
     /**
      * Auto generated value setter.
      * @param parentPortalPageId the parentPortalPageId to set
      */
-    private void setParentPortalPageId(String parentPortalPageId) {
+    public void setParentPortalPageId(String parentPortalPageId) {
         this.parentPortalPageId = parentPortalPageId;
     }
     /**
      * Auto generated value setter.
      * @param userLoginId the userLoginId to set
      */
-    private void setUserLoginId(String userLoginId) {
+    public void setUserLoginId(String userLoginId) {
         this.userLoginId = userLoginId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
 

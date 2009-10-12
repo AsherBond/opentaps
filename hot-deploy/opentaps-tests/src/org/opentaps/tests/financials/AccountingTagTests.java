@@ -156,4 +156,46 @@ public class AccountingTagTests extends FinancialsTestCase {
         assertMapDifferenceCorrect("Balance changes for TRAINING tag is not correct", initialBalances_TRAINING, finalBalances_TRAINING, accountMap);
 
     }
+
+    /**
+     * Verifies that when payments are tagged for each application, they are posted to the correct accounting tags and GL accounts
+     */
+    public void testPaymentAccountingTagsAtAllocation() throws GeneralException {
+        // create a copy of the Company organization 
+        String organizationPartyId = createOrganizationFromTemplate("Company", "Test organization for accounting tags payment application alloation " + UtilDateTime.nowTimestamp());
+        FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, demofinadmin);
+        
+        // set its PartyAcctgPreference.allocatePaymentTagsToApplications to "Y"
+        // create a purchase invoice from DemoSupplier for $1000 (PI1)
+        // create a second purchase invoice from DemoSupplier for $2000 (PI2)
+        // create a vendor payment of $2500 to DemoSupplier
+        
+        // getting initial balances
+        Timestamp start = UtilDateTime.nowTimestamp();
+        Map initialBalances_CONSUMER = fa.getFinancialBalances(start, UtilMisc.toMap("tag1", "DIV_CONSUMER"));
+        Map initialBalances_GOV = fa.getFinancialBalances(start, UtilMisc.toMap("tag1", "DIV_GOV"));
+        Map initialBalances_CONSUMER_SALES_TRAINING = fa.getFinancialBalances(start, UtilMisc.toMap("tag1", "DIV_CONSUMER", "tag2", "DPT_SALES", "tag3", "ACTI_TRAINING"), false);
+        Map initialBalances_TRAINING = fa.getFinancialBalances(start, UtilMisc.toMap("tag3", "ACTI_TRAINING"), false);
+
+        // apply $1000 of payment to PI1 with tags DIV_CONSUMER, DPT_SALES, ACTI_TRAINING
+        // verify that Payment.isReadyToPost() is false
+        // apply $1500 of payment to PI2 with tags DIV_GOV, DPT_MANUFACTURING, ACTI_TRAINING
+        // verify that Payment.isReadyToPost() is true
+        // Set payment status to SENT
+        
+        // get final balances
+        Timestamp finish = UtilDateTime.nowTimestamp();
+        Map finalBalances_CONSUMER = fa.getFinancialBalances(finish, UtilMisc.toMap("tag1", "DIV_CONSUMER"));
+        Map finalBalances_GOV = fa.getFinancialBalances(finish, UtilMisc.toMap("tag1", "DIV_GOV"));
+        Map finalBalances_CONSUMER_SALES_TRAINING = fa.getFinancialBalances(finish, UtilMisc.toMap("tag1", "DIV_CONSUMER", "tag2", "DPT_SALES", "tag3", "ACTI_TRAINING"), false);
+        Map finalBalances_TRAINING = fa.getFinancialBalances(finish, UtilMisc.toMap("tag3", "ACTI_TRAINING"), false);
+
+        // verify correct changes in balances:
+        // ACCOUNTS_PAYABLE for DIV_CONSUMER, -1000
+        // ACCOUNTS_PAYABLE for DIV_GOV, -1500
+        // ACCOUNTS_PAYABLE for DIV_CONSUMER, DPT_SALES, ACTI_TRANINIG -1000
+        // ACCOUNTS_PAYABLE for ACTI_TRAINING, -2500
+        //
+        // total ACCOUNTS_PAYABLE change, -2500
+   }
 }

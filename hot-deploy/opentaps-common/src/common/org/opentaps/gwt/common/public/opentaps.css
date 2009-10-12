@@ -100,3 +100,26 @@
 .promoItemRow {
     background-color:#FDD !important;
 }
+
+/* Styles for highlighting case states by status */
+
+.case_CRQ_SUBMITTED {
+    background-color: white !important;
+}
+.case_CRQ_ACCEPTED {
+    background-color: #FFFF99 !important;
+}
+.case_CRQ_REVIEWED {
+    background-color: #FFCC66 !important;
+}
+.case_CRQ_COMPLETED {
+    background-color: #E0E0E0 !important;
+}
+.case_CRQ_REJECTED {
+    background-color: #FFCCCC !important;
+}
+.case_CRQ_CANCELLED {
+    background-color: #FFCCCC !important;
+}
+
+

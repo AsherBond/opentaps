@@ -1109,6 +1109,7 @@
   <mapping class="org.opentaps.domain.base.entities.MrpInventoryEventPlanned"/>
   <mapping class="org.opentaps.domain.base.entities.CustRequestRole"/>
   <mapping class="org.opentaps.domain.base.entities.FacilityRole"/>
+  <mapping class="org.opentaps.domain.base.entities.DataWarehouseTransform"/>
   <mapping class="org.opentaps.domain.base.entities.PartyFromByRelnAndContactInfo"/>
   <mapping class="org.opentaps.domain.base.entities.PartyFromByRelnAndContactInfoAndPartyClassification"/>
   <mapping class="org.opentaps.domain.base.entities.PartyFromSummaryByRelationship"/>
@@ -1140,6 +1141,8 @@
   <mapping class="org.opentaps.domain.base.entities.TrackingCodeAndContactListAndMarketingCampaign"/>
   <mapping class="org.opentaps.domain.base.entities.QuoteItemOption"/>
   <mapping class="org.opentaps.domain.base.entities.QuoteNote"/>
+  <mapping class="org.opentaps.domain.base.entities.CustRequestAndPartyRelationshipAndRole"/>
+  <mapping class="org.opentaps.domain.base.entities.SalesOpportunityAndPartyRelationshipAndStage"/>
   <mapping class="org.opentaps.domain.base.entities.UspsBmcCode"/>
   <mapping class="org.opentaps.domain.base.entities.UspsZipToBmcCode"/>
   <mapping class="org.opentaps.domain.base.entities.UspsBPMZoneMap"/>
@@ -1199,6 +1202,7 @@
   <mapping class="org.opentaps.domain.base.entities.TaxAuthorityDim"/>
   <mapping class="org.opentaps.domain.base.entities.DateDim"/>
   <mapping class="org.opentaps.domain.base.entities.CurrencyDim"/>
+  <mapping class="org.opentaps.domain.base.entities.OrganizationDim"/>
   <mapping class="org.opentaps.domain.base.entities.SalesInvoiceItemFact"/>
   <mapping class="org.opentaps.domain.base.entities.TaxInvoiceItemFact"/>
   <mapping class="org.opentaps.domain.base.entities.GlAccountTransEntryFact"/>

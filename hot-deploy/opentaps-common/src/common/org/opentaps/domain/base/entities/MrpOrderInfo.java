@@ -229,161 +229,161 @@ fieldMapColumns.put("MrpOrderInfo", fields);
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param orderTypeId the orderTypeId to set
      */
-    private void setOrderTypeId(String orderTypeId) {
+    public void setOrderTypeId(String orderTypeId) {
         this.orderTypeId = orderTypeId;
     }
     /**
      * Auto generated value setter.
      * @param orderDate the orderDate to set
      */
-    private void setOrderDate(Timestamp orderDate) {
+    public void setOrderDate(Timestamp orderDate) {
         this.orderDate = orderDate;
     }
     /**
      * Auto generated value setter.
      * @param productStoreId the productStoreId to set
      */
-    private void setProductStoreId(String productStoreId) {
+    public void setProductStoreId(String productStoreId) {
         this.productStoreId = productStoreId;
     }
     /**
      * Auto generated value setter.
      * @param orderStatusId the orderStatusId to set
      */
-    private void setOrderStatusId(String orderStatusId) {
+    public void setOrderStatusId(String orderStatusId) {
         this.orderStatusId = orderStatusId;
     }
     /**
      * Auto generated value setter.
      * @param orderItemSeqId the orderItemSeqId to set
      */
-    private void setOrderItemSeqId(String orderItemSeqId) {
+    public void setOrderItemSeqId(String orderItemSeqId) {
         this.orderItemSeqId = orderItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param quantity the quantity to set
      */
-    private void setQuantity(BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
     /**
      * Auto generated value setter.
      * @param cancelQuantity the cancelQuantity to set
      */
-    private void setCancelQuantity(BigDecimal cancelQuantity) {
+    public void setCancelQuantity(BigDecimal cancelQuantity) {
         this.cancelQuantity = cancelQuantity;
     }
     /**
      * Auto generated value setter.
      * @param itemStatusId the itemStatusId to set
      */
-    private void setItemStatusId(String itemStatusId) {
+    public void setItemStatusId(String itemStatusId) {
         this.itemStatusId = itemStatusId;
     }
     /**
      * Auto generated value setter.
      * @param itemShipBeforeDate the itemShipBeforeDate to set
      */
-    private void setItemShipBeforeDate(Timestamp itemShipBeforeDate) {
+    public void setItemShipBeforeDate(Timestamp itemShipBeforeDate) {
         this.itemShipBeforeDate = itemShipBeforeDate;
     }
     /**
      * Auto generated value setter.
      * @param itemShipAfterDate the itemShipAfterDate to set
      */
-    private void setItemShipAfterDate(Timestamp itemShipAfterDate) {
+    public void setItemShipAfterDate(Timestamp itemShipAfterDate) {
         this.itemShipAfterDate = itemShipAfterDate;
     }
     /**
      * Auto generated value setter.
      * @param itemEstimatedDeliveryDate the itemEstimatedDeliveryDate to set
      */
-    private void setItemEstimatedDeliveryDate(Timestamp itemEstimatedDeliveryDate) {
+    public void setItemEstimatedDeliveryDate(Timestamp itemEstimatedDeliveryDate) {
         this.itemEstimatedDeliveryDate = itemEstimatedDeliveryDate;
     }
     /**
      * Auto generated value setter.
      * @param shipGroupSeqId the shipGroupSeqId to set
      */
-    private void setShipGroupSeqId(String shipGroupSeqId) {
+    public void setShipGroupSeqId(String shipGroupSeqId) {
         this.shipGroupSeqId = shipGroupSeqId;
     }
     /**
      * Auto generated value setter.
      * @param shipGroupContactMechId the shipGroupContactMechId to set
      */
-    private void setShipGroupContactMechId(String shipGroupContactMechId) {
+    public void setShipGroupContactMechId(String shipGroupContactMechId) {
         this.shipGroupContactMechId = shipGroupContactMechId;
     }
     /**
      * Auto generated value setter.
      * @param shipByDate the shipByDate to set
      */
-    private void setShipByDate(Timestamp shipByDate) {
+    public void setShipByDate(Timestamp shipByDate) {
         this.shipByDate = shipByDate;
     }
     /**
      * Auto generated value setter.
      * @param shipAfterDate the shipAfterDate to set
      */
-    private void setShipAfterDate(Timestamp shipAfterDate) {
+    public void setShipAfterDate(Timestamp shipAfterDate) {
         this.shipAfterDate = shipAfterDate;
     }
     /**
      * Auto generated value setter.
      * @param quantityReserved the quantityReserved to set
      */
-    private void setQuantityReserved(BigDecimal quantityReserved) {
+    public void setQuantityReserved(BigDecimal quantityReserved) {
         this.quantityReserved = quantityReserved;
     }
     /**
      * Auto generated value setter.
      * @param reservedDatetime the reservedDatetime to set
      */
-    private void setReservedDatetime(Timestamp reservedDatetime) {
+    public void setReservedDatetime(Timestamp reservedDatetime) {
         this.reservedDatetime = reservedDatetime;
     }
     /**
      * Auto generated value setter.
      * @param reserveSequenceId the reserveSequenceId to set
      */
-    private void setReserveSequenceId(Long reserveSequenceId) {
+    public void setReserveSequenceId(Long reserveSequenceId) {
         this.reserveSequenceId = reserveSequenceId;
     }
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
     /**
      * Auto generated value setter.
      * @param salesDiscontinuationDate the salesDiscontinuationDate to set
      */
-    private void setSalesDiscontinuationDate(Timestamp salesDiscontinuationDate) {
+    public void setSalesDiscontinuationDate(Timestamp salesDiscontinuationDate) {
         this.salesDiscontinuationDate = salesDiscontinuationDate;
     }
     /**
      * Auto generated value setter.
      * @param introductionDate the introductionDate to set
      */
-    private void setIntroductionDate(Timestamp introductionDate) {
+    public void setIntroductionDate(Timestamp introductionDate) {
         this.introductionDate = introductionDate;
     }
 

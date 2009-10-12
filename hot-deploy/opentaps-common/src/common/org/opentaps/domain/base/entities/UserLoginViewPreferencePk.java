@@ -32,8 +32,8 @@ public class UserLoginViewPreferencePk implements Serializable {
     private String applicationName;
     @Column(name="SCREEN_NAME")
     private String screenName;
-    @Column(name="NAME")
-    private String name;
+    @Column(name="PREFERENCE_NAME")
+    private String preferenceName;
     
     /**
      * Auto generated value setter.
@@ -58,10 +58,10 @@ public class UserLoginViewPreferencePk implements Serializable {
     }
     /**
      * Auto generated value setter.
-     * @param name the name to set
+     * @param preferenceName the preferenceName to set
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setPreferenceName(String preferenceName) {
+        this.preferenceName = preferenceName;
     }
 
     /**
@@ -89,7 +89,7 @@ public class UserLoginViewPreferencePk implements Serializable {
      * Auto generated value accessor.
      * @return <code>String</code>
      */  
-    public String getName() {
-        return this.name;
+    public String getPreferenceName() {
+        return this.preferenceName;
     }
 }

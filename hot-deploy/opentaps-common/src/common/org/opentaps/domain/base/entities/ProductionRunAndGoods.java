@@ -160,77 +160,77 @@ fieldMapColumns.put("ProductionRunAndGoods", fields);
      * Auto generated value setter.
      * @param workEffortId the workEffortId to set
      */
-    private void setWorkEffortId(String workEffortId) {
+    public void setWorkEffortId(String workEffortId) {
         this.workEffortId = workEffortId;
     }
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
     /**
      * Auto generated value setter.
      * @param workEffortTypeId the workEffortTypeId to set
      */
-    private void setWorkEffortTypeId(String workEffortTypeId) {
+    public void setWorkEffortTypeId(String workEffortTypeId) {
         this.workEffortTypeId = workEffortTypeId;
     }
     /**
      * Auto generated value setter.
      * @param workEffortName the workEffortName to set
      */
-    private void setWorkEffortName(String workEffortName) {
+    public void setWorkEffortName(String workEffortName) {
         this.workEffortName = workEffortName;
     }
     /**
      * Auto generated value setter.
      * @param workEffortPurposeTypeId the workEffortPurposeTypeId to set
      */
-    private void setWorkEffortPurposeTypeId(String workEffortPurposeTypeId) {
+    public void setWorkEffortPurposeTypeId(String workEffortPurposeTypeId) {
         this.workEffortPurposeTypeId = workEffortPurposeTypeId;
     }
     /**
      * Auto generated value setter.
      * @param currentStatusId the currentStatusId to set
      */
-    private void setCurrentStatusId(String currentStatusId) {
+    public void setCurrentStatusId(String currentStatusId) {
         this.currentStatusId = currentStatusId;
     }
     /**
      * Auto generated value setter.
      * @param estimatedStartDate the estimatedStartDate to set
      */
-    private void setEstimatedStartDate(Timestamp estimatedStartDate) {
+    public void setEstimatedStartDate(Timestamp estimatedStartDate) {
         this.estimatedStartDate = estimatedStartDate;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param workEffortGoodStdTypeId the workEffortGoodStdTypeId to set
      */
-    private void setWorkEffortGoodStdTypeId(String workEffortGoodStdTypeId) {
+    public void setWorkEffortGoodStdTypeId(String workEffortGoodStdTypeId) {
         this.workEffortGoodStdTypeId = workEffortGoodStdTypeId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param estimatedQuantity the estimatedQuantity to set
      */
-    private void setEstimatedQuantity(BigDecimal estimatedQuantity) {
+    public void setEstimatedQuantity(BigDecimal estimatedQuantity) {
         this.estimatedQuantity = estimatedQuantity;
     }
 

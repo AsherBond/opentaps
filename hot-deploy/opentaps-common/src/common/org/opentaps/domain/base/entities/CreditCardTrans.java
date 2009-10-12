@@ -177,91 +177,91 @@ fieldMapColumns.put("CreditCardTrans", fields);
      * Auto generated value setter.
      * @param paymentId the paymentId to set
      */
-    private void setPaymentId(String paymentId) {
+    public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
     }
     /**
      * Auto generated value setter.
      * @param currencyUomId the currencyUomId to set
      */
-    private void setCurrencyUomId(String currencyUomId) {
+    public void setCurrencyUomId(String currencyUomId) {
         this.currencyUomId = currencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param partyIdTo the partyIdTo to set
      */
-    private void setPartyIdTo(String partyIdTo) {
+    public void setPartyIdTo(String partyIdTo) {
         this.partyIdTo = partyIdTo;
     }
     /**
      * Auto generated value setter.
      * @param paymentAmount the paymentAmount to set
      */
-    private void setPaymentAmount(BigDecimal paymentAmount) {
+    public void setPaymentAmount(BigDecimal paymentAmount) {
         this.paymentAmount = paymentAmount;
     }
     /**
      * Auto generated value setter.
      * @param amountApplied the amountApplied to set
      */
-    private void setAmountApplied(BigDecimal amountApplied) {
+    public void setAmountApplied(BigDecimal amountApplied) {
         this.amountApplied = amountApplied;
     }
     /**
      * Auto generated value setter.
      * @param invoiceId the invoiceId to set
      */
-    private void setInvoiceId(String invoiceId) {
+    public void setInvoiceId(String invoiceId) {
         this.invoiceId = invoiceId;
     }
     /**
      * Auto generated value setter.
      * @param paymentGatewayResponseId the paymentGatewayResponseId to set
      */
-    private void setPaymentGatewayResponseId(String paymentGatewayResponseId) {
+    public void setPaymentGatewayResponseId(String paymentGatewayResponseId) {
         this.paymentGatewayResponseId = paymentGatewayResponseId;
     }
     /**
      * Auto generated value setter.
      * @param transactionDate the transactionDate to set
      */
-    private void setTransactionDate(Timestamp transactionDate) {
+    public void setTransactionDate(Timestamp transactionDate) {
         this.transactionDate = transactionDate;
     }
     /**
      * Auto generated value setter.
      * @param transCodeEnumId the transCodeEnumId to set
      */
-    private void setTransCodeEnumId(String transCodeEnumId) {
+    public void setTransCodeEnumId(String transCodeEnumId) {
         this.transCodeEnumId = transCodeEnumId;
     }
     /**
      * Auto generated value setter.
      * @param referenceNum the referenceNum to set
      */
-    private void setReferenceNum(String referenceNum) {
+    public void setReferenceNum(String referenceNum) {
         this.referenceNum = referenceNum;
     }
     /**
      * Auto generated value setter.
      * @param gatewayCode the gatewayCode to set
      */
-    private void setGatewayCode(String gatewayCode) {
+    public void setGatewayCode(String gatewayCode) {
         this.gatewayCode = gatewayCode;
     }
     /**
      * Auto generated value setter.
      * @param paymentMethodId the paymentMethodId to set
      */
-    private void setPaymentMethodId(String paymentMethodId) {
+    public void setPaymentMethodId(String paymentMethodId) {
         this.paymentMethodId = paymentMethodId;
     }
     /**
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
 

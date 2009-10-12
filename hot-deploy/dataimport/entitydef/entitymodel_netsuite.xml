@@ -149,7 +149,7 @@
         <field name="resalenumber" type="description"/>
         <field name="salesRepId" type="id"/>
         <field name="salesTerritoryId" type="id"/>
-        <field name="state" type="id"/>
+        <field name="stateProvince" type="id"/>
         <field name="country" type="id"/>
         <field name="statusId" type="name"/>
         <field name="statusProbability" type="floating-point"/>

@@ -186,112 +186,112 @@ fieldMapColumns.put("BenefitTypeAndParty", fields);
      * Auto generated value setter.
      * @param benefitTypeId the benefitTypeId to set
      */
-    private void setBenefitTypeId(String benefitTypeId) {
+    public void setBenefitTypeId(String benefitTypeId) {
         this.benefitTypeId = benefitTypeId;
     }
     /**
      * Auto generated value setter.
      * @param benefitName the benefitName to set
      */
-    private void setBenefitName(String benefitName) {
+    public void setBenefitName(String benefitName) {
         this.benefitName = benefitName;
     }
     /**
      * Auto generated value setter.
      * @param parentTypeId the parentTypeId to set
      */
-    private void setParentTypeId(String parentTypeId) {
+    public void setParentTypeId(String parentTypeId) {
         this.parentTypeId = parentTypeId;
     }
     /**
      * Auto generated value setter.
      * @param hasTable the hasTable to set
      */
-    private void setHasTable(String hasTable) {
+    public void setHasTable(String hasTable) {
         this.hasTable = hasTable;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param employerPaidPercentage the employerPaidPercentage to set
      */
-    private void setEmployerPaidPercentage(BigDecimal employerPaidPercentage) {
+    public void setEmployerPaidPercentage(BigDecimal employerPaidPercentage) {
         this.employerPaidPercentage = employerPaidPercentage;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeIdFrom the roleTypeIdFrom to set
      */
-    private void setRoleTypeIdFrom(String roleTypeIdFrom) {
+    public void setRoleTypeIdFrom(String roleTypeIdFrom) {
         this.roleTypeIdFrom = roleTypeIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeIdTo the roleTypeIdTo to set
      */
-    private void setRoleTypeIdTo(String roleTypeIdTo) {
+    public void setRoleTypeIdTo(String roleTypeIdTo) {
         this.roleTypeIdTo = roleTypeIdTo;
     }
     /**
      * Auto generated value setter.
      * @param partyIdFrom the partyIdFrom to set
      */
-    private void setPartyIdFrom(String partyIdFrom) {
+    public void setPartyIdFrom(String partyIdFrom) {
         this.partyIdFrom = partyIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param partyIdTo the partyIdTo to set
      */
-    private void setPartyIdTo(String partyIdTo) {
+    public void setPartyIdTo(String partyIdTo) {
         this.partyIdTo = partyIdTo;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param periodTypeId the periodTypeId to set
      */
-    private void setPeriodTypeId(String periodTypeId) {
+    public void setPeriodTypeId(String periodTypeId) {
         this.periodTypeId = periodTypeId;
     }
     /**
      * Auto generated value setter.
      * @param cost the cost to set
      */
-    private void setCost(BigDecimal cost) {
+    public void setCost(BigDecimal cost) {
         this.cost = cost;
     }
     /**
      * Auto generated value setter.
      * @param actualEmployerPaidPercent the actualEmployerPaidPercent to set
      */
-    private void setActualEmployerPaidPercent(BigDecimal actualEmployerPaidPercent) {
+    public void setActualEmployerPaidPercent(BigDecimal actualEmployerPaidPercent) {
         this.actualEmployerPaidPercent = actualEmployerPaidPercent;
     }
     /**
      * Auto generated value setter.
      * @param availableTime the availableTime to set
      */
-    private void setAvailableTime(Long availableTime) {
+    public void setAvailableTime(Long availableTime) {
         this.availableTime = availableTime;
     }
 

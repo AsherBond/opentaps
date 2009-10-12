@@ -139,49 +139,49 @@ fieldMapColumns.put("FacilityPartySecurityPermission", fields);
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param securityGroupId the securityGroupId to set
      */
-    private void setSecurityGroupId(String securityGroupId) {
+    public void setSecurityGroupId(String securityGroupId) {
         this.securityGroupId = securityGroupId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param groupId the groupId to set
      */
-    private void setGroupId(String groupId) {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
     /**
      * Auto generated value setter.
      * @param permissionId the permissionId to set
      */
-    private void setPermissionId(String permissionId) {
+    public void setPermissionId(String permissionId) {
         this.permissionId = permissionId;
     }
 

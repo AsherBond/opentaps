@@ -240,126 +240,126 @@ fieldMapColumns.put("AgreementAndRole", fields);
      * Auto generated value setter.
      * @param agreementId the agreementId to set
      */
-    private void setAgreementId(String agreementId) {
+    public void setAgreementId(String agreementId) {
         this.agreementId = agreementId;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param partyIdFrom the partyIdFrom to set
      */
-    private void setPartyIdFrom(String partyIdFrom) {
+    public void setPartyIdFrom(String partyIdFrom) {
         this.partyIdFrom = partyIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param partyIdTo the partyIdTo to set
      */
-    private void setPartyIdTo(String partyIdTo) {
+    public void setPartyIdTo(String partyIdTo) {
         this.partyIdTo = partyIdTo;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeIdFrom the roleTypeIdFrom to set
      */
-    private void setRoleTypeIdFrom(String roleTypeIdFrom) {
+    public void setRoleTypeIdFrom(String roleTypeIdFrom) {
         this.roleTypeIdFrom = roleTypeIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeIdTo the roleTypeIdTo to set
      */
-    private void setRoleTypeIdTo(String roleTypeIdTo) {
+    public void setRoleTypeIdTo(String roleTypeIdTo) {
         this.roleTypeIdTo = roleTypeIdTo;
     }
     /**
      * Auto generated value setter.
      * @param agreementTypeId the agreementTypeId to set
      */
-    private void setAgreementTypeId(String agreementTypeId) {
+    public void setAgreementTypeId(String agreementTypeId) {
         this.agreementTypeId = agreementTypeId;
     }
     /**
      * Auto generated value setter.
      * @param agreementDate the agreementDate to set
      */
-    private void setAgreementDate(Timestamp agreementDate) {
+    public void setAgreementDate(Timestamp agreementDate) {
         this.agreementDate = agreementDate;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param textData the textData to set
      */
-    private void setTextData(String textData) {
+    public void setTextData(String textData) {
         this.textData = textData;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param defaultCurrencyUomId the defaultCurrencyUomId to set
      */
-    private void setDefaultCurrencyUomId(String defaultCurrencyUomId) {
+    public void setDefaultCurrencyUomId(String defaultCurrencyUomId) {
         this.defaultCurrencyUomId = defaultCurrencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param fromPartyClassGroupId the fromPartyClassGroupId to set
      */
-    private void setFromPartyClassGroupId(String fromPartyClassGroupId) {
+    public void setFromPartyClassGroupId(String fromPartyClassGroupId) {
         this.fromPartyClassGroupId = fromPartyClassGroupId;
     }
     /**
      * Auto generated value setter.
      * @param toPartyClassGroupId the toPartyClassGroupId to set
      */
-    private void setToPartyClassGroupId(String toPartyClassGroupId) {
+    public void setToPartyClassGroupId(String toPartyClassGroupId) {
         this.toPartyClassGroupId = toPartyClassGroupId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
 

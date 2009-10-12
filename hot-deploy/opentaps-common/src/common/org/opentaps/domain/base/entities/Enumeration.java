@@ -235,6 +235,10 @@ fieldMapColumns.put("Enumeration", fields);
    
    private List<CustRequest> salesChannelCustRequests = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="TRANSFORM_ENUM_ID")
+   
+   private List<DataWarehouseTransform> dataWarehouseTransforms = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID1")
    
    private List<EncumbranceDetail> tag1EncumbranceDetails = null;
@@ -1171,6 +1175,17 @@ fieldMapColumns.put("Enumeration", fields);
             this.salesChannelCustRequests = getRelated(CustRequest.class, "SalesChannelCustRequest");
         }
         return this.salesChannelCustRequests;
+    }
+    /**
+     * Auto generated method that gets the related <code>DataWarehouseTransform</code> by the relation named <code>DataWarehouseTransform</code>.
+     * @return the list of <code>DataWarehouseTransform</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends DataWarehouseTransform> getDataWarehouseTransforms() throws RepositoryException {
+        if (this.dataWarehouseTransforms == null) {
+            this.dataWarehouseTransforms = getRelated(DataWarehouseTransform.class, "DataWarehouseTransform");
+        }
+        return this.dataWarehouseTransforms;
     }
     /**
      * Auto generated method that gets the related <code>EncumbranceDetail</code> by the relation named <code>tag1EncumbranceDetail</code>.
@@ -2574,6 +2589,13 @@ fieldMapColumns.put("Enumeration", fields);
     */
     public void setSalesChannelCustRequests(List<CustRequest> salesChannelCustRequests) {
         this.salesChannelCustRequests = salesChannelCustRequests;
+    }
+    /**
+     * Auto generated value setter.
+     * @param dataWarehouseTransforms the dataWarehouseTransforms to set
+    */
+    public void setDataWarehouseTransforms(List<DataWarehouseTransform> dataWarehouseTransforms) {
+        this.dataWarehouseTransforms = dataWarehouseTransforms;
     }
     /**
      * Auto generated value setter.

@@ -157,63 +157,63 @@ fieldMapColumns.put("WebslingerLayout", fields);
      * Auto generated value setter.
      * @param webslingerServerId the webslingerServerId to set
      */
-    private void setWebslingerServerId(String webslingerServerId) {
+    public void setWebslingerServerId(String webslingerServerId) {
         this.webslingerServerId = webslingerServerId;
     }
     /**
      * Auto generated value setter.
      * @param delegatorName the delegatorName to set
      */
-    private void setDelegatorName(String delegatorName) {
+    public void setDelegatorName(String delegatorName) {
         this.delegatorName = delegatorName;
     }
     /**
      * Auto generated value setter.
      * @param dispatcherName the dispatcherName to set
      */
-    private void setDispatcherName(String dispatcherName) {
+    public void setDispatcherName(String dispatcherName) {
         this.dispatcherName = dispatcherName;
     }
     /**
      * Auto generated value setter.
      * @param serverName the serverName to set
      */
-    private void setServerName(String serverName) {
+    public void setServerName(String serverName) {
         this.serverName = serverName;
     }
     /**
      * Auto generated value setter.
      * @param webSiteId the webSiteId to set
      */
-    private void setWebSiteId(String webSiteId) {
+    public void setWebSiteId(String webSiteId) {
         this.webSiteId = webSiteId;
     }
     /**
      * Auto generated value setter.
      * @param target the target to set
      */
-    private void setTarget(String target) {
+    public void setTarget(String target) {
         this.target = target;
     }
     /**
      * Auto generated value setter.
      * @param loadAtStart the loadAtStart to set
      */
-    private void setLoadAtStart(String loadAtStart) {
+    public void setLoadAtStart(String loadAtStart) {
         this.loadAtStart = loadAtStart;
     }
     /**
      * Auto generated value setter.
      * @param hostName the hostName to set
      */
-    private void setHostName(String hostName) {
+    public void setHostName(String hostName) {
         this.hostName = hostName;
     }
     /**
      * Auto generated value setter.
      * @param contextPath the contextPath to set
      */
-    private void setContextPath(String contextPath) {
+    public void setContextPath(String contextPath) {
         this.contextPath = contextPath;
     }
 

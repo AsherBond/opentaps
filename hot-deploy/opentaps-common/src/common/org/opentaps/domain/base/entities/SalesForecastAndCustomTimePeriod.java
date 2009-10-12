@@ -216,154 +216,154 @@ fieldMapColumns.put("SalesForecastAndCustomTimePeriod", fields);
      * Auto generated value setter.
      * @param salesForecastId the salesForecastId to set
      */
-    private void setSalesForecastId(String salesForecastId) {
+    public void setSalesForecastId(String salesForecastId) {
         this.salesForecastId = salesForecastId;
     }
     /**
      * Auto generated value setter.
      * @param parentSalesForecastId the parentSalesForecastId to set
      */
-    private void setParentSalesForecastId(String parentSalesForecastId) {
+    public void setParentSalesForecastId(String parentSalesForecastId) {
         this.parentSalesForecastId = parentSalesForecastId;
     }
     /**
      * Auto generated value setter.
      * @param organizationPartyId the organizationPartyId to set
      */
-    private void setOrganizationPartyId(String organizationPartyId) {
+    public void setOrganizationPartyId(String organizationPartyId) {
         this.organizationPartyId = organizationPartyId;
     }
     /**
      * Auto generated value setter.
      * @param internalPartyId the internalPartyId to set
      */
-    private void setInternalPartyId(String internalPartyId) {
+    public void setInternalPartyId(String internalPartyId) {
         this.internalPartyId = internalPartyId;
     }
     /**
      * Auto generated value setter.
      * @param customTimePeriodId the customTimePeriodId to set
      */
-    private void setCustomTimePeriodId(String customTimePeriodId) {
+    public void setCustomTimePeriodId(String customTimePeriodId) {
         this.customTimePeriodId = customTimePeriodId;
     }
     /**
      * Auto generated value setter.
      * @param currencyUomId the currencyUomId to set
      */
-    private void setCurrencyUomId(String currencyUomId) {
+    public void setCurrencyUomId(String currencyUomId) {
         this.currencyUomId = currencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param quotaAmount the quotaAmount to set
      */
-    private void setQuotaAmount(BigDecimal quotaAmount) {
+    public void setQuotaAmount(BigDecimal quotaAmount) {
         this.quotaAmount = quotaAmount;
     }
     /**
      * Auto generated value setter.
      * @param forecastAmount the forecastAmount to set
      */
-    private void setForecastAmount(BigDecimal forecastAmount) {
+    public void setForecastAmount(BigDecimal forecastAmount) {
         this.forecastAmount = forecastAmount;
     }
     /**
      * Auto generated value setter.
      * @param bestCaseAmount the bestCaseAmount to set
      */
-    private void setBestCaseAmount(BigDecimal bestCaseAmount) {
+    public void setBestCaseAmount(BigDecimal bestCaseAmount) {
         this.bestCaseAmount = bestCaseAmount;
     }
     /**
      * Auto generated value setter.
      * @param closedAmount the closedAmount to set
      */
-    private void setClosedAmount(BigDecimal closedAmount) {
+    public void setClosedAmount(BigDecimal closedAmount) {
         this.closedAmount = closedAmount;
     }
     /**
      * Auto generated value setter.
      * @param percentOfQuotaForecast the percentOfQuotaForecast to set
      */
-    private void setPercentOfQuotaForecast(BigDecimal percentOfQuotaForecast) {
+    public void setPercentOfQuotaForecast(BigDecimal percentOfQuotaForecast) {
         this.percentOfQuotaForecast = percentOfQuotaForecast;
     }
     /**
      * Auto generated value setter.
      * @param percentOfQuotaClosed the percentOfQuotaClosed to set
      */
-    private void setPercentOfQuotaClosed(BigDecimal percentOfQuotaClosed) {
+    public void setPercentOfQuotaClosed(BigDecimal percentOfQuotaClosed) {
         this.percentOfQuotaClosed = percentOfQuotaClosed;
     }
     /**
      * Auto generated value setter.
      * @param pipelineAmount the pipelineAmount to set
      */
-    private void setPipelineAmount(BigDecimal pipelineAmount) {
+    public void setPipelineAmount(BigDecimal pipelineAmount) {
         this.pipelineAmount = pipelineAmount;
     }
     /**
      * Auto generated value setter.
      * @param createdByUserLoginId the createdByUserLoginId to set
      */
-    private void setCreatedByUserLoginId(String createdByUserLoginId) {
+    public void setCreatedByUserLoginId(String createdByUserLoginId) {
         this.createdByUserLoginId = createdByUserLoginId;
     }
     /**
      * Auto generated value setter.
      * @param modifiedByUserLoginId the modifiedByUserLoginId to set
      */
-    private void setModifiedByUserLoginId(String modifiedByUserLoginId) {
+    public void setModifiedByUserLoginId(String modifiedByUserLoginId) {
         this.modifiedByUserLoginId = modifiedByUserLoginId;
     }
     /**
      * Auto generated value setter.
      * @param parentPeriodId the parentPeriodId to set
      */
-    private void setParentPeriodId(String parentPeriodId) {
+    public void setParentPeriodId(String parentPeriodId) {
         this.parentPeriodId = parentPeriodId;
     }
     /**
      * Auto generated value setter.
      * @param periodTypeId the periodTypeId to set
      */
-    private void setPeriodTypeId(String periodTypeId) {
+    public void setPeriodTypeId(String periodTypeId) {
         this.periodTypeId = periodTypeId;
     }
     /**
      * Auto generated value setter.
      * @param periodNum the periodNum to set
      */
-    private void setPeriodNum(Long periodNum) {
+    public void setPeriodNum(Long periodNum) {
         this.periodNum = periodNum;
     }
     /**
      * Auto generated value setter.
      * @param periodName the periodName to set
      */
-    private void setPeriodName(String periodName) {
+    public void setPeriodName(String periodName) {
         this.periodName = periodName;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Date fromDate) {
+    public void setFromDate(Date fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Date thruDate) {
+    public void setThruDate(Date thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param isClosed the isClosed to set
      */
-    private void setIsClosed(String isClosed) {
+    public void setIsClosed(String isClosed) {
         this.isClosed = isClosed;
     }
 

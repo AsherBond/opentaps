@@ -271,189 +271,189 @@ fieldMapColumns.put("SurveyResponseAndAnswer", fields);
      * Auto generated value setter.
      * @param surveyResponseId the surveyResponseId to set
      */
-    private void setSurveyResponseId(String surveyResponseId) {
+    public void setSurveyResponseId(String surveyResponseId) {
         this.surveyResponseId = surveyResponseId;
     }
     /**
      * Auto generated value setter.
      * @param surveyId the surveyId to set
      */
-    private void setSurveyId(String surveyId) {
+    public void setSurveyId(String surveyId) {
         this.surveyId = surveyId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param responseDate the responseDate to set
      */
-    private void setResponseDate(Timestamp responseDate) {
+    public void setResponseDate(Timestamp responseDate) {
         this.responseDate = responseDate;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedDate the lastModifiedDate to set
      */
-    private void setLastModifiedDate(Timestamp lastModifiedDate) {
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
     /**
      * Auto generated value setter.
      * @param referenceId the referenceId to set
      */
-    private void setReferenceId(String referenceId) {
+    public void setReferenceId(String referenceId) {
         this.referenceId = referenceId;
     }
     /**
      * Auto generated value setter.
      * @param generalFeedback the generalFeedback to set
      */
-    private void setGeneralFeedback(String generalFeedback) {
+    public void setGeneralFeedback(String generalFeedback) {
         this.generalFeedback = generalFeedback;
     }
     /**
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param orderItemSeqId the orderItemSeqId to set
      */
-    private void setOrderItemSeqId(String orderItemSeqId) {
+    public void setOrderItemSeqId(String orderItemSeqId) {
         this.orderItemSeqId = orderItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param surveyQuestionId the surveyQuestionId to set
      */
-    private void setSurveyQuestionId(String surveyQuestionId) {
+    public void setSurveyQuestionId(String surveyQuestionId) {
         this.surveyQuestionId = surveyQuestionId;
     }
     /**
      * Auto generated value setter.
      * @param surveyMultiRespColId the surveyMultiRespColId to set
      */
-    private void setSurveyMultiRespColId(String surveyMultiRespColId) {
+    public void setSurveyMultiRespColId(String surveyMultiRespColId) {
         this.surveyMultiRespColId = surveyMultiRespColId;
     }
     /**
      * Auto generated value setter.
      * @param surveyMultiRespId the surveyMultiRespId to set
      */
-    private void setSurveyMultiRespId(String surveyMultiRespId) {
+    public void setSurveyMultiRespId(String surveyMultiRespId) {
         this.surveyMultiRespId = surveyMultiRespId;
     }
     /**
      * Auto generated value setter.
      * @param booleanResponse the booleanResponse to set
      */
-    private void setBooleanResponse(String booleanResponse) {
+    public void setBooleanResponse(String booleanResponse) {
         this.booleanResponse = booleanResponse;
     }
     /**
      * Auto generated value setter.
      * @param currencyResponse the currencyResponse to set
      */
-    private void setCurrencyResponse(BigDecimal currencyResponse) {
+    public void setCurrencyResponse(BigDecimal currencyResponse) {
         this.currencyResponse = currencyResponse;
     }
     /**
      * Auto generated value setter.
      * @param floatResponse the floatResponse to set
      */
-    private void setFloatResponse(BigDecimal floatResponse) {
+    public void setFloatResponse(BigDecimal floatResponse) {
         this.floatResponse = floatResponse;
     }
     /**
      * Auto generated value setter.
      * @param numericResponse the numericResponse to set
      */
-    private void setNumericResponse(Long numericResponse) {
+    public void setNumericResponse(Long numericResponse) {
         this.numericResponse = numericResponse;
     }
     /**
      * Auto generated value setter.
      * @param textResponse the textResponse to set
      */
-    private void setTextResponse(String textResponse) {
+    public void setTextResponse(String textResponse) {
         this.textResponse = textResponse;
     }
     /**
      * Auto generated value setter.
      * @param surveyOptionSeqId the surveyOptionSeqId to set
      */
-    private void setSurveyOptionSeqId(String surveyOptionSeqId) {
+    public void setSurveyOptionSeqId(String surveyOptionSeqId) {
         this.surveyOptionSeqId = surveyOptionSeqId;
     }
     /**
      * Auto generated value setter.
      * @param contentId the contentId to set
      */
-    private void setContentId(String contentId) {
+    public void setContentId(String contentId) {
         this.contentId = contentId;
     }
     /**
      * Auto generated value setter.
      * @param answeredDate the answeredDate to set
      */
-    private void setAnsweredDate(Timestamp answeredDate) {
+    public void setAnsweredDate(Timestamp answeredDate) {
         this.answeredDate = answeredDate;
     }
     /**
      * Auto generated value setter.
      * @param amountBase the amountBase to set
      */
-    private void setAmountBase(BigDecimal amountBase) {
+    public void setAmountBase(BigDecimal amountBase) {
         this.amountBase = amountBase;
     }
     /**
      * Auto generated value setter.
      * @param amountBaseUomId the amountBaseUomId to set
      */
-    private void setAmountBaseUomId(String amountBaseUomId) {
+    public void setAmountBaseUomId(String amountBaseUomId) {
         this.amountBaseUomId = amountBaseUomId;
     }
     /**
      * Auto generated value setter.
      * @param weightFactor the weightFactor to set
      */
-    private void setWeightFactor(BigDecimal weightFactor) {
+    public void setWeightFactor(BigDecimal weightFactor) {
         this.weightFactor = weightFactor;
     }
     /**
      * Auto generated value setter.
      * @param duration the duration to set
      */
-    private void setDuration(Long duration) {
+    public void setDuration(Long duration) {
         this.duration = duration;
     }
     /**
      * Auto generated value setter.
      * @param durationUomId the durationUomId to set
      */
-    private void setDurationUomId(String durationUomId) {
+    public void setDurationUomId(String durationUomId) {
         this.durationUomId = durationUomId;
     }
     /**
      * Auto generated value setter.
      * @param sequenceNum the sequenceNum to set
      */
-    private void setSequenceNum(Long sequenceNum) {
+    public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
 

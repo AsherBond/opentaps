@@ -198,6 +198,10 @@ fieldMapColumns.put("UserLogin", fields);
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN")
    
    private List<DataResource> lastModifiedByDataResources = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="USER_LOGIN_ID")
+   
+   private List<DataWarehouseTransform> dataWarehouseTransforms = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="userLogin", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="USER_LOGIN_ID")
    
@@ -866,6 +870,17 @@ fieldMapColumns.put("UserLogin", fields);
             this.lastModifiedByDataResources = getRelated(DataResource.class, "LastModifiedByDataResource");
         }
         return this.lastModifiedByDataResources;
+    }
+    /**
+     * Auto generated method that gets the related <code>DataWarehouseTransform</code> by the relation named <code>DataWarehouseTransform</code>.
+     * @return the list of <code>DataWarehouseTransform</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends DataWarehouseTransform> getDataWarehouseTransforms() throws RepositoryException {
+        if (this.dataWarehouseTransforms == null) {
+            this.dataWarehouseTransforms = getRelated(DataWarehouseTransform.class, "DataWarehouseTransform");
+        }
+        return this.dataWarehouseTransforms;
     }
     /**
      * Auto generated method that gets the related <code>EntityViewHistory</code> by the relation named <code>EntityViewHistory</code>.
@@ -1577,6 +1592,13 @@ fieldMapColumns.put("UserLogin", fields);
     */
     public void setLastModifiedByDataResources(List<DataResource> lastModifiedByDataResources) {
         this.lastModifiedByDataResources = lastModifiedByDataResources;
+    }
+    /**
+     * Auto generated value setter.
+     * @param dataWarehouseTransforms the dataWarehouseTransforms to set
+    */
+    public void setDataWarehouseTransforms(List<DataWarehouseTransform> dataWarehouseTransforms) {
+        this.dataWarehouseTransforms = dataWarehouseTransforms;
     }
     /**
      * Auto generated value setter.

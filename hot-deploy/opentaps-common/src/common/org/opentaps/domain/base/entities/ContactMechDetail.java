@@ -203,140 +203,140 @@ fieldMapColumns.put("ContactMechDetail", fields);
      * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
-    private void setContactMechId(String contactMechId) {
+    public void setContactMechId(String contactMechId) {
         this.contactMechId = contactMechId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechTypeId the contactMechTypeId to set
      */
-    private void setContactMechTypeId(String contactMechTypeId) {
+    public void setContactMechTypeId(String contactMechTypeId) {
         this.contactMechTypeId = contactMechTypeId;
     }
     /**
      * Auto generated value setter.
      * @param infoString the infoString to set
      */
-    private void setInfoString(String infoString) {
+    public void setInfoString(String infoString) {
         this.infoString = infoString;
     }
     /**
      * Auto generated value setter.
      * @param paToName the paToName to set
      */
-    private void setPaToName(String paToName) {
+    public void setPaToName(String paToName) {
         this.paToName = paToName;
     }
     /**
      * Auto generated value setter.
      * @param paAttnName the paAttnName to set
      */
-    private void setPaAttnName(String paAttnName) {
+    public void setPaAttnName(String paAttnName) {
         this.paAttnName = paAttnName;
     }
     /**
      * Auto generated value setter.
      * @param paAddress1 the paAddress1 to set
      */
-    private void setPaAddress1(String paAddress1) {
+    public void setPaAddress1(String paAddress1) {
         this.paAddress1 = paAddress1;
     }
     /**
      * Auto generated value setter.
      * @param paAddress2 the paAddress2 to set
      */
-    private void setPaAddress2(String paAddress2) {
+    public void setPaAddress2(String paAddress2) {
         this.paAddress2 = paAddress2;
     }
     /**
      * Auto generated value setter.
      * @param paDirections the paDirections to set
      */
-    private void setPaDirections(String paDirections) {
+    public void setPaDirections(String paDirections) {
         this.paDirections = paDirections;
     }
     /**
      * Auto generated value setter.
      * @param paCity the paCity to set
      */
-    private void setPaCity(String paCity) {
+    public void setPaCity(String paCity) {
         this.paCity = paCity;
     }
     /**
      * Auto generated value setter.
      * @param paPostalCode the paPostalCode to set
      */
-    private void setPaPostalCode(String paPostalCode) {
+    public void setPaPostalCode(String paPostalCode) {
         this.paPostalCode = paPostalCode;
     }
     /**
      * Auto generated value setter.
      * @param paPostalCodeExt the paPostalCodeExt to set
      */
-    private void setPaPostalCodeExt(String paPostalCodeExt) {
+    public void setPaPostalCodeExt(String paPostalCodeExt) {
         this.paPostalCodeExt = paPostalCodeExt;
     }
     /**
      * Auto generated value setter.
      * @param paCountryGeoId the paCountryGeoId to set
      */
-    private void setPaCountryGeoId(String paCountryGeoId) {
+    public void setPaCountryGeoId(String paCountryGeoId) {
         this.paCountryGeoId = paCountryGeoId;
     }
     /**
      * Auto generated value setter.
      * @param paStateProvinceGeoId the paStateProvinceGeoId to set
      */
-    private void setPaStateProvinceGeoId(String paStateProvinceGeoId) {
+    public void setPaStateProvinceGeoId(String paStateProvinceGeoId) {
         this.paStateProvinceGeoId = paStateProvinceGeoId;
     }
     /**
      * Auto generated value setter.
      * @param paCountyGeoId the paCountyGeoId to set
      */
-    private void setPaCountyGeoId(String paCountyGeoId) {
+    public void setPaCountyGeoId(String paCountyGeoId) {
         this.paCountyGeoId = paCountyGeoId;
     }
     /**
      * Auto generated value setter.
      * @param paPostalCodeGeoId the paPostalCodeGeoId to set
      */
-    private void setPaPostalCodeGeoId(String paPostalCodeGeoId) {
+    public void setPaPostalCodeGeoId(String paPostalCodeGeoId) {
         this.paPostalCodeGeoId = paPostalCodeGeoId;
     }
     /**
      * Auto generated value setter.
      * @param paGeoPointId the paGeoPointId to set
      */
-    private void setPaGeoPointId(String paGeoPointId) {
+    public void setPaGeoPointId(String paGeoPointId) {
         this.paGeoPointId = paGeoPointId;
     }
     /**
      * Auto generated value setter.
      * @param tnCountryCode the tnCountryCode to set
      */
-    private void setTnCountryCode(String tnCountryCode) {
+    public void setTnCountryCode(String tnCountryCode) {
         this.tnCountryCode = tnCountryCode;
     }
     /**
      * Auto generated value setter.
      * @param tnAreaCode the tnAreaCode to set
      */
-    private void setTnAreaCode(String tnAreaCode) {
+    public void setTnAreaCode(String tnAreaCode) {
         this.tnAreaCode = tnAreaCode;
     }
     /**
      * Auto generated value setter.
      * @param tnContactNumber the tnContactNumber to set
      */
-    private void setTnContactNumber(String tnContactNumber) {
+    public void setTnContactNumber(String tnContactNumber) {
         this.tnContactNumber = tnContactNumber;
     }
     /**
      * Auto generated value setter.
      * @param tnAskForName the tnAskForName to set
      */
-    private void setTnAskForName(String tnAskForName) {
+    public void setTnAskForName(String tnAskForName) {
         this.tnAskForName = tnAskForName;
     }
 

@@ -179,105 +179,105 @@ fieldMapColumns.put("UspsContactListSortAndPostalAddressView", fields);
      * Auto generated value setter.
      * @param address1 the address1 to set
      */
-    private void setAddress1(String address1) {
+    public void setAddress1(String address1) {
         this.address1 = address1;
     }
     /**
      * Auto generated value setter.
      * @param address2 the address2 to set
      */
-    private void setAddress2(String address2) {
+    public void setAddress2(String address2) {
         this.address2 = address2;
     }
     /**
      * Auto generated value setter.
      * @param toName the toName to set
      */
-    private void setToName(String toName) {
+    public void setToName(String toName) {
         this.toName = toName;
     }
     /**
      * Auto generated value setter.
      * @param attnName the attnName to set
      */
-    private void setAttnName(String attnName) {
+    public void setAttnName(String attnName) {
         this.attnName = attnName;
     }
     /**
      * Auto generated value setter.
      * @param city the city to set
      */
-    private void setCity(String city) {
+    public void setCity(String city) {
         this.city = city;
     }
     /**
      * Auto generated value setter.
      * @param postalCode the postalCode to set
      */
-    private void setPostalCode(String postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
     /**
      * Auto generated value setter.
      * @param stateProvinceGeoId the stateProvinceGeoId to set
      */
-    private void setStateProvinceGeoId(String stateProvinceGeoId) {
+    public void setStateProvinceGeoId(String stateProvinceGeoId) {
         this.stateProvinceGeoId = stateProvinceGeoId;
     }
     /**
      * Auto generated value setter.
      * @param uspsContactListSortId the uspsContactListSortId to set
      */
-    private void setUspsContactListSortId(String uspsContactListSortId) {
+    public void setUspsContactListSortId(String uspsContactListSortId) {
         this.uspsContactListSortId = uspsContactListSortId;
     }
     /**
      * Auto generated value setter.
      * @param contactListId the contactListId to set
      */
-    private void setContactListId(String contactListId) {
+    public void setContactListId(String contactListId) {
         this.contactListId = contactListId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
-    private void setContactMechId(String contactMechId) {
+    public void setContactMechId(String contactMechId) {
         this.contactMechId = contactMechId;
     }
     /**
      * Auto generated value setter.
      * @param zip5 the zip5 to set
      */
-    private void setZip5(String zip5) {
+    public void setZip5(String zip5) {
         this.zip5 = zip5;
     }
     /**
      * Auto generated value setter.
      * @param zip3 the zip3 to set
      */
-    private void setZip3(String zip3) {
+    public void setZip3(String zip3) {
         this.zip3 = zip3;
     }
     /**
      * Auto generated value setter.
      * @param bmcCode the bmcCode to set
      */
-    private void setBmcCode(String bmcCode) {
+    public void setBmcCode(String bmcCode) {
         this.bmcCode = bmcCode;
     }
     /**
      * Auto generated value setter.
      * @param sortResult the sortResult to set
      */
-    private void setSortResult(String sortResult) {
+    public void setSortResult(String sortResult) {
         this.sortResult = sortResult;
     }
     /**
      * Auto generated value setter.
      * @param processedTimestamp the processedTimestamp to set
      */
-    private void setProcessedTimestamp(Timestamp processedTimestamp) {
+    public void setProcessedTimestamp(Timestamp processedTimestamp) {
         this.processedTimestamp = processedTimestamp;
     }
 

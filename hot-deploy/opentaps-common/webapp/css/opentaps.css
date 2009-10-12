@@ -1073,6 +1073,16 @@ table.shortcutHelp td.shortcutKey {
    padding-right:2em;
 }
 
+.tundra .dijitDialogTitleBar {
+   background:#CCC;
+   outline:none;
+}
+
+.shortcutGroup {
+   background:#CCC;
+   text-align:center;
+}
+
 /* Ofbiz Pager */
 
 .nav-pager {

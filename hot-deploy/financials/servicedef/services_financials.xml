@@ -368,6 +368,7 @@
         <implements service="accountingTagsInterface"/>
         <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
         <attribute name="accountingTagUsage" mode="IN" type="String" optional="true" default-value="BALANCE_REPORTS"/>
+        <attribute name="includeBudgetIncome" mode="IN" type="String" optional="true" default-value="N"/>
         <attribute name="fromDate" mode="IN" type="Timestamp" optional="false"/>
         <attribute name="thruDate" mode="IN" type="Timestamp" optional="false"/>
         <attribute name="reportData" mode="OUT" type="java.util.List"/>

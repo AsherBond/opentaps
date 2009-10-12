@@ -119,21 +119,21 @@ fieldMapColumns.put("SalesOpportunityEstimatedAmountTotalByStage", fields);
      * Auto generated value setter.
      * @param opportunityStageId the opportunityStageId to set
      */
-    private void setOpportunityStageId(String opportunityStageId) {
+    public void setOpportunityStageId(String opportunityStageId) {
         this.opportunityStageId = opportunityStageId;
     }
     /**
      * Auto generated value setter.
      * @param currencyUomId the currencyUomId to set
      */
-    private void setCurrencyUomId(String currencyUomId) {
+    public void setCurrencyUomId(String currencyUomId) {
         this.currencyUomId = currencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param estimatedAmountTotal the estimatedAmountTotal to set
      */
-    private void setEstimatedAmountTotal(BigDecimal estimatedAmountTotal) {
+    public void setEstimatedAmountTotal(BigDecimal estimatedAmountTotal) {
         this.estimatedAmountTotal = estimatedAmountTotal;
     }
 

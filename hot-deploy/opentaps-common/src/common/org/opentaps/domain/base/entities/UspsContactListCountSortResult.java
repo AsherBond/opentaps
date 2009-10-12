@@ -125,28 +125,28 @@ fieldMapColumns.put("UspsContactListCountSortResult", fields);
      * Auto generated value setter.
      * @param contactListId the contactListId to set
      */
-    private void setContactListId(String contactListId) {
+    public void setContactListId(String contactListId) {
         this.contactListId = contactListId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
-    private void setContactMechId(Long contactMechId) {
+    public void setContactMechId(Long contactMechId) {
         this.contactMechId = contactMechId;
     }
     /**
      * Auto generated value setter.
      * @param sortResult the sortResult to set
      */
-    private void setSortResult(String sortResult) {
+    public void setSortResult(String sortResult) {
         this.sortResult = sortResult;
     }
     /**
      * Auto generated value setter.
      * @param processedTimestamp the processedTimestamp to set
      */
-    private void setProcessedTimestamp(Timestamp processedTimestamp) {
+    public void setProcessedTimestamp(Timestamp processedTimestamp) {
         this.processedTimestamp = processedTimestamp;
     }
 

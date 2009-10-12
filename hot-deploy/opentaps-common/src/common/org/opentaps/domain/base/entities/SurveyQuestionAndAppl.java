@@ -238,140 +238,140 @@ fieldMapColumns.put("SurveyQuestionAndAppl", fields);
      * Auto generated value setter.
      * @param surveyQuestionId the surveyQuestionId to set
      */
-    private void setSurveyQuestionId(String surveyQuestionId) {
+    public void setSurveyQuestionId(String surveyQuestionId) {
         this.surveyQuestionId = surveyQuestionId;
     }
     /**
      * Auto generated value setter.
      * @param surveyQuestionCategoryId the surveyQuestionCategoryId to set
      */
-    private void setSurveyQuestionCategoryId(String surveyQuestionCategoryId) {
+    public void setSurveyQuestionCategoryId(String surveyQuestionCategoryId) {
         this.surveyQuestionCategoryId = surveyQuestionCategoryId;
     }
     /**
      * Auto generated value setter.
      * @param surveyQuestionTypeId the surveyQuestionTypeId to set
      */
-    private void setSurveyQuestionTypeId(String surveyQuestionTypeId) {
+    public void setSurveyQuestionTypeId(String surveyQuestionTypeId) {
         this.surveyQuestionTypeId = surveyQuestionTypeId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param question the question to set
      */
-    private void setQuestion(String question) {
+    public void setQuestion(String question) {
         this.question = question;
     }
     /**
      * Auto generated value setter.
      * @param hint the hint to set
      */
-    private void setHint(String hint) {
+    public void setHint(String hint) {
         this.hint = hint;
     }
     /**
      * Auto generated value setter.
      * @param enumTypeId the enumTypeId to set
      */
-    private void setEnumTypeId(String enumTypeId) {
+    public void setEnumTypeId(String enumTypeId) {
         this.enumTypeId = enumTypeId;
     }
     /**
      * Auto generated value setter.
      * @param geoId the geoId to set
      */
-    private void setGeoId(String geoId) {
+    public void setGeoId(String geoId) {
         this.geoId = geoId;
     }
     /**
      * Auto generated value setter.
      * @param formatString the formatString to set
      */
-    private void setFormatString(String formatString) {
+    public void setFormatString(String formatString) {
         this.formatString = formatString;
     }
     /**
      * Auto generated value setter.
      * @param surveyId the surveyId to set
      */
-    private void setSurveyId(String surveyId) {
+    public void setSurveyId(String surveyId) {
         this.surveyId = surveyId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param surveyPageSeqId the surveyPageSeqId to set
      */
-    private void setSurveyPageSeqId(String surveyPageSeqId) {
+    public void setSurveyPageSeqId(String surveyPageSeqId) {
         this.surveyPageSeqId = surveyPageSeqId;
     }
     /**
      * Auto generated value setter.
      * @param surveyMultiRespId the surveyMultiRespId to set
      */
-    private void setSurveyMultiRespId(String surveyMultiRespId) {
+    public void setSurveyMultiRespId(String surveyMultiRespId) {
         this.surveyMultiRespId = surveyMultiRespId;
     }
     /**
      * Auto generated value setter.
      * @param surveyMultiRespColId the surveyMultiRespColId to set
      */
-    private void setSurveyMultiRespColId(String surveyMultiRespColId) {
+    public void setSurveyMultiRespColId(String surveyMultiRespColId) {
         this.surveyMultiRespColId = surveyMultiRespColId;
     }
     /**
      * Auto generated value setter.
      * @param requiredField the requiredField to set
      */
-    private void setRequiredField(String requiredField) {
+    public void setRequiredField(String requiredField) {
         this.requiredField = requiredField;
     }
     /**
      * Auto generated value setter.
      * @param sequenceNum the sequenceNum to set
      */
-    private void setSequenceNum(Long sequenceNum) {
+    public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
     /**
      * Auto generated value setter.
      * @param externalFieldRef the externalFieldRef to set
      */
-    private void setExternalFieldRef(String externalFieldRef) {
+    public void setExternalFieldRef(String externalFieldRef) {
         this.externalFieldRef = externalFieldRef;
     }
     /**
      * Auto generated value setter.
      * @param withSurveyQuestionId the withSurveyQuestionId to set
      */
-    private void setWithSurveyQuestionId(String withSurveyQuestionId) {
+    public void setWithSurveyQuestionId(String withSurveyQuestionId) {
         this.withSurveyQuestionId = withSurveyQuestionId;
     }
     /**
      * Auto generated value setter.
      * @param withSurveyOptionSeqId the withSurveyOptionSeqId to set
      */
-    private void setWithSurveyOptionSeqId(String withSurveyOptionSeqId) {
+    public void setWithSurveyOptionSeqId(String withSurveyOptionSeqId) {
         this.withSurveyOptionSeqId = withSurveyOptionSeqId;
     }
 

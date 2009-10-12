@@ -607,700 +607,700 @@ fieldMapColumns.put("PartyFromByRelnAndContactInfo", fields);
      * Auto generated value setter.
      * @param relationshipStatusId the relationshipStatusId to set
      */
-    private void setRelationshipStatusId(String relationshipStatusId) {
+    public void setRelationshipStatusId(String relationshipStatusId) {
         this.relationshipStatusId = relationshipStatusId;
     }
     /**
      * Auto generated value setter.
      * @param partyContactMechFromDate the partyContactMechFromDate to set
      */
-    private void setPartyContactMechFromDate(Timestamp partyContactMechFromDate) {
+    public void setPartyContactMechFromDate(Timestamp partyContactMechFromDate) {
         this.partyContactMechFromDate = partyContactMechFromDate;
     }
     /**
      * Auto generated value setter.
      * @param partyContactMechThruDate the partyContactMechThruDate to set
      */
-    private void setPartyContactMechThruDate(Timestamp partyContactMechThruDate) {
+    public void setPartyContactMechThruDate(Timestamp partyContactMechThruDate) {
         this.partyContactMechThruDate = partyContactMechThruDate;
     }
     /**
      * Auto generated value setter.
      * @param extension the extension to set
      */
-    private void setExtension(String extension) {
+    public void setExtension(String extension) {
         this.extension = extension;
     }
     /**
      * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
-    private void setContactMechId(String contactMechId) {
+    public void setContactMechId(String contactMechId) {
         this.contactMechId = contactMechId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechTypeId the contactMechTypeId to set
      */
-    private void setContactMechTypeId(String contactMechTypeId) {
+    public void setContactMechTypeId(String contactMechTypeId) {
         this.contactMechTypeId = contactMechTypeId;
     }
     /**
      * Auto generated value setter.
      * @param infoString the infoString to set
      */
-    private void setInfoString(String infoString) {
+    public void setInfoString(String infoString) {
         this.infoString = infoString;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param partyTypeId the partyTypeId to set
      */
-    private void setPartyTypeId(String partyTypeId) {
+    public void setPartyTypeId(String partyTypeId) {
         this.partyTypeId = partyTypeId;
     }
     /**
      * Auto generated value setter.
      * @param externalId the externalId to set
      */
-    private void setExternalId(String externalId) {
+    public void setExternalId(String externalId) {
         this.externalId = externalId;
     }
     /**
      * Auto generated value setter.
      * @param preferredCurrencyUomId the preferredCurrencyUomId to set
      */
-    private void setPreferredCurrencyUomId(String preferredCurrencyUomId) {
+    public void setPreferredCurrencyUomId(String preferredCurrencyUomId) {
         this.preferredCurrencyUomId = preferredCurrencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param createdDate the createdDate to set
      */
-    private void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
     /**
      * Auto generated value setter.
      * @param createdByUserLogin the createdByUserLogin to set
      */
-    private void setCreatedByUserLogin(String createdByUserLogin) {
+    public void setCreatedByUserLogin(String createdByUserLogin) {
         this.createdByUserLogin = createdByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedDate the lastModifiedDate to set
      */
-    private void setLastModifiedDate(Timestamp lastModifiedDate) {
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedByUserLogin the lastModifiedByUserLogin to set
      */
-    private void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
+    public void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
         this.lastModifiedByUserLogin = lastModifiedByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param dataSourceId the dataSourceId to set
      */
-    private void setDataSourceId(String dataSourceId) {
+    public void setDataSourceId(String dataSourceId) {
         this.dataSourceId = dataSourceId;
     }
     /**
      * Auto generated value setter.
      * @param isUnread the isUnread to set
      */
-    private void setIsUnread(String isUnread) {
+    public void setIsUnread(String isUnread) {
         this.isUnread = isUnread;
     }
     /**
      * Auto generated value setter.
      * @param salutation the salutation to set
      */
-    private void setSalutation(String salutation) {
+    public void setSalutation(String salutation) {
         this.salutation = salutation;
     }
     /**
      * Auto generated value setter.
      * @param firstName the firstName to set
      */
-    private void setFirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
     /**
      * Auto generated value setter.
      * @param middleName the middleName to set
      */
-    private void setMiddleName(String middleName) {
+    public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
     /**
      * Auto generated value setter.
      * @param lastName the lastName to set
      */
-    private void setLastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
     /**
      * Auto generated value setter.
      * @param personalTitle the personalTitle to set
      */
-    private void setPersonalTitle(String personalTitle) {
+    public void setPersonalTitle(String personalTitle) {
         this.personalTitle = personalTitle;
     }
     /**
      * Auto generated value setter.
      * @param suffix the suffix to set
      */
-    private void setSuffix(String suffix) {
+    public void setSuffix(String suffix) {
         this.suffix = suffix;
     }
     /**
      * Auto generated value setter.
      * @param nickname the nickname to set
      */
-    private void setNickname(String nickname) {
+    public void setNickname(String nickname) {
         this.nickname = nickname;
     }
     /**
      * Auto generated value setter.
      * @param firstNameLocal the firstNameLocal to set
      */
-    private void setFirstNameLocal(String firstNameLocal) {
+    public void setFirstNameLocal(String firstNameLocal) {
         this.firstNameLocal = firstNameLocal;
     }
     /**
      * Auto generated value setter.
      * @param middleNameLocal the middleNameLocal to set
      */
-    private void setMiddleNameLocal(String middleNameLocal) {
+    public void setMiddleNameLocal(String middleNameLocal) {
         this.middleNameLocal = middleNameLocal;
     }
     /**
      * Auto generated value setter.
      * @param lastNameLocal the lastNameLocal to set
      */
-    private void setLastNameLocal(String lastNameLocal) {
+    public void setLastNameLocal(String lastNameLocal) {
         this.lastNameLocal = lastNameLocal;
     }
     /**
      * Auto generated value setter.
      * @param otherLocal the otherLocal to set
      */
-    private void setOtherLocal(String otherLocal) {
+    public void setOtherLocal(String otherLocal) {
         this.otherLocal = otherLocal;
     }
     /**
      * Auto generated value setter.
      * @param memberId the memberId to set
      */
-    private void setMemberId(String memberId) {
+    public void setMemberId(String memberId) {
         this.memberId = memberId;
     }
     /**
      * Auto generated value setter.
      * @param gender the gender to set
      */
-    private void setGender(String gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
     /**
      * Auto generated value setter.
      * @param birthDate the birthDate to set
      */
-    private void setBirthDate(Date birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
     /**
      * Auto generated value setter.
      * @param height the height to set
      */
-    private void setHeight(BigDecimal height) {
+    public void setHeight(BigDecimal height) {
         this.height = height;
     }
     /**
      * Auto generated value setter.
      * @param weight the weight to set
      */
-    private void setWeight(BigDecimal weight) {
+    public void setWeight(BigDecimal weight) {
         this.weight = weight;
     }
     /**
      * Auto generated value setter.
      * @param mothersMaidenName the mothersMaidenName to set
      */
-    private void setMothersMaidenName(String mothersMaidenName) {
+    public void setMothersMaidenName(String mothersMaidenName) {
         this.mothersMaidenName = mothersMaidenName;
     }
     /**
      * Auto generated value setter.
      * @param maritalStatus the maritalStatus to set
      */
-    private void setMaritalStatus(String maritalStatus) {
+    public void setMaritalStatus(String maritalStatus) {
         this.maritalStatus = maritalStatus;
     }
     /**
      * Auto generated value setter.
      * @param socialSecurityNumber the socialSecurityNumber to set
      */
-    private void setSocialSecurityNumber(String socialSecurityNumber) {
+    public void setSocialSecurityNumber(String socialSecurityNumber) {
         this.socialSecurityNumber = socialSecurityNumber;
     }
     /**
      * Auto generated value setter.
      * @param passportNumber the passportNumber to set
      */
-    private void setPassportNumber(String passportNumber) {
+    public void setPassportNumber(String passportNumber) {
         this.passportNumber = passportNumber;
     }
     /**
      * Auto generated value setter.
      * @param passportExpireDate the passportExpireDate to set
      */
-    private void setPassportExpireDate(Date passportExpireDate) {
+    public void setPassportExpireDate(Date passportExpireDate) {
         this.passportExpireDate = passportExpireDate;
     }
     /**
      * Auto generated value setter.
      * @param totalYearsWorkExperience the totalYearsWorkExperience to set
      */
-    private void setTotalYearsWorkExperience(BigDecimal totalYearsWorkExperience) {
+    public void setTotalYearsWorkExperience(BigDecimal totalYearsWorkExperience) {
         this.totalYearsWorkExperience = totalYearsWorkExperience;
     }
     /**
      * Auto generated value setter.
      * @param employmentStatusEnumId the employmentStatusEnumId to set
      */
-    private void setEmploymentStatusEnumId(String employmentStatusEnumId) {
+    public void setEmploymentStatusEnumId(String employmentStatusEnumId) {
         this.employmentStatusEnumId = employmentStatusEnumId;
     }
     /**
      * Auto generated value setter.
      * @param residenceStatusEnumId the residenceStatusEnumId to set
      */
-    private void setResidenceStatusEnumId(String residenceStatusEnumId) {
+    public void setResidenceStatusEnumId(String residenceStatusEnumId) {
         this.residenceStatusEnumId = residenceStatusEnumId;
     }
     /**
      * Auto generated value setter.
      * @param occupation the occupation to set
      */
-    private void setOccupation(String occupation) {
+    public void setOccupation(String occupation) {
         this.occupation = occupation;
     }
     /**
      * Auto generated value setter.
      * @param yearsWithEmployer the yearsWithEmployer to set
      */
-    private void setYearsWithEmployer(Long yearsWithEmployer) {
+    public void setYearsWithEmployer(Long yearsWithEmployer) {
         this.yearsWithEmployer = yearsWithEmployer;
     }
     /**
      * Auto generated value setter.
      * @param monthsWithEmployer the monthsWithEmployer to set
      */
-    private void setMonthsWithEmployer(Long monthsWithEmployer) {
+    public void setMonthsWithEmployer(Long monthsWithEmployer) {
         this.monthsWithEmployer = monthsWithEmployer;
     }
     /**
      * Auto generated value setter.
      * @param existingCustomer the existingCustomer to set
      */
-    private void setExistingCustomer(String existingCustomer) {
+    public void setExistingCustomer(String existingCustomer) {
         this.existingCustomer = existingCustomer;
     }
     /**
      * Auto generated value setter.
      * @param parentPartyId the parentPartyId to set
      */
-    private void setParentPartyId(String parentPartyId) {
+    public void setParentPartyId(String parentPartyId) {
         this.parentPartyId = parentPartyId;
     }
     /**
      * Auto generated value setter.
      * @param departmentName the departmentName to set
      */
-    private void setDepartmentName(String departmentName) {
+    public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
     }
     /**
      * Auto generated value setter.
      * @param generalProfTitle the generalProfTitle to set
      */
-    private void setGeneralProfTitle(String generalProfTitle) {
+    public void setGeneralProfTitle(String generalProfTitle) {
         this.generalProfTitle = generalProfTitle;
     }
     /**
      * Auto generated value setter.
      * @param companyName the companyName to set
      */
-    private void setCompanyName(String companyName) {
+    public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
     /**
      * Auto generated value setter.
      * @param companyNameLocal the companyNameLocal to set
      */
-    private void setCompanyNameLocal(String companyNameLocal) {
+    public void setCompanyNameLocal(String companyNameLocal) {
         this.companyNameLocal = companyNameLocal;
     }
     /**
      * Auto generated value setter.
      * @param annualRevenue the annualRevenue to set
      */
-    private void setAnnualRevenue(BigDecimal annualRevenue) {
+    public void setAnnualRevenue(BigDecimal annualRevenue) {
         this.annualRevenue = annualRevenue;
     }
     /**
      * Auto generated value setter.
      * @param currencyUomId the currencyUomId to set
      */
-    private void setCurrencyUomId(String currencyUomId) {
+    public void setCurrencyUomId(String currencyUomId) {
         this.currencyUomId = currencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param numberEmployees the numberEmployees to set
      */
-    private void setNumberEmployees(Long numberEmployees) {
+    public void setNumberEmployees(Long numberEmployees) {
         this.numberEmployees = numberEmployees;
     }
     /**
      * Auto generated value setter.
      * @param industryEnumId the industryEnumId to set
      */
-    private void setIndustryEnumId(String industryEnumId) {
+    public void setIndustryEnumId(String industryEnumId) {
         this.industryEnumId = industryEnumId;
     }
     /**
      * Auto generated value setter.
      * @param ownershipEnumId the ownershipEnumId to set
      */
-    private void setOwnershipEnumId(String ownershipEnumId) {
+    public void setOwnershipEnumId(String ownershipEnumId) {
         this.ownershipEnumId = ownershipEnumId;
     }
     /**
      * Auto generated value setter.
      * @param sicCode the sicCode to set
      */
-    private void setSicCode(String sicCode) {
+    public void setSicCode(String sicCode) {
         this.sicCode = sicCode;
     }
     /**
      * Auto generated value setter.
      * @param tickerSymbol the tickerSymbol to set
      */
-    private void setTickerSymbol(String tickerSymbol) {
+    public void setTickerSymbol(String tickerSymbol) {
         this.tickerSymbol = tickerSymbol;
     }
     /**
      * Auto generated value setter.
      * @param importantNote the importantNote to set
      */
-    private void setImportantNote(String importantNote) {
+    public void setImportantNote(String importantNote) {
         this.importantNote = importantNote;
     }
     /**
      * Auto generated value setter.
      * @param primaryPostalAddressId the primaryPostalAddressId to set
      */
-    private void setPrimaryPostalAddressId(String primaryPostalAddressId) {
+    public void setPrimaryPostalAddressId(String primaryPostalAddressId) {
         this.primaryPostalAddressId = primaryPostalAddressId;
     }
     /**
      * Auto generated value setter.
      * @param primaryTelecomNumberId the primaryTelecomNumberId to set
      */
-    private void setPrimaryTelecomNumberId(String primaryTelecomNumberId) {
+    public void setPrimaryTelecomNumberId(String primaryTelecomNumberId) {
         this.primaryTelecomNumberId = primaryTelecomNumberId;
     }
     /**
      * Auto generated value setter.
      * @param primaryEmailId the primaryEmailId to set
      */
-    private void setPrimaryEmailId(String primaryEmailId) {
+    public void setPrimaryEmailId(String primaryEmailId) {
         this.primaryEmailId = primaryEmailId;
     }
     /**
      * Auto generated value setter.
      * @param groupName the groupName to set
      */
-    private void setGroupName(String groupName) {
+    public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
     /**
      * Auto generated value setter.
      * @param groupNameLocal the groupNameLocal to set
      */
-    private void setGroupNameLocal(String groupNameLocal) {
+    public void setGroupNameLocal(String groupNameLocal) {
         this.groupNameLocal = groupNameLocal;
     }
     /**
      * Auto generated value setter.
      * @param officeSiteName the officeSiteName to set
      */
-    private void setOfficeSiteName(String officeSiteName) {
+    public void setOfficeSiteName(String officeSiteName) {
         this.officeSiteName = officeSiteName;
     }
     /**
      * Auto generated value setter.
      * @param numEmployees the numEmployees to set
      */
-    private void setNumEmployees(Long numEmployees) {
+    public void setNumEmployees(Long numEmployees) {
         this.numEmployees = numEmployees;
     }
     /**
      * Auto generated value setter.
      * @param logoImageUrl the logoImageUrl to set
      */
-    private void setLogoImageUrl(String logoImageUrl) {
+    public void setLogoImageUrl(String logoImageUrl) {
         this.logoImageUrl = logoImageUrl;
     }
     /**
      * Auto generated value setter.
      * @param isIncorporated the isIncorporated to set
      */
-    private void setIsIncorporated(String isIncorporated) {
+    public void setIsIncorporated(String isIncorporated) {
         this.isIncorporated = isIncorporated;
     }
     /**
      * Auto generated value setter.
      * @param federalTaxId the federalTaxId to set
      */
-    private void setFederalTaxId(String federalTaxId) {
+    public void setFederalTaxId(String federalTaxId) {
         this.federalTaxId = federalTaxId;
     }
     /**
      * Auto generated value setter.
      * @param requires1099 the requires1099 to set
      */
-    private void setRequires1099(String requires1099) {
+    public void setRequires1099(String requires1099) {
         this.requires1099 = requires1099;
     }
     /**
      * Auto generated value setter.
      * @param partyIdFrom the partyIdFrom to set
      */
-    private void setPartyIdFrom(String partyIdFrom) {
+    public void setPartyIdFrom(String partyIdFrom) {
         this.partyIdFrom = partyIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param partyIdTo the partyIdTo to set
      */
-    private void setPartyIdTo(String partyIdTo) {
+    public void setPartyIdTo(String partyIdTo) {
         this.partyIdTo = partyIdTo;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeIdFrom the roleTypeIdFrom to set
      */
-    private void setRoleTypeIdFrom(String roleTypeIdFrom) {
+    public void setRoleTypeIdFrom(String roleTypeIdFrom) {
         this.roleTypeIdFrom = roleTypeIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeIdTo the roleTypeIdTo to set
      */
-    private void setRoleTypeIdTo(String roleTypeIdTo) {
+    public void setRoleTypeIdTo(String roleTypeIdTo) {
         this.roleTypeIdTo = roleTypeIdTo;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param relationshipName the relationshipName to set
      */
-    private void setRelationshipName(String relationshipName) {
+    public void setRelationshipName(String relationshipName) {
         this.relationshipName = relationshipName;
     }
     /**
      * Auto generated value setter.
      * @param securityGroupId the securityGroupId to set
      */
-    private void setSecurityGroupId(String securityGroupId) {
+    public void setSecurityGroupId(String securityGroupId) {
         this.securityGroupId = securityGroupId;
     }
     /**
      * Auto generated value setter.
      * @param priorityTypeId the priorityTypeId to set
      */
-    private void setPriorityTypeId(String priorityTypeId) {
+    public void setPriorityTypeId(String priorityTypeId) {
         this.priorityTypeId = priorityTypeId;
     }
     /**
      * Auto generated value setter.
      * @param partyRelationshipTypeId the partyRelationshipTypeId to set
      */
-    private void setPartyRelationshipTypeId(String partyRelationshipTypeId) {
+    public void setPartyRelationshipTypeId(String partyRelationshipTypeId) {
         this.partyRelationshipTypeId = partyRelationshipTypeId;
     }
     /**
      * Auto generated value setter.
      * @param permissionsEnumId the permissionsEnumId to set
      */
-    private void setPermissionsEnumId(String permissionsEnumId) {
+    public void setPermissionsEnumId(String permissionsEnumId) {
         this.permissionsEnumId = permissionsEnumId;
     }
     /**
      * Auto generated value setter.
      * @param positionTitle the positionTitle to set
      */
-    private void setPositionTitle(String positionTitle) {
+    public void setPositionTitle(String positionTitle) {
         this.positionTitle = positionTitle;
     }
     /**
      * Auto generated value setter.
      * @param countryCode the countryCode to set
      */
-    private void setCountryCode(String countryCode) {
+    public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
     /**
      * Auto generated value setter.
      * @param areaCode the areaCode to set
      */
-    private void setAreaCode(String areaCode) {
+    public void setAreaCode(String areaCode) {
         this.areaCode = areaCode;
     }
     /**
      * Auto generated value setter.
      * @param contactNumber the contactNumber to set
      */
-    private void setContactNumber(String contactNumber) {
+    public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
     }
     /**
      * Auto generated value setter.
      * @param askForName the askForName to set
      */
-    private void setAskForName(String askForName) {
+    public void setAskForName(String askForName) {
         this.askForName = askForName;
     }
     /**
      * Auto generated value setter.
      * @param toName the toName to set
      */
-    private void setToName(String toName) {
+    public void setToName(String toName) {
         this.toName = toName;
     }
     /**
      * Auto generated value setter.
      * @param attnName the attnName to set
      */
-    private void setAttnName(String attnName) {
+    public void setAttnName(String attnName) {
         this.attnName = attnName;
     }
     /**
      * Auto generated value setter.
      * @param address1 the address1 to set
      */
-    private void setAddress1(String address1) {
+    public void setAddress1(String address1) {
         this.address1 = address1;
     }
     /**
      * Auto generated value setter.
      * @param address2 the address2 to set
      */
-    private void setAddress2(String address2) {
+    public void setAddress2(String address2) {
         this.address2 = address2;
     }
     /**
      * Auto generated value setter.
      * @param directions the directions to set
      */
-    private void setDirections(String directions) {
+    public void setDirections(String directions) {
         this.directions = directions;
     }
     /**
      * Auto generated value setter.
      * @param city the city to set
      */
-    private void setCity(String city) {
+    public void setCity(String city) {
         this.city = city;
     }
     /**
      * Auto generated value setter.
      * @param postalCode the postalCode to set
      */
-    private void setPostalCode(String postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
     /**
      * Auto generated value setter.
      * @param postalCodeExt the postalCodeExt to set
      */
-    private void setPostalCodeExt(String postalCodeExt) {
+    public void setPostalCodeExt(String postalCodeExt) {
         this.postalCodeExt = postalCodeExt;
     }
     /**
      * Auto generated value setter.
      * @param countryGeoId the countryGeoId to set
      */
-    private void setCountryGeoId(String countryGeoId) {
+    public void setCountryGeoId(String countryGeoId) {
         this.countryGeoId = countryGeoId;
     }
     /**
      * Auto generated value setter.
      * @param stateProvinceGeoId the stateProvinceGeoId to set
      */
-    private void setStateProvinceGeoId(String stateProvinceGeoId) {
+    public void setStateProvinceGeoId(String stateProvinceGeoId) {
         this.stateProvinceGeoId = stateProvinceGeoId;
     }
     /**
      * Auto generated value setter.
      * @param countyGeoId the countyGeoId to set
      */
-    private void setCountyGeoId(String countyGeoId) {
+    public void setCountyGeoId(String countyGeoId) {
         this.countyGeoId = countyGeoId;
     }
     /**
      * Auto generated value setter.
      * @param postalCodeGeoId the postalCodeGeoId to set
      */
-    private void setPostalCodeGeoId(String postalCodeGeoId) {
+    public void setPostalCodeGeoId(String postalCodeGeoId) {
         this.postalCodeGeoId = postalCodeGeoId;
     }
     /**
      * Auto generated value setter.
      * @param geoPointId the geoPointId to set
      */
-    private void setGeoPointId(String geoPointId) {
+    public void setGeoPointId(String geoPointId) {
         this.geoPointId = geoPointId;
     }
 

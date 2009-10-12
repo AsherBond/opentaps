@@ -33,6 +33,9 @@ import org.opentaps.common.domain.order.OrderSpecification;
 import org.opentaps.domain.base.entities.AcctgTransEntry;
 import org.opentaps.domain.base.entities.EncumbranceDetail;
 import org.opentaps.domain.base.entities.EncumbranceSnapshot;
+import org.opentaps.domain.base.entities.InvoiceItemType;
+import org.opentaps.domain.base.entities.InvoiceItemTypeGlAccount;
+import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.ledger.AccountingTransaction;
 import org.opentaps.domain.ledger.EncumbranceRepositoryInterface;
 import org.opentaps.domain.ledger.EncumbranceServiceInterface;
@@ -69,6 +72,8 @@ public class EncumbranceServices extends Service implements EncumbranceServiceIn
         try {
             session = infrastructure.getSession();
 
+            InvoiceRepositoryInterface invoiceRepository = getDomainsDirectory().getBillingDomain().getInvoiceRepository();
+
             // retrieve open purchase orders and items
             OrderRepositoryInterface orderRepository = getDomainsDirectory().getOrderDomain().getOrderRepository();
             List<Order> openOrders = orderRepository.getOpenOrders(organizationPartyId, OrderSpecification.OrderTypeEnum.PURCHASE);
@@ -80,6 +85,7 @@ public class EncumbranceServices extends Service implements EncumbranceServiceIn
                 }
 
                 for (OrderItem item : orderItems) {
+                    
                     EncumbranceDetail encumbrance = new EncumbranceDetail();
                     encumbrance.setEncumbranceDetailTypeId("ENCUMB_PURCHASING");
                     encumbrance.setPartyId(order.getBillFromPartyId());
@@ -109,6 +115,27 @@ public class EncumbranceServices extends Service implements EncumbranceServiceIn
                     encumbrance.setAcctgTagEnumId8(item.getAcctgTagEnumId8());
                     encumbrance.setAcctgTagEnumId9(item.getAcctgTagEnumId9());
                     encumbrance.setAcctgTagEnumId10(item.getAcctgTagEnumId10());
+
+                    // find corresponding GL account by means of establishing relation between 
+                    // order item type and invoice item type and its gl account for organization.
+                    String glAccountId = null;
+                    InvoiceItemType invoiceItemType = invoiceRepository.getInvoiceItemType(item, "PURCHASE_INVOICE");
+                    List<? extends InvoiceItemTypeGlAccount> invItemTypeGlAccts = invoiceItemType.getInvoiceItemTypeGlAccounts();
+                    if (UtilValidate.isNotEmpty(invItemTypeGlAccts)) {
+                        for (InvoiceItemTypeGlAccount acct : invItemTypeGlAccts) {
+                            if (organizationPartyId.equals(acct.getOrganizationPartyId())) {
+                                glAccountId = acct.getGlAccountId();
+                                break;
+                            }
+                        }
+                    };
+
+                    // default if not found
+                    if (glAccountId == null) {
+                        glAccountId = invoiceItemType.getDefaultGlAccountId();
+                    }
+                    encumbrance.setGlAccountId(glAccountId);
+
                     encumbranceDetails.add(encumbrance);
                 }
 

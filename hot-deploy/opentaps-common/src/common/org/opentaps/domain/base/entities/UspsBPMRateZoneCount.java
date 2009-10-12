@@ -140,49 +140,49 @@ fieldMapColumns.put("UspsBPMRateZoneCount", fields);
      * Auto generated value setter.
      * @param uspsBPMRateZone the uspsBPMRateZone to set
      */
-    private void setUspsBPMRateZone(String uspsBPMRateZone) {
+    public void setUspsBPMRateZone(String uspsBPMRateZone) {
         this.uspsBPMRateZone = uspsBPMRateZone;
     }
     /**
      * Auto generated value setter.
      * @param ratePerPiece the ratePerPiece to set
      */
-    private void setRatePerPiece(BigDecimal ratePerPiece) {
+    public void setRatePerPiece(BigDecimal ratePerPiece) {
         this.ratePerPiece = ratePerPiece;
     }
     /**
      * Auto generated value setter.
      * @param ratePerPound the ratePerPound to set
      */
-    private void setRatePerPound(BigDecimal ratePerPound) {
+    public void setRatePerPound(BigDecimal ratePerPound) {
         this.ratePerPound = ratePerPound;
     }
     /**
      * Auto generated value setter.
      * @param zip3 the zip3 to set
      */
-    private void setZip3(String zip3) {
+    public void setZip3(String zip3) {
         this.zip3 = zip3;
     }
     /**
      * Auto generated value setter.
      * @param sortResult the sortResult to set
      */
-    private void setSortResult(String sortResult) {
+    public void setSortResult(String sortResult) {
         this.sortResult = sortResult;
     }
     /**
      * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
-    private void setContactMechId(Long contactMechId) {
+    public void setContactMechId(Long contactMechId) {
         this.contactMechId = contactMechId;
     }
     /**
      * Auto generated value setter.
      * @param contactListId the contactListId to set
      */
-    private void setContactListId(String contactListId) {
+    public void setContactListId(String contactListId) {
         this.contactListId = contactListId;
     }
 

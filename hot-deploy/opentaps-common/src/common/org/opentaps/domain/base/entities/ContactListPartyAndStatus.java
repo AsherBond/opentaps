@@ -159,77 +159,77 @@ fieldMapColumns.put("ContactListPartyAndStatus", fields);
      * Auto generated value setter.
      * @param contactListId the contactListId to set
      */
-    private void setContactListId(String contactListId) {
+    public void setContactListId(String contactListId) {
         this.contactListId = contactListId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param statusDate the statusDate to set
      */
-    private void setStatusDate(Timestamp statusDate) {
+    public void setStatusDate(Timestamp statusDate) {
         this.statusDate = statusDate;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param setByUserLoginId the setByUserLoginId to set
      */
-    private void setSetByUserLoginId(String setByUserLoginId) {
+    public void setSetByUserLoginId(String setByUserLoginId) {
         this.setByUserLoginId = setByUserLoginId;
     }
     /**
      * Auto generated value setter.
      * @param optInVerifyCode the optInVerifyCode to set
      */
-    private void setOptInVerifyCode(String optInVerifyCode) {
+    public void setOptInVerifyCode(String optInVerifyCode) {
         this.optInVerifyCode = optInVerifyCode;
     }
     /**
      * Auto generated value setter.
      * @param statusTypeId the statusTypeId to set
      */
-    private void setStatusTypeId(String statusTypeId) {
+    public void setStatusTypeId(String statusTypeId) {
         this.statusTypeId = statusTypeId;
     }
     /**
      * Auto generated value setter.
      * @param statusCode the statusCode to set
      */
-    private void setStatusCode(String statusCode) {
+    public void setStatusCode(String statusCode) {
         this.statusCode = statusCode;
     }
     /**
      * Auto generated value setter.
      * @param sequenceId the sequenceId to set
      */
-    private void setSequenceId(String sequenceId) {
+    public void setSequenceId(String sequenceId) {
         this.sequenceId = sequenceId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 

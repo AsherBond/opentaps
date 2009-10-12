@@ -342,294 +342,294 @@ fieldMapColumns.put("SubContentDataResourceView", fields);
      * Auto generated value setter.
      * @param contentId the contentId to set
      */
-    private void setContentId(String contentId) {
+    public void setContentId(String contentId) {
         this.contentId = contentId;
     }
     /**
      * Auto generated value setter.
      * @param contentTypeId the contentTypeId to set
      */
-    private void setContentTypeId(String contentTypeId) {
+    public void setContentTypeId(String contentTypeId) {
         this.contentTypeId = contentTypeId;
     }
     /**
      * Auto generated value setter.
      * @param ownerContentId the ownerContentId to set
      */
-    private void setOwnerContentId(String ownerContentId) {
+    public void setOwnerContentId(String ownerContentId) {
         this.ownerContentId = ownerContentId;
     }
     /**
      * Auto generated value setter.
      * @param decoratorContentId the decoratorContentId to set
      */
-    private void setDecoratorContentId(String decoratorContentId) {
+    public void setDecoratorContentId(String decoratorContentId) {
         this.decoratorContentId = decoratorContentId;
     }
     /**
      * Auto generated value setter.
      * @param instanceOfContentId the instanceOfContentId to set
      */
-    private void setInstanceOfContentId(String instanceOfContentId) {
+    public void setInstanceOfContentId(String instanceOfContentId) {
         this.instanceOfContentId = instanceOfContentId;
     }
     /**
      * Auto generated value setter.
      * @param dataResourceId the dataResourceId to set
      */
-    private void setDataResourceId(String dataResourceId) {
+    public void setDataResourceId(String dataResourceId) {
         this.dataResourceId = dataResourceId;
     }
     /**
      * Auto generated value setter.
      * @param templateDataResourceId the templateDataResourceId to set
      */
-    private void setTemplateDataResourceId(String templateDataResourceId) {
+    public void setTemplateDataResourceId(String templateDataResourceId) {
         this.templateDataResourceId = templateDataResourceId;
     }
     /**
      * Auto generated value setter.
      * @param dataSourceId the dataSourceId to set
      */
-    private void setDataSourceId(String dataSourceId) {
+    public void setDataSourceId(String dataSourceId) {
         this.dataSourceId = dataSourceId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param privilegeEnumId the privilegeEnumId to set
      */
-    private void setPrivilegeEnumId(String privilegeEnumId) {
+    public void setPrivilegeEnumId(String privilegeEnumId) {
         this.privilegeEnumId = privilegeEnumId;
     }
     /**
      * Auto generated value setter.
      * @param serviceName the serviceName to set
      */
-    private void setServiceName(String serviceName) {
+    public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
     /**
      * Auto generated value setter.
      * @param contentName the contentName to set
      */
-    private void setContentName(String contentName) {
+    public void setContentName(String contentName) {
         this.contentName = contentName;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param localeString the localeString to set
      */
-    private void setLocaleString(String localeString) {
+    public void setLocaleString(String localeString) {
         this.localeString = localeString;
     }
     /**
      * Auto generated value setter.
      * @param mimeTypeId the mimeTypeId to set
      */
-    private void setMimeTypeId(String mimeTypeId) {
+    public void setMimeTypeId(String mimeTypeId) {
         this.mimeTypeId = mimeTypeId;
     }
     /**
      * Auto generated value setter.
      * @param characterSetId the characterSetId to set
      */
-    private void setCharacterSetId(String characterSetId) {
+    public void setCharacterSetId(String characterSetId) {
         this.characterSetId = characterSetId;
     }
     /**
      * Auto generated value setter.
      * @param childLeafCount the childLeafCount to set
      */
-    private void setChildLeafCount(Long childLeafCount) {
+    public void setChildLeafCount(Long childLeafCount) {
         this.childLeafCount = childLeafCount;
     }
     /**
      * Auto generated value setter.
      * @param childBranchCount the childBranchCount to set
      */
-    private void setChildBranchCount(Long childBranchCount) {
+    public void setChildBranchCount(Long childBranchCount) {
         this.childBranchCount = childBranchCount;
     }
     /**
      * Auto generated value setter.
      * @param createdDate the createdDate to set
      */
-    private void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
     /**
      * Auto generated value setter.
      * @param createdByUserLogin the createdByUserLogin to set
      */
-    private void setCreatedByUserLogin(String createdByUserLogin) {
+    public void setCreatedByUserLogin(String createdByUserLogin) {
         this.createdByUserLogin = createdByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedDate the lastModifiedDate to set
      */
-    private void setLastModifiedDate(Timestamp lastModifiedDate) {
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedByUserLogin the lastModifiedByUserLogin to set
      */
-    private void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
+    public void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
         this.lastModifiedByUserLogin = lastModifiedByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param classificationEnumId the classificationEnumId to set
      */
-    private void setClassificationEnumId(String classificationEnumId) {
+    public void setClassificationEnumId(String classificationEnumId) {
         this.classificationEnumId = classificationEnumId;
     }
     /**
      * Auto generated value setter.
      * @param drDataResourceId the drDataResourceId to set
      */
-    private void setDrDataResourceId(String drDataResourceId) {
+    public void setDrDataResourceId(String drDataResourceId) {
         this.drDataResourceId = drDataResourceId;
     }
     /**
      * Auto generated value setter.
      * @param drDataResourceTypeId the drDataResourceTypeId to set
      */
-    private void setDrDataResourceTypeId(String drDataResourceTypeId) {
+    public void setDrDataResourceTypeId(String drDataResourceTypeId) {
         this.drDataResourceTypeId = drDataResourceTypeId;
     }
     /**
      * Auto generated value setter.
      * @param drDataTemplateTypeId the drDataTemplateTypeId to set
      */
-    private void setDrDataTemplateTypeId(String drDataTemplateTypeId) {
+    public void setDrDataTemplateTypeId(String drDataTemplateTypeId) {
         this.drDataTemplateTypeId = drDataTemplateTypeId;
     }
     /**
      * Auto generated value setter.
      * @param drDataCategoryId the drDataCategoryId to set
      */
-    private void setDrDataCategoryId(String drDataCategoryId) {
+    public void setDrDataCategoryId(String drDataCategoryId) {
         this.drDataCategoryId = drDataCategoryId;
     }
     /**
      * Auto generated value setter.
      * @param drDataSourceId the drDataSourceId to set
      */
-    private void setDrDataSourceId(String drDataSourceId) {
+    public void setDrDataSourceId(String drDataSourceId) {
         this.drDataSourceId = drDataSourceId;
     }
     /**
      * Auto generated value setter.
      * @param drStatusId the drStatusId to set
      */
-    private void setDrStatusId(String drStatusId) {
+    public void setDrStatusId(String drStatusId) {
         this.drStatusId = drStatusId;
     }
     /**
      * Auto generated value setter.
      * @param drDataResourceName the drDataResourceName to set
      */
-    private void setDrDataResourceName(String drDataResourceName) {
+    public void setDrDataResourceName(String drDataResourceName) {
         this.drDataResourceName = drDataResourceName;
     }
     /**
      * Auto generated value setter.
      * @param drLocaleString the drLocaleString to set
      */
-    private void setDrLocaleString(String drLocaleString) {
+    public void setDrLocaleString(String drLocaleString) {
         this.drLocaleString = drLocaleString;
     }
     /**
      * Auto generated value setter.
      * @param drMimeTypeId the drMimeTypeId to set
      */
-    private void setDrMimeTypeId(String drMimeTypeId) {
+    public void setDrMimeTypeId(String drMimeTypeId) {
         this.drMimeTypeId = drMimeTypeId;
     }
     /**
      * Auto generated value setter.
      * @param drCharacterSetId the drCharacterSetId to set
      */
-    private void setDrCharacterSetId(String drCharacterSetId) {
+    public void setDrCharacterSetId(String drCharacterSetId) {
         this.drCharacterSetId = drCharacterSetId;
     }
     /**
      * Auto generated value setter.
      * @param drObjectInfo the drObjectInfo to set
      */
-    private void setDrObjectInfo(String drObjectInfo) {
+    public void setDrObjectInfo(String drObjectInfo) {
         this.drObjectInfo = drObjectInfo;
     }
     /**
      * Auto generated value setter.
      * @param drSurveyId the drSurveyId to set
      */
-    private void setDrSurveyId(String drSurveyId) {
+    public void setDrSurveyId(String drSurveyId) {
         this.drSurveyId = drSurveyId;
     }
     /**
      * Auto generated value setter.
      * @param drSurveyResponseId the drSurveyResponseId to set
      */
-    private void setDrSurveyResponseId(String drSurveyResponseId) {
+    public void setDrSurveyResponseId(String drSurveyResponseId) {
         this.drSurveyResponseId = drSurveyResponseId;
     }
     /**
      * Auto generated value setter.
      * @param drRelatedDetailId the drRelatedDetailId to set
      */
-    private void setDrRelatedDetailId(String drRelatedDetailId) {
+    public void setDrRelatedDetailId(String drRelatedDetailId) {
         this.drRelatedDetailId = drRelatedDetailId;
     }
     /**
      * Auto generated value setter.
      * @param drIsPublic the drIsPublic to set
      */
-    private void setDrIsPublic(String drIsPublic) {
+    public void setDrIsPublic(String drIsPublic) {
         this.drIsPublic = drIsPublic;
     }
     /**
      * Auto generated value setter.
      * @param drCreatedDate the drCreatedDate to set
      */
-    private void setDrCreatedDate(Timestamp drCreatedDate) {
+    public void setDrCreatedDate(Timestamp drCreatedDate) {
         this.drCreatedDate = drCreatedDate;
     }
     /**
      * Auto generated value setter.
      * @param drCreatedByUserLogin the drCreatedByUserLogin to set
      */
-    private void setDrCreatedByUserLogin(String drCreatedByUserLogin) {
+    public void setDrCreatedByUserLogin(String drCreatedByUserLogin) {
         this.drCreatedByUserLogin = drCreatedByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param drLastModifiedDate the drLastModifiedDate to set
      */
-    private void setDrLastModifiedDate(Timestamp drLastModifiedDate) {
+    public void setDrLastModifiedDate(Timestamp drLastModifiedDate) {
         this.drLastModifiedDate = drLastModifiedDate;
     }
     /**
      * Auto generated value setter.
      * @param drLastModifiedByUserLogin the drLastModifiedByUserLogin to set
      */
-    private void setDrLastModifiedByUserLogin(String drLastModifiedByUserLogin) {
+    public void setDrLastModifiedByUserLogin(String drLastModifiedByUserLogin) {
         this.drLastModifiedByUserLogin = drLastModifiedByUserLogin;
     }
 

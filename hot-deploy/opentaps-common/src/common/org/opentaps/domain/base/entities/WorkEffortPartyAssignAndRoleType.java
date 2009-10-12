@@ -189,119 +189,119 @@ fieldMapColumns.put("WorkEffortPartyAssignAndRoleType", fields);
      * Auto generated value setter.
      * @param workEffortId the workEffortId to set
      */
-    private void setWorkEffortId(String workEffortId) {
+    public void setWorkEffortId(String workEffortId) {
         this.workEffortId = workEffortId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param assignedByUserLoginId the assignedByUserLoginId to set
      */
-    private void setAssignedByUserLoginId(String assignedByUserLoginId) {
+    public void setAssignedByUserLoginId(String assignedByUserLoginId) {
         this.assignedByUserLoginId = assignedByUserLoginId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param statusDateTime the statusDateTime to set
      */
-    private void setStatusDateTime(Timestamp statusDateTime) {
+    public void setStatusDateTime(Timestamp statusDateTime) {
         this.statusDateTime = statusDateTime;
     }
     /**
      * Auto generated value setter.
      * @param expectationEnumId the expectationEnumId to set
      */
-    private void setExpectationEnumId(String expectationEnumId) {
+    public void setExpectationEnumId(String expectationEnumId) {
         this.expectationEnumId = expectationEnumId;
     }
     /**
      * Auto generated value setter.
      * @param delegateReasonEnumId the delegateReasonEnumId to set
      */
-    private void setDelegateReasonEnumId(String delegateReasonEnumId) {
+    public void setDelegateReasonEnumId(String delegateReasonEnumId) {
         this.delegateReasonEnumId = delegateReasonEnumId;
     }
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
     /**
      * Auto generated value setter.
      * @param comments the comments to set
      */
-    private void setComments(String comments) {
+    public void setComments(String comments) {
         this.comments = comments;
     }
     /**
      * Auto generated value setter.
      * @param mustRsvp the mustRsvp to set
      */
-    private void setMustRsvp(String mustRsvp) {
+    public void setMustRsvp(String mustRsvp) {
         this.mustRsvp = mustRsvp;
     }
     /**
      * Auto generated value setter.
      * @param availabilityStatusId the availabilityStatusId to set
      */
-    private void setAvailabilityStatusId(String availabilityStatusId) {
+    public void setAvailabilityStatusId(String availabilityStatusId) {
         this.availabilityStatusId = availabilityStatusId;
     }
     /**
      * Auto generated value setter.
      * @param parentTypeId the parentTypeId to set
      */
-    private void setParentTypeId(String parentTypeId) {
+    public void setParentTypeId(String parentTypeId) {
         this.parentTypeId = parentTypeId;
     }
     /**
      * Auto generated value setter.
      * @param hasTable the hasTable to set
      */
-    private void setHasTable(String hasTable) {
+    public void setHasTable(String hasTable) {
         this.hasTable = hasTable;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 

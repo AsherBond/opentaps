@@ -170,91 +170,91 @@ fieldMapColumns.put("AgreementBillingAndInvoiceSum", fields);
      * Auto generated value setter.
      * @param agreementId the agreementId to set
      */
-    private void setAgreementId(String agreementId) {
+    public void setAgreementId(String agreementId) {
         this.agreementId = agreementId;
     }
     /**
      * Auto generated value setter.
      * @param origInvoiceId the origInvoiceId to set
      */
-    private void setOrigInvoiceId(String origInvoiceId) {
+    public void setOrigInvoiceId(String origInvoiceId) {
         this.origInvoiceId = origInvoiceId;
     }
     /**
      * Auto generated value setter.
      * @param agentPartyId the agentPartyId to set
      */
-    private void setAgentPartyId(String agentPartyId) {
+    public void setAgentPartyId(String agentPartyId) {
         this.agentPartyId = agentPartyId;
     }
     /**
      * Auto generated value setter.
      * @param amount the amount to set
      */
-    private void setAmount(BigDecimal amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
     /**
      * Auto generated value setter.
      * @param origAmount the origAmount to set
      */
-    private void setOrigAmount(BigDecimal origAmount) {
+    public void setOrigAmount(BigDecimal origAmount) {
         this.origAmount = origAmount;
     }
     /**
      * Auto generated value setter.
      * @param origPaymentAmount the origPaymentAmount to set
      */
-    private void setOrigPaymentAmount(BigDecimal origPaymentAmount) {
+    public void setOrigPaymentAmount(BigDecimal origPaymentAmount) {
         this.origPaymentAmount = origPaymentAmount;
     }
     /**
      * Auto generated value setter.
      * @param origPaymentApplicationId the origPaymentApplicationId to set
      */
-    private void setOrigPaymentApplicationId(String origPaymentApplicationId) {
+    public void setOrigPaymentApplicationId(String origPaymentApplicationId) {
         this.origPaymentApplicationId = origPaymentApplicationId;
     }
     /**
      * Auto generated value setter.
      * @param billingDatetime the billingDatetime to set
      */
-    private void setBillingDatetime(Timestamp billingDatetime) {
+    public void setBillingDatetime(Timestamp billingDatetime) {
         this.billingDatetime = billingDatetime;
     }
     /**
      * Auto generated value setter.
      * @param invoiceTypeId the invoiceTypeId to set
      */
-    private void setInvoiceTypeId(String invoiceTypeId) {
+    public void setInvoiceTypeId(String invoiceTypeId) {
         this.invoiceTypeId = invoiceTypeId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param partyIdFrom the partyIdFrom to set
      */
-    private void setPartyIdFrom(String partyIdFrom) {
+    public void setPartyIdFrom(String partyIdFrom) {
         this.partyIdFrom = partyIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param invoiceDate the invoiceDate to set
      */
-    private void setInvoiceDate(Timestamp invoiceDate) {
+    public void setInvoiceDate(Timestamp invoiceDate) {
         this.invoiceDate = invoiceDate;
     }
 

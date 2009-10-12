@@ -149,63 +149,63 @@ fieldMapColumns.put("AcctgTransEntryEquivalenceSum", fields);
      * Auto generated value setter.
      * @param acctgTransId the acctgTransId to set
      */
-    private void setAcctgTransId(String acctgTransId) {
+    public void setAcctgTransId(String acctgTransId) {
         this.acctgTransId = acctgTransId;
     }
     /**
      * Auto generated value setter.
      * @param amount the amount to set
      */
-    private void setAmount(BigDecimal amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
     /**
      * Auto generated value setter.
      * @param glAccountId the glAccountId to set
      */
-    private void setGlAccountId(String glAccountId) {
+    public void setGlAccountId(String glAccountId) {
         this.glAccountId = glAccountId;
     }
     /**
      * Auto generated value setter.
      * @param organizationPartyId the organizationPartyId to set
      */
-    private void setOrganizationPartyId(String organizationPartyId) {
+    public void setOrganizationPartyId(String organizationPartyId) {
         this.organizationPartyId = organizationPartyId;
     }
     /**
      * Auto generated value setter.
      * @param debitCreditFlag the debitCreditFlag to set
      */
-    private void setDebitCreditFlag(String debitCreditFlag) {
+    public void setDebitCreditFlag(String debitCreditFlag) {
         this.debitCreditFlag = debitCreditFlag;
     }
     /**
      * Auto generated value setter.
      * @param currencyUomId the currencyUomId to set
      */
-    private void setCurrencyUomId(String currencyUomId) {
+    public void setCurrencyUomId(String currencyUomId) {
         this.currencyUomId = currencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
 

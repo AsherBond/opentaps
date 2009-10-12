@@ -150,63 +150,63 @@ fieldMapColumns.put("ProductStoreFacilityByOrder", fields);
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param productStoreId the productStoreId to set
      */
-    private void setProductStoreId(String productStoreId) {
+    public void setProductStoreId(String productStoreId) {
         this.productStoreId = productStoreId;
     }
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param sequenceNum the sequenceNum to set
      */
-    private void setSequenceNum(Long sequenceNum) {
+    public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
     /**
      * Auto generated value setter.
      * @param storeName the storeName to set
      */
-    private void setStoreName(String storeName) {
+    public void setStoreName(String storeName) {
         this.storeName = storeName;
     }
     /**
      * Auto generated value setter.
      * @param facilityName the facilityName to set
      */
-    private void setFacilityName(String facilityName) {
+    public void setFacilityName(String facilityName) {
         this.facilityName = facilityName;
     }
     /**
      * Auto generated value setter.
      * @param facilityTypeId the facilityTypeId to set
      */
-    private void setFacilityTypeId(String facilityTypeId) {
+    public void setFacilityTypeId(String facilityTypeId) {
         this.facilityTypeId = facilityTypeId;
     }
 

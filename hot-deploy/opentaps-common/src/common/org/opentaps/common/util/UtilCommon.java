@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -581,7 +580,6 @@ public abstract class UtilCommon {
      * @return <code>true</code> if the change is valid
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static boolean isValidChange(String statusId, String statusIdTo, GenericDelegator delegator) throws GenericEntityException {
         return delegator.findCountByAnd("StatusValidChange", UtilMisc.toMap("statusId", statusId, "statusIdTo", statusIdTo)) > 0 ? true : false;
     }
@@ -827,7 +825,7 @@ public abstract class UtilCommon {
      */
     public static String makeHistoryQueryString(Map<String, ? extends Object> parameters, List<String> override) {
         Set<String> keySet = parameters.keySet();
-        Set<String> excludes = new FastSet<String>();
+        Set<String> excludes = FastSet.<String>newInstance();
         String queryString = "";
 
         if (override != null && override.size() > 0) {
@@ -869,6 +867,8 @@ public abstract class UtilCommon {
             excludes.add("jpublishWrapper");
             excludes.add("externalLoginKey");
             excludes.add("sessionId");
+            excludes.add("timeZone");
+            excludes.add("ofbizServerName");
 
             for (String key : keySet) {
 
@@ -909,9 +909,8 @@ public abstract class UtilCommon {
      * @param override a <code>List</code> of parameter names to include, if <code>null</code> or empty then all the parameters will be included except a few common
      * @return the history entry <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map makeHistoryEntry(String text, String view, List<String> override) {
-        HashMap<String, Object> entry = new HashMap<String, Object>();
+    public static Map<String, ?> makeHistoryEntry(String text, String view, List<String> override) {
+        Map<String, Object> entry = FastMap.<String, Object>newInstance();
         if (text == null) {
             throw new IllegalArgumentException("Argument \"text\" can't be null");
         }
@@ -931,8 +930,7 @@ public abstract class UtilCommon {
      * @param view the view name
      * @return the history entry <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map makeHistoryEntry(String text, String view) {
+    public static Map<String, ?> makeHistoryEntry(String text, String view) {
         return makeHistoryEntry(text, view, null);
     }
 
@@ -1006,10 +1004,10 @@ public abstract class UtilCommon {
      * @throws IOException if an error occurs
      */
     public static void saveToExcel(
-        final String workBookName,
-        final String workSheetName,
-        final List<String> columnNameList,
-        final List<Map<String, Object>> data
+            final String workBookName,
+            final String workSheetName,
+            final List<String> columnNameList,
+            final List<Map<String, Object>> data
     ) throws IOException {
         if (StringUtils.isEmpty(workBookName)) {
             throw new IllegalArgumentException("Argument workBookName can't be empty");
@@ -1075,33 +1073,33 @@ public abstract class UtilCommon {
         // column data starts from the second element
         if (data.size() > 1) {
             for (int dataRowIndex = 1; dataRowIndex < data.size(); dataRowIndex++) {
-               Map<String, Object> rowDataMap = data.get(dataRowIndex);
-               if (rowDataMap == null) {
-                   continue;
-               }
+                Map<String, Object> rowDataMap = data.get(dataRowIndex);
+                if (rowDataMap == null) {
+                    continue;
+                }
 
-               HSSFRow dataRow = workSheet.createRow(dataRowIndex);
-               assert dataRow != null;
+                HSSFRow dataRow = workSheet.createRow(dataRowIndex);
+                assert dataRow != null;
 
-               for (short i = 0; i < columnNameList.size(); i++) {
-                   HSSFCell cell = dataRow.createCell(i);
-                   assert cell != null;
+                for (short i = 0; i < columnNameList.size(); i++) {
+                    HSSFCell cell = dataRow.createCell(i);
+                    assert cell != null;
 
-                   Object cellData = rowDataMap.get(columnNameList.get(i));
-                   if (cellData != null) {
-                       if (cellData instanceof BigDecimal) {
-                           cell.setCellValue(((BigDecimal) cellData).doubleValue());
-                       } else if (cellData instanceof Double) {
-                           cell.setCellValue(((Double) cellData).doubleValue());
-                       } else if (cellData instanceof Integer) {
-                           cell.setCellValue(((Integer) cellData).doubleValue());
-                       } else if (cellData instanceof BigInteger) {
-                           cell.setCellValue(((BigInteger) cellData).doubleValue());
-                       } else {
-                           cell.setCellValue(new HSSFRichTextString(cellData.toString()));
-                       }
-                   }
-               }
+                    Object cellData = rowDataMap.get(columnNameList.get(i));
+                    if (cellData != null) {
+                        if (cellData instanceof BigDecimal) {
+                            cell.setCellValue(((BigDecimal) cellData).doubleValue());
+                        } else if (cellData instanceof Double) {
+                            cell.setCellValue(((Double) cellData).doubleValue());
+                        } else if (cellData instanceof Integer) {
+                            cell.setCellValue(((Integer) cellData).doubleValue());
+                        } else if (cellData instanceof BigInteger) {
+                            cell.setCellValue(((BigInteger) cellData).doubleValue());
+                        } else {
+                            cell.setCellValue(new HSSFRichTextString(cellData.toString()));
+                        }
+                    }
+                }
             }
         }
 
@@ -1406,11 +1404,11 @@ public abstract class UtilCommon {
     public static String getUserLoginViewPreference(HttpServletRequest request, String applicationName, String screenName, String option) throws GenericEntityException {
         GenericValue userLogin = getUserLogin(request);
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
-        GenericValue pref = delegator.findByPrimaryKeyCache("UserLoginViewPreference", UtilMisc.toMap("userLoginId", userLogin.get("userLoginId"), "applicationName", applicationName, "screenName", screenName, "name", option));
+        GenericValue pref = delegator.findByPrimaryKeyCache("UserLoginViewPreference", UtilMisc.toMap("userLoginId", userLogin.get("userLoginId"), "applicationName", applicationName, "screenName", screenName, "preferenceName", option));
         if (pref == null) {
             return null;
         }
-        return pref.getString("value");
+        return pref.getString("preferenceValue");
     }
 
     /**
@@ -1425,11 +1423,11 @@ public abstract class UtilCommon {
     public static void setUserLoginViewPreference(HttpServletRequest request, String applicationName, String screenName, String option, String value) throws GenericEntityException {
         GenericValue userLogin = getUserLogin(request);
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
-        GenericValue pref = delegator.findByPrimaryKey("UserLoginViewPreference", UtilMisc.toMap("userLoginId", userLogin.get("userLoginId"), "applicationName", applicationName, "screenName", screenName, "name", option));
+        GenericValue pref = delegator.findByPrimaryKey("UserLoginViewPreference", UtilMisc.toMap("userLoginId", userLogin.get("userLoginId"), "applicationName", applicationName, "screenName", screenName, "preferenceName", option));
         if (pref == null) {
-            pref = delegator.makeValue("UserLoginViewPreference", UtilMisc.toMap("userLoginId", userLogin.get("userLoginId"), "applicationName", applicationName, "screenName", screenName, "name", option));
+            pref = delegator.makeValue("UserLoginViewPreference", UtilMisc.toMap("userLoginId", userLogin.get("userLoginId"), "applicationName", applicationName, "screenName", screenName, "preferenceName", option));
         }
-        pref.set("value", value);
+        pref.set("preferenceValue", value);
         delegator.createOrStore(pref);
     }
 
@@ -1489,6 +1487,41 @@ public abstract class UtilCommon {
             GenericValue s = it.next();
             if (lastShortcut != null && lastShortcut.equalsIgnoreCase(s.getString("shortcut"))) {
                 Debug.logWarning("Ignored masked shortcut: [" + lastShortcut + "] with action [" + s.getString("actionTypeId") + " -> " + s.getString("actionTarget") + "] in screen " + applicationName + "/" + screenName + ", for user [" + userLogin.getString("userLoginId") + "]", MODULE);
+                it.remove();
+            }
+            lastShortcut = s.getString("shortcut");
+        }
+
+        return shortcuts;
+    }
+
+    /**
+     * Get the shortcuts available for Login page.
+     * @param applicationName the current application name (eg: crmsfa, financials, ...)
+     * @param screenName the screen name, which is from the URI
+     * @param delegator a <code>GenericDelegator</code> value
+     * @return a <code>List</code> of <code>KeyboardShortcut</code> entities that should be activated
+     * @exception GenericEntityException if an error occurs
+     */
+    public static List<GenericValue> getKeyboardShortcutsForLoginPage(String applicationName, String screenName, GenericDelegator delegator) throws GenericEntityException {
+
+        List<GenericValue> shortcuts = delegator.findByAnd("KeyboardShortcutAndHandler", UtilMisc.toList(
+                EntityCondition.makeCondition("userLoginId", EntityOperator.EQUALS, null),
+                EntityCondition.makeCondition(EntityOperator.OR,
+                      EntityCondition.makeCondition("applicationName", EntityOperator.EQUALS, applicationName),
+                      EntityCondition.makeCondition("applicationName", EntityOperator.EQUALS, null)),
+                EntityCondition.makeCondition(EntityOperator.OR,
+                      EntityCondition.makeCondition("screenName", EntityOperator.EQUALS, screenName),
+                      EntityCondition.makeCondition("screenName", EntityOperator.EQUALS, null))
+        ), UtilMisc.toList("shortcut", "userLoginId", "screenName", "applicationName")); // nulls are returned last
+
+        // remove global shortcuts masked / overridden by more specific ones
+        Iterator<GenericValue> it = shortcuts.iterator();
+        String lastShortcut = null;
+        while (it.hasNext()) {
+            GenericValue s = it.next();
+            if (lastShortcut != null && lastShortcut.equalsIgnoreCase(s.getString("shortcut"))) {
+                Debug.logWarning("Ignored masked shortcut: [" + lastShortcut + "] with action [" + s.getString("actionTypeId") + " -> " + s.getString("actionTarget") + "] in screen " + applicationName + "/" + screenName, MODULE);
                 it.remove();
             }
             lastShortcut = s.getString("shortcut");

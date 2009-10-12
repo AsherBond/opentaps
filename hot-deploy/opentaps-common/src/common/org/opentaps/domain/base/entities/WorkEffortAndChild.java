@@ -148,63 +148,63 @@ fieldMapColumns.put("WorkEffortAndChild", fields);
      * Auto generated value setter.
      * @param workEffortId the workEffortId to set
      */
-    private void setWorkEffortId(String workEffortId) {
+    public void setWorkEffortId(String workEffortId) {
         this.workEffortId = workEffortId;
     }
     /**
      * Auto generated value setter.
      * @param workEffortName the workEffortName to set
      */
-    private void setWorkEffortName(String workEffortName) {
+    public void setWorkEffortName(String workEffortName) {
         this.workEffortName = workEffortName;
     }
     /**
      * Auto generated value setter.
      * @param workEffortTypeId the workEffortTypeId to set
      */
-    private void setWorkEffortTypeId(String workEffortTypeId) {
+    public void setWorkEffortTypeId(String workEffortTypeId) {
         this.workEffortTypeId = workEffortTypeId;
     }
     /**
      * Auto generated value setter.
      * @param workEffortParentId the workEffortParentId to set
      */
-    private void setWorkEffortParentId(String workEffortParentId) {
+    public void setWorkEffortParentId(String workEffortParentId) {
         this.workEffortParentId = workEffortParentId;
     }
     /**
      * Auto generated value setter.
      * @param currentStatusId the currentStatusId to set
      */
-    private void setCurrentStatusId(String currentStatusId) {
+    public void setCurrentStatusId(String currentStatusId) {
         this.currentStatusId = currentStatusId;
     }
     /**
      * Auto generated value setter.
      * @param childWorkEffortId the childWorkEffortId to set
      */
-    private void setChildWorkEffortId(String childWorkEffortId) {
+    public void setChildWorkEffortId(String childWorkEffortId) {
         this.childWorkEffortId = childWorkEffortId;
     }
     /**
      * Auto generated value setter.
      * @param childWorkEffortName the childWorkEffortName to set
      */
-    private void setChildWorkEffortName(String childWorkEffortName) {
+    public void setChildWorkEffortName(String childWorkEffortName) {
         this.childWorkEffortName = childWorkEffortName;
     }
     /**
      * Auto generated value setter.
      * @param childWorkEffortTypeId the childWorkEffortTypeId to set
      */
-    private void setChildWorkEffortTypeId(String childWorkEffortTypeId) {
+    public void setChildWorkEffortTypeId(String childWorkEffortTypeId) {
         this.childWorkEffortTypeId = childWorkEffortTypeId;
     }
     /**
      * Auto generated value setter.
      * @param childCurrentStatusId the childCurrentStatusId to set
      */
-    private void setChildCurrentStatusId(String childCurrentStatusId) {
+    public void setChildCurrentStatusId(String childCurrentStatusId) {
         this.childCurrentStatusId = childCurrentStatusId;
     }
 

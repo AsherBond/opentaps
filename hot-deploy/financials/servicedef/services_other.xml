@@ -25,7 +25,7 @@
             location="com.opensourcestrategies.financials.integration.GLExportServices" invoke="exportGLToFile" transaction-timeout="7200" auth="true">
         <implements service="storeEntitySyncData"/>
     </service>
-    
+
     <!-- Payment services -->
     <service name="financials.createPayment" engine="java" default-entity-name="Payment"
         location="com.opensourcestrategies.financials.payment.PaymentServices" invoke="createPayment" auth="true">
@@ -112,4 +112,38 @@
         <attribute name="comments" mode="IN" type="String" optional="true"/>
         <attribute name="description" mode="IN" type="String" optional="true"/>
     </service>
+
+    <service name="financials.createGlAccountTransEntryFact" engine="pojo"
+        location="org.opentaps.financials.domain.ledger.FinancialReportServices" invoke="createGlAccountTransEntryFact" auth="true" use-transaction="false">
+        <description>
+            Collects and put to GlAccountTransEntryFact entity summary data for comparison budget 
+            versus actual transactions and encumbrances in financial reports.
+        </description>
+        <attribute name="organizationPartyId" mode="IN" type="String"/>
+    </service>
+
+    <service name="financials.collectEncumbranceAndTransEntryFacts" engine="pojo"
+        location="org.opentaps.financials.domain.ledger.FinancialReportServices" 
+        invoke="collectEncumbranceAndTransEntryFacts" auth="true" use-transaction="false">
+        <description>
+            Wrapper. Calls createEncumbranceSnapshotAndDetail and financials.createGlAccountTransEntryFact services. 
+        </description>
+        <attribute name="organizationPartyId" mode="IN" type="String"/>
+        <attribute name="startDatetime" mode="IN" type="Timestamp" optional="true"/>
+        <attribute name="snapshotDatetime" mode="IN" type="Timestamp" optional="true"/>
+        <attribute name="comments" mode="IN" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+    </service>
+
+    <service name="financials.loadTaxInvoiceItemFact" engine="java"
+        location="com.opensourcestrategies.financials.reports.FinancialReports"
+        invoke="loadTaxInvoiceItemFact" auth="true">
+        <description>Load data to TaxInvoiceItemFact entity</description>
+    </service>
+
+    <service name="loadSalesTaxData" engine="java" location="com.opensourcestrategies.financials.reports.FinancialReports"
+        invoke="loadSalesTaxData" use-transaction="false">
+        <description>Run both kettle sales tax transformations and loadTaxInvoiceItemFact service.</description>
+    </service>
+
 </services>

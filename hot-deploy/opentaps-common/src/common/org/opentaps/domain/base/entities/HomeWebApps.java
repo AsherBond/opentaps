@@ -53,7 +53,7 @@ public class HomeWebApps extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("applicationId", "APPLICATION_ID");
-        fields.put("name", "NAME");
+        fields.put("applicationName", "APPLICATION_NAME");
         fields.put("description", "DESCRIPTION");
         fields.put("imageUrl", "IMAGE_URL");
         fields.put("imageHoverUrl", "IMAGE_HOVER_URL");
@@ -66,7 +66,7 @@ fieldMapColumns.put("HomeWebApps", fields);
 }
   public static enum Fields implements EntityFieldInterface<HomeWebApps> {
     applicationId("applicationId"),
-    name("name"),
+    applicationName("applicationName"),
     description("description"),
     imageUrl("imageUrl"),
     imageHoverUrl("imageHoverUrl"),
@@ -90,8 +90,8 @@ fieldMapColumns.put("HomeWebApps", fields);
    @Id
    @Column(name="APPLICATION_ID")
    private String applicationId;
-   @Column(name="NAME")
-   private String name;
+   @Column(name="APPLICATION_NAME")
+   private String applicationName;
    @Column(name="DESCRIPTION")
    private String description;
    @Column(name="IMAGE_URL")
@@ -120,7 +120,7 @@ fieldMapColumns.put("HomeWebApps", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("applicationId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("applicationId");this.allFieldsNames.add("name");this.allFieldsNames.add("description");this.allFieldsNames.add("imageUrl");this.allFieldsNames.add("imageHoverUrl");this.allFieldsNames.add("linkUrl");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("applicationId");this.allFieldsNames.add("applicationName");this.allFieldsNames.add("description");this.allFieldsNames.add("imageUrl");this.allFieldsNames.add("imageHoverUrl");this.allFieldsNames.add("linkUrl");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -144,10 +144,10 @@ fieldMapColumns.put("HomeWebApps", fields);
     }
     /**
      * Auto generated value setter.
-     * @param name the name to set
+     * @param applicationName the applicationName to set
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
     }
     /**
      * Auto generated value setter.
@@ -217,8 +217,8 @@ fieldMapColumns.put("HomeWebApps", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getName() {
-        return this.name;
+    public String getApplicationName() {
+        return this.applicationName;
     }
     /**
      * Auto generated value accessor.
@@ -285,7 +285,7 @@ fieldMapColumns.put("HomeWebApps", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setApplicationId((String) mapValue.get("applicationId"));
-        setName((String) mapValue.get("name"));
+        setApplicationName((String) mapValue.get("applicationName"));
         setDescription((String) mapValue.get("description"));
         setImageUrl((String) mapValue.get("imageUrl"));
         setImageHoverUrl((String) mapValue.get("imageHoverUrl"));
@@ -302,7 +302,7 @@ fieldMapColumns.put("HomeWebApps", fields);
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("applicationId", getApplicationId());
-        mapValue.put("name", getName());
+        mapValue.put("applicationName", getApplicationName());
         mapValue.put("description", getDescription());
         mapValue.put("imageUrl", getImageUrl());
         mapValue.put("imageHoverUrl", getImageHoverUrl());

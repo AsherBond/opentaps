@@ -71,7 +71,12 @@
     </tr>
     <#list backOrderedItems?if_exists as item>
         <#assign itemInfo = item.orderId />
-        <#assign shipmentInfo = item.carrierPartyId?default("N/A") + " " + item.getRelatedOneCache("ShipmentMethodType").description />
+        <#if item.getRelatedOneCache("ShipmentMethodType")?exists>
+          <#assign shipmentMethodTypeDescription = " " + item.getRelatedOneCache("ShipmentMethodType").description />
+        <#else>
+          <#assign shipmentMethodTypeDescription = " " />
+        </#if>
+        <#assign shipmentInfo = item.carrierPartyId?default("N/A") +  shipmentMethodTypeDescription/>
         <#if item.promisedDatetime?exists><#assign promisedDate = item.promisedDatetime?string.short></#if>
     <tr class="${tableRowClass(item_index)}">
         <@displayDateCell date=item.reservedDatetime />

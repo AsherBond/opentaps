@@ -59,7 +59,7 @@
         <property name="gwt.module.base" value="org.opentaps.gwt.crmsfa"/>
         <property name="gwt.src.common" value="../opentaps-common/src/common/org/opentaps/gwt"/>
         <property name="gwt.src.base" value="./src/org/opentaps/gwt/crmsfa"/>
-        <property name="gwt.module.list" value="contacts,accounts,leads,partners,orders,cases"/>
+        <property name="gwt.module.list" value="contacts,accounts,leads,partners,orders,cases,opportunities"/>
         <!-- This parameter must point to your ofbiz/ directory or the libraries for the financials app would not be found.
          The default setting would work if you have checked out the financials module into your ofbiz/hot-deploy/ directory.
          It would NOT work if you checked it out somewhere else and symlinked to it in your hot-deploy/ directory.

@@ -186,112 +186,112 @@ fieldMapColumns.put("TestEntityAndItem", fields);
      * Auto generated value setter.
      * @param testEntityId the testEntityId to set
      */
-    private void setTestEntityId(String testEntityId) {
+    public void setTestEntityId(String testEntityId) {
         this.testEntityId = testEntityId;
     }
     /**
      * Auto generated value setter.
      * @param testEntityItemSeqId the testEntityItemSeqId to set
      */
-    private void setTestEntityItemSeqId(String testEntityItemSeqId) {
+    public void setTestEntityItemSeqId(String testEntityItemSeqId) {
         this.testEntityItemSeqId = testEntityItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param itemValue the itemValue to set
      */
-    private void setItemValue(String itemValue) {
+    public void setItemValue(String itemValue) {
         this.itemValue = itemValue;
     }
     /**
      * Auto generated value setter.
      * @param testId the testId to set
      */
-    private void setTestId(String testId) {
+    public void setTestId(String testId) {
         this.testId = testId;
     }
     /**
      * Auto generated value setter.
      * @param testStringField the testStringField to set
      */
-    private void setTestStringField(String testStringField) {
+    public void setTestStringField(String testStringField) {
         this.testStringField = testStringField;
     }
     /**
      * Auto generated value setter.
      * @param testDateTimeField the testDateTimeField to set
      */
-    private void setTestDateTimeField(Timestamp testDateTimeField) {
+    public void setTestDateTimeField(Timestamp testDateTimeField) {
         this.testDateTimeField = testDateTimeField;
     }
     /**
      * Auto generated value setter.
      * @param testNumericField the testNumericField to set
      */
-    private void setTestNumericField(Long testNumericField) {
+    public void setTestNumericField(Long testNumericField) {
         this.testNumericField = testNumericField;
     }
     /**
      * Auto generated value setter.
      * @param testFloatingPointField the testFloatingPointField to set
      */
-    private void setTestFloatingPointField(BigDecimal testFloatingPointField) {
+    public void setTestFloatingPointField(BigDecimal testFloatingPointField) {
         this.testFloatingPointField = testFloatingPointField;
     }
     /**
      * Auto generated value setter.
      * @param testCurrencyPreciseField the testCurrencyPreciseField to set
      */
-    private void setTestCurrencyPreciseField(BigDecimal testCurrencyPreciseField) {
+    public void setTestCurrencyPreciseField(BigDecimal testCurrencyPreciseField) {
         this.testCurrencyPreciseField = testCurrencyPreciseField;
     }
     /**
      * Auto generated value setter.
      * @param testCreditCardNumberField the testCreditCardNumberField to set
      */
-    private void setTestCreditCardNumberField(String testCreditCardNumberField) {
+    public void setTestCreditCardNumberField(String testCreditCardNumberField) {
         this.testCreditCardNumberField = testCreditCardNumberField;
     }
     /**
      * Auto generated value setter.
      * @param testCreditCardDateField the testCreditCardDateField to set
      */
-    private void setTestCreditCardDateField(String testCreditCardDateField) {
+    public void setTestCreditCardDateField(String testCreditCardDateField) {
         this.testCreditCardDateField = testCreditCardDateField;
     }
     /**
      * Auto generated value setter.
      * @param testEmailField the testEmailField to set
      */
-    private void setTestEmailField(String testEmailField) {
+    public void setTestEmailField(String testEmailField) {
         this.testEmailField = testEmailField;
     }
     /**
      * Auto generated value setter.
      * @param testUrlField the testUrlField to set
      */
-    private void setTestUrlField(String testUrlField) {
+    public void setTestUrlField(String testUrlField) {
         this.testUrlField = testUrlField;
     }
     /**
      * Auto generated value setter.
      * @param testTelphoneField the testTelphoneField to set
      */
-    private void setTestTelphoneField(String testTelphoneField) {
+    public void setTestTelphoneField(String testTelphoneField) {
         this.testTelphoneField = testTelphoneField;
     }
     /**
      * Auto generated value setter.
      * @param enumId the enumId to set
      */
-    private void setEnumId(String enumId) {
+    public void setEnumId(String enumId) {
         this.enumId = enumId;
     }
     /**
      * Auto generated value setter.
      * @param testEncrypt the testEncrypt to set
      */
-    private void setTestEncrypt(String testEncrypt) {
+    public void setTestEncrypt(String testEncrypt) {
         this.testEncrypt = testEncrypt;
     }
 

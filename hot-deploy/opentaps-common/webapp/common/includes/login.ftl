@@ -41,7 +41,6 @@
  *@version    $Rev: 314 $
  *@since      2.1
 -->
-
 <#assign previousParams = sessionAttributes._PREVIOUS_PARAMS_?if_exists/>
 <#if previousParams?has_content>
   <#assign previousParams = "?" + previousParams/>
@@ -55,7 +54,7 @@
 </#if>
 
 <#assign greetingLabel = opentapsApplicationName?default("opentaps")?cap_first + "LoginGreeting"/>
-
+<#include "keyboard-shortcuts.ftl"/>
 <div class="form" style="padding-top: 125px; padding-bottom: 125px;">
 
   <div align="center">

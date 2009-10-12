@@ -151,9 +151,14 @@ public class Invoice extends org.opentaps.domain.base.entities.Invoice {
             BigDecimal quantity = (item.get("quantity") == null ? BigDecimal.ONE : item.getBigDecimal("quantity"));
             if ("ITM_SALES_TAX".equals(item.get("invoiceItemTypeId"))) {
                 salesTaxTotal = salesTaxTotal.add(amount.multiply(quantity)).setScale(TAX_DECIMALS, TAX_ROUNDING);
+                // round the intermediate values to one more decimal place than the final values.
+                invoiceTotal = invoiceTotal.add(amount.multiply(quantity).setScale(TAX_DECIMALS, TAX_ROUNDING)).setScale(DECIMALS + 1, ROUNDING);
+            } else {
+                // round the intermediate values to one more decimal place than the final values.
+                invoiceTotal = invoiceTotal.add(amount.multiply(quantity).setScale(DECIMALS, ROUNDING)).setScale(DECIMALS + 1, ROUNDING);
             }
-            invoiceTotal = invoiceTotal.add(amount.multiply(quantity)).setScale(DECIMALS, ROUNDING);
         }
+        invoiceTotal = invoiceTotal.setScale(DECIMALS, ROUNDING);
     }
 
     /**

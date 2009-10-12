@@ -244,196 +244,196 @@ fieldMapColumns.put("PartyRelationshipToFrom", fields);
      * Auto generated value setter.
      * @param onePartyIdFrom the onePartyIdFrom to set
      */
-    private void setOnePartyIdFrom(String onePartyIdFrom) {
+    public void setOnePartyIdFrom(String onePartyIdFrom) {
         this.onePartyIdFrom = onePartyIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param onePartyIdTo the onePartyIdTo to set
      */
-    private void setOnePartyIdTo(String onePartyIdTo) {
+    public void setOnePartyIdTo(String onePartyIdTo) {
         this.onePartyIdTo = onePartyIdTo;
     }
     /**
      * Auto generated value setter.
      * @param oneRoleTypeIdFrom the oneRoleTypeIdFrom to set
      */
-    private void setOneRoleTypeIdFrom(String oneRoleTypeIdFrom) {
+    public void setOneRoleTypeIdFrom(String oneRoleTypeIdFrom) {
         this.oneRoleTypeIdFrom = oneRoleTypeIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param oneRoleTypeIdTo the oneRoleTypeIdTo to set
      */
-    private void setOneRoleTypeIdTo(String oneRoleTypeIdTo) {
+    public void setOneRoleTypeIdTo(String oneRoleTypeIdTo) {
         this.oneRoleTypeIdTo = oneRoleTypeIdTo;
     }
     /**
      * Auto generated value setter.
      * @param oneFromDate the oneFromDate to set
      */
-    private void setOneFromDate(Timestamp oneFromDate) {
+    public void setOneFromDate(Timestamp oneFromDate) {
         this.oneFromDate = oneFromDate;
     }
     /**
      * Auto generated value setter.
      * @param oneThruDate the oneThruDate to set
      */
-    private void setOneThruDate(Timestamp oneThruDate) {
+    public void setOneThruDate(Timestamp oneThruDate) {
         this.oneThruDate = oneThruDate;
     }
     /**
      * Auto generated value setter.
      * @param oneStatusId the oneStatusId to set
      */
-    private void setOneStatusId(String oneStatusId) {
+    public void setOneStatusId(String oneStatusId) {
         this.oneStatusId = oneStatusId;
     }
     /**
      * Auto generated value setter.
      * @param oneRelationshipName the oneRelationshipName to set
      */
-    private void setOneRelationshipName(String oneRelationshipName) {
+    public void setOneRelationshipName(String oneRelationshipName) {
         this.oneRelationshipName = oneRelationshipName;
     }
     /**
      * Auto generated value setter.
      * @param oneSecurityGroupId the oneSecurityGroupId to set
      */
-    private void setOneSecurityGroupId(String oneSecurityGroupId) {
+    public void setOneSecurityGroupId(String oneSecurityGroupId) {
         this.oneSecurityGroupId = oneSecurityGroupId;
     }
     /**
      * Auto generated value setter.
      * @param onePriorityTypeId the onePriorityTypeId to set
      */
-    private void setOnePriorityTypeId(String onePriorityTypeId) {
+    public void setOnePriorityTypeId(String onePriorityTypeId) {
         this.onePriorityTypeId = onePriorityTypeId;
     }
     /**
      * Auto generated value setter.
      * @param onePartyRelationshipTypeId the onePartyRelationshipTypeId to set
      */
-    private void setOnePartyRelationshipTypeId(String onePartyRelationshipTypeId) {
+    public void setOnePartyRelationshipTypeId(String onePartyRelationshipTypeId) {
         this.onePartyRelationshipTypeId = onePartyRelationshipTypeId;
     }
     /**
      * Auto generated value setter.
      * @param onePermissionsEnumId the onePermissionsEnumId to set
      */
-    private void setOnePermissionsEnumId(String onePermissionsEnumId) {
+    public void setOnePermissionsEnumId(String onePermissionsEnumId) {
         this.onePermissionsEnumId = onePermissionsEnumId;
     }
     /**
      * Auto generated value setter.
      * @param onePositionTitle the onePositionTitle to set
      */
-    private void setOnePositionTitle(String onePositionTitle) {
+    public void setOnePositionTitle(String onePositionTitle) {
         this.onePositionTitle = onePositionTitle;
     }
     /**
      * Auto generated value setter.
      * @param oneComments the oneComments to set
      */
-    private void setOneComments(String oneComments) {
+    public void setOneComments(String oneComments) {
         this.oneComments = oneComments;
     }
     /**
      * Auto generated value setter.
      * @param twoPartyIdFrom the twoPartyIdFrom to set
      */
-    private void setTwoPartyIdFrom(String twoPartyIdFrom) {
+    public void setTwoPartyIdFrom(String twoPartyIdFrom) {
         this.twoPartyIdFrom = twoPartyIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param twoPartyIdTo the twoPartyIdTo to set
      */
-    private void setTwoPartyIdTo(String twoPartyIdTo) {
+    public void setTwoPartyIdTo(String twoPartyIdTo) {
         this.twoPartyIdTo = twoPartyIdTo;
     }
     /**
      * Auto generated value setter.
      * @param twoRoleTypeIdFrom the twoRoleTypeIdFrom to set
      */
-    private void setTwoRoleTypeIdFrom(String twoRoleTypeIdFrom) {
+    public void setTwoRoleTypeIdFrom(String twoRoleTypeIdFrom) {
         this.twoRoleTypeIdFrom = twoRoleTypeIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param twoRoleTypeIdTo the twoRoleTypeIdTo to set
      */
-    private void setTwoRoleTypeIdTo(String twoRoleTypeIdTo) {
+    public void setTwoRoleTypeIdTo(String twoRoleTypeIdTo) {
         this.twoRoleTypeIdTo = twoRoleTypeIdTo;
     }
     /**
      * Auto generated value setter.
      * @param twoFromDate the twoFromDate to set
      */
-    private void setTwoFromDate(Timestamp twoFromDate) {
+    public void setTwoFromDate(Timestamp twoFromDate) {
         this.twoFromDate = twoFromDate;
     }
     /**
      * Auto generated value setter.
      * @param twoThruDate the twoThruDate to set
      */
-    private void setTwoThruDate(Timestamp twoThruDate) {
+    public void setTwoThruDate(Timestamp twoThruDate) {
         this.twoThruDate = twoThruDate;
     }
     /**
      * Auto generated value setter.
      * @param twoStatusId the twoStatusId to set
      */
-    private void setTwoStatusId(String twoStatusId) {
+    public void setTwoStatusId(String twoStatusId) {
         this.twoStatusId = twoStatusId;
     }
     /**
      * Auto generated value setter.
      * @param twoRelationshipName the twoRelationshipName to set
      */
-    private void setTwoRelationshipName(String twoRelationshipName) {
+    public void setTwoRelationshipName(String twoRelationshipName) {
         this.twoRelationshipName = twoRelationshipName;
     }
     /**
      * Auto generated value setter.
      * @param twoSecurityGroupId the twoSecurityGroupId to set
      */
-    private void setTwoSecurityGroupId(String twoSecurityGroupId) {
+    public void setTwoSecurityGroupId(String twoSecurityGroupId) {
         this.twoSecurityGroupId = twoSecurityGroupId;
     }
     /**
      * Auto generated value setter.
      * @param twoPriorityTypeId the twoPriorityTypeId to set
      */
-    private void setTwoPriorityTypeId(String twoPriorityTypeId) {
+    public void setTwoPriorityTypeId(String twoPriorityTypeId) {
         this.twoPriorityTypeId = twoPriorityTypeId;
     }
     /**
      * Auto generated value setter.
      * @param twoPartyRelationshipTypeId the twoPartyRelationshipTypeId to set
      */
-    private void setTwoPartyRelationshipTypeId(String twoPartyRelationshipTypeId) {
+    public void setTwoPartyRelationshipTypeId(String twoPartyRelationshipTypeId) {
         this.twoPartyRelationshipTypeId = twoPartyRelationshipTypeId;
     }
     /**
      * Auto generated value setter.
      * @param twoPermissionsEnumId the twoPermissionsEnumId to set
      */
-    private void setTwoPermissionsEnumId(String twoPermissionsEnumId) {
+    public void setTwoPermissionsEnumId(String twoPermissionsEnumId) {
         this.twoPermissionsEnumId = twoPermissionsEnumId;
     }
     /**
      * Auto generated value setter.
      * @param twoPositionTitle the twoPositionTitle to set
      */
-    private void setTwoPositionTitle(String twoPositionTitle) {
+    public void setTwoPositionTitle(String twoPositionTitle) {
         this.twoPositionTitle = twoPositionTitle;
     }
     /**
      * Auto generated value setter.
      * @param twoComments the twoComments to set
      */
-    private void setTwoComments(String twoComments) {
+    public void setTwoComments(String twoComments) {
         this.twoComments = twoComments;
     }
 

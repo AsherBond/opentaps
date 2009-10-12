@@ -160,77 +160,77 @@ fieldMapColumns.put("InvoiceItemCategorySummary", fields);
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param invoiceDate the invoiceDate to set
      */
-    private void setInvoiceDate(Timestamp invoiceDate) {
+    public void setInvoiceDate(Timestamp invoiceDate) {
         this.invoiceDate = invoiceDate;
     }
     /**
      * Auto generated value setter.
      * @param invoiceTypeId the invoiceTypeId to set
      */
-    private void setInvoiceTypeId(String invoiceTypeId) {
+    public void setInvoiceTypeId(String invoiceTypeId) {
         this.invoiceTypeId = invoiceTypeId;
     }
     /**
      * Auto generated value setter.
      * @param partyIdFrom the partyIdFrom to set
      */
-    private void setPartyIdFrom(String partyIdFrom) {
+    public void setPartyIdFrom(String partyIdFrom) {
         this.partyIdFrom = partyIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param currencyUomId the currencyUomId to set
      */
-    private void setCurrencyUomId(String currencyUomId) {
+    public void setCurrencyUomId(String currencyUomId) {
         this.currencyUomId = currencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param invoiceItemTypeId the invoiceItemTypeId to set
      */
-    private void setInvoiceItemTypeId(String invoiceItemTypeId) {
+    public void setInvoiceItemTypeId(String invoiceItemTypeId) {
         this.invoiceItemTypeId = invoiceItemTypeId;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param quantityTotal the quantityTotal to set
      */
-    private void setQuantityTotal(BigDecimal quantityTotal) {
+    public void setQuantityTotal(BigDecimal quantityTotal) {
         this.quantityTotal = quantityTotal;
     }
     /**
      * Auto generated value setter.
      * @param amountTotal the amountTotal to set
      */
-    private void setAmountTotal(BigDecimal amountTotal) {
+    public void setAmountTotal(BigDecimal amountTotal) {
         this.amountTotal = amountTotal;
     }
     /**
      * Auto generated value setter.
      * @param productCategoryId the productCategoryId to set
      */
-    private void setProductCategoryId(String productCategoryId) {
+    public void setProductCategoryId(String productCategoryId) {
         this.productCategoryId = productCategoryId;
     }
 

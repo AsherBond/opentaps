@@ -388,294 +388,294 @@ fieldMapColumns.put("DataResourceContentView", fields);
      * Auto generated value setter.
      * @param dataResourceId the dataResourceId to set
      */
-    private void setDataResourceId(String dataResourceId) {
+    public void setDataResourceId(String dataResourceId) {
         this.dataResourceId = dataResourceId;
     }
     /**
      * Auto generated value setter.
      * @param dataResourceTypeId the dataResourceTypeId to set
      */
-    private void setDataResourceTypeId(String dataResourceTypeId) {
+    public void setDataResourceTypeId(String dataResourceTypeId) {
         this.dataResourceTypeId = dataResourceTypeId;
     }
     /**
      * Auto generated value setter.
      * @param dataTemplateTypeId the dataTemplateTypeId to set
      */
-    private void setDataTemplateTypeId(String dataTemplateTypeId) {
+    public void setDataTemplateTypeId(String dataTemplateTypeId) {
         this.dataTemplateTypeId = dataTemplateTypeId;
     }
     /**
      * Auto generated value setter.
      * @param dataCategoryId the dataCategoryId to set
      */
-    private void setDataCategoryId(String dataCategoryId) {
+    public void setDataCategoryId(String dataCategoryId) {
         this.dataCategoryId = dataCategoryId;
     }
     /**
      * Auto generated value setter.
      * @param dataSourceId the dataSourceId to set
      */
-    private void setDataSourceId(String dataSourceId) {
+    public void setDataSourceId(String dataSourceId) {
         this.dataSourceId = dataSourceId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param dataResourceName the dataResourceName to set
      */
-    private void setDataResourceName(String dataResourceName) {
+    public void setDataResourceName(String dataResourceName) {
         this.dataResourceName = dataResourceName;
     }
     /**
      * Auto generated value setter.
      * @param localeString the localeString to set
      */
-    private void setLocaleString(String localeString) {
+    public void setLocaleString(String localeString) {
         this.localeString = localeString;
     }
     /**
      * Auto generated value setter.
      * @param mimeTypeId the mimeTypeId to set
      */
-    private void setMimeTypeId(String mimeTypeId) {
+    public void setMimeTypeId(String mimeTypeId) {
         this.mimeTypeId = mimeTypeId;
     }
     /**
      * Auto generated value setter.
      * @param characterSetId the characterSetId to set
      */
-    private void setCharacterSetId(String characterSetId) {
+    public void setCharacterSetId(String characterSetId) {
         this.characterSetId = characterSetId;
     }
     /**
      * Auto generated value setter.
      * @param objectInfo the objectInfo to set
      */
-    private void setObjectInfo(String objectInfo) {
+    public void setObjectInfo(String objectInfo) {
         this.objectInfo = objectInfo;
     }
     /**
      * Auto generated value setter.
      * @param surveyId the surveyId to set
      */
-    private void setSurveyId(String surveyId) {
+    public void setSurveyId(String surveyId) {
         this.surveyId = surveyId;
     }
     /**
      * Auto generated value setter.
      * @param surveyResponseId the surveyResponseId to set
      */
-    private void setSurveyResponseId(String surveyResponseId) {
+    public void setSurveyResponseId(String surveyResponseId) {
         this.surveyResponseId = surveyResponseId;
     }
     /**
      * Auto generated value setter.
      * @param relatedDetailId the relatedDetailId to set
      */
-    private void setRelatedDetailId(String relatedDetailId) {
+    public void setRelatedDetailId(String relatedDetailId) {
         this.relatedDetailId = relatedDetailId;
     }
     /**
      * Auto generated value setter.
      * @param isPublic the isPublic to set
      */
-    private void setIsPublic(String isPublic) {
+    public void setIsPublic(String isPublic) {
         this.isPublic = isPublic;
     }
     /**
      * Auto generated value setter.
      * @param createdDate the createdDate to set
      */
-    private void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
     /**
      * Auto generated value setter.
      * @param createdByUserLogin the createdByUserLogin to set
      */
-    private void setCreatedByUserLogin(String createdByUserLogin) {
+    public void setCreatedByUserLogin(String createdByUserLogin) {
         this.createdByUserLogin = createdByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedDate the lastModifiedDate to set
      */
-    private void setLastModifiedDate(Timestamp lastModifiedDate) {
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedByUserLogin the lastModifiedByUserLogin to set
      */
-    private void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
+    public void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
         this.lastModifiedByUserLogin = lastModifiedByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param coContentId the coContentId to set
      */
-    private void setCoContentId(String coContentId) {
+    public void setCoContentId(String coContentId) {
         this.coContentId = coContentId;
     }
     /**
      * Auto generated value setter.
      * @param coContentTypeId the coContentTypeId to set
      */
-    private void setCoContentTypeId(String coContentTypeId) {
+    public void setCoContentTypeId(String coContentTypeId) {
         this.coContentTypeId = coContentTypeId;
     }
     /**
      * Auto generated value setter.
      * @param coOwnerContentId the coOwnerContentId to set
      */
-    private void setCoOwnerContentId(String coOwnerContentId) {
+    public void setCoOwnerContentId(String coOwnerContentId) {
         this.coOwnerContentId = coOwnerContentId;
     }
     /**
      * Auto generated value setter.
      * @param coDecoratorContentId the coDecoratorContentId to set
      */
-    private void setCoDecoratorContentId(String coDecoratorContentId) {
+    public void setCoDecoratorContentId(String coDecoratorContentId) {
         this.coDecoratorContentId = coDecoratorContentId;
     }
     /**
      * Auto generated value setter.
      * @param coInstanceOfContentId the coInstanceOfContentId to set
      */
-    private void setCoInstanceOfContentId(String coInstanceOfContentId) {
+    public void setCoInstanceOfContentId(String coInstanceOfContentId) {
         this.coInstanceOfContentId = coInstanceOfContentId;
     }
     /**
      * Auto generated value setter.
      * @param coDataResourceId the coDataResourceId to set
      */
-    private void setCoDataResourceId(String coDataResourceId) {
+    public void setCoDataResourceId(String coDataResourceId) {
         this.coDataResourceId = coDataResourceId;
     }
     /**
      * Auto generated value setter.
      * @param coTemplateDataResourceId the coTemplateDataResourceId to set
      */
-    private void setCoTemplateDataResourceId(String coTemplateDataResourceId) {
+    public void setCoTemplateDataResourceId(String coTemplateDataResourceId) {
         this.coTemplateDataResourceId = coTemplateDataResourceId;
     }
     /**
      * Auto generated value setter.
      * @param coDataSourceId the coDataSourceId to set
      */
-    private void setCoDataSourceId(String coDataSourceId) {
+    public void setCoDataSourceId(String coDataSourceId) {
         this.coDataSourceId = coDataSourceId;
     }
     /**
      * Auto generated value setter.
      * @param coStatusId the coStatusId to set
      */
-    private void setCoStatusId(String coStatusId) {
+    public void setCoStatusId(String coStatusId) {
         this.coStatusId = coStatusId;
     }
     /**
      * Auto generated value setter.
      * @param coPrivilegeEnumId the coPrivilegeEnumId to set
      */
-    private void setCoPrivilegeEnumId(String coPrivilegeEnumId) {
+    public void setCoPrivilegeEnumId(String coPrivilegeEnumId) {
         this.coPrivilegeEnumId = coPrivilegeEnumId;
     }
     /**
      * Auto generated value setter.
      * @param coServiceName the coServiceName to set
      */
-    private void setCoServiceName(String coServiceName) {
+    public void setCoServiceName(String coServiceName) {
         this.coServiceName = coServiceName;
     }
     /**
      * Auto generated value setter.
      * @param coContentName the coContentName to set
      */
-    private void setCoContentName(String coContentName) {
+    public void setCoContentName(String coContentName) {
         this.coContentName = coContentName;
     }
     /**
      * Auto generated value setter.
      * @param coDescription the coDescription to set
      */
-    private void setCoDescription(String coDescription) {
+    public void setCoDescription(String coDescription) {
         this.coDescription = coDescription;
     }
     /**
      * Auto generated value setter.
      * @param coLocaleString the coLocaleString to set
      */
-    private void setCoLocaleString(String coLocaleString) {
+    public void setCoLocaleString(String coLocaleString) {
         this.coLocaleString = coLocaleString;
     }
     /**
      * Auto generated value setter.
      * @param coMimeTypeId the coMimeTypeId to set
      */
-    private void setCoMimeTypeId(String coMimeTypeId) {
+    public void setCoMimeTypeId(String coMimeTypeId) {
         this.coMimeTypeId = coMimeTypeId;
     }
     /**
      * Auto generated value setter.
      * @param coCharacterSetId the coCharacterSetId to set
      */
-    private void setCoCharacterSetId(String coCharacterSetId) {
+    public void setCoCharacterSetId(String coCharacterSetId) {
         this.coCharacterSetId = coCharacterSetId;
     }
     /**
      * Auto generated value setter.
      * @param coChildLeafCount the coChildLeafCount to set
      */
-    private void setCoChildLeafCount(Long coChildLeafCount) {
+    public void setCoChildLeafCount(Long coChildLeafCount) {
         this.coChildLeafCount = coChildLeafCount;
     }
     /**
      * Auto generated value setter.
      * @param coChildBranchCount the coChildBranchCount to set
      */
-    private void setCoChildBranchCount(Long coChildBranchCount) {
+    public void setCoChildBranchCount(Long coChildBranchCount) {
         this.coChildBranchCount = coChildBranchCount;
     }
     /**
      * Auto generated value setter.
      * @param coCreatedDate the coCreatedDate to set
      */
-    private void setCoCreatedDate(Timestamp coCreatedDate) {
+    public void setCoCreatedDate(Timestamp coCreatedDate) {
         this.coCreatedDate = coCreatedDate;
     }
     /**
      * Auto generated value setter.
      * @param coCreatedByUserLogin the coCreatedByUserLogin to set
      */
-    private void setCoCreatedByUserLogin(String coCreatedByUserLogin) {
+    public void setCoCreatedByUserLogin(String coCreatedByUserLogin) {
         this.coCreatedByUserLogin = coCreatedByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param coLastModifiedDate the coLastModifiedDate to set
      */
-    private void setCoLastModifiedDate(Timestamp coLastModifiedDate) {
+    public void setCoLastModifiedDate(Timestamp coLastModifiedDate) {
         this.coLastModifiedDate = coLastModifiedDate;
     }
     /**
      * Auto generated value setter.
      * @param coLastModifiedByUserLogin the coLastModifiedByUserLogin to set
      */
-    private void setCoLastModifiedByUserLogin(String coLastModifiedByUserLogin) {
+    public void setCoLastModifiedByUserLogin(String coLastModifiedByUserLogin) {
         this.coLastModifiedByUserLogin = coLastModifiedByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param coClassificationEnumId the coClassificationEnumId to set
      */
-    private void setCoClassificationEnumId(String coClassificationEnumId) {
+    public void setCoClassificationEnumId(String coClassificationEnumId) {
         this.coClassificationEnumId = coClassificationEnumId;
     }
 

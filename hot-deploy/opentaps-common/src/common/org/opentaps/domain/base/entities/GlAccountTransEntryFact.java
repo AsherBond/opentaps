@@ -59,6 +59,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("glAccountId", "GL_ACCOUNT_ID");
         fields.put("acctgTransId", "ACCTG_TRANS_ID");
         fields.put("acctgTransEntrySeqId", "ACCTG_TRANS_ENTRY_SEQ_ID");
+        fields.put("orderId", "ORDER_ID");
+        fields.put("orderItemSeqId", "ORDER_ITEM_SEQ_ID");
         fields.put("budgetDebitAmount", "BUDGET_DEBIT_AMOUNT");
         fields.put("budgetCreditAmount", "BUDGET_CREDIT_AMOUNT");
         fields.put("actualDebitAmount", "ACTUAL_DEBIT_AMOUNT");
@@ -68,6 +70,16 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("budgetNetAmount", "BUDGET_NET_AMOUNT");
         fields.put("actualNetAmount", "ACTUAL_NET_AMOUNT");
         fields.put("encumberedNetAmount", "ENCUMBERED_NET_AMOUNT");
+        fields.put("acctgTagEnumId1", "ACCTG_TAG_ENUM_ID1");
+        fields.put("acctgTagEnumId2", "ACCTG_TAG_ENUM_ID2");
+        fields.put("acctgTagEnumId3", "ACCTG_TAG_ENUM_ID3");
+        fields.put("acctgTagEnumId4", "ACCTG_TAG_ENUM_ID4");
+        fields.put("acctgTagEnumId5", "ACCTG_TAG_ENUM_ID5");
+        fields.put("acctgTagEnumId6", "ACCTG_TAG_ENUM_ID6");
+        fields.put("acctgTagEnumId7", "ACCTG_TAG_ENUM_ID7");
+        fields.put("acctgTagEnumId8", "ACCTG_TAG_ENUM_ID8");
+        fields.put("acctgTagEnumId9", "ACCTG_TAG_ENUM_ID9");
+        fields.put("acctgTagEnumId10", "ACCTG_TAG_ENUM_ID10");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -81,6 +93,8 @@ fieldMapColumns.put("GlAccountTransEntryFact", fields);
     glAccountId("glAccountId"),
     acctgTransId("acctgTransId"),
     acctgTransEntrySeqId("acctgTransEntrySeqId"),
+    orderId("orderId"),
+    orderItemSeqId("orderItemSeqId"),
     budgetDebitAmount("budgetDebitAmount"),
     budgetCreditAmount("budgetCreditAmount"),
     actualDebitAmount("actualDebitAmount"),
@@ -90,6 +104,16 @@ fieldMapColumns.put("GlAccountTransEntryFact", fields);
     budgetNetAmount("budgetNetAmount"),
     actualNetAmount("actualNetAmount"),
     encumberedNetAmount("encumberedNetAmount"),
+    acctgTagEnumId1("acctgTagEnumId1"),
+    acctgTagEnumId2("acctgTagEnumId2"),
+    acctgTagEnumId3("acctgTagEnumId3"),
+    acctgTagEnumId4("acctgTagEnumId4"),
+    acctgTagEnumId5("acctgTagEnumId5"),
+    acctgTagEnumId6("acctgTagEnumId6"),
+    acctgTagEnumId7("acctgTagEnumId7"),
+    acctgTagEnumId8("acctgTagEnumId8"),
+    acctgTagEnumId9("acctgTagEnumId9"),
+    acctgTagEnumId10("acctgTagEnumId10"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -119,6 +143,10 @@ fieldMapColumns.put("GlAccountTransEntryFact", fields);
    private String acctgTransId;
    @Column(name="ACCTG_TRANS_ENTRY_SEQ_ID")
    private String acctgTransEntrySeqId;
+   @Column(name="ORDER_ID")
+   private String orderId;
+   @Column(name="ORDER_ITEM_SEQ_ID")
+   private String orderItemSeqId;
    @Column(name="BUDGET_DEBIT_AMOUNT")
    private BigDecimal budgetDebitAmount;
    @Column(name="BUDGET_CREDIT_AMOUNT")
@@ -137,6 +165,26 @@ fieldMapColumns.put("GlAccountTransEntryFact", fields);
    private BigDecimal actualNetAmount;
    @Column(name="ENCUMBERED_NET_AMOUNT")
    private BigDecimal encumberedNetAmount;
+   @Column(name="ACCTG_TAG_ENUM_ID1")
+   private String acctgTagEnumId1;
+   @Column(name="ACCTG_TAG_ENUM_ID2")
+   private String acctgTagEnumId2;
+   @Column(name="ACCTG_TAG_ENUM_ID3")
+   private String acctgTagEnumId3;
+   @Column(name="ACCTG_TAG_ENUM_ID4")
+   private String acctgTagEnumId4;
+   @Column(name="ACCTG_TAG_ENUM_ID5")
+   private String acctgTagEnumId5;
+   @Column(name="ACCTG_TAG_ENUM_ID6")
+   private String acctgTagEnumId6;
+   @Column(name="ACCTG_TAG_ENUM_ID7")
+   private String acctgTagEnumId7;
+   @Column(name="ACCTG_TAG_ENUM_ID8")
+   private String acctgTagEnumId8;
+   @Column(name="ACCTG_TAG_ENUM_ID9")
+   private String acctgTagEnumId9;
+   @Column(name="ACCTG_TAG_ENUM_ID10")
+   private String acctgTagEnumId10;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -165,7 +213,7 @@ fieldMapColumns.put("GlAccountTransEntryFact", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("glAccountTransEntryFactId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("glAccountTransEntryFactId");this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("organizationPartyId");this.allFieldsNames.add("glAccountId");this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransEntrySeqId");this.allFieldsNames.add("budgetDebitAmount");this.allFieldsNames.add("budgetCreditAmount");this.allFieldsNames.add("actualDebitAmount");this.allFieldsNames.add("actualCreditAmount");this.allFieldsNames.add("encumberedDebitAmount");this.allFieldsNames.add("encumberedCreditAmount");this.allFieldsNames.add("budgetNetAmount");this.allFieldsNames.add("actualNetAmount");this.allFieldsNames.add("encumberedNetAmount");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("glAccountTransEntryFactId");this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("organizationPartyId");this.allFieldsNames.add("glAccountId");this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransEntrySeqId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("budgetDebitAmount");this.allFieldsNames.add("budgetCreditAmount");this.allFieldsNames.add("actualDebitAmount");this.allFieldsNames.add("actualCreditAmount");this.allFieldsNames.add("encumberedDebitAmount");this.allFieldsNames.add("encumberedCreditAmount");this.allFieldsNames.add("budgetNetAmount");this.allFieldsNames.add("actualNetAmount");this.allFieldsNames.add("encumberedNetAmount");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -221,6 +269,20 @@ fieldMapColumns.put("GlAccountTransEntryFact", fields);
      */
     public void setAcctgTransEntrySeqId(String acctgTransEntrySeqId) {
         this.acctgTransEntrySeqId = acctgTransEntrySeqId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param orderId the orderId to set
+     */
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param orderItemSeqId the orderItemSeqId to set
+     */
+    public void setOrderItemSeqId(String orderItemSeqId) {
+        this.orderItemSeqId = orderItemSeqId;
     }
     /**
      * Auto generated value setter.
@@ -284,6 +346,76 @@ fieldMapColumns.put("GlAccountTransEntryFact", fields);
      */
     public void setEncumberedNetAmount(BigDecimal encumberedNetAmount) {
         this.encumberedNetAmount = encumberedNetAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId1 the acctgTagEnumId1 to set
+     */
+    public void setAcctgTagEnumId1(String acctgTagEnumId1) {
+        this.acctgTagEnumId1 = acctgTagEnumId1;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId2 the acctgTagEnumId2 to set
+     */
+    public void setAcctgTagEnumId2(String acctgTagEnumId2) {
+        this.acctgTagEnumId2 = acctgTagEnumId2;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId3 the acctgTagEnumId3 to set
+     */
+    public void setAcctgTagEnumId3(String acctgTagEnumId3) {
+        this.acctgTagEnumId3 = acctgTagEnumId3;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId4 the acctgTagEnumId4 to set
+     */
+    public void setAcctgTagEnumId4(String acctgTagEnumId4) {
+        this.acctgTagEnumId4 = acctgTagEnumId4;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId5 the acctgTagEnumId5 to set
+     */
+    public void setAcctgTagEnumId5(String acctgTagEnumId5) {
+        this.acctgTagEnumId5 = acctgTagEnumId5;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId6 the acctgTagEnumId6 to set
+     */
+    public void setAcctgTagEnumId6(String acctgTagEnumId6) {
+        this.acctgTagEnumId6 = acctgTagEnumId6;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId7 the acctgTagEnumId7 to set
+     */
+    public void setAcctgTagEnumId7(String acctgTagEnumId7) {
+        this.acctgTagEnumId7 = acctgTagEnumId7;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId8 the acctgTagEnumId8 to set
+     */
+    public void setAcctgTagEnumId8(String acctgTagEnumId8) {
+        this.acctgTagEnumId8 = acctgTagEnumId8;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId9 the acctgTagEnumId9 to set
+     */
+    public void setAcctgTagEnumId9(String acctgTagEnumId9) {
+        this.acctgTagEnumId9 = acctgTagEnumId9;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId10 the acctgTagEnumId10 to set
+     */
+    public void setAcctgTagEnumId10(String acctgTagEnumId10) {
+        this.acctgTagEnumId10 = acctgTagEnumId10;
     }
     /**
      * Auto generated value setter.
@@ -358,6 +490,20 @@ fieldMapColumns.put("GlAccountTransEntryFact", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOrderId() {
+        return this.orderId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOrderItemSeqId() {
+        return this.orderItemSeqId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>BigDecimal</code>
      */
     public BigDecimal getBudgetDebitAmount() {
@@ -418,6 +564,76 @@ fieldMapColumns.put("GlAccountTransEntryFact", fields);
      */
     public BigDecimal getEncumberedNetAmount() {
         return this.encumberedNetAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId1() {
+        return this.acctgTagEnumId1;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId2() {
+        return this.acctgTagEnumId2;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId3() {
+        return this.acctgTagEnumId3;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId4() {
+        return this.acctgTagEnumId4;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId5() {
+        return this.acctgTagEnumId5;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId6() {
+        return this.acctgTagEnumId6;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId7() {
+        return this.acctgTagEnumId7;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId8() {
+        return this.acctgTagEnumId8;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId9() {
+        return this.acctgTagEnumId9;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId10() {
+        return this.acctgTagEnumId10;
     }
     /**
      * Auto generated value accessor.
@@ -497,6 +713,8 @@ fieldMapColumns.put("GlAccountTransEntryFact", fields);
         setGlAccountId((String) mapValue.get("glAccountId"));
         setAcctgTransId((String) mapValue.get("acctgTransId"));
         setAcctgTransEntrySeqId((String) mapValue.get("acctgTransEntrySeqId"));
+        setOrderId((String) mapValue.get("orderId"));
+        setOrderItemSeqId((String) mapValue.get("orderItemSeqId"));
         setBudgetDebitAmount(convertToBigDecimal(mapValue.get("budgetDebitAmount")));
         setBudgetCreditAmount(convertToBigDecimal(mapValue.get("budgetCreditAmount")));
         setActualDebitAmount(convertToBigDecimal(mapValue.get("actualDebitAmount")));
@@ -506,6 +724,16 @@ fieldMapColumns.put("GlAccountTransEntryFact", fields);
         setBudgetNetAmount(convertToBigDecimal(mapValue.get("budgetNetAmount")));
         setActualNetAmount(convertToBigDecimal(mapValue.get("actualNetAmount")));
         setEncumberedNetAmount(convertToBigDecimal(mapValue.get("encumberedNetAmount")));
+        setAcctgTagEnumId1((String) mapValue.get("acctgTagEnumId1"));
+        setAcctgTagEnumId2((String) mapValue.get("acctgTagEnumId2"));
+        setAcctgTagEnumId3((String) mapValue.get("acctgTagEnumId3"));
+        setAcctgTagEnumId4((String) mapValue.get("acctgTagEnumId4"));
+        setAcctgTagEnumId5((String) mapValue.get("acctgTagEnumId5"));
+        setAcctgTagEnumId6((String) mapValue.get("acctgTagEnumId6"));
+        setAcctgTagEnumId7((String) mapValue.get("acctgTagEnumId7"));
+        setAcctgTagEnumId8((String) mapValue.get("acctgTagEnumId8"));
+        setAcctgTagEnumId9((String) mapValue.get("acctgTagEnumId9"));
+        setAcctgTagEnumId10((String) mapValue.get("acctgTagEnumId10"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -523,6 +751,8 @@ fieldMapColumns.put("GlAccountTransEntryFact", fields);
         mapValue.put("glAccountId", getGlAccountId());
         mapValue.put("acctgTransId", getAcctgTransId());
         mapValue.put("acctgTransEntrySeqId", getAcctgTransEntrySeqId());
+        mapValue.put("orderId", getOrderId());
+        mapValue.put("orderItemSeqId", getOrderItemSeqId());
         mapValue.put("budgetDebitAmount", getBudgetDebitAmount());
         mapValue.put("budgetCreditAmount", getBudgetCreditAmount());
         mapValue.put("actualDebitAmount", getActualDebitAmount());
@@ -532,6 +762,16 @@ fieldMapColumns.put("GlAccountTransEntryFact", fields);
         mapValue.put("budgetNetAmount", getBudgetNetAmount());
         mapValue.put("actualNetAmount", getActualNetAmount());
         mapValue.put("encumberedNetAmount", getEncumberedNetAmount());
+        mapValue.put("acctgTagEnumId1", getAcctgTagEnumId1());
+        mapValue.put("acctgTagEnumId2", getAcctgTagEnumId2());
+        mapValue.put("acctgTagEnumId3", getAcctgTagEnumId3());
+        mapValue.put("acctgTagEnumId4", getAcctgTagEnumId4());
+        mapValue.put("acctgTagEnumId5", getAcctgTagEnumId5());
+        mapValue.put("acctgTagEnumId6", getAcctgTagEnumId6());
+        mapValue.put("acctgTagEnumId7", getAcctgTagEnumId7());
+        mapValue.put("acctgTagEnumId8", getAcctgTagEnumId8());
+        mapValue.put("acctgTagEnumId9", getAcctgTagEnumId9());
+        mapValue.put("acctgTagEnumId10", getAcctgTagEnumId10());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

@@ -193,112 +193,112 @@ fieldMapColumns.put("WorkEffortAssocView", fields);
      * Auto generated value setter.
      * @param workEffortToName the workEffortToName to set
      */
-    private void setWorkEffortToName(String workEffortToName) {
+    public void setWorkEffortToName(String workEffortToName) {
         this.workEffortToName = workEffortToName;
     }
     /**
      * Auto generated value setter.
      * @param workEffortToSetup the workEffortToSetup to set
      */
-    private void setWorkEffortToSetup(BigDecimal workEffortToSetup) {
+    public void setWorkEffortToSetup(BigDecimal workEffortToSetup) {
         this.workEffortToSetup = workEffortToSetup;
     }
     /**
      * Auto generated value setter.
      * @param workEffortToRun the workEffortToRun to set
      */
-    private void setWorkEffortToRun(BigDecimal workEffortToRun) {
+    public void setWorkEffortToRun(BigDecimal workEffortToRun) {
         this.workEffortToRun = workEffortToRun;
     }
     /**
      * Auto generated value setter.
      * @param workEffortToParentId the workEffortToParentId to set
      */
-    private void setWorkEffortToParentId(String workEffortToParentId) {
+    public void setWorkEffortToParentId(String workEffortToParentId) {
         this.workEffortToParentId = workEffortToParentId;
     }
     /**
      * Auto generated value setter.
      * @param workEffortToCurrentStatusId the workEffortToCurrentStatusId to set
      */
-    private void setWorkEffortToCurrentStatusId(String workEffortToCurrentStatusId) {
+    public void setWorkEffortToCurrentStatusId(String workEffortToCurrentStatusId) {
         this.workEffortToCurrentStatusId = workEffortToCurrentStatusId;
     }
     /**
      * Auto generated value setter.
      * @param workEffortToWorkEffortPurposeTypeId the workEffortToWorkEffortPurposeTypeId to set
      */
-    private void setWorkEffortToWorkEffortPurposeTypeId(String workEffortToWorkEffortPurposeTypeId) {
+    public void setWorkEffortToWorkEffortPurposeTypeId(String workEffortToWorkEffortPurposeTypeId) {
         this.workEffortToWorkEffortPurposeTypeId = workEffortToWorkEffortPurposeTypeId;
     }
     /**
      * Auto generated value setter.
      * @param workEffortToEstimatedStartDate the workEffortToEstimatedStartDate to set
      */
-    private void setWorkEffortToEstimatedStartDate(Timestamp workEffortToEstimatedStartDate) {
+    public void setWorkEffortToEstimatedStartDate(Timestamp workEffortToEstimatedStartDate) {
         this.workEffortToEstimatedStartDate = workEffortToEstimatedStartDate;
     }
     /**
      * Auto generated value setter.
      * @param workEffortToEstimatedCompletionDate the workEffortToEstimatedCompletionDate to set
      */
-    private void setWorkEffortToEstimatedCompletionDate(Timestamp workEffortToEstimatedCompletionDate) {
+    public void setWorkEffortToEstimatedCompletionDate(Timestamp workEffortToEstimatedCompletionDate) {
         this.workEffortToEstimatedCompletionDate = workEffortToEstimatedCompletionDate;
     }
     /**
      * Auto generated value setter.
      * @param workEffortToActualStartDate the workEffortToActualStartDate to set
      */
-    private void setWorkEffortToActualStartDate(Timestamp workEffortToActualStartDate) {
+    public void setWorkEffortToActualStartDate(Timestamp workEffortToActualStartDate) {
         this.workEffortToActualStartDate = workEffortToActualStartDate;
     }
     /**
      * Auto generated value setter.
      * @param workEffortToActualCompletionDate the workEffortToActualCompletionDate to set
      */
-    private void setWorkEffortToActualCompletionDate(Timestamp workEffortToActualCompletionDate) {
+    public void setWorkEffortToActualCompletionDate(Timestamp workEffortToActualCompletionDate) {
         this.workEffortToActualCompletionDate = workEffortToActualCompletionDate;
     }
     /**
      * Auto generated value setter.
      * @param workEffortIdFrom the workEffortIdFrom to set
      */
-    private void setWorkEffortIdFrom(String workEffortIdFrom) {
+    public void setWorkEffortIdFrom(String workEffortIdFrom) {
         this.workEffortIdFrom = workEffortIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param workEffortIdTo the workEffortIdTo to set
      */
-    private void setWorkEffortIdTo(String workEffortIdTo) {
+    public void setWorkEffortIdTo(String workEffortIdTo) {
         this.workEffortIdTo = workEffortIdTo;
     }
     /**
      * Auto generated value setter.
      * @param workEffortAssocTypeId the workEffortAssocTypeId to set
      */
-    private void setWorkEffortAssocTypeId(String workEffortAssocTypeId) {
+    public void setWorkEffortAssocTypeId(String workEffortAssocTypeId) {
         this.workEffortAssocTypeId = workEffortAssocTypeId;
     }
     /**
      * Auto generated value setter.
      * @param sequenceNum the sequenceNum to set
      */
-    private void setSequenceNum(Long sequenceNum) {
+    public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
 

@@ -477,3 +477,7 @@ div#sectionHeaderTitle_orders {
     background-image: url('/opentaps_images/openclipart.org/calcolatrice_architetto__01_24x24.png');
     padding-left: 40px;
 }
+div#sectionHeaderTitle_reports {
+    background-image: url('/opentaps_images/openclipart.org/inservice_presentation_01.png');
+    padding-left: 40px;
+}

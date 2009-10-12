@@ -125,28 +125,28 @@ fieldMapColumns.put("FinAccountTransSum", fields);
      * Auto generated value setter.
      * @param finAccountId the finAccountId to set
      */
-    private void setFinAccountId(String finAccountId) {
+    public void setFinAccountId(String finAccountId) {
         this.finAccountId = finAccountId;
     }
     /**
      * Auto generated value setter.
      * @param finAccountTransTypeId the finAccountTransTypeId to set
      */
-    private void setFinAccountTransTypeId(String finAccountTransTypeId) {
+    public void setFinAccountTransTypeId(String finAccountTransTypeId) {
         this.finAccountTransTypeId = finAccountTransTypeId;
     }
     /**
      * Auto generated value setter.
      * @param transactionDate the transactionDate to set
      */
-    private void setTransactionDate(Timestamp transactionDate) {
+    public void setTransactionDate(Timestamp transactionDate) {
         this.transactionDate = transactionDate;
     }
     /**
      * Auto generated value setter.
      * @param amount the amount to set
      */
-    private void setAmount(BigDecimal amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

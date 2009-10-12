@@ -160,77 +160,77 @@ fieldMapColumns.put("PaymentReceiptsDetail", fields);
      * Auto generated value setter.
      * @param paymentId the paymentId to set
      */
-    private void setPaymentId(String paymentId) {
+    public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
     }
     /**
      * Auto generated value setter.
      * @param paymentMethodTypeId the paymentMethodTypeId to set
      */
-    private void setPaymentMethodTypeId(String paymentMethodTypeId) {
+    public void setPaymentMethodTypeId(String paymentMethodTypeId) {
         this.paymentMethodTypeId = paymentMethodTypeId;
     }
     /**
      * Auto generated value setter.
      * @param paymentRefNum the paymentRefNum to set
      */
-    private void setPaymentRefNum(String paymentRefNum) {
+    public void setPaymentRefNum(String paymentRefNum) {
         this.paymentRefNum = paymentRefNum;
     }
     /**
      * Auto generated value setter.
      * @param partyIdTo the partyIdTo to set
      */
-    private void setPartyIdTo(String partyIdTo) {
+    public void setPartyIdTo(String partyIdTo) {
         this.partyIdTo = partyIdTo;
     }
     /**
      * Auto generated value setter.
      * @param partyIdFrom the partyIdFrom to set
      */
-    private void setPartyIdFrom(String partyIdFrom) {
+    public void setPartyIdFrom(String partyIdFrom) {
         this.partyIdFrom = partyIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param amount the amount to set
      */
-    private void setAmount(BigDecimal amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
     /**
      * Auto generated value setter.
      * @param currencyUomId the currencyUomId to set
      */
-    private void setCurrencyUomId(String currencyUomId) {
+    public void setCurrencyUomId(String currencyUomId) {
         this.currencyUomId = currencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param acctgTransId the acctgTransId to set
      */
-    private void setAcctgTransId(String acctgTransId) {
+    public void setAcctgTransId(String acctgTransId) {
         this.acctgTransId = acctgTransId;
     }
     /**
      * Auto generated value setter.
      * @param transactionDate the transactionDate to set
      */
-    private void setTransactionDate(Timestamp transactionDate) {
+    public void setTransactionDate(Timestamp transactionDate) {
         this.transactionDate = transactionDate;
     }
     /**
      * Auto generated value setter.
      * @param glAccountId the glAccountId to set
      */
-    private void setGlAccountId(String glAccountId) {
+    public void setGlAccountId(String glAccountId) {
         this.glAccountId = glAccountId;
     }
     /**
      * Auto generated value setter.
      * @param debitCreditFlag the debitCreditFlag to set
      */
-    private void setDebitCreditFlag(String debitCreditFlag) {
+    public void setDebitCreditFlag(String debitCreditFlag) {
         this.debitCreditFlag = debitCreditFlag;
     }
 

@@ -365,364 +365,364 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
      * Auto generated value setter.
      * @param contactMechPurposeTypeId the contactMechPurposeTypeId to set
      */
-    private void setContactMechPurposeTypeId(String contactMechPurposeTypeId) {
+    public void setContactMechPurposeTypeId(String contactMechPurposeTypeId) {
         this.contactMechPurposeTypeId = contactMechPurposeTypeId;
     }
     /**
      * Auto generated value setter.
      * @param purposeFromDate the purposeFromDate to set
      */
-    private void setPurposeFromDate(Timestamp purposeFromDate) {
+    public void setPurposeFromDate(Timestamp purposeFromDate) {
         this.purposeFromDate = purposeFromDate;
     }
     /**
      * Auto generated value setter.
      * @param purposeThruDate the purposeThruDate to set
      */
-    private void setPurposeThruDate(Timestamp purposeThruDate) {
+    public void setPurposeThruDate(Timestamp purposeThruDate) {
         this.purposeThruDate = purposeThruDate;
     }
     /**
      * Auto generated value setter.
      * @param contactMechTypeId the contactMechTypeId to set
      */
-    private void setContactMechTypeId(String contactMechTypeId) {
+    public void setContactMechTypeId(String contactMechTypeId) {
         this.contactMechTypeId = contactMechTypeId;
     }
     /**
      * Auto generated value setter.
      * @param infoString the infoString to set
      */
-    private void setInfoString(String infoString) {
+    public void setInfoString(String infoString) {
         this.infoString = infoString;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
-    private void setContactMechId(String contactMechId) {
+    public void setContactMechId(String contactMechId) {
         this.contactMechId = contactMechId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param allowSolicitation the allowSolicitation to set
      */
-    private void setAllowSolicitation(String allowSolicitation) {
+    public void setAllowSolicitation(String allowSolicitation) {
         this.allowSolicitation = allowSolicitation;
     }
     /**
      * Auto generated value setter.
      * @param extension the extension to set
      */
-    private void setExtension(String extension) {
+    public void setExtension(String extension) {
         this.extension = extension;
     }
     /**
      * Auto generated value setter.
      * @param verified the verified to set
      */
-    private void setVerified(String verified) {
+    public void setVerified(String verified) {
         this.verified = verified;
     }
     /**
      * Auto generated value setter.
      * @param comments the comments to set
      */
-    private void setComments(String comments) {
+    public void setComments(String comments) {
         this.comments = comments;
     }
     /**
      * Auto generated value setter.
      * @param yearsWithContactMech the yearsWithContactMech to set
      */
-    private void setYearsWithContactMech(Long yearsWithContactMech) {
+    public void setYearsWithContactMech(Long yearsWithContactMech) {
         this.yearsWithContactMech = yearsWithContactMech;
     }
     /**
      * Auto generated value setter.
      * @param monthsWithContactMech the monthsWithContactMech to set
      */
-    private void setMonthsWithContactMech(Long monthsWithContactMech) {
+    public void setMonthsWithContactMech(Long monthsWithContactMech) {
         this.monthsWithContactMech = monthsWithContactMech;
     }
     /**
      * Auto generated value setter.
      * @param toName the toName to set
      */
-    private void setToName(String toName) {
+    public void setToName(String toName) {
         this.toName = toName;
     }
     /**
      * Auto generated value setter.
      * @param attnName the attnName to set
      */
-    private void setAttnName(String attnName) {
+    public void setAttnName(String attnName) {
         this.attnName = attnName;
     }
     /**
      * Auto generated value setter.
      * @param address1 the address1 to set
      */
-    private void setAddress1(String address1) {
+    public void setAddress1(String address1) {
         this.address1 = address1;
     }
     /**
      * Auto generated value setter.
      * @param address2 the address2 to set
      */
-    private void setAddress2(String address2) {
+    public void setAddress2(String address2) {
         this.address2 = address2;
     }
     /**
      * Auto generated value setter.
      * @param directions the directions to set
      */
-    private void setDirections(String directions) {
+    public void setDirections(String directions) {
         this.directions = directions;
     }
     /**
      * Auto generated value setter.
      * @param city the city to set
      */
-    private void setCity(String city) {
+    public void setCity(String city) {
         this.city = city;
     }
     /**
      * Auto generated value setter.
      * @param postalCode the postalCode to set
      */
-    private void setPostalCode(String postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
     /**
      * Auto generated value setter.
      * @param postalCodeExt the postalCodeExt to set
      */
-    private void setPostalCodeExt(String postalCodeExt) {
+    public void setPostalCodeExt(String postalCodeExt) {
         this.postalCodeExt = postalCodeExt;
     }
     /**
      * Auto generated value setter.
      * @param countryGeoId the countryGeoId to set
      */
-    private void setCountryGeoId(String countryGeoId) {
+    public void setCountryGeoId(String countryGeoId) {
         this.countryGeoId = countryGeoId;
     }
     /**
      * Auto generated value setter.
      * @param stateProvinceGeoId the stateProvinceGeoId to set
      */
-    private void setStateProvinceGeoId(String stateProvinceGeoId) {
+    public void setStateProvinceGeoId(String stateProvinceGeoId) {
         this.stateProvinceGeoId = stateProvinceGeoId;
     }
     /**
      * Auto generated value setter.
      * @param countyGeoId the countyGeoId to set
      */
-    private void setCountyGeoId(String countyGeoId) {
+    public void setCountyGeoId(String countyGeoId) {
         this.countyGeoId = countyGeoId;
     }
     /**
      * Auto generated value setter.
      * @param postalCodeGeoId the postalCodeGeoId to set
      */
-    private void setPostalCodeGeoId(String postalCodeGeoId) {
+    public void setPostalCodeGeoId(String postalCodeGeoId) {
         this.postalCodeGeoId = postalCodeGeoId;
     }
     /**
      * Auto generated value setter.
      * @param geoPointId the geoPointId to set
      */
-    private void setGeoPointId(String geoPointId) {
+    public void setGeoPointId(String geoPointId) {
         this.geoPointId = geoPointId;
     }
     /**
      * Auto generated value setter.
      * @param countryCode the countryCode to set
      */
-    private void setCountryCode(String countryCode) {
+    public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
     /**
      * Auto generated value setter.
      * @param areaCode the areaCode to set
      */
-    private void setAreaCode(String areaCode) {
+    public void setAreaCode(String areaCode) {
         this.areaCode = areaCode;
     }
     /**
      * Auto generated value setter.
      * @param contactNumber the contactNumber to set
      */
-    private void setContactNumber(String contactNumber) {
+    public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
     }
     /**
      * Auto generated value setter.
      * @param askForName the askForName to set
      */
-    private void setAskForName(String askForName) {
+    public void setAskForName(String askForName) {
         this.askForName = askForName;
     }
     /**
      * Auto generated value setter.
      * @param stateGeoId the stateGeoId to set
      */
-    private void setStateGeoId(String stateGeoId) {
+    public void setStateGeoId(String stateGeoId) {
         this.stateGeoId = stateGeoId;
     }
     /**
      * Auto generated value setter.
      * @param stateGeoTypeId the stateGeoTypeId to set
      */
-    private void setStateGeoTypeId(String stateGeoTypeId) {
+    public void setStateGeoTypeId(String stateGeoTypeId) {
         this.stateGeoTypeId = stateGeoTypeId;
     }
     /**
      * Auto generated value setter.
      * @param stateGeoName the stateGeoName to set
      */
-    private void setStateGeoName(String stateGeoName) {
+    public void setStateGeoName(String stateGeoName) {
         this.stateGeoName = stateGeoName;
     }
     /**
      * Auto generated value setter.
      * @param stateGeoCode the stateGeoCode to set
      */
-    private void setStateGeoCode(String stateGeoCode) {
+    public void setStateGeoCode(String stateGeoCode) {
         this.stateGeoCode = stateGeoCode;
     }
     /**
      * Auto generated value setter.
      * @param stateGeoSecCode the stateGeoSecCode to set
      */
-    private void setStateGeoSecCode(String stateGeoSecCode) {
+    public void setStateGeoSecCode(String stateGeoSecCode) {
         this.stateGeoSecCode = stateGeoSecCode;
     }
     /**
      * Auto generated value setter.
      * @param stateAbbreviation the stateAbbreviation to set
      */
-    private void setStateAbbreviation(String stateAbbreviation) {
+    public void setStateAbbreviation(String stateAbbreviation) {
         this.stateAbbreviation = stateAbbreviation;
     }
     /**
      * Auto generated value setter.
      * @param stateWellKnownText the stateWellKnownText to set
      */
-    private void setStateWellKnownText(String stateWellKnownText) {
+    public void setStateWellKnownText(String stateWellKnownText) {
         this.stateWellKnownText = stateWellKnownText;
     }
     /**
      * Auto generated value setter.
      * @param countyGeoTypeId the countyGeoTypeId to set
      */
-    private void setCountyGeoTypeId(String countyGeoTypeId) {
+    public void setCountyGeoTypeId(String countyGeoTypeId) {
         this.countyGeoTypeId = countyGeoTypeId;
     }
     /**
      * Auto generated value setter.
      * @param countyGeoName the countyGeoName to set
      */
-    private void setCountyGeoName(String countyGeoName) {
+    public void setCountyGeoName(String countyGeoName) {
         this.countyGeoName = countyGeoName;
     }
     /**
      * Auto generated value setter.
      * @param countyGeoCode the countyGeoCode to set
      */
-    private void setCountyGeoCode(String countyGeoCode) {
+    public void setCountyGeoCode(String countyGeoCode) {
         this.countyGeoCode = countyGeoCode;
     }
     /**
      * Auto generated value setter.
      * @param countyGeoSecCode the countyGeoSecCode to set
      */
-    private void setCountyGeoSecCode(String countyGeoSecCode) {
+    public void setCountyGeoSecCode(String countyGeoSecCode) {
         this.countyGeoSecCode = countyGeoSecCode;
     }
     /**
      * Auto generated value setter.
      * @param countyAbbreviation the countyAbbreviation to set
      */
-    private void setCountyAbbreviation(String countyAbbreviation) {
+    public void setCountyAbbreviation(String countyAbbreviation) {
         this.countyAbbreviation = countyAbbreviation;
     }
     /**
      * Auto generated value setter.
      * @param countyWellKnownText the countyWellKnownText to set
      */
-    private void setCountyWellKnownText(String countyWellKnownText) {
+    public void setCountyWellKnownText(String countyWellKnownText) {
         this.countyWellKnownText = countyWellKnownText;
     }
     /**
      * Auto generated value setter.
      * @param countryGeoTypeId the countryGeoTypeId to set
      */
-    private void setCountryGeoTypeId(String countryGeoTypeId) {
+    public void setCountryGeoTypeId(String countryGeoTypeId) {
         this.countryGeoTypeId = countryGeoTypeId;
     }
     /**
      * Auto generated value setter.
      * @param countryGeoName the countryGeoName to set
      */
-    private void setCountryGeoName(String countryGeoName) {
+    public void setCountryGeoName(String countryGeoName) {
         this.countryGeoName = countryGeoName;
     }
     /**
      * Auto generated value setter.
      * @param countryGeoCode the countryGeoCode to set
      */
-    private void setCountryGeoCode(String countryGeoCode) {
+    public void setCountryGeoCode(String countryGeoCode) {
         this.countryGeoCode = countryGeoCode;
     }
     /**
      * Auto generated value setter.
      * @param countryGeoSecCode the countryGeoSecCode to set
      */
-    private void setCountryGeoSecCode(String countryGeoSecCode) {
+    public void setCountryGeoSecCode(String countryGeoSecCode) {
         this.countryGeoSecCode = countryGeoSecCode;
     }
     /**
      * Auto generated value setter.
      * @param countryAbbreviation the countryAbbreviation to set
      */
-    private void setCountryAbbreviation(String countryAbbreviation) {
+    public void setCountryAbbreviation(String countryAbbreviation) {
         this.countryAbbreviation = countryAbbreviation;
     }
     /**
      * Auto generated value setter.
      * @param countryWellKnownText the countryWellKnownText to set
      */
-    private void setCountryWellKnownText(String countryWellKnownText) {
+    public void setCountryWellKnownText(String countryWellKnownText) {
         this.countryWellKnownText = countryWellKnownText;
     }
 

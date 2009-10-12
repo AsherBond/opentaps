@@ -200,133 +200,133 @@ fieldMapColumns.put("OrderHeaderAndItems", fields);
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param orderDate the orderDate to set
      */
-    private void setOrderDate(Timestamp orderDate) {
+    public void setOrderDate(Timestamp orderDate) {
         this.orderDate = orderDate;
     }
     /**
      * Auto generated value setter.
      * @param orderStatusId the orderStatusId to set
      */
-    private void setOrderStatusId(String orderStatusId) {
+    public void setOrderStatusId(String orderStatusId) {
         this.orderStatusId = orderStatusId;
     }
     /**
      * Auto generated value setter.
      * @param grandTotal the grandTotal to set
      */
-    private void setGrandTotal(BigDecimal grandTotal) {
+    public void setGrandTotal(BigDecimal grandTotal) {
         this.grandTotal = grandTotal;
     }
     /**
      * Auto generated value setter.
      * @param productStoreId the productStoreId to set
      */
-    private void setProductStoreId(String productStoreId) {
+    public void setProductStoreId(String productStoreId) {
         this.productStoreId = productStoreId;
     }
     /**
      * Auto generated value setter.
      * @param orderTypeId the orderTypeId to set
      */
-    private void setOrderTypeId(String orderTypeId) {
+    public void setOrderTypeId(String orderTypeId) {
         this.orderTypeId = orderTypeId;
     }
     /**
      * Auto generated value setter.
      * @param orderItemSeqId the orderItemSeqId to set
      */
-    private void setOrderItemSeqId(String orderItemSeqId) {
+    public void setOrderItemSeqId(String orderItemSeqId) {
         this.orderItemSeqId = orderItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param quantity the quantity to set
      */
-    private void setQuantity(BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
     /**
      * Auto generated value setter.
      * @param cancelQuantity the cancelQuantity to set
      */
-    private void setCancelQuantity(BigDecimal cancelQuantity) {
+    public void setCancelQuantity(BigDecimal cancelQuantity) {
         this.cancelQuantity = cancelQuantity;
     }
     /**
      * Auto generated value setter.
      * @param unitPrice the unitPrice to set
      */
-    private void setUnitPrice(BigDecimal unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
     /**
      * Auto generated value setter.
      * @param unitListPrice the unitListPrice to set
      */
-    private void setUnitListPrice(BigDecimal unitListPrice) {
+    public void setUnitListPrice(BigDecimal unitListPrice) {
         this.unitListPrice = unitListPrice;
     }
     /**
      * Auto generated value setter.
      * @param itemDescription the itemDescription to set
      */
-    private void setItemDescription(String itemDescription) {
+    public void setItemDescription(String itemDescription) {
         this.itemDescription = itemDescription;
     }
     /**
      * Auto generated value setter.
      * @param itemStatusId the itemStatusId to set
      */
-    private void setItemStatusId(String itemStatusId) {
+    public void setItemStatusId(String itemStatusId) {
         this.itemStatusId = itemStatusId;
     }
     /**
      * Auto generated value setter.
      * @param estimatedShipDate the estimatedShipDate to set
      */
-    private void setEstimatedShipDate(Timestamp estimatedShipDate) {
+    public void setEstimatedShipDate(Timestamp estimatedShipDate) {
         this.estimatedShipDate = estimatedShipDate;
     }
     /**
      * Auto generated value setter.
      * @param estimatedDeliveryDate the estimatedDeliveryDate to set
      */
-    private void setEstimatedDeliveryDate(Timestamp estimatedDeliveryDate) {
+    public void setEstimatedDeliveryDate(Timestamp estimatedDeliveryDate) {
         this.estimatedDeliveryDate = estimatedDeliveryDate;
     }
     /**
      * Auto generated value setter.
      * @param shipBeforeDate the shipBeforeDate to set
      */
-    private void setShipBeforeDate(Timestamp shipBeforeDate) {
+    public void setShipBeforeDate(Timestamp shipBeforeDate) {
         this.shipBeforeDate = shipBeforeDate;
     }
     /**
      * Auto generated value setter.
      * @param shipAfterDate the shipAfterDate to set
      */
-    private void setShipAfterDate(Timestamp shipAfterDate) {
+    public void setShipAfterDate(Timestamp shipAfterDate) {
         this.shipAfterDate = shipAfterDate;
     }
     /**
      * Auto generated value setter.
      * @param orderItemTypeId the orderItemTypeId to set
      */
-    private void setOrderItemTypeId(String orderItemTypeId) {
+    public void setOrderItemTypeId(String orderItemTypeId) {
         this.orderItemTypeId = orderItemTypeId;
     }
 

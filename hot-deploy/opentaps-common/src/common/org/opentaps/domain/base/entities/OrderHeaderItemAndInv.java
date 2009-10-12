@@ -336,168 +336,168 @@ fieldMapColumns.put("OrderHeaderItemAndInv", fields);
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param orderTypeId the orderTypeId to set
      */
-    private void setOrderTypeId(String orderTypeId) {
+    public void setOrderTypeId(String orderTypeId) {
         this.orderTypeId = orderTypeId;
     }
     /**
      * Auto generated value setter.
      * @param orderDate the orderDate to set
      */
-    private void setOrderDate(Timestamp orderDate) {
+    public void setOrderDate(Timestamp orderDate) {
         this.orderDate = orderDate;
     }
     /**
      * Auto generated value setter.
      * @param entryDate the entryDate to set
      */
-    private void setEntryDate(Timestamp entryDate) {
+    public void setEntryDate(Timestamp entryDate) {
         this.entryDate = entryDate;
     }
     /**
      * Auto generated value setter.
      * @param visitId the visitId to set
      */
-    private void setVisitId(String visitId) {
+    public void setVisitId(String visitId) {
         this.visitId = visitId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param createdBy the createdBy to set
      */
-    private void setCreatedBy(String createdBy) {
+    public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
     /**
      * Auto generated value setter.
      * @param firstAttemptOrderId the firstAttemptOrderId to set
      */
-    private void setFirstAttemptOrderId(String firstAttemptOrderId) {
+    public void setFirstAttemptOrderId(String firstAttemptOrderId) {
         this.firstAttemptOrderId = firstAttemptOrderId;
     }
     /**
      * Auto generated value setter.
      * @param currencyUom the currencyUom to set
      */
-    private void setCurrencyUom(String currencyUom) {
+    public void setCurrencyUom(String currencyUom) {
         this.currencyUom = currencyUom;
     }
     /**
      * Auto generated value setter.
      * @param syncStatusId the syncStatusId to set
      */
-    private void setSyncStatusId(String syncStatusId) {
+    public void setSyncStatusId(String syncStatusId) {
         this.syncStatusId = syncStatusId;
     }
     /**
      * Auto generated value setter.
      * @param billingAccountId the billingAccountId to set
      */
-    private void setBillingAccountId(String billingAccountId) {
+    public void setBillingAccountId(String billingAccountId) {
         this.billingAccountId = billingAccountId;
     }
     /**
      * Auto generated value setter.
      * @param originFacilityId the originFacilityId to set
      */
-    private void setOriginFacilityId(String originFacilityId) {
+    public void setOriginFacilityId(String originFacilityId) {
         this.originFacilityId = originFacilityId;
     }
     /**
      * Auto generated value setter.
      * @param productStoreId the productStoreId to set
      */
-    private void setProductStoreId(String productStoreId) {
+    public void setProductStoreId(String productStoreId) {
         this.productStoreId = productStoreId;
     }
     /**
      * Auto generated value setter.
      * @param webSiteId the webSiteId to set
      */
-    private void setWebSiteId(String webSiteId) {
+    public void setWebSiteId(String webSiteId) {
         this.webSiteId = webSiteId;
     }
     /**
      * Auto generated value setter.
      * @param grandTotal the grandTotal to set
      */
-    private void setGrandTotal(BigDecimal grandTotal) {
+    public void setGrandTotal(BigDecimal grandTotal) {
         this.grandTotal = grandTotal;
     }
     /**
      * Auto generated value setter.
      * @param remainingSubTotal the remainingSubTotal to set
      */
-    private void setRemainingSubTotal(BigDecimal remainingSubTotal) {
+    public void setRemainingSubTotal(BigDecimal remainingSubTotal) {
         this.remainingSubTotal = remainingSubTotal;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param quantity the quantity to set
      */
-    private void setQuantity(BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
     /**
      * Auto generated value setter.
      * @param unitPrice the unitPrice to set
      */
-    private void setUnitPrice(BigDecimal unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
     /**
      * Auto generated value setter.
      * @param unitListPrice the unitListPrice to set
      */
-    private void setUnitListPrice(BigDecimal unitListPrice) {
+    public void setUnitListPrice(BigDecimal unitListPrice) {
         this.unitListPrice = unitListPrice;
     }
     /**
      * Auto generated value setter.
      * @param estimatedShipDate the estimatedShipDate to set
      */
-    private void setEstimatedShipDate(Timestamp estimatedShipDate) {
+    public void setEstimatedShipDate(Timestamp estimatedShipDate) {
         this.estimatedShipDate = estimatedShipDate;
     }
     /**
      * Auto generated value setter.
      * @param autoCancelDate the autoCancelDate to set
      */
-    private void setAutoCancelDate(Timestamp autoCancelDate) {
+    public void setAutoCancelDate(Timestamp autoCancelDate) {
         this.autoCancelDate = autoCancelDate;
     }
     /**
      * Auto generated value setter.
      * @param correspondingPoId the correspondingPoId to set
      */
-    private void setCorrespondingPoId(String correspondingPoId) {
+    public void setCorrespondingPoId(String correspondingPoId) {
         this.correspondingPoId = correspondingPoId;
     }
     /**
      * Auto generated value setter.
      * @param quantityNotAvailable the quantityNotAvailable to set
      */
-    private void setQuantityNotAvailable(BigDecimal quantityNotAvailable) {
+    public void setQuantityNotAvailable(BigDecimal quantityNotAvailable) {
         this.quantityNotAvailable = quantityNotAvailable;
     }
 

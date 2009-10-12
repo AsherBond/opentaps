@@ -29,7 +29,7 @@
  import org.ofbiz.content.report.*;
  import org.opentaps.common.util.UtilCommon;
  import org.opentaps.common.util.UtilMessage;
- import org.opentaps.analytics.UtilEtl;
+ import org.opentaps.common.reporting.etl.UtilEtl;
  import java.text.ParseException;
  import org.opentaps.common.util.UtilDate;
   

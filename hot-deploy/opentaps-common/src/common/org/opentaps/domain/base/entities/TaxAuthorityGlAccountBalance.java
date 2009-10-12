@@ -150,63 +150,63 @@ fieldMapColumns.put("TaxAuthorityGlAccountBalance", fields);
      * Auto generated value setter.
      * @param baseCurrencyUomId the baseCurrencyUomId to set
      */
-    private void setBaseCurrencyUomId(String baseCurrencyUomId) {
+    public void setBaseCurrencyUomId(String baseCurrencyUomId) {
         this.baseCurrencyUomId = baseCurrencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param taxAuthGeoId the taxAuthGeoId to set
      */
-    private void setTaxAuthGeoId(String taxAuthGeoId) {
+    public void setTaxAuthGeoId(String taxAuthGeoId) {
         this.taxAuthGeoId = taxAuthGeoId;
     }
     /**
      * Auto generated value setter.
      * @param taxAuthPartyId the taxAuthPartyId to set
      */
-    private void setTaxAuthPartyId(String taxAuthPartyId) {
+    public void setTaxAuthPartyId(String taxAuthPartyId) {
         this.taxAuthPartyId = taxAuthPartyId;
     }
     /**
      * Auto generated value setter.
      * @param organizationPartyId the organizationPartyId to set
      */
-    private void setOrganizationPartyId(String organizationPartyId) {
+    public void setOrganizationPartyId(String organizationPartyId) {
         this.organizationPartyId = organizationPartyId;
     }
     /**
      * Auto generated value setter.
      * @param glAccountId the glAccountId to set
      */
-    private void setGlAccountId(String glAccountId) {
+    public void setGlAccountId(String glAccountId) {
         this.glAccountId = glAccountId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param postedBalance the postedBalance to set
      */
-    private void setPostedBalance(BigDecimal postedBalance) {
+    public void setPostedBalance(BigDecimal postedBalance) {
         this.postedBalance = postedBalance;
     }
 

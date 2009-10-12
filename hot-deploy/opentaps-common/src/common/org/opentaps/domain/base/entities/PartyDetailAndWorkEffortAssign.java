@@ -169,91 +169,91 @@ fieldMapColumns.put("PartyDetailAndWorkEffortAssign", fields);
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param partyTypeId the partyTypeId to set
      */
-    private void setPartyTypeId(String partyTypeId) {
+    public void setPartyTypeId(String partyTypeId) {
         this.partyTypeId = partyTypeId;
     }
     /**
      * Auto generated value setter.
      * @param partyStatusId the partyStatusId to set
      */
-    private void setPartyStatusId(String partyStatusId) {
+    public void setPartyStatusId(String partyStatusId) {
         this.partyStatusId = partyStatusId;
     }
     /**
      * Auto generated value setter.
      * @param workEffortTypeId the workEffortTypeId to set
      */
-    private void setWorkEffortTypeId(String workEffortTypeId) {
+    public void setWorkEffortTypeId(String workEffortTypeId) {
         this.workEffortTypeId = workEffortTypeId;
     }
     /**
      * Auto generated value setter.
      * @param workEffortId the workEffortId to set
      */
-    private void setWorkEffortId(String workEffortId) {
+    public void setWorkEffortId(String workEffortId) {
         this.workEffortId = workEffortId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param firstName the firstName to set
      */
-    private void setFirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
     /**
      * Auto generated value setter.
      * @param middleName the middleName to set
      */
-    private void setMiddleName(String middleName) {
+    public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
     /**
      * Auto generated value setter.
      * @param lastName the lastName to set
      */
-    private void setLastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
     /**
      * Auto generated value setter.
      * @param groupName the groupName to set
      */
-    private void setGroupName(String groupName) {
+    public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
 

@@ -213,140 +213,140 @@ fieldMapColumns.put("ShipmentAndItem", fields);
      * Auto generated value setter.
      * @param shipmentId the shipmentId to set
      */
-    private void setShipmentId(String shipmentId) {
+    public void setShipmentId(String shipmentId) {
         this.shipmentId = shipmentId;
     }
     /**
      * Auto generated value setter.
      * @param shipmentTypeId the shipmentTypeId to set
      */
-    private void setShipmentTypeId(String shipmentTypeId) {
+    public void setShipmentTypeId(String shipmentTypeId) {
         this.shipmentTypeId = shipmentTypeId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param primaryOrderId the primaryOrderId to set
      */
-    private void setPrimaryOrderId(String primaryOrderId) {
+    public void setPrimaryOrderId(String primaryOrderId) {
         this.primaryOrderId = primaryOrderId;
     }
     /**
      * Auto generated value setter.
      * @param estimatedReadyDate the estimatedReadyDate to set
      */
-    private void setEstimatedReadyDate(Timestamp estimatedReadyDate) {
+    public void setEstimatedReadyDate(Timestamp estimatedReadyDate) {
         this.estimatedReadyDate = estimatedReadyDate;
     }
     /**
      * Auto generated value setter.
      * @param estimatedShipDate the estimatedShipDate to set
      */
-    private void setEstimatedShipDate(Timestamp estimatedShipDate) {
+    public void setEstimatedShipDate(Timestamp estimatedShipDate) {
         this.estimatedShipDate = estimatedShipDate;
     }
     /**
      * Auto generated value setter.
      * @param estimatedArrivalDate the estimatedArrivalDate to set
      */
-    private void setEstimatedArrivalDate(Timestamp estimatedArrivalDate) {
+    public void setEstimatedArrivalDate(Timestamp estimatedArrivalDate) {
         this.estimatedArrivalDate = estimatedArrivalDate;
     }
     /**
      * Auto generated value setter.
      * @param latestCancelDate the latestCancelDate to set
      */
-    private void setLatestCancelDate(Timestamp latestCancelDate) {
+    public void setLatestCancelDate(Timestamp latestCancelDate) {
         this.latestCancelDate = latestCancelDate;
     }
     /**
      * Auto generated value setter.
      * @param estimatedShipCost the estimatedShipCost to set
      */
-    private void setEstimatedShipCost(BigDecimal estimatedShipCost) {
+    public void setEstimatedShipCost(BigDecimal estimatedShipCost) {
         this.estimatedShipCost = estimatedShipCost;
     }
     /**
      * Auto generated value setter.
      * @param handlingInstructions the handlingInstructions to set
      */
-    private void setHandlingInstructions(String handlingInstructions) {
+    public void setHandlingInstructions(String handlingInstructions) {
         this.handlingInstructions = handlingInstructions;
     }
     /**
      * Auto generated value setter.
      * @param originFacilityId the originFacilityId to set
      */
-    private void setOriginFacilityId(String originFacilityId) {
+    public void setOriginFacilityId(String originFacilityId) {
         this.originFacilityId = originFacilityId;
     }
     /**
      * Auto generated value setter.
      * @param destinationFacilityId the destinationFacilityId to set
      */
-    private void setDestinationFacilityId(String destinationFacilityId) {
+    public void setDestinationFacilityId(String destinationFacilityId) {
         this.destinationFacilityId = destinationFacilityId;
     }
     /**
      * Auto generated value setter.
      * @param originContactMechId the originContactMechId to set
      */
-    private void setOriginContactMechId(String originContactMechId) {
+    public void setOriginContactMechId(String originContactMechId) {
         this.originContactMechId = originContactMechId;
     }
     /**
      * Auto generated value setter.
      * @param destinationContactMechId the destinationContactMechId to set
      */
-    private void setDestinationContactMechId(String destinationContactMechId) {
+    public void setDestinationContactMechId(String destinationContactMechId) {
         this.destinationContactMechId = destinationContactMechId;
     }
     /**
      * Auto generated value setter.
      * @param partyIdTo the partyIdTo to set
      */
-    private void setPartyIdTo(String partyIdTo) {
+    public void setPartyIdTo(String partyIdTo) {
         this.partyIdTo = partyIdTo;
     }
     /**
      * Auto generated value setter.
      * @param partyIdFrom the partyIdFrom to set
      */
-    private void setPartyIdFrom(String partyIdFrom) {
+    public void setPartyIdFrom(String partyIdFrom) {
         this.partyIdFrom = partyIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param shipmentItemSeqId the shipmentItemSeqId to set
      */
-    private void setShipmentItemSeqId(String shipmentItemSeqId) {
+    public void setShipmentItemSeqId(String shipmentItemSeqId) {
         this.shipmentItemSeqId = shipmentItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param quantity the quantity to set
      */
-    private void setQuantity(BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
     /**
      * Auto generated value setter.
      * @param shipmentContentDescription the shipmentContentDescription to set
      */
-    private void setShipmentContentDescription(String shipmentContentDescription) {
+    public void setShipmentContentDescription(String shipmentContentDescription) {
         this.shipmentContentDescription = shipmentContentDescription;
     }
 

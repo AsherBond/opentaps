@@ -149,42 +149,42 @@ fieldMapColumns.put("TestingNodeAndMember", fields);
      * Auto generated value setter.
      * @param testingNodeId the testingNodeId to set
      */
-    private void setTestingNodeId(String testingNodeId) {
+    public void setTestingNodeId(String testingNodeId) {
         this.testingNodeId = testingNodeId;
     }
     /**
      * Auto generated value setter.
      * @param primaryParentNodeId the primaryParentNodeId to set
      */
-    private void setPrimaryParentNodeId(String primaryParentNodeId) {
+    public void setPrimaryParentNodeId(String primaryParentNodeId) {
         this.primaryParentNodeId = primaryParentNodeId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param testingId the testingId to set
      */
-    private void setTestingId(String testingId) {
+    public void setTestingId(String testingId) {
         this.testingId = testingId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
 

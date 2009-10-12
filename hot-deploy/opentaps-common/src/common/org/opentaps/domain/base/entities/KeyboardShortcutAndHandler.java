@@ -48,7 +48,7 @@ import java.lang.String;
  * Auto generated base entity KeyboardShortcutAndHandler.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectKeyboardShortcutAndHandlers", query="SELECT KB.SHORTCUT_ID AS \"shortcutId\",KB.USER_LOGIN_ID AS \"userLoginId\",KB.APPLICATION_NAME AS \"applicationName\",KB.SCREEN_NAME AS \"screenName\",KB.SHORTCUT AS \"shortcut\",KB.ACTION_TYPE_ID AS \"actionTypeId\",KB.ACTION_TARGET AS \"actionTarget\",KB.DESCRIPTION AS \"description\",KB.SEQUENCE_NUM AS \"sequenceNum\",KBH.HANDLER AS \"handler\" FROM KEYBOARD_SHORTCUT KB INNER JOIN KEYBOARD_SHORTCUT_HANDLER KBH ON KB.ACTION_TYPE_ID = KBH.ACTION_TYPE_ID", resultSetMapping="KeyboardShortcutAndHandlerMapping")
+@NamedNativeQuery(name="selectKeyboardShortcutAndHandlers", query="SELECT KB.SHORTCUT_ID AS \"shortcutId\",KB.USER_LOGIN_ID AS \"userLoginId\",KB.APPLICATION_NAME AS \"applicationName\",KB.SCREEN_NAME AS \"screenName\",KB.SHORTCUT AS \"shortcut\",KB.ACTION_TYPE_ID AS \"actionTypeId\",KB.ACTION_TARGET AS \"actionTarget\",KB.DESCRIPTION AS \"description\",KB.SEQUENCE_NUM AS \"sequenceNum\",KBH.SHORTCUT_HANDLER AS \"shortcutHandler\" FROM KEYBOARD_SHORTCUT KB INNER JOIN KEYBOARD_SHORTCUT_HANDLER KBH ON KB.ACTION_TYPE_ID = KBH.ACTION_TYPE_ID", resultSetMapping="KeyboardShortcutAndHandlerMapping")
 @SqlResultSetMapping(name="KeyboardShortcutAndHandlerMapping", entities={
 @EntityResult(entityClass=KeyboardShortcutAndHandler.class, fields = {
 @FieldResult(name="shortcutId", column="shortcutId")
@@ -60,7 +60,7 @@ import java.lang.String;
 ,@FieldResult(name="actionTarget", column="actionTarget")
 ,@FieldResult(name="description", column="description")
 ,@FieldResult(name="sequenceNum", column="sequenceNum")
-,@FieldResult(name="handler", column="handler")
+,@FieldResult(name="shortcutHandler", column="shortcutHandler")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
 @org.hibernate.annotations.AccessType("field")
@@ -76,7 +76,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("actionTarget", "KB.ACTION_TARGET");
         fields.put("description", "KB.DESCRIPTION");
         fields.put("sequenceNum", "KB.SEQUENCE_NUM");
-        fields.put("handler", "KBH.HANDLER");
+        fields.put("shortcutHandler", "KBH.SHORTCUT_HANDLER");
 fieldMapColumns.put("KeyboardShortcutAndHandler", fields);
 }
   public static enum Fields implements EntityFieldInterface<KeyboardShortcutAndHandler> {
@@ -89,7 +89,7 @@ fieldMapColumns.put("KeyboardShortcutAndHandler", fields);
     actionTarget("actionTarget"),
     description("description"),
     sequenceNum("sequenceNum"),
-    handler("handler");
+    shortcutHandler("shortcutHandler");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -119,7 +119,7 @@ fieldMapColumns.put("KeyboardShortcutAndHandler", fields);
     
    private Long sequenceNum;
     
-   private String handler;
+   private String shortcutHandler;
 
   /**
    * Default constructor.
@@ -132,7 +132,7 @@ fieldMapColumns.put("KeyboardShortcutAndHandler", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("shortcutId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("shortcutId");this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("applicationName");this.allFieldsNames.add("screenName");this.allFieldsNames.add("shortcut");this.allFieldsNames.add("actionTypeId");this.allFieldsNames.add("actionTarget");this.allFieldsNames.add("description");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("handler");
+      this.allFieldsNames.add("shortcutId");this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("applicationName");this.allFieldsNames.add("screenName");this.allFieldsNames.add("shortcut");this.allFieldsNames.add("actionTypeId");this.allFieldsNames.add("actionTarget");this.allFieldsNames.add("description");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("shortcutHandler");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -154,71 +154,71 @@ fieldMapColumns.put("KeyboardShortcutAndHandler", fields);
      * Auto generated value setter.
      * @param shortcutId the shortcutId to set
      */
-    private void setShortcutId(String shortcutId) {
+    public void setShortcutId(String shortcutId) {
         this.shortcutId = shortcutId;
     }
     /**
      * Auto generated value setter.
      * @param userLoginId the userLoginId to set
      */
-    private void setUserLoginId(String userLoginId) {
+    public void setUserLoginId(String userLoginId) {
         this.userLoginId = userLoginId;
     }
     /**
      * Auto generated value setter.
      * @param applicationName the applicationName to set
      */
-    private void setApplicationName(String applicationName) {
+    public void setApplicationName(String applicationName) {
         this.applicationName = applicationName;
     }
     /**
      * Auto generated value setter.
      * @param screenName the screenName to set
      */
-    private void setScreenName(String screenName) {
+    public void setScreenName(String screenName) {
         this.screenName = screenName;
     }
     /**
      * Auto generated value setter.
      * @param shortcut the shortcut to set
      */
-    private void setShortcut(String shortcut) {
+    public void setShortcut(String shortcut) {
         this.shortcut = shortcut;
     }
     /**
      * Auto generated value setter.
      * @param actionTypeId the actionTypeId to set
      */
-    private void setActionTypeId(String actionTypeId) {
+    public void setActionTypeId(String actionTypeId) {
         this.actionTypeId = actionTypeId;
     }
     /**
      * Auto generated value setter.
      * @param actionTarget the actionTarget to set
      */
-    private void setActionTarget(String actionTarget) {
+    public void setActionTarget(String actionTarget) {
         this.actionTarget = actionTarget;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param sequenceNum the sequenceNum to set
      */
-    private void setSequenceNum(Long sequenceNum) {
+    public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
     /**
      * Auto generated value setter.
-     * @param handler the handler to set
+     * @param shortcutHandler the shortcutHandler to set
      */
-    private void setHandler(String handler) {
-        this.handler = handler;
+    public void setShortcutHandler(String shortcutHandler) {
+        this.shortcutHandler = shortcutHandler;
     }
 
     /**
@@ -288,8 +288,8 @@ fieldMapColumns.put("KeyboardShortcutAndHandler", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getHandler() {
-        return this.handler;
+    public String getShortcutHandler() {
+        return this.shortcutHandler;
     }
 
 
@@ -308,7 +308,7 @@ fieldMapColumns.put("KeyboardShortcutAndHandler", fields);
         setActionTarget((String) mapValue.get("actionTarget"));
         setDescription((String) mapValue.get("description"));
         setSequenceNum((Long) mapValue.get("sequenceNum"));
-        setHandler((String) mapValue.get("handler"));
+        setShortcutHandler((String) mapValue.get("shortcutHandler"));
         postInit();
     }
 
@@ -325,7 +325,7 @@ fieldMapColumns.put("KeyboardShortcutAndHandler", fields);
         mapValue.put("actionTarget", getActionTarget());
         mapValue.put("description", getDescription());
         mapValue.put("sequenceNum", getSequenceNum());
-        mapValue.put("handler", getHandler());
+        mapValue.put("shortcutHandler", getShortcutHandler());
         return mapValue;
     }
 

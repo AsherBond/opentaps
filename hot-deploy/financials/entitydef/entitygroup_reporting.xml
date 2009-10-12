@@ -26,7 +26,8 @@
     <entity-group group="org.ofbiz" entity="StoreDim"/>
     <entity-group group="org.ofbiz" entity="TaxAuthorityDim"/>
     <entity-group group="org.ofbiz" entity="CurrencyDim"/>
-    
+    <entity-group group="org.ofbiz" entity="OrganizationDim"/>
+
     <entity-group group="org.ofbiz" entity="SalesInvoiceItemFact"/>
     <entity-group group="org.ofbiz" entity="TaxInvoiceItemFact"/>    
 

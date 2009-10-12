@@ -91,7 +91,21 @@ public class UtilView {
             history.put("viewedTimestamp", UtilDateTime.nowTimestamp());
             history.create();
         }
-    }    
-    
-    
+    }
+
+    /**
+     * Checks if an CustRequest has been updated since the last view.  The EntityViewHistory table stores the time
+     * of the last view.  When an update happens, the entries in EntityViewHistory table are cleared.
+     * Thus, if no last view exists, an update has occured.
+     * @param delegator a <code>GenericDelegator</code> instance
+     * @param custRequestId the id of CustRequest
+     * @param userLoginId the id of user login
+     * @return if update
+     */
+    public static boolean isUpdatedSinceLastView(GenericDelegator delegator, String custRequestId, String userLoginId) throws GenericEntityException {
+        GenericValue history = delegator.findByPrimaryKey("EntityViewHistory", UtilMisc.toMap("entityName", "CustRequest",
+                "primaryKeyId", custRequestId, "userLoginId", userLoginId));
+        return (history == null ? true : false);
+    }
+
 }

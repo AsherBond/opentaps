@@ -115,12 +115,13 @@ under the License.
     <ProductInvoiceItemType productTypeId="FINDIG_GOOD" invoiceTypeId="SALES_INVOICE" invoiceItemTypeId="INV_FDPROD_ITEM"/>
     <!-- all other product types for SALES_INVOICE set to INV_FPROD_ITEM for now -->
 
-    <!-- Service items for ordering, along with map data for invoice item type TODO: to support purchased services, we'll need an InvoiceItemType specifoc for them -->
+    <!-- Service items for ordering, along with map data for invoice item type -->
     <OrderItemType orderItemTypeId="SERVICE_ORDER_ITEM" description="Service Item"/>
     <ProductOrderItemType productTypeId="SERVICE" orderTypeId="SALES_ORDER" orderItemTypeId="SERVICE_ORDER_ITEM"/>
     <InvoiceItemTypeMap invoiceItemMapKey="SERVICE_ORDER_ITEM" invoiceTypeId="SALES_INVOICE" invoiceItemTypeId="INV_SPROD_ITEM"/>
     <!-- This one is if product type SERVICE is used as the key (see org.ofbiz.accounting.invoice.InvoiceServices line 30) -->
     <InvoiceItemTypeMap invoiceItemMapKey="SERVICE" invoiceTypeId="SALES_INVOICE" invoiceItemTypeId="INV_SPROD_ITEM"/>
+    <InvoiceItemTypeMap invoiceItemMapKey="SERVICE" invoiceTypeId="PURCHASE_INVOICE" invoiceItemTypeId="PINV_SPROD_ITEM"/>
 
     <!-- Product Price Types -->
     <ProductPriceType description="Minimum Advertised Price" productPriceTypeId="MIN_ADV_PRICE"/>
@@ -235,9 +236,14 @@ under the License.
     <JobSandbox jobId="REFRESHINDEX" jobName="Run Create Index for Entities" runTime="2009-01-01 04:00:00.000" serviceName="opentaps.createHibernateSearchIndex" poolId="pool" runAsUser="system" recurrenceInfoId="REFRESHINDEX"/>
  
     <!-- Seed data for keyboard shortcuts default handlers -->
-    <KeyboardShortcutHandler actionTypeId="KB_URL" description="Redirects to the target URL" handler="opentaps.addUrlShortcut" />
-    <KeyboardShortcutHandler actionTypeId="KB_FOCUS" description="Set focus on the target DOM element" handler="opentaps.addFocusShortcut" />
+    <KeyboardShortcutHandler actionTypeId="KB_URL" description="Redirects to the target URL" shortcutHandler="opentaps.addUrlShortcut" />
+    <KeyboardShortcutHandler actionTypeId="KB_FOCUS" description="Set focus on the target DOM element" shortcutHandler="opentaps.addFocusShortcut" />
 
-	<!-- it use in InventoryTests.testNonSerializedInventoryVarianceWithAccountingTags -->
+    <!-- Data transformation type -->
+    <EnumerationType enumTypeId="DATA_TRANSFORM" description="Data Transformation Type"/>
+    <Enumeration enumTypeId="DATA_TRANSFORM" enumId="ENCUMB_GL_ENTRY" enumCode="ENCUMB_GL_ENTRY" sequenceId="01" description="Encumbrance and GL Account Trans Entry"/>
+    <Enumeration enumTypeId="DATA_TRANSFORM" enumId="SALES_TAX_FACT" enumCode="SALES_TAX_FACT" sequenceId="05" description="Sales Tax Facts"/>
+
+    <!-- it use in InventoryTests.testNonSerializedInventoryVarianceWithAccountingTags -->
     <Enumeration description="Transit" enumCode="VAR_TRANSIT" enumId="VAR_TRANSIT" sequenceId="09" enumTypeId="IID_REASON"/>
 </entity-engine-xml>

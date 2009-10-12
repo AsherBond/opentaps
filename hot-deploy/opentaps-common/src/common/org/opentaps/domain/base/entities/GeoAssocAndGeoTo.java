@@ -148,63 +148,63 @@ fieldMapColumns.put("GeoAssocAndGeoTo", fields);
      * Auto generated value setter.
      * @param geoIdFrom the geoIdFrom to set
      */
-    private void setGeoIdFrom(String geoIdFrom) {
+    public void setGeoIdFrom(String geoIdFrom) {
         this.geoIdFrom = geoIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param geoAssocTypeId the geoAssocTypeId to set
      */
-    private void setGeoAssocTypeId(String geoAssocTypeId) {
+    public void setGeoAssocTypeId(String geoAssocTypeId) {
         this.geoAssocTypeId = geoAssocTypeId;
     }
     /**
      * Auto generated value setter.
      * @param geoId the geoId to set
      */
-    private void setGeoId(String geoId) {
+    public void setGeoId(String geoId) {
         this.geoId = geoId;
     }
     /**
      * Auto generated value setter.
      * @param geoTypeId the geoTypeId to set
      */
-    private void setGeoTypeId(String geoTypeId) {
+    public void setGeoTypeId(String geoTypeId) {
         this.geoTypeId = geoTypeId;
     }
     /**
      * Auto generated value setter.
      * @param geoName the geoName to set
      */
-    private void setGeoName(String geoName) {
+    public void setGeoName(String geoName) {
         this.geoName = geoName;
     }
     /**
      * Auto generated value setter.
      * @param geoCode the geoCode to set
      */
-    private void setGeoCode(String geoCode) {
+    public void setGeoCode(String geoCode) {
         this.geoCode = geoCode;
     }
     /**
      * Auto generated value setter.
      * @param geoSecCode the geoSecCode to set
      */
-    private void setGeoSecCode(String geoSecCode) {
+    public void setGeoSecCode(String geoSecCode) {
         this.geoSecCode = geoSecCode;
     }
     /**
      * Auto generated value setter.
      * @param abbreviation the abbreviation to set
      */
-    private void setAbbreviation(String abbreviation) {
+    public void setAbbreviation(String abbreviation) {
         this.abbreviation = abbreviation;
     }
     /**
      * Auto generated value setter.
      * @param wellKnownText the wellKnownText to set
      */
-    private void setWellKnownText(String wellKnownText) {
+    public void setWellKnownText(String wellKnownText) {
         this.wellKnownText = wellKnownText;
     }
 

@@ -16,7 +16,6 @@
 package org.opentaps.financials.domain.billing.financials;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.List;
@@ -62,7 +61,7 @@ public class AccountBalanceHistoryService extends Service implements AccountBala
             OrganizationRepositoryInterface organizationRepositoryInterface = domains.getOrganizationDomain().getOrganizationRepository();
             session = getInfrastructure().getSession();
             List<Organization> allValidOrganizations = organizationRepositoryInterface.getAllValidOrganizations();
-            List<Map> allBalances = FastList.newInstance();
+            List<Map<String, Object>> allBalances = FastList.newInstance();
             asOfDatetime = UtilDateTime.nowTimestamp();
             for (Organization organization : allValidOrganizations) {
                 // use AccountsHelper.getBalancesForAllCustomers to get Balances For Customers
@@ -79,7 +78,7 @@ public class AccountBalanceHistoryService extends Service implements AccountBala
             }
             //store balance to database
             tx = session.beginTransaction();
-            for (Map balancesMap : allBalances) {
+            for (Map<String, Object> balancesMap : allBalances) {
                 String organizationPartyId = (String) balancesMap.get("organizationPartyId");
                 String balanceTypeEnumId = (String) balancesMap.get("balanceTypeEnumId");
                 Map<String, BigDecimal> balances = (Map<String, BigDecimal>) balancesMap.get("balances");

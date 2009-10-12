@@ -161,77 +161,77 @@ fieldMapColumns.put("ProdFeaGrpAppAndProdFeaApp", fields);
      * Auto generated value setter.
      * @param productFeatureGroupId the productFeatureGroupId to set
      */
-    private void setProductFeatureGroupId(String productFeatureGroupId) {
+    public void setProductFeatureGroupId(String productFeatureGroupId) {
         this.productFeatureGroupId = productFeatureGroupId;
     }
     /**
      * Auto generated value setter.
      * @param productFeatureId the productFeatureId to set
      */
-    private void setProductFeatureId(String productFeatureId) {
+    public void setProductFeatureId(String productFeatureId) {
         this.productFeatureId = productFeatureId;
     }
     /**
      * Auto generated value setter.
      * @param groupFromDate the groupFromDate to set
      */
-    private void setGroupFromDate(Timestamp groupFromDate) {
+    public void setGroupFromDate(Timestamp groupFromDate) {
         this.groupFromDate = groupFromDate;
     }
     /**
      * Auto generated value setter.
      * @param groupThruDate the groupThruDate to set
      */
-    private void setGroupThruDate(Timestamp groupThruDate) {
+    public void setGroupThruDate(Timestamp groupThruDate) {
         this.groupThruDate = groupThruDate;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param productFeatureApplTypeId the productFeatureApplTypeId to set
      */
-    private void setProductFeatureApplTypeId(String productFeatureApplTypeId) {
+    public void setProductFeatureApplTypeId(String productFeatureApplTypeId) {
         this.productFeatureApplTypeId = productFeatureApplTypeId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param sequenceNum the sequenceNum to set
      */
-    private void setSequenceNum(Long sequenceNum) {
+    public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
     /**
      * Auto generated value setter.
      * @param amount the amount to set
      */
-    private void setAmount(BigDecimal amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
     /**
      * Auto generated value setter.
      * @param recurringAmount the recurringAmount to set
      */
-    private void setRecurringAmount(BigDecimal recurringAmount) {
+    public void setRecurringAmount(BigDecimal recurringAmount) {
         this.recurringAmount = recurringAmount;
     }
 

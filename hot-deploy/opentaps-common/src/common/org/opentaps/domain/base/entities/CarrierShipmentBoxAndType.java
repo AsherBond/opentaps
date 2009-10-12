@@ -159,77 +159,77 @@ fieldMapColumns.put("CarrierShipmentBoxAndType", fields);
      * Auto generated value setter.
      * @param shipmentBoxTypeId the shipmentBoxTypeId to set
      */
-    private void setShipmentBoxTypeId(String shipmentBoxTypeId) {
+    public void setShipmentBoxTypeId(String shipmentBoxTypeId) {
         this.shipmentBoxTypeId = shipmentBoxTypeId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param packagingTypeCode the packagingTypeCode to set
      */
-    private void setPackagingTypeCode(String packagingTypeCode) {
+    public void setPackagingTypeCode(String packagingTypeCode) {
         this.packagingTypeCode = packagingTypeCode;
     }
     /**
      * Auto generated value setter.
      * @param oversizeCode the oversizeCode to set
      */
-    private void setOversizeCode(String oversizeCode) {
+    public void setOversizeCode(String oversizeCode) {
         this.oversizeCode = oversizeCode;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param dimensionUomId the dimensionUomId to set
      */
-    private void setDimensionUomId(String dimensionUomId) {
+    public void setDimensionUomId(String dimensionUomId) {
         this.dimensionUomId = dimensionUomId;
     }
     /**
      * Auto generated value setter.
      * @param boxLength the boxLength to set
      */
-    private void setBoxLength(BigDecimal boxLength) {
+    public void setBoxLength(BigDecimal boxLength) {
         this.boxLength = boxLength;
     }
     /**
      * Auto generated value setter.
      * @param boxWidth the boxWidth to set
      */
-    private void setBoxWidth(BigDecimal boxWidth) {
+    public void setBoxWidth(BigDecimal boxWidth) {
         this.boxWidth = boxWidth;
     }
     /**
      * Auto generated value setter.
      * @param boxHeight the boxHeight to set
      */
-    private void setBoxHeight(BigDecimal boxHeight) {
+    public void setBoxHeight(BigDecimal boxHeight) {
         this.boxHeight = boxHeight;
     }
     /**
      * Auto generated value setter.
      * @param weightUomId the weightUomId to set
      */
-    private void setWeightUomId(String weightUomId) {
+    public void setWeightUomId(String weightUomId) {
         this.weightUomId = weightUomId;
     }
     /**
      * Auto generated value setter.
      * @param boxWeight the boxWeight to set
      */
-    private void setBoxWeight(BigDecimal boxWeight) {
+    public void setBoxWeight(BigDecimal boxWeight) {
         this.boxWeight = boxWeight;
     }
 

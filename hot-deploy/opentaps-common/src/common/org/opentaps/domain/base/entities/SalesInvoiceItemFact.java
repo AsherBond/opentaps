@@ -54,9 +54,11 @@ import java.sql.Timestamp;
 public class SalesInvoiceItemFact extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
+        fields.put("salesInvItemFactId", "SALES_INV_ITEM_FACT_ID");
         fields.put("dateDimId", "DATE_DIM_ID");
         fields.put("storeDimId", "STORE_DIM_ID");
         fields.put("currencyDimId", "CURRENCY_DIM_ID");
+        fields.put("organizationDimId", "ORGANIZATION_DIM_ID");
         fields.put("invoiceId", "INVOICE_ID");
         fields.put("invoiceItemSeqId", "INVOICE_ITEM_SEQ_ID");
         fields.put("grossAmount", "GROSS_AMOUNT");
@@ -70,9 +72,11 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
 fieldMapColumns.put("SalesInvoiceItemFact", fields);
 }
   public static enum Fields implements EntityFieldInterface<SalesInvoiceItemFact> {
+    salesInvItemFactId("salesInvItemFactId"),
     dateDimId("dateDimId"),
     storeDimId("storeDimId"),
     currencyDimId("currencyDimId"),
+    organizationDimId("organizationDimId"),
     invoiceId("invoiceId"),
     invoiceItemSeqId("invoiceItemSeqId"),
     grossAmount("grossAmount"),
@@ -93,25 +97,23 @@ fieldMapColumns.put("SalesInvoiceItemFact", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
-   @EmbeddedId
-
-   @FieldBridge(impl = org.opentaps.domain.base.entities.bridge.SalesInvoiceItemFactPkBridge.class)
-     private SalesInvoiceItemFactPk id = new SalesInvoiceItemFactPk();
-   
-    /**
-     * Auto generated Id accessor.
-     * @return <code>SalesInvoiceItemFactPk</code>
-     */
-      public SalesInvoiceItemFactPk getId() {
-         return id;
-      }
-    /**
-     * Auto generated Id setter.
-     * @param id a <code>SalesInvoiceItemFactPk</code> value to set
-    */   
-      public void setId(SalesInvoiceItemFactPk id) {
-         this.id = id;
-      }
+   @org.hibernate.annotations.GenericGenerator(name="SalesInvoiceItemFact_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
+   @GeneratedValue(generator="SalesInvoiceItemFact_GEN")
+   @Id
+   @Column(name="SALES_INV_ITEM_FACT_ID")
+   private Long salesInvItemFactId;
+   @Column(name="DATE_DIM_ID")
+   private Long dateDimId;
+   @Column(name="STORE_DIM_ID")
+   private Long storeDimId;
+   @Column(name="CURRENCY_DIM_ID")
+   private Long currencyDimId;
+   @Column(name="ORGANIZATION_DIM_ID")
+   private Long organizationDimId;
+   @Column(name="INVOICE_ID")
+   private String invoiceId;
+   @Column(name="INVOICE_ITEM_SEQ_ID")
+   private String invoiceItemSeqId;
    @Column(name="GROSS_AMOUNT")
    private BigDecimal grossAmount;
    @Column(name="DISCOUNTS")
@@ -138,9 +140,9 @@ fieldMapColumns.put("SalesInvoiceItemFact", fields);
       this.isView = false;
       
       this.primaryKeyNames = new ArrayList<String>();
-      this.primaryKeyNames.add("dateDimId");this.primaryKeyNames.add("storeDimId");this.primaryKeyNames.add("currencyDimId");this.primaryKeyNames.add("invoiceId");this.primaryKeyNames.add("invoiceItemSeqId");
+      this.primaryKeyNames.add("salesInvItemFactId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("dateDimId");this.allFieldsNames.add("storeDimId");this.allFieldsNames.add("currencyDimId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("grossAmount");this.allFieldsNames.add("discounts");this.allFieldsNames.add("refunds");this.allFieldsNames.add("netAmount");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("salesInvItemFactId");this.allFieldsNames.add("dateDimId");this.allFieldsNames.add("storeDimId");this.allFieldsNames.add("currencyDimId");this.allFieldsNames.add("organizationDimId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("grossAmount");this.allFieldsNames.add("discounts");this.allFieldsNames.add("refunds");this.allFieldsNames.add("netAmount");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -157,38 +159,52 @@ fieldMapColumns.put("SalesInvoiceItemFact", fields);
 
     /**
      * Auto generated value setter.
+     * @param salesInvItemFactId the salesInvItemFactId to set
+     */
+    public void setSalesInvItemFactId(Long salesInvItemFactId) {
+        this.salesInvItemFactId = salesInvItemFactId;
+    }
+    /**
+     * Auto generated value setter.
      * @param dateDimId the dateDimId to set
      */
     public void setDateDimId(Long dateDimId) {
-        id.setDateDimId(dateDimId);
+        this.dateDimId = dateDimId;
     }
     /**
      * Auto generated value setter.
      * @param storeDimId the storeDimId to set
      */
     public void setStoreDimId(Long storeDimId) {
-        id.setStoreDimId(storeDimId);
+        this.storeDimId = storeDimId;
     }
     /**
      * Auto generated value setter.
      * @param currencyDimId the currencyDimId to set
      */
     public void setCurrencyDimId(Long currencyDimId) {
-        id.setCurrencyDimId(currencyDimId);
+        this.currencyDimId = currencyDimId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param organizationDimId the organizationDimId to set
+     */
+    public void setOrganizationDimId(Long organizationDimId) {
+        this.organizationDimId = organizationDimId;
     }
     /**
      * Auto generated value setter.
      * @param invoiceId the invoiceId to set
      */
     public void setInvoiceId(String invoiceId) {
-        id.setInvoiceId(invoiceId);
+        this.invoiceId = invoiceId;
     }
     /**
      * Auto generated value setter.
      * @param invoiceItemSeqId the invoiceItemSeqId to set
      */
     public void setInvoiceItemSeqId(String invoiceItemSeqId) {
-        id.setInvoiceItemSeqId(invoiceItemSeqId);
+        this.invoiceItemSeqId = invoiceItemSeqId;
     }
     /**
      * Auto generated value setter.
@@ -251,36 +267,50 @@ fieldMapColumns.put("SalesInvoiceItemFact", fields);
      * Auto generated value accessor.
      * @return <code>Long</code>
      */
+    public Long getSalesInvItemFactId() {
+        return this.salesInvItemFactId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
     public Long getDateDimId() {
-        return this.id.getDateDimId();
+        return this.dateDimId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Long</code>
      */
     public Long getStoreDimId() {
-        return this.id.getStoreDimId();
+        return this.storeDimId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Long</code>
      */
     public Long getCurrencyDimId() {
-        return this.id.getCurrencyDimId();
+        return this.currencyDimId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getOrganizationDimId() {
+        return this.organizationDimId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */
     public String getInvoiceId() {
-        return this.id.getInvoiceId();
+        return this.invoiceId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */
     public String getInvoiceItemSeqId() {
-        return this.id.getInvoiceItemSeqId();
+        return this.invoiceItemSeqId;
     }
     /**
      * Auto generated value accessor.
@@ -346,9 +376,11 @@ fieldMapColumns.put("SalesInvoiceItemFact", fields);
     @Override
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
+        setSalesInvItemFactId((Long) mapValue.get("salesInvItemFactId"));
         setDateDimId((Long) mapValue.get("dateDimId"));
         setStoreDimId((Long) mapValue.get("storeDimId"));
         setCurrencyDimId((Long) mapValue.get("currencyDimId"));
+        setOrganizationDimId((Long) mapValue.get("organizationDimId"));
         setInvoiceId((String) mapValue.get("invoiceId"));
         setInvoiceItemSeqId((String) mapValue.get("invoiceItemSeqId"));
         setGrossAmount(convertToBigDecimal(mapValue.get("grossAmount")));
@@ -366,9 +398,11 @@ fieldMapColumns.put("SalesInvoiceItemFact", fields);
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
+        mapValue.put("salesInvItemFactId", getSalesInvItemFactId());
         mapValue.put("dateDimId", getDateDimId());
         mapValue.put("storeDimId", getStoreDimId());
         mapValue.put("currencyDimId", getCurrencyDimId());
+        mapValue.put("organizationDimId", getOrganizationDimId());
         mapValue.put("invoiceId", getInvoiceId());
         mapValue.put("invoiceItemSeqId", getInvoiceItemSeqId());
         mapValue.put("grossAmount", getGrossAmount());

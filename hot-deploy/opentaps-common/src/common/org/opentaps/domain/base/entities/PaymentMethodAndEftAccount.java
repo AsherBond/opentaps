@@ -203,98 +203,98 @@ fieldMapColumns.put("PaymentMethodAndEftAccount", fields);
      * Auto generated value setter.
      * @param paymentMethodId the paymentMethodId to set
      */
-    private void setPaymentMethodId(String paymentMethodId) {
+    public void setPaymentMethodId(String paymentMethodId) {
         this.paymentMethodId = paymentMethodId;
     }
     /**
      * Auto generated value setter.
      * @param paymentMethodTypeId the paymentMethodTypeId to set
      */
-    private void setPaymentMethodTypeId(String paymentMethodTypeId) {
+    public void setPaymentMethodTypeId(String paymentMethodTypeId) {
         this.paymentMethodTypeId = paymentMethodTypeId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param glAccountId the glAccountId to set
      */
-    private void setGlAccountId(String glAccountId) {
+    public void setGlAccountId(String glAccountId) {
         this.glAccountId = glAccountId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param bankName the bankName to set
      */
-    private void setBankName(String bankName) {
+    public void setBankName(String bankName) {
         this.bankName = bankName;
     }
     /**
      * Auto generated value setter.
      * @param routingNumber the routingNumber to set
      */
-    private void setRoutingNumber(String routingNumber) {
+    public void setRoutingNumber(String routingNumber) {
         this.routingNumber = routingNumber;
     }
     /**
      * Auto generated value setter.
      * @param accountType the accountType to set
      */
-    private void setAccountType(String accountType) {
+    public void setAccountType(String accountType) {
         this.accountType = accountType;
     }
     /**
      * Auto generated value setter.
      * @param accountNumber the accountNumber to set
      */
-    private void setAccountNumber(String accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
     /**
      * Auto generated value setter.
      * @param nameOnAccount the nameOnAccount to set
      */
-    private void setNameOnAccount(String nameOnAccount) {
+    public void setNameOnAccount(String nameOnAccount) {
         this.nameOnAccount = nameOnAccount;
     }
     /**
      * Auto generated value setter.
      * @param companyNameOnAccount the companyNameOnAccount to set
      */
-    private void setCompanyNameOnAccount(String companyNameOnAccount) {
+    public void setCompanyNameOnAccount(String companyNameOnAccount) {
         this.companyNameOnAccount = companyNameOnAccount;
     }
     /**
      * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
-    private void setContactMechId(String contactMechId) {
+    public void setContactMechId(String contactMechId) {
         this.contactMechId = contactMechId;
     }
     /**
      * Auto generated value setter.
      * @param yearsAtBank the yearsAtBank to set
      */
-    private void setYearsAtBank(Long yearsAtBank) {
+    public void setYearsAtBank(Long yearsAtBank) {
         this.yearsAtBank = yearsAtBank;
     }
 

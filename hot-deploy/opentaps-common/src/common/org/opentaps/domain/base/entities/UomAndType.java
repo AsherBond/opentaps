@@ -143,56 +143,56 @@ fieldMapColumns.put("UomAndType", fields);
      * Auto generated value setter.
      * @param uomId the uomId to set
      */
-    private void setUomId(String uomId) {
+    public void setUomId(String uomId) {
         this.uomId = uomId;
     }
     /**
      * Auto generated value setter.
      * @param uomTypeId the uomTypeId to set
      */
-    private void setUomTypeId(String uomTypeId) {
+    public void setUomTypeId(String uomTypeId) {
         this.uomTypeId = uomTypeId;
     }
     /**
      * Auto generated value setter.
      * @param abbreviation the abbreviation to set
      */
-    private void setAbbreviation(String abbreviation) {
+    public void setAbbreviation(String abbreviation) {
         this.abbreviation = abbreviation;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param typeUomTypeId the typeUomTypeId to set
      */
-    private void setTypeUomTypeId(String typeUomTypeId) {
+    public void setTypeUomTypeId(String typeUomTypeId) {
         this.typeUomTypeId = typeUomTypeId;
     }
     /**
      * Auto generated value setter.
      * @param typeParentTypeId the typeParentTypeId to set
      */
-    private void setTypeParentTypeId(String typeParentTypeId) {
+    public void setTypeParentTypeId(String typeParentTypeId) {
         this.typeParentTypeId = typeParentTypeId;
     }
     /**
      * Auto generated value setter.
      * @param typeHasTable the typeHasTable to set
      */
-    private void setTypeHasTable(String typeHasTable) {
+    public void setTypeHasTable(String typeHasTable) {
         this.typeHasTable = typeHasTable;
     }
     /**
      * Auto generated value setter.
      * @param typeDescription the typeDescription to set
      */
-    private void setTypeDescription(String typeDescription) {
+    public void setTypeDescription(String typeDescription) {
         this.typeDescription = typeDescription;
     }
 

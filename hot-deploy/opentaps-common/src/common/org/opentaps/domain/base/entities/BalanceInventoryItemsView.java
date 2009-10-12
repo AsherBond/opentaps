@@ -176,98 +176,98 @@ fieldMapColumns.put("BalanceInventoryItemsView", fields);
      * Auto generated value setter.
      * @param inventoryItemId the inventoryItemId to set
      */
-    private void setInventoryItemId(String inventoryItemId) {
+    public void setInventoryItemId(String inventoryItemId) {
         this.inventoryItemId = inventoryItemId;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
     /**
      * Auto generated value setter.
      * @param inventoryItemTypeId the inventoryItemTypeId to set
      */
-    private void setInventoryItemTypeId(String inventoryItemTypeId) {
+    public void setInventoryItemTypeId(String inventoryItemTypeId) {
         this.inventoryItemTypeId = inventoryItemTypeId;
     }
     /**
      * Auto generated value setter.
      * @param availableToPromiseTotal the availableToPromiseTotal to set
      */
-    private void setAvailableToPromiseTotal(BigDecimal availableToPromiseTotal) {
+    public void setAvailableToPromiseTotal(BigDecimal availableToPromiseTotal) {
         this.availableToPromiseTotal = availableToPromiseTotal;
     }
     /**
      * Auto generated value setter.
      * @param quantityOnHandTotal the quantityOnHandTotal to set
      */
-    private void setQuantityOnHandTotal(BigDecimal quantityOnHandTotal) {
+    public void setQuantityOnHandTotal(BigDecimal quantityOnHandTotal) {
         this.quantityOnHandTotal = quantityOnHandTotal;
     }
     /**
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param shipGroupSeqId the shipGroupSeqId to set
      */
-    private void setShipGroupSeqId(String shipGroupSeqId) {
+    public void setShipGroupSeqId(String shipGroupSeqId) {
         this.shipGroupSeqId = shipGroupSeqId;
     }
     /**
      * Auto generated value setter.
      * @param orderItemSeqId the orderItemSeqId to set
      */
-    private void setOrderItemSeqId(String orderItemSeqId) {
+    public void setOrderItemSeqId(String orderItemSeqId) {
         this.orderItemSeqId = orderItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param quantity the quantity to set
      */
-    private void setQuantity(BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
     /**
      * Auto generated value setter.
      * @param quantityNotAvailable the quantityNotAvailable to set
      */
-    private void setQuantityNotAvailable(BigDecimal quantityNotAvailable) {
+    public void setQuantityNotAvailable(BigDecimal quantityNotAvailable) {
         this.quantityNotAvailable = quantityNotAvailable;
     }
     /**
      * Auto generated value setter.
      * @param reserveOrderEnumId the reserveOrderEnumId to set
      */
-    private void setReserveOrderEnumId(String reserveOrderEnumId) {
+    public void setReserveOrderEnumId(String reserveOrderEnumId) {
         this.reserveOrderEnumId = reserveOrderEnumId;
     }
     /**
      * Auto generated value setter.
      * @param reservedDatetime the reservedDatetime to set
      */
-    private void setReservedDatetime(Timestamp reservedDatetime) {
+    public void setReservedDatetime(Timestamp reservedDatetime) {
         this.reservedDatetime = reservedDatetime;
     }
     /**
      * Auto generated value setter.
      * @param sequenceId the sequenceId to set
      */
-    private void setSequenceId(Long sequenceId) {
+    public void setSequenceId(Long sequenceId) {
         this.sequenceId = sequenceId;
     }
 

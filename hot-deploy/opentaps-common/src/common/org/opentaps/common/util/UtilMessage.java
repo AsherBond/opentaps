@@ -120,6 +120,15 @@ public final class UtilMessage {
                         Debug.logWarning(e.getMessage(), MODULE);
                     }
                 }
+
+                try {
+                    // reports imported from analytics and their metadata use own resource bundle
+                    // in non-typical location.
+                    localizedLabels.addBottomResourceBundle(UtilProperties.getResourceBundle("org/opentaps/analytics/locale/messages", locale));
+                } catch (IllegalArgumentException e) {
+                    Debug.logWarning("Resorce bundle for analytics isn't found.", MODULE);
+                }
+
                 UI_LABELS.put(locale, localizedLabels);
             }
         }

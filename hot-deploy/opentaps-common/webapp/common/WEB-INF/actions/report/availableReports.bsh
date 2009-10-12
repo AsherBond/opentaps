@@ -18,11 +18,12 @@ import org.opentaps.common.reporting.UtilReports;
 import org.opentaps.common.util.UtilCommon;
 
 applicationName = UtilCommon.getParameter(context, "componentName");
+uiLabelMap = context.get("uiLabelMap");
 
 //make navigation history entry
-context{"history"} = UtilCommon.makeHistoryEntry("Reports", "manageReports");
+context{"history"} = UtilCommon.makeHistoryEntry(uiLabelMap.get("OpentapsReports"), "manageReports");
 
-reportsGroupedList = UtilReports.getManagedReports(applicationName, delegator, UtilHttp.getLocale(request));
+reportsGroupedList = UtilReports.getManagedReports(applicationName, null, delegator, UtilHttp.getLocale(request));
 if (UtilValidate.isNotEmpty(reportsGroupedList)) {
 	context{"reportsGroupedList"} = reportsGroupedList;
 }

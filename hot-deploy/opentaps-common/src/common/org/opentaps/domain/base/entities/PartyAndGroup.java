@@ -221,161 +221,161 @@ fieldMapColumns.put("PartyAndGroup", fields);
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param partyTypeId the partyTypeId to set
      */
-    private void setPartyTypeId(String partyTypeId) {
+    public void setPartyTypeId(String partyTypeId) {
         this.partyTypeId = partyTypeId;
     }
     /**
      * Auto generated value setter.
      * @param externalId the externalId to set
      */
-    private void setExternalId(String externalId) {
+    public void setExternalId(String externalId) {
         this.externalId = externalId;
     }
     /**
      * Auto generated value setter.
      * @param preferredCurrencyUomId the preferredCurrencyUomId to set
      */
-    private void setPreferredCurrencyUomId(String preferredCurrencyUomId) {
+    public void setPreferredCurrencyUomId(String preferredCurrencyUomId) {
         this.preferredCurrencyUomId = preferredCurrencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param createdDate the createdDate to set
      */
-    private void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
     /**
      * Auto generated value setter.
      * @param createdByUserLogin the createdByUserLogin to set
      */
-    private void setCreatedByUserLogin(String createdByUserLogin) {
+    public void setCreatedByUserLogin(String createdByUserLogin) {
         this.createdByUserLogin = createdByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedDate the lastModifiedDate to set
      */
-    private void setLastModifiedDate(Timestamp lastModifiedDate) {
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedByUserLogin the lastModifiedByUserLogin to set
      */
-    private void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
+    public void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
         this.lastModifiedByUserLogin = lastModifiedByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param dataSourceId the dataSourceId to set
      */
-    private void setDataSourceId(String dataSourceId) {
+    public void setDataSourceId(String dataSourceId) {
         this.dataSourceId = dataSourceId;
     }
     /**
      * Auto generated value setter.
      * @param isUnread the isUnread to set
      */
-    private void setIsUnread(String isUnread) {
+    public void setIsUnread(String isUnread) {
         this.isUnread = isUnread;
     }
     /**
      * Auto generated value setter.
      * @param groupName the groupName to set
      */
-    private void setGroupName(String groupName) {
+    public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
     /**
      * Auto generated value setter.
      * @param groupNameLocal the groupNameLocal to set
      */
-    private void setGroupNameLocal(String groupNameLocal) {
+    public void setGroupNameLocal(String groupNameLocal) {
         this.groupNameLocal = groupNameLocal;
     }
     /**
      * Auto generated value setter.
      * @param officeSiteName the officeSiteName to set
      */
-    private void setOfficeSiteName(String officeSiteName) {
+    public void setOfficeSiteName(String officeSiteName) {
         this.officeSiteName = officeSiteName;
     }
     /**
      * Auto generated value setter.
      * @param annualRevenue the annualRevenue to set
      */
-    private void setAnnualRevenue(BigDecimal annualRevenue) {
+    public void setAnnualRevenue(BigDecimal annualRevenue) {
         this.annualRevenue = annualRevenue;
     }
     /**
      * Auto generated value setter.
      * @param numEmployees the numEmployees to set
      */
-    private void setNumEmployees(Long numEmployees) {
+    public void setNumEmployees(Long numEmployees) {
         this.numEmployees = numEmployees;
     }
     /**
      * Auto generated value setter.
      * @param tickerSymbol the tickerSymbol to set
      */
-    private void setTickerSymbol(String tickerSymbol) {
+    public void setTickerSymbol(String tickerSymbol) {
         this.tickerSymbol = tickerSymbol;
     }
     /**
      * Auto generated value setter.
      * @param comments the comments to set
      */
-    private void setComments(String comments) {
+    public void setComments(String comments) {
         this.comments = comments;
     }
     /**
      * Auto generated value setter.
      * @param logoImageUrl the logoImageUrl to set
      */
-    private void setLogoImageUrl(String logoImageUrl) {
+    public void setLogoImageUrl(String logoImageUrl) {
         this.logoImageUrl = logoImageUrl;
     }
     /**
      * Auto generated value setter.
      * @param isIncorporated the isIncorporated to set
      */
-    private void setIsIncorporated(String isIncorporated) {
+    public void setIsIncorporated(String isIncorporated) {
         this.isIncorporated = isIncorporated;
     }
     /**
      * Auto generated value setter.
      * @param federalTaxId the federalTaxId to set
      */
-    private void setFederalTaxId(String federalTaxId) {
+    public void setFederalTaxId(String federalTaxId) {
         this.federalTaxId = federalTaxId;
     }
     /**
      * Auto generated value setter.
      * @param requires1099 the requires1099 to set
      */
-    private void setRequires1099(String requires1099) {
+    public void setRequires1099(String requires1099) {
         this.requires1099 = requires1099;
     }
 

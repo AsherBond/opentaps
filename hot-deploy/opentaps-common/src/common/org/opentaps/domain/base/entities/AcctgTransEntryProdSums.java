@@ -150,63 +150,63 @@ fieldMapColumns.put("AcctgTransEntryProdSums", fields);
      * Auto generated value setter.
      * @param organizationPartyId the organizationPartyId to set
      */
-    private void setOrganizationPartyId(String organizationPartyId) {
+    public void setOrganizationPartyId(String organizationPartyId) {
         this.organizationPartyId = organizationPartyId;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param debitCreditFlag the debitCreditFlag to set
      */
-    private void setDebitCreditFlag(String debitCreditFlag) {
+    public void setDebitCreditFlag(String debitCreditFlag) {
         this.debitCreditFlag = debitCreditFlag;
     }
     /**
      * Auto generated value setter.
      * @param amount the amount to set
      */
-    private void setAmount(BigDecimal amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
     /**
      * Auto generated value setter.
      * @param glAccountId the glAccountId to set
      */
-    private void setGlAccountId(String glAccountId) {
+    public void setGlAccountId(String glAccountId) {
         this.glAccountId = glAccountId;
     }
     /**
      * Auto generated value setter.
      * @param glAccountTypeId the glAccountTypeId to set
      */
-    private void setGlAccountTypeId(String glAccountTypeId) {
+    public void setGlAccountTypeId(String glAccountTypeId) {
         this.glAccountTypeId = glAccountTypeId;
     }
     /**
      * Auto generated value setter.
      * @param isPosted the isPosted to set
      */
-    private void setIsPosted(String isPosted) {
+    public void setIsPosted(String isPosted) {
         this.isPosted = isPosted;
     }
     /**
      * Auto generated value setter.
      * @param glFiscalTypeId the glFiscalTypeId to set
      */
-    private void setGlFiscalTypeId(String glFiscalTypeId) {
+    public void setGlFiscalTypeId(String glFiscalTypeId) {
         this.glFiscalTypeId = glFiscalTypeId;
     }
     /**
      * Auto generated value setter.
      * @param transactionDate the transactionDate to set
      */
-    private void setTransactionDate(Timestamp transactionDate) {
+    public void setTransactionDate(Timestamp transactionDate) {
         this.transactionDate = transactionDate;
     }
 

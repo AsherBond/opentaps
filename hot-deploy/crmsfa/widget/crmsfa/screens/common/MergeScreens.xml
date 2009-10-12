@@ -58,7 +58,7 @@
                     <decorator-section name="section-body">
                         <container style="form">
                             <container style="subSectionBlock">
-                                <label style="requiredField">${uiLabelMap.CrmMergePartiesConfirmMessage}</label>
+                                <label style="requiredField">${crmUiLabelMap.CrmMergePartiesConfirmMessage}</label>
                             </container>
                             <include-form name="ConfirmMergePartyForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
                         </container>
@@ -106,7 +106,7 @@
                     <decorator-section name="section-body">
                         <container style="form">
                             <container style="subSectionBlock">
-                                <label style="requiredField">${uiLabelMap.CrmMergePartiesConfirmMessage}</label>
+                                <label style="requiredField">${crmUiLabelMap.CrmMergePartiesConfirmMessage}</label>
                             </container>
                             <include-form name="ConfirmMergePartyForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
                         </container>
@@ -155,7 +155,7 @@
                     <decorator-section name="section-body">
                         <container style="form">
                             <container style="subSectionBlock">
-                                <label style="requiredField">${uiLabelMap.CrmMergePartiesConfirmMessage}</label>
+                                <label style="requiredField">${crmUiLabelMap.CrmMergePartiesConfirmMessage}</label>
                             </container>
                             <include-form name="ConfirmMergePartyForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
                         </container>

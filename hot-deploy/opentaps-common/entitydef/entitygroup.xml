@@ -191,5 +191,9 @@ under the License.
     <entity-group group="org.ofbiz" entity="InventoryEventPlannedType" />
     <entity-group group="org.ofbiz" entity="MrpInventoryEventPlanned" />
 
-    <entity-group group="org.ofbiz" entity="CustRequestRole" />    
+    <entity-group group="org.ofbiz" entity="CustRequestRole" />   
+ 
+    <!-- Registers data transformations time -->
+    <entity-group group="org.ofbiz" entity="DataWarehouseTransform"/>
+ 
 </entitygroup>  

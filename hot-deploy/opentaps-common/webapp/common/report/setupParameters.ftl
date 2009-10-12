@@ -19,12 +19,25 @@
     opentaps.addOnLoad(function(){fixLayout() /*QueryBuilder JSNI function*/});
 </script>
 
+<#--
+  Local macro to display accounting tags row for given index (possible values 0-9). 
+-->
+<#macro tagRow index>
+    <#if tagTypes?has_content && index &lt; tagTypes.size()>
+        <#assign tag = tagTypes.get(index)/>
+        <tr>
+            <td class="titleCell"><span class="tableheadtext">${tag.description}</td>
+            <td><@accountingTagsSelect tag=tag/></td>
+        </tr>
+    </#if>
+</#macro>
 
 <#if useQueryBuilder?has_content && useQueryBuilder == true>
 
     <@gwtWidget id="queryBuilderWidget" environment="opentaps"/>
 
 <#else>
+<#if report?has_content>
 <form method="post" name="SetupReportParametersForm" action="<@ofbizUrl>runReport</@ofbizUrl>">
     <@inputHidden name="reportId" value="${parameters.reportId}"/>
     <@inputHidden name="parametersTypeJSON" value="${parametersTypeJSON?if_exists?html}"/>
@@ -38,7 +51,7 @@
 <div class="subSectionBlock">
     <@sectionHeader title="${report?if_exists.shortName}"/>
     <table class="twoColumnForm">    
-    
+
     <#if reportParameters?has_content>
        <#list reportParameters as param>
             <#if param.type == "Timestamp" || param.type == "Date" || param.type == "Time">
@@ -53,6 +66,26 @@
                    <@inputLookupRow title=uiLabelMap.PartySupplier name="supplierId" lookup="LookupSupplier" form="SetupReportParametersForm"/>
                 <#elseif param.name == "productId"> 
                    <@inputLookupRow title=uiLabelMap.ProductProduct name="productId" lookup="LookupProduct" form="SetupReportParametersForm"/>
+                <#elseif param.name == "tag1"> <#-- accounting tags handling -->
+                    <@tagRow index=0 />
+                <#elseif param.name == "tag2">
+                    <@tagRow index=1 />
+                <#elseif param.name == "tag3">
+                    <@tagRow index=2 />
+                <#elseif param.name == "tag4">
+                    <@tagRow index=3 />
+                <#elseif param.name == "tag5">
+                    <@tagRow index=4 />
+                <#elseif param.name == "tag6">
+                    <@tagRow index=5 />
+                <#elseif param.name == "tag7">
+                    <@tagRow index=6 />
+                <#elseif param.name == "tag8">
+                    <@tagRow index=7 />
+                <#elseif param.name == "tag9">
+                    <@tagRow index=8 />
+                <#elseif param.name == "tag10">
+                    <@tagRow index=9 />
                 <#else>
                     <#-- Default case, simple text input --> 
                     <@inputTextRow title="${uiLabelMap.get(param.name)}" name="${param.name}"/>
@@ -63,7 +96,7 @@
            </#if>
         </#list>
     </#if>
-    
+
         <@inputSelectRow name="reportType" title="${uiLabelMap.OpentapsReportFormat}" list=reportTypes?default([]) key="mimeTypeId" ; mimeType>
             ${mimeType.get("description", locale)}
         </@inputSelectRow>
@@ -87,4 +120,11 @@
     </table>
 </div>
 </form>
+<#else> <#-- if report object is empty -->
+
+<div class="subSectionBlock">
+  <p>${error?if_exists}</p>
+</div>
+
+</#if>
 </#if>

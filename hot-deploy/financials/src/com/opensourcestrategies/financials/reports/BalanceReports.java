@@ -95,6 +95,9 @@ public final class BalanceReports {
         // the usage that defines what are the tags used in the report
         // this defaults to BALANCE_REPORTS_TAG (see the service definition)
         String accountingTagUsage = (String) context.get("accountingTagUsage");
+        // should the budget amounts include income, this defaults to "N"
+        boolean includeBudgetIncome = "Y".equals(context.get("includeBudgetIncome"));
+
         try {
             Infrastructure infrastructure = new Infrastructure(dispatcher);
             User user = new User(userLogin);
@@ -110,12 +113,8 @@ public final class BalanceReports {
             List<Map<String, Object>> reportData = new FastList<Map<String, Object>>();
 
             // tag filters for the getIncomeStatementByTagByDates service, defaults to all tags
-            // TODO: add support for input filters, so this report can be filtered by a given set of tags
             Map incomeStatementParams = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId", "ACTUAL", "userLogin", userLogin);
-            for (int i = 1; i <= UtilAccountingTags.TAG_COUNT; i++) {
-                String tag = UtilAccountingTags.TAG_PARAM_PREFIX + i;
-                incomeStatementParams.put(tag, "ANY");
-            }
+            UtilAccountingTags.addTagParameters(context, incomeStatementParams);
             // get the statement by these dates
             incomeStatementParams.put("fromDate", fromDate);
             incomeStatementParams.put("thruDate", thruDate);
@@ -126,7 +125,7 @@ public final class BalanceReports {
             actualIncomeStatementParams.put("glFiscalTypeId", "ACTUAL");
             actualIncomeStatementParams.put("accountingTagUsage", accountingTagUsage);
             Map<String, Object> actualIncomeStatement = dispatcher.runSync("getIncomeStatementByTagByDates", actualIncomeStatementParams);
-            addReportLines(reportData, actualIncomeStatement, "ACTUAL", accountingTags, delegator);
+            addReportLines(reportData, actualIncomeStatement, "ACTUAL", accountingTags, includeBudgetIncome, delegator);
 
             // get budget income statement by tag and put it into report data
             Map budgetIncomeStatementParams = new FastMap();
@@ -134,7 +133,7 @@ public final class BalanceReports {
             budgetIncomeStatementParams.put("glFiscalTypeId", "BUDGET");
             budgetIncomeStatementParams.put("accountingTagUsage", accountingTagUsage);
             Map<String, Object> budgetIncomeStatement = dispatcher.runSync("getIncomeStatementByTagByDates", budgetIncomeStatementParams);
-            addReportLines(reportData, budgetIncomeStatement, "BUDGET", accountingTags, delegator);
+            addReportLines(reportData, budgetIncomeStatement, "BUDGET", accountingTags, includeBudgetIncome, delegator);
 
             // get last encumbrance snapshot prior to thruDate
             List<EncumbranceDetail> encumbranceDetails = encumbranceRepository.getEncumbranceDetails(organizationPartyId, null, thruDate);
@@ -211,9 +210,10 @@ public final class BalanceReports {
         Locale locale = UtilHttp.getLocale(request.getSession());
         TimeZone timeZone = UtilCommon.getTimeZone(request);
 
+        String includeBudgetIncome = UtilCommon.getParameter(request, "includeBudgetIncome");
         // get the dates and validate (maybe we can simplify this into a UtilCommon.getTimestampParameter() which does all this)
-        String fromDateStr = (String) UtilHttp.makeParamValueFromComposite(request, "fromDate", locale);
-        String thruDateStr = (String)  UtilHttp.makeParamValueFromComposite(request, "thruDate", locale);
+        String fromDateStr = UtilHttp.makeParamValueFromComposite(request, "fromDate", locale);
+        String thruDateStr = UtilHttp.makeParamValueFromComposite(request, "thruDate", locale);
         Timestamp fromDate = null;
         Timestamp thruDate = null;
         if (fromDateStr != null) {
@@ -239,7 +239,14 @@ public final class BalanceReports {
             Organization organization = organizationRepository.getOrganizationById(organizationPartyId);
 
             // get the data
-            Map<String, Object> results = dispatcher.runSync("balanceStatementReport", UtilMisc.toMap("userLogin", userLogin, "organizationPartyId", organizationPartyId, "fromDate", fromDate, "thruDate", thruDate));
+            Map<String, Object> ctxt = new FastMap<String, Object>();
+            ctxt.put("userLogin", userLogin);
+            ctxt.put("organizationPartyId", organizationPartyId);
+            ctxt.put("includeBudgetIncome", includeBudgetIncome);
+            ctxt.put("fromDate", fromDate);
+            ctxt.put("thruDate", thruDate);
+            UtilAccountingTags.addTagParameters(request, ctxt);
+            Map<String, Object> results = dispatcher.runSync("balanceStatementReport", ctxt);
             if (!UtilCommon.isSuccess(results)) {
                 return UtilMessage.createAndLogEventError(request, results, locale, MODULE);
             }
@@ -282,16 +289,23 @@ public final class BalanceReports {
      * @param incomeStatement a <code>Map</code> result of the getIncomeStatementByTagByDates service call
      * @param glFiscalTypeId the fiscal type of the incomeStatement results being added
      * @param accountingTags the <code>Map</code> of accounting tags in the report
+     * @param includeBudgetIncome if the Budget amount calculation should also include income
      * @param delegator a <code>GenericDelegator</code> value
      * @throws GenericEntityException if error occur
      */
     @SuppressWarnings("unchecked")
-    private static void addReportLines(List<Map<String, Object>> reportData, Map<String, Object> incomeStatement, String glFiscalTypeId, Map<Integer, String> accountingTags, GenericDelegator delegator) throws GenericEntityException {
+    private static void addReportLines(List<Map<String, Object>> reportData, Map<String, Object> incomeStatement, String glFiscalTypeId, Map<Integer, String> accountingTags, boolean includeBudgetIncome, GenericDelegator delegator) throws GenericEntityException {
         List<String> glAccountIncomeStatementTypes = new ArrayList(FinancialServices.INCOME_STATEMENT_TYPES);
         glAccountIncomeStatementTypes.add(FinancialServices.UNCLASSIFIED_TYPE);
         Map glAccountSums = (Map) incomeStatement.get("glAccountSums");
         // iterate all glAccountTypeId
         for (String glAccountTypeId : glAccountIncomeStatementTypes) {
+            // Budget lines only includes the expenses types
+            if (!includeBudgetIncome && glFiscalTypeId.equals("BUDGET")) {
+                if (!FinancialServices.EXPENSES_TYPES.contains(glAccountTypeId)) {
+                    continue;
+                }
+            }
             List<Map> accountList = (List) glAccountSums.get(glAccountTypeId);
             for (Map account : accountList) {
                 // find a report line matching the account tag set, or get a new line

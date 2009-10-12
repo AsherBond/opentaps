@@ -329,217 +329,217 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param roleStatusId the roleStatusId to set
      */
-    private void setRoleStatusId(String roleStatusId) {
+    public void setRoleStatusId(String roleStatusId) {
         this.roleStatusId = roleStatusId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
-    private void setContactMechId(String contactMechId) {
+    public void setContactMechId(String contactMechId) {
         this.contactMechId = contactMechId;
     }
     /**
      * Auto generated value setter.
      * @param communicationEventId the communicationEventId to set
      */
-    private void setCommunicationEventId(String communicationEventId) {
+    public void setCommunicationEventId(String communicationEventId) {
         this.communicationEventId = communicationEventId;
     }
     /**
      * Auto generated value setter.
      * @param communicationEventTypeId the communicationEventTypeId to set
      */
-    private void setCommunicationEventTypeId(String communicationEventTypeId) {
+    public void setCommunicationEventTypeId(String communicationEventTypeId) {
         this.communicationEventTypeId = communicationEventTypeId;
     }
     /**
      * Auto generated value setter.
      * @param origCommEventId the origCommEventId to set
      */
-    private void setOrigCommEventId(String origCommEventId) {
+    public void setOrigCommEventId(String origCommEventId) {
         this.origCommEventId = origCommEventId;
     }
     /**
      * Auto generated value setter.
      * @param parentCommEventId the parentCommEventId to set
      */
-    private void setParentCommEventId(String parentCommEventId) {
+    public void setParentCommEventId(String parentCommEventId) {
         this.parentCommEventId = parentCommEventId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechTypeId the contactMechTypeId to set
      */
-    private void setContactMechTypeId(String contactMechTypeId) {
+    public void setContactMechTypeId(String contactMechTypeId) {
         this.contactMechTypeId = contactMechTypeId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechIdFrom the contactMechIdFrom to set
      */
-    private void setContactMechIdFrom(String contactMechIdFrom) {
+    public void setContactMechIdFrom(String contactMechIdFrom) {
         this.contactMechIdFrom = contactMechIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param contactMechIdTo the contactMechIdTo to set
      */
-    private void setContactMechIdTo(String contactMechIdTo) {
+    public void setContactMechIdTo(String contactMechIdTo) {
         this.contactMechIdTo = contactMechIdTo;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeIdFrom the roleTypeIdFrom to set
      */
-    private void setRoleTypeIdFrom(String roleTypeIdFrom) {
+    public void setRoleTypeIdFrom(String roleTypeIdFrom) {
         this.roleTypeIdFrom = roleTypeIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeIdTo the roleTypeIdTo to set
      */
-    private void setRoleTypeIdTo(String roleTypeIdTo) {
+    public void setRoleTypeIdTo(String roleTypeIdTo) {
         this.roleTypeIdTo = roleTypeIdTo;
     }
     /**
      * Auto generated value setter.
      * @param partyIdFrom the partyIdFrom to set
      */
-    private void setPartyIdFrom(String partyIdFrom) {
+    public void setPartyIdFrom(String partyIdFrom) {
         this.partyIdFrom = partyIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param partyIdTo the partyIdTo to set
      */
-    private void setPartyIdTo(String partyIdTo) {
+    public void setPartyIdTo(String partyIdTo) {
         this.partyIdTo = partyIdTo;
     }
     /**
      * Auto generated value setter.
      * @param entryDate the entryDate to set
      */
-    private void setEntryDate(Timestamp entryDate) {
+    public void setEntryDate(Timestamp entryDate) {
         this.entryDate = entryDate;
     }
     /**
      * Auto generated value setter.
      * @param datetimeStarted the datetimeStarted to set
      */
-    private void setDatetimeStarted(Timestamp datetimeStarted) {
+    public void setDatetimeStarted(Timestamp datetimeStarted) {
         this.datetimeStarted = datetimeStarted;
     }
     /**
      * Auto generated value setter.
      * @param datetimeEnded the datetimeEnded to set
      */
-    private void setDatetimeEnded(Timestamp datetimeEnded) {
+    public void setDatetimeEnded(Timestamp datetimeEnded) {
         this.datetimeEnded = datetimeEnded;
     }
     /**
      * Auto generated value setter.
      * @param subject the subject to set
      */
-    private void setSubject(String subject) {
+    public void setSubject(String subject) {
         this.subject = subject;
     }
     /**
      * Auto generated value setter.
      * @param contentMimeTypeId the contentMimeTypeId to set
      */
-    private void setContentMimeTypeId(String contentMimeTypeId) {
+    public void setContentMimeTypeId(String contentMimeTypeId) {
         this.contentMimeTypeId = contentMimeTypeId;
     }
     /**
      * Auto generated value setter.
      * @param content the content to set
      */
-    private void setContent(String content) {
+    public void setContent(String content) {
         this.content = content;
     }
     /**
      * Auto generated value setter.
      * @param note the note to set
      */
-    private void setNote(String note) {
+    public void setNote(String note) {
         this.note = note;
     }
     /**
      * Auto generated value setter.
      * @param reasonEnumId the reasonEnumId to set
      */
-    private void setReasonEnumId(String reasonEnumId) {
+    public void setReasonEnumId(String reasonEnumId) {
         this.reasonEnumId = reasonEnumId;
     }
     /**
      * Auto generated value setter.
      * @param contactListId the contactListId to set
      */
-    private void setContactListId(String contactListId) {
+    public void setContactListId(String contactListId) {
         this.contactListId = contactListId;
     }
     /**
      * Auto generated value setter.
      * @param headerString the headerString to set
      */
-    private void setHeaderString(String headerString) {
+    public void setHeaderString(String headerString) {
         this.headerString = headerString;
     }
     /**
      * Auto generated value setter.
      * @param fromString the fromString to set
      */
-    private void setFromString(String fromString) {
+    public void setFromString(String fromString) {
         this.fromString = fromString;
     }
     /**
      * Auto generated value setter.
      * @param toString the toString to set
      */
-    private void setToString(String toString) {
+    public void setToString(String toString) {
         this.toString = toString;
     }
     /**
      * Auto generated value setter.
      * @param ccString the ccString to set
      */
-    private void setCcString(String ccString) {
+    public void setCcString(String ccString) {
         this.ccString = ccString;
     }
     /**
      * Auto generated value setter.
      * @param bccString the bccString to set
      */
-    private void setBccString(String bccString) {
+    public void setBccString(String bccString) {
         this.bccString = bccString;
     }
     /**
      * Auto generated value setter.
      * @param messageId the messageId to set
      */
-    private void setMessageId(String messageId) {
+    public void setMessageId(String messageId) {
         this.messageId = messageId;
     }
 

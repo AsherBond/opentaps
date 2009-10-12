@@ -17,20 +17,20 @@
 -->
  
     <!-- Financials Keyboard shortcuts demo data -->
-    <KeyboardShortcut shortcutId="FINA_FIND_SINV" sequenceNum="210" shortcut="shift+f1" actionTypeId="KB_URL" actionTarget="findSalesInvoices" applicationName="financials" description="Find Sales Invoices" />
-    <KeyboardShortcut shortcutId="FINA_CREATE_SINV" sequenceNum="211" shortcut="f1" actionTypeId="KB_URL" actionTarget="createInvoiceForm?invoiceTypeId=SALES_INVOICE" applicationName="financials" description="Create a Sales Invoice" />
+    <KeyboardShortcut shortcutId="FINA_FIND_SINV" sequenceNum="210" shortcut="f1" actionTypeId="KB_URL" actionTarget="findSalesInvoices" applicationName="financials" description="Find Sales Invoices" />
+    <KeyboardShortcut shortcutId="FINA_CREATE_SINV" sequenceNum="211" shortcut="shift+f1" actionTypeId="KB_URL" actionTarget="createInvoiceForm?invoiceTypeId=SALES_INVOICE" applicationName="financials" description="Create a Sales Invoice" />
 
-    <KeyboardShortcut shortcutId="FINA_FIND_VINV" sequenceNum="212" shortcut="shift+f2" actionTypeId="KB_URL" actionTarget="findPurchaseInvoices" applicationName="financials" description="Find Vendor invoices" />
-    <KeyboardShortcut shortcutId="FINA_CREATE_VINV" sequenceNum="213" shortcut="f2" actionTypeId="KB_URL" actionTarget="createInvoiceForm?invoiceTypeId=PURCHASE_INVOICE" applicationName="financials" description="Create a Vendor invoice" />
+    <KeyboardShortcut shortcutId="FINA_FIND_VINV" sequenceNum="212" shortcut="f2" actionTypeId="KB_URL" actionTarget="findPurchaseInvoices" applicationName="financials" description="Find Vendor invoices" />
+    <KeyboardShortcut shortcutId="FINA_CREATE_VINV" sequenceNum="213" shortcut="shift+f2" actionTypeId="KB_URL" actionTarget="createInvoiceForm?invoiceTypeId=PURCHASE_INVOICE" applicationName="financials" description="Create a Vendor invoice" />
 
-    <KeyboardShortcut shortcutId="FINA_FIND_PAYCHECK" sequenceNum="214" shortcut="shift+f3" actionTypeId="KB_URL" actionTarget="findPaycheck" applicationName="financials" description="Find Paychecks" />
-    <KeyboardShortcut shortcutId="FINA_CREATE_PAYCHECK" sequenceNum="215" shortcut="f3" actionTypeId="KB_URL" actionTarget="createPaycheckForm" applicationName="financials" description="Create a Paycheck" />
+    <KeyboardShortcut shortcutId="FINA_FIND_PAYCHECK" sequenceNum="214" shortcut="f3" actionTypeId="KB_URL" actionTarget="findPaycheck" applicationName="financials" description="Find Paychecks" />
+    <KeyboardShortcut shortcutId="FINA_CREATE_PAYCHECK" sequenceNum="215" shortcut="shift+f3" actionTypeId="KB_URL" actionTarget="createPaycheckForm" applicationName="financials" description="Create a Paycheck" />
 
-    <KeyboardShortcut shortcutId="FINA_FIND_PINV" sequenceNum="216" shortcut="shift+f4" actionTypeId="KB_URL" actionTarget="findPartnerInvoices" applicationName="financials" description="Find Partner Invoices" />
-    <KeyboardShortcut shortcutId="FINA_CREATE_PINV" sequenceNum="217" shortcut="f4" actionTypeId="KB_URL" actionTarget="createPartnerInvoiceForm" applicationName="financials" description="Create a Partner Invoice" />
+    <KeyboardShortcut shortcutId="FINA_FIND_PINV" sequenceNum="216" shortcut="f4" actionTypeId="KB_URL" actionTarget="findPartnerInvoices" applicationName="financials" description="Find Partner Invoices" />
+    <KeyboardShortcut shortcutId="FINA_CREATE_PINV" sequenceNum="217" shortcut="shift+f4" actionTypeId="KB_URL" actionTarget="createPartnerInvoiceForm" applicationName="financials" description="Create a Partner Invoice" />
 
-    <KeyboardShortcut shortcutId="FINA_FIND_TRANS" sequenceNum="218" shortcut="shift+f5" actionTypeId="KB_URL" actionTarget="transactionsMain" applicationName="financials" description="Find Transactions" />
-    <KeyboardShortcut shortcutId="FINA_CREATE_TRANS" sequenceNum="219" shortcut="f5" actionTypeId="KB_URL" actionTarget="createAcctgTransForm" applicationName="financials" description="Create a Transaction" />
+    <KeyboardShortcut shortcutId="FINA_FIND_TRANS" sequenceNum="218" shortcut="f5" actionTypeId="KB_URL" actionTarget="transactionsMain" applicationName="financials" description="Find Transactions" />
+    <KeyboardShortcut shortcutId="FINA_CREATE_TRANS" sequenceNum="219" shortcut="shift+f5" actionTypeId="KB_URL" actionTarget="createAcctgTransForm" applicationName="financials" description="Create a Transaction" />
 
 
 </entity-engine-xml>

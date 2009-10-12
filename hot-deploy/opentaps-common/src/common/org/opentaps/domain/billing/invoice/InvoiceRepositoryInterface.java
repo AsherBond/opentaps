@@ -23,6 +23,8 @@ import org.opentaps.domain.base.entities.InvoiceAdjustment;
 import org.opentaps.domain.base.entities.InvoiceAndInvoiceItem;
 import org.opentaps.domain.base.entities.InvoiceItem;
 import org.opentaps.domain.base.entities.InvoiceItemType;
+import org.opentaps.domain.base.entities.InvoiceItemTypeMap;
+import org.opentaps.domain.base.entities.OrderItem;
 import org.opentaps.domain.base.entities.PaymentAndApplication;
 import org.opentaps.domain.base.entities.PostalAddress;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
@@ -194,6 +196,15 @@ public interface InvoiceRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an exception occurs
      */
     public List<AccountingTagConfigurationForOrganizationAndUsage> validateTagParameters(Invoice invoice, InvoiceItem item) throws RepositoryException;
+
+    /**
+     * Returns invoice item type based on order item and invoice type.
+     * @param orderItem An instance of <code>OrderItem</code>
+     * @return
+     *    An instance of <code>InvoiceItemType</code>
+     * @throws RepositoryException
+     */
+    public InvoiceItemType getInvoiceItemType(OrderItem orderItem, String invoiceTypeId) throws RepositoryException;
 
     /**
      *  Gets the InvoiceAdjustmentType List by the given <code>Invoice</code> and organizationPartyId.

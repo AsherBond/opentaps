@@ -25,6 +25,7 @@ package org.opentaps.common.asterisk;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 
 import org.asteriskjava.manager.AuthenticationFailedException;
@@ -38,6 +39,7 @@ import org.asteriskjava.manager.action.StatusAction;
 import org.asteriskjava.manager.event.DialEvent;
 import org.asteriskjava.manager.event.ManagerEvent;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.domain.base.entities.TelecomNumber;
@@ -62,6 +64,10 @@ public final class AsteriskUtil {
     private String asteriskAreaPrefix = "";             // the number prefix that you want to dial other city number
     private String alwaysDialAreaCode = "";             // if always add area code to dial
     private String alwaysDialCountryCode = "";          // if always add country code to dial
+    private String originationContext = "";             // dialplan context to use for outbound calling
+    private String originationChannel = "";             // channel for extension to use for outbound calling
+    private String originationChannelSuffix = "";       // suffix to extension channel to use for outbound calling 
+    private List localAreaCodes = null;         // Area codes to be treated as local - don't dial long distance prefix
     private AsteriskUtil() {
         reload();
     }
@@ -109,6 +115,15 @@ public final class AsteriskUtil {
         alwaysDialAreaCode = UtilProperties.getPropertyValue("asterisk.properties", "asterisk.alwaysDialAreaCode", "Y");
         // if always add country code to dial, even though it was the same country code, it used in some voip provider.
         alwaysDialCountryCode = UtilProperties.getPropertyValue("asterisk.properties", "asterisk.alwaysDialCountryCode", "Y");
+        // Dialplan context to use for outgoing calls, i.e. the dialed number
+        originationContext = UtilProperties.getPropertyValue("asterisk.properties", "asterisk.originationContext", "from-internal");
+        // Channel Technology to use for outgoing calls for the user's channel i.e. SIP/ for chan_sip or Local/ for chan_local
+        originationChannel = UtilProperties.getPropertyValue("asterisk.properties", "asterisk.originationChannel", "Local/");
+        // Channel Technology suffix (useful for ChanLocal - i.e. Local/825@from-internal
+        originationChannelSuffix = UtilProperties.getPropertyValue("asterisk.properties", "asterisk.originationChannelSuffix", "");
+        // Area codes that don't need the long-distance prefix
+        String localAreaCodesString = UtilProperties.getPropertyValue("asterisk.properties", "asterisk.localAreaCodes", "");
+        localAreaCodes = UtilMisc.toListArray(localAreaCodesString.split(","));
         // logs out an existing connection
         if (managerConnection != null) {
             if (managerConnection.getState().equals(ManagerConnectionState.CONNECTED)) {
@@ -198,17 +213,20 @@ public final class AsteriskUtil {
 
         OriginateAction originateAction;
         originateAction = new OriginateAction();
-        originateAction.setChannel("Local/" + callFrom + "@from-internal");
-        originateAction.setContext("from-internal");
+        originateAction.setChannel(originationChannel + callFrom + originationChannelSuffix);
+        originateAction.setContext(originationContext);
         originateAction.setExten(asteriskExternalCode + callTo);
         originateAction.setCallerId(callFrom);
         originateAction.setPriority(new Integer(1));
         originateAction.setTimeout(new Long(TIMEOUT)); // 30 seconds timeout
         Debug.logInfo("Calling from: " + originateAction.getChannel() + ", to: " + originateAction.getExten(), MODULE);
 
-        // send the originate action and wait for a maximum of 30 seconds for Asterisk
-        // to send a reply
+        // send the originate action and wait for a maximum of 30 seconds for Asterisk to send a reply
         try {
+            // confirm the manager connection still connected, else try to reconnect
+            if (managerConnection.getState() != ManagerConnectionState.CONNECTED) {
+                managerConnection.login();
+            }
             managerConnection.sendAction(originateAction, TIMEOUT);
         } catch (IllegalArgumentException e) {
             Debug.logError(e, "Error outbound calling", MODULE);
@@ -217,6 +235,8 @@ public final class AsteriskUtil {
         } catch (IOException e) {
             Debug.logError(e, "Error outbound calling", MODULE);
         } catch (TimeoutException e) {
+            Debug.logError(e, "Error outbound calling", MODULE);
+        } catch (AuthenticationFailedException e) {
             Debug.logError(e, "Error outbound calling", MODULE);
         }
 
@@ -240,40 +260,84 @@ public final class AsteriskUtil {
      */
     public String getDialOutNumber(String phoneCountryCode, String phoneAreaCode, String phoneNumber) {
 
+        Boolean addInternationalPrefix = Boolean.FALSE;
+        Boolean addCountryCode = Boolean.FALSE;
+        Boolean addAreaPrefix = Boolean.FALSE;
+        Boolean addAreaCode = Boolean.FALSE;
+
         String dialNumber = "";
+
         // check if the dialed phone number is not in the same country as the asterisk server
         // then adds the international prefix + the destination country code
         if (UtilValidate.isNotEmpty(asteriskCountryCode) && UtilValidate.isNotEmpty(phoneCountryCode) && !asteriskCountryCode.equals(phoneCountryCode)) {
             // checks if the country code already contains the international prefix
             if (phoneCountryCode.startsWith(asteriskInternationalPrefix)) {
-                dialNumber = phoneCountryCode;
+                //Country code contains international prefix - no need to add again
+                 addInternationalPrefix = Boolean.FALSE;
+                 addCountryCode = Boolean.TRUE;
             } else {
                 // else add both the international prefix + country code
-                dialNumber = asteriskInternationalPrefix + phoneCountryCode;
+                 addInternationalPrefix = Boolean.TRUE;
+                 addCountryCode = Boolean.TRUE;
             }
         } else if (alwaysDialCountryCode.equals("Y")) {
             // add country code if even though it was the same country code.
-            dialNumber = asteriskCountryCode;
+            addInternationalPrefix = Boolean.FALSE;
+            addCountryCode = Boolean.TRUE;
+        } else {
+            addInternationalPrefix = Boolean.FALSE;
+            addCountryCode = Boolean.FALSE;
         }
 
-        // check if the dialed phone number is not in the same area as the asterisk server
-        // then adds the area prefix + the destination area code
-        if ((UtilValidate.isNotEmpty(asteriskAreaCode) && UtilValidate.isNotEmpty(phoneAreaCode) && !asteriskAreaCode.equals(phoneAreaCode))
-              || alwaysDialAreaCode.equals("Y")) {
-            // if no international prefix is used, use the area code directly
-            String targetAreaCode = UtilValidate.isNotEmpty(phoneAreaCode) ? phoneAreaCode : asteriskAreaCode;
-            if (dialNumber.equals("")) {
-                dialNumber = targetAreaCode;
-            } else {
-                // else since an international prefix was used, there is no need to use an area prefix so:
-                // if the area prefix is empty or if the area code do not include the area prefix, we can use the area code directly
-                if (UtilValidate.isEmpty(asteriskAreaPrefix) || !targetAreaCode.startsWith(asteriskAreaPrefix)) {
-                    dialNumber += targetAreaCode;
-                } else {
-                    // else, we need to remove the prefix
-                    dialNumber += targetAreaCode.substring(asteriskAreaPrefix.length());
-                }
-            }
+        // AreaCode Logic
+        if (UtilValidate.isEmpty(phoneAreaCode)) {
+           //No area code in number, so nothing to add.
+           addAreaCode = Boolean.FALSE;
+        } else if (alwaysDialAreaCode.equals("Y")) {
+           addAreaCode = Boolean.TRUE;
+        } else if (addCountryCode == Boolean.TRUE) {
+           //Different country, so add area code even if they happen to be the same value
+           addAreaCode = Boolean.TRUE;
+        } else if (UtilValidate.isEmpty(asteriskAreaCode)) {
+           //Phone has an area code, asterisk doesn't.  Probably safer to dial the area code.
+           addAreaCode = Boolean.TRUE;
+        } else if (!asteriskAreaCode.equals(phoneAreaCode)) {
+           addAreaCode = Boolean.TRUE;
+        } else {
+           addAreaCode = Boolean.FALSE;
+        }
+
+        //AreaCodePrefix Logic
+        if (addAreaCode == Boolean.FALSE) {
+           //If you're not adding an area code, you certainly don't need the area code prefix
+           addAreaPrefix = Boolean.FALSE;
+        } else if (addCountryCode == Boolean.TRUE) {
+           //No area prefix for international calls
+           addAreaPrefix = Boolean.FALSE;
+        } else if (UtilValidate.isNotEmpty(localAreaCodes) && localAreaCodes.contains(phoneAreaCode)) {
+           //Explicitly in local area, so no prefix
+           addAreaPrefix = Boolean.FALSE;
+        } else if (UtilValidate.isEmpty(asteriskAreaCode)) {
+           //Phone Number has area code, Asterisk doesn't.  Probably safer to dial the prefix and area code.
+           addAreaPrefix = Boolean.TRUE;
+        } else if (!asteriskAreaCode.equals(phoneAreaCode)) {
+           //Otherwise should get a prefix if the area codes differ
+           addAreaPrefix = Boolean.TRUE;
+        } else {
+           addAreaPrefix = Boolean.FALSE;
+        }
+
+        if (addInternationalPrefix == Boolean.TRUE) {
+           dialNumber += asteriskInternationalPrefix;
+        }
+        if (addCountryCode == Boolean.TRUE) {
+           dialNumber += phoneCountryCode;
+        }
+        if (addAreaPrefix == Boolean.TRUE) {
+           dialNumber += asteriskAreaPrefix;
+        }
+        if (addAreaCode == Boolean.TRUE) {
+           dialNumber += phoneAreaCode;
         }
 
         // finally, the main phone number, check that we are not trying to dial the asterisk server

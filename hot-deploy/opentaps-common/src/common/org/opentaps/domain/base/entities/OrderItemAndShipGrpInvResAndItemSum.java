@@ -156,63 +156,63 @@ fieldMapColumns.put("OrderItemAndShipGrpInvResAndItemSum", fields);
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param orderItemSeqId the orderItemSeqId to set
      */
-    private void setOrderItemSeqId(String orderItemSeqId) {
+    public void setOrderItemSeqId(String orderItemSeqId) {
         this.orderItemSeqId = orderItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param inventoryProductId the inventoryProductId to set
      */
-    private void setInventoryProductId(String inventoryProductId) {
+    public void setInventoryProductId(String inventoryProductId) {
         this.inventoryProductId = inventoryProductId;
     }
     /**
      * Auto generated value setter.
      * @param shipGroupSeqId the shipGroupSeqId to set
      */
-    private void setShipGroupSeqId(String shipGroupSeqId) {
+    public void setShipGroupSeqId(String shipGroupSeqId) {
         this.shipGroupSeqId = shipGroupSeqId;
     }
     /**
      * Auto generated value setter.
      * @param quantityOrdered the quantityOrdered to set
      */
-    private void setQuantityOrdered(BigDecimal quantityOrdered) {
+    public void setQuantityOrdered(BigDecimal quantityOrdered) {
         this.quantityOrdered = quantityOrdered;
     }
     /**
      * Auto generated value setter.
      * @param totQuantityReserved the totQuantityReserved to set
      */
-    private void setTotQuantityReserved(BigDecimal totQuantityReserved) {
+    public void setTotQuantityReserved(BigDecimal totQuantityReserved) {
         this.totQuantityReserved = totQuantityReserved;
     }
     /**
      * Auto generated value setter.
      * @param totQuantityNotAvailable the totQuantityNotAvailable to set
      */
-    private void setTotQuantityNotAvailable(BigDecimal totQuantityNotAvailable) {
+    public void setTotQuantityNotAvailable(BigDecimal totQuantityNotAvailable) {
         this.totQuantityNotAvailable = totQuantityNotAvailable;
     }
     /**
      * Auto generated value setter.
      * @param totQuantityAvailable the totQuantityAvailable to set
      */
-    private void setTotQuantityAvailable(BigDecimal totQuantityAvailable) {
+    public void setTotQuantityAvailable(BigDecimal totQuantityAvailable) {
         this.totQuantityAvailable = totQuantityAvailable;
     }
 

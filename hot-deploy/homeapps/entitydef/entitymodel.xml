@@ -27,7 +27,7 @@
             package-name="org.ofbiz.homewebapps"
             title="Opentaps Home Web Applications Entity">
       <field name="applicationId" type="id-long-ne"></field>
-      <field name="name" type="long-varchar"></field>
+      <field name="applicationName" type="long-varchar"></field>
       <field name="description" type="description"></field>
       <field name="imageUrl" type="long-varchar"></field>
       <field name="imageHoverUrl" type="long-varchar"></field>

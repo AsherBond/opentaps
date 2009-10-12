@@ -81,7 +81,7 @@
 	</columnHeader>
 	<detail>
 		<band height="13" splitType="Stretch">
-			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 				<reportElement key="textField-4" x="410" y="0" width="90" height="13"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>

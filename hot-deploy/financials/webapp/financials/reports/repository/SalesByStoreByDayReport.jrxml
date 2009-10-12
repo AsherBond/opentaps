@@ -86,7 +86,7 @@ ORDER BY PS.STORE_NAME, CAST(ORDER_DATE AS DATE)]]>
 					</textElement>
 					<textFieldExpression class="java.lang.Long"><![CDATA[$F{number_of_orders}]]></textFieldExpression>
 				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
 					<reportElement key="textField-8" x="535" y="1" width="116" height="20" forecolor="#0A0303" backcolor="#FFFFFF"/>
 					<box>
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>

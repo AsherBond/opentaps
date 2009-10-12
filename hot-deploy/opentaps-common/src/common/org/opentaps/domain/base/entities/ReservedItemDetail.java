@@ -195,105 +195,105 @@ fieldMapColumns.put("ReservedItemDetail", fields);
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param orderTypeId the orderTypeId to set
      */
-    private void setOrderTypeId(String orderTypeId) {
+    public void setOrderTypeId(String orderTypeId) {
         this.orderTypeId = orderTypeId;
     }
     /**
      * Auto generated value setter.
      * @param orderDate the orderDate to set
      */
-    private void setOrderDate(Timestamp orderDate) {
+    public void setOrderDate(Timestamp orderDate) {
         this.orderDate = orderDate;
     }
     /**
      * Auto generated value setter.
      * @param orderStatusId the orderStatusId to set
      */
-    private void setOrderStatusId(String orderStatusId) {
+    public void setOrderStatusId(String orderStatusId) {
         this.orderStatusId = orderStatusId;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param orderItemStatusId the orderItemStatusId to set
      */
-    private void setOrderItemStatusId(String orderItemStatusId) {
+    public void setOrderItemStatusId(String orderItemStatusId) {
         this.orderItemStatusId = orderItemStatusId;
     }
     /**
      * Auto generated value setter.
      * @param shipGroupSeqId the shipGroupSeqId to set
      */
-    private void setShipGroupSeqId(String shipGroupSeqId) {
+    public void setShipGroupSeqId(String shipGroupSeqId) {
         this.shipGroupSeqId = shipGroupSeqId;
     }
     /**
      * Auto generated value setter.
      * @param carrierPartyId the carrierPartyId to set
      */
-    private void setCarrierPartyId(String carrierPartyId) {
+    public void setCarrierPartyId(String carrierPartyId) {
         this.carrierPartyId = carrierPartyId;
     }
     /**
      * Auto generated value setter.
      * @param shipmentMethodTypeId the shipmentMethodTypeId to set
      */
-    private void setShipmentMethodTypeId(String shipmentMethodTypeId) {
+    public void setShipmentMethodTypeId(String shipmentMethodTypeId) {
         this.shipmentMethodTypeId = shipmentMethodTypeId;
     }
     /**
      * Auto generated value setter.
      * @param sequenceId the sequenceId to set
      */
-    private void setSequenceId(Long sequenceId) {
+    public void setSequenceId(Long sequenceId) {
         this.sequenceId = sequenceId;
     }
     /**
      * Auto generated value setter.
      * @param quantityReserved the quantityReserved to set
      */
-    private void setQuantityReserved(BigDecimal quantityReserved) {
+    public void setQuantityReserved(BigDecimal quantityReserved) {
         this.quantityReserved = quantityReserved;
     }
     /**
      * Auto generated value setter.
      * @param quantityNotAvailable the quantityNotAvailable to set
      */
-    private void setQuantityNotAvailable(BigDecimal quantityNotAvailable) {
+    public void setQuantityNotAvailable(BigDecimal quantityNotAvailable) {
         this.quantityNotAvailable = quantityNotAvailable;
     }
     /**
      * Auto generated value setter.
      * @param reservedDatetime the reservedDatetime to set
      */
-    private void setReservedDatetime(Timestamp reservedDatetime) {
+    public void setReservedDatetime(Timestamp reservedDatetime) {
         this.reservedDatetime = reservedDatetime;
     }
     /**
      * Auto generated value setter.
      * @param promisedDatetime the promisedDatetime to set
      */
-    private void setPromisedDatetime(Timestamp promisedDatetime) {
+    public void setPromisedDatetime(Timestamp promisedDatetime) {
         this.promisedDatetime = promisedDatetime;
     }
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
 

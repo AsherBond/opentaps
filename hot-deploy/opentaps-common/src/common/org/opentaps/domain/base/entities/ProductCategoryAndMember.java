@@ -206,119 +206,119 @@ fieldMapColumns.put("ProductCategoryAndMember", fields);
      * Auto generated value setter.
      * @param productCategoryId the productCategoryId to set
      */
-    private void setProductCategoryId(String productCategoryId) {
+    public void setProductCategoryId(String productCategoryId) {
         this.productCategoryId = productCategoryId;
     }
     /**
      * Auto generated value setter.
      * @param productCategoryTypeId the productCategoryTypeId to set
      */
-    private void setProductCategoryTypeId(String productCategoryTypeId) {
+    public void setProductCategoryTypeId(String productCategoryTypeId) {
         this.productCategoryTypeId = productCategoryTypeId;
     }
     /**
      * Auto generated value setter.
      * @param primaryParentCategoryId the primaryParentCategoryId to set
      */
-    private void setPrimaryParentCategoryId(String primaryParentCategoryId) {
+    public void setPrimaryParentCategoryId(String primaryParentCategoryId) {
         this.primaryParentCategoryId = primaryParentCategoryId;
     }
     /**
      * Auto generated value setter.
      * @param categoryName the categoryName to set
      */
-    private void setCategoryName(String categoryName) {
+    public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param longDescription the longDescription to set
      */
-    private void setLongDescription(String longDescription) {
+    public void setLongDescription(String longDescription) {
         this.longDescription = longDescription;
     }
     /**
      * Auto generated value setter.
      * @param categoryImageUrl the categoryImageUrl to set
      */
-    private void setCategoryImageUrl(String categoryImageUrl) {
+    public void setCategoryImageUrl(String categoryImageUrl) {
         this.categoryImageUrl = categoryImageUrl;
     }
     /**
      * Auto generated value setter.
      * @param linkOneImageUrl the linkOneImageUrl to set
      */
-    private void setLinkOneImageUrl(String linkOneImageUrl) {
+    public void setLinkOneImageUrl(String linkOneImageUrl) {
         this.linkOneImageUrl = linkOneImageUrl;
     }
     /**
      * Auto generated value setter.
      * @param linkTwoImageUrl the linkTwoImageUrl to set
      */
-    private void setLinkTwoImageUrl(String linkTwoImageUrl) {
+    public void setLinkTwoImageUrl(String linkTwoImageUrl) {
         this.linkTwoImageUrl = linkTwoImageUrl;
     }
     /**
      * Auto generated value setter.
      * @param detailScreen the detailScreen to set
      */
-    private void setDetailScreen(String detailScreen) {
+    public void setDetailScreen(String detailScreen) {
         this.detailScreen = detailScreen;
     }
     /**
      * Auto generated value setter.
      * @param showInSelect the showInSelect to set
      */
-    private void setShowInSelect(String showInSelect) {
+    public void setShowInSelect(String showInSelect) {
         this.showInSelect = showInSelect;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param comments the comments to set
      */
-    private void setComments(String comments) {
+    public void setComments(String comments) {
         this.comments = comments;
     }
     /**
      * Auto generated value setter.
      * @param sequenceNum the sequenceNum to set
      */
-    private void setSequenceNum(Long sequenceNum) {
+    public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
     /**
      * Auto generated value setter.
      * @param quantity the quantity to set
      */
-    private void setQuantity(BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 

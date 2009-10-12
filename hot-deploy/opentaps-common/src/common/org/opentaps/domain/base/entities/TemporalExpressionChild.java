@@ -155,70 +155,70 @@ fieldMapColumns.put("TemporalExpressionChild", fields);
      * Auto generated value setter.
      * @param fromTempExprId the fromTempExprId to set
      */
-    private void setFromTempExprId(String fromTempExprId) {
+    public void setFromTempExprId(String fromTempExprId) {
         this.fromTempExprId = fromTempExprId;
     }
     /**
      * Auto generated value setter.
      * @param exprAssocType the exprAssocType to set
      */
-    private void setExprAssocType(String exprAssocType) {
+    public void setExprAssocType(String exprAssocType) {
         this.exprAssocType = exprAssocType;
     }
     /**
      * Auto generated value setter.
      * @param tempExprId the tempExprId to set
      */
-    private void setTempExprId(String tempExprId) {
+    public void setTempExprId(String tempExprId) {
         this.tempExprId = tempExprId;
     }
     /**
      * Auto generated value setter.
      * @param tempExprTypeId the tempExprTypeId to set
      */
-    private void setTempExprTypeId(String tempExprTypeId) {
+    public void setTempExprTypeId(String tempExprTypeId) {
         this.tempExprTypeId = tempExprTypeId;
     }
     /**
      * Auto generated value setter.
      * @param date1 the date1 to set
      */
-    private void setDate1(Timestamp date1) {
+    public void setDate1(Timestamp date1) {
         this.date1 = date1;
     }
     /**
      * Auto generated value setter.
      * @param date2 the date2 to set
      */
-    private void setDate2(Timestamp date2) {
+    public void setDate2(Timestamp date2) {
         this.date2 = date2;
     }
     /**
      * Auto generated value setter.
      * @param integer1 the integer1 to set
      */
-    private void setInteger1(Long integer1) {
+    public void setInteger1(Long integer1) {
         this.integer1 = integer1;
     }
     /**
      * Auto generated value setter.
      * @param integer2 the integer2 to set
      */
-    private void setInteger2(Long integer2) {
+    public void setInteger2(Long integer2) {
         this.integer2 = integer2;
     }
     /**
      * Auto generated value setter.
      * @param string1 the string1 to set
      */
-    private void setString1(String string1) {
+    public void setString1(String string1) {
         this.string1 = string1;
     }
     /**
      * Auto generated value setter.
      * @param string2 the string2 to set
      */
-    private void setString2(String string2) {
+    public void setString2(String string2) {
         this.string2 = string2;
     }
 

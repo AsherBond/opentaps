@@ -237,161 +237,161 @@ fieldMapColumns.put("FacilityProductAndMrpEventAndDetailAndOrderAndProductStoreG
      * Auto generated value setter.
      * @param billOfMaterialLevel the billOfMaterialLevel to set
      */
-    private void setBillOfMaterialLevel(Long billOfMaterialLevel) {
+    public void setBillOfMaterialLevel(Long billOfMaterialLevel) {
         this.billOfMaterialLevel = billOfMaterialLevel;
     }
     /**
      * Auto generated value setter.
      * @param introductionDate the introductionDate to set
      */
-    private void setIntroductionDate(Timestamp introductionDate) {
+    public void setIntroductionDate(Timestamp introductionDate) {
         this.introductionDate = introductionDate;
     }
     /**
      * Auto generated value setter.
      * @param salesDiscontinuationDate the salesDiscontinuationDate to set
      */
-    private void setSalesDiscontinuationDate(Timestamp salesDiscontinuationDate) {
+    public void setSalesDiscontinuationDate(Timestamp salesDiscontinuationDate) {
         this.salesDiscontinuationDate = salesDiscontinuationDate;
     }
     /**
      * Auto generated value setter.
      * @param inOut the inOut to set
      */
-    private void setInOut(String inOut) {
+    public void setInOut(String inOut) {
         this.inOut = inOut;
     }
     /**
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param productStoreId the productStoreId to set
      */
-    private void setProductStoreId(String productStoreId) {
+    public void setProductStoreId(String productStoreId) {
         this.productStoreId = productStoreId;
     }
     /**
      * Auto generated value setter.
      * @param productStoreGroupId the productStoreGroupId to set
      */
-    private void setProductStoreGroupId(String productStoreGroupId) {
+    public void setProductStoreGroupId(String productStoreGroupId) {
         this.productStoreGroupId = productStoreGroupId;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
     /**
      * Auto generated value setter.
      * @param minimumStock the minimumStock to set
      */
-    private void setMinimumStock(BigDecimal minimumStock) {
+    public void setMinimumStock(BigDecimal minimumStock) {
         this.minimumStock = minimumStock;
     }
     /**
      * Auto generated value setter.
      * @param reorderQuantity the reorderQuantity to set
      */
-    private void setReorderQuantity(BigDecimal reorderQuantity) {
+    public void setReorderQuantity(BigDecimal reorderQuantity) {
         this.reorderQuantity = reorderQuantity;
     }
     /**
      * Auto generated value setter.
      * @param daysToShip the daysToShip to set
      */
-    private void setDaysToShip(Long daysToShip) {
+    public void setDaysToShip(Long daysToShip) {
         this.daysToShip = daysToShip;
     }
     /**
      * Auto generated value setter.
      * @param replenishMethodEnumId the replenishMethodEnumId to set
      */
-    private void setReplenishMethodEnumId(String replenishMethodEnumId) {
+    public void setReplenishMethodEnumId(String replenishMethodEnumId) {
         this.replenishMethodEnumId = replenishMethodEnumId;
     }
     /**
      * Auto generated value setter.
      * @param replenishFromFacilityId the replenishFromFacilityId to set
      */
-    private void setReplenishFromFacilityId(String replenishFromFacilityId) {
+    public void setReplenishFromFacilityId(String replenishFromFacilityId) {
         this.replenishFromFacilityId = replenishFromFacilityId;
     }
     /**
      * Auto generated value setter.
      * @param eventDate the eventDate to set
      */
-    private void setEventDate(Timestamp eventDate) {
+    public void setEventDate(Timestamp eventDate) {
         this.eventDate = eventDate;
     }
     /**
      * Auto generated value setter.
      * @param inventoryEventPlanTypeId the inventoryEventPlanTypeId to set
      */
-    private void setInventoryEventPlanTypeId(String inventoryEventPlanTypeId) {
+    public void setInventoryEventPlanTypeId(String inventoryEventPlanTypeId) {
         this.inventoryEventPlanTypeId = inventoryEventPlanTypeId;
     }
     /**
      * Auto generated value setter.
      * @param eventQuantity the eventQuantity to set
      */
-    private void setEventQuantity(BigDecimal eventQuantity) {
+    public void setEventQuantity(BigDecimal eventQuantity) {
         this.eventQuantity = eventQuantity;
     }
     /**
      * Auto generated value setter.
      * @param netQoh the netQoh to set
      */
-    private void setNetQoh(BigDecimal netQoh) {
+    public void setNetQoh(BigDecimal netQoh) {
         this.netQoh = netQoh;
     }
     /**
      * Auto generated value setter.
      * @param eventName the eventName to set
      */
-    private void setEventName(String eventName) {
+    public void setEventName(String eventName) {
         this.eventName = eventName;
     }
     /**
      * Auto generated value setter.
      * @param isLate the isLate to set
      */
-    private void setIsLate(String isLate) {
+    public void setIsLate(String isLate) {
         this.isLate = isLate;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param sequenceNum the sequenceNum to set
      */
-    private void setSequenceNum(Long sequenceNum) {
+    public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
 

@@ -39,17 +39,20 @@ import org.ofbiz.base.util.*;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilCommon;
+import com.opensourcestrategies.financials.reports.FinancialReports;
 
 locale = UtilHttp.getLocale(request);
 timeZone = UtilCommon.getTimeZone(request);
 dateFormat = UtilDate.getDateFormat(locale);
 
+Map ctxt = FinancialReports.prepareComparativeStateReportParameters(request);
+context.putAll(ctxt);
+
 // get the form data
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = context.get("organizationPartyId");
 customTimePeriods = delegator.findByAndCache("CustomTimePeriod", UtilMisc.toMap("organizationPartyId", organizationPartyId), UtilMisc.toList("customTimePeriodId"));
 glFiscalTypes = delegator.findAll("GlFiscalType");
 
-context.put("organizationPartyId", organizationPartyId);
 context.put("customTimePeriods", customTimePeriods);
 context.put("glFiscalTypes", glFiscalTypes);
 
@@ -63,29 +66,4 @@ if (dateOption == null) {
 
 // get the report form type (flow, state, comparativeFlow, comparativeState)
 reportFormType = parameters.get("reportFormType");
-
-// pass the fromGlFiscalTypeId and toGlFiscalTypeId to the next script
-fromGlFiscalTypeId = parameters.get("fromGlFiscalTypeId");
-toGlFiscalTypeId = parameters.get("toGlFiscalTypeId");
-context.put("fromGlFiscalTypeId", fromGlFiscalTypeId);
-context.put("toGlFiscalTypeId", toGlFiscalTypeId);
-
-// determine the from and thru dates according to the report form type
-if (dateOption.equals("byDate")) {
-    fromDate = parameters.get("fromDate");
-    thruDate = parameters.get("thruDate");
-    if (fromDate == null || fromDate.length() == 0 || thruDate == null || thruDate.length() == 0) return; 
-    context.put("fromDate", UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(fromDate, dateFormat, timeZone, locale), timeZone, locale));
-    context.put("thruDate", UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(thruDate, dateFormat, timeZone, locale), timeZone, locale));
-} else if (dateOption.equals("byTimePeriod")) {
-    context.put("fromCustomTimePeriodId", parameters.get("fromCustomTimePeriodId"));
-    context.put("thruCustomTimePeriodId", parameters.get("thruCustomTimePeriodId"));
-    fromTimePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", context.get("fromCustomTimePeriodId")));
-    thruTimePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", context.get("thruCustomTimePeriodId")));
-    //  the time periods end at the beginning of the thruDate,  end we want to adjust it so that the report ends at the end of day before the thruDate
-    fromDate = UtilDateTime.adjustTimestamp(new Timestamp(fromTimePeriod.get("thruDate").getTime()), Calendar.MILLISECOND, -1, timeZone, locale);
-    thruDate = UtilDateTime.adjustTimestamp(new Timestamp(thruTimePeriod.get("thruDate").getTime()), Calendar.MILLISECOND, -1, timeZone, locale);
-    context.put("fromDate", fromDate);
-    context.put("thruDate", thruDate);
-}
-
+context.put("reportFormType", reportFormType);

@@ -75,21 +75,19 @@
     <screen name="myCases">
         <section>
             <actions>
-                <set field="pageTitleLabel" value="CrmCases"/>    <!-- this is uiLabelMap property for the title of the HTML page -->
-                <set field="sectionHeaderUiLabel" value="CrmCases"/>  <!-- this is for the main section of this page, ie <h2> -->
-                <set field="casePaginatorName" value="myCases"/>                
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/cases/myCases.bsh"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/cases/listCases.bsh"/>
+                <set field="pageTitleLabel" value="CrmCases"/>
+                <set field="sectionHeaderUiLabel" value="CrmCases"/>
+                <set field="findCaseWidget" value="myCases"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <!-- my cases -->
-                        <container style="subSectionBlock">
-                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/cases/submenus/myCasesMenu.ftl"/></html></platform-specific>                        
-                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/cases/listCases.ftl"/></html></platform-specific>
-                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/cases/submenus/myCasesMenu.ftl"/></html>
+                        </platform-specific>                        
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindCrmsfaCases.ftl"/></html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -154,31 +152,19 @@
         </section>
     </screen>
 
-    <screen name="findCases">
+     <screen name="findCases">
         <section>
             <actions>
                 <set field="pageTitleLabel" value="CrmFindCases"/>
                 <set field="sectionHeaderUiLabel" value="CrmFindCases"/>
-                <set field="listSortTarget" value="findCases"/> <!-- targets for order by links -->
-                <set field="parameters.listIteratorNameToUse" value="casesListIt"/> <!-- iterator for list of cases -->
-                <set field="casePaginatorName" value="findCases"/>                
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/cases/findCases.bsh"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/cases/listCases.bsh"/>                
-                <set field="findCasesTarget" value="findCases"/>
+                <set field="findCaseWidget" value="findCases"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="subSectionBlock">
-                            <container style="form">
-                                <include-form name="FindCasesForm" location="component://crmsfa/widget/crmsfa/forms/cases/CasesForms.xml"/>
-                            </container>
-                        </container>
-                        <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmCases}</label></container>
-                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/cases/listCases.ftl"/></html></platform-specific>
-                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindCrmsfaCases.ftl"/></html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

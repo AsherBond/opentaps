@@ -169,70 +169,70 @@ fieldMapColumns.put("WorkOrderAndOrderItem", fields);
      * Auto generated value setter.
      * @param orderTypeId the orderTypeId to set
      */
-    private void setOrderTypeId(String orderTypeId) {
+    public void setOrderTypeId(String orderTypeId) {
         this.orderTypeId = orderTypeId;
     }
     /**
      * Auto generated value setter.
      * @param orderStatusId the orderStatusId to set
      */
-    private void setOrderStatusId(String orderStatusId) {
+    public void setOrderStatusId(String orderStatusId) {
         this.orderStatusId = orderStatusId;
     }
     /**
      * Auto generated value setter.
      * @param itemStatusId the itemStatusId to set
      */
-    private void setItemStatusId(String itemStatusId) {
+    public void setItemStatusId(String itemStatusId) {
         this.itemStatusId = itemStatusId;
     }
     /**
      * Auto generated value setter.
      * @param orderItemTypeId the orderItemTypeId to set
      */
-    private void setOrderItemTypeId(String orderItemTypeId) {
+    public void setOrderItemTypeId(String orderItemTypeId) {
         this.orderItemTypeId = orderItemTypeId;
     }
     /**
      * Auto generated value setter.
      * @param quantity the quantity to set
      */
-    private void setQuantity(BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
     /**
      * Auto generated value setter.
      * @param unitPrice the unitPrice to set
      */
-    private void setUnitPrice(BigDecimal unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
     /**
      * Auto generated value setter.
      * @param workEffortId the workEffortId to set
      */
-    private void setWorkEffortId(String workEffortId) {
+    public void setWorkEffortId(String workEffortId) {
         this.workEffortId = workEffortId;
     }
     /**
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param orderItemSeqId the orderItemSeqId to set
      */
-    private void setOrderItemSeqId(String orderItemSeqId) {
+    public void setOrderItemSeqId(String orderItemSeqId) {
         this.orderItemSeqId = orderItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param quantityFulfilled the quantityFulfilled to set
      */
-    private void setQuantityFulfilled(BigDecimal quantityFulfilled) {
+    public void setQuantityFulfilled(BigDecimal quantityFulfilled) {
         this.quantityFulfilled = quantityFulfilled;
     }
 

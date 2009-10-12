@@ -1561,7 +1561,7 @@ public class InvoiceServices {
         return response;
     }
 
-    private static String getInvoiceItemType(GenericDelegator delegator, String key1, String key2, String invoiceTypeId, String defaultValue) {
+    public static String getInvoiceItemType(GenericDelegator delegator, String key1, String key2, String invoiceTypeId, String defaultValue) {
         GenericValue itemMap = null;
         try {
             if (UtilValidate.isNotEmpty(key1)) {

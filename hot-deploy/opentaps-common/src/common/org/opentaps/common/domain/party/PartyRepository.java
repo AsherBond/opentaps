@@ -295,8 +295,8 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
             // that's why we do it this way
             String formatedPhoneNumber2 = formatPhoneNumberSQL("concat('%'," + formatedPhoneNumber + ")");
             String hql = "select pcm.party from PartyContactMech pcm where"
-                + " (pcm.thruDate is null or pcm.thruDate > current_date())"
-                + " and (pcm.id.fromDate is null or pcm.id.fromDate <= current_date())"
+                + " (pcm.thruDate is null or pcm.thruDate > current_timestamp())"
+                + " and (pcm.id.fromDate is null or pcm.id.fromDate <= current_timestamp())"
                 + " and (" + formatedPhoneNumber1 + " like :phoneNumber1"
                 + " or " + formatedPhoneNumber2 + " like :phoneNumber2)";
             org.hibernate.Query query = session.createQuery(hql);
@@ -397,5 +397,58 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
             throw new RepositoryException(e);
         }
         return null;
+    }
+
+    /** {@inheritDoc} */
+    public Set<Party> getPartyByEmail(String email) throws RepositoryException {
+        Set<Party> resultSet = new FastSet<Party>();
+        try {
+            Session session = getInfrastructure().getSession();
+            // prepare the HQL to get Party
+            String hql = "select pcm.party from PartyContactMech pcm where"
+                + " (pcm.thruDate is null or pcm.thruDate > current_timestamp())"
+                + " and (pcm.id.fromDate is null or pcm.id.fromDate <= current_timestamp())"
+                + " and lower(trim(pcm.contactMech.infoString)) like :email"
+                + " and (pcm.party.statusId is null or 'PARTY_DISABLED' <> pcm.party.statusId)";
+            org.hibernate.Query query = session.createQuery(hql);
+            query.setString("email", email.trim().toLowerCase());
+            List<org.opentaps.domain.base.entities.Party> parties = query.list();
+            List<String> partyIds = new ArrayList<String>();
+            for (org.opentaps.domain.base.entities.Party party : parties) {
+                partyIds.add(party.getPartyId());
+            }
+            if (partyIds.size() > 0) {
+                resultSet.addAll(getPartyByIds(partyIds));
+            }
+        } catch (InfrastructureException e) {
+            throw new RepositoryException(e);
+        }
+        return resultSet;
+    }
+
+    /** {@inheritDoc} */
+    public Set<Party> getPartyByName(String firstName, String lastName) throws RepositoryException {
+        Set<Party> resultSet = new FastSet<Party>();
+        try {
+            Session session = getInfrastructure().getSession();
+            // prepare the HQL to get Party
+            String hql = "select eo.party from Person eo where lower(trim(eo.firstName)) like :firstName"
+                + " and lower(trim(eo.lastName)) like :lastName"
+                + " and (eo.party.statusId is null or 'PARTY_DISABLED' <> eo.party.statusId)";
+            org.hibernate.Query query = session.createQuery(hql);
+            query.setString("firstName", firstName.trim().toLowerCase());
+            query.setString("lastName", lastName.trim().toLowerCase());
+            List<org.opentaps.domain.base.entities.Party> parties = query.list();
+            List<String> partyIds = new ArrayList<String>();
+            for (org.opentaps.domain.base.entities.Party party : parties) {
+                partyIds.add(party.getPartyId());
+            }
+            if (partyIds.size() > 0) {
+                resultSet.addAll(getPartyByIds(partyIds));
+            }
+        } catch (InfrastructureException e) {
+            throw new RepositoryException(e);
+        }
+        return resultSet;
     }
 }

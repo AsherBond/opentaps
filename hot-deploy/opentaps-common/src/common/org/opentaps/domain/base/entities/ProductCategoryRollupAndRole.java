@@ -171,70 +171,70 @@ fieldMapColumns.put("ProductCategoryRollupAndRole", fields);
      * Auto generated value setter.
      * @param productCategoryId the productCategoryId to set
      */
-    private void setProductCategoryId(String productCategoryId) {
+    public void setProductCategoryId(String productCategoryId) {
         this.productCategoryId = productCategoryId;
     }
     /**
      * Auto generated value setter.
      * @param parentProductCategoryId the parentProductCategoryId to set
      */
-    private void setParentProductCategoryId(String parentProductCategoryId) {
+    public void setParentProductCategoryId(String parentProductCategoryId) {
         this.parentProductCategoryId = parentProductCategoryId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param sequenceNum the sequenceNum to set
      */
-    private void setSequenceNum(Long sequenceNum) {
+    public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param roleFromDate the roleFromDate to set
      */
-    private void setRoleFromDate(Timestamp roleFromDate) {
+    public void setRoleFromDate(Timestamp roleFromDate) {
         this.roleFromDate = roleFromDate;
     }
     /**
      * Auto generated value setter.
      * @param roleThruDate the roleThruDate to set
      */
-    private void setRoleThruDate(Timestamp roleThruDate) {
+    public void setRoleThruDate(Timestamp roleThruDate) {
         this.roleThruDate = roleThruDate;
     }
     /**
      * Auto generated value setter.
      * @param roleComments the roleComments to set
      */
-    private void setRoleComments(String roleComments) {
+    public void setRoleComments(String roleComments) {
         this.roleComments = roleComments;
     }
 

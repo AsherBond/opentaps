@@ -151,63 +151,63 @@ fieldMapColumns.put("OrderHeaderAndRoleSummary", fields);
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param orderTypeId the orderTypeId to set
      */
-    private void setOrderTypeId(String orderTypeId) {
+    public void setOrderTypeId(String orderTypeId) {
         this.orderTypeId = orderTypeId;
     }
     /**
      * Auto generated value setter.
      * @param orderDate the orderDate to set
      */
-    private void setOrderDate(Timestamp orderDate) {
+    public void setOrderDate(Timestamp orderDate) {
         this.orderDate = orderDate;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param totalGrandAmount the totalGrandAmount to set
      */
-    private void setTotalGrandAmount(BigDecimal totalGrandAmount) {
+    public void setTotalGrandAmount(BigDecimal totalGrandAmount) {
         this.totalGrandAmount = totalGrandAmount;
     }
     /**
      * Auto generated value setter.
      * @param totalSubRemainingAmount the totalSubRemainingAmount to set
      */
-    private void setTotalSubRemainingAmount(BigDecimal totalSubRemainingAmount) {
+    public void setTotalSubRemainingAmount(BigDecimal totalSubRemainingAmount) {
         this.totalSubRemainingAmount = totalSubRemainingAmount;
     }
     /**
      * Auto generated value setter.
      * @param totalOrders the totalOrders to set
      */
-    private void setTotalOrders(Long totalOrders) {
+    public void setTotalOrders(Long totalOrders) {
         this.totalOrders = totalOrders;
     }
 

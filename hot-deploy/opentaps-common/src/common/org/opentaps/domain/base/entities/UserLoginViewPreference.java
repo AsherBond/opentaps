@@ -55,8 +55,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("userLoginId", "USER_LOGIN_ID");
         fields.put("applicationName", "APPLICATION_NAME");
         fields.put("screenName", "SCREEN_NAME");
-        fields.put("name", "NAME");
-        fields.put("value", "VALUE");
+        fields.put("preferenceName", "PREFERENCE_NAME");
+        fields.put("preferenceValue", "PREFERENCE_VALUE");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -67,8 +67,8 @@ fieldMapColumns.put("UserLoginViewPreference", fields);
     userLoginId("userLoginId"),
     applicationName("applicationName"),
     screenName("screenName"),
-    name("name"),
-    value("value"),
+    preferenceName("preferenceName"),
+    preferenceValue("preferenceValue"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -102,8 +102,8 @@ fieldMapColumns.put("UserLoginViewPreference", fields);
       public void setId(UserLoginViewPreferencePk id) {
          this.id = id;
       }
-   @Column(name="VALUE")
-   private String value;
+   @Column(name="PREFERENCE_VALUE")
+   private String preferenceValue;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -122,9 +122,9 @@ fieldMapColumns.put("UserLoginViewPreference", fields);
       this.isView = false;
       
       this.primaryKeyNames = new ArrayList<String>();
-      this.primaryKeyNames.add("userLoginId");this.primaryKeyNames.add("applicationName");this.primaryKeyNames.add("screenName");this.primaryKeyNames.add("name");
+      this.primaryKeyNames.add("userLoginId");this.primaryKeyNames.add("applicationName");this.primaryKeyNames.add("screenName");this.primaryKeyNames.add("preferenceName");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("applicationName");this.allFieldsNames.add("screenName");this.allFieldsNames.add("name");this.allFieldsNames.add("value");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("applicationName");this.allFieldsNames.add("screenName");this.allFieldsNames.add("preferenceName");this.allFieldsNames.add("preferenceValue");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -162,17 +162,17 @@ fieldMapColumns.put("UserLoginViewPreference", fields);
     }
     /**
      * Auto generated value setter.
-     * @param name the name to set
+     * @param preferenceName the preferenceName to set
      */
-    public void setName(String name) {
-        id.setName(name);
+    public void setPreferenceName(String preferenceName) {
+        id.setPreferenceName(preferenceName);
     }
     /**
      * Auto generated value setter.
-     * @param value the value to set
+     * @param preferenceValue the preferenceValue to set
      */
-    public void setValue(String value) {
-        this.value = value;
+    public void setPreferenceValue(String preferenceValue) {
+        this.preferenceValue = preferenceValue;
     }
     /**
      * Auto generated value setter.
@@ -228,15 +228,15 @@ fieldMapColumns.put("UserLoginViewPreference", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getName() {
-        return this.id.getName();
+    public String getPreferenceName() {
+        return this.id.getPreferenceName();
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getValue() {
-        return this.value;
+    public String getPreferenceValue() {
+        return this.preferenceValue;
     }
     /**
      * Auto generated value accessor.
@@ -277,8 +277,8 @@ fieldMapColumns.put("UserLoginViewPreference", fields);
         setUserLoginId((String) mapValue.get("userLoginId"));
         setApplicationName((String) mapValue.get("applicationName"));
         setScreenName((String) mapValue.get("screenName"));
-        setName((String) mapValue.get("name"));
-        setValue((String) mapValue.get("value"));
+        setPreferenceName((String) mapValue.get("preferenceName"));
+        setPreferenceValue((String) mapValue.get("preferenceValue"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -293,8 +293,8 @@ fieldMapColumns.put("UserLoginViewPreference", fields);
         mapValue.put("userLoginId", getUserLoginId());
         mapValue.put("applicationName", getApplicationName());
         mapValue.put("screenName", getScreenName());
-        mapValue.put("name", getName());
-        mapValue.put("value", getValue());
+        mapValue.put("preferenceName", getPreferenceName());
+        mapValue.put("preferenceValue", getPreferenceValue());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

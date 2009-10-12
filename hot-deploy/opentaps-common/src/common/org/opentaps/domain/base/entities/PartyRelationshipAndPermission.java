@@ -184,112 +184,112 @@ fieldMapColumns.put("PartyRelationshipAndPermission", fields);
      * Auto generated value setter.
      * @param partyIdFrom the partyIdFrom to set
      */
-    private void setPartyIdFrom(String partyIdFrom) {
+    public void setPartyIdFrom(String partyIdFrom) {
         this.partyIdFrom = partyIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param partyIdTo the partyIdTo to set
      */
-    private void setPartyIdTo(String partyIdTo) {
+    public void setPartyIdTo(String partyIdTo) {
         this.partyIdTo = partyIdTo;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeIdFrom the roleTypeIdFrom to set
      */
-    private void setRoleTypeIdFrom(String roleTypeIdFrom) {
+    public void setRoleTypeIdFrom(String roleTypeIdFrom) {
         this.roleTypeIdFrom = roleTypeIdFrom;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeIdTo the roleTypeIdTo to set
      */
-    private void setRoleTypeIdTo(String roleTypeIdTo) {
+    public void setRoleTypeIdTo(String roleTypeIdTo) {
         this.roleTypeIdTo = roleTypeIdTo;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param relationshipName the relationshipName to set
      */
-    private void setRelationshipName(String relationshipName) {
+    public void setRelationshipName(String relationshipName) {
         this.relationshipName = relationshipName;
     }
     /**
      * Auto generated value setter.
      * @param securityGroupId the securityGroupId to set
      */
-    private void setSecurityGroupId(String securityGroupId) {
+    public void setSecurityGroupId(String securityGroupId) {
         this.securityGroupId = securityGroupId;
     }
     /**
      * Auto generated value setter.
      * @param priorityTypeId the priorityTypeId to set
      */
-    private void setPriorityTypeId(String priorityTypeId) {
+    public void setPriorityTypeId(String priorityTypeId) {
         this.priorityTypeId = priorityTypeId;
     }
     /**
      * Auto generated value setter.
      * @param partyRelationshipTypeId the partyRelationshipTypeId to set
      */
-    private void setPartyRelationshipTypeId(String partyRelationshipTypeId) {
+    public void setPartyRelationshipTypeId(String partyRelationshipTypeId) {
         this.partyRelationshipTypeId = partyRelationshipTypeId;
     }
     /**
      * Auto generated value setter.
      * @param permissionsEnumId the permissionsEnumId to set
      */
-    private void setPermissionsEnumId(String permissionsEnumId) {
+    public void setPermissionsEnumId(String permissionsEnumId) {
         this.permissionsEnumId = permissionsEnumId;
     }
     /**
      * Auto generated value setter.
      * @param positionTitle the positionTitle to set
      */
-    private void setPositionTitle(String positionTitle) {
+    public void setPositionTitle(String positionTitle) {
         this.positionTitle = positionTitle;
     }
     /**
      * Auto generated value setter.
      * @param comments the comments to set
      */
-    private void setComments(String comments) {
+    public void setComments(String comments) {
         this.comments = comments;
     }
     /**
      * Auto generated value setter.
      * @param groupId the groupId to set
      */
-    private void setGroupId(String groupId) {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
     /**
      * Auto generated value setter.
      * @param permissionId the permissionId to set
      */
-    private void setPermissionId(String permissionId) {
+    public void setPermissionId(String permissionId) {
         this.permissionId = permissionId;
     }
 

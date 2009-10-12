@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DatamartSalesTaxReport" pageWidth="840" pageHeight="842" columnWidth="780" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DatamartSalesTaxReport" pageWidth="612" pageHeight="792" columnWidth="556" leftMargin="28" rightMargin="28" topMargin="20" bottomMargin="20">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
-	<import value="org.opentaps.common.reporting.UtilReports"/>
 	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="org.opentaps.common.reporting.UtilReports"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<parameter name="fromDate" class="java.sql.Timestamp" isForPrompting="false">
@@ -18,18 +18,31 @@
 	<parameter name="currencyUomId" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["USD"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="periodStart" class="java.lang.Long" isForPrompting="false">
+		<defaultValueExpression><![CDATA[Long.valueOf(0L)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="periodEnd" class="java.lang.Long" isForPrompting="false">
+		<defaultValueExpression><![CDATA[Long.valueOf(0L)]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[SELECT PRODUCT_STORE_ID, STORE_DIM.STORE_DIM_NAME AS NAME, STORE_DIM.STORE_DIM_ID, SUM(GROSS_AMOUNT) AS TOTAL_GROSS_SALES,
-			      SUM(DISCOUNTS) AS TOTAL_DISCOUNTS,
-			      SUM(REFUNDS) AS TOTAL_REFUNDS,
-			      SUM(NET_AMOUNT) AS TOTAL_NET_SALES
-	                      FROM SALES_INVOICE_ITEM_FACT, STORE_DIM, DATE_DIM, CURRENCY_DIM
-	                      WHERE STORE_DIM.STORE_DIM_ID = SALES_INVOICE_ITEM_FACT.STORE_DIM_ID
-	                      AND DATE_DIM.DATE_DIM_ID = SALES_INVOICE_ITEM_FACT.DATE_DIM_ID
-	                      AND CURRENCY_DIM.CURRENCY_DIM_ID = SALES_INVOICE_ITEM_FACT.CURRENCY_DIM_ID
-	                      AND DATE_DIM.INVOICE_DATE > $P{fromDate}
-	                      AND DATE_DIM.INVOICE_DATE < $P{thruDate}
-	                      AND CURRENCY_DIM.UOM_ID = $P{currencyUomId}
+		<![CDATA[SELECT
+  PRODUCT_STORE_ID,
+  STORE_DIM.STORE_DIM_NAME AS NAME,
+  STORE_DIM.STORE_DIM_ID,
+  SUM(GROSS_AMOUNT) AS TOTAL_GROSS_SALES,
+  SUM(DISCOUNTS) AS TOTAL_DISCOUNTS,
+  SUM(REFUNDS) AS TOTAL_REFUNDS,
+  SUM(NET_AMOUNT) AS TOTAL_NET_SALES
+FROM SALES_INVOICE_ITEM_FACT, STORE_DIM, DATE_DIM, CURRENCY_DIM, ORGANIZATION_DIM
+WHERE
+  STORE_DIM.STORE_DIM_ID = SALES_INVOICE_ITEM_FACT.STORE_DIM_ID
+  AND DATE_DIM.DATE_DIM_ID = SALES_INVOICE_ITEM_FACT.DATE_DIM_ID
+  AND CURRENCY_DIM.CURRENCY_DIM_ID = SALES_INVOICE_ITEM_FACT.CURRENCY_DIM_ID
+  AND ORGANIZATION_DIM.ORGANIZATION_DIM_ID = SALES_INVOICE_ITEM_FACT.ORGANIZATION_DIM_ID
+  AND DATE_DIM.DATE_DIM_ID >= $P{periodStart}
+  AND DATE_DIM.DATE_DIM_ID <= $P{periodEnd}
+  AND CURRENCY_DIM.UOM_ID = $P{currencyUomId}
+  AND ORGANIZATION_DIM.ORGANIZATION_PARTY_ID = $P{organizationPartyId}
 GROUP BY PRODUCT_STORE_ID, STORE_DIM.STORE_DIM_NAME, STORE_DIM.STORE_DIM_ID
 ORDER BY STORE_DIM.STORE_DIM_NAME]]>
 	</queryString>
@@ -40,9 +53,9 @@ ORDER BY STORE_DIM.STORE_DIM_NAME]]>
 	<field name="total_discounts" class="java.math.BigDecimal"/>
 	<field name="total_refunds" class="java.math.BigDecimal"/>
 	<field name="total_net_sales" class="java.lang.Double"/>
-	<variable name="store_id" class="java.lang.String">
-		<variableExpression><![CDATA[$F{store_dim_id}.toString()]]></variableExpression>
-		<initialValueExpression><![CDATA["_NA_"]]></initialValueExpression>
+	<variable name="store_id" class="java.lang.Long">
+		<variableExpression><![CDATA[$F{store_dim_id}]]></variableExpression>
+		<initialValueExpression><![CDATA[Long.valueOf(0)]]></initialValueExpression>
 	</variable>
 	<group name="name">
 		<groupExpression><![CDATA[$F{name}]]></groupExpression>
@@ -59,20 +72,20 @@ ORDER BY STORE_DIM.STORE_DIM_NAME]]>
 	<title>
 		<band height="43" splitType="Stretch">
 			<line>
-				<reportElement key="line" mode="Opaque" x="0" y="38" width="780" height="1" forecolor="#808080" backcolor="#FFFFFF"/>
+				<reportElement key="line" mode="Opaque" x="0" y="38" width="556" height="1" forecolor="#808080" backcolor="#FFFFFF"/>
 				<graphicElement>
 					<pen lineWidth="2.0"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement key="line" mode="Opaque" x="0" y="3" width="780" height="1" forecolor="#808080" backcolor="#FFFFFF"/>
+				<reportElement key="line" mode="Opaque" x="0" y="3" width="556" height="1" forecolor="#808080" backcolor="#FFFFFF"/>
 				<graphicElement>
 					<pen lineWidth="2.0"/>
 				</graphicElement>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement key="staticText-1" x="0" y="3" width="780" height="35"/>
-				<textElement textAlignment="Center" markup="none">
+				<reportElement key="staticText-1" x="0" y="3" width="556" height="35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font size="18" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsSalesTaxStatement}]]></textFieldExpression>
@@ -82,7 +95,7 @@ ORDER BY STORE_DIM.STORE_DIM_NAME]]>
 	<pageHeader>
 		<band height="20" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement key="textField-1" x="221" y="0" width="70" height="19"/>
+				<reportElement key="textField-1" x="116" y="0" width="70" height="19"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -95,7 +108,7 @@ ORDER BY STORE_DIM.STORE_DIM_NAME]]>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonFromDate}+":"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement key="textField-2" x="381" y="0" width="70" height="19"/>
+				<reportElement key="textField-2" x="276" y="0" width="70" height="19"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -108,7 +121,7 @@ ORDER BY STORE_DIM.STORE_DIM_NAME]]>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonThruDate}+":"]]></textFieldExpression>
 			</textField>
 			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
-				<reportElement key="textField-3" isPrintRepeatedValues="false" x="451" y="0" width="90" height="19"/>
+				<reportElement key="textField-3" isPrintRepeatedValues="false" x="346" y="0" width="90" height="19"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -121,7 +134,7 @@ ORDER BY STORE_DIM.STORE_DIM_NAME]]>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{thruDate}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
-				<reportElement key="textField-4" x="291" y="0" width="90" height="19"/>
+				<reportElement key="textField-4" x="186" y="0" width="90" height="19"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -141,9 +154,15 @@ ORDER BY STORE_DIM.STORE_DIM_NAME]]>
 	<detail>
 		<band height="64" splitType="Stretch">
 			<subreport isUsingCache="true">
-				<reportElement key="subreport-1" x="0" y="9" width="780" height="53" isRemoveLineWhenBlank="true"/>
+				<reportElement key="subreport-1" x="0" y="9" width="556" height="53" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="REPORT_LOCALE">
+					<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="organizationPartyId">
 					<subreportParameterExpression><![CDATA[$P{organizationPartyId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="periodStart">
+					<subreportParameterExpression><![CDATA[$P{periodStart}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="thruDate">
 					<subreportParameterExpression><![CDATA[$P{thruDate}]]></subreportParameterExpression>
@@ -154,6 +173,9 @@ ORDER BY STORE_DIM.STORE_DIM_NAME]]>
 				<subreportParameter name="currencyUomId">
 					<subreportParameterExpression><![CDATA[$P{currencyUomId}]]></subreportParameterExpression>
 				</subreportParameter>
+				<subreportParameter name="periodEnd">
+					<subreportParameterExpression><![CDATA[$P{periodEnd}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="StoreName">
 					<subreportParameterExpression><![CDATA[$F{name}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -162,6 +184,9 @@ ORDER BY STORE_DIM.STORE_DIM_NAME]]>
 				</subreportParameter>
 				<subreportParameter name="TotalSales">
 					<subreportParameterExpression><![CDATA[$F{total_net_sales}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
+					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://financials/webapp/financials/reports/repository/DatamartSalesTaxSubReport.jrxml")]]></subreportExpression>

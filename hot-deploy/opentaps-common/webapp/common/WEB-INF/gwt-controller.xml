@@ -210,4 +210,63 @@
         <response name="error" type="none"/>
     </request-map>
 
+    <!-- Case lookup requests -->
+    <request-map uri="gwtFindCases">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.CaseLookupService" invoke="findCases"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    
+    <request-map uri="gwtSuggestCasePriorities">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.CasePriorityLookupService" invoke="suggestCasePriorities"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>    
+
+    <request-map uri="gwtSuggestCaseStatus">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.CaseStatusLookupService" invoke="suggestCaseStatus"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>  
+    
+    <request-map uri="gwtSuggestCustRequestTypes">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.CustRequestTypeLookupService" invoke="suggestCustRequestTypes"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>   
+
+    <!-- Opportunity lookup requests -->
+    <request-map uri="gwtFindOpportunities">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.OpportunityLookupService" invoke="findOpportunities"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <request-map uri="gwtSuggestOpportunityStages">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.OpportunityStageLookupService" invoke="suggestOpportunityStages"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>  
+    
+    <request-map uri="gwtSuggestOpportunityTypes">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.OpportunityTypeLookupService" invoke="suggestOpportunityTypes"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>   
+
+    <request-map uri="gwtSuggestLeads">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.PartyLookupService" invoke="suggestLeads"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map> 
+    
+                  
 </site-conf>

@@ -173,77 +173,77 @@ fieldMapColumns.put("ViewPrefAndLocation", fields);
      * Auto generated value setter.
      * @param viewPrefTypeId the viewPrefTypeId to set
      */
-    private void setViewPrefTypeId(String viewPrefTypeId) {
+    public void setViewPrefTypeId(String viewPrefTypeId) {
         this.viewPrefTypeId = viewPrefTypeId;
     }
     /**
      * Auto generated value setter.
      * @param userLoginId the userLoginId to set
      */
-    private void setUserLoginId(String userLoginId) {
+    public void setUserLoginId(String userLoginId) {
         this.userLoginId = userLoginId;
     }
     /**
      * Auto generated value setter.
      * @param viewPrefValueTypeId the viewPrefValueTypeId to set
      */
-    private void setViewPrefValueTypeId(String viewPrefValueTypeId) {
+    public void setViewPrefValueTypeId(String viewPrefValueTypeId) {
         this.viewPrefValueTypeId = viewPrefValueTypeId;
     }
     /**
      * Auto generated value setter.
      * @param viewPrefEnumId the viewPrefEnumId to set
      */
-    private void setViewPrefEnumId(String viewPrefEnumId) {
+    public void setViewPrefEnumId(String viewPrefEnumId) {
         this.viewPrefEnumId = viewPrefEnumId;
     }
     /**
      * Auto generated value setter.
      * @param viewPrefString the viewPrefString to set
      */
-    private void setViewPrefString(String viewPrefString) {
+    public void setViewPrefString(String viewPrefString) {
         this.viewPrefString = viewPrefString;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param application the application to set
      */
-    private void setApplication(String application) {
+    public void setApplication(String application) {
         this.application = application;
     }
     /**
      * Auto generated value setter.
      * @param applicationSection the applicationSection to set
      */
-    private void setApplicationSection(String applicationSection) {
+    public void setApplicationSection(String applicationSection) {
         this.applicationSection = applicationSection;
     }
     /**
      * Auto generated value setter.
      * @param screenName the screenName to set
      */
-    private void setScreenName(String screenName) {
+    public void setScreenName(String screenName) {
         this.screenName = screenName;
     }
     /**
      * Auto generated value setter.
      * @param formName the formName to set
      */
-    private void setFormName(String formName) {
+    public void setFormName(String formName) {
         this.formName = formName;
     }
     /**
      * Auto generated value setter.
      * @param domId the domId to set
      */
-    private void setDomId(String domId) {
+    public void setDomId(String domId) {
         this.domId = domId;
     }
 

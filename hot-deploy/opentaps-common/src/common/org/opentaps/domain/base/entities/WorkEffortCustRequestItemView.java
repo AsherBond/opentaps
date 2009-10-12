@@ -216,133 +216,133 @@ fieldMapColumns.put("WorkEffortCustRequestItemView", fields);
      * Auto generated value setter.
      * @param statusItemDescription the statusItemDescription to set
      */
-    private void setStatusItemDescription(String statusItemDescription) {
+    public void setStatusItemDescription(String statusItemDescription) {
         this.statusItemDescription = statusItemDescription;
     }
     /**
      * Auto generated value setter.
      * @param custRequestId the custRequestId to set
      */
-    private void setCustRequestId(String custRequestId) {
+    public void setCustRequestId(String custRequestId) {
         this.custRequestId = custRequestId;
     }
     /**
      * Auto generated value setter.
      * @param custRequestItemSeqId the custRequestItemSeqId to set
      */
-    private void setCustRequestItemSeqId(String custRequestItemSeqId) {
+    public void setCustRequestItemSeqId(String custRequestItemSeqId) {
         this.custRequestItemSeqId = custRequestItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param workEffortId the workEffortId to set
      */
-    private void setWorkEffortId(String workEffortId) {
+    public void setWorkEffortId(String workEffortId) {
         this.workEffortId = workEffortId;
     }
     /**
      * Auto generated value setter.
      * @param custRequestResolutionId the custRequestResolutionId to set
      */
-    private void setCustRequestResolutionId(String custRequestResolutionId) {
+    public void setCustRequestResolutionId(String custRequestResolutionId) {
         this.custRequestResolutionId = custRequestResolutionId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param priority the priority to set
      */
-    private void setPriority(Long priority) {
+    public void setPriority(Long priority) {
         this.priority = priority;
     }
     /**
      * Auto generated value setter.
      * @param sequenceNum the sequenceNum to set
      */
-    private void setSequenceNum(Long sequenceNum) {
+    public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
     /**
      * Auto generated value setter.
      * @param requiredByDate the requiredByDate to set
      */
-    private void setRequiredByDate(Timestamp requiredByDate) {
+    public void setRequiredByDate(Timestamp requiredByDate) {
         this.requiredByDate = requiredByDate;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param quantity the quantity to set
      */
-    private void setQuantity(BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
     /**
      * Auto generated value setter.
      * @param selectedAmount the selectedAmount to set
      */
-    private void setSelectedAmount(BigDecimal selectedAmount) {
+    public void setSelectedAmount(BigDecimal selectedAmount) {
         this.selectedAmount = selectedAmount;
     }
     /**
      * Auto generated value setter.
      * @param maximumAmount the maximumAmount to set
      */
-    private void setMaximumAmount(BigDecimal maximumAmount) {
+    public void setMaximumAmount(BigDecimal maximumAmount) {
         this.maximumAmount = maximumAmount;
     }
     /**
      * Auto generated value setter.
      * @param reservStart the reservStart to set
      */
-    private void setReservStart(Timestamp reservStart) {
+    public void setReservStart(Timestamp reservStart) {
         this.reservStart = reservStart;
     }
     /**
      * Auto generated value setter.
      * @param reservLength the reservLength to set
      */
-    private void setReservLength(BigDecimal reservLength) {
+    public void setReservLength(BigDecimal reservLength) {
         this.reservLength = reservLength;
     }
     /**
      * Auto generated value setter.
      * @param reservPersons the reservPersons to set
      */
-    private void setReservPersons(BigDecimal reservPersons) {
+    public void setReservPersons(BigDecimal reservPersons) {
         this.reservPersons = reservPersons;
     }
     /**
      * Auto generated value setter.
      * @param configId the configId to set
      */
-    private void setConfigId(String configId) {
+    public void setConfigId(String configId) {
         this.configId = configId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param story the story to set
      */
-    private void setStory(String story) {
+    public void setStory(String story) {
         this.story = story;
     }
 

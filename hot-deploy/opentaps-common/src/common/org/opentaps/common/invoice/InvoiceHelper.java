@@ -134,7 +134,8 @@ public final class InvoiceHelper {
 
         // round the numerical values properly
         BigDecimal amountTotal = (BigDecimal) invoiceLine.get("amountTotal");
-        invoiceLine.put("amountTotal", amountTotal.setScale(decimals, rounding));
+        // round the intermediate values to one more decimal place than the final values
+        invoiceLine.put("amountTotal", amountTotal.setScale(decimals + 1, rounding));
 
         // remove data for non-uniform sets
         if (!isUniform) {

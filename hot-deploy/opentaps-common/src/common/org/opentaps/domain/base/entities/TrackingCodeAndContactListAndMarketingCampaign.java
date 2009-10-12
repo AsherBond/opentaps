@@ -169,91 +169,91 @@ fieldMapColumns.put("TrackingCodeAndContactListAndMarketingCampaign", fields);
      * Auto generated value setter.
      * @param campaignListId the campaignListId to set
      */
-    private void setCampaignListId(String campaignListId) {
+    public void setCampaignListId(String campaignListId) {
         this.campaignListId = campaignListId;
     }
     /**
      * Auto generated value setter.
      * @param contactListId the contactListId to set
      */
-    private void setContactListId(String contactListId) {
+    public void setContactListId(String contactListId) {
         this.contactListId = contactListId;
     }
     /**
      * Auto generated value setter.
      * @param marketingCampaignId the marketingCampaignId to set
      */
-    private void setMarketingCampaignId(String marketingCampaignId) {
+    public void setMarketingCampaignId(String marketingCampaignId) {
         this.marketingCampaignId = marketingCampaignId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param contactListName the contactListName to set
      */
-    private void setContactListName(String contactListName) {
+    public void setContactListName(String contactListName) {
         this.contactListName = contactListName;
     }
     /**
      * Auto generated value setter.
      * @param trackingCodeId the trackingCodeId to set
      */
-    private void setTrackingCodeId(String trackingCodeId) {
+    public void setTrackingCodeId(String trackingCodeId) {
         this.trackingCodeId = trackingCodeId;
     }
     /**
      * Auto generated value setter.
      * @param trackingCodeTypeId the trackingCodeTypeId to set
      */
-    private void setTrackingCodeTypeId(String trackingCodeTypeId) {
+    public void setTrackingCodeTypeId(String trackingCodeTypeId) {
         this.trackingCodeTypeId = trackingCodeTypeId;
     }
     /**
      * Auto generated value setter.
      * @param tcFromDate the tcFromDate to set
      */
-    private void setTcFromDate(Timestamp tcFromDate) {
+    public void setTcFromDate(Timestamp tcFromDate) {
         this.tcFromDate = tcFromDate;
     }
     /**
      * Auto generated value setter.
      * @param tcThruDate the tcThruDate to set
      */
-    private void setTcThruDate(Timestamp tcThruDate) {
+    public void setTcThruDate(Timestamp tcThruDate) {
         this.tcThruDate = tcThruDate;
     }
     /**
      * Auto generated value setter.
      * @param parentContactListId the parentContactListId to set
      */
-    private void setParentContactListId(String parentContactListId) {
+    public void setParentContactListId(String parentContactListId) {
         this.parentContactListId = parentContactListId;
     }
     /**
      * Auto generated value setter.
      * @param parentContactListName the parentContactListName to set
      */
-    private void setParentContactListName(String parentContactListName) {
+    public void setParentContactListName(String parentContactListName) {
         this.parentContactListName = parentContactListName;
     }
     /**
      * Auto generated value setter.
      * @param contactMechTypeId the contactMechTypeId to set
      */
-    private void setContactMechTypeId(String contactMechTypeId) {
+    public void setContactMechTypeId(String contactMechTypeId) {
         this.contactMechTypeId = contactMechTypeId;
     }
 

@@ -202,4 +202,21 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
      * @throws EntityNotFoundException if an error occurs
      */
     public PostalAddress getSupplierPostalAddress(Party party) throws RepositoryException, EntityNotFoundException;
+
+    /**
+     * Finds the list of <code>Party</code> matching the given email.
+     * @return the list of <code>Party</code> matching the email
+     * @param email the email to find
+     * @throws RepositoryException if an error occurs
+     */
+    public Set<Party> getPartyByEmail(String email) throws RepositoryException;
+
+    /**
+     * Finds the list of <code>Party</code> matching the given name.
+     * @return the list of <code>Contact</code> matching the name
+     * @param firstName the firstName to find
+     * @param lastName the lastName to find
+     * @throws RepositoryException if an error occurs
+     */
+    public Set<Party> getPartyByName(String firstName, String lastName) throws RepositoryException;
 }

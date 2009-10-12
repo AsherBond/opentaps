@@ -179,84 +179,84 @@ fieldMapColumns.put("PartyAndUserLoginAndPerson", fields);
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param partyTypeId the partyTypeId to set
      */
-    private void setPartyTypeId(String partyTypeId) {
+    public void setPartyTypeId(String partyTypeId) {
         this.partyTypeId = partyTypeId;
     }
     /**
      * Auto generated value setter.
      * @param createdDate the createdDate to set
      */
-    private void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param userLoginId the userLoginId to set
      */
-    private void setUserLoginId(String userLoginId) {
+    public void setUserLoginId(String userLoginId) {
         this.userLoginId = userLoginId;
     }
     /**
      * Auto generated value setter.
      * @param currentPassword the currentPassword to set
      */
-    private void setCurrentPassword(String currentPassword) {
+    public void setCurrentPassword(String currentPassword) {
         this.currentPassword = currentPassword;
     }
     /**
      * Auto generated value setter.
      * @param passwordHint the passwordHint to set
      */
-    private void setPasswordHint(String passwordHint) {
+    public void setPasswordHint(String passwordHint) {
         this.passwordHint = passwordHint;
     }
     /**
      * Auto generated value setter.
      * @param enabled the enabled to set
      */
-    private void setEnabled(String enabled) {
+    public void setEnabled(String enabled) {
         this.enabled = enabled;
     }
     /**
      * Auto generated value setter.
      * @param disabledDateTime the disabledDateTime to set
      */
-    private void setDisabledDateTime(Timestamp disabledDateTime) {
+    public void setDisabledDateTime(Timestamp disabledDateTime) {
         this.disabledDateTime = disabledDateTime;
     }
     /**
      * Auto generated value setter.
      * @param successiveFailedLogins the successiveFailedLogins to set
      */
-    private void setSuccessiveFailedLogins(Long successiveFailedLogins) {
+    public void setSuccessiveFailedLogins(Long successiveFailedLogins) {
         this.successiveFailedLogins = successiveFailedLogins;
     }
     /**
      * Auto generated value setter.
      * @param lastName the lastName to set
      */
-    private void setLastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
     /**
      * Auto generated value setter.
      * @param firstName the firstName to set
      */
-    private void setFirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 

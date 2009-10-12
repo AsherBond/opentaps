@@ -280,182 +280,182 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
      * Auto generated value setter.
      * @param assignmentStatusId the assignmentStatusId to set
      */
-    private void setAssignmentStatusId(String assignmentStatusId) {
+    public void setAssignmentStatusId(String assignmentStatusId) {
         this.assignmentStatusId = assignmentStatusId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param partyTypeId the partyTypeId to set
      */
-    private void setPartyTypeId(String partyTypeId) {
+    public void setPartyTypeId(String partyTypeId) {
         this.partyTypeId = partyTypeId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param firstName the firstName to set
      */
-    private void setFirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
     /**
      * Auto generated value setter.
      * @param middleName the middleName to set
      */
-    private void setMiddleName(String middleName) {
+    public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
     /**
      * Auto generated value setter.
      * @param lastName the lastName to set
      */
-    private void setLastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
     /**
      * Auto generated value setter.
      * @param firstNameLocal the firstNameLocal to set
      */
-    private void setFirstNameLocal(String firstNameLocal) {
+    public void setFirstNameLocal(String firstNameLocal) {
         this.firstNameLocal = firstNameLocal;
     }
     /**
      * Auto generated value setter.
      * @param lastNameLocal the lastNameLocal to set
      */
-    private void setLastNameLocal(String lastNameLocal) {
+    public void setLastNameLocal(String lastNameLocal) {
         this.lastNameLocal = lastNameLocal;
     }
     /**
      * Auto generated value setter.
      * @param personalTitle the personalTitle to set
      */
-    private void setPersonalTitle(String personalTitle) {
+    public void setPersonalTitle(String personalTitle) {
         this.personalTitle = personalTitle;
     }
     /**
      * Auto generated value setter.
      * @param suffix the suffix to set
      */
-    private void setSuffix(String suffix) {
+    public void setSuffix(String suffix) {
         this.suffix = suffix;
     }
     /**
      * Auto generated value setter.
      * @param groupName the groupName to set
      */
-    private void setGroupName(String groupName) {
+    public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
     /**
      * Auto generated value setter.
      * @param groupNameLocal the groupNameLocal to set
      */
-    private void setGroupNameLocal(String groupNameLocal) {
+    public void setGroupNameLocal(String groupNameLocal) {
         this.groupNameLocal = groupNameLocal;
     }
     /**
      * Auto generated value setter.
      * @param workEffortId the workEffortId to set
      */
-    private void setWorkEffortId(String workEffortId) {
+    public void setWorkEffortId(String workEffortId) {
         this.workEffortId = workEffortId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param assignedByUserLoginId the assignedByUserLoginId to set
      */
-    private void setAssignedByUserLoginId(String assignedByUserLoginId) {
+    public void setAssignedByUserLoginId(String assignedByUserLoginId) {
         this.assignedByUserLoginId = assignedByUserLoginId;
     }
     /**
      * Auto generated value setter.
      * @param statusDateTime the statusDateTime to set
      */
-    private void setStatusDateTime(Timestamp statusDateTime) {
+    public void setStatusDateTime(Timestamp statusDateTime) {
         this.statusDateTime = statusDateTime;
     }
     /**
      * Auto generated value setter.
      * @param expectationEnumId the expectationEnumId to set
      */
-    private void setExpectationEnumId(String expectationEnumId) {
+    public void setExpectationEnumId(String expectationEnumId) {
         this.expectationEnumId = expectationEnumId;
     }
     /**
      * Auto generated value setter.
      * @param delegateReasonEnumId the delegateReasonEnumId to set
      */
-    private void setDelegateReasonEnumId(String delegateReasonEnumId) {
+    public void setDelegateReasonEnumId(String delegateReasonEnumId) {
         this.delegateReasonEnumId = delegateReasonEnumId;
     }
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
     /**
      * Auto generated value setter.
      * @param comments the comments to set
      */
-    private void setComments(String comments) {
+    public void setComments(String comments) {
         this.comments = comments;
     }
     /**
      * Auto generated value setter.
      * @param mustRsvp the mustRsvp to set
      */
-    private void setMustRsvp(String mustRsvp) {
+    public void setMustRsvp(String mustRsvp) {
         this.mustRsvp = mustRsvp;
     }
     /**
      * Auto generated value setter.
      * @param availabilityStatusId the availabilityStatusId to set
      */
-    private void setAvailabilityStatusId(String availabilityStatusId) {
+    public void setAvailabilityStatusId(String availabilityStatusId) {
         this.availabilityStatusId = availabilityStatusId;
     }
 

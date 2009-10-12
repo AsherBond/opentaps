@@ -166,77 +166,77 @@ fieldMapColumns.put("OrderShipmentInfoSummary", fields);
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param orderItemSeqId the orderItemSeqId to set
      */
-    private void setOrderItemSeqId(String orderItemSeqId) {
+    public void setOrderItemSeqId(String orderItemSeqId) {
         this.orderItemSeqId = orderItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param shipmentId the shipmentId to set
      */
-    private void setShipmentId(String shipmentId) {
+    public void setShipmentId(String shipmentId) {
         this.shipmentId = shipmentId;
     }
     /**
      * Auto generated value setter.
      * @param shipGroupSeqId the shipGroupSeqId to set
      */
-    private void setShipGroupSeqId(String shipGroupSeqId) {
+    public void setShipGroupSeqId(String shipGroupSeqId) {
         this.shipGroupSeqId = shipGroupSeqId;
     }
     /**
      * Auto generated value setter.
      * @param shipmentRouteSegmentId the shipmentRouteSegmentId to set
      */
-    private void setShipmentRouteSegmentId(String shipmentRouteSegmentId) {
+    public void setShipmentRouteSegmentId(String shipmentRouteSegmentId) {
         this.shipmentRouteSegmentId = shipmentRouteSegmentId;
     }
     /**
      * Auto generated value setter.
      * @param carrierPartyId the carrierPartyId to set
      */
-    private void setCarrierPartyId(String carrierPartyId) {
+    public void setCarrierPartyId(String carrierPartyId) {
         this.carrierPartyId = carrierPartyId;
     }
     /**
      * Auto generated value setter.
      * @param actualStartDate the actualStartDate to set
      */
-    private void setActualStartDate(Timestamp actualStartDate) {
+    public void setActualStartDate(Timestamp actualStartDate) {
         this.actualStartDate = actualStartDate;
     }
     /**
      * Auto generated value setter.
      * @param shipmentMethodTypeId the shipmentMethodTypeId to set
      */
-    private void setShipmentMethodTypeId(String shipmentMethodTypeId) {
+    public void setShipmentMethodTypeId(String shipmentMethodTypeId) {
         this.shipmentMethodTypeId = shipmentMethodTypeId;
     }
     /**
      * Auto generated value setter.
      * @param shipmentPackageSeqId the shipmentPackageSeqId to set
      */
-    private void setShipmentPackageSeqId(String shipmentPackageSeqId) {
+    public void setShipmentPackageSeqId(String shipmentPackageSeqId) {
         this.shipmentPackageSeqId = shipmentPackageSeqId;
     }
     /**
      * Auto generated value setter.
      * @param trackingCode the trackingCode to set
      */
-    private void setTrackingCode(String trackingCode) {
+    public void setTrackingCode(String trackingCode) {
         this.trackingCode = trackingCode;
     }
     /**
      * Auto generated value setter.
      * @param boxNumber the boxNumber to set
      */
-    private void setBoxNumber(String boxNumber) {
+    public void setBoxNumber(String boxNumber) {
         this.boxNumber = boxNumber;
     }
 

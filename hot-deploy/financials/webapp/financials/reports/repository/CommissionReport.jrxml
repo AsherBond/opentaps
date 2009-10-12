@@ -159,7 +159,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{origInvoiceId}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement key="textField" x="360" y="0" width="70" height="16"/>
 				<box rightPadding="5">
 					<topPen lineWidth="0.0" lineColor="#000000"/>
@@ -194,7 +194,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{billingDatetime}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement key="textField" x="590" y="0" width="70" height="16">
 					<printWhenExpression><![CDATA[new Boolean($F{origPaymentAmount} != null)]]></printWhenExpression>
 				</reportElement>
@@ -207,7 +207,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{origPaymentAmount}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement key="textField" x="660" y="0" width="70" height="16"/>
 				<box rightPadding="5">
 					<topPen lineWidth="0.0" lineColor="#000000"/>

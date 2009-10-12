@@ -129,35 +129,35 @@ fieldMapColumns.put("ProductPromoCodeEmailParty", fields);
      * Auto generated value setter.
      * @param productPromoCodeId the productPromoCodeId to set
      */
-    private void setProductPromoCodeId(String productPromoCodeId) {
+    public void setProductPromoCodeId(String productPromoCodeId) {
         this.productPromoCodeId = productPromoCodeId;
     }
     /**
      * Auto generated value setter.
      * @param infoString the infoString to set
      */
-    private void setInfoString(String infoString) {
+    public void setInfoString(String infoString) {
         this.infoString = infoString;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
 

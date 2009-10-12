@@ -193,77 +193,77 @@ fieldMapColumns.put("BillingAccountAndRole", fields);
      * Auto generated value setter.
      * @param billingAccountId the billingAccountId to set
      */
-    private void setBillingAccountId(String billingAccountId) {
+    public void setBillingAccountId(String billingAccountId) {
         this.billingAccountId = billingAccountId;
     }
     /**
      * Auto generated value setter.
      * @param accountLimit the accountLimit to set
      */
-    private void setAccountLimit(BigDecimal accountLimit) {
+    public void setAccountLimit(BigDecimal accountLimit) {
         this.accountLimit = accountLimit;
     }
     /**
      * Auto generated value setter.
      * @param accountCurrencyUomId the accountCurrencyUomId to set
      */
-    private void setAccountCurrencyUomId(String accountCurrencyUomId) {
+    public void setAccountCurrencyUomId(String accountCurrencyUomId) {
         this.accountCurrencyUomId = accountCurrencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
-    private void setContactMechId(String contactMechId) {
+    public void setContactMechId(String contactMechId) {
         this.contactMechId = contactMechId;
     }
     /**
      * Auto generated value setter.
      * @param accountFromDate the accountFromDate to set
      */
-    private void setAccountFromDate(Timestamp accountFromDate) {
+    public void setAccountFromDate(Timestamp accountFromDate) {
         this.accountFromDate = accountFromDate;
     }
     /**
      * Auto generated value setter.
      * @param accountThruDate the accountThruDate to set
      */
-    private void setAccountThruDate(Timestamp accountThruDate) {
+    public void setAccountThruDate(Timestamp accountThruDate) {
         this.accountThruDate = accountThruDate;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
 

@@ -169,77 +169,77 @@ fieldMapColumns.put("FacilityLocationAndGeoPoint", fields);
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
     /**
      * Auto generated value setter.
      * @param locationSeqId the locationSeqId to set
      */
-    private void setLocationSeqId(String locationSeqId) {
+    public void setLocationSeqId(String locationSeqId) {
         this.locationSeqId = locationSeqId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param geoPointId the geoPointId to set
      */
-    private void setGeoPointId(String geoPointId) {
+    public void setGeoPointId(String geoPointId) {
         this.geoPointId = geoPointId;
     }
     /**
      * Auto generated value setter.
      * @param dataSourceId the dataSourceId to set
      */
-    private void setDataSourceId(String dataSourceId) {
+    public void setDataSourceId(String dataSourceId) {
         this.dataSourceId = dataSourceId;
     }
     /**
      * Auto generated value setter.
      * @param latitude the latitude to set
      */
-    private void setLatitude(BigDecimal latitude) {
+    public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
     }
     /**
      * Auto generated value setter.
      * @param longitude the longitude to set
      */
-    private void setLongitude(BigDecimal longitude) {
+    public void setLongitude(BigDecimal longitude) {
         this.longitude = longitude;
     }
     /**
      * Auto generated value setter.
      * @param elevation the elevation to set
      */
-    private void setElevation(BigDecimal elevation) {
+    public void setElevation(BigDecimal elevation) {
         this.elevation = elevation;
     }
     /**
      * Auto generated value setter.
      * @param elevationUomId the elevationUomId to set
      */
-    private void setElevationUomId(String elevationUomId) {
+    public void setElevationUomId(String elevationUomId) {
         this.elevationUomId = elevationUomId;
     }
     /**
      * Auto generated value setter.
      * @param information the information to set
      */
-    private void setInformation(String information) {
+    public void setInformation(String information) {
         this.information = information;
     }
 

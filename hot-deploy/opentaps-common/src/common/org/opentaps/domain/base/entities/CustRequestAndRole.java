@@ -209,112 +209,112 @@ fieldMapColumns.put("CustRequestAndRole", fields);
      * Auto generated value setter.
      * @param custRequestId the custRequestId to set
      */
-    private void setCustRequestId(String custRequestId) {
+    public void setCustRequestId(String custRequestId) {
         this.custRequestId = custRequestId;
     }
     /**
      * Auto generated value setter.
      * @param custRequestTypeId the custRequestTypeId to set
      */
-    private void setCustRequestTypeId(String custRequestTypeId) {
+    public void setCustRequestTypeId(String custRequestTypeId) {
         this.custRequestTypeId = custRequestTypeId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param fromPartyId the fromPartyId to set
      */
-    private void setFromPartyId(String fromPartyId) {
+    public void setFromPartyId(String fromPartyId) {
         this.fromPartyId = fromPartyId;
     }
     /**
      * Auto generated value setter.
      * @param priority the priority to set
      */
-    private void setPriority(Long priority) {
+    public void setPriority(Long priority) {
         this.priority = priority;
     }
     /**
      * Auto generated value setter.
      * @param custRequestDate the custRequestDate to set
      */
-    private void setCustRequestDate(Timestamp custRequestDate) {
+    public void setCustRequestDate(Timestamp custRequestDate) {
         this.custRequestDate = custRequestDate;
     }
     /**
      * Auto generated value setter.
      * @param responseRequiredDate the responseRequiredDate to set
      */
-    private void setResponseRequiredDate(Timestamp responseRequiredDate) {
+    public void setResponseRequiredDate(Timestamp responseRequiredDate) {
         this.responseRequiredDate = responseRequiredDate;
     }
     /**
      * Auto generated value setter.
      * @param custRequestName the custRequestName to set
      */
-    private void setCustRequestName(String custRequestName) {
+    public void setCustRequestName(String custRequestName) {
         this.custRequestName = custRequestName;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param createdDate the createdDate to set
      */
-    private void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedDate the lastModifiedDate to set
      */
-    private void setLastModifiedDate(Timestamp lastModifiedDate) {
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedByUserLogin the lastModifiedByUserLogin to set
      */
-    private void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
+    public void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
         this.lastModifiedByUserLogin = lastModifiedByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
 

@@ -1,618 +1,716 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Invoice" pageWidth="612" pageHeight="792" columnWidth="500" leftMargin="56" rightMargin="56" topMargin="56" bottomMargin="28">
-	<property name="ireport.scriptlethandling" value="0"/>
-	<property name="ireport.encoding" value="UTF-8"/>
-	<import value="org.opentaps.domain.base.entities.*"/>
-	<import value="org.opentaps.common.reporting.UtilReports"/>
-	<import value="net.sf.jasperreports.engine.*"/>
-	<import value="java.util.*"/>
-	<import value="net.sf.jasperreports.engine.data.*"/>
-	<import value="org.opentaps.domain.billing.invoice.Invoice"/>
-	<parameter name="organizationLogoImageUrl" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="organizationCompanyName" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="organizationPostalAddress" class="java.lang.Object" isForPrompting="false"/>
-	<parameter name="countryName" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="stateProvinceAbbrv" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="website" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="primaryPhone" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="primaryFax" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="invoice" class="java.lang.Object" isForPrompting="false"/>
-	<parameter name="paymentList" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
-	<parameter name="adjustmentList" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String">
-		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="Invoice"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="612"
+		 pageHeight="792"
+		 columnWidth="500"
+		 columnSpacing="0"
+		 leftMargin="56"
+		 rightMargin="56"
+		 topMargin="56"
+		 bottomMargin="28"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+	<import value="org.opentaps.domain.base.entities.*" />
+	<import value="org.opentaps.common.reporting.UtilReports" />
+	<import value="org.opentaps.domain.billing.invoice.Invoice" />
+
+	<parameter name="organizationLogoImageUrl" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="organizationCompanyName" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="organizationPostalAddress" isForPrompting="false" class="java.lang.Object"/>
+	<parameter name="countryName" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="stateProvinceAbbrv" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="website" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="primaryPhone" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="primaryFax" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="invoice" isForPrompting="false" class="java.lang.Object"/>
+	<parameter name="paymentList" isForPrompting="false" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<parameter name="adjustmentList" isForPrompting="false" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<parameter name="SUBREPORT_DIR" isForPrompting="true" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["./"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="paymentListLabel" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="isReceipt" class="java.lang.Boolean" isForPrompting="false">
-		<defaultValueExpression><![CDATA[Boolean.FALSE]]></defaultValueExpression>
+	<parameter name="paymentListLabel" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="isReceipt" isForPrompting="false" class="java.lang.Boolean">
+		<defaultValueExpression ><![CDATA[Boolean.FALSE]]></defaultValueExpression>
 	</parameter>
-	<parameter name="isDisbursement" class="java.lang.Boolean" isForPrompting="false">
-		<defaultValueExpression><![CDATA[Boolean.FALSE]]></defaultValueExpression>
+	<parameter name="isDisbursement" isForPrompting="false" class="java.lang.Boolean">
+		<defaultValueExpression ><![CDATA[Boolean.FALSE]]></defaultValueExpression>
 	</parameter>
-	<parameter name="isPartner" class="java.lang.Boolean" isForPrompting="false">
-		<defaultValueExpression><![CDATA[Boolean.FALSE]]></defaultValueExpression>
+	<parameter name="isPartner" isForPrompting="false" class="java.lang.Boolean">
+		<defaultValueExpression ><![CDATA[Boolean.FALSE]]></defaultValueExpression>
 	</parameter>
-	<parameter name="invoiceAddress" class="java.lang.Object" isForPrompting="false"/>
-	<parameter name="shippingAddress" class="java.lang.Object" isForPrompting="false"/>
-	<parameter name="defaultBillingPartyName" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="firstLine" class="java.lang.Object" isForPrompting="false"/>
-	<parameter name="extraDetails" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
+	<parameter name="invoiceAddress" isForPrompting="false" class="java.lang.Object"/>
+	<parameter name="shippingAddress" isForPrompting="false" class="java.lang.Object"/>
+	<parameter name="defaultBillingPartyName" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="firstLine" isForPrompting="false" class="java.lang.Object"/>
+	<parameter name="extraDetails" isForPrompting="false" class="net.sf.jasperreports.engine.JRDataSource"/>
+
 	<field name="productId" class="java.lang.String"/>
 	<field name="description" class="java.lang.String"/>
 	<field name="quantity" class="java.math.BigDecimal"/>
 	<field name="amount" class="java.math.BigDecimal"/>
-	<variable name="INVOICE_STATUS_ID" class="java.lang.String">
+
+	<variable name="INVOICE_STATUS_ID" class="java.lang.String" resetType="Report" calculation="Nothing">
 		<initialValueExpression><![CDATA[((Invoice)$P{invoice}).getStatusId()]]></initialValueExpression>
 	</variable>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
-	<title>
-		<band splitType="Stretch"/>
-	</title>
-	<pageHeader>
-		<band height="233" splitType="Stretch">
-			<image isLazy="true" onErrorType="Blank">
-				<reportElement key="companyLogo" x="0" y="0" width="241" height="49">
-					<printWhenExpression><![CDATA[Boolean.valueOf($P{organizationLogoImageUrl} != null)]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<graphicElement>
-					<pen lineWidth="0.0"/>
-				</graphicElement>
-				<imageExpression class="java.net.URL"><![CDATA[new URL($P{organizationLogoImageUrl})]]></imageExpression>
-			</image>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-1" x="0" y="54" width="241" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{organizationCompanyName}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-2" positionType="Float" x="0" y="67" width="241" height="13" isRemoveLineWhenBlank="true"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[((Map)$P{organizationPostalAddress}).get("address1")]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-3" x="0" y="80" width="241" height="13" isRemoveLineWhenBlank="true"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[((Map)$P{organizationPostalAddress}).get("address2")]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-4" x="0" y="93" width="241" height="13" isRemoveLineWhenBlank="true"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[(((Map)$P{organizationPostalAddress}).get("city")) + ", " + $P{stateProvinceAbbrv} + " " + (((Map)$P{organizationPostalAddress}).get("postalCode")) + ", " + $P{countryName}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-5" x="0" y="106" width="241" height="13" isRemoveLineWhenBlank="true"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{website}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-6" x="0" y="119" width="241" height="13" isRemoveLineWhenBlank="true"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{primaryPhone} != null ? ($R{CrmPrimaryPhone} + ": " + $P{primaryPhone}) : null]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-7" x="0" y="132" width="241" height="13" isRemoveLineWhenBlank="true"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{primaryFax} != null ? ($R{PartyContactFaxPhoneNumber} + ": " + $P{primaryFax}) : null]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-8" x="318" y="10" width="181" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[((Invoice)$P{invoice}).getInvoiceType().getDescription()]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-9" x="318" y="42" width="90" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[((Invoice)$P{invoice}).getInvoiceTypeId().equals("SALES_INVOICE") ? $R{FinancialsCustomerId} : null]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-10" x="408" y="42" width="91" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[((Invoice)$P{invoice}).getInvoiceTypeId().equals("SALES_INVOICE") ? ((Invoice)$P{invoice}).getPartyId() : null]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-11" x="318" y="26" width="90" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{AccountingInvoice}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-12" x="408" y="26" width="91" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[((Invoice)$P{invoice}).getInvoiceId()]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-13" x="318" y="58" width="90" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[(!$V{INVOICE_STATUS_ID}.equals("INVOICE_CANCELLED") && !$V{INVOICE_STATUS_ID}.equals("INVOICE_WRITEOFF") && !$V{INVOICE_STATUS_ID}.equals("INVOICE_VOIDED")) ? $R{CommonDate} : null]]></textFieldExpression>
-			</textField>
-			<textField pattern="M/d/yy" isBlankWhenNull="true">
-				<reportElement key="textField-14" x="408" y="58" width="91" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression class="java.sql.Timestamp"><![CDATA[(!$V{INVOICE_STATUS_ID}.equals("INVOICE_CANCELLED") && !$V{INVOICE_STATUS_ID}.equals("INVOICE_WRITEOFF") && !$V{INVOICE_STATUS_ID}.equals("INVOICE_VOIDED")) ? ((Invoice)$P{invoice}).getInvoiceDate() : null]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-15" x="0" y="165" width="241" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsBillingAddress}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-16" x="317" y="165" width="183" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsShippingAddress}]]></textFieldExpression>
-			</textField>
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-3" x="0" y="178" width="241" height="35"/>
-				<subreportParameter name="REPORT_LOCALE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="postalAddress">
-					<subreportParameterExpression><![CDATA[$P{invoiceAddress}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="defaultPartyName">
-					<subreportParameterExpression><![CDATA[$P{defaultBillingPartyName}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://opentaps-common/webapp/common/report/PostalAddress.jrxml")]]></subreportExpression>
-			</subreport>
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-4" x="317" y="178" width="183" height="35"/>
-				<subreportParameter name="postalAddress">
-					<subreportParameterExpression><![CDATA[$P{shippingAddress}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://opentaps-common/webapp/common/report/PostalAddress.jrxml")]]></subreportExpression>
-			</subreport>
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-5" positionType="Float" x="0" y="223" width="499" height="7"/>
-				<subreportParameter name="REPORT_LOCALE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="firstLine">
-					<subreportParameterExpression><![CDATA[$P{firstLine}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_DATA_SOURCE">
-					<subreportParameterExpression><![CDATA[$P{extraDetails}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://financials/webapp/financials/reports/repository/InvoiceFirstLine.jrxml")]]></subreportExpression>
-			</subreport>
-		</band>
-	</pageHeader>
-	<columnHeader>
-		<band height="30" splitType="Stretch">
-			<line>
-				<reportElement key="line-1" positionType="FixRelativeToBottom" x="0" y="27" width="499" height="1"/>
-				<graphicElement>
-					<pen lineWidth="1.0"/>
-				</graphicElement>
-			</line>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-30" x="0" y="13" width="70" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsProduct}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-31" x="70" y="13" width="269" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonDescription}]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-32" x="340" y="13" width="40" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font isBold="true" isItalic="false" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsQty}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-33" x="380" y="13" width="60" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsUnitPrice}]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-34" x="440" y="13" width="60" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonAmount}]]></textFieldExpression>
-			</textField>
-		</band>
-	</columnHeader>
-	<detail>
-		<band height="16" splitType="Stretch">
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement key="textField-25" x="0" y="0" width="70" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{productId}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="textField-26" x="70" y="0" width="269" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{description}]]></textFieldExpression>
-			</textField>
-			<textField pattern="###0;-###0" isBlankWhenNull="true">
-				<reportElement key="textField-27" x="340" y="0" width="40" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{quantity}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
-				<reportElement key="textField-28" x="380" y="0" width="60" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{amount}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
-				<reportElement key="textField-29" x="440" y="0" width="60" height="16"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{quantity}.multiply($F{amount})]]></textFieldExpression>
-			</textField>
-		</band>
-	</detail>
-	<columnFooter>
-		<band splitType="Stretch"/>
-	</columnFooter>
-	<pageFooter>
-		<band height="19" splitType="Stretch">
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-36" x="122" y="0" width="170" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonPage} + " " + $V{PAGE_NUMBER} + " " + $R{OpentapsOf} + " "]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report" pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-37" x="294" y="0" width="36" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-		</band>
-	</pageFooter>
-	<summary>
-		<band height="174" splitType="Stretch">
-			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
-				<reportElement key="textField-38" x="440" y="4" width="60" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[((Invoice) $P{invoice}).getInvoiceTotal()]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
-				<reportElement key="textField-39" x="440" y="30" width="60" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[((Invoice) $P{invoice}).getAppliedAmount()]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
-				<reportElement key="textField-40" x="440" y="43" width="60" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[((Invoice) $P{invoice}).getOpenAmount()]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-41" x="360" y="30" width="80" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Left">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsAmountPaidCapital}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-42" x="360" y="43" width="80" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Left">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsAmountOutstandingCapital}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-43" x="360" y="4" width="80" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Left">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsTotalCapital}]]></textFieldExpression>
-			</textField>
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-1" x="0" y="59" width="500" height="55">
-					<printWhenExpression><![CDATA[Boolean.valueOf($P{paymentList} != null)]]></printWhenExpression>
-				</reportElement>
-				<subreportParameter name="REPORT_LOCALE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="paymentListLabel">
-					<subreportParameterExpression><![CDATA[$P{paymentListLabel}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_DATA_SOURCE">
-					<subreportParameterExpression><![CDATA[$P{paymentList}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://financials/webapp/financials/reports/repository/InvoicePayments.jrxml")]]></subreportExpression>
-			</subreport>
-			<subreport isUsingCache="true">
-				<reportElement key="subreport-2" x="0" y="117" width="500" height="55">
-					<printWhenExpression><![CDATA[Boolean.valueOf($P{adjustmentList} != null)]]></printWhenExpression>
-				</reportElement>
-				<subreportParameter name="REPORT_LOCALE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="REPORT_DATA_SOURCE">
-					<subreportParameterExpression><![CDATA[$P{adjustmentList}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://financials/webapp/financials/reports/repository/InvoiceAdjustments.jrxml")]]></subreportExpression>
-			</subreport>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-44" x="360" y="17" width="80" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Left">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsAmountAdjustedCapital}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
-				<reportElement key="textField-45" x="440" y="17" width="60" height="13"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Right">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[((Invoice) $P{invoice}).getAdjustedAmount()]]></textFieldExpression>
-			</textField>
-		</band>
-	</summary>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="225"  isSplitAllowed="true" >
+				<image  isLazy="true" onErrorType="Blank" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="241"
+						height="49"
+						key="companyLogo">
+							<printWhenExpression><![CDATA[Boolean.valueOf($P{organizationLogoImageUrl} != null)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<graphicElement stretchType="NoStretch"/>
+					<imageExpression class="java.net.URL"><![CDATA[new URL($P{organizationLogoImageUrl})]]></imageExpression>
+				</image>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="54"
+						width="241"
+						height="13"
+						key="textField-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{organizationCompanyName}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="67"
+						width="241"
+						height="13"
+						key="textField-2"
+						positionType="Float"
+						isRemoveLineWhenBlank="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[((Map)$P{organizationPostalAddress}).get("address1")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="80"
+						width="241"
+						height="13"
+						key="textField-3"
+						isRemoveLineWhenBlank="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[((Map)$P{organizationPostalAddress}).get("address2")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="93"
+						width="241"
+						height="13"
+						key="textField-4"
+						isRemoveLineWhenBlank="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[(((Map)$P{organizationPostalAddress}).get("city")) + ", " + $P{stateProvinceAbbrv} + " " + (((Map)$P{organizationPostalAddress}).get("postalCode")) + ", " + $P{countryName}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="106"
+						width="241"
+						height="13"
+						key="textField-5"
+						isRemoveLineWhenBlank="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{website}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="119"
+						width="241"
+						height="13"
+						key="textField-6"
+						isRemoveLineWhenBlank="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{primaryPhone} != null ? ($R{CrmPrimaryPhone} + ": " + $P{primaryPhone}) : null]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="132"
+						width="241"
+						height="13"
+						key="textField-7"
+						isRemoveLineWhenBlank="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{primaryFax} != null ? ($R{PartyContactFaxPhoneNumber} + ": " + $P{primaryFax}) : null]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="318"
+						y="10"
+						width="181"
+						height="16"
+						key="textField-8"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[((Invoice)$P{invoice}).getInvoiceType().getDescription()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="318"
+						y="42"
+						width="90"
+						height="16"
+						key="textField-9"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[((Invoice)$P{invoice}).getInvoiceTypeId().equals("SALES_INVOICE") ? $R{FinancialsCustomerId} : null]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="408"
+						y="42"
+						width="91"
+						height="16"
+						key="textField-10"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[((Invoice)$P{invoice}).getInvoiceTypeId().equals("SALES_INVOICE") ? ((Invoice)$P{invoice}).getPartyId() : null]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="318"
+						y="26"
+						width="90"
+						height="16"
+						key="textField-11"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{AccountingInvoice}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="408"
+						y="26"
+						width="91"
+						height="16"
+						key="textField-12"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[((Invoice)$P{invoice}).getInvoiceId()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="318"
+						y="58"
+						width="90"
+						height="16"
+						key="textField-13"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[(!$V{INVOICE_STATUS_ID}.equals("INVOICE_CANCELLED") && !$V{INVOICE_STATUS_ID}.equals("INVOICE_WRITEOFF") && !$V{INVOICE_STATUS_ID}.equals("INVOICE_VOIDED")) ? $R{CommonDate} : null]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="M/d/yy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="408"
+						y="58"
+						width="91"
+						height="16"
+						key="textField-14"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.sql.Timestamp"><![CDATA[(!$V{INVOICE_STATUS_ID}.equals("INVOICE_CANCELLED") && !$V{INVOICE_STATUS_ID}.equals("INVOICE_WRITEOFF") && !$V{INVOICE_STATUS_ID}.equals("INVOICE_VOIDED")) ? ((Invoice)$P{invoice}).getInvoiceDate() : null]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="165"
+						width="241"
+						height="13"
+						key="textField-15"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{OpentapsBillingAddress}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="317"
+						y="165"
+						width="183"
+						height="13"
+						key="textField-16"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{OpentapsShippingAddress}]]></textFieldExpression>
+				</textField>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="178"
+						width="241"
+						height="35"
+						key="subreport-3"/>
+					<subreportParameter  name="REPORT_LOCALE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="postalAddress">
+						<subreportParameterExpression><![CDATA[$P{invoiceAddress}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="defaultPartyName">
+						<subreportParameterExpression><![CDATA[$P{defaultBillingPartyName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_RESOURCE_BUNDLE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://opentaps-common/webapp/common/report/PostalAddress.jrxml")]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="317"
+						y="178"
+						width="183"
+						height="35"
+						key="subreport-4"/>
+					<subreportParameter  name="postalAddress">
+						<subreportParameterExpression><![CDATA[$P{shippingAddress}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_RESOURCE_BUNDLE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://opentaps-common/webapp/common/report/PostalAddress.jrxml")]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="217"
+						width="499"
+						height="7"
+						key="subreport-5"
+						positionType="Float"/>
+					<subreportParameter  name="REPORT_LOCALE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="firstLine">
+						<subreportParameterExpression><![CDATA[$P{firstLine}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_RESOURCE_BUNDLE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_DATA_SOURCE">
+						<subreportParameterExpression><![CDATA[$P{extraDetails}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://financials/webapp/financials/reports/repository/InvoiceFirstLine.jrxml")]]></subreportExpression>
+				</subreport>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="30"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						x="0"
+						y="27"
+						width="499"
+						height="1"
+						key="line-1"
+						positionType="FixRelativeToBottom"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="13"
+						width="70"
+						height="13"
+						key="textField-30"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{FinancialsProduct}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="70"
+						y="13"
+						width="269"
+						height="13"
+						key="textField-31"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{CommonDescription}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="340"
+						y="13"
+						width="40"
+						height="13"
+						key="textField-32"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" isBold="true" isItalic="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{FinancialsQty}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="380"
+						y="13"
+						width="60"
+						height="13"
+						key="textField-33"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{FinancialsUnitPrice}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="440"
+						y="13"
+						width="60"
+						height="13"
+						key="textField-34"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{CommonAmount}]]></textFieldExpression>
+				</textField>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="16"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="70"
+						height="16"
+						key="textField-25"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{productId}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="70"
+						y="0"
+						width="269"
+						height="16"
+						key="textField-26"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{description}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="###0;-###0" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="340"
+						y="0"
+						width="40"
+						height="16"
+						key="textField-27"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{quantity}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00#;(#,##0.00#)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="380"
+						y="0"
+						width="60"
+						height="16"
+						key="textField-28"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{amount}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00#;(#,##0.00#)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="440"
+						y="0"
+						width="60"
+						height="16"
+						key="textField-29"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{quantity}.multiply($F{amount})]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="53"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="122"
+						y="38"
+						width="170"
+						height="13"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-36"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{CommonPage} + " " + $V{PAGE_NUMBER} + " " + $R{OpentapsOf} + " "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="294"
+						y="38"
+						width="36"
+						height="13"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-37"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="499"
+						height="30"
+						key="textField-46"
+						isRemoveLineWhenBlank="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Oblique" size="12" isItalic="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[((Invoice)$P{invoice}).getInvoiceMessage()]]></textFieldExpression>
+				</textField>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="175"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="440"
+						y="4"
+						width="60"
+						height="13"
+						key="textField-38"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[((Invoice) $P{invoice}).getInvoiceTotal()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="440"
+						y="30"
+						width="60"
+						height="13"
+						key="textField-39"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[((Invoice) $P{invoice}).getAppliedAmount()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="440"
+						y="43"
+						width="60"
+						height="13"
+						key="textField-40"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[((Invoice) $P{invoice}).getOpenAmount()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="360"
+						y="30"
+						width="80"
+						height="13"
+						key="textField-41"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{FinancialsAmountPaidCapital}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="360"
+						y="43"
+						width="80"
+						height="13"
+						key="textField-42"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{FinancialsAmountOutstandingCapital}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="360"
+						y="4"
+						width="80"
+						height="13"
+						key="textField-43"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{FinancialsTotalCapital}]]></textFieldExpression>
+				</textField>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="59"
+						width="500"
+						height="55"
+						key="subreport-1">
+							<printWhenExpression><![CDATA[Boolean.valueOf($P{paymentList} != null)]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="REPORT_LOCALE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="paymentListLabel">
+						<subreportParameterExpression><![CDATA[$P{paymentListLabel}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_RESOURCE_BUNDLE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_DATA_SOURCE">
+						<subreportParameterExpression><![CDATA[$P{paymentList}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://financials/webapp/financials/reports/repository/InvoicePayments.jrxml")]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="117"
+						width="500"
+						height="55"
+						key="subreport-2">
+							<printWhenExpression><![CDATA[Boolean.valueOf($P{adjustmentList} != null)]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="REPORT_LOCALE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_RESOURCE_BUNDLE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_DATA_SOURCE">
+						<subreportParameterExpression><![CDATA[$P{adjustmentList}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://financials/webapp/financials/reports/repository/InvoiceAdjustments.jrxml")]]></subreportExpression>
+				</subreport>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="360"
+						y="17"
+						width="80"
+						height="13"
+						key="textField-44"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{FinancialsAmountAdjustedCapital}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="440"
+						y="17"
+						width="60"
+						height="13"
+						key="textField-45"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[((Invoice) $P{invoice}).getAdjustedAmount()]]></textFieldExpression>
+				</textField>
+			</band>
+		</summary>
 </jasperReport>

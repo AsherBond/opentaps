@@ -236,182 +236,182 @@ fieldMapColumns.put("PartyTaxAuthInfoAndDetail", fields);
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param taxAuthGeoId the taxAuthGeoId to set
      */
-    private void setTaxAuthGeoId(String taxAuthGeoId) {
+    public void setTaxAuthGeoId(String taxAuthGeoId) {
         this.taxAuthGeoId = taxAuthGeoId;
     }
     /**
      * Auto generated value setter.
      * @param taxAuthPartyId the taxAuthPartyId to set
      */
-    private void setTaxAuthPartyId(String taxAuthPartyId) {
+    public void setTaxAuthPartyId(String taxAuthPartyId) {
         this.taxAuthPartyId = taxAuthPartyId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param partyTaxId the partyTaxId to set
      */
-    private void setPartyTaxId(String partyTaxId) {
+    public void setPartyTaxId(String partyTaxId) {
         this.partyTaxId = partyTaxId;
     }
     /**
      * Auto generated value setter.
      * @param isExempt the isExempt to set
      */
-    private void setIsExempt(String isExempt) {
+    public void setIsExempt(String isExempt) {
         this.isExempt = isExempt;
     }
     /**
      * Auto generated value setter.
      * @param isNexus the isNexus to set
      */
-    private void setIsNexus(String isNexus) {
+    public void setIsNexus(String isNexus) {
         this.isNexus = isNexus;
     }
     /**
      * Auto generated value setter.
      * @param groupName the groupName to set
      */
-    private void setGroupName(String groupName) {
+    public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
     /**
      * Auto generated value setter.
      * @param groupNameLocal the groupNameLocal to set
      */
-    private void setGroupNameLocal(String groupNameLocal) {
+    public void setGroupNameLocal(String groupNameLocal) {
         this.groupNameLocal = groupNameLocal;
     }
     /**
      * Auto generated value setter.
      * @param officeSiteName the officeSiteName to set
      */
-    private void setOfficeSiteName(String officeSiteName) {
+    public void setOfficeSiteName(String officeSiteName) {
         this.officeSiteName = officeSiteName;
     }
     /**
      * Auto generated value setter.
      * @param annualRevenue the annualRevenue to set
      */
-    private void setAnnualRevenue(BigDecimal annualRevenue) {
+    public void setAnnualRevenue(BigDecimal annualRevenue) {
         this.annualRevenue = annualRevenue;
     }
     /**
      * Auto generated value setter.
      * @param numEmployees the numEmployees to set
      */
-    private void setNumEmployees(Long numEmployees) {
+    public void setNumEmployees(Long numEmployees) {
         this.numEmployees = numEmployees;
     }
     /**
      * Auto generated value setter.
      * @param tickerSymbol the tickerSymbol to set
      */
-    private void setTickerSymbol(String tickerSymbol) {
+    public void setTickerSymbol(String tickerSymbol) {
         this.tickerSymbol = tickerSymbol;
     }
     /**
      * Auto generated value setter.
      * @param comments the comments to set
      */
-    private void setComments(String comments) {
+    public void setComments(String comments) {
         this.comments = comments;
     }
     /**
      * Auto generated value setter.
      * @param logoImageUrl the logoImageUrl to set
      */
-    private void setLogoImageUrl(String logoImageUrl) {
+    public void setLogoImageUrl(String logoImageUrl) {
         this.logoImageUrl = logoImageUrl;
     }
     /**
      * Auto generated value setter.
      * @param isIncorporated the isIncorporated to set
      */
-    private void setIsIncorporated(String isIncorporated) {
+    public void setIsIncorporated(String isIncorporated) {
         this.isIncorporated = isIncorporated;
     }
     /**
      * Auto generated value setter.
      * @param federalTaxId the federalTaxId to set
      */
-    private void setFederalTaxId(String federalTaxId) {
+    public void setFederalTaxId(String federalTaxId) {
         this.federalTaxId = federalTaxId;
     }
     /**
      * Auto generated value setter.
      * @param requires1099 the requires1099 to set
      */
-    private void setRequires1099(String requires1099) {
+    public void setRequires1099(String requires1099) {
         this.requires1099 = requires1099;
     }
     /**
      * Auto generated value setter.
      * @param geoId the geoId to set
      */
-    private void setGeoId(String geoId) {
+    public void setGeoId(String geoId) {
         this.geoId = geoId;
     }
     /**
      * Auto generated value setter.
      * @param geoTypeId the geoTypeId to set
      */
-    private void setGeoTypeId(String geoTypeId) {
+    public void setGeoTypeId(String geoTypeId) {
         this.geoTypeId = geoTypeId;
     }
     /**
      * Auto generated value setter.
      * @param geoName the geoName to set
      */
-    private void setGeoName(String geoName) {
+    public void setGeoName(String geoName) {
         this.geoName = geoName;
     }
     /**
      * Auto generated value setter.
      * @param geoCode the geoCode to set
      */
-    private void setGeoCode(String geoCode) {
+    public void setGeoCode(String geoCode) {
         this.geoCode = geoCode;
     }
     /**
      * Auto generated value setter.
      * @param geoSecCode the geoSecCode to set
      */
-    private void setGeoSecCode(String geoSecCode) {
+    public void setGeoSecCode(String geoSecCode) {
         this.geoSecCode = geoSecCode;
     }
     /**
      * Auto generated value setter.
      * @param abbreviation the abbreviation to set
      */
-    private void setAbbreviation(String abbreviation) {
+    public void setAbbreviation(String abbreviation) {
         this.abbreviation = abbreviation;
     }
     /**
      * Auto generated value setter.
      * @param wellKnownText the wellKnownText to set
      */
-    private void setWellKnownText(String wellKnownText) {
+    public void setWellKnownText(String wellKnownText) {
         this.wellKnownText = wellKnownText;
     }
 

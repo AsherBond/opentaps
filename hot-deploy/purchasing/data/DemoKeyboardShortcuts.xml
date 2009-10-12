@@ -17,16 +17,16 @@
 -->
  
     <!-- Purchasing Keyboard shortcuts demo data -->
-    <KeyboardShortcut shortcutId="PRCH_FIND_SUPP" sequenceNum="410" shortcut="shift+f1" actionTypeId="KB_URL" actionTarget="supplierMain" applicationName="purchasing" description="Find Suppliers" />
-    <KeyboardShortcut shortcutId="PRCH_CREATE_SUPP" sequenceNum="411" shortcut="f1" actionTypeId="KB_URL" actionTarget="createSupplier" applicationName="purchasing" description="Create a Supplier" />
+    <KeyboardShortcut shortcutId="PRCH_FIND_SUPP" sequenceNum="410" shortcut="f1" actionTypeId="KB_URL" actionTarget="supplierMain" applicationName="purchasing" description="Find Suppliers" />
+    <KeyboardShortcut shortcutId="PRCH_CREATE_SUPP" sequenceNum="411" shortcut="shift+f1" actionTypeId="KB_URL" actionTarget="createSupplier" applicationName="purchasing" description="Create a Supplier" />
 
-    <KeyboardShortcut shortcutId="PRCH_BOM_SIMU" sequenceNum="412" shortcut="shift+f2" actionTypeId="KB_URL" actionTarget="bomMain" applicationName="purchasing" description="BOM Simulation" />
+    <KeyboardShortcut shortcutId="PRCH_BOM_SIMU" sequenceNum="412" shortcut="f2" actionTypeId="KB_URL" actionTarget="bomMain" applicationName="purchasing" description="BOM Simulation" />
 
-    <KeyboardShortcut shortcutId="PRCH_FIND_REQ" sequenceNum="413" shortcut="shift+f3" actionTypeId="KB_URL" actionTarget="findRequirements" applicationName="purchasing" description="Find Requirements" />
-    <KeyboardShortcut shortcutId="PRCH_FIND_INV" sequenceNum="414" shortcut="f3" actionTypeId="KB_URL" actionTarget="ViewFacilityInventoryByProduct" applicationName="purchasing" description="Find facility Inventory Items" />
+    <KeyboardShortcut shortcutId="PRCH_FIND_REQ" sequenceNum="413" shortcut="f3" actionTypeId="KB_URL" actionTarget="findRequirements" applicationName="purchasing" description="Find Requirements" />
+    <KeyboardShortcut shortcutId="PRCH_FIND_INV" sequenceNum="414" shortcut="shift+f3" actionTypeId="KB_URL" actionTarget="ViewFacilityInventoryByProduct" applicationName="purchasing" description="Find facility Inventory Items" />
 
-    <KeyboardShortcut shortcutId="PRCH_FIND_ORDERS" sequenceNum="415" shortcut="shift+f4" actionTypeId="KB_URL" actionTarget="findOrders" applicationName="purchasing" description="Find Purchase Orders" />
-    <KeyboardShortcut shortcutId="PRCH_CREATE_ORDER" sequenceNum="416" shortcut="f4" actionTypeId="KB_URL" actionTarget="orderentry" applicationName="purchasing" description="Create a Purchase Order" />
+    <KeyboardShortcut shortcutId="PRCH_FIND_ORDERS" sequenceNum="415" shortcut="f4" actionTypeId="KB_URL" actionTarget="findOrders" applicationName="purchasing" description="Find Purchase Orders" />
+    <KeyboardShortcut shortcutId="PRCH_CREATE_ORDER" sequenceNum="416" shortcut="shift+f4" actionTypeId="KB_URL" actionTarget="orderentry" applicationName="purchasing" description="Create a Purchase Order" />
 
     <KeyboardShortcut shortcutId="PRCH_CREATE_ORDER" sequenceNum="417" shortcut="f6" actionTypeId="KB_URL" actionTarget="manageReports" applicationName="purchasing" description="Reports" />
 

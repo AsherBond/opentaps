@@ -206,6 +206,45 @@ For more information, please see documentation/opentapsFormMacros.html
   </tr>
 </#macro>
 
+<#--
+  Display reports for specified report group.
+    Attributes:
+      group - One of the ReportGroup.reportGroupId
+      runtimeData - for future extension
+      updater - URL that should used to update report summary data
+      nameOnly - show only report names if true (default), otherwise attach description on the right of report name.
+-->
+<#macro displayReportGroup group runtimeData="" updater="" nameOnly=true>
+  <#if !reportGroupedList?has_content>
+     <#assign reportGroupedList = Static["org.opentaps.common.reporting.UtilReports"].getManagedReports(parameters.componentName, group?default(null), delegator, Static["org.ofbiz.base.util.UtilHttp"].getLocale(request))?default([])/> 
+  </#if>
+
+  <#list reportGroupedList as reportGroup>
+  <p><b>${reportGroup.description}</b>
+  <#if updater?has_content>
+    <#if runtimeData?has_content>
+      <#assign transformTimestamp = Static["org.opentaps.common.reporting.UtilReports"].getTrasformationTimeByType("ENCUMB_GL_ENTRY", delegator)?if_exists />
+      <br/><i><#if transformTimestamp?has_content>${uiLabelMap.OpentapsDataAsOf}&nbsp;<@displayDate date=transformTimestamp/><#else>No data</#if></i>&nbsp;(<a class="linktext" href="<@ofbizUrl>${updater}</@ofbizUrl>">${uiLabelMap.FinancialsEncumbranceRefresh}</a>)
+    <#else>
+      &nbsp;(<a class="linktext" href="<@ofbizUrl>${updater}</@ofbizUrl>">${uiLabelMap.FinancialsEncumbranceRefresh}</a>)
+    </#if>  
+  </#if>
+  </p>
+    <ul class="bulletList">
+    <#assign reports = reportGroup.reports/>
+    <#list reports as report>
+      <#if report.setupUri?has_content>
+        <#assign setupUri = "${report.setupUri}"/>
+      <#else>
+        <#assign setupUri = "setupReport?"/>
+      </#if>
+      <li><a href="<@ofbizUrl>${setupUri}</@ofbizUrl>reportId=${report.reportId}">${report.shortName}</a><#if report.description?has_content && !nameOnly>: ${report.description}</#if></li>
+    </#list>
+    <#nested>
+    </ul>
+  </#list>
+
+</#macro>
 
 <#-- ------------------------ -->
 <#-- --    Input Macros    -- -->

@@ -1137,12 +1137,16 @@ public interface CommonMessages extends Messages {
     String agreementType_description_PURCHASE_AGREEMENT();
     @DefaultMessage("Customer")
     String agreementType_description_SALES_AGREEMENT();
+    @DefaultMessage("opentaps Analytics Login")
+    String analyticsLoginGreeting();
     @DefaultMessage("- Any -")
     String anyFeatureType();
     @DefaultMessage("Apply To All")
     String applyToAll();
     @DefaultMessage("As Of")
     String asOf();
+    @DefaultMessage("As of")
+    String asOfDate();
     @DefaultMessage("Attention Name")
     String attnName();
     @DefaultMessage("Bulgarian")
@@ -2425,6 +2429,8 @@ public interface CommonMessages extends Messages {
     String crmCaseClosed();
     @DefaultMessage("Case History")
     String crmCaseHistory();
+    @DefaultMessage("Case Id")
+    String crmCaseId();
     @DefaultMessage("Cases")
     String crmCases();
     @DefaultMessage("Add all Domestic Catalog Requests")
@@ -3267,6 +3273,8 @@ public interface CommonMessages extends Messages {
     String crmOpportunityFor();
     @DefaultMessage("Opportunity History")
     String crmOpportunityHistory();
+    @DefaultMessage("Opportunity Id")
+    String crmOpportunityId();
     @DefaultMessage("Opportunity Name")
     String crmOpportunityName();
     @DefaultMessage("Back-Ordered")
@@ -4275,12 +4283,16 @@ public interface CommonMessages extends Messages {
     String en_GB();
     @DefaultMessage("Commission Timing")
     String enumerationType_description_COMM_TIMING_TERM();
+    @DefaultMessage("Data Transformation Type")
+    String enumerationType_description_DATA_TRANSFORM();
     @DefaultMessage("Warranty Options")
     String enumerationType_description_WARRANTY();
     @DefaultMessage("When customer sales invoice is ready")
     String enumeration_description_COMM_AT_INVOICE();
     @DefaultMessage("When customer payment is confirmed")
     String enumeration_description_COMM_AT_PAYMENT();
+    @DefaultMessage("Encumbrance and GL Account Trans Entry")
+    String enumeration_description_ENCUMB_GL_ENTRY();
     @DefaultMessage("Full Warranty")
     String enumeration_description_WARRANTY_FULL();
     @DefaultMessage("Limited Warranty")
@@ -4365,6 +4377,14 @@ public interface CommonMessages extends Messages {
     String financials();
     @DefaultMessage("Account Activities Detail")
     String financialsAccountActivitiesDetail();
+    @DefaultMessage("Account Balance")
+    String financialsAccountBalance();
+    @DefaultMessage("Account Code/Name")
+    String financialsAccountCodeName();
+    @DefaultMessage("Account Total")
+    String financialsAccountTotal();
+    @DefaultMessage("Account Type Total")
+    String financialsAccountTypeTotal();
     @DefaultMessage("Accounting Tags Usage")
     String financialsAccountingTagUsage();
     @DefaultMessage("Accounting Tags")
@@ -4469,6 +4489,14 @@ public interface CommonMessages extends Messages {
     String financialsBshErrorThisPaymentIsNotAPaycheck(String paymentId);
     @DefaultMessage("Budget")
     String financialsBudget();
+    @DefaultMessage("Budget versus Actual Expenses by GL Account")
+    String financialsBudgetVsActualExpensesByGLAccount();
+    @DefaultMessage("Budget versus Actual Expenses Details")
+    String financialsBudgetVsActualExpensesDetails();
+    @DefaultMessage("Budget Versus Actual Expenses by GL Account Type")
+    String financialsBudgetVsActualExpensesbyGLAccountType();
+    @DefaultMessage("Budgeting")
+    String financialsBudgeting();
     @DefaultMessage("COD Commission")
     String financialsCODCommission();
     @DefaultMessage("COGS")
@@ -4653,6 +4681,8 @@ public interface CommonMessages extends Messages {
     String financialsEmployees();
     @DefaultMessage("Refresh Data")
     String financialsEncumbranceRefresh();
+    @DefaultMessage("Encumbrances")
+    String financialsEncumbrances();
     @DefaultMessage("Ending Cash Balance")
     String financialsEndingCashBalance();
     @DefaultMessage("Ending On")
@@ -4735,7 +4765,7 @@ public interface CommonMessages extends Messages {
     String financialsError_InvoiceTypeNotSupported(String invoiceId, String invoiceTypeId);
     @DefaultMessage("Cannot invoice the selected invoices because there was nothing in them to invoice.")
     String financialsError_NoPartnerSalesInvoiceCreated();
-    @DefaultMessage("Could not find a CustomTimePeriod (fiscal period) for the Transaction Date [{0}] (is for Organization Party with ID [{1}])")
+    @DefaultMessage("Could not find a CustomTimePeriod (fiscal period) for Transaction Date [{0}] and Organization Party with ID [{1}]")
     String financialsError_NoTimePeriodsToPost(String transactionDate, String organizationPartyId);
     @DefaultMessage("Please select at least one partner invoice.")
     String financialsError_PartnerInvoicesMissing();
@@ -4759,6 +4789,8 @@ public interface CommonMessages extends Messages {
     String financialsExchangeRatesUpdate();
     @DefaultMessage("Expense")
     String financialsExpense();
+    @DefaultMessage("Expenses")
+    String financialsExpenses();
     @DefaultMessage("Finance Charge for Invoice")
     String financialsFinanceChargeForInvoice();
     @DefaultMessage("Finance Charges")
@@ -4811,6 +4843,8 @@ public interface CommonMessages extends Messages {
     String financialsGlActivitySetupTitle();
     @DefaultMessage("Grace Period")
     String financialsGracePeriod();
+    @DefaultMessage("Grand Total")
+    String financialsGrandTotal();
     @DefaultMessage("Gross Amount")
     String financialsGrossAmount();
     @DefaultMessage("Gross Pay")
@@ -4819,6 +4853,8 @@ public interface CommonMessages extends Messages {
     String financialsGrossProfit();
     @DefaultMessage("Hide Child Accounts Invoices")
     String financialsHideChildAccountsInvoices();
+    @DefaultMessage("Include Budgeted Incomes")
+    String financialsIncludeIncomeInBudget();
     @DefaultMessage("Income")
     String financialsIncome();
     @DefaultMessage("Initial Check Number")
@@ -5097,6 +5133,8 @@ public interface CommonMessages extends Messages {
     String financialsPostTransactions();
     @DefaultMessage("Posted Balance")
     String financialsPostedBalance();
+    @DefaultMessage("Posted Balances by GL Account")
+    String financialsPostedBalancesByGlAccount();
     @DefaultMessage("Posted Date")
     String financialsPostedDate();
     @DefaultMessage("Pretax Income")
@@ -5207,6 +5245,8 @@ public interface CommonMessages extends Messages {
     String financialsReturnToReports();
     @DefaultMessage("Return to Tax Summary")
     String financialsReturnToTaxSummary();
+    @DefaultMessage("Revenue")
+    String financialsRevenue();
     @DefaultMessage("Reversal Of")
     String financialsReversalOf();
     @DefaultMessage("Reverse")
@@ -5357,6 +5397,8 @@ public interface CommonMessages extends Messages {
     String financialsStatementsEndingBalance();
     @DefaultMessage("Status")
     String financialsStatusId();
+    @DefaultMessage("Tax")
+    String financialsTax();
     @DefaultMessage("Tax Due")
     String financialsTaxDue();
     @DefaultMessage("Tax Region")
@@ -6773,6 +6815,8 @@ public interface CommonMessages extends Messages {
     String formFieldTitle_yearsWithEmployer();
     @DefaultMessage("French")
     String fr();
+    @DefaultMessage("From Date")
+    String fromDate();
     @DefaultMessage("From Time Period")
     String fromTimePeriod();
     @DefaultMessage("You do not have permission to run {0}. (\"CATALOG{1}\" or \"CATALOG_ADMIN\" needed)")
@@ -7235,8 +7279,12 @@ public interface CommonMessages extends Messages {
     String manufacturingProductionRunStartDateNotCorrect();
     @DefaultMessage("ProductionRun status changed successfully.")
     String manufacturingProductionRunStatusChanged();
+    @DefaultMessage("This status change cannot be completed because there are other production runs which this production run depends upon, and they must be cancelled first.")
+    String manufacturingProductionRunStatusNotCancelledMandatoryProductionRunFound();
     @DefaultMessage("This status change cannot be completed because there are other production runs which this production run depends upon, and they must be completed first.")
     String manufacturingProductionRunStatusNotChangedMandatoryProductionRunFound();
+    @DefaultMessage("This status change cannot be completed because there are other production runs which this production run depends upon, and they must be completed first.")
+    String manufacturingProductionRunStatusNotChangedMandatoryProductionRunNotCompleted();
     @DefaultMessage("This task cannot start because tasks before it are not finished yet.")
     String manufacturingProductionRunTaskCannotStartPrevTasksNotCompleted();
     @DefaultMessage("Production Runs")
@@ -7627,6 +7675,10 @@ public interface CommonMessages extends Messages {
     String opentapsCreateWebUrl();
     @DefaultMessage("Customer")
     String opentapsCustomer();
+    @DefaultMessage("Customer Name")
+    String opentapsCustomerName();
+    @DefaultMessage("Data as of")
+    String opentapsDataAsOf();
     @DefaultMessage("Date Requested")
     String opentapsDateRequested();
     @DefaultMessage("Default")
@@ -7935,6 +7987,8 @@ public interface CommonMessages extends Messages {
     String opentapsGrossValueDisclaimer();
     @DefaultMessage("Help")
     String opentapsHelp();
+    @DefaultMessage("Shortcuts")
+    String opentapsHelpShortcuts();
     @DefaultMessage("Hide Full Text")
     String opentapsHideTextData();
     @DefaultMessage("Insert Tags")
@@ -7951,9 +8005,17 @@ public interface CommonMessages extends Messages {
     String opentapsIsIncorporated();
     @DefaultMessage("Item ID")
     String opentapsItemID();
+    @DefaultMessage("Keyboard Shortcuts")
+    String opentapsKeyboardShortcuts();
+    @DefaultMessage("Global")
+    String opentapsKeyboardShortcutsGlobal();
+    @DefaultMessage("Specific to this application")
+    String opentapsKeyboardShortcutsSpecificToApp();
+    @DefaultMessage("Specific to this page")
+    String opentapsKeyboardShortcutsSpecificToPage();
     @DefaultMessage("Last updated at {0}")
     String opentapsLastUpdatedAt(String lastUpdatedStamp);
-    @DefaultMessage("Opentaps Login")
+    @DefaultMessage("opentaps Login")
     String opentapsLoginGreeting();
     @DefaultMessage("Is Default?")
     String opentapsMakeDefault();
@@ -7985,6 +8047,8 @@ public interface CommonMessages extends Messages {
     String opentapsNewMessagesPrefix();
     @DefaultMessage("New Team Member")
     String opentapsNewTeamMember();
+    @DefaultMessage("Customer and sales analysis reports have to be used in conjunction with opentaps Analytics. Ensure analytics is installed and data loaded.")
+    String opentapsNoAnalyticsCaution();
     @DefaultMessage("You have no new messages.")
     String opentapsNoNewMessages();
     @DefaultMessage("<No subject>")
@@ -8127,7 +8191,7 @@ public interface CommonMessages extends Messages {
     String opentapsReportList();
     @DefaultMessage("Portable Document (*.pdf)")
     String opentapsReportOptionPdf();
-    @DefaultMessage("Screen")
+    @DefaultMessage("On Screen")
     String opentapsReportOptionScreen();
     @DefaultMessage("Excel Spreadsheet (*.xls)")
     String opentapsReportOptionXls();
@@ -8143,7 +8207,7 @@ public interface CommonMessages extends Messages {
     String opentapsResumeOrder();
     @DefaultMessage("Run Report")
     String opentapsRunReport();
-    @DefaultMessage("Run Report in...")
+    @DefaultMessage("Run Report as:")
     String opentapsRunReportIn();
     @DefaultMessage("Sales Order {0}")
     String opentapsSalesOrderEmailSubject(String orderId);
@@ -14687,6 +14751,8 @@ public interface CommonMessages extends Messages {
     String termType_THRESHOLD();
     @DefaultMessage("Earn Commission Term")
     String termType_description_COMM_TIMING_AT();
+    @DefaultMessage("Thru Date")
+    String thruDate();
     @DefaultMessage("Thru Time Period")
     String thruTimePeriod();
     @DefaultMessage("Time Period")

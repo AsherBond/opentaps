@@ -191,6 +191,9 @@ public final class InvoiceEvents {
         if (UtilValidate.isNotEmpty(invoiceItems)) {
             Map<String, Object> firstLine = invoiceItems.get(0);
 
+            if (UtilValidate.isNotEmpty(invoice.getReferenceNumber())) {
+                extraInfo.put("referenceNumber", invoice.getReferenceNumber());
+            }
             GenericValue orderItem = (GenericValue) firstLine.get("orderItem");
             if (UtilValidate.isNotEmpty(orderItem)) {
                 extraInfo.put("orderId", orderItem.getString("orderId"));

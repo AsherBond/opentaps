@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="classic" pageWidth="860" pageHeight="842" orientation="Landscape" columnWidth="800" leftMargin="30" rightMargin="30" topMargin="0" bottomMargin="0">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="classic" pageWidth="612" pageHeight="792" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
-	<parameter name="store_id" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["_NA_"]]></defaultValueExpression>
+	<parameter name="store_id" class="java.lang.Long" isForPrompting="false">
+		<defaultValueExpression><![CDATA[Long.valueOf(0)]]></defaultValueExpression>
 	</parameter>
 	<parameter name="fromDate" class="java.sql.Timestamp" isForPrompting="false">
 		<defaultValueExpression><![CDATA[java.sql.Timestamp.valueOf("1980-01-01")]]></defaultValueExpression>
@@ -23,17 +23,31 @@
 	<parameter name="TotalSales" class="java.lang.Double" isForPrompting="false">
 		<defaultValueExpression><![CDATA[new Double(0.00)]]></defaultValueExpression>
 	</parameter>
+	<parameter name="organizationPartyId" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="periodStart" class="java.lang.Long" isForPrompting="false"/>
+	<parameter name="periodEnd" class="java.lang.Long" isForPrompting="false"/>
 	<queryString>
-		<![CDATA[SELECT STORE_DIM.STORE_DIM_NAME AS NAME, GROUP_NAME, GEO_NAME, GEO_CODE, SUM(NET_AMOUNT) AS NETSALES, SUM(TAX_DUE) AS TAXDUE
-FROM TAX_INVOICE_ITEM_FACT, STORE_DIM, TAX_AUTHORITY_DIM, DATE_DIM, CURRENCY_DIM
-WHERE TAX_INVOICE_ITEM_FACT.STORE_DIM_ID = STORE_DIM.STORE_DIM_ID
-AND TAX_INVOICE_ITEM_FACT.DATE_DIM_ID = DATE_DIM.DATE_DIM_ID
-AND TAX_INVOICE_ITEM_FACT.TAX_AUTHORITY_DIM_ID = TAX_AUTHORITY_DIM.TAX_AUTHORITY_DIM_ID
-AND CURRENCY_DIM.CURRENCY_DIM_ID = TAX_INVOICE_ITEM_FACT.CURRENCY_DIM_ID
-AND DATE_DIM.INVOICE_DATE > $P{fromDate}
-AND DATE_DIM.INVOICE_DATE < $P{thruDate}
-AND CURRENCY_DIM.UOM_ID = $P{currencyUomId}
-AND STORE_DIM.STORE_DIM_ID = $P{store_id}
+		<![CDATA[SELECT
+  STORE_DIM.STORE_DIM_NAME AS NAME,
+  GROUP_NAME,
+  GEO_NAME,
+  GEO_CODE,
+  SUM(TAXABLE) AS TAXABLE,
+  SUM(TAX_DUE) AS TAXDUE
+FROM
+  TAX_INVOICE_ITEM_FACT, STORE_DIM, TAX_AUTHORITY_DIM, DATE_DIM, CURRENCY_DIM, ORGANIZATION_DIM
+WHERE
+  TAX_INVOICE_ITEM_FACT.STORE_DIM_ID = STORE_DIM.STORE_DIM_ID
+  AND TAX_INVOICE_ITEM_FACT.DATE_DIM_ID = DATE_DIM.DATE_DIM_ID
+  AND TAX_INVOICE_ITEM_FACT.TAX_AUTHORITY_DIM_ID = TAX_AUTHORITY_DIM.TAX_AUTHORITY_DIM_ID
+  AND CURRENCY_DIM.CURRENCY_DIM_ID = TAX_INVOICE_ITEM_FACT.CURRENCY_DIM_ID
+  AND ORGANIZATION_DIM.ORGANIZATION_DIM_ID = TAX_INVOICE_ITEM_FACT.ORGANIZATION_DIM_ID
+  AND DATE_DIM.DATE_DIM_ID >= $P{periodStart}
+  AND DATE_DIM.DATE_DIM_ID <= $P{periodEnd}
+  AND CURRENCY_DIM.UOM_ID = $P{currencyUomId}
+  AND STORE_DIM.STORE_DIM_ID = $P{store_id}
+  AND ORGANIZATION_DIM.ORGANIZATION_PARTY_ID = $P{organizationPartyId}
+  AND (TAXABLE > 0 OR TAX_DUE > 0)
 GROUP BY STORE_DIM.STORE_DIM_NAME, GROUP_NAME, GEO_NAME, GEO_CODE
 ORDER BY STORE_DIM.STORE_DIM_NAME, GROUP_NAME, GEO_NAME, GEO_CODE]]>
 	</queryString>
@@ -41,7 +55,7 @@ ORDER BY STORE_DIM.STORE_DIM_NAME, GROUP_NAME, GEO_NAME, GEO_CODE]]>
 	<field name="group_name" class="java.lang.String"/>
 	<field name="geo_name" class="java.lang.String"/>
 	<field name="geo_code" class="java.lang.String"/>
-	<field name="netsales" class="java.math.BigDecimal"/>
+	<field name="taxable" class="java.math.BigDecimal"/>
 	<field name="taxdue" class="java.math.BigDecimal"/>
 	<variable name="TaxAuthPartyName" class="java.lang.String">
 		<variableExpression><![CDATA[$F{group_name}]]></variableExpression>
@@ -50,10 +64,45 @@ ORDER BY STORE_DIM.STORE_DIM_NAME, GROUP_NAME, GEO_NAME, GEO_CODE]]>
 	<group name="name">
 		<groupExpression><![CDATA[$F{name}]]></groupExpression>
 		<groupHeader>
-			<band splitType="Stretch"/>
+			<band height="22" splitType="Stretch">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement key="textField-2" x="0" y="1" width="551" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
+					<box>
+						<topPen lineWidth="0.0" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineColor="#000000"/>
+					</box>
+					<textElement>
+						<font size="8" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$P{StoreName}]]></textFieldExpression>
+				</textField>
+			</band>
 		</groupHeader>
 		<groupFooter>
-			<band splitType="Stretch"/>
+			<band height="23" splitType="Stretch">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement key="textField-1" x="479" y="1" width="73" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
+					<box>
+						<topPen lineWidth="0.0" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$P{TotalSales}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement key="staticText-2" x="406" y="1" width="73" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
+					<textElement textAlignment="Left" markup="none">
+						<font fontName="" size="8" isBold="true" isItalic="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsTotalSales} + ":"]]></textFieldExpression>
+				</textField>
+			</band>
 		</groupFooter>
 	</group>
 	<group name="group_name">
@@ -83,60 +132,36 @@ ORDER BY STORE_DIM.STORE_DIM_NAME, GROUP_NAME, GEO_NAME, GEO_CODE]]>
 	<pageHeader>
 		<band height="21" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement key="staticText" x="278" y="0" width="200" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement markup="none">
+				<reportElement key="staticText" x="0" y="0" width="209" height="16" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Bottom" markup="none">
 					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{AccountingTaxAuthority}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement key="staticText" positionType="Float" x="580" y="0" width="72" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement markup="none">
+				<reportElement key="staticText" positionType="Float" x="405" y="0" width="72" height="16" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom" markup="none">
 					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsTaxableSales}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement key="staticText" positionType="Float" x="652" y="0" width="73" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement markup="none">
+				<reportElement key="staticText" positionType="Float" x="478" y="0" width="73" height="16" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom" markup="none">
 					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsTaxDue}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement key="staticText-2" x="208" y="0" width="70" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Left" markup="none">
-					<font fontName="" size="8" isBold="true" isItalic="false" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsTotalSales}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement key="staticText-3" x="0" y="0" width="208" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Left" markup="none">
-					<font fontName="" size="8" isBold="true" isItalic="false" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{ProductProductStore}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement key="staticText-4" positionType="Float" x="725" y="0" width="75" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement key="staticText-6" x="478" y="0" width="102" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement markup="none">
+				<reportElement key="staticText-6" x="209" y="0" width="196" height="16" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Bottom" markup="none">
 					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsRegion}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement x="0" y="17" width="556" height="1"/>
+			</line>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -145,7 +170,7 @@ ORDER BY STORE_DIM.STORE_DIM_NAME, GROUP_NAME, GEO_NAME, GEO_CODE]]>
 	<detail>
 		<band height="23" splitType="Stretch">
 			<textField evaluationTime="Band" pattern="" isBlankWhenNull="true">
-				<reportElement key="textField" mode="Transparent" x="278" y="2" width="200" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField" mode="Transparent" x="0" y="1" width="209" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -157,73 +182,34 @@ ORDER BY STORE_DIM.STORE_DIM_NAME, GROUP_NAME, GEO_NAME, GEO_CODE]]>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[( new java.lang.Boolean($F{group_name}.toString() != null).booleanValue() ? $F{group_name}.toString() : new java.lang.String("Not Available" ))]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField" x="580" y="2" width="72" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement key="textField" x="405" y="1" width="73" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
-				<textElement>
+				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{netsales}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{taxable}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField" x="652" y="2" width="73" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement key="textField" x="478" y="1" width="73" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
-				<textElement>
+				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{taxdue}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-1" x="208" y="2" width="70" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$P{TotalSales}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement key="textField-2" x="0" y="2" width="208" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{StoreName}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement key="staticText-5" positionType="Float" x="725" y="2" width="75" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
 			<textField evaluationTime="Band" pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-3" mode="Transparent" x="478" y="2" width="102" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-3" mode="Transparent" x="209" y="1" width="196" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>

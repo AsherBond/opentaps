@@ -176,98 +176,98 @@ fieldMapColumns.put("ProductFeatureGroupAndAppl", fields);
      * Auto generated value setter.
      * @param productFeatureGroupId the productFeatureGroupId to set
      */
-    private void setProductFeatureGroupId(String productFeatureGroupId) {
+    public void setProductFeatureGroupId(String productFeatureGroupId) {
         this.productFeatureGroupId = productFeatureGroupId;
     }
     /**
      * Auto generated value setter.
      * @param productFeatureId the productFeatureId to set
      */
-    private void setProductFeatureId(String productFeatureId) {
+    public void setProductFeatureId(String productFeatureId) {
         this.productFeatureId = productFeatureId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param sequenceNum the sequenceNum to set
      */
-    private void setSequenceNum(Long sequenceNum) {
+    public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
     /**
      * Auto generated value setter.
      * @param productFeatureTypeId the productFeatureTypeId to set
      */
-    private void setProductFeatureTypeId(String productFeatureTypeId) {
+    public void setProductFeatureTypeId(String productFeatureTypeId) {
         this.productFeatureTypeId = productFeatureTypeId;
     }
     /**
      * Auto generated value setter.
      * @param productFeatureCategoryId the productFeatureCategoryId to set
      */
-    private void setProductFeatureCategoryId(String productFeatureCategoryId) {
+    public void setProductFeatureCategoryId(String productFeatureCategoryId) {
         this.productFeatureCategoryId = productFeatureCategoryId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param uomId the uomId to set
      */
-    private void setUomId(String uomId) {
+    public void setUomId(String uomId) {
         this.uomId = uomId;
     }
     /**
      * Auto generated value setter.
      * @param numberSpecified the numberSpecified to set
      */
-    private void setNumberSpecified(BigDecimal numberSpecified) {
+    public void setNumberSpecified(BigDecimal numberSpecified) {
         this.numberSpecified = numberSpecified;
     }
     /**
      * Auto generated value setter.
      * @param defaultAmount the defaultAmount to set
      */
-    private void setDefaultAmount(BigDecimal defaultAmount) {
+    public void setDefaultAmount(BigDecimal defaultAmount) {
         this.defaultAmount = defaultAmount;
     }
     /**
      * Auto generated value setter.
      * @param defaultSequenceNum the defaultSequenceNum to set
      */
-    private void setDefaultSequenceNum(Long defaultSequenceNum) {
+    public void setDefaultSequenceNum(Long defaultSequenceNum) {
         this.defaultSequenceNum = defaultSequenceNum;
     }
     /**
      * Auto generated value setter.
      * @param abbrev the abbrev to set
      */
-    private void setAbbrev(String abbrev) {
+    public void setAbbrev(String abbrev) {
         this.abbrev = abbrev;
     }
     /**
      * Auto generated value setter.
      * @param idCode the idCode to set
      */
-    private void setIdCode(String idCode) {
+    public void setIdCode(String idCode) {
         this.idCode = idCode;
     }
 

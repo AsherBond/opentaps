@@ -199,112 +199,112 @@ fieldMapColumns.put("GlAccountAndHistory", fields);
      * Auto generated value setter.
      * @param glAccountClassId the glAccountClassId to set
      */
-    private void setGlAccountClassId(String glAccountClassId) {
+    public void setGlAccountClassId(String glAccountClassId) {
         this.glAccountClassId = glAccountClassId;
     }
     /**
      * Auto generated value setter.
      * @param glAccountId the glAccountId to set
      */
-    private void setGlAccountId(String glAccountId) {
+    public void setGlAccountId(String glAccountId) {
         this.glAccountId = glAccountId;
     }
     /**
      * Auto generated value setter.
      * @param glAccountTypeId the glAccountTypeId to set
      */
-    private void setGlAccountTypeId(String glAccountTypeId) {
+    public void setGlAccountTypeId(String glAccountTypeId) {
         this.glAccountTypeId = glAccountTypeId;
     }
     /**
      * Auto generated value setter.
      * @param glResourceTypeId the glResourceTypeId to set
      */
-    private void setGlResourceTypeId(String glResourceTypeId) {
+    public void setGlResourceTypeId(String glResourceTypeId) {
         this.glResourceTypeId = glResourceTypeId;
     }
     /**
      * Auto generated value setter.
      * @param glXbrlClassId the glXbrlClassId to set
      */
-    private void setGlXbrlClassId(String glXbrlClassId) {
+    public void setGlXbrlClassId(String glXbrlClassId) {
         this.glXbrlClassId = glXbrlClassId;
     }
     /**
      * Auto generated value setter.
      * @param parentGlAccountId the parentGlAccountId to set
      */
-    private void setParentGlAccountId(String parentGlAccountId) {
+    public void setParentGlAccountId(String parentGlAccountId) {
         this.parentGlAccountId = parentGlAccountId;
     }
     /**
      * Auto generated value setter.
      * @param accountCode the accountCode to set
      */
-    private void setAccountCode(String accountCode) {
+    public void setAccountCode(String accountCode) {
         this.accountCode = accountCode;
     }
     /**
      * Auto generated value setter.
      * @param accountName the accountName to set
      */
-    private void setAccountName(String accountName) {
+    public void setAccountName(String accountName) {
         this.accountName = accountName;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param postedBalance the postedBalance to set
      */
-    private void setPostedBalance(BigDecimal postedBalance) {
+    public void setPostedBalance(BigDecimal postedBalance) {
         this.postedBalance = postedBalance;
     }
     /**
      * Auto generated value setter.
      * @param organizationPartyId the organizationPartyId to set
      */
-    private void setOrganizationPartyId(String organizationPartyId) {
+    public void setOrganizationPartyId(String organizationPartyId) {
         this.organizationPartyId = organizationPartyId;
     }
     /**
      * Auto generated value setter.
      * @param customTimePeriodId the customTimePeriodId to set
      */
-    private void setCustomTimePeriodId(String customTimePeriodId) {
+    public void setCustomTimePeriodId(String customTimePeriodId) {
         this.customTimePeriodId = customTimePeriodId;
     }
     /**
      * Auto generated value setter.
      * @param postedDebits the postedDebits to set
      */
-    private void setPostedDebits(BigDecimal postedDebits) {
+    public void setPostedDebits(BigDecimal postedDebits) {
         this.postedDebits = postedDebits;
     }
     /**
      * Auto generated value setter.
      * @param postedCredits the postedCredits to set
      */
-    private void setPostedCredits(BigDecimal postedCredits) {
+    public void setPostedCredits(BigDecimal postedCredits) {
         this.postedCredits = postedCredits;
     }
     /**
      * Auto generated value setter.
      * @param endingBalance the endingBalance to set
      */
-    private void setEndingBalance(BigDecimal endingBalance) {
+    public void setEndingBalance(BigDecimal endingBalance) {
         this.endingBalance = endingBalance;
     }
 

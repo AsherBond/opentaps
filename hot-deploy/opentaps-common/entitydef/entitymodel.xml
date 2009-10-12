@@ -2196,13 +2196,13 @@ under the License.
         <field name="userLoginId" type="id-ne"/>
         <field name="applicationName" type="id"/>
         <field name="screenName" type="id-vlong"/>
-        <field name="name" type="id-vlong"/>
-        <field name="value" type="id-vlong"/>
+        <field name="preferenceName" type="id-vlong"/>
+        <field name="preferenceValue" type="id-vlong"/>
 
         <prim-key field="userLoginId"/>
         <prim-key field="applicationName"/>
         <prim-key field="screenName"/>
-        <prim-key field="name"/>
+        <prim-key field="preferenceName"/>
 
     </entity>
  
@@ -2212,7 +2212,7 @@ under the License.
     
     <entity entity-name="KeyboardShortcutHandler" package-name="org.opentaps.common">
         <field name="actionTypeId" type="id-ne"/>
-        <field name="handler" type="short-varchar">
+        <field name="shortcutHandler" type="short-varchar">
           <description>The target JS function that is called for creating this type of shortcut, pasing two arguments "shortcut" and "actionTarget".</description>
         </field>
         <field name="description" type="description"/>
@@ -2378,5 +2378,25 @@ under the License.
       <relation type="one" fk-name="FACILITY_RLE_ROLE" rel-entity-name="RoleType">
         <key-map field-name="roleTypeId"/>
       </relation>
-    </entity>    
+    </entity>  
+ 
+    <!-- Registers data transformations time -->
+    <entity entity-name="DataWarehouseTransform" package-name="org.opentaps.common"
+        title="Data transformation runtime attributes">
+        <field name="transformId" type="id-ne"/>
+        <field name="organizationPartyId" type="id-ne"/>
+        <field name="transformEnumId" type="id"/>
+        <field name="transformTimestamp" type="date-time"/>
+        <field name="userLoginId" type="id-vlong-ne"/>
+
+        <prim-key field="transformId"/>
+
+        <relation rel-entity-name="Enumeration" type="one" fk-name="DWTR_ENUM_TP">
+            <key-map field-name="transformEnumId" rel-field-name="enumId"/>
+        </relation>
+        <relation rel-entity-name="UserLogin" type="one" fk-name="DWTR_USR_LOGIN" >
+            <key-map field-name="userLoginId"/>
+        </relation>
+    </entity>
+  
 </entitymodel>

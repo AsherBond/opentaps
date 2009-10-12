@@ -198,91 +198,91 @@ fieldMapColumns.put("PartyContactWithPurpose", fields);
      * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
-    private void setContactMechId(String contactMechId) {
+    public void setContactMechId(String contactMechId) {
         this.contactMechId = contactMechId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechPurposeTypeId the contactMechPurposeTypeId to set
      */
-    private void setContactMechPurposeTypeId(String contactMechPurposeTypeId) {
+    public void setContactMechPurposeTypeId(String contactMechPurposeTypeId) {
         this.contactMechPurposeTypeId = contactMechPurposeTypeId;
     }
     /**
      * Auto generated value setter.
      * @param contactFromDate the contactFromDate to set
      */
-    private void setContactFromDate(Timestamp contactFromDate) {
+    public void setContactFromDate(Timestamp contactFromDate) {
         this.contactFromDate = contactFromDate;
     }
     /**
      * Auto generated value setter.
      * @param contactThruDate the contactThruDate to set
      */
-    private void setContactThruDate(Timestamp contactThruDate) {
+    public void setContactThruDate(Timestamp contactThruDate) {
         this.contactThruDate = contactThruDate;
     }
     /**
      * Auto generated value setter.
      * @param purposeFromDate the purposeFromDate to set
      */
-    private void setPurposeFromDate(Timestamp purposeFromDate) {
+    public void setPurposeFromDate(Timestamp purposeFromDate) {
         this.purposeFromDate = purposeFromDate;
     }
     /**
      * Auto generated value setter.
      * @param purposeThruDate the purposeThruDate to set
      */
-    private void setPurposeThruDate(Timestamp purposeThruDate) {
+    public void setPurposeThruDate(Timestamp purposeThruDate) {
         this.purposeThruDate = purposeThruDate;
     }
     /**
      * Auto generated value setter.
      * @param contactMechTypeId the contactMechTypeId to set
      */
-    private void setContactMechTypeId(String contactMechTypeId) {
+    public void setContactMechTypeId(String contactMechTypeId) {
         this.contactMechTypeId = contactMechTypeId;
     }
     /**
      * Auto generated value setter.
      * @param infoString the infoString to set
      */
-    private void setInfoString(String infoString) {
+    public void setInfoString(String infoString) {
         this.infoString = infoString;
     }
     /**
      * Auto generated value setter.
      * @param comments the comments to set
      */
-    private void setComments(String comments) {
+    public void setComments(String comments) {
         this.comments = comments;
     }
     /**
      * Auto generated value setter.
      * @param extension the extension to set
      */
-    private void setExtension(String extension) {
+    public void setExtension(String extension) {
         this.extension = extension;
     }
     /**
      * Auto generated value setter.
      * @param allowSolicitation the allowSolicitation to set
      */
-    private void setAllowSolicitation(String allowSolicitation) {
+    public void setAllowSolicitation(String allowSolicitation) {
         this.allowSolicitation = allowSolicitation;
     }
     /**
      * Auto generated value setter.
      * @param purposeDescription the purposeDescription to set
      */
-    private void setPurposeDescription(String purposeDescription) {
+    public void setPurposeDescription(String purposeDescription) {
         this.purposeDescription = purposeDescription;
     }
 

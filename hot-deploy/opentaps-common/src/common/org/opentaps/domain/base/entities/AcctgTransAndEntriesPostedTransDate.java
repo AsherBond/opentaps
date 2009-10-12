@@ -119,21 +119,21 @@ fieldMapColumns.put("AcctgTransAndEntriesPostedTransDate", fields);
      * Auto generated value setter.
      * @param transactionDate the transactionDate to set
      */
-    private void setTransactionDate(Timestamp transactionDate) {
+    public void setTransactionDate(Timestamp transactionDate) {
         this.transactionDate = transactionDate;
     }
     /**
      * Auto generated value setter.
      * @param isPosted the isPosted to set
      */
-    private void setIsPosted(String isPosted) {
+    public void setIsPosted(String isPosted) {
         this.isPosted = isPosted;
     }
     /**
      * Auto generated value setter.
      * @param organizationPartyId the organizationPartyId to set
      */
-    private void setOrganizationPartyId(String organizationPartyId) {
+    public void setOrganizationPartyId(String organizationPartyId) {
         this.organizationPartyId = organizationPartyId;
     }
 

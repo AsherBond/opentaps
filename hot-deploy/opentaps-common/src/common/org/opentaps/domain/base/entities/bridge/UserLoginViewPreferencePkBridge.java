@@ -53,8 +53,8 @@ public class UserLoginViewPreferencePkBridge implements TwoWayFieldBridge {
         id.setApplicationName(field.stringValue());
         field = document.getField(name + ".screenName");
         id.setScreenName(field.stringValue());
-        field = document.getField(name + ".name");
-        id.setName(field.stringValue());
+        field = document.getField(name + ".preferenceName");
+        id.setPreferenceName(field.stringValue());
         return id;
     }
 
@@ -73,7 +73,7 @@ public class UserLoginViewPreferencePkBridge implements TwoWayFieldBridge {
         sb.append(" ");
         sb.append(id.getScreenName());
         sb.append(" ");
-        sb.append(id.getName());
+        sb.append(id.getPreferenceName());
         return sb.toString();
     }
 
@@ -101,7 +101,7 @@ public class UserLoginViewPreferencePkBridge implements TwoWayFieldBridge {
         field = new Field(name + ".screenName", id.getScreenName(), store, index, termVector);
         field.setBoost(boost);
         document.add(field);
-        field = new Field(name + ".name", id.getName(), store, index, termVector);
+        field = new Field(name + ".preferenceName", id.getPreferenceName(), store, index, termVector);
         field.setBoost(boost);
         document.add(field);
 

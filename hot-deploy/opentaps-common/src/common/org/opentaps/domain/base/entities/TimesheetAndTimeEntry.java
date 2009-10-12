@@ -202,105 +202,105 @@ fieldMapColumns.put("TimesheetAndTimeEntry", fields);
      * Auto generated value setter.
      * @param activityDate the activityDate to set
      */
-    private void setActivityDate(Timestamp activityDate) {
+    public void setActivityDate(Timestamp activityDate) {
         this.activityDate = activityDate;
     }
     /**
      * Auto generated value setter.
      * @param entryComments the entryComments to set
      */
-    private void setEntryComments(String entryComments) {
+    public void setEntryComments(String entryComments) {
         this.entryComments = entryComments;
     }
     /**
      * Auto generated value setter.
      * @param sheetComments the sheetComments to set
      */
-    private void setSheetComments(String sheetComments) {
+    public void setSheetComments(String sheetComments) {
         this.sheetComments = sheetComments;
     }
     /**
      * Auto generated value setter.
      * @param timesheetId the timesheetId to set
      */
-    private void setTimesheetId(String timesheetId) {
+    public void setTimesheetId(String timesheetId) {
         this.timesheetId = timesheetId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param approvedByUserLoginId the approvedByUserLoginId to set
      */
-    private void setApprovedByUserLoginId(String approvedByUserLoginId) {
+    public void setApprovedByUserLoginId(String approvedByUserLoginId) {
         this.approvedByUserLoginId = approvedByUserLoginId;
     }
     /**
      * Auto generated value setter.
      * @param timeEntryId the timeEntryId to set
      */
-    private void setTimeEntryId(String timeEntryId) {
+    public void setTimeEntryId(String timeEntryId) {
         this.timeEntryId = timeEntryId;
     }
     /**
      * Auto generated value setter.
      * @param rateTypeId the rateTypeId to set
      */
-    private void setRateTypeId(String rateTypeId) {
+    public void setRateTypeId(String rateTypeId) {
         this.rateTypeId = rateTypeId;
     }
     /**
      * Auto generated value setter.
      * @param workEffortId the workEffortId to set
      */
-    private void setWorkEffortId(String workEffortId) {
+    public void setWorkEffortId(String workEffortId) {
         this.workEffortId = workEffortId;
     }
     /**
      * Auto generated value setter.
      * @param invoiceId the invoiceId to set
      */
-    private void setInvoiceId(String invoiceId) {
+    public void setInvoiceId(String invoiceId) {
         this.invoiceId = invoiceId;
     }
     /**
      * Auto generated value setter.
      * @param invoiceItemSeqId the invoiceItemSeqId to set
      */
-    private void setInvoiceItemSeqId(String invoiceItemSeqId) {
+    public void setInvoiceItemSeqId(String invoiceItemSeqId) {
         this.invoiceItemSeqId = invoiceItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param hours the hours to set
      */
-    private void setHours(BigDecimal hours) {
+    public void setHours(BigDecimal hours) {
         this.hours = hours;
     }
 

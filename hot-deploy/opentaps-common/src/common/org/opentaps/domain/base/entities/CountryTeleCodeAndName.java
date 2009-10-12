@@ -118,21 +118,21 @@ fieldMapColumns.put("CountryTeleCodeAndName", fields);
      * Auto generated value setter.
      * @param teleCode the teleCode to set
      */
-    private void setTeleCode(String teleCode) {
+    public void setTeleCode(String teleCode) {
         this.teleCode = teleCode;
     }
     /**
      * Auto generated value setter.
      * @param countryCode the countryCode to set
      */
-    private void setCountryCode(String countryCode) {
+    public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
     /**
      * Auto generated value setter.
      * @param countryName the countryName to set
      */
-    private void setCountryName(String countryName) {
+    public void setCountryName(String countryName) {
         this.countryName = countryName;
     }
 

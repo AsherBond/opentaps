@@ -165,84 +165,84 @@ fieldMapColumns.put("OrderReportPurchasesGroupByProduct", fields);
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param internalName the internalName to set
      */
-    private void setInternalName(String internalName) {
+    public void setInternalName(String internalName) {
         this.internalName = internalName;
     }
     /**
      * Auto generated value setter.
      * @param orderDate the orderDate to set
      */
-    private void setOrderDate(Timestamp orderDate) {
+    public void setOrderDate(Timestamp orderDate) {
         this.orderDate = orderDate;
     }
     /**
      * Auto generated value setter.
      * @param orderStatusId the orderStatusId to set
      */
-    private void setOrderStatusId(String orderStatusId) {
+    public void setOrderStatusId(String orderStatusId) {
         this.orderStatusId = orderStatusId;
     }
     /**
      * Auto generated value setter.
      * @param orderItemStatusId the orderItemStatusId to set
      */
-    private void setOrderItemStatusId(String orderItemStatusId) {
+    public void setOrderItemStatusId(String orderItemStatusId) {
         this.orderItemStatusId = orderItemStatusId;
     }
     /**
      * Auto generated value setter.
      * @param orderTypeId the orderTypeId to set
      */
-    private void setOrderTypeId(String orderTypeId) {
+    public void setOrderTypeId(String orderTypeId) {
         this.orderTypeId = orderTypeId;
     }
     /**
      * Auto generated value setter.
      * @param toPartyId the toPartyId to set
      */
-    private void setToPartyId(String toPartyId) {
+    public void setToPartyId(String toPartyId) {
         this.toPartyId = toPartyId;
     }
     /**
      * Auto generated value setter.
      * @param toRoleTypeId the toRoleTypeId to set
      */
-    private void setToRoleTypeId(String toRoleTypeId) {
+    public void setToRoleTypeId(String toRoleTypeId) {
         this.toRoleTypeId = toRoleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param fromPartyId the fromPartyId to set
      */
-    private void setFromPartyId(String fromPartyId) {
+    public void setFromPartyId(String fromPartyId) {
         this.fromPartyId = fromPartyId;
     }
     /**
      * Auto generated value setter.
      * @param fromRoleTypeId the fromRoleTypeId to set
      */
-    private void setFromRoleTypeId(String fromRoleTypeId) {
+    public void setFromRoleTypeId(String fromRoleTypeId) {
         this.fromRoleTypeId = fromRoleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param quantity the quantity to set
      */
-    private void setQuantity(BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
     /**
      * Auto generated value setter.
      * @param unitPrice the unitPrice to set
      */
-    private void setUnitPrice(BigDecimal unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 

@@ -41,6 +41,7 @@ import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilDate;
+import com.opensourcestrategies.financials.reports.FinancialReports;
 
 timeZone = UtilCommon.getTimeZone(request);
 locale = UtilHttp.getLocale(request);
@@ -50,15 +51,16 @@ dateFormat = UtilDate.getDateFormat(locale);
 defaultAsOfDate = UtilDateTime.getDayEnd( UtilDateTime.nowTimestamp(), timeZone, locale );
 context.put("defaultAsOfDate", UtilDateTime.timeStampToString(defaultAsOfDate, dateFormat, timeZone, locale));
 
+Map ctxt = FinancialReports.prepareFinancialReportParameters(request);
+context.putAll(ctxt);
+
 // get the form data
-organizationPartyId = session.getAttribute("organizationPartyId");
+organizationPartyId = context.get("organizationPartyId");
 customTimePeriods = delegator.findByAndCache("CustomTimePeriod", UtilMisc.toMap("organizationPartyId", organizationPartyId), UtilMisc.toList("customTimePeriodId"));
 glFiscalTypes = delegator.findAll("GlFiscalType");
 
 // get the accounting tags
 context.put("tagTypes", UtilAccountingTags.getAccountingTagFiltersForOrganization(organizationPartyId, UtilAccountingTags.FINANCIALS_REPORTS_TAG, delegator, locale));
-
-context.put("organizationPartyId", organizationPartyId);
 context.put("customTimePeriods", customTimePeriods);
 context.put("glFiscalTypes", glFiscalTypes);
 
@@ -74,54 +76,6 @@ if (dateOption == null) {
 reportFormType = UtilCommon.getParameter(request, "reportFormType");
 context.put("reportFormType", reportFormType);
 
-// pass the glFiscalTypeId to the next script
-glFiscalTypeId = UtilCommon.getParameter(request, "glFiscalTypeId");
-context.put("glFiscalTypeId", glFiscalTypeId);
-
 // pass the isPosted to the next script
 isPosted = UtilCommon.getParameter(request, "isPosted");
 context.put("isPosted", isPosted);
-
-// determine the from and thru dates according to the report form type
-if (dateOption.equals("byDate")) {
-    if (reportFormType.equals("state")) {
-        asOfDate = UtilCommon.getParameter(request, "asOfDate");
-        if (asOfDate == null || asOfDate.length() == 0) return;
-        asOfTimestamp = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(asOfDate, dateFormat, timeZone, locale), timeZone, locale);
-        context.put("asOfDate", asOfTimestamp);
-    }
-    else if (reportFormType.equals("flow")) {
-        fromDate = UtilCommon.getParameter(request, "fromDate");
-        thruDate = UtilCommon.getParameter(request, "thruDate");
-        fromDateTs = null;
-        thruDateTs = null;
-        if (UtilValidate.isNotEmpty(fromDate)) {
-            try {
-                fromDateTs = UtilDateTime.stringToTimeStamp(fromDate, dateFormat, timeZone, locale);            
-            } catch (ParseException) {
-                UtilMessage.addFieldError(request, "fromDate", "FinancialsError_IllegalDateFieldFormat", UtilMisc.toMap("date", fromDate) );
-            }
-        }
-        if (UtilValidate.isNotEmpty(thruDate)) {
-            try {
-                thruDateTs = UtilDateTime.stringToTimeStamp(thruDate, dateFormat, timeZone, locale);
-            } catch (ParseException) {
-                UtilMessage.addFieldError(request, "thruDate", "FinancialsError_IllegalDateFieldFormat", UtilMisc.toMap("date", thruDate) );
-            }
-        }
-        if (fromDateTs != null) context.put("fromDate", UtilDateTime.getDayStart(fromDateTs, timeZone, locale));
-        if (thruDateTs != null) context.put("thruDate", UtilDateTime.getDayEnd(thruDateTs, timeZone, locale));
-    }
-} else if (dateOption.equals("byTimePeriod")) {
-    if (reportFormType.equals("state") || reportFormType.equals("flow")) {
-        context.put("customTimePeriodId", UtilCommon.getParameter(request, "customTimePeriodId"));
-        timePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", context.get("customTimePeriodId")));
-        fromDate = new Timestamp(timePeriod.get("fromDate").getTime());
-        thruDate = new Timestamp(timePeriod.get("thruDate").getTime());
-        thruDate = UtilDateTime.adjustTimestamp(thruDate, Calendar.MILLISECOND, -1, timeZone, locale);
-        context.put("fromDate", UtilDateTime.getDayStart(fromDate, timeZone, locale));
-        context.put("thruDate", thruDate);
-        context.put("asOfDate", thruDate);
-    }
-}
-

@@ -205,140 +205,140 @@ fieldMapColumns.put("FacilityPartyPermissionDetail", fields);
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
     /**
      * Auto generated value setter.
      * @param facilityTypeId the facilityTypeId to set
      */
-    private void setFacilityTypeId(String facilityTypeId) {
+    public void setFacilityTypeId(String facilityTypeId) {
         this.facilityTypeId = facilityTypeId;
     }
     /**
      * Auto generated value setter.
      * @param parentFacilityId the parentFacilityId to set
      */
-    private void setParentFacilityId(String parentFacilityId) {
+    public void setParentFacilityId(String parentFacilityId) {
         this.parentFacilityId = parentFacilityId;
     }
     /**
      * Auto generated value setter.
      * @param ownerPartyId the ownerPartyId to set
      */
-    private void setOwnerPartyId(String ownerPartyId) {
+    public void setOwnerPartyId(String ownerPartyId) {
         this.ownerPartyId = ownerPartyId;
     }
     /**
      * Auto generated value setter.
      * @param defaultInventoryItemTypeId the defaultInventoryItemTypeId to set
      */
-    private void setDefaultInventoryItemTypeId(String defaultInventoryItemTypeId) {
+    public void setDefaultInventoryItemTypeId(String defaultInventoryItemTypeId) {
         this.defaultInventoryItemTypeId = defaultInventoryItemTypeId;
     }
     /**
      * Auto generated value setter.
      * @param facilityName the facilityName to set
      */
-    private void setFacilityName(String facilityName) {
+    public void setFacilityName(String facilityName) {
         this.facilityName = facilityName;
     }
     /**
      * Auto generated value setter.
      * @param primaryFacilityGroupId the primaryFacilityGroupId to set
      */
-    private void setPrimaryFacilityGroupId(String primaryFacilityGroupId) {
+    public void setPrimaryFacilityGroupId(String primaryFacilityGroupId) {
         this.primaryFacilityGroupId = primaryFacilityGroupId;
     }
     /**
      * Auto generated value setter.
      * @param squareFootage the squareFootage to set
      */
-    private void setSquareFootage(Long squareFootage) {
+    public void setSquareFootage(Long squareFootage) {
         this.squareFootage = squareFootage;
     }
     /**
      * Auto generated value setter.
      * @param productStoreId the productStoreId to set
      */
-    private void setProductStoreId(String productStoreId) {
+    public void setProductStoreId(String productStoreId) {
         this.productStoreId = productStoreId;
     }
     /**
      * Auto generated value setter.
      * @param defaultDaysToShip the defaultDaysToShip to set
      */
-    private void setDefaultDaysToShip(Long defaultDaysToShip) {
+    public void setDefaultDaysToShip(Long defaultDaysToShip) {
         this.defaultDaysToShip = defaultDaysToShip;
     }
     /**
      * Auto generated value setter.
      * @param openedDate the openedDate to set
      */
-    private void setOpenedDate(Timestamp openedDate) {
+    public void setOpenedDate(Timestamp openedDate) {
         this.openedDate = openedDate;
     }
     /**
      * Auto generated value setter.
      * @param closedDate the closedDate to set
      */
-    private void setClosedDate(Timestamp closedDate) {
+    public void setClosedDate(Timestamp closedDate) {
         this.closedDate = closedDate;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param defaultWeightUomId the defaultWeightUomId to set
      */
-    private void setDefaultWeightUomId(String defaultWeightUomId) {
+    public void setDefaultWeightUomId(String defaultWeightUomId) {
         this.defaultWeightUomId = defaultWeightUomId;
     }
     /**
      * Auto generated value setter.
      * @param geoPointId the geoPointId to set
      */
-    private void setGeoPointId(String geoPointId) {
+    public void setGeoPointId(String geoPointId) {
         this.geoPointId = geoPointId;
     }
     /**
      * Auto generated value setter.
      * @param inventoryReserveOrderEnumId the inventoryReserveOrderEnumId to set
      */
-    private void setInventoryReserveOrderEnumId(String inventoryReserveOrderEnumId) {
+    public void setInventoryReserveOrderEnumId(String inventoryReserveOrderEnumId) {
         this.inventoryReserveOrderEnumId = inventoryReserveOrderEnumId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param securityGroupId the securityGroupId to set
      */
-    private void setSecurityGroupId(String securityGroupId) {
+    public void setSecurityGroupId(String securityGroupId) {
         this.securityGroupId = securityGroupId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
 

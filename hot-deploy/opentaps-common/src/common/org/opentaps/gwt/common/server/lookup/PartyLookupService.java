@@ -484,6 +484,27 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         return findListWithFilters(entity, conds, filters);
     }
 
+    /**
+     * AJAX event to suggest Leads.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the resulting JSON response
+     * @throws InfrastructureException if an error occurs
+     */
+    public static String suggestLeads(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
+        InputProviderInterface provider = new HttpInputProvider(request);
+        JsonResponse json = new JsonResponse(response);
+        PartyLookupService service = new PartyLookupService(provider);
+        service.suggestLeads();
+        return json.makeSuggestResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service);
+    }
 
+    /**
+     * Suggests a list of leads.
+     * @return the list of <code>Lead</code>, or <code>null</code> if an error occurred
+     */
+    public List<PartyFromByRelnAndContactInfoAndPartyClassification> suggestLeads() {
+        return suggestParties(LEAD_CONDITIONS);
+    }
 }
 

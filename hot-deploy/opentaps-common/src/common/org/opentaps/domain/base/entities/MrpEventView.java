@@ -158,63 +158,63 @@ fieldMapColumns.put("MrpEventView", fields);
      * Auto generated value setter.
      * @param billOfMaterialLevel the billOfMaterialLevel to set
      */
-    private void setBillOfMaterialLevel(Long billOfMaterialLevel) {
+    public void setBillOfMaterialLevel(Long billOfMaterialLevel) {
         this.billOfMaterialLevel = billOfMaterialLevel;
     }
     /**
      * Auto generated value setter.
      * @param mrpId the mrpId to set
      */
-    private void setMrpId(String mrpId) {
+    public void setMrpId(String mrpId) {
         this.mrpId = mrpId;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param eventDate the eventDate to set
      */
-    private void setEventDate(Timestamp eventDate) {
+    public void setEventDate(Timestamp eventDate) {
         this.eventDate = eventDate;
     }
     /**
      * Auto generated value setter.
      * @param mrpEventTypeId the mrpEventTypeId to set
      */
-    private void setMrpEventTypeId(String mrpEventTypeId) {
+    public void setMrpEventTypeId(String mrpEventTypeId) {
         this.mrpEventTypeId = mrpEventTypeId;
     }
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
     /**
      * Auto generated value setter.
      * @param quantity the quantity to set
      */
-    private void setQuantity(BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
     /**
      * Auto generated value setter.
      * @param eventName the eventName to set
      */
-    private void setEventName(String eventName) {
+    public void setEventName(String eventName) {
         this.eventName = eventName;
     }
     /**
      * Auto generated value setter.
      * @param isLate the isLate to set
      */
-    private void setIsLate(String isLate) {
+    public void setIsLate(String isLate) {
         this.isLate = isLate;
     }
 

@@ -139,49 +139,49 @@ fieldMapColumns.put("InventoryItemStatusForCount", fields);
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
     /**
      * Auto generated value setter.
      * @param inventoryItemTypeId the inventoryItemTypeId to set
      */
-    private void setInventoryItemTypeId(String inventoryItemTypeId) {
+    public void setInventoryItemTypeId(String inventoryItemTypeId) {
         this.inventoryItemTypeId = inventoryItemTypeId;
     }
     /**
      * Auto generated value setter.
      * @param inventoryItemId the inventoryItemId to set
      */
-    private void setInventoryItemId(String inventoryItemId) {
+    public void setInventoryItemId(String inventoryItemId) {
         this.inventoryItemId = inventoryItemId;
     }
     /**
      * Auto generated value setter.
      * @param productId the productId to set
      */
-    private void setProductId(String productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param statusDatetime the statusDatetime to set
      */
-    private void setStatusDatetime(Timestamp statusDatetime) {
+    public void setStatusDatetime(Timestamp statusDatetime) {
         this.statusDatetime = statusDatetime;
     }
     /**
      * Auto generated value setter.
      * @param statusEndDatetime the statusEndDatetime to set
      */
-    private void setStatusEndDatetime(Timestamp statusEndDatetime) {
+    public void setStatusEndDatetime(Timestamp statusEndDatetime) {
         this.statusEndDatetime = statusEndDatetime;
     }
 

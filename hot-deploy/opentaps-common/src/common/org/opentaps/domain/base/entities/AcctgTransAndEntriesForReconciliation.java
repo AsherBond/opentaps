@@ -191,91 +191,91 @@ fieldMapColumns.put("AcctgTransAndEntriesForReconciliation", fields);
      * Auto generated value setter.
      * @param acctgTransId the acctgTransId to set
      */
-    private void setAcctgTransId(String acctgTransId) {
+    public void setAcctgTransId(String acctgTransId) {
         this.acctgTransId = acctgTransId;
     }
     /**
      * Auto generated value setter.
      * @param acctgTransTypeId the acctgTransTypeId to set
      */
-    private void setAcctgTransTypeId(String acctgTransTypeId) {
+    public void setAcctgTransTypeId(String acctgTransTypeId) {
         this.acctgTransTypeId = acctgTransTypeId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param paymentId the paymentId to set
      */
-    private void setPaymentId(String paymentId) {
+    public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
     }
     /**
      * Auto generated value setter.
      * @param transactionDate the transactionDate to set
      */
-    private void setTransactionDate(Timestamp transactionDate) {
+    public void setTransactionDate(Timestamp transactionDate) {
         this.transactionDate = transactionDate;
     }
     /**
      * Auto generated value setter.
      * @param isPosted the isPosted to set
      */
-    private void setIsPosted(String isPosted) {
+    public void setIsPosted(String isPosted) {
         this.isPosted = isPosted;
     }
     /**
      * Auto generated value setter.
      * @param acctgTransEntrySeqId the acctgTransEntrySeqId to set
      */
-    private void setAcctgTransEntrySeqId(String acctgTransEntrySeqId) {
+    public void setAcctgTransEntrySeqId(String acctgTransEntrySeqId) {
         this.acctgTransEntrySeqId = acctgTransEntrySeqId;
     }
     /**
      * Auto generated value setter.
      * @param glAccountId the glAccountId to set
      */
-    private void setGlAccountId(String glAccountId) {
+    public void setGlAccountId(String glAccountId) {
         this.glAccountId = glAccountId;
     }
     /**
      * Auto generated value setter.
      * @param debitCreditFlag the debitCreditFlag to set
      */
-    private void setDebitCreditFlag(String debitCreditFlag) {
+    public void setDebitCreditFlag(String debitCreditFlag) {
         this.debitCreditFlag = debitCreditFlag;
     }
     /**
      * Auto generated value setter.
      * @param amount the amount to set
      */
-    private void setAmount(BigDecimal amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
     /**
      * Auto generated value setter.
      * @param reconcileStatusId the reconcileStatusId to set
      */
-    private void setReconcileStatusId(String reconcileStatusId) {
+    public void setReconcileStatusId(String reconcileStatusId) {
         this.reconcileStatusId = reconcileStatusId;
     }
     /**
      * Auto generated value setter.
      * @param refNum the refNum to set
      */
-    private void setRefNum(String refNum) {
+    public void setRefNum(String refNum) {
         this.refNum = refNum;
     }
     /**
      * Auto generated value setter.
      * @param paymentTypeId the paymentTypeId to set
      */
-    private void setPaymentTypeId(String paymentTypeId) {
+    public void setPaymentTypeId(String paymentTypeId) {
         this.paymentTypeId = paymentTypeId;
     }
 

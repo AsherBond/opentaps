@@ -159,56 +159,56 @@ fieldMapColumns.put("PartyAndUserLogin", fields);
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param partyTypeId the partyTypeId to set
      */
-    private void setPartyTypeId(String partyTypeId) {
+    public void setPartyTypeId(String partyTypeId) {
         this.partyTypeId = partyTypeId;
     }
     /**
      * Auto generated value setter.
      * @param userLoginId the userLoginId to set
      */
-    private void setUserLoginId(String userLoginId) {
+    public void setUserLoginId(String userLoginId) {
         this.userLoginId = userLoginId;
     }
     /**
      * Auto generated value setter.
      * @param currentPassword the currentPassword to set
      */
-    private void setCurrentPassword(String currentPassword) {
+    public void setCurrentPassword(String currentPassword) {
         this.currentPassword = currentPassword;
     }
     /**
      * Auto generated value setter.
      * @param passwordHint the passwordHint to set
      */
-    private void setPasswordHint(String passwordHint) {
+    public void setPasswordHint(String passwordHint) {
         this.passwordHint = passwordHint;
     }
     /**
      * Auto generated value setter.
      * @param enabled the enabled to set
      */
-    private void setEnabled(String enabled) {
+    public void setEnabled(String enabled) {
         this.enabled = enabled;
     }
     /**
      * Auto generated value setter.
      * @param disabledDateTime the disabledDateTime to set
      */
-    private void setDisabledDateTime(Timestamp disabledDateTime) {
+    public void setDisabledDateTime(Timestamp disabledDateTime) {
         this.disabledDateTime = disabledDateTime;
     }
     /**
      * Auto generated value setter.
      * @param successiveFailedLogins the successiveFailedLogins to set
      */
-    private void setSuccessiveFailedLogins(Long successiveFailedLogins) {
+    public void setSuccessiveFailedLogins(Long successiveFailedLogins) {
         this.successiveFailedLogins = successiveFailedLogins;
     }
 

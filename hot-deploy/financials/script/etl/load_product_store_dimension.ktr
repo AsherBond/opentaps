@@ -6,6 +6,8 @@
     <extended_description/>
     <trans_version/>
     <directory>&#47;</directory>
+    <parameters>
+    </parameters>
     <log>
       <read/>
       <write/>
@@ -18,6 +20,7 @@
       <step_performance_table/>
       <use_batchid>Y</use_batchid>
       <use_logfield>N</use_logfield>
+      <size_limit_lines/>
     </log>
     <maxdate>
       <connection/>
@@ -50,14 +53,14 @@
   <notepads>
   </notepads>
   <connection>
-    <name>ofbiz_ods</name>
-    <server>${odsHostServer}</server>
+    <name>ofbiz_dw</name>
+    <server>${dwHostServer}</server>
     <type>GENERIC</type>
     <access>JNDI</access>
     <database>operational</database>
     <port>-1</port>
-    <username>${odsUserName}</username>
-    <password>${odsPassword}</password>
+    <username>${dwUserName}</username>
+    <password>${dwPassword}</password>
     <servername/>
     <data_tablespace/>
     <index_tablespace/>
@@ -71,14 +74,14 @@
     </attributes>
   </connection>
   <connection>
-    <name>ofbiz_dw</name>
-    <server>${dwHostServer}</server>
+    <name>ofbiz_ods</name>
+    <server>${odsHostServer}</server>
     <type>GENERIC</type>
     <access>JNDI</access>
     <database>operational</database>
     <port>-1</port>
-    <username>${dwUserName}</username>
-    <password>${dwPassword}</password>
+    <username>${odsUserName}</username>
+    <password>${odsPassword}</password>
     <servername/>
     <data_tablespace/>
     <index_tablespace/>
@@ -186,7 +189,11 @@
       <sequence/>
       <min_year>1974</min_year>
       <max_year>2199</max_year>
-      <cache_size>5000</cache_size>
+      <cache_size>-1</cache_size>
+      <preload_cache>N</preload_cache>
+      <use_start_date_alternative>N</use_start_date_alternative>
+      <start_date_alternative>none</start_date_alternative>
+      <start_date_field_name/>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>740</xloc>

@@ -184,112 +184,112 @@ fieldMapColumns.put("ProjectPartyAndPhase", fields);
      * Auto generated value setter.
      * @param projectId the projectId to set
      */
-    private void setProjectId(String projectId) {
+    public void setProjectId(String projectId) {
         this.projectId = projectId;
     }
     /**
      * Auto generated value setter.
      * @param projectName the projectName to set
      */
-    private void setProjectName(String projectName) {
+    public void setProjectName(String projectName) {
         this.projectName = projectName;
     }
     /**
      * Auto generated value setter.
      * @param phaseId the phaseId to set
      */
-    private void setPhaseId(String phaseId) {
+    public void setPhaseId(String phaseId) {
         this.phaseId = phaseId;
     }
     /**
      * Auto generated value setter.
      * @param phaseName the phaseName to set
      */
-    private void setPhaseName(String phaseName) {
+    public void setPhaseName(String phaseName) {
         this.phaseName = phaseName;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param roleTypeId the roleTypeId to set
      */
-    private void setRoleTypeId(String roleTypeId) {
+    public void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
      * @param assignedByUserLoginId the assignedByUserLoginId to set
      */
-    private void setAssignedByUserLoginId(String assignedByUserLoginId) {
+    public void setAssignedByUserLoginId(String assignedByUserLoginId) {
         this.assignedByUserLoginId = assignedByUserLoginId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param statusDateTime the statusDateTime to set
      */
-    private void setStatusDateTime(Timestamp statusDateTime) {
+    public void setStatusDateTime(Timestamp statusDateTime) {
         this.statusDateTime = statusDateTime;
     }
     /**
      * Auto generated value setter.
      * @param expectationEnumId the expectationEnumId to set
      */
-    private void setExpectationEnumId(String expectationEnumId) {
+    public void setExpectationEnumId(String expectationEnumId) {
         this.expectationEnumId = expectationEnumId;
     }
     /**
      * Auto generated value setter.
      * @param delegateReasonEnumId the delegateReasonEnumId to set
      */
-    private void setDelegateReasonEnumId(String delegateReasonEnumId) {
+    public void setDelegateReasonEnumId(String delegateReasonEnumId) {
         this.delegateReasonEnumId = delegateReasonEnumId;
     }
     /**
      * Auto generated value setter.
      * @param comments the comments to set
      */
-    private void setComments(String comments) {
+    public void setComments(String comments) {
         this.comments = comments;
     }
     /**
      * Auto generated value setter.
      * @param mustRsvp the mustRsvp to set
      */
-    private void setMustRsvp(String mustRsvp) {
+    public void setMustRsvp(String mustRsvp) {
         this.mustRsvp = mustRsvp;
     }
     /**
      * Auto generated value setter.
      * @param availabilityStatusId the availabilityStatusId to set
      */
-    private void setAvailabilityStatusId(String availabilityStatusId) {
+    public void setAvailabilityStatusId(String availabilityStatusId) {
         this.availabilityStatusId = availabilityStatusId;
     }
 

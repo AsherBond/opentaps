@@ -120,21 +120,21 @@ fieldMapColumns.put("TrackingCodeAndVisit", fields);
      * Auto generated value setter.
      * @param trackingCodeId the trackingCodeId to set
      */
-    private void setTrackingCodeId(String trackingCodeId) {
+    public void setTrackingCodeId(String trackingCodeId) {
         this.trackingCodeId = trackingCodeId;
     }
     /**
      * Auto generated value setter.
      * @param visitId the visitId to set
      */
-    private void setVisitId(Long visitId) {
+    public void setVisitId(Long visitId) {
         this.visitId = visitId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
 

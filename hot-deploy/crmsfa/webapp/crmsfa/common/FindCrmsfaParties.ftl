@@ -17,7 +17,7 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#if findPartyWidget?has_content>
-  <#if viewPreferences?has_content> 
+  <#if viewPreferences?has_content && viewPreferences.MY_OR_TEAM_ACCOUNTS?has_content> 
       <@gwtWidget id=findPartyWidget class="subSectionBlock" viewPref="${viewPreferences.MY_OR_TEAM_ACCOUNTS}"/>
   <#else>
       <@gwtWidget id=findPartyWidget class="subSectionBlock"/>

@@ -148,63 +148,63 @@ fieldMapColumns.put("ShipmentPackageRouteDetail", fields);
      * Auto generated value setter.
      * @param shipmentId the shipmentId to set
      */
-    private void setShipmentId(String shipmentId) {
+    public void setShipmentId(String shipmentId) {
         this.shipmentId = shipmentId;
     }
     /**
      * Auto generated value setter.
      * @param shipmentPackageSeqId the shipmentPackageSeqId to set
      */
-    private void setShipmentPackageSeqId(String shipmentPackageSeqId) {
+    public void setShipmentPackageSeqId(String shipmentPackageSeqId) {
         this.shipmentPackageSeqId = shipmentPackageSeqId;
     }
     /**
      * Auto generated value setter.
      * @param shipmentRouteSegmentId the shipmentRouteSegmentId to set
      */
-    private void setShipmentRouteSegmentId(String shipmentRouteSegmentId) {
+    public void setShipmentRouteSegmentId(String shipmentRouteSegmentId) {
         this.shipmentRouteSegmentId = shipmentRouteSegmentId;
     }
     /**
      * Auto generated value setter.
      * @param labelPrinted the labelPrinted to set
      */
-    private void setLabelPrinted(String labelPrinted) {
+    public void setLabelPrinted(String labelPrinted) {
         this.labelPrinted = labelPrinted;
     }
     /**
      * Auto generated value setter.
      * @param carrierPartyId the carrierPartyId to set
      */
-    private void setCarrierPartyId(String carrierPartyId) {
+    public void setCarrierPartyId(String carrierPartyId) {
         this.carrierPartyId = carrierPartyId;
     }
     /**
      * Auto generated value setter.
      * @param carrierServiceStatusId the carrierServiceStatusId to set
      */
-    private void setCarrierServiceStatusId(String carrierServiceStatusId) {
+    public void setCarrierServiceStatusId(String carrierServiceStatusId) {
         this.carrierServiceStatusId = carrierServiceStatusId;
     }
     /**
      * Auto generated value setter.
      * @param shipmentMethodTypeId the shipmentMethodTypeId to set
      */
-    private void setShipmentMethodTypeId(String shipmentMethodTypeId) {
+    public void setShipmentMethodTypeId(String shipmentMethodTypeId) {
         this.shipmentMethodTypeId = shipmentMethodTypeId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param primaryOrderId the primaryOrderId to set
      */
-    private void setPrimaryOrderId(String primaryOrderId) {
+    public void setPrimaryOrderId(String primaryOrderId) {
         this.primaryOrderId = primaryOrderId;
     }
 

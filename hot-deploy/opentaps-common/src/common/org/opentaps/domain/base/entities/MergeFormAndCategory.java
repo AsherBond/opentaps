@@ -148,63 +148,63 @@ fieldMapColumns.put("MergeFormAndCategory", fields);
      * Auto generated value setter.
      * @param mergeFormId the mergeFormId to set
      */
-    private void setMergeFormId(String mergeFormId) {
+    public void setMergeFormId(String mergeFormId) {
         this.mergeFormId = mergeFormId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param mergeFormName the mergeFormName to set
      */
-    private void setMergeFormName(String mergeFormName) {
+    public void setMergeFormName(String mergeFormName) {
         this.mergeFormName = mergeFormName;
     }
     /**
      * Auto generated value setter.
      * @param subject the subject to set
      */
-    private void setSubject(String subject) {
+    public void setSubject(String subject) {
         this.subject = subject;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param mergeFormText the mergeFormText to set
      */
-    private void setMergeFormText(String mergeFormText) {
+    public void setMergeFormText(String mergeFormText) {
         this.mergeFormText = mergeFormText;
     }
     /**
      * Auto generated value setter.
      * @param showInSelect the showInSelect to set
      */
-    private void setShowInSelect(String showInSelect) {
+    public void setShowInSelect(String showInSelect) {
         this.showInSelect = showInSelect;
     }
     /**
      * Auto generated value setter.
      * @param mergeFormCategoryId the mergeFormCategoryId to set
      */
-    private void setMergeFormCategoryId(String mergeFormCategoryId) {
+    public void setMergeFormCategoryId(String mergeFormCategoryId) {
         this.mergeFormCategoryId = mergeFormCategoryId;
     }
     /**
      * Auto generated value setter.
      * @param mergeFormCategoryName the mergeFormCategoryName to set
      */
-    private void setMergeFormCategoryName(String mergeFormCategoryName) {
+    public void setMergeFormCategoryName(String mergeFormCategoryName) {
         this.mergeFormCategoryName = mergeFormCategoryName;
     }
 

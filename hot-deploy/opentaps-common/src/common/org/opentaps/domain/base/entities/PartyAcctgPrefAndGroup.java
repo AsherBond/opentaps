@@ -118,21 +118,21 @@ fieldMapColumns.put("PartyAcctgPrefAndGroup", fields);
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param baseCurrencyUomId the baseCurrencyUomId to set
      */
-    private void setBaseCurrencyUomId(String baseCurrencyUomId) {
+    public void setBaseCurrencyUomId(String baseCurrencyUomId) {
         this.baseCurrencyUomId = baseCurrencyUomId;
     }
     /**
      * Auto generated value setter.
      * @param groupName the groupName to set
      */
-    private void setGroupName(String groupName) {
+    public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
 

@@ -180,105 +180,105 @@ fieldMapColumns.put("ExampleStatusDetail", fields);
      * Auto generated value setter.
      * @param currentStatusId the currentStatusId to set
      */
-    private void setCurrentStatusId(String currentStatusId) {
+    public void setCurrentStatusId(String currentStatusId) {
         this.currentStatusId = currentStatusId;
     }
     /**
      * Auto generated value setter.
      * @param statusDelay the statusDelay to set
      */
-    private void setStatusDelay(Timestamp statusDelay) {
+    public void setStatusDelay(Timestamp statusDelay) {
         this.statusDelay = statusDelay;
     }
     /**
      * Auto generated value setter.
      * @param exampleId the exampleId to set
      */
-    private void setExampleId(String exampleId) {
+    public void setExampleId(String exampleId) {
         this.exampleId = exampleId;
     }
     /**
      * Auto generated value setter.
      * @param exampleTypeId the exampleTypeId to set
      */
-    private void setExampleTypeId(String exampleTypeId) {
+    public void setExampleTypeId(String exampleTypeId) {
         this.exampleTypeId = exampleTypeId;
     }
     /**
      * Auto generated value setter.
      * @param exampleName the exampleName to set
      */
-    private void setExampleName(String exampleName) {
+    public void setExampleName(String exampleName) {
         this.exampleName = exampleName;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param longDescription the longDescription to set
      */
-    private void setLongDescription(String longDescription) {
+    public void setLongDescription(String longDescription) {
         this.longDescription = longDescription;
     }
     /**
      * Auto generated value setter.
      * @param comments the comments to set
      */
-    private void setComments(String comments) {
+    public void setComments(String comments) {
         this.comments = comments;
     }
     /**
      * Auto generated value setter.
      * @param exampleSize the exampleSize to set
      */
-    private void setExampleSize(Long exampleSize) {
+    public void setExampleSize(Long exampleSize) {
         this.exampleSize = exampleSize;
     }
     /**
      * Auto generated value setter.
      * @param exampleDate the exampleDate to set
      */
-    private void setExampleDate(Timestamp exampleDate) {
+    public void setExampleDate(Timestamp exampleDate) {
         this.exampleDate = exampleDate;
     }
     /**
      * Auto generated value setter.
      * @param anotherDate the anotherDate to set
      */
-    private void setAnotherDate(Timestamp anotherDate) {
+    public void setAnotherDate(Timestamp anotherDate) {
         this.anotherDate = anotherDate;
     }
     /**
      * Auto generated value setter.
      * @param anotherText the anotherText to set
      */
-    private void setAnotherText(String anotherText) {
+    public void setAnotherText(String anotherText) {
         this.anotherText = anotherText;
     }
     /**
      * Auto generated value setter.
      * @param statusDate the statusDate to set
      */
-    private void setStatusDate(Timestamp statusDate) {
+    public void setStatusDate(Timestamp statusDate) {
         this.statusDate = statusDate;
     }
     /**
      * Auto generated value setter.
      * @param statusEndDate the statusEndDate to set
      */
-    private void setStatusEndDate(Timestamp statusEndDate) {
+    public void setStatusEndDate(Timestamp statusEndDate) {
         this.statusEndDate = statusEndDate;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
 

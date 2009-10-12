@@ -196,126 +196,126 @@ fieldMapColumns.put("PicklistAndBinAndItem", fields);
      * Auto generated value setter.
      * @param picklistId the picklistId to set
      */
-    private void setPicklistId(String picklistId) {
+    public void setPicklistId(String picklistId) {
         this.picklistId = picklistId;
     }
     /**
      * Auto generated value setter.
      * @param description the description to set
      */
-    private void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
      */
-    private void setFacilityId(String facilityId) {
+    public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
     /**
      * Auto generated value setter.
      * @param shipmentMethodTypeId the shipmentMethodTypeId to set
      */
-    private void setShipmentMethodTypeId(String shipmentMethodTypeId) {
+    public void setShipmentMethodTypeId(String shipmentMethodTypeId) {
         this.shipmentMethodTypeId = shipmentMethodTypeId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param picklistDate the picklistDate to set
      */
-    private void setPicklistDate(Timestamp picklistDate) {
+    public void setPicklistDate(Timestamp picklistDate) {
         this.picklistDate = picklistDate;
     }
     /**
      * Auto generated value setter.
      * @param createdByUserLogin the createdByUserLogin to set
      */
-    private void setCreatedByUserLogin(String createdByUserLogin) {
+    public void setCreatedByUserLogin(String createdByUserLogin) {
         this.createdByUserLogin = createdByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param lastModifiedByUserLogin the lastModifiedByUserLogin to set
      */
-    private void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
+    public void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
         this.lastModifiedByUserLogin = lastModifiedByUserLogin;
     }
     /**
      * Auto generated value setter.
      * @param picklistBinId the picklistBinId to set
      */
-    private void setPicklistBinId(String picklistBinId) {
+    public void setPicklistBinId(String picklistBinId) {
         this.picklistBinId = picklistBinId;
     }
     /**
      * Auto generated value setter.
      * @param binLocationNumber the binLocationNumber to set
      */
-    private void setBinLocationNumber(Long binLocationNumber) {
+    public void setBinLocationNumber(Long binLocationNumber) {
         this.binLocationNumber = binLocationNumber;
     }
     /**
      * Auto generated value setter.
      * @param primaryOrderId the primaryOrderId to set
      */
-    private void setPrimaryOrderId(String primaryOrderId) {
+    public void setPrimaryOrderId(String primaryOrderId) {
         this.primaryOrderId = primaryOrderId;
     }
     /**
      * Auto generated value setter.
      * @param primaryShipGroupSeqId the primaryShipGroupSeqId to set
      */
-    private void setPrimaryShipGroupSeqId(String primaryShipGroupSeqId) {
+    public void setPrimaryShipGroupSeqId(String primaryShipGroupSeqId) {
         this.primaryShipGroupSeqId = primaryShipGroupSeqId;
     }
     /**
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param orderItemSeqId the orderItemSeqId to set
      */
-    private void setOrderItemSeqId(String orderItemSeqId) {
+    public void setOrderItemSeqId(String orderItemSeqId) {
         this.orderItemSeqId = orderItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param shipGroupSeqId the shipGroupSeqId to set
      */
-    private void setShipGroupSeqId(String shipGroupSeqId) {
+    public void setShipGroupSeqId(String shipGroupSeqId) {
         this.shipGroupSeqId = shipGroupSeqId;
     }
     /**
      * Auto generated value setter.
      * @param inventoryItemId the inventoryItemId to set
      */
-    private void setInventoryItemId(String inventoryItemId) {
+    public void setInventoryItemId(String inventoryItemId) {
         this.inventoryItemId = inventoryItemId;
     }
     /**
      * Auto generated value setter.
      * @param itemStatusId the itemStatusId to set
      */
-    private void setItemStatusId(String itemStatusId) {
+    public void setItemStatusId(String itemStatusId) {
         this.itemStatusId = itemStatusId;
     }
     /**
      * Auto generated value setter.
      * @param quantity the quantity to set
      */
-    private void setQuantity(BigDecimal quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 

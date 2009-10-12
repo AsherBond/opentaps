@@ -141,42 +141,42 @@ fieldMapColumns.put("TrackingCodeOrderAndOrderHeader", fields);
      * Auto generated value setter.
      * @param orderId the orderId to set
      */
-    private void setOrderId(String orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     /**
      * Auto generated value setter.
      * @param trackingCodeId the trackingCodeId to set
      */
-    private void setTrackingCodeId(String trackingCodeId) {
+    public void setTrackingCodeId(String trackingCodeId) {
         this.trackingCodeId = trackingCodeId;
     }
     /**
      * Auto generated value setter.
      * @param siteId the siteId to set
      */
-    private void setSiteId(String siteId) {
+    public void setSiteId(String siteId) {
         this.siteId = siteId;
     }
     /**
      * Auto generated value setter.
      * @param hasExported the hasExported to set
      */
-    private void setHasExported(String hasExported) {
+    public void setHasExported(String hasExported) {
         this.hasExported = hasExported;
     }
     /**
      * Auto generated value setter.
      * @param affiliateReferredTimeStamp the affiliateReferredTimeStamp to set
      */
-    private void setAffiliateReferredTimeStamp(Timestamp affiliateReferredTimeStamp) {
+    public void setAffiliateReferredTimeStamp(Timestamp affiliateReferredTimeStamp) {
         this.affiliateReferredTimeStamp = affiliateReferredTimeStamp;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
 

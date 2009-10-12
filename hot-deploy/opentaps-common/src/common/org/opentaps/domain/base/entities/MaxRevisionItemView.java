@@ -123,28 +123,28 @@ fieldMapColumns.put("MaxRevisionItemView", fields);
      * Auto generated value setter.
      * @param rootRevisionContentId the rootRevisionContentId to set
      */
-    private void setRootRevisionContentId(String rootRevisionContentId) {
+    public void setRootRevisionContentId(String rootRevisionContentId) {
         this.rootRevisionContentId = rootRevisionContentId;
     }
     /**
      * Auto generated value setter.
      * @param itemContentId the itemContentId to set
      */
-    private void setItemContentId(String itemContentId) {
+    public void setItemContentId(String itemContentId) {
         this.itemContentId = itemContentId;
     }
     /**
      * Auto generated value setter.
      * @param contentRevisionSeqId the contentRevisionSeqId to set
      */
-    private void setContentRevisionSeqId(String contentRevisionSeqId) {
+    public void setContentRevisionSeqId(String contentRevisionSeqId) {
         this.contentRevisionSeqId = contentRevisionSeqId;
     }
     /**
      * Auto generated value setter.
      * @param maxRevisionSeqId the maxRevisionSeqId to set
      */
-    private void setMaxRevisionSeqId(String maxRevisionSeqId) {
+    public void setMaxRevisionSeqId(String maxRevisionSeqId) {
         this.maxRevisionSeqId = maxRevisionSeqId;
     }
 

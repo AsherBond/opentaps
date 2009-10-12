@@ -25,8 +25,10 @@ import java.util.TimeZone;
 
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
@@ -64,19 +66,19 @@ public final class OpportunitiesServices {
         String leadPartyId = (String) context.get("leadPartyId");
 
         // if internal not supplied, then make sure either an account or lead is supplied, but not both
-        if (internalPartyId == null && ((accountPartyId == null && leadPartyId == null) || (accountPartyId != null && leadPartyId != null))) {
+        if (UtilValidate.isEmpty(internalPartyId) && ((UtilValidate.isEmpty(accountPartyId) && UtilValidate.isEmpty(leadPartyId)) || (UtilValidate.isNotEmpty(accountPartyId) && UtilValidate.isNotEmpty(leadPartyId)))) {
             return UtilMessage.createAndLogServiceError("Please specify an account or a lead (not both).", "CrmErrorCreateOpportunityFail", locale, MODULE);
         }
 
         // track which partyId we're using, the account or the lead
         String partyId = null;
-        if (accountPartyId != null) {
+        if (UtilValidate.isNotEmpty(accountPartyId)) {
             partyId = accountPartyId;
         }
-        if (leadPartyId != null) {
+        if (UtilValidate.isNotEmpty(leadPartyId)) {
             partyId = leadPartyId;
         }
-        if (internalPartyId != null) {
+        if (UtilValidate.isNotEmpty(internalPartyId)) {
             partyId = internalPartyId;
         }
 
@@ -87,7 +89,7 @@ public final class OpportunitiesServices {
 
         try {
             // set the accountPartyId or leadPartyId according to the role of internalPartyId
-            if (internalPartyId != null) {
+            if (UtilValidate.isNotEmpty(internalPartyId)) {
                 String roleTypeId = PartyHelper.getFirstValidInternalPartyRoleTypeId(internalPartyId, delegator);
                 if ("ACCOUNT".equals(roleTypeId)) {
                     accountPartyId = internalPartyId;
@@ -98,7 +100,7 @@ public final class OpportunitiesServices {
             }
 
             // make sure the lead is qualified if we're doing initial lead
-            if (leadPartyId != null) {
+            if (UtilValidate.isNotEmpty(leadPartyId)) {
                 GenericValue party = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", leadPartyId));
                 if (party == null) {
                     return UtilMessage.createAndLogServiceError("CrmErrorLeadNotFound", UtilMisc.toMap("leadPartyId", leadPartyId), locale, MODULE);
@@ -133,7 +135,7 @@ public final class OpportunitiesServices {
             UtilOpportunity.createSalesOpportunityHistory(opportunity, delegator, context);
 
             // assign the initial account
-            if (accountPartyId != null) {
+            if (UtilValidate.isNotEmpty(accountPartyId)) {
                 Map<String, Object> serviceResults = dispatcher.runSync("crmsfa.assignOpportunityToAccount",
                         UtilMisc.toMap("salesOpportunityId", salesOpportunityId, "accountPartyId", accountPartyId, "userLogin", userLogin));
                 if (ServiceUtil.isError(serviceResults)) {
@@ -142,7 +144,7 @@ public final class OpportunitiesServices {
             }
 
             // assign the initial lead
-            if (leadPartyId != null) {
+            if (UtilValidate.isNotEmpty(leadPartyId)) {
                 Map<String, Object> serviceResults = dispatcher.runSync("crmsfa.assignOpportunityToLead",
                         UtilMisc.toMap("salesOpportunityId", salesOpportunityId, "leadPartyId", leadPartyId, "userLogin", userLogin));
                 if (ServiceUtil.isError(serviceResults)) {
@@ -151,7 +153,7 @@ public final class OpportunitiesServices {
             }
 
             // assign the initial contact, but only if account was specified
-            if (contactPartyId != null && accountPartyId != null) {
+            if (UtilValidate.isNotEmpty(contactPartyId) && UtilValidate.isNotEmpty(accountPartyId)) {
                 Map<String, Object> serviceResults = dispatcher.runSync("crmsfa.addContactToOpportunity",
                         UtilMisc.toMap("salesOpportunityId", salesOpportunityId, "contactPartyId", contactPartyId, "userLogin", userLogin));
                 if (ServiceUtil.isError(serviceResults)) {

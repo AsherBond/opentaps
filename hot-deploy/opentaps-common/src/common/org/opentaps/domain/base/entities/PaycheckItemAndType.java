@@ -141,42 +141,42 @@ fieldMapColumns.put("PaycheckItemAndType", fields);
      * Auto generated value setter.
      * @param paymentId the paymentId to set
      */
-    private void setPaymentId(String paymentId) {
+    public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
     }
     /**
      * Auto generated value setter.
      * @param paycheckItemSeqId the paycheckItemSeqId to set
      */
-    private void setPaycheckItemSeqId(String paycheckItemSeqId) {
+    public void setPaycheckItemSeqId(String paycheckItemSeqId) {
         this.paycheckItemSeqId = paycheckItemSeqId;
     }
     /**
      * Auto generated value setter.
      * @param paycheckItemTypeId the paycheckItemTypeId to set
      */
-    private void setPaycheckItemTypeId(String paycheckItemTypeId) {
+    public void setPaycheckItemTypeId(String paycheckItemTypeId) {
         this.paycheckItemTypeId = paycheckItemTypeId;
     }
     /**
      * Auto generated value setter.
      * @param paycheckItemClassId the paycheckItemClassId to set
      */
-    private void setPaycheckItemClassId(String paycheckItemClassId) {
+    public void setPaycheckItemClassId(String paycheckItemClassId) {
         this.paycheckItemClassId = paycheckItemClassId;
     }
     /**
      * Auto generated value setter.
      * @param amount the amount to set
      */
-    private void setAmount(BigDecimal amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(String partyId) {
+    public void setPartyId(String partyId) {
         this.partyId = partyId;
     }
 

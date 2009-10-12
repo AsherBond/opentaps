@@ -146,49 +146,49 @@ fieldMapColumns.put("CustRequestAndAddress", fields);
      * Auto generated value setter.
      * @param custRequestId the custRequestId to set
      */
-    private void setCustRequestId(String custRequestId) {
+    public void setCustRequestId(String custRequestId) {
         this.custRequestId = custRequestId;
     }
     /**
      * Auto generated value setter.
      * @param custRequestTypeId the custRequestTypeId to set
      */
-    private void setCustRequestTypeId(String custRequestTypeId) {
+    public void setCustRequestTypeId(String custRequestTypeId) {
         this.custRequestTypeId = custRequestTypeId;
     }
     /**
      * Auto generated value setter.
      * @param custRequestDate the custRequestDate to set
      */
-    private void setCustRequestDate(Timestamp custRequestDate) {
+    public void setCustRequestDate(Timestamp custRequestDate) {
         this.custRequestDate = custRequestDate;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param fromPartyId the fromPartyId to set
      */
-    private void setFromPartyId(String fromPartyId) {
+    public void setFromPartyId(String fromPartyId) {
         this.fromPartyId = fromPartyId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
-    private void setContactMechId(String contactMechId) {
+    public void setContactMechId(String contactMechId) {
         this.contactMechId = contactMechId;
     }
     /**
      * Auto generated value setter.
      * @param countryGeoId the countryGeoId to set
      */
-    private void setCountryGeoId(String countryGeoId) {
+    public void setCountryGeoId(String countryGeoId) {
         this.countryGeoId = countryGeoId;
     }
 

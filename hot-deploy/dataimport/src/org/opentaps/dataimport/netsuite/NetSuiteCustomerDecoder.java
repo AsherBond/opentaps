@@ -171,7 +171,7 @@ public class NetSuiteCustomerDecoder extends CustomerDecoder {
         // make the customer tax exempt in the customer's state using resalenumber as the tax ID
         // TODO: make the geo lookup more robust, such as the one in the address decoder (state might be in Canada or Australia for instance)
         String resaleNumber = entry.getString("resalenumber");
-        String state = entry.getString("state");
+        String state = entry.getString("stateProvince");
         if (resaleNumber != null) {
             if (resaleNumber.length() > 20) throw new IllegalArgumentException("Customer ["+partyId+"] has resale number longer than 20 characters.  Cannot fit this into tax information.");
             if (state == null) throw new IllegalArgumentException("Cannot create tax info:  Customer ["+partyId+"] is tax exempt, but the customer's state is unknown.");

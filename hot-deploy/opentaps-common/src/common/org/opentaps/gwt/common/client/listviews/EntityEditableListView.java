@@ -222,6 +222,11 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
 
         setSelectionModel(selectionModel);
         setClicksToEdit(1);
+
+        setLoadMask(true);
+        // note: for some reason setLoadMask(String message) does not work, the underlying code is actually doing something wrong
+        // so we use this instead and reset the default CSS class
+        setLoadMask(UtilUi.MSG.loading(), "x-mask-loading");
     }
 
     /**
@@ -970,7 +975,8 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
 
     protected ColumnModel makeColumnModel() {
         ColumnModel model = new ColumnModel(columnConfigs.toArray(new ColumnConfig[columnConfigs.size()]));
-        model.setDefaultSortable(false);
+        // allow sort by default on ready only grids (as it wont conflict with cell editors)
+        model.setDefaultSortable(!editable);
         return model;
     }
 

@@ -120,21 +120,21 @@ fieldMapColumns.put("MarketingCampaignAndVisit", fields);
      * Auto generated value setter.
      * @param marketingCampaignId the marketingCampaignId to set
      */
-    private void setMarketingCampaignId(String marketingCampaignId) {
+    public void setMarketingCampaignId(String marketingCampaignId) {
         this.marketingCampaignId = marketingCampaignId;
     }
     /**
      * Auto generated value setter.
      * @param visitId the visitId to set
      */
-    private void setVisitId(Long visitId) {
+    public void setVisitId(Long visitId) {
         this.visitId = visitId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
 

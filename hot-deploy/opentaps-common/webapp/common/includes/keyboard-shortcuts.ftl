@@ -22,7 +22,7 @@
 /*<![CDATA[*/
 
   <#list keyboardShortcuts as kb>
-    ${kb.handler}('${StringUtil.wrapString(kb.shortcut)}', '${StringUtil.wrapString(kb.actionTarget)}');
+    ${kb.shortcutHandler}('${StringUtil.wrapString(kb.shortcut)}', '${StringUtil.wrapString(kb.actionTarget)}');
   </#list>
 
     dojo.require("dijit.form.Button");
@@ -42,18 +42,18 @@
       <#list keyboardShortcuts as kb>
         <#if kb.screenName?has_content>
           <#if thisScreenOnly == 0>
-            <tr><td colspan="2">Specific to this page</td></tr>
+            <tr class="shortcutGroup"><td colspan="2">${uiLabelMap.OpentapsKeyboardShortcutsSpecificToPage}</td></tr>
           </#if>
           <#assign thisScreenOnly = thisScreenOnly + 1 />
         <#else>
           <#if kb.applicationName?has_content>
             <#if thisAppOnly == 0>
-              <tr><td colspan="2">Specific to this application:</td></tr>
+              <tr class="shortcutGroup"><td colspan="2">${uiLabelMap.OpentapsKeyboardShortcutsSpecificToApp}</td></tr>
             </#if>
             <#assign thisAppOnly = thisAppOnly + 1 />
           <#else>
             <#if globalShortcut == 0>
-              <tr><td colspan="2">Global</td></tr>
+              <tr class="shortcutGroup"><td colspan="2">${uiLabelMap.OpentapsKeyboardShortcutsGlobal}</td></tr>
             </#if>
             <#assign globalShortcut = globalShortcut + 1 />
           </#if>

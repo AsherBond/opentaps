@@ -145,56 +145,56 @@ fieldMapColumns.put("ContactListPartyCount", fields);
      * Auto generated value setter.
      * @param contactListId the contactListId to set
      */
-    private void setContactListId(String contactListId) {
+    public void setContactListId(String contactListId) {
         this.contactListId = contactListId;
     }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
      */
-    private void setPartyId(Long partyId) {
+    public void setPartyId(Long partyId) {
         this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
      * @param contactMechFromDate the contactMechFromDate to set
      */
-    private void setContactMechFromDate(Timestamp contactMechFromDate) {
+    public void setContactMechFromDate(Timestamp contactMechFromDate) {
         this.contactMechFromDate = contactMechFromDate;
     }
     /**
      * Auto generated value setter.
      * @param contactMechThruDate the contactMechThruDate to set
      */
-    private void setContactMechThruDate(Timestamp contactMechThruDate) {
+    public void setContactMechThruDate(Timestamp contactMechThruDate) {
         this.contactMechThruDate = contactMechThruDate;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param countryGeoId the countryGeoId to set
      */
-    private void setCountryGeoId(String countryGeoId) {
+    public void setCountryGeoId(String countryGeoId) {
         this.countryGeoId = countryGeoId;
     }
     /**
      * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
-    private void setFromDate(Timestamp fromDate) {
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
     }
     /**
      * Auto generated value setter.
      * @param thruDate the thruDate to set
      */
-    private void setThruDate(Timestamp thruDate) {
+    public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
 

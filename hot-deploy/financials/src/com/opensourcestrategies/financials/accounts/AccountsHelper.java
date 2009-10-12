@@ -56,9 +56,9 @@ public class AccountsHelper {
     protected static final BigDecimal ZERO = new BigDecimal("0"); // TODO: this will soon be UtilNumber.BD_ZERO
 
     // what gl accounts to use for the customer, vendor and commission statements and balances reports
-    public static final List CUSTOMER_RECEIVABLE_ACCTS = UtilMisc.toList("ACCOUNTS_RECEIVABLE", "CUSTOMER_CREDIT", "CUSTOMER_DEPOSIT", "INTRSTINC_RECEIVABLE");
-    public static final List VENDOR_PAYABLE_ACCTS = UtilMisc.toList("ACCOUNTS_PAYABLE", "PREPAID_EXPENSES");
-    public static final List COMMISSION_PAYABLE_ACCTS = UtilMisc.toList("COMMISSIONS_PAYABLE");
+    public static final List<String> CUSTOMER_RECEIVABLE_ACCTS = UtilMisc.toList("ACCOUNTS_RECEIVABLE", "CUSTOMER_CREDIT", "CUSTOMER_DEPOSIT", "INTRSTINC_RECEIVABLE");
+    public static final List<String> VENDOR_PAYABLE_ACCTS = UtilMisc.toList("ACCOUNTS_PAYABLE", "PREPAID_EXPENSES");
+    public static final List<String> COMMISSION_PAYABLE_ACCTS = UtilMisc.toList("COMMISSIONS_PAYABLE");
 
     /**
      * Find the sum of transaction entry amounts by partyId for the given parameters.
@@ -124,15 +124,20 @@ public class AccountsHelper {
     }
 
     /**
-     * Canonical method to get transaction balances by glAccountTypeid.
+     * Canonical method to get transaction balances by glAccountTypeId.
      * Use one of the helper methods defined after this method.
      *
-     * @param   glAccountTypeIds Kust if Account types to sum over. this determines the sign of the resulting balance.
+     * @param   glAccountTypeIds Account types to sum over. this determines the sign of the resulting balance.
      *                          For instance, in the case of receivables (incoming), sum of all debit - sum of all credit.
      *                          In the case of payables (outgoing),  sum of all credit - sum of all debit.
+     * @param   organizationPartyId the organization party ID
      * @param   partyId         If specified, limit the search result to the given partyId
+     * @param   roleTypeId
      * @param   glFiscalTypeId
      * @param   asOfDateTime    Timestamp to sum up to. TODO: investigate the boundary conditions
+     * @param   delegator       a <code>GenericDelegator</code> instance
+     * @return a <code>Map</code> of partyId -> balance amount
+     * @throws  GenericEntityException if an error occurs
      */
     public static Map<String, BigDecimal> getBalancesHelper(List<String> glAccountTypeIds, String organizationPartyId, String partyId, String roleTypeId, String glFiscalTypeId,
             Timestamp asOfDateTime, GenericDelegator delegator) throws GenericEntityException {
@@ -191,17 +196,17 @@ public class AccountsHelper {
     }
 
     /** Gets ACCOUNTS_RECEIVABLE balances for all customers in an organizatoin up to the asOfDateTime. Returns a Map of partyId keys to BigDecimal balance values */
-    public static Map getBalancesForAllCustomers(String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator) throws GenericEntityException {
+    public static Map<String, BigDecimal> getBalancesForAllCustomers(String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator) throws GenericEntityException {
         return getBalancesHelper(CUSTOMER_RECEIVABLE_ACCTS, organizationPartyId, null, "BILL_TO_CUSTOMER", glFiscalTypeId, asOfDateTime, delegator);
     }
 
     /** Gets ACCOUNTS_PAYABLE balances for all vendors in an organizatoin up to the asOfDateTime. Returns a Map of partyId keys to BigDecimal balance values */
-    public static Map getBalancesForAllVendors(String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator) throws GenericEntityException {
+    public static Map<String, BigDecimal> getBalancesForAllVendors(String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator) throws GenericEntityException {
         return getBalancesHelper(VENDOR_PAYABLE_ACCTS, organizationPartyId, null, "BILL_FROM_VENDOR", glFiscalTypeId, asOfDateTime, delegator);
     }
 
     /** Gets COMMISSIONS_PAYABLE balances for all sales rep in an organizatoin up to the asOfDateTime. Returns a Map of partyId keys to BigDecimal balance values */
-    public static Map getBalancesForAllCommissions(String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator) throws GenericEntityException {
+    public static Map<String, BigDecimal> getBalancesForAllCommissions(String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator) throws GenericEntityException {
         return getBalancesHelper(COMMISSION_PAYABLE_ACCTS, organizationPartyId, null, "SALES_REP", glFiscalTypeId, asOfDateTime, delegator);
     }
 

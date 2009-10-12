@@ -134,42 +134,42 @@ fieldMapColumns.put("PartyNoteView", fields);
      * Auto generated value setter.
      * @param targetPartyId the targetPartyId to set
      */
-    private void setTargetPartyId(String targetPartyId) {
+    public void setTargetPartyId(String targetPartyId) {
         this.targetPartyId = targetPartyId;
     }
     /**
      * Auto generated value setter.
      * @param noteId the noteId to set
      */
-    private void setNoteId(String noteId) {
+    public void setNoteId(String noteId) {
         this.noteId = noteId;
     }
     /**
      * Auto generated value setter.
      * @param noteName the noteName to set
      */
-    private void setNoteName(String noteName) {
+    public void setNoteName(String noteName) {
         this.noteName = noteName;
     }
     /**
      * Auto generated value setter.
      * @param noteInfo the noteInfo to set
      */
-    private void setNoteInfo(String noteInfo) {
+    public void setNoteInfo(String noteInfo) {
         this.noteInfo = noteInfo;
     }
     /**
      * Auto generated value setter.
      * @param noteDateTime the noteDateTime to set
      */
-    private void setNoteDateTime(Timestamp noteDateTime) {
+    public void setNoteDateTime(Timestamp noteDateTime) {
         this.noteDateTime = noteDateTime;
     }
     /**
      * Auto generated value setter.
      * @param noteParty the noteParty to set
      */
-    private void setNoteParty(String noteParty) {
+    public void setNoteParty(String noteParty) {
         this.noteParty = noteParty;
     }
 

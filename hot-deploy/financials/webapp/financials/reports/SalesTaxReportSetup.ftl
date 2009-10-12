@@ -27,8 +27,8 @@
         <table class="twoColumnForm">
             <@inputHidden name="organizationPartyId" value="${parameters.organizationPartyId}"/>
             <@inputHidden name="reportPath" value="${reportPath}"/>
-            <@inputDateTimeRow name="fromDate" form="SalesTaxReportSetupForm" title="${uiLabelMap.CommonFromDate}" default=thirtyDaysAgo?if_exists/>
-            <@inputDateTimeRow name="thruDate" form="SalesTaxReportSetupForm" title="${uiLabelMap.CommonThruDate}" default=today?if_exists/>
+            <@inputDateRow name="fromDate" form="SalesTaxReportSetupForm" title="${uiLabelMap.CommonFromDate}" default=thirtyDaysAgo?if_exists/>
+            <@inputDateRow name="thruDate" form="SalesTaxReportSetupForm" title="${uiLabelMap.CommonThruDate}" default=today?if_exists/>
             <@inputCurrencySelectRow name="currencyUomId" title=uiLabelMap.CommonCurrency defaultCurrencyUomId=parameters.orgCurrencyUomId />            
             <tr><td colspan="2">&nbsp;</td></tr>
             <@inputSelectRow name="reportType" title="${uiLabelMap.OpentapsReportFormat}" list=reportTypes?default([]) key="mimeTypeId" ; mimeType>

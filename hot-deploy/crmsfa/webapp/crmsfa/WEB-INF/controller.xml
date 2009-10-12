@@ -697,6 +697,12 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>
+    <request-map uri="gwtQuickNewOpportunity">
+        <security https="true" auth="true"/>
+        <event type="gwtservice" invoke="crmsfa.createOpportunity"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>    
     <!-- AJAX request for quick creation of Leads -->
     <request-map uri="createContactJSON">
         <security https="true" auth="true"/>
@@ -3100,6 +3106,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <view-map name="addContentUrlForQuote" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#addContentUrlForQuote"/>
     <view-map name="uploadContentForQuote" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#uploadContentForQuote"/>
     <view-map name="updateContentForQuote" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#updateContentForQuote"/>
+
+    <!-- reports screens -->
+    <view-map name="manageReports" type="screen" page="component://crmsfa/widget/crmsfa/screens/reports/ReportScreens.xml#manageReports"/>
 
     <!-- lookup screens -->
     <view-map name="LookupClients" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/LookupScreens.xml#LookupClients"/>

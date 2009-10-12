@@ -119,21 +119,21 @@ fieldMapColumns.put("CommunicationEventSum", fields);
      * Auto generated value setter.
      * @param communicationEventId the communicationEventId to set
      */
-    private void setCommunicationEventId(Long communicationEventId) {
+    public void setCommunicationEventId(Long communicationEventId) {
         this.communicationEventId = communicationEventId;
     }
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
      */
-    private void setStatusId(String statusId) {
+    public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
      * @param partyIdTo the partyIdTo to set
      */
-    private void setPartyIdTo(String partyIdTo) {
+    public void setPartyIdTo(String partyIdTo) {
         this.partyIdTo = partyIdTo;
     }
 

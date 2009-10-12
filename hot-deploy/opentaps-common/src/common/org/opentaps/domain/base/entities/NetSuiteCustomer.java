@@ -97,7 +97,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("resalenumber", "RESALENUMBER");
         fields.put("salesRepId", "SALES_REP_ID");
         fields.put("salesTerritoryId", "SALES_TERRITORY_ID");
-        fields.put("state", "STATE");
+        fields.put("stateProvince", "STATE_PROVINCE");
         fields.put("country", "COUNTRY");
         fields.put("statusId", "STATUS_ID");
         fields.put("statusProbability", "STATUS_PROBABILITY");
@@ -164,7 +164,7 @@ fieldMapColumns.put("NetSuiteCustomer", fields);
     resalenumber("resalenumber"),
     salesRepId("salesRepId"),
     salesTerritoryId("salesTerritoryId"),
-    state("state"),
+    stateProvince("stateProvince"),
     country("country"),
     statusId("statusId"),
     statusProbability("statusProbability"),
@@ -284,8 +284,8 @@ fieldMapColumns.put("NetSuiteCustomer", fields);
    private String salesRepId;
    @Column(name="SALES_TERRITORY_ID")
    private String salesTerritoryId;
-   @Column(name="STATE")
-   private String state;
+   @Column(name="STATE_PROVINCE")
+   private String stateProvince;
    @Column(name="COUNTRY")
    private String country;
    @Column(name="STATUS_ID")
@@ -338,7 +338,7 @@ fieldMapColumns.put("NetSuiteCustomer", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("customerId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("customerId");this.allFieldsNames.add("customerTypeId");this.allFieldsNames.add("accountnumber");this.allFieldsNames.add("email");this.allFieldsNames.add("altemail");this.allFieldsNames.add("phone");this.allFieldsNames.add("homePhone");this.allFieldsNames.add("mobilePhone");this.allFieldsNames.add("altphone");this.allFieldsNames.add("fax");this.allFieldsNames.add("category_0");this.allFieldsNames.add("comments");this.allFieldsNames.add("companyName");this.allFieldsNames.add("creditlimit");this.allFieldsNames.add("currencyId");this.allFieldsNames.add("expectedClose");this.allFieldsNames.add("projectedEnd");this.allFieldsNames.add("firstName");this.allFieldsNames.add("middlename");this.allFieldsNames.add("lastName");this.allFieldsNames.add("salutation");this.allFieldsNames.add("fullName");this.allFieldsNames.add("customerName");this.allFieldsNames.add("isemailhtml");this.allFieldsNames.add("isemailpdf");this.allFieldsNames.add("isinactive");this.allFieldsNames.add("istaxable");this.allFieldsNames.add("isJob");this.allFieldsNames.add("isPerson");this.allFieldsNames.add("loginaccess");this.allFieldsNames.add("multiplePriceId");this.allFieldsNames.add("openbalance");this.allFieldsNames.add("costEstimate");this.allFieldsNames.add("amountComplete");this.allFieldsNames.add("parentId");this.allFieldsNames.add("partnerId");this.allFieldsNames.add("paymentTermsId");this.allFieldsNames.add("probability");this.allFieldsNames.add("reminderdays");this.allFieldsNames.add("renewal");this.allFieldsNames.add("resalenumber");this.allFieldsNames.add("salesRepId");this.allFieldsNames.add("salesTerritoryId");this.allFieldsNames.add("state");this.allFieldsNames.add("country");this.allFieldsNames.add("statusId");this.allFieldsNames.add("statusProbability");this.allFieldsNames.add("statusReadOnly");this.allFieldsNames.add("subsidiaryId");this.allFieldsNames.add("taxItemId");this.allFieldsNames.add("dealerAgreementReceived");this.allFieldsNames.add("creditApplicationReceived");this.allFieldsNames.add("internetApproved");this.allFieldsNames.add("dealerApprovedopen");this.allFieldsNames.add("customerWarehouseLocationId");this.allFieldsNames.add("importStatusId");this.allFieldsNames.add("importError");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("contactPartyId");this.allFieldsNames.add("accountPartyId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("customerId");this.allFieldsNames.add("customerTypeId");this.allFieldsNames.add("accountnumber");this.allFieldsNames.add("email");this.allFieldsNames.add("altemail");this.allFieldsNames.add("phone");this.allFieldsNames.add("homePhone");this.allFieldsNames.add("mobilePhone");this.allFieldsNames.add("altphone");this.allFieldsNames.add("fax");this.allFieldsNames.add("category_0");this.allFieldsNames.add("comments");this.allFieldsNames.add("companyName");this.allFieldsNames.add("creditlimit");this.allFieldsNames.add("currencyId");this.allFieldsNames.add("expectedClose");this.allFieldsNames.add("projectedEnd");this.allFieldsNames.add("firstName");this.allFieldsNames.add("middlename");this.allFieldsNames.add("lastName");this.allFieldsNames.add("salutation");this.allFieldsNames.add("fullName");this.allFieldsNames.add("customerName");this.allFieldsNames.add("isemailhtml");this.allFieldsNames.add("isemailpdf");this.allFieldsNames.add("isinactive");this.allFieldsNames.add("istaxable");this.allFieldsNames.add("isJob");this.allFieldsNames.add("isPerson");this.allFieldsNames.add("loginaccess");this.allFieldsNames.add("multiplePriceId");this.allFieldsNames.add("openbalance");this.allFieldsNames.add("costEstimate");this.allFieldsNames.add("amountComplete");this.allFieldsNames.add("parentId");this.allFieldsNames.add("partnerId");this.allFieldsNames.add("paymentTermsId");this.allFieldsNames.add("probability");this.allFieldsNames.add("reminderdays");this.allFieldsNames.add("renewal");this.allFieldsNames.add("resalenumber");this.allFieldsNames.add("salesRepId");this.allFieldsNames.add("salesTerritoryId");this.allFieldsNames.add("stateProvince");this.allFieldsNames.add("country");this.allFieldsNames.add("statusId");this.allFieldsNames.add("statusProbability");this.allFieldsNames.add("statusReadOnly");this.allFieldsNames.add("subsidiaryId");this.allFieldsNames.add("taxItemId");this.allFieldsNames.add("dealerAgreementReceived");this.allFieldsNames.add("creditApplicationReceived");this.allFieldsNames.add("internetApproved");this.allFieldsNames.add("dealerApprovedopen");this.allFieldsNames.add("customerWarehouseLocationId");this.allFieldsNames.add("importStatusId");this.allFieldsNames.add("importError");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("contactPartyId");this.allFieldsNames.add("accountPartyId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -656,10 +656,10 @@ fieldMapColumns.put("NetSuiteCustomer", fields);
     }
     /**
      * Auto generated value setter.
-     * @param state the state to set
+     * @param stateProvince the stateProvince to set
      */
-    public void setState(String state) {
-        this.state = state;
+    public void setStateProvince(String stateProvince) {
+        this.stateProvince = stateProvince;
     }
     /**
      * Auto generated value setter.
@@ -1107,8 +1107,8 @@ fieldMapColumns.put("NetSuiteCustomer", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getState() {
-        return this.state;
+    public String getStateProvince() {
+        return this.stateProvince;
     }
     /**
      * Auto generated value accessor.
@@ -1301,7 +1301,7 @@ fieldMapColumns.put("NetSuiteCustomer", fields);
         setResalenumber((String) mapValue.get("resalenumber"));
         setSalesRepId((String) mapValue.get("salesRepId"));
         setSalesTerritoryId((String) mapValue.get("salesTerritoryId"));
-        setState((String) mapValue.get("state"));
+        setStateProvince((String) mapValue.get("stateProvince"));
         setCountry((String) mapValue.get("country"));
         setStatusId((String) mapValue.get("statusId"));
         setStatusProbability(convertToBigDecimal(mapValue.get("statusProbability")));
@@ -1372,7 +1372,7 @@ fieldMapColumns.put("NetSuiteCustomer", fields);
         mapValue.put("resalenumber", getResalenumber());
         mapValue.put("salesRepId", getSalesRepId());
         mapValue.put("salesTerritoryId", getSalesTerritoryId());
-        mapValue.put("state", getState());
+        mapValue.put("stateProvince", getStateProvince());
         mapValue.put("country", getCountry());
         mapValue.put("statusId", getStatusId());
         mapValue.put("statusProbability", getStatusProbability());

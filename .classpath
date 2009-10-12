@@ -179,7 +179,7 @@
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/hibernate/hibernate-search-3.1.0.GA.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/gwt-log-2.6.0.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/gwt-math-2.0.3.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/gwt-user-1.6.4.jar"/>
+	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/gwt-user-1.7.0.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/gwtext.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/gwtextux.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/jfreechart-1.0.6.jar"/>
