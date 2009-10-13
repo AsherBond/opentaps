@@ -100,6 +100,7 @@ r13032 Upgraded lucene from 2.2 to 2.4 needed for hibernate search.
 
 applications/accounting/ofbiz-component.xml
 r13042 commented out secas_ledger.xml
+r13609 commented out seed and demo data which duplicate the ones in financials. To maintain backward compatibility, we are using the same accounting type data from older versions of ofbiz/opentaps.
 
 applications/party/script/org/ofbiz/party/contact/PartyContactMechServices.xml
 r13048 fix the createPartyContactMech service to return the contact mech id if it reuses an existing contact mech
