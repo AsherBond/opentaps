@@ -50,20 +50,22 @@
 </#if>
 
 
-<#if hasUpdatePermission>
-  
 <script type="text/javascript">
 /*<![CDATA[*/
 function notifyInvoiceItemsCount(n) {
+<#if hasUpdatePermission>
   var button = document.getElementById('markAsReadyButton');
   if (n > 0) {
     button.style.visibility = 'visible';
   } else {
     button.style.visibility = 'hidden';
   }
+</#if>
 }
 /*]]>*/
 </script>
+
+<#if hasUpdatePermission>
 
   <@form name="markInvoiceReadyAction" url="setInvoiceReady" invoiceId=invoice.invoiceId />
   <@form name="cancelInvoiceReadyAction" url="setInvoiceStatus" invoiceId=invoice.invoiceId statusId="INVOICE_CANCELLED" />
