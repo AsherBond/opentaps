@@ -107,6 +107,10 @@
     <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="PARTYMGR_ADMIN"/>
     <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="ACCTG_ATX_ADMIN"/>
     <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="ACCTG_PREF_ADMIN"/>
+    <!-- amazing but true: to store an email into WorkEffort you now need WORKEFFORTMGR_ROLE and an ASSETMAINT permission -->
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="WORKEFFORTMGR_ROLE_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="ASSETMAINT_UPDATE"/>
+
 
     <!-- Special AR, AP, Transactions roles.  ACCOUNTING_ADMIN is required for now due to coarse nature OFBIZ permissions but will be removed once we have financials screens for invoices, etc.
     OFBTOOLS_VIEW is required to access any OFBIZ backend app including ACCOUNTING.  Not sure if we want to require this for Financials as well or not but including for now to work with Accounting -->
@@ -120,6 +124,8 @@
     <SecurityGroupPermission groupId="FINANCIALS_AR" permissionId="PAY_INFO_UPDATE"/> <!-- required to update payments in OFBIZ --> 
     <SecurityGroupPermission groupId="FINANCIALS_AR" permissionId="ORDERMGR_UPDATE"/>     <!-- Needed for invoicing performed services -->   
     <SecurityGroupPermission groupId="FINANCIALS_AR" permissionId="PARTYMGR_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR" permissionId="WORKEFFORTMGR_ROLE_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR" permissionId="ASSETMAINT_UPDATE"/>
 
     <SecurityGroup groupId="FINANCIALS_AP" description="Financials Accounts Payables handling permission"/> 
     <SecurityGroupPermission groupId="FINANCIALS_AP" permissionId="FINANCIALS_VIEW"/>
@@ -130,6 +136,8 @@
     <SecurityGroupPermission groupId="FINANCIALS_AP" permissionId="PAY_INFO_CREATE"/> <!-- required to create payments in OFBIZ -->
     <SecurityGroupPermission groupId="FINANCIALS_AP" permissionId="PAY_INFO_UPDATE"/> <!-- required to update payments in OFBIZ -->    
     <SecurityGroupPermission groupId="FINANCIALS_AP" permissionId="PARTYMGR_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP" permissionId="WORKEFFORTMGR_ROLE_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP" permissionId="ASSETMAINT_UPDATE"/>
 
     <SecurityGroup groupId="FINANCIALS_TRANS" description="Financials Transactions creation, posting, and reconciliation permission"/>
     <SecurityGroupPermission groupId="FINANCIALS_TRANS" permissionId="FINANCIALS_VIEW"/>
@@ -137,6 +145,8 @@
     <SecurityGroupPermission groupId="FINANCIALS_TRANS" permissionId="FINANCIALS_REVERSE"/>
     <SecurityGroupPermission groupId="FINANCIALS_TRANS" permissionId="ACCOUNTING_ADMIN"/>
     <SecurityGroupPermission groupId="FINANCIALS_TRANS" permissionId="OFBTOOLS_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_TRANS" permissionId="WORKEFFORTMGR_ROLE_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_TRANS" permissionId="ASSETMAINT_UPDATE"/>
 
     <SecurityGroup groupId="FINANCIALS_AR_INV" description="Financials Accounts Receivables view/create/update invoices, view payments"/>
     <SecurityGroupPermission groupId="FINANCIALS_AR_INV" permissionId="FINANCIALS_VIEW"/>
@@ -148,6 +158,8 @@
     <SecurityGroupPermission groupId="FINANCIALS_AR_INV" permissionId="ACCOUNTING_ADMIN"/>
     <SecurityGroupPermission groupId="FINANCIALS_AR_INV" permissionId="ORDERMGR_UPDATE"/>     <!-- Needed for invoicing performed services -->
     <SecurityGroupPermission groupId="FINANCIALS_AR_INV" permissionId="PARTYMGR_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_INV" permissionId="WORKEFFORTMGR_ROLE_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_INV" permissionId="ASSETMAINT_UPDATE"/>
 
     <SecurityGroup groupId="FINANCIALS_AP_INV" description="Financials Accounts Payables view/create/update invoices, view payments"/>
     <SecurityGroupPermission groupId="FINANCIALS_AP_INV" permissionId="FINANCIALS_VIEW"/>
@@ -158,6 +170,8 @@
     <SecurityGroupPermission groupId="FINANCIALS_AP_INV" permissionId="FINANCIALS_AP_PVIEW"/>
     <SecurityGroupPermission groupId="FINANCIALS_AP_INV" permissionId="ACCOUNTING_ADMIN"/>
     <SecurityGroupPermission groupId="FINANCIALS_AP_INV" permissionId="PARTYMGR_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_INV" permissionId="WORKEFFORTMGR_ROLE_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_INV" permissionId="ASSETMAINT_UPDATE"/>
     
     <SecurityGroup groupId="FINANCIALS_AR_PMNT" description="Financials Accounts Receivables view/create/update/apply payments, view invoices"/>
     <SecurityGroupPermission groupId="FINANCIALS_AR_PMNT" permissionId="FINANCIALS_VIEW"/>
@@ -170,6 +184,8 @@
     <SecurityGroupPermission groupId="FINANCIALS_AR_PMNT" permissionId="ACCOUNTING_ADMIN"/>
     <SecurityGroupPermission groupId="FINANCIALS_AR_PMNT" permissionId="PAY_INFO_CREATE"/>
     <SecurityGroupPermission groupId="FINANCIALS_AR_PMNT" permissionId="PARTYMGR_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_PMNT" permissionId="WORKEFFORTMGR_ROLE_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_PMNT" permissionId="ASSETMAINT_UPDATE"/>
 
     <SecurityGroup groupId="FINANCIALS_AP_PMNT" description="Financials Accounts Payables view/create/update/apply payments, view invoices"/>
     <SecurityGroupPermission groupId="FINANCIALS_AP_PMNT" permissionId="FINANCIALS_VIEW"/>
@@ -182,6 +198,8 @@
     <SecurityGroupPermission groupId="FINANCIALS_AP_PMNT" permissionId="ACCOUNTING_ADMIN"/>
     <SecurityGroupPermission groupId="FINANCIALS_AP_PMNT" permissionId="PAY_INFO_CREATE"/>
     <SecurityGroupPermission groupId="FINANCIALS_AP_PMNT" permissionId="PARTYMGR_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_PMNT" permissionId="WORKEFFORTMGR_ROLE_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_PMNT" permissionId="ASSETMAINT_UPDATE"/>
 
     <!-- system must be financials admin for automated ledger postings to work -->
     <UserLoginSecurityGroup userLoginId="system" groupId="FINANCIALS_ADMIN" fromDate="2001-01-01 00:00:00"/>
