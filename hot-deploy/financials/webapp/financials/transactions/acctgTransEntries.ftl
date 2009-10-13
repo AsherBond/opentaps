@@ -64,6 +64,7 @@
       <#else/>
         <#-- otherwise allow inline editing and adding of new entries -->
         <#if acctgTransEntries?has_content>
+          <@form name="deleteAcctgTransEntryForm" url="deleteAcctgTransEntry" acctgTransId="" acctgTransEntrySeqId=""/>
           <form name="updateAcctgTransEntryForm" method="POST" action="<@ofbizUrl>updateAcctgTransEntryInline</@ofbizUrl>">
             <@inputHidden name="acctgTransId" value="${acctgTrans.acctgTransId}" />
             <@inputHiddenRowCount list=acctgTransEntries />
@@ -79,7 +80,7 @@
                 <@inputTextCell name="amount" default=entry.amount size="8" index=entry_index onChange="opentaps.markRowForSubmit(this.form, ${entry_index})" />
                 <td>
                   <@inputSubmitIndexed title="${uiLabelMap.CommonUpdate}" index=entry_index/>
-                  <@displayLink href="deleteAcctgTransEntry?acctgTransId=${entry.acctgTransId}&amp;acctgTransEntrySeqId=${entry.acctgTransEntrySeqId}" class="buttontext" text="${uiLabelMap.CommonRemove}"/>
+                  <@submitFormLink form="deleteAcctgTransEntryForm" text=uiLabelMap.CommonRemove class="smallSubmit" acctgTransId=entry.acctgTransId acctgTransEntrySeqId=entry.acctgTransEntrySeqId/>
                 </td>
               </tr>
               <#-- List possible tags in separate lines -->

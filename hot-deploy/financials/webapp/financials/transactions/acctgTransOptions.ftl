@@ -14,15 +14,23 @@
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
  *  
 -->
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 <#if acctgTrans?exists>
+    <@form name="postAcctgTransForm" url="postAcctgTrans" acctgTransId=acctgTrans.acctgTransId />
+    <@form name="reverseAcctgTransForm" url="reverseAcctgTrans" acctgTransId=acctgTrans.acctgTransId />
+    <@form name="deleteAcctgTransForm" url="deleteAcctgTrans" acctgTransId=acctgTrans.acctgTransId />
     <div class="screenlet-header">
         <div style="float: right;"><#t/>
             <#if accountingTransaction.isPosted()><#t/>
-                <a class="buttontext" href="reverseAcctgTrans?acctgTransId=${acctgTrans.acctgTransId}">${uiLabelMap.FinancialsReverseTransaction}</a><#t/>
+                <@submitFormLink form="reverseAcctgTransForm" text=uiLabelMap.FinancialsReverseTransaction class="buttontext" /><#t/>
             <#else><#t/>
                 <a class="buttontext" href="updateAcctgTransForm?acctgTransId=${acctgTrans.acctgTransId}">${uiLabelMap.CommonEdit}</a><#t/>
-                <#if canDeleteTrans><a class="buttontext" href="deleteAcctgTrans?acctgTransId=${acctgTrans.acctgTransId}">${uiLabelMap.CommonDelete}</a></#if><#t/>          
-                <#if accountingTransaction.canPost()><a class="buttontext" href="postAcctgTrans?acctgTransId=${acctgTrans.acctgTransId}">${uiLabelMap.AccountingPostTransaction}</a></#if><#t>
+                <#if canDeleteTrans>
+                  <@submitFormLink form="deleteAcctgTransForm" text=uiLabelMap.CommonDelete class="buttontext" />
+                </#if><#t/>          
+                <#if accountingTransaction.canPost()>
+                  <@submitFormLink form="postAcctgTransForm" text=uiLabelMap.AccountingPostTransaction class="buttontext" />
+                </#if><#t>
             </#if><#t/>
         </div><#t/>
         <div class="boxhead">
