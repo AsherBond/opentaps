@@ -14,8 +14,12 @@
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
  *  
 -->
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<div class="screenlet-header">
-  <div style="float: right;"><a class="buttontext" href="<@ofbizUrl>prepareBillingAccountCreditMemo?billingAccountId=${billingAccount.billingAccountId}&amp;organizationPartyId=${parameters.organizationPartyId}</@ofbizUrl>">${uiLabelMap.AccountingInvoicePDF}</a><a class="buttontext" href="<@ofbizUrl>payInvoiceWithBillingAccountForm?billingAccountId=${billingAccount.billingAccountId}</@ofbizUrl>">${uiLabelMap.FinancialsPayInvoice}</a></div>
-  <div class="boxhead">${uiLabelMap.FinancialsCustomerBillingAccount}</div>
+<#-- for the view PDF link -->
+<@form name="prepareBillingAccountCreditMemoAction" url="prepareBillingAccountCreditMemo" billingAccountId=billingAccount.billingAccountId organizationPartyId=parameters.organizationPartyId/>
+
+<div class="subSectionHeader">
+  <div class="subSectionTitle">${uiLabelMap.FinancialsCustomerBillingAccount} ${uiLabelMap.OrderNbr}${billingAccount.billingAccountId}</div>
+  <div class="subMenuBar"><@submitFormLink form="prepareBillingAccountCreditMemoAction" class="subMenuButton" text=uiLabelMap.AccountingInvoicePDF/><a class="subMenuButton" href="<@ofbizUrl>payInvoiceWithBillingAccountForm?billingAccountId=${billingAccount.billingAccountId}</@ofbizUrl>">${uiLabelMap.FinancialsPayInvoice}</a></div>
 </div>
