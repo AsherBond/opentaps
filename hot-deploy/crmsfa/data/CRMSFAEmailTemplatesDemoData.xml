@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<entity-engine-xml>
+
+  <!-- For the order entry store -->
+
+    <!-- Order Emails  -->
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_CONFIRM" fromAddress="ofbiztest@yahoo.com" bccAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#OrderConfirmNotice" 
+                              xslfoAttachScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#OrderConfirmNoticePdf"
+                              subject="Opentaps Demo - Order Confirmation #${orderId}"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_COMPLETE" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/widget/EmailOrderScreens.xml#OrderCompleteNotice"
+                              subject="Opentaps Demo - Your Order Is Complete #${orderId}"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_BACKORDER" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/widget/EmailOrderScreens.xml#BackorderNotice"
+                              subject="Opentaps Demo - Backorder Notification #${orderId}"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_CHANGE" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/widget/EmailOrderScreens.xml#OrderChangeNotice"
+                              subject="Opentaps Demo - Order Change Notification #${orderId}"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_PAYRETRY" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/widget/EmailOrderScreens.xml#PaymentRetryNotice" 
+                              subject="Opentaps Demo - Order Payment Notification #${orderId}"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_SHIP_COMPLT" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/widget/EmailOrderScreens.xml#ShipmentCompleteNotice"
+                              subject="Opentaps Demo - Shipment Complete Notification #${orderId}"/>
+
+    <!-- Return Emails  -->
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_RTN_ACCEPT" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://ecommerce/widget/EmailReturnScreens.xml#ReturnAccept" 
+                              subject="Opentaps Demo - Return Accepted #${returnHeader.returnId}"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_RTN_COMPLETE" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://ecommerce/widget/EmailReturnScreens.xml#ReturnComplete" 
+                              subject="Opentaps Demo - Return Completed #${returnHeader.returnId}"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_RTN_CANCEL" fromAddress="ofbiztest@yahoo.com" 
+                              bodyScreenLocation="component://ecommerce/widget/EmailReturnScreens.xml#ReturnCancel" 
+                              subject="Opentaps Demo - Return Cancelled #${returnHeader.returnId}"/>
+
+    <!-- Gift card Emails -->
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_GC_PURCHASE" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://ecommerce/widget/EmailGiftCardScreens.xml#GiftCardPurchase"
+                              subject="A Gift From ${senderName}!"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_GC_RELOAD" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://ecommerce/widget/EmailGiftCardScreens.xml#GiftCardReload"
+                              subject="Gift Card Reload Results"/>
+    <!-- Tell a Friend Email -->
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_TELL_FRIEND" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://ecommerce/widget/EmailProductScreens.xml#TellFriend"
+                              subject="${sendFrom} has sent you a link!"/>
+    <!-- Password retreival Email -->
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_PWD_RETRIEVE" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://securityext/widget/EmailSecurityScreens.xml#PasswordEmail" 
+                              subject="Opentaps Demo - Password Reminder (${userLogin.userLoginId})"/>
+
+    <!-- Quote confirmation Email -->
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_QUO_CONFIRM" fromAddress="ofbiztest@yahoo.com" bccAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://order/widget/ordermgr/QuoteScreens.xml#ViewQuoteSimple" 
+                              xslfoAttachScreenLocation="component://order/widget/ordermgr/QuoteScreens.xml#QuoteReport" 
+                              subject="Opentaps Demo - Quote Confirmation #${quoteId}"/>
+
+    <!-- Account related Emails -->
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PARTY_REGIS_CONFIRM" bccAddress="ofbiztest@yahoo.com" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://party/widget/partymgr/EmailPartyScreens.xml#CreatePartyNotification" 
+                              subject="New Account Created"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="UPD_PRSNL_INF_CNFRM" bccAddress="ofbiztest@yahoo.com" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://party/widget/partymgr/EmailPartyScreens.xml#ChangePersonalInfoNotification"
+                              subject="Personal Information Updated"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_EMAIL_VERIFY" bccAddress="ofbiztest@yahoo.com" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://party/widget/partymgr/EmailPartyScreens.xml#VerifyEmailAddressNotification" 
+                              subject="Email Address Verification"/>
+
+  <!-- For the Rental store -->
+
+    <!-- Order Emails  -->
+    <ProductStoreEmailSetting productStoreId="RentalStore" emailType="PRDS_ODR_CONFIRM" fromAddress="ofbiztest@yahoo.com" bccAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#OrderConfirmNotice" 
+                              xslfoAttachScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#OrderConfirmNoticePdf"
+                              subject="Opentaps Demo - Order Confirmation #${orderId}"/>
+    <ProductStoreEmailSetting productStoreId="RentalStore" emailType="PRDS_ODR_COMPLETE" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/widget/EmailOrderScreens.xml#OrderCompleteNotice"
+                              subject="Opentaps Demo - Your Order Is Complete #${orderId}"/>
+    <ProductStoreEmailSetting productStoreId="RentalStore" emailType="PRDS_ODR_BACKORDER" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/widget/EmailOrderScreens.xml#BackorderNotice"
+                              subject="Opentaps Demo - Backorder Notification #${orderId}"/>
+    <ProductStoreEmailSetting productStoreId="RentalStore" emailType="PRDS_ODR_CHANGE" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/widget/EmailOrderScreens.xml#OrderChangeNotice"
+                              subject="Opentaps Demo - Order Change Notification #${orderId}"/>
+    <ProductStoreEmailSetting productStoreId="RentalStore" emailType="PRDS_ODR_PAYRETRY" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/widget/EmailOrderScreens.xml#PaymentRetryNotice" 
+                              subject="Opentaps Demo - Order Payment Notification #${orderId}"/>
+    <ProductStoreEmailSetting productStoreId="RentalStore" emailType="PRDS_ODR_SHIP_COMPLT" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/widget/EmailOrderScreens.xml#ShipmentCompleteNotice"
+                              subject="Opentaps Demo - Shipment Complete Notification #${orderId}"/>
+
+    <!-- Return Emails  -->
+    <ProductStoreEmailSetting productStoreId="RentalStore" emailType="PRDS_RTN_ACCEPT" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://ecommerce/widget/EmailReturnScreens.xml#ReturnAccept" 
+                              subject="Opentaps Demo - Return Accepted #${returnHeader.returnId}"/>
+    <ProductStoreEmailSetting productStoreId="RentalStore" emailType="PRDS_RTN_COMPLETE" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://ecommerce/widget/EmailReturnScreens.xml#ReturnComplete" 
+                              subject="Opentaps Demo - Return Completed #${returnHeader.returnId}"/>
+    <ProductStoreEmailSetting productStoreId="RentalStore" emailType="PRDS_RTN_CANCEL" fromAddress="ofbiztest@yahoo.com" 
+                              bodyScreenLocation="component://ecommerce/widget/EmailReturnScreens.xml#ReturnCancel" 
+                              subject="Opentaps Demo - Return Cancelled #${returnHeader.returnId}"/>
+
+    <!-- Gift card Emails -->
+    <ProductStoreEmailSetting productStoreId="RentalStore" emailType="PRDS_GC_PURCHASE" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://ecommerce/widget/EmailGiftCardScreens.xml#GiftCardPurchase"
+                              subject="A Gift From ${senderName}!"/>
+    <ProductStoreEmailSetting productStoreId="RentalStore" emailType="PRDS_GC_RELOAD" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://ecommerce/widget/EmailGiftCardScreens.xml#GiftCardReload"
+                              subject="Gift Card Reload Results"/>
+    <!-- Tell a Friend Email -->
+    <ProductStoreEmailSetting productStoreId="RentalStore" emailType="PRDS_TELL_FRIEND" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://ecommerce/widget/EmailProductScreens.xml#TellFriend"
+                              subject="${sendFrom} has sent you a link!"/>
+    <!-- Password retreival Email -->
+    <ProductStoreEmailSetting productStoreId="RentalStore" emailType="PRDS_PWD_RETRIEVE" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://securityext/widget/EmailSecurityScreens.xml#PasswordEmail" 
+                              subject="Opentaps Demo - Password Reminder (${userLogin.userLoginId})"/>
+
+    <!-- Quote confirmation Email -->
+    <ProductStoreEmailSetting productStoreId="RentalStore" emailType="PRDS_QUO_CONFIRM" fromAddress="ofbiztest@yahoo.com" bccAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://order/widget/ordermgr/QuoteScreens.xml#ViewQuoteSimple" 
+                              xslfoAttachScreenLocation="component://order/widget/ordermgr/QuoteScreens.xml#QuoteReport" 
+                              subject="Opentaps Demo - Quote Confirmation #${quoteId}"/>
+
+    <!-- Account related Emails -->
+    <ProductStoreEmailSetting productStoreId="RentalStore" emailType="PARTY_REGIS_CONFIRM" bccAddress="ofbiztest@yahoo.com" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://party/widget/partymgr/EmailPartyScreens.xml#CreatePartyNotification" 
+                              subject="New Account Created"/>
+    <ProductStoreEmailSetting productStoreId="RentalStore" emailType="UPD_PRSNL_INF_CNFRM" bccAddress="ofbiztest@yahoo.com" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://party/widget/partymgr/EmailPartyScreens.xml#ChangePersonalInfoNotification"
+                              subject="Personal Information Updated"/>
+    <ProductStoreEmailSetting productStoreId="RentalStore" emailType="PRDS_EMAIL_VERIFY" bccAddress="ofbiztest@yahoo.com" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://party/widget/partymgr/EmailPartyScreens.xml#VerifyEmailAddressNotification" 
+                              subject="Email Address Verification"/>
+
+</entity-engine-xml>

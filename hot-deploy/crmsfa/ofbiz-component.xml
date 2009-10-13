@@ -47,6 +47,7 @@
     <entity-resource type="data" reader-name="demo" loader="main" location="data/CRMSFADemoCatalogRequest.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/CRMSFADemoChartData.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/CRMSFADemoCommission.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/CRMSFAEmailTemplatesDemoData.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/USPS_DemoData.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoCreditLimit.xml"/>
 
