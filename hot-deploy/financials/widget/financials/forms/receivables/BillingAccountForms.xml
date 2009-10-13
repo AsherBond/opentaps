@@ -76,8 +76,7 @@
     </form>
 
     <form name="payInvoiceWithBillingAccountForm" type="single" target="payInvoiceWithBillingAccount"
-        default-title-style="tableheadtext" default-tooltip-style="tabletext" default-widget-style="inputBox"
-        default-table-style="listTable">
+        default-title-style="tableheadtext" default-tooltip-style="tabletext" default-widget-style="inputBox">
 
         <field name="billingAccountId" title="${uiLabelMap.FinancialsCustomerBillingAccountID}" widget-style="tabletext">
             <display description="${parameters.billingAccountId}"/>
