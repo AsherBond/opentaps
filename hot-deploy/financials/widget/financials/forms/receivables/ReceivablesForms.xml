@@ -82,8 +82,8 @@ under the License.
         <field name="daysOutstanding" title="${uiLabelMap.FinancialsDaysOutstanding}" widget-area-style="tabletextright"><display also-hidden="false"/></field>
         <field name="outstandingAmount" title="${uiLabelMap.FinancialsAmountOutstanding}" widget-area-style="tabletextright"><display type="currency" currency="${currencyUomId}" also-hidden="false"/></field>
         <field name="interestCharged" title="${uiLabelMap.FinancialsPreviousFinanceCharges}" widget-area-style="tabletextright"><display type="currency" currency="${currencyUomId}" also-hidden="false"/></field>
-        <field name="amount" title="${uiLabelMap.FinancialsFinanceChargeForInvoice}"><text size="10"/></field>
-        <field name="description" title="${uiLabelMap.CommonDescription}"><text size="30"/></field>
+        <field name="amount" title="${uiLabelMap.FinancialsFinanceChargeForInvoice}" widget-style="inputBox"><text size="10"/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}" widget-style="inputBox"><text size="30"/></field>
         <field name="_rowSubmit" title="${uiLabelMap.CommonSelected}"><check/></field>
         <field name="submitButton" title="${uiLabelMap.FinancialsAssessFinanceCharges}" widget-style="smallSubmit"><submit/></field>
     </form>
