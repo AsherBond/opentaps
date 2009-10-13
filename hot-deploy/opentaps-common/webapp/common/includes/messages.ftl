@@ -49,10 +49,10 @@
 <div class="errorMessageHeader">${uiLabelMap.CommonFollowingErrorsOccurred}:</div>
 <ul class="errorList">
   <#list opentapsErrors.toplevel as errorMsg>
-      <li class="errorMessage">${errorMsg}</li>
+      <li class="errorMessage">${StringUtil.wrapString(errorMsg)}</li>
   </#list>
   <#list errorMessageList?if_exists as errorMsg>
-    <li class="errorMessage">${errorMsg}</li>
+    <li class="errorMessage">${StringUtil.wrapString(errorMsg)}</li>
   </#list>
 </ul>
 </div>
@@ -62,7 +62,7 @@
 <div class="eventMessageHeader">${uiLabelMap.CommonFollowingOccurred}:</div>
 <ul class="eventList">
   <#list eventMessageList as eventMsg>
-    <li class="eventMessage">${eventMsg}</li>
+    <li class="eventMessage">${StringUtil.wrapString(eventMsg)}</li>
   </#list>
 </ul>
 </div>
