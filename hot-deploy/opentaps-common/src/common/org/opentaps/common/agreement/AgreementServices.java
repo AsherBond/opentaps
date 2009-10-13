@@ -95,8 +95,8 @@ public final class AgreementServices {
                 item.set("agreementId", agreementId);
                 item.set("agreementItemTypeId", agreementItemTypeId);
                 item.set("currencyUomId", currencyUomId);
-                item.set("agreementItemSeqId", delegator.getNextSeqId("AgreementItemSeqId"));
                 item.set("agreementText", agreementText);
+                delegator.setNextSubSeqId(item, "agreementItemSeqId", 5, 1);
                 item.create();
                 agreementItems.add(item);
             }
