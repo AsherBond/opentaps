@@ -71,6 +71,7 @@
     <screen name="viewCustomerBillAcct">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="FinancialsCustomerBillingAccount"/>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
                   
                 <script location="component://financials/webapp/financials/WEB-INF/actions/receivables/viewCustomerBillAcct.bsh"/>
