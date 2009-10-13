@@ -29,7 +29,7 @@
         <@inputSelectRow name="partyIdFrom" title=uiLabelMap.OpentapsPartner list=partners key="partyId" ; partner >
           ${partner.firstName?if_exists} ${partner.lastName?if_exists} ${partner.groupName?if_exists} (${partner.partyId})
         </@inputSelectRow>
-        <@inputLookupRow name="partyId" title=uiLabelMap.CommonCustomer lookup="LookupPartyName" form="createPartnerInvoiceForm" />
+        <@inputLookupRow name="partyId" title=uiLabelMap.OpentapsCustomer lookup="LookupPartyName" form="createPartnerInvoiceForm" />
         <@inputCurrencySelectRow name="currencyUomId" title=uiLabelMap.CommonCurrency defaultCurrencyUomId=parameters.orgCurrencyUomId />
         <@inputDateTimeRow name="invoiceDate" title=uiLabelMap.AccountingInvoiceDate form="createPartnerInvoiceForm" default=Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp() />
         <@inputDateTimeRow name="dueDate" title=uiLabelMap.AccountingDueDate form="createPartnerInvoiceForm" />
