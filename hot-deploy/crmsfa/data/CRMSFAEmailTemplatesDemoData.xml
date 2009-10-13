@@ -44,19 +44,19 @@ under the License.
                               xslfoAttachScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#OrderConfirmNoticePdf"
                               subject="Opentaps Demo - Order Confirmation #${orderId}"/>
     <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_COMPLETE" fromAddress="ofbiztest@yahoo.com"
-                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/widget/EmailOrderScreens.xml#OrderCompleteNotice"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#OrderCompleteNotice"
                               subject="Opentaps Demo - Your Order Is Complete #${orderId}"/>
     <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_BACKORDER" fromAddress="ofbiztest@yahoo.com"
-                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/widget/EmailOrderScreens.xml#BackorderNotice"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#BackorderNotice"
                               subject="Opentaps Demo - Backorder Notification #${orderId}"/>
     <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_CHANGE" fromAddress="ofbiztest@yahoo.com"
-                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/widget/EmailOrderScreens.xml#OrderChangeNotice"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#OrderChangeNotice"
                               subject="Opentaps Demo - Order Change Notification #${orderId}"/>
     <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_PAYRETRY" fromAddress="ofbiztest@yahoo.com"
-                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/widget/EmailOrderScreens.xml#PaymentRetryNotice" 
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#PaymentRetryNotice" 
                               subject="Opentaps Demo - Order Payment Notification #${orderId}"/>
     <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_SHIP_COMPLT" fromAddress="ofbiztest@yahoo.com"
-                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/widget/EmailOrderScreens.xml#ShipmentCompleteNotice"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#ShipmentCompleteNotice"
                               subject="Opentaps Demo - Shipment Complete Notification #${orderId}"/>
 
     <!-- Return Emails  -->
