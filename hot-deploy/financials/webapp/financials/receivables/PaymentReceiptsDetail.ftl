@@ -40,7 +40,7 @@
     </select>
   </div>
   <div style="margin-left: 30px; margin-top: 10px;">
-    <span class="tableheadtext">${uiLabelMap.AccountingPaymentMethodType}</span> 
+    <span class="tableheadtext">${uiLabelMap.FinancialsPaymentMethodType}</span> 
     <select name="paymentMethodTypeId" class="inputBox">
       <option value=""></option>
       <#list paymentMethodTypes as paymentMethodType>
