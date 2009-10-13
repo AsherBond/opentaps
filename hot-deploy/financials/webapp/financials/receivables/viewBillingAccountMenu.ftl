@@ -16,10 +16,7 @@
 -->
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<#-- for the view PDF link -->
-<@form name="prepareBillingAccountCreditMemoAction" url="prepareBillingAccountCreditMemo" billingAccountId=billingAccount.billingAccountId organizationPartyId=parameters.organizationPartyId/>
-
 <div class="subSectionHeader">
   <div class="subSectionTitle">${uiLabelMap.FinancialsCustomerBillingAccount} ${uiLabelMap.OrderNbr}${billingAccount.billingAccountId}</div>
-  <div class="subMenuBar"><@submitFormLink form="prepareBillingAccountCreditMemoAction" class="subMenuButton" text=uiLabelMap.AccountingInvoicePDF/><a class="subMenuButton" href="<@ofbizUrl>payInvoiceWithBillingAccountForm?billingAccountId=${billingAccount.billingAccountId}</@ofbizUrl>">${uiLabelMap.FinancialsPayInvoice}</a></div>
+  <div class="subMenuBar"><a class="subMenuButton" href="<@ofbizUrl>payInvoiceWithBillingAccountForm?billingAccountId=${billingAccount.billingAccountId}</@ofbizUrl>">${uiLabelMap.FinancialsPayInvoice}</a></div>
 </div>
