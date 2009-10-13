@@ -91,7 +91,7 @@
     </form>
 
     <form name="EditBillingAccount" type="single" target="updateBillingAccount" title=""
-          default-map-name="billingAccount" default-tooltip-style="tooltip">
+          default-map-name="billingAccount" default-title-style="tableheadtext" >
         <alt-target use-when="billingAccount==null" target="createBillingAccount"/>
         
         <field use-when="billingAccount!=null" name="billingAccountId" title="${uiLabelMap.FinancialsCustomerBillingAccountID}">
@@ -101,8 +101,8 @@
             <display description="${billingAccount.customerName} (${billingAccount.customerPartyId})"/>
         </field>
        
-        <field name="fromDate" position="1" encode-output="false"><date-time/></field>
-        <field name="thruDate" position="2" encode-output="false"><date-time/></field>
+        <field name="fromDate" position="1" encode-output="false" widget-style="inputBox"><date-time/></field>
+        <field name="thruDate" position="2" encode-output="false" widget-style="inputBox"><date-time/></field>
 
         <field name="description">
             <textarea rows="2"/>
