@@ -22,10 +22,12 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
+<@form name="processLockboxBatchAction" url="processLockboxBatch" organizationPartyId=organizationPartyId lockboxBatchId=batch.lockboxBatchId />
+
 <div class="subSectionBlock">
   <@sectionHeader title=uiLabelMap.FinancialsLockboxBatchDetail>
     <div style="float: right;">
-      <a href="processLockboxBatch?lockboxBatchId=${batch.lockboxBatchId}&amp;organizationPartyId=${organizationPartyId}" class="buttontext">${uiLabelMap.FinancialsProcessLockboxBatch}</a>
+      <@submitFormLink form="processLockboxBatchAction" text=uiLabelMap.FinancialsProcessLockboxBatch />
     </div>
   </@sectionHeader>
   <#if batch?has_content>
