@@ -1209,13 +1209,14 @@ width: auto;
 display: none;
 }
 
-ul {
-    border:0;
-    margin:0;
+.autocomplete ul {
+    border:1px;
+    margin:0px;
     outline:0;
     padding:0;
-    width: auto;
+    width: 450px;
     vertical-align: baseline;
-    border-style: none;
+    border-style: solid;
     list-style: none;
+    background: white;
 }
