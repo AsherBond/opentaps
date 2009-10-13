@@ -17,9 +17,9 @@
 package org.opentaps.domain.billing.lockbox;
 
 import java.math.BigDecimal;
+import java.nio.ByteBuffer;
 
 import org.opentaps.foundation.service.ServiceException;
-import org.ofbiz.entity.util.ByteWrapper;
 
 /**
  * Lockbox POJO service to import Lockbox files into opentaps.
@@ -28,9 +28,9 @@ public interface LockboxServiceInterface {
 
     /**
      * Sets the uploaded file data, required parameter for {@link #uploadLockboxFile}.
-     * @param uploadedFile a <code>ByteWrapper</code> value
+     * @param uploadedFile a <code>ByteBuffer</code> value
      */
-    public void setUploadedFile(ByteWrapper uploadedFile);
+    public void setUploadedFile(ByteBuffer uploadedFile);
 
     /**
      * Sets the file name, required parameter for {@link #uploadLockboxFile}.

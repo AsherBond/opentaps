@@ -17,6 +17,7 @@
 package org.opentaps.financials.domain.billing.lockbox;
 
 import java.math.BigDecimal;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +27,6 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.util.ByteWrapper;
 import org.opentaps.domain.base.entities.PaymentMethodAndEftAccount;
 import org.opentaps.domain.billing.BillingDomainInterface;
 import org.opentaps.domain.billing.invoice.Invoice;
@@ -52,7 +52,7 @@ public class LockboxService extends Service implements LockboxServiceInterface {
     // for the uploadLockboxFile service
     private String fileName;
     private String contentType;
-    private ByteWrapper uploadedFile;
+    private ByteBuffer uploadedFile;
     // for the other services
     private String lockboxBatchId;
     private String itemSeqId;
@@ -76,7 +76,7 @@ public class LockboxService extends Service implements LockboxServiceInterface {
     }
 
     /** {@inheritDoc} */
-    public void setUploadedFile(ByteWrapper uploadedFile) {
+    public void setUploadedFile(ByteBuffer uploadedFile) {
         this.uploadedFile = uploadedFile;
     }
 
@@ -102,13 +102,9 @@ public class LockboxService extends Service implements LockboxServiceInterface {
             // mainly a test first
             Debug.logInfo("Uploading file [" + fileName + "] with content-type [" + contentType + "]", MODULE);
 
-            if (uploadedFile.getLength() == 0) {
-                throw new ServiceException("FinancialsServiceErrorLockboxFileAlreadyImported", null);
-            }
-
             // parse the data, this throws an exception if the data is inconsistent
             LockboxFileParser parser = new LockboxFileParser();
-            parser.parse(new String(uploadedFile.getBytes()));
+            parser.parse(new String(uploadedFile.array()));
 
             String fileNameStripped = fileName;
             int extIdx = fileNameStripped.lastIndexOf('.');
