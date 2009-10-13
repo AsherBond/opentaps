@@ -36,16 +36,22 @@ under the License.
     <!-- <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_olap.xml"/> -->
     <!-- <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup_olap.xml"/> -->
     <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas.xml"/>
+    <!--
+    opentaps uses the ones in hot-deploy/financials/data
     <entity-resource type="data" reader-name="seed" loader="main" location="data/AccountingTypeData.xml"/>
+    -->
     <entity-resource type="data" reader-name="seed" loader="main" location="data/UsTaxAccountGroups.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/AccountingSecurityData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/AccountingPortletData.xml"/>
     <entity-resource type="data" reader-name="seed-initial" loader="main" location="data/InvoiceScheduledServiceData.xml"/>
+    <!--
+    These conflict with the ones in hot-deploy/financials/data/
     <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoGeneralChartOfAccounts.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoOrganizationData.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoGlSetupData.xml"/>
+    -->
     <entity-resource type="data" reader-name="demo" loader="main" location="data/PaymentsInvoices.xml"/>
-
+    
     <!-- General Payment Service Definitions -->
     <service-resource type="model" loader="main" location="servicedef/services_agreement.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_admin.xml"/>
@@ -88,7 +94,7 @@ under the License.
         base-permission="OFBTOOLS,ACCOUNTING"
         mount-point="/accounting"/>
 
-    <webapp name="ar"
+    <!--webapp name="ar"
         title="AR"
         server="default-server"
         location="webapp/ar"
@@ -100,5 +106,5 @@ under the License.
         server="default-server"
         location="webapp/ap"
         base-permission="OFBTOOLS,ACCOUNTING"
-        mount-point="/ap"/>
+        mount-point="/ap"/-->
 </ofbiz-component>
