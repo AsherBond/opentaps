@@ -420,7 +420,7 @@ public class LockboxService extends Service implements LockboxServiceInterface {
                         input.put("currencyUomId", org.getPartyAcctgPreference().getBaseCurrencyUomId());
                     }
                     // receive ONLY the amount to apply, the cash discount will be accounted as an invoice adjustment
-                    input.put("amount", detail.getAmountToApply().doubleValue());
+                    input.put("amount", detail.getAmountToApply());
                     input.put("statusId", "PMNT_NOT_PAID");
                     input.put("effectiveDate", batch.getDatetimeEntered());
                     // add some references
@@ -470,7 +470,7 @@ public class LockboxService extends Service implements LockboxServiceInterface {
                             input.put("overrideGlAccountId", lockboxGlAccount.getGlAccountId());
                             // the cash discount on the LockboxItemDetail has an opposite sign:
                             // -$10 means to apply 10$ of the payment to the GL account
-                            input.put("amountApplied", detail.getCashDiscount().negate().doubleValue());
+                            input.put("amountApplied", detail.getCashDiscount().negate());
                             // call the createPaymentApplication service
                             input.put("userLogin", getUser().getOfbizUserLogin());
                             results = runSync("createPaymentApplication", input);
@@ -480,7 +480,7 @@ public class LockboxService extends Service implements LockboxServiceInterface {
                         input = new HashMap<String, Object>();
                         input.put("paymentId", paymentId);
                         input.put("invoiceId", detail.getInvoice().getInvoiceId());
-                        input.put("amountApplied", detail.getAmountToApplyToInvoice().doubleValue());
+                        input.put("amountApplied", detail.getAmountToApplyToInvoice());
                         // call the createPaymentApplication service
                         input.put("userLogin", getUser().getOfbizUserLogin());
                         results = runSync("createPaymentApplication", input);
