@@ -23,6 +23,7 @@
   <#list tagsByType.keySet() as type>
     <div class="screenlet">
       <div class="screenlet-header"><span class="boxhead">${type.description}</span></div>
+      <@form name="deleteAccountingTagForm" url="deleteAccountingTag" enumId="" />
       <form method="post" action="<@ofbizUrl>updateAccountingTag</@ofbizUrl>" name="updateAccountingTag">
         <@inputHiddenUseRowSubmit />
         <@inputHiddenRowCount list=tagsByType.get(type) />
@@ -46,7 +47,9 @@
               <@inputSelectHashCell name="disabled" default=tag.disabled!"N" index=tag_index hash=disableSelectValues />
               <@inputHiddenRowSubmit submit=false index=tag_index/>
               <@inputSubmitIndexedCell title="${uiLabelMap.CommonUpdate}" index=tag_index/>
-              <@displayLinkCell href="deleteAccountingTag?enumId=${tag.enumId}" class="smallSubmit" text=uiLabelMap.CommonRemove />
+              <td>
+              <@submitFormLink form="deleteAccountingTagForm" text=uiLabelMap.CommonRemove class="smallSubmit" enumId=tag.enumId/>
+              </td>
             </tr>
           </#list>
         </table>

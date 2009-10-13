@@ -43,7 +43,7 @@ dojo.declare("opentaps.TrialBalanceAccountTree", opentaps.GLAccountTree, {
         cells += '<td><a href="reconcileAccounts?glAccountId=' + glAccountId + '" class="buttontext">${uiLabelMap.FinancialsReconcile}</a></td>';
         cells += '<td><a href="updateGlAccountScreen?glAccountId=' + glAccountId + '" class="buttontext">${uiLabelMap.CommonEdit}</a></td>';
         cells += '<td><a href="addSubAccountScreen?parentGlAccountId=' + glAccountId + '" class="buttontext">${uiLabelMap.FinancialsAddSubAccount}</a></td>';
-        cells += '<td><a href="removeGlAccountFromOrganization?glAccountId=' + glAccountId + '" class="buttonDangerous">${uiLabelMap.FinancialsDeactivate}</a></td>';
+        cells += '<td><a href="javascript:opentaps.submitForm(\'removeGlAccountFromOrganizationForm\', null, {\'glAccountId\':\'' + glAccountId + '\'});" class="buttonDangerous">${uiLabelMap.FinancialsDeactivate}</a></td>';
         cells += '</tr></table>';
         return  opentaps.createSpan(null, cells, 'amount');
     }
@@ -58,7 +58,7 @@ dojo.declare("opentaps.TrialBalanceAccountTree", opentaps.GLAccountTree, {
     <div class="subMenuBar"><a class="buttontext" href="addNewGlAccountScreen">${uiLabelMap.FinancialsCreateNewAccount}</a><a class="buttontext" href="addExistingGlAccountScreen">${uiLabelMap.FinancialsAddExistingAccount}</a></div>
   </div>
 </div>
-
+<@form name="removeGlAccountFromOrganizationForm" url="removeGlAccountFromOrganization" glAccountId="" />
 <#if chartOfAccountsTree?exists>
   <@glAccountTree glAccountTree=chartOfAccountsTree treeId="chartOfAccounts" className="opentaps.TrialBalanceAccountTree" defaultState="collapsed"/>
 </#if>
