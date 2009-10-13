@@ -416,11 +416,10 @@ public final class LedgerServices {
                 // if this invoice item is for a product, check to see if it has a particular GL account defined in ProductGlAccount,
                 // or, alternatively, in GlAccountTypeDefault
                 String invoiceItemTypeId = invoiceItem.getString("invoiceItemTypeId");
-                if ((invoiceItemTypeId.equals(INVOICE_PRODUCT_ITEM_TYPE))
-                        || (invoiceItemTypeId.equals(PURCHINV_PRODUCT_ITEM_TYPE))
-                        || invoiceItemTypeId.equals(RETINV_PRODUCT_ITEM_TYPE)) {
-                    invoiceItemPostingGlAccountId = UtilAccounting.getProductOrgGlAccountId(invoiceItem.getString("productId"),
-                            defaultGlAccountTypeId, organizationPartyId, delegator);
+                if (INVOICE_PRODUCT_ITEM_TYPE.equals(invoiceItemTypeId)
+                    || PURCHINV_PRODUCT_ITEM_TYPE.equals(invoiceItemTypeId)
+                    || RETINV_PRODUCT_ITEM_TYPE.equals(invoiceItemTypeId)) {
+                    invoiceItemPostingGlAccountId = UtilAccounting.getProductOrgGlAccountId(invoiceItem.getString("productId"), defaultGlAccountTypeId, organizationPartyId, delegator);
                 } else if (PURCHNV_SUPPLIES_ITEM_TYPE.equals(invoiceItemTypeId)) {
                     // for supplies items on purchase invoices, see if the product has a special EXPENSE account defined
                     GenericValue productGlAccount = delegator.findByPrimaryKeyCache("ProductGlAccount", UtilMisc.toMap("productId", invoiceItem.getString("productId"),
