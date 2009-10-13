@@ -97,9 +97,11 @@ while ((invoice = iterator.next()) != null) {
     // keep runing total of invoice
     invoiceTotal = InvoiceWorker.getInvoiceTotal(invoice);
     // convert to the currency exchange rate at the time of the invoiceDate
-    invoiceSum = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, invoice.getString("currencyUomId"), invoice.getTimestamp("invoiceDate")) * invoiceTotal;
-    if (row.get("invoiceSum") != null) invoiceSum += row.get("invoiceSum").doubleValue();
-    row.put("invoiceSum", new Double(invoiceSum));
+    invoiceSum = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, invoice.getString("currencyUomId"), invoice.getTimestamp("invoiceDate")).multiply(invoiceTotal);
+    if (row.get("invoiceSum") != null) {
+        invoiceSum = invoiceSum.add(row.get("invoiceSum")).setScale(2, BigDecimal.ROUND_HALF_UP);
+    }
+    row.put("invoiceSum", invoiceSum);
 
     // compute DSO, number of days outstanding for invoice
     invoiceDate = invoice.get("invoiceDate");
@@ -116,59 +118,67 @@ while ((invoice = iterator.next()) != null) {
     }
     fromCal = UtilDate.toCalendar(invoiceDate, timeZone, locale);
     thruCal = UtilDate.toCalendar(dsoDate, timeZone, locale);
-    dso = (thruCal.getTimeInMillis() - fromCal.getTimeInMillis())*1.0/1000/60/60/24;
+    dso = (thruCal.getTimeInMillis() - fromCal.getTimeInMillis()) / (UtilDate.MS_IN_A_DAY);
 
     // keep running sum of DSO
+    dso = BigDecimal.valueOf(dso);
     dsoSum = dso;
-    if (row.get("dsoSum") != null) dsoSum += row.get("dsoSum").doubleValue();
-    row.put("dsoSum", new Double(dsoSum));
+    if (row.get("dsoSum") != null) {
+        dsoSum = dsoSum.add(row.get("dsoSum"));
+    }
+    row.put("dsoSum", dsoSum);
 
     // keep running DSO*invoiceTotal sum
-    dsoValueSum = dso * invoiceTotal;
-    if (row.get("dsoValueSum") != null) dsoValueSum += row.get("dsoValueSum").doubleValue();
+    dsoValueSum = dso.multiply(invoiceTotal);
+    if (row.get("dsoValueSum") != null) {
+        dsoValueSum = dsoValueSum.add(row.get("dsoValueSum"));
+    }
     row.put("dsoValueSum", dsoValueSum);
 
     // update number of invoices
     numberOfInvoices = 1;
-    if (row.get("numberOfInvoices") != null) numberOfInvoices += row.get("numberOfInvoices").intValue();
+    if (row.get("numberOfInvoices") != null) {
+        numberOfInvoices += row.get("numberOfInvoices").intValue();
+    }
     row.put("numberOfInvoices", new Integer(numberOfInvoices));
 
     // update avg DSO
-    row.put("dsoAvg", new Double(dsoSum / numberOfInvoices));
+    row.put("dsoAvg", new Double(dsoSum.doubleValue() / numberOfInvoices));
 
     // update weighted DSO
-    if (invoiceSum != 0) {
-        row.put("dsoWeighted", new Double(dsoValueSum / invoiceSum));
+    if (invoiceSum.signum() != 0) {
+        row.put("dsoWeighted", new Double(dsoValueSum.doubleValue() / invoiceSum));
     } else {
         row.put("dsoWeighted", 0);
     }
     
     reportMap.put(partyId, row);
 }
+iterator.close();
 report = reportMap.values();
 
 // go through report once more and compute totals row
-invoiceSum = 0.0;
-dsoSum = 0.0;
-dsoValueSum = 0.0;
+invoiceSum = BigDecimal.ZERO;
+dsoSum = BigDecimal.ZERO;
+dsoValueSum = BigDecimal.ZERO;
 numberOfInvoices = 0;
-for (iter = report.iterator(); iter.hasNext(); ) {
+
+iter = report.iterator();
+while (iter.hasNext()) {
     row = iter.next();
-    invoiceSum += row.get("invoiceSum").doubleValue();
-    dsoSum += row.get("dsoSum").doubleValue();
-    dsoValueSum += row.get("dsoValueSum").doubleValue();
+    invoiceSum = invoiceSum.add(row.get("invoiceSum"));
+    dsoSum = dsoSum.add(row.get("dsoSum"));
+    dsoValueSum = dsoValueSum.add(row.get("dsoValueSum"));
     numberOfInvoices += row.get("numberOfInvoices").intValue();
 }
 
 totals = FastMap.newInstance();
-totals.put("invoiceSum", new Double(invoiceSum));
-totals.put("dsoSum", new Double(dsoSum));
-totals.put("dsoValueSum", new Double(dsoValueSum));
+totals.put("invoiceSum", invoiceSum);
+totals.put("dsoSum", dsoSum);
+totals.put("dsoValueSum", dsoValueSum);
 totals.put("numberOfInvoices", new Integer(numberOfInvoices));
-totals.put("dsoAvg", new Double(dsoSum / numberOfInvoices));
-totals.put("dsoWeighted", new Double(dsoValueSum / invoiceSum));
+totals.put("dsoAvg", new Double(dsoSum.doubleValue() / numberOfInvoices));
+totals.put("dsoWeighted", new Double(dsoValueSum.doubleValue() / invoiceSum));
 
 context.put("report", report);
 context.put("totals", totals);
-
-iterator.close();
