@@ -882,10 +882,7 @@ public final class CrmsfaOrderServices {
             String bodyScreen = productStoreEmailSetting.getString("bodyScreenLocation");
             String content = null;
             if (UtilValidate.isNotEmpty(bodyScreen)) {
-                ResourceBundleMapWrapper uiLabelMap = UtilProperties.getResourceBundleMap("EcommerceUiLabels", locale);
-                uiLabelMap.addBottomResourceBundle("BlogUiLabels");
-                uiLabelMap.addBottomResourceBundle("OrderUiLabels");
-                uiLabelMap.addBottomResourceBundle("CommonUiLabels");
+                ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
                 context.put("uiLabelMap", uiLabelMap);
                 try {
                     content = ScreenHelper.renderScreenLocationAsText(bodyScreen, dctx, context, UtilMisc.toMap("orderId", orderId, "baseUrl", context.get("baseUrl")));
