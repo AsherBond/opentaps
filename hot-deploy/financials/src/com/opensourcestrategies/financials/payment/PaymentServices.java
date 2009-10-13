@@ -1037,7 +1037,7 @@ public final class PaymentServices {
             paymentApplication.set("invoiceItemSeqId", invoiceItemSeqId);
             paymentApplication.set("paymentId", paymentId);
             paymentApplication.set("toPaymentId", toPaymentId);
-            paymentApplication.set("amountApplied", new Double(amountApplied.doubleValue()));
+            paymentApplication.set("amountApplied", amountApplied);
             paymentApplication.set("billingAccountId", billingAccountId);
             paymentApplication.set("taxAuthGeoId", taxAuthGeoId);
             return storePaymentApplication(delegator, paymentApplication, locale);
@@ -1057,7 +1057,7 @@ public final class PaymentServices {
                 paymentApplication.set("invoiceId", invoiceId);
                 paymentApplication.set("invoiceItemSeqId", null);
                 paymentApplication.set("toPaymentId", null);
-                paymentApplication.set("amountApplied", new Double(amountApplied.doubleValue()));
+                paymentApplication.set("amountApplied", amountApplied);
                 paymentApplication.set("billingAccountId", billingAccountId);
                 paymentApplication.set("taxAuthGeoId", null);
                 if (debug) {
@@ -1175,7 +1175,7 @@ public final class PaymentServices {
             paymentApplication.set("invoiceItemSeqId", invoiceItemSeqId);
             paymentApplication.set("paymentId", paymentId);
             paymentApplication.set("toPaymentId", toPaymentId);
-            paymentApplication.set("amountApplied", new Double(amountApplied.doubleValue()));
+            paymentApplication.set("amountApplied", amountApplied);
             paymentApplication.set("billingAccountId", billingAccountId);
             paymentApplication.set("taxAuthGeoId", taxAuthGeoId);
             return storePaymentApplication(delegator, paymentApplication, locale);
