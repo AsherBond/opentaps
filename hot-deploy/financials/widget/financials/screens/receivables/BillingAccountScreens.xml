@@ -61,11 +61,7 @@
                                 <include-form name="findCustomerBillingAccount" location="component://financials/widget/financials/forms/receivables/BillingAccountForms.xml"/>
                             </container>
                         </container>
-                        <container style="screenlet">
-                            <container style="screenlet-body">
-                                <include-form name="listCustomerBillingAccounts" location="component://financials/widget/financials/forms/receivables/BillingAccountForms.xml"/>
-                            </container>
-                        </container>
+                        <include-form name="listCustomerBillingAccounts" location="component://financials/widget/financials/forms/receivables/BillingAccountForms.xml"/>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
