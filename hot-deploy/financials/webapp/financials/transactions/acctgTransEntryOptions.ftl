@@ -14,10 +14,12 @@
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
  *  
 -->
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+<@form name="deleteEntryForm" url="deleteAcctgTransEntry" acctgTransId=acctgTransEntry.acctgTransId acctgTransEntrySeqId=acctgTransEntry.acctgTransEntrySeqId/>
 <div class="screenlet-header">
     <div style="float: right;">
 <a class="buttontext" href="updateAcctgTransEntryForm?acctgTransId=${acctgTransEntry.acctgTransId}&acctgTransEntrySeqId=${acctgTransEntry.acctgTransEntrySeqId}">${uiLabelMap.CommonEdit}</a>
-<a class="buttontext" href="deleteAcctgTransEntry?acctgTransId=${acctgTransEntry.acctgTransId}&acctgTransEntrySeqId=${acctgTransEntry.acctgTransEntrySeqId}">${uiLabelMap.CommonDelete}</a>
+<@submitFormLink form="deleteEntryForm" text=uiLabelMap.CommonDelete class="buttontext"/>
     </div>
     <div class="boxhead">
         ${uiLabelMap.FinancialsTransactionEntry}
