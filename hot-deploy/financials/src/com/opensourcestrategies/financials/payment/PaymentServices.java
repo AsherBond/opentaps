@@ -1213,6 +1213,7 @@ public final class PaymentServices {
                     "invoiceId", paymentApplication.get("invoiceId"),
                     "invoiceItemSeqId", paymentApplication.get("invoiceItemSeqId"),
                     "billingAccountId", paymentApplication.get("billingAccountId"),
+                    "overrideGlAccountId", paymentApplication.get("overrideGlAccountId"),
                     "paymentId", paymentApplication.get("paymentId"),
                     "toPaymentId", paymentApplication.get("toPaymentId"),
                     "taxAuthGeoId", paymentApplication.get("taxAuthGeoId")));
