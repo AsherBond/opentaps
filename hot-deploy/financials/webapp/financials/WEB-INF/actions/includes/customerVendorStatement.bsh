@@ -25,15 +25,14 @@
  * @author Si Chen (sichen@opensourcestrategies.com)
  */
 
-import java.util.*;
+import java.awt.Color;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
-import org.ofbiz.entity.*;
-import org.ofbiz.entity.util.*;
-import org.ofbiz.entity.condition.*;
-import org.ofbiz.base.util.*;
-import org.ofbiz.service.*;
-import org.opentaps.common.util.UtilMessage;
-import org.opentaps.common.util.UtilCommon;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
@@ -45,11 +44,14 @@ import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.ui.RectangleInsets;
-import java.awt.Color;
-import java.text.SimpleDateFormat;
-import java.text.DecimalFormat;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.service.*;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
 import org.opentaps.foundation.infrastructure.Infrastructure;
-import com.opensourcestrategies.financials.accounts.AccountsHelper;
 
 // the screen should tell us the report type (VENDOR, CUSTOMER, COMMISSION)
 reportType = context.get("reportType");
@@ -150,36 +152,38 @@ context.put("beginningBalance", beginningBalance);
 
 // calculate the running balance when processing each transaction
 runningBalance = beginningBalance;
-if (runningBalance == null) runningBalance = 0;
+if (runningBalance == null) {
+    runningBalance = BigDecimal.ZERO;
+}
 
 // processing transaction to retreive additional fields and calculate the running balance
-for (GenericValue t : transactions) {
-    tmap = new HashMap(t);
+for (transaction : transactions) {
+    tmap = new HashMap(transaction);
 
-    isCredit = "C".equals(t.get("debitCreditFlag"));
+    isCredit = "C".equals(transaction.get("debitCreditFlag"));
 
     // reverse the amount for paid debits or received credits
-    transactionAmount = t.get("amount");
+    transactionAmount = transaction.getBigDecimal("amount");
     if (isReceivable && isCredit || isPayable && !isCredit) {
-        transactionAmount = -transactionAmount;
+        transactionAmount = transactionAmount.negate();
     }
     tmap.put("amount", transactionAmount);
 
     // calculate running balance
-    runningBalance += transactionAmount;
+    runningBalance = runningBalance.add(transactionAmount);
     tmap.put("runningBalance", runningBalance);
 
     // get the transaction/invoice/payment type
-    invoiceId = t.get("invoiceId");
-    paymentId = t.get("paymentId");
+    invoiceId = transaction.get("invoiceId");
+    paymentId = transaction.get("paymentId");
     invoice = null;
     payment = null;
     if (UtilValidate.isNotEmpty(invoiceId)) {
-        invoice = t.getRelatedOne("Invoice");
+        invoice = transaction.getRelatedOne("Invoice");
     } else if (UtilValidate.isNotEmpty(paymentId)) {
-        payment = t.getRelatedOne("Payment");
+        payment = transaction.getRelatedOne("Payment");
     } else {
-        transType = t.getRelatedOneCache("AcctgTransType").getString("description");
+        transType = transaction.getRelatedOneCache("AcctgTransType").getString("description");
         tmap.put("transType", transType);
     }
 
