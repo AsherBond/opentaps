@@ -148,6 +148,7 @@
     <screen name="viewInvoice">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="AccountingInvoice"/>
                 <set field="invoiceId" from-field="parameters.invoiceId"/>
                 <set field="gwtScripts[]" value="financialsgwt/org.opentaps.gwt.financials.invoices.invoices" global="true"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/invoices/viewInvoice.bsh"/>
