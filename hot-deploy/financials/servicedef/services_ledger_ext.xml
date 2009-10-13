@@ -317,7 +317,7 @@ under the License.
         <!-- TODO: make required-permissions tag work here rather than inside the simple XML -->
     </service>
 
-    <!-- this service was copy from accounting/script/org/ofbiz/accounting/ledger/AcctgTransServices.xml of opentaps 1.0 trunk, for new service cannot work on Reconcile -->    
+    <!-- these services were copied from accounting/script/org/ofbiz/accounting/ledger/AcctgTransServices.xml and General LedgerServices.xml of opentaps 1.0 trunk so that GL account reconciliation continues to work -->    
     <service name="updateAcctgTransEntry" default-entity-name="AcctgTransEntry" engine="simple"
             location="com/opensourcestrategies/financials/ledger/AcctgTransServices.xml" invoke="updateAcctgTransEntry" auth="true">
         <description>Update an Entry to a AcctgTrans record</description>
@@ -326,5 +326,11 @@ under the License.
         </required-permissions>
         <auto-attributes include="pk" mode="IN" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
-    </service>    
+    </service>   
+    <service name="createGlReconciliationEntry" default-entity-name="GlReconciliationEntry" engine="simple"
+        location="com/opensourcestrategies/financials/ledger/AcctgTransServices.xml" invoke="createGlReconciliationEntry" auth="true">
+        <description>Add an Entry to a GlReconciliation</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="false"/>
+    </service>
 </services>

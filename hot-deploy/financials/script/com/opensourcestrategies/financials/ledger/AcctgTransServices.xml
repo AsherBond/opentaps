@@ -38,9 +38,12 @@ under the License.
 
 <simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
         xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
-    <!-- these method was copy from accounting/script/org/ofbiz/accounting/ledger/AcctgTransServices.xml of opentaps 1.0 trunck, for Reconcile is broken in ofbiz new version -->
+        <!-- these methods were copied from accounting/script/org/ofbiz/accounting/ledger/AcctgTransServices.xml and GeneralLedgerServices.xml of opentaps 1.0 trunk
+    so that GL account reciliation would still work with ofbiz 09.04 -->
     <!-- ========= AcctgTrans methods ========= -->
     <simple-method method-name="updateAcctgTransEntry" short-description="Update Entry To AcctgTrans">
+        <!-- this method is necessary because ofbiz 09.04's updateAcctgTransEntry will no longer let you set the reconcileStatusId flag to AES_RECONCILED after a transaction has been posted,
+        which is in fact when an accounting transaction entry should be reconciled. -->
         <entity-one entity-name="AcctgTransEntry" value-name="lookedUpValue"/>
         <set-nonpk-fields map-name="parameters" value-name="lookedUpValue"/>
         <store-value value-name="lookedUpValue"/>
@@ -48,10 +51,36 @@ under the License.
         <!-- when changing entries, also update the last modified info for the AcctgTrans -->
         <call-simple-method method-name="updateAcctgTransLastModified"/>
     </simple-method>
+    
     <simple-method method-name="updateAcctgTransLastModified" short-description="Update AcctgTrans LastModified Info">
         <!-- this is just a little method that is meant to be called as an inline call-simple-method target with the context already setup -->
         <entity-one entity-name="AcctgTrans" value-name="lookedUpACTX"/>
         <set from-field="userLogin.userLoginId" field="lookedUpACTX.lastModifiedByUserLogin"/>
         <store-value value-name="lookedUpACTX"/>
     </simple-method>    
- </simple-methods>
+
+    <!-- ========= GlReconciliationEntry methods ========= -->
+    <simple-method method-name="createGlReconciliationEntry" short-description="Add Entry To GlReconciliation">
+        <!-- this method is copied over because the createGlReconciliationEntry in ofbiz 09.04 will not create a reconciliation entry after a transaciton entry
+        has been marked as reconciled, which is the sequence opentaps financials does it: first set transaction entry reconciled, then enter it into reconciliation entry -->
+        <check-permission permission="ACCOUNTING" action="_CREATE"><fail-message message="Security Error: to run createGlReconciliationEntry you must have the ACCOUNTING_CREATE or ACCOUNTING_ADMIN permission"/></check-permission>
+        <check-errors/>
+
+        <make-value entity-name="GlReconciliationEntry" value-name="newEntity"/>
+        <set-nonpk-fields map-name="parameters" value-name="newEntity"/>
+        <set-pk-fields map-name="parameters" value-name="newEntity"/>
+        <create-value value-name="newEntity"/>
+
+        <!-- when changing entries, also update the last modified info for the GlReconciliation -->
+        <call-simple-method method-name="updateGlReconciliationLastModified"/>
+    </simple-method>
+
+    <simple-method method-name="updateGlReconciliationLastModified" short-description="Update GlReconciliation LastModified Info">        
+        <!-- this is just a little method that is meant to be called as an inline call-simple-method target with the context already setup -->        
+        <entity-one entity-name="GlReconciliation" value-name="lookedUpGLR"/>        
+        <set from-field="userLogin.userLoginId" field="lookedUpGLR.lastModifiedByUserLogin"/>
+        <store-value value-name="lookedUpGLR"/>
+    </simple-method>
+
+
+</simple-methods>

@@ -3189,7 +3189,7 @@ public final class LedgerServices {
                 }
 
                 // need amount of trans entry for gl reconcile entry
-                Double amount = acctgTransEntry.getDouble("amount");
+                BigDecimal amount = acctgTransEntry.getBigDecimal("amount");
 
                 // prepare input for and call createGlReconciliationEntry
                 params = UtilMisc.toMap("glReconciliationId", glReconciliationId);
