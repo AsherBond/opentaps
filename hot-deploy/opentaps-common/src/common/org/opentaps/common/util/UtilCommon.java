@@ -1632,4 +1632,14 @@ public abstract class UtilCommon {
         }
         return ModelService.RESPOND_SUCCESS.equals(results.get(ModelService.RESPONSE_MESSAGE));
     }
+    
+    /**
+     * format string for javascript.
+     * @param string a <code>String</code> value
+     * @return a <code>String</code> value
+     */   
+    public static String toJsString(String string) {
+        if (UtilValidate.isEmail(string)) return string;
+        return string.replaceAll("'", "&apos;");
+    }
 }

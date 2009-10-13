@@ -1208,3 +1208,14 @@ width: auto;
 .screenlet-title-bar { 
 display: none;
 }
+
+ul {
+    border:0;
+    margin:0;
+    outline:0;
+    padding:0;
+    width: auto;
+    vertical-align: baseline;
+    border-style: none;
+    list-style: none;
+}

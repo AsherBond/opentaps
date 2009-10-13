@@ -197,7 +197,7 @@
     
     <!-- add a new Gl Account to an Organization -->
     <form name="addNewGlAccount" type="single" title="Add a new Gl Account" target="addNewGlAccount"
-        default-widget-style="tabletext" default-title-style="tableheadtext">        
+        default-widget-style="tabletext" default-title-style="tableheadtext">    
         <field name="glAccountId"><hidden value=""/></field>
         <field name="organizationPartyId"><hidden value="${organizationPartyId}"/></field>
         <field name="glXbrlClassId"><hidden value=""/></field>
@@ -212,11 +212,12 @@
         </field>    
         <field name="parentGlAccountId" title="${uiLabelMap.FinancialsParentGLAccount}" >            
             <drop-down allow-empty="true">
-                <entity-options entity-name="GlAccountOrganizationAndClass" description="${accountCode}: ${accountName} (${glAccountId})" key-field-name="glAccountId">
+                <auto-complete/>
+                <entity-options entity-name="GlAccountOrganizationAndClass" description="${accountCode}: ${groovy:org.opentaps.common.util.UtilCommon.toJsString(accountName)} (${glAccountId})" key-field-name="glAccountId">
                     <entity-constraint name="organizationPartyId" operator="equals" env-name="parameters.organizationPartyId"  />
                     <entity-order-by field-name="accountCode"/>
                 </entity-options>
-            </drop-down>  
+            </drop-down>
         </field>
         <field name="accountCode" title="${uiLabelMap.FinancialsGLAccountCode}" >            
             <text/>

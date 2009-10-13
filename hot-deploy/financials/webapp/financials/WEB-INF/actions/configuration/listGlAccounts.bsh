@@ -27,3 +27,5 @@ organizationPartyId = session.getAttribute("organizationPartyId");
 // make the tree
 chartOfAccountsTree = GLAccountTree.getOrganizationTree(delegator, organizationPartyId, UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator));
 context.put("chartOfAccountsTree", chartOfAccountsTree);
+// enable javascript support for form widget
+session.setAttribute("javaScriptEnabled", true);
