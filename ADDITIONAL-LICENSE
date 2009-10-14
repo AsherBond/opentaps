@@ -1,0 +1,57 @@
+The following files are not part of the Apache OFBIZ project but are included in opentaps for your convenience.
+The license information below is deemed to be reliable but its accuracy is not guaranteed.
+Copies of these licenses may be found in hot-deploy/opentaps-common/licenses/
+
+Library                           License                     Location
+Jasper Reports                    LGPL                        framework/webapp/lib/
+OpenOffice                        LGPL                        applications/content/lib/uno/
+MySQL JDBC                        GPL                         framework/entity/lib/jdbc
+PostgreSQL JDBC                   BSD                         framework/entity/lib/jdbc
+Spring Framework                  Apache 2.0                  hot-deploy/opentaps-common/lib
+FCKEditor                         GPL/LGPL/Mozilla PL         hot-deploy/opentaps-common/webapp/js/fckeditor/
+FCKPackager                       GPL/LGPL/Mozilla PL         hot-deploy/opentaps-common/webapp/js/fckeditor/fckpackager/
+xhtml2fo(1)                       Creative Commons 3.0        hot-deploy/opentaps-common/xsl/xhtml2fo.xsl
+jpublish                          Apache 2.0                  hot-deploy/crmsfa/lib/
+edenlib                           Apache 2.0                  hot-deploy/crmsfa/lib/
+funambol-admin-dev                HPL                         hot-deploy/funambol/lib/core
+funambol-ext                      HPL                         hot-deploy/funambol/lib/core
+funambol-foundation               HPL                         hot-deploy/funambol/lib/core
+funambol-framework                HPL                         hot-deploy/funambol/lib/core
+funambol-server                   HPL                         hot-deploy/funambol/lib/core
+commons-httpclient                Apache 2.0                  hot-deploy/funambol/lib/ext
+joda-time                         Apache 2.0                  hot-deploy/funambol/lib/ext
+DBL SIGA Framework                BSD                         hot-deploy/funambol/lib/ext
+funambol-common-pim               HPL                         hot-deploy/funambol/lib/modules
+javaservice.exe                   LGPL                        windows-service/
+JExelApi                          LGPL                        hot-deploy/opentaps-common/lib
+JFreeChart                        LGPL                        hot-deploy/opentaps-common/lib
+Pentaho plus modules              Mozilla PL/LGPL/Apache/BSD  hot-deploy/pentaho/lib
+Apache Axis                       Apache 2.0                  hot-deploy/amazon/lib/axis-1_4
+POI                               Apache 2.0                  hot-deploy/opentaps-common/lib
+jscalendar                        LGPL                        hot-deploy/opentaps-common/webapp/js/jscalendar-1.0
+Spring                            Apache 2.0                  hot-deploy/opentaps-common/lib/pentaho
+OGNL                              OGNL                        hot-deploy/opentaps-common/lib/pentaho
+Rhino                             Mozilla PL                  hot-deploy/opentaps-common/lib/pentaho
+Pentaho DI                        Mozilla PL                  hot-deploy/opentaps-common/lib/pentaho
+JETM                              BSD                         framework/base/lib/
+   website: (http://www.dynarch.com/projects/calendar/)
+AspectWerkz                       LGPL 2.1                    hot-deploy/opentaps-common/lib/aspectwerkz
+Inflector                         Apache 2.0                  hot-deploy/opentaps-common/lib
+Asterisks                         Apache 2.0                  hot-deploy/opentaps-common/lib/asterisk/asterisk-java-0.3.1.jar
+GWT                               Apache 2.0                  hot-deploy/opentaps-common/lib
+GWT-Math                          Apache 2.0                  hot-deploy/opentaps-common/lib
+GWT-Log                           Apache 2.0                  hot-deploy/opentaps-common/lib
+GWT-Ext                           LGPL 3.0                    hot-deploy/opentaps-common/lib
+ext                               LGPL 3.0                    hot-deploy/opentaps-common/lib
+ant-contrib                       Apache 2.0                  hot-deploy/opentaps-common/lib
+hibernate                         LGPL 2.1                    hot-deploy/opentaps-common/lib/hibernate
+Checkstyle                        LGPL                        hot-deploy/opentaps-common/lib
+lucene                            Apache 2.0                  applications/content/lib
+hibernate search                  LGPL 2.1                    hot-deploy/opentaps-common/lib/hibernate
+Commons BeanUtils                 Apache 2.0                  hot-deploy/opentaps-common/lib/commons-beanutils-1.8.0.jar
+Commons Digester                  Apache 2.0                  hot-deploy/opentaps-common/lib/commons-digester-1.8.1.jar
+Shortcuts                         BSD                         hot-deploy/opentaps-common/webapp/js/shortcuts.js
+Pentaho Data Integration Engine   LGPL                        framework/base/lib/etl
+
+(1)  This project uses the Creative Commons Attribution-Share Alike 3.0 License.  Please
+     review the license before using it for any other purpose.
