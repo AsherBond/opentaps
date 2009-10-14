@@ -210,7 +210,7 @@
                 </entity-options>
             </drop-down>  
         </field>    
-        <field name="parentGlAccountId" title="${uiLabelMap.FinancialsParentGLAccount}" >            
+        <field name="parentGlAccountId" title="${uiLabelMap.FinancialsParentGLAccount}" widget-style="XdijitInputField dijitInputFieldValidationNormal">            
             <drop-down allow-empty="true">
                 <auto-complete/>
                 <entity-options entity-name="GlAccountOrganizationAndClass" description="${accountCode}: ${groovy:org.opentaps.common.util.UtilCommon.toJsString(accountName)} (${glAccountId})" key-field-name="glAccountId">
