@@ -76,6 +76,15 @@ framework/widget/dtd/widget-form.xsd
 framework/widget/src/org/ofbiz/widget/form/ModelForm.java
 - Default form pagination back to false, and fix the ModelForm to actually the paginate = false
 
+framework/base/lib/etl/
+framework/base/lib/etl/js.jar
+framework/base/lib/etl/kettle-core.jar
+framework/base/lib/etl/kettle-db.jar
+framework/base/lib/etl/kettle-engine.jar
+framework/base/lib/etl/ognl-2.6.9.jar
+r13618 Move kettle libraries to framework in order to resolve classpath problems
+r13623 Removed log4j.xml from the kettle-engine.jar root because it affects common logging format. 
+
 Applications changes
 --------------------
 
