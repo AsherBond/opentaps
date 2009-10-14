@@ -16,12 +16,13 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#if paycheck?has_content>
+    <@form name="setPaycheckStatusForm" url="setPaycheckStatus" statusId="" paymentId=paycheck.paymentId />
 
 	<#if (paycheck.statusId == "PMNT_NOT_PAID") && (hasUpdatePermission)>
-	  <#assign stateChangeLinks = "<a href='setPaycheckStatus?statusId=PMNT_SENT&paymentId="+paycheck.paymentId+"' class='buttontext'>" + uiLabelMap.FinancialsPaymentStatusToSent + "</a>" />
-	  <#assign stateChangeLinks = stateChangeLinks?default("") +  "<a href='setPaycheckStatus?statusId=PMNT_CANCELLED&paymentId="+paycheck.paymentId+"' class='buttontext'>" + uiLabelMap.FinancialsPaymentStatusToCanceled + "</a>" />
+      <#assign stateChangeLinks><@submitFormLink form="setPaycheckStatusForm" text=uiLabelMap.FinancialsPaymentStatusToSent statusId="PMNT_SENT" class="buttontext"/></#assign>
+      <#assign stateChangeLinks>${stateChangeLinks?default("")}<@submitFormLink form="setPaycheckStatusForm" text=uiLabelMap.FinancialsPaymentStatusToCanceled statusId="PMNT_CANCELLED" class="buttontext"/></#assign>
 	<#elseif (paycheck.statusId == "PMNT_SENT") && (hasUpdatePermission)>
-	  <#assign stateChangeLinks = "<a href='setPaycheckStatus?statusId=PMNT_VOID&paymentId="+paycheck.paymentId+"' class='buttontext'>" + uiLabelMap.FinancialsPaymentVoidPayment + "</a>">
+      <#assign stateChangeLinks><@submitFormLink form="setPaycheckStatusForm" text=uiLabelMap.FinancialsPaymentVoidPayment statusId="PMNT_VOID" class="buttontext"/></#assign>
 	</#if>
 
 	<!-- Paycheck Header -->
