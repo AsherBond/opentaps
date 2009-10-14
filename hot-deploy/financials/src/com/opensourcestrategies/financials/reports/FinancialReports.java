@@ -16,6 +16,7 @@
 package com.opensourcestrategies.financials.reports;
 
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -42,6 +43,7 @@ import javolution.util.FastMap;
 import javolution.util.FastSet;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 import org.ofbiz.accounting.util.UtilAccounting;
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
@@ -1646,6 +1648,7 @@ public final class FinancialReports {
             }
 
             // clean up datamart data
+            Debug.logInfo("Clean up dimension and fact tables", MODULE);
             delegator.removeByCondition("StoreDim", EntityCondition.makeCondition("storeDimId", EntityOperator.NOT_EQUAL, null));
             delegator.removeByCondition("TaxAuthorityDim", EntityCondition.makeCondition("taxAuthorityDimId", EntityOperator.NOT_EQUAL, null));
             delegator.removeByCondition("CurrencyDim", EntityCondition.makeCondition("currencyDimId", EntityOperator.NOT_EQUAL, null));
@@ -1657,8 +1660,12 @@ public final class FinancialReports {
             DataSourceImpl datasource = new DataSourceImpl(dataSourceName);
             new InitialContext().rebind("java:comp/env/jdbc/default_delegator", (DataSource) datasource);
 
-            // run the ETL jobs to load the datamarts
-            UtilEtl.runJob("sales_tax_statement_etl_job.kjb", "component://financials/script/etl");
+            // run the ETL transformations to load the datamarts
+            UtilEtl.runTrans("component://financials/script/etl/load_product_store_dimension.ktr", null);
+            UtilEtl.runTrans("component://financials/script/etl/load_tax_authority_dimension.ktr", null);
+            UtilEtl.runTrans("component://financials/script/etl/load_organization_dimension.ktr", null);
+            UtilEtl.runTrans("component://financials/script/etl/load_sales_invoice_item_fact.ktr", null);
+            UtilEtl.runTrans("component://financials/script/etl/load_invoice_level_promotions.ktr", null);
             dispatcher.runSync("financials.loadTaxInvoiceItemFact", UtilMisc.toMap("userLogin", userLogin, "locale", locale));
 
             new InitialContext().unbind("java:comp/env/jdbc/default_delegator");
@@ -1680,6 +1687,9 @@ public final class FinancialReports {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         } catch (KettleException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
         return results;
