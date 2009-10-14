@@ -112,7 +112,7 @@ buildPaymentList(delegator, conditions) {
             row.putAll(payment.getAllFields());
 
             row.put("statusDescription", payment.getRelatedOneCache("StatusItem").get("description"));
-            row.put("amountOutstainding", PaymentWorker.getPaymentNotAppliedBd(delegator, payment.get("paymentId")));
+            row.put("amountOutstainding", PaymentWorker.getPaymentNotApplied(delegator, payment.get("paymentId")));
             row.put("employeeName", PartyHelper.getPartyName(delegator, payment.get("partyIdTo"), false));
             newPage.add(row);
         }
