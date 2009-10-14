@@ -16,11 +16,13 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
+<#if invoices?has_content>
+
 <form method="post" name="processCheckRunForm" action="<@ofbizUrl>processCheckRun</@ofbizUrl>" onSubmit="javascript:submitFormDisableSubmits(this)">
 
-  <@inputHidden name="paymentMethodId" value=parameters.paymentMethodId />
-  <@inputHidden name="initialCheckNumber" value=parameters.initialCheckNumber />
-  <@inputHidden name="organizationPartyId" value=organizationPartyId />
+  <@inputHidden name="paymentMethodId" value=parameters.paymentMethodId! />
+  <@inputHidden name="initialCheckNumber" value=parameters.initialCheckNumber! />
+  <@inputHidden name="organizationPartyId" value=organizationPartyId! />
   <@inputHidden name="partyIdFrom" value=parameters.partyIdFrom! />
   <@inputHidden name="dueDate" value=parameters.dueDate! />
 
@@ -66,3 +68,5 @@
     <@inputHiddenRowCount list=invoices />
   </table>
 </form>
+
+</#if>
