@@ -183,7 +183,7 @@ under the License.
         default-title-style="boxhead" default-tooltip-style="tabletext" default-widget-style="tabletext" header-row-style="boxtop"
         default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1" separate-columns="true" >
         <row-actions>
-            <set field="amountToApply" value="${groovy:org.ofbiz.accounting.payment.PaymentWorker.getPaymentNotAppliedBd(delegator,paymentId)}"/>
+            <set field="amountToApply" value="${groovy:org.ofbiz.accounting.payment.PaymentWorker.getPaymentNotApplied(delegator,paymentId)}"/>
         </row-actions>
         <field name="paymentId" widget-style="linktext">
             <hyperlink description="${paymentId}" target="viewPayment">
