@@ -1403,7 +1403,7 @@ public final class FinancialReports {
 
         List<String> selectList = UtilMisc.toList("totalTaxDue", "taxAuthPartyId", "taxAuthGeoId");
 
-        EntityListIterator iter = delegator.findListIteratorByCondition(dv, conditionList, null, selectList, UtilMisc.toList("invoiceId", "invoiceItemSeqId"), null);
+        EntityListIterator iter = delegator.findListIteratorByCondition(dv, conditionList, null, selectList, null, null);
         List<GenericValue> taxItems = iter.getCompleteList();
         iter.close();
         for (GenericValue taxItem : taxItems) {
