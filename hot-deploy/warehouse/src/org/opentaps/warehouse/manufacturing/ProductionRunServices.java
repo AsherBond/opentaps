@@ -479,7 +479,7 @@ public final class ProductionRunServices {
                 BigDecimal templateQuantity = (templateProduct.get("estimatedQuantity") == null ? new BigDecimal("1.0") : templateProduct.getBigDecimal("estimatedQuantity"));
 
                 // get the supplier for this product (used later for requirement)
-                results = dispatcher.runSync("getSuppliersForProduct", UtilMisc.toMap("productId", templateProductId, "quantity", templateProduct));
+                results = dispatcher.runSync("getSuppliersForProduct", UtilMisc.toMap("productId", templateProductId, "quantity", templateQuantity));
                 if (ServiceUtil.isError(results)) {
                     return UtilMessage.createAndLogServiceError(results, "WarehouseError_CannotCreateProductionRun", locale, MODULE);
                 }
