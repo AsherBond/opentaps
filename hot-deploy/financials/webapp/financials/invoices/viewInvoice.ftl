@@ -70,7 +70,7 @@ function notifyInvoiceItemsCount(n) {
   <@form name="markInvoiceReadyAction" url="setInvoiceReady" invoiceId=invoice.invoiceId />
   <@form name="cancelInvoiceReadyAction" url="setInvoiceStatus" invoiceId=invoice.invoiceId statusId="INVOICE_CANCELLED" />
 
-  <#assign stateChangeLinks><@submitFormLink form="markInvoiceReadyAction" text=uiLabelMap.FinancialsPaymentStatusToReady id="markAsReadyButton" class="subMenuButton" style=(invoiceItems.size() gt 0)?string("visibility:hidden", "")/></#assign>
+  <#assign stateChangeLinks><@submitFormLink form="markInvoiceReadyAction" text=uiLabelMap.FinancialsPaymentStatusToReady id="markAsReadyButton" class="subMenuButton" style=(invoiceItems.size() == 0)?string("visibility:hidden", "")/></#assign>
   <#assign stateChangeLinks>${stateChangeLinks!}<@submitFormLink form="cancelInvoiceReadyAction" text=uiLabelMap.CommonCancel class="subMenuButton"/></#assign>
 <#elseif (invoice.isReady() || invoice.isPaid()) && (hasWriteoffPermission)>
   <#if (invoice.isSalesInvoice() && invoice.isReady() && invoice.processingStatusId?default("") != "INVOICE_PRINTED")>
