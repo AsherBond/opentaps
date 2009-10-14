@@ -18,6 +18,8 @@ specific language governing permissions and limitations
 under the License.
 -->
 <entity-engine-xml>
+    <!--
+ To preserve backward compatibility, we have to see original AcctgTransType definitions in hot-deploy/financials/data, so these are commented out to avoid duplication.
     <AcctgTransType acctgTransTypeId="INTERNAL_ACCTG_TRANS" description="Internal" hasTable="Y" parentTypeId=""/>
     <AcctgTransType acctgTransTypeId="AMORTIZATION" description="Amortization" hasTable="N" parentTypeId="INTERNAL_ACCTG_TRANS"/>
     <AcctgTransType acctgTransTypeId="DEPRECIATION" description="Depreciation" hasTable="Y" parentTypeId="INTERNAL_ACCTG_TRANS"/>
@@ -38,16 +40,16 @@ under the License.
 
     <AcctgTransType acctgTransTypeId="INVENTORY_RETURN" description="Inventory from Return" hasTable="N" parentTypeId="EXTERNAL_ACCTG_TRANS"/>
 
-    <AcctgTransType acctgTransTypeId="SALES_INVOICE" description="Sales Invoice" hasTable="N" parentTypeId="OBLIGATION_ACCTG_TRA"/><!-- FIXME: replace with "SALES" -->
-    <AcctgTransType acctgTransTypeId="PURCHASE_INVOICE" description="Purchase Invoice" hasTable="N" parentTypeId="OBLIGATION_ACCTG_TRA"/><!-- FIXME: replace with "SALES" -->
+    <AcctgTransType acctgTransTypeId="SALES_INVOICE" description="Sales Invoice" hasTable="N" parentTypeId="OBLIGATION_ACCTG_TRA"/>
+    <AcctgTransType acctgTransTypeId="PURCHASE_INVOICE" description="Purchase Invoice" hasTable="N" parentTypeId="OBLIGATION_ACCTG_TRA"/>
     <AcctgTransType acctgTransTypeId="SALES_SHIPMENT" description="Sales Shipment" hasTable="N" parentTypeId="EXTERNAL_ACCTG_TRANS"/>
     <AcctgTransType acctgTransTypeId="SHIPMENT_RECEIPT" description="Shipment Receipt" hasTable="N" parentTypeId="EXTERNAL_ACCTG_TRANS"/>
 
-    <AcctgTransType acctgTransTypeId="INCOMING_PAYMENT" description="Incoming Payment" hasTable="N" parentTypeId=""/><!-- FIXME: replace with "RECEIPT" -->
-    <AcctgTransType acctgTransTypeId="OUTGOING_PAYMENT" description="Outgoing Payment" hasTable="N" parentTypeId=""/><!-- FIXME: replace with "DISBURSEMENT" -->
+    <AcctgTransType acctgTransTypeId="INCOMING_PAYMENT" description="Incoming Payment" hasTable="N" parentTypeId=""/>
+    <AcctgTransType acctgTransTypeId="OUTGOING_PAYMENT" description="Outgoing Payment" hasTable="N" parentTypeId=""/>
 
     <AcctgTransType acctgTransTypeId="PAYMENT_APPL" description="Payment Applied" hasTable="N" parentTypeId=""/>
-
+    -->
     <AcctgTransEntryType acctgTransEntryTypeId="_NA_" description="Not Applicable" hasTable="N" parentTypeId=""/>
 
     <StatusType description="Acctg Entry Reconcile" hasTable="N" parentTypeId="" statusTypeId="ACCTG_ENREC_STATUS"/>
