@@ -23,7 +23,7 @@
 <tr>
   <td style="vertical-align: top; width: 35%;">
 
-    <p><b>${uiLabelMap.CommonAccounting}</b>
+    <p><b>${uiLabelMap.AccountingAccounting}</b>
     <ul class="bulletList">
     <li><a href="<@ofbizUrl>PostedBalances</@ofbizUrl>">${uiLabelMap.FinancialsPostedBalancesByGlAccount}</a></li>
     <li><a href="<@ofbizUrl>TransactionSummary</@ofbizUrl>">${uiLabelMap.FinancialsTransactionSummary}</a></li>
