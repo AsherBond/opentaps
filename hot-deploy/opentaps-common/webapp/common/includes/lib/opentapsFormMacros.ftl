@@ -1372,9 +1372,14 @@ For more information, please see documentation/opentapsFormMacros.html
 </#macro>
 
 <#-- Accounting tags macros -->
-<#macro accountingTagsHidden tags entity prefix="tag" suffix="">
+<#macro accountingTagsHidden tags entity="" prefix="tag" suffix="">
   <#list tags as tag>
-    <@inputHidden name="${prefix}${tag.index}${suffix}" value=entity.get("acctgTagEnumId${tag.index}")! />
+    <#if entity?has_content>
+      <#assign tagValue=entity.get("acctgTagEnumId${tag.index}")! />
+    <#else>
+      <#assign tagValue=parameters.get("${prefix}${tag.index}${suffix}")! />
+    </#if>
+    <@inputHidden name="${prefix}${tag.index}${suffix}" value=tagValue />
   </#list>
 </#macro>
 

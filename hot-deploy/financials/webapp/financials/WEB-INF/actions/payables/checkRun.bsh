@@ -1,5 +1,5 @@
 /* 
- * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
@@ -14,22 +14,24 @@
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
  */
 
-import org.ofbiz.base.util.*;
-import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.entity.condition.*;
-import org.opentaps.common.util.UtilAccountingTags;
-import org.ofbiz.accounting.invoice.InvoiceWorker;
-import org.opentaps.domain.DomainsLoader;
-import org.opentaps.domain.billing.invoice.Invoice;
-import org.opentaps.domain.organization.Organization;
-import org.opentaps.domain.organization.OrganizationRepositoryInterface;
-import org.opentaps.foundation.repository.ofbiz.Repository;
-import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.opentaps.foundation.infrastructure.User;
 import java.sql.Timestamp;
 import java.text.ParseException;
-import org.opentaps.common.util.UtilDate;
+
+import org.ofbiz.accounting.invoice.InvoiceWorker;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilDate;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.billing.invoice.Invoice;
+import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
+import org.opentaps.domain.organization.Organization;
+import org.opentaps.domain.organization.OrganizationRepositoryInterface;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.foundation.repository.ofbiz.Repository;
 
 delegator = request.getAttribute("delegator");
 locale = UtilHttp.getLocale(request);
@@ -39,6 +41,7 @@ dateTimeFormat = UtilDate.getDateTimeFormat(locale);
 DomainsLoader dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
 dd = dl.loadDomainsDirectory();
 OrganizationRepositoryInterface organizationRepository = dd.getOrganizationDomain().getOrganizationRepository();
+InvoiceRepositoryInterface invoiceRepository = dd.getBillingDomain().getInvoiceRepository();
 Organization organization = organizationRepository.getOrganizationById(organizationPartyId);
 invoiceRepository = dd.getBillingDomain().getInvoiceRepository();
 
@@ -91,42 +94,38 @@ context.put("partyIdFrom", partyIdFrom);
 
 // TODO how can the domain model emulate this kind of flexible lookup?
 conditions = new ArrayList();
-conditions.add(new EntityExpr("invoiceTypeId", EntityOperator.IN, UtilMisc.toList("PURCHASE_INVOICE", "CUST_RTN_INVOICE", "COMMISSION_INVOICE")));
-conditions.add(new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList("INVOICE_READY")));
+conditions.add(EntityCondition.makeCondition("invoiceTypeId", EntityOperator.IN, UtilMisc.toList("PURCHASE_INVOICE", "CUST_RTN_INVOICE", "COMMISSION_INVOICE")));
+conditions.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "INVOICE_READY"));
 if (UtilValidate.isNotEmpty(partyIdFrom)) {
-    conditions.add(new EntityExpr("partyIdFrom", EntityOperator.EQUALS, partyIdFrom));
+    conditions.add(EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, partyIdFrom));
 }
-invoiceList = delegator.findByCondition("Invoice", new EntityConditionList(conditions, EntityOperator.AND), null, UtilMisc.toList("invoiceId"));
-if ( ! UtilValidate.isEmpty( dueDate ) ) {
-    dateConditions = new ArrayList();
-    dateConditions.add(new EntityExpr( "dueDate" , EntityOperator.LESS_THAN_EQUAL_TO , dueDate ));
+if (UtilValidate.isNotEmpty(dueDate)) {
+    dateConditions = EntityCondition.makeCondition(EntityOperator.OR,
+                                                   EntityCondition.makeCondition("dueDate", EntityOperator.LESS_THAN_EQUAL_TO, dueDate),
+                                                   // todo: Exclude invoices with null dueDates?
+                                                   EntityCondition.makeCondition("dueDate", EntityOperator.EQUALS, null));
+    conditions.add(dateConditions);
+}
 
-    // todo: Exclude invoices with null dueDates?
-    dateConditions.add(new EntityExpr( "dueDate" , EntityOperator.EQUALS , null ));
-    invoiceList = EntityUtil.filterByCondition( invoiceList , new EntityConditionList( dateConditions , EntityOperator.OR ) ) ;
-}
+invoiceList = invoiceRepository.findList(Invoice.class, conditions, UtilMisc.toList("invoiceId"));
 
 // Assemble the invoice data
 now = UtilDateTime.nowTimestamp();
 invoices = new ArrayList();
-invoiceData = new HashMap();
+fromPartyNames = new HashMap();
 for (invoice : invoiceList) {
-    // load our domain object by hand, since the lookup was custom
-    invoiceObj = Repository.loadFromGeneric(Invoice.class, invoice);
-    invoiceObj.initRepository(invoiceRepository); // this is sort of a hack since we are creating the domain objects by hand
-    outstandingAmount = invoiceObj.getPendingOpenAmount();
+    outstandingAmount = invoice.getPendingOpenAmount();
     if (outstandingAmount.signum() > 0) {
-
-        partyIdFromNameMap = dispatcher.runSync( "getPartyNameForDate" , UtilMisc.toMap( "partyId" , invoice.getString( "partyIdFrom" ) , "compareDate" , invoice.get( "invoiceDate" ) , "userLogin" , session.getAttribute( "userLogin" ) ) ) ;
-        fromPartyName = partyIdFromNameMap.get( "fullName" ) ;
-        if ( fromPartyName == null ) {
+        partyIdFromNameMap = dispatcher.runSync("getPartyNameForDate", UtilMisc.toMap("partyId", invoice.getPartyIdFrom(), "compareDate", invoice.getInvoiceDate(), "userLogin", session.getAttribute("userLogin")));
+        fromPartyName = partyIdFromNameMap.get("fullName");
+        if (fromPartyName == null) {
             fromPartyName = "" ;
         }
         fromPartyName += "(" + invoice.getString( "partyIdFrom" ) + ")" ;
 
         invoices.add(invoice);
-        invoiceData.put( invoice.getString("invoiceId"), UtilMisc.toMap( "outstandingAmount", outstandingAmount, "fromPartyName" , fromPartyName ) ) ;        
+        fromPartyNames.put(invoice.getInvoiceId(), fromPartyName);        
     }
 }
 context.put("invoices", invoices);
-context.put("invoiceData", invoiceData);
+context.put("fromPartyNames", fromPartyNames);

@@ -282,6 +282,7 @@
     <screen name="checkRun">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="FinancialsCheckRun"/>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/payables/checkRun.bsh"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/includes/pagination.bsh"/>
@@ -299,7 +300,9 @@
                                 <platform-specific>
                                     <html><html-template location="component://financials/webapp/financials/payables/FindInvoicesForCheckRun.ftl"/></html>
                                 </platform-specific>
-                                <include-form name="ListInvoicesForCheckRun" location="component://financials/widget/financials/forms/payables/PayablesForm.xml"/>
+                                <platform-specific>
+                                    <html><html-template location="component://financials/webapp/financials/payables/ListInvoicesForCheckRun.ftl"/></html>
+                                </platform-specific>
                             </widgets>
                             <fail-widgets>
                                 <include-screen name="PermissionErrorScreen" location="component://financials/widget/financials/screens/common/CommonScreens.xml"/>

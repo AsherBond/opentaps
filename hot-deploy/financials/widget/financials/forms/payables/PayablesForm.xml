@@ -57,36 +57,6 @@
         <field name="_rowSubmit" title="${uiLabelMap.CommonSelect}"><check/></field>
     </form>
 
-    <form name="ListInvoicesForCheckRun" type="multi" list-name="invoices"
-        paginate-target="checkRun" paginate-size-field="invoicesSize" paginate-index-field="invoicesIndex"
-        default-title-style="boxhead" default-tooltip-style="tabletext" default-widget-style="tabletext" header-row-style="boxtop"
-        default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1" separate-columns="true"
-        target="processCheckRun?paymentMethodId=${paymentMethodId}&amp;initialCheckNumber=${initialCheckNumber}&amp;organizationPartyId=${organizationPartyId}&amp;partyIdFrom=${partyIdFrom}&amp;dueDate=${dueDate}&amp;acctgTagEnumId1=${tag1}&amp;acctgTagEnumId2=${tag2}&amp;acctgTagEnumId3=${tag3}&amp;acctgTagEnumId4=${tag4}&amp;acctgTagEnumId5=${tag5}&amp;acctgTagEnumId6=${tag6}&amp;acctgTagEnumId7=${tag7}&amp;acctgTagEnumId8=${tag8}&amp;acctgTagEnumId9=${tag9}&amp;acctgTagEnumId10=${tag10}">
-        <row-actions>
-            <set field="outstandingAmount" value="${groovy:invoiceData.get(invoiceId).get(&quot;outstandingAmount&quot;)}"/>
-            <set field="fromPartyName" value="${groovy:invoiceData.get(invoiceId).get(&quot;fromPartyName&quot;)}"/>
-        </row-actions>
-        <field name="invoiceIds" entry-name="invoiceId" title="${uiLabelMap.AccountingInvoiceID}" widget-style="linktext">
-            <hyperlink description="${invoiceId}" target="viewInvoice">
-                <parameter param-name="invoiceId" from-field="invoiceId"/>
-            </hyperlink>
-        </field>
-        <field name="partyIdsFrom" entry-name="${partyIdFrom}"><hidden value="${partyIdFrom}"/></field>
-        <field name="invoiceTypeIds" entry-name="${invoiceTypeId}"><hidden value="${invoiceTypeId}"/></field>
-        <field name="referenceNumber" title="${uiLabelMap.FinancialsReferenceNumber}"><display also-hidden="false"/></field>
-        <field name="invoiceDate" title="${uiLabelMap.AccountingInvoiceDate}"><display also-hidden="false"/></field>
-        <field name="dueDate" title="${uiLabelMap.AccountingDueDate}"><display also-hidden="false"/></field>
-        <field name="fromPartyName" title="${uiLabelMap.PartyParty}">
-            <hyperlink description="${fromPartyName}" target="customerStatement" also-hidden="false">
-                <parameter param-name="partyId" from-field="partyIdFrom"/>
-            </hyperlink>
-        </field>
-        <field name="currencyUomIds" entry-name="currencyUomId" title="${uiLabelMap.CommonCurrency}"><hidden/></field>
-        <field name="outstandingAmount" title="${uiLabelMap.FinancialsAmountOutstanding}" widget-area-style="tabletextright"><display type="currency" currency="${currencyUomId}" also-hidden="false"/></field>
-        <field name="amounts" entry-name="${amount}" title="${uiLabelMap.FinancialsAmountToPay}"><text size="10" default-value="${outstandingAmount}"/></field>
-        <field name="_rowSubmit" title="${uiLabelMap.CommonSelected}"><check/></field>
-        <field name="submitButton" title="${uiLabelMap.FinancialsIssueChecks}" widget-style="smallSubmit" widget-area-style="boxlink"><submit/></field>
-    </form>
 
 </forms>
         
