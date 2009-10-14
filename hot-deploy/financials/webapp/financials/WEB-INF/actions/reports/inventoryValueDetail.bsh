@@ -77,8 +77,8 @@ for (iter = inventoryItems.iterator(); iter.hasNext(); ) {
          amount = qoh.multiply(inventoryItem.getBigDecimal("unitCost")).setScale(FinancialServices.decimals, FinancialServices.rounding);
 
          // convert TODO: make a faster method as this is slow as a service
-         serviceResults = dispatcher.runSync("convertUom", UtilMisc.toMap("uomId", inventoryItem.get("currencyUomId"), "uomIdTo", orgCurrencyUomId, "originalValue", new Double(amount.doubleValue())));
-         amount = new BigDecimal(((Double) serviceResults.get("convertedValue")).doubleValue());
+         serviceResults = dispatcher.runSync("convertUom", UtilMisc.toMap("uomId", inventoryItem.get("currencyUomId"), "uomIdTo", orgCurrencyUomId, "originalValue", amount));
+         amount = (BigDecimal) serviceResults.get("convertedValue");
 
          // round off and store
          amount = amount.setScale(FinancialServices.decimals, FinancialServices.rounding);
