@@ -312,6 +312,8 @@ public class OrderItemsEditableListView extends EntityEditableListView {
             @Override public void onStoreLoadError(Throwable error) {
                 unlockCell(rowIndex, getColumnIndex(OrderItemsCartLookupConfiguration.INOUT_DESCRIPTION));
                 unlockCell(rowIndex, getColumnIndex(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE));
+                markGridNotBusy();
+                UtilUi.logError("Store load error [" + error + "]", MODULE, "onStoreLoadError");
             }
         };
     }
