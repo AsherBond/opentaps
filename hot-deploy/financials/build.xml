@@ -46,6 +46,7 @@
             <fileset dir="${ofbiz.dir}/framework/base/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/base/lib/commons" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/base/lib/j2eespecs" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/base/lib/etl" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/base/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/entity/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/entity/build/lib" includes="*.jar"/>

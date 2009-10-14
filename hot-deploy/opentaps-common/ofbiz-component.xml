@@ -24,7 +24,6 @@
     <classpath type="jar" location="lib/aspectwerkz/*"/>
     <classpath type="jar" location="lib/asterisk/*"/>
     <classpath type="jar" location="lib/hibernate/*"/>
-    <classpath type="jar" location="lib/etl/*"/>
     <classpath type="dir" location="scripts"/>
     <classpath type="dir" location="config"/>
     <classpath type="dir" location="script"/>
