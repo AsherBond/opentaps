@@ -312,6 +312,7 @@ public class OrderItemsEditableListView extends EntityEditableListView {
             @Override public void onStoreLoadError(Throwable error) {
                 unlockCell(rowIndex, getColumnIndex(OrderItemsCartLookupConfiguration.INOUT_DESCRIPTION));
                 unlockCell(rowIndex, getColumnIndex(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE));
+                // make grid not busy after encounter an error, else will display "wait a while..." pop window endless.
                 markGridNotBusy();
                 UtilUi.logError("Store load error [" + error + "]", MODULE, "onStoreLoadError");
             }
