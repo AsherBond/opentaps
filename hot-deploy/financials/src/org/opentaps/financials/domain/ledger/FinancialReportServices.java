@@ -26,7 +26,6 @@ import javolution.util.FastMap;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Transaction;
-import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.opentaps.domain.base.entities.AcctgTransAndEntries;
@@ -202,7 +201,7 @@ public class FinancialReportServices extends Service implements FinancialReportS
             if (tx != null && tx.isActive()) {
                 tx.rollback();
             }
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(HibernateUtil.getHibernateExceptionCause(e));
         } catch (EntityNotFoundException e) {
             throw new ServiceException(e.getMessage());
         } catch (LedgerException e) {
@@ -216,7 +215,6 @@ public class FinancialReportServices extends Service implements FinancialReportS
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public void collectEncumbranceAndTransEntryFacts() throws ServiceException {
         // create encumbrance snapshot
         Map<String, Object> context = FastMap.<String, Object>newInstance();

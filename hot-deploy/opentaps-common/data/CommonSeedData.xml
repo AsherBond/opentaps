@@ -222,7 +222,7 @@ under the License.
     <Enumeration enumId="ACTUAL_COSTING" enumTypeId="COSTING_METHOD" description="Actual Costs" sequenceId="01"/>
     <Enumeration enumId="STANDARD_COSTING" enumTypeId="COSTING_METHOD" description="Standard Costs" sequenceId="02"/>
 
-    <!-- Requirement for transfering inventory -->
+    <!-- Requirement for transferring inventory -->
     <RequirementType requirementTypeId="TRANSFER_REQUIREMENT" description="Inventory Transfer Requirement" hasTable="N"/>
 
     <!-- Final status for shipment route segments to mark that a label has been printed and the segment has been shipped. -->
