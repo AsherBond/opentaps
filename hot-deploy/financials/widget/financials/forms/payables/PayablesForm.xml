@@ -45,7 +45,7 @@
                 <parameter param-name="paymentId" from-field="paymentId"/>
             </hyperlink>
         </field>
-        <field name="paymentMethodId" title="${uiLabelMap.AccountingPaymentMethod}">
+        <field name="paymentMethodId" title="${uiLabelMap.FinancialsPaymentMethod}">
             <display-entity description="${description} (${paymentMethodId})" entity-name="PaymentMethod"/> 
         </field>
         <field name="paymentRefNum" title="${uiLabelMap.FinancialsPaymentRefNum}"><display/></field>

@@ -21,13 +21,13 @@
 
     <form method="post" action="checkRun" onSubmit="javascript:submitFormDisableSubmits(this)" name="FindInvoicesForCheckRun">
         <table class="twoColumnForm">
-            <@inputSelectRow title=uiLabelMap.AccountingPaymentMethod name="paymentMethodId" list=checkPaymentMethods key="paymentMethodId" displayField="description" default="${defaultPaymentMethodId}" titleClass="requiredField"/>
+            <@inputSelectRow title=uiLabelMap.FinancialsPaymentMethod name="paymentMethodId" list=checkPaymentMethods key="paymentMethodId" displayField="description" default="${defaultPaymentMethodId}" titleClass="requiredField"/>
             <@inputTextRow title=uiLabelMap.FinancialsInitialCheckNumber name="initialCheckNumber" size="20" titleClass="requiredField"/>
             <#if tagTypes?has_content>
                 <@accountingTagsSelectRows tags=tagTypes prefix="acctgTagEnumId" entity=paymentValue! />
             </#if>
             <tr><td colspan="2">&nbsp;</td></tr>
-            <@inputLookupRow title=uiLabelMap.AccountingFromParty name="partyIdFrom" lookup="LookupPartyName" form="FindInvoicesForCheckRun"/>
+            <@inputLookupRow title=uiLabelMap.OpentapsFromParty name="partyIdFrom" lookup="LookupPartyName" form="FindInvoicesForCheckRun"/>
             <@inputDateRow title=uiLabelMap.FinancialsDueDateBefore name="dueDate"/>
             <@inputSubmitRow title=uiLabelMap.CommonFind/>
         </table>

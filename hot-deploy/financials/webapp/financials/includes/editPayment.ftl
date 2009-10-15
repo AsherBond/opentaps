@@ -151,7 +151,7 @@
 
   <#if ! isDisbursement >
     <tr>
-      <@displayTitleCell title=uiLabelMap.AccountingPaymentMethodType />
+      <@displayTitleCell title=uiLabelMap.CommonPaymentMethodType />
       <td nowrap="nowrap">
         <select name="paymentMethodTypeId" id="paymentMethodTypeId" class="selectBox">
           <#list paymentMethodTypeList as paymentMethodType>
