@@ -38,7 +38,7 @@
     <tr class="listTableHeader">
         <@headerCell title=uiLabelMap.AccountingEffectiveDate orderBy="effectiveDate" blockClass="tableheadtext"/>
         <@headerCell title=uiLabelMap.AccountingPaymentID orderBy="paymentId" blockClass="tableheadtext"/>
-        <@headerCell title=uiLabelMap.AccountingPaymentMethod orderBy="paymentMethodId" blockClass="tableheadtext"/>
+        <@headerCell title=uiLabelMap.FinancialsPaymentMethod orderBy="paymentMethodId" blockClass="tableheadtext"/>
         <@headerCell title=uiLabelMap.FinancialsPaymentRefNum orderBy="paymentRefNum" blockClass="tableheadtext"/>
         <@headerCell title=uiLabelMap.FinancialsPayToParty orderBy="partyIdTo" blockClass="tableheadtext"/>
         <@headerCell title=uiLabelMap.AccountingAmount orderBy="amount" blockClass="tableheadtext"/>

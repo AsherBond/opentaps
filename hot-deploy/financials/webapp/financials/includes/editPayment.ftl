@@ -125,7 +125,7 @@
 
   <#if paymentMethodList?exists && paymentMethodList?has_content && ( fromParty?exists || isDisbursement )>
     <tr>
-      <@displayTitleCell title=uiLabelMap.AccountingPaymentMethod />
+      <@displayTitleCell title=uiLabelMap.FinancialsPaymentMethod />
       <td nowrap="nowrap">
         <select name="paymentMethodId" id="paymentMethodId" class="selectBox" onchange="checkPaymentMethodTypeId()">
           <#if ! isDisbursement><option value=""></option></#if>

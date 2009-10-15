@@ -51,7 +51,7 @@ under the License.
                     <fo:block font-weight="bold">${uiLabelMap.CommonDate}</fo:block>
                 </fo:table-cell>
                 <fo:table-cell padding-before="0.2in">
-                    <fo:block font-weight="bold">${uiLabelMap.AccountingPaymentMethod}</fo:block>
+                    <fo:block font-weight="bold">${uiLabelMap.FinancialsPaymentMethod}</fo:block>
                 </fo:table-cell>
                 <fo:table-cell padding-before="0.2in">
                     <fo:block font-weight="bold">${uiLabelMap.FormFieldTitle_paymentRefNum}</fo:block>

@@ -91,9 +91,9 @@ If you have come this far, payment should be a valid Payment Object.
           </#if> 
           (${paymentMethod.paymentMethodId})
         </#assign>
-        <@displayRow title=uiLabelMap.AccountingPaymentMethod text=paymentMethodDesc />
+        <@displayRow title=uiLabelMap.FinancialsPaymentMethod text=paymentMethodDesc />
       <#else/>
-        <@displayRow title=uiLabelMap.AccountingPaymentMethodType text=(paymentMethodType.get("description", locale))?if_exists />
+        <@displayRow title=uiLabelMap.FinancialsPaymentMethodType text=(paymentMethodType.get("description", locale))?if_exists />
       </#if>
    
       <@displayCurrencyRow title=uiLabelMap.AccountingAmount amount=payment.amount?default("0.0") currencyUomId=payment.currencyUomId />

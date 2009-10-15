@@ -34,7 +34,7 @@
               <@displayRow title=uiLabelMap.CommonStatus text=paycheck.getRelatedOneCache("StatusItem").get("description", "FinancialsEntityLabel", locale) />        	  
               <@displayRow title=uiLabelMap.FinancialsPaycheckType text=paycheck.getRelatedOneCache("PaymentType").get("description", "FinancialsEntityLabel", locale)/>
               <@displayRow title=uiLabelMap.FinancialsPayToParty text=paycheck.partyIdTo />
-              <@inputSelectRow name="paymentMethodId" title=uiLabelMap.AccountingPaymentMethod list=paymentMethodList key="paymentMethodId" displayField="description" default=paycheck.paymentMethodId/>
+              <@inputSelectRow name="paymentMethodId" title=uiLabelMap.FinancialsPaymentMethod list=paymentMethodList key="paymentMethodId" displayField="description" default=paycheck.paymentMethodId/>
               <tr>
 		          <@displayCell text=uiLabelMap.FinancialsGrossAmount blockClass="titleCell" blockStyle="width: 100px" class="tableheadtext"/>
 	          	  <@inputCurrencyCell name="amount" currencyName="currencyUomId" default=paycheck.amount defaultCurrencyUomId=paycheck.currencyUomId/>
@@ -49,7 +49,7 @@
         <@displayRow title=uiLabelMap.CommonStatus text=paycheck.getRelatedOneCache("StatusItem").get("description", "FinancialsEntityLabel", locale) />        	  
         <@displayRow title=uiLabelMap.FinancialsPaycheckType text=paycheck.getRelatedOneCache("PaymentType").get("description", "FinancialsEntityLabel", locale)/>
         <@displayRow title=uiLabelMap.FinancialsPayToParty text=paycheck.partyIdTo />
-        <@displayRow title=uiLabelMap.AccountingPaymentMethod text=paycheck.paymentMethodId />
+        <@displayRow title=uiLabelMap.FinancialsPaymentMethod text=paycheck.paymentMethodId />
         <@displayCurrencyRow title=uiLabelMap.FinancialsGrossAmount amount=paycheck.amount currencyUomId=paycheck.currencyUomId />
         <@displayDateRow title=uiLabelMap.AccountingEffectiveDate date=paycheck.effectiveDate />
         <@displayRow title=uiLabelMap.CommonComments text=paycheck.comments?if_exists />

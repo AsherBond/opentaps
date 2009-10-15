@@ -34,7 +34,7 @@
                   <@inputSelectRow name="paymentTypeId" title=uiLabelMap.FinancialsPaycheckType list=paycheckTypes key="paymentTypeId" displayField="description" default=paymentTypeId?if_exists/>
               </#if>
               <@inputLookupRow name="partyIdTo" title=uiLabelMap.FinancialsPayToParty form="createPaycheckForm" lookup="LookupPartyName"/>
-              <@inputSelectRow name="paymentMethodId" title=uiLabelMap.AccountingPaymentMethod list=paymentMethodList key="paymentMethodId" displayField="description"/>
+              <@inputSelectRow name="paymentMethodId" title=uiLabelMap.FinancialsPaymentMethod list=paymentMethodList key="paymentMethodId" displayField="description"/>
               <tr>
 		          <@displayCell text=uiLabelMap.FinancialsGrossAmount blockClass="titleCell" blockStyle="width: 100px" class="tableheadtext"/>
 	          	  <@inputCurrencyCell name="amount" currencyName="currencyUomId" defaultCurrencyUomId=defaultCurrencyUomId/>

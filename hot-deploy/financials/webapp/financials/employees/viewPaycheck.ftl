@@ -49,7 +49,7 @@
 		    <@displayRow title=uiLabelMap.CommonStatus text=paycheck.getRelatedOneCache("StatusItem").get("description", "FinancialsEntityLabel", locale) />        	  
 		    <@displayRow title=uiLabelMap.FinancialsPaycheckType text=paycheck.getRelatedOneCache("PaymentType").get("description", "FinancialsEntityLabel", locale)/>
 		    <@displayRow title=uiLabelMap.FinancialsPayToParty text=paycheck.partyIdTo />
-		    <@displayRow title=uiLabelMap.AccountingPaymentMethod text=paycheck.paymentMethodId />
+		    <@displayRow title=uiLabelMap.FinancialsPaymentMethod text=paycheck.paymentMethodId />
 		    <@displayDateRow title=uiLabelMap.AccountingEffectiveDate date=paycheck.effectiveDate />
 		    <@displayRow title=uiLabelMap.CommonComments text=paycheck.comments?if_exists />
 		    <@displayRow title=uiLabelMap.FinancialsPaymentRefNum text=paycheck.paymentRefNum?if_exists />        

@@ -36,7 +36,7 @@
                 <@displayError name="thruDate" />
             </td>
         </tr>
-        <@inputSelectRow name="paymentMethodId" title=uiLabelMap.AccountingPaymentMethod list=paymentMethodList key="paymentMethodId" displayField="description" required=false />
+        <@inputSelectRow name="paymentMethodId" title=uiLabelMap.FinancialsPaymentMethod list=paymentMethodList key="paymentMethodId" displayField="description" required=false />
         <@inputTextRow name="paymentRefNum" title=uiLabelMap.FinancialsPaymentRefNum />
         <@inputSubmitRow title=uiLabelMap.FinancialsFindPaycheck />
 

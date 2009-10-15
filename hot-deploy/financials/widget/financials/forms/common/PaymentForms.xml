@@ -190,7 +190,7 @@ under the License.
                 <parameter param-name="paymentId" from-field="paymentId"/>
             </hyperlink>
         </field>
-        <field name="paymentMethodTypeId" title="${uiLabelMap.AccountingPaymentMethod}">
+        <field name="paymentMethodTypeId" title="${uiLabelMap.FinancialsPaymentMethod}">
             <display-entity entity-name="PaymentMethodType"/> 
         </field>
         <field name="effectiveDate" title="${uiLabelMap.AccountingEffectiveDate}"><display/></field>

@@ -81,7 +81,7 @@
    
    <tr>
      <#if findDisbursement >
-       <td width="20%" align="right"><div class="tableheadtext">${uiLabelMap.AccountingPaymentMethod} </div></td>
+       <td width="20%" align="right"><div class="tableheadtext">${uiLabelMap.FinancialsPaymentMethod} </div></td>
        <td width="2%">&nbsp;</td>
        <td nowrap>
          <select name="paymentMethodId" class="selectBox">
@@ -92,7 +92,7 @@
 	     </select>
        </td>
      <#else>
-       <td width="20%" align="right" nowrap><div class="tableheadtext">${uiLabelMap.AccountingPaymentMethodType} </div></td>
+       <td width="20%" align="right" nowrap><div class="tableheadtext">${uiLabelMap.FinancialsPaymentMethodType} </div></td>
        <td width="2%">&nbsp;</td>
        <td nowrap>
          <select name="paymentMethodTypeId" class="selectBox">
