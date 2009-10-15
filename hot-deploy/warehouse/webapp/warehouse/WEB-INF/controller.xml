@@ -880,7 +880,9 @@ under the License.
     <request-map uri="createPicklistFromOrders">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="createPicklistFromOrders"/>
-        <response name="success" type="request-redirect" value="picklistDetails"/>
+        <response name="success" type="request-redirect" value="picklistDetails">
+             <redirect-parameter name="picklistId"/>
+        </response>
         <response name="error" type="request-redirect" value="createPicklist"/>
     </request-map>
     <request-map uri="createAndPrintPicklistFromOrders">
@@ -898,8 +900,12 @@ under the License.
     <request-map uri="closePicklist">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="warehouse.closePicklist"/>
-        <response name="success" type="request-redirect" value="picklistDetails"/>
-        <response name="error" type="request-redirect" value="picklistDetails"/>
+        <response name="success" type="request-redirect" value="picklistDetails">
+             <redirect-parameter name="picklistId"/>
+        </response>
+        <response name="error" type="request-redirect" value="picklistDetails">
+             <redirect-parameter name="picklistId"/>
+        </response>
     </request-map>
     <request-map uri="closePicklists">
         <security https="true" auth="true"/>
