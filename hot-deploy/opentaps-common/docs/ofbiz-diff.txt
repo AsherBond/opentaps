@@ -88,6 +88,9 @@ r13623 Removed log4j.xml from the kettle-engine.jar root because it affects comm
 framework/base/config/debug.properties
 r13645 Filter Spring logging to WARN
 
+framework/entity/config/entityengine.xml
+r13534 Add analytics & testing(analytics test database) to entity engine config
+
 Applications changes
 --------------------
 
