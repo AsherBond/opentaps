@@ -178,6 +178,9 @@ applications/manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ViewP
 applications/manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunDeclaration.groovy
 - Patch to ofbiz files to fix NPE occurring if the WEGS is missing.
 
+applications/accounting/src/org/ofbiz/accounting/invoice/InvoiceServices.java
+- Fix to calculate adjustment with source percentage and no amount set.
+
 Other API Changes
 -----------------
 
