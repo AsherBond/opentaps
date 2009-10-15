@@ -158,7 +158,6 @@ public class OrderItemsLookupService extends EntityLookupService {
                 BigDecimal quantity = new BigDecimal(quantityStr);
                 PurchasingRepositoryInterface purchasingRepository = getDomainsDirectory().getPurchasingDomain().getPurchasingRepository();
                 SupplierProduct supplierProduct = purchasingRepository.getSupplierProduct(cart.getPartyId(), productId, quantity, cart.getCurrency());
-                Debug.logInfo("Found matching SupplierProduct: " + supplierProduct, MODULE);
 
                 String description = "";
                 String supplierProductName = "";
@@ -168,10 +167,16 @@ public class OrderItemsLookupService extends EntityLookupService {
                     if (lastPrice != null) {
                         item.setUnitPrice(lastPrice.toString());
                     } else {
+                        item.setUnitPrice("0.0");
                         Debug.logWarning("No lastPrice found for SupplierProduct with party [" + cart.getPartyId() + "], product [" + productId + "], quantity [" + quantity + "] and currency [" + cart.getCurrency() + "]", MODULE);
                     }
                     description = supplierProduct.getSupplierProductId() + " ";
                     supplierProductName = supplierProduct.getSupplierProductName();
+                } else {
+                    // if not find any matching SupplierProduct, then set 0.0 as default unit price
+                    // it for fix the endless loop when adding a product without SupplierProduct to a purchase order
+                    item.setUnitPrice("0.0");
+                    Debug.logWarning("No SupplierProduct found with party [" + cart.getPartyId() + "], product [" + productId + "], quantity [" + quantity + "] and currency [" + cart.getCurrency() + "]", MODULE);
                 }
 
                 if (UtilValidate.isNotEmpty(supplierProductName)) {
