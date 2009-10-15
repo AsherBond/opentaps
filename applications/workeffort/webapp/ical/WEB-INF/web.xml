@@ -49,6 +49,11 @@ under the License.
     <param-value>/WEB-INF/bsh</param-value>
     <description>BeanShell Script Location</description>
   </context-param>
+    <context-param>
+    	<param-name>ofbizServerName</param-name>
+    	<param-value>default-server</param-value>
+    	<description>Identify the server instance</description>
+    </context-param>
 
     <filter>
         <filter-name>ContextFilter</filter-name>

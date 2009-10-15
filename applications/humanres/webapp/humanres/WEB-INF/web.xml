@@ -49,6 +49,11 @@ under the License.
         <param-value>component://humanres/widget/CommonScreens.xml</param-value>
         <description>The location of the main-decorator screen to use for this webapp; referred to as a context variable in screen def XML files.</description>
     </context-param>
+    <context-param>
+    	<param-name>ofbizServerName</param-name>
+    	<param-value>default-server</param-value>
+    	<description>Identify the server instance</description>
+    </context-param>
 
     <filter>
         <filter-name>ContextFilter</filter-name>
