@@ -918,6 +918,7 @@ under the License.
                 <condition-expr field-name="facilityId" operator="equals" from-field="parameters.facilityId"/>
                 <condition-expr field-name="statusId" operator="not-equals" value="PICKLIST_PICKED"/>
                 <condition-expr field-name="statusId" operator="not-equals" value="PICKLIST_CANCELLED"/>
+                <condition-expr field-name="statusId" operator="not-equals" value="PICKLIST_COMPLETED"/>
             </condition-list>
             <order-by field-name="picklistDate"/>
         </entity-condition>

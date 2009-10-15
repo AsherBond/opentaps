@@ -170,6 +170,9 @@ applications/product/script/org/ofbiz/shipment/picklist/PicklistServices.xml
 applications/*/webapp/*/WEB-INF/web.xml
 - Added ofbizServerName context-param for JBOSS integration
 
+applications/product/script/org/ofbiz/shipment/picklist/PicklistServices.xml
+- Changed Warehouse Dashboard to exclude any completed pick lists.
+
 Other API Changes
 -----------------
 
