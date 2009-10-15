@@ -120,7 +120,7 @@
                     <@inputHidden name="cashDrawerId" value="${cashDrawer.cashDrawerId}"/>
                     <table>
                       <#if mustForceClosed>
-                        <@inputHidden name="finalAmount" value="${parameters.finalAmount}"/>
+                        <@inputHidden name="finalAmount" value="${parameters.finalAmount?default(0)}"/>
                         <@inputHidden name="forceClose" value="true"/>
                         <tr>
                           <td class="titleCell"><span class="tableheadtext">${uiLabelMap.OpentapsCashDrawerFinalCashAmount}</span></td>
@@ -149,7 +149,7 @@
                           <td>&nbsp;</td>
                           <td>
                             <@inputConfirm title=uiLabelMap.OpentapsCashDrawerCloseDrawer form="closeCashDrawer_${cashDrawer.cashDrawerId}"/>
-                            <@displayLink href="javascript:opentaps.expandCollapse('closeCashDrawer_${cashDrawer.cashDrawerId}');opentaps.removeClass(document.getElementById('closeFormLink_${cashDrawer.cashDrawerId}'),'hidden')" text=uiLabelMap.OpentapsCashDrawerCancelClose/>
+                            <@displayLink href="javascript:opentaps.expandCollapse('closeCashDrawer_${cashDrawer.cashDrawerId}');opentaps.removeClass(document.getElementById('closeFormLink_${cashDrawer.cashDrawerId}'),'hidden')" text=uiLabelMap.OpentapsCashDrawerCancelClose class="buttontext"/>
                           </td>
                         </tr>
                       </#if>
