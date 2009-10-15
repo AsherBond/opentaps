@@ -13,14 +13,18 @@
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
 -->
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#if picklistInfo?has_content>
+<#if isPicklistPicked?exists>
+  <@form name="closePicklistAction" url="closePicklist" picklistId=picklistInfo.picklistId />
+</#if>
 <div class="subSectionHeader">
   <div class="subSectionTitle">${uiLabelMap.WarehousePicklistDetails}</div>
   <div class="subMenuBar">
     <a href="<@ofbizUrl>PicklistReport.pdf?picklistId=${picklistInfo.picklistId}</@ofbizUrl>" target="_blank" class="buttontext">${uiLabelMap.OpentapsContentType_ApplicationPDF}</a>
     <#if isPicklistPicked?exists>
-      <a class="subMenuButton" href="closePicklist?picklistId=${picklistInfo.picklistId}">${uiLabelMap.WarehouseClosePicklists}</a>
+      <@submitFormLink form="closePicklistAction" class="subMenuButton" text=uiLabelMap.WarehouseClosePicklists />
     </#if>
   </div>
 </div>
