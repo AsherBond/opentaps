@@ -167,6 +167,10 @@ public class ProductionRun {
                 try {
                     List productionRunProducts = productionRun.getRelated("WorkEffortGoodStandard", UtilMisc.toMap("workEffortGoodStdTypeId", "PRUN_PROD_DELIV"),null);
                     this.productionRunProduct = EntityUtil.getFirst(productionRunProducts);
+                    if (productionRunProduct == null) {
+                        Debug.logError("There was no WorkEffortGoodStandard of type PRUN_PROD_DELIV for production run [" + productionRun.get("workEffortId") + "]", module);
+                        return null;
+                    }
                     quantity = productionRunProduct.getBigDecimal("estimatedQuantity");
                     productProduced = productionRunProduct.getRelatedOneCache("Product");
                 } catch (GenericEntityException e) {

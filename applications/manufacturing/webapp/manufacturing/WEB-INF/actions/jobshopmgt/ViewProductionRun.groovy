@@ -27,13 +27,16 @@ productionRunId = parameters.productionRunId;
 if (productionRunId) {
     ProductionRun productionRun = new ProductionRun(productionRunId, delegator, dispatcher);
     if (productionRun.exist()) {
+        productProduced = productionRun.getProductProduced();
         productionRunId = productionRun.getGenericValue().workEffortId;
         context.productionRunId = productionRunId;
         context.productionRun = productionRun.getGenericValue();
         // Prepare production run header data
         productionRunData = [:];
         productionRunData.productionRunId = productionRunId;
-        productionRunData.productId = productionRun.getProductProduced().productId;
+        if (productProduced != null) {
+            productionRunData.productId = productProduced.productId;
+        }
         productionRunData.currentStatusId = productionRun.getGenericValue().currentStatusId;
         productionRunData.facilityId = productionRun.getGenericValue().facilityId;
         productionRunData.workEffortName = productionRun.getProductionRunName();

@@ -173,6 +173,11 @@ applications/*/webapp/*/WEB-INF/web.xml
 applications/product/script/org/ofbiz/shipment/picklist/PicklistServices.xml
 - Changed Warehouse Dashboard to exclude any completed pick lists.
 
+applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRun.java
+applications/manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ViewProductionRun.groovy
+applications/manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunDeclaration.groovy
+- Patch to ofbiz files to fix NPE occurring if the WEGS is missing.
+
 Other API Changes
 -----------------
 

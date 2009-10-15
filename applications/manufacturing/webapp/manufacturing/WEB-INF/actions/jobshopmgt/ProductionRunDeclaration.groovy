@@ -77,10 +77,13 @@ if (productionRunId) {
 
         productionRunData = [:];
         productionRunData.workEffortId = productionRunId;
-        productionRunData.productId = productionRun.getProductProduced().productId;
-        if (maxQuantity > 0 && !"WIP".equals(productionRun.getProductProduced().productTypeId)) {
-            productionRunData.quantity = maxQuantity;
-            context.canProduce = "Y";
+        productProduced = productionRun.getProductProduced();
+        if (productProduced != null) {
+            productionRunData.productId = productProduced.productId;
+            if (maxQuantity > 0 && !"WIP".equals(productProduced.productTypeId)) {
+                productionRunData.quantity = maxQuantity;
+                context.canProduce = "Y";
+            }
         }
         productionRunData.quantityToProduce = quantityToProduce;
         productionRunData.quantityProduced = quantityProduced;
