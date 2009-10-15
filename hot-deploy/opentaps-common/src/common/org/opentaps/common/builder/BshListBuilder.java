@@ -30,6 +30,10 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
+import org.opentaps.foundation.entity.EntityException;
+import org.opentaps.foundation.entity.EntityInterface;
+import org.opentaps.foundation.repository.RepositoryInterface;
+import org.opentaps.foundation.util.FoundationUtils;
 
 /**
  * Builder that is constructed from a beanshell closure.
@@ -84,6 +88,8 @@ public class BshListBuilder extends EntityListBuilder {
 
             // get the variables
             this.entityName = getString(ns, "entityName");
+            this.entityClass = getClass(ns, "entityClass");
+            this.repository = getRepository(ns, "repository");
             this.where = getCondition(ns, "where");
             this.having = getCondition(ns, "having");
             this.fieldsToSelect = getCollection(ns, "fieldsToSelect");
@@ -91,9 +97,17 @@ public class BshListBuilder extends EntityListBuilder {
             this.options = getOptions(ns, "options");
 
             // now validate what we need
-            if (entityName == null) {
-                throw new ListBuilderException(ERR + "Field 'entityName' must be defined.  Please make sure it is.");
+            if (entityName == null && entityClass == null) {
+                throw new ListBuilderException(ERR + "Field 'entityName' or 'entityClass' must be defined.  Please make sure it is.");
             }
+            if (entityName == null) {
+                try {
+                    entityName = FoundationUtils.getEntityBaseName(entityClass);
+                } catch (EntityException e) {
+                    throw new ListBuilderException(ERR + "Field 'entityClass' cannot be read as an entity Class.  Please make sure it is.");
+                }
+            }
+
             if (where == null) {
                 throw new ListBuilderException(ERR + "Field 'where' must be defined.  Please make sure it is.");
             }
@@ -170,6 +184,28 @@ public class BshListBuilder extends EntityListBuilder {
             return (List) obj;
         }
         throw new ListBuilderException(ERR + "Field '" + name + "' must be a List.  I was passed " + obj.getClass().getName() + ".");
+    }
+
+    private Class getClass(NameSpace ns, String name) throws ListBuilderException, UtilEvalError {
+        Object obj = getVariable(ns, name);
+        if (obj == null) {
+            return null;
+        }
+        if (obj instanceof Class) {
+            return (Class) obj;
+        }
+        throw new ListBuilderException(ERR + "Field '" + name + "' must be a Class.  I was passed " + obj.getClass().getName() + ".");
+    }
+
+    private RepositoryInterface getRepository(NameSpace ns, String name) throws ListBuilderException, UtilEvalError {
+        Object obj = getVariable(ns, name);
+        if (obj == null) {
+            return null;
+        }
+        if (obj instanceof RepositoryInterface) {
+            return (RepositoryInterface) obj;
+        }
+        throw new ListBuilderException(ERR + "Field '" + name + "' must be a RepositoryInterface.  I was passed " + obj.getClass().getName() + ".");
     }
 
     private Collection getCollection(NameSpace ns, String name) throws ListBuilderException, UtilEvalError {

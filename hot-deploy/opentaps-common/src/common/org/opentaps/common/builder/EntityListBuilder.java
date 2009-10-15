@@ -27,6 +27,10 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityListIterator;
+import org.opentaps.foundation.entity.EntityInterface;
+import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.foundation.repository.RepositoryInterface;
+import org.opentaps.foundation.repository.ofbiz.Repository;
 
 /**
  * Basic builder to look up entities and view entities using
@@ -47,6 +51,8 @@ public class EntityListBuilder extends AbstractListBuilder {
     public static final EntityFindOptions DISTINCT_READ_OPTIONS = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
 
     protected String entityName = null;
+    protected Class<? extends EntityInterface> entityClass = null;
+    protected RepositoryInterface repository = null;
     protected EntityCondition where = null;
     protected EntityCondition having = null;
     protected Collection<String> fieldsToSelect = null;
@@ -210,6 +216,19 @@ public class EntityListBuilder extends AbstractListBuilder {
             // XXX Note:  EntityListIterator is a 1 based list, so we must add 1 to index
             List results = iterator.getPartialList((int) cursorIndex + 1, (int) viewSize);
             close();
+            // convert to domain entities if needed
+            if (repository != null && entityClass != null) {
+                List domainResults = null;
+                try {
+                    domainResults = Repository.loadFromGeneric(entityClass, results, repository);
+                } catch (RepositoryException e) {
+                    Debug.logError(e, module);
+                }
+                if (domainResults != null) {
+                    return domainResults;
+                }
+            }
+
             return results;
         } catch (GenericEntityException e) {
             throw new ListBuilderException(e);
