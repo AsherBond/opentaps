@@ -17,6 +17,8 @@
 import java.sql.Timestamp;
 import java.text.ParseException;
 
+import javolution.util.FastList;
+import javolution.util.FastMap;
 import org.ofbiz.accounting.invoice.InvoiceWorker;
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.condition.*;
@@ -52,7 +54,8 @@ checkPaymentMethods = delegator.findByAnd("PaymentMethod", UtilMisc.toList(
             EntityUtil.getFilterByDateExpr()));
 context.put("checkPaymentMethods", checkPaymentMethods);
 
-context.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.CHECK_RUN_TAG, delegator));
+tagTypes = UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.CHECK_RUN_TAG, delegator);
+context.put("tagTypes", tagTypes);
 UtilAccountingTags.addTagParameters(request, context, "acctgTagEnumId");
 
 // get the default bank settlement account's payment method
@@ -111,21 +114,36 @@ invoiceList = invoiceRepository.findList(Invoice.class, conditions, UtilMisc.toL
 
 // Assemble the invoice data
 now = UtilDateTime.nowTimestamp();
-invoices = new ArrayList();
-fromPartyNames = new HashMap();
-for (invoice : invoiceList) {
-    outstandingAmount = invoice.getPendingOpenAmount();
-    if (outstandingAmount.signum() > 0) {
-        partyIdFromNameMap = dispatcher.runSync("getPartyNameForDate", UtilMisc.toMap("partyId", invoice.getPartyIdFrom(), "compareDate", invoice.getInvoiceDate(), "userLogin", session.getAttribute("userLogin")));
-        fromPartyName = partyIdFromNameMap.get("fullName");
-        if (fromPartyName == null) {
-            fromPartyName = "" ;
-        }
-        fromPartyName += "(" + invoice.getString( "partyIdFrom" ) + ")" ;
 
-        invoices.add(invoice);
-        fromPartyNames.put(invoice.getInvoiceId(), fromPartyName);        
+// Pagination
+invoiceListBuilder(InvoiceRepositoryInterface invoiceRepository) {
+    entityName = "Invoice";
+    where = conditions;
+    orderBy = UtilMisc.toList("invoiceId DESC");
+
+    build(page) {
+        newPage = FastList.newInstance();
+        for (invoiceGv : page) {
+            newRow = FastMap.newInstance();
+            newRow.putAll(invoiceGv.getAllFields());
+            Invoice invoice = invoiceRepository.getInvoiceById(invoiceGv.getString("invoiceId"));
+            outstandingAmount = invoice.getPendingOpenAmount();
+            newRow{"pendingOpenAmount"} = outstandingAmount;
+            if (outstandingAmount.signum() > 0) {
+                partyIdFromNameMap = dispatcher.runSync("getPartyNameForDate", UtilMisc.toMap("partyId", invoice.getPartyIdFrom(), "compareDate", invoice.getInvoiceDate(), "userLogin", session.getAttribute("userLogin")));
+                fromPartyName = partyIdFromNameMap.get("fullName");
+                if (fromPartyName == null) {
+                    fromPartyName = "" ;
+                }
+                fromPartyName += "(" + invoice.getPartyIdFrom() + ")" ;
+                newRow{"fromPartyName"} = fromPartyName;
+                newPage.add(newRow);
+            }
+        }
+        return newPage;
     }
+
+    return this;
 }
-context.put("invoices", invoices);
-context.put("fromPartyNames", fromPartyNames);
+InvoiceRepositoryInterface invoiceRepository = new DomainsLoader(new Infrastructure(dispatcher), new User(parameters.get("userLogin"))).loadDomainsDirectory().getBillingDomain().getInvoiceRepository();
+context.put("invoiceListBuilder", invoiceListBuilder(invoiceRepository));

@@ -16,8 +16,6 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<#if invoices?has_content>
-
 <form method="post" name="processCheckRunForm" action="<@ofbizUrl>processCheckRun</@ofbizUrl>" onSubmit="javascript:submitFormDisableSubmits(this)">
 
   <@inputHidden name="paymentMethodId" value=parameters.paymentMethodId! />
@@ -25,9 +23,11 @@
   <@inputHidden name="organizationPartyId" value=organizationPartyId! />
   <@inputHidden name="partyIdFrom" value=parameters.partyIdFrom! />
   <@inputHidden name="dueDate" value=parameters.dueDate! />
-
   <@accountingTagsHidden tags=tagTypes prefix="acctgTagEnumId" />
 
+  <@paginate name="listCheckRunInvoices" list=invoiceListBuilder rememberPage=false organizationPartyId=organizationPartyId tagTypes=tagTypes>
+  <#noparse>
+  <@navigationHeader/>
   <table class="listTable">
     <tr class="listTableHeader">
       <td>${uiLabelMap.AccountingDueDate}</td>
@@ -40,7 +40,7 @@
       <td><@inputMultiSelectAll form="processCheckRunForm"/></td>
     </tr>
 
-    <#list invoices as invoice>
+    <#list pageRows as invoice>
       <@inputHidden name="partyIdsFrom" value=invoice.partyIdFrom! index=invoice_index />
       <@inputHidden name="invoiceTypeIds" value=invoice.invoiceTypeId! index=invoice_index />
       <@inputHidden name="invoiceIds" value=invoice.invoiceId! index=invoice_index />
@@ -51,7 +51,7 @@
         <@displayLinkCell href="viewInvoice?invoiceId=${invoice.invoiceId}" text=invoice.invoiceId />
         <@displayCell text=invoice.referenceNumber! />
         <@displayDateCell date=invoice.invoiceDate! />
-        <@displayLinkCell href="vendorStatement?partyId=${invoice.partyIdFrom}" text=fromPartyNames.get(invoice.invoiceId)! />
+        <@displayLinkCell href="vendorStatement?partyId=${invoice.partyIdFrom}" text=invoice.fromPartyName! />
         <@displayCurrencyCell amount=invoice.pendingOpenAmount currencyUomId=invoice.currencyUomId! />
         <@inputTextCell name="amounts" size=10 index=invoice_index default=invoice.pendingOpenAmount />
         <@inputMultiCheckCell index=invoice_index />
@@ -65,8 +65,8 @@
     </tr>
 
     <@inputHiddenUseRowSubmit />
-    <@inputHiddenRowCount list=invoices />
+    <@inputHiddenRowCount list=pageRows />
   </table>
+  </#noparse>
+  </@paginate>
 </form>
-
-</#if>
