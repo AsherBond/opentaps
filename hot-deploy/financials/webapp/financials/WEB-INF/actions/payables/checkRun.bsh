@@ -117,16 +117,16 @@ now = UtilDateTime.nowTimestamp();
 
 // Pagination
 invoiceListBuilder(InvoiceRepositoryInterface invoiceRepository) {
-    entityName = "Invoice";
+    entityClass = Invoice.class;
+    repository = invoiceRepository;
     where = conditions;
     orderBy = UtilMisc.toList("invoiceId DESC");
 
     build(page) {
         newPage = FastList.newInstance();
-        for (invoiceGv : page) {
+        for (invoice : page) {
             newRow = FastMap.newInstance();
-            newRow.putAll(invoiceGv.getAllFields());
-            Invoice invoice = invoiceRepository.getInvoiceById(invoiceGv.getString("invoiceId"));
+            newRow.putAll(invoice.toMap());
             outstandingAmount = invoice.getPendingOpenAmount();
             newRow{"pendingOpenAmount"} = outstandingAmount;
             if (outstandingAmount.signum() > 0) {

@@ -175,31 +175,29 @@ search.add( new EntityExpr("invoiceTypeId", EntityOperator.EQUALS, invoiceTypeId
 
 // Pagination
 invoiceListBuilder(InvoiceRepositoryInterface invoiceRepository) {
-    entityName = "Invoice";
+    entityClass = Invoice.class;
+    repository = invoiceRepository;
     where = search;
     orderBy = UtilMisc.toList("invoiceDate DESC");
 
-    build( page ) {
+    build(page) {
         newPage = FastList.newInstance();
-        for (invoice: page) {
+        for (invoice : page) {
             newRow = FastMap.newInstance();
-            newRow.putAll(invoice.getAllFields());
+            newRow.putAll(invoice.toMap());
             
-            status = invoice.getRelatedOne("StatusItem");
+            status = invoice.getStatusItem();
             newRow{"statusDescription"} = status.get("description", locale);
-            processingStatus = invoice.getRelatedOne("ProcessingStatusItem");
+            processingStatus = invoice.getProcessingStatusItem();
             if (processingStatus != null) {
                 newRow{"processingStatusDescription"} = processingStatus.get("description", locale);
             }
 
-            newRow{"partyNameFrom"} = PartyHelper.getPartyName(delegator, invoice.get("partyIdFrom"), false);
-            newRow{"partyName"} = PartyHelper.getPartyName(delegator, invoice.get("partyId"), false);
+            newRow{"partyNameFrom"} = PartyHelper.getPartyName(delegator, invoice.getPartyIdFrom(), false);
+            newRow{"partyName"} = PartyHelper.getPartyName(delegator, invoice.getPartyId(), false);
 
-            // TODO: Refactor more of this into domain driven code
-            Invoice invoiceObj = invoiceRepository.getInvoiceById(invoice.getString("invoiceId"));
-
-            newRow{"amount"} = invoiceObj.getInvoiceTotal();
-            newRow{"outstanding"} = invoiceObj.getOpenAmount();
+            newRow{"amount"} = invoice.getInvoiceTotal();
+            newRow{"outstanding"} = invoice.getOpenAmount();
 
             newPage.add(newRow);
         }
