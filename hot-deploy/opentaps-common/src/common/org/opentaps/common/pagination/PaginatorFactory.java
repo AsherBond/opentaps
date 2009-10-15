@@ -32,13 +32,15 @@ import java.util.List;
  *
  * @author Leon Torres (leon@opensourcestrategies.com)
  */
-public class PaginatorFactory {
+public final class PaginatorFactory {
 
-    public static final String module = PaginatorFactory.class.getName();
+    private PaginatorFactory() { }
 
     /**
      * Fetches a paginator from the session provided that paginatorName and applicationName are request parameters.
      * This is useful only for the pagination requests and event handlers.
+     * @param request a <code>HttpServletRequest</code> value
+     * @return a <code>Paginator</code> value
      */
     public static Paginator getPaginator(HttpServletRequest request) {
         String paginatorName = getSessionPaginatorName(request);
@@ -46,7 +48,13 @@ public class PaginatorFactory {
         return (Paginator) session.getAttribute(paginatorName);
     }
 
-    /** Get the named paginator from the session. */
+    /**
+     * Get the named paginator from the session.
+     * @param session a <code>HttpSession</code> value
+     * @param paginatorName a <code>String</code> value
+     * @param applicationName a <code>String</code> value
+     * @return a <code>Paginator</code> value
+     */
     public static Paginator getPaginator(HttpSession session, String paginatorName, String applicationName) {
         String sessionName = getSessionPaginatorName(paginatorName, applicationName);
         return (Paginator) session.getAttribute(sessionName);
@@ -60,10 +68,14 @@ public class PaginatorFactory {
     // generates the paginator name for a session
     private static String getSessionPaginatorName(HttpServletRequest request) {
         String paginatorName = request.getParameter("paginatorName");
-        if (paginatorName == null) throw new IllegalArgumentException("Missing paginatorName parameter for pagination request.  Paginator in question is ["+paginatorName+"].");
+        if (paginatorName == null) {
+            throw new IllegalArgumentException("Missing paginatorName parameter for pagination request.  Paginator in question is [" + paginatorName + "].");
+        }
 
         String applicationName = request.getParameter("applicationName");
-        if (applicationName == null) throw new IllegalArgumentException("Missing applicationName parameter for pagination request.  Paginator in question is ["+paginatorName+"].");
+        if (applicationName == null) {
+            throw new IllegalArgumentException("Missing applicationName parameter for pagination request.  Paginator in question is [" + paginatorName + "].");
+        }
 
         return getSessionPaginatorName(paginatorName, applicationName);
     }
@@ -76,16 +88,17 @@ public class PaginatorFactory {
 
     /**
      * Main factory method used by PaginateTransform.
+     * @param paginatorName a <code>String</code> value
+     * @param list an <code>Object</code> value
+     * @param context a <code>Map</code> value
+     * @param params a <code>Map</code> value
+     * @param rememberPage a <code>boolean</code> value
+     * @param rememberOrderBy a <code>boolean</code> value
+     * @param renderExcelButton a <code>boolean</code> value
+     * @return a <code>Paginator</code> value
+     * @exception ListBuilderException if an error occurs
      */
-    public static Paginator createPaginatorForTransform(
-    	String paginatorName,
-    	Object list,
-    	Map context,
-    	Map params,
-    	boolean rememberPage,
-    	boolean rememberOrderBy,
-    	boolean renderExcelButton
-    ) throws ListBuilderException {
+    public static Paginator createPaginatorForTransform(String paginatorName, Object list, Map context, Map params, boolean rememberPage, boolean rememberOrderBy, boolean renderExcelButton) throws ListBuilderException {
         HttpSession session = (HttpSession) context.get("session");
         String applicationName = (String) context.get("opentapsApplicationName");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -110,22 +123,22 @@ public class PaginatorFactory {
         paginator = new Paginator(paginatorName, builder, params, userLogin, applicationName, rememberPage, rememberOrderBy, renderExcelButton);
         paginator.setIsFormlet(true);
         savePaginator(session, paginator);
-        
+
         return paginator;
     }
 
     /**
      * Updates the paginator if the user reloads the page and something significant has changed.
+     * @param paginator a <code>Paginator</code> value
+     * @param list an <code>Object</code> value
+     * @param context a <code>Map</code> value
+     * @param params a <code>Map</code> value
+     * @param rememberPage a <code>boolean</code> value
+     * @param rememberOrderBy a <code>boolean</code> value
+     * @param renderExcelButton a <code>boolean</code> value
+     * @exception ListBuilderException if an error occurs
      */
-    public static void updatePaginatorForTransform(
-    	Paginator paginator,
-    	Object list,
-    	Map context,
-    	Map params,
-    	boolean rememberPage,
-    	boolean rememberOrderBy,
-    	boolean renderExcelButton
-    	) throws ListBuilderException {
+    public static void updatePaginatorForTransform(Paginator paginator, Object list, Map context, Map params, boolean rememberPage, boolean rememberOrderBy, boolean renderExcelButton) throws ListBuilderException {
 
         // update paginator variables if they changed
         paginator.setParams(params);
@@ -134,7 +147,9 @@ public class PaginatorFactory {
         paginator.setRenderExcelButton(renderExcelButton);
 
         // return user to first page if we're not remembering the page
-        if (! rememberPage) paginator.setCursorIndex(0);
+        if (!rememberPage) {
+            paginator.setCursorIndex(0);
+        }
 
         // for Lists, rebuild completely
         if (list instanceof List) {
@@ -146,15 +161,19 @@ public class PaginatorFactory {
         // for bsh, we need to reload the closure, which rebuilds everything
         if (list instanceof bsh.This) {
             ListBuilder builder = new BshListBuilder((bsh.This) list, (GenericDelegator) context.get("delegator"));
-            if (rememberOrderBy) builder.changeOrderBy(paginator.getOrderBy()); // preserve the order by
+            if (rememberOrderBy) {
+                builder.changeOrderBy(paginator.getOrderBy()); // preserve the order by
+            }
             paginator.setListBuilder(builder);
             return;
         }
-        
+
         // replace the list builder entirely, because developer might have changed it
         if (list instanceof ListBuilder) {
             ListBuilder builder = (ListBuilder) list;
-            if (rememberOrderBy) builder.changeOrderBy(paginator.getOrderBy()); // preserve the order by
+            if (rememberOrderBy) {
+                builder.changeOrderBy(paginator.getOrderBy()); // preserve the order by
+            }
             paginator.setListBuilder(builder);
         }
 

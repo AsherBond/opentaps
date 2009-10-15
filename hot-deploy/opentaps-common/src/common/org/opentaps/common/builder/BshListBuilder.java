@@ -15,21 +15,21 @@
  */
 package org.opentaps.common.builder;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import bsh.NameSpace;
 import bsh.Primitive;
 import bsh.This;
 import bsh.UtilEvalError;
 import javolution.util.FastList;
+import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
-import org.ofbiz.entity.GenericDelegator;
-
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Builder that is constructed from a beanshell closure.

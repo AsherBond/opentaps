@@ -16,6 +16,9 @@ package org.opentaps.common.builder;
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
  */
 
+import java.util.Collection;
+import java.util.List;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
@@ -25,11 +28,8 @@ import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityListIterator;
 
-import java.util.Collection;
-import java.util.List;
-
 /**
- * Basic builder to look up entities and view entities using 
+ * Basic builder to look up entities and view entities using
  * delegator.findListIteratorByCondition().  Constructing this
  * builder is similar to constructing a findListIteratorByCondition()
  * method call.  It is meant to replace the use of EntityListIterator
@@ -59,7 +59,15 @@ public class EntityListBuilder extends AbstractListBuilder {
 
     protected EntityListBuilder() { };
 
-    /** Full constructor containing all possible fields. */
+    /**
+     * Full constructor for Delegator based lists, containing all possible fields.
+     * @param entityName a <code>String</code> value
+     * @param where an <code>EntityCondition</code> value
+     * @param having an <code>EntityCondition</code> value
+     * @param fieldsToSelect a <code>List</code> value
+     * @param orderBy a <code>List</code> value
+     * @param options an <code>EntityFindOptions</code> value
+     */
     public EntityListBuilder(String entityName, EntityCondition where, EntityCondition having, Collection<String> fieldsToSelect, List<String> orderBy, EntityFindOptions options) {
         this.entityName = entityName;
         this.where = where;
@@ -69,26 +77,47 @@ public class EntityListBuilder extends AbstractListBuilder {
         this.options = options;
     }
 
-    /** Distinct readonly lookup. */
+    /**
+     * Distinct readonly lookup.
+     * @param entityName a <code>String</code> value
+     * @param where an <code>EntityCondition</code> value
+     * @param orderBy a <code>List</code> value
+     */
     public EntityListBuilder(String entityName, EntityCondition where, List<String> orderBy) {
         this(entityName, where, null, null, orderBy, DISTINCT_READ_OPTIONS);
     }
 
-    /** Distinct readonly lookup limited to certain fields. */
+    /**
+     * Distinct readonly lookup limited to certain fields.
+     * @param entityName a <code>String</code> value
+     * @param where an <code>EntityCondition</code> value
+     * @param fieldsToSelect a <code>List</code> value
+     * @param orderBy a <code>List</code> value
+     */
     public EntityListBuilder(String entityName, EntityCondition where, Collection<String> fieldsToSelect, List<String> orderBy) {
         this(entityName, where, null, fieldsToSelect, orderBy, DISTINCT_READ_OPTIONS);
     }
 
-    /** Distinct readonly lookup for all values. */
+    /**
+     * Distinct readonly lookup for all values.
+     * @param entityName a <code>String</code> value
+     */
     public EntityListBuilder(String entityName) {
         this(entityName, null, null, null, null, DISTINCT_READ_OPTIONS);
     }
 
-    /** As a convenience, the delegator is set when a call to the pagination macro is made.  This saves us a parameter in the constructors. */
+    /**
+     * As a convenience, the delegator is set when a call to the pagination macro is made.  This saves us a parameter in the constructors.
+     * @param delegator a <code>GenericDelegator</code> value
+     */
     public void setDelegator(GenericDelegator delegator) {
         this.delegator = delegator;
     }
 
+    /**
+     * Gets the current Delegator instance.
+     * @return a <code>GenericDelegator</code> value
+     */
     public GenericDelegator getDelegator() {
         return delegator;
     }
@@ -145,6 +174,8 @@ public class EntityListBuilder extends AbstractListBuilder {
      * (An operation that automatically closes the list).  The size is
      * cached by the initialize() function, so calling this multiple times
      * in a row should be safe.
+     * @return a <code>long</code> value
+     * @exception ListBuilderException if an error occurs
      */
     public long getListSize() throws ListBuilderException {
         if (!isInitialized()) {
@@ -153,7 +184,10 @@ public class EntityListBuilder extends AbstractListBuilder {
         return size;
     }
 
-    /** This builder is always deterministic. */
+    /**
+     * This builder is always deterministic.
+     * @return a <code>boolean</code> value
+     */
     public boolean isDeterministic() {
         return true;
     }
@@ -163,6 +197,10 @@ public class EntityListBuilder extends AbstractListBuilder {
      * Gets a partial list of a given size starting from a cursor index.
      * Note that although the arguments are longs, the EntityListIterator must
      * accept ints.
+     * @param viewSize a <code>long</code> value
+     * @param cursorIndex a <code>long</code> value
+     * @return a <code>List</code> value
+     * @exception ListBuilderException if an error occurs
      */
     public List getPartialList(long viewSize, long cursorIndex) throws ListBuilderException {
         if (!isInitialized()) {
