@@ -34,14 +34,8 @@
         <property name="build.dir" value="build"/>        
         <property name="ofbiz.dir" value="../../"/> 
     </target>
-    
-    <target name="buildCommons">
-        <subant>
-            <filelist refid="commons-builds"/>
-        </subant>
-    </target>
 
-    <target name="classpath" depends="buildCommons">
+    <target name="classpath">
         <path id="local.class.path">
             <fileset dir="${ofbiz.dir}/framework/base/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/base/lib/commons" includes="*.jar"/>
