@@ -188,7 +188,7 @@ public class AmazonUtil {
             s = s.replaceAll("\\u00A0", " ");
             
             if (s.length() > _maxLength) {
-                Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_WarningStringTruncated", UtilMisc.toMap("str", s, "maxLength", _maxLength), locale), module);
+                Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_WarningStringTruncated", UtilMisc.<String, Object>toMap("str", s, "maxLength", _maxLength), locale), module);
                 return s.substring(0, _maxLength - 1);
             }
             return s;

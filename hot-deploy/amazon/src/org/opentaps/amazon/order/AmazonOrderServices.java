@@ -181,7 +181,7 @@ public class AmazonOrderServices {
             while ((amazonOrderDocument = (GenericValue) amazonOrderDocIt.next()) != null) {
 
                 if (AmazonConstants.docExtractRetryThreshold <= amazonOrderDocument.getLong("extractionFailures").intValue()) {
-                    String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ExtractAttemptsOverThreshold", UtilMisc.toMap("documentId", amazonOrderDocument.getString("documentId"), "threshold", AmazonConstants.docExtractRetryThreshold), locale);
+                    String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ExtractAttemptsOverThreshold", UtilMisc.<String, Object>toMap("documentId", amazonOrderDocument.getString("documentId"), "threshold", AmazonConstants.docExtractRetryThreshold), locale);
                     Debug.logInfo(errorLog, module);
                     continue;
                 }
@@ -432,7 +432,7 @@ public class AmazonOrderServices {
             
                     // Check to see that importing of the order hasn't failed too many times
                     if (AmazonConstants.orderImportRetryThreshold <= amazonOrder.getLong("importFailures").intValue()) {
-                        String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ImportAttemptsOverThreshold", UtilMisc.toMap("amazonOrderId", amazonOrder.getString("amazonOrderId"), "threshold", AmazonConstants.orderImportRetryThreshold), locale);
+                        String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ImportAttemptsOverThreshold", UtilMisc.<String, Object>toMap("amazonOrderId", amazonOrder.getString("amazonOrderId"), "threshold", AmazonConstants.orderImportRetryThreshold), locale);
                         Debug.logInfo(errorLog, module);
                         continue;
                     }

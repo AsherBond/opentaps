@@ -216,7 +216,7 @@ public class AmazonProductServices {
                 GenericValue amazonProduct = delegator.findByPrimaryKey("AmazonProduct", UtilMisc.toMap("productId", viewAmazonProduct.get("productId")));
 
                 if ((viewAmazonProduct.get("postFailures") != null) && (AmazonConstants.productPostRetryThreshold <= viewAmazonProduct.getLong("postFailures").intValue())) {
-                    String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostProductAttemptsOverThreshold", UtilMisc.toMap("productId", viewAmazonProduct.getString("productId"), "threshold", AmazonConstants.productPostRetryThreshold), locale);
+                    String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostProductAttemptsOverThreshold", UtilMisc.<String, Object>toMap("productId", viewAmazonProduct.getString("productId"), "threshold", AmazonConstants.productPostRetryThreshold), locale);
                     Debug.logInfo(errorLog, module);
                     continue;
                 }
@@ -334,7 +334,7 @@ public class AmazonProductServices {
                 List<GenericValue> bulletPoints = viewAmazonProduct.getRelated("AmazonProductBulletPoint");
                 if (bulletPoints != null) {
                     if (bulletPoints.size() > AmazonConstants.productFeedMaxBulletPoints) {
-                        String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_TooMuchElementsInFeed", UtilMisc.toMap("max", AmazonConstants.productFeedMaxBulletPoints, "elementName", "Bullet Points", "elementsCount", bulletPoints.size(), "productId", viewAmazonProduct.getString("productId")), locale);
+                        String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_TooMuchElementsInFeed", UtilMisc.<String, Object>toMap("max", AmazonConstants.productFeedMaxBulletPoints, "elementName", "Bullet Points", "elementsCount", bulletPoints.size(), "productId", viewAmazonProduct.getString("productId")), locale);
                         Debug.logInfo(infoMessage, module);
                     }
                     int index = 0;
@@ -449,7 +449,7 @@ public class AmazonProductServices {
                 List<GenericValue> searchTerms = viewAmazonProduct.getRelated("AmazonProductSearchTerms");
                 if (searchTerms != null) {
                     if (searchTerms.size() > AmazonConstants.productFeedMaxSearchTerms) {
-                        String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_TooMuchElementsInFeed", UtilMisc.toMap("max", AmazonConstants.productFeedMaxSearchTerms, "elementName", "Search Terms", "elementsCount", searchTerms.size(), "productId", viewAmazonProduct.getString("productId")), locale);
+                        String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_TooMuchElementsInFeed", UtilMisc.<String, Object>toMap("max", AmazonConstants.productFeedMaxSearchTerms, "elementName", "Search Terms", "elementsCount", searchTerms.size(), "productId", viewAmazonProduct.getString("productId")), locale);
                         Debug.logInfo(infoMessage, module);
                     }
                     int index = 0;
@@ -463,7 +463,7 @@ public class AmazonProductServices {
                 List<GenericValue> usedForList = viewAmazonProduct.getRelated("AmazonUsedForValue");
                 if (usedForList != null) {
                     if (usedForList.size() > AmazonConstants.productFeedMaxUsedFor) {
-                        String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_TooMuchElementsInFeed", UtilMisc.toMap("max", AmazonConstants.productFeedMaxUsedFor, "elementName", "Used For", "elementsCount", searchTerms.size(), "productId", viewAmazonProduct.getString("productId")), locale);
+                        String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_TooMuchElementsInFeed", UtilMisc.<String, Object>toMap("max", AmazonConstants.productFeedMaxUsedFor, "elementName", "Used For", "elementsCount", searchTerms.size(), "productId", viewAmazonProduct.getString("productId")), locale);
                         Debug.logInfo(infoMessage, module);
                     }
                     int index = 0;
@@ -482,7 +482,7 @@ public class AmazonProductServices {
                 List<GenericValue> otherItemAttributes = viewAmazonProduct.getRelated("AmazonOtherItemAttrValue");
                 if (otherItemAttributes != null) {
                     if (otherItemAttributes.size() > AmazonConstants.productFeedMaxOtherItemAttributes) {
-                        String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_TooMuchElementsInFeed", UtilMisc.toMap("max", AmazonConstants.productFeedMaxOtherItemAttributes, "elementName", "Other Item Attribute", "elementsCount", searchTerms.size(), "productId", viewAmazonProduct.getString("productId")), locale);
+                        String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_TooMuchElementsInFeed", UtilMisc.<String, Object>toMap("max", AmazonConstants.productFeedMaxOtherItemAttributes, "elementName", "Other Item Attribute", "elementsCount", searchTerms.size(), "productId", viewAmazonProduct.getString("productId")), locale);
                         Debug.logInfo(infoMessage, module);
                     }
                     int index = 0;
@@ -496,7 +496,7 @@ public class AmazonProductServices {
                 List<GenericValue> targetAudience = viewAmazonProduct.getRelated("AmazonTargetAudienceValue");
                 if (targetAudience != null) {
                     if (targetAudience.size() > AmazonConstants.productFeedMaxTargetAudience) {
-                        String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_TooMuchElementsInFeed", UtilMisc.toMap("max", AmazonConstants.productFeedMaxTargetAudience, "elementName", "Target Audience", "elementsCount", searchTerms.size(), "productId", viewAmazonProduct.getString("productId")), locale);
+                        String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_TooMuchElementsInFeed", UtilMisc.<String, Object>toMap("max", AmazonConstants.productFeedMaxTargetAudience, "elementName", "Target Audience", "elementsCount", searchTerms.size(), "productId", viewAmazonProduct.getString("productId")), locale);
                         Debug.logInfo(infoMessage, module);
                     }
                     int index = 0;
@@ -669,7 +669,7 @@ public class AmazonProductServices {
                 String errMessage = null;
 
                 if (AmazonConstants.productPostRetryThreshold <= amazonPrice.getLong("postFailures").intValue()) {
-                    String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostPriceAttemptsOverThreshold", UtilMisc.toMap("productId", amazonPrice.getString("productId"), "threshold", AmazonConstants.productPostRetryThreshold), locale);
+                    String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostPriceAttemptsOverThreshold", UtilMisc.<String, Object>toMap("productId", amazonPrice.getString("productId"), "threshold", AmazonConstants.productPostRetryThreshold), locale);
                     Debug.logInfo(errorLog, module);
                     continue;
                 }
@@ -925,7 +925,7 @@ public class AmazonProductServices {
                 String errMessage = null;
 
                 if (AmazonConstants.productPostRetryThreshold <= amazonProductImage.getLong("postFailures").intValue()) {
-                    String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostImageAttemptsOverThreshold", UtilMisc.toMap("productId", amazonProductImage.getString("productId"), "threshold", AmazonConstants.productPostRetryThreshold), locale);
+                    String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostImageAttemptsOverThreshold", UtilMisc.<String, Object>toMap("productId", amazonProductImage.getString("productId"), "threshold", AmazonConstants.productPostRetryThreshold), locale);
                     Debug.logInfo(errorLog, module);
                     continue;
                 }
@@ -1151,7 +1151,7 @@ public class AmazonProductServices {
 
                 // Check that the failure threshold has not been reached previously
                 if (AmazonConstants.productPostRetryThreshold <= amazonProductInventory.getLong("postFailures").intValue()) {
-                    String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostImageAttemptsOverThreshold", UtilMisc.toMap("productId", amazonProductInventory.getString("productId"), "threshold", AmazonConstants.productPostRetryThreshold), locale);
+                    String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostImageAttemptsOverThreshold", UtilMisc.<String, Object>toMap("productId", amazonProductInventory.getString("productId"), "threshold", AmazonConstants.productPostRetryThreshold), locale);
                     Debug.logInfo(errorLog, module);
                     continue;
                 }
@@ -1347,7 +1347,7 @@ public class AmazonProductServices {
             while ((amazonProduct = (GenericValue) amazonProductsIt.next()) != null) {
 
                 if (AmazonConstants.productPostRetryThreshold <= amazonProduct.getLong("postFailures").intValue()) {
-                    String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostProductAttemptsOverThreshold", UtilMisc.toMap("productId", amazonProduct.getString("productId"), "threshold", AmazonConstants.productPostRetryThreshold), locale);
+                    String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostProductAttemptsOverThreshold", UtilMisc.<String, Object>toMap("productId", amazonProduct.getString("productId"), "threshold", AmazonConstants.productPostRetryThreshold), locale);
                     Debug.logInfo(errorLog, module);
                     continue;
                 }
