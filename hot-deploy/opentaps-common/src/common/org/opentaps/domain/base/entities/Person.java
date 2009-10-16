@@ -244,6 +244,7 @@ fieldMapColumns.put("Person", fields);
    )
    
    private Enumeration residenceStatusEnumeration = null;
+   private transient List<AmazonParty> amazonPartys = null;
    private transient List<PartyContactMech> partyContactMeches = null;
    private transient List<PartyContactMechPurpose> partyContactMechPurposes = null;
    private transient List<ProdCatalogRole> prodCatalogRoles = null;
@@ -793,6 +794,17 @@ fieldMapColumns.put("Person", fields);
         return this.residenceStatusEnumeration;
     }
     /**
+     * Auto generated method that gets the related <code>AmazonParty</code> by the relation named <code>AmazonParty</code>.
+     * @return the list of <code>AmazonParty</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AmazonParty> getAmazonPartys() throws RepositoryException {
+        if (this.amazonPartys == null) {
+            this.amazonPartys = getRelated(AmazonParty.class, "AmazonParty");
+        }
+        return this.amazonPartys;
+    }
+    /**
      * Auto generated method that gets the related <code>PartyContactMech</code> by the relation named <code>PartyContactMech</code>.
      * @return the list of <code>PartyContactMech</code>
      * @throws RepositoryException if an error occurs
@@ -923,6 +935,13 @@ fieldMapColumns.put("Person", fields);
     */
     public void setResidenceStatusEnumeration(Enumeration residenceStatusEnumeration) {
         this.residenceStatusEnumeration = residenceStatusEnumeration;
+    }
+    /**
+     * Auto generated value setter.
+     * @param amazonPartys the amazonPartys to set
+    */
+    public void setAmazonPartys(List<AmazonParty> amazonPartys) {
+        this.amazonPartys = amazonPartys;
     }
     /**
      * Auto generated value setter.

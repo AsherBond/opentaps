@@ -41,32 +41,37 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
+import java.lang.Long;
 import java.lang.String;
 import java.sql.Timestamp;
 
 /**
- * Auto generated base entity ProductContentType.
+ * Auto generated base entity AmazonProductImage.
  */
 @javax.persistence.Entity
-@Table(name="PRODUCT_CONTENT_TYPE")
-public class ProductContentType extends Entity {
+@Table(name="AMAZON_PRODUCT_IMAGE")
+public class AmazonProductImage extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
-        fields.put("productContentTypeId", "PRODUCT_CONTENT_TYPE_ID");
-        fields.put("parentTypeId", "PARENT_TYPE_ID");
-        fields.put("hasTable", "HAS_TABLE");
-        fields.put("description", "DESCRIPTION");
+        fields.put("productId", "PRODUCT_ID");
+        fields.put("statusId", "STATUS_ID");
+        fields.put("processingDocumentId", "PROCESSING_DOCUMENT_ID");
+        fields.put("postTimestamp", "POST_TIMESTAMP");
+        fields.put("postErrorMessage", "POST_ERROR_MESSAGE");
+        fields.put("postFailures", "POST_FAILURES");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
-fieldMapColumns.put("ProductContentType", fields);
+fieldMapColumns.put("AmazonProductImage", fields);
 }
-  public static enum Fields implements EntityFieldInterface<ProductContentType> {
-    productContentTypeId("productContentTypeId"),
-    parentTypeId("parentTypeId"),
-    hasTable("hasTable"),
-    description("description"),
+  public static enum Fields implements EntityFieldInterface<AmazonProductImage> {
+    productId("productId"),
+    statusId("statusId"),
+    processingDocumentId("processingDocumentId"),
+    postTimestamp("postTimestamp"),
+    postErrorMessage("postErrorMessage"),
+    postFailures("postFailures"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -81,17 +86,21 @@ fieldMapColumns.put("ProductContentType", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
-   @org.hibernate.annotations.GenericGenerator(name="ProductContentType_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
-   @GeneratedValue(generator="ProductContentType_GEN")
+   @org.hibernate.annotations.GenericGenerator(name="AmazonProductImage_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
+   @GeneratedValue(generator="AmazonProductImage_GEN")
    @Id
-   @Column(name="PRODUCT_CONTENT_TYPE_ID")
-   private String productContentTypeId;
-   @Column(name="PARENT_TYPE_ID")
-   private String parentTypeId;
-   @Column(name="HAS_TABLE")
-   private String hasTable;
-   @Column(name="DESCRIPTION")
-   private String description;
+   @Column(name="PRODUCT_ID")
+   private String productId;
+   @Column(name="STATUS_ID")
+   private String statusId;
+   @Column(name="PROCESSING_DOCUMENT_ID")
+   private Long processingDocumentId;
+   @Column(name="POST_TIMESTAMP")
+   private Timestamp postTimestamp;
+   @Column(name="POST_ERROR_MESSAGE")
+   private String postErrorMessage;
+   @Column(name="POST_FAILURES")
+   private Long postFailures;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -101,37 +110,29 @@ fieldMapColumns.put("ProductContentType", fields);
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
-   @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
+   @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductContentType parentProductContentType = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="productContentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_CONTENT_TYPE_ID")
+   private AmazonProduct amazonProduct = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="amazonProductImage", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
    
    private List<AmazonProductImageAck> amazonProductImageAcks = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="productContentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_CONTENT_TYPE_ID")
-   
-   private List<ProductContent> productContents = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="PARENT_TYPE_ID")
-   
-   private List<ProductContentType> childProductContentTypes = null;
 
   /**
    * Default constructor.
    */
-  public ProductContentType() {
+  public AmazonProductImage() {
       super();
-      this.baseEntityName = "ProductContentType";
+      this.baseEntityName = "AmazonProductImage";
       this.isView = false;
-      this.resourceName = "ProductEntityLabels";
+      
       this.primaryKeyNames = new ArrayList<String>();
-      this.primaryKeyNames.add("productContentTypeId");
+      this.primaryKeyNames.add("productId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productContentTypeId");this.allFieldsNames.add("parentTypeId");this.allFieldsNames.add("hasTable");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("productId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("processingDocumentId");this.allFieldsNames.add("postTimestamp");this.allFieldsNames.add("postErrorMessage");this.allFieldsNames.add("postFailures");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -141,38 +142,52 @@ fieldMapColumns.put("ProductContentType", fields);
    * Constructor with a repository.
    * @param repository a <code>RepositoryInterface</code> value
    */
-  public ProductContentType(RepositoryInterface repository) {
+  public AmazonProductImage(RepositoryInterface repository) {
       this();
       initRepository(repository);
   }
 
     /**
      * Auto generated value setter.
-     * @param productContentTypeId the productContentTypeId to set
+     * @param productId the productId to set
      */
-    public void setProductContentTypeId(String productContentTypeId) {
-        this.productContentTypeId = productContentTypeId;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
     /**
      * Auto generated value setter.
-     * @param parentTypeId the parentTypeId to set
+     * @param statusId the statusId to set
      */
-    public void setParentTypeId(String parentTypeId) {
-        this.parentTypeId = parentTypeId;
+    public void setStatusId(String statusId) {
+        this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
-     * @param hasTable the hasTable to set
+     * @param processingDocumentId the processingDocumentId to set
      */
-    public void setHasTable(String hasTable) {
-        this.hasTable = hasTable;
+    public void setProcessingDocumentId(Long processingDocumentId) {
+        this.processingDocumentId = processingDocumentId;
     }
     /**
      * Auto generated value setter.
-     * @param description the description to set
+     * @param postTimestamp the postTimestamp to set
      */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPostTimestamp(Timestamp postTimestamp) {
+        this.postTimestamp = postTimestamp;
+    }
+    /**
+     * Auto generated value setter.
+     * @param postErrorMessage the postErrorMessage to set
+     */
+    public void setPostErrorMessage(String postErrorMessage) {
+        this.postErrorMessage = postErrorMessage;
+    }
+    /**
+     * Auto generated value setter.
+     * @param postFailures the postFailures to set
+     */
+    public void setPostFailures(Long postFailures) {
+        this.postFailures = postFailures;
     }
     /**
      * Auto generated value setter.
@@ -207,29 +222,43 @@ fieldMapColumns.put("ProductContentType", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getProductContentTypeId() {
-        return this.productContentTypeId;
+    public String getProductId() {
+        return this.productId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getParentTypeId() {
-        return this.parentTypeId;
+    public String getStatusId() {
+        return this.statusId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getProcessingDocumentId() {
+        return this.processingDocumentId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getPostTimestamp() {
+        return this.postTimestamp;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getHasTable() {
-        return this.hasTable;
+    public String getPostErrorMessage() {
+        return this.postErrorMessage;
     }
     /**
      * Auto generated value accessor.
-     * @return <code>String</code>
+     * @return <code>Long</code>
      */
-    public String getDescription() {
-        return this.description;
+    public Long getPostFailures() {
+        return this.postFailures;
     }
     /**
      * Auto generated value accessor.
@@ -261,15 +290,15 @@ fieldMapColumns.put("ProductContentType", fields);
     }
 
     /**
-     * Auto generated method that gets the related <code>ProductContentType</code> by the relation named <code>ParentProductContentType</code>.
-     * @return the <code>ProductContentType</code>
+     * Auto generated method that gets the related <code>AmazonProduct</code> by the relation named <code>AmazonProduct</code>.
+     * @return the <code>AmazonProduct</code>
      * @throws RepositoryException if an error occurs
      */
-    public ProductContentType getParentProductContentType() throws RepositoryException {
-        if (this.parentProductContentType == null) {
-            this.parentProductContentType = getRelatedOne(ProductContentType.class, "ParentProductContentType");
+    public AmazonProduct getAmazonProduct() throws RepositoryException {
+        if (this.amazonProduct == null) {
+            this.amazonProduct = getRelatedOne(AmazonProduct.class, "AmazonProduct");
         }
-        return this.parentProductContentType;
+        return this.amazonProduct;
     }
     /**
      * Auto generated method that gets the related <code>AmazonProductImageAck</code> by the relation named <code>AmazonProductImageAck</code>.
@@ -282,35 +311,13 @@ fieldMapColumns.put("ProductContentType", fields);
         }
         return this.amazonProductImageAcks;
     }
-    /**
-     * Auto generated method that gets the related <code>ProductContent</code> by the relation named <code>ProductContent</code>.
-     * @return the list of <code>ProductContent</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends ProductContent> getProductContents() throws RepositoryException {
-        if (this.productContents == null) {
-            this.productContents = getRelated(ProductContent.class, "ProductContent");
-        }
-        return this.productContents;
-    }
-    /**
-     * Auto generated method that gets the related <code>ProductContentType</code> by the relation named <code>ChildProductContentType</code>.
-     * @return the list of <code>ProductContentType</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends ProductContentType> getChildProductContentTypes() throws RepositoryException {
-        if (this.childProductContentTypes == null) {
-            this.childProductContentTypes = getRelated(ProductContentType.class, "ChildProductContentType");
-        }
-        return this.childProductContentTypes;
-    }
 
     /**
      * Auto generated value setter.
-     * @param parentProductContentType the parentProductContentType to set
+     * @param amazonProduct the amazonProduct to set
     */
-    public void setParentProductContentType(ProductContentType parentProductContentType) {
-        this.parentProductContentType = parentProductContentType;
+    public void setAmazonProduct(AmazonProduct amazonProduct) {
+        this.amazonProduct = amazonProduct;
     }
     /**
      * Auto generated value setter.
@@ -318,20 +325,6 @@ fieldMapColumns.put("ProductContentType", fields);
     */
     public void setAmazonProductImageAcks(List<AmazonProductImageAck> amazonProductImageAcks) {
         this.amazonProductImageAcks = amazonProductImageAcks;
-    }
-    /**
-     * Auto generated value setter.
-     * @param productContents the productContents to set
-    */
-    public void setProductContents(List<ProductContent> productContents) {
-        this.productContents = productContents;
-    }
-    /**
-     * Auto generated value setter.
-     * @param childProductContentTypes the childProductContentTypes to set
-    */
-    public void setChildProductContentTypes(List<ProductContentType> childProductContentTypes) {
-        this.childProductContentTypes = childProductContentTypes;
     }
 
     /**
@@ -361,42 +354,17 @@ fieldMapColumns.put("ProductContentType", fields);
         }
         this.amazonProductImageAcks.clear();
     }
-    /**
-     * Auto generated method that add item to collection.
-     */
-    public void addProductContent(ProductContent productContent) {
-        if (this.productContents == null) {
-            this.productContents = new ArrayList<ProductContent>();
-        }
-        this.productContents.add(productContent);
-    }
-    /**
-     * Auto generated method that remove item from collection.
-     */
-    public void removeProductContent(ProductContent productContent) {
-        if (this.productContents == null) {
-            return;
-        }
-        this.productContents.remove(productContent);
-    }
-    /**
-     * Auto generated method that clear items from collection.
-     */
-    public void clearProductContent() {
-        if (this.productContents == null) {
-            return;
-        }
-        this.productContents.clear();
-    }
 
     /** {@inheritDoc} */
     @Override
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
-        setProductContentTypeId((String) mapValue.get("productContentTypeId"));
-        setParentTypeId((String) mapValue.get("parentTypeId"));
-        setHasTable((String) mapValue.get("hasTable"));
-        setDescription((String) mapValue.get("description"));
+        setProductId((String) mapValue.get("productId"));
+        setStatusId((String) mapValue.get("statusId"));
+        setProcessingDocumentId((Long) mapValue.get("processingDocumentId"));
+        setPostTimestamp((Timestamp) mapValue.get("postTimestamp"));
+        setPostErrorMessage((String) mapValue.get("postErrorMessage"));
+        setPostFailures((Long) mapValue.get("postFailures"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -408,10 +376,12 @@ fieldMapColumns.put("ProductContentType", fields);
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
-        mapValue.put("productContentTypeId", getProductContentTypeId());
-        mapValue.put("parentTypeId", getParentTypeId());
-        mapValue.put("hasTable", getHasTable());
-        mapValue.put("description", getDescription());
+        mapValue.put("productId", getProductId());
+        mapValue.put("statusId", getStatusId());
+        mapValue.put("processingDocumentId", getProcessingDocumentId());
+        mapValue.put("postTimestamp", getPostTimestamp());
+        mapValue.put("postErrorMessage", getPostErrorMessage());
+        mapValue.put("postFailures", getPostFailures());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

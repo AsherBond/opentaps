@@ -478,6 +478,13 @@ fieldMapColumns.put("Product", fields);
    @JoinColumn(name="PRODUCT_ID")
    
    private List<AgreementTerm> agreementTerms = null;
+   @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private AmazonProduct amazonProduct = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
@@ -1961,6 +1968,17 @@ fieldMapColumns.put("Product", fields);
         return this.agreementTerms;
     }
     /**
+     * Auto generated method that gets the related <code>AmazonProduct</code> by the relation named <code>AmazonProduct</code>.
+     * @return the <code>AmazonProduct</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public AmazonProduct getAmazonProduct() throws RepositoryException {
+        if (this.amazonProduct == null) {
+            this.amazonProduct = getRelatedOne(AmazonProduct.class, "AmazonProduct");
+        }
+        return this.amazonProduct;
+    }
+    /**
      * Auto generated method that gets the related <code>CartAbandonedLine</code> by the relation named <code>CartAbandonedLine</code>.
      * @return the list of <code>CartAbandonedLine</code>
      * @throws RepositoryException if an error occurs
@@ -2818,6 +2836,13 @@ fieldMapColumns.put("Product", fields);
     */
     public void setAgreementTerms(List<AgreementTerm> agreementTerms) {
         this.agreementTerms = agreementTerms;
+    }
+    /**
+     * Auto generated value setter.
+     * @param amazonProduct the amazonProduct to set
+    */
+    public void setAmazonProduct(AmazonProduct amazonProduct) {
+        this.amazonProduct = amazonProduct;
     }
     /**
      * Auto generated value setter.

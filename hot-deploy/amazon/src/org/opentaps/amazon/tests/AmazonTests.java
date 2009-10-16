@@ -18,8 +18,12 @@ package org.opentaps.amazon.tests;
 
 import java.util.List;
 
+import org.opentaps.domain.base.entities.AmazonOrder;
+import org.opentaps.domain.base.entities.AmazonProduct;
+
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderRepositoryInterface;
+import org.opentaps.domain.product.ProductRepositoryInterface;
 import org.opentaps.tests.OpentapsTestCase;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.base.util.UtilMisc;
@@ -36,16 +40,18 @@ public class AmazonTests extends OpentapsTestCase {
         super.setUp();
 
         // reset the Amazon demo data status flags so that the tests can run each time
-        List<GenericValue> amazonProducts = delegator.findAll("AmazonProduct");
-        for (GenericValue amazonProduct : amazonProducts) {
-            amazonProduct.set("statusId", "AMZN_PROD_CREATED");
-            amazonProduct.set("postFailures", new Long(0));
-            amazonProduct.store();
+        // "borrowing" the ProductRepositoryInterface for now
+        ProductRepositoryInterface productRepository = productDomain.getProductRepository();
+        List<AmazonProduct> amazonProducts = productRepository.findAll(AmazonProduct.class);
+        for (AmazonProduct amazonProduct : amazonProducts) {
+            amazonProduct.setStatusId("AMZN_PROD_CREATED");
+            amazonProduct.setPostFailures(new Long(0));
+            productRepository.createOrUpdate(amazonProduct);
         }
-        List<GenericValue> amazonOrders = delegator.findAll("AmazonOrder");
-        for (GenericValue amazonOrder : amazonOrders) {
-            amazonOrder.set("statusId", "AMZN_ORDR_CREATED");
-            amazonOrder.store();
+        List<AmazonOrder> amazonOrders = productRepository.findAll(AmazonOrder.class);
+        for (AmazonOrder amazonOrder : amazonOrders) {
+            amazonOrder.setStatusId("AMZN_ORDR_CREATED");
+            productRepository.createOrUpdate(amazonOrder);
         }
 
     }
@@ -72,9 +78,12 @@ public class AmazonTests extends OpentapsTestCase {
 
         // TODO: Use new SalesOrderSearchRepository
         // TODO: also test inventory reservation (ATP decreases for these products
+        
+        // based on hot-deploy/amazon/data/AmazonDemoSetup.xml
         List<GenericValue> orders = delegator.findByAnd("OrderHeader", UtilMisc.toMap("productStoreId", "AMAZON"));
         for (GenericValue orderGV : orders) {
             Order order = orderRepository.getOrderById(orderGV.getString("orderId"));
+            // these are from hot-deploy/amazon/data/AmazonDemoData.xml
             if ("TEST-AMNZ-9876543210".equals(order.getOrderId())) {
                 assertEquals("Total for TEST-AMNZ-9876543210 is not correct", order.getTotal(), "43.98");
             } else if ("TEST-AMNZ-9876543211".equals(order.getOrderId())) {

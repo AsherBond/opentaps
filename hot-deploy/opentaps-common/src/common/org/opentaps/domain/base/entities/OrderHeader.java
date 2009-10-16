@@ -287,6 +287,10 @@ fieldMapColumns.put("OrderHeader", fields);
    )
    
    private Party billToCustomerParty = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ORDER_ID")
+   
+   private List<AmazonOrderImport> amazonOrderImports = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
@@ -1150,6 +1154,17 @@ fieldMapColumns.put("OrderHeader", fields);
         return this.billToCustomerParty;
     }
     /**
+     * Auto generated method that gets the related <code>AmazonOrderImport</code> by the relation named <code>AmazonOrderImport</code>.
+     * @return the list of <code>AmazonOrderImport</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AmazonOrderImport> getAmazonOrderImports() throws RepositoryException {
+        if (this.amazonOrderImports == null) {
+            this.amazonOrderImports = getRelated(AmazonOrderImport.class, "AmazonOrderImport");
+        }
+        return this.amazonOrderImports;
+    }
+    /**
      * Auto generated method that gets the related <code>CommunicationEventOrder</code> by the relation named <code>CommunicationEventOrder</code>.
      * @return the list of <code>CommunicationEventOrder</code>
      * @throws RepositoryException if an error occurs
@@ -1859,6 +1874,13 @@ fieldMapColumns.put("OrderHeader", fields);
     */
     public void setBillToCustomerParty(Party billToCustomerParty) {
         this.billToCustomerParty = billToCustomerParty;
+    }
+    /**
+     * Auto generated value setter.
+     * @param amazonOrderImports the amazonOrderImports to set
+    */
+    public void setAmazonOrderImports(List<AmazonOrderImport> amazonOrderImports) {
+        this.amazonOrderImports = amazonOrderImports;
     }
     /**
      * Auto generated value setter.

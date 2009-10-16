@@ -31,6 +31,7 @@ under the License.
     <load-component component-location="dataimport"/>
     <load-component component-location="opentaps-tests"/>
     <load-component component-location="homeapps"/>
+    <load-component component-location="amazon"/>
     <!--
     <load-component component-location="livecatalog"/>
     <load-component component-location="analytics"/>
@@ -38,9 +39,6 @@ under the License.
     -->
     <!-- Uncomment these to load the Funambol Data Synchronization or Pentaho BI 
     <load-component component-location="pentaho"/>        
-    -->
-    <!-- Uncomment to load the Amazon integration component
-    <load-component component-location="amazon"/>
     -->
     
 

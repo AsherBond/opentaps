@@ -108,6 +108,10 @@ fieldMapColumns.put("ContactMech", fields);
    
    private List<ContactMechTypeAttr> contactMechTypeAttrs = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="EMAIL_CONTACT_MECH_ID")
+   
+   private List<AmazonParty> amazonPartys = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID")
    
    private List<BillingAccount> billingAccounts = null;
@@ -433,6 +437,17 @@ fieldMapColumns.put("ContactMech", fields);
             this.contactMechTypeAttrs = getRelated(ContactMechTypeAttr.class, "ContactMechTypeAttr");
         }
         return this.contactMechTypeAttrs;
+    }
+    /**
+     * Auto generated method that gets the related <code>AmazonParty</code> by the relation named <code>AmazonParty</code>.
+     * @return the list of <code>AmazonParty</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AmazonParty> getAmazonPartys() throws RepositoryException {
+        if (this.amazonPartys == null) {
+            this.amazonPartys = getRelated(AmazonParty.class, "AmazonParty");
+        }
+        return this.amazonPartys;
     }
     /**
      * Auto generated method that gets the related <code>BillingAccount</code> by the relation named <code>BillingAccount</code>.
@@ -921,6 +936,13 @@ fieldMapColumns.put("ContactMech", fields);
     */
     public void setContactMechTypeAttrs(List<ContactMechTypeAttr> contactMechTypeAttrs) {
         this.contactMechTypeAttrs = contactMechTypeAttrs;
+    }
+    /**
+     * Auto generated value setter.
+     * @param amazonPartys the amazonPartys to set
+    */
+    public void setAmazonPartys(List<AmazonParty> amazonPartys) {
+        this.amazonPartys = amazonPartys;
     }
     /**
      * Auto generated value setter.
