@@ -876,7 +876,7 @@ border: #999999 solid 1px;
 margin: 2px;
 }
 
-.inputBox {
+.basic-form input[type="text"], .inputBox {
 font-family: Verdana, Arial, Helvetica, sans-serif;
 font-weight: normal;
 background: #FFFFFF;
