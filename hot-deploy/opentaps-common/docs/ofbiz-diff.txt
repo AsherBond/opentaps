@@ -1,25 +1,21 @@
-
-
 Based on revisions:
 https://svn.apache.org/repos/asf/ofbiz/branches/release09.04@822662
 svn://svn.opentaps.org/opentaps_all/versions/1.0/tags/tests-passed-20091011
+
+Overall changes
+---------------
+Commented out various webapps and components which duplicate or are superseded by opentaps.
+r13679
+applications/*/webapp/*/WEB-INF/web.xml
+r13646 Added ofbizServerName context-param for JBOSS integration
 
 Framework changes
 -----------------
 
 This list the changes made in the framework directory, from the 09.04 ofbiz release.
 
-
 framework/base/src/org/ofbiz/base/util/UtilFormatOut.java
 r12890 Added a formatCurrency method which does not require the maximumFractionDigits argument. It uses the default value for the locale. Added for backward compatibility.
-
-
-framework/entity/src/org/ofbiz/entity/GenericDelegator.java
-r12909 Removed depracation tags for the findXXX methods. Ofbiz deprecated them to be replaced with findOne, findList but the old methods are used in too many places to be refactored
-completely for now.
-
-framework/service/config/serviceengine.xml
-r12978 Added the POJOJavaEngine as a service engine. This is a needed part of opentaps.
 
 framework/base/config/pojoentities-containers.xml
 framework/start/src/org/ofbiz/base/start/pojoentities.properties
@@ -30,6 +26,25 @@ framework/base/config/ofbiz-containers.xml
 framework/base/config/test-containers.xml
 framework/start/src/org/ofbiz/base/start/hibernatecfg.properties
 r13030 Added hibernate configuration generator container
+
+framework/base/lib/etl/
+framework/base/lib/etl/js.jar
+framework/base/lib/etl/kettle-core.jar
+framework/base/lib/etl/kettle-db.jar
+framework/base/lib/etl/kettle-engine.jar
+framework/base/lib/etl/ognl-2.6.9.jar
+r13618 Move kettle libraries to framework in order to resolve classpath problems
+r13623 Removed log4j.xml from the kettle-engine.jar root because it affects common logging format. 
+
+framework/base/config/debug.properties
+r13645 Filter Spring logging to WARN
+
+framework/base/src/org/ofbiz/base/util/UtilHttp.java
+r13392 Port back change in makeParamValueFromComposite to return the String representing the parsed Timestamp instead of directly the Timestamp
+
+framework/entity/src/org/ofbiz/entity/GenericDelegator.java
+r12909 Removed depracation tags for the findXXX methods. Ofbiz deprecated them to be replaced with findOne, findList but the old methods are used in too many places to be refactored
+completely for now.
 
 framework/entity/src/org/ofbiz/entity/condition/EntityExpr.java
 r13040 fix a bug in the validation which did not work if the rhs was an empty collection
@@ -45,19 +60,20 @@ framework/entity/src/org/ofbiz/entity/GenericEntity.java
 framework/entity/src/org/ofbiz/entity/condition/EntityExpr.java
 r13261 Remove backtrace from database type warnings
 
-framework/webapp/dtd/site-conf.xsd
-framework/webapp/src/org/ofbiz/webapp/control/ConfigXMLReader.java
-framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
-r13252, r13253 Port back request-redirect-filterparam
-
-framework/widget/src/org/ofbiz/widget/html/HtmlScreenRenderer.java
-framework/widget/src/org/ofbiz/widget/screen/ScreenWidgetViewHandler.java
-r13276 Save the current content type in the context, and skip inserting an HTML DocType if the content type is not html. This is used for example for javascript files.
-r13298 Fixed, reverted previous change in RequestHandler.java
+framework/entity/config/entityengine.xml
+r13534 Add analytics & testing(analytics test database) to entity engine config
 
 framework/entity/src/org/ofbiz/entity/GenericEntity.java
 r13280 Return field value if entity label for a primary key equals to this key. This fix broken labels in many screens
 The reason: some common entity labels (example CommonEntityLabels.xml DataSource.description.*> are ID, not description.
+
+framework/service/config/serviceengine.xml
+r12978 Added the POJOJavaEngine as a service engine. This is a needed part of opentaps.
+
+framework/webapp/dtd/site-conf.xsd
+framework/webapp/src/org/ofbiz/webapp/control/ConfigXMLReader.java
+framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
+r13252, r13253 Port back request-redirect-filterparam
 
 framework/webapp/lib
 r13338 Updated itext-2.0.1.jar to iText-2.1.7.jar, necessary to work with our version of jasper report
@@ -69,58 +85,30 @@ r13357 Changed error message for secured URL parameters
 framework/widget/templates/foScreenMacroLibrary.ftl
 r13376 Fix for missing macros and new parameters
 
-framework/base/src/org/ofbiz/base/util/UtilHttp.java
-r13392 Port back change in makeParamValueFromComposite to return the String representing the parsed Timestamp instead of directly the Timestamp
+framework/widget/src/org/ofbiz/widget/html/HtmlScreenRenderer.java
+framework/widget/src/org/ofbiz/widget/screen/ScreenWidgetViewHandler.java
+r13276 Save the current content type in the context, and skip inserting an HTML DocType if the content type is not html. This is used for example for javascript files.
+r13298 Fixed, reverted previous change in RequestHandler.java
+
+framework/widget/src/org/ofbiz/widget/form/ModelFormField.java
+framework/widget/src/org/ofbiz/widget/html/HtmlFormRenderer.java
+r13551,r13554 add re-display search value for date/time calendar on submit support.
 
 framework/widget/dtd/widget-form.xsd
 framework/widget/src/org/ofbiz/widget/form/ModelForm.java
 r13488 Default form pagination back to false, and fix the ModelForm to actually the paginate = false
 
-framework/base/lib/etl/
-framework/base/lib/etl/js.jar
-framework/base/lib/etl/kettle-core.jar
-framework/base/lib/etl/kettle-db.jar
-framework/base/lib/etl/kettle-engine.jar
-framework/base/lib/etl/ognl-2.6.9.jar
-r13618 Move kettle libraries to framework in order to resolve classpath problems
-r13623 Removed log4j.xml from the kettle-engine.jar root because it affects common logging format. 
-
-framework/base/config/debug.properties
-r13645 Filter Spring logging to WARN
-
-framework/entity/config/entityengine.xml
-r13534 Add analytics & testing(analytics test database) to entity engine config
 
 Applications changes
 --------------------
 
 This list the changes made in the applications directory, from the 09.04 ofbiz release.
 
-applications/order/servicedef/secas.xml
-r12967 removed receiveInventoryProduct service eca
-
-applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCart.java
-r12896 made some methods / attributes protected instead of private, so we can access them in OpentapsShoppingCart
-
-applications/order/entitydef/entitymodel_old.xml
-r12972 removed OldCustRequestRole from ofbiz order entitydef
-related to this change:
-r12972 re-added CustRequestRole/InventoryEventPlanned/InventoryEventPlannedType/MrpInventoryEventPlanned in opentaps common.
-
-ofbiz remove contentPurposeEnumId from entity PartyContent, also add partyContentTypeId as part of primary key.
-I re-add contentPurposeEnumId in r12982, and going to refactor relate codes. 
-
-applications/content/lib/lucene-core-2.4.0.jar
-r13032 Upgraded lucene from 2.2 to 2.4 needed for hibernate search.
+applications/accounting/config/AccountingUiLabels.xml
+r13681 fix a couple of English UI labels
 
 applications/accounting/ofbiz-component.xml
 r13042 commented out secas_ledger.xml
-r13609 commented out seed and demo data which duplicate the ones in financials. To maintain backward compatibility, we are using the same accounting type data from older versions of ofbiz/opentaps.
-
-applications/party/script/org/ofbiz/party/contact/PartyContactMechServices.xml
-r13048 fix the createPartyContactMech service to return the contact mech id if it reuses an existing contact mech
-
-applications/accounting/ofbiz-component.xml
 r13085 commented out the services, secas and entities related to ofbiz BI (SalesInvoiceItemFact)
 
 applications/accounting/data/AccountingTypeData.xml
@@ -133,11 +121,61 @@ r13145 The following AcctgTransType were removed from Ofbiz as they already exis
  * OTHER_INTERNAL_ACCTG -> OTHER_INTERNAL
  * SALES_ACCTG_TRANS    -> SALES
 
+applications/accounting/widget/GlSetupForms.xml
+r13565, hide PartyAcctgPreference.errorGlJournalId field
+
+applications/accounting/servicedef/services_paymentmethod.xml
+r13303 Fix gift card number should be required, service has NPE if not given, see JIRA 2926
+
 applications/accounting/servicedef/secas.xml
 r13147 Removed the seca on createPaymentApplication that called createAcctgTransAndEntriesForPaymentApplication (new ofbiz service)
 
+applications/accounting/src/org/ofbiz/accounting/invoice/InvoiceServices.java
+r13651 Fix to calculate adjustment with source percentage and no amount set.
+
+applications/accounting/src/org/ofbiz/accounting/payment/PaymentGatewayServices.java
+r13205 Fix potential NPE if the OPP maxAmount is null
+
+applicatioins/content/entitydef/entitymodel.xml
+ofbiz remove contentPurposeEnumId from entity PartyContent, also add partyContentTypeId as part of primary key.
+I re-add contentPurposeEnumId in r12982, and going to refactor relate codes. 
+
+applications/content/build.xml
+applications/content/lib/uno/*.jar
+r13341 Adding jars for jasper reports and openoffice (uno)
+
+applications/content/lib/lucene-core-2.4.0.jar
+r13032 Upgraded lucene from 2.2 to 2.4 needed for hibernate search.
+
 applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRun.java
 r13173 Fix so that the production run quantityToProduce field is also updated on store
+
+applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRun.java
+applications/manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ViewProductionRun.groovy
+applications/manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunDeclaration.groovy
+r13650 Patch to ofbiz files to fix NPE occurring if the WEGS is missing.
+
+applications/manufacturing/src/org/ofbiz/manufacturing/routing/RoutingServices.java
+r13123 change return parameters estimatedSetupMillis/estimatedMilliSeconds to fix service define (Double -> BigDecimal)
+TODO: it should patch back to ofbiz
+
+applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRunServices.java
+r13138 change return parameters estimatedSetupMillis/estimatedMilliSeconds to fix service define (Double -> BigDecimal)
+TODO: it should patch back to ofbiz
+
+applications/order/entitydef/entitymodel_old.xml
+r12972 removed OldCustRequestRole from ofbiz order entitydef
+related to this change:
+r12972 re-added CustRequestRole/InventoryEventPlanned/InventoryEventPlannedType/MrpInventoryEventPlanned in opentaps common.
+
+applications/order/servicedef/secas.xml
+r12967 removed receiveInventoryProduct service eca
+
+applications/order/data/OrderTypeData.xml
+r13468 comment the quote status item and status valid change for the it conflict with our code
+
+applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCart.java
+r12896 made some methods / attributes protected instead of private, so we can access them in OpentapsShoppingCart
 
 applications/order/servicedef/secas.xml
 r13192 Removed ofbiz new seca that auto invoice services when approved, this conflicts with the perform service -> invoice performed services workflow in opentaps.
@@ -145,8 +183,8 @@ r13192 Removed ofbiz new seca that auto invoice services when approved, this con
 applications/order/src/org/ofbiz/order/order/OrderServices.java
 r13199 Small fix for cancelOrderItem, so that it sets an item as completed if part of it is billed and the remaining quantity is cancelled.
 
-applications/accounting/src/org/ofbiz/accounting/payment/PaymentGatewayServices.java
-r13205 Fix potential NPE if the OPP maxAmount is null
+applications/party/script/org/ofbiz/party/contact/PartyContactMechServices.xml
+r13048 fix the createPartyContactMech service to return the contact mech id if it reuses an existing contact mech
 
 applications/order/servicedef/secas.xml
 r13211 Comment out SECAs on cancelOrderItem since those are redefined in hot-deploy/opentaps-common/servicedef/secas_orders.xml
@@ -157,32 +195,20 @@ r13222 Small fix for reserveInventory not to try to reserve cancelled quantity
 applications/order/src/org/ofbiz/order/order/OrderReturnServices.java
 r13243 Re added the code block that creates filler payments from the remaining amount
 
-applications/accounting/servicedef/services_paymentmethod.xml
-r13303 Fix gift card number should be required, service has NPE if not given, see JIRA 2926
-
 applications/order/src/org/ofbiz/order/shoppingcart/CheckOutEvents.java
 r13310 Revert Ofbiz change, only Purchase Order should require Terms. Avoid the terms screen to appear in the sales order checkout process.
 
-applications/content/build.xml
-applications/content/lib/uno/*.jar
-r13341 Adding jars for jasper reports and openoffice (uno)
+applications/order/webapp/ordermgr/WEB-INF/actions/order/OrderView.groovy
+r13479 fix view purchasing order NPE if facility is null
 
 applications/product/script/org/ofbiz/shipment/picklist/PicklistServices.xml
 - Fix UEL errors in services, see JIRA 2969
 
-applications/*/webapp/*/WEB-INF/web.xml
-r13646 Added ofbizServerName context-param for JBOSS integration
-
 applications/product/script/org/ofbiz/shipment/picklist/PicklistServices.xml
 r13649 Changed Warehouse Dashboard to exclude any completed pick lists.
 
-applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRun.java
-applications/manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ViewProductionRun.groovy
-applications/manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunDeclaration.groovy
-r13650 Patch to ofbiz files to fix NPE occurring if the WEGS is missing.
-
-applications/accounting/src/org/ofbiz/accounting/invoice/InvoiceServices.java
-r13651 Fix to calculate adjustment with source percentage and no amount set.
+applications/product/webapp/facility/WEB-INF/actions/facility/ViewFacilityInventoryByProduct.groovy
+r13477 change productsSoldThruTImestamp to timpstamp when it is a string value 
 
 Other API Changes
 -----------------
@@ -218,31 +244,6 @@ If the ship group may split, the calculated date is the earliest of the estimate
 Else it is the latest of those values.
 TODO: see when this value get set and with which value, else we can use it to cache the result of this method or just ignore it and leave it to null.
 
-applications/product/entitydef/entitymodel_old.xml
-r13098 remove OldFacilityRole from ofbiz product entitydef
-related to this change:
-r13098 re-added FacilityRole Entity define in opentaps common.
 
-applications/manufacturing/src/org/ofbiz/manufacturing/routing/RoutingServices.java
-r13123 change return parameters estimatedSetupMillis/estimatedMilliSeconds to fix service define (Double -> BigDecimal)
-TODO: it should patch back to ofbiz
 
-applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRunServices.java
-r13138 change return parameters estimatedSetupMillis/estimatedMilliSeconds to fix service define (Double -> BigDecimal)
-TODO: it should patch back to ofbiz
 
-applications/order/data/OrderTypeData.xml
-r13468 comment the quote status item and status valid change for the it conflict with our code
-
-applications/product/webapp/facility/WEB-INF/actions/facility/ViewFacilityInventoryByProduct.groovy
-r13477 change productsSoldThruTImestamp to timpstamp when it is a string value 
-
-applications/order/webapp/ordermgr/WEB-INF/actions/order/OrderView.groovy
-r13479 fix view purchasing order NPE if facility is null
-
-framework/widget/src/org/ofbiz/widget/form/ModelFormField.java
-framework/widget/src/org/ofbiz/widget/html/HtmlFormRenderer.java
-r13551,r13554 add re-display search value for date/time calendar on submit support.
-
-applications/accounting/widget/GlSetupForms.xml
-r13565, hide PartyAcctgPreference.errorGlJournalId field
