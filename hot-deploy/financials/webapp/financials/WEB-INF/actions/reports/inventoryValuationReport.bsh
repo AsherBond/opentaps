@@ -34,9 +34,11 @@ import org.opentaps.common.util.UtilCommon;
 //put to history
 context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsInventoryValuationReport"));
 
+// disable the glFiscalTypes, not used by this report
+context.remove("glFiscalTypes");
+
 // get the form data from the helper script
 organizationPartyId = context.get("organizationPartyId");
-glFiscalTypeId = context.get("glFiscalTypeId");
 asOfDateTime = context.get("asOfDate");
 if (asOfDateTime == null) return;
 

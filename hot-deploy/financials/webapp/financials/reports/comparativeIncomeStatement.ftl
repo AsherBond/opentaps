@@ -29,11 +29,11 @@
       <td class="tableheadtext" align="left">${uiLabelMap.Account}</td>
       <td class="tableheadtext" align="right" style="white-space:nowrap">
         ${getLocalizedDate(fromDate1, "DATE")} - ${getLocalizedDate(thruDate1, "DATE")}<br/>
-        ${isClosed1?string(uiLabelMap.isClosed,uiLabelMap.isNotClosed)} (${glFiscalType1.description})
+        ${isClosed1?string(uiLabelMap.FinancialsTimePeriodIsClosed, uiLabelMap.FinancialsTimePeriodIsNotClosed)} (${glFiscalType1.description})
       </td>
       <td class="tableheadtext" align="right" style="white-space:nowrap">
         ${getLocalizedDate(fromDate2, "DATE")} - ${getLocalizedDate(thruDate2, "DATE")}<br/>
-        ${isClosed2?string(uiLabelMap.isClosed,uiLabelMap.isNotClosed)} (${glFiscalType2.description})
+        ${isClosed2?string(uiLabelMap.FinancialsTimePeriodIsClosed, uiLabelMap.FinancialsTimePeriodIsNotClosed)} (${glFiscalType2.description})
       <td class="tableheadtext" align="right">${uiLabelMap.OpentapsDifference}</td>
     </tr>
     <#list accounts as account>

@@ -24,9 +24,9 @@
       <div class="tableheadtext">${uiLabelMap.AccountingIncomeStatement} for ${parameters.organizationName?if_exists} (${organizationPartyId})</div>
       <div class="tabletext">${uiLabelMap.CommonFrom} ${getLocalizedDate(fromDate, "DATE")} ${uiLabelMap.CommonThru} ${getLocalizedDate(thruDate, "DATE")}
         <#if isClosed>
-          (${uiLabelMap.isClosed})
+          (${uiLabelMap.FinancialsTimePeriodIsClosed})
         <#else>
-          (${uiLabelMap.isNotClosed})
+          (${uiLabelMap.FinancialsTimePeriodIsNotClosed})
         </#if>
       </div>
     </div>

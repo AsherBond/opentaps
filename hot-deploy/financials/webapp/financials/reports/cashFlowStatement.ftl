@@ -51,9 +51,9 @@
         ${getLocalizedDate(fromDate, "DATE")} <span class="tableheadtext">Thru</span> ${getLocalizedDate(thruDate, "DATE")}
         <#if isClosed?exists>
           <#if isClosed>
-            (${uiLabelMap.isClosed})
+            (${uiLabelMap.FinancialsTimePeriodIsClosed})
             <#else>
-              (${uiLabelMap.isNotClosed})
+              (${uiLabelMap.FinancialsTimePeriodIsNotClosed})
             </#if>
           </#if>
       </div>

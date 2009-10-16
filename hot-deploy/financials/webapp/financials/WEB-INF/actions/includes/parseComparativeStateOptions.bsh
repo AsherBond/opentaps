@@ -25,8 +25,8 @@
  * After this script is called, call your report generation
  * script and get the form data from the context:
  *
- * fromGlFiscalTypeId
- * toGlFiscalTypeId
+ * glFiscalTypeId1
+ * glFiscalTypeId2
  * fromDate (Timestamp or null if not specified)
  * thruDate (Timestamp or null if not specified)
  *

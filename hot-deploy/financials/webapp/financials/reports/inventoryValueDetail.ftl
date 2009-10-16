@@ -15,7 +15,7 @@
  *  
 -->
 
-<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+<@import location="component://financials/webapp/financials/includes/commonReportMacros.ftl"/>
 
 <#assign currencyUomId = parameters.orgCurrencyUomId>  <!-- for some reason, putting this in context in main-decorator.bsh does not work -->
 
@@ -23,18 +23,10 @@
   <#-- some forms need a productId, they should define this value -->
   <#-- TODO: use a macro to generate filter options like in product lookup -->
   <#if productIdInputRequested?exists>
-  <div style="margin-left: 5px; margin-bottom: 5px;">
-    <span class="tableheadtext">${uiLabelMap.ProductProductId}</span>
-    <input type="text" name="productId" size="20" maxlength="20" value="${parameters.productId?if_exists}" class="inputBox"></input>
-  </div>
+    <@productInput form="stateReportForm" />
   </#if>
 
-  <div style="margin-left: 30px; margin-top: 10px;">
-    <input type="Submit" class="smallSubmit" name="submitButton" value="${uiLabelMap.CommonRun}"></input>
-    <#if returnPage?exists && returnLabel?exists>
-    <input type="button" class="smallSubmit" name="backButton" value="${uiLabelMap.get(returnLabel)}" onClick="window.location.href='/financials/control/${returnPage}'"></input>
-    </#if>
-  </div>  
+  <@submitReportOptions returnPage=returnPage! returnLabel=returnLabel!/>
 </form>
 
 <div style="border: 1px solid #999999; margin-top: 20px; margin-bottom: 20px;"></div>
@@ -43,11 +35,11 @@
   ${uiLabelMap.OpentapsAsOfDate} ${getLocalizedDate(Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp(), "DATE")}</td></tr>
   <tr><td colspan="7">&nbsp;</td></tr>
   <tr>
-    <td class="tableheadtext">Inventory Item</td>
-    <td class="tableheadtext">Product</td>
-    <td class="tableheadtext">Serial No.</td>
-    <td class="tableheadtext" align="right">QOH</td>
-    <td class="tableheadtext" align="right">Unit Cost</td>
+    <td class="tableheadtext">${uiLabelMap.ProductInventoryItem}</td>
+    <td class="tableheadtext">${uiLabelMap.ProductProduct}</td>
+    <td class="tableheadtext">${uiLabelMap.ProductSerialNumber}</td>
+    <td class="tableheadtext" align="right">${uiLabelMap.ProductQoh}</td>
+    <td class="tableheadtext" align="right">${uiLabelMap.FormFieldTitle_unitCost}</td>
     <td class="tableheadtext" align="right">${uiLabelMap.FinancialsValue}</td>
     <td class="tableheadtext" align="right">${uiLabelMap.FinancialsCumulativeValue}</td>
   </tr>
@@ -78,12 +70,12 @@
 <#-- also display the inventory average cost valuation account balances -->
 <#if adjustmentTransactions?exists>
   <tr><td colspan="7">&nbsp;</td></tr>
-  <tr><td colspan="7" align="center" class="tableheadtext">Adjustments</td></tr>
+  <tr><td colspan="7" align="center" class="tableheadtext">${uiLabelMap.OrderAdjustments}</td></tr>
   <tr>
-    <td class="tableheadtext">Inventory Item</td>
-    <td class="tableheadtext">Product</td>
-    <td class="tableheadtext" colspan="4">Account</td>
-    <td class="tableheadtext" align="right">Amount</td>
+    <td class="tableheadtext">${uiLabelMap.ProductInventoryItem}</td>
+    <td class="tableheadtext">${uiLabelMap.ProductProduct}</td>
+    <td class="tableheadtext" colspan="4">${uiLabelMap.AccountingAccount}</td>
+    <td class="tableheadtext" align="right">${uiLabelMap.AccountingAmount}</td>
   </tr>
 
 <#list adjustmentTransactions as trans>

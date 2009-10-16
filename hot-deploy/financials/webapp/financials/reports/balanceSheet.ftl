@@ -32,9 +32,9 @@
         </#if>
         <#if isClosed?exists>
           <#if isClosed>
-            (${uiLabelMap.isClosed})
+            (${uiLabelMap.FinancialsTimePeriodIsClosed})
           <#else>
-            (${uiLabelMap.isNotClosed})
+            (${uiLabelMap.FinancialsTimePeriodIsNotClosed})
           </#if>
         </#if>
       </div>

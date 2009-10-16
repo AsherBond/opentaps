@@ -28,8 +28,8 @@ timeZone = UtilCommon.getTimeZone(request);
 //put to history
 context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsComparativeBalance"));
 organizationPartyId = context.get("organizationPartyId");
-fromGlFiscalTypeId = context.get("fromGlFiscalTypeId");
-toGlFiscalTypeId = context.get("toGlFiscalTypeId");
+glFiscalTypeId1 = context.get("glFiscalTypeId1");
+glFiscalTypeId2 = context.get("glFiscalTypeId2");
 fromDate = context.get("fromDate");
 thruDate = context.get("thruDate");
 if (fromDate == null || thruDate == null) return;
@@ -38,7 +38,7 @@ if (fromDate == null || thruDate == null) return;
 fromDate = UtilDateTime.getDayEnd(fromDate, timeZone, locale);
 thruDate = UtilDateTime.getDayEnd(thruDate, timeZone, locale);
 
-input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "fromGlFiscalTypeId", fromGlFiscalTypeId, "toGlFiscalTypeId", toGlFiscalTypeId);
+input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId1", glFiscalTypeId1, "glFiscalTypeId2", glFiscalTypeId2);
 input.put("userLogin", userLogin);
 input.put("fromDate", fromDate);
 input.put("thruDate", thruDate);
@@ -63,7 +63,7 @@ context.put("fromDate", fromDate);
 context.put("thruDate", thruDate);
 
 // put the correct GlFiscalTypes into the context for the display tier
-fromGlFiscalType = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", fromGlFiscalTypeId));
-toGlFiscalType = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", toGlFiscalTypeId));
+fromGlFiscalType = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", glFiscalTypeId1));
+toGlFiscalType = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", glFiscalTypeId2));
 context.put("fromGlFiscalType", fromGlFiscalType);
 context.put("toGlFiscalType", toGlFiscalType);

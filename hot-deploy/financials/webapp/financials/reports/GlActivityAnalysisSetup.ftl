@@ -30,7 +30,7 @@
             
             <@inputDateRow name="fromDate" form="GlActivityAnalysisSetupForm" title="${uiLabelMap.CommonFromDate}" default=fromDate?if_exists/>
             <@inputDateRow name="thruDate" form="GlActivityAnalysisSetupForm" title="${uiLabelMap.CommonThruDate}" default=thruDate?if_exists/>
-            <@inputAutoCompleteGlAccountRow name="glAccountId" title="${uiLabelMap.AccountingGlAcc}" />
+            <@inputAutoCompleteGlAccountRow name="glAccountId" title="${uiLabelMap.AccountingGlAccount}" />
 
             <#-- List possible tags -->
             <#list tagTypes as tag>

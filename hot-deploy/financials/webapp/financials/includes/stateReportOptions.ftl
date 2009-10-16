@@ -21,153 +21,46 @@ Make sure you call parseReportOptions.bsh so that this form can work.
 @author Leon Torres (leon@opensourcestrategies.com)
 -->
 
-<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
-
-<#macro listCustomTimePeriods customTimePeriods defaultTimePeriodId>
-  <#list customTimePeriods as customTimePeriod>
-    <#assign selected=""/>
-    <#if defaultTimePeriodId == customTimePeriod.customTimePeriodId><#assign selected="selected"></#if>
-    <option ${selected?if_exists} value="${customTimePeriod.customTimePeriodId}">${customTimePeriod.periodName?if_exists} 
-      <#if customTimePeriod.periodNum?has_content>
-        ${customTimePeriod.periodNum?string("####")}
-      </#if> 
-        ${uiLabelMap.FinancialsEndingOn} <#if customTimePeriod.thruDate?has_content>${getLocalizedDate(customTimePeriod.thruDate, "DATE_ONLY")}</#if> 
-      <#if customTimePeriod.isClosed == "Y">
-        (${uiLabelMap.isClosed})
-      <#else>
-        (${uiLabelMap.isNotClosed})
-      </#if>
-    </option>
-  </#list>
-</#macro>
-
-<#macro listGlFiscalTypes glFiscalTypes>
-  <#list glFiscalTypes as glFiscalType>
-    <#assign selected = ""/>
-    <#if glFiscalTypeId?exists && glFiscalTypeId == glFiscalType.glFiscalTypeId><#assign selected = "selected"/></#if>
-    <option ${selected?if_exists} value="${glFiscalType.glFiscalTypeId}">${glFiscalType.description}</option>
-  </#list>
-</#macro>
+<@import location="component://financials/webapp/financials/includes/commonReportMacros.ftl"/>
 
 <#-- preserve the last checked date option -->
 <#if customTimePeriodId?exists || fromTimePeriodId?exists>
-  <#assign byTimePeriodChecked = "checked=''">
-  <#else>
-  <#assign byDateChecked = "checked=''">
+  <#assign byTimePeriodChecked = "checked=\"checked\"">
+<#else>
+  <#assign byDateChecked = "checked=\"checked\"">
 </#if>
 
-<#-- a function to "disable" the other date option when one is selected -->
-<script type="text/javascript">
-  <!--
-  function selectReportDateOption(button) {
-    if (button.checked == true) {
-      if (button.value == "byDate") {
-        button.form.asOfDate.disabled = false;
-        button.form.customTimePeriodId.disabled = true;
-      }
-      if (button.value == "byTimePeriod") {
-        button.form.asOfDate.disabled = true;
-        button.form.customTimePeriodId.disabled = false;
-      }
-    }
-  }
-
-  function doSubmit(action, target) {
-    document.stateReportForm.type.value = target;
-    document.stateReportForm.reportAction.value = '';
-    document.stateReportForm.action = action;
-    document.stateReportForm.submit();
-  }
-  //-->
-</script>
+<@commonReportJs formName="stateReportForm" />
 
 <#-- this form needs no action since it returns to the same page, allowing multiple different views to use it in the same pattern -->
 <form method="POST" name="stateReportForm" action="">
-  <input type="hidden" name="reportFormType" value="state"></input>
+  <@inputHidden name="reportFormType" value="state" />
 
   <#-- some forms need a partyId, they should define this map which contains a "label" for the label -->
   <#if partyIdInputRequested?exists>
-  <div style="margin-left: 5px; margin-bottom: 5px;">
-    <span class="tableheadtext">${uiLabelMap.get(partyIdInputRequested.get("label"))}</span>
-    <input type="text" name="partyId" size="20" maxlength="20" value="${partyId?if_exists}" class="inputBox"></input>
-    <a href="javascript:call_fieldlookup2(document.stateReportForm.partyId, 'LookupPartyName');">
-      <img src="/images/fieldlookup.gif" width="16" height="16" border="0" alt="Lookup"></img>
-    </a>
-  </div>
+    <@partyInput label=partyIdInputRequested.label form="stateReportForm" />
   </#if>
 
   <#-- some forms need a productId, they should define this value -->
-  <#-- TODO: use a macro to generate filter options like in product lookup -->
   <#if productIdInputRequested?exists>
-  <div style="margin-left: 5px; margin-bottom: 5px;">
-    <span class="tableheadtext">${uiLabelMap.ProductProductId}</span>
-    <input type="text" name="productId" size="20" maxlength="20" value="${productId?if_exists}" class="inputBox"></input>
-  </div>
+    <@productInput form="stateReportForm" />
   </#if>
 
-  <table>
-    <tr>
-      <td><input type="radio" name="reportDateOption" value="byDate" onClick="javascript:selectReportDateOption(this)" ${byDateChecked?default("")}></input></td>
-      <td class="tableheadtext">${uiLabelMap.OpentapsAsOfDate}</td>
-      <td>
-        <#if requestParameters.asOfDate?exists>
-          <#assign date = requestParameters.asOfDate />
-        <#else>
-          <#assign date = defaultAsOfDate />
-        </#if>
-        <@inputDate name="asOfDate" default=date?if_exists/>
-      </td>
-    </tr>
-  </table>
+  <@asOfDateInputRow byDateChecked=byDateChecked! />
 
-  <#if customTimePeriods.size() != 0>
-  <table>
-    <tr>
-      <td><input type="radio" name="reportDateOption" value="byTimePeriod" onClick="javascript:selectReportDateOption(this)" ${byTimePeriodChecked?default("")}></input></td>
-      <td class="tableheadtext">${uiLabelMap.AccountingTimePeriod}</td>
-      <td class="tabletext">
-        <select class="selectBox" name="customTimePeriodId" size="1">
-          <@listCustomTimePeriods customTimePeriods =customTimePeriods defaultTimePeriodId=customTimePeriodId?default("")/>
-        </select> 
-      </td>
-    </tr>
-  </table>
+  <#if customTimePeriods?has_content>
+    <@timePeriodInputRow customTimePeriods=customTimePeriods defaultTimePeriodId=customTimePeriodId! byTimePeriodChecked=byTimePeriodChecked!/>
   </#if>
 
-  <div style="margin-left: 30px; margin-top: 5px;">
-    <span class="tableheadtext">${uiLabelMap.FinancialsGlFiscalType}</span>
-    <select class="selectBox" name="glFiscalTypeId" size="1"><@listGlFiscalTypes glFiscalTypes=glFiscalTypes/></select>
-  </div>
-
-  <#if !disableTags?exists>
-    <#-- List possible tags -->
-    <#list tagTypes as tag>
-      <div style="margin-left: 30px; margin-top: 5px;">
-        <span class="tableheadtext">${tag.description}</span>
-        <@inputSelect name="tag${tag.index}" list=tag.tagValues key="enumId" required=true ; tagValue>
-          ${tagValue.description}
-        </@inputSelect>
-      </div>
-    </#list>
+  <#if glFiscalTypes?has_content>
+    <@glFiscalTypeInputRow glFiscalTypes=glFiscalTypes />
   </#if>
 
-  <div style="margin-left: 30px; margin-top: 10px;">
-    <@inputHidden name="type" value="pdf"/>
-    <#if reportRequest?has_content && screenRequest?has_content>
-        <@selectAction name="reportAction" prompt="${uiLabelMap.OpentapsRunReportIn}">
-            <@action url="javascript: doSubmit('${screenRequest}', 'screen')" text="${uiLabelMap.OpentapsReportOptionScreen}"/>
-            <@action url="javascript: doSubmit('${reportRequest}', 'pdf')" text="${uiLabelMap.OpentapsReportOptionPdf}"/>
-            <@action url="javascript: doSubmit('${reportRequest}', 'xls')" text="${uiLabelMap.OpentapsReportOptionXls}"/>
-    <#if returnPage?exists && returnLabel?exists>
-            <@action url="javascript: void()" text="${uiLabelMap.OpentapsDefaultActionSeparator}"/>
-            <@action url="javascript: window.location.href='/financials/control/${returnPage}'" text="${uiLabelMap.get(returnLabel)}"/>
-    </#if>            
-        </@selectAction>
-    <#else>
-        <input type="Submit" class="smallSubmit" name="submitButton" value="${uiLabelMap.CommonRun}"></input>
-    </#if>
+  <#if !disableTags?exists && tagTypes?has_content>
+    <@accountingTagsInputs tagTypes=tagTypes />
+  </#if>
 
-  </div>  
+  <@submitReportOptions reportRequest=reportRequest! screenRequest=screenRequest! returnPage=returnPage! returnLabel=returnLabel!/>
 
 </form>
 

@@ -14,7 +14,7 @@
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
 -->
 
-<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+<@import location="component://financials/webapp/financials/includes/commonReportMacros.ftl"/>
 
 <#assign now = Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp()>
 <#assign defaultFromDate = Static["org.ofbiz.base.util.UtilDateTime"].getDayStart(now, timeZone, locale)>
@@ -22,33 +22,17 @@
 
 <form method="POST" name="transactionSummaryForm" action="">
   <@inputHidden name="glFiscalTypeId" value="ACTUAL"/>
-  <div style="margin-left: 30px; margin-top: 5px;">
-    <span class="tableheadtext">${uiLabelMap.CommonFromDate}</span>
-    <@inputDateTime name="fromDate" default=fromDate?default(defaultFromDate)/><@displayError name="fromDate" />
-  </div>
-  <div style="margin-left: 30px; margin-top: 5px;">
-    <span class="tableheadtext">${uiLabelMap.CommonThruDate}</span>
-    <@inputDateTime name="thruDate" default=thruDate?default(defaultThruDate)/><@displayError name="thruDate" />
-  </div>
-  <#-- List possible tags -->
-  <#list tagTypes as tag>
-    <div style="margin-left: 30px; margin-top: 5px;">
-      <span class="tableheadtext">${tag.description}</span>
-      <@inputSelect name="tag${tag.index}" list=tag.tagValues key="enumId" required=true default="" ; tagValue>
-        ${tagValue.description}
-      </@inputSelect>
-    </div>
-  </#list>
-  <div style="margin-left: 30px; margin-top: 5px;">
-    <span class="tableheadtext">${uiLabelMap.FinancialsIsPosted}</span>
-    <select class="selectBox" name="isPosted" size="1">
-      <option value="Y">Y</option>
-      <option value="N" <#if isPosted?default("Y") == "N">selected="selected"</#if> >N</option>
-    </select>
-  </div>
-  <div style="margin-left: 30px; margin-top: 10px;">
-    <input type="Submit" class="smallSubmit" name="submitButton" value="${uiLabelMap.CommonRun}"></input>
-  </div>  
+
+  <@dateTimeRangeInputRows defaultFromDate=fromDate?default(defaultFromDate) defaultThruDate=thruDate?default(defaultThruDate) />
+
+  <#if !disableTags?exists && tagTypes?has_content>
+    <@accountingTagsInputs tagTypes=tagTypes />
+  </#if>
+
+  <@isPostedInputRow default=isPosted! />
+
+  <@submitReportOptions returnPage=returnPage! returnLabel=returnLabel!/>
+ 
 </form>
 
 <#if report?exists>

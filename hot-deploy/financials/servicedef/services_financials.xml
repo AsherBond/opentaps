@@ -180,12 +180,12 @@
     <service name="getComparativeBalanceSheet" engine="java"
             location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getComparativeBalanceSheet" auth="true" use-transaction="false">
         <description>Generates balance sheet for two dates and determines the balance difference between the two. The balances are in BigDecimal.
-            The output includes the result of getBalanceSheetForDate for the fromDate and thruDate and fromGlFiscalTypeId and toGlFiscalTypeId.
+            The output includes the result of getBalanceSheetForDate for the fromDate and thruDate and glFiscalTypeId1 and glFiscalTypeId2.
         </description>
         <implements service="accountingTagsInterface"/>
         <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
-        <attribute name="fromGlFiscalTypeId" mode="IN" type="String" optional="true"/>
-        <attribute name="toGlFiscalTypeId" mode="IN" type="String" optional="true"/>
+        <attribute name="glFiscalTypeId1" mode="IN" type="String" optional="true"/>
+        <attribute name="glFiscalTypeId2" mode="IN" type="String" optional="true"/>
         <attribute name="fromDate" mode="IN" type="Timestamp" optional="false"/>
         <attribute name="thruDate" mode="IN" type="Timestamp" optional="false"/>
         <attribute name="fromDateAccountBalances" mode="OUT" type="java.util.Map"/>

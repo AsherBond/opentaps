@@ -777,7 +777,7 @@ public final class FinancialServices {
 
     /**
      * Generates balance sheet for two dates and determines the balance difference between the two. The balances are in BigDecimal.
-     * The output includes the result of getBalanceSheetForDate for the fromDate and thruDate and fromGlFiscalTypeId and toGlFiscalTypeId.
+     * The output includes the result of getBalanceSheetForDate for the fromDate and thruDate and glFiscalTypeId1 and glFiscalTypeId2.
      *
      * @param dctx a <code>DispatchContext</code> value
      * @param context a <code>Map</code> value
@@ -790,15 +790,15 @@ public final class FinancialServices {
 
         // input parameters
         String organizationPartyId = (String) context.get("organizationPartyId");
-        String fromGlFiscalTypeId = (String) context.get("fromGlFiscalTypeId");
-        String toGlFiscalTypeId = (String) context.get("toGlFiscalTypeId");
+        String glFiscalTypeId1 = (String) context.get("glFiscalTypeId1");
+        String glFiscalTypeId2 = (String) context.get("glFiscalTypeId2");
         Timestamp fromDate = (Timestamp) context.get("fromDate");
         Timestamp thruDate = (Timestamp) context.get("thruDate");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         try {
             // create the balance sheet for the fromDate
-            Map input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId", fromGlFiscalTypeId, "asOfDate", fromDate, "userLogin", userLogin);
+            Map input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId", glFiscalTypeId1, "asOfDate", fromDate, "userLogin", userLogin);
             UtilAccountingTags.addTagParameters(context, input);
             Map fromDateResults = dispatcher.runSync("getBalanceSheetForDate", input);
             if (ServiceUtil.isError(fromDateResults)) {
@@ -806,7 +806,7 @@ public final class FinancialServices {
             }
 
             // create the balance sheet for the thruDate
-            input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId", toGlFiscalTypeId, "asOfDate", thruDate, "userLogin", userLogin);
+            input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId", glFiscalTypeId2, "asOfDate", thruDate, "userLogin", userLogin);
             UtilAccountingTags.addTagParameters(context, input);
             Map thruDateResults = dispatcher.runSync("getBalanceSheetForDate", input);
             if (ServiceUtil.isError(thruDateResults)) {

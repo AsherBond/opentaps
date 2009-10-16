@@ -59,7 +59,7 @@ try {
   UtilMessage.addFieldError(request, "fromDate", "FinancialsError_IllegalDateFieldFormat", UtilMisc.toMap("date", fromDateString) );
 }
 try {
-  thruDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(thruDateString.trim(), dateTimeFormat, timeZone, locale), timeZone, locale);
+  thruDate = UtilDateTime.stringToTimeStamp(thruDateString.trim(), dateTimeFormat, timeZone, locale);
 } catch (ParseException) {
   UtilMessage.addFieldError(request, "thruDate", "FinancialsError_IllegalDateFieldFormat", UtilMisc.toMap("date", thruDateString) );
 }

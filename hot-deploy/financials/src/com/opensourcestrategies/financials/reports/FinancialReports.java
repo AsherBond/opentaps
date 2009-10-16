@@ -232,8 +232,8 @@ public final class FinancialReports {
         TimeZone timeZone = UtilHttp.getTimeZone(request);
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         String organizationPartyId = (String) request.getSession().getAttribute("organizationPartyId");
-        String fromGlFiscalTypeId = UtilCommon.getParameter(request, "fromGlFiscalTypeId");
-        String toGlFiscalTypeId = UtilCommon.getParameter(request, "toGlFiscalTypeId");
+        String glFiscalTypeId1 = UtilCommon.getParameter(request, "glFiscalTypeId1");
+        String glFiscalTypeId2 = UtilCommon.getParameter(request, "glFiscalTypeId2");
        String fromDateText = null;
         String thruDateText = null;
         Timestamp fromDate = null;
@@ -243,8 +243,8 @@ public final class FinancialReports {
         Map<String, Object> ctxt = FastMap.newInstance();
         ctxt.put("userLogin", userLogin);
         ctxt.put("organizationPartyId", organizationPartyId);
-        ctxt.put("fromGlFiscalTypeId", fromGlFiscalTypeId);
-        ctxt.put("toGlFiscalTypeId", toGlFiscalTypeId);
+        ctxt.put("glFiscalTypeId1", glFiscalTypeId1);
+        ctxt.put("glFiscalTypeId2", glFiscalTypeId2);
 
         // determine the period
         if (dateOption != null) {
@@ -744,8 +744,8 @@ public final class FinancialReports {
             Map<GenericValue, BigDecimal> toLiabilityAccountBalances = (Map<GenericValue, BigDecimal>) thruDateAccountBalances.get("liabilityAccountBalances");
             Map<GenericValue, BigDecimal> toEquityAccountBalances = (Map<GenericValue, BigDecimal>) thruDateAccountBalances.get("equityAccountBalances");
 
-            GenericValue fromGlFiscalType = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", ctxt.get("fromGlFiscalTypeId")));
-            GenericValue toGlFiscalType = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", ctxt.get("toGlFiscalTypeId")));
+            GenericValue fromGlFiscalType = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", ctxt.get("glFiscalTypeId1")));
+            GenericValue toGlFiscalType = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", ctxt.get("glFiscalTypeId2")));
 
             List<Map<String, Object>> rows = FastList.newInstance();
 
