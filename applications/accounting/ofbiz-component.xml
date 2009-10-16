@@ -88,7 +88,8 @@ under the License.
         server="default-server"
         location="webapp/accounting"
         base-permission="OFBTOOLS,ACCOUNTING"
-        mount-point="/accounting"/>
+        mount-point="/accounting"
+        app-bar-display="false"/>
 
     <!--webapp name="ar"
         title="AR"

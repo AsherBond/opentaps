@@ -31,10 +31,12 @@
 
     <service-resource type="model" loader="main" location="servicedef/services.xml"/>
 
+    <!--
     <webapp name="myportal"
         title="MyPortal"
         server="default-server"
         location="webapp/myportal"
         mount-point="/myportal"
         app-bar-display="true"/>
+    -->
 </ofbiz-component>

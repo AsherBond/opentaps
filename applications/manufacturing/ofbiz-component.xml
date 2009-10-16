@@ -55,7 +55,8 @@ under the License.
         server="default-server"
         location="webapp/manufacturing"
         base-permission="OFBTOOLS,MANUFACTURING"
-        mount-point="/manufacturing"/>
+        mount-point="/manufacturing"
+        app-bar-display="false"/>
 
 </ofbiz-component>
 

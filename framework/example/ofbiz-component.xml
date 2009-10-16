@@ -48,12 +48,12 @@ under the License.
 
     <test-suite loader="main" location="testdef/tests.xml"/>
 
-    <!-- web applications; will be mounted when using the embedded container -->
+    <!-- web applications; will be mounted when using the embedded container 
     <webapp name="example"
         title="Example"
         menu-name="secondary"
         server="default-server"
         location="webapp/example"
         base-permission="OFBTOOLS,EXAMPLE"
-        mount-point="/example"/>
+        mount-point="/example"/>-->
 </ofbiz-component>
