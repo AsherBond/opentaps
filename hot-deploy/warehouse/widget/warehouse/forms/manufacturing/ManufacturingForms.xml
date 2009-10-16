@@ -43,7 +43,7 @@ under the License.
             paginate-target="${listSortTarget}" paginate-target-anchor="ListProductionRuns"
             paginate-size-field="productionRunsSize" paginate-index-field="productionRunsIndex">
         <field name="workEffortName" title="${uiLabelMap.ManufacturingProductionRunName}" widget-style="linktext">
-            <hyperlink target="ShowProductionRun" description="${workEffortName} (${workEffortId})" also-hidden="false">
+            <hyperlink target="ShowProductionRun" description="${workEffortName} (${workEffortId})" also-hidden="false" link-type="anchor">
                 <parameter param-name="productionRunId" from-field="workEffortId"/>
             </hyperlink>
         </field>
