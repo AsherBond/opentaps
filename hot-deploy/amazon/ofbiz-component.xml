@@ -45,7 +45,8 @@
     <!-- Services -->
     <service-resource type="model" loader="main" location="servicedef/services_amazon.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_amazon_sync.xml"/>
-
+    
+    <!-- these tests require the demo data to be loaded -->
     <test-suite loader="main" location="testdef/amazon_tests.xml"/>
 
     <webapp name="amazon"
