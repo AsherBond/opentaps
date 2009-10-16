@@ -1,7 +1,0 @@
-The following files are not part of the OpenTAPS project but are included in opentaps for your convenience.
-The license information below is deemed to be reliable but its accuracy is not guaranteed.
-
-Fileset                           License                     Location (relative to hot-deploy/funambol)        TODO
-Funambol DSS Config               HPL                         config/com/**/*.xml,config/Funambol.xml             These files are now effectively source managed by OT, and only originally copied from FBol
-Funambol DSS webapp source        HPL                         src/com/**/*.java
-Funambol DSS webapp structure     HPL                         webapp/**/*.* with the exception of web.xml, opentaps-sync-config.xml
