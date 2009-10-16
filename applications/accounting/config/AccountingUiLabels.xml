@@ -3942,7 +3942,7 @@
         <value xml:lang="zh">发票[${invoiceId}的明细[${invoiceItemSeqId}有${invoiceItemApplyAvailable?currency(${isoCode})}要应用，但是请求的是${amountApplied?currency(${isoCode})}</value>
     </property>
     <property key="AccountingInvoiceItemNotEnough">
-        <value xml:lang="en">Requested Amount is ${tooMuch?currency(${isoCode})} to much for this Invoice [${invoiceId}] Item [${invoiceItemSeqId}]</value>
+        <value xml:lang="en">This amount exceeds the outstanding value of invoice ${invoiceId} item ${invoiceItemSeqId}</value>
         <value xml:lang="es">Cantidad requerida es ${tooMuch?currency(${isoCode})} demasiado para esta factura [${invoiceId}] elemento [${invoiceItemSeqId}]</value>
         <value xml:lang="fr">Le montant demandé est de ${tooMuch?currency(${isoCode})} trop élevé pour la ligne [${invoiceItemSeqId}] de cette facture [${invoiceId}]</value>
         <value xml:lang="it">Importo Richiesto è ${tooMuch?currency(${isoCode})} troppo grande per questa Fattura [${invoiceId}] Riga [${invoiceItemSeqId}]</value>
@@ -4018,7 +4018,7 @@
         <value xml:lang="zh">发票[${invoiceId}有${invoiceApplyAvailable?currency(${isoCode})}要应用，但是请求的是${amountApplied?currency(${isoCode})}</value>
     </property>
     <property key="AccountingInvoiceNotEnough">
-        <value xml:lang="en">Requested Amount is ${tooMuch?currency(${isoCode})} to much for this Invoice [${invoiceId}]</value>
+        <value xml:lang="en">This amount exceeds the outstanding balance of invoice ${invoiceId}</value>
         <value xml:lang="es">Cantidad requerida es ${tooMuch?currency(${isoCode})} demasiado para esta factura [${invoiceId}]</value>
         <value xml:lang="fr">Le montant requis est de ${tooMuch?currency(${isoCode})} trop élevé pour cette facture [${invoiceId}]</value>
         <value xml:lang="it">Importo Richiesto è ${tooMuch?currency(${isoCode})} troppo grande per questa Fattura [${invoiceId}]</value>
