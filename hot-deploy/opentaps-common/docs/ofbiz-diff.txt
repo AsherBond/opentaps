@@ -70,11 +70,11 @@ framework/widget/templates/foScreenMacroLibrary.ftl
 r13376 Fix for missing macros and new parameters
 
 framework/base/src/org/ofbiz/base/util/UtilHttp.java
-- Port back change in makeParamValueFromComposite to return the String representing the parsed Timestamp instead of directly the Timestamp
+r13392 Port back change in makeParamValueFromComposite to return the String representing the parsed Timestamp instead of directly the Timestamp
 
 framework/widget/dtd/widget-form.xsd
 framework/widget/src/org/ofbiz/widget/form/ModelForm.java
-- Default form pagination back to false, and fix the ModelForm to actually the paginate = false
+r13488 Default form pagination back to false, and fix the ModelForm to actually the paginate = false
 
 framework/base/lib/etl/
 framework/base/lib/etl/js.jar
@@ -171,18 +171,18 @@ applications/product/script/org/ofbiz/shipment/picklist/PicklistServices.xml
 - Fix UEL errors in services, see JIRA 2969
 
 applications/*/webapp/*/WEB-INF/web.xml
-- Added ofbizServerName context-param for JBOSS integration
+r13646 Added ofbizServerName context-param for JBOSS integration
 
 applications/product/script/org/ofbiz/shipment/picklist/PicklistServices.xml
-- Changed Warehouse Dashboard to exclude any completed pick lists.
+r13649 Changed Warehouse Dashboard to exclude any completed pick lists.
 
 applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRun.java
 applications/manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ViewProductionRun.groovy
 applications/manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunDeclaration.groovy
-- Patch to ofbiz files to fix NPE occurring if the WEGS is missing.
+r13650 Patch to ofbiz files to fix NPE occurring if the WEGS is missing.
 
 applications/accounting/src/org/ofbiz/accounting/invoice/InvoiceServices.java
-- Fix to calculate adjustment with source percentage and no amount set.
+r13651 Fix to calculate adjustment with source percentage and no amount set.
 
 Other API Changes
 -----------------
