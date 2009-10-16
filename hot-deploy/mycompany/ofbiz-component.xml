@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- This component should serve as a sample for setting up your own company and deploying your
+        own images and applications into opentaps.  Use it as a template and modify as you need to. -->
+
+<ofbiz-component name="mycompany"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/ofbiz-component.xsd">
+
+    <!-- always required -->
+    <resource-loader name="main" type="component"/>
+
+    <!-- in case you have your own jar files, script files, or config properties or ui labels, uncomment these
+    <classpath type="jar" location="build/lib/*"/>
+    <classpath type="dir" location="script"/>
+    <classpath type="dir" location="config"/>
+    -->
+
+    <!-- if you create your own data model or extensions, uncomment these
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
+    <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup.xml"/>
+    -->
+
+    <!-- seed data for your organization.  These are configured as "seed" so they would be loaded during a
+    load from seed which would not include the demo data.  Comment them out if you don't need to do a seed install with 
+    special seed data for your company.
+
+    These files could be modified or expanded to fit your company's actual needs, but it is important that they are loaded
+    IN THIS SEQUENCE, as there are dependencies between the files.
+
+    The MySeedData.xml file can be used to create your own custom seed data, such as variance reasons, contact types, return reason codes,
+    sales channels, etc. 
+
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/MySeedData.xml"/>
+    -->
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/CRMSFATypes.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/CompanyData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/Warehouses.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/Shipping.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/Store.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/Catalog.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/ChartOfAccount.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/DefaultInvoiceItemTypeGlAccounts.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/Accounting.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/Users.xml"/>
+
+        
+    <!-- if you have entity ECAs uncomment this
+    <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas.xml"/>
+    -->
+
+    <!-- if you have your own services or SECAs uncomment these
+    <service-resource type="model" loader="main" location="servicedef/services.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas.xml"/>
+    -->
+
+    <!-- this is a webapp definition if you want to have your own webapps, such as an online store or your own
+    administrative application
+    <webapp name="webstore"
+          title="online store for my company"
+          server="default-server"
+          location="webapp/webstore"
+          mount-point="/webstore"
+          app-bar-display="false"/>
+    <webapp name="mywebapp"
+          title="My Web App"
+          server="default-server"
+          location="webapp/mywebapp"
+          base-permission="MYWEBAPP"
+          mount-point="/mywebapp"
+          app-bar-display="true"/>
+    -->
+    <!-- you can put your images or other static content here and they will be served by the embedded Tomcat server -->
+    <webapp name="myimages"
+          title="images for my company"
+          server="default-server"
+          location="webapp/myimages"
+          mount-point="/myimages"
+          app-bar-display="false"/>
+    
+</ofbiz-component>

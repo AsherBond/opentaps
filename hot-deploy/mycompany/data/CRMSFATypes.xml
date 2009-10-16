@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+    <!-- This file contains a sample of various enumeration and type data.  You can use this file or create your own -->
+
+<entity-engine-xml>
+
+    <!-- different types of ownership -->
+    <EnumerationType description="Ownership Types" enumTypeId="PARTY_OWNERSHIP" hasTable="N" parentTypeId=""/>
+    <Enumeration description="Sole Proprietorship" enumCode="PROPRIETOR" enumId="OWN_PROPRIETOR" sequenceId="01" enumTypeId="PARTY_OWNERSHIP"/>
+    <Enumeration description="Partnership" enumCode="PARTNERSHIP" enumId="OWN_PARTNERSHIP" sequenceId="02" enumTypeId="PARTY_OWNERSHIP"/>
+    <Enumeration description="LLC/LLP" enumCode="LLC_LLP" enumId="OWN_LLC_LLP" sequenceId="03" enumTypeId="PARTY_OWNERSHIP"/>
+    <Enumeration description="S-Corporation" enumCode="SCORP" enumId="OWN_SCORP" sequenceId="04" enumTypeId="PARTY_OWNERSHIP"/>
+    <Enumeration description="Corporation" enumCode="CCORP" enumId="OWN_CCORP" sequenceId="05" enumTypeId="PARTY_OWNERSHIP"/>
+    <Enumeration description="Public Corporation" enumCode="PUBLIC_CORP" enumId="OWN_PUBLIC_CORP" sequenceId="06" enumTypeId="PARTY_OWNERSHIP"/>
+
+    <!-- different industries -->
+    <EnumerationType description="Industry" enumTypeId="PARTY_INDUSTRY" hasTable="N" parentTypeId=""/>
+    <Enumeration description="Advertising" enumCode="AEROSPACE" enumId="IND_AEROSPACE" sequenceId="01" enumTypeId="PARTY_INDUSTRY"/>
+    <Enumeration description="Aerospace" enumCode="AEROSPACE" enumId="IND_AEROSPACE" sequenceId="02" enumTypeId="PARTY_INDUSTRY"/>
+    <Enumeration description="Computer Hardware" enumCode="HARDWRE" enumId="IND_HARDWARE" sequenceId="03" enumTypeId="PARTY_INDUSTRY"/>
+    <Enumeration description="Computer Software" enumCode="SOFTWARE" enumId="IND_SOFTWARE" sequenceId="04" enumTypeId="PARTY_INDUSTRY"/>
+    <Enumeration description="Distribution" enumCode="DISTRIBUTION" enumId="IND_DISTRIBUTION" sequenceId="05" enumTypeId="PARTY_INDUSTRY"/>
+    <Enumeration description="Finance" enumCode="FINANCE" enumId="IND_FINANCE" sequenceId="06" enumTypeId="PARTY_INDUSTRY"/>
+    <Enumeration description="General Services" enumCode="SERVICES" enumId="IND_GEN_SERVICES" sequenceId="07" enumTypeId="PARTY_INDUSTRY"/>
+    <Enumeration description="Health Care" enumCode="HEALTH_CARE" enumId="IND_HEALTH_CARE" sequenceId="08" enumTypeId="PARTY_INDUSTRY"/>
+    <Enumeration description="Insurance" enumCode="INSURANCE" enumId="IND_INSURANCE" sequenceId="09" enumTypeId="PARTY_INDUSTRY"/>
+    <Enumeration description="Manufacturing" enumCode="MANUFACTURING" enumId="IND_MANUFACTURING" sequenceId="10" enumTypeId="PARTY_INDUSTRY"/>
+    <Enumeration description="Media" enumCode="MEDIA" enumId="IND_MEDIA" sequenceId="11" enumTypeId="PARTY_INDUSTRY"/>
+    <Enumeration description="Non-profit" enumCode="NON_PROFIT" enumId="IND_NON_PROFIT" sequenceId="12" enumTypeId="PARTY_INDUSTRY"/>
+    <Enumeration description="Real Estate" enumCode="REAL_ESTATE" enumId="IND_REAL_ESTATE" sequenceId="13" enumTypeId="PARTY_INDUSTRY"/>
+    <Enumeration description="Retail" enumCode="RETAIL" enumId="IND_RETAIL" sequenceId="14" enumTypeId="PARTY_INDUSTRY"/>
+    <Enumeration description="Telecommunications" enumCode="TELECOM" enumId="IND_TELECOM" sequenceId="15" enumTypeId="PARTY_INDUSTRY"/>
+
+    <!-- sales types -->
+    <EnumerationType description="Sales Opportunity Types" enumTypeId="SO_TYPES" hasTable="N" parentTypeId=""/>
+    <Enumeration description="New Business" enumCode="NEW_BUSINESS" enumId="SOTYP_NEWBIZ" sequenceId="01" enumTypeId="SO_TYPES"/>
+    <Enumeration description="Add On Sale" enumCode="ADD_ON" enumId="SOTYP_ADDON" sequenceId="02" enumTypeId="SO_TYPES"/>
+    <Enumeration description="Renewal" enumCode="RENEWAL" enumId="SOTYP_RENEW" sequenceId="03" enumTypeId="SO_TYPES"/>
+    <Enumeration description="Upgrade" enumCode="UPGRADE" enumId="SOTYP_UPGRD" sequenceId="04" enumTypeId="SO_TYPES"/>
+    <Enumeration description="Replacement" enumCode="REPLACEMENT" enumId="SOTYP_REPLC" sequenceId="05" enumTypeId="SO_TYPES"/>
+
+    <!-- data sources for lead generation -->
+    <DataSourceType dataSourceTypeId="LEAD_GENERATION" description="Lead generation sources"/>
+    <DataSource dataSourceTypeId="LEAD_GENERATION" dataSourceId="LEAD_COLDCALL" description="Cold Call"/>
+    <DataSource dataSourceTypeId="LEAD_GENERATION" dataSourceId="LEAD_DIRECTMAIL" description="Direct Mail"/>
+    <DataSource dataSourceTypeId="LEAD_GENERATION" dataSourceId="LEAD_CONFERENCE" description="Conference"/>
+    <DataSource dataSourceTypeId="LEAD_GENERATION" dataSourceId="LEAD_TRADESHOW" description="Tradeshow"/>
+    <DataSource dataSourceTypeId="LEAD_GENERATION" dataSourceId="LEAD_WEBSITE" description="Website"/>
+    <DataSource dataSourceTypeId="LEAD_GENERATION" dataSourceId="LEAD_EXISTCUST" description="Existing Customer"/>
+    <DataSource dataSourceTypeId="LEAD_GENERATION" dataSourceId="LEAD_SELFGEN" description="Self Generated"/>
+    <DataSource dataSourceTypeId="LEAD_GENERATION" dataSourceId="LEAD_EMPLOYEE" description="Employee"/>
+    <DataSource dataSourceTypeId="LEAD_GENERATION" dataSourceId="LEAD_PARTNER" description="Partner"/>
+    <DataSource dataSourceTypeId="LEAD_GENERATION" dataSourceId="LEAD_PR" description="Public Relations"/>
+    <DataSource dataSourceTypeId="LEAD_GENERATION" dataSourceId="LEAD_WORDOFMOUTH" description="Word of Mouth"/>
+    <DataSource dataSourceTypeId="LEAD_GENERATION" dataSourceId="LEAD_OTHER" description="Other"/>
+
+    <!-- Case reasons -->
+    <CustRequestCategory custRequestCategoryId="CRCAT_NOTRAIN" custRequestTypeId="" description="User didn't attend training"/>
+    <CustRequestCategory custRequestCategoryId="CRCAT_COMPLEX" custRequestTypeId="" description="Complex functionality"/>
+    <CustRequestCategory custRequestCategoryId="CRCAT_EXISTING_PROB" custRequestTypeId="" description="Existing problem"/>
+    <CustRequestCategory custRequestCategoryId="CRCAT_INST_NOTCLEAR" custRequestTypeId="" description="Instructions not clear"/>
+    <CustRequestCategory custRequestCategoryId="CRCAT_NEW_PROB" custRequestTypeId="" description="New problem"/>
+
+</entity-engine-xml>

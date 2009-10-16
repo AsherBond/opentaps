@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ -->
+
+<!-- This file defines your company, some requisite roles for various applications to work, and its addresses -->
+
+<entity-engine-xml>
+
+    <Party partyId="Company" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="Company" groupName="My Company"/>
+    <!-- IMPORTANT: set INTERNAL_ORGANIZATIO first, otherwise BILL_TO_CUSTOMER will also cause this party group to become an ACCOUNT thanks to CRM's auto assign responsible party -->
+    <PartyRole partyId="Company" roleTypeId="INTERNAL_ORGANIZATIO"/>
+    <PartyRole partyId="Company" roleTypeId="BILL_FROM_VENDOR"/>
+    <PartyRole partyId="Company" roleTypeId="BILL_TO_CUSTOMER"/>
+    <PartyRole partyId="Company" roleTypeId="_NA_"/>
+
+    <ContactMech contactMechId="MYPOSTAL01" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="MYPOSTAL01" toName="My Company" attnName="Michael Me" address1="100 My Street" address2="Suite M"
+                   city="Los Angeles" stateProvinceGeoId="CA" countryGeoId="USA" postalCode="90012"/>
+    <PartyContactMech partyId="Company" contactMechId="MYPOSTAL01" fromDate="2000-01-01 00:00:00"/>
+    <PartyContactMechPurpose partyId="Company" contactMechId="MYPOSTAL01" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2000-01-01 00:00:00"/>
+    <PartyContactMechPurpose partyId="Company" contactMechId="MYPOSTAL01" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2000-01-01 00:00:00"/>
+    <PartyContactMechPurpose partyId="Company" contactMechId="MYPOSTAL01" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2000-01-01 00:00:00"/>
+    <PartyContactMechPurpose partyId="Company" contactMechId="MYPOSTAL01" contactMechPurposeTypeId="PAYMENT_LOCATION" fromDate="2000-01-01 00:00:00"/>
+
+    <ContactMech contactMechId="MYPHONE01" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="MYPHONE01" countryCode="1" areaCode="800" contactNumber="673-6827"/>  <!-- 1-800-OPENTAP -->
+    <PartyContactMech partyId="Company" contactMechId="MYPHONE01" fromDate="2000-01-01 00:00:00"/>
+    <PartyContactMechPurpose partyId="Company" contactMechId="MYPHONE01" contactMechPurposeTypeId="PRIMARY_PHONE" fromDate="2000-01-01 00:00:00"/>
+
+    <ContactMech contactMechId="MYPHONE02" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="MYPHONE02" countryCode="1" areaCode="310" contactNumber="456-7890"/>
+    <PartyContactMech partyId="Company" contactMechId="MYPHONE02" fromDate="2000-01-01 00:00:00"/>
+    <PartyContactMechPurpose partyId="Company" contactMechId="MYPHONE02" contactMechPurposeTypeId="FAX_NUMBER" fromDate="2000-01-01 00:00:00"/>
+
+    <ContactMech contactMechId="MYEMAIL01" contactMechTypeId="EMAIL_ADDRESS" infoString="info@mycompany.com"/>
+    <PartyContactMech partyId="Company" contactMechId="MYEMAIL01" fromDate="2000-01-01 00:00:00"/>
+    <PartyContactMechPurpose partyId="Company" contactMechId="MYEMAIL01" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2000-01-01 00:00:00"/>
+
+    <ContactMech contactMechId="MYWEB01" contactMechTypeId="WEB_ADDRESS" infoString="www.mycompany.com"/>
+    <PartyContactMech partyId="Company" contactMechId="MYWEB01" fromDate="2000-01-01 00:00:00"/>
+    <PartyContactMechPurpose partyId="Company" contactMechId="MYWEB01" contactMechPurposeTypeId="PRIMARY_WEB_URL" fromDate="2000-01-01 00:00:00"/>
+    <PartySupplementalData partyId="Company" primaryPostalAddressId="MYPOSTAL01" primaryTelecomNumberId="MYPHONE01" primaryEmailId="MYEMAIL01" />
+
+
+</entity-engine-xml>

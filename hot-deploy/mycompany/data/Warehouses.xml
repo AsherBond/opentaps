@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ -->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- This file has been modified by Open Source Strategies, Inc. -->        
+
+<!-- This file defines a warehouse for your company.  You can add additional warehouses to this file or
+use a separate file for each of your warehouses -->        
+
+<entity-engine-xml>
+
+    <Facility facilityId="MYWAREHOUSE01" facilityTypeId="WAREHOUSE" ownerPartyId="Company" defaultInventoryItemTypeId="NON_SERIAL_INV_ITEM"
+        facilityName="My Main Warehouse" description="This is the main warehouse for My Company"
+        defaultDaysToShip="2"/>
+    <ContactMech contactMechId="MYWRHSPOST01" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="MYWRHSPOST01" toName="My Company" attnName="Main Warehouse" address1="200 My Street"
+        city="Los Angeles" stateProvinceGeoId="CA" countryGeoId="USA" postalCode="90012"/>
+    <FacilityContactMech facilityId="MYWAREHOUSE01" contactMechId="MYWRHSPOST01" fromDate="2000-01-01 00:00:00"/>
+    <FacilityContactMechPurpose facilityId="MYWAREHOUSE01" contactMechId="MYWRHSPOST01" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2000-01-01 00:00:00"/>
+    <FacilityContactMechPurpose facilityId="MYWAREHOUSE01" contactMechId="MYWRHSPOST01" contactMechPurposeTypeId="SHIP_ORIG_LOCATION" fromDate="2000-01-01 00:00:00"/>
+
+    <ContactMech contactMechId="MYWRHSPHON01" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="MYWRHSPHON01" countryCode="1" areaCode="323" contactNumber="763-9157"/>
+    <FacilityContactMech facilityId="MYWAREHOUSE01" contactMechId="MYWRHSPHON01" fromDate="2000-01-01 00:00:00"/>
+    <FacilityContactMechPurpose facilityId="MYWAREHOUSE01" contactMechId="MYWRHSPHON01" contactMechPurposeTypeId="PHONE_SHIPPING" fromDate="2000-01-01 00:00:00"/>
+    <FacilityContactMechPurpose facilityId="MYWAREHOUSE01" contactMechId="MYWRHSPHON01" contactMechPurposeTypeId="PHONE_SHIP_ORIG" fromDate="2000-01-01 00:00:00"/>
+
+    <FacilityLocation facilityId="MYWAREHOUSE01" locationSeqId="TLTLTLLL01" locationTypeEnumId="FLT_PICKLOC" areaId="TL" aisleId="TL" sectionId="TL" levelId="LL" positionId="01"/>
+    <FacilityLocation facilityId="MYWAREHOUSE01" locationSeqId="TLTLTLUL01" locationTypeEnumId="FLT_BULK" areaId="TL" aisleId="TL" sectionId="TL" levelId="UL" positionId="01"/>
+    <FacilityLocation facilityId="MYWAREHOUSE01" locationSeqId="TLTLTLLL02" locationTypeEnumId="FLT_PICKLOC" areaId="TL" aisleId="TL" sectionId="TL" levelId="LL" positionId="02"/>
+    <FacilityLocation facilityId="MYWAREHOUSE01" locationSeqId="TLTLTLUL02" locationTypeEnumId="FLT_BULK" areaId="TL" aisleId="TL" sectionId="TL" levelId="UL" positionId="02"/>
+    <FacilityLocation facilityId="MYWAREHOUSE01" locationSeqId="TLTLTLLL03" locationTypeEnumId="FLT_PICKLOC" areaId="TL" aisleId="TL" sectionId="TL" levelId="LL" positionId="03"/>
+    <FacilityLocation facilityId="MYWAREHOUSE01" locationSeqId="TLTLTLUL03" locationTypeEnumId="FLT_BULK" areaId="TL" aisleId="TL" sectionId="TL" levelId="UL" positionId="03"/>
+    <FacilityLocation facilityId="MYWAREHOUSE01" locationSeqId="TLTLTLLL04" locationTypeEnumId="FLT_PICKLOC" areaId="TL" aisleId="TL" sectionId="TL" levelId="LL" positionId="04"/>
+    <FacilityLocation facilityId="MYWAREHOUSE01" locationSeqId="TLTLTLUL04" locationTypeEnumId="FLT_BULK" areaId="TL" aisleId="TL" sectionId="TL" levelId="UL" positionId="04"/>
+
+
+</entity-engine-xml>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ -->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<!-- This XML file defines all aspects of a store.  It is recommended that you use a separate XML file for each store -->        
+
+<entity-engine-xml>
+
+    <!-- Base store configuration  -->
+
+    <ProductStore productStoreId="9000" storeName="My WebStore" companyName="My Company" title="My WebStore"
+           subtitle="My Online Store based on opentaps" payToPartyId="Company" daysToCancelNonPay="30" prorateShipping="Y" prorateTaxes="Y"
+           inventoryFacilityId="MYWAREHOUSE01" oneInventoryFacility="Y" checkInventory="Y" reserveInventory="Y" reserveOrderEnumId="INVRO_FIFO_REC" requireInventory="N"
+           defaultLocaleString="en_US" defaultCurrencyUomId="USD" defaultSalesChannelEnumId="WEB_SALES_CHANNEL" allowPassword="Y" explodeOrderItems="N" retryFailedAuths="Y"
+           headerApprovedStatus="ORDER_APPROVED" itemApprovedStatus="ITEM_APPROVED" digitalItemApprovedStatus="ITEM_APPROVED" headerDeclinedStatus="ORDER_REJECTED"
+           itemDeclinedStatus="ITEM_REJECTED" headerCancelStatus="ORDER_CANCELLED" itemCancelStatus="ITEM_CANCELLED" orderNumberPrefix="WS"
+           authDeclinedMessage="There has been a problem with your method of payment. Please try a different method or call customer service."
+           authFraudMessage="Your order has been rejected and your account has been disabled due to fraud."
+           authErrorMessage="Problem connecting to payment processor; we will continue to retry and notify you by email."
+           storeCreditValidDays="90"
+           styleSheet="/images/ecommain.css" headerLogo="/opentaps_images/opentaps_logo.png" autoApproveInvoice="Y" shipIfCaptureFails="Y" autoApproveOrder="Y"/>
+
+    <!-- payment settings including reference to credit card payment processors -->
+
+    <ProductStorePaymentSetting productStoreId="9000" paymentMethodTypeId="CREDIT_CARD" paymentServiceTypeEnumId="PRDS_PAY_AUTH" paymentService="alwaysApproveCCProcessor"/>
+    <ProductStorePaymentSetting productStoreId="9000" paymentMethodTypeId="CREDIT_CARD" paymentServiceTypeEnumId="PRDS_PAY_RELEASE" paymentService="testCCRelease"/>
+    <ProductStorePaymentSetting productStoreId="9000" paymentMethodTypeId="CREDIT_CARD" paymentServiceTypeEnumId="PRDS_PAY_CAPTURE" paymentService="testCCCapture"/>
+    <ProductStorePaymentSetting productStoreId="9000" paymentMethodTypeId="CREDIT_CARD" paymentServiceTypeEnumId="PRDS_PAY_REAUTH" paymentService="alwaysApproveCCProcessor"/>
+    <ProductStorePaymentSetting productStoreId="9000" paymentMethodTypeId="CREDIT_CARD" paymentServiceTypeEnumId="PRDS_PAY_REFUND" paymentService="testCCRefund"/>
+    <ProductStorePaymentSetting productStoreId="9000" paymentMethodTypeId="EFT_ACCOUNT" paymentServiceTypeEnumId="PRDS_PAY_AUTH" paymentService="alwaysApproveEFTProcessor"/>
+    <ProductStorePaymentSetting productStoreId="9000" paymentMethodTypeId="GIFT_CARD" paymentServiceTypeEnumId="PRDS_PAY_AUTH" paymentService="alwaysApproveGCProcessor"/>
+    <ProductStorePaymentSetting productStoreId="9000" paymentMethodTypeId="GIFT_CARD" paymentServiceTypeEnumId="PRDS_PAY_RELEASE" paymentService="testGCRelease"/>
+    <ProductStorePaymentSetting productStoreId="9000" paymentMethodTypeId="EXT_PAYPAL" paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL" paymentService=""/>
+    <ProductStorePaymentSetting productStoreId="9000" paymentMethodTypeId="EXT_WORLDPAY" paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL" paymentService=""/>
+    <ProductStorePaymentSetting productStoreId="9000" paymentMethodTypeId="EXT_OFFLINE" paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL" paymentService=""/>
+    <ProductStorePaymentSetting productStoreId="9000" paymentMethodTypeId="EXT_COD" paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL" paymentService=""/>
+    <ProductStorePaymentSetting productStoreId="9000" paymentMethodTypeId="EXT_BILLACT" paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL" paymentService=""/>
+
+    <!-- email notification settings -->
+
+    <!--  these need the crmsfa email setting because the ecommerce has security permission issues -->
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_CONFIRM" fromAddress="ofbiztest@yahoo.com" bccAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#OrderConfirmNotice" 
+                              xslfoAttachScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#OrderConfirmNoticePdf"
+                              subject="Opentaps Demo - Order Confirmation #${orderId}"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_COMPLETE" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#OrderCompleteNotice"
+                              subject="Opentaps Demo - Your Order Is Complete #${orderId}"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_BACKORDER" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#BackorderNotice"
+                              subject="Opentaps Demo - Backorder Notification #${orderId}"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_CHANGE" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#OrderChangeNotice"
+                              subject="Opentaps Demo - Order Change Notification #${orderId}"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_PAYRETRY" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#PaymentRetryNotice" 
+                              subject="Opentaps Demo - Order Payment Notification #${orderId}"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_SHIP_COMPLT" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#ShipmentCompleteNotice"
+                              subject="Opentaps Demo - Shipment Complete Notification #${orderId}"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_ODR_SHIP_COMPLT" fromAddress="ofbiztest@yahoo.com"
+                              bodyScreenLocation="component://crmsfa/widget/crmsfa/screens/orders/EmailOrderScreens.xml#ShipmentCompleteNotice"
+                              subject="Opentaps Demo - Shipment Complete Notification #${orderId}"/>
+
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_RTN_ACCEPT" bodyScreenLocation="component://ecommerce/widget/EmailReturnScreens.xml#ReturnAccept" subject="OFBiz Demo - Return Accepted #${returnHeader.returnId}" fromAddress="ofbiztest@yahoo.com"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_RTN_COMPLETE" bodyScreenLocation="component://ecommerce/widget/EmailReturnScreens.xml#ReturnComplete" subject="OFBiz Demo - Return Completed #${returnHeader.returnId}" fromAddress="ofbiztest@yahoo.com"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_RTN_CANCEL" bodyScreenLocation="component://ecommerce/widget/EmailReturnScreens.xml#ReturnCancel" subject="OFBiz Demo - Return Cancelled #${returnHeader.returnId}" fromAddress="ofbiztest@yahoo.com"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_GC_PURCHASE" bodyScreenLocation="component://ecommerce/widget/EmailGiftCardScreens.xml#GiftCardPurchase" fromAddress="ofbiztest@yahoo.com" subject="A Gift From ${senderName}!"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_GC_RELOAD" bodyScreenLocation="component://ecommerce/widget/EmailGiftCardScreens.xml#GiftCardReload" fromAddress="ofbiztest@yahoo.com" subject="Gift Card Reload Results"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_TELL_FRIEND" bodyScreenLocation="component://ecommerce/widget/EmailProductScreens.xml#TellFriend" subject="${sendFrom} has sent you a link!" fromAddress="ofbiztest@yahoo.com"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_PWD_RETRIEVE" bodyScreenLocation="component://securityext/widget/EmailSecurityScreens.xml#PasswordEmail" subject="OFBiz Demo - Password Reminder (${userLoginId})" fromAddress="ofbiztest@yahoo.com"/>
+    <ProductStoreEmailSetting productStoreId="9000" emailType="PRDS_QUO_CONFIRM" bodyScreenLocation="component://order/widget/ordermgr/QuoteScreens.xml#ViewQuoteSimple" xslfoAttachScreenLocation="component://order/widget/ordermgr/QuoteScreens.xml#QuoteReport" subject="OFBiz Demo - Quote Confirmation #${quoteId}" bccAddress="ofbiztest@yahoo.com" fromAddress="ofbiztest@yahoo.com"/>
+
+    <ProductStoreFacility productStoreId="9000" facilityId="MYWAREHOUSE01" fromDate="2001-05-13 12:00:00.0"/>
+
+    <!-- reference websites defined in webapp web.xml file -->
+    <WebSite webSiteId="WebStore" siteName="eCommerce Web Site" productStoreId="9000"/>
+
+    <!-- one store needs to be defined for OrderEntry website in order manager for legacy reasons -->
+    <WebSite webSiteId="OrderEntry" siteName="Order Entry Web Site" productStoreId="9000"/>
+
+    <!-- Shipping: Comment out the shipping methods you don't want to offer for your store.  This includes everything. -->
+    <ProductStoreShipmentMeth productStoreShipMethId="9000" productStoreId="9000" partyId="_NA_" includeNoChargeItems="Y" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="NO_SHIPPING" sequenceNumber="6"/>
+    <!-- This is actually only available in continental USA -->
+    <ProductStoreShipmentMeth productStoreShipMethId="9001" productStoreId="9000" partyId="UPS" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="GROUND" sequenceNumber="7" includeGeoId="USA"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9002" productStoreId="9000" partyId="UPS" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="AIR" sequenceNumber="4" includeGeoId="USA"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9002" productStoreId="9000" partyId="UPS" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="SECOND_DAY_AM" sequenceNumber="5" includeGeoId="USA"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9003" productStoreId="9000" partyId="UPS" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="NEXT_DAY" sequenceNumber="1" includeGeoId="USA"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9004" productStoreId="9000" partyId="UPS" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="THIRD_DAY" sequenceNumber="6" includeGeoId="USA"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9005" productStoreId="9000" partyId="UPS" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="NEXT_DAY_AIR_SAVER" sequenceNumber="2" includeGeoId="USA"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9006" productStoreId="9000" partyId="UPS" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="NEXT_DAY_EARLY_AM" sequenceNumber="3" includeGeoId="USA"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9007" productStoreId="9000" partyId="UPS" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="WW_EXPRESS" sequenceNumber="8" excludeGeoId="USA"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9008" productStoreId="9000" partyId="UPS" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="WW_EXPEDITED" sequenceNumber="9" excludeGeoId="USA"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9009" productStoreId="9000" partyId="UPS" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="WW_EXPRESS_PLUS" sequenceNumber="10" excludeGeoId="USA"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9010" productStoreId="9000" partyId="UPS" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="STANDARD" sequenceNumber="11" includeGeoId="CAN"/>
+
+
+    <ProductStoreShipmentMeth productStoreShipMethId="9100" productStoreId="9000" partyId="USPS" includeNoChargeItems="N" allowUspsAddr="Y" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="STANDARD" serviceName="uspsRateInquire" sequenceNumber="5" includeGeoId="USA"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9101" productStoreId="9000" partyId="USPS" includeNoChargeItems="N" allowUspsAddr="Y" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="EXPRESS" serviceName="uspsRateInquire" sequenceNumber="4"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9200" productStoreId="9000" partyId="DHL" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="EXPRESS" sequenceNumber="7"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9201" productStoreId="9000" partyId="DHL" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="NEXT_PM" sequenceNumber="8"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9202" productStoreId="9000" partyId="DHL" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="SECOND_DAY" sequenceNumber="9"/>
+    <!-- This is actually only available in continental USA -->
+    <ProductStoreShipmentMeth productStoreShipMethId="9203" productStoreId="9000" partyId="DHL" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="GROUND" sequenceNumber="10" includeGeoId="USA"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9300" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="NEXT_AM" sequenceNumber="11" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9301" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="PTY_OVERNIGHT" sequenceNumber="12" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9302" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="NEXT_PM" sequenceNumber="13" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9303" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="SECOND_DAY" sequenceNumber="14" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9304" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="EXPRESS" sequenceNumber="15" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9305" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="GROUND" sequenceNumber="16" includeGeoId="USA" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9306" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="GROUND_HOME" sequenceNumber="17" includeGeoId="USA" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9017" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="EUR_1ST_INT_PRIORITY" sequenceNumber="18" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9018" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="1_DAY_FREIGHT" sequenceNumber="19" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9019" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="2_DAY_FREIGHT" sequenceNumber="20" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9020" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="3_DAY_FREIGHT" sequenceNumber="21" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9021" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="INT_ECONOMY" sequenceNumber="22" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9022" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="INT_ECONOMY_FREIGHT" sequenceNumber="23" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9023" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="INT_FIRST" sequenceNumber="24" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9024" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="INT_PRIORITY" sequenceNumber="25" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9025" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="INT_PRIORITY_DIST" sequenceNumber="26" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9026" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="INT_PRIORITY_FREIGHT" sequenceNumber="27" serviceName="opentaps.fedexRateRequest"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9027" productStoreId="9000" partyId="FEDEX" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="STD_OVERNIGHT" sequenceNumber="28" serviceName="opentaps.fedexRateRequest"/>
+
+    <QuantityBreak fromQuantity="0.0" quantityBreakId="9000" quantityBreakTypeId="SHIP_WEIGHT" thruQuantity="0.0"/>
+    <QuantityBreak fromQuantity="0.0" quantityBreakId="9001" quantityBreakTypeId="SHIP_WEIGHT" thruQuantity="0.0"/>
+    <QuantityBreak fromQuantity="0.0" quantityBreakId="9002" quantityBreakTypeId="SHIP_WEIGHT" thruQuantity="0.0"/>
+    <QuantityBreak fromQuantity="0.0" quantityBreakId="9003" quantityBreakTypeId="SHIP_WEIGHT" thruQuantity="0.0"/>
+    <QuantityBreak fromQuantity="0.0" quantityBreakId="9004" quantityBreakTypeId="SHIP_WEIGHT" thruQuantity="0.0"/>
+    <QuantityBreak fromQuantity="0.0" quantityBreakId="9005" quantityBreakTypeId="SHIP_WEIGHT" thruQuantity="0.0"/>
+    <QuantityBreak fromQuantity="0.0" quantityBreakId="9006" quantityBreakTypeId="SHIP_WEIGHT" thruQuantity="0.0"/>
+    <QuantityBreak fromQuantity="0.0" quantityBreakId="9007" quantityBreakTypeId="SHIP_WEIGHT" thruQuantity="0.0"/>
+    <QuantityBreak fromQuantity="0.0" quantityBreakId="9008" quantityBreakTypeId="SHIP_WEIGHT" thruQuantity="0.0"/>
+    <QuantityBreak fromQuantity="0.0" quantityBreakId="9009" quantityBreakTypeId="SHIP_WEIGHT" thruQuantity="0.0"/>
+
+    <ShipmentCostEstimate productStoreId="9000" orderFlatPrice="5.0" orderItemFlatPrice="0.0" orderPricePercent="0.0" shipmentCostEstimateId="9000" shipmentMethodTypeId="AIR" carrierPartyId="UPS" carrierRoleTypeId="CARRIER" weightBreakId="9000" weightUnitPrice="0.2"/>
+    <ShipmentCostEstimate productStoreId="9000" orderFlatPrice="3.0" orderItemFlatPrice="0.0" orderPricePercent="0.0" shipmentCostEstimateId="9001" shipmentMethodTypeId="GROUND" carrierPartyId="UPS" carrierRoleTypeId="CARRIER" weightBreakId="9001" weightUnitPrice="0.1"/>
+    <ShipmentCostEstimate productStoreId="9000" orderFlatPrice="5.0" orderItemFlatPrice="0.0" carrierPartyId="Company" carrierRoleTypeId="CARRIER" orderPricePercent="0.0" shipmentCostEstimateId="9002" shipmentMethodTypeId="LOCAL_DELIVERY"/>
+    <ShipmentCostEstimate productStoreId="9000" orderFlatPrice="10.0" orderItemFlatPrice="0.0" orderPricePercent="0.0" shipmentCostEstimateId="9003" shipmentMethodTypeId="NEXT_DAY" carrierPartyId="UPS" carrierRoleTypeId="CARRIER" weightBreakId="9002" weightUnitPrice="0.35"/>
+    <ShipmentCostEstimate productStoreId="9000" shipmentCostEstimateId="9004" shipmentMethodTypeId="STANDARD" carrierPartyId="_NA_" carrierRoleTypeId="CARRIER" orderFlatPrice="0.0" orderPricePercent="20.0" orderItemFlatPrice="0.0"/>
+    <ShipmentCostEstimate productStoreId="9000" shipmentCostEstimateId="9005" shipmentMethodTypeId="NO_SHIPPING" carrierPartyId="_NA_" carrierRoleTypeId="CARRIER" orderFlatPrice="0.0" orderPricePercent="0.0" orderItemFlatPrice="0.0"/>
+    <ShipmentCostEstimate productStoreId="9000" orderFlatPrice="10.0" orderItemFlatPrice="0.0" orderPricePercent="0.0" shipmentCostEstimateId="9100" shipmentMethodTypeId="EXPRESS" carrierPartyId="DHL" carrierRoleTypeId="CARRIER" weightBreakId="9003" weightUnitPrice="0.2"/>
+    <ShipmentCostEstimate productStoreId="9000" orderFlatPrice="9.0" orderItemFlatPrice="0.0" orderPricePercent="0.0" shipmentCostEstimateId="9101" shipmentMethodTypeId="NEXT_PM" carrierPartyId="DHL" carrierRoleTypeId="CARRIER" weightBreakId="9004" weightUnitPrice="0.2"/>
+    <ShipmentCostEstimate productStoreId="9000" orderFlatPrice="5.0" orderItemFlatPrice="0.0" orderPricePercent="0.0" shipmentCostEstimateId="9102" shipmentMethodTypeId="SECOND_DAY" carrierPartyId="DHL" carrierRoleTypeId="CARRIER" weightBreakId="9005" weightUnitPrice="0.2"/>
+    <ShipmentCostEstimate productStoreId="9000" orderFlatPrice="3.0" orderItemFlatPrice="0.0" orderPricePercent="0.0" shipmentCostEstimateId="9103" shipmentMethodTypeId="GROUND" carrierPartyId="DHL" carrierRoleTypeId="CARRIER" weightBreakId="9006" weightUnitPrice="0.1"/>
+    <ShipmentCostEstimate productStoreId="9000" orderFlatPrice="0.0" orderItemFlatPrice="0.0" orderPricePercent="0.0" shipmentCostEstimateId="9203" shipmentMethodTypeId="NEXT_AM" carrierPartyId="FEDEX" carrierRoleTypeId="CARRIER"/>
+    <ShipmentCostEstimate productStoreId="9000" orderFlatPrice="0.0" orderItemFlatPrice="0.0" orderPricePercent="0.0" shipmentCostEstimateId="9204" shipmentMethodTypeId="PTY_OVERNIGHT" carrierPartyId="FEDEX" carrierRoleTypeId="CARRIER"/>
+    <ShipmentCostEstimate productStoreId="9000" orderFlatPrice="0.0" orderItemFlatPrice="0.0" orderPricePercent="0.0" shipmentCostEstimateId="9205" shipmentMethodTypeId="NEXT_PM" carrierPartyId="FEDEX" carrierRoleTypeId="CARRIER"/>
+    <ShipmentCostEstimate productStoreId="9000" orderFlatPrice="0.0" orderItemFlatPrice="0.0" orderPricePercent="0.0" shipmentCostEstimateId="9206" shipmentMethodTypeId="SECOND_DAY" carrierPartyId="FEDEX" carrierRoleTypeId="CARRIER"/>
+    <ShipmentCostEstimate productStoreId="9000" orderFlatPrice="0.0" orderItemFlatPrice="0.0" orderPricePercent="0.0" shipmentCostEstimateId="9207" shipmentMethodTypeId="EXPRESS" carrierPartyId="FEDEX" carrierRoleTypeId="CARRIER"/>
+    <ShipmentCostEstimate productStoreId="9000" orderFlatPrice="0.0" orderItemFlatPrice="0.0" orderPricePercent="0.0" shipmentCostEstimateId="9208" shipmentMethodTypeId="GROUND" carrierPartyId="FEDEX" carrierRoleTypeId="CARRIER"/>
+    <ShipmentCostEstimate productStoreId="9000" orderFlatPrice="0.0" orderItemFlatPrice="0.0" orderPricePercent="0.0" shipmentCostEstimateId="9209" shipmentMethodTypeId="GROUND_HOME" carrierPartyId="FEDEX" carrierRoleTypeId="CARRIER"/>
+
+    <!-- Here is an example of free shipping: 
+    <ShipmentMethodType description="Free Ground Service for Orders over $100" shipmentMethodTypeId="FREE_GROUND"/>
+    <CarrierShipmentMethod partyId="UPS" roleTypeId="CARRIER" shipmentMethodTypeId="FREE_GROUND" sequenceNumber="1" carrierServiceCode="03"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="9300" productStoreId="9000" partyId="UPS" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" roleTypeId="CARRIER" shipmentMethodTypeId="FREE_GROUND" sequenceNumber="30" minTotal="100.0"/>
+    <ShipmentCostEstimate productStoreId="9000" orderFlatPrice="0.0" orderItemFlatPrice="0.0" orderPricePercent="0.0" shipmentCostEstimateId="9300" shipmentMethodTypeId="FREE_GROUND" carrierPartyId="UPS" carrierRoleTypeId="CARRIER"/>
+    -->
+
+    <!-- Sales tax -->
+    <TaxAuthorityRateProduct taxAuthorityRateSeqId="9001" taxAuthGeoId="CA" taxAuthPartyId="CA_BOE" taxAuthorityRateTypeId="SALES_TAX" productStoreId="9000"
+            productCategoryId="" titleTransferEnumId="" minItemPrice="0.00" minPurchase="0.00" taxShipping="N" taxPercentage="8.50"
+            fromDate="2001-05-13 00:00:00.001" thruDate="" description="California State Sales Tax"/>
+
+</entity-engine-xml>

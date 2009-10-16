@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ -->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<!-- This XML file a product catalog and some categories within the catalog.  It is recommended that you define a separate catalog in each XML file.
+ The products are not defined in entity engine XML.  It is recommended that you use data import to import your products.  -->
+
+<entity-engine-xml>
+
+    <ProdCatalog prodCatalogId="DemoCatalog" catalogName="Demo Catalog" useQuickAdd="Y"/>
+    <ProductStoreCatalog productStoreId="9000" prodCatalogId="DemoCatalog" fromDate="2001-05-13 12:00:00.0" sequenceNum="1"/>
+
+    <ProductCategory categoryName="Demo Browse Root"
+            longDescription="Demo Catalog Primary Browse Root Category" productCategoryId="CATALOG1" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory longDescription="long description of Gizmos"
+                     primaryParentCategoryId="CATALOG1" productCategoryId="100" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory longDescription="long description of Widgets"
+                     primaryParentCategoryId="CATALOG1" productCategoryId="200" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory longDescription="long description of Small Gizmos"
+                     primaryParentCategoryId="100" productCategoryId="101" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory longDescription="long description of Large Gizmos"
+                     primaryParentCategoryId="100" productCategoryId="102" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory longDescription="long description of Small Widgets"
+                     primaryParentCategoryId="200" productCategoryId="201" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory longDescription="long description of Large Widgets"
+                     primaryParentCategoryId="200" productCategoryId="202" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory longDescription="long description of Mini Widgets"
+                     primaryParentCategoryId="201" productCategoryId="2011" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory longDescription="long description of Other Mini Widgets"
+                     primaryParentCategoryId="201" productCategoryId="2012" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory longDescription="long description of Micro Widgets"
+                     primaryParentCategoryId="2011" productCategoryId="20111" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory categoryName="Featured Products" productCategoryId="PROMOTIONS" productCategoryTypeId="CATALOG_CATEGORY"/>
+    <ProductCategory categoryName="Demo Default Search"
+                     longDescription="Catalog1 Search Products - only products in this category will show up in a search in catalog1"
+                     productCategoryId="CATALOG1_SEARCH" productCategoryTypeId="SEARCH_CATEGORY"/>
+    <ProductCategory categoryName="Main Quick Add"
+                     longDescription="For quick orders, you have found the right place!" productCategoryId="CATALOG1_QUICKADD1" productCategoryTypeId="QUICKADD_CATEGORY"/>
+    <ProductCategory categoryName="Widget Quick Add"
+                     longDescription="Get all you widgets here!" productCategoryId="CATALOG1_QUICKADD2" productCategoryTypeId="QUICKADD_CATEGORY"/>
+    
+    <ProdCatalogCategory prodCatalogId="DemoCatalog" productCategoryId="CATALOG1" fromDate="2001-05-13 12:00:00.0"
+        sequenceNum="1" prodCatalogCategoryTypeId="PCCT_BROWSE_ROOT"/>
+    <ProdCatalogCategory prodCatalogId="DemoCatalog" productCategoryId="CATALOG1_SEARCH" fromDate="2001-05-13 12:00:00.0"
+        sequenceNum="1" prodCatalogCategoryTypeId="PCCT_SEARCH"/>
+    <ProdCatalogCategory prodCatalogId="DemoCatalog" productCategoryId="CATALOG1_QUICKADD1" fromDate="2001-05-13 12:00:00.0"
+        sequenceNum="1" prodCatalogCategoryTypeId="PCCT_QUICK_ADD"/>
+    <ProdCatalogCategory prodCatalogId="DemoCatalog" productCategoryId="CATALOG1_QUICKADD2" fromDate="2001-05-13 12:00:00.0"
+        sequenceNum="2" prodCatalogCategoryTypeId="PCCT_QUICK_ADD"/>
+    <ProdCatalogCategory prodCatalogId="DemoCatalog" productCategoryId="PROMOTIONS" fromDate="2001-05-13 12:00:00.0"
+        sequenceNum="1" prodCatalogCategoryTypeId="PCCT_PROMOTIONS"/>
+
+
+</entity-engine-xml>
