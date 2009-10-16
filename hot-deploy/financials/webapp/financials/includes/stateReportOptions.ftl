@@ -135,7 +135,7 @@ Make sure you call parseReportOptions.bsh so that this form can work.
   </#if>
 
   <div style="margin-left: 30px; margin-top: 5px;">
-    <span class="tableheadtext">${uiLabelMap.GlFiscalType}</span>
+    <span class="tableheadtext">${uiLabelMap.FinancialsGlFiscalType}</span>
     <select class="selectBox" name="glFiscalTypeId" size="1"><@listGlFiscalTypes glFiscalTypes=glFiscalTypes/></select>
   </div>
 

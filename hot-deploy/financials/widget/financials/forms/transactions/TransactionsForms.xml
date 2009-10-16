@@ -81,7 +81,7 @@
             <!-- TODO: need lookup controller and maybe screen/form -->
             <lookup target-form-name="LookupPartyName" size="20" maxlength="20"/>
         </field>
-        <field name="glFiscalTypeId" title="${uiLabelMap.GlFiscalType}">
+        <field name="glFiscalTypeId" title="${uiLabelMap.FinancialsGlFiscalType}">
             <drop-down allow-empty="true" current="selected" no-current-selected-key="ACTUAL">
                 <entity-options description="${description}" entity-name="GlFiscalType" cache="true">
                     <entity-order-by field-name="description"/>
@@ -170,7 +170,7 @@
                 <option description="${uiLabelMap.CommonYes}" key="Y"/>
             </drop-down>
         </field> 
-        <field name="glFiscalTypeId" title="${uiLabelMap.GlFiscalType}">
+        <field name="glFiscalTypeId" title="${uiLabelMap.FinancialsGlFiscalType}">
             <drop-down allow-empty="false" current="selected">
                 <entity-options description="${description}" entity-name="GlFiscalType">
                     <entity-order-by field-name="description"/>
@@ -199,7 +199,7 @@
         <field name="partyId" title="${uiLabelMap.PartyPartyId}">
             <lookup target-form-name="LookupPartyName" size="20" maxlength="20"/>
         </field>
-        <field name="glFiscalTypeId" title="${uiLabelMap.GlFiscalType}">
+        <field name="glFiscalTypeId" title="${uiLabelMap.FinancialsGlFiscalType}">
             <drop-down allow-empty="false" current="selected">
                 <entity-options description="${description}" entity-name="GlFiscalType">
                     <entity-order-by field-name="description"/>

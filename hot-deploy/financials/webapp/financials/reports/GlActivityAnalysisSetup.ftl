@@ -39,7 +39,7 @@
               </@inputSelectRow>
             </#list>
 
-            <@inputSelectRow name="glFiscalTypeId" title="${uiLabelMap.GlFiscalType}" list=glFiscalTypes?default([]) key="glFiscalTypeId" ; glFiscalType>
+            <@inputSelectRow name="glFiscalTypeId" title="${uiLabelMap.FinancialsGlFiscalType}" list=glFiscalTypes?default([]) key="glFiscalTypeId" ; glFiscalType>
                 ${glFiscalType.get("description", locale)}
             </@inputSelectRow>
             <tr><td colspan="2">&nbsp;</td></tr>
