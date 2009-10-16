@@ -108,7 +108,7 @@ Make sure you call parseReportOptions.bsh so that this form can work.
   <table>
     <tr>
       <td><input type="radio" name="reportDateOption" value="byDate" onClick="javascript:selectReportDateOption(this)" ${byDateChecked?default("")}></input></td>
-      <td class="tableheadtext">${uiLabelMap.AsOf}</td>
+      <td class="tableheadtext">${uiLabelMap.OpentapsAsOfDate}</td>
       <td>
         <#if requestParameters.asOfDate?exists>
           <#assign date = requestParameters.asOfDate />

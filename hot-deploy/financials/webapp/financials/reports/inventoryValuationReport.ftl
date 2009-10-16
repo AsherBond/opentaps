@@ -33,7 +33,7 @@
      ${customTimePeriod.periodNum} (${getLocalizedDate(customTimePeriod.fromDate, "DATE_ONLY")} ${uiLabelMap.CommonThru} ${getLocalizedDate(customTimePeriod.thruDate, "DATE_ONLY")})
      </#if>
      <#if asOfDate?has_content>
-     ${uiLabelMap.AsOf} ${getLocalizedDate(asOfDate, "DATE")}
+     ${uiLabelMap.OpentapsAsOfDate} ${getLocalizedDate(asOfDate, "DATE")}
      </#if>
   </tr>
 

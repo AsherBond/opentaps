@@ -40,7 +40,7 @@
 <div style="border: 1px solid #999999; margin-top: 20px; margin-bottom: 20px;"></div>
 <table>
   <tr><td colspan="7" class="tableheadtext" align="center">${uiLabelMap.FinancialsInventoryValueDetail} for ${parameters.organizationName?if_exists} (${organizationPartyId}) <br/>
-  ${uiLabelMap.AsOf} ${getLocalizedDate(Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp(), "DATE")}</td></tr>
+  ${uiLabelMap.OpentapsAsOfDate} ${getLocalizedDate(Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp(), "DATE")}</td></tr>
   <tr><td colspan="7">&nbsp;</td></tr>
   <tr>
     <td class="tableheadtext">Inventory Item</td>
