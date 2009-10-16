@@ -89,7 +89,7 @@ public class FinancialReportServices extends Service implements FinancialReportS
                     fiscalType = FiscalType.ACTUAL;
                 } else if (FiscalType.BUDGET.name().equals(trans.getGlFiscalTypeId())) {
                     fiscalType = FiscalType.BUDGET;
-                };
+                }
 
                 GeneralLedgerAccount glAccount = ledgerRepository.getLedgerAccount(trans.getGlAccountId(), organizationPartyId);
                 boolean isDebit = "D".equals(trans.getDebitCreditFlag()) ? true : false;
