@@ -82,6 +82,37 @@ function removeSelected(formName) {
     cform.submit();
 }
 
+// highlight the selected row(s)
+
+function highlightRow(e,rowId){
+    var currentClassName = document.getElementById(rowId).className;
+    if (e.checked) {
+        if (currentClassName == '' ) {
+            document.getElementById(rowId).className = 'selected';
+        } else if (currentClassName == 'alternate-row') {
+            document.getElementById(rowId).className = 'alternate-rowSelected';
+        }
+    } else {
+        if (currentClassName == 'selected') {
+            document.getElementById(rowId).className = '';
+        } else if (currentClassName == 'alternate-rowSelected') {
+            document.getElementById(rowId).className = 'alternate-row';
+        }
+    }
+}
+
+function highlightAllRows(e, halfRowId, formName){
+    var cform = document[formName];
+    var len = cform.elements.length;
+    for (var i = 0; i < len; i++) {
+        var element = cform.elements[i];
+        if (element.name.substring(0, 10) == "_rowSubmit") {
+            highlightRow(e, halfRowId+element.name.substring(13));
+        }
+    }
+}
+
+
 // popup windows functions
 
 function popUp(url, name, height, width) {
@@ -184,6 +215,222 @@ function confirmActionFormLink(msg, formName) {
     }
 }
 
+// ===== Ajax Functions - based on protoype.js ===== //
+
+/** Update an area (HTML container element).
+  * @param areaId The id of the HTML container to update
+  * @param target The URL to call to update the HTML container
+  * @param targetParams The URL parameters
+*/
+function ajaxUpdateArea(areaId, target, targetParams) {
+    new Ajax.Updater(areaId, target, {parameters: targetParams});
+}
+
+/** Update multiple areas (HTML container elements).
+  * @param areaCsvString The area CSV string. The CSV string is a flat array in the
+  * form of: areaId, target, target parameters [, areaId, target, target parameters...].
+*/
+function ajaxUpdateAreas(areaCsvString) {
+    responseFunction = function(transport) {
+        // Uncomment the next two lines to see the HTTP responses
+        //var response = transport.responseText || "no response text";
+        //alert("Response: \n\n" + response);
+    }
+    var areaArray = areaCsvString.split(",");
+    var numAreas = parseInt(areaArray.length / 3);
+    for (var i = 0; i < numAreas * 3; i = i + 3) {
+        new Ajax.Updater(areaArray[i], areaArray[i + 1], {parameters: areaArray[i + 2], onComplete: responseFunction,evalScripts: true });
+    }
+}
+
+/** Update an area (HTML container element) periodically.
+  * @param areaId The id of the HTML container to update
+  * @param target The URL to call to update the HTML container
+  * @param targetParams The URL parameters
+  * @param interval The update interval, in seconds.
+*/
+function ajaxUpdateAreaPeriodic(areaId, target, targetParams, interval) {
+    new Ajax.PeriodicalUpdater(areaId, target, {parameters: targetParams, frequency: interval});
+}
+
+/** Submit request, update multiple areas (HTML container elements).
+  * @param target The URL to call to update the HTML container
+  * @param targetParams The URL parameters
+  * @param areaCsvString The area CSV string. The CSV string is a flat array in the
+  * form of: areaId, target, target parameters [, areaId, target, target parameters...].
+*/
+function ajaxSubmitRequestUpdateAreas(target, targetParams, areaCsvString) {
+    updateFunction = function(transport) {
+        ajaxUpdateAreas(areaCsvString);
+    }
+    new Ajax.Request(target, {
+        parameters: targetParams,
+        onComplete: updateFunction });
+}
+
+/** Submit form, update an area (HTML container element).
+  * @param form The form element
+  * @param areaId The id of the HTML container to update
+  * @param submitUrl The URL to call to update the HTML container
+*/
+function submitFormInBackground(form, areaId, submitUrl) {
+    submitFormDisableSubmits(form);
+    updateFunction = function() {
+        new Ajax.Updater(areaId, submitUrl);
+    }
+    new Ajax.Request(form.action, {
+        parameters: form.serialize(true),
+        onComplete: updateFunction });
+}
+
+/** Submit form, update multiple areas (HTML container elements).
+  * @param form The form element
+  * @param areaCsvString The area CSV string. The CSV string is a flat array in the
+  * form of: areaId, target, target parameters [, areaId, target, target parameters...].
+*/
+function ajaxSubmitFormUpdateAreas(form, areaCsvString) {
+    submitFormDisableSubmits($(form));
+    updateFunction = function(transport) {
+        var data = transport.responseText.evalJSON(true);
+        if (data._ERROR_MESSAGE_LIST_ != undefined || data._ERROR_MESSAGE_ != undefined) {
+            if(!$('content-messages')) {
+               //add this div just after app-navigation
+               if($('app-navigation')){
+                   $('app-navigation' ).insert({after: '<div id="content-messages"></div>'});
+               }
+            }
+           $('content-messages').addClassName('errorMessage');
+           $('content-messages' ).update(data._ERROR_MESSAGE_LIST_ + " " + data._ERROR_MESSAGE_);
+           new Effect.Appear('content-messages',{duration: 0.5});
+        }else {
+        	if($('content-messages')) {
+                $('content-messages').removeClassName('errorMessage');
+                new Effect.Fade('content-messages',{duration: 0.0});
+            }
+            ajaxUpdateAreas(areaCsvString);
+        }
+    }
+    new Ajax.Request($(form).action, {
+        parameters: $(form).serialize(true),
+        onComplete: updateFunction });
+}
+
+/** Enable auto-completion for text elements.
+  * @param areaCsvString The area CSV string. The CSV string is a flat array in the
+  * form of: areaId, target, target parameters [, areaId, target, target parameters...].
+*/
+function ajaxAutoCompleter(areaCsvString) {
+    var areaArray = areaCsvString.split(",");
+    var numAreas = parseInt(areaArray.length / 3);
+    for (var i = 0; i < numAreas * 3; i = i + 3) {
+	    var optionsDivId = areaArray[i] + "_autoCompleterOptions";
+	    $(areaArray[i]).insert({after: '<div class="autocomplete"' + 'id=' + optionsDivId + '></div>'});
+        new Ajax.Autocompleter($(areaArray[i]), optionsDivId, areaArray[i + 1], {parameters: areaArray[i + 2]});
+    }
+}
+
+/** Enable auto-completion for drop-down elements.
+  * @param descriptionElement The id of the text field
+  * @param hiddenElement The id of the drop-down.  Used as the id of hidden field inserted.
+  * @param data Choices for Autocompleter.Local, form of: {key: 'description',.......}
+  * @param options
+*/
+
+function ajaxAutoCompleteDropDown(descriptionElement, hiddenElement, data, options) {
+    var update = hiddenElement + "_autoCompleterOptions";
+    $(descriptionElement).insert({after: '<div class="autocomplete"' + 'id=' + update + '></div>'});
+    new Autocompleter.Local($(descriptionElement), update, $H(data), {autoSelect: options.autoSelect, frequency: options.frequency, minChars: options.minChars, choices: options.choices, partialSearch: options.partialSearch, partialChars: options.partialChars, ignoreCase: options.ignoreCase, fullSearch: options.fullSearch, afterUpdateElement: setKeyAsParameter});
+
+    function setKeyAsParameter(text, li) {
+        $(hiddenElement).value = li.id;
+    }
+}
+
+/** Toggle area visibility on/off.
+  * @param link The <a> element calling this function
+  * @param areaId The id of the HTML container to toggle
+  * @param expandTxt Localized 'Expand' text
+  * @param collapseTxt Localized 'Collapse' text
+*/
+function toggleCollapsiblePanel(link, areaId, expandTxt, collapseTxt){
+    var container = $(areaId);
+    var liElement = $(link).up('li');
+    if(container.visible()){
+        liElement.removeClassName('expanded');
+        liElement.addClassName('collapsed');
+        link.title = expandTxt;
+    } else {
+        liElement.removeClassName('collapsed');
+        liElement.addClassName('expanded');
+        link.title = collapseTxt;
+    }
+    Effect.toggle(container, 'appear');
+}
+
+/** Toggle screenlet visibility on/off.
+  * @param link The <a> element calling this function
+  * @param areaId The id of the HTML container to toggle
+  * @param expandTxt Localized 'Expand' text
+  * @param collapseTxt Localized 'Collapse' text
+*/
+function toggleScreenlet(link, areaId, expandTxt, collapseTxt){
+    toggleCollapsiblePanel(link, areaId, expandTxt, collapseTxt);
+    var container = $(areaId);
+    var screenlet = container.up('div');
+    if(container.visible()){
+        var currentParam = screenlet.id + "_collapsed=false";
+        var newParam = screenlet.id + "_collapsed=true";
+    } else {
+        var currentParam = screenlet.id + "_collapsed=true";
+        var newParam = screenlet.id + "_collapsed=false";
+    }
+    var paginationMenus = $$('div.nav-pager');
+    paginationMenus.each(function(menu) {
+        if (menu) {
+            var childElements = menu.getElementsByTagName('a');
+            for (var i = 0; i < childElements.length; i++) {
+                if (childElements[i].href.indexOf("http") == 0) {
+                    childElements[i].href = replaceQueryParam(childElements[i].href, currentParam, newParam);
+                }
+            }
+            childElements = menu.getElementsByTagName('select');
+            for (i = 0; i < childElements.length; i++) {
+                if (childElements[i].href.indexOf("location.href") >= 0) {
+                    Element.extend(childElements[i]);
+                    childElements[i].writeAttribute("onchange", replaceQueryParam(childElements[i].readAttribute("onchange"), currentParam, newParam));
+                }
+            }
+        }
+    });
+}
+
+/** In Place Editor for display elements
+  * @param element The id of the display field
+  * @param url The request to be called to update the display field
+  * @param options Options to be passed to Ajax.InPlaceEditor
+*/
+
+function ajaxInPlaceEditDisplayField(element, url, options) {
+    new Ajax.InPlaceEditor($(element), url, options);
+}
+// ===== End of Ajax Functions ===== //
+
+function replaceQueryParam(queryString, currentParam, newParam) {
+    var result = queryString.replace(currentParam, newParam);
+    if (result.indexOf(newParam) < 0) {
+        if (result.indexOf("?") < 0) {
+            result = result + "?" + newParam;
+        } else if (result.endsWith("#")) {
+            result = result.replace("#", "&" + newParam + "#");
+        } else if (result.endsWith(";")) {
+            result = result.replace(";", " + '&" + newParam + "';");
+        } else {
+            result = result + "&" + newParam;
+        }
+    }
+    return result;
+}
+
 function submitFormDisableSubmits(form) {
     for (var i=0;i<form.length;i++) {
         var formel = form.elements[i];
@@ -215,6 +462,28 @@ function submitFormEnableButtonByName(formName, buttonName) {
 function submitFormEnableButton(button) {
     button.disabled = false;
     button.className = button.className.substring(0, button.className.length - " disabled".length);
+}
+
+function expandAll(expanded) {
+  var divs,divs1,i,j,links,groupbody;
+
+  divs=document.getElementsByTagName('div');
+  for(i=0;i<divs.length;i++) {
+    if(/fieldgroup$/.test(divs[i].className)) {
+      links=divs[i].getElementsByTagName('a');
+      if(links.length>0) {
+        divs1=divs[i].getElementsByTagName('div');
+        for(j=0;j<divs1.length;j++){
+          if(/fieldgroup-body/.test(divs1[j].className)) {
+            groupbody=divs1[j];
+          }
+        }
+        if(groupbody.visible() != expanded) {
+          toggleCollapsiblePanel(links[0], groupbody.id, 'expand', 'collapse');
+        }
+      }
+    }
+  }
 }
 
 // redirect location to new url and prevents double posts for link
