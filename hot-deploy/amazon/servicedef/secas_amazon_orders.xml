@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/service-eca.xsd">
+
+     <!--When a Shipment is packed, queue any quantities derived from Amazon orders for fulfillment acknowledgement -->
+     <!-- Use this sECA if you do *not* confirm shipments with a carrier using Opentaps. If you use this sECA, comment out the 
+            eECAs in eecas_amazon_orders.xml -->
+   <eca service="completePack" event="commit" run-on-error="false">
+        <action service="opentaps.amazon.queueShippedItemsForFulfillmentPost" mode="sync"/>
+    </eca>
+
+</service-eca>
+    

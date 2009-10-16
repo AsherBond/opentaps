@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entity-engine-xml>
+
+    <Enumeration enumId="AMAZON_SALES_CHANNEL" enumTypeId="ORDER_SALES_CHANNEL" enumCode="AMAZON_CHANNEL" sequenceId="50" description="Amazon.com"/>
+    <PartyClassificationGroup partyClassificationGroupId="AMAZON_CUSTOMERS" partyClassificationTypeId="PERSON_CLASSIFICATIO" description="Amazon.com customers"/>
+    <GoodIdentificationType goodIdentificationTypeId="ASIN" description="ASIN" hasTable="N"/> 
+
+    <!-- StatusItems -->
+    <StatusType statusTypeId="AMZN_DOC" hasTable="N" description="Amazon Order Document"/>
+    <StatusItem statusId="AMZN_DOC_DLED" statusTypeId="AMZN_DOC" statusCode="DOWNLOADED" sequenceId="01" description="Document downloaded"/>
+    <StatusItem statusId="AMZN_DOC_DL_ERR" statusTypeId="AMZN_DOC" statusCode="DOWNLOADERROR" sequenceId="03" description="Error in document download"/>
+    <StatusItem statusId="AMZN_DOC_XTRED" statusTypeId="AMZN_DOC" statusCode="EXTRACTED" sequenceId="02" description="Orders extracted from document"/>
+    <StatusItem statusId="AMZN_DOC_XTRED_ERR" statusTypeId="AMZN_DOC" statusCode="EXTRACTIONERROR" sequenceId="04" description="Error in order extraction"/>
+    <StatusItem statusId="AMZN_DOC_NOT_ACKED" statusTypeId="AMZN_DOC" statusCode="NOTACKNOWLEDGED" sequenceId="01" description="Download not acknowledged"/>
+    <StatusItem statusId="AMZN_DOC_ACKED" statusTypeId="AMZN_DOC" statusCode="ACKNOWLEDGED" sequenceId="02" description="Download acknowledged"/>
+    <StatusItem statusId="AMZN_DOC_ACK_ERR" statusTypeId="AMZN_DOC" statusCode="ACKNOWLEDGEERROR" sequenceId="03" description="Error acknowledging download"/>
+
+    <StatusType statusTypeId="AMZN_ORDER" hasTable="N" description="Amazon Order"/>
+    <StatusItem statusId="AMZN_ORDR_CREATED" statusTypeId="AMZN_ORDER" statusCode="CREATED" sequenceId="01" description="Created"/>
+    <StatusItem statusId="AMZN_ORDR_IMPTD" statusTypeId="AMZN_ORDER" statusCode="IMPORTED" sequenceId="02" description="Imported"/>
+    <StatusItem statusId="AMZN_ORDR_IMPTD_ERR" statusTypeId="AMZN_ORDER" statusCode="IMPORTERROR" sequenceId="04" description="Error in order import"/>
+    <StatusItem statusId="AMZN_ORDR_CANCELLED" statusTypeId="AMZN_ORDER" statusCode="CANCELLED" sequenceId="03" description="Cancelled"/>
+    <StatusItem statusId="AMZN_ORDR_ACK_SENT" statusTypeId="AMZN_ORDER" statusCode="ACKNOWLEDGESENT" sequenceId="01" description="Import acknowledgement sent"/>
+    <StatusItem statusId="AMZN_ORDR_NOT_ACKED" statusTypeId="AMZN_ORDER" statusCode="NOTACKNOWLEDGED" sequenceId="02" description="Import not acknowledged"/>
+    <StatusItem statusId="AMZN_ORDR_SCSS_ACKED" statusTypeId="AMZN_ORDER" statusCode="SUCCESSACKNOWLEDGED" sequenceId="03" description="Successful import acknowledged"/>
+    <StatusItem statusId="AMZN_ORDR_FAIL_ACKED" statusTypeId="AMZN_ORDER" statusCode="FAILUREACKNOWLEDGED" sequenceId="04" description="Import failure acknowledged"/>
+    <StatusItem statusId="AMZN_ORDR_SC_ACK_ERR" statusTypeId="AMZN_ORDER" statusCode="ACKNOWLEDGESCSSERROR" sequenceId="05" description="Error acknowledging import success"/>
+    <StatusItem statusId="AMZN_ORDR_FL_ACK_ERR" statusTypeId="AMZN_ORDER" statusCode="ACKNOWLEDGEFAILERROR" sequenceId="06" description="Error acknowledging import failure"/>
+    <StatusItem statusId="AMZN_ORDR_ACK_FL_ST" statusTypeId="AMZN_ORDER" statusCode="FAILACKNOWLEDGESENT" sequenceId="07" description="Import failure acknowledgement sent"/>
+    
+    <StatusType statusTypeId="AMZN_SHIP" hasTable="N" description="Amazon Order"/>
+    <StatusItem statusId="AMZN_SHIP_NOT_ACKED" statusTypeId="AMZN_SHIP" statusCode="NOTACKNOWLEDGED" sequenceId="01" description="Fulfillment not acknowledged"/>
+    <StatusItem statusId="AMZN_SHIP_ACK_SENT" statusTypeId="AMZN_SHIP" statusCode="ACKNOWLEDGESENT" sequenceId="02" description="Fulfillment acknowledgement sent"/>
+    <StatusItem statusId="AMZN_SHIP_ACKED" statusTypeId="AMZN_SHIP" statusCode="ACKNOWLEDGED" sequenceId="03" description="Fulfillment acknowledged"/>
+    <StatusItem statusId="AMZN_SHIP_ACK_ERR" statusTypeId="AMZN_SHIP" statusCode="ACKNOWLEDGEERROR" sequenceId="04" description="Error acknowledging fulfillment"/>
+
+    <StatusType statusTypeId="AMZN_PRODUCT" hasTable="N" description="Amazon Product Statuses"/>
+    <StatusItem statusId="AMZN_PROD_CREATED" statusTypeId="AMZN_PRODUCT" statusCode="CREATED" sequenceId="01" description="New product"/>
+    <StatusItem statusId="AMZN_PROD_CHANGED" statusTypeId="AMZN_PRODUCT" statusCode="CHANGED" sequenceId="02" description="Product date are changed"/>
+    <StatusItem statusId="AMZN_PROD_POSTED" statusTypeId="AMZN_PRODUCT" statusCode="POSTED" sequenceId="03" description="Product is posted to store"/>
+    <StatusItem statusId="AMZN_PROD_SUCCESS" statusTypeId="AMZN_PRODUCT" statusCode="SUCCESS" sequenceId="04" description="Successful post acknowledged"/>
+    <StatusItem statusId="AMZN_PROD_ERROR" statusTypeId="AMZN_PRODUCT" statusCode="ERROR" sequenceId="05" description="Product isn't accepted"/>
+    <StatusItem statusId="AMZN_PROD_ACK_RECV" statusTypeId="AMZN_PRODUCT" statusCode="ACK_RECV" sequenceId="06" description="Product is acknowledged"/>
+    <StatusItem statusId="AMZN_PROD_ACK_ERR" statusTypeId="AMZN_PRODUCT" statusCode="ACK_ERROR" sequenceId="07" description="Product isn't acknowledged in an error issue"/>
+    <StatusItem statusId="AMZN_PROD_NOT_ACKED" statusTypeId="AMZN_PRODUCT" statusCode="NOT_ACKED" sequenceId="08" description="Product isn't acknowledged"/>
+    <StatusItem statusId="AMZN_PROD_DELETED" statusTypeId="AMZN_PRODUCT" statusCode="DELETED" sequenceId="09" description="Product is planned for deletion"/>
+    <StatusItem statusId="AMZN_PROD_DEL_ERR" statusTypeId="AMZN_PRODUCT" statusCode="DEL_ERROR" sequenceId="10" description="Error deleting product"/>
+
+    <!-- type of StandardProductId -->
+    <EnumerationType enumTypeId="AMZN_PRODUCT_ID_TYPE" parentTypeId="" description="Amazon Standard Product Id Type" hasTable="N"/>
+    <Enumeration enumId="AMZN_PRODID_ISBN" description="ISBN" enumTypeId="AMZN_PRODUCT_ID_TYPE" enumCode="ISBN" sequenceId="01"/>
+    <Enumeration enumId="AMZN_PRODID_UPC" description="UPC" enumTypeId="AMZN_PRODUCT_ID_TYPE" enumCode="UPC" sequenceId="02"/>
+    <Enumeration enumId="AMZN_PRODID_EAN" description="EAN" enumTypeId="AMZN_PRODUCT_ID_TYPE" enumCode="EAN" sequenceId="03"/>
+    <Enumeration enumId="AMZN_PRODID_ASIN" description="ASIN" enumTypeId="AMZN_PRODUCT_ID_TYPE" enumCode="ASIN" sequenceId="04"/>
+    <Enumeration enumId="AMZN_PRODID_GTIN" description="GTIN" enumTypeId="AMZN_PRODUCT_ID_TYPE" enumCode="GTIN" sequenceId="05"/>
+
+    <EnumerationType enumTypeId="AMZN_CONDITION_TYPE" parentTypeId="" description="Amazon Standard Product Id Type" hasTable="N"/>
+    <Enumeration enumId="AMZN_NEW" description="New" enumTypeId="AMZN_PRODUCT_ID_TYPE" enumCode="New" sequenceId="01"/>
+    <Enumeration enumId="AMZN_USEDLIKENEW" description="Used Like New" enumTypeId="AMZN_PRODUCT_ID_TYPE" enumCode="UsedLikeNew" sequenceId="02"/>
+    <Enumeration enumId="AMZN_USEDVERYGOOD" description="Used Very Good" enumTypeId="AMZN_PRODUCT_ID_TYPE" enumCode="UsedVeryGood" sequenceId="03"/>
+    <Enumeration enumId="AMZN_USEDGOOD" description="Used Good" enumTypeId="AMZN_PRODUCT_ID_TYPE" enumCode="UsedGood" sequenceId="04"/>
+    <Enumeration enumId="AMZN_USEDACCEPTABLE" description="Used Acceptable" enumTypeId="AMZN_PRODUCT_ID_TYPE" enumCode="UsedAcceptable" sequenceId="05"/>
+    <Enumeration enumId="AMZN_COLLECTIBLELIK" description="Collectible Like New" enumTypeId="AMZN_PRODUCT_ID_TYPE" enumCode="CollectibleLikeNew" sequenceId="06"/>
+    <Enumeration enumId="AMZN_COLLECTIBLEVER" description="Collectible Very Good" enumTypeId="AMZN_PRODUCT_ID_TYPE" enumCode="CollectibleVeryGood" sequenceId="07"/>
+    <Enumeration enumId="AMZN_COLLECTIBLEGOO" description="Collectible Good" enumTypeId="AMZN_PRODUCT_ID_TYPE" enumCode="CollectibleGood" sequenceId="08"/>
+    <Enumeration enumId="AMZN_COLLECTIBLEACC" description="Collectible Acceptable" enumTypeId="AMZN_PRODUCT_ID_TYPE" enumCode="CollectibleAcceptable" sequenceId="09"/>
+    <Enumeration enumId="AMZN_REFUBLISHED" description="Refurbished" enumTypeId="AMZN_PRODUCT_ID_TYPE" enumCode="Refurbished" sequenceId="10"/>
+    <Enumeration enumId="AMZN_CLUB" description="Club" enumTypeId="AMZN_PRODUCT_ID_TYPE" enumCode="Club" sequenceId="11"/>
+
+    <EnumerationType enumTypeId="AMZN_DELIVERY_CH" parentTypeId="" description="Amazon Delivery Channels" hasTable="N"/>
+    <Enumeration enumId="AMZN_IN_STORE" description="In Store" enumTypeId="AMZN_DELIVERY_CH" enumCode="in_store" sequenceId="01"/>
+    <Enumeration enumId="AMZN_DIRECT" description="Direct Ship" enumTypeId="AMZN_DELIVERY_CH" enumCode="direct_ship" sequenceId="02"/>
+    <Enumeration enumId="AMZN_BOTH" description="In Store/Direct Ship" enumTypeId="AMZN_DELIVERY_CH" enumCode="both" sequenceId="03"/>
+    
+    <EnumerationType enumTypeId="AMZN_AVAILABILITY" parentTypeId="" description="Amazon Underlying Availability" hasTable="N"/>
+    <Enumeration enumId="AMZN_AVAIL_BACKORD" description="Backordered" enumTypeId="AMZN_AVAILABILITY" enumCode="backordered" sequenceId="01"/>
+    <Enumeration enumId="AMZN_AVAIL_OUTOFSTCK" description="Manufacturer Out of Stock" enumTypeId="AMZN_AVAILABILITY" enumCode="manufacturer-out-of-stock" sequenceId="02"/>
+    <Enumeration enumId="AMZN_AVAIL_PREORD" description="Pre-Ordered" enumTypeId="AMZN_AVAILABILITY" enumCode="pre-ordered" sequenceId="03"/>
+    <Enumeration enumId="AMZN_AVAIL_2D3" description="2-3 Days" enumTypeId="AMZN_AVAILABILITY" enumCode="2-3-days" sequenceId="04"/>
+    <Enumeration enumId="AMZN_AVAIL_1W2" description="1-2 Weeks" enumTypeId="AMZN_AVAILABILITY" enumCode="1-2-weeks" sequenceId="05"/>
+    <Enumeration enumId="AMZN_AVAIL_4W6" description="4-6 Weeks" enumTypeId="AMZN_AVAILABILITY" enumCode="4-6-weeks" sequenceId="06"/>
+    
+    <EnumerationType enumTypeId="AMZN_RELENISHCAT" parentTypeId="" description="Amazon Replenish Category" hasTable="N"/>
+    <Enumeration enumId="AMZN_REPL_BASIC" description="Basic Replenishment" enumTypeId="AMZN_RELENISHCAT" enumCode="basic-replenishment" sequenceId="01"/>
+    <Enumeration enumId="AMZN_REPL_LIMITED" description="Limited Replenishment" enumTypeId="AMZN_RELENISHCAT" enumCode="limited-replenishment" sequenceId="02"/>
+    <Enumeration enumId="AMZN_REPL_OUTOFST" description="Manufacturer Out of Stock" enumTypeId="AMZN_RELENISHCAT" enumCode="manufacturer-out-of-stock" sequenceId="03"/>
+    <Enumeration enumId="AMZN_REPL_NEW" description="New Product" enumTypeId="AMZN_RELENISHCAT" enumCode="new-product" sequenceId="04"/>
+    <Enumeration enumId="AMZN_REPL_NONE" description="Non-replenishable" enumTypeId="AMZN_RELENISHCAT" enumCode="non-replenishable" sequenceId="05"/>
+    <Enumeration enumId="AMZN_REPL_NONST" description="Non-stockupable" enumTypeId="AMZN_RELENISHCAT" enumCode="non-stockupable" sequenceId="06"/>
+    <Enumeration enumId="AMZN_REPL_OBSOLETE" description="Obsolete" enumTypeId="AMZN_RELENISHCAT" enumCode="obsolete" sequenceId="07"/>
+    <Enumeration enumId="AMZN_REPL_PLANNED" description="Planned Replenishment" enumTypeId="AMZN_RELENISHCAT" enumCode="planned-replenishment" sequenceId="08"/>
+    
+    <EnumerationType enumTypeId="AMZN_DROPSHIP" parentTypeId="" description="Amazon Replenish Category" hasTable="N"/>
+    <Enumeration enumId="AMZN_DSHIP_DIS" description="Drop-ship Disabled" enumTypeId="AMZN_DROPSHIP" enumCode="drop-ship-disabled" sequenceId="01"/>
+    <Enumeration enumId="AMZN_DSHIP_DISBYR" description="Drop-ship Disabled by Buyer" enumTypeId="AMZN_DROPSHIP" enumCode="drop-ship-disabled-by-buyer" sequenceId="02"/>
+    <Enumeration enumId="AMZN_DSHIP_ENAB" description="Drop-ship Enabled" enumTypeId="AMZN_DROPSHIP" enumCode="drop-ship-enabled" sequenceId="03"/>
+    <Enumeration enumId="AMZN_DSHIP_NOAUTOPR" description="Drop-ship Enabled, no Auto Pricing" enumTypeId="AMZN_DROPSHIP" enumCode="drop-ship-enabled-no-auto-pricing" sequenceId="04"/>
+    <Enumeration enumId="AMZN_DSHIP_ONLY" description="Drop-Ship Only" enumTypeId="AMZN_DROPSHIP" enumCode="drop-ship-only" sequenceId="05"/>
+    
+    <EnumerationType enumTypeId="AMZN_OUTOFSTOCK_MSG" parentTypeId="" description="Out-of-Stock Messages" hasTable="N"/>
+    <Enumeration enumId="AMZN_OUTST_EMAIL" description="Email me when available" enumTypeId="AMZN_OUTOFSTOCK_MSG" enumCode="email-me-when-available" sequenceId="01"/>
+    <Enumeration enumId="AMZN_OUTST_OUTOFST" description="Out of Stock" enumTypeId="AMZN_OUTOFSTOCK_MSG" enumCode="out-of-stock" sequenceId="02"/>
+    <Enumeration enumId="AMZN_OUTST_PREORDER" description="Preorder UTE" enumTypeId="AMZN_OUTOFSTOCK_MSG" enumCode="pre-order-ute" sequenceId="03"/>
+    <Enumeration enumId="AMZN_OUTST_UNDAV" description="Underlying Availability" enumTypeId="AMZN_OUTOFSTOCK_MSG" enumCode="underlying-availability" sequenceId="04"/>
+    
+</entity-engine-xml>

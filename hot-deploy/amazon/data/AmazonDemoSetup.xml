@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entity-engine-xml>
+
+    <Party partyId="AMAZON" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="AMAZON" groupName="Amazon.com"/>
+
+    <ProductStore productStoreId="AMAZON" storeName="Amazon.com Integration Store" payToPartyId="Company" daysToCancelNonPay="30" inventoryFacilityId="WebStoreWarehouse" 
+            oneInventoryFacility="Y" checkInventory="Y" reserveInventory="Y" reserveOrderEnumId="INVRO_FIFO_REC" requireInventory="N" defaultLocaleString="en_US" 
+            defaultCurrencyUomId="USD" defaultSalesChannelEnumId="AMAZON_SALES_CHANNEL" orderNumberPrefix="AM" autoApproveInvoice="Y" shipIfCaptureFails="Y" billToThirdPartyId="AMAZON"
+            prorateShipping="N"/>
+    <ProductStorePaymentSetting productStoreId="AMAZON" paymentMethodTypeId="EXT_BILL_3RDPTY" paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL"/>
+
+    <GlAccount glAccountId="126000" parentGlAccountId="120000" accountCode="126000" glAccountClassId="CURRENT_ASSET" glAccountTypeId="" accountName="UNINVOICED THIRD PARTY BILLINGS" postedBalance="0.0"/>
+    <GlAccountOrganization glAccountId="126000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <InvoiceItemTypeGlAccount invoiceItemTypeId="ITM_BILL_FROM_CUST" organizationPartyId="Company" glAccountId="126000"/>
+    <PaymentMethodTypeGlAccount paymentMethodTypeId="EXT_BILL_3RDPTY" organizationPartyId="Company" glAccountId="126000"/>
+
+    <!-- Recurring jobs to run Amazon integration services -->
+    <RecurrenceRule recurrenceRuleId="AM_15_MIN" frequency="MINUTELY" intervalNumber="15" countNumber="-1"/>
+    <RecurrenceRule recurrenceRuleId="AM_HOURLY" frequency="HOURLY" intervalNumber="1" countNumber="-1"/>
+    <RecurrenceRule recurrenceRuleId="AM_DAILY" frequency="DAILY" intervalNumber="1" countNumber="-1"/>
+    <RecurrenceInfo recurrenceInfoId="AM_15_MIN_4EVER_SPOD" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="AM_15_MIN" recurrenceCount="0"/>
+    <RecurrenceInfo recurrenceInfoId="AM_15_MIN_4EVER_AODD" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="AM_15_MIN" recurrenceCount="0"/>
+    <RecurrenceInfo recurrenceInfoId="AM_15_MIN_4EVER_EOFI" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="AM_15_MIN" recurrenceCount="0"/>
+    <RecurrenceInfo recurrenceInfoId="AM_15_MIN_4EVER_IO" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="AM_15_MIN" recurrenceCount="0"/>
+    <RecurrenceInfo recurrenceInfoId="AM_15_MIN_4EVER_AIO" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="AM_15_MIN" recurrenceCount="0"/>
+    <RecurrenceInfo recurrenceInfoId="AM_HOURLY_4EVER_ASOI" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="AM_HOURLY" recurrenceCount="0"/>
+    <RecurrenceInfo recurrenceInfoId="AM_HOURLY_4EVER_CAS" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="AM_HOURLY" recurrenceCount="0"/>
+    <RecurrenceInfo recurrenceInfoId="AM_DAILY_4EVER_ABUP" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="AM_DAILY" recurrenceCount="0"/>
+    <RecurrenceInfo recurrenceInfoId="AM_DAILY_4EVER_PPTA" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="AM_DAILY" recurrenceCount="0"/>
+    <RecurrenceInfo recurrenceInfoId="AM_DAILY_4EVER_PPPTA" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="AM_DAILY" recurrenceCount="0"/>
+    <RecurrenceInfo recurrenceInfoId="AM_DAILY_4EVER_PPITA" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="AM_DAILY" recurrenceCount="0"/>
+    <RecurrenceInfo recurrenceInfoId="AM_DAILY_4EVER_PPNTA" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="AM_DAILY" recurrenceCount="0"/>
+    <RecurrenceInfo recurrenceInfoId="AM_DAILY_4EVER_DPFA" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="AM_DAILY" recurrenceCount="0"/>
+    <RecurrenceInfo recurrenceInfoId="AM_DAILY_4EVER_CLFPD" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="AM_DAILY" recurrenceCount="0"/>
+    <JobSandbox jobId="AM_SPOD" jobName="Store Amazon.com pending order documents" runTime="2007-01-01 00:00:00.000" serviceName="opentaps.amazon.storePendingOrderDocuments" poolId="pool" runAsUser="system" recurrenceInfoId="AM_15_MIN_4EVER_SPOD"/>
+    <JobSandbox jobId="AM_AODD" jobName="Acknowledge downloaded Amazon.com pending Order Documents" runTime="2007-01-01 00:03:00.000" serviceName="opentaps.amazon.acknowledgeOrderDocumentDownload" poolId="pool" runAsUser="system" recurrenceInfoId="AM_15_MIN_4EVER_AODD"/>
+    <JobSandbox jobId="AM_EOFI" jobName="Extract Amazon.com orders from pending order documents" runTime="2007-01-01 00:06:00.000" serviceName="opentaps.amazon.extractOrdersForImport" poolId="pool" runAsUser="system" recurrenceInfoId="AM_15_MIN_4EVER_EOFI"/>
+    <JobSandbox jobId="AM_IO" jobName="Import orders from Amazon.com order import tables" runTime="2007-01-01 00:09:00.000" serviceName="opentaps.amazon.importOrders" poolId="pool" runAsUser="system" recurrenceInfoId="AM_15_MIN_4EVER_IO"/>
+    <JobSandbox jobId="AM_AIO" jobName="Acknowledge imported Amazon.com orders" runTime="2007-01-01 00:12:00.000" serviceName="opentaps.amazon.acknowledgeImportedOrders" poolId="pool" runAsUser="system" recurrenceInfoId="AM_15_MIN_4EVER_AIO"/>
+    <JobSandbox jobId="AM_ASOI" jobName="Acknowledge shipped Amazon.com order items" runTime="2007-01-01 00:00:00.000" serviceName="opentaps.amazon.acknowledgeFulfilledOrderItems" poolId="pool" runAsUser="system" recurrenceInfoId="AM_HOURLY_4EVER_ASOI"/>
+    <JobSandbox jobId="AM_CAS" jobName="Check the processing status of outstanding acknowledgements" runTime="2007-01-01 00:00:00.000" serviceName="opentaps.amazon.checkAcknowledgementStatuses" poolId="pool" runAsUser="system" recurrenceInfoId="AM_HOURLY_4EVER_CAS"/>
+    <JobSandbox jobId="AM_PPTA" jobName="Publish products to Amazon.com" runTime="2007-01-01 00:00:00.000" serviceName="opentaps.amazon.publishProductsToAmazon" poolId="pool" runAsUser="system" recurrenceInfoId="AM_DAILY_4EVER_PPTA"/>
+    <JobSandbox jobId="AM_ABUP" jobName="Check products and product images for changes or discontinuation" runTime="2007-01-01 00:00:00.000" serviceName="opentaps.amazon.batchUpdateAmazonProducts" poolId="pool" runAsUser="system" recurrenceInfoId="AM_DAILY_4EVER_ABUP"/>
+    <JobSandbox jobId="AM_PPPTA" jobName="Publish product prices to Amazon.com" runTime="2007-01-01 00:00:00.000" serviceName="opentaps.amazon.publishProductPriceToAmazon" poolId="pool" runAsUser="system" recurrenceInfoId="AM_DAILY_4EVER_PPPTA"/>
+    <JobSandbox jobId="AM_PPITA" jobName="Publish product images to Amazon.com" runTime="2007-01-01 00:00:00.000" serviceName="opentaps.amazon.publishProductImagesToAmazon" poolId="pool" runAsUser="system" recurrenceInfoId="AM_DAILY_4EVER_PPITA"/>
+    <JobSandbox jobId="AM_PPINTA" jobName="Publish product inventory to Amazon.com" runTime="2007-01-01 00:00:00.000" serviceName="opentaps.amazon.publishProductInventoryToAmazon" poolId="pool" runAsUser="system" recurrenceInfoId="AM_DAILY_4EVER_PPNTA"/>
+    <JobSandbox jobId="AM_DPFA" jobName="Delete products from Amazon.com" runTime="2007-01-01 00:00:00.000" serviceName="opentaps.amazon.deleteProductsFromAmazon" poolId="pool" runAsUser="system" recurrenceInfoId="AM_DAILY_4EVER_DPFA"/>
+    <JobSandbox jobId="AM_CLFPD" jobName="Check the age of the last successful product feed processing document download" runTime="2007-01-01 00:00:00.000" serviceName="opentaps.amazon.checkLastFeedProcessingDocumentDownloadSuccess" poolId="pool" runAsUser="system" recurrenceInfoId="AM_DAILY_4EVER_CLFPD"/>
+
+</entity-engine-xml>

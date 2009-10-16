@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+<entity-engine-xml>
+
+    <AmazonNodeMappingType nodeMappingTypeId="USED_FOR" description="Used For"/>
+    <AmazonNodeMappingType nodeMappingTypeId="OTHER_ITEM_ATTR" description="Other Item Attributes"/>
+    <AmazonNodeMappingType nodeMappingTypeId="SUBJECT_CONTENT" description="Subject Content"/>
+    <AmazonNodeMappingType nodeMappingTypeId="TARGET_AUDIENCE" description="Target Audience"/>
+    
+    <AmazonProductItemType itemTypeId="sports-nutritional-supplements" description="Sports Nutritional Supplements"/>
+    <AmazonProductItemType itemTypeId="essential-fatty-acid-combination-nutritional-supplements" description="Essential Fatty Acid Combination Nutritional Supplements"/>
+    <AmazonProductItemType itemTypeId="herbal-supplements" description="Herbal Supplements"/>
+    <AmazonProductItemType itemTypeId="nutrition-bars" description="Nutrition Bars"/>
+    <AmazonProductItemType itemTypeId="nutrition-beverages" description="Nutrition Beverages"/>
+    <AmazonProductItemType itemTypeId="protein-nutritional-supplements" description="Protein Nutritional Supplements"/>
+    <AmazonProductItemType itemTypeId="health-care-products" description="Health Care Products"/>
+    <AmazonProductItemType itemTypeId="ear-care-products" description="Ear Care Products"/>
+    <AmazonProductItemType itemTypeId="eye-care-products" description="Eye Care Products"/>
+    <AmazonProductItemType itemTypeId="homeopathic-remedy-formulas" description="Homeopathic Remedy Formulas"/>
+    <AmazonProductItemType itemTypeId="aromatherapy-products" description="Aromatherapy Products"/>
+    <AmazonProductItemType itemTypeId="skin-care-products" description="Skin Care Products"/>
+    <AmazonProductItemType itemTypeId="nutritional-supplements-and-vitamins" description="Nutritional Supplements and Vitamins"/>
+    <AmazonProductItemType itemTypeId="weight-loss-products" description="Weight Loss Products"/>
+    <AmazonProductItemType itemTypeId="nutritional-supplements" description="Nutritional Supplements"/>
+    <AmazonProductItemType itemTypeId="amino-acids" description="Amino Acids"/>
+    <AmazonProductItemType itemTypeId="relora-herbal-supplements" description="Relora Herbal Supplements"/>
+    <AmazonProductItemType itemTypeId="pyruvate-nutritional-supplements" description="Pyruvate Nutritional Supplements"/>
+    <AmazonProductItemType itemTypeId="nutrition-shakes" description="Nutrition Shakes"/>
+    <AmazonProductItemType itemTypeId="conjugated-linoleic-acid-nutritional-supplements" description="Conjugated Linoleic Acid Nutritional Supplements"/>
+    <AmazonProductItemType itemTypeId="body-fat-calipers" description="Body Fat Calipers"/>
+    <AmazonProductItemType itemTypeId="prepared-food" description="Prepared Food"/>
+    <AmazonProductItemType itemTypeId="nutrition-beverages" description="Nutrition Beverages"/>
+    <AmazonProductItemType itemTypeId="aromatherapy-product-accessories" description="Aromatherapy Product Accessories"/>
+    <AmazonProductItemType itemTypeId="lip-care-products" description="Lip Care Products"/>
+    <AmazonProductItemType itemTypeId="therapeutic-skin-care-products" description="Therapeutic Skin Care Products"/>
+    <AmazonProductItemType itemTypeId="body-scrubs-and-treatments" description="Body Scrubs and Treatments"/>
+    
+    <AmazonProductTargetAudience targetAudienceId="people" description="People"/>
+    <AmazonProductTargetAudience targetAudienceId="adults" description="Adults"/>
+    <AmazonProductTargetAudience targetAudienceId="men" description="Men"/>
+    <AmazonProductTargetAudience targetAudienceId="seniors" description="Seniors"/>
+    <AmazonProductTargetAudience targetAudienceId="unisex-adult" description="Unisex Adult"/>
+    <AmazonProductTargetAudience targetAudienceId="women" description="Women"/>
+    <AmazonProductTargetAudience targetAudienceId="children" description="Children"/>
+    <AmazonProductTargetAudience targetAudienceId="babies" description="Babies"/>
+    <AmazonProductTargetAudience targetAudienceId="baby-boys" description="Baby Boys"/>
+    <AmazonProductTargetAudience targetAudienceId="baby-girls" description="Baby Girls"/>
+    <AmazonProductTargetAudience targetAudienceId="unisex-baby" description="Unisex Baby"/>
+    <AmazonProductTargetAudience targetAudienceId="boys" description="Boys"/>
+    <AmazonProductTargetAudience targetAudienceId="girls" description="Girls"/>
+    <AmazonProductTargetAudience targetAudienceId="toddlers" description="Toddlers"/>
+    <AmazonProductTargetAudience targetAudienceId="toddler-boys" description="Toddler Boys"/>
+    <AmazonProductTargetAudience targetAudienceId="toddler-girls" description="Toddler Girls"/>
+    <AmazonProductTargetAudience targetAudienceId="unisex-toddler" description="Unisex Toddler"/>
+    <AmazonProductTargetAudience targetAudienceId="unisex-children" description="Unisex Children"/>
+    <AmazonProductTargetAudience targetAudienceId="pregnant-women" description="Pregnant Women"/>
+
+    <AmazonProductUsedFor usedForId="complementary-and-alternative-medicine" description="Complementary and Alternative Medicine"/>
+    <AmazonProductUsedFor usedForId="acupuncture" description="Acupuncture"/>
+    <AmazonProductUsedFor usedForId="aromatherapy" description="Aromatherapy"/>
+    <AmazonProductUsedFor usedForId="ayurveda" description="Ayurveda"/>
+    <AmazonProductUsedFor usedForId="chiropractic" description="Chiropractic"/>
+    <AmazonProductUsedFor usedForId="herbal-medicine" description="Herbal Medicine"/>
+    <AmazonProductUsedFor usedForId="homeopathy" description="Homeopathy"/>
+    <AmazonProductUsedFor usedForId="light-therapy" description="Light Therapy"/>
+    <AmazonProductUsedFor usedForId="magnetic-field-therapy" description="Magnetic Field Therapy"/>
+    <AmazonProductUsedFor usedForId="massage-therapy" description="Massage Therapy"/>
+    <AmazonProductUsedFor usedForId="meditation" description="Meditation"/>
+    <AmazonProductUsedFor usedForId="naturopathy" description="Naturopathy"/>
+    <AmazonProductUsedFor usedForId="osteopathy" description="Osteopathy"/>
+    <AmazonProductUsedFor usedForId="oxygen-therapy" description="Oxygen Therapy"/>
+    <AmazonProductUsedFor usedForId="sound-therapy" description="Sound Therapy"/>
+    <AmazonProductUsedFor usedForId="aging" description="Aging"/>
+    <AmazonProductUsedFor usedForId="allergies" description="Allergies"/>
+    <AmazonProductUsedFor usedForId="skin-allergies" description="Skin Allergies"/>
+    <AmazonProductUsedFor usedForId="anxiety" description="Anxiety"/>
+    <AmazonProductUsedFor usedForId="arthritis" description="Arthritis"/>
+    <AmazonProductUsedFor usedForId="asthma" description="Asthma"/>
+    <AmazonProductUsedFor usedForId="athletes-foot" description="Athletes Foot"/>
+    <AmazonProductUsedFor usedForId="bladder-conditions" description="Bladder Conditions"/>
+    <AmazonProductUsedFor usedForId="brain-health" description="Brain Health"/>
+    <AmazonProductUsedFor usedForId="cancer" description="Cancer"/>
+    <AmazonProductUsedFor usedForId="cardiovascular-conditions" description="Cardiovascular Conditions"/>
+    <AmazonProductUsedFor usedForId="depression" description="Depression"/>
+    <AmazonProductUsedFor usedForId="diabetes" description="Diabetes"/>
+    <AmazonProductUsedFor usedForId="digestive-system-conditions" description="Digestive System Conditions"/>
+    <AmazonProductUsedFor usedForId="ear-conditions" description="Ear Conditions"/>
+    <AmazonProductUsedFor usedForId="eye-conditions" description="Eye Conditions"/>
+    <AmazonProductUsedFor usedForId="gallbladder-conditions" description="Gallbladder Conditions"/>
+    <AmazonProductUsedFor usedForId="hair-loss" description="Hair Loss"/>
+    <AmazonProductUsedFor usedForId="hearing-impairments" description="Hearing Impairments"/>
+    <AmazonProductUsedFor usedForId="deafness" description="Deafness"/>
+    <AmazonProductUsedFor usedForId="hemorrhoids" description="Hemorrhoids"/>
+    <AmazonProductUsedFor usedForId="immune-system-conditions" description="Immune System Conditions"/>
+    <AmazonProductUsedFor usedForId="incontinence" description="Incontinence"/>
+    <AmazonProductUsedFor usedForId="jock-itch" description="Jock Itch"/>
+    <AmazonProductUsedFor usedForId="kidney-conditions" description="Kidney Conditions"/>
+    <AmazonProductUsedFor usedForId="lactose-intolerance" description="Lactose Intolerance"/>
+    <AmazonProductUsedFor usedForId="liver-conditions" description="Liver Conditions"/>
+    <AmazonProductUsedFor usedForId="lung-conditions" description="Lung Conditions"/>
+    <AmazonProductUsedFor usedForId="memory-improvement" description="Memory Improvement"/>
+    <AmazonProductUsedFor usedForId="menopause" description="Menopause"/>
+    <AmazonProductUsedFor usedForId="menstruation" description="Menstruation"/>
+    <AmazonProductUsedFor usedForId="oral-health-conditions" description="Oral Health Conditions"/>
+    <AmazonProductUsedFor usedForId="reproductive-conditions" description="Reproductive Conditions"/>
+    <AmazonProductUsedFor usedForId="sinus-conditions" description="Sinus Conditions"/>
+    <AmazonProductUsedFor usedForId="sleeping-disorders" description="Sleeping Disorders"/>
+    <AmazonProductUsedFor usedForId="smoking-cessation" description="Smoking Cessation"/>
+    <AmazonProductUsedFor usedForId="stress" description="Stress"/>
+    <AmazonProductUsedFor usedForId="urinary-tract-infections" description="Urinary Tract Infections"/>
+    <AmazonProductUsedFor usedForId="vision-impairments" description="Vision Impairments"/>
+    <AmazonProductUsedFor usedForId="blindness" description="Blindness"/>
+    <AmazonProductUsedFor usedForId="weight-loss" description="Weight Loss"/>
+    <AmazonProductUsedFor usedForId="yeast-infections" description="Yeast Infections"/>
+    <AmazonProductUsedFor usedForId="medical-and-health-symptoms" description="Medical and Health Symptoms"/>
+    <AmazonProductUsedFor usedForId="cough" description="Cough"/>
+    <AmazonProductUsedFor usedForId="pain" description="Pain"/>
+    <AmazonProductUsedFor usedForId="joint-pain" description="Joint Pain"/>
+    <AmazonProductUsedFor usedForId="migraine-pain" description="Migraine Pain"/>
+    <AmazonProductUsedFor usedForId="muscle-pain" description="Muscle Pain"/>
+    <AmazonProductUsedFor usedForId="skin-conditions" description="Skin Conditions"/>
+    <AmazonProductUsedFor usedForId="acne" description="Acne"/>
+    <AmazonProductUsedFor usedForId="eczema" description="Eczema"/>
+    <AmazonProductUsedFor usedForId="rosacea" description="Rosacea"/>
+
+    <AmazonProductOtherItemAttr otherItemAttrId="aromatherapy" description="Aromatherapy"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="ayurvedic" description="Ayurvedic"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="blends" description="Blends"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="chinese-treatments" description="Chinese Treatments"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="ephedrine-free" description="Ephedrine Free"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="extracts" description="Extracts"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="handheld" description="Handheld"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="heated" description="Heated"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="nighttime-formulas" description="Nighttime Formulas"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="organic" description="Organic"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="phase-2-formulas" description="Phase-2 Formulas"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="sexual-enhancing" description="Sexual Enhancing"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="sugar-free" description="Sugar Free"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="balm-format" description="Balm Format"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="caplet-format" description="Caplet Format"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="capsule-format" description="Capsule Format"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="cream-format" description="Cream Format"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="drink-packets" description="Drink Packets"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="gel-format" description="Gel Format"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="liquid-dilutions" description="Liquid Dilutions"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="liquid-format" description="Liquid Format"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="lotion-format" description="Lotion Format"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="oil-format" description="Oil Format"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="ointment-format" description="Ointment Format"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="powder-format" description="Powder Format"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="tablet-format" description="Tablet Format"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="tinctures" description="Tinctures"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="wafers" description="Wafers"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="whole-herbs" description="Whole Herbs"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="wipe-format" description="Wipe Format"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="added-protein" description="Added Protein"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="energy-enhancing" description="Energy Enhancing"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="high-fiber" description="High Fiber"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="low-calorie" description="Low Calorie"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="low-carb" description="Low Carb"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="low-fat" description="Low Fat"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="soy-ingredient" description="Soy Ingredient"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="homeopathic" description="Homeopathic"/>
+    <AmazonProductOtherItemAttr otherItemAttrId="natural-medicines" description="Natural Medicines"/>
+
+    <AmazonProductBrowseNode nodeId="3763401" description="Health Care/Homeopathic &amp; Natural Remedies"/>
+    <AmazonProductBrowseNode nodeId="4075981" description="Nutrition &amp; Fitness/Nutrition Bars &amp; Drinks/Nutrition Bars"/>
+    <AmazonProductBrowseNode nodeId="3773501" description="Nutrition &amp; Fitness/Vitamins &amp; Supplements/A-Z/E/Essential Fatty Acid Combinations"/>
+    <AmazonProductBrowseNode nodeId="3764461" description="Nutrition &amp; Fitness/Vitamins &amp; Supplements/Herbal Supplements"/>
+    <AmazonProductBrowseNode nodeId="3773091" description="Nutrition &amp; Fitness/Vitamins &amp; Supplements"/>
+    <AmazonProductBrowseNode nodeId="10781161" description="Nutrition &amp; Fitness/Vitamins &amp; Supplements/A-Z/A/Amino Acids"/>
+    <AmazonProductBrowseNode nodeId="3774931"  description="Nutrition &amp; Fitness/Weight Loss Products"/>
+    <AmazonProductBrowseNode nodeId="10781141" description="Nutrition &amp; Fitness/Vitamins &amp; Supplements/Sports"/>
+    <AmazonProductBrowseNode nodeId="3767491" description="Nutrition &amp; Fitness/Massage &amp; Relaxation/Aromatherapy"/>
+    <AmazonProductBrowseNode nodeId="3785441" description="Personal Care/Skin Care"/>
+
+    <AmazonNodeValidAttribute nodeValidAttrId="9000" nodeId="3763401" itemTypeId="health-care-products" nodeMappingTypeId="OTHER_ITEM_ATTR" relatedToId="homeopathic"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9001" nodeId="3763401" itemTypeId="ear-care-products" nodeMappingTypeId="OTHER_ITEM_ATTR" relatedToId="homeopathic"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9002" nodeId="3763401" itemTypeId="eye-care-products" nodeMappingTypeId="OTHER_ITEM_ATTR" relatedToId="homeopathic"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9003" nodeId="3763401" itemTypeId="health-care-products" nodeMappingTypeId="OTHER_ITEM_ATTR" relatedToId="natural-medicines"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9004" nodeId="3763401" itemTypeId="ear-care-products" nodeMappingTypeId="OTHER_ITEM_ATTR" relatedToId="natural-medicines"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9005" nodeId="3763401" itemTypeId="eye-care-products" nodeMappingTypeId="OTHER_ITEM_ATTR" relatedToId="natural-medicines"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9006" nodeId="3763401" itemTypeId="homeopathic-remedy-formulas"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9007" nodeId="4075981" itemTypeId="nutrition-bars"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9008" nodeId="3773501" itemTypeId="essential-fatty-acid-combination-nutritional-supplements"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9009" nodeId="3764461" itemTypeId="herbal-supplements"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9010" nodeId="3773091" itemTypeId="nutritional-supplements-and-vitamins"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9011" nodeId="3773091" itemTypeId="nutritional-supplements"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9012" nodeId="3773091" itemTypeId="nutrition-beverages"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9013" nodeId="3773091" itemTypeId="herbal-supplements"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9014" nodeId="10781161" itemTypeId="amino-acids"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9015" nodeId="3774931" itemTypeId="weight-loss-products"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9016" nodeId="3774931" itemTypeId="relora-herbal-supplements"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9017" nodeId="3774931" itemTypeId="pyruvate-nutritional-supplements"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9018" nodeId="3774931" itemTypeId="nutrition-bars"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9019" nodeId="3774931" itemTypeId="nutrition-shakes"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9020" nodeId="3774931" itemTypeId="conjugated-linoleic-acid-nutritional-supplements"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9021" nodeId="3774931" itemTypeId="body-fat-calipers"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9022" nodeId="3774931" itemTypeId="prepared-food" nodeMappingTypeId="USED_FOR" relatedToId="weight-loss"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9023" nodeId="10781141" itemTypeId="sports-nutritional-supplements"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9024" nodeId="10781141" itemTypeId="nutrition-beverages"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9025" nodeId="3767491" itemTypeId="aromatherapy-products"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9026" nodeId="3767491" itemTypeId="aromatherapy-product-accessories"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9027" nodeId="3785441" itemTypeId="skin-care-products"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9028" nodeId="3785441" itemTypeId="lip-care-products"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9029" nodeId="3785441" itemTypeId="therapeutic-skin-care-products"/>
+    <AmazonNodeValidAttribute nodeValidAttrId="9030" nodeId="3785441" itemTypeId="body-scrubs-and-treatments"/>
+
+</entity-engine-xml>

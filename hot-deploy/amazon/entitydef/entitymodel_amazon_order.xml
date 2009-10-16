@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+    <title>Entity definitions for the Opentaps Amazon component order integration</title>
+    <copyright>Copyright (c) 2005 - 2007 Open Source Strategies Inc.</copyright>
+
+    <!-- Amazon order storage entities -->
+    
+    <entity entity-name="AmazonOrderDocument" package-name="org.opentaps.amazon.order">
+        <field name="documentId" type="id-vlong-ne"/>
+        <field name="generatedTimestamp" type="date-time"/>
+        <field name="documentXml" type="very-long"/>
+        <field name="statusId" type="id-ne"/>
+        <field name="ackStatusId" type="id-ne"/>
+        <field name="downloadTimestamp" type="date-time"/>
+        <field name="downloadErrorMessage" type="very-long"/>
+        <field name="importTimestamp" type="date-time"/>
+        <field name="extractionFailures" type="numeric"/>
+        <field name="importErrorMessage" type="very-long"/>
+        <field name="acknowledgeTimestamp" type="date-time"/>
+        <field name="acknowledgeErrorMessage" type="very-long"/>
+        <prim-key field="documentId"/>
+        <relation type="one" rel-entity-name="StatusItem" fk-name="AOD_SI">
+            <key-map field-name="statusId"/>
+        </relation>
+        <relation type="one" rel-entity-name="StatusItem" title="Ack" fk-name="AOD_ASI">
+            <key-map field-name="ackStatusId" rel-field-name="statusId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="AmazonOrder" package-name="org.opentaps.amazon.order">
+        <field name="documentId" type="id-vlong-ne"/>
+        <field name="documentMessageId" type="id"/>
+        <field name="amazonOrderId" type="id-long-ne"/>
+        <field name="amazonSessionId" type="id-long-ne"/>
+        <field name="orderDate" type="date-time"/>
+        <field name="orderPostedDate" type="date-time"/>
+        <field name="buyerEmailAddress" type="email"/>
+        <field name="buyerName" type="long-varchar"/>
+        <field name="buyerPhoneNumber" type="short-varchar"/>
+        <field name="fulfillmentMethod" type="short-varchar"/>
+        <field name="fulfillmentServiceLevel" type="short-varchar"/>
+        <field name="addressName" type="long-varchar"/>
+        <field name="addressFieldOne" type="long-varchar"/>
+        <field name="addressFieldTwo" type="long-varchar"/>
+        <field name="addressFieldThree" type="long-varchar"/>
+        <field name="addressCity" type="long-varchar"/>
+        <field name="addressStateOrRegion" type="short-varchar"/>
+        <field name="addressPostalCode" type="id"/>
+        <field name="addressCountryCode" type="id"/>
+        <field name="addressPhoneNumber" type="short-varchar"/>
+        <field name="statusId" type="id-ne"/>
+        <field name="ackStatusId" type="id-ne"/>
+        <field name="importTimestamp" type="date-time"/>
+        <field name="importFailures" type="numeric"/>
+        <field name="importErrorMessage" type="very-long"/>
+        <field name="acknowledgeTimestamp" type="date-time"/>
+        <field name="acknowledgeErrorMessage" type="very-long"/>
+        <field name="processingDocumentId" type="numeric"/>
+        <field name="acknowledgeMessageId" type="id"/>
+        <prim-key field="amazonOrderId"/>
+        <relation type="one" rel-entity-name="AmazonOrderDocument" fk-name="OA_AO_AOD">
+            <key-map field-name="documentId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="AmazonParty">
+            <key-map field-name="buyerEmailAddress"/>
+        </relation>
+        <relation type="one" rel-entity-name="StatusItem" fk-name="AO_SI">
+            <key-map field-name="statusId"/>
+        </relation>
+        <relation type="one" rel-entity-name="StatusItem" title="Ack" fk-name="AO_ASI">
+            <key-map field-name="ackStatusId" rel-field-name="statusId"/>
+        </relation>
+    </entity>
+    
+    <entity entity-name="AmazonOrderItem" package-name="org.opentaps.amazon.order">
+        <field name="amazonOrderId" type="id-long-ne"/>
+        <field name="amazonOrderItemCode" type="id-long-ne"/>
+        <field name="sku" type="short-varchar"/>
+        <field name="title" type="very-long"/>
+        <field name="quantity" type="floating-point"/>
+        <field name="productTaxCode" type="id"/>
+        <prim-key field="amazonOrderId"/>
+        <prim-key field="amazonOrderItemCode"/>
+        <relation type="one" rel-entity-name="AmazonOrder" fk-name="OA_AOI_AO">
+            <key-map field-name="amazonOrderId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="AmazonOrderItemPriceComp" package-name="org.opentaps.amazon.order">
+        <field name="amazonOrderId" type="id-long-ne"/>
+        <field name="amazonOrderItemCode" type="id-long-ne"/>
+        <field name="componentType" type="id-ne"/>
+        <field name="componentCurrency" type="id"/>
+        <field name="componentAmount" type="currency-amount"/>
+        <prim-key field="amazonOrderId"/>
+        <prim-key field="amazonOrderItemCode"/>
+        <prim-key field="componentType"/>
+        <relation type="one" rel-entity-name="AmazonOrderItem" fk-name="OA_AOIPC_AOI">
+            <key-map field-name="amazonOrderId"/>
+            <key-map field-name="amazonOrderItemCode"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="AmazonOrderItemFee" package-name="org.opentaps.amazon.order">
+        <field name="amazonOrderId" type="id-long-ne"/>
+        <field name="amazonOrderItemCode" type="id-long-ne"/>
+        <field name="feeType" type="id-ne"/>
+        <field name="feeCurrency" type="id"/>
+        <field name="feeAmount" type="currency-amount"/>
+        <prim-key field="amazonOrderId"/>
+        <prim-key field="amazonOrderItemCode"/>
+        <prim-key field="feeType"/>
+        <relation type="one" rel-entity-name="AmazonOrderItem" fk-name="OA_AOIF_AOI">
+            <key-map field-name="amazonOrderId"/>
+            <key-map field-name="amazonOrderItemCode"/>
+        </relation>
+    </entity>
+    
+    <entity entity-name="AmazonOrderItemTaxJurisdtn" package-name="org.opentaps.amazon.order">
+        <field name="amazonOrderId" type="id-long-ne"/>
+        <field name="amazonOrderItemCode" type="id-long-ne"/>
+        <field name="itemTaxJurisTypeId" type="id-ne"/>
+        <field name="taxType" type="id"/>
+        <field name="taxLocationCode" type="id"/>
+        <field name="taxJurisDistrict" type="short-varchar"/>
+        <field name="taxJurisCity" type="short-varchar"/>
+        <field name="taxJurisCounty" type="short-varchar"/>
+        <field name="taxJurisState" type="id"/>
+        <prim-key field="itemTaxJurisTypeId"/>
+        <relation type="one" rel-entity-name="AmazonOrderItem" fk-name="OA_AOITJ_AOI">
+            <key-map field-name="amazonOrderId"/>
+            <key-map field-name="amazonOrderItemCode"/>
+        </relation>
+        <relation type="one" rel-entity-name="AmazonOrderTaxJurisToAuth" fk-name="OA_AOITJ_AOTJTA">
+            <key-map field-name="taxJurisDistrict"/>
+            <key-map field-name="taxJurisCity"/>
+            <key-map field-name="taxJurisCounty"/>
+            <key-map field-name="taxJurisState"/>
+        </relation>
+    </entity>
+    
+    <entity entity-name="AmazonOrderItemTaxAmount" package-name="org.opentaps.amazon.order">
+        <field name="amazonOrderId" type="id-long-ne"/>
+        <field name="amazonOrderItemCode" type="id-long-ne"/>
+        <field name="itemTaxJurisTypeId" type="id-ne"/>
+        <field name="taxAmountType" type="id"/>
+        <field name="taxJurisdictionType" type="id"/>
+        <field name="taxCurrency" type="short-varchar"/>
+        <field name="taxAmount" type="currency-amount"/>
+        <prim-key field="amazonOrderId"/>
+        <prim-key field="amazonOrderItemCode"/>
+        <prim-key field="itemTaxJurisTypeId"/>
+        <prim-key field="taxAmountType"/>
+        <prim-key field="taxJurisdictionType"/>
+        <relation type="one" rel-entity-name="AmazonOrderItem" fk-name="OA_AOITA_AOI">
+            <key-map field-name="amazonOrderId"/>
+            <key-map field-name="amazonOrderItemCode"/>
+        </relation>
+        <relation type="one" rel-entity-name="AmazonOrderItemTaxJurisdtn" fk-name="OA_AOITA_AOITJ">
+            <key-map field-name="itemTaxJurisTypeId"/>
+        </relation>
+    </entity>
+    
+    <entity entity-name="AmazonOrderItemTaxRate" package-name="org.opentaps.amazon.order">
+        <field name="amazonOrderId" type="id-long-ne"/>
+        <field name="amazonOrderItemCode" type="id-long-ne"/>
+        <field name="itemTaxJurisTypeId" type="id-ne"/>
+        <field name="taxJurisdictionType" type="id"/>
+        <field name="taxRate" type="floating-point"/>
+        <prim-key field="amazonOrderId"/>
+        <prim-key field="amazonOrderItemCode"/>
+        <prim-key field="itemTaxJurisTypeId"/>
+        <prim-key field="taxJurisdictionType"/>
+        <relation type="one" rel-entity-name="AmazonOrderItem" fk-name="OA_AOITR_AOI">
+            <key-map field-name="amazonOrderId"/>
+            <key-map field-name="amazonOrderItemCode"/>
+        </relation>
+        <relation type="one" rel-entity-name="AmazonOrderItemTaxJurisdtn" fk-name="OA_AOITR_AOITJ">
+            <key-map field-name="itemTaxJurisTypeId"/>
+        </relation>
+    </entity>
+    
+    <entity entity-name="AmazonOrderItemPromo" package-name="org.opentaps.amazon.order">
+        <field name="amazonOrderId" type="id-long-ne"/>
+        <field name="amazonOrderItemCode" type="id-long-ne"/>
+        <field name="promotionClaimCode" type="short-varchar"/>
+        <field name="merchantPromotionId" type="short-varchar"/>
+        <field name="promoAmountType" type="id-ne"/>
+        <field name="promoAmountCurrency" type="id"/>
+        <field name="promoAmount" type="currency-amount"/>
+        <prim-key field="amazonOrderId"/>
+        <prim-key field="amazonOrderItemCode"/>
+        <prim-key field="promotionClaimCode"/>
+        <prim-key field="merchantPromotionId"/>
+        <prim-key field="promoAmountType"/>
+        <relation type="one" rel-entity-name="AmazonOrderItem" fk-name="OA_AOIP_AOI">
+            <key-map field-name="amazonOrderId"/>
+            <key-map field-name="amazonOrderItemCode"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="AmazonOrderItemFulfillment" package-name="org.opentaps.amazon.order">
+        <field name="amazonOrderId" type="id-long-ne"/>
+        <field name="amazonOrderItemCode" type="id-long-ne"/>
+        <field name="quantity" type="floating-point"/>
+        <field name="fulfillmentDate" type="date-time"/>
+        <field name="shipmentId" type="id-ne"/>
+        <field name="shipmentItemSeqId" type="id-ne"/>
+        <field name="carrierPartyId" type="id-ne"/>
+        <field name="shipmentMethodTypeId" type="id-ne"/>
+        <field name="trackingIdNumber" type="short-varchar"/>
+        <field name="itemIssuanceId" type="id-ne"/>
+        <field name="shipmentPackageSeqId" type="id-ne"/>
+        <field name="shipmentRouteSegmentId" type="id"/>
+        <field name="ackStatusId" type="id-ne"/>
+        <field name="ackFailures" type="numeric"/>
+        <field name="processingDocumentId" type="numeric"/>
+        <field name="acknowledgeMessageId" type="id"/>
+        <field name="acknowledgeTimestamp" type="date-time"/>
+        <field name="acknowledgeErrorMessage" type="very-long"/>
+        <prim-key field="amazonOrderId"/>
+        <prim-key field="amazonOrderItemCode"/>
+        <prim-key field="shipmentId"/>
+        <prim-key field="shipmentItemSeqId"/>
+        <prim-key field="shipmentPackageSeqId"/>
+        <prim-key field="itemIssuanceId"/>
+        <relation type="one" rel-entity-name="AmazonOrderItem" fk-name="OA_AOIFF_AOI">
+            <key-map field-name="amazonOrderId"/>
+            <key-map field-name="amazonOrderItemCode"/>
+        </relation>
+        <relation type="one" rel-entity-name="ShipmentMethodType" fk-name="OA_AOIFF_SMT">
+            <key-map field-name="shipmentMethodTypeId"/>
+        </relation>
+    </entity>
+
+    <!-- Import/Cross-reference entities -->
+    
+    <entity entity-name="AmazonOrderImport" package-name="org.opentaps.amazon.order">
+        <field name="amazonOrderId" type="id-long-ne"/>
+        <field name="buyerPartyId" type="long-varchar"/>
+        <field name="buyerPhoneContactMechId" type="id"/>
+        <field name="addressPostalContactMechId" type="id"/>
+        <field name="addressPhoneContactMechId" type="id"/>
+        <field name="orderId" type="id"/>
+        <prim-key field="amazonOrderId"/>
+        <relation type="one" rel-entity-name="AmazonOrder" fk-name="OA_AOIM_AO">
+            <key-map field-name="amazonOrderId"/>
+        </relation>
+        <relation type="one" rel-entity-name="OrderHeader" fk-name="OA_AOIM_OH">
+            <key-map field-name="orderId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="AmazonOrderItemImport" package-name="org.opentaps.amazon.order">
+        <field name="amazonOrderId" type="id-long-ne"/>
+        <field name="amazonOrderItemCode" type="id-long-ne"/>
+        <field name="orderId" type="id"/>
+        <field name="orderItemSeqId" type="id"/>
+        <field name="productId" type="id"/>
+        <prim-key field="amazonOrderId"/>
+        <prim-key field="amazonOrderItemCode"/>
+        <relation type="one" rel-entity-name="AmazonOrder" fk-name="OA_AOIIM_AO">
+            <key-map field-name="amazonOrderId"/>
+        </relation>
+        <relation type="one" rel-entity-name="AmazonOrderItem" fk-name="OA_AOIIM_AOI">
+            <key-map field-name="amazonOrderId"/>
+            <key-map field-name="amazonOrderItemCode"/>
+        </relation>
+        <relation type="one" rel-entity-name="OrderItem" fk-name="OA_AOIIM_OI">
+            <key-map field-name="orderId"/>
+            <key-map field-name="orderItemSeqId"/>
+        </relation>
+    </entity>
+    
+    <entity entity-name="AmazonParty" package-name="org.opentaps.amazon.order">
+        <field name="buyerEmailAddress" type="email"/>
+        <field name="partyId" type="id-ne"/>
+        <field name="emailContactMechId" type="id-ne"/>
+        <prim-key field="buyerEmailAddress"/>
+        <relation type="one" rel-entity-name="Person" fk-name="OA_AP_P">
+            <key-map field-name="partyId"/>
+        </relation>
+        <relation type="one" rel-entity-name="ContactMech" fk-name="OA_AP_CM">
+            <key-map field-name="emailContactMechId" rel-field-name="contactMechId"/>
+        </relation>
+    </entity>
+    
+    <entity entity-name="AmazonOrderTaxJurisToAuth" package-name="org.opentaps.amazon.order">
+        <field name="taxJurisDistrict" type="short-varchar"/>
+        <field name="taxJurisCity" type="short-varchar"/>
+        <field name="taxJurisCounty" type="short-varchar"/>
+        <field name="taxJurisState" type="id"/>
+        <field name="taxAuthPartyId" type="id-ne"/>
+        <field name="taxAuthGeoId" type="id-ne"/>
+        <prim-key field="taxJurisDistrict"/>
+        <prim-key field="taxJurisCity"/>
+        <prim-key field="taxJurisCounty"/>
+        <prim-key field="taxJurisState"/>
+        <relation type="one" rel-entity-name="TaxAuthority" fk-name="OA_ATJTA_TA">
+            <key-map field-name="taxAuthPartyId"/>
+            <key-map field-name="taxAuthGeoId"/>
+        </relation>
+    </entity>
+</entitymodel>

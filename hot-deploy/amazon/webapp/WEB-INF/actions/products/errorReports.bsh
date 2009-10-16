@@ -1,0 +1,254 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+ 
+ import org.ofbiz.base.util.UtilMisc;
+ import org.opentaps.common.util.UtilCommon;
+ import org.opentaps.common.util.UtilMessage;
+ import org.ofbiz.entity.condition.*;
+ import org.ofbiz.entity.model.*;
+ import javolution.util.FastList;
+ import org.ofbiz.entity.util.EntityUtil;
+ import org.ofbiz.entity.util.EntityFindOptions;
+ import org.ofbiz.base.util.UtilValidate;
+ import org.opentaps.amazon.AmazonConstants;
+ import org.opentaps.common.product.UtilProduct;
+
+assembleData(dv, conditions) {
+    list = new ArrayList();
+    iterator = delegator.findListIteratorByCondition(dv, new EntityConditionList(conditions, EntityOperator.AND), null, null, UtilMisc.toList("productId"), null);
+    if (UtilValidate.isNotEmpty(iterator)) {
+        while ((result = iterator.next()) != null) {
+            data = result.getAllFields();
+            idValue = result.getString("idValue");
+            if (UtilValidate.isNotEmpty(idValue) && "UPCE".equals(result.getString("goodIdentificationTypeId"))) {
+                idValue = idValue + " " + "(" + UtilProduct.expandUPCE(idValue) + ")";
+            }
+            if (UtilValidate.isNotEmpty(idValue)) data{"idValue"} = idValue; 
+            list.add(data);
+        }
+        context{"reportDatasource"} = list;
+    }
+    iterator.close();
+}
+ 
+ 
+ report = UtilCommon.getParameter(context, "report");
+ if (UtilValidate.isEmpty(report)) {
+     Debug.logError("There is no report field in screen definition.");
+     return;
+ }
+
+ if  ("INVALID_UPC".equals(report)) {
+
+     dv = new DynamicViewEntity();
+     dv.addMemberEntity("P", "Product");
+     dv.addMemberEntity("AP", "AmazonProduct");
+     dv.addMemberEntity("GI", "GoodIdentification");
+     dv.addAlias("AP", "productId");
+     dv.addAlias("AP", "statusId");
+     dv.addAlias("AP", "ackStatusId");
+     dv.addAlias("AP", "postErrorMessage");
+     dv.addAlias("P", "productName");
+     dv.addAlias("GI", "idValue");
+     dv.addAlias("GI", "goodIdentificationTypeId");
+     dv.addViewLink("AP", "P", Boolean.FALSE, ModelKeyMap.makeKeyMapList("productId"));
+     dv.addViewLink("AP", "GI", Boolean.TRUE, ModelKeyMap.makeKeyMapList("productId"));
+
+     conditions = FastList.newInstance();
+     conditions.add(new EntityExpr("statusId", EntityOperator.NOT_EQUAL, AmazonConstants.statusProductDeleted));
+     
+     hasValidUPC = new ArrayList();
+     iterator = delegator.findListIteratorByCondition(dv, new EntityConditionList(conditions, EntityOperator.AND), null, null, UtilMisc.toList("productId"), null);
+     list = iterator.getCompleteList();
+     for (result : list) {
+         if (! ("UPCA".equals(result.getString("goodIdentificationTypeId")) || "UPCE".equals(result.getString("goodIdentificationTypeId")))) continue;
+             if (UtilValidate.isEmpty(result.getString("idValue")) ||
+                 (UtilValidate.isNotEmpty(result.getString("postErrorMessage")) && result.getString("postErrorMessage").matches("%invalid%")) ||
+             (UtilValidate.isNotEmpty(result.getString("postErrorMessage")) && result.getString("postErrorMessage").matches("%Missing UPC%")) ||
+             ! UtilProduct.isValidUPC(result.getString("idValue"))) continue;
+         hasValidUPC.add(result.getString("productId"));
+         }
+     list = EntityUtil.filterOutByCondition(list, new EntityExpr("productId", EntityOperator.IN, hasValidUPC));
+     context{"reportDatasource"} = list;
+
+     columnOrder = FastList.newInstance();
+     columnOrder.add(UtilMisc.toMap("field", "productId", "width", "10%", "title", "AmazonProductID"));
+     columnOrder.add(UtilMisc.toMap("field", "productName", "width", "65%", "title", "ProductProductName"));
+     columnOrder.add(UtilMisc.toMap("field", "idValue", "width", "25%", "title", "AmazonProductUPC"));
+     context{"columnOrder"} = columnOrder;
+
+ } else if ("NO_TAX".equals(report)) {
+
+     dv = new DynamicViewEntity();
+     dv.addMemberEntity("P", "Product");
+     dv.addMemberEntity("AP", "AmazonProduct");
+     dv.addMemberEntity("GI", "GoodIdentification");
+     dv.addAlias("AP", "productId");
+     dv.addAlias("AP", "postErrorMessage");
+     dv.addAlias("AP", "statusId");
+     dv.addAlias("P", "productName");
+     dv.addAlias("GI", "idValue");
+     dv.addAlias("GI", "goodIdentificationTypeId");
+     dv.addAlias("AP", "productTaxCode");
+     dv.addViewLink("AP", "P", Boolean.FALSE, ModelKeyMap.makeKeyMapList("productId"));
+     dv.addViewLink("AP", "GI", Boolean.TRUE, ModelKeyMap.makeKeyMapList("productId"));
+
+     conditions = FastList.newInstance();
+     conditions.add(new EntityExpr("statusId", EntityOperator.NOT_EQUAL, AmazonConstants.statusProductDeleted));
+     conditions.add(new EntityExpr(
+             new EntityExpr("goodIdentificationTypeId", EntityOperator.IN, UtilMisc.toList("UPCA", "UPCE")), 
+             EntityOperator.OR,
+             new EntityExpr("goodIdentificationTypeId", EntityOperator.EQUALS, null))
+     );
+     conditions.add(new EntityExpr("productTaxCode", EntityOperator.EQUALS, null));
+    
+     assembleData(dv, conditions);
+     
+     columnOrder = FastList.newInstance();
+     columnOrder.add(UtilMisc.toMap("field", "productId", "width", "10%", "title", "AmazonProductID"));
+     columnOrder.add(UtilMisc.toMap("field", "productName", "width", "65%", "title", "ProductProductName"));
+     columnOrder.add(UtilMisc.toMap("field", "idValue", "width", "25%", "title", "AmazonProductUPC"));
+     context{"columnOrder"} = columnOrder;
+
+ } else if ("MISS_IMAGES".equals(report)) {
+
+     dv = new DynamicViewEntity();
+     dv.addMemberEntity("P", "Product");
+     dv.addMemberEntity("AP", "AmazonProduct");
+     dv.addMemberEntity("GI", "GoodIdentification");
+     dv.addAlias("AP", "productId");
+     dv.addAlias("AP", "statusId");
+     dv.addAlias("P", "productName");
+     dv.addAlias("GI", "idValue");
+     dv.addAlias("GI", "goodIdentificationTypeId");
+     dv.addAlias("P", (String)AmazonConstants.imageTypes.get("Main"));
+     dv.addViewLink("AP", "P", Boolean.FALSE, ModelKeyMap.makeKeyMapList("productId"));
+     dv.addViewLink("AP", "GI", Boolean.TRUE, ModelKeyMap.makeKeyMapList("productId"));
+
+     conditions = FastList.newInstance();
+     conditions.add(new EntityExpr("statusId", EntityOperator.NOT_EQUAL, AmazonConstants.statusProductDeleted));
+     conditions.add(new EntityExpr(
+             new EntityExpr("goodIdentificationTypeId", EntityOperator.IN, UtilMisc.toList("UPCA", "UPCE")), 
+             EntityOperator.OR,
+             new EntityExpr("goodIdentificationTypeId", EntityOperator.EQUALS, null))
+     );
+     conditions.add(new EntityExpr((String)AmazonConstants.imageTypes.get("Main"), EntityOperator.EQUALS, null));
+
+     assembleData(dv, conditions);
+
+     columnOrder = FastList.newInstance();
+     columnOrder.add(UtilMisc.toMap("field", "productId", "width", "10%", "title", "AmazonProductID"));
+     columnOrder.add(UtilMisc.toMap("field", "productName", "width", "65%", "title", "ProductProductName"));
+     columnOrder.add(UtilMisc.toMap("field", "idValue", "width", "25%", "title", "AmazonProductUPC"));
+     context{"columnOrder"} = columnOrder;
+
+ } else if ("BAD_IMAGES".equals(report)) {
+
+     dv = new DynamicViewEntity();
+     dv.addMemberEntity("P", "Product");
+     dv.addMemberEntity("AP", "AmazonProduct");
+     dv.addMemberEntity("APIA", "AmazonProductImageAck");
+     dv.addMemberEntity("GI", "GoodIdentification");
+     dv.addAlias("APIA", "productId");
+     dv.addAlias("APIA", "ackStatusId");
+     dv.addAlias("AP", "statusId");
+     dv.addAlias("P", "productName");
+     dv.addAlias("GI", "idValue");
+     dv.addAlias("GI", "goodIdentificationTypeId");
+     dv.addAlias("APIA", "acknowledgeErrorMessage");
+     dv.addAlias("APIA", "productContentTypeId");
+     dv.addViewLink("APIA", "P", Boolean.FALSE, ModelKeyMap.makeKeyMapList("productId"));
+     dv.addViewLink("APIA", "AP", Boolean.FALSE, ModelKeyMap.makeKeyMapList("productId"));
+     dv.addViewLink("APIA", "GI", Boolean.TRUE, ModelKeyMap.makeKeyMapList("productId"));
+
+     conditions = FastList.newInstance();
+     conditions.add(new EntityExpr(
+             new EntityExpr("statusId", EntityOperator.EQUALS, AmazonConstants.statusProductError), 
+             EntityOperator.AND,
+             new EntityExpr("ackStatusId", EntityOperator.EQUALS, AmazonConstants.statusProductAckError))
+     );
+     conditions.add(new EntityExpr(
+             new EntityExpr("goodIdentificationTypeId", EntityOperator.IN, UtilMisc.toList("UPCA", "UPCE")), 
+             EntityOperator.OR,
+             new EntityExpr("goodIdentificationTypeId", EntityOperator.EQUALS, null))
+     );
+     conditions.add(new EntityExpr("acknowledgeErrorMessage", EntityOperator.NOT_EQUAL, null));
+
+    list = new ArrayList();
+    iterator = delegator.findListIteratorByCondition(dv, new EntityConditionList(conditions, EntityOperator.AND), null, null, UtilMisc.toList("productId"), null);
+    if (UtilValidate.isNotEmpty(iterator)) {
+        while ((result = iterator.next()) != null) {
+            data = result.getAllFields();
+            idValue = result.getString("idValue");
+            if (UtilValidate.isNotEmpty(idValue) && "UPCE".equals(result.getString("goodIdentificationTypeId"))) {
+                idValue = idValue + " " + "(" + UtilProduct.expandUPCE(idValue) + ")";
+            }
+            if (UtilValidate.isNotEmpty(idValue)) data{"idValue"} = idValue; 
+            if (UtilValidate.isNotEmpty(result.getString("productContentTypeId"))) data{"productContentTypeId"} = ModelUtil.dbNameToVarName(result.getString("productContentTypeId")); 
+            list.add(data);
+        }
+        context{"reportDatasource"} = list;
+    }
+    iterator.close();
+
+     columnOrder = FastList.newInstance();
+     columnOrder.add(UtilMisc.toMap("field", "productId", "width", "10%", "title", "AmazonProductID"));
+     columnOrder.add(UtilMisc.toMap("field", "productName", "width", "35%", "title", "ProductProductName"));
+     columnOrder.add(UtilMisc.toMap("field", "idValue", "width", "20%", "title", "AmazonProductUPC"));
+     columnOrder.add(UtilMisc.toMap("field", "productContentTypeId", "width", "10%", "title", "AmazonProductField"));
+     columnOrder.add(UtilMisc.toMap("field", "acknowledgeErrorMessage", "width", "25%", "title", "AmazonProductErrorMessage"));
+     context{"columnOrder"} = columnOrder;
+     
+ } else if ("ACK_ERRORS".equals(report)) {
+
+     dv = new DynamicViewEntity();
+     dv.addMemberEntity("P", "Product");
+     dv.addMemberEntity("AP", "AmazonProduct");
+     dv.addMemberEntity("GI", "GoodIdentification");
+     dv.addAlias("AP", "productId");
+     dv.addAlias("AP", "statusId");
+     dv.addAlias("AP", "ackStatusId");
+     dv.addAlias("P", "productName");
+     dv.addAlias("GI", "idValue");
+     dv.addAlias("GI", "goodIdentificationTypeId");
+     dv.addAlias("AP", "acknowledgeErrorMessage");
+     dv.addAlias("AP", "postErrorMessage");
+     dv.addViewLink("AP", "P", Boolean.FALSE, ModelKeyMap.makeKeyMapList("productId"));
+     dv.addViewLink("AP", "GI", Boolean.TRUE, ModelKeyMap.makeKeyMapList("productId"));
+
+     conditions = FastList.newInstance();
+     conditions.add(new EntityExpr(
+             new EntityExpr("statusId", EntityOperator.EQUALS, AmazonConstants.statusProductError), 
+             EntityOperator.AND,
+             new EntityExpr("ackStatusId", EntityOperator.EQUALS, AmazonConstants.statusProductAckError))
+     );
+     conditions.add(new EntityExpr(
+             new EntityExpr("goodIdentificationTypeId", EntityOperator.IN, UtilMisc.toList("UPCA", "UPCE")), 
+             EntityOperator.OR,
+             new EntityExpr("goodIdentificationTypeId", EntityOperator.EQUALS, null))
+     );
+     conditions.add(new EntityExpr("acknowledgeErrorMessage", EntityOperator.NOT_EQUAL, null));
+
+     assembleData(dv, conditions);
+
+     columnOrder = FastList.newInstance();
+     columnOrder.add(UtilMisc.toMap("field", "productId", "width", "10%", "title", "AmazonProductID"));
+     columnOrder.add(UtilMisc.toMap("field", "productName", "width", "45%", "title", "ProductProductName"));
+     columnOrder.add(UtilMisc.toMap("field", "idValue", "width", "25%", "title", "AmazonProductUPC"));
+     columnOrder.add(UtilMisc.toMap("field", "ackErrorMessage", "width", "20%", "title", "AmazonProductErrorMessage"));
+     context{"columnOrder"} = columnOrder;
+
+ }

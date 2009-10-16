@@ -1,0 +1,43 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+ 
+ import org.ofbiz.base.util.UtilMisc;
+ import org.ofbiz.base.util.UtilDateTime;
+ import org.ofbiz.entity.condition.EntityExpr;
+ import org.ofbiz.entity.condition.EntityOperator;
+ 
+// Find all products
+conditions = UtilMisc.toList(new EntityExpr("productId", EntityOperator.NOT_EQUAL, null));
+ 
+ listProductsBuilder() {
+     entityName = "ViewAmazonProducts";
+     orderBy = UtilMisc.toList("productId");
+     where = conditions;
+     
+	build(page) {
+     	newPage = new ArrayList();
+     	for (row : page) {
+        	amazonProduct = row.getAllFields();
+         	newPage.add(amazonProduct);
+     	}
+     	return newPage;
+	}
+     
+    return this;
+ }
+ 
+ context.put("amazonProducts", listProductsBuilder());
+ 

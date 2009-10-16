@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Services that synchronize the Opentaps and Amazon models, including ECA and batch services.</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    
+    <service name="opentaps.amazon.batchUpdateAmazonProducts" engine="java" location="org.opentaps.amazon.sync.AmazonSyncServices" invoke="batchUpdateAmazonProducts" transaction-timeout="7200">
+        <description>
+            Batch updating service that initializes new products
+            in the Opentaps Amazon system and checks if any Amazon
+            published products should be updated.  This does not
+            handle price or inventory updates.
+        </description>
+    </service>
+
+    <service name="opentaps.amazon.updateAmazonProductPrices" engine="java" location="org.opentaps.amazon.sync.AmazonSyncServices" invoke="updateAmazonProductPrices" default-entity-name="ProductPrice">
+        <description>Updates AmazonProductPrice statusId to reflect changes to corresponding ProductPrice records</description>
+        <auto-attributes mode="IN" include="pk" optional="false"/>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>
+    </service>
+
+    <service name="opentaps.amazon.updateAmazonProductInventory" engine="java" location="org.opentaps.amazon.sync.AmazonSyncServices" invoke="updateAmazonProductInventory">
+        <description>Updates AmazonProductInventory statusId to reflect changes to corresponding product inventory levels or ProductFacility records</description>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="facilityId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <!--service name="opentaps.amazon.updateAmazonInventory" engine="java" location="org.opentaps.amazon.sync.AmazonEcaServices" invoke="updateAmazonInventory">
+        <description>ECA service that checks to see if Amazon inventory should be updated.</description>
+    </service-->
+
+</services>

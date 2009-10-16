@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="products" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <script location="component://amazon/webapp/WEB-INF/actions/products/shortcuts.bsh"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="findProduct">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="AmazonProductTitleFind"/>  
+                <set field="sectionHeaderUiLabel" value="AmazonProductTitleFind"/>  
+                <script location="component://amazon/webapp/WEB-INF/actions/products/findProducts.bsh"/> 
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://amazon/webapp/products/listProducts.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="viewProduct">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="AmazonProductTitleView"/>  
+                <set field="sectionHeaderUiLabel" value="AmazonProductTitleView"/>  
+                <script location="component://amazon/webapp/WEB-INF/actions/products/viewProduct.bsh"/> 
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://amazon/webapp/products/viewProduct.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createOrUpdateProduct">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="AmazonProductTitleEdit"/>  
+                <set field="sectionHeaderUiLabel" value="AmazonProductTitleEdit"/>  
+                <script location="component://amazon/webapp/WEB-INF/actions/products/createOrUpdateAmazonProduct.bsh"/> 
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://amazon/webapp/products/createOrUpdateAmazonProduct.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="productFeedProcessingAgeWarning">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
+                <property-map resource="AmazonUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="AmazonErrorUiLabels" map-name="uiLabelMap" global="true"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://amazon/webapp/products/productFeedProcessingAgeWarning.ftl"/></html>
+                </platform-specific> 
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="amazonProductFields">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://amazon/webapp/products/amazonProductFields.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="errorEmail">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
+                <property-map resource="AmazonUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="AmazonErrorUiLabels" map-name="uiLabelMap" global="true"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://amazon/webapp/products/errorEmail.ftl"/></html>
+                </platform-specific> 
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="errorReportsSummary">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="AmazonProductTitleErrorReports"/>  
+                <set field="sectionHeaderUiLabel" value="AmazonProductTitleErrorReports"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://amazon/webapp/products/errorReportsSummary.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="errorReportsUPC">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="AmazonProductErrorReportUpc"/>  
+                <set field="reportHeaderUiLabel" value="AmazonProductErrorReportUpc"/>
+                <set field="report" value="INVALID_UPC"/>
+                <script location="component://amazon/webapp/WEB-INF/actions/products/errorReports.bsh"/>  
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://amazon/webapp/products/errorReports.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="errorReportsTax">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="AmazonProductErrorReportTax"/>  
+                <set field="reportHeaderUiLabel" value="AmazonProductErrorReportTax"/>
+                <set field="report" value="NO_TAX"/>
+                <script location="component://amazon/webapp/WEB-INF/actions/products/errorReports.bsh"/>  
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://amazon/webapp/products/errorReports.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="errorReportsMissImages">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="AmazonProductErrorReportMissImages"/>  
+                <set field="reportHeaderUiLabel" value="AmazonProductErrorReportMissImages"/>
+                <set field="report" value="MISS_IMAGES"/>
+                <script location="component://amazon/webapp/WEB-INF/actions/products/errorReports.bsh"/>  
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://amazon/webapp/products/errorReports.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="errorReportsBadImages">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="AmazonProductErrorReportBadImages"/>  
+                <set field="reportHeaderUiLabel" value="AmazonProductErrorReportBadImages"/>
+                <set field="report" value="BAD_IMAGES"/>
+                <script location="component://amazon/webapp/WEB-INF/actions/products/errorReports.bsh"/>  
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://amazon/webapp/products/errorReports.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="errorReportsAckErrors">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="AmazonProductErrorReportTitleAckErrors"/>  
+                <set field="reportHeaderUiLabel" value="AmazonProductErrorReportAckErrors"/>
+                <set field="report" value="ACK_ERRORS"/>
+                <script location="component://amazon/webapp/WEB-INF/actions/products/errorReports.bsh"/>  
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://amazon/webapp/products/errorReports.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

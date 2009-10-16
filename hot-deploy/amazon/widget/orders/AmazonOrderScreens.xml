@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="orders" global="true"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="unimportedOrders">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="AmazonUnimportedOrders"/>  
+                <set field="sectionHeaderUiLabel" value="AmazonUnimportedOrders"/>  
+                <script location="component://amazon/webapp/WEB-INF/actions/orders/unimportedOrders.bsh"/> 
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://amazon/webapp/orders/unimportedOrders.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="errorEmail">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
+                <property-map resource="AmazonUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="AmazonErrorUiLabels" map-name="uiLabelMap" global="true"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://amazon/webapp/orders/errorEmail.ftl"/></html>
+                </platform-specific> 
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="orderAckValidateErrorEmail">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
+                <property-map resource="AmazonUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="AmazonErrorUiLabels" map-name="uiLabelMap" global="true"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://amazon/webapp/orders/orderAckValidateErrorEmail.ftl"/></html>
+                </platform-specific> 
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="orderItemFulfillValidateErrorEmail">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
+                <property-map resource="AmazonUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="AmazonErrorUiLabels" map-name="uiLabelMap" global="true"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://amazon/webapp/orders/orderItemFulfillValidateErrorEmail.ftl"/></html>
+                </platform-specific> 
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

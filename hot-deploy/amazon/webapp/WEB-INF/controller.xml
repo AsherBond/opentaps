@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/site-conf.xsd">
+
+    <include location="component://opentaps-common/webapp/common/WEB-INF/common-controller.xml"/>
+
+    <description>Amazon.com Integration Configuration File</description>
+    <owner>Open Source Strategies, Inc. (c) 2005-2007</owner>
+    <errorpage>/error/error.jsp</errorpage>
+
+    <!-- event handlers -->
+    <handler name="java" type="request" class="org.ofbiz.webapp.event.JavaEventHandler"/>
+    <handler name="simple" type="request" class="org.ofbiz.webapp.event.SimpleEventHandler"/>
+    <handler name="service" type="request" class="org.ofbiz.webapp.event.ServiceEventHandler"/>
+    <handler name="service-multi" type="request" class="org.ofbiz.webapp.event.ServiceMultiEventHandler"/>
+
+    <!-- view handlers -->
+    <handler name="screen" type="view" class="org.ofbiz.widget.screen.ScreenWidgetViewHandler"/>
+    <handler name="screenfop" type="view" class="org.ofbiz.widget.screen.ScreenFopViewHandler"/>
+
+    <preprocessor>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="checkExternalLoginKey"/>
+    </preprocessor>
+    <postprocessor>
+    </postprocessor>
+
+    
+    <!-- ================= -->
+    <!-- Security Mappings -->
+    <!-- ================= -->
+
+    <request-map uri="checkLogin" edit="false">
+        <security https="true" auth="false"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="checkLogin" />
+        <response name="success" type="request" value="main" />
+        <response name="error" type="view" value="login" />
+    </request-map>
+    <request-map uri="login">
+        <security https="true" auth="false"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="login" />
+        <response name="success" type="request" value="main" />
+        <response name="error" type="view" value="login" />
+    </request-map>
+    <request-map uri="logout">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="logout"/>
+        <response name="success" type="request" value="checkLogin"/>
+        <response name="error" type="request" value="main" />
+    </request-map>
+
+
+    <!-- ====================== -->
+    <!-- Basic Request Mappings -->
+    <!-- ====================== -->
+
+    <request-map uri="main">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="unimportedOrders"/>
+    </request-map>
+
+
+    <!-- ========================= -->
+    <!--    Orders Request Maps    -->
+    <!-- ========================= -->
+
+    <request-map uri="unimportedOrders">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="unimportedOrders"/>
+    </request-map>
+    <request-map uri="CancelUnimportedOrder">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.amazon.cancelUnimportedOrder"/>
+        <response name="success" type="request-redirect" value="unimportedOrders"/>
+        <response name="error" type="view" value="unimportedOrders"/>
+    </request-map>
+    
+    
+    <!-- =========================== -->
+    <!--    Products Request Maps    -->
+    <!-- =========================== -->
+
+    <request-map uri="findProduct">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findProduct"/>
+    </request-map>
+    <request-map uri="createProduct">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createProduct"/>
+    </request-map>
+    <request-map uri="updateProduct">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateProduct"/>
+    </request-map>
+    <request-map uri="viewProduct">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewProduct"/>
+    </request-map>
+    <request-map uri="createOrUpdateAmazonProduct">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.amazon.createOrUpdateAmazonProduct"/>
+        <response name="success" type="request-redirect" value="updateProduct"/>
+        <response name="error" type="view" value="updateProduct"/>
+    </request-map>
+    <request-map uri="getValidAmazonBrowseNodeValues">
+        <event type="java" path="org.opentaps.amazon.AmazonEvents" invoke="getValidAttributesForItemTypeJSON"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="errorReportsSummary">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="errorReportsSummary"/>
+    </request-map>
+    <request-map uri="errorReportsUPC">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="errorReportsUPC"/>
+    </request-map>
+    <request-map uri="errorReportsTax">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="errorReportsTax"/>
+    </request-map>
+    <request-map uri="errorReportsMissImages">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="errorReportsMissImages"/>
+    </request-map>
+    <request-map uri="errorReportsBadImages">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="errorReportsBadImages"/>
+    </request-map>
+    <request-map uri="errorReportsAckErrors">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="errorReportsAckErrors"/>
+    </request-map>
+    
+    <!-- ================= -->
+    <!--     View Maps     -->
+    <!-- ================= -->
+
+    <view-map name="login" type="screen" page="component://opentaps-common/widget/screens/common/CommonScreens.xml#login"/>
+    <view-map name="error" page="/error/error.jsp"/>
+
+    
+    <!-- ====================== -->
+    <!--    Orders View Maps    -->
+    <!-- ====================== -->
+
+    <view-map name="unimportedOrders" type="screen" page="component://amazon/widget/orders/AmazonOrderScreens.xml#unimportedOrders"/>
+
+    
+    <!-- ======================== -->
+    <!--    Products View Maps    -->
+    <!-- ======================== -->
+
+    <view-map name="findProduct" type="screen" page="component://amazon/widget/products/AmazonProductScreens.xml#findProduct"/>
+    <view-map name="createProduct" type="screen" page="component://amazon/widget/products/AmazonProductScreens.xml#createOrUpdateProduct"/>
+    <view-map name="updateProduct" type="screen" page="component://amazon/widget/products/AmazonProductScreens.xml#createOrUpdateProduct"/>
+    <view-map name="viewProduct" type="screen" page="component://amazon/widget/products/AmazonProductScreens.xml#viewProduct"/>
+    <view-map name="errorReportsSummary" type="screen" page="component://amazon/widget/products/AmazonProductScreens.xml#errorReportsSummary"/>
+    <view-map name="errorReportsUPC" type="screen" page="component://amazon/widget/products/AmazonProductScreens.xml#errorReportsUPC"/>
+    <view-map name="errorReportsTax" type="screen" page="component://amazon/widget/products/AmazonProductScreens.xml#errorReportsTax"/>
+    <view-map name="errorReportsMissImages" type="screen" page="component://amazon/widget/products/AmazonProductScreens.xml#errorReportsMissImages"/>
+    <view-map name="errorReportsBadImages" type="screen" page="component://amazon/widget/products/AmazonProductScreens.xml#errorReportsBadImages"/>
+    <view-map name="errorReportsAckErrors" type="screen" page="component://amazon/widget/products/AmazonProductScreens.xml#errorReportsAckErrors"/>
+
+</site-conf>

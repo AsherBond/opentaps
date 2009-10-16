@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Opentaps Amazon Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    
+    <service name="opentaps.amazon.storePendingOrderDocuments" engine="java" location="org.opentaps.amazon.order.AmazonOrderServices" invoke="storePendingOrderDocuments" transaction-timeout="7200">
+        <description>Stores any pending order documents from Amazon that don't exist in the AmazonOrderDocument entity</description>
+    </service>
+    
+    <service name="opentaps.amazon.acknowledgeOrderDocumentDownload" engine="java" location="org.opentaps.amazon.order.AmazonOrderServices" invoke="acknowledgeOrderDocumentDownload" transaction-timeout="7200">
+        <description>Posts acknowledgement to Amazon of successfully downloaded order documents</description>
+    </service>
+    
+    <service name="opentaps.amazon.extractOrdersForImport" engine="java" location="org.opentaps.amazon.order.AmazonOrderServices" invoke="extractOrdersForImport" use-transaction="false">
+        <description>Extracts order data from Amazon order documents and stores it in transitional import tables</description>
+    </service>
+    
+    <service name="opentaps.amazon.importOrders" engine="java" location="org.opentaps.amazon.order.AmazonOrderServices" invoke="importOrders" use-transaction="false">
+        <description>Creates the constellation of order-related data from any unimported Amazon orders</description>
+    </service>
+    
+    <service name="opentaps.amazon.acknowledgeImportedOrders" engine="java" location="org.opentaps.amazon.order.AmazonOrderServices" invoke="acknowledgeImportedOrders" transaction-timeout="7200">
+        <description>Posts acknowledgement to Amazon of successfully imported orders</description>
+    </service>
+    
+    <service name="opentaps.amazon.queueShippedItemsForFulfillmentPost" engine="java" location="org.opentaps.amazon.order.AmazonOrderServices" invoke="queueShippedItemsForFulfillmentPost">
+        <description>Queues any shipment quantities related to a Shipment/ShipmentRouteSegment derived from an Amazon order for fulfillment confirmation posting</description>
+        <auto-attributes entity-name="Shipment" include="pk" mode="IN" optional="false"/>
+        <auto-attributes entity-name="ShipmentRouteSegment" include="pk" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="opentaps.amazon.acknowledgeFulfilledOrderItems" engine="java" location="org.opentaps.amazon.order.AmazonOrderServices" invoke="acknowledgeFulfilledOrderItems" transaction-timeout="7200">
+        <description>Posts acknowledgement to Amazon of shipped order items</description>
+    </service>
+    
+    <service name="opentaps.amazon.cancelUnimportedOrder" engine="java" location="org.opentaps.amazon.order.AmazonOrderServices" invoke="cancelUnimportedOrder" transaction-timeout="7200">
+        <description>Posts acknowledgement to Amazon of an unsuccessfully imported order</description>
+        <attribute name="amazonOrderId" type="String" mode="IN" optional="false"/>
+    </service>
+    
+    <service name="opentaps.amazon.checkAcknowledgementStatuses" engine="java" location="org.opentaps.amazon.order.AmazonOrderServices" invoke="checkAcknowledgementStatuses" transaction-timeout="7200">
+        <description>Checks the processing status of any outstanding posted documents attached to Amazon-related objects, and if the processing report is ready, downloads and parses it in order to update the objects' acknowledgement statuses
+        This is used to check acknowledgement of ALL posted documents: orders as well as product related</description>
+    </service>
+
+    <service name="opentaps.amazon.createOrUpdateAmazonProduct" engine="java" location="org.opentaps.amazon.product.AmazonProductServices" invoke="createOrUpdateAmazonProduct" default-entity-name="AmazonProduct">
+        <description>Creates new entry in the Amazon product staging table from information in the opentaps product catalog</description>
+        <auto-attributes mode="INOUT" include="pk" optional="false"/>    
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>    
+        <attribute name="usedForId" mode="IN" type="List" optional="true"/>
+        <attribute name="targetAudienceId" mode="IN" type="List" optional="true"/>
+        <attribute name="otherItemAttrId" mode="IN" type="List" optional="true"/>
+        <attribute name="bulletPoint" mode="IN" type="List" optional="true"/>
+        <attribute name="searchTerm" mode="IN" type="List" optional="true"/>
+    </service>
+    
+    <service name="opentaps.amazon.publishProductsToAmazon" engine="java" location="org.opentaps.amazon.product.AmazonProductServices" invoke="publishProductsToAmazon" transaction-timeout="7200">
+        <description>
+            Service looks over new and changed products in the AmazonProducts staging table and posts them 
+            to Amazon.com and changes their status back to Published.
+        </description>
+        <attribute name="productId" mode="IN" type="String" optional="true"/>
+    </service>
+
+    <service name="opentaps.amazon.publishProductPriceToAmazon" engine="java" location="org.opentaps.amazon.product.AmazonProductServices" invoke="publishProductPriceToAmazon" transaction-timeout="7200">
+        <description>
+            Service looks over new and changed prices for listed products in the AmazonProductPrice staging table
+            and posts them to Amazon.com and changes their status back to Published.
+        </description>
+        <attribute name="productId" mode="IN" type="String" optional="true"/>
+    </service>
+   
+    <service name="opentaps.amazon.publishProductImagesToAmazon" engine="java" location="org.opentaps.amazon.product.AmazonProductServices" invoke="publishProductImagesToAmazon" transaction-timeout="7200">
+        <description>
+            Service looks over new and changed product images in the AmazonProductImage staging table and posts 
+            them to Amazon.com and changes their status back to Published.
+        </description>
+        <attribute name="productId" mode="IN" type="String" optional="true"/>
+    </service>
+
+    <service name="opentaps.amazon.publishProductInventoryToAmazon" engine="java" location="org.opentaps.amazon.product.AmazonProductServices" invoke="publishProductInventoryToAmazon" transaction-timeout="7200">
+        <description>Posts inventory data relating to any new or changed AmazonProductInventory records to Amazon</description>
+        <attribute name="productId" mode="IN" type="String" optional="true"/>
+    </service>
+    
+    <service name="opentaps.amazon.deleteProductsFromAmazon" engine="java" location="org.opentaps.amazon.product.AmazonProductServices" invoke="deleteProductsFromAmazon" transaction-timeout="7200">
+        <description>Service deletes products from Amazon.com</description>
+    </service>
+
+    <service name="opentaps.amazon.checkLastFeedProcessingDocumentDownloadSuccess" engine="java" location="org.opentaps.amazon.product.AmazonProductServices" invoke="checkLastFeedProcessingDocumentDownloadSuccess">
+        <description>Checks the time of the last successful feed processing document download against a configurable threshold and sends a warning email if the last success
+            was too long in the past (threshold is configurable in the opentaps.amazon.error.email.productFeedProcessingAgeWarning.thresholdHours property</description>
+    </service>
+
+    <service name="opentaps.amazon.checkSKUChangeAllowed" engine="java" location="org.opentaps.amazon.product.AmazonProductServices" invoke="checkSKUChangeAllowed">
+        <description>Returns an error if the Amazon component is using GoodIdentifications</description>
+    </service>
+
+</services>

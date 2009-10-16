@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+    <title>Entity definitions for the Opentaps Amazon component product integration</title>
+    <copyright>Copyright (c) 2005 - 2007 Open Source Strategies Inc.</copyright>
+
+    <!-- Product Feed-related entities -->
+    
+    <entity entity-name="AmazonProduct" package-name="org.opentaps.amazon.product">
+        <description>Main entry to store product data required by Amazon.com</description>
+
+        <field name="productId" type="id-ne"/>
+        
+        <field name="statusId" type="id-ne"/>
+        <field name="productTaxCode" type="id"/>
+        <field name="releaseDate" type="date-time"/>
+        <field name="itemTypeId" type="id-long"/>
+        <field name="nodeId" type="id"/>
+        <field name="priority" type="numeric"/>
+        <field name="browseExclusion" type="indicator"/>
+        <field name="recommendationExclusion" type="indicator"/>
+        <field name="tier" type="numeric"/>
+        <field name="purchasingCategory" type="short-varchar"/>
+        <field name="purchasingSubCategory" type="short-varchar"/>
+        <field name="packagingType" type="short-varchar"/>
+        <field name="underlyingAvailability" type="short-varchar"/>
+        <field name="replenishmentCategory" type="short-varchar"/>
+        <field name="dropShipStatus" type="short-varchar"/>
+        <field name="outOfStockWebsiteMessage" type="short-varchar"/>
+        <field name="registeredParameter" type="short-varchar"/>
+        <field name="processingDocumentId" type="numeric"/>
+        <field name="postTimestamp" type="date-time"/>
+        <field name="postErrorMessage" type="very-long"/>
+        <field name="postFailures" type="numeric"/>
+        <field name="ackStatusId" type="id-ne"/>
+        <field name="acknowledgeTimestamp" type="date-time"/>
+        <field name="acknowledgeErrorMessage" type="very-long"/>
+        <field name="acknowledgeMessageId" type="id"/>
+        <prim-key field="productId"/>
+        <relation rel-entity-name="Product" type="one" fk-name="OA_AP_PR">
+            <key-map field-name="productId"/>
+        </relation>
+        <relation rel-entity-name="GoodIdentification" type="many" fk-name="OA_APR_GI">
+            <key-map field-name="productId"/>
+        </relation>
+        <relation rel-entity-name="StatusItem" type="one" fk-name="OA_APR_P">
+            <key-map field-name="statusId"/>
+        </relation>
+        <relation rel-entity-name="AmazonProductBrowseNode" type="one" fk-name="OA_AP_APBN">
+            <key-map field-name="nodeId"/>
+        </relation>
+        <relation rel-entity-name="AmazonProductItemType" type="one" fk-name="OA_AP_APIT">
+            <key-map field-name="itemTypeId"/>
+        </relation>
+    </entity>
+    
+    <entity entity-name="AmazonProductSearchTerms" package-name="org.opentaps.amazon.product">
+        <description>Provide specific search terms to easy find product on Amazon.com</description>
+        <field name="searchTermId" type="id-ne"/>
+        <field name="productId" type="id-ne"/>
+        <field name="description" type="short-varchar"/>
+        <prim-key field="searchTermId"/>
+        <prim-key field="productId"/>
+        <relation rel-entity-name="AmazonProduct" type="one" fk-name="OA_APST_AP">
+            <key-map field-name="productId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="AmazonProductBulletPoint" package-name="org.opentaps.amazon.product">
+        <description>Used to highlight some of the product's most important qualities.</description>
+        <field name="bulletPointId" type="id-ne"/>
+        <field name="productId" type="id-ne"/>
+        <field name="description" type="very-long"/>
+        <prim-key field="bulletPointId"/>
+        <prim-key field="productId"/>
+        <relation rel-entity-name="AmazonProduct" type="one" fk-name="OA_APBP_AP">
+            <key-map field-name="productId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="AmazonUsedForValue" package-name="org.opentaps.amazon.product">
+        <description></description>
+        <field name="productId" type="id-ne"/>
+        <field name="usedForId" type="id-long-ne"/>
+        <prim-key field="productId"/>
+        <prim-key field="usedForId"/>
+        <relation rel-entity-name="AmazonProductUsedFor" type="one" fk-name="OA_AUFV_APUF">
+            <key-map field-name="usedForId"/>
+        </relation>
+        <relation rel-entity-name="AmazonProduct" type="one" fk-name="OA_APUFV_AP">
+            <key-map field-name="productId"/>
+        </relation>
+    </entity>
+    
+    <entity entity-name="AmazonTargetAudienceValue" package-name="org.opentaps.amazon.product">
+        <description></description>
+        <field name="productId" type="id-ne"/>
+        <field name="targetAudienceId" type="id-long-ne"/>
+        <prim-key field="productId"/>
+        <prim-key field="targetAudienceId"/>
+        <relation rel-entity-name="AmazonProductTargetAudience" type="one" fk-name="OA_ATAV_APTA">
+            <key-map field-name="targetAudienceId"/>
+        </relation>
+        <relation rel-entity-name="AmazonProduct" type="one" fk-name="OA_APTAV_AP">
+            <key-map field-name="productId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="AmazonOtherItemAttrValue" package-name="org.opentaps.amazon.product">
+        <description></description>
+        <field name="productId" type="id-ne"/>
+        <field name="otherItemAttrId" type="id-long-ne"/>
+        <prim-key field="productId"/>
+        <prim-key field="otherItemAttrId"/>
+        <relation rel-entity-name="AmazonProductOtherItemAttr" type="one" fk-name="OA_AOIAV_APOTA">
+            <key-map field-name="otherItemAttrId"/>
+        </relation>
+        <relation rel-entity-name="AmazonProduct" type="one" fk-name="OA_APOAV_AP">
+            <key-map field-name="productId"/>
+        </relation>
+    </entity>
+
+    <!-- Browse-node-related entities -->
+
+    <entity entity-name="AmazonNodeMappingType" package-name="org.opentaps.amazon.product">
+        <description>
+            Values used in AmazonNodeValidAttribute and define foreign entity for relatedTo* fields.
+        </description>
+        <field name="nodeMappingTypeId" type="id-ne"/>
+        <field name="description" type="description"/>
+        <prim-key field="nodeMappingTypeId"/>
+    </entity>
+    
+    <entity entity-name="AmazonProductBrowseNode" package-name="org.opentaps.amazon.product">
+        <description></description>
+        <field name="nodeId" type="id-ne"/>
+        <field name="parentNodeId" type="id"/>
+        <field name="description" type="description"/>
+        <field name="productCategoryId" type="id"/>
+        <prim-key field="nodeId"/>
+    </entity>
+    
+    <entity entity-name="AmazonNodeValidAttribute" package-name="org.opentaps.amazon.product">
+        <description>Valid element values combination for given browse node.</description>
+        <field name="nodeValidAttrId" type="id-ne"/>
+        <field name="nodeId" type="id-ne"/>
+        <field name="itemTypeId" type="id-long">
+            <description>
+                Different records with the same nodeId presents valid item types for given node. 
+            </description>
+        </field>
+        <field name="nodeMappingTypeId" type="id-ne"/>
+        <field name="relatedToId" type="id-long-ne">
+            <description>
+                All listed in relatedTo*Id fields values should be used jointly with given itemTypeId
+            </description>
+        </field>
+        <field name="relatedTo1Id" type="id-long-ne"/>
+        <field name="relatedTo2Id" type="id-long-ne"/>
+        <field name="relatedTo3Id" type="id-long-ne"/>
+        <field name="relatedTo4Id" type="id-long-ne"/>
+        <prim-key field="nodeValidAttrId"/>
+        <prim-key field="nodeId"/>
+        <prim-key field="itemTypeId"/>
+    </entity>
+
+    <entity entity-name="AmazonProductItemType" package-name="org.opentaps.amazon.product">
+        <description>Collection of the ItemType element values for Product Feed.</description>
+        <field name="itemTypeId" type="id-long"/>
+        <field name="description" type="description"/>
+        <prim-key field="itemTypeId"/>
+    </entity>
+
+    <entity entity-name="AmazonProductUsedFor" package-name="org.opentaps.amazon.product">
+        <description>Collection of the UsedFor element values for Product Feed.</description>
+        <field name="usedForId" type="id-long-ne"/>
+        <field name="description" type="description"/>
+        <prim-key field="usedForId"/>
+    </entity>
+
+    <entity entity-name="AmazonProductTargetAudience" package-name="org.opentaps.amazon.product">
+        <description>Collection of the TargetAudience element values for Product Feed.</description>
+        <field name="targetAudienceId" type="id-long-ne"/>
+        <field name="description" type="short-varchar"/>
+        <prim-key field="targetAudienceId"/>
+    </entity>
+
+    <entity entity-name="AmazonProductOtherItemAttr" package-name="org.opentaps.amazon.product">
+        <description>Collection of the OtherItemAttribute element values for Product Feed.</description>
+        <field name="otherItemAttrId" type="id-long-ne"/>
+        <field name="description" type="description"/>
+        <prim-key field="otherItemAttrId"/>
+    </entity>
+
+    <!-- Entities related to other feeds -->
+
+    <entity entity-name="AmazonProductPrice" package-name="org.opentaps.amazon.product">
+        <field name="productId" type="id-ne"/>
+        <field name="statusId" type="id-ne"/>
+        <field name="processingDocumentId" type="numeric"/>
+        <field name="postTimestamp" type="date-time"/>
+        <field name="postErrorMessage" type="very-long"/>
+        <field name="postFailures" type="numeric"/>
+        <field name="ackStatusId" type="id-ne"/>
+        <field name="acknowledgeTimestamp" type="date-time"/>
+        <field name="acknowledgeErrorMessage" type="very-long"/>
+        <field name="acknowledgeMessageId" type="id"/>
+        <prim-key field="productId"/>
+        <relation rel-entity-name="ProductPrice" type="many" fk-name="OA_APP_PP">
+            <key-map field-name="productId"/>
+        </relation>
+        <relation rel-entity-name="AmazonProduct" type="one" fk-name="OA_APP_AP">
+            <key-map field-name="productId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="AmazonProductImage" package-name="org.opentaps.amazon.product">
+        <field name="productId" type="id-ne"/>
+        <field name="statusId" type="id-ne"/>
+        <field name="processingDocumentId" type="numeric"/>
+        <field name="postTimestamp" type="date-time"/>
+        <field name="postErrorMessage" type="very-long"/>
+        <field name="postFailures" type="numeric"/>
+        <prim-key field="productId"/>
+        <relation rel-entity-name="AmazonProduct" type="one" fk-name="OA_API_AP">
+            <key-map field-name="productId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="AmazonProductImageAck" package-name="org.opentaps.amazon.product">
+        <field name="productId" type="id-ne"/>
+        <field name="productContentTypeId" type="id-ne"/>
+        <field name="acknowledgeMessageId" type="id-ne"/>
+        <field name="ackStatusId" type="id-ne"/>
+        <field name="acknowledgeTimestamp" type="date-time"/>
+        <field name="acknowledgeErrorMessage" type="very-long"/>
+        <prim-key field="productId"/>
+        <prim-key field="productContentTypeId"/>
+        <relation rel-entity-name="AmazonProductImage" type="one" fk-name="OA_APIM_API">
+            <key-map field-name="productId"/>
+        </relation>
+        <relation rel-entity-name="ProductContentType" type="one" fk-name="OA_APIM_PCT">
+            <key-map field-name="productContentTypeId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="AmazonProductInventory" package-name="org.opentaps.amazon.product">
+        <field name="productId" type="id-ne"/>
+        <field name="statusId" type="id-ne"/>
+        <field name="processingDocumentId" type="numeric"/>
+        <field name="postTimestamp" type="date-time"/>
+        <field name="postErrorMessage" type="very-long"/>
+        <field name="postFailures" type="numeric"/>
+        <field name="ackStatusId" type="id-ne"/>
+        <field name="acknowledgeTimestamp" type="date-time"/>
+        <field name="acknowledgeErrorMessage" type="very-long"/>
+        <field name="acknowledgeMessageId" type="id"/>
+        <prim-key field="productId"/>
+        <relation rel-entity-name="AmazonProduct" type="one" fk-name="OA_APIN_AP">
+            <key-map field-name="productId"/>
+        </relation>
+    </entity>
+
+    <!-- Miscellaneous entities -->
+
+    <entity entity-name="AmazonProductFeedProcessing" package-name="org.opentaps.amazon.product">
+        <field name="processingDocumentId" type="id-ne"/>
+        <field name="feedType" type="id-ne"/>
+        <field name="acknowledgeTimestamp" type="date-time"/>
+        <prim-key field="feedType"/>
+    </entity>
+    
+    <!-- View-entities -->
+
+    <view-entity entity-name="ViewAmazonProducts" package-name="org.opentaps.amazon.product">
+        <description>
+            Join AmazonProduct and Product entities. Used for building list of Amazon products.
+        </description>
+        <member-entity entity-alias="APR" entity-name="AmazonProduct"/>
+        <member-entity entity-alias="PR" entity-name="Product"/>
+        <alias-all entity-alias="APR">
+            <exclude field="postErrorMessage"/>
+            <exclude field="acknowledgeErrorMessage"/>
+        </alias-all>
+        <alias-all entity-alias="PR"/>
+        <view-link rel-entity-alias="PR" entity-alias="APR">
+            <key-map field-name="productId"/>
+        </view-link>
+        <relation rel-entity-name="GoodIdentification" type="many" fk-name="OA_APV_GI">
+            <key-map field-name="productId"/>
+        </relation>
+        <relation rel-entity-name="StatusItem" type="one" fk-name="OA_AP_SI">
+            <key-map field-name="statusId"/>
+        </relation>
+        <relation rel-entity-name="AmazonProductBulletPoint" type="many" fk-name="OA_VAP_APBP">
+            <key-map field-name="productId"/>
+        </relation>
+        <relation rel-entity-name="AmazonProductSearchTerms" type="many" fk-name="OA_VAP_APST">
+            <key-map field-name="productId"/>
+        </relation>
+        <relation rel-entity-name="AmazonProductBrowseNode" type="one" fk-name="OA_VAP_APBN">
+            <key-map field-name="nodeId"/>
+        </relation>
+        <relation rel-entity-name="AmazonProductItemType" type="one" fk-name="OA_VAP_APIT">
+            <key-map field-name="itemTypeId"/>
+        </relation>
+        <relation rel-entity-name="AmazonUsedForValue" type="many" fk-name="OA_VAP_APUV">
+            <key-map field-name="productId"/>
+        </relation>
+        <relation rel-entity-name="AmazonTargetAudienceValue" type="many" fk-name="OA_VAP_APTA">
+            <key-map field-name="productId"/>
+        </relation>
+        <relation rel-entity-name="AmazonOtherItemAttrValue" type="many" fk-name="OA_VAP_APOA">
+            <key-map field-name="productId"/>
+        </relation>
+    </view-entity>
+
+    <view-entity entity-name="AmazonProductImageAndAck" package-name="org.opentaps.amazon.product">
+        <member-entity entity-alias="API" entity-name="AmazonProductImage"/>
+        <member-entity entity-alias="APIA" entity-name="AmazonProductImageAck"/>
+        <alias-all entity-alias="API"/>
+        <alias-all entity-alias="APIA"/>
+        <view-link entity-alias="API" rel-entity-alias="APIA" rel-optional="true">
+            <key-map field-name="productId"/>
+        </view-link>
+        <relation type="one" rel-entity-name="AmazonProductImage" fk-name="OA_APIAA_API">
+            <key-map field-name="productId"/>
+        </relation>
+        <relation type="one" rel-entity-name="AmazonProductImageAck" fk-name="OA_APIAA_APIA">
+            <key-map field-name="productId"/>
+            <key-map field-name="productContentTypeId"/>
+        </relation>
+    </view-entity>
+    
+</entitymodel>

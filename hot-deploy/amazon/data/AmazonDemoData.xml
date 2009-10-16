@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<entity-engine-xml>
+
+    <!-- These entries are required for the products to be uploaded to amazon-->
+    <AmazonProduct productId="GZ-1000" statusId="AMZN_PROD_CREATED" productTaxCode="ABCD" releaseDate="2009-01-01 00:00:00.0" priority="1" browseExclusion="N" recommendationExclusion="N" tier="1" underlyingAvailability="2-3-days" replenishmentCategory="basic-replenishment" dropShipStatus="drop-ship-enabled" outOfStockWebsiteMessage="email-me-when-available" />
+    <AmazonProduct productId="GZ-1001" statusId="AMZN_PROD_CREATED" productTaxCode="ABCD" releaseDate="2009-01-01 00:00:00.0" priority="1" browseExclusion="N" recommendationExclusion="N" tier="1" underlyingAvailability="2-3-days" replenishmentCategory="basic-replenishment" dropShipStatus="drop-ship-enabled" outOfStockWebsiteMessage="email-me-when-available" />
+
+    <!-- This is a sample of a basic order which is downloaded from amazon.  It consists of an AmazonOrder, which also has customer data,
+    AmazonOrderItem, which is a list of items, and AmazonOrderItemPriceComp, which breaks out the prices. -->
+    <AmazonOrder amazonOrderId="TEST-AMNZ-9876543210" orderDate="2009-01-29 09:25:32.0" buyerEmailAddress="amazon_buyer@opentaps.org" buyerName="Amazon Buyer" buyerPhoneNumber="1-310-987-6543" fulfillmentServiceLevel="Standard" addressName="Amazon Buyer" addressFieldOne="100 Ocean Ave" addressCity="Santa Monica" addressStateOrRegion="CA" addressPostalCode="90402" addressCountryCode="USA" addressPhoneNumber="310-987-6543" statusId="AMZN_ORDR_CREATED" importFailures="0" lastUpdatedStamp="2009-01-29 10:13:37.0" lastUpdatedTxStamp="2009-01-29 10:13:37.0" createdStamp="2009-01-29 09:30:06.0" createdTxStamp="2009-01-29 09:30:06.0"/>
+    <!-- The sku field could be UPC or productId, depending on the configuration in amazon.properties -->
+    <AmazonOrderItem amazonOrderId="TEST-AMNZ-9876543210" amazonOrderItemCode="0" sku="GZ-1001" title="Nan Gizmo" quantity="2.0" productTaxCode="ABCD" lastUpdatedStamp="2009-01-29 09:50:41.0" lastUpdatedTxStamp="2009-01-29 09:50:41.0" createdStamp="2009-01-29 09:50:41.0" createdTxStamp="2009-01-29 09:50:41.0"/>
+    <AmazonOrderItem amazonOrderId="TEST-AMNZ-9876543210" amazonOrderItemCode="1" sku="GZ-1000" quantity="5.0" productTaxCode="ABCD" lastUpdatedStamp="2009-01-29 09:43:53.0" lastUpdatedTxStamp="2009-01-29 09:43:53.0" createdStamp="2009-01-29 09:38:06.0" createdTxStamp="2009-01-29 09:38:06.0">
+        <title><![CDATA[Tiny Gizmo.  Note we are using GZ-1000 as SKU because opentaps.amazon.export.product.useProductIdAsSKU = true
+in amazon.properties]]></title>
+    </AmazonOrderItem>
+    <!-- Price of each order item, divided into Principal, Shipping, etc. -->
+    <AmazonOrderItemPriceComp amazonOrderId="TEST-AMNZ-9876543210" amazonOrderItemCode="0" componentType="Principal" componentCurrency="USD" componentAmount="25.0" lastUpdatedStamp="2009-01-29 10:04:28.0" lastUpdatedTxStamp="2009-01-29 10:04:28.0" createdStamp="2009-01-29 10:04:28.0" createdTxStamp="2009-01-29 10:04:28.0"/>
+    <AmazonOrderItemPriceComp amazonOrderId="TEST-AMNZ-9876543210" amazonOrderItemCode="0" componentType="Shipping" componentCurrency="USD" componentAmount="1.99" lastUpdatedStamp="2009-01-29 10:04:41.0" lastUpdatedTxStamp="2009-01-29 10:04:41.0" createdStamp="2009-01-29 10:04:41.0" createdTxStamp="2009-01-29 10:04:41.0"/>
+    <AmazonOrderItemPriceComp amazonOrderId="TEST-AMNZ-9876543210" amazonOrderItemCode="1" componentType="Principal" componentCurrency="USD" componentAmount="15.0" lastUpdatedStamp="2009-01-29 10:04:57.0" lastUpdatedTxStamp="2009-01-29 10:04:57.0" createdStamp="2009-01-29 10:04:57.0" createdTxStamp="2009-01-29 10:04:57.0"/>
+    <AmazonOrderItemPriceComp amazonOrderId="TEST-AMNZ-9876543210" amazonOrderItemCode="1" componentType="Shipping" componentCurrency="USD" componentAmount="1.99" lastUpdatedStamp="2009-01-29 10:05:09.0" lastUpdatedTxStamp="2009-01-29 10:05:09.0" createdStamp="2009-01-29 10:05:09.0" createdTxStamp="2009-01-29 10:05:09.0"/>
+
+    <!-- Another sample order.  Note the Expedited shipping.  -->
+    <AmazonOrder amazonOrderId="TEST-AMNZ-9876543211" orderDate="2009-01-29 09:25:32.0" buyerEmailAddress="amazon_buyer2@opentaps.org" buyerName="Amazon Buyer Jr." buyerPhoneNumber="1-212-321-4567" fulfillmentServiceLevel="Expedited" addressName="Amazon Buyer Jr." addressFieldOne="100 East End Ave" addressCity="New York" addressStateOrRegion="NY" addressPostalCode="10001" addressCountryCode="USA" addressPhoneNumber="212-321-4567" statusId="AMZN_ORDR_CREATED" importFailures="0" lastUpdatedStamp="2009-01-29 10:13:37.0" lastUpdatedTxStamp="2009-01-29 10:13:37.0" createdStamp="2009-01-29 09:30:06.0" createdTxStamp="2009-01-29 09:30:06.0"/>
+    <AmazonOrderItem amazonOrderId="TEST-AMNZ-9876543211" amazonOrderItemCode="0" sku="GZ-1001" title="Nan Gizmo" quantity="2.0" productTaxCode="ABCD" lastUpdatedStamp="2009-01-29 09:50:41.0" lastUpdatedTxStamp="2009-01-29 09:50:41.0" createdStamp="2009-01-29 09:50:41.0" createdTxStamp="2009-01-29 09:50:41.0"/>
+    <AmazonOrderItemPriceComp amazonOrderId="TEST-AMNZ-9876543211" amazonOrderItemCode="0" componentType="Principal" componentCurrency="USD" componentAmount="25.0" lastUpdatedStamp="2009-01-29 10:04:28.0" lastUpdatedTxStamp="2009-01-29 10:04:28.0" createdStamp="2009-01-29 10:04:28.0" createdTxStamp="2009-01-29 10:04:28.0"/>
+    <AmazonOrderItemPriceComp amazonOrderId="TEST-AMNZ-9876543211" amazonOrderItemCode="0" componentType="Shipping" componentCurrency="USD" componentAmount="1.99" lastUpdatedStamp="2009-01-29 10:04:41.0" lastUpdatedTxStamp="2009-01-29 10:04:41.0" createdStamp="2009-01-29 10:04:41.0" createdTxStamp="2009-01-29 10:04:41.0"/>
+
+
+
+</entity-engine-xml>

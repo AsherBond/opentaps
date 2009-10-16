@@ -1,0 +1,102 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+ 
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.amazon.*;
+ 
+productId = parameters.get("productId");
+amazonLoaded = UtilCommon.isLoaded("amazon");
+context.put("amazonLoaded", amazonLoaded);
+
+if (! amazonLoaded) return;
+
+// Get the AmazonProductBrowseNode structure
+locale = UtilHttp.getLocale(request);
+
+allAmazonProductBrowseNodes = delegator.findAll("AmazonProductBrowseNode");
+browseNodes = new HashMap();
+for (apbn : allAmazonProductBrowseNodes) {
+    apbn.set("description", apbn.get("description", "AmazonUiLabels", locale));
+    browseNodes.put(apbn.get("nodeId"), apbn);
+}
+context.put("browseNodes", browseNodes.values().toArray());
+
+context.put("productFeedMaxBulletPoints", AmazonConstants.productFeedMaxBulletPoints);
+context.put("productFeedMaxSearchTerms", AmazonConstants.productFeedMaxSearchTerms);
+
+if (UtilValidate.isEmpty(productId)) return;
+
+amazonProduct = delegator.findByPrimaryKey("AmazonProduct", UtilMisc.toMap("productId", productId));
+if (UtilValidate.isEmpty(amazonProduct)) return;
+
+context.put("amazonProduct", amazonProduct);
+
+productPrices = delegator.findByAnd("ProductPrice", UtilMisc.toMap("productId", productId, "productStoreGroupId", AmazonConstants.priceProductStoreGroup, "productPriceTypeId", "DEFAULT_PRICE"));
+productPrices = EntityUtil.filterByDate(productPrices);
+amazonProductIsActive = UtilValidate.isNotEmpty(productPrices);
+context.put("amazonProductIsActive", amazonProductIsActive);
+
+itemTypeId = amazonProduct.get("itemTypeId");
+nodeId = amazonProduct.get("nodeId");
+
+if (UtilValidate.isNotEmpty(nodeId)) {
+    validAttributes = delegator.findByAndCache("AmazonNodeValidAttribute", UtilMisc.toMap("nodeId", nodeId));
+    itemTypeIds = EntityUtil.getFieldListFromEntityList(validAttributes, "itemTypeId", true);
+    itemTypes = delegator.findByCondition("AmazonProductItemType", new EntityExpr("itemTypeId", EntityOperator.IN, itemTypeIds), null, null);
+    for (value : itemTypes) value.set("description", value.get("description", "AmazonUiLabels", locale));
+    context.put("itemTypes", itemTypes);
+}
+if (UtilValidate.isNotEmpty(nodeId) && UtilValidate.isNotEmpty(itemTypeId)) {
+    
+    usedFor = AmazonUtil.getValidAttributesForItemType(delegator, "USED_FOR", nodeId, itemTypeId);
+    if (usedFor != null) {
+        for (value : usedFor) value.set("description", value.get("description", "AmazonUiLabels", locale));
+        context.put("usedFor", usedFor);
+    }
+    targetAudience = AmazonUtil.getValidAttributesForItemType(delegator, "TARGET_AUDIENCE", nodeId, itemTypeId);
+    if (targetAudience != null) {
+        for (value : targetAudience) value.set("description", value.get("description", "AmazonUiLabels", locale));
+        context.put("targetAudience", targetAudience);
+    }
+    otherItemAttributes = AmazonUtil.getValidAttributesForItemType(delegator, "OTHER_ITEM_ATTR", nodeId, itemTypeId);
+    if (otherItemAttributes != null) {
+        for (value : otherItemAttributes) value.set("description", value.get("description", "AmazonUiLabels", locale));
+        context.put("otherItemAttributes", otherItemAttributes);
+    }
+}
+
+// Get the related AmazonProductBulletPoint and AmazonProductSearchTerms records
+bulletPoints = delegator.findByAnd("AmazonProductBulletPoint", UtilMisc.toMap("productId", productId), UtilMisc.toList("createdStamp"));
+context.put("bulletPoints", bulletPoints);
+searchTerms = delegator.findByAnd("AmazonProductSearchTerms", UtilMisc.toMap("productId", productId), UtilMisc.toList("createdStamp"));
+context.put("searchTerms", searchTerms);
+
+// Get the related AmazonUsedForValue, AmazonTargetAudienceValue and AmazonOtherItemAttrValue records
+amazonUsedForValues = delegator.findByAnd("AmazonUsedForValue", UtilMisc.toMap("productId", productId));
+context.put("productUsedForIds", EntityUtil.getFieldListFromEntityList(amazonUsedForValues, "usedForId", true));
+amazonTargetAudienceValues = delegator.findByAnd("AmazonTargetAudienceValue", UtilMisc.toMap("productId", productId));
+context.put("productTargetAudienceIds", EntityUtil.getFieldListFromEntityList(amazonTargetAudienceValues, "targetAudienceId", true));
+amazonOtherItemAttrValues = delegator.findByAnd("AmazonOtherItemAttrValue", UtilMisc.toMap("productId", productId));
+context.put("productOtherItemAttrIds", EntityUtil.getFieldListFromEntityList(amazonOtherItemAttrValues, "otherItemAttrId", true));
+
+
+
+ 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+    <title>Entity definitions for the Opentaps Amazon component product integration</title>
+    <copyright>Copyright (c) 2005 - 2007 Open Source Strategies Inc.</copyright>
+
+    <entity entity-name="AmazonBatchUpdateHistory" package-name="org.opentaps.amazon.sync">
+        <description>Stores information about when batch updates were run for the Amazon model.</description>
+        <field name="historyId" type="id-ne"/>
+        <field name="serviceName" type="description"/>
+        <field name="userLoginId" type="id-vlong-ne"/>
+        <field name="completedTimestamp" type="date-time">
+            <description>
+                Stores the time the service was successfully completed.  Note 
+                that no entry will be made for failed runs.  This implies that
+                batch services should roll back if there was an error.
+            </description>
+        </field>
+        <prim-key field="historyId"/>
+    </entity>
+
+</entitymodel>
