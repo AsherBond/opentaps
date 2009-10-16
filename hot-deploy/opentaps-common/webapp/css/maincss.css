@@ -876,7 +876,9 @@ border: #999999 solid 1px;
 margin: 2px;
 }
 
-.basic-form input[type="text"], .inputBox {
+.basic-form select,
+.basic-form input[type="text"],
+.inputBox {
 font-family: Verdana, Arial, Helvetica, sans-serif;
 font-weight: normal;
 background: #FFFFFF;
@@ -916,6 +918,8 @@ background: #FFFFFF;
 font-size: 8pt;
 }
 
+.basic-form input[type="submit"],
+.basic-form input[type="reset"],
 .smallSubmit {
 font-family: Verdana, Arial, Helvetica, sans-serif;
 font-size: 8pt;
