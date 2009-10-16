@@ -920,7 +920,9 @@ font-size: 8pt;
 
 .basic-form input[type="submit"],
 .basic-form input[type="reset"],
-.smallSubmit {
+.smallSubmit,
+.smallSubmit:visited,
+.smallSubmitDisabled {
 font-family: Verdana, Arial, Helvetica, sans-serif;
 font-size: 8pt;
 text-decoration: none;
@@ -931,7 +933,13 @@ margin: 2px;
 padding: 0px 6px;
 }
 
-.mediumSubmit,.largeSubmit,.loginButton {
+.smallSubmitDisabled {
+color: #666666;
+}
+
+.mediumSubmit,
+.largeSubmit,
+.loginButton {
 font-family: Verdana, Arial, Helvetica, sans-serif;
 font-size: 10pt;
 font-weight: bold;
@@ -942,20 +950,15 @@ border: #999999 solid 1px;
 margin: 2px;
 }
 
-.smallSubmit:hover,.mediumSubmit:hover,.largeSubmit:hover,.loginButton:hover {
+.smallSubmit:active,
+.smallSubmit:hover,
+.mediumSubmit:active,
+.mediumSubmit:hover,
+.largeSubmit:active,
+.largeSubmit:hover,
+.loginButton:hover {
 color: red;
 text-decoration: underline;
-}
-
-.smallSubmitDisabled {
-font-family: Verdana, Arial, Helvetica, sans-serif;
-font-size: 8pt;
-font-weight: bold;
-text-decoration: none;
-color: #666666;
-background: white;
-border: 0px;
-margin: 2px;
 }
 
 .smallAltSubmit,.mediumAltSubmit,.largeAltSubmit {
@@ -1154,7 +1157,6 @@ background-color: #ffffff;
 border: #999999 solid 1px;
 color: #000099;
 font-size: 1em;
-font-weight: bold;
 margin: 0.2em;
 padding: 0.1em 0.2em 0.1em 0.2em;
 white-space: nowrap;
@@ -1302,23 +1304,6 @@ border-bottom: 1px solid #999999;
 /* Alternating row style */
 /* .viewManyTR1 deprecated - use .alternate-row */
 background-color: #eeeeee;
-}
-
-.basic-form table tr td .smallSubmit,
-.basic-form table tr td .smallSubmit:visited {
-background-color: #ffffff;
-border: #999999 solid 1px;
-color: #000099;
-font-size: 1em;
-font-weight: bold;
-margin: 0.2em;
-padding: 0.1em 0.2em 0.1em 0.2em;
-}
-
-.basic-form table tr td .smallSubmit:hover,
-.basic-form table tr td .smallSubmit:active {
-color: #ff0000;
-text-decoration: none;
 }
 
 .basic-form table tr td .disabled {
