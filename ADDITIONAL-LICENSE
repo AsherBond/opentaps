@@ -13,11 +13,11 @@ FCKPackager                       GPL/LGPL/Mozilla PL         hot-deploy/opentap
 xhtml2fo(1)                       Creative Commons 3.0        hot-deploy/opentaps-common/xsl/xhtml2fo.xsl
 jpublish                          Apache 2.0                  hot-deploy/crmsfa/lib/
 edenlib                           Apache 2.0                  hot-deploy/crmsfa/lib/
-funambol-admin-dev                HPL                         hot-deploy/funambol/lib/core
-funambol-ext                      HPL                         hot-deploy/funambol/lib/core
-funambol-foundation               HPL                         hot-deploy/funambol/lib/core
-funambol-framework                HPL                         hot-deploy/funambol/lib/core
-funambol-server                   HPL                         hot-deploy/funambol/lib/core
+funambol-admin-dev                AGPLv3                      hot-deploy/funambol/lib/core
+funambol-ext                      AGPLv3                      hot-deploy/funambol/lib/core
+funambol-foundation               AGPLv3                      hot-deploy/funambol/lib/core
+funambol-framework                AGPLv3                      hot-deploy/funambol/lib/core
+funambol-server                   AGPLv3                      hot-deploy/funambol/lib/core
 commons-httpclient                Apache 2.0                  hot-deploy/funambol/lib/ext
 joda-time                         Apache 2.0                  hot-deploy/funambol/lib/ext
 DBL SIGA Framework                BSD                         hot-deploy/funambol/lib/ext
