@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * Honest Public License for more details.
- * 
+ *
  * You should have received a copy of the Honest Public License
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
@@ -31,8 +31,7 @@ import org.ofbiz.base.util.*;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityListIterator;
@@ -51,18 +50,21 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * Services for Amazon integration product management
- *
- * @version $Rev: 11160 $
+ * Services for Amazon integration product management.
  */
-public class AmazonProductServices {
+public final class AmazonProductServices {
 
-    public static String module = AmazonProductServices.class.getName();
+    private AmazonProductServices() { }
+
+    private static final String MODULE = AmazonProductServices.class.getName();
 
     /**
-     * Service create Amazon product and related entities
+     * Service create Amazon product and related entities.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context the service context <code>Map</code>
+     * @return the service response <code>Map</code>
      */
-    public static Map createOrUpdateAmazonProduct(DispatchContext dctx, Map context) {
+    public static Map<String, Object> createOrUpdateAmazonProduct(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
 
@@ -83,11 +85,11 @@ public class AmazonProductServices {
         Long priority = (Long) context.get("priority");
         String browseExclusion = (String) context.get("browseExclusion");
         String recommendationExclusion = (String) context.get("recommendationExclusion");
-        List<String> usedForIds = (List) context.get("usedForId");
-        List<String> targetAudienceIds = (List) context.get("targetAudienceId");
-        List<String> otherItemAttrIds = (List) context.get("otherItemAttrId");
-        List<String> bulletPoints = (List) context.get("bulletPoint");
-        List<String> searchTerms = (List) context.get("searchTerm");
+        List<String> usedForIds = (List<String>) context.get("usedForId");
+        List<String> targetAudienceIds = (List<String>) context.get("targetAudienceId");
+        List<String> otherItemAttrIds = (List<String>) context.get("otherItemAttrId");
+        List<String> bulletPoints = (List<String>) context.get("bulletPoint");
+        List<String> searchTerms = (List<String>) context.get("searchTerm");
 
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
 
@@ -95,19 +97,19 @@ public class AmazonProductServices {
             // Check if Product with ID exists
             long productCountById = delegator.findCountByAnd("Product", UtilMisc.toMap("productId", productId));
             if (productCountById != 1) {
-                return UtilMessage.createAndLogServiceError("AmazonError_ErrorProductDoesntExists", context, locale, module);
+                return UtilMessage.createAndLogServiceError("AmazonError_ErrorProductDoesntExists", context, locale, MODULE);
             }
 
             GenericValue product = delegator.findByPrimaryKey("AmazonProduct", UtilMisc.toMap("productId", productId));
             boolean create = UtilValidate.isEmpty(product);
             if (create) {
                 product = AmazonUtil.createAmazonProductRecord(delegator, productId);
-            } else if (! AmazonUtil.isAmazonProductDeleted(product)) {
+            } else if (!AmazonUtil.isAmazonProductDeleted(product)) {
                 product.set("statusId", AmazonConstants.statusProductChanged);
             }
 
             /*
-            * Set AmazonProduct values 
+            * Set AmazonProduct values
             */
             product.set("productTaxCode", productTaxCode);
             product.set("nodeId", nodeId);
@@ -138,40 +140,62 @@ public class AmazonProductServices {
             if (usedForIds != null) {
                 delegator.removeByAnd("AmazonUsedForValue", UtilMisc.toMap("productId", productId));
                 if (UtilValidate.isNotEmpty(usedForIds)) {
-                    for (String usedForId : usedForIds) if (UtilValidate.isNotEmpty(usedForId)) delegator.create("AmazonUsedForValue", UtilMisc.toMap("productId", productId, "usedForId", usedForId));
+                    for (String usedForId : usedForIds) {
+                        if (UtilValidate.isNotEmpty(usedForId)) {
+                            delegator.create("AmazonUsedForValue", UtilMisc.toMap("productId", productId, "usedForId", usedForId));
+                        }
+                    }
                 }
             }
             if (targetAudienceIds != null) {
                 delegator.removeByAnd("AmazonTargetAudienceValue", UtilMisc.toMap("productId", productId));
                 if (UtilValidate.isNotEmpty(targetAudienceIds)) {
-                    for (String targetAudienceId : targetAudienceIds) if (UtilValidate.isNotEmpty(targetAudienceId)) delegator.create("AmazonTargetAudienceValue", UtilMisc.toMap("productId", productId, "targetAudienceId", targetAudienceId));
+                    for (String targetAudienceId : targetAudienceIds) {
+                        if (UtilValidate.isNotEmpty(targetAudienceId)) {
+                            delegator.create("AmazonTargetAudienceValue", UtilMisc.toMap("productId", productId, "targetAudienceId", targetAudienceId));
+                        }
+                    }
                 }
             }
             if (otherItemAttrIds != null) {
                 delegator.removeByAnd("AmazonOtherItemAttrValue", UtilMisc.toMap("productId", productId));
                 if (UtilValidate.isNotEmpty(otherItemAttrIds)) {
-                    for (String otherItemAttrId : otherItemAttrIds) if (UtilValidate.isNotEmpty(otherItemAttrId)) delegator.create("AmazonOtherItemAttrValue", UtilMisc.toMap("productId", productId, "otherItemAttrId", otherItemAttrId));
+                    for (String otherItemAttrId : otherItemAttrIds) {
+                        if (UtilValidate.isNotEmpty(otherItemAttrId)) {
+                            delegator.create("AmazonOtherItemAttrValue", UtilMisc.toMap("productId", productId, "otherItemAttrId", otherItemAttrId));
+                        }
+                    }
                 }
             }
             if (bulletPoints != null) {
                 delegator.removeByAnd("AmazonProductBulletPoint", UtilMisc.toMap("productId", productId));
                 if (UtilValidate.isNotEmpty(bulletPoints)) {
-                    for (String bulletPoint : bulletPoints) if (UtilValidate.isNotEmpty(bulletPoint)) delegator.create("AmazonProductBulletPoint", UtilMisc.toMap("productId", productId, "description", bulletPoint, "bulletPointId", delegator.getNextSeqId("AmazonProductBulletPoint")));
+                    for (String bulletPoint : bulletPoints) {
+                        if (UtilValidate.isNotEmpty(bulletPoint)) {
+                            delegator.create("AmazonProductBulletPoint", UtilMisc.toMap("productId", productId, "description", bulletPoint, "bulletPointId", delegator.getNextSeqId("AmazonProductBulletPoint")));
+                        }
+                    }
                 }
             }
             if (searchTerms != null) {
                 delegator.removeByAnd("AmazonProductSearchTerms", UtilMisc.toMap("productId", productId));
                 if (UtilValidate.isNotEmpty(searchTerms)) {
-                    for (String searchTerm : searchTerms) if (UtilValidate.isNotEmpty(searchTerm)) delegator.create("AmazonProductSearchTerms", UtilMisc.toMap("productId", productId, "description", searchTerm, "searchTermId", delegator.getNextSeqId("AmazonProductSearchTerms")));
+                    for (String searchTerm : searchTerms) {
+                        if (UtilValidate.isNotEmpty(searchTerm)) {
+                            delegator.create("AmazonProductSearchTerms", UtilMisc.toMap("productId", productId, "description", searchTerm, "searchTermId", delegator.getNextSeqId("AmazonProductSearchTerms")));
+                        }
+                    }
                 }
             }
 
-            if (create) delegator.storeAll(AmazonUtil.createAmazonProductRelatedRecords(delegator, productId));
+            if (create) {
+                delegator.storeAll(AmazonUtil.createAmazonProductRelatedRecords(delegator, productId));
+            }
 
             resultMap.put("productId", productId);
 
         } catch (GenericEntityException gee) {
-            return UtilMessage.createAndLogServiceError(gee, locale, module);
+            return UtilMessage.createAndLogServiceError(gee, locale, MODULE);
         }
 
         return resultMap;
@@ -179,13 +203,12 @@ public class AmazonProductServices {
 
     /**
      * Service looks over AmzonProduct and collect new products (and those which aren't posted due error as well),
-     * creates XML document for Product Feed and post it to Amazon.com
-     *
-     * @param dctx
-     * @param context
-     * @return Map
+     * creates XML document for Product Feed and post it to Amazon.com.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context the service context <code>Map</code>
+     * @return the service response <code>Map</code>
      */
-    public static Map publishProductsToAmazon(DispatchContext dctx, Map context) {
+    public static Map<String, Object> publishProductsToAmazon(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
@@ -194,14 +217,13 @@ public class AmazonProductServices {
         String prodId = (String) context.get("productId");
 
         try {
-            List conditions = FastList.newInstance();
-            conditions.add(new EntityExpr("statusId", EntityOperator.IN, Arrays.asList(AmazonConstants.statusProductCreated, AmazonConstants.statusProductError, AmazonConstants.statusProductChanged)));
+            List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("statusId", EntityOperator.IN, Arrays.asList(AmazonConstants.statusProductCreated, AmazonConstants.statusProductError, AmazonConstants.statusProductChanged)));
             if (UtilValidate.isNotEmpty(prodId)) {
-                conditions.add(new EntityExpr("productId", EntityOperator.EQUALS, prodId));
+                conditions.add(EntityCondition.makeCondition("productId", EntityOperator.EQUALS, prodId));
             }
 
             TransactionUtil.begin();
-            EntityListIterator amazonProductsIt = delegator.findListIteratorByCondition("ViewAmazonProducts", new EntityConditionList(conditions, EntityOperator.AND), null, Arrays.asList("productId"));
+            EntityListIterator amazonProductsIt = delegator.findListIteratorByCondition("ViewAmazonProducts", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, Arrays.asList("productId"));
             TransactionUtil.commit();
 
             // Prepare Product Feed document
@@ -211,42 +233,44 @@ public class AmazonProductServices {
             long messageId = 1;
             Map<GenericValue, String> invalidAmazonProducts = new HashMap<GenericValue, String>();
             List<GenericValue> validAmazonProducts = new ArrayList<GenericValue>();
-            while ((viewAmazonProduct = (GenericValue) amazonProductsIt.next()) != null) {
+            while ((viewAmazonProduct = amazonProductsIt.next()) != null) {
 
                 GenericValue amazonProduct = delegator.findByPrimaryKey("AmazonProduct", UtilMisc.toMap("productId", viewAmazonProduct.get("productId")));
 
                 if ((viewAmazonProduct.get("postFailures") != null) && (AmazonConstants.productPostRetryThreshold <= viewAmazonProduct.getLong("postFailures").intValue())) {
                     String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostProductAttemptsOverThreshold", UtilMisc.<String, Object>toMap("productId", viewAmazonProduct.getString("productId"), "threshold", AmazonConstants.productPostRetryThreshold), locale);
-                    Debug.logInfo(errorLog, module);
+                    Debug.logInfo(errorLog, MODULE);
                     continue;
                 }
 
                 String errMessage = null;
 
                 /*
-                 * Some elements are required. So, we get it first and go to next iteration 
+                 * Some elements are required. So, we get it first and go to next iteration
                  * if some of these is absent.
                  */
                 String title = AmazonUtil.Strings.LONG_STR_N_NULL.normalize(viewAmazonProduct.getString("productName"), locale);
                 if (UtilValidate.isEmpty(title)) {
-                    Debug.logWarning(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_NoRequiredParameter", UtilMisc.toMap("parameterName", "Title", "productName", viewAmazonProduct.getString("productId")), locale), module);
+                    Debug.logWarning(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_NoRequiredParameter", UtilMisc.toMap("parameterName", "Title", "productName", viewAmazonProduct.getString("productId")), locale), MODULE);
                 }
 
                 List<GenericValue> goodIdents = viewAmazonProduct.getRelated("GoodIdentification", Arrays.asList("lastUpdatedStamp DESC"));
-                goodIdents = EntityUtil.filterOutByCondition(goodIdents, new EntityConditionList(Arrays.asList(new EntityExpr("idValue", EntityOperator.EQUALS, ""), new EntityExpr("idValue", EntityOperator.EQUALS, null)), EntityOperator.OR));
+                goodIdents = EntityUtil.filterOutByCondition(goodIdents, EntityCondition.makeCondition(EntityOperator.OR,
+                                                  EntityCondition.makeCondition("idValue", EntityOperator.EQUALS, ""),
+                                                  EntityCondition.makeCondition("idValue", EntityOperator.EQUALS, null)));
 
                 String upc = null;
                 if (AmazonConstants.requireUpcCodes || AmazonConstants.useUPCAsSKU) {
-    
+
                     // Establish and validate the UPC
                     upc = getProductUPC(delegator, viewAmazonProduct.getString("productId"), locale);
                     if (UtilValidate.isEmpty(upc) && AmazonConstants.requireUpcCodes) {
                          errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_MissingCodeUPC", UtilMisc.toMap("productId", viewAmazonProduct.getString("productId")), locale));
-                    } else if (UtilValidate.isNotEmpty(upc) && ! UtilProduct.isValidUPC(upc)) {
+                    } else if (UtilValidate.isNotEmpty(upc) && !UtilProduct.isValidUPC(upc)) {
                         errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_InvalidCodeUPC", UtilMisc.toMap("productId", viewAmazonProduct.getString("productId")), locale));
                     }
                 }
-                    
+
                 // Establish and validate the SKU
                 String sku = getProductSKU(delegator, viewAmazonProduct, upc);
 
@@ -254,16 +278,24 @@ public class AmazonProductServices {
                 String manufacturerName = AmazonUtil.Strings.STR_N_NULL.normalize(PartyHelper.getPartyName(delegator, viewAmazonProduct.getString("manufacturerPartyId"), false), locale);
                 String manufacturerId = null;
                 GenericValue manufacturerIdValue = EntityUtil.getFirst(EntityUtil.filterByAnd(goodIdents, UtilMisc.toMap("goodIdentificationTypeId", "MANUFACTURER_ID_NO")));
-                if (UtilValidate.isNotEmpty(manufacturerIdValue)) manufacturerId = AmazonUtil.Strings.FOURTY_STR_N_NULL.normalize(manufacturerIdValue.getString("idValue"), locale);
-                if (UtilValidate.isEmpty(manufacturerId)) manufacturerId = AmazonUtil.Strings.FOURTY_STR_N_NULL.normalize(upc, locale);
-                
+                if (UtilValidate.isNotEmpty(manufacturerIdValue)) {
+                    manufacturerId = AmazonUtil.Strings.FOURTY_STR_N_NULL.normalize(manufacturerIdValue.getString("idValue"), locale);
+                }
+                if (UtilValidate.isEmpty(manufacturerId)) {
+                    manufacturerId = AmazonUtil.Strings.FOURTY_STR_N_NULL.normalize(upc, locale);
+                }
+
                 // Limit the remaining goodIdentifications to EAN, ISBN and GTIN
-                goodIdents = EntityUtil.filterByCondition(goodIdents, new EntityExpr("goodIdentificationTypeId", EntityOperator.IN, AmazonConstants.goodIdentTypeIds.keySet()));
+                goodIdents = EntityUtil.filterByCondition(goodIdents, EntityCondition.makeCondition("goodIdentificationTypeId", EntityOperator.IN, AmazonConstants.goodIdentTypeIds.keySet()));
 
                 // Add errors if some required elements are missing.
-                if (UtilValidate.isEmpty(sku) && ! AmazonConstants.useUPCAsSKU) errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_NoRequiredParameter", UtilMisc.toMap("parameterName", "SKU", "productName", title), locale));
+                if (UtilValidate.isEmpty(sku) && !AmazonConstants.useUPCAsSKU) {
+                    errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_NoRequiredParameter", UtilMisc.toMap("parameterName", "SKU", "productName", title), locale));
+                }
                 String productTaxCode = viewAmazonProduct.getString("productTaxCode");
-                if (UtilValidate.isEmpty(productTaxCode)) errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_NoRequiredParameter", UtilMisc.toMap("parameterName", "ProductTaxCode", "productName", title), locale));
+                if (UtilValidate.isEmpty(productTaxCode)) {
+                    errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_NoRequiredParameter", UtilMisc.toMap("parameterName", "ProductTaxCode", "productName", title), locale));
+                }
 
                 // Check for errors
                 if (UtilValidate.isNotEmpty(errMessage)) {
@@ -311,17 +343,20 @@ public class AmazonProductServices {
                 UtilXml.addChildElementValue(descriptionData, "Title", UtilValidate.isNotEmpty(title) ? title : sku, productFeed);
                 String brandName = AmazonUtil.Strings.STR_N_NULL.normalize(viewAmazonProduct.getString("brandName"), locale);
                 if (UtilValidate.isEmpty(brandName)) {
-                    List cond = UtilMisc.toList(new EntityExpr("productId", EntityOperator.EQUALS, viewAmazonProduct.getString("productId")),
-                                                new EntityExpr("productFeatureTypeId", EntityOperator.EQUALS, "BRAND"),
-                                                new EntityExpr("productFeatureApplTypeId", EntityOperator.EQUALS, "STANDARD_FEATURE"),
+                    EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
+                                                EntityCondition.makeCondition("productId", EntityOperator.EQUALS, viewAmazonProduct.getString("productId")),
+                                                EntityCondition.makeCondition("productFeatureTypeId", EntityOperator.EQUALS, "BRAND"),
+                                                EntityCondition.makeCondition("productFeatureApplTypeId", EntityOperator.EQUALS, "STANDARD_FEATURE"),
                                                 EntityUtil.getFilterByDateExpr());
-                    GenericValue pf = EntityUtil.getFirst(delegator.findByCondition("ProductFeatureAndAppl", new EntityConditionList(cond, EntityOperator.AND), null, Arrays.asList("fromDate DESC")));
-                    if (UtilValidate.isNotEmpty(pf)) brandName = AmazonUtil.Strings.STR_N_NULL.normalize(pf.getString("description"), locale);
+                    GenericValue pf = EntityUtil.getFirst(delegator.findByCondition("ProductFeatureAndAppl", cond, null, Arrays.asList("fromDate DESC")));
+                    if (UtilValidate.isNotEmpty(pf)) {
+                        brandName = AmazonUtil.Strings.STR_N_NULL.normalize(pf.getString("description"), locale);
+                    }
                 }
                 if (UtilValidate.isNotEmpty(brandName)) {
                     UtilXml.addChildElementValue(descriptionData, "Brand", brandName, productFeed);
                 }
-                
+
                 String description = viewAmazonProduct.getString(AmazonConstants.productDescriptionField);
                 description = UtilValidate.isEmpty(description) ? null : description.replaceAll("<[^ ].*?>", "");
                 description = StringEscapeUtils.escapeHtml(description);
@@ -335,13 +370,15 @@ public class AmazonProductServices {
                 if (bulletPoints != null) {
                     if (bulletPoints.size() > AmazonConstants.productFeedMaxBulletPoints) {
                         String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_TooMuchElementsInFeed", UtilMisc.<String, Object>toMap("max", AmazonConstants.productFeedMaxBulletPoints, "elementName", "Bullet Points", "elementsCount", bulletPoints.size(), "productId", viewAmazonProduct.getString("productId")), locale);
-                        Debug.logInfo(infoMessage, module);
+                        Debug.logInfo(infoMessage, MODULE);
                     }
                     int index = 0;
                     for (GenericValue bulletPoint : bulletPoints) {
                         UtilXml.addChildElementValue(descriptionData, "BulletPoint", AmazonUtil.Strings.LONG_STR_N_NULL.normalize(bulletPoint.getString("description"), locale), productFeed);
                         index++;
-                        if (index == AmazonConstants.productFeedMaxBulletPoints) break;
+                        if (index == AmazonConstants.productFeedMaxBulletPoints) {
+                            break;
+                        }
                     }
                 }
 
@@ -406,19 +443,21 @@ public class AmazonProductServices {
                 UtilXml.addChildElementValue(descriptionData, "MerchantCatalogNumber", AmazonUtil.Strings.FOURTY_STR_N_NULL.normalize(viewAmazonProduct.getString("productId"), locale), productFeed);
 
                 // Try to find a price for the Amazon productStoreGroup first
-                List cond = UtilMisc.toList(new EntityExpr("productId", EntityOperator.EQUALS, amazonProduct.getString("productId")),
-                                          new EntityExpr("productPriceTypeId", EntityOperator.EQUALS, AmazonConstants.priceStandard),
-                                          new EntityExpr("productStoreGroupId", EntityOperator.EQUALS, AmazonConstants.priceProductStoreGroup),
+                EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
+                                          EntityCondition.makeCondition("productId", EntityOperator.EQUALS, amazonProduct.getString("productId")),
+                                          EntityCondition.makeCondition("productPriceTypeId", EntityOperator.EQUALS, AmazonConstants.priceStandard),
+                                          EntityCondition.makeCondition("productStoreGroupId", EntityOperator.EQUALS, AmazonConstants.priceProductStoreGroup),
                                           EntityUtil.getFilterByDateExpr());
-                GenericValue msrpValue = EntityUtil.getFirst(delegator.findByCondition("ProductPrice", new EntityConditionList(cond, EntityOperator.AND), null, Arrays.asList("lastUpdatedStamp DESC")));
+                GenericValue msrpValue = EntityUtil.getFirst(delegator.findByCondition("ProductPrice", cond, null, Arrays.asList("lastUpdatedStamp DESC")));
                 if (UtilValidate.isEmpty(msrpValue)) {
 
                     // If there's no price for the Amazon productStoreGroup, try _NA_
-                    cond = UtilMisc.toList(new EntityExpr("productId", EntityOperator.EQUALS, amazonProduct.getString("productId")),
-                                         new EntityExpr("productPriceTypeId", EntityOperator.EQUALS, AmazonConstants.priceStandard),
-                                         new EntityExpr("productStoreGroupId", EntityOperator.EQUALS, "_NA_"),
+                    cond = EntityCondition.makeCondition(EntityOperator.AND,
+                                         EntityCondition.makeCondition("productId", EntityOperator.EQUALS, amazonProduct.getString("productId")),
+                                         EntityCondition.makeCondition("productPriceTypeId", EntityOperator.EQUALS, AmazonConstants.priceStandard),
+                                         EntityCondition.makeCondition("productStoreGroupId", EntityOperator.EQUALS, "_NA_"),
                                          EntityUtil.getFilterByDateExpr());
-                    msrpValue = EntityUtil.getFirst(delegator.findByCondition("ProductPrice", new EntityConditionList(cond, EntityOperator.AND), null, Arrays.asList("lastUpdatedStamp DESC")));
+                    msrpValue = EntityUtil.getFirst(delegator.findByCondition("ProductPrice", cond, null, Arrays.asList("lastUpdatedStamp DESC")));
                 }
                 BigDecimal msrp = null;
                 String msrpCurrency = null;
@@ -432,7 +471,9 @@ public class AmazonProductServices {
                 msrpEl.setAttribute("currency", UtilValidate.isNotEmpty(msrpCurrency) ? msrpCurrency : UtilProperties.getPropertyValue("opentaps.properties", "defaultCurrencyUomId"));
                 }
 
-                if (UtilValidate.isEmpty(manufacturerName) && UtilValidate.isNotEmpty(brandName)) manufacturerName = brandName;
+                if (UtilValidate.isEmpty(manufacturerName) && UtilValidate.isNotEmpty(brandName)) {
+                    manufacturerName = brandName;
+                }
                 if (UtilValidate.isNotEmpty(manufacturerName)) {
                     UtilXml.addChildElementValue(descriptionData, "Manufacturer", manufacturerName, productFeed);
                 }
@@ -440,23 +481,25 @@ public class AmazonProductServices {
                     UtilXml.addChildElementValue(descriptionData, "MfrPartNumber", manufacturerId, productFeed);
                 }
 
-                // Add a search term for the product name.  Amazon does not like null <SearchTerms/> tag so make sure it is not empty 
+                // Add a search term for the product name.  Amazon does not like null <SearchTerms/> tag so make sure it is not empty
                 if (UtilValidate.isNotEmpty(title)) {
                     UtilXml.addChildElementValue(descriptionData, "SearchTerms", AmazonUtil.Strings.STR_N_NULL.normalize(title, locale), productFeed);
                 }
-                
+
                 // Add any other search terms
                 List<GenericValue> searchTerms = viewAmazonProduct.getRelated("AmazonProductSearchTerms");
                 if (searchTerms != null) {
                     if (searchTerms.size() > AmazonConstants.productFeedMaxSearchTerms) {
                         String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_TooMuchElementsInFeed", UtilMisc.<String, Object>toMap("max", AmazonConstants.productFeedMaxSearchTerms, "elementName", "Search Terms", "elementsCount", searchTerms.size(), "productId", viewAmazonProduct.getString("productId")), locale);
-                        Debug.logInfo(infoMessage, module);
+                        Debug.logInfo(infoMessage, MODULE);
                     }
                     int index = 0;
                     for (GenericValue searchTerm : searchTerms) {
                         UtilXml.addChildElementValue(descriptionData, "SearchTerms", AmazonUtil.Strings.STR_N_NULL.normalize(searchTerm.getString("description"), locale), productFeed);
                         index++;
-                        if (index == AmazonConstants.productFeedMaxSearchTerms) break;
+                        if (index == AmazonConstants.productFeedMaxSearchTerms) {
+                            break;
+                        }
                     }
                 }
 
@@ -464,13 +507,15 @@ public class AmazonProductServices {
                 if (usedForList != null) {
                     if (usedForList.size() > AmazonConstants.productFeedMaxUsedFor) {
                         String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_TooMuchElementsInFeed", UtilMisc.<String, Object>toMap("max", AmazonConstants.productFeedMaxUsedFor, "elementName", "Used For", "elementsCount", searchTerms.size(), "productId", viewAmazonProduct.getString("productId")), locale);
-                        Debug.logInfo(infoMessage, module);
+                        Debug.logInfo(infoMessage, MODULE);
                     }
                     int index = 0;
                     for (GenericValue usedFor : usedForList) {
                         UtilXml.addChildElementValue(descriptionData, "UsedFor", AmazonUtil.Strings.STR_N_NULL.normalize(usedFor.getString("usedForId"), locale), productFeed);
                         index++;
-                        if (index == AmazonConstants.productFeedMaxUsedFor) break;
+                        if (index == AmazonConstants.productFeedMaxUsedFor) {
+                            break;
+                        }
                     }
                 }
 
@@ -483,13 +528,15 @@ public class AmazonProductServices {
                 if (otherItemAttributes != null) {
                     if (otherItemAttributes.size() > AmazonConstants.productFeedMaxOtherItemAttributes) {
                         String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_TooMuchElementsInFeed", UtilMisc.<String, Object>toMap("max", AmazonConstants.productFeedMaxOtherItemAttributes, "elementName", "Other Item Attribute", "elementsCount", searchTerms.size(), "productId", viewAmazonProduct.getString("productId")), locale);
-                        Debug.logInfo(infoMessage, module);
+                        Debug.logInfo(infoMessage, MODULE);
                     }
                     int index = 0;
                     for (GenericValue attribute : otherItemAttributes) {
                         UtilXml.addChildElementValue(descriptionData, "OtherItemAttributes", AmazonUtil.Strings.LONG_STR_N_NULL.normalize(attribute.getString("otherItemAttrId"), locale), productFeed);
                         index++;
-                        if (index == AmazonConstants.productFeedMaxOtherItemAttributes) break;
+                        if (index == AmazonConstants.productFeedMaxOtherItemAttributes) {
+                            break;
+                        }
                     }
                 }
 
@@ -497,20 +544,24 @@ public class AmazonProductServices {
                 if (targetAudience != null) {
                     if (targetAudience.size() > AmazonConstants.productFeedMaxTargetAudience) {
                         String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_TooMuchElementsInFeed", UtilMisc.<String, Object>toMap("max", AmazonConstants.productFeedMaxTargetAudience, "elementName", "Target Audience", "elementsCount", searchTerms.size(), "productId", viewAmazonProduct.getString("productId")), locale);
-                        Debug.logInfo(infoMessage, module);
+                        Debug.logInfo(infoMessage, MODULE);
                     }
                     int index = 0;
                     for (GenericValue audience : targetAudience) {
                         UtilXml.addChildElementValue(descriptionData, "TargetAudience", AmazonUtil.Strings.STR_N_NULL.normalize(audience.getString("targetAudienceId"), locale), productFeed);
                         index++;
-                        if (index == AmazonConstants.productFeedMaxTargetAudience) break;
+                        if (index == AmazonConstants.productFeedMaxTargetAudience) {
+                            break;
+                        }
                     }
                 }
 
                 amazonProduct.set("acknowledgeMessageId", "" + messageId);
                 validAmazonProducts.add(amazonProduct);
                 messageId++;
-                if (messageId % 500 == 0) Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_Processed_Records_Product", UtilMisc.toMap("count", messageId), locale), module);
+                if (messageId % 500 == 0) {
+                    Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_Processed_Records_Product", UtilMisc.toMap("count", messageId), locale), MODULE);
+                }
             }
             amazonProductsIt.close();
 
@@ -518,29 +569,29 @@ public class AmazonProductServices {
 
             if (UtilValidate.isEmpty(validAmazonProducts)) {
                 String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostNoNewProducts", locale);
-                Debug.logInfo(infoMessage, module);
+                Debug.logInfo(infoMessage, MODULE);
             } else {
 
                 /*
-                 * Post product document and get transaction ID. Store ID with product for later use. 
+                 * Post product document and get transaction ID. Store ID with product for later use.
                  */
                 boolean success = true;
                 String postErrorMessage = null;
                 long processingDocumentId = -1;
                 try {
                     String xml = UtilXml.writeXmlDocument(productFeed);
-                    Debug.logVerbose(xml, module);
+                    Debug.logVerbose(xml, MODULE);
                     Writer writer = new OutputStreamWriter(new FileOutputStream(AmazonConstants.xmlOutputLocation + "AmazonProductFeed_" + AmazonConstants.xmlOutputDateFormat.format(new Date()) + ".xml"), "UTF-8");
-                    writer.write(xml);                    
-                    writer.close();                    
+                    writer.write(xml);
+                    writer.close();
                     processingDocumentId = AmazonConstants.soapClient.postProducts(xml);
-                    Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ProcessingDocumentId_Product", UtilMisc.toMap("processingDocumentId", processingDocumentId), locale), module);
+                    Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ProcessingDocumentId_Product", UtilMisc.toMap("processingDocumentId", processingDocumentId), locale), MODULE);
                 } catch (RemoteException e) {
                     success = false;
                     postErrorMessage = e.getMessage();
-                    List productIds = EntityUtil.getFieldListFromEntityList(validAmazonProducts, "productId", true);
+                    List<String> productIds = EntityUtil.getFieldListFromEntityList(validAmazonProducts, "productId", true);
                     String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostProductError", UtilMisc.toMap("productIds", productIds, "errorMessage", postErrorMessage), locale);
-                    Debug.logError(errorLog, module);
+                    Debug.logError(errorLog, MODULE);
                 }
 
                 // Store operational data of the post attempt
@@ -550,9 +601,11 @@ public class AmazonProductServices {
                     validAmazonProduct.set("postErrorMessage", success ? null : postErrorMessage);
                     long postFailures = 0;
                     if (validAmazonProduct.getLong("postFailures") != null) {
-                    	postFailures = validAmazonProduct.getLong("postFailures");
+                        postFailures = validAmazonProduct.getLong("postFailures");
                     }
-                    if (!success) validAmazonProduct.set("postFailures", postFailures + 1);
+                    if (!success) {
+                        validAmazonProduct.set("postFailures", postFailures + 1);
+                    }
                     validAmazonProduct.set("processingDocumentId", success ? processingDocumentId : null);
                     validAmazonProduct.set("ackStatusId", AmazonConstants.statusProductNotAcked);
                     validAmazonProduct.set("acknowledgeTimestamp", null);
@@ -585,11 +638,11 @@ public class AmazonProductServices {
             }
 
         } catch (GenericEntityException gee) {
-            UtilMessage.createAndLogServiceError(gee, locale, module);
+            UtilMessage.createAndLogServiceError(gee, locale, MODULE);
         } catch (IOException ioe) {
-            UtilMessage.createAndLogServiceError(ioe, locale, module);
+            UtilMessage.createAndLogServiceError(ioe, locale, MODULE);
         } catch (GenericServiceException gse) {
-            UtilMessage.createAndLogServiceError(gse, locale, module);
+            UtilMessage.createAndLogServiceError(gse, locale, MODULE);
         }
 
         return ServiceUtil.returnSuccess();
@@ -608,23 +661,27 @@ public class AmazonProductServices {
     }
 
     private static String getProductUPC(GenericDelegator delegator, String productId, Locale locale) throws GenericEntityException {
-        
+
         // Amazon only accepts UPC-A codes, so try to find one first
-        List cond = UtilMisc.toList(new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                                    new EntityExpr("goodIdentificationTypeId", EntityOperator.EQUALS, "UPCA"),
-                                    new EntityExpr("idValue", EntityOperator.NOT_EQUAL, ""));
-        GenericValue upcValue = EntityUtil.getFirst(delegator.findByCondition("GoodIdentification", new EntityConditionList(cond, EntityOperator.AND), null, Arrays.asList("lastUpdatedStamp DESC")));
-        if (UtilValidate.isNotEmpty(upcValue)) return upcValue.getString("idValue");
-        
+        EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
+                                    EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                                    EntityCondition.makeCondition("goodIdentificationTypeId", EntityOperator.EQUALS, "UPCA"),
+                                    EntityCondition.makeCondition("idValue", EntityOperator.NOT_EQUAL, ""));
+        GenericValue upcValue = EntityUtil.getFirst(delegator.findByCondition("GoodIdentification", cond, null, Arrays.asList("lastUpdatedStamp DESC")));
+        if (UtilValidate.isNotEmpty(upcValue)) {
+            return upcValue.getString("idValue");
+        }
+
         // If there's no UPC-A, try to find a UPC-E and expand it to a UPC-A
-        cond = UtilMisc.toList(new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                                    new EntityExpr("goodIdentificationTypeId", EntityOperator.EQUALS, "UPCE"),
-                                    new EntityExpr("idValue", EntityOperator.NOT_EQUAL, ""));
-        upcValue = EntityUtil.getFirst(delegator.findByCondition("GoodIdentification", new EntityConditionList(cond, EntityOperator.AND), null, Arrays.asList("lastUpdatedStamp DESC")));
+        cond = EntityCondition.makeCondition(EntityOperator.AND,
+                                    EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                                    EntityCondition.makeCondition("goodIdentificationTypeId", EntityOperator.EQUALS, "UPCE"),
+                                    EntityCondition.makeCondition("idValue", EntityOperator.NOT_EQUAL, ""));
+        upcValue = EntityUtil.getFirst(delegator.findByCondition("GoodIdentification", cond, null, Arrays.asList("lastUpdatedStamp DESC")));
         if (UtilValidate.isNotEmpty(upcValue)) {
             String upce = upcValue.getString("idValue");
             String upca = UtilProduct.expandUPCE(upce);
-            Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ExpandingUPCE", UtilMisc.toMap("productId", productId, "upce", upce, "upca", upca), locale), module);
+            Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ExpandingUPCE", UtilMisc.toMap("productId", productId, "upce", upce, "upca", upca), locale), MODULE);
             return upca;
         }
         return null;
@@ -632,13 +689,12 @@ public class AmazonProductServices {
 
     /**
      * Service looks over AmzonProductPrice and collect product prices that haven't been posted yet,
-     * creates XML document for Price Feed and post it to Amazon.com
-     *
-     * @param dctx
-     * @param context
-     * @return
+     * creates XML document for Price Feed and post it to Amazon.com.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context the service context <code>Map</code>
+     * @return the service response <code>Map</code>
      */
-    public static Map publishProductPriceToAmazon(DispatchContext dctx, Map context) {
+    public static Map<String, Object> publishProductPriceToAmazon(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
@@ -647,14 +703,13 @@ public class AmazonProductServices {
         String prodId = (String) context.get("productId");
 
         try {
-            List<EntityExpr> conditions = FastList.newInstance();
-            conditions.add(new EntityExpr("statusId", EntityOperator.IN, Arrays.asList(AmazonConstants.statusProductCreated, AmazonConstants.statusProductChanged, AmazonConstants.statusProductError)));
+            List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("statusId", EntityOperator.IN, Arrays.asList(AmazonConstants.statusProductCreated, AmazonConstants.statusProductChanged, AmazonConstants.statusProductError)));
             if (UtilValidate.isNotEmpty(prodId)) {
-                conditions.add(new EntityExpr("productId", EntityOperator.EQUALS, prodId));
+                conditions.add(EntityCondition.makeCondition("productId", EntityOperator.EQUALS, prodId));
             }
 
             TransactionUtil.begin();
-            EntityListIterator amazonPriceIt = delegator.findListIteratorByCondition("AmazonProductPrice", new EntityConditionList(conditions, EntityOperator.AND), null, Arrays.asList("productId"));
+            EntityListIterator amazonPriceIt = delegator.findListIteratorByCondition("AmazonProductPrice", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, Arrays.asList("productId"));
             TransactionUtil.commit();
 
             // Prepare Price Feed document
@@ -664,50 +719,50 @@ public class AmazonProductServices {
             Document priceFeed = AmazonConstants.soapClient.createDocumentHeader(AmazonConstants.messageTypePrice);
             Element root = priceFeed.getDocumentElement();
             GenericValue amazonPrice = null;
-            while ((amazonPrice = (GenericValue) amazonPriceIt.next()) != null) {
+            while ((amazonPrice = amazonPriceIt.next()) != null) {
 
                 String errMessage = null;
 
                 if (AmazonConstants.productPostRetryThreshold <= amazonPrice.getLong("postFailures").intValue()) {
                     String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostPriceAttemptsOverThreshold", UtilMisc.<String, Object>toMap("productId", amazonPrice.getString("productId"), "threshold", AmazonConstants.productPostRetryThreshold), locale);
-                    Debug.logInfo(errorLog, module);
+                    Debug.logInfo(errorLog, MODULE);
                     continue;
                 }
 
                 // Ignore products marked deleted
                 if (AmazonUtil.isAmazonProductDeleted(delegator, amazonPrice.getString("productId"))) {
                     String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_IgnoringProductPrice_ProductDeleted", UtilMisc.toMap("productId", amazonPrice.getString("productId")), locale);
-                    Debug.logError(errorLog, module);
+                    Debug.logError(errorLog, MODULE);
                     continue;
                 }
 
                 // check if this product was exported and acknowledged earlier
                 if (delegator.findCountByAnd("AmazonProduct", UtilMisc.toMap("productId", amazonPrice.getString("productId"), "statusId", AmazonConstants.statusProductPosted, "ackStatusId", AmazonConstants.statusProductAckRecv)) != 1) {
                     String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostPriceNonExistentProduct", UtilMisc.toMap("productId", amazonPrice.getString("productId")), locale);
-                    Debug.logError(errorLog, module);
+                    Debug.logError(errorLog, MODULE);
                     continue;
                 }
 
                 /*
-                 * Some elements are required. So, we get it first and go to next iteration 
+                 * Some elements are required. So, we get it first and go to next iteration
                  * if some of these is absent.
                  */
 
                 String upc = null;
                 if (AmazonConstants.requireUpcCodes || AmazonConstants.useUPCAsSKU) {
-    
+
                     // Establish and validate the UPC
                     upc = getProductUPC(delegator, amazonPrice.getString("productId"), locale);
                     if (UtilValidate.isEmpty(upc) && AmazonConstants.requireUpcCodes) {
                          errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_MissingCodeUPC", UtilMisc.toMap("productId", amazonPrice.getString("productId")), locale));
-                    } else if (UtilValidate.isNotEmpty(upc) && ! UtilProduct.isValidUPC(upc)) {
+                    } else if (UtilValidate.isNotEmpty(upc) && !UtilProduct.isValidUPC(upc)) {
                         errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_InvalidCodeUPC", UtilMisc.toMap("productId", amazonPrice.getString("productId")), locale));
                     }
                 }
 
                 // Establish and validate the SKU
                 String sku = getProductSKU(delegator, amazonPrice, upc);
-                if (UtilValidate.isEmpty(sku) && ! AmazonConstants.useUPCAsSKU) {
+                if (UtilValidate.isEmpty(sku) && !AmazonConstants.useUPCAsSKU) {
                     errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_NoRequiredParameter", UtilMisc.toMap("parameterName", "SKU", "productName", amazonPrice.getString("productId")), locale));
                 }
 
@@ -721,19 +776,21 @@ public class AmazonProductServices {
                 String standardPriceCurrency = null;
 
                 // Try to find a price for the Amazon productStoreGroup first
-                List cond = UtilMisc.toList(new EntityExpr("productId", EntityOperator.EQUALS, amazonPrice.getString("productId")),
-                                          new EntityExpr("productPriceTypeId", EntityOperator.EQUALS, AmazonConstants.priceStandard),
-                                          new EntityExpr("productStoreGroupId", EntityOperator.EQUALS, AmazonConstants.priceProductStoreGroup),
+                EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
+                                          EntityCondition.makeCondition("productId", EntityOperator.EQUALS, amazonPrice.getString("productId")),
+                                          EntityCondition.makeCondition("productPriceTypeId", EntityOperator.EQUALS, AmazonConstants.priceStandard),
+                                          EntityCondition.makeCondition("productStoreGroupId", EntityOperator.EQUALS, AmazonConstants.priceProductStoreGroup),
                                           EntityUtil.getFilterByDateExpr());
-                GenericValue standardPriceVal = EntityUtil.getFirst(delegator.findByCondition("ProductPrice", new EntityConditionList(cond, EntityOperator.AND), null, Arrays.asList("lastUpdatedStamp DESC")));
+                GenericValue standardPriceVal = EntityUtil.getFirst(delegator.findByCondition("ProductPrice", cond, null, Arrays.asList("lastUpdatedStamp DESC")));
                 if (UtilValidate.isEmpty(standardPriceVal)) {
 
                     // If there's no price for the Amazon productStoreGroup, try _NA_
-                    cond = UtilMisc.toList(new EntityExpr("productId", EntityOperator.EQUALS, amazonPrice.getString("productId")),
-                                         new EntityExpr("productPriceTypeId", EntityOperator.EQUALS, AmazonConstants.priceStandard),
-                                         new EntityExpr("productStoreGroupId", EntityOperator.EQUALS, "_NA_"),
+                    cond = EntityCondition.makeCondition(EntityOperator.AND,
+                                         EntityCondition.makeCondition("productId", EntityOperator.EQUALS, amazonPrice.getString("productId")),
+                                         EntityCondition.makeCondition("productPriceTypeId", EntityOperator.EQUALS, AmazonConstants.priceStandard),
+                                         EntityCondition.makeCondition("productStoreGroupId", EntityOperator.EQUALS, "_NA_"),
                                          EntityUtil.getFilterByDateExpr());
-                    standardPriceVal = EntityUtil.getFirst(delegator.findByCondition("ProductPrice", new EntityConditionList(cond, EntityOperator.AND), null, Arrays.asList("lastUpdatedStamp DESC")));
+                    standardPriceVal = EntityUtil.getFirst(delegator.findByCondition("ProductPrice", cond, null, Arrays.asList("lastUpdatedStamp DESC")));
                 }
                 if (UtilValidate.isNotEmpty(standardPriceVal)) {
                     standardPrice = standardPriceVal.getBigDecimal("price").setScale(AmazonConstants.decimals, AmazonConstants.rounding);
@@ -745,10 +802,11 @@ public class AmazonProductServices {
                 String salePriceCurrency = null;
                 String saleStartDate = null;
                 String saleEndDate = null;
-                cond = UtilMisc.toList(new EntityExpr("productId", EntityOperator.EQUALS, amazonPrice.getString("productId")),
-                                     new EntityExpr("productPriceTypeId", EntityOperator.EQUALS, AmazonConstants.priceSale),
-                                     new EntityExpr("productStoreGroupId", EntityOperator.EQUALS, AmazonConstants.priceProductStoreGroup));
-                GenericValue salePriceVal = EntityUtil.getFirst(delegator.findByCondition("ProductPrice", new EntityConditionList(cond, EntityOperator.AND), null, Arrays.asList("lastUpdatedStamp DESC")));
+                cond = EntityCondition.makeCondition(EntityOperator.AND,
+                                     EntityCondition.makeCondition("productId", EntityOperator.EQUALS, amazonPrice.getString("productId")),
+                                     EntityCondition.makeCondition("productPriceTypeId", EntityOperator.EQUALS, AmazonConstants.priceSale),
+                                     EntityCondition.makeCondition("productStoreGroupId", EntityOperator.EQUALS, AmazonConstants.priceProductStoreGroup));
+                GenericValue salePriceVal = EntityUtil.getFirst(delegator.findByCondition("ProductPrice", cond, null, Arrays.asList("lastUpdatedStamp DESC")));
                 if (UtilValidate.isNotEmpty(salePriceVal)) {
                     salePrice = salePriceVal.getBigDecimal("price").setScale(AmazonConstants.decimals, AmazonConstants.rounding);
                     salePriceCurrency = salePriceVal.getString("currencyUomId");
@@ -756,12 +814,12 @@ public class AmazonProductServices {
                     Timestamp thruDate = salePriceVal.getTimestamp("thruDate");
                     Timestamp now = UtilDateTime.nowTimestamp();
                     if (UtilValidate.isEmpty(thruDate)) {
-                        Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostPriceNoSaleEndDate", UtilMisc.toMap("productId", amazonPrice.getString("productId")), locale), module);
+                        Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostPriceNoSaleEndDate", UtilMisc.toMap("productId", amazonPrice.getString("productId")), locale), MODULE);
 
                         // Amazon requires an end date for the sale, so add twenty years or so
                         saleEndDate = AmazonUtil.convertTimestampToXSDate(new Timestamp(now.getTime() + 631152000000L));
                     } else if (thruDate.before(now)) {
-                        Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostPriceSalePriceSkipped", UtilMisc.toMap("productId", amazonPrice.getString("productId"), "thruDate", thruDate), locale), module);
+                        Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostPriceSalePriceSkipped", UtilMisc.toMap("productId", amazonPrice.getString("productId"), "thruDate", thruDate), locale), MODULE);
 
                         // The sale is over, so leave out the sale price so that it will be deleted in the Amazon system
                         salePrice = null;
@@ -786,10 +844,10 @@ public class AmazonProductServices {
                 Element price = priceFeed.createElement("Price");
                 message.appendChild(price);
                 UtilXml.addChildElementValue(price, "SKU", sku, priceFeed);
-                
+
                 // Delist the product (set standard price to zero) if certain conditions are true
                 boolean deListProduct = UtilValidate.isEmpty(standardPrice) || ((UtilValidate.isEmpty(salePriceVal) && AmazonConstants.delistProductIfNoSalePrice));
-                
+
                 Element standardPriceElement = UtilXml.addChildElementValue(price, "StandardPrice", deListProduct ? "0.0" : standardPrice.toString(), priceFeed);
                 standardPriceElement.setAttribute("currency", UtilValidate.isNotEmpty(standardPriceCurrency) ? standardPriceCurrency : UtilProperties.getPropertyValue("opentaps.properties", "defaultCurrencyUomId"));
                 if (UtilValidate.isEmpty(standardPrice)) {
@@ -807,7 +865,9 @@ public class AmazonProductServices {
                 amazonPrice.set("acknowledgeMessageId", "" + messageId);
                 validAmazonPrices.add(amazonPrice);
                 messageId++;
-                if (messageId % 500 == 0) Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_Processed_Records_Price", UtilMisc.toMap("count", messageId), locale), module);
+                if (messageId % 500 == 0) {
+                    Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_Processed_Records_Price", UtilMisc.toMap("count", messageId), locale), MODULE);
+                }
             }
             amazonPriceIt.close();
 
@@ -815,7 +875,7 @@ public class AmazonProductServices {
 
             if (UtilValidate.isEmpty(validAmazonPrices)) {
                 String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostNoNewPrices", locale);
-                Debug.logInfo(infoMessage, module);
+                Debug.logInfo(infoMessage, MODULE);
             } else {
 
                 boolean success = true;
@@ -823,18 +883,18 @@ public class AmazonProductServices {
                 long processingDocumentId = -1;
                 try {
                     String xml = UtilXml.writeXmlDocument(priceFeed);
-                    Debug.logVerbose(xml, module);
+                    Debug.logVerbose(xml, MODULE);
                     Writer writer = new OutputStreamWriter(new FileOutputStream(AmazonConstants.xmlOutputLocation + "AmazonPriceFeed_" + AmazonConstants.xmlOutputDateFormat.format(new Date()) + ".xml"), "UTF-8");
-                    writer.write(xml);                    
-                    writer.close();                    
+                    writer.write(xml);
+                    writer.close();
                     processingDocumentId = AmazonConstants.soapClient.postProductPrices(xml);
-                    Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ProcessingDocumentId_Price", UtilMisc.toMap("processingDocumentId", processingDocumentId), locale), module);
+                    Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ProcessingDocumentId_Price", UtilMisc.toMap("processingDocumentId", processingDocumentId), locale), MODULE);
                 } catch (RemoteException e) {
                     success = false;
                     postErrorMessage = e.getMessage();
-                    List productIds = EntityUtil.getFieldListFromEntityList(validAmazonPrices, "productId", true);
+                    List<String> productIds = EntityUtil.getFieldListFromEntityList(validAmazonPrices, "productId", true);
                     String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostPriceError", UtilMisc.toMap("productIds", productIds, "errorMessage", postErrorMessage), locale);
-                    Debug.logError(errorLog, module);
+                    Debug.logError(errorLog, MODULE);
                 }
 
                 // Store operational data of the post attempt
@@ -842,7 +902,9 @@ public class AmazonProductServices {
                     validAmazonPrice.set("statusId", success ? AmazonConstants.statusProductPosted : AmazonConstants.statusProductError);
                     validAmazonPrice.set("postTimestamp", UtilDateTime.nowTimestamp());
                     validAmazonPrice.set("postErrorMessage", success ? null : postErrorMessage);
-                    if (!success) validAmazonPrice.set("postFailures", validAmazonPrice.getLong("postFailures") + 1);
+                    if (!success) {
+                        validAmazonPrice.set("postFailures", validAmazonPrice.getLong("postFailures") + 1);
+                    }
                     validAmazonPrice.set("processingDocumentId", success ? processingDocumentId : null);
                     validAmazonPrice.set("ackStatusId", AmazonConstants.statusProductNotAcked);
                     validAmazonPrice.set("acknowledgeTimestamp", null);
@@ -875,11 +937,11 @@ public class AmazonProductServices {
             }
 
         } catch (GenericEntityException gee) {
-            UtilMessage.createAndLogServiceError(gee, locale, module);
+            UtilMessage.createAndLogServiceError(gee, locale, MODULE);
         } catch (IOException ioe) {
-            UtilMessage.createAndLogServiceError(ioe, locale, module);
+            UtilMessage.createAndLogServiceError(ioe, locale, MODULE);
         } catch (GenericServiceException gse) {
-            UtilMessage.createAndLogServiceError(gse, locale, module);
+            UtilMessage.createAndLogServiceError(gse, locale, MODULE);
         }
 
         return ServiceUtil.returnSuccess();
@@ -887,13 +949,12 @@ public class AmazonProductServices {
 
     /**
      * Service looks over AmazonProductImage and collect product images that haven't been posted yet,
-     * creates XML document for ProductImage Feed and post it to Amazon.com
-     *
-     * @param dctx
-     * @param context
-     * @return Map
+     * creates XML document for ProductImage Feed and post it to Amazon.com.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context the service context <code>Map</code>
+     * @return the service response <code>Map</code>
      */
-    public static Map publishProductImagesToAmazon(DispatchContext dctx, Map context) {
+    public static Map<String, Object> publishProductImagesToAmazon(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
@@ -902,56 +963,55 @@ public class AmazonProductServices {
         String prodId = (String) context.get("productId");
 
         try {
-            List<EntityExpr> conditions = FastList.newInstance();
-            conditions.add(new EntityExpr("statusId", EntityOperator.IN, Arrays.asList(AmazonConstants.statusProductCreated, AmazonConstants.statusProductChanged, AmazonConstants.statusProductError)));
+            List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("statusId", EntityOperator.IN, Arrays.asList(AmazonConstants.statusProductCreated, AmazonConstants.statusProductChanged, AmazonConstants.statusProductError)));
             if (UtilValidate.isNotEmpty(prodId)) {
-                conditions.add(new EntityExpr("productId", EntityOperator.EQUALS, prodId));
+                conditions.add(EntityCondition.makeCondition("productId", EntityOperator.EQUALS, prodId));
             }
 
             TransactionUtil.begin();
-            EntityListIterator amazonImageIt = delegator.findListIteratorByCondition("AmazonProductImage", new EntityConditionList(conditions, EntityOperator.AND), null, Arrays.asList("productId"));
+            EntityListIterator amazonImageIt = delegator.findListIteratorByCondition("AmazonProductImage", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, Arrays.asList("productId"));
             TransactionUtil.commit();
 
             long messageId = 1;
             long processedProductImages = 0;
             Map<GenericValue, String> invalidAmazonImages = new HashMap<GenericValue, String>();
             List<GenericValue> validAmazonImages = new ArrayList<GenericValue>();
-            List<GenericValue> amazonProductImageAcks = new ArrayList();
+            List<GenericValue> amazonProductImageAcks = new ArrayList<GenericValue>();
             Document imageFeed = AmazonConstants.soapClient.createDocumentHeader(AmazonConstants.messageTypeProductImage);
             Element root = imageFeed.getDocumentElement();
             GenericValue amazonProductImage = null;
-            while ((amazonProductImage = (GenericValue) amazonImageIt.next()) != null) {
+            while ((amazonProductImage = amazonImageIt.next()) != null) {
 
                 String errMessage = null;
 
                 if (AmazonConstants.productPostRetryThreshold <= amazonProductImage.getLong("postFailures").intValue()) {
                     String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostImageAttemptsOverThreshold", UtilMisc.<String, Object>toMap("productId", amazonProductImage.getString("productId"), "threshold", AmazonConstants.productPostRetryThreshold), locale);
-                    Debug.logInfo(errorLog, module);
+                    Debug.logInfo(errorLog, MODULE);
                     continue;
                 }
 
                 // check if this product was exported and acknowledged earlier
                 if (delegator.findCountByAnd("AmazonProduct", UtilMisc.toMap("productId", amazonProductImage.getString("productId"), "statusId", AmazonConstants.statusProductPosted, "ackStatusId", AmazonConstants.statusProductAckRecv)) != 1) {
                     String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostImageNonExistentProduct", UtilMisc.toMap("productId", amazonProductImage.getString("productId")), locale);
-                    Debug.logError(errorLog, module);
+                    Debug.logError(errorLog, MODULE);
                     continue;
                 }
 
                 // Ignore products marked deleted
                 if (AmazonUtil.isAmazonProductDeleted(delegator, amazonProductImage.getString("productId"))) {
                     String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_IgnoringProductImage_ProductDeleted", UtilMisc.toMap("productId", amazonProductImage.getString("productId")), locale);
-                    Debug.logError(errorLog, module);
+                    Debug.logError(errorLog, MODULE);
                     continue;
                 }
 
                 String upc = null;
                 if (AmazonConstants.requireUpcCodes || AmazonConstants.useUPCAsSKU) {
-    
+
                     // Establish and validate the UPC
                     upc = getProductUPC(delegator, amazonProductImage.getString("productId"), locale);
                     if (UtilValidate.isEmpty(upc) && AmazonConstants.requireUpcCodes) {
                          errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_MissingCodeUPC", UtilMisc.toMap("productId", amazonProductImage.getString("productId")), locale));
-                    } else if (UtilValidate.isNotEmpty(upc) && ! UtilProduct.isValidUPC(upc)) {
+                    } else if (UtilValidate.isNotEmpty(upc) && !UtilProduct.isValidUPC(upc)) {
                         errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_InvalidCodeUPC", UtilMisc.toMap("productId", amazonProductImage.getString("productId")), locale));
                     }
                 }
@@ -959,7 +1019,7 @@ public class AmazonProductServices {
                 // Establish and validate the SKU
                 String sku = getProductSKU(delegator, amazonProductImage, upc);
 
-                if (UtilValidate.isEmpty(sku) && ! AmazonConstants.useUPCAsSKU) {
+                if (UtilValidate.isEmpty(sku) && !AmazonConstants.useUPCAsSKU) {
                     errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_NoRequiredParameter", UtilMisc.toMap("parameterName", "SKU", "productName", amazonProductImage.getString("productId")), locale));
                 }
 
@@ -977,8 +1037,8 @@ public class AmazonProductServices {
 
                     StringUtil.StringWrapper imageUrlWrapper = contentWrapper.get(fieldName);
                     if (imageUrlWrapper == null) {
-                    	Debug.logInfo("No image url found for product [" + prodId + "] and field [" + fieldName, module);
-                    	continue;
+                        Debug.logInfo("No image url found for product [" + prodId + "] and field [" + fieldName + "]", MODULE);
+                        continue;
                     }
                     String imageUrlString = imageUrlWrapper.toString();
                     if (UtilValidate.isEmpty(imageUrlString)) {
@@ -1031,7 +1091,7 @@ public class AmazonProductServices {
                 validAmazonImages.add(amazonProductImage);
                 processedProductImages++;
                 if (processedProductImages % 500 == 0) {
-                    Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_Processed_Records_Image", UtilMisc.toMap("count", processedProductImages), locale), module);
+                    Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_Processed_Records_Image", UtilMisc.toMap("count", processedProductImages), locale), MODULE);
                 }
             }
             amazonImageIt.close();
@@ -1040,7 +1100,7 @@ public class AmazonProductServices {
 
             if (UtilValidate.isEmpty(validAmazonImages)) {
                 String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostNoNewImages", locale);
-                Debug.logInfo(infoMessage, module);
+                Debug.logInfo(infoMessage, MODULE);
             } else {
 
                 boolean success = true;
@@ -1048,18 +1108,18 @@ public class AmazonProductServices {
                 long processingDocumentId = -1;
                 try {
                     String xml = UtilXml.writeXmlDocument(imageFeed);
-                    Debug.logVerbose(xml, module);
+                    Debug.logVerbose(xml, MODULE);
                     Writer writer = new OutputStreamWriter(new FileOutputStream(AmazonConstants.xmlOutputLocation + "AmazonImageFeed_" + AmazonConstants.xmlOutputDateFormat.format(new Date()) + ".xml"), "UTF-8");
-                    writer.write(xml);                    
-                    writer.close();                    
+                    writer.write(xml);
+                    writer.close();
                     processingDocumentId = AmazonConstants.soapClient.postProductImages(xml);
-                    Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ProcessingDocumentId_Image", UtilMisc.toMap("processingDocumentId", processingDocumentId), locale), module);
+                    Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ProcessingDocumentId_Image", UtilMisc.toMap("processingDocumentId", processingDocumentId), locale), MODULE);
                 } catch (RemoteException e) {
                     success = false;
                     postErrorMessage = e.getMessage();
-                    List productIds = EntityUtil.getFieldListFromEntityList(validAmazonImages, "productId", true);
+                    List<String> productIds = EntityUtil.getFieldListFromEntityList(validAmazonImages, "productId", true);
                     String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostImageError", UtilMisc.toMap("productIds", productIds, "errorMessage", postErrorMessage), locale);
-                    Debug.logError(errorLog, module);
+                    Debug.logError(errorLog, MODULE);
                 }
 
                 // Store operational data of the post attempt
@@ -1078,7 +1138,7 @@ public class AmazonProductServices {
 
                     // Remove the old AmazonProductImageAcks from the database and store the new ones
                     delegator.removeRelated("AmazonProductImageAck", validAmazonImage);
-                    delegator.storeAll(EntityUtil.filterByCondition(amazonProductImageAcks, new EntityExpr("productId", EntityOperator.EQUALS, validAmazonImage.getString("productId"))));
+                    delegator.storeAll(EntityUtil.filterByCondition(amazonProductImageAcks, EntityCondition.makeCondition("productId", EntityOperator.EQUALS, validAmazonImage.getString("productId"))));
                 }
             }
 
@@ -1101,24 +1161,23 @@ public class AmazonProductServices {
             }
 
         } catch (GenericEntityException gee) {
-            UtilMessage.createAndLogServiceError(gee, locale, module);
+            UtilMessage.createAndLogServiceError(gee, locale, MODULE);
         } catch (IOException ioe) {
-            UtilMessage.createAndLogServiceError(ioe, locale, module);
+            UtilMessage.createAndLogServiceError(ioe, locale, MODULE);
         } catch (GenericServiceException gse) {
-            UtilMessage.createAndLogServiceError(gse, locale, module);
+            UtilMessage.createAndLogServiceError(gse, locale, MODULE);
         }
 
         return ServiceUtil.returnSuccess();
     }
 
     /**
-     * Posts inventory data relating to any new or changed AmazonProductInventory records to Amazon
-     *
-     * @param dctx
-     * @param context
-     * @return
+     * Posts inventory data relating to any new or changed AmazonProductInventory records to Amazon.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context the service context <code>Map</code>
+     * @return the service response <code>Map</code>
      */
-    public static Map publishProductInventoryToAmazon(DispatchContext dctx, Map context) {
+    public static Map<String, Object> publishProductInventoryToAmazon(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
@@ -1129,13 +1188,13 @@ public class AmazonProductServices {
 
         try {
 
-            List conditions = UtilMisc.toList(new EntityExpr("statusId", EntityOperator.IN, Arrays.asList(AmazonConstants.statusProductCreated, AmazonConstants.statusProductError, AmazonConstants.statusProductChanged)));
+            List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("statusId", EntityOperator.IN, Arrays.asList(AmazonConstants.statusProductCreated, AmazonConstants.statusProductError, AmazonConstants.statusProductChanged)));
             if (UtilValidate.isNotEmpty(prodId)) {
-                conditions.add(new EntityExpr("productId", EntityOperator.EQUALS, prodId));
+                conditions.add(EntityCondition.makeCondition("productId", EntityOperator.EQUALS, prodId));
             }
 
             TransactionUtil.begin();
-            EntityListIterator amazonInventoryIt = delegator.findListIteratorByCondition("AmazonProductInventory", new EntityConditionList(conditions, EntityOperator.AND), null, Arrays.asList("productId"));
+            EntityListIterator amazonInventoryIt = delegator.findListIteratorByCondition("AmazonProductInventory", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, Arrays.asList("productId"));
             TransactionUtil.commit();
 
             GenericValue productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", AmazonConstants.productStoreId));
@@ -1145,46 +1204,46 @@ public class AmazonProductServices {
             List<GenericValue> validAmazonInventory = new ArrayList<GenericValue>();
             Document inventoryDoc = AmazonConstants.soapClient.createDocumentHeader(AmazonConstants.messageTypeInventory);
             GenericValue amazonProductInventory = null;
-            while ((amazonProductInventory = (GenericValue) amazonInventoryIt.next()) != null) {
+            while ((amazonProductInventory = amazonInventoryIt.next()) != null) {
 
                 String errMessage = null;
 
                 // Check that the failure threshold has not been reached previously
                 if (AmazonConstants.productPostRetryThreshold <= amazonProductInventory.getLong("postFailures").intValue()) {
                     String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostImageAttemptsOverThreshold", UtilMisc.<String, Object>toMap("productId", amazonProductInventory.getString("productId"), "threshold", AmazonConstants.productPostRetryThreshold), locale);
-                    Debug.logInfo(errorLog, module);
+                    Debug.logInfo(errorLog, MODULE);
                     continue;
                 }
 
                 // Check if this product was exported and acknowledged earlier
                 if (delegator.findCountByAnd("AmazonProduct", UtilMisc.toMap("productId", amazonProductInventory.getString("productId"), "statusId", AmazonConstants.statusProductPosted, "ackStatusId", AmazonConstants.statusProductAckRecv)) != 1) {
                     String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostInventoryNonExistentProduct", UtilMisc.toMap("productId", amazonProductInventory.getString("productId")), locale);
-                    Debug.logError(errorLog, module);
+                    Debug.logError(errorLog, MODULE);
                     continue;
                 }
 
                 // Ignore products marked deleted
                 if (AmazonUtil.isAmazonProductDeleted(delegator, amazonProductInventory.getString("productId"))) {
                     String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_IgnoringProductInventory_ProductDeleted", UtilMisc.toMap("productId", amazonProductInventory.getString("productId")), locale);
-                    Debug.logError(errorLog, module);
+                    Debug.logError(errorLog, MODULE);
                     continue;
                 }
 
                 String upc = null;
                 if (AmazonConstants.requireUpcCodes || AmazonConstants.useUPCAsSKU) {
-    
+
                     // Establish and validate the UPC
                     upc = getProductUPC(delegator, amazonProductInventory.getString("productId"), locale);
                     if (UtilValidate.isEmpty(upc) && AmazonConstants.requireUpcCodes) {
                          errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_MissingCodeUPC", UtilMisc.toMap("productId", amazonProductInventory.getString("productId")), locale));
-                    } else if (UtilValidate.isNotEmpty(upc) && ! UtilProduct.isValidUPC(upc)) {
+                    } else if (UtilValidate.isNotEmpty(upc) && !UtilProduct.isValidUPC(upc)) {
                         errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_InvalidCodeUPC", UtilMisc.toMap("productId", amazonProductInventory.getString("productId")), locale));
                     }
                 }
 
                 // Establish and validate the SKU
                 String sku = getProductSKU(delegator, amazonProductInventory, upc);
-                if (UtilValidate.isEmpty(sku) && ! AmazonConstants.useUPCAsSKU) {
+                if (UtilValidate.isEmpty(sku) && !AmazonConstants.useUPCAsSKU) {
                     errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_NoRequiredParameter", UtilMisc.toMap("parameterName", "SKU", "productName", amazonProductInventory.getString("productId")), locale));
                 }
 
@@ -1201,15 +1260,21 @@ public class AmazonProductServices {
 
                 Double atp = new Double(0);
                 TransactionUtil.begin();
-                Map serviceResult = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("productId", amazonProductInventory.getString("productId"), "facilityId", productStore.getString("inventoryFacilityId"), "userLogin", userLogin));
+                Map<String, Object> serviceResult = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("productId", amazonProductInventory.getString("productId"), "facilityId", productStore.getString("inventoryFacilityId"), "userLogin", userLogin));
                 TransactionUtil.commit();
-                if (serviceResult.containsKey("availableToPromiseTotal")) atp = (Double) serviceResult.get("availableToPromiseTotal");
+                if (serviceResult.containsKey("availableToPromiseTotal")) {
+                    atp = (Double) serviceResult.get("availableToPromiseTotal");
+                }
 
                 // Amazon doesn't like inventory values < 0
-                if (atp.doubleValue() < 0) atp = new Double(0);
+                if (atp.doubleValue() < 0) {
+                    atp = new Double(0);
+                }
 
                 // Amazon doesn't like inventory values > 99,999,999
-                if (atp.doubleValue() > 99999999) postActualInventory = false;
+                if (atp.doubleValue() > 99999999) {
+                    postActualInventory = false;
+                }
 
                 GenericValue productFacility = delegator.findByPrimaryKey("ProductFacility", UtilMisc.toMap("productId", amazonProductInventory.getString("productId"), "facilityId", productStore.getString("inventoryFacilityId")));
 
@@ -1230,16 +1295,20 @@ public class AmazonProductServices {
                     long daysToShip = productFacility.getLong("daysToShip").longValue();
 
                     // Amazon doesn't like FulfillmentLatency > 30
-                    if (daysToShip > 30) daysToShip = 30;
+                    if (daysToShip > 30) {
+                        daysToShip = 30;
+                    }
 
                     // Amazon doesn't like FulfillmentLatency <= 0
-                    if (daysToShip > 0) UtilXml.addChildElementValue(invElement, "FulfillmentLatency", "" + daysToShip, inventoryDoc);
+                    if (daysToShip > 0) {
+                        UtilXml.addChildElementValue(invElement, "FulfillmentLatency", "" + daysToShip, inventoryDoc);
+                    }
                 }
 
                 amazonProductInventory.set("acknowledgeMessageId", "" + messageId);
                 validAmazonInventory.add(amazonProductInventory);
                 messageId++;
-                if (messageId % 500 == 0) Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_Processed_Records_Inventory", UtilMisc.toMap("count", messageId), locale), module);
+                if (messageId % 500 == 0) Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_Processed_Records_Inventory", UtilMisc.toMap("count", messageId), locale), MODULE);
             }
             amazonInventoryIt.close();
 
@@ -1247,7 +1316,7 @@ public class AmazonProductServices {
 
             if (UtilValidate.isEmpty(validAmazonInventory)) {
                 String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostNoNewProductInventory", locale);
-                Debug.logInfo(infoMessage, module);
+                Debug.logInfo(infoMessage, MODULE);
             } else {
 
                 boolean success = true;
@@ -1255,18 +1324,18 @@ public class AmazonProductServices {
                 long processingDocumentId = -1;
                 try {
                     String xml = UtilXml.writeXmlDocument(inventoryDoc);
-                    Debug.logVerbose(xml, module);
+                    Debug.logVerbose(xml, MODULE);
                     Writer writer = new OutputStreamWriter(new FileOutputStream(AmazonConstants.xmlOutputLocation + "AmazonProductInventoryFeed_" + AmazonConstants.xmlOutputDateFormat.format(new Date()) + ".xml"), "UTF-8");
-                    writer.write(xml);                    
-                    writer.close();                    
+                    writer.write(xml);
+                    writer.close();
                     processingDocumentId = AmazonConstants.soapClient.postProductInventory(xml);
-                    Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ProcessingDocumentId_Inventory", UtilMisc.toMap("processingDocumentId", processingDocumentId), locale), module);
+                    Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ProcessingDocumentId_Inventory", UtilMisc.toMap("processingDocumentId", processingDocumentId), locale), MODULE);
                 } catch (RemoteException e) {
                     success = false;
                     postErrorMessage = e.getMessage();
-                    List productIds = EntityUtil.getFieldListFromEntityList(validAmazonInventory, "productId", true);
+                    List<String> productIds = EntityUtil.getFieldListFromEntityList(validAmazonInventory, "productId", true);
                     String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostInventoryError", UtilMisc.toMap("productIds", productIds, "errorMessage", postErrorMessage), locale);
-                    Debug.logError(errorLog, module);
+                    Debug.logError(errorLog, MODULE);
                 }
 
                 // Store operational data of the post attempt
@@ -1309,32 +1378,35 @@ public class AmazonProductServices {
             }
 
         } catch (GenericEntityException gee) {
-            UtilMessage.createAndLogServiceError(gee, locale, module);
+            UtilMessage.createAndLogServiceError(gee, locale, MODULE);
         } catch (IOException ioe) {
-            UtilMessage.createAndLogServiceError(ioe, locale, module);
+            UtilMessage.createAndLogServiceError(ioe, locale, MODULE);
         } catch (GenericServiceException gse) {
-            UtilMessage.createAndLogServiceError(gse, locale, module);
+            UtilMessage.createAndLogServiceError(gse, locale, MODULE);
         }
 
         return ServiceUtil.returnSuccess();
     }
 
     /**
-     * Service deletes products which status is AMZN_PROD_DELETED from Amazon.com
+     * Service deletes products which status is AMZN_PROD_DELETED from Amazon.com.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context the service context <code>Map</code>
+     * @return the service response <code>Map</code>
      */
-    public static Map deleteProductsFromAmazon(DispatchContext dctx, Map context) {
+    public static Map<String, Object> deleteProductsFromAmazon(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         try {
-            List conditions = FastList.newInstance();
-            conditions.add(new EntityExpr("statusId", EntityOperator.IN, Arrays.asList(AmazonConstants.statusProductDeleted, AmazonConstants.statusProductDeleteError)));
-            conditions.add(new EntityExpr("ackStatusId", EntityOperator.EQUALS, AmazonConstants.statusProductNotAcked));
+            List<EntityCondition> conditions = FastList.newInstance();
+            conditions.add(EntityCondition.makeCondition("statusId", EntityOperator.IN, Arrays.asList(AmazonConstants.statusProductDeleted, AmazonConstants.statusProductDeleteError)));
+            conditions.add(EntityCondition.makeCondition("ackStatusId", EntityOperator.EQUALS, AmazonConstants.statusProductNotAcked));
 
             TransactionUtil.begin();
-            EntityListIterator amazonProductsIt = delegator.findListIteratorByCondition("AmazonProduct", new EntityConditionList(conditions, EntityOperator.AND), null, Arrays.asList("productId"));
+            EntityListIterator amazonProductsIt = delegator.findListIteratorByCondition("AmazonProduct", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, Arrays.asList("productId"));
             TransactionUtil.commit();
 
             // Prepare Product Feed document only element SKU and OperationType = Delete
@@ -1344,11 +1416,11 @@ public class AmazonProductServices {
             long messageId = 1;
             Map<GenericValue, String> invalidAmazonProducts = new HashMap<GenericValue, String>();
             List<GenericValue> validAmazonProducts = new ArrayList<GenericValue>();
-            while ((amazonProduct = (GenericValue) amazonProductsIt.next()) != null) {
+            while ((amazonProduct = amazonProductsIt.next()) != null) {
 
                 if (AmazonConstants.productPostRetryThreshold <= amazonProduct.getLong("postFailures").intValue()) {
                     String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostProductAttemptsOverThreshold", UtilMisc.<String, Object>toMap("productId", amazonProduct.getString("productId"), "threshold", AmazonConstants.productPostRetryThreshold), locale);
-                    Debug.logInfo(errorLog, module);
+                    Debug.logInfo(errorLog, MODULE);
                     continue;
                 }
 
@@ -1356,12 +1428,12 @@ public class AmazonProductServices {
 
                 String upc = null;
                 if (AmazonConstants.requireUpcCodes || AmazonConstants.useUPCAsSKU) {
-    
+
                     // Establish and validate the UPC
                     upc = getProductUPC(delegator, amazonProduct.getString("productId"), locale);
                     if (UtilValidate.isEmpty(upc) && AmazonConstants.requireUpcCodes) {
                          errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_MissingCodeUPC", UtilMisc.toMap("productId", amazonProduct.getString("productId")), locale));
-                    } else if (UtilValidate.isNotEmpty(upc) && ! UtilProduct.isValidUPC(upc)) {
+                    } else if (UtilValidate.isNotEmpty(upc) && !UtilProduct.isValidUPC(upc)) {
                         errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_InvalidCodeUPC", UtilMisc.toMap("productId", amazonProduct.getString("productId")), locale));
                     }
                 }
@@ -1370,7 +1442,9 @@ public class AmazonProductServices {
                 String sku = getProductSKU(delegator, amazonProduct, upc);
 
                 // Add errors if SKU is missing.
-                if (UtilValidate.isEmpty(sku) && ! AmazonConstants.useUPCAsSKU) errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_NoRequiredParameter", UtilMisc.toMap("parameterName", "SKU", "internalName", amazonProduct.getString("productId")), locale));
+                if (UtilValidate.isEmpty(sku) && !AmazonConstants.useUPCAsSKU) {
+                    errMessage = AmazonUtil.compoundError(errMessage, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_NoRequiredParameter", UtilMisc.toMap("parameterName", "SKU", "internalName", amazonProduct.getString("productId")), locale));
+                }
 
                 // Check for errors
                 if (UtilValidate.isNotEmpty(errMessage)) {
@@ -1392,7 +1466,9 @@ public class AmazonProductServices {
                 amazonProduct.set("acknowledgeMessageId", "" + messageId);
                 validAmazonProducts.add(amazonProduct);
                 messageId++;
-                if (messageId % 500 == 0) Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_Processed_Records_Product", UtilMisc.toMap("count", messageId), locale), module);
+                if (messageId % 500 == 0) {
+                    Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_Processed_Records_Product", UtilMisc.toMap("count", messageId), locale), MODULE);
+                }
             }
             amazonProductsIt.close();
 
@@ -1400,29 +1476,29 @@ public class AmazonProductServices {
 
             if (UtilValidate.isEmpty(validAmazonProducts)) {
                 String infoMessage = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostNoDeletedProducts", locale);
-                Debug.logInfo(infoMessage, module);
+                Debug.logInfo(infoMessage, MODULE);
             } else {
 
                 /*
-                 * Post product document and get transaction ID. Store ID with product for later use. 
+                 * Post product document and get transaction ID. Store ID with product for later use.
                  */
                 boolean success = true;
                 String postErrorMessage = null;
                 long processingDocumentId = -1;
                 try {
                     String xml = UtilXml.writeXmlDocument(productDeleteFeed);
-                    Debug.logVerbose(xml, module);
+                    Debug.logVerbose(xml, MODULE);
                     Writer writer = new OutputStreamWriter(new FileOutputStream(AmazonConstants.xmlOutputLocation + "AmazonProductDeleteFeed_" + AmazonConstants.xmlOutputDateFormat.format(new Date()) + ".xml"), "UTF-8");
-                    writer.write(xml);                    
-                    writer.close();                    
+                    writer.write(xml);
+                    writer.close();
                     processingDocumentId = AmazonConstants.soapClient.postProducts(xml);
-                    Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ProcessingDocumentId_Product", UtilMisc.toMap("processingDocumentId", processingDocumentId), locale), module);
+                    Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ProcessingDocumentId_Product", UtilMisc.toMap("processingDocumentId", processingDocumentId), locale), MODULE);
                 } catch (RemoteException e) {
                     success = false;
                     postErrorMessage = e.getMessage();
-                    List productIds = EntityUtil.getFieldListFromEntityList(validAmazonProducts, "productId", true);
+                    List<String> productIds = EntityUtil.getFieldListFromEntityList(validAmazonProducts, "productId", true);
                     String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_PostProductError", UtilMisc.toMap("productIds", productIds, "errorMessage", postErrorMessage), locale);
-                    Debug.logError(errorLog, module);
+                    Debug.logError(errorLog, MODULE);
                 }
 
                 // Store operational data of the post attempt
@@ -1465,11 +1541,11 @@ public class AmazonProductServices {
             }
 
         } catch (GenericEntityException gee) {
-            UtilMessage.createAndLogServiceError(gee, locale, module);
+            UtilMessage.createAndLogServiceError(gee, locale, MODULE);
         } catch (IOException ioe) {
-            UtilMessage.createAndLogServiceError(ioe, locale, module);
+            UtilMessage.createAndLogServiceError(ioe, locale, MODULE);
         } catch (GenericServiceException gse) {
-            UtilMessage.createAndLogServiceError(gse, locale, module);
+            UtilMessage.createAndLogServiceError(gse, locale, MODULE);
         }
 
         return ServiceUtil.returnSuccess();
@@ -1478,13 +1554,12 @@ public class AmazonProductServices {
     /**
      * Checks the time of the last successful feed processing document download against a configurable threshold and
      * sends a warning email if the last success was too long in the past (threshold is configurable in the
-     * opentaps.amazon.error.email.productFeedProcessingAgeWarning.thresholdHours property
-     *
-     * @param dctx
-     * @param context
-     * @return
+     * opentaps.amazon.error.email.productFeedProcessingAgeWarning.thresholdHours property.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context the service context <code>Map</code>
+     * @return the service response <code>Map</code>
      */
-    public static Map checkLastFeedProcessingDocumentDownloadSuccess(DispatchContext dctx, Map context) {
+    public static Map<String, Object> checkLastFeedProcessingDocumentDownloadSuccess(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
@@ -1493,7 +1568,7 @@ public class AmazonProductServices {
 
         if (!AmazonConstants.sendErrorEmails) {
             String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_NotCheckingLastProcDocSuccessNoEmail", locale);
-            Debug.logInfo(errorLog, module);
+            Debug.logInfo(errorLog, MODULE);
             return ServiceUtil.returnSuccess();
         }
 
@@ -1503,7 +1578,7 @@ public class AmazonProductServices {
 
             if (UtilValidate.isEmpty(amazonProductFeedProcessing)) {
                 String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_NoSuccesfulProcDocs", locale);
-                Debug.logInfo(errorLog, module);
+                Debug.logInfo(errorLog, MODULE);
                 return ServiceUtil.returnSuccess();
             }
 
@@ -1513,32 +1588,31 @@ public class AmazonProductServices {
             cal.add(Calendar.HOUR, 0 - Math.abs(AmazonConstants.lastProcDocCheckAge));
 
             if (lastSuccess.before(new Timestamp(cal.getTimeInMillis()))) {
-                Map emailMap = UtilMisc.toMap("thresholdHours", "" + AmazonConstants.lastProcDocCheckAge);
+                Map<String, String> emailMap = UtilMisc.toMap("thresholdHours", "" + AmazonConstants.lastProcDocCheckAge);
                 AmazonUtil.sendErrorEmail(dispatcher, userLogin, emailMap, UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ErrorEmailSubject_ProcDocAgeWarning", AmazonConstants.errorEmailLocale), AmazonConstants.errorEmailScreenUriProcDocAgeWarning);
             }
 
         } catch (GenericEntityException gee) {
-            UtilMessage.createAndLogServiceError(gee, locale, module);
+            UtilMessage.createAndLogServiceError(gee, locale, MODULE);
         } catch (GenericServiceException gse) {
-            UtilMessage.createAndLogServiceError(gse, locale, module);
+            UtilMessage.createAndLogServiceError(gse, locale, MODULE);
         }
 
         return ServiceUtil.returnSuccess();
     }
 
     /**
-     * Returns an error if the Amazon component is using GoodIdentifications
-     *
-     * @param dctx
-     * @param context
-     * @return
+     * Returns an error if the Amazon component is using GoodIdentifications.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context the service context <code>Map</code>
+     * @return the service response <code>Map</code>
      */
-    public static Map checkSKUChangeAllowed(DispatchContext dctx, Map context) {
+    public static Map<String, Object> checkSKUChangeAllowed(DispatchContext dctx, Map<String, Object> context) {
         Locale locale = (Locale) context.get("locale");
 
         if (!AmazonConstants.useProductIdAsSKU) {
             String errorLog = UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_SKUChangesNotAllowed", locale);
-            Debug.logInfo(errorLog, module);
+            Debug.logInfo(errorLog, MODULE);
             return ServiceUtil.returnError(errorLog);
         }
 

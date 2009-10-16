@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * Honest Public License for more details.
- * 
+ *
  * You should have received a copy of the Honest Public License
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
@@ -16,45 +16,44 @@
 
 package org.opentaps.amazon;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.*;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
-import org.opentaps.common.util.UtilMessage;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.*;
 
 /**
- * Utilities for Amazon integration
- *
- * @author     <a href="mailto:cliberty@opensourcestrategies.com">Chris Liberty</a> 
- * @version    $Rev: 10645 $
+ * Utilities for Amazon integration.
  */
+public final class AmazonUtil {
 
-public class AmazonUtil {
+    private AmazonUtil() { }
 
-    public static String module = AmazonUtil.class.getName();
+    private static final String MODULE = AmazonUtil.class.getName();
 
     /**
      * Parses a date string in XS date format into a Timestamp corrected to server time.
      *  Assumes that the XS date is for the Amazon timezone defined in AmazonConstants
-     * 
-     * @param xsDateString
+     *
+     * @param xsDateString a date string in XS date format
      * @return Timestamp corrected for server time
      */
     public static Timestamp convertAmazonXSDateToLocalTimestamp(String xsDateString) {
-        if (xsDateString == null) return null;
+        if (xsDateString == null) {
+            return null;
+        }
         String[] dateTimeElements = xsDateString.split("T");
         String[] dateElements = dateTimeElements[0].split("-");
         String[] timeElements = dateTimeElements[1].substring(0, 8).split(":");
@@ -65,37 +64,38 @@ public class AmazonUtil {
     }
 
     /**
-     * Converts a timestamp to XS date format
-     * 
-     * @param ts
+     * Converts a timestamp to XS date format.
+     *
+     * @param ts a <code>Timestamp</code> value
      * @return XS date string
      */
     public static String convertTimestampToXSDate(Timestamp ts) {
-        if (ts == null) return null;
-        GregorianCalendar cal = new GregorianCalendar(); 
+        if (ts == null) {
+            return null;
+        }
+        GregorianCalendar cal = new GregorianCalendar();
         cal.setTimeInMillis(ts.getTime());
         DatatypeFactory df = null;
         try {
             df = DatatypeFactory.newInstance();
         } catch (DatatypeConfigurationException e) {
-            Debug.logError(e, module);
+            Debug.logError(e, MODULE);
         }
         XMLGregorianCalendar xc = df.newXMLGregorianCalendar(cal);
         return xc.toXMLFormat();
     }
 
     /**
-     * Sends email notification of a failed operation
-     * 
-     * @param dispatcher
-     * @param userLogin
-     * @param params
-     * @param subject
-     * @param screenUri
-     * @throws GenericServiceException
+     * Sends email notification of a failed operation.
+     * @param dispatcher a <code>LocalDispatcher</code> value
+     * @param userLogin a <code>GenericValue</code> value
+     * @param params a <code>Map</code> value
+     * @param subject a <code>String</code> value
+     * @param screenUri a <code>String</code> value
+     * @exception GenericServiceException if an error occurs
      */
     public static void sendErrorEmail(LocalDispatcher dispatcher, GenericValue userLogin, Map params, String subject, String screenUri) throws GenericServiceException {
-        Map sendMailContext = new HashMap();
+        Map<String, Object> sendMailContext = new HashMap<String, Object>();
         sendMailContext.put("locale", AmazonConstants.errorEmailLocale);
         sendMailContext.put("bodyScreenUri", screenUri);
         sendMailContext.put("bodyParameters", params);
@@ -110,21 +110,21 @@ public class AmazonUtil {
     }
 
     /**
-     * Send bulk error notification emails, with a number of lines defined by AmazonConstants.linesForBulkErrorEmails
-     * @param dispatcher
-     * @param userLogin
-     * @param errorMessages
-     * @param subject
-     * @param screenUri
-     * @throws GenericServiceException
+     * Send bulk error notification emails, with a number of lines defined by AmazonConstants.linesForBulkErrorEmails.
+     * @param dispatcher a <code>LocalDispatcher</code> value
+     * @param userLogin a <code>GenericValue</code> value
+     * @param errorMessages a <code>Map</code> value
+     * @param subject a <code>String</code> value
+     * @param screenUri a <code>String</code> value
+     * @exception GenericServiceException if an error occurs
      */
     public static void sendBulkErrorEmail(LocalDispatcher dispatcher, GenericValue userLogin, LinkedHashMap<GenericValue, String> errorMessages, String subject, String screenUri) throws GenericServiceException {
-        Map emailErrors = new LinkedHashMap();
+        Map<GenericValue, String> emailErrors = new LinkedHashMap<GenericValue, String>();
         int count = 0;
         int messageCount = 0;
         int max = errorMessages.size();
         int totalMessages = new BigDecimal(max / new Double(AmazonConstants.linesForBulkErrorEmails).doubleValue()).setScale(0, BigDecimal.ROUND_UP).intValue();
-        for (Map.Entry entry : errorMessages.entrySet()) {
+        for (Map.Entry<GenericValue, String> entry : errorMessages.entrySet()) {
             emailErrors.put(entry.getKey(), entry.getValue());
             count++;
             if ((count != 0 && count % AmazonConstants.linesForBulkErrorEmails == 0) || count == max) {
@@ -152,54 +152,55 @@ public class AmazonUtil {
         SKU_TYPE                (1, 40),
         DESCRIPTION             (0, 2000),
         DISCLAIMER              (0, 1000);
-        
-        private final int _minLength;
-        private final int _maxLength;
-        
+
+        private final int minLength;
+        private final int maxLength;
+
         Strings(int minLength, int maxLength) {
-            _minLength = minLength;
-            _maxLength = maxLength;
+            this.minLength = minLength;
+            this.maxLength = maxLength;
         }
-        
+
         /**
          * Check if string length is within a valid range.
-         * 
-         * @param s
-         * @return boolean
+         *
+         * @param s a <code>String</code> to check
+         * @return is the <code>String</code> valid
          */
         public boolean isValid(String s) {
-            if (_minLength != 0 && s == null) {
+            if (minLength != 0 && s == null) {
                 return false;
             }
-            return (s.length() >= _minLength) && (s.length() <= _maxLength) ? true : false;
+            return (s.length() >= minLength) && (s.length() <= maxLength) ? true : false;
         };
-        
+
         /**
          * Truncate string to max valid length of given type and log warning.
-         * 
-         * @param s
-         * @param locale
-         * @return String
+         *
+         * @param s a <code>String</code> to normalize
+         * @param locale a <code>Locale</code> value
+         * @return the normalized <code>String</code>
          */
         public String normalize(String s, Locale locale) {
-            if (s == null) return s;
-            
+            if (s == null) {
+                return s;
+            }
+
             // Hack to work around the non-breaking space bug
             s = s.replaceAll("\\u00A0", " ");
-            
-            if (s.length() > _maxLength) {
-                Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_WarningStringTruncated", UtilMisc.<String, Object>toMap("str", s, "maxLength", _maxLength), locale), module);
-                return s.substring(0, _maxLength - 1);
+
+            if (s.length() > maxLength) {
+                Debug.logInfo(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_WarningStringTruncated", UtilMisc.<String, Object>toMap("str", s, "maxLength", maxLength), locale), MODULE);
+                return s.substring(0, maxLength - 1);
             }
             return s;
         }
-        
+
     };
 
     /**
      * Marks an AmazonProduct as updated, which will cause it to be published to Amazon.
-     *
-     * @param value
+     * @param value a <code>GenericValue</code> value
      */
     public static void markAmazonProductAsUpdated(GenericValue value) {
         markAmazonValueAsUpdated(value);
@@ -209,8 +210,7 @@ public class AmazonUtil {
 
     /**
      * Marks an AmazonProduct as deleted, which will cause it to be deleted from Amazon.
-     *
-     * @param value
+     * @param value a <code>GenericValue</code> value
      */
     public static void markAmazonProductAsDeleted(GenericValue value) {
         markAmazonValueAsUpdated(value);
@@ -220,8 +220,7 @@ public class AmazonUtil {
 
     /**
      * Marks an AmazonProductImage as updated, which will cause it to be published to Amazon.
-     *
-     * @param value
+     * @param value a <code>GenericValue</code> value
      */
     public static void markAmazonProductImageAsUpdated(GenericValue value) {
         value.set("postTimestamp", null);
@@ -233,8 +232,7 @@ public class AmazonUtil {
 
     /**
      * Marks an AmazonProductPrice as updated, which will cause it to be published to Amazon.
-     *
-     * @param value
+     * @param value a <code>GenericValue</code> value
      */
     public static void markAmazonProductPriceAsUpdated(GenericValue value) {
         markAmazonValueAsUpdated(value);
@@ -244,8 +242,7 @@ public class AmazonUtil {
 
     /**
      * Marks an AmazonProductInventory as updated, which will cause it to be published to Amazon.
-     *
-     * @param value
+     * @param value a <code>GenericValue</code> value
      */
     public static void markAmazonProductInventoryAsUpdated(GenericValue value) {
         markAmazonValueAsUpdated(value);
@@ -254,25 +251,23 @@ public class AmazonUtil {
     }
 
     /**
-     * Creates the necessary set of records for a new Amazon product
-     * 
-     * @param delegator
-     * @param productId
-     * @return
+     * Creates the necessary set of records for a new Amazon product.
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param productId a <code>String</code> value
+     * @return a <code>List</code> value
      */
     public static List<GenericValue> createAmazonProductRecords(GenericDelegator delegator, String productId) {
-        List<GenericValue> records = new ArrayList<GenericValue>(); 
+        List<GenericValue> records = new ArrayList<GenericValue>();
         records.add(createAmazonProductRecord(delegator, productId));
         records.addAll(createAmazonProductRelatedRecords(delegator, productId));
         return records;
     }
-    
+
     /**
-     * Creates the AmazonProduct record for a new Amazon product
-     * 
-     * @param delegator
-     * @param productId
-     * @return
+     * Creates the AmazonProduct record for a new Amazon product.
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param productId a <code>String</code> value
+     * @return a <code>GenericValue</code> value
      */
     public static GenericValue createAmazonProductRecord(GenericDelegator delegator, String productId) {
         GenericValue amazonProduct = delegator.makeValue("AmazonProduct", UtilMisc.toMap("productId", productId));
@@ -281,18 +276,23 @@ public class AmazonUtil {
         amazonProduct.set("ackStatusId", AmazonConstants.statusProductNotAcked);
         return amazonProduct;
     }
-    
+
     /**
-     * Creates the AmazonProduct* records for a new Amazon product
-     * 
-     * @param delegator
-     * @param productId
-     * @return
+     * Creates the AmazonProduct* records for a new Amazon product.
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param productId a <code>String</code> value
+     * @return a <code>List</code> value
      */
     public static List<GenericValue> createAmazonProductRelatedRecords(GenericDelegator delegator, String productId) {
         return UtilMisc.toList(createAmazonProductPrice(delegator, productId), createAmazonProductInventory(delegator, productId), createAmazonProductImage(delegator, productId));
     }
 
+    /**
+     * Creates a new AmazonProductImage record.
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param productId a <code>String</code> value
+     * @return a <code>GenericValue</code> value
+     */
     public static GenericValue createAmazonProductImage(GenericDelegator delegator, String productId) {
         GenericValue amazonProductImage = delegator.makeValue("AmazonProductImage", UtilMisc.toMap("productId", productId));
         markAmazonValueAsUpdated(amazonProductImage);
@@ -302,6 +302,10 @@ public class AmazonUtil {
 
     /**
      * If the amazonProductImage parameter is not null, flags as updated and stores. Otherwise, creates, flags as updated and stores.
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param productId a <code>String</code> value
+     * @param amazonProductImage a <code>GenericValue</code> value
+     * @exception GenericEntityException if an error occurs
      */
     public static void createOrUpdateAmazonProductImage(GenericDelegator delegator, String productId, GenericValue amazonProductImage) throws GenericEntityException {
         if (amazonProductImage != null) {
@@ -315,6 +319,12 @@ public class AmazonUtil {
         }
     }
 
+    /**
+     * Creates a new AmazonProductPrice record.
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param productId a <code>String</code> value
+     * @return a <code>GenericValue</code> value
+     */
     public static GenericValue createAmazonProductPrice(GenericDelegator delegator, String productId) {
         GenericValue amazonProductPrice = delegator.makeValue("AmazonProductPrice", UtilMisc.toMap("productId", productId));
         markAmazonValueAsUpdated(amazonProductPrice);
@@ -323,6 +333,12 @@ public class AmazonUtil {
         return amazonProductPrice;
     }
 
+    /**
+     * Creates a new AmazonProductInventory record.
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param productId a <code>String</code> value
+     * @return a <code>GenericValue</code> value
+     */
     public static GenericValue createAmazonProductInventory(GenericDelegator delegator, String productId) {
         GenericValue amazonProductInventory = delegator.makeValue("AmazonProductInventory", UtilMisc.toMap("productId", productId));
         markAmazonValueAsUpdated(amazonProductInventory);
@@ -337,27 +353,44 @@ public class AmazonUtil {
         value.set("postFailures", new Long(0));
         value.set("processingDocumentId", null);
         ModelEntity modelEntity = value.getModelEntity();
-        if ((modelEntity != null) && (modelEntity.getField("acknowledgeTimestamp") != null)) value.set("acknowledgeTimestamp", null);
-        if ((modelEntity != null) && (modelEntity.getField("acknowledgeErrorMessage") != null)) value.set("acknowledgeErrorMessage", null);
-        if ((modelEntity != null) && (modelEntity.getField("acknowledgeMessageId") != null)) value.set("acknowledgeMessageId", null);
+        if ((modelEntity != null) && (modelEntity.getField("acknowledgeTimestamp") != null)) {
+            value.set("acknowledgeTimestamp", null);
+        }
+        if ((modelEntity != null) && (modelEntity.getField("acknowledgeErrorMessage") != null)) {
+            value.set("acknowledgeErrorMessage", null);
+        }
+        if ((modelEntity != null) && (modelEntity.getField("acknowledgeMessageId") != null)) {
+            value.set("acknowledgeMessageId", null);
+        }
     }
 
+    /**
+     * Checks if the given AmazonProduct record is deleted.
+     * @param amazonProduct a <code>GenericValue</code> value
+     * @return a <code>boolean</code> value
+     */
     public static boolean isAmazonProductDeleted(GenericValue amazonProduct) {
         return AmazonConstants.statusProductDeleted.equalsIgnoreCase(amazonProduct.getString("statusId")) || AmazonConstants.statusProductDeleteError.equalsIgnoreCase(amazonProduct.getString("statusId"));
     }
-    
+
+    /**
+     * Checks if the given AmazonProduct record is deleted.
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param productId a <code>String</code> value
+     * @return a <code>boolean</code> value
+     * @exception GenericEntityException if an error occurs
+     */
     public static boolean isAmazonProductDeleted(GenericDelegator delegator, String productId) throws GenericEntityException {
         GenericValue amazonProduct = delegator.findByPrimaryKey("AmazonProduct", UtilMisc.toMap("productId", productId));
         return isAmazonProductDeleted(amazonProduct);
     }
-    
+
     /**
      * Returns ItemType for given node. For each node can be only ItemType.
-     * 
-     * @param delegator
-     * @param nodeId
-     * @return String 
-     * @throws GenericEntityException
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param nodeId a <code>String</code> value
+     * @return a <code>String</code> value
+     * @exception GenericEntityException if an error occurs
      */
     public static String getValidItemType(GenericDelegator delegator, String nodeId) throws GenericEntityException {
         List<GenericValue> validItem = delegator.findByAnd("AmazonNodeValidAttribute", UtilMisc.toMap("nodeId", nodeId));
@@ -366,114 +399,153 @@ public class AmazonUtil {
         }
         return EntityUtil.getFirst(validItem).getString("itemTypeId");
     }
-    
+
+    /**
+     * Describe <code>findAndSetValidProductElements</code> method here.
+     *
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param productId a <code>String</code> value
+     * @param nodeId a <code>String</code> value
+     * @exception GenericEntityException if an error occurs
+     */
     public static void findAndSetValidProductElements(GenericDelegator delegator, String productId, String nodeId) throws GenericEntityException {
         List<GenericValue> validElements = delegator.findByAnd("AmazonNodeValidAttribute", UtilMisc.toMap("nodeId", nodeId));
         if (UtilValidate.isEmpty(validElements)) {
             return;
         }
-        
+
         // look for OtherItemAttributes
         List<GenericValue> otherItemAttributes = EntityUtil.filterByAnd(validElements, UtilMisc.toMap("nodeMappingTypeId", "OTHER_ITEM_ATTR"));
         if (UtilValidate.isNotEmpty(otherItemAttributes) && otherItemAttributes.size() == 1) {
             GenericValue otherItemAttribute = EntityUtil.getFirst(otherItemAttributes);
             List<String> andValues = new ArrayList<String>();
-            if (UtilValidate.isNotEmpty(otherItemAttribute.getString("relatedToId"))) andValues.add(otherItemAttribute.getString("relatedToId"));
-            if (UtilValidate.isNotEmpty(otherItemAttribute.getString("relatedTo1Id"))) andValues.add(otherItemAttribute.getString("relatedTo1Id"));
-            if (UtilValidate.isNotEmpty(otherItemAttribute.getString("relatedTo2Id"))) andValues.add(otherItemAttribute.getString("relatedTo2Id"));
-            if (UtilValidate.isNotEmpty(otherItemAttribute.getString("relatedTo3Id"))) andValues.add(otherItemAttribute.getString("relatedTo3Id"));
-            if (UtilValidate.isNotEmpty(otherItemAttribute.getString("relatedTo4Id"))) andValues.add(otherItemAttribute.getString("relatedTo4Id"));
+            if (UtilValidate.isNotEmpty(otherItemAttribute.getString("relatedToId"))) {
+                andValues.add(otherItemAttribute.getString("relatedToId"));
+            }
+            if (UtilValidate.isNotEmpty(otherItemAttribute.getString("relatedTo1Id"))) {
+                andValues.add(otherItemAttribute.getString("relatedTo1Id"));
+            }
+            if (UtilValidate.isNotEmpty(otherItemAttribute.getString("relatedTo2Id"))) {
+                andValues.add(otherItemAttribute.getString("relatedTo2Id"));
+            }
+            if (UtilValidate.isNotEmpty(otherItemAttribute.getString("relatedTo3Id"))) {
+                andValues.add(otherItemAttribute.getString("relatedTo3Id"));
+            }
+            if (UtilValidate.isNotEmpty(otherItemAttribute.getString("relatedTo4Id"))) {
+                andValues.add(otherItemAttribute.getString("relatedTo4Id"));
+            }
             for (String andValue : andValues) {
                 GenericValue value = delegator.makeValue("AmazonOtherItemAttrValue", UtilMisc.toMap("productId", productId, "otherItemAttrId", andValue));
                 value.create();
             }
         }
-        
+
         // look for UsedFor
         List<GenericValue> usedForItems = EntityUtil.filterByAnd(validElements, UtilMisc.toMap("nodeMappingTypeId", "USED_FOR"));
         if (UtilValidate.isNotEmpty(usedForItems) && usedForItems.size() == 1) {
             GenericValue usedForItem = EntityUtil.getFirst(usedForItems);
             List<String> andValues = new ArrayList<String>();
-            if (UtilValidate.isNotEmpty(usedForItem.getString("relatedToId"))) andValues.add(usedForItem.getString("relatedToId"));
-            if (UtilValidate.isNotEmpty(usedForItem.getString("relatedTo1Id"))) andValues.add(usedForItem.getString("relatedTo1Id"));
-            if (UtilValidate.isNotEmpty(usedForItem.getString("relatedTo2Id"))) andValues.add(usedForItem.getString("relatedTo2Id"));
-            if (UtilValidate.isNotEmpty(usedForItem.getString("relatedTo3Id"))) andValues.add(usedForItem.getString("relatedTo3Id"));
-            if (UtilValidate.isNotEmpty(usedForItem.getString("relatedTo4Id"))) andValues.add(usedForItem.getString("relatedTo4Id"));
+            if (UtilValidate.isNotEmpty(usedForItem.getString("relatedToId"))) {
+                andValues.add(usedForItem.getString("relatedToId"));
+            }
+            if (UtilValidate.isNotEmpty(usedForItem.getString("relatedTo1Id"))) {
+                andValues.add(usedForItem.getString("relatedTo1Id"));
+            }
+            if (UtilValidate.isNotEmpty(usedForItem.getString("relatedTo2Id"))) {
+                andValues.add(usedForItem.getString("relatedTo2Id"));
+            }
+            if (UtilValidate.isNotEmpty(usedForItem.getString("relatedTo3Id"))) {
+                andValues.add(usedForItem.getString("relatedTo3Id"));
+            }
+            if (UtilValidate.isNotEmpty(usedForItem.getString("relatedTo4Id"))) {
+                andValues.add(usedForItem.getString("relatedTo4Id"));
+            }
             for (String andValue : andValues) {
                 GenericValue value = delegator.makeValue("AmazonUsedForValue", UtilMisc.toMap("productId", productId, "usedForId", andValue));
                 value.create();
             }
         }
-        
+
         // look for TargetAudience
         List<GenericValue> targetAudienceItems = EntityUtil.filterByAnd(validElements, UtilMisc.toMap("nodeMappingTypeId", "TARGET_AUDIENCE"));
         if (UtilValidate.isNotEmpty(targetAudienceItems) && targetAudienceItems.size() == 1) {
             GenericValue targetAudienceItem = EntityUtil.getFirst(targetAudienceItems);
             List<String> andValues = new ArrayList<String>();
-            if (UtilValidate.isNotEmpty(targetAudienceItem.getString("relatedToId"))) andValues.add(targetAudienceItem.getString("relatedToId"));
-            if (UtilValidate.isNotEmpty(targetAudienceItem.getString("relatedTo1Id"))) andValues.add(targetAudienceItem.getString("relatedTo1Id"));
-            if (UtilValidate.isNotEmpty(targetAudienceItem.getString("relatedTo2Id"))) andValues.add(targetAudienceItem.getString("relatedTo2Id"));
-            if (UtilValidate.isNotEmpty(targetAudienceItem.getString("relatedTo3Id"))) andValues.add(targetAudienceItem.getString("relatedTo3Id"));
-            if (UtilValidate.isNotEmpty(targetAudienceItem.getString("relatedTo4Id"))) andValues.add(targetAudienceItem.getString("relatedTo4Id"));
+            if (UtilValidate.isNotEmpty(targetAudienceItem.getString("relatedToId"))) {
+                andValues.add(targetAudienceItem.getString("relatedToId"));
+            }
+            if (UtilValidate.isNotEmpty(targetAudienceItem.getString("relatedTo1Id"))) {
+                andValues.add(targetAudienceItem.getString("relatedTo1Id"));
+            }
+            if (UtilValidate.isNotEmpty(targetAudienceItem.getString("relatedTo2Id"))) {
+                andValues.add(targetAudienceItem.getString("relatedTo2Id"));
+            }
+            if (UtilValidate.isNotEmpty(targetAudienceItem.getString("relatedTo3Id"))) {
+                andValues.add(targetAudienceItem.getString("relatedTo3Id"));
+            }
+            if (UtilValidate.isNotEmpty(targetAudienceItem.getString("relatedTo4Id"))) {
+                andValues.add(targetAudienceItem.getString("relatedTo4Id"));
+            }
             for (String andValue : andValues) {
                 GenericValue value = delegator.makeValue("AmazonTargetAudienceValue", UtilMisc.toMap("productId", productId, "targetAudienceId", andValue));
                 value.create();
             }
         }
-        
+
     }
-    
+
     /**
-     * Helper method return valid ItemTypes for given browse node. 
-     * 
-     * @param delegator
-     * @param nodeId
-     * @return List<GenericValue>
+     * Helper method return valid ItemTypes for given browse node.
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param nodeId a node ID
+     * @return the <code>List</code> of <code>GenericValue</code> valid items for the given node
      */
     public static List<GenericValue> getValidItemTypesForNode(GenericDelegator delegator, String nodeId) {
-        
+
         if (UtilValidate.isEmpty(nodeId) || delegator == null) {
             return null;
         }
-        
+
         try {
-            
+
             List<GenericValue> validAttributes = delegator.findByAnd("AmazonNodeValidAttribute", UtilMisc.toMap("nodeId", nodeId));
             List<String> validItemTypeIds = EntityUtil.getFieldListFromEntityList(validAttributes, "itemTypeId", true);
             if (UtilValidate.isNotEmpty(validItemTypeIds)) {
-                return delegator.findByCondition("AmazonProductItemType", new EntityExpr("itemTypeId", EntityOperator.IN, validItemTypeIds), null, Arrays.asList("itemTypeId"));
+                return delegator.findByCondition("AmazonProductItemType", EntityCondition.makeCondition("itemTypeId", EntityOperator.IN, validItemTypeIds), null, Arrays.asList("itemTypeId"));
             }
-            
+
         } catch (GenericEntityException gee) {
-            Debug.logError(gee.getMessage(), module);
+            Debug.logError(gee.getMessage(), MODULE);
         } catch (NullPointerException npe) {
-            Debug.logError(npe.getMessage(), module);
+            Debug.logError(npe.getMessage(), MODULE);
         }
 
         return null;
     }
-    
+
     /**
-     * 
-     * Method return attributes of some type (UsedFor, OtherItemAttribute, TargetAudience) which can be combined 
+     *
+     * Method return attributes of some type (UsedFor, OtherItemAttribute, TargetAudience) which can be combined
      * for the ItemType by OR.
-     * 
-     * @param delegator
-     * @param nodeMappingTypeId
-     * @param nodeId
-     * @param itemTypeId
-     * @return List<GenericValue>
+     *
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param nodeMappingTypeId a node mapping type ID
+     * @param nodeId a node ID
+     * @param itemTypeId an item type ID
+     * @return the <code>List</code> of <code>GenericValue</code> valid attributes for the given node and item type
      */
     public static List<GenericValue> getValidAttributesForItemType(GenericDelegator delegator, String nodeMappingTypeId, String nodeId, String itemTypeId) {
 
         if (UtilValidate.isEmpty(nodeId) || delegator == null) {
             return null;
         }
-        
+
         try {
-            
-            Map fields = UtilMisc.toMap("nodeId", nodeId, "nodeMappingTypeId", nodeMappingTypeId);
-            if (itemTypeId != null) fields.put("itemTypeId", itemTypeId);
+
+            Map<String, Object> fields = UtilMisc.<String, Object>toMap("nodeId", nodeId, "nodeMappingTypeId", nodeMappingTypeId);
+            if (itemTypeId != null) {
+                fields.put("itemTypeId", itemTypeId);
+            }
             List<GenericValue> validAttributes = delegator.findByAnd("AmazonNodeValidAttribute", fields);
             List<String> validIds = EntityUtil.getFieldListFromEntityList(validAttributes, "relatedToId", true);
             List<GenericValue> result = null;
@@ -487,30 +559,35 @@ public class AmazonUtil {
                 }
             } else {
                 if ("USED_FOR".equals(nodeMappingTypeId)) {
-                    result = delegator.findByCondition("AmazonProductUsedFor", new EntityExpr("usedForId", EntityOperator.IN, validIds), null, Arrays.asList("usedForId"));
+                    result = delegator.findByCondition("AmazonProductUsedFor", EntityCondition.makeCondition("usedForId", EntityOperator.IN, validIds), null, Arrays.asList("usedForId"));
                 } else if ("OTHER_ITEM_ATTR".equals(nodeMappingTypeId)) {
-                    result = delegator.findByCondition("AmazonProductOtherItemAttr", new EntityExpr("otherItemAttrId", EntityOperator.IN, validIds), null, Arrays.asList("otherItemAttrId"));
+                    result = delegator.findByCondition("AmazonProductOtherItemAttr", EntityCondition.makeCondition("otherItemAttrId", EntityOperator.IN, validIds), null, Arrays.asList("otherItemAttrId"));
                 } else if ("TARGET_AUDIENCE".equals(nodeMappingTypeId)) {
-                    result = delegator.findByCondition("AmazonProductTargetAudience", new EntityExpr("targetAudienceId", EntityOperator.IN, validIds), null, Arrays.asList("targetAudienceId"));
+                    result = delegator.findByCondition("AmazonProductTargetAudience", EntityCondition.makeCondition("targetAudienceId", EntityOperator.IN, validIds), null, Arrays.asList("targetAudienceId"));
                 }
             }
-            
+
             return result;
-            
+
         } catch (GenericEntityException gee) {
-            Debug.logError(gee.getMessage(), module);
+            Debug.logError(gee.getMessage(), MODULE);
         } catch (NullPointerException npe) {
-            Debug.logError(npe.getMessage(), module);
+            Debug.logError(npe.getMessage(), MODULE);
         }
-        
+
         return null;
     }
 
     /**
-     * Aggregates a possibly empty original error message with a new error message using the system's line separator
+     * Aggregates a possibly empty original error message with a new error message using the system's line separator.
+     * @param originalError a <code>String</code> value
+     * @param newError a <code>String</code> value
+     * @return a <code>String</code> value
      */
     public static String compoundError(String originalError, String newError) {
-        if (UtilValidate.isEmpty(originalError)) return newError;
+        if (UtilValidate.isEmpty(originalError)) {
+            return newError;
+        }
         return originalError + System.getProperty("line.separator") + newError;
     }
 }

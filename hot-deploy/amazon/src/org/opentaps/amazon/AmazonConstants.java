@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * Honest Public License for more details.
- * 
+ *
  * You should have received a copy of the Honest Public License
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
@@ -21,19 +21,18 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilProperties;
-import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.amazon.soap.AmazonSoapClient;
 
 /**
- * Constants for Amazon integration
- *
- * @author     <a href="mailto:cliberty@opensourcestrategies.com">Chris Liberty</a> 
- * @version    $Rev: 10645 $
+ * Constants for Amazon integration.
  */
-public class AmazonConstants {
+public final class AmazonConstants {
+
+    private AmazonConstants() { }
 
     // Resource bundles
     public static final String configResource = "amazon";
@@ -42,7 +41,7 @@ public class AmazonConstants {
 
     // Standard description field contents
     public static final String createdByAmazonApp = UtilProperties.getPropertyValue(configResource, "opentaps.amazon.createdByAmazonApplication");
-    
+
     // URL
     public static final String url = UtilProperties.getPropertyValue(configResource, "opentaps.amazon.url");
 
@@ -51,18 +50,18 @@ public class AmazonConstants {
     public static final String merchantName = UtilProperties.getPropertyValue(configResource, "opentaps.amazon.merchantName");
     public static final String userName = UtilProperties.getPropertyValue(configResource, "opentaps.amazon.userName");
     public static final String password = UtilProperties.getPropertyValue(configResource, "opentaps.amazon.password");
-    
+
     // SOAP client
     public static final AmazonSoapClient soapClient = new AmazonSoapClient(userName, password);
 
     // Amazon's timezone
     public static final TimeZone amazonTimeZone = TimeZone.getTimeZone("PST");
-    
+
     // Tax type data
     public static final String[] taxTypes = new String[]{"ItemTaxData", "ShippingTaxData"};
     public static final String[] taxAmountTypes = new String[]{"TaxableAmounts", "NonTaxableAmounts", "ZeroRatedAmounts", "TaxCollectedAmounts"};
     public static final String[] taxJurisdictionTypes = new String[]{"District", "City", "County", "State"};
-    
+
     // Order import
     public static final String productStoreId = UtilProperties.getPropertyValue(configResource, "opentaps.amazon.import.productStoreId");
     public static final boolean approveOrders = "true".equalsIgnoreCase(UtilProperties.getPropertyValue(configResource, "opentaps.amazon.import.approveOrders", ""));
@@ -107,7 +106,7 @@ public class AmazonConstants {
     // Precision and rounding
     public static final int decimals = UtilNumber.getBigDecimalScale(configResource, "opentaps.amazon.import.decimalPrecision");
     public static final int rounding = UtilNumber.getBigDecimalRoundingMode(configResource, "opentaps.amazon.import.decimalRounding");
-    public static final BigDecimal ZERO = (new BigDecimal("0")).setScale(decimals, rounding);    
+    public static final BigDecimal ZERO = (new BigDecimal("0")).setScale(decimals, rounding);
 
     // Shipping
     public static final Map<String, String> shipmentMethodTypeIds = new HashMap<String, String>();
@@ -140,7 +139,7 @@ public class AmazonConstants {
     public static final String messageTypePrice = "Price";
     public static final String messageTypeProductImage = "ProductImage";
     public static final String messageTypeInventory = "Inventory";
-    
+
     // StatusIds
     public static String statusDocDownloaded = "AMZN_DOC_DLED";
     public static String statusDocDownloadError = "AMZN_DOC_DL_ERR";
@@ -180,7 +179,7 @@ public class AmazonConstants {
     public static String statusOrderShipAckSent = "AMZN_SHIP_ACK_SENT";
     public static String statusOrderShipAcknowledged = "AMZN_SHIP_ACKED";
     public static String statusOrderShipAcknowledgedError = "AMZN_SHIP_ACK_ERR";
-    
+
     // Email info
     public static final boolean sendErrorEmails = "true".equalsIgnoreCase(UtilProperties.getPropertyValue(configResource, "opentaps.amazon.error.email.sendErrorEmails", ""));
     public static Locale errorEmailLocale = UtilMisc.parseLocale(UtilProperties.getPropertyValue(configResource, "opentaps.amazon.error.email.errorEmailLocale"));
@@ -191,18 +190,18 @@ public class AmazonConstants {
     public static String errorEmailTo = UtilProperties.getPropertyValue(configResource, "opentaps.amazon.error.email.toAddress");
     public static String errorEmailFrom = UtilProperties.getPropertyValue(configResource, "opentaps.amazon.error.email.fromAddress");
     public static final int linesForBulkErrorEmails = Integer.parseInt(UtilProperties.getPropertyValue(configResource, "opentaps.amazon.error.email.linesForBulkErrorEmails"));
-    
+
     // Age threshold for warning of the last successful product feed processing document download
     public static final int lastProcDocCheckAge = Integer.parseInt(UtilProperties.getPropertyValue(configResource, "opentaps.amazon.error.email.productFeedProcessingAgeWarning.thresholdHours"));
     public static String errorEmailScreenUriProcDocAgeWarning = UtilProperties.getPropertyValue(configResource, "opentaps.amazon.error.email.errorEmailScreenUri.productFeedProcessingAgeWarning");
-    
+
     // Maping between Amazon and Opentaps prices
     public static String priceStandard = "LIST_PRICE";
     public static String priceMAP = null;
     public static String priceSale = "DEFAULT_PRICE";
     public static String priceProductStoreGroup = UtilProperties.getPropertyValue(configResource, "opentaps.amazon.export.product.price.productStoreGroupId");
     public static final boolean delistProductIfNoSalePrice = "true".equalsIgnoreCase(UtilProperties.getPropertyValue(configResource, "opentaps.amazon.export.product.price.delistProductIfNoSalePrice", ""));
-    
+
     // Units of measure and default units
     public static final Map<String, String> units = new HashMap<String, String>();
     static {
@@ -243,15 +242,15 @@ public class AmazonConstants {
         String search = UtilProperties.getPropertyValue(configResource, "opentaps.amazon.default.image.search", null);
         if (UtilValidate.isNotEmpty(search)) imageTypes.put("Search", search);
     }
-    
+
     // Default prefix for image URL
     public static final String imageUrlPrefix = UtilProperties.getPropertyValue(configResource, "opentaps.amazon.image.urlRoot", "");
- 
+
     // Inventory posting controls
     public static final boolean postActualInventory = "true".equalsIgnoreCase(UtilProperties.getPropertyValue(configResource, "opentaps.amazon.export.inventory.postActualInventory", ""));
     public static final boolean postInventoryDaysToShip = "true".equalsIgnoreCase(UtilProperties.getPropertyValue(configResource, "opentaps.amazon.export.inventory.postInventoryDaysToShip", ""));
     public static final boolean inventoryIsAvailableIfMinimumStock = "true".equalsIgnoreCase(UtilProperties.getPropertyValue(configResource, "opentaps.amazon.export.inventory.inventoryIsAvailableIfMinimumStock", ""));
-    
+
     // GoodIdentificationTypeId -> Amazon StandardProductId mapping. They're the same at the moment.
     public static final Map<String, String> goodIdentTypeIds = UtilMisc.toMap("EAN", "EAN", "ISBN", "ISBN", "GTIN", "GTIN");
 
