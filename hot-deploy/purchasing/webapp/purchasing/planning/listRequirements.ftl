@@ -70,7 +70,7 @@
     <#if massUpdatePane?has_content && massUpdateForm?has_content>
 
 <script type="text/javascript">
-<!--
+/*<![CDATA[*/
   function doSubmit(action, confirmation, confirmText) {
     if (confirmation && !confirm(confirmText)) {
       return;
@@ -78,7 +78,7 @@
     document.${massUpdateForm}.action = action;
     document.${massUpdateForm}.submit();
   }
-//-->
+/*]]>*/
 </script>
 
       <#list massUpdatePane as operationDef>
@@ -91,6 +91,7 @@
         <#else>
           <@displayLink href="javascript:doSubmit('${operationDef.action}', false, '')" text=uiLabelMap.get(operationDef.title) class="buttontext"/>
         </#if>
+        <span class="tabletext">&nbsp;</span>
       </#list>
     </#if>
 
