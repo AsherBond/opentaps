@@ -116,8 +116,8 @@ public final class FinancialReports {
         if (dateOption == null) {
             // use the default asOfDate and run the report
             ctxt.put("asOfDate", defaultAsOfDate);
-        } else if (dateOption.equals("byDate")) {
-            if (reportFormType.equals("state")) {
+        } else if ("byDate".equals(dateOption)) {
+            if ("state".equals(reportFormType)) {
                 String asOfDateText = UtilCommon.getParameter(request, "asOfDate");
                 asOfDate = UtilDateTime.getDayEnd(UtilDate.toTimestamp(asOfDateText, timeZone, locale), timeZone, locale);
                 // use current date
@@ -125,7 +125,7 @@ public final class FinancialReports {
                     asOfDate = defaultAsOfDate;
                 }
                 ctxt.put("asOfDate", asOfDate);
-            } else if (reportFormType.equals("flow")) {
+            } else if ("flow".equals(reportFormType)) {
                 fromDateText = UtilCommon.getParameter(request, "fromDate");
                 thruDateText = UtilCommon.getParameter(request, "thruDate");
                 if (UtilValidate.isNotEmpty(fromDateText)) {
@@ -137,8 +137,8 @@ public final class FinancialReports {
                 ctxt.put("fromDate", fromDate);
                 ctxt.put("thruDate", thruDate);
             }
-        } else if (dateOption.equals("byTimePeriod")) {
-            if (reportFormType.equals("state") || reportFormType.equals("flow")) {
+        } else if ("byTimePeriod".equals(dateOption)) {
+            if ("state".equals(reportFormType) || "flow".equals(reportFormType)) {
                 String customTimePeriodId = UtilCommon.getParameter(request, "customTimePeriodId");
                 ctxt.put("customTimePeriodId", customTimePeriodId);
                 GenericValue timePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
