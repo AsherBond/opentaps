@@ -18,7 +18,10 @@
  *******************************************************************************/
 package org.ofbiz.widget.screen;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -402,8 +405,7 @@ public class ModelScreen extends ModelWidget implements Serializable {
             } catch (GenericEntityException e2) {
                 Debug.logError(e2, "Could not rollback transaction: " + e2.toString(), module);
             }
-            // after rolling back, rethrow the exception
-            throw new ScreenRenderException(errMsg, e);
+            writeError(writer, e);
         } catch (Exception e) {
             String errMsg = "Error rendering screen [" + this.sourceLocation + "#" + this.name + "]: " + e.toString();
             Debug.logError(e, errMsg + ". Rolling back transaction.", module);
@@ -416,8 +418,7 @@ public class ModelScreen extends ModelWidget implements Serializable {
 
             // throw nested exception, don't need to log details here: Debug.logError(e, errMsg, module);
 
-            // after rolling back, rethrow the exception
-            throw new ScreenRenderException(errMsg, e);
+            writeError(writer, e);
         } finally {
             // only commit the transaction if we started one... this will throw an exception if it fails
             try {
@@ -436,6 +437,19 @@ public class ModelScreen extends ModelWidget implements Serializable {
     public GenericDelegator getDelegator(Map<String, Object> context) {
         GenericDelegator delegator = (GenericDelegator) context.get("delegator");
         return delegator;
+    }
+
+    public void writeError(Appendable writer, Exception e) throws ScreenRenderException {
+        try {
+            writer.append("<h4>Screen Render Error</h4><pre>");
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            String stackTrace = sw.toString();
+            writer.append(stackTrace);
+            writer.append("</pre>");
+        } catch (IOException ioe) {
+            throw new ScreenRenderException(e.getMessage(), e);
+        }
     }
 }
 
