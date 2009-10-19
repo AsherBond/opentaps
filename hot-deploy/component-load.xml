@@ -32,6 +32,7 @@ under the License.
     <load-component component-location="opentaps-tests"/>
     <load-component component-location="homeapps"/>
     <load-component component-location="amazon"/>
+    <!-- load-component component-location="translations"/ -->
     <!--
     <load-component component-location="livecatalog"/>
     <load-component component-location="analytics"/>
@@ -46,7 +47,7 @@ under the License.
 
     <!-- Put your application components below.  Usually they should be loaded after all the other
     opentaps components
-    <load-component component-location="mycompany"/>
     -->
+    <load-component component-location="mycompany"/>
 
 </component-loader>
