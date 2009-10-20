@@ -35,7 +35,8 @@ public class OpportunityStageLookupService extends EntityLookupAndSuggestService
     protected OpportunityStageLookupService(InputProviderInterface provider) {
         super(provider,
               Arrays.asList(OpportunityStageLookupConfiguration.OUT_OPPORTUNITY_STAGE_ID,
-                      OpportunityStageLookupConfiguration.OUT_DESCRIPTION));
+                      OpportunityStageLookupConfiguration.OUT_DESCRIPTION,
+                      OpportunityStageLookupConfiguration.OUT_SEQUENCE_NUM));
     }
 
     /**

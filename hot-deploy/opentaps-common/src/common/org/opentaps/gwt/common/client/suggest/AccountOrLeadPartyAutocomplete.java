@@ -14,20 +14,20 @@
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
  */
 package org.opentaps.gwt.common.client.suggest;
-import org.opentaps.gwt.common.client.lookup.configuration.OpportunityStageLookupConfiguration;
+
+import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 /**
- * A ComboBox that autocompletes SalesOpportunity Stage.
+ * A ComboBox that autocompletes Accounts or Leads.
  */
-public class SalesOpportunityStageAutocomplete  extends EntityStaticAutocomplete {
+public class AccountOrLeadPartyAutocomplete extends EntityAutocomplete {
 
     /**
-     * Creates a new <code>SalesOpportunityStageAutocomplete</code> instance.
-     * Unlike other autocompleters, this widget offer no input, just a list of the possible values.
+     * Default constructor.
      * @param fieldLabel the field label
      * @param name the field name used in the form
      * @param fieldWidth the field size in pixels
      */
-    public SalesOpportunityStageAutocomplete(String fieldLabel, String name, int fieldWidth) {
-        super(fieldLabel, name, fieldWidth, OpportunityStageLookupConfiguration.URL_SUGGEST_CLASSIFICATIONS , OpportunityStageLookupConfiguration.OUT_SEQUENCE_NUM);
+    public AccountOrLeadPartyAutocomplete(String fieldLabel, String name, int fieldWidth) {
+        super(fieldLabel, name, fieldWidth, PartyLookupConfiguration.URL_SUGGEST_ACCOUNTS_OR_LEADS, PartyLookupConfiguration.INOUT_PARTY_ID);
     }
 }

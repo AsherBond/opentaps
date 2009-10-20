@@ -22,7 +22,7 @@ public abstract class QuickNewOpportunityConfiguration {
     public static final String URL = "/crmsfa/control/gwtQuickNewOpportunity";
 
     public static final String OPPORTUNITY_NAME = "opportunityName";
-    public static final String ACCOUNT_PARTY_ID = "accountPartyId";
+    public static final String ACCOUNT_OR_LEAD_PARTY_ID = "accountOrLeadPartyId";
     public static final String LEAD_PARTY_ID = "leadPartyId";
     public static final String OPPORTUNITY_STAGE_ID = "opportunityStageId";
     public static final String ESTIMATED_AMOUNT = "estimatedAmount";

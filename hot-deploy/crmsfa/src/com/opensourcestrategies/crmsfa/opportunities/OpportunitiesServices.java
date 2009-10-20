@@ -18,11 +18,13 @@ package com.opensourcestrategies.crmsfa.opportunities;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -64,33 +66,44 @@ public final class OpportunitiesServices {
         String accountPartyId = (String) context.get("accountPartyId");
         String contactPartyId = (String) context.get("contactPartyId");
         String leadPartyId = (String) context.get("leadPartyId");
-
-        // if internal not supplied, then make sure either an account or lead is supplied, but not both
-        if (UtilValidate.isEmpty(internalPartyId) && ((UtilValidate.isEmpty(accountPartyId) && UtilValidate.isEmpty(leadPartyId)) || (UtilValidate.isNotEmpty(accountPartyId) && UtilValidate.isNotEmpty(leadPartyId)))) {
-            return UtilMessage.createAndLogServiceError("Please specify an account or a lead (not both).", "CrmErrorCreateOpportunityFail", locale, MODULE);
-        }
-
-        // track which partyId we're using, the account or the lead
-        String partyId = null;
-        if (UtilValidate.isNotEmpty(accountPartyId)) {
-            partyId = accountPartyId;
-        }
-        if (UtilValidate.isNotEmpty(leadPartyId)) {
-            partyId = leadPartyId;
-        }
-        if (UtilValidate.isNotEmpty(internalPartyId)) {
-            partyId = internalPartyId;
-        }
-
-        // make sure userLogin has CRMSFA_OPP_CREATE permission for the account or lead
-        if (!CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_OPP", "_CREATE", userLogin, partyId)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
-        }
-
+        String accountOrLeadPartyId = (String) context.get("accountOrLeadPartyId");
         try {
+            String roleTypeId = PartyHelper.getFirstValidRoleTypeId(accountOrLeadPartyId, Arrays.asList("ACCOUNT","PROSPECT"), delegator);
+            if (UtilValidate.isNotEmpty(accountOrLeadPartyId)) {
+                if ("ACCOUNT".equals(roleTypeId)) {
+                    accountPartyId = accountOrLeadPartyId;
+                }
+                if ("PROSPECT".equals(roleTypeId)) {
+                    leadPartyId = accountOrLeadPartyId;
+                }
+            }
+            Debug.logInfo("roleTypeId : " + roleTypeId + ", accountOrLeadPartyId : " + accountOrLeadPartyId, MODULE);
+            // if internal not supplied, then make sure either an account or lead is supplied, but not both
+            if (UtilValidate.isEmpty(internalPartyId) && ((UtilValidate.isEmpty(accountPartyId) && UtilValidate.isEmpty(leadPartyId)) || (UtilValidate.isNotEmpty(accountPartyId) && UtilValidate.isNotEmpty(leadPartyId)))) {
+                return UtilMessage.createAndLogServiceError("Please specify an account or a lead (not both).", "CrmErrorCreateOpportunityFail", locale, MODULE);
+            }
+    
+            // track which partyId we're using, the account or the lead
+            String partyId = null;
+            if (UtilValidate.isNotEmpty(accountPartyId)) {
+                partyId = accountPartyId;
+            }
+            if (UtilValidate.isNotEmpty(leadPartyId)) {
+                partyId = leadPartyId;
+            }
+            if (UtilValidate.isNotEmpty(internalPartyId)) {
+                partyId = internalPartyId;
+            }
+    
+            // make sure userLogin has CRMSFA_OPP_CREATE permission for the account or lead
+            if (!CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_OPP", "_CREATE", userLogin, partyId)) {
+                return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
+            }
+
+            
             // set the accountPartyId or leadPartyId according to the role of internalPartyId
             if (UtilValidate.isNotEmpty(internalPartyId)) {
-                String roleTypeId = PartyHelper.getFirstValidInternalPartyRoleTypeId(internalPartyId, delegator);
+                roleTypeId = PartyHelper.getFirstValidInternalPartyRoleTypeId(internalPartyId, delegator);
                 if ("ACCOUNT".equals(roleTypeId)) {
                     accountPartyId = internalPartyId;
                 }

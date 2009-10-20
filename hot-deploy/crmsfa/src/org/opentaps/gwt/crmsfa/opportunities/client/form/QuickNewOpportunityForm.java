@@ -19,8 +19,7 @@ import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.base.ScreenletFormPanel;
 import org.opentaps.gwt.common.client.form.field.DateField;
 import org.opentaps.gwt.common.client.form.field.NumberField;
-import org.opentaps.gwt.common.client.suggest.AccountAutocomplete;
-import org.opentaps.gwt.common.client.suggest.LeadAutocomplete;
+import org.opentaps.gwt.common.client.suggest.AccountOrLeadPartyAutocomplete;
 import org.opentaps.gwt.common.client.suggest.SalesOpportunityStageAutocomplete;
 import org.opentaps.gwt.crmsfa.opportunities.client.form.configuration.QuickNewOpportunityConfiguration;
 
@@ -30,9 +29,7 @@ import com.gwtext.client.widgets.form.TextField;
  * Form class for quick create opportunity.
  */
 public class QuickNewOpportunityForm extends ScreenletFormPanel {
-
-    private AccountAutocomplete accountInput;
-    private LeadAutocomplete leadInput;
+    private AccountOrLeadPartyAutocomplete accountOrLeadPartyIdInput;
     private TextField opportunityNameInput;
     private SalesOpportunityStageAutocomplete opportunityStageInput;
     private NumberField estimatedAmountInput;
@@ -47,13 +44,9 @@ public class QuickNewOpportunityForm extends ScreenletFormPanel {
         // the URL, linked to opentaps controller
         setUrl(QuickNewOpportunityConfiguration.URL);
 
-        // account is a required field and will be the account autocomplete
-        accountInput = new AccountAutocomplete(UtilUi.MSG.crmAccount(), QuickNewOpportunityConfiguration.ACCOUNT_PARTY_ID, INPUT_LENGTH);
-        addField(accountInput);
-
-        // lead is a required field and will be the lead autocomplete
-        leadInput = new LeadAutocomplete(UtilUi.MSG.crmLead(), QuickNewOpportunityConfiguration.LEAD_PARTY_ID, INPUT_LENGTH);
-        addField(leadInput);
+        // accountOrLeadPartyId is a required field and will be the AccountOrLeadPartyAutocomplete
+        accountOrLeadPartyIdInput = new AccountOrLeadPartyAutocomplete(UtilUi.MSG.crmAccountOrLeadParty(), QuickNewOpportunityConfiguration.ACCOUNT_OR_LEAD_PARTY_ID, INPUT_LENGTH);
+        addRequiredField(accountOrLeadPartyIdInput);
 
         // opportunity name is a required text input field
         opportunityNameInput = new TextField(UtilUi.MSG.crmOpportunityName(), QuickNewOpportunityConfiguration.OPPORTUNITY_NAME, INPUT_LENGTH);
@@ -61,10 +54,12 @@ public class QuickNewOpportunityForm extends ScreenletFormPanel {
 
         // opportunity stage is a required SalesOpportunityStageAutocomplete input field
         opportunityStageInput = new SalesOpportunityStageAutocomplete(UtilUi.MSG.crmInitialStage(), QuickNewOpportunityConfiguration.OPPORTUNITY_STAGE_ID, INPUT_LENGTH);
+        // set SOSTG_PROSPECT as default value
+        opportunityStageInput.setValue("SOSTG_PROSPECT");
         addRequiredField(opportunityStageInput);
 
         // subject is a NumberField input field
-        estimatedAmountInput = new NumberField(UtilUi.MSG.crmEstimatedAmount(), QuickNewOpportunityConfiguration.ESTIMATED_AMOUNT, INPUT_LENGTH);
+        estimatedAmountInput = new NumberField(UtilUi.MSG.crmOpportunityAmount(), QuickNewOpportunityConfiguration.ESTIMATED_AMOUNT, INPUT_LENGTH);
         addField(estimatedAmountInput);
 
         // estimated closeDate is a required DateField input field

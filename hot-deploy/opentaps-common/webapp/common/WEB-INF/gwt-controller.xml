@@ -267,6 +267,12 @@
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map> 
-    
+
+    <request-map uri="gwtSuggestAccountsOrLeads">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.PartyLookupService" invoke="suggestAccountsOrLeads"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>     
                   
 </site-conf>

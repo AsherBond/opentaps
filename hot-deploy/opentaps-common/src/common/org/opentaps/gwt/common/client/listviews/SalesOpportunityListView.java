@@ -76,7 +76,7 @@ public class SalesOpportunityListView  extends EntityListView {
         ColumnConfig columnOpportunityStage = makeColumn(UtilUi.MSG.crmStage(), new StringFieldDef(OpportunityLookupConfiguration.OUT_OPPORTUNITY_STAGE));
         columnOpportunityStage.setWidth(60);
 
-        ColumnConfig columnOpportunityAmount = makeColumn(UtilUi.MSG.crmOpportunityAmount(), new StringFieldDef(OpportunityLookupConfiguration.OUT_ESTIMATED_AMOUNT));
+        ColumnConfig columnOpportunityAmount = makeColumn(UtilUi.MSG.commonAmount(), new StringFieldDef(OpportunityLookupConfiguration.OUT_ESTIMATED_AMOUNT));
         columnOpportunityAmount.setWidth(80);
         columnOpportunityAmount.setRenderer(new Renderer() {
             // render estimatedAmount as currency
@@ -89,7 +89,7 @@ public class SalesOpportunityListView  extends EntityListView {
             }
         });
 
-        ColumnConfig columnEstimatedCloseDate = makeColumn(UtilUi.MSG.crmEstimatedCloseDate(), new StringFieldDef(OpportunityLookupConfiguration.OUT_ESTIMATED_CLOSE_DATE_STRING));
+        ColumnConfig columnEstimatedCloseDate = makeColumn(UtilUi.MSG.crmEstClosed(), new StringFieldDef(OpportunityLookupConfiguration.OUT_ESTIMATED_CLOSE_DATE_STRING));
         columnEstimatedCloseDate.setWidth(90);
 
 

@@ -21,10 +21,12 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import javolution.util.FastMap;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -55,7 +57,15 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     private static final EntityCondition LEAD_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", "PROSPECT");
     private static final EntityCondition PARTNER_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", "PARTNER");
     private static final EntityCondition SUPPLIER_CONDITIONS = EntityCondition.makeCondition("roleTypeId", "SUPPLIER");
-
+    private static final EntityCondition ACCOUNT_OR_LEAD_CONDITIONS = EntityCondition.makeCondition(
+                                                                        Arrays.asList(
+                                                                                EntityCondition.makeCondition("roleTypeIdFrom", "ACCOUNT"),
+                                                                                EntityCondition.makeCondition("roleTypeIdFrom", "PROSPECT")
+                                                                        ),
+                                                                        EntityOperator.OR
+                                                                );
+    
+    
     private static List<String> BY_ID_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_PARTY_ID);
     private static List<String> BY_NAME_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_GROUP_NAME,
                                                                   PartyLookupConfiguration.INOUT_COMPANY_NAME,
@@ -506,5 +516,29 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     public List<PartyFromByRelnAndContactInfoAndPartyClassification> suggestLeads() {
         return suggestParties(LEAD_CONDITIONS);
     }
+
+    /**
+     * AJAX event to suggest Leads.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the resulting JSON response
+     * @throws InfrastructureException if an error occurs
+     */
+    public static String suggestAccountsOrLeads(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
+        InputProviderInterface provider = new HttpInputProvider(request);
+        JsonResponse json = new JsonResponse(response);
+        PartyLookupService service = new PartyLookupService(provider);
+        service.suggestAccountsOrLeads();
+        return json.makeSuggestResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service);
+    }
+
+    /**
+     * Suggests a list of accounts or leads.
+     * @return the list of <code>PartyFromByRelnAndContactInfoAndPartyClassification</code>, or <code>null</code> if an error occurred
+     */
+    public List<PartyFromByRelnAndContactInfoAndPartyClassification> suggestAccountsOrLeads() {
+        return suggestParties(ACCOUNT_OR_LEAD_CONDITIONS);
+    }
+
 }
 

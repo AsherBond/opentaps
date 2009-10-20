@@ -2323,6 +2323,8 @@ public interface CommonMessages extends Messages {
     String createLead();
     @DefaultMessage("Account")
     String crmAccount();
+    @DefaultMessage("Account Or Lead")
+    String crmAccountOrLeadParty();    
     @DefaultMessage("This account was deactivated as of")
     String crmAccountDeactivated();
     @DefaultMessage("Account ID")
@@ -2861,6 +2863,8 @@ public interface CommonMessages extends Messages {
     String crmError_OrderItemRequiresSurveyInBulkAdd(String productId);
     @DefaultMessage("Esitmated Amount")
     String crmEstimatedAmount();
+    @DefaultMessage("Est Closed")
+    String crmEstClosed();    
     @DefaultMessage("Estimated Close Date")
     String crmEstimatedCloseDate();
     @DefaultMessage("Estimated Probability")

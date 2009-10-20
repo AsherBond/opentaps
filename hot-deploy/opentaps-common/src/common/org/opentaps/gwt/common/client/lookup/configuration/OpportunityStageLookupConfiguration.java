@@ -26,4 +26,5 @@ public abstract class OpportunityStageLookupConfiguration {
     public static final String URL_SUGGEST_CLASSIFICATIONS = "gwtSuggestOpportunityStages";
     public static final String OUT_OPPORTUNITY_STAGE_ID = "opportunityStageId";
     public static final String OUT_DESCRIPTION = "description";
+    public static final String OUT_SEQUENCE_NUM = "sequenceNum";
 }

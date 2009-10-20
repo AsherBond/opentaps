@@ -49,6 +49,7 @@
         <attribute name="opportunityName" type="String" mode="IN" optional="false"/>
         <!-- TODO: once the form widget accepts autocomplete, remove accountPartyId and leadPartyId in favor of internalPartyId -->
         <attribute name="internalPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="accountOrLeadPartyId" type="String" mode="IN" optional="true"/>
         <attribute name="accountPartyId" type="String" mode="IN" optional="true"/>
         <attribute name="leadPartyId" type="String" mode="IN" optional="true"/>
         <attribute name="contactPartyId" type="String" mode="IN" optional="true"/>
