@@ -1132,7 +1132,9 @@ color: #000000;
 }
 
 .basic-table .viewManyTR1,
-.basic-table .alternate-row {
+.basic-table .alternate-row,
+.basic-table .alternate-row form
+ {
 /* Alternating row style */
 /* .viewManyTR1 deprecated - use .alternate-row */
 background-color: #eeeeee;
@@ -1178,6 +1180,10 @@ text-decoration: none;
 .hover-bar tr:hover {
 background-color: #cccccc;
 cursor: default;
+}
+
+.hover-bar tr:hover form {
+background-color: #cccccc;
 }
 
 .hover-bar .header-row:hover,
