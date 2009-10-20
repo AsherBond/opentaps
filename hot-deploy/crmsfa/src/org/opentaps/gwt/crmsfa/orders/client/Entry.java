@@ -1,17 +1,18 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the Honest Public License.
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * Opentaps is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * Honest Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the Honest Public License
- * along with this program; if not, write to Funambol,
- * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.opentaps.gwt.crmsfa.orders.client;
 
