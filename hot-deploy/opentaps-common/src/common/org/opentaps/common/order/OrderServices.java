@@ -33,6 +33,8 @@
  * under the License.
  *******************************************************************************/
 
+/* This file has been modified by Open Source Strategies, Inc. */
+
 package org.opentaps.common.order;
 
 import java.math.BigDecimal;

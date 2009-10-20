@@ -34,7 +34,7 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<!-- Parts of this file came from the Apache Open For Business Project. -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 
 <screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 

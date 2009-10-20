@@ -34,7 +34,7 @@
  * under the License.
  *******************************************************************************/
 
-//A portion of this file may be based upon one or more files from the Apache ofbiz project
+/* This file has been modified by Open Source Strategies, Inc. */
 
 package org.opentaps.tests.analytics;
 

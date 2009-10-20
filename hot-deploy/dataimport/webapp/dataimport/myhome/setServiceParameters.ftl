@@ -32,7 +32,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<#-- This file incorporates a few lines from an ofbiz webtools file and �has been modified by Open Source Strategies, Inc. -->
+<#-- This file incorporates a few lines from an ofbiz webtools file and has been modified by Open Source Strategies, Inc. -->
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#if hasDIAdminPermissions?default(false)>

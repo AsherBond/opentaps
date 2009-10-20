@@ -37,6 +37,7 @@ under the License.
 
 <!-- This file has form widgets that originate from the Apache OFBiz FacilityForms.xml file.  Modifications were made to these forms to better work with the purchasing app. -->
 
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 
 <forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-form.xsd">
 

@@ -34,6 +34,8 @@
  * under the License.
  *******************************************************************************/
 
+/* This file has been modified by Open Source Strategies, Inc. */
+
 package org.opentaps.common.product;
 
 import java.io.FileWriter;

@@ -32,6 +32,9 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
+
+/* This file has been modified by Open Source Strategies, Inc. */
+
 package org.opentaps.common.order.shoppingcart;
 
 import java.math.BigDecimal;
