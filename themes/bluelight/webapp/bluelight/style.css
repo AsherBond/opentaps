@@ -767,6 +767,13 @@ DIV.screenlet-body {
     margin-right: 1em;
 }
 
+#column-container .left-larger {
+float: left;
+/* alt: position: absolute; top: 0px; left: 0px; */
+width: 25em;
+margin-right: 1em;
+}
+
 .left-border {
     float: left;
     margin-right: 1em;
@@ -784,6 +791,11 @@ DIV.screenlet-body {
 
 #column-container .leftonly {
     margin-left: 23em;
+    width: auto;
+}
+
+#column-container .leftonly-larger {
+    margin-left: 26em;
     width: auto;
 }
 

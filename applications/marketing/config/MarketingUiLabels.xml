@@ -1334,7 +1334,7 @@
     </property>
     <property key="PageTitleFindSalesForecast">
         <value xml:lang="en">Find Sales Forecast</value>
-        <value xml:lang="fr">Rechercher la prévision des ventes</value>
+        <value xml:lang="fr">Recherche de prévision des ventes</value>
         <value xml:lang="it">Ricerca previsioni di vendita</value>
     </property>
     <property key="PageTitleFindSegmentGroup">
@@ -1666,7 +1666,7 @@
     </property>
     <property key="SfaCreateContactFromVCard">
         <value xml:lang="en">Create from vCard</value>
-        <value xml:lang="fr">Créer depuis la vCard</value>
+        <value xml:lang="fr">Créer depuis une vCard</value>
         <value xml:lang="it">Creare contatto dalla vCard</value>
     </property>
     <property key="SfaDataSourceLabel">

@@ -1,5 +1,5 @@
 Based on revisions:
-https://svn.apache.org/repos/asf/ofbiz/branches/release09.04@822662
+https://svn.apache.org/repos/asf/ofbiz/branches/release09.04@826786
 svn://svn.opentaps.org/opentaps_all/versions/1.0/tags/tests-passed-20091011
 
 Overall changes
@@ -204,13 +204,10 @@ applications/order/webapp/ordermgr/WEB-INF/actions/order/OrderView.groovy
 r13479 fix view purchasing order NPE if facility is null
 
 applications/product/script/org/ofbiz/shipment/picklist/PicklistServices.xml
-- Fix UEL errors in services, see JIRA 2969
-
-applications/product/script/org/ofbiz/shipment/picklist/PicklistServices.xml
 r13649 Changed Warehouse Dashboard to exclude any completed pick lists.
 
 applications/product/webapp/facility/WEB-INF/actions/facility/ViewFacilityInventoryByProduct.groovy
-r13477 change productsSoldThruTImestamp to timpstamp when it is a string value 
+r13477 change productsSoldThruTimestamp to timestamp when it is a string value 
 
 Other API Changes
 -----------------
