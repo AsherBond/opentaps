@@ -1205,8 +1205,22 @@ float: right;
 width: auto;
 }
 
+.noTitleBar .screenlet-title-bar {
+display:none;
+}
+
 .screenlet-title-bar { 
-display: none;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+margin: 0px;
+font-size: 8pt;
+font-weight: bold;
+text-decoration: none;
+color: #FFFFFF;
+background-color: #333333;
+}
+
+.screenlet-title-bar h3 { 
+margin:0;
 }
 
 .autocomplete ul {

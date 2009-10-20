@@ -138,9 +138,11 @@ under the License.
                             <platform-specific>
                                 <html><html-template location="component://warehouse/webapp/warehouse/shipping/sectionheaders/ViewShipmentRouteSegmentInfo.ftl"/></html>
                             </platform-specific>
-                            <platform-specific>
+                            <container style="noTitleBar">
+                              <platform-specific>
                                 <html><html-template location="component://product/webapp/facility/shipment/ViewShipmentRouteInfo.ftl"/></html>
-                            </platform-specific>
+                              </platform-specific>
+                            </container>
                         </container>
                     </decorator-section>
                 </decorator-screen>
