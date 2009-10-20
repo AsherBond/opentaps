@@ -68,8 +68,8 @@ public final class OpportunitiesServices {
         String leadPartyId = (String) context.get("leadPartyId");
         String accountOrLeadPartyId = (String) context.get("accountOrLeadPartyId");
         try {
-            String roleTypeId = PartyHelper.getFirstValidRoleTypeId(accountOrLeadPartyId, Arrays.asList("ACCOUNT","PROSPECT"), delegator);
             if (UtilValidate.isNotEmpty(accountOrLeadPartyId)) {
+                String roleTypeId = PartyHelper.getFirstValidRoleTypeId(accountOrLeadPartyId, Arrays.asList("ACCOUNT","PROSPECT"), delegator);
                 if ("ACCOUNT".equals(roleTypeId)) {
                     accountPartyId = accountOrLeadPartyId;
                 }
@@ -77,7 +77,6 @@ public final class OpportunitiesServices {
                     leadPartyId = accountOrLeadPartyId;
                 }
             }
-            Debug.logInfo("roleTypeId : " + roleTypeId + ", accountOrLeadPartyId : " + accountOrLeadPartyId, MODULE);
             // if internal not supplied, then make sure either an account or lead is supplied, but not both
             if (UtilValidate.isEmpty(internalPartyId) && ((UtilValidate.isEmpty(accountPartyId) && UtilValidate.isEmpty(leadPartyId)) || (UtilValidate.isNotEmpty(accountPartyId) && UtilValidate.isNotEmpty(leadPartyId)))) {
                 return UtilMessage.createAndLogServiceError("Please specify an account or a lead (not both).", "CrmErrorCreateOpportunityFail", locale, MODULE);
@@ -103,7 +102,7 @@ public final class OpportunitiesServices {
             
             // set the accountPartyId or leadPartyId according to the role of internalPartyId
             if (UtilValidate.isNotEmpty(internalPartyId)) {
-                roleTypeId = PartyHelper.getFirstValidInternalPartyRoleTypeId(internalPartyId, delegator);
+                String roleTypeId = PartyHelper.getFirstValidInternalPartyRoleTypeId(internalPartyId, delegator);
                 if ("ACCOUNT".equals(roleTypeId)) {
                     accountPartyId = internalPartyId;
                 }
