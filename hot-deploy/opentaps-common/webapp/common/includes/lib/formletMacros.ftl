@@ -42,8 +42,8 @@ requests, and similar things.
 </#if>
 </#macro>
 
-<#macro headerCell title orderBy orderByReverse="" blockClass="" linkClass="orderByHeaderLink">
-    <td class="${blockClass}"><@headerLink title=title orderBy=orderBy orderByReverse=orderByReverse blockClass=blockClass linkClass=linkClass/></td>
+<#macro headerCell title orderBy orderByReverse="" blockClass="" linkClass="orderByHeaderLink" width="" align="">
+    <td class="${blockClass}"<#if width?has_content> width="${width}"</#if><#if align?has_content> align="${align}"</#if>><@headerLink title=title orderBy=orderBy orderByReverse=orderByReverse blockClass=blockClass linkClass=linkClass/></td>
 </#macro>
 
 <#macro navigationHeader title="">

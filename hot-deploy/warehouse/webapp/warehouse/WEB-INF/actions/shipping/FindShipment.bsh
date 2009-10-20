@@ -36,181 +36,43 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 
 
-import java.util.*;
 import java.sql.Timestamp;
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
 import org.ofbiz.base.util.*;
-import org.ofbiz.entity.*;
-import org.ofbiz.entity.util.*;
 import org.ofbiz.entity.condition.*;
-import org.ofbiz.entity.transaction.*;
+import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.base.entities.Shipment;
+import org.opentaps.domain.base.entities.ShipmentAndItemIssuanceAndInventory;
+import org.opentaps.domain.base.entities.ShipmentAndReceiptAndInventory;
+import org.opentaps.domain.shipping.ShippingRepositoryInterface;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
 
-// AH: This file needs to be rewritten to better conform to OpenTaps conventions
-delegator = request.getAttribute("delegator");
+facilityId = parameters.get("facilityId");
 
-lookupFlag = request.getParameter("lookupFlag");
-shipmentId = parameters.get("shipmentId");
-shipmentTypeId = request.getParameter("shipmentTypeId");
-partyIdFrom = parameters.get("partyIdFrom");
-partyIdTo = parameters.get("partyIdTo");
-statusId = request.getParameter("statusId");
-lotId = request.getParameter("lotId");
-formShipmentTypeId = request.getParameter("formShipmentTypeId");
+// get the search parameters
+lookupFlag = UtilCommon.getParameter(request, "lookupFlag");
+shipmentId = UtilCommon.getParameter(request, "shipmentId");
+shipmentTypeId = UtilCommon.getParameter(request, "shipmentTypeId");
+partyIdFrom = UtilCommon.getParameter(request, "partyIdFrom");
+partyIdTo = UtilCommon.getParameter(request, "partyIdTo");
+statusId = UtilCommon.getParameter(request, "statusId");
+lotId = UtilCommon.getParameter(request, "lotId");
+formShipmentTypeId = UtilCommon.getParameter(request, "formShipmentTypeId");
 
 module = "FindShipment.bsh";
 
-// set the page parameters
-viewIndex = 1;
-try {
-    viewIndex = Integer.valueOf((String) request.getParameter("VIEW_INDEX")).intValue();
-} catch (Exception e) {
-    viewIndex = 1;
-}
-context.put("viewIndex", viewIndex);
-
-viewSize = 20;
-try {
-    viewSize = Integer.valueOf((String) request.getParameter("VIEW_SIZE")).intValue();
-} catch (Exception e) {
-    viewSize = 20;
-}
-context.put("viewSize", viewSize);
-
-findShipmentExprs = new LinkedList();
-paramListBuffer = new StringBuffer();
-if (UtilValidate.isNotEmpty(shipmentId)) {
-    paramListBuffer.append("&shipmentId=");
-    paramListBuffer.append(shipmentId);
-    findShipmentExprs.add(new EntityExpr("shipmentId", EntityOperator.EQUALS, shipmentId));
-}
-if (UtilValidate.isNotEmpty(shipmentTypeId)) {
-    paramListBuffer.append("&shipmentTypeId=");
-    paramListBuffer.append(shipmentTypeId);
-    findShipmentExprs.add(new EntityExpr("shipmentTypeId", EntityOperator.EQUALS, shipmentTypeId));
-
-    currentShipmentType = delegator.findByPrimaryKeyCache("ShipmentType", UtilMisc.toMap("shipmentTypeId", shipmentTypeId));
-    context.put("currentShipmentType", currentShipmentType);
-}
-if (UtilValidate.isNotEmpty(partyIdFrom)) {
-    paramListBuffer.append("&partyIdFrom=");
-    paramListBuffer.append(partyIdFrom);
-    findShipmentExprs.add(new EntityExpr("partyIdFrom", EntityOperator.EQUALS, partyIdFrom));
-
-    currentPartyIdFrom = delegator.findByPrimaryKeyCache("Party", UtilMisc.toMap("partyId", partyIdFrom));
-    context.put("currentPartyIdFrom", currentPartyIdFrom);
-}
-if (UtilValidate.isNotEmpty(partyIdTo)) {
-    paramListBuffer.append("&partyIdTo=");
-    paramListBuffer.append(partyIdTo);
-    findShipmentExprs.add(new EntityExpr("partyIdTo", EntityOperator.EQUALS, partyIdTo));
-
-    currentPartyIdTo = delegator.findByPrimaryKeyCache("Party", UtilMisc.toMap("partyId", partyIdTo));
-    context.put("currentPartyIdTo", currentPartyIdTo);
-}
-if (UtilValidate.isNotEmpty(lotId)) {
-    paramListBuffer.append("&lotId=");
-    paramListBuffer.append(lotId);
-    findShipmentExprs.add(new EntityExpr("lotId", EntityOperator.LIKE, lotId + "%"));
-
-    currentLot = delegator.findByPrimaryKeyCache("Lot", UtilMisc.toMap("lotId", lotId));
-    context.put("currentLot", currentLot);
-}
-if (UtilValidate.isNotEmpty(statusId)) {
-    paramListBuffer.append("&statusId=");
-    paramListBuffer.append(statusId);
-    findShipmentExprs.add(new EntityExpr("statusId", EntityOperator.EQUALS, statusId));
-
-    currentStatus = delegator.findByPrimaryKeyCache("StatusItem", UtilMisc.toMap("statusId", statusId));
-    context.put("currentStatus", currentStatus);
-}
-if (UtilValidate.isNotEmpty(formShipmentTypeId)) {
-    paramListBuffer.append("&formShipmentTypeId=");
-    paramListBuffer.append(formShipmentTypeId);
-}
-
-// this restricts the shipment lookup to those coming into or going out of the current facility
-if ("INCOMING_SHIPMENT".equals(formShipmentTypeId)) {
-    findShipmentExprs.add(new EntityExpr("destinationFacilityId", EntityOperator.EQUALS, parameters.get("facilityId")));
-} else {
-    findShipmentExprs.add(new EntityExpr("originFacilityId", EntityOperator.EQUALS, parameters.get("facilityId")));
-}
-
-
-if ("Y".equals(lookupFlag)) {
-    context.put("paramList", paramListBuffer.toString());
-
-    if (findShipmentExprs.size() > 0) {
-        EntityFindOptions findOpts = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
-        mainCond = new EntityConditionList(findShipmentExprs, EntityOperator.AND);
-        List orderBy = UtilMisc.toList("-estimatedShipDate");
-        List fieldsToSelect = Arrays.asList(new String[] {"shipmentId", "shipmentTypeId", "statusId", "partyIdFrom", "partyIdTo", "destinationContactMechId", "estimatedShipDate"});
-
-        if ("INCOMING_SHIPMENT".equals(formShipmentTypeId)) {
-            searchEntity = "ShipmentAndReceiptAndInventory";
-        } else if (UtilValidate.isEmpty(lotId)) {
-            searchEntity = "Shipment";
-        } else {
-            searchEntity = "ShipmentAndItemIssuanceAndInventory";
-        }
-
-        boolean beganTransaction = false;
-        try {
-            beganTransaction = TransactionUtil.begin();
-
-            // using list iterator
-            EntityListIterator orli = delegator.findListIteratorByCondition(searchEntity, mainCond, null, fieldsToSelect, orderBy, findOpts);
-
-            // get the indexes for the partial list
-            lowIndex = (((viewIndex - 1) * viewSize) + 1);
-            highIndex = viewIndex * viewSize;
-
-            // attempt to get the full size
-            orli.last();
-            shipmentListSize = orli.currentIndex();
-            if (highIndex > shipmentListSize) {
-                highIndex = shipmentListSize;
-            }
-
-            // get the partial list for this page
-            orli.beforeFirst();
-            if (shipmentListSize > 0) {
-                shipmentList = orli.getPartialList(lowIndex, viewSize);
-            } else {
-                shipmentList = new ArrayList();
-            }
-
-            // close the list iterator
-            orli.close();
-        } catch (GenericEntityException e) {
-            String errMsg = "Failure in operation, rolling back transaction";
-            Debug.logError(e, errMsg, module);
-            try {
-                // only rollback the transaction if we started one...
-                TransactionUtil.rollback(beganTransaction, errMsg, e);
-            } catch (GenericEntityException e2) {
-                Debug.logError(e2, "Could not rollback transaction: " + e2.toString(), module);
-            }
-            // after rolling back, rethrow the exception
-            throw e;
-        } finally {
-            // only commit the transaction if we started one... this will throw an exception if it fails
-            TransactionUtil.commit(beganTransaction);
-        }
-    } else {
-        shipmentList = new ArrayList();
-        shipmentListSize = 0;
-        highIndex = 0;
-        lowIndex = 0;
-    }
-
-    context.put("shipmentList", shipmentList);
-    context.put("listSize", shipmentListSize);
-    context.put("highIndex", highIndex);
-    context.put("lowIndex", lowIndex);
-}
-
 // =============== Prepare the Option Data for the Find Form =================
 
-if ("INCOMING_SHIPMENT".equals(formShipmentTypeId)) {
+
+isIncomingShipment = "INCOMING_SHIPMENT".equals(formShipmentTypeId);
+context.put("isIncomingShipment", isIncomingShipment);
+
+if (isIncomingShipment) {
     shipmentTypes = delegator.findByAnd("ShipmentType", UtilMisc.toMap("parentTypeId", "INCOMING_SHIPMENT"), UtilMisc.toList("description"));
 } else {
     shipmentTypes = delegator.findByAnd("ShipmentType", UtilMisc.toMap("parentTypeId", "OUTGOING_SHIPMENT"), UtilMisc.toList("description"));
@@ -221,9 +83,111 @@ facilities = delegator.findAll("Facility", UtilMisc.toList("facilityName"));
 context.put("facilities", facilities);
 
 // since purchase and sales shipments have different status codes, we'll need to make two separate lists
-if ("INCOMING_SHIPMENT".equals(formShipmentTypeId)) {
+if (isIncomingShipment) {
     context.put("shipmentStatusList", delegator.findByAnd("StatusItem", UtilMisc.toMap("statusTypeId", "PURCH_SHIP_STATUS"), UtilMisc.toList("sequenceId")));
 } else {
     context.put("shipmentStatusList", delegator.findByAnd("StatusItem", UtilMisc.toMap("statusTypeId", "SHIPMENT_STATUS"), UtilMisc.toList("sequenceId")));
 }
 
+// =============== Lookup the Shipments according to the given parameters =================
+
+if (!"Y".equals(lookupFlag)) {
+    return;
+}
+
+// build search conditions
+findShipmentExprs = FastList.newInstance();
+if (UtilValidate.isNotEmpty(shipmentId)) {
+    findShipmentExprs.add(new EntityExpr("shipmentId", EntityOperator.EQUALS, shipmentId));
+}
+if (UtilValidate.isNotEmpty(shipmentTypeId)) {
+    findShipmentExprs.add(new EntityExpr("shipmentTypeId", EntityOperator.EQUALS, shipmentTypeId));
+
+    currentShipmentType = delegator.findByPrimaryKeyCache("ShipmentType", UtilMisc.toMap("shipmentTypeId", shipmentTypeId));
+    context.put("currentShipmentType", currentShipmentType);
+}
+if (UtilValidate.isNotEmpty(partyIdFrom)) {
+    findShipmentExprs.add(new EntityExpr("partyIdFrom", EntityOperator.EQUALS, partyIdFrom));
+
+    currentPartyIdFrom = delegator.findByPrimaryKeyCache("Party", UtilMisc.toMap("partyId", partyIdFrom));
+    context.put("currentPartyIdFrom", currentPartyIdFrom);
+}
+if (UtilValidate.isNotEmpty(partyIdTo)) {
+    findShipmentExprs.add(new EntityExpr("partyIdTo", EntityOperator.EQUALS, partyIdTo));
+
+    currentPartyIdTo = delegator.findByPrimaryKeyCache("Party", UtilMisc.toMap("partyId", partyIdTo));
+    context.put("currentPartyIdTo", currentPartyIdTo);
+}
+if (UtilValidate.isNotEmpty(lotId)) {
+    findShipmentExprs.add(new EntityExpr("lotId", EntityOperator.LIKE, lotId + "%"));
+
+    currentLot = delegator.findByPrimaryKeyCache("Lot", UtilMisc.toMap("lotId", lotId));
+    context.put("currentLot", currentLot);
+}
+if (UtilValidate.isNotEmpty(statusId)) {
+    findShipmentExprs.add(new EntityExpr("statusId", EntityOperator.EQUALS, statusId));
+
+    currentStatus = delegator.findByPrimaryKeyCache("StatusItem", UtilMisc.toMap("statusId", statusId));
+    context.put("currentStatus", currentStatus);
+}
+
+// this restricts the shipment lookup to those coming into or going out of the current facility
+if (isIncomingShipment) {
+    findShipmentExprs.add(new EntityExpr("destinationFacilityId", EntityOperator.EQUALS, facilityId));
+} else {
+    findShipmentExprs.add(new EntityExpr("originFacilityId", EntityOperator.EQUALS, facilityId));
+}
+
+condition = new EntityConditionList(findShipmentExprs, EntityOperator.AND);
+
+if (isIncomingShipment) {
+    searchEntity = ShipmentAndReceiptAndInventory.class;
+} else if (UtilValidate.isEmpty(lotId)) {
+    searchEntity = Shipment.class;
+} else {
+    searchEntity = ShipmentAndItemIssuanceAndInventory.class;
+}
+
+// Pagination
+shipmentListBuilder(repo, searchEntity, condition) {
+    entityClass = searchEntity;
+    repository = repo;
+    where = condition;
+    orderBy = UtilMisc.toList("-estimatedShipDate");
+    fieldsToSelect = Arrays.asList(new String[] {"shipmentId", "shipmentTypeId", "statusId", "partyIdFrom", "partyIdTo", "destinationContactMechId", "estimatedShipDate"});
+
+    build(page) {
+        newPage = FastList.newInstance();
+        for (shipment : page) {
+            newRow = FastMap.newInstance();
+            newRow.putAll(shipment.toMap());
+            
+            status = shipment.getStatusItem();
+            newRow{"statusDescription"} = status.get("description", locale);
+
+            shipmentType = shipment.getShipmentType();
+            newRow{"shipmentTypeDescription"} = shipmentType.get("description", locale);
+
+            if (UtilValidate.isNotEmpty(shipment.getPartyIdFrom())) {
+                fromPartyName = PartyHelper.getPartyName(delegator, shipment.getPartyIdFrom(), false);
+                newRow{"fromParty"} = fromPartyName + " (" + shipment.getPartyIdFrom() + ")";
+            }
+            if (UtilValidate.isNotEmpty(shipment.getPartyIdTo())) {
+                toPartyName = PartyHelper.getPartyName(delegator, shipment.getPartyIdTo(), false);
+                newRow{"toParty"} = toPartyName + " (" + shipment.getPartyIdTo() + ")";
+            }
+
+            if (UtilValidate.isNotEmpty(shipment.getDestinationContactMechId())) {
+                destinationPostalAddress = delegator.findByPrimaryKeyCache("PostalAddress", UtilMisc.toMap("contactMechId", shipment.getDestinationContactMechId()));
+                newRow{"destinationAddress"} = destinationPostalAddress.get("address1") + " - " + destinationPostalAddress.get("city");
+            }
+
+            newPage.add(newRow);
+        }
+        return newPage;
+    }
+
+    return this;
+}
+ShippingRepositoryInterface repository = new DomainsLoader(new Infrastructure(dispatcher), new User(parameters.get("userLogin"))).loadDomainsDirectory().getShippingDomain().getShippingRepository();
+context.put("shipmentListBuilder", shipmentListBuilder(repository, searchEntity, condition));
