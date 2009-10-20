@@ -98,6 +98,8 @@ framework/widget/dtd/widget-form.xsd
 framework/widget/src/org/ofbiz/widget/form/ModelForm.java
 r13488 Default form pagination back to false, and fix the ModelForm to actually the paginate = false
 
+framework/widget/src/org/ofbiz/widget/screen/ModelScreen.java
+r13693 Instead of throwing a complicated error, just render it to the writer when caught. This is much clearer.
 
 Applications changes
 --------------------
