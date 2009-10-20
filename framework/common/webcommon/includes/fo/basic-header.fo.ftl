@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <#escape x as x?xml>
         <fo:static-content flow-name="xsl-region-before">
           <fo:block font-size="${(layoutSettings.headerFontSize)?default("14pt")}" text-align="center" margin-bottom="14pt">

@@ -17,6 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <entity-engine-xml>
     <StatusType description="Pos Transaction" hasTable="N" parentTypeId="" statusTypeId="POSTX_STATUS"/>
     <StatusItem description="Active" sequenceId="01" statusCode="ACTIVE" statusId="POSTX_ACTIVE" statusTypeId="POSTX_STATUS"/>

@@ -17,6 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <#-- xsi:schemaLocation="http://www.openapplications.org/197_receive_delivery_001 file:///C:/Documents%20and%20Settings/022523/My%20Documents/Vudu/XML%20Specs/OAG%20721/197_receive_delivery_001.xsd" -->
 <n:RECEIVE_DELIVERY_001
     xmlns:n="http://www.openapplications.org/197_receive_delivery_001"

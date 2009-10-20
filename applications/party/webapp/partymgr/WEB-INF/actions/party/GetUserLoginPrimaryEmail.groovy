@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/* This file has been modified by Open Source Strategies, Inc. */
 
 //figure out the PRIMARY_EMAIL of the logged in user, for setting in the send email link
 //maybe nice to put in some secondary emails later

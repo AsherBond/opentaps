@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
     <fo:simple-page-master master-name="11x17-portrait"
         page-width="11in" page-height="17in"
         margin-top="0.5in" margin-bottom="0.5in"

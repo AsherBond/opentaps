@@ -16,5 +16,6 @@
 # specific language governing permissions and limitations
 # under the License.
 #####################################################################
+# This file has been modified by Open Source Strategies, Inc.
 
 Web applications which will be mounted by the container would go here.

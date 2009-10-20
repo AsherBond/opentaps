@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <#assign countries = Static["org.ofbiz.common.CommonWorkers"].getCountryList(delegator)>
 <#list countries as country>
     <option value='${country.geoId}'>${country.get("geoName",locale)?default(country.geoId)}</option>

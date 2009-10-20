@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/* This file has been modified by Open Source Strategies, Inc. */
 
 // ================= FIELD LOOKUP METHODS ============================
 var NS4 = (navigator.appName.indexOf("Netscape")>=0 && !document.getElementById)? true : false;

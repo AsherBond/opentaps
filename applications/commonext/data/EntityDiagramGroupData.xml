@@ -17,6 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <entity-engine-xml>
     <EntityGroup entityGroupId="5000" entityGroupName="Top Level: Common"/>
     <EntityGroupEntry entityGroupId="5000" entityOrPackage="DataSource" applEnumId="ESIA_INCLUDE"/>

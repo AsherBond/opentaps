@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
+/* This file has been modified by Open Source Strategies, Inc. */
 
 // copied from : http://cocoon.apache.org/2.2/blocks/captcha/1.0/1436_1_1.html
 

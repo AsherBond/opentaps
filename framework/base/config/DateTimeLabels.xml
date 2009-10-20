@@ -18,6 +18,7 @@
     specific language governing permissions and limitations
     under the License.
 --><resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!-- This file has been modified by Open Source Strategies, Inc. -->
     <property key="hour.plural">
         <value xml:lang="de">Stunden</value>
         <value xml:lang="en">hours</value>

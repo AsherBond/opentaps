@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <#if requestParameters.product_id?exists>
   <form name="reviewProduct" method="post" action="<@ofbizUrl>createProductReview</@ofbizUrl>">
     <input type="hidden" name="productStoreId" value="${productStore.productStoreId}">

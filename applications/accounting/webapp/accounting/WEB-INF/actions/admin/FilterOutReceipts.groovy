@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/* This file has been modified by Open Source Strategies, Inc. */
  // simple script to filter out receipts in a list of payments
 
 import org.ofbiz.accounting.util.UtilAccounting;

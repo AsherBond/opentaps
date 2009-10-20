@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+# This file has been modified by Open Source Strategies, Inc.
 org.ofbiz.minilang.method.conditional.CombinedCondition$OrConditionFactory
 org.ofbiz.minilang.method.conditional.CombinedCondition$XorConditionFactory
 org.ofbiz.minilang.method.conditional.CombinedCondition$AndConditionFactory

@@ -16,5 +16,6 @@
 # specific language governing permissions and limitations
 # under the License.
 #####################################################################
+# This file has been modified by Open Source Strategies, Inc.
 
 The script directory is for static resources that are interpreted at run time rather than being compiled. This goes on the classpath, but does not get built or put into a JAR file.

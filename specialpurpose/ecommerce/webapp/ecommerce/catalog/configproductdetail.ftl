@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <#-- variable setup -->
 <#assign productContentWrapper = productContentWrapper?if_exists>
 <#assign price = priceMap?if_exists>

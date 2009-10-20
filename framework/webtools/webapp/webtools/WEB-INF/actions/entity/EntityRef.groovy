@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/* This file has been modified by Open Source Strategies, Inc. */
 controlPath = parameters._CONTROL_PATH_;
 list = "$controlPath/view/entityref_list";
 main = "$controlPath/view/entityref_main";

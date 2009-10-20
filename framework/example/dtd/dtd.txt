@@ -16,6 +16,7 @@
 # specific language governing permissions and limitations
 # under the License.
 #####################################################################
+# This file has been modified by Open Source Strategies, Inc.
 
 Place all DTDs / schemas which need to be included on the classpath here.
 All files located in this directory will be placed in the root of the built jar.

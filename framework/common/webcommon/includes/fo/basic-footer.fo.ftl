@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <#escape x as x?xml>
         <fo:static-content flow-name="xsl-region-after" font-size="${(layoutSettings.footerFontSize)?default("8pt")}">
             <fo:block text-align="center" border-top="thin solid black">Copyright (c) 2001-${nowTimestamp?string("yyyy")} The Apache Software Foundation</fo:block>

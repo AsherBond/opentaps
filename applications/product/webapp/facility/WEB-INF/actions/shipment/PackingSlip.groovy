@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/* This file has been modified by Open Source Strategies, Inc. */
 
 // This script gets shipment items grouped by package for use in the packing slip PDF or any screens that require by-package layout
 

@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <#assign javaVer = Static["java.lang.System"].getProperty("java.vm.version")/>
 <#assign isJava5 = javaVer.startsWith("1.5")/>
 <#if parameters.maxElements?has_content><#assign maxElements = parameters.maxElements?number/><#else><#assign maxElements = 10/></#if>

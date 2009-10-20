@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
   <div class="screenlet-title-bar">
     <ul>
       <li class="h3">${start?date?string("EEEE")?cap_first} ${start?date?string.long}</li>

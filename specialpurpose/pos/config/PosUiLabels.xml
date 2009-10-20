@@ -18,6 +18,7 @@
     specific language governing permissions and limitations
     under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <property key="PosAdjustment">
         <value xml:lang="en">(adjustment)</value>

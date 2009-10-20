@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <div id="serverError_${contactMech.contactMechId}" class="errorMessage"></div>
 <#assign postalAddress = delegator.findOne("PostalAddress", Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechId", contactMech.contactMechId), true)>

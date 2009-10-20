@@ -16,6 +16,7 @@
 # specific language governing permissions and limitations
 # under the License.
 #####################################################################
+# This file has been modified by Open Source Strategies, Inc.
 
 The Lucene indexing files for the content manager go in this directory.
 

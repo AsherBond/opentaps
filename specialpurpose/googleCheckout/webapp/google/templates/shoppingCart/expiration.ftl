@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <cart-expiration>
     <good-until-date>${googleCart.cartExpiration?string("yyyy-MM-dd'THH:mm:ss'Z")}</good-until-date>

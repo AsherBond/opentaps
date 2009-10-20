@@ -17,6 +17,7 @@
 # specific language governing permissions and limitations
 # under the License.
 # ****************************************************************************
+# This file has been modified by Open Source Strategies, Inc.
 # This script is used to start WebLogic Server.
 #
 # To create your own start script for your domain, you can initialize the

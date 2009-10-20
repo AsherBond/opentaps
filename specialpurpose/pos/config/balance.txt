@@ -16,6 +16,7 @@
 # specific language governing permissions and limitations
 # under the License.
 #####################################################################
+# This file has been modified by Open Source Strategies, Inc.
 
 #dateFormat=EEE, d MMM yyyy HH:mm:ss z
 ${CENTER}${DOUBLE_HEIGHT}${BOLD}Company XYZ

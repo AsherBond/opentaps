@@ -17,6 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <entity-engine-xml>
     <!-- Entity Sync Admin security -->
     <SecurityPermission description="Use the Entity Sync Admin pages." permissionId="ENTITY_SYNC_ADMIN"/>

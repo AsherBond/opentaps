@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <#assign components = Static["org.ofbiz.base.component.ComponentConfig"].getAllComponents()?if_exists/>
 <div id="stats-bins-history" class="screenlet">

@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 
 ${(decoratedContent.subcontent.htmlHead)?default((thisContent.subcontent.htmlHead)?if_exists)}
 ${(decoratedContent.subcontent.header)?default((thisContent.subcontent.header)?if_exists)}

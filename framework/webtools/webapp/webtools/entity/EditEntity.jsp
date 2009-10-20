@@ -17,6 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 --%>
+<%-- This file has been modified by Open Source Strategies, Inc. --%>
 
 <%@ page import="java.util.*" %>
 <%@ page import="org.ofbiz.base.util.*, org.ofbiz.base.config.*" %>

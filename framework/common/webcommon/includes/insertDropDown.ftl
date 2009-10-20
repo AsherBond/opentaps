@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <form method="post"  action="<@ofbizUrl>${topLine.action}</@ofbizUrl>"  onSubmit="javascript:submitFormDisableSubmits(this)" name="${topLine.action}" id="${topLine.action}">
 ${StringUtil.wrapString(topLine.textBegin?if_exists)}

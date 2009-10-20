@@ -17,6 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <entity-engine-xml>
     <EnumerationType description="Workflow Graph Conformance Classifications" enumTypeId="WORKFLOW_GRAPH_CONF" hasTable="N" parentTypeId="WORKFLOW"/>
     <EnumerationType description="Workflow Formal Parameter Mode" enumTypeId="WORKFLOW_PARAM_MODE" hasTable="N" parentTypeId="WORKFLOW"/>

@@ -17,6 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <entity-engine-xml>
     <AcctgTransType acctgTransTypeId="INTERNAL_ACCTG_TRANS" description="Internal" hasTable="Y" parentTypeId=""/>
     <AcctgTransType acctgTransTypeId="AMORTIZATION" description="Amortization" hasTable="N" parentTypeId="INTERNAL_ACCTG_TRANS"/>

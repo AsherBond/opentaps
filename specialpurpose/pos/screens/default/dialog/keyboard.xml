@@ -17,6 +17,7 @@
     specific language governing permissions and limitations
     under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <XPage class="net.xoetrope.swing.XDialog">
     <Components>
         <Panel name="mainPanel" x="0" y="0" w="1024" h="768" style="menu" >

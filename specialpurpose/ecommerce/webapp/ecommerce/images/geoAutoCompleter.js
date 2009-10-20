@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/* This file has been modified by Open Source Strategies, Inc. */
 
 Event.observe(window, 'load', function() {
     // Autocompleter for shipping panel

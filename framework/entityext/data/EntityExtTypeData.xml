@@ -17,6 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <entity-engine-xml>
     <EnumerationType description="Entity Sync Include Application Type" enumTypeId="ENTSYNC_INC_APPL" hasTable="N" parentTypeId=""/>
     <Enumeration description="Include" enumCode="INCLUDE" enumId="ESIA_INCLUDE" sequenceId="01" enumTypeId="ENTSYNC_INC_APPL"/>

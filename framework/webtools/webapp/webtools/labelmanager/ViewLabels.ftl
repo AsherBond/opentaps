@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <div class="screenlet-body">
   <a href="<@ofbizUrl>UpdateLabel?fileName=${parameters.labelFileName?if_exists}</@ofbizUrl>" class="buttontext">${uiLabelMap.WebtoolsLabelManagerAddNew}</a>
   <form name= "SaveLabelsToXmlFile" method= "post" action= "<@ofbizUrl>SaveLabelsToXmlFile</@ofbizUrl>">

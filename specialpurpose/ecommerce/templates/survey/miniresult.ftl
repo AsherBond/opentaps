@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
   <#list surveyQuestionAndAppls as surveyQuestionAndAppl>

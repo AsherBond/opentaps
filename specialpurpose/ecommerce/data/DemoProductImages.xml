@@ -17,6 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 
 <entity-engine-xml>
   <Product productId="GZ-1000" smallImageUrl="/images/products/small/web_browser.png" largeImageUrl="/images/products/large/web_browser.png"/>

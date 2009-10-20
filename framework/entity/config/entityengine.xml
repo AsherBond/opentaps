@@ -17,6 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <!--
  - This file configures the Entity Engine JDBC (or other DataSource) and JTA
 access. For a detailed description see the core/docs/entityconfig.html file.

@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
+/* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.webapp.control;
 
 import static org.ofbiz.base.util.UtilGenerics.checkMap;

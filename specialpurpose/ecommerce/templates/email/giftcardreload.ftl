@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <#--
      Standard fields for this template are: cardNumber, pinNumber, amount, previousAmount, processResult, responseCode

@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 --%>
+<%-- This file has been modified by Open Source Strategies, Inc. --%>
 <%@ page import="java.util.*, java.io.*, java.net.*, java.sql.*, org.ofbiz.base.util.*, org.ofbiz.entity.*, org.ofbiz.entity.model.*, org.ofbiz.entity.datasource.*" %><jsp:useBean id="delegator" type="org.ofbiz.entity.GenericDelegator" scope="request" /><jsp:useBean id="security" type="org.ofbiz.security.Security" scope="request" /><%
 
 if(security.hasPermission("ENTITY_MAINT", session)) {
@@ -77,6 +78,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 
 <entitymodel>
   <!-- ========================================================= -->

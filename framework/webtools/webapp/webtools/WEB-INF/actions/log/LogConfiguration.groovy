@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/* This file has been modified by Open Source Strategies, Inc. */
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;

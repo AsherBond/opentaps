@@ -16,6 +16,7 @@
   specific language governing permissions and limitations
   under the License.
   -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <form name="editContentTree" action="<#if parameters.rename?has_content><@ofbizUrl>updateDocumentTree</@ofbizUrl><#else><@ofbizUrl>addDocumentToTree</@ofbizUrl></#if>" method="post">
     <#assign content  = delegator.findByPrimaryKey("Content",Static["org.ofbiz.base.util.UtilMisc"].toMap("contentId",parameters.contentId))/>
     <#if parameters.rename?has_content>

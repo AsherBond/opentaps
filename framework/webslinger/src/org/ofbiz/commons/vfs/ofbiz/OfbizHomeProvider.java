@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
+/* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.commons.vfs.ofbiz;
 
 import java.net.URL;

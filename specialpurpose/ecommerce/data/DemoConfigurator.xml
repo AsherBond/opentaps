@@ -17,6 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 
 <entity-engine-xml>
     <Product productId="PC001" productTypeId="AGGREGATED" productName="Configurable PC" internalName="Configurable PC" description="Configurable PC" isVirtual="N" isVariant="N" billOfMaterialLevel="0" createdDate="2004-08-20 12:49:13.418" createdByUserLogin="admin"/>

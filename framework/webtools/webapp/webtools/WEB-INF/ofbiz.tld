@@ -18,6 +18,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <taglib>
   <tlibversion>1.0</tlibversion>
   <jspversion>1.1</jspversion>

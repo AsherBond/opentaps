@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
+/* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.entityext.cache;
 
 import java.util.Map;

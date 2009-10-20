@@ -17,6 +17,7 @@
   specific language governing permissions and limitations
   under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <!-- This generates an application.xml file used in an exploded EAR structure (no WAR files).
   The file is copied in the META-INF directory in this EAR structure ready to deploy using the inPlace deployer tool option
   Eventually irrelevant generated modules and dependencies should be removed (but it should not hurt if not done)

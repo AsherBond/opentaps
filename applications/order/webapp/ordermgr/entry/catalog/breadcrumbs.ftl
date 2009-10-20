@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <#-- variable setup and worker calls -->
 <#assign topLevelList = requestAttributes.topLevelList?if_exists>
 <#assign curCategoryId = requestAttributes.curCategoryId?if_exists>

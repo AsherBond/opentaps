@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <form  method="post" action="<@ofbizUrl>mergeContacts</@ofbizUrl>" class="basic-form">
   <table border="0" width="100%" >
     <tr>

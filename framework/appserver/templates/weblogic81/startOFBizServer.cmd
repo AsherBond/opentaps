@@ -16,6 +16,7 @@
 @rem specific language governing permissions and limitations
 @rem under the License.
 @rem ###################################################################
+# This file has been modified by Open Source Strategies, Inc.
 @rem This script is used to start WebLogic Server.
 @rem
 @rem To create your own start script for your domain, you can initialize the

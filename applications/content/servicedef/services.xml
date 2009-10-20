@@ -17,6 +17,7 @@
   specific language governing permissions and limitations
   under the License.
   -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">

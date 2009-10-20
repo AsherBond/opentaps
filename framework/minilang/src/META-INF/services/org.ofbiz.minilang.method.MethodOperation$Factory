@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+# This file has been modified by Open Source Strategies, Inc.
 org.ofbiz.minilang.method.callops.AddError$AddErrorFactory
 org.ofbiz.minilang.method.callops.CallBsh$CallBshFactory
 org.ofbiz.minilang.method.callops.CallClassMethod$CallClassMethodFactory

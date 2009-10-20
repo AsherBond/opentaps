@@ -16,6 +16,7 @@
   specific language governing permissions and limitations
   under the License.
   -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <object width="550" height="400">
     <param name="movie" value="/content/control/stream?contentId=${contentId}">
   	<embed src="/content/control/stream?contentId=${contentId}" width="550" height="400"></embed>

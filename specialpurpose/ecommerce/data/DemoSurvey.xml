@@ -17,6 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 
 <entity-engine-xml>
     <Survey surveyId="1000" description="Gift Card Purchase Information" isAnonymous="Y" allowMultiple="Y" allowUpdate="N"/>

@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <#if canNotView>
   <p><h3>${uiLabelMap.AccountingEFTNotBelongToYou}.</h3></p>

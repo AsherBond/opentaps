@@ -17,6 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <entity-engine-xml>
     <PortalPortlet portalPortletId="EXAMPLE_1" portletName="Example 1" description="Example portlet n. 1"
         screenName="ExamplePortlet1" screenLocation="component://example/widget/example/PortletScreens.xml"

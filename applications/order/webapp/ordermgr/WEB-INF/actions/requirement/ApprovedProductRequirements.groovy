@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/* This file has been modified by Open Source Strategies, Inc. */
 
 prepare = dispatcher.runSync("prepareFind", [inputFields : parameters, entityName : "Requirement"]);
 if (prepare.entityConditionList) {

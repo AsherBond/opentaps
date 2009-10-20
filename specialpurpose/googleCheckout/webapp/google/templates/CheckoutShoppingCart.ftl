@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <?xml version="1.0" encoding="UTF-8"?>
 <checkout-shopping-cart xmlns="http://checkout.google.com/schema/2">

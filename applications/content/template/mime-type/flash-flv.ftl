@@ -16,6 +16,7 @@
   specific language governing permissions and limitations
   under the License.
   -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <object type="application/x-shockwave-flash" data="/images/FlowPlayerLP.swf" width="320" height="263" id="FlowPlayer">
 	<param name="movie" value="/images/FlowPlayerLP.swf" />
 	<param name="quality" value="high" />

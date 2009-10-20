@@ -17,6 +17,7 @@
     specific language governing permissions and limitations
     under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <entity-engine-xml>
     <Content contentId="TREE_ROOT" contentTypeId="DOCUMENT" contentName="ROOT" dataResourceId=""/>
     <Content contentId="PICTURE" contentTypeId="DOCUMENT" contentName="Picture" dataResourceId=""/>

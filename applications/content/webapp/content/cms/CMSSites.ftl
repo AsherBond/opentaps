@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <SCRIPT language="javascript">
 function call_fieldlookup4(rootForumId, parentForumId ) {
 	var obj_lookupwindow = window.open("addSubSite?rootForumId=" + rootForumId + "&parentForumId=" + parentForumId, 'FieldLookup', 'width=500,height=250,scrollbars=yes,status=no,top='+my+',left='+mx+',dependent=yes,alwaysRaised=yes');

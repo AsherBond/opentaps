@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 --%>
+<%-- This file has been modified by Open Source Strategies, Inc. --%>
 <%@ page contentType="text/plain" %><%@ page import="java.util.*, java.io.*, java.net.*, org.ofbiz.base.config.*, org.ofbiz.base.util.*, org.ofbiz.entity.*, org.ofbiz.entity.config.*, org.ofbiz.entity.model.*" %><jsp:useBean id="delegator" type="org.ofbiz.entity.GenericDelegator" scope="request" /><jsp:useBean id="security" type="org.ofbiz.security.Security" scope="request" /><%
 
   if("true-not-working".equals(request.getParameter("savetofile"))) {
@@ -78,6 +79,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <%
   ModelReader reader = delegator.getModelReader();
   ModelGroupReader groupReader = delegator.getModelGroupReader();

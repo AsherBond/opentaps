@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <script language="JavaScript" type="text/javascript">
 function insertImageName(type,nameValue) {
   eval('document.productCategoryForm.' + type + 'ImageUrl.value=nameValue;');

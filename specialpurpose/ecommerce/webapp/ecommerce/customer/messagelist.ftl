@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <#macro showMessage communicationEvent isSentMessage>
   <#if communicationEvent.partyIdFrom?has_content>

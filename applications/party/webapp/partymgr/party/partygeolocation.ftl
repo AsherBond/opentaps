@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <#if latestGeoPoint?has_content>
   <#if latestGeoPoint.latitude?has_content && latestGeoPoint.longitude?has_content>
     ${uiLabelMap.CommonLatitude}${latestGeoPoint.latitude}<br>

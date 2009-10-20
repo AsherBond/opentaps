@@ -16,5 +16,6 @@
 # specific language governing permissions and limitations
 # under the License.
 #####################################################################
+# This file has been modified by Open Source Strategies, Inc.
 
 External (thirdparty) libraries which are required for running and building this component.

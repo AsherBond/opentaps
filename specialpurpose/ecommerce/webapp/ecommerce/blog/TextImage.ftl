@@ -16,6 +16,7 @@
   specific language governing permissions and limitations
   under the License.
   -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <#--
 # This page displays both the textarea for text and the file upload control.

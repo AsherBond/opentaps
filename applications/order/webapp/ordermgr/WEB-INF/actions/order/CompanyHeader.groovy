@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/* This file has been modified by Open Source Strategies, Inc. */
 
  // this script is used to get the company's logo header information for orders, invoices, and returns.  It can either take order, invoice, returnHeader from
  // parameters or use orderId, invoiceId, or returnId to look them up.

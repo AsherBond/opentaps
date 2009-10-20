@@ -16,6 +16,7 @@
   specific language governing permissions and limitations
   under the License.
   -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab">
     <param name="SRC" value="/content/control/stream?contentId=${contentId}" />
     <param name="WIDTH" value="320" />

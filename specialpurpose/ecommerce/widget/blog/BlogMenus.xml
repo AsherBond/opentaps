@@ -17,6 +17,7 @@
   specific language governing permissions and limitations
   under the License.
   -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 
 <menus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-menu.xsd">
     <menu name="view_edit" default-title-style="tabButton" default-selected-style="tabButtonSelected" default-menu-item-name="all" orientation="horizontal" menu-width="100%" default-tooltip-style="tabletext" default-widget-style="tabButton" menu-container-style="blogmenuwrapper" title="" type="simple">

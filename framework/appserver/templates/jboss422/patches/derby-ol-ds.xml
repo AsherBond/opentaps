@@ -18,6 +18,7 @@
   specific language governing permissions and limitations
   under the License.
   -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 
 <!-- The Derby embedded database JCA connection factory config
 $Id: derby-ds.xml,v 1.1.4.1 2004/11/03 13:28:39 loubyansky Exp $ -->

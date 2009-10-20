@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <div id="microCart">
     <#if (shoppingCartSize > 0)>
       <table class="basic-table" cellspacing="1" cellpadding="2">

@@ -16,6 +16,7 @@
   specific language governing permissions and limitations
   under the License.
   -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <#-- cms menu bar -->
 <div id="cmsmenu" style="margin-bottom: 8px;">

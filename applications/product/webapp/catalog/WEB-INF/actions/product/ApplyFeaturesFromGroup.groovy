@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/* This file has been modified by Open Source Strategies, Inc. */
 
 /*
  * For cases when the ApplyFeaturesFromCategory.ftl is actually supposed to get its list of ProductFeatures from a productFeatureGroupId.

@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
+/* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.widget.cache;
 
 import org.ofbiz.base.util.cache.UtilCache;

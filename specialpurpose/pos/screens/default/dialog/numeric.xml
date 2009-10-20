@@ -17,6 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <XPage class="net.xoetrope.swing.XDialog">
     <Components>
         <Panel x="0" y="0" w="306" h="50" style="numButton">

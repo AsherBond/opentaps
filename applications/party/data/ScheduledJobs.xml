@@ -17,6 +17,7 @@
     specific language governing permissions and limitations
     under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 
 <!-- This is a recurring job with will check for communication events which need to be send as emails. -->
 <entity-engine-xml>

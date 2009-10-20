@@ -18,6 +18,7 @@
     specific language governing permissions and limitations
     under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <entity-engine-xml>
     <SecurityGroup description="POS Clerk" groupId="POSCLERK"/>
     <SecurityGroupPermission groupId="POSCLERK" permissionId="ORDERMGR_VIEW"/>

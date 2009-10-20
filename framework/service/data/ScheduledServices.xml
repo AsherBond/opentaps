@@ -17,6 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <entity-engine-xml>
     <TemporalExpression tempExprId="MIDNIGHT_DAILY" tempExprTypeId="FREQUENCY" date1="2000-01-01 00:00:00.000" integer1="5" integer2="1"/>
     <JobSandbox jobId="PURGE_OLD_JOBS" jobName="Purge Old Jobs" runTime="2000-01-01 00:00:00.000" serviceName="purgeOldJobs" poolId="pool" runAsUser="system" tempExprId="MIDNIGHT_DAILY" maxRecurrenceCount="-1"/>

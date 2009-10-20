@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
+/* This file has been modified by Open Source Strategies, Inc. */
 package org.ofbiz.base.util.string;
 
 import static de.odysseus.el.tree.impl.Scanner.Symbol.END_EVAL;

@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <form name="scheduleForm" method="POST" action="<@ofbizUrl>scheduleService</@ofbizUrl>">
     <#list scheduleOptions as scheduleOption>
       <input type="hidden" name="${scheduleOption.name}" value="${scheduleOption.value}"/>

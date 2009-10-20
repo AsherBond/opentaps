@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <div class='tabletext'>NOTE: These report are for demonstration purposes only.
 They use the JasperReports reporting tool. They have not been polished yet, but

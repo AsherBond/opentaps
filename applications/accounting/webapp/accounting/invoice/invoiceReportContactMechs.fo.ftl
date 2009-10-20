@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <#escape x as x?xml>
 <fo:table space-after="0.3in">
    <fo:table-column column-width="3.5in"/>

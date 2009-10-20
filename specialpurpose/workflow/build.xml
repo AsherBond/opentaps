@@ -17,6 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 
 <project name="OFBiz - Workflow Component" default="jar" basedir=".">
     <import file="../../common.xml"/>

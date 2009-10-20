@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/* This file has been modified by Open Source Strategies, Inc. */
 
 // This script can be used for testing right now but it should not be used for production because
 // it does not work for marketing packages and more importantly, if there is a new product without any

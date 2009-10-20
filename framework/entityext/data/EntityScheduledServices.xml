@@ -17,6 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <entity-engine-xml>
     <JobSandbox jobId="8200" jobName="Clear EntitySyncRemove Info" runTime="2000-01-01 00:00:00.000" serviceName="cleanSyncRemoveInfo" poolId="pool" runAsUser="system" tempExprId="MIDNIGHT_DAILY" maxRecurrenceCount="-1"/>
 

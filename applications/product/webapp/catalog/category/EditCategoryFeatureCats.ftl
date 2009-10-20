@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<#-- This file has been modified by Open Source Strategies, Inc. -->
 <a href="<@ofbizUrl>attachProductFeaturesToCategory?productCategoryId=${productCategoryId?if_exists}</@ofbizUrl>" class="buttontext">[${uiLabelMap.ProductFeatureCategoryAttach}]</a>
 <#if productCategoryId?exists && productCategory?exists>
     <div class="screenlet-title-bar">

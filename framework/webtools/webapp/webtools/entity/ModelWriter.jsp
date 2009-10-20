@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 --%>
+<%-- This file has been modified by Open Source Strategies, Inc. --%>
 <%@ page contentType="text/plain" %><%@ page import="java.util.*, java.io.*, java.net.*, org.ofbiz.base.config.*, org.ofbiz.base.util.*, org.ofbiz.entity.*, org.ofbiz.entity.config.*, org.ofbiz.entity.model.*" %><jsp:useBean id="delegator" type="org.ofbiz.entity.GenericDelegator" scope="request" /><jsp:useBean id="security" type="org.ofbiz.security.Security" scope="request" /><%
 try {
 if (security.hasPermission("ENTITY_MAINT", session) || request.getParameter("originalLoaderName") != null) {
@@ -85,6 +86,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
 <%
   //GenericDelegator delegator = GenericHelperFactory.getDefaultHelper();
   ModelReader reader = delegator.getModelReader();
