@@ -179,26 +179,7 @@ public abstract class UtilDate {
      * @return the <code>Timestamp</code> corresponding to the given <code>String</code>
      */
     public static Timestamp toTimestamp(String timestampString, TimeZone timeZone, Locale locale) {
-        String dateFormat = null;
-
-        if (UtilValidate.isEmpty(timestampString)) {
-            return null;
-        }
-
-        if (timestampString.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d+$")) {
-            // JDBC format
-            dateFormat = "yyyy-MM-dd HH:mm:ss.S";
-        } else if (timestampString.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
-            // ISO format
-            dateFormat = "yyyy-MM-dd";
-        } else if (timestampString.indexOf(" ") != -1) {
-            // Date and time in localized format
-            dateFormat = getDateTimeFormat(locale);
-        } else {
-            // date in localized format
-            dateFormat = getDateFormat(locale);
-        }
-
+        String dateFormat = getDateFormat(timestampString, locale);
         if (!UtilDate.isDateTime(timestampString, dateFormat, locale)) {
             // timestampString doesn't match pattern
             return null;
@@ -522,5 +503,47 @@ public abstract class UtilDate {
      */
     public static java.sql.Date timestampToSqlDate(Timestamp ts) {
         return new java.sql.Date(UtilDateTime.getDayStart(ts).getTime());
+    }
+
+
+    /**
+     * Returns appropriate date format string, default using locale format, if it isn't match the date string, then try to get date format from date string.
+     * @param dateString a <code>String</code> value
+     * @param locale User's locale, may be <code>null</code>
+     * @return Date format string
+     */
+    public static String getDateFormat(String dateString, Locale locale) {
+        String dateFormat = getDateFormat(locale);
+        if (UtilValidate.isEmpty(dateString))
+            return dateFormat;
+        if (dateString.indexOf(" ") != -1) {
+            // Date and time in localized format
+            dateFormat = getDateTimeFormat(locale);
+        }
+        if(!UtilDate.isDateTime(dateString, dateFormat, locale)) {
+            if (UtilValidate.isEmpty(dateString)) {
+                return null;
+            }
+            if (dateString.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d+$")) {
+                // JDBC format
+                dateFormat = "yyyy-MM-dd HH:mm:ss.S";
+            } else if (dateString.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                // ISO format
+                dateFormat = "yyyy-MM-dd";
+            } else if (dateString.matches("^\\d{2}/\\d{2}/\\d{2}$")) {
+                // MM/dd/yy
+                dateFormat = "MM/dd/yy";
+            } else if (dateString.matches("^\\d{2}/\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d+$")) {
+                // MM/dd/yy HH:mm:ss.S
+                dateFormat = "MM/dd/yy HH:mm:ss.S";
+            } else if (dateString.matches("\\w{3} \\w{3} \\d{2} \\d{4} \\d{2}:\\d{2}:\\d{2} \\S{8}$")) {
+                // GWT Date input format1, example : Sat Oct 10 2009 00:00:00 GMT+0800
+                dateFormat = "EEE MMM dd yyyy hh:mm:ss";
+            } else if (dateString.matches("\\w{3} \\w{3} \\d{2} \\d{2}:\\d{2}:\\d{2} \\S{8} \\d{4}$")) {
+                // GWT Date input format2, example : Thu Oct 15 00:00:00 UTC+0800 2009
+                dateFormat = "EEE MMM dd hh:mm:ss zZ yyyy";
+            }
+        }
+        return dateFormat;
     }
 }

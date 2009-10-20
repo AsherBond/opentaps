@@ -23,9 +23,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import com.opensourcestrategies.crmsfa.party.PartyHelper;
-import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
-import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -41,6 +38,9 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
+
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 
 /**
  * Opportunities services. The service documentation is in services_opportunities.xml.
@@ -112,7 +112,8 @@ public final class OpportunitiesServices {
 
             // set estimatedCloseDate to 23:59:59.999 so that it's at the end of the day
             String estimatedCloseDateString = (String) context.get("estimatedCloseDate");
-            Timestamp estimatedCloseDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(estimatedCloseDateString, UtilDate.getDateFormat(locale), timeZone, locale), timeZone, locale);
+            Timestamp inputEstimatedCloseDate = UtilDateTime.stringToTimeStamp(estimatedCloseDateString, UtilDate.getDateFormat(estimatedCloseDateString, locale), timeZone, locale);
+            Timestamp estimatedCloseDate = UtilDateTime.getDayEnd(inputEstimatedCloseDate, timeZone, locale);
 
             // create the opportunity
             String salesOpportunityId = delegator.getNextSeqId("SalesOpportunity");
