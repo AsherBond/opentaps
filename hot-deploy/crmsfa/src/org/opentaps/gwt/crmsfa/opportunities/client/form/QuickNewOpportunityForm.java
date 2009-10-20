@@ -67,7 +67,7 @@ public class QuickNewOpportunityForm extends ScreenletFormPanel {
         estimatedAmountInput = new NumberField(UtilUi.MSG.crmEstimatedAmount(), QuickNewOpportunityConfiguration.ESTIMATED_AMOUNT, INPUT_LENGTH);
         addField(estimatedAmountInput);
 
-        // subject is a required DateField input field
+        // estimated closeDate is a required DateField input field
         estimatedCloseDateInput = new DateField(UtilUi.MSG.crmEstimatedCloseDate(), QuickNewOpportunityConfiguration.ESTIMATED_CLOSE_DATE, INPUT_LENGTH);
         addRequiredField(estimatedCloseDateInput);
 
