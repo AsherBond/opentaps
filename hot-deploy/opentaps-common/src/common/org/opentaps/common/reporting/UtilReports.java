@@ -438,8 +438,8 @@ public final class UtilReports {
             List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
                     EntityCondition.makeCondition("application", componentName),
                     EntityCondition.makeCondition("showInSelect", "Y"));
-            if (UtilValidate.isNotEmpty(reportGroupId)) {
-                conditions.add(EntityCondition.makeCondition("reportGroupId", EntityOperator.EQUALS, reportGroupId));
+            if (UtilValidate.isNotEmpty(reportGroupId)) {
+                conditions.add(EntityCondition.makeCondition("reportGroupId", EntityOperator.EQUALS, reportGroupId));
             }
             List<GenericValue> applicationGroups = delegator.findByCondition("ReportGroup", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, null , UtilMisc.toList("sequenceNum", "description"), null);
             if (UtilValidate.isEmpty(applicationGroups)) {
