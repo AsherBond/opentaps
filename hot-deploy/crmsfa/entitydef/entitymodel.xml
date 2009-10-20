@@ -1059,12 +1059,12 @@
         <view-link entity-alias="SOR" rel-entity-alias="SO">
             <key-map field-name="salesOpportunityId"/>
         </view-link>
-        <relation fk-name="PRASO_SOQ" rel-entity-name="SalesOpportunityQuote" type="many">
-            <key-map field-name="salesOpportunityId"/>
-        </relation>
         <view-link entity-alias="SO" rel-entity-alias="SOS" rel-optional="true">
             <key-map field-name="opportunityStageId"/>
-        </view-link>        
+        </view-link>
+        <relation fk-name="PRASO_SOQ" rel-entity-name="SalesOpportunityQuote" type="many">
+            <key-map field-name="salesOpportunityId"/>
+        </relation>       
     </view-entity>
 
 </entitymodel>
