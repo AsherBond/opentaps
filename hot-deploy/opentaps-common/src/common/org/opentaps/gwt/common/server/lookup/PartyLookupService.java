@@ -58,15 +58,16 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     private static final EntityCondition LEAD_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", "PROSPECT");
     private static final EntityCondition PARTNER_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", "PARTNER");
     private static final EntityCondition SUPPLIER_CONDITIONS = EntityCondition.makeCondition("roleTypeId", "SUPPLIER");
-    private static final EntityCondition ACCOUNT_OR_LEAD_CONDITIONS = EntityCondition.makeCondition(
-                                                                        Arrays.asList(
-                                                                                EntityCondition.makeCondition("roleTypeIdFrom", "ACCOUNT"),
-                                                                                EntityCondition.makeCondition("roleTypeIdFrom", "PROSPECT")
-                                                                        ),
-                                                                        EntityOperator.OR
-                                                                );
-    
-    
+    private static final EntityCondition ACCOUNT_OR_LEAD_CONDITIONS = EntityCondition.makeCondition(EntityOperator.OR,
+                                                                                      EntityCondition.makeCondition("roleTypeIdFrom", "ACCOUNT"),
+                                                                                      EntityCondition.makeCondition("roleTypeIdFrom", "PROSPECT"));
+    private static final EntityCondition ACCOUNT_OR_QUALIFIED_LEAD_CONDITIONS = EntityCondition.makeCondition(EntityOperator.OR,
+                                                                                      EntityCondition.makeCondition("roleTypeIdFrom", "ACCOUNT"),
+                                                                                      EntityCondition.makeCondition(EntityOperator.AND,
+                                                                                            EntityCondition.makeCondition("roleTypeIdFrom", "PROSPECT"),
+                                                                                            EntityCondition.makeCondition("statusId", "PTYLEAD_QUALIFIED")));
+
+
     private static List<String> BY_ID_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_PARTY_ID);
     private static List<String> BY_NAME_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_GROUP_NAME,
                                                                   PartyLookupConfiguration.INOUT_COMPANY_NAME,
@@ -274,8 +275,14 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
 
     private List<PartyFromByRelnAndContactInfoAndPartyClassification> suggestParties(EntityCondition roleCondition) {
 
+        List<EntityCondition> conditions = Arrays.asList(roleCondition);
+        // add filter by date is active only is set
+        if (activeOnly) {
+            conditions.add(EntityUtil.getFilterByDateExpr());
+        }
+
         if (getSuggestQuery() == null) {
-            return findAllParties(PartyFromByRelnAndContactInfoAndPartyClassification.class, roleCondition);
+            return findAllParties(PartyFromByRelnAndContactInfoAndPartyClassification.class, EntityCondition.makeCondition(conditions, EntityOperator.AND));
         }
 
         try {
@@ -283,10 +290,6 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
             // format the search string for matching
             String searchString = getSuggestQuery().toUpperCase();
 
-            List<EntityCondition> conditions = Arrays.asList(roleCondition);
-            if (activeOnly) {
-                conditions.add(EntityUtil.getFilterByDateExpr());
-            }
             List<PartyFromByRelnAndContactInfoAndPartyClassification> r = getRepository().findList(PartyFromByRelnAndContactInfoAndPartyClassification.class, EntityCondition.makeCondition(conditions, EntityOperator.AND), getFields(), getPager().getSortList());
 
             List<PartyFromByRelnAndContactInfoAndPartyClassification> parties = new ArrayList<PartyFromByRelnAndContactInfoAndPartyClassification>();
@@ -519,7 +522,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     }
 
     /**
-     * AJAX event to suggest Leads.
+     * AJAX event to suggest Accounts or Leads.
      * @param request a <code>HttpServletRequest</code> value
      * @param response a <code>HttpServletResponse</code> value
      * @return the resulting JSON response
@@ -539,6 +542,29 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
      */
     public List<PartyFromByRelnAndContactInfoAndPartyClassification> suggestAccountsOrLeads() {
         return suggestParties(ACCOUNT_OR_LEAD_CONDITIONS);
+    }
+
+    /**
+     * AJAX event to suggest Accounts or Qualified Leads.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the resulting JSON response
+     * @throws InfrastructureException if an error occurs
+     */
+    public static String suggestAccountsOrQualifiedLeads(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
+        InputProviderInterface provider = new HttpInputProvider(request);
+        JsonResponse json = new JsonResponse(response);
+        PartyLookupService service = new PartyLookupService(provider);
+        service.suggestAccountsOrQualifiedLeads();
+        return json.makeSuggestResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service);
+    }
+
+    /**
+     * Suggests a list of accounts or leads.
+     * @return the list of <code>PartyFromByRelnAndContactInfoAndPartyClassification</code>, or <code>null</code> if an error occurred
+     */
+    public List<PartyFromByRelnAndContactInfoAndPartyClassification> suggestAccountsOrQualifiedLeads() {
+        return suggestParties(ACCOUNT_OR_QUALIFIED_LEAD_CONDITIONS);
     }
 
 }

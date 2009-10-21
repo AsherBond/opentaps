@@ -21,7 +21,7 @@ import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfigurat
 /**
  * A ComboBox that autocompletes Accounts or Leads.
  */
-public class AccountOrLeadPartyAutocomplete extends EntityAutocomplete {
+public class AccountOrQualifiedLeadPartyAutocomplete extends EntityAutocomplete {
 
     /**
      * Default constructor.
@@ -29,7 +29,7 @@ public class AccountOrLeadPartyAutocomplete extends EntityAutocomplete {
      * @param name the field name used in the form
      * @param fieldWidth the field size in pixels
      */
-    public AccountOrLeadPartyAutocomplete(String fieldLabel, String name, int fieldWidth) {
-        super(fieldLabel, name, fieldWidth, PartyLookupConfiguration.URL_SUGGEST_ACCOUNTS_OR_LEADS, PartyLookupConfiguration.INOUT_PARTY_ID);
+    public AccountOrQualifiedLeadPartyAutocomplete(String fieldLabel, String name, int fieldWidth) {
+        super(fieldLabel, name, fieldWidth, PartyLookupConfiguration.URL_SUGGEST_ACCOUNTS_OR_QUALIFIED_LEADS, PartyLookupConfiguration.INOUT_PARTY_ID);
     }
 }

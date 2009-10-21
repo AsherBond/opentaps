@@ -16,27 +16,32 @@
  */
 package org.opentaps.gwt.crmsfa.opportunities.client.form;
 
+import com.gwtext.client.core.Position;
+import com.gwtext.client.widgets.form.TextField;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.base.ScreenletFormPanel;
 import org.opentaps.gwt.common.client.form.field.DateField;
 import org.opentaps.gwt.common.client.form.field.NumberField;
-import org.opentaps.gwt.common.client.suggest.AccountOrLeadPartyAutocomplete;
+import org.opentaps.gwt.common.client.suggest.AccountOrQualifiedLeadPartyAutocomplete;
 import org.opentaps.gwt.common.client.suggest.SalesOpportunityStageAutocomplete;
 import org.opentaps.gwt.crmsfa.opportunities.client.form.configuration.QuickNewOpportunityConfiguration;
 
-import com.gwtext.client.core.Position;
-import com.gwtext.client.widgets.form.TextField;
 /**
  * Form class for quick create opportunity.
  */
 public class QuickNewOpportunityForm extends ScreenletFormPanel {
-    private AccountOrLeadPartyAutocomplete accountOrLeadPartyIdInput;
+
+    private AccountOrQualifiedLeadPartyAutocomplete accountOrQualifiedLeadPartyIdInput;
     private TextField opportunityNameInput;
     private SalesOpportunityStageAutocomplete opportunityStageInput;
     private NumberField estimatedAmountInput;
     private DateField estimatedCloseDateInput;
     private static final Integer INPUT_LENGTH = 135;
 
+    /**
+     * Creates a new <code>QuickNewOpportunityForm</code> instance.
+     *
+     */
     public QuickNewOpportunityForm() {
 
         // label at the top
@@ -46,8 +51,8 @@ public class QuickNewOpportunityForm extends ScreenletFormPanel {
         setUrl(QuickNewOpportunityConfiguration.URL);
 
         // accountOrLeadPartyId is a required field and will be the AccountOrLeadPartyAutocomplete
-        accountOrLeadPartyIdInput = new AccountOrLeadPartyAutocomplete(UtilUi.MSG.crmAccountOrLeadParty(), QuickNewOpportunityConfiguration.ACCOUNT_OR_LEAD_PARTY_ID, INPUT_LENGTH);
-        addRequiredField(accountOrLeadPartyIdInput);
+        accountOrQualifiedLeadPartyIdInput = new AccountOrQualifiedLeadPartyAutocomplete(UtilUi.MSG.crmAccountOrLeadParty(), QuickNewOpportunityConfiguration.ACCOUNT_OR_LEAD_PARTY_ID, INPUT_LENGTH);
+        addRequiredField(accountOrQualifiedLeadPartyIdInput);
 
         // opportunity name is a required text input field
         opportunityNameInput = new TextField(UtilUi.MSG.crmOpportunityName(), QuickNewOpportunityConfiguration.OPPORTUNITY_NAME, INPUT_LENGTH);
