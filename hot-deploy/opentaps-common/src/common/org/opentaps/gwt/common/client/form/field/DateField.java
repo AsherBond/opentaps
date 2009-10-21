@@ -27,6 +27,7 @@ public class DateField extends com.gwtext.client.widgets.form.DateField {
      */
     public DateField() {
         super();
+        init();
         setDefaultAttributes();
     }
 
@@ -37,6 +38,7 @@ public class DateField extends com.gwtext.client.widgets.form.DateField {
      */
     public DateField(String fieldLabel, String fieldName) {
         super(fieldLabel, fieldName);
+        init();
         setDefaultAttributes();
     }
 
@@ -48,6 +50,7 @@ public class DateField extends com.gwtext.client.widgets.form.DateField {
      */
     public DateField(String fieldLabel, String fieldName, int fieldWidth) {
         super(fieldLabel, fieldName, fieldWidth);
+        init();
         setDefaultAttributes();
     }
 
@@ -57,6 +60,7 @@ public class DateField extends com.gwtext.client.widgets.form.DateField {
      */
     public DateField(DateField dateField) {
         super(dateField.getFieldLabel(), dateField.getName(), dateField.getWidth());
+        init();
         copyAttributes(dateField);
     }
 
@@ -85,5 +89,10 @@ public class DateField extends com.gwtext.client.widgets.form.DateField {
 
     private void copyAttributes(DateField dateField) {
         setAllowBlank(dateField.getAllowBlank());
+    }
+
+    private void init() {
+        // error icon does not display right with the handle, using qtip instead
+        setFieldMsgTarget("qtip");
     }
 }
