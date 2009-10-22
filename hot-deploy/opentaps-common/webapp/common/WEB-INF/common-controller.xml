@@ -130,10 +130,7 @@
     <request-map uri="printReport">
         <security auth="true" https="true"/>
         <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="printJRReport"/>
-        <response name="success" type="request-redirect" value="setupReport">
-            <redirect-parameter name="reportId"/>
-            <redirect-parameter name="reportType"/>
-        </response>
+        <response name="success" type="view" value="setupReport"/>
         <response name="error" type="view" value="setupReport"/>
     </request-map>
 
