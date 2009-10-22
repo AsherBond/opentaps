@@ -55,7 +55,6 @@
 
     <#if reportParameters?has_content>
        <#list reportParameters as param>
-       <@display text=context.get("${param.name}")?default(parameters.get("${param.name}"))?if_exists/>
             <#if param.type == "Timestamp" || param.type == "Date" || param.type == "Time">
                 <@inputDateTimeRow title="${uiLabelMap.get(param.name)}" name="${param.name}" default=context.get("${param.name}")?default(parameters.get("${param.name}"))?if_exists />
             <#elseif param.type == "Boolean">
