@@ -20,6 +20,7 @@
 package org.ofbiz.widget.screen;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +92,8 @@ public abstract class ModelScreenAction implements Serializable {
                 actions.add(new PropertyToField(modelScreen, actionElement));
             } else if ("script".equals(actionElement.getNodeName())) {
                 actions.add(new Script(modelScreen, actionElement));
+            } else if ("java".equals(actionElement.getNodeName())) {
+                actions.add(new Javaf(modelScreen, actionElement));
             } else if ("service".equals(actionElement.getNodeName())) {
                 actions.add(new Service(modelScreen, actionElement));
             } else if ("entity-one".equals(actionElement.getNodeName())) {
@@ -425,6 +428,68 @@ public abstract class ModelScreenAction implements Serializable {
                 }
             } else {
                 throw new GeneralException("For screen script actions the script type is not yet supported for location: [" + location + "]");
+            }
+        }
+    }
+ 
+    public static class Javaf extends ModelScreenAction {
+        protected String location;
+        protected String invoke;
+        protected Map<String, Class> actionClassMap = FastMap.newInstance();
+
+        public Javaf(ModelScreen modelScreen, Element scriptElement) {
+            super (modelScreen, scriptElement);
+            this.location = scriptElement.getAttribute("location");
+            this.invoke = scriptElement.getAttribute("invoke");
+        }
+
+        public void runAction(Map context) throws GeneralException {
+            Class actionClass = (Class) this.actionClassMap.get(location);
+            
+            if (actionClass == null) {
+                synchronized (this) {
+                    actionClass = (Class) this.actionClassMap.get(location);
+                    if (actionClass == null) {
+                        try {
+                            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+                            actionClass = loader.loadClass(location);
+                        } catch (ClassNotFoundException e) {
+                            Debug.logError(e, "Error loading class with name: " + location + ", will not be able to run action...", module);
+                        }
+                        if (actionClass != null) {
+                            actionClassMap.put(location, actionClass);
+                        }
+                    }
+                }
+            }
+            if (Debug.verboseOn()) Debug.logVerbose("[Set location/invoke]: " + location + " / " + invoke, module);
+
+            Class[] paramTypes = new Class[] {Map.class};
+
+            Debug.logVerbose("*[[Action invocation]]*", module);
+            Object[] params = new Object[] {context};
+
+            if (location == null || invoke == null) {
+                throw new GeneralException("Invalid action method or path; call initialize()");
+            }
+
+            Debug.logVerbose("[Processing]: JAVA Action", module);
+            try {
+                Method m = actionClass.getMethod(invoke, paramTypes);
+                m.invoke(null, params);
+            } catch (java.lang.reflect.InvocationTargetException e) {
+                Throwable t = e.getTargetException();
+                
+                if (t != null) {
+                    Debug.logError(t, "Problems Processing Action", module);
+                    throw new GeneralException("Problems processing action: " + t.toString(), t);
+                } else {
+                    Debug.logError(e, "Problems Processing Action", module);
+                    throw new GeneralException("Problems processing action: " + e.toString(), e);
+                }
+            } catch (Exception e) {
+                Debug.logError(e, "Problems Processing Action", module);
+                throw new GeneralException("Problems processing action: " + e.toString(), e);
             }
         }
     }
