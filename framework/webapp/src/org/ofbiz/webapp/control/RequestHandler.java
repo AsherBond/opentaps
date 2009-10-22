@@ -29,7 +29,6 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -663,6 +662,9 @@ public class RequestHandler {
             String name = (String) attributeNameEnum.nextElement();
             Object obj = req.getAttribute(name);
             if (obj instanceof Serializable) {
+                if (obj instanceof Map) {
+                    UtilMisc.makeMapSerializable((Map<String, ?>) obj);
+                }
                 reqAttrMap.put(name, obj);
             }
         }
