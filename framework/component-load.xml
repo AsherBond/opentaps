@@ -31,10 +31,8 @@ under the License.
     <load-component component-location="common"/>
     <load-component component-location="service"/>
     <load-component component-location="entityext"/>
-    <!--
-    This is superseded by Pentaho in opentaps
+    <!-- This is superseded by Pentaho in opentaps but the other ofbiz components depend on it ... -->
     <load-component component-location="bi"/>
-    -->
     <load-component component-location="webapp"/>
     <load-component component-location="guiapp"/>
     <load-component component-location="widget"/>
