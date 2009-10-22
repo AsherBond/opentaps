@@ -4,6 +4,8 @@ svn://svn.opentaps.org/opentaps_all/versions/1.0/tags/tests-passed-20091011
 
 Overall changes
 ---------------
+Re enabled the BI component on which ther components rely
+r13743
 Commented out various webapps and components which duplicate or are superseded by opentaps.
 r13679
 applications/*/webapp/*/WEB-INF/web.xml
@@ -100,6 +102,10 @@ r13488 Default form pagination back to false, and fix the ModelForm to actually 
 
 framework/widget/src/org/ofbiz/widget/screen/ModelScreen.java
 r13693 Instead of throwing a complicated error, just render it to the writer when caught. This is much clearer.
+
+framework/widget/dtd/widget-screen.xsd
+framework/widget/src/org/ofbiz/widget/screen/ModelScreenAction.java
+r13738 Applied patch from JIRA 44, allow to use java action in addition to bsh action in screens
 
 Applications changes
 --------------------
