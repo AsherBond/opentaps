@@ -307,7 +307,7 @@ public final class CommonEvents {
 
             PrintService ps = UtilReports.getPrintServiceByName(printerName);
             if (ps == null) {
-                //TODO. Add error handling
+                return UtilMessage.createAndLogEventError(request, "OpentapsError_UnablePrintService", UtilMisc.toMap("printerName", printerName), locale, MODULE);
             }
 
             JRPrintServiceExporter exporter = new JRPrintServiceExporter();
