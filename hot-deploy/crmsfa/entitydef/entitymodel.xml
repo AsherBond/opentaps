@@ -1063,7 +1063,7 @@
         <view-link entity-alias="SO" rel-entity-alias="SOS" rel-optional="true">
             <key-map field-name="opportunityStageId"/>
         </view-link>
-        <relation fk-name="PRASO_SOQ" rel-entity-name="SalesOpportunityQuote" type="many">
+        <relation fk-name="SOAPR_SOQ" rel-entity-name="SalesOpportunityQuote" type="many">
             <key-map field-name="salesOpportunityId"/>
         </relation>       
     </view-entity>
