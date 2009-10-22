@@ -152,7 +152,7 @@
                 <set field="pageTitleLabel" value="AccountingInvoice"/>
                 <set field="invoiceId" from-field="parameters.invoiceId"/>
                 <set field="gwtScripts[]" value="financialsgwt/org.opentaps.gwt.financials.invoices.invoices" global="true"/>
-                <script location="component://financials/webapp/financials/WEB-INF/actions/invoices/viewInvoice.bsh"/>
+                <java location="com.opensourcestrategies.financials.invoice.InvoiceActions" invoke="viewInvoice"/> 
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator" location="${decoratorLocation}">
@@ -201,7 +201,7 @@
         <section>
             <actions>
                 <set field="invoiceId" from-field="parameters.invoiceId"/>
-                <script location="component://financials/webapp/financials/WEB-INF/actions/invoices/viewInvoice.bsh"/>
+                <java location="com.opensourcestrategies.financials.invoice.InvoiceActions" invoke="viewInvoice"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/invoices/updateInvoiceItem.bsh"/>
             </actions>
             <widgets>
@@ -233,7 +233,7 @@
         <section>
             <actions>
                 <set field="invoiceId" from-field="parameters.invoiceId"/>
-                <script location="component://financials/webapp/financials/WEB-INF/actions/invoices/viewInvoice.bsh"/>
+                <java location="com.opensourcestrategies.financials.invoice.InvoiceActions" invoke="viewInvoice"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/invoices/emailInvoice.bsh"/>
             </actions>
             <widgets>
