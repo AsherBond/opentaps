@@ -71,6 +71,9 @@ if (location.indexOf("analytics") > 0) {
 // get the jasper report file
 filePath = UtilValidate.isUrl(location) ? ComponentLocationResolver.getBaseLocation(location).toString() : location;
 
+// jrParameters may be here after request-redirect
+jrParameters = request.getAttribute("jrParameters");
+
 // parse the jasper report and put the parameters into the context for rendering as input fields
 /*JasperDesign*/ design = JRXmlLoader.load(filePath);     
 if (design != null) {
@@ -83,13 +86,23 @@ if (design != null) {
             if (UtilValidate.isNotEmpty(currentParameter.getDescription())) {
                 parameterMap{"description"} = currentParameter.getDescription();
             }
-            parameterMap{"name"} = currentParameter.getName();
+
+            parameterName = currentParameter.getName();
+            parameterMap{"name"} = parameterName;
             // get the type of the parameter
             if (UtilValidate.isNotEmpty(currentParameter.getValueClassName())) {
                 parameterMap{"type"} = currentParameter.getValueClassName().substring(currentParameter.ValueClassName.lastIndexOf(".") + 1);
                 parametersType.put(currentParameter.getName(), currentParameter.getValueClassName().substring(currentParameter.ValueClassName.lastIndexOf(".") + 1));
             }
 
+            // sometimes we have previously entered values in attribute named jrParameters.
+            // let's put them to context and use as defaults
+            if (jrParameters != null) {
+                currentParameterValue = jrParameters.get(parameterName);
+                if (currentParameterValue != null) {
+                    context.put(parameterName, currentParameterValue);
+                }  
+            }
             /*
             if we ever need to get default values, this is how.  The expression is of class JRExpression
             print(currentParameter.getDefaultValueExpression().getText());

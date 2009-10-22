@@ -55,18 +55,19 @@
 
     <#if reportParameters?has_content>
        <#list reportParameters as param>
+       <@display text=context.get("${param.name}")?default(parameters.get("${param.name}"))?if_exists/>
             <#if param.type == "Timestamp" || param.type == "Date" || param.type == "Time">
-                <@inputDateTimeRow title="${uiLabelMap.get(param.name)}" name="${param.name}"/>
+                <@inputDateTimeRow title="${uiLabelMap.get(param.name)}" name="${param.name}" default=context.get("${param.name}")?default(parameters.get("${param.name}"))?if_exists />
             <#elseif param.type == "Boolean">
                 <@inputIndicatorRow title="${uiLabelMap.get(param.name)}" name="${param.name}" required=false/>
             <#else>
                 <#-- Well known parameters can be formated in specific way here -->
                 <#if param.name == "facilityId"> 
-                   <@inputSelectRow title=uiLabelMap.ProductFacility name="facilityId" list=facilities required=true titleClass="requiredField" displayField="facilityName"/>
+                   <@inputSelectRow title=uiLabelMap.ProductFacility name="facilityId" list=facilities required=true titleClass="requiredField" displayField="facilityName" default=context.get("${param.name}")?default(parameters.get("${param.name}"))?if_exists/>
                 <#elseif param.name == "supplierId">
-                   <@inputLookupRow title=uiLabelMap.PartySupplier name="supplierId" lookup="LookupSupplier" form="SetupReportParametersForm"/>
+                   <@inputLookupRow title=uiLabelMap.PartySupplier name="supplierId" lookup="LookupSupplier" form="SetupReportParametersForm" default=context.get("${param.name}")?default(parameters.get("${param.name}"))?if_exists/>
                 <#elseif param.name == "productId"> 
-                   <@inputLookupRow title=uiLabelMap.ProductProduct name="productId" lookup="LookupProduct" form="SetupReportParametersForm"/>
+                   <@inputLookupRow title=uiLabelMap.ProductProduct name="productId" lookup="LookupProduct" form="SetupReportParametersForm" default=context.get("${param.name}")?default(parameters.get("${param.name}"))?if_exists/>
                 <#elseif param.name == "tag1"> <#-- accounting tags handling -->
                     <@tagRow index=0 />
                 <#elseif param.name == "tag2">
@@ -89,7 +90,7 @@
                     <@tagRow index=9 />
                 <#else>
                     <#-- Default case, simple text input --> 
-                    <@inputTextRow title="${uiLabelMap.get(param.name)}" name="${param.name}"/>
+                    <@inputTextRow title="${uiLabelMap.get(param.name)}" name="${param.name}" default=context.get("${param.name}")?default(parameters.get("${param.name}"))?if_exists/>
                 </#if>   
            </#if>
            <#if (param.description)?has_content>
