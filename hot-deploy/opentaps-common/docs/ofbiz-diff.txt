@@ -4,10 +4,8 @@ svn://svn.opentaps.org/opentaps_all/versions/1.0/tags/tests-passed-20091011
 
 Overall changes
 ---------------
-Re enabled the BI component on which ther components rely
-r13743
 Commented out various webapps and components which duplicate or are superseded by opentaps.
-r13679
+r13679, 13743, 13753
 applications/*/webapp/*/WEB-INF/web.xml
 r13646 Added ofbizServerName context-param for JBOSS integration
 
