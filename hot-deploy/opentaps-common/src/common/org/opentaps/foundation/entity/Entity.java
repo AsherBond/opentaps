@@ -60,7 +60,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 
-/** {@inheritDoc} */
+/** {@inheritDoc}. */
 public class Entity implements EntityInterface {
 
     private static final String MODULE = Entity.class.getName();
@@ -143,9 +143,9 @@ public class Entity implements EntityInterface {
      * @param fields a list of fields to consider when comparing the entities
      * @return the resulting <code>Set</code> of entities that are distinct for the given list of fields
      */
-    public static Set<Map<String, Object>> getDistinctFieldValues(Iterable<? extends Entity> entities, Iterable<String> fields) {
+    public static Set<Map<String, Object>> getDistinctFieldValues(Iterable<? extends EntityInterface> entities, Iterable<String> fields) {
         Set<Map<String, Object>> distinctEntities = new LinkedHashSet<Map<String, Object>>();
-        for (Entity e : entities) {
+        for (EntityInterface e : entities) {
             distinctEntities.add(e.toMap(fields));
         }
         return distinctEntities;
@@ -348,6 +348,42 @@ public class Entity implements EntityInterface {
             }
         }
         return grouped;
+    }
+
+    /**
+     * Gets the first entity from the given List.
+     * @param <T> the entity class
+     * @param entities a list of entities
+     * @return the first of the given list or <code>null</code> if the list is <code>null</code> or empty
+     */
+    public static <T extends EntityInterface> T getFirst(List<T> entities) {
+        if ((entities != null) && (entities.size() > 0)) {
+            return entities.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Gets the only entity from the given List, throws an exception if more than one is present in the List.
+     * @param <T> the entity class
+     * @param entities a list of entities
+     * @return the only entity of the given list or <code>null</code> if the list is <code>null</code> or empty
+     * @throws IllegalArgumentException if the given List has more than one element
+     */
+    public static <T extends EntityInterface> T getOnly(List<T> entities) throws IllegalArgumentException {
+        if (entities != null) {
+            if (entities.size() <= 0) {
+                return null;
+            }
+            if (entities.size() == 1) {
+                return entities.get(0);
+            } else {
+                throw new IllegalArgumentException("Passed List had more than one value.");
+            }
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -714,139 +750,168 @@ public class Entity implements EntityInterface {
 
     // get related methods
 
-    /**
-     * Gets the entity related to this entity by the given relation.
-     * @param relation the name of the relation between the two entities
-     * @return an <code>EntityInterface</code> value
-     * @throws RepositoryException if an error occurs
-     */
+    /** {@inheritDoc} */
     public EntityInterface getRelatedOne(String relation) throws RepositoryException {
-        if (repository == null) return null;
+        if (repository == null) {
+            return null;
+        }
         return repository.getRelatedOne(relation, this);
     }
 
-    /**
-     * Gets the entity related to this entity, where the relation name match the related entity name.
-     * @param <T> class of entity to return
-     * @param entityName the name the related entity
-     * @return an <code>EntityInterface</code> value
-     * @throws RepositoryException if an error occurs
-     */
-    public <T extends Entity> T getRelatedOne(Class<T> entityName) throws RepositoryException {
-        if (repository == null) return null;
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> T getRelatedOne(Class<T> entityName) throws RepositoryException {
+        if (repository == null) {
+            return null;
+        }
         return repository.getRelatedOne(entityName, this);
     }
 
-    /**
-     * Gets the entity related to this entity, given both the related entity name and the relation name.
-     * @param <T> class of entity to return
-     * @param entityName the name the related entity
-     * @param relation the name of the relation between the two entities
-     * @return an <code>EntityInterface</code> value
-     * @throws RepositoryException if an error occurs
-     */
-    public <T extends Entity> T getRelatedOne(Class<T> entityName, String relation) throws RepositoryException {
-        if (repository == null) return null;
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> T getRelatedOne(Class<T> entityName, String relation) throws RepositoryException {
+        if (repository == null) {
+            return null;
+        }
         return repository.getRelatedOne(entityName, relation, this);
     }
 
-    /**
-     * Gets the entity related to this entity by the given relation using the cache.
-     * @param relation the name of the relation between the two entities
-     * @return an <code>EntityInterface</code> value
-     * @throws RepositoryException if an error occurs
-     */
+    /** {@inheritDoc} */
     public EntityInterface getRelatedOneCache(String relation) throws RepositoryException {
-        if (repository == null) return null;
+        if (repository == null) {
+            return null;
+        }
         return repository.getRelatedOneCache(relation, this);
     }
 
-    /**
-     * Gets the entity related to this entity using the cache, where the relation name match the related entity name.
-     * @param <T> class of entity to return
-     * @param entityName the name the related entity
-     * @return an <code>EntityInterface</code> value
-     * @throws RepositoryException if an error occurs
-     */
-    public <T extends Entity> T getRelatedOneCache(Class<T> entityName) throws RepositoryException {
-        if (repository == null) return null;
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> T getRelatedOneCache(Class<T> entityName) throws RepositoryException {
+        if (repository == null) {
+            return null;
+        }
         return repository.getRelatedOneCache(entityName, this);
     }
 
-    /**
-     * Gets the entity related to this entity using the cache, given both the related entity name and the relation name.
-     * @param <T> class of entity to return
-     * @param entityName the name the related entity
-     * @param relation the name of the relation between the two entities
-     * @return an <code>EntityInterface</code> value
-     * @throws RepositoryException if an error occurs
-     */
-    public <T extends Entity> T getRelatedOneCache(Class<T> entityName, String relation) throws RepositoryException {
-        if (repository == null) return null;
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> T getRelatedOneCache(Class<T> entityName, String relation) throws RepositoryException {
+        if (repository == null) {
+            return null;
+        }
         return repository.getRelatedOneCache(entityName, relation, this);
     }
 
-    /**
-     * Gets the list of related entities to this entity by the given relation name.
-     * @param relation the name of the relation between the two entities
-     * @return a list of <code>EntityInterface</code> value
-     * @throws RepositoryException if an error occurs
-     */
+    /** {@inheritDoc} */
     public List<? extends EntityInterface> getRelated(String relation) throws RepositoryException {
-        if (repository == null) return null;
+        if (repository == null) {
+            return null;
+        }
         return repository.getRelated(relation, this);
     }
 
-    /**
-     * Gets the list of related entities to this entity, where the relation name match the related entity name.
-     * @param <T> class of entity to return
-     * @param entityName the name of the related entities
-     * @return a list of <code>EntityInterface</code> value
-     * @throws RepositoryException if an error occurs
-     */
-    public <T extends Entity> List<T> getRelated(Class<T> entityName) throws RepositoryException {
-        if (repository == null) return null;
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> List<T> getRelated(Class<T> entityName) throws RepositoryException {
+        if (repository == null) {
+            return null;
+        }
         return repository.getRelated(entityName, this);
     }
 
-    /**
-     * Gets the list of related entities to this entity, where the relation name match the related entity name.
-     * @param <T> class of entity to return
-     * @param entityName the name of the related entities
-     * @param orderBy the fields of the related entity to order the query by; may be null; optionally add a " ASC" for ascending or " DESC" for descending
-     * @return a list of <code>EntityInterface</code> value
-     * @throws RepositoryException if an error occurs
-     */
-    public <T extends Entity> List<T> getRelated(Class<T> entityName, List<String> orderBy) throws RepositoryException {
-        if (repository == null) return null;
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> List<T> getRelated(Class<T> entityName, List<String> orderBy) throws RepositoryException {
+        if (repository == null) {
+            return null;
+        }
         return repository.getRelated(entityName, this, orderBy);
     }
 
-    /**
-     * Gets the list of related entities to this entity, given both the related entity name and the relation name.
-     * @param <T> class of entity to return
-     * @param entityName the name of the related entities
-     * @param relation the name of the relation between the entities
-     * @return a list of <code>EntityInterface</code> value
-     * @throws RepositoryException if an error occurs
-     */
-    public <T extends Entity> List<T> getRelated(Class<T> entityName, String relation) throws RepositoryException {
-        if (repository == null) return null;
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> List<T> getRelated(Class<T> entityName, String relation) throws RepositoryException {
+        if (repository == null) {
+            return null;
+        }
         return repository.getRelated(entityName, relation, this);
     }
 
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> List<T> getRelated(Class<T> entityName, String relation, List<String> orderBy) throws RepositoryException {
+        if (repository == null) {
+            return null;
+        }
+        return repository.getRelated(entityName, relation, this, orderBy);
+    }
+
+    /** {@inheritDoc} */
+    public List<? extends EntityInterface> getRelatedCache(String relation) throws RepositoryException {
+        if (repository == null) {
+            return null;
+        }
+        return repository.getRelatedCache(relation, this);
+    }
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> List<T> getRelatedCache(Class<T> entityName) throws RepositoryException {
+        if (repository == null) {
+            return null;
+        }
+        return repository.getRelatedCache(entityName, this);
+    }
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> List<T> getRelatedCache(Class<T> entityName, String relation) throws RepositoryException {
+        if (repository == null) {
+            return null;
+        }
+        return repository.getRelatedCache(entityName, relation, this);
+    }
+
     /**
-     * Gets the list of related entities to this entity, given both the related entity name and the relation name.
+     * Gets the list of related entities to the given list of entity.
      * @param <T> class of entity to return
+     * @param <T2> class of the given list of entity
      * @param entityName the name of the related entities
-     * @param relation the name of the relation between the entities
-     * @param orderBy the fields of the related entity to order the query by; may be null; optionally add a " ASC" for ascending or " DESC" for descending
+     * @param entities the list of entities to get the related from
      * @return a list of <code>EntityInterface</code> value
      * @throws RepositoryException if an error occurs
      */
-    public <T extends Entity> List<T> getRelated(Class<T> entityName, String relation, List<String> orderBy) throws RepositoryException {
-        if (repository == null) return null;
-        return repository.getRelated(entityName, relation, this, orderBy);
+    public static <T extends EntityInterface, T2 extends EntityInterface> List<T> getRelated(Class<T> entityName, Iterable<T2> entities) throws RepositoryException {
+        if (entities == null) {
+            return null;
+        }
+        List<T> result = new ArrayList<T>();
+        RepositoryInterface repo = null;
+        for (EntityInterface entity : entities) {
+            repo = entity.getBaseRepository();
+            if (repo == null) {
+                return null;
+            }
+            result.addAll(entity.getRelated(entityName));
+        }
+
+        return result;
+    }
+
+    /**
+     * Gets the list of related entities to the given list of entity using the cache.
+     * @param <T> class of entity to return
+     * @param <T2> class of the given list of entity
+     * @param entityName the name of the related entities
+     * @param entities the list of entities to get the related from
+     * @return a list of <code>EntityInterface</code> value
+     * @throws RepositoryException if an error occurs
+     */
+    public static <T extends EntityInterface, T2 extends EntityInterface> List<T> getRelatedCache(Class<T> entityName, Iterable<T2> entities) throws RepositoryException {
+        if (entities == null) {
+            return null;
+        }
+        List<T> result = new ArrayList<T>();
+        RepositoryInterface repo = null;
+        for (EntityInterface entity : entities) {
+            repo = entity.getBaseRepository();
+            if (repo == null) {
+                return null;
+            }
+            result.addAll(entity.getRelatedCache(entityName));
+        }
+
+        return result;
     }
 
 }
