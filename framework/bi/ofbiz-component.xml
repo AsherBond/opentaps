@@ -28,7 +28,7 @@ under the License.
     <classpath type="jar" location="build/lib/*"/>
 
     <service-resource type="model" loader="main" location="servicedef/services.xml"/>
-
+    <!--
     <webapp name="bi"
         title="Business Intelligence"
         menu-name="secondary"
@@ -37,4 +37,5 @@ under the License.
         base-permission="OFBTOOLS"
         mount-point="/bi"
         app-bar-display="true"/>
+    -->
 </ofbiz-component>
