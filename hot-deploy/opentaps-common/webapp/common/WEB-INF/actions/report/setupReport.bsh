@@ -54,7 +54,7 @@ if (reportName.startsWith("%")) {
     }
 }
 if (UtilValidate.isNotEmpty(reportName)) {
-    context{"history"} = UtilCommon.makeHistoryEntry(reportName, "setupReport");
+    context{"history"} = UtilCommon.makeHistoryEntry(reportName, "setupReport", UtilMisc.toList("reportId"));
 }
 
 reportParameters = FastList.newInstance();
