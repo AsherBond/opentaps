@@ -337,7 +337,6 @@ public abstract class UtilCommon {
      * @return a <code>List</code> of countries Geo <code>GenericValue</code>
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getCountries(GenericDelegator delegator) throws GenericEntityException {
         return delegator.findByAndCache("Geo", UtilMisc.toMap("geoTypeId", "COUNTRY"), UtilMisc.toList("geoName"));
     }
@@ -349,7 +348,6 @@ public abstract class UtilCommon {
      * @return a <code>List</code> of states Geo <code>GenericValue</code>
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getStates(GenericDelegator delegator, String countryGeoId) throws GenericEntityException {
         return delegator.findByAndCache("GeoAssocAndGeoTo", UtilMisc.toMap("geoIdFrom", countryGeoId, "geoAssocTypeId", "REGIONS"), UtilMisc.toList("geoName"));
     }
@@ -360,7 +358,6 @@ public abstract class UtilCommon {
      * @return a <code>List</code> of currencies <code>GenericValue</code>
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getCurrencies(GenericDelegator delegator) throws GenericEntityException {
         return delegator.findByAndCache("Uom", UtilMisc.toMap("uomTypeId", "CURRENCY_MEASURE"), UtilMisc.toList("abbreviation"));
     }
@@ -458,9 +455,8 @@ public abstract class UtilCommon {
      * @return the current postal address of for the given facility, <code>null</code> if none is found
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static GenericValue getFacilityPostalAddress(GenericDelegator delegator, String facilityId) throws GenericEntityException {
-        List facilityMechPurps = delegator.findByAndCache("FacilityContactMechPurpose", UtilMisc.toMap("facilityId", facilityId, "contactMechPurposeTypeId", "SHIP_ORIG_LOCATION"));
+        List<GenericValue> facilityMechPurps = delegator.findByAndCache("FacilityContactMechPurpose", UtilMisc.toMap("facilityId", facilityId, "contactMechPurposeTypeId", "SHIP_ORIG_LOCATION"));
         facilityMechPurps = EntityUtil.filterByDate(facilityMechPurps);
         if (UtilValidate.isNotEmpty(facilityMechPurps)) {
             return EntityUtil.getFirst(facilityMechPurps).getRelatedOne("ContactMech").getRelatedOne("PostalAddress");
@@ -475,7 +471,6 @@ public abstract class UtilCommon {
      * @return the <code>List</code> of facilityId of the facilities which can get inventory for the given organization
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<String> getOrgReceivingFacilityIds(String organizationPartyId, GenericDelegator delegator) throws GenericEntityException {
         return EntityUtil.getFieldListFromEntityList(getOrganizationReceivingFacilities(organizationPartyId, delegator), "facilityId", true);
     }
@@ -488,7 +483,6 @@ public abstract class UtilCommon {
      * @return the <code>List</code> of receiving facilities
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getOrganizationReceivingFacilities(String organizationPartyId, GenericDelegator delegator) throws GenericEntityException {
         if (UtilValidate.isEmpty(organizationPartyId)) {
             return null;
@@ -512,7 +506,6 @@ public abstract class UtilCommon {
      * @return a <code>Map</code> containing organization information
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static Map<String, Object> getOrganizationHeaderInfo(String organizationPartyId, GenericDelegator delegator) throws GenericEntityException {
         Map<String, Object> results = FastMap.newInstance();
 
@@ -528,7 +521,7 @@ public abstract class UtilCommon {
         }
 
         // the address
-        List addresses = delegator.findByAnd("PartyContactMechPurpose", UtilMisc.toMap("partyId", organizationPartyId, "contactMechPurposeTypeId", "GENERAL_LOCATION"));
+        List<GenericValue> addresses = delegator.findByAnd("PartyContactMechPurpose", UtilMisc.toMap("partyId", organizationPartyId, "contactMechPurposeTypeId", "GENERAL_LOCATION"));
         GenericValue address = EntityUtil.getFirst(EntityUtil.filterByDate(addresses, UtilDateTime.nowTimestamp(), "fromDate", "thruDate", true));
         if (address != null) {
             GenericValue postalAddress = delegator.findByPrimaryKey("PostalAddress", UtilMisc.toMap("contactMechId", address.getString("contactMechId")));
@@ -568,7 +561,6 @@ public abstract class UtilCommon {
      * @return the <code>List</code> of status <code>GenericValue</code>
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getValidChanges(String statusId, GenericDelegator delegator) throws GenericEntityException {
         return delegator.findByAndCache("StatusValidChange", UtilMisc.toMap("statusId", statusId));
     }
@@ -592,7 +584,6 @@ public abstract class UtilCommon {
      * @return the <code>List</code> of status <code>GenericValue</code>
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getStatuses(String statusTypeId, GenericDelegator delegator) throws GenericEntityException {
         return delegator.findByAndCache("StatusItem", UtilMisc.toMap("statusTypeId", statusTypeId), UtilMisc.toList("sequenceId"));
     }
@@ -645,19 +636,19 @@ public abstract class UtilCommon {
      * @see #getParameter(HttpServletRequest, String)
      */
     @SuppressWarnings("unchecked")
-    public static String getParameter(Map context, String parameterName) {
+    public static String getParameter(Map<String, ?> context, String parameterName) {
         String result = (String) context.get(parameterName); // search the context map
         if (result == null) {
             // search the request and session using the special "parameters" map
-            Map parameters = (Map) context.get("parameters");
+            Map<String, String> parameters = (Map<String, String>) context.get("parameters");
             if (parameters != null) {
-                result = (String) parameters.get(parameterName);
+                result = parameters.get(parameterName);
             }
             if (result == null) {
                 // search the global context
-                Map global = (Map) context.get("globalContext");
+                Map<String, String> global = (Map<String, String>) context.get("globalContext");
                 if (global != null) {
-                    result = (String) global.get(parameterName);
+                    result = global.get(parameterName);
                 }
             }
         }
@@ -706,7 +697,6 @@ public abstract class UtilCommon {
      * @return the <code>List</code> of children <code>GenericValue</code> for the given parent
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getEntityChildren(GenericDelegator delegator, GenericValue parent) throws GenericEntityException {
         List<GenericValue> combined = FastList.newInstance();
         if (parent == null) {
@@ -786,7 +776,6 @@ public abstract class UtilCommon {
      * @param pkFieldName the name of the primary key field in the entity
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private static void recurseGetEntityChildrenSet(GenericValue parent, Set<Object> ids, String pkFieldName) throws GenericEntityException {
         ids.add(parent.get(pkFieldName));
         List<GenericValue> children = parent.getRelatedCache("Child" + parent.getEntityName());
@@ -801,7 +790,6 @@ public abstract class UtilCommon {
      * @param componentName the application component name
      * @return <code>true</code> if the application component is loaded
      */
-    @SuppressWarnings("unchecked")
     public static boolean isLoaded(String componentName) {
         if (UtilValidate.isEmpty(componentName)) {
             return false;
@@ -940,8 +928,7 @@ public abstract class UtilCommon {
      * @param text the text that should be displayed as the label of the entry
      * @return the history entry <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map makeHistoryEntry(String text) {
+    public static Map<String, ?> makeHistoryEntry(String text) {
         return makeHistoryEntry(text, null, null);
     }
 
@@ -953,7 +940,6 @@ public abstract class UtilCommon {
       * @param locale the <code>Locale</code> used to build the label strings
       * @return returns the weight (percentage) of each balance
       */
-    @SuppressWarnings("unchecked")
     public static List<Map<String, Number>> getPercentageValues(Map<String, BigDecimal> values, BigDecimal minPercentage, Locale locale) {
 
          Collection<BigDecimal> inValues = values.values();
@@ -1296,7 +1282,6 @@ public abstract class UtilCommon {
      * @return the <code>List</code> of enumeration <code>GenericValue</code>
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getEnumerations(String enumTypeId, GenericDelegator delegator) throws GenericEntityException {
         return delegator.findByAndCache("Enumeration", UtilMisc.toMap("enumTypeId", enumTypeId), UtilMisc.toList("sequenceId"));
     }
@@ -1463,7 +1448,6 @@ public abstract class UtilCommon {
      * @return a <code>List</code> of <code>KeyboardShortcut</code> entities that should be activated
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getKeyboardShortcuts(GenericValue userLogin, String applicationName, String screenName, GenericDelegator delegator) throws GenericEntityException {
         String userLoginId = null;
         if (userLogin == null) {
