@@ -107,6 +107,9 @@ framework/widget/dtd/widget-screen.xsd
 framework/widget/src/org/ofbiz/widget/screen/ModelScreenAction.java
 r13738 Applied patch from JIRA 44, allow to use java action in addition to bsh action in screens
 
+framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
+r13747 Remove non-serializable entries from each attribute that is an instance of Map
+
 Applications changes
 --------------------
 
