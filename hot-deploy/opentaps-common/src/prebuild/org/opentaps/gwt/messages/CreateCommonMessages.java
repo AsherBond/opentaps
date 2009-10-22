@@ -39,9 +39,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import javolution.util.FastList;
+
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -268,8 +271,16 @@ public final class CreateCommonMessages {
      */
     private static void readLabelsFromSourcePropertiesFile(String fileName, String locale, Map<String, GwtLabelDefinition> gwtLabelDefinitionsMap) {
         // load the file
-        Properties properties = loadPropertiesFile(fileName, locale);
-        String propertiesFileName = getPropertiesFileName(fileName, locale);
+        Properties properties = null;
+        String propertiesFileName = null;
+        if (fileName.endsWith(".xml")) {
+            // read labels from xml file
+            properties = xmlToProperties(fileName, locale);
+            propertiesFileName = fileName;
+        } else {
+            properties = loadPropertiesFile(fileName, locale);
+            propertiesFileName = getPropertiesFileName(fileName, locale);
+        }
         // this regex identifies FreeMarker placeholders in the label text
         // eg: Welcome ${firstName} ${lastName}
         // It supports first level recursions like ${amountApplied?currency(${isoCode})}
@@ -470,6 +481,7 @@ public final class CreateCommonMessages {
         labelKey = labelKey.replace('-', '_');
         labelKey = labelKey.replace('+', '_');
         labelKey = labelKey.replace('/', '_');
+        labelKey = labelKey.replace(' ', '_');
 
         return labelKey;
     }
@@ -493,6 +505,176 @@ public final class CreateCommonMessages {
             counter++;
         }
         return counter;
+    }
+    
+
+    
+    /** This method was refactor from org/ofbiz/base/util/UtilProperties.java 
+     * Convert XML property file to Properties instance. This method will convert
+     * both the Java XML properties file format and the OFBiz custom XML
+     * properties file format.
+     * <p>
+     * The format of the custom XML properties file is:<br />
+     * <br />
+     * <code>
+     * &lt;resource&gt;<br />
+     * &nbsp;&lt;property key="key"&gt;<br />
+     * &nbsp;&nbsp;&lt;value xml:lang="locale 1"&gt;Some value&lt;/value&gt<br />
+     * &nbsp;&nbsp;&lt;value xml:lang="locale 2"&gt;Some value&lt;/value&gt<br />
+     * &nbsp;&nbsp;...<br />
+     * &nbsp;&lt;/property&gt;<br />
+     * &nbsp;...<br />
+     * &lt;/resource&gt;<br /><br /></code> where <em>"locale 1", "locale 2"</em> are valid Locale strings.
+     * </p>
+     *
+     * @param resource XML file path
+     * @param localeString The desired locale
+     * @return Properties instance or null if not found
+     */
+    public static Properties xmlToProperties(String resource, String localeString) {
+        Properties properties = new Properties();
+        if (resource == null) {
+            throw new IllegalArgumentException("Resource cannot be null");
+        }
+        File file = new File(resource);
+        if (!file.exists()) {
+            throw new IllegalArgumentException("File " + resource + " not exists");
+        }
+        Document doc = null;
+        InputStream in = null;
+        try {
+            in = new BufferedInputStream(new FileInputStream(file));
+            /* Standard JAXP (mostly), but doesn't seem to be doing XML Schema validation, so making sure that is on... */
+            DocumentBuilderFactory factory = new org.apache.xerces.jaxp.DocumentBuilderFactoryImpl();
+            factory.setValidating(false);
+            factory.setNamespaceAware(true);
+            
+            factory.setAttribute("http://xml.org/sax/features/validation", false);
+            factory.setAttribute("http://apache.org/xml/features/validation/schema", false);
+
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            doc = builder.parse(in);
+            in.close();
+        } catch (Exception e) {
+            try {
+                in.close();
+            } catch (IOException e1) {
+                throw new IllegalArgumentException(e1);
+            }
+            throw new IllegalArgumentException(e);
+        }
+        Element resourceElement = doc.getDocumentElement();
+        List<? extends Element> propertyList = childElementList(resourceElement, "property");
+        if (propertyList.size() > 0) {
+            // Custom XML properties file format
+            for (Element property : propertyList) {
+                Element value = firstChildElement(property, "value", "xml:lang", localeString);
+                if (value != null) {
+                    String valueString = elementValue(value);
+                    if (valueString != null) {
+                        properties.put(property.getAttribute("key"), valueString);
+                    }
+                }
+            }
+            return properties;
+        }
+        propertyList = childElementList(resourceElement, "entry");
+        if (propertyList.size() == 0) {
+            throw new IllegalArgumentException("XML properties file invalid or empty");
+        }
+        // Java XML properties file format
+        for (Element property : propertyList) {
+            String value = elementValue(property);
+            if (value != null) {
+                if (properties == null) {
+                    properties = new Properties();
+                }
+                properties.put(property.getAttribute("key"), value);
+            }
+        }
+        return properties;
+    }
+
+    
+    /**
+     * This method was refactor from org/ofbiz/base/util/UtilXml.java 
+     * Return the text (node value) of the first node under this, works best if normalized. 
+     * @param element a <code>Element</code> value
+     * @return the value of element
+     */
+    public static String elementValue(Element element) {
+        if (element == null) return null;
+        // make sure we get all the text there...
+        element.normalize();
+        Node textNode = element.getFirstChild();
+
+        if (textNode == null) return null;
+
+        StringBuilder valueBuffer = new StringBuilder();
+        do {
+            if (textNode.getNodeType() == Node.CDATA_SECTION_NODE || textNode.getNodeType() == Node.TEXT_NODE) {
+                valueBuffer.append(textNode.getNodeValue());
+            }
+        } while ((textNode = textNode.getNextSibling()) != null);
+        return valueBuffer.toString();
+    }
+
+    /**
+     * This method was refactor from org/ofbiz/base/util/UtilXml.java.
+     * Return the first child Element with the given name; if name is null then returns the first element..
+     * @param element a <code>Element</code> value
+     * @param childElementName child element name of element
+     * @param attrName a <code>String</code> value
+     * @param attrValue a <code>String</code> value
+     * @return the Element first found
+     */    
+    public static Element firstChildElement(Element element, String childElementName, String attrName, String attrValue) {
+        if (element == null) return null;
+        // get the first element with the given name
+        Node node = element.getFirstChild();
+
+        if (node != null) {
+            do {
+                if (node.getNodeType() == Node.ELEMENT_NODE && (childElementName == null ||
+                        childElementName.equals(node.getNodeName()))) {
+                    Element childElement = (Element) node;
+
+                    String value = childElement.getAttribute(attrName);
+
+                    if (value != null && value.equals(attrValue)) {
+                        return childElement;
+                    }
+                }
+            } while ((node = node.getNextSibling()) != null);
+        }
+        return null;
+    }
+
+    /**
+     * This method was refactor from org/ofbiz/base/util/UtilXml.java. 
+     * Return a List of Element objects that have the given name and are
+     * immediate children of the given element; if name is null, all child
+     * elements will be included.
+     * @param element a <code>Element</code> value
+     * @param childElementName child element name of element
+     */
+    public static List<? extends Element> childElementList(Element element, String childElementName) {
+        if (element == null) return null;
+
+        List<Element> elements = FastList.newInstance();
+        Node node = element.getFirstChild();
+
+        if (node != null) {
+            do {
+                if (node.getNodeType() == Node.ELEMENT_NODE && (childElementName == null ||
+                        childElementName.equals(node.getNodeName()))) {
+                    Element childElement = (Element) node;
+
+                    elements.add(childElement);
+                }
+            } while ((node = node.getNextSibling()) != null);
+        }
+        return elements;
     }
 
 }
