@@ -2648,6 +2648,8 @@ public interface CommonMessages extends Messages {
     String crmAccountName();
     @DefaultMessage("Account or Lead Name")
     String crmAccountOrLead();
+    @DefaultMessage("Account Or Lead")
+    String crmAccountOrLeadParty();
     @DefaultMessage("Account Shortcuts")
     String crmAccountShortcuts();
     @DefaultMessage("Accounts")
