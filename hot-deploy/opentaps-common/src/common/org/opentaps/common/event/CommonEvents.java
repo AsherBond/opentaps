@@ -244,7 +244,17 @@ public final class CommonEvents {
         String printerName = UtilCommon.getParameter(request, "printerName");
         String location = UtilCommon.getParameter(request, "reportPath");
 
-        Map<String, Object> parameters = (Map<String, Object>) request.getAttribute("jrParameters");
+        // collect report parameters ...
+        Map<String, Object> parameters = null;
+
+        // ... either from jrParameters attribute ... 
+        Map<String, Object> jrParameters = (Map<String, Object>) request.getAttribute("jrParameters");
+        if (UtilValidate.isNotEmpty(jrParameters)) {
+            parameters = FastMap.<String, Object>newInstance();
+            parameters.putAll(jrParameters);
+        }
+
+        // ... or from request parameter map
         if (UtilValidate.isEmpty(parameters)) {
             parameters = UtilHttp.getParameterMap(request);
         }
