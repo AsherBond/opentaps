@@ -26,7 +26,6 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import com.opensourcestrategies.financials.payroll.PayrollHelper;
 import com.opensourcestrategies.financials.util.UtilFinancial;
-import org.opentaps.common.util.UtilDate;
 
 timeZone = UtilCommon.getTimeZone(request);
 
@@ -68,17 +67,17 @@ paymentRefNum = UtilCommon.getParameter(request, "paymentRefNum");
 fromDate = null; thruDate = null;
 if (fromDateString != null) {
     try {
-        fromDate = UtilDateTime.stringToTimeStamp(fromDateString, UtilDate.getDateFormat(locale), timeZone, locale);
+        fromDate = UtilDateTime.stringToTimeStamp(fromDateString, UtilDateTime.getDateFormat(locale), timeZone, locale);
     } catch (ParseException) {
-        UtilMessage.addFieldError(request, "fromDate", UtilMessage.expandLabel("OpentapsFieldError_BadDateFormat", locale, UtilMisc.toMap("format", UtilDate.getDateFormat(locale))));
+        UtilMessage.addFieldError(request, "fromDate", UtilMessage.expandLabel("OpentapsFieldError_BadDateFormat", locale, UtilMisc.toMap("format", UtilDateTime.getDateFormat(locale))));
         return;
     }
 }
 if (thruDateString != null) {
     try {
-        thruDate = UtilDateTime.stringToTimeStamp(thruDateString, UtilDate.getDateFormat(locale), timeZone, locale);
+        thruDate = UtilDateTime.stringToTimeStamp(thruDateString, UtilDateTime.getDateFormat(locale), timeZone, locale);
     } catch (ParseException) {
-        UtilMessage.addFieldError(request, "thruDate", UtilMessage.expandLabel("OpentapsFieldError_BadDateFormat", locale, UtilMisc.toMap("format", UtilDate.getDateFormat(locale))));
+        UtilMessage.addFieldError(request, "thruDate", UtilMessage.expandLabel("OpentapsFieldError_BadDateFormat", locale, UtilMisc.toMap("format", UtilDateTime.getDateFormat(locale))));
         return;
     }
     thruDate = UtilDateTime.getNextDayStart(thruDate);

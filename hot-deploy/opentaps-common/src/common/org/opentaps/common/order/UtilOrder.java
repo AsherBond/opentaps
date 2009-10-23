@@ -47,7 +47,6 @@ import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.shipment.packing.PackingSession;
 import org.opentaps.common.product.UtilProduct;
-import org.opentaps.common.util.UtilDate;
 
 /**
  * UtilOrder - A place for common crmsfa helper methods.
@@ -80,7 +79,7 @@ public final class UtilOrder {
         if (date == null) {
             return "N/A";
         }
-        return UtilDateTime.timeStampToString(date, UtilDate.getDateFormat(locale), timeZone, locale);
+        return UtilDateTime.timeStampToString(date, UtilDateTime.getDateFormat(locale), timeZone, locale);
     }
 
     /**

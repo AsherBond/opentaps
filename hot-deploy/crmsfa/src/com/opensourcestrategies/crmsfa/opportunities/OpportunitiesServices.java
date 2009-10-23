@@ -234,7 +234,7 @@ public final class OpportunitiesServices {
 
             // set estimatedCloseDate to 23:59:59.999 so that it's at the end of the day
             String estimatedCloseDateString = (String) context.get("estimatedCloseDate");
-            Timestamp estimatedCloseDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(estimatedCloseDateString, UtilDate.getDateFormat(locale), timeZone, locale), timeZone, locale);
+            Timestamp estimatedCloseDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(estimatedCloseDateString, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
             opportunity.set("estimatedCloseDate", estimatedCloseDate);
 
             // if the stage changed, set the probability to the one of the stage

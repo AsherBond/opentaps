@@ -355,7 +355,7 @@ public final class OpentapsMrpServices {
                 }
 
                 parameters = UtilMisc.toMap("productId", productId, "eventDate", UtilCommon.laterOf(estimatedShipDate, now), "inventoryEventPlanTypeId", "MANUF_ORDER_REQ", "facilityId", genericResult.getString("facilityId"));
-                String eventName = (UtilValidate.isEmpty(genericResult.getString("workEffortParentId")) ? genericResult.getString("workEffortId") : genericResult.getString("workEffortParentId") + "-" + genericResult.getString("workEffortId") + " (" + UtilDateTime.timeStampToString(estimatedShipDate, UtilDate.getDateFormat(locale), timeZone, locale) + ")");
+                String eventName = (UtilValidate.isEmpty(genericResult.getString("workEffortParentId")) ? genericResult.getString("workEffortId") : genericResult.getString("workEffortParentId") + "-" + genericResult.getString("workEffortId") + " (" + UtilDateTime.timeStampToString(estimatedShipDate, UtilDateTime.getDateFormat(locale), timeZone, locale) + ")");
                 MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(parameters, eventQuantityTmp, null, eventName, estimatedShipDate.before(now), null, delegator);
             }
 
@@ -399,7 +399,7 @@ public final class OpentapsMrpServices {
 
                 parameters = UtilMisc.toMap("productId", prunProductId, "eventDate", UtilCommon.beforeMillisecs(UtilCommon.laterOf(estimatedShipDate, now), receiptEventBufferMilliseconds),
                         "inventoryEventPlanTypeId", "MANUF_ORDER_RECP", "facilityId", genericResult.getString("facilityId"));
-                MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(parameters, eventQuantityTmp, null, genericResult.getString("workEffortId") + " (" + UtilDateTime.timeStampToString(estimatedShipDate, UtilDate.getDateFormat(locale), timeZone, locale) + ")", estimatedShipDate.before(now), null, delegator);
+                MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(parameters, eventQuantityTmp, null, genericResult.getString("workEffortId") + " (" + UtilDateTime.timeStampToString(estimatedShipDate, UtilDateTime.getDateFormat(locale), timeZone, locale) + ")", estimatedShipDate.before(now), null, delegator);
 
             }
 
@@ -418,7 +418,7 @@ public final class OpentapsMrpServices {
                 Timestamp sendDate = transferItem.getTimestamp("sendDate");
                 parameters = UtilMisc.toMap("productId", transferItem.getString("productId"), "eventDate", UtilCommon.beforeMillisecs(UtilCommon.laterOf(sendDate, now), receiptEventBufferMilliseconds),
                         "inventoryEventPlanTypeId", "INVENTORY_XFER_IN", "facilityId", facilityId);
-                MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(parameters, getInventoryTransferQuantity(transferItem), null, transferItem.getString("inventoryTransferId") + ": " + UtilDateTime.timeStampToString(transferItem.getTimestamp("sendDate"), UtilDate.getDateFormat(locale), timeZone, locale), transferItem.getTimestamp("sendDate").before(now), null, delegator);
+                MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(parameters, getInventoryTransferQuantity(transferItem), null, transferItem.getString("inventoryTransferId") + ": " + UtilDateTime.timeStampToString(transferItem.getTimestamp("sendDate"), UtilDateTime.getDateFormat(locale), timeZone, locale), transferItem.getTimestamp("sendDate").before(now), null, delegator);
             }
 
 
@@ -438,7 +438,7 @@ public final class OpentapsMrpServices {
                 Timestamp sendDate = transferItem.getTimestamp("sendDate");
                 parameters = UtilMisc.toMap("productId", transferItem.getString("productId"), "eventDate", UtilCommon.laterOf(sendDate, now),
                         "inventoryEventPlanTypeId", "INVENTORY_XFER_OUT", "facilityId", facilityId);
-                MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(parameters, getInventoryTransferQuantity(transferItem).negate(), null, transferItem.getString("inventoryTransferId") + ": " + UtilDateTime.timeStampToString(transferItem.getTimestamp("sendDate"), UtilDate.getDateFormat(locale), timeZone, locale), transferItem.getTimestamp("sendDate").before(now), null, delegator);
+                MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(parameters, getInventoryTransferQuantity(transferItem).negate(), null, transferItem.getString("inventoryTransferId") + ": " + UtilDateTime.timeStampToString(transferItem.getTimestamp("sendDate"), UtilDateTime.getDateFormat(locale), timeZone, locale), transferItem.getTimestamp("sendDate").before(now), null, delegator);
             }
 
 
@@ -844,7 +844,7 @@ public final class OpentapsMrpServices {
                     parameters.put("inventoryEventPlanTypeId", "MRP_REQUIREMENT");
                     parameters.put("facilityId", facilityId);
                     BigDecimal componentEventQuantity = node.getQuantity();
-                    MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(parameters, componentEventQuantity.negate(), null, product.get("productId") + ": " + UtilDateTime.timeStampToString(eventDate, UtilDate.getDateFormat(locale), timeZone, locale), eventDate.before(now), null, delegator);
+                    MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(parameters, componentEventQuantity.negate(), null, product.get("productId") + ": " + UtilDateTime.timeStampToString(eventDate, UtilDateTime.getDateFormat(locale), timeZone, locale), eventDate.before(now), null, delegator);
 
                 }
             }

@@ -43,7 +43,6 @@ import org.opentaps.common.party.PartyNotFoundException;
 import org.opentaps.common.party.PartyReader;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilConfig;
-import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
@@ -209,7 +208,7 @@ public final class InvoiceEvents {
                         "shippedViaMessage",
                         UtilMessage.expandLabel(
                                 "FinancialsShippedVia", locale, UtilMisc.toMap(
-                                        "createdDate", createdDate != null ? UtilDateTime.timeStampToString(createdDate, UtilDate.getDateFormat(locale), timeZone, locale) : "",
+                                        "createdDate", createdDate != null ? UtilDateTime.timeStampToString(createdDate, UtilDateTime.getDateFormat(locale), timeZone, locale) : "",
                                                 "carrierPartyId", firstLine.get("carrierPartyId"),
                                                 "shipmentMethodTypeId", firstLine.get("shipmentMethodTypeId")
                                 )
@@ -240,7 +239,7 @@ public final class InvoiceEvents {
             // dueDate
             Timestamp dueDate = invoice.getDueDate();
             if (dueDate != null) {
-                extraDetails.add(UtilMisc.toMap("title", UtilMessage.expandLabel("AccountingDueDate", locale), "message", UtilDateTime.timeStampToString(dueDate, UtilDate.getDateFormat(locale), timeZone, locale)));
+                extraDetails.add(UtilMisc.toMap("title", UtilMessage.expandLabel("AccountingDueDate", locale), "message", UtilDateTime.timeStampToString(dueDate, UtilDateTime.getDateFormat(locale), timeZone, locale)));
             }
 
             // tracking codes

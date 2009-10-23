@@ -128,13 +128,13 @@ For more information, please see documentation/opentapsFormMacros.html
   <#if !timeZone?has_content><#assign timeZone = Static["org.ofbiz.base.util.UtilHttp"].getTimeZone(request)/></#if>
   <#if date?has_content && date?is_date>
     <#if format == "DATE_TIME">
-      <#assign fmt = Static["org.opentaps.common.util.UtilDate"].getDateTimeFormat(locale)/>
+      <#assign fmt = Static["org.ofbiz.base.util.UtilDateTime"].getDateTimeFormat(locale)/>
     <#elseif format == "DATE">
-      <#assign fmt = Static["org.opentaps.common.util.UtilDate"].getDateFormat(locale)/>
+      <#assign fmt = Static["org.ofbiz.base.util.UtilDateTime"].getDateFormat(locale)/>
     <#elseif format == "TIME">
-      <#assign fmt = Static["org.opentaps.common.util.UtilDate"].getTimeFormat(locale)/>
+      <#assign fmt = Static["org.ofbiz.base.util.UtilDateTime"].getTimeFormat(locale)/>
     <#elseif format == "DATE_ONLY">
-      <#assign fmt = Static["org.opentaps.common.util.UtilDate"].getDateFormat(locale)/>
+      <#assign fmt = Static["org.ofbiz.base.util.UtilDateTime"].getDateFormat(locale)/>
 
       <#-- If format is DATE_ONLY, just format the date portion and return (this seems to be rendered identically to DATE)-->
       <#return date?date?string(fmt) />
@@ -772,7 +772,7 @@ For more information, please see documentation/opentapsFormMacros.html
       if (calendar.dateClicked) {
         var input = document.getElementById('${elId}');
         if (input) {
-          input.value = opentaps.formatDate(calendar.date, '${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.opentaps.common.util.UtilDate"].getDateFormat(locale)))}');
+          input.value = opentaps.formatDate(calendar.date, '${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.ofbiz.base.util.UtilDateTime"].getDateFormat(locale)))}');
         }
         opentaps.addClass(document.getElementById('${elId}-calendar-placeholder'), 'hidden');
       }
@@ -790,7 +790,7 @@ For more information, please see documentation/opentapsFormMacros.html
       time += (Date.DAY * ${delta});
       
       var linkedDate = new Date(time);
-      linkedInput.value = opentaps.formatDate(linkedDate, '${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.opentaps.common.util.UtilDate"].getDateFormat(locale)))}');
+      linkedInput.value = opentaps.formatDate(linkedDate, '${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.ofbiz.base.UtilDateTime"].getDateFormat(locale)))}');
     };
     </#if>
     Calendar.setup(
@@ -800,7 +800,7 @@ For more information, please see documentation/opentapsFormMacros.html
         flatCallback: ${elId}_onDateChange,
       <#else>
         inputField: "${elId}",
-        ifFormat: "${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.opentaps.common.util.UtilDate"].getDateFormat(locale)))}",
+        ifFormat: "${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.ofbiz.base.util.UtilDateTime"].getDateFormat(locale)))}",
         button: "${elId}-button",
         align: "Bl",
       </#if>
@@ -905,7 +905,7 @@ For more information, please see documentation/opentapsFormMacros.html
           if (calendar.dateClicked) {
             var input = document.getElementById('${name}_c_date');
             if (input) {
-              input.value = opentaps.formatDate(calendar.date, '${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.opentaps.common.util.UtilDate"].getDateFormat(locale)))}');
+              input.value = opentaps.formatDate(calendar.date, '${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.ofbiz.base.UtilDateTime"].getDateFormat(locale)))}');
             }
             opentaps.addClass(document.getElementById('${name}-calendar-placeholder'), 'hidden');
           }
@@ -923,7 +923,7 @@ For more information, please see documentation/opentapsFormMacros.html
           time += (Date.DAY * ${delta});
       
           var linkedDate = new Date(time);
-          linkedInput.value = opentaps.formatDate(linkedDate, '${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.opentaps.common.util.UtilDate"].getDateFormat(locale)))}');
+          linkedInput.value = opentaps.formatDate(linkedDate, '${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.ofbiz.base.util.UtilDateTime"].getDateFormat(locale)))}');
         };
         </#if>
         Calendar.setup(
@@ -933,7 +933,7 @@ For more information, please see documentation/opentapsFormMacros.html
             flatCallback: ${name}_onDateChange,
           <#else>
             inputField: "${name}_c_date",
-            ifFormat: "${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.opentaps.common.util.UtilDate"].getDateFormat(locale)))}",
+            ifFormat: "${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.ofbiz.base.util.UtilDateTime"].getDateFormat(locale)))}",
             button: "${name}-button",
             align: "Bl",
           </#if>

@@ -34,7 +34,6 @@ import org.ofbiz.entity.model.ModelKeyMap;
 import org.ofbiz.entity.util.*;
 import org.opentaps.common.reporting.etl.UtilEtl;
 import org.opentaps.common.util.UtilCommon;
-import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
 
  GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
@@ -58,7 +57,7 @@ import org.opentaps.common.util.UtilMessage;
  periodEnd = null;
 
  try {
-     fromDate = UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(fromDateString, UtilDate.getDateFormat(locale), timeZone, locale), timeZone, locale);
+     fromDate = UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(fromDateString, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
      dayOfMonth = dayOfMonthFmt.format(fromDate);
      monthOfYear = monthOfYearFmt.format(fromDate);
      yearNumber = yearNumberFmt.format(fromDate);
@@ -78,7 +77,7 @@ import org.opentaps.common.util.UtilMessage;
  }
 
  try {
-     thruDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(thruDateString, UtilDate.getDateFormat(locale), timeZone, locale), timeZone, locale);
+     thruDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(thruDateString, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
 
      dayOfMonth = dayOfMonthFmt.format(thruDate);
      monthOfYear = monthOfYearFmt.format(thruDate);

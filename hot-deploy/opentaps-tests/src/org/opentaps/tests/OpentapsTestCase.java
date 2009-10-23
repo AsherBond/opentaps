@@ -60,7 +60,6 @@ import org.opentaps.common.order.PurchaseOrderFactory;
 import org.opentaps.common.order.SalesOrderFactory;
 import org.opentaps.common.product.UtilProduct;
 import org.opentaps.common.util.UtilAccountingTags;
-import org.opentaps.common.util.UtilDate;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.base.entities.InventoryItemTraceDetail;
@@ -2483,7 +2482,7 @@ public class OpentapsTestCase extends TestCase {
      * @return a String value
      */
     public static String dateStringToShortLocaleString(String dateString, String formatString) throws ParseException {
-        SimpleDateFormat defaultSdf = new SimpleDateFormat(UtilDate.getDateFormat(Locale.getDefault()));
+        SimpleDateFormat defaultSdf = new SimpleDateFormat(UtilDateTime.getDateFormat(Locale.getDefault()));
         SimpleDateFormat sdf = new SimpleDateFormat(formatString);
         return defaultSdf.format(sdf.parse(dateString));
     }

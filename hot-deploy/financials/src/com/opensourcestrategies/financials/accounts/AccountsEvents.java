@@ -41,7 +41,6 @@ import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.opentaps.common.util.UtilCommon;
-import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.base.entities.PostalAddress;
@@ -116,7 +115,7 @@ public class AccountsEvents {
         String asOfDateString = UtilCommon.getParameter(request, "asOfDate");
         Timestamp asOfDate = null;
         try {
-            asOfDate = UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(asOfDateString, UtilDate.getDateFormat(locale), timeZone, locale), timeZone, locale);
+            asOfDate = UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(asOfDateString, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
         } catch (ParseException e) {
             if (UtilValidate.isNotEmpty(asOfDateString)) {
                 UtilMessage.addError(request, "FinancialsError_IllegalDateFormat", UtilMisc.toMap("fieldName", uiLabelMap.get("CommonFromDate")));

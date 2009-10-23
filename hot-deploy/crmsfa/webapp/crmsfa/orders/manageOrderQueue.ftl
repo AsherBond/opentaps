@@ -16,7 +16,7 @@
 -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
-<#assign dateFormat = StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.opentaps.common.util.UtilDate"].getDateFormat(locale)))/>
+<#assign dateFormat = StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.ofbiz.base.util.UtilDateTime"].getDateFormat(locale)))/>
 
 <style type="text/css">
     table#orderPriorities {
@@ -123,7 +123,7 @@
          var shipByDateInputId = 'shipByDate_' + data.orderId + '_' + data.shipGroupSeqId;
          Calendar.setup({
           inputField: shipByDateInputId,
-          ifFormat: "${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.opentaps.common.util.UtilDate"].getDateFormat(locale)))}",
+          ifFormat: "${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.ofbiz.base.util.UtilDateTime"].getDateFormat(locale)))}",
           button: shipByDateInputId+"-button",
           align: "Bl",
           showOthers: true,

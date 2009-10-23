@@ -45,7 +45,6 @@ import org.opentaps.common.builder.EntityListBuilder;
 import org.opentaps.common.builder.PageBuilder;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
-import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.base.entities.BillingAccountAndRole;
 import org.opentaps.domain.base.entities.GlAccountOrganizationAndClass;
@@ -448,7 +447,7 @@ public final class InvoiceActions {
                 search.add(EntityCondition.makeCondition(Invoice.Fields.processingStatusId.name(), EntityOperator.EQUALS, processingStatusId.trim()));
             }
         }
-        String dateFormat = UtilDate.getDateFormat(locale);
+        String dateFormat = UtilDateTime.getDateFormat(locale);
         if (invoiceDateFrom != null) {
             search.add(EntityCondition.makeCondition(Invoice.Fields.invoiceDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(invoiceDateFrom, dateFormat, timeZone, locale), timeZone, locale)));
         }

@@ -99,16 +99,16 @@ For more information, please see documentation/opentapsFormMacros.html
   <#if !timeZone?has_content><#assign timeZone = Static["org.ofbiz.base.util.UtilHttp"].getTimeZone(request)/></#if>
   <#if date?has_content && date?is_date>
     <#if format == "DATE_TIME">
-      <#assign fmt = Static["org.opentaps.common.util.UtilDate"].getDateTimeFormat(locale)/>
+      <#assign fmt = Static["org.ofbiz.base.util.UtilDateTime"].getDateTimeFormat(locale)/>
       ${Static["org.ofbiz.base.util.UtilDateTime"].timeStampToString(date?datetime, fmt, timeZone, locale)}
     <#elseif format == "DATE">
-      <#assign fmt = Static["org.opentaps.common.util.UtilDate"].getDateFormat(locale)/>
+      <#assign fmt = Static["org.ofbiz.base.util.UtilDateTime"].getDateFormat(locale)/>
       ${Static["org.ofbiz.base.util.UtilDateTime"].timeStampToString(date?datetime, fmt, timeZone, locale)}
     <#elseif format == "TIME">
-      <#assign fmt = Static["org.opentaps.common.util.UtilDate"].getTimeFormat(locale)/>
+      <#assign fmt = Static["org.ofbiz.base.util.UtilDateTime"].getTimeFormat(locale)/>
       ${Static["org.ofbiz.base.util.UtilDateTime"].timeStampToString(date?datetime, fmt, timeZone, locale)}
     <#elseif format == "DATE_ONLY">
-      <#assign fmt = Static["org.opentaps.common.util.UtilDate"].getDateFormat(locale)/>
+      <#assign fmt = Static["org.ofbiz.base.util.UtilDateTime"].getDateFormat(locale)/>
       ${date?date?string(fmt)}
     </#if>
   </#if> 

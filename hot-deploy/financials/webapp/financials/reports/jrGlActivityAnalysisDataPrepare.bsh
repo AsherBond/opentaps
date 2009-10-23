@@ -33,7 +33,6 @@ import org.ofbiz.entity.model.ModelKeyMap;
 import org.ofbiz.entity.transaction.TransactionUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
-import org.opentaps.common.util.UtilDate;
  
  detailing = UtilCommon.getParameter(request, "detailing");
  if (UtilValidate.isEmpty(detailing)) detailing = "DETAILED";
@@ -56,7 +55,7 @@ import org.opentaps.common.util.UtilDate;
  thruDate = null;
 
  try {
-     fromDate = UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(fromDateString, UtilDate.getDateFormat(locale), timeZone, locale), timeZone, locale);
+     fromDate = UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(fromDateString, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
  } catch (ParseException) {
      if (UtilValidate.isNotEmpty(fromDateString)) {
          UtilMessage.addError(request, "FinancialsError_IllegalDateFormat", UtilMisc.toMap("fieldName", uiLabelMap.get("CommonFromDate")));
@@ -65,7 +64,7 @@ import org.opentaps.common.util.UtilDate;
  }
  
  try {
-     thruDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(thruDateString, UtilDate.getDateFormat(locale), timeZone, locale), timeZone, locale);
+     thruDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(thruDateString, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
  } catch (ParseException) {
      if (UtilValidate.isNotEmpty(thruDateString)) {
          UtilMessage.addError(request, "FinancialsError_IllegalDateFormat", UtilMisc.toMap("fieldName", uiLabelMap.get("CommonThruDate")));

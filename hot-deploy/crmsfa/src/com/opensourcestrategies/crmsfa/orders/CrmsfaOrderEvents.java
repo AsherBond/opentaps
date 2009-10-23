@@ -70,7 +70,6 @@ import org.opentaps.common.party.PartyNotFoundException;
 import org.opentaps.common.party.PartyReader;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
-import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
@@ -276,7 +275,7 @@ public final class CrmsfaOrderEvents {
         String shipBeforeDateString = request.getParameter("shipBeforeDate");
         if (UtilValidate.isNotEmpty(shipBeforeDateString)) {
             try {
-                Timestamp shipBeforeDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(shipBeforeDateString, UtilDate.getDateFormat(locale), timeZone, locale), timeZone, locale);
+                Timestamp shipBeforeDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(shipBeforeDateString, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
                 cart.setDefaultShipBeforeDate(shipBeforeDate);
             } catch (IllegalArgumentException e) {
                 errors.add("CrmErrorQuickCreateOrderIllegalDate", UtilMisc.toMap("shipBeforeDate", shipBeforeDateString));

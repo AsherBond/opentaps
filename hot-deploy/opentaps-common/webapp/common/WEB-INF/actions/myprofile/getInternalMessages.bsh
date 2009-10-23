@@ -30,11 +30,10 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.service.ServiceUtil;
 import org.apache.commons.validator.GenericValidator;
 import java.text.ParseException;
-import org.opentaps.common.util.UtilDate;
 
 locale = UtilHttp.getLocale(request);
 timeZone = UtilCommon.getTimeZone(request);
-dateFormat = UtilDate.getDateFormat(locale);
+dateFormat = UtilDateTime.getDateFormat(locale);
 
 boolean isInternalMessageSender = false;
 
@@ -99,7 +98,7 @@ if (UtilValidate.isNotEmpty(fromDate)) {
         if (fromDateTs != null)
             callCtxt{"dateFrom"} = fromDateTs;
     } catch (ParseException e) {
-        UtilMessage.addFieldError(request, "fromDate", UtilMessage.expandLabel("OpentapsFieldError_BadDateFormat", locale, UtilMisc.toMap("format", UtilDate.getDateFormat(locale))));
+        UtilMessage.addFieldError(request, "fromDate", UtilMessage.expandLabel("OpentapsFieldError_BadDateFormat", locale, UtilMisc.toMap("format", dateFormat)));
     }
 }
 if (UtilValidate.isNotEmpty(thruDate)) {
@@ -108,7 +107,7 @@ if (UtilValidate.isNotEmpty(thruDate)) {
         if (thruDateTs != null)
             callCtxt{"dateTo"} = thruDateTs;
     } catch (ParseException e) {
-        UtilMessage.addFieldError(request, "thruDate", UtilMessage.expandLabel("OpentapsFieldError_BadDateFormat", locale, UtilMisc.toMap("format", UtilDate.getDateFormat(locale))));
+        UtilMessage.addFieldError(request, "thruDate", UtilMessage.expandLabel("OpentapsFieldError_BadDateFormat", locale, UtilMisc.toMap("format", dateFormat)));
     }
 }
 callResult = dispatcher.runSync("opentaps.receiveInternalMessage", callCtxt);

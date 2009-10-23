@@ -30,7 +30,6 @@ import java.util.TimeZone;
 import javolution.util.FastList;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
-import org.opentaps.common.util.UtilDate;
 import org.opentaps.domain.base.entities.ContactMech;
 import org.opentaps.domain.base.entities.ContactMechPurposeType;
 import org.opentaps.domain.base.entities.Enumeration;
@@ -799,7 +798,7 @@ public class Order extends org.opentaps.domain.base.entities.OrderHeader {
     public String getEarliestShipByDate(final TimeZone timeZone, final Locale locale) throws RepositoryException {
         Timestamp date = getEarliestShipByDate();
         if (date == null) { return "N/A"; }
-        return UtilDateTime.timeStampToString(date, UtilDate.getDateFormat(locale), timeZone, locale);
+        return UtilDateTime.timeStampToString(date, UtilDateTime.getDateFormat(locale), timeZone, locale);
     }
 
 

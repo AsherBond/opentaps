@@ -41,12 +41,11 @@ import org.ofbiz.base.util.*;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilAccountingTags;
-import org.opentaps.common.util.UtilDate;
 import com.opensourcestrategies.financials.reports.FinancialReports;
 
 timeZone = UtilCommon.getTimeZone(request);
 locale = UtilHttp.getLocale(request);
-dateFormat = UtilDate.getDateFormat(locale);
+dateFormat = UtilDateTime.getDateFormat(locale);
 
 // set a default asOfDate to end of today
 defaultAsOfDate = UtilDateTime.getDayEnd( UtilDateTime.nowTimestamp(), timeZone, locale );
