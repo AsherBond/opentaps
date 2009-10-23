@@ -238,15 +238,6 @@
         <jar jarfile="${build.dir}/lib/prebuild.jar" basedir="${build.dir}/classes/prebuild"/>
     </target>
 
-    <target name="gwt-labels" depends="prebuild">  
-        <java classname="org.opentaps.gwt.messages.CreateCommonMessages">
-            <classpath>
-                <path refid="local.class.path"/>
-                <fileset dir="${build.dir}/lib" includes="*.jar"/>
-            </classpath>
-        </java>
-    </target>
-
     <!-- ================================================================== -->
     <!-- Build JavaDoc                                                      -->
     <!-- ================================================================== -->

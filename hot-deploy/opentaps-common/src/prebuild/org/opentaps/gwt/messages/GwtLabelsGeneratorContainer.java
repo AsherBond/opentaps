@@ -38,6 +38,7 @@ package org.opentaps.gwt.messages;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -46,29 +47,33 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import javolution.util.FastList;
-
 import org.apache.commons.io.FileUtils;
+import org.ofbiz.base.container.Container;
+import org.ofbiz.base.container.ContainerConfig;
+import org.ofbiz.base.container.ContainerException;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.service.ServiceDispatcher;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
+import org.ofbiz.base.util.Debug;
 
 
 /**
@@ -104,24 +109,42 @@ import freemarker.template.TemplateException;
  *     and the text:
  *     <code>exampleOfMessage = Hello {0} '{0} - {1}'</code>
  */
-public final class CreateCommonMessages {
+public final class GwtLabelsGeneratorContainer implements Container {
+
+    private static final String MODULE = GwtLabelsGeneratorContainer.class.getName();
+    private static final String CONTAINER_NAME = "gwtlabels-generator-container";
 
     // the default locale is the locale of the properties file that do no specify the local, IE: CommonUiLabels.properties
     // so we do not need to generate a CommonuiLabels_{DEFAULT_LOCALE}.properties
     private static final String DEFAULT_LOCALE = "en";
 
-    /** Construct not needed. */
-    private CreateCommonMessages() { }
+    /** Config file. */
+    private String configFile = null;
 
     /**
-     * Main function entry point.
-     * @param args command line parameters
-     * @throws IOException if an error related to file reading / writing occurs
-     * @throws TemplateException if an error related to FreeMarker occurs
-     * @throws ParserConfigurationException if an error related to xml parse occurs
-     * @throws SAXException if an error related to xml parse occurs
+     * Creates a new <code>GwtLabelsGeneratorContainer</code> instance.
      */
-    public static void main(String[] args) throws IOException, TemplateException, ParserConfigurationException, SAXException {
+    public GwtLabelsGeneratorContainer() {
+        super();
+    }
+
+    /** {@inheritDoc} */
+    public void init(String[] args, String configFile) throws ContainerException {
+        this.configFile = configFile;
+        // disable job scheduler, JMS listener and startup services
+        ServiceDispatcher.enableJM(false);
+        ServiceDispatcher.enableJMS(false);
+        ServiceDispatcher.enableSvcs(false);
+
+        // parse arguments here if needed
+    }
+
+    /** {@inheritDoc} */
+    public void stop() throws ContainerException { }
+
+    /** {@inheritDoc} */
+    @SuppressWarnings("unchecked")
+    public boolean start() throws ContainerException {
 
         // *** Configuration
 
@@ -151,89 +174,98 @@ public final class CreateCommonMessages {
         // this Map stores the {locale => Map{label key => GwtLabelDefinition}}
         Map<String, TreeMap<String, GwtLabelDefinition>> allGwtLabelDefinitionsMaps = new HashMap<String, TreeMap<String, GwtLabelDefinition>>();
 
-        // read the target locales from the GWT module configuration (common.gwt.xml)
-        // by parsing the XML structure
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document document = builder.parse(new File(gwtModuleConfigurationFile));
-        Element rootElement = document.getDocumentElement();
-        // each locale is listed as a distinct "extend-property" XML tag, ie: <extend-property name="locale" values="fr"/>
-        NodeList list = rootElement.getElementsByTagName("extend-property");
-        // loop through all "extend-property tags
-        for (int i = 0; i < list.getLength(); i++) {
-            Element element = (Element) list.item(i);
-            // check if the tag defines a locale
-            if (element.getAttribute("name").equals("locale")) {
-                // each tag only defines one locale
-                String locale = element.getAttribute("values");
-                // label keys are sorted alphabetically by the TreeMap
-                TreeMap<String, GwtLabelDefinition> gwtLabelDefinitionsMaps = new TreeMap<String, GwtLabelDefinition>();
 
-                // iterate through the list of source properties files defined in LabelConfiguration.properties
-                Iterator<Entry <Object, Object>> it = sources.entrySet().iterator();
-                while (it.hasNext()) {
-                    Entry<Object, Object> entry = it.next();
-                    try {
-                        String fileName = (String) entry.getValue();
-                        readLabelsFromSourcePropertiesFile(fileName, locale, gwtLabelDefinitionsMaps);
-                    } catch (IllegalArgumentException e) {
-                        e.printStackTrace();
+        try {
+
+            // read the target locales from the GWT module configuration (common.gwt.xml)
+            // by parsing the XML structure
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(new File(gwtModuleConfigurationFile));
+            Element rootElement = document.getDocumentElement();
+            // each locale is listed as a distinct "extend-property" XML tag, ie: <extend-property name="locale" values="fr"/>
+            NodeList list = rootElement.getElementsByTagName("extend-property");
+            // loop through all "extend-property tags
+            for (int i = 0; i < list.getLength(); i++) {
+                Element element = (Element) list.item(i);
+                // check if the tag defines a locale
+                if (element.getAttribute("name").equals("locale")) {
+                    // each tag only defines one locale
+                    String locale = element.getAttribute("values");
+                    // label keys are sorted alphabetically by the TreeMap
+                    TreeMap<String, GwtLabelDefinition> gwtLabelDefinitionsMaps = new TreeMap<String, GwtLabelDefinition>();
+
+                    // iterate through the list of source properties files defined in LabelConfiguration.properties
+                    Iterator<Entry <Object, Object>> it = sources.entrySet().iterator();
+                    while (it.hasNext()) {
+                        Entry<Object, Object> entry = it.next();
+                        try {
+                            String fileName = (String) entry.getValue();
+                            readLabelsFromSourcePropertiesFile(fileName, locale, gwtLabelDefinitionsMaps);
+                        } catch (IllegalArgumentException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    allGwtLabelDefinitionsMaps.put(locale, gwtLabelDefinitionsMaps);
+                }
+            }
+
+            // use the default label definitions to generate the Java interface file
+            TreeMap<String, GwtLabelDefinition> defaultGwtLabelDefinitionsMaps = allGwtLabelDefinitionsMaps.get(DEFAULT_LOCALE);
+            // render the GWT message interface Java file from the FTL template
+            Writer writer = new StringWriter();
+            Configuration ftlConfig = new Configuration();
+            ftlConfig.setDirectoryForTemplateLoading(new File(templatePath));
+            Template t = ftlConfig.getTemplate(templateFile);
+            Map<String, Object> context = new HashMap<String, Object>();
+            // label keys are sorted alphabetically by the TreeMap, so the values() collection is sorted automatically
+            context.put("functions", defaultGwtLabelDefinitionsMaps.values());
+            t.process(context, writer);
+
+            // write the GWT message interface Java file
+            File javaFile = new File(gwtPropertiesDir + gwtLabelFileName + ".java");
+            FileUtils.writeStringToFile(javaFile, writer.toString(), "UTF-8");
+
+            // write the properties files
+            Iterator<Entry<String, TreeMap<String, GwtLabelDefinition>>> it = allGwtLabelDefinitionsMaps.entrySet().iterator();
+            while (it.hasNext()) {
+                String locale = it.next().getKey();
+                // iterate through the list of locale, and generated gwt properties for all locales defined in the GWT module configuration
+                TreeMap<String, GwtLabelDefinition> gwtLabelDefinitionsMaps = allGwtLabelDefinitionsMaps.get(locale);
+                // write the localized properties files
+                StringBuffer stringBuffer = new StringBuffer();
+                for (String key : gwtLabelDefinitionsMaps.keySet()) {
+                    // check the label has the same signature as the default label
+                    GwtLabelDefinition localizedLabel = gwtLabelDefinitionsMaps.get(key);
+                    GwtLabelDefinition defaultLabel = defaultGwtLabelDefinitionsMaps.get(key);
+                    if (defaultLabel == null) {
+                        Debug.logError("*** Localized label [" + key + "] defined in " + localizedLabel.getPropertiesFile() + " for locale [" + locale + "] has no default signature.", MODULE);
+                        continue;
+                    }
+
+                    boolean badLabel = !localizedLabel.matchesSignatureOf(defaultLabel);
+                    if (badLabel) {
+                        Debug.logError("*** Localized label [" + key + "] defined in " + localizedLabel.getPropertiesFile() + " for locale [" + locale + "] do not match the default signature.", MODULE);
+                    }
+                    if (!(badLabel && dumpBadLocalizedLabels)) {
+                        stringBuffer.append(key).append(" = ").append(localizedLabel.getText()).append("\n");
                     }
                 }
-                allGwtLabelDefinitionsMaps.put(locale, gwtLabelDefinitionsMaps);
+                String outGwtLabelPropertiesFile = gwtPropertiesDir + gwtLabelFileName + ".properties";
+                if (!locale.equals(DEFAULT_LOCALE)) {
+                    outGwtLabelPropertiesFile = gwtPropertiesDir + gwtLabelFileName + "_" + locale + ".properties";
+                }
+                File propertiesFile = new File(outGwtLabelPropertiesFile);
+                FileUtils.writeStringToFile(propertiesFile, stringBuffer.toString(), "UTF-8");
+
             }
+        } catch (Exception e) {
+            Debug.logError(e, MODULE);
+            return false;
         }
 
-        // use the default label definitions to generate the Java interface file
-        TreeMap<String, GwtLabelDefinition> defaultGwtLabelDefinitionsMaps = allGwtLabelDefinitionsMaps.get(DEFAULT_LOCALE);
-        // render the GWT message interface Java file from the FTL template
-        Writer writer = new StringWriter();
-        Configuration ftlConfig = new Configuration();
-        ftlConfig.setDirectoryForTemplateLoading(new File(templatePath));
-        Template t = ftlConfig.getTemplate(templateFile);
-        Map<String, Object> context = new HashMap<String, Object>();
-        // label keys are sorted alphabetically by the TreeMap, so the values() collection is sorted automatically
-        context.put("functions", defaultGwtLabelDefinitionsMaps.values());
-        t.process(context, writer);
 
-        // write the GWT message interface Java file
-        File javaFile = new File(gwtPropertiesDir + gwtLabelFileName + ".java");
-        FileUtils.writeStringToFile(javaFile, writer.toString(), "UTF-8");
-
-        // write the properties files
-        Iterator<Entry<String, TreeMap<String, GwtLabelDefinition>>> it = allGwtLabelDefinitionsMaps.entrySet().iterator();
-        while (it.hasNext()) {
-            String locale = it.next().getKey();
-            // iterate through the list of locale, and generated gwt properties for all locales defined in the GWT module configuration
-            TreeMap<String, GwtLabelDefinition> gwtLabelDefinitionsMaps = allGwtLabelDefinitionsMaps.get(locale);
-            // write the localized properties files
-            StringBuffer stringBuffer = new StringBuffer();
-            for (String key : gwtLabelDefinitionsMaps.keySet()) {
-                // check the label has the same signature as the default label
-                GwtLabelDefinition localizedLabel = gwtLabelDefinitionsMaps.get(key);
-                GwtLabelDefinition defaultLabel = defaultGwtLabelDefinitionsMaps.get(key);
-                if (defaultLabel == null) {
-                    System.err.println("*** Localized label [" + key + "] defined in " + localizedLabel.getPropertiesFile() + " for locale [" + locale + "] has no default signature.");
-                    continue;
-                }
-
-                boolean badLabel = !localizedLabel.matchesSignatureOf(defaultLabel);
-                if (badLabel) {
-                    System.err.println("*** Localized label [" + key + "] defined in " + localizedLabel.getPropertiesFile() + " for locale [" + locale + "] do not match the default signature.");
-                }
-                if (!(badLabel && dumpBadLocalizedLabels)) {
-                    stringBuffer.append(key).append(" = ").append(localizedLabel.getText()).append("\n");
-                }
-            }
-            String outGwtLabelPropertiesFile = gwtPropertiesDir + gwtLabelFileName + ".properties";
-            if (!locale.equals(DEFAULT_LOCALE)) {
-                outGwtLabelPropertiesFile = gwtPropertiesDir + gwtLabelFileName + "_" + locale + ".properties";
-            }
-            File propertiesFile = new File(outGwtLabelPropertiesFile);
-            FileUtils.writeStringToFile(propertiesFile, stringBuffer.toString(), "UTF-8");
-
-        }
-
+        return true;
     }
 
     /**
@@ -286,14 +318,16 @@ public final class CreateCommonMessages {
      * @param functionNames a <code>List</code> of label names
      * @param gwtLabelDefinitionsMap a <code>Map</code> of label names to <code>GwtLabelDefinition</code>
      * @param locale the locale that properties file use
+     * @exception IOException if an error occurs
+     * @exception FileNotFoundException if an error occurs
      */
-    private static void readLabelsFromSourcePropertiesFile(String fileName, String locale, Map<String, GwtLabelDefinition> gwtLabelDefinitionsMap) {
+    private static void readLabelsFromSourcePropertiesFile(String fileName, String locale, Map<String, GwtLabelDefinition> gwtLabelDefinitionsMap) throws IOException, FileNotFoundException {
         // load the file
         Properties properties = null;
         String propertiesFileName = null;
         if (fileName.endsWith(".xml")) {
             // read labels from xml file
-            properties = xmlToProperties(fileName, locale);
+            properties = UtilProperties.xmlToProperties(new FileInputStream(fileName), new Locale(locale), null);
             propertiesFileName = fileName;
         } else {
             properties = loadPropertiesFile(fileName, locale);
@@ -350,8 +384,8 @@ public final class CreateCommonMessages {
                 // if a label with the same key was already loaded from a different file
                 //  just log the duplicate
                 if (gwtLabelDefinitionsMap.containsKey(labelKey)) {
-                    System.err.println("Found duplicate label key [" + labelKey + "] in " + propertiesFileName);
-                    System.err.println("key [" + labelKey + "] already defined in " + gwtLabelDefinitionsMap.get(labelKey).getPropertiesFile());
+                    Debug.logError("Found duplicate label key [" + labelKey + "] in " + propertiesFileName, MODULE);
+                    Debug.logError("key [" + labelKey + "] already defined in " + gwtLabelDefinitionsMap.get(labelKey).getPropertiesFile(), MODULE);
                     continue;
                 }
 
@@ -523,176 +557,6 @@ public final class CreateCommonMessages {
             counter++;
         }
         return counter;
-    }
-    
-
-    
-    /** This method was refactor from org/ofbiz/base/util/UtilProperties.java 
-     * Convert XML property file to Properties instance. This method will convert
-     * both the Java XML properties file format and the OFBiz custom XML
-     * properties file format.
-     * <p>
-     * The format of the custom XML properties file is:<br />
-     * <br />
-     * <code>
-     * &lt;resource&gt;<br />
-     * &nbsp;&lt;property key="key"&gt;<br />
-     * &nbsp;&nbsp;&lt;value xml:lang="locale 1"&gt;Some value&lt;/value&gt<br />
-     * &nbsp;&nbsp;&lt;value xml:lang="locale 2"&gt;Some value&lt;/value&gt<br />
-     * &nbsp;&nbsp;...<br />
-     * &nbsp;&lt;/property&gt;<br />
-     * &nbsp;...<br />
-     * &lt;/resource&gt;<br /><br /></code> where <em>"locale 1", "locale 2"</em> are valid Locale strings.
-     * </p>
-     *
-     * @param resource XML file path
-     * @param localeString The desired locale
-     * @return Properties instance or null if not found
-     */
-    public static Properties xmlToProperties(String resource, String localeString) {
-        Properties properties = new Properties();
-        if (resource == null) {
-            throw new IllegalArgumentException("Resource cannot be null");
-        }
-        File file = new File(resource);
-        if (!file.exists()) {
-            throw new IllegalArgumentException("File " + resource + " not exists");
-        }
-        Document doc = null;
-        InputStream in = null;
-        try {
-            in = new BufferedInputStream(new FileInputStream(file));
-            /* Standard JAXP (mostly), but doesn't seem to be doing XML Schema validation, so making sure that is on... */
-            DocumentBuilderFactory factory = new org.apache.xerces.jaxp.DocumentBuilderFactoryImpl();
-            factory.setValidating(false);
-            factory.setNamespaceAware(true);
-            
-            factory.setAttribute("http://xml.org/sax/features/validation", false);
-            factory.setAttribute("http://apache.org/xml/features/validation/schema", false);
-
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            doc = builder.parse(in);
-            in.close();
-        } catch (Exception e) {
-            try {
-                in.close();
-            } catch (IOException e1) {
-                throw new IllegalArgumentException(e1);
-            }
-            throw new IllegalArgumentException(e);
-        }
-        Element resourceElement = doc.getDocumentElement();
-        List<? extends Element> propertyList = childElementList(resourceElement, "property");
-        if (propertyList.size() > 0) {
-            // Custom XML properties file format
-            for (Element property : propertyList) {
-                Element value = firstChildElement(property, "value", "xml:lang", localeString);
-                if (value != null) {
-                    String valueString = elementValue(value);
-                    if (valueString != null) {
-                        properties.put(property.getAttribute("key"), valueString);
-                    }
-                }
-            }
-            return properties;
-        }
-        propertyList = childElementList(resourceElement, "entry");
-        if (propertyList.size() == 0) {
-            throw new IllegalArgumentException("XML properties file invalid or empty");
-        }
-        // Java XML properties file format
-        for (Element property : propertyList) {
-            String value = elementValue(property);
-            if (value != null) {
-                if (properties == null) {
-                    properties = new Properties();
-                }
-                properties.put(property.getAttribute("key"), value);
-            }
-        }
-        return properties;
-    }
-
-    
-    /**
-     * This method was refactor from org/ofbiz/base/util/UtilXml.java 
-     * Return the text (node value) of the first node under this, works best if normalized. 
-     * @param element a <code>Element</code> value
-     * @return the value of element
-     */
-    public static String elementValue(Element element) {
-        if (element == null) return null;
-        // make sure we get all the text there...
-        element.normalize();
-        Node textNode = element.getFirstChild();
-
-        if (textNode == null) return null;
-
-        StringBuilder valueBuffer = new StringBuilder();
-        do {
-            if (textNode.getNodeType() == Node.CDATA_SECTION_NODE || textNode.getNodeType() == Node.TEXT_NODE) {
-                valueBuffer.append(textNode.getNodeValue());
-            }
-        } while ((textNode = textNode.getNextSibling()) != null);
-        return valueBuffer.toString();
-    }
-
-    /**
-     * This method was refactor from org/ofbiz/base/util/UtilXml.java.
-     * Return the first child Element with the given name; if name is null then returns the first element..
-     * @param element a <code>Element</code> value
-     * @param childElementName child element name of element
-     * @param attrName a <code>String</code> value
-     * @param attrValue a <code>String</code> value
-     * @return the Element first found
-     */    
-    public static Element firstChildElement(Element element, String childElementName, String attrName, String attrValue) {
-        if (element == null) return null;
-        // get the first element with the given name
-        Node node = element.getFirstChild();
-
-        if (node != null) {
-            do {
-                if (node.getNodeType() == Node.ELEMENT_NODE && (childElementName == null ||
-                        childElementName.equals(node.getNodeName()))) {
-                    Element childElement = (Element) node;
-
-                    String value = childElement.getAttribute(attrName);
-
-                    if (value != null && value.equals(attrValue)) {
-                        return childElement;
-                    }
-                }
-            } while ((node = node.getNextSibling()) != null);
-        }
-        return null;
-    }
-
-    /**
-     * This method was refactor from org/ofbiz/base/util/UtilXml.java. 
-     * Return a List of Element objects that have the given name and are
-     * immediate children of the given element; if name is null, all child
-     * elements will be included.
-     * @param element a <code>Element</code> value
-     * @param childElementName child element name of element
-     */
-    public static List<? extends Element> childElementList(Element element, String childElementName) {
-        if (element == null) return null;
-
-        List<Element> elements = FastList.newInstance();
-        Node node = element.getFirstChild();
-
-        if (node != null) {
-            do {
-                if (node.getNodeType() == Node.ELEMENT_NODE && (childElementName == null ||
-                        childElementName.equals(node.getNodeName()))) {
-                    Element childElement = (Element) node;
-
-                    elements.add(childElement);
-                }
-            } while ((node = node.getNextSibling()) != null);
-        }
-        return elements;
     }
 
 }

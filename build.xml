@@ -170,11 +170,16 @@ under the License.
         <echo message="[gwt code] ========== Done Building GWT Code (Compile) =========="/>
     </target>
 
-    <target name="gwt-labels">
+    <target name="gwt-labels" depends="prebuild">
         <echo message="[gwt-labels] ========== Start Building GWT Labels (Compile) =========="/>
-        <subant inheritall="false" target="gwt-labels">
-                <filelist dir="." files="hot-deploy/opentaps-common/build.xml"/>
-        </subant>
+        <delete verbose="on">
+            <fileset dir="./hot-deploy/opentaps-common/src/common/org/opentaps/gwt/common/client/messages/" includes="CommonMessages*.*"/>
+        </delete>
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${permmemory.max.param}"/>
+            <arg value="gwtlabels"/>
+        </java>
         <echo message="[gwt-labels] ========== Done Building GWT Labels (Compile) =========="/>
     </target>
 
@@ -187,10 +192,10 @@ under the License.
         <subant inheritall="false">
             <filelist dir="." files="framework/build.xml"/>
         </subant>
-        <subant inheritall="false" failonerror="false">
+        <subant inheritall="false">
             <filelist dir="." files="applications/build.xml"/>
         </subant>
-        <subant inheritall="false" failonerror="false">
+        <subant inheritall="false">
             <filelist dir="." files="specialpurpose/build.xml"/>
         </subant>
         <subant target="prebuild">
