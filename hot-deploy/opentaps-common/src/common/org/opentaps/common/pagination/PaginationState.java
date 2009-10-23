@@ -44,7 +44,7 @@ import java.util.Map;
  *
  * An application may override this by defining pagination.default.viewSize
  * in the ${applicationName}.propeties file.
- * 
+ *
  * The default values for a particular paginator can be defined as follows,
  *
  * pagination.default.${paginatorName}.viewSize = 20
@@ -54,23 +54,32 @@ import java.util.Map;
  */
 public class PaginationState {
 
-    public static final String module = PaginationState.class.getName();
+    private static final String MODULE = PaginationState.class.getName();
+    /** The pagination default view size. */
     public static final int DEFAULT_VIEW_SIZE = UtilConfig.getPropertyInt("opentaps", "pagination.default.viewSize", 20);
 
-    protected String paginatorName = null;
-    protected String applicationName = null;
-    protected GenericValue userLogin = null;
-    protected long viewSize = DEFAULT_VIEW_SIZE;
-    protected long cursorIndex = 0;
-    protected List orderBy = null;
-    protected boolean rememberPage;
-    protected boolean rememberOrderBy;
+    private String paginatorName = null;
+    private String applicationName = null;
+    private GenericValue userLogin = null;
+    private long viewSize = DEFAULT_VIEW_SIZE;
+    private long cursorIndex = 0;
+    private List<String> orderBy = null;
+    private boolean rememberPage;
+    private boolean rememberOrderBy;
 
-    protected PaginationState() {}
+    /**
+     * Creates a new <code>PaginationState</code> instance.
+     */
+    protected PaginationState() { }
 
     /**
      * Initializes a pagination state.  This will load the last user state if exists, otherwise it determines
      * the default state for the list from the properties files. (See above for documentation.)
+     * @param paginatorName a <code>String</code> value
+     * @param userLogin a <code>GenericValue</code> value
+     * @param applicationName a <code>String</code> value
+     * @param rememberPage a <code>boolean</code> value
+     * @param rememberOrderBy a <code>boolean</code> value
      */
     public PaginationState(String paginatorName, GenericValue userLogin, String applicationName, boolean rememberPage, boolean rememberOrderBy) {
         this.paginatorName = paginatorName;
@@ -83,66 +92,121 @@ public class PaginationState {
     }
 
 
+    /**
+     * Gets the paginator name.
+     * @return a <code>String</code> value
+     */
     public String getPaginatorName() {
         return paginatorName;
     }
 
+    /**
+     * Gets the paginator application name.
+     * @return a <code>String</code> value
+     */
     public String getApplicationName() {
         return applicationName;
     }
 
+    /**
+     * Gets the <code>UserLogin</code>.
+     * @return a <code>GenericValue</code> value
+     */
     public GenericValue getUserLogin() {
         return userLogin;
     }
 
-    public List getOrderBy() {
+    /**
+     * Gets the list of order by strings.
+     * @return a <code>List</code> of <code>String</code>
+     */
+    public List<String> getOrderBy() {
         return orderBy;
     }
 
-    public void setOrderBy(List orderBy) {
+    /**
+     * Sets the list of order by strings.
+     * @param orderBy a <code>List</code> of <code>String</code>
+     */
+    public void setOrderBy(List<String> orderBy) {
         this.orderBy = orderBy;
     }
 
+    /**
+     * Gets the page view size.
+     * @return a <code>long</code> value
+     */
     public long getViewSize() {
         return viewSize;
     }
 
+    /**
+     * Sets the page view size.
+     * @param viewSize a <code>long</code> value
+     */
     public void setViewSize(long viewSize) {
-        if (viewSize <= 0) viewSize = DEFAULT_VIEW_SIZE;
+        if (viewSize <= 0) {
+            viewSize = DEFAULT_VIEW_SIZE;
+        }
         this.viewSize = viewSize;
     }
 
+    /**
+     * Gets the current cursor index.
+     * @return a <code>long</code> value
+     */
     public long getCursorIndex() {
         return cursorIndex;
     }
 
+    /**
+     * Sets the cursor index.
+     * @param cursorIndex a <code>long</code> value
+     */
     public void setCursorIndex(long cursorIndex) {
-        if (cursorIndex < 0) cursorIndex = 0;
+        if (cursorIndex < 0) {
+            cursorIndex = 0;
+        }
         this.cursorIndex = cursorIndex;
     }
 
+    /**
+     * Sets the remember page option.
+     * @param rememberPage a <code>boolean</code> value
+     */
     public void setRememberPage(boolean rememberPage) {
         this.rememberPage = rememberPage;
     }
 
+    /**
+     * Sets the remember order by option.
+     * @param rememberOrderBy a <code>boolean</code> value
+     */
     public void setRememberOrderBy(boolean rememberOrderBy) {
         this.rememberOrderBy = rememberOrderBy;
     }
 
-    /** Get the name as actually stored in the database, which is ${applicationNAme}.${paginatorName} */
+    /**
+     * Get the name as actually stored in the database, which is ${applicationNAme}.${paginatorName}.
+     * @return the name stored in the database
+     */
     public String getNameForDatabase() {
         return applicationName + "." + paginatorName;
     }
 
     /** The paginator is responsible for deciding when to save. */
     public void save() {
-        if (userLogin == null) return;
+        if (userLogin == null) {
+            return;
+        }
         try {
             GenericDelegator delegator = userLogin.getDelegator();
-            if (delegator == null) return;
+            if (delegator == null) {
+                return;
+            }
 
             boolean newPref = false;
-            Map input = UtilMisc.toMap("userLoginId", userLogin.get("userLoginId"), "paginatorName", getNameForDatabase());
+            Map<String, Object> input = UtilMisc.<String, Object>toMap("userLoginId", userLogin.get("userLoginId"), "paginatorName", getNameForDatabase());
             GenericValue preference = delegator.findByPrimaryKey("PaginationPreference", input);
             if (preference == null) {
                 newPref = true;
@@ -161,7 +225,7 @@ public class PaginationState {
                 preference.store();
             }
         } catch (GenericEntityException e) {
-            Debug.logError(e, "Not saving pagination state for user ["+userLogin.get("userLoginId")+"].", module);
+            Debug.logError(e, "Not saving pagination state for user [" + userLogin.get("userLoginId") + "].", MODULE);
         }
     }
 
@@ -175,43 +239,69 @@ public class PaginationState {
         String defaultOrderBy = UtilConfig.getPropertyValue(applicationName, "pagination.default.orderBy");
         setOrderBy(loadOrderBy(defaultOrderBy));
 
-        if (userLogin == null) return;
+        if (userLogin == null) {
+            return;
+        }
         try {
             GenericDelegator delegator = userLogin.getDelegator();
-            if (delegator == null) return;
+            if (delegator == null) {
+                return;
+            }
             GenericValue preference = delegator.findByPrimaryKey("PaginationPreference", UtilMisc.toMap("userLoginId", userLogin.get("userLoginId"), "paginatorName", getNameForDatabase()));
-            if (preference == null) return;
+            if (preference == null) {
+                return;
+            }
 
             Long viewSizeValue = preference.getLong("viewSize");
-            if (viewSizeValue != null) setViewSize(viewSizeValue.longValue());
+            if (viewSizeValue != null) {
+                setViewSize(viewSizeValue.longValue());
+            }
 
             if (rememberPage) {
                 Long cursorIndexValue = preference.getLong("cursorIndex");
-                if (cursorIndexValue != null) setCursorIndex(cursorIndexValue.longValue());
+                if (cursorIndexValue != null) {
+                    setCursorIndex(cursorIndexValue.longValue());
+                }
             }
             if (rememberOrderBy) {
-                List orderByValue = PaginationState.loadOrderBy(preference.getString("orderBy"));
-                if (orderByValue != null) setOrderBy(orderByValue);
+                List<String> orderByValue = PaginationState.loadOrderBy(preference.getString("orderBy"));
+                if (orderByValue != null) {
+                    setOrderBy(orderByValue);
+                }
             }
         } catch (GenericEntityException e) {
-            Debug.logError(e, "Not saving pagination state for user ["+userLogin.get("userLoginId")+"].", module);
+            Debug.logError(e, "Not saving pagination state for user [" + userLogin.get("userLoginId") + "].", MODULE);
         }
     }
 
-    /** Serializes the orderBy list into a string. */
-    public static String serializeOrderBy(List orderBy) {
-        if (orderBy == null) return null;
+    /**
+     * Serializes the orderBy list into a string.
+     * @param orderBy the list of order by strings
+     * @return a <code>String</code>
+     */
+    public static String serializeOrderBy(List<String> orderBy) {
+        if (orderBy == null) {
+            return null;
+        }
         StringBuffer buff = new StringBuffer();
-        for (Iterator iter = orderBy.iterator(); iter.hasNext(); ) {
+        for (Iterator<String> iter = orderBy.iterator(); iter.hasNext();) {
             buff.append(iter.next());
-            if (iter.hasNext()) buff.append(',');
+            if (iter.hasNext()) {
+                buff.append(',');
+            }
         }
         return buff.toString();
     }
 
-    /** Loads an order by string into a List */
-    public static List loadOrderBy(String orderByValue) {
-        if (UtilValidate.isEmpty(orderByValue)) return null;
+    /**
+     * Loads an order by string into a List.
+     * @param orderByValue a <code>String</code> value
+     * @return a <code>List</code> value
+     */
+    public static List<String> loadOrderBy(String orderByValue) {
+        if (UtilValidate.isEmpty(orderByValue)) {
+            return null;
+        }
         return Arrays.asList(orderByValue.split("\\s*,\\s*"));
     }
 }

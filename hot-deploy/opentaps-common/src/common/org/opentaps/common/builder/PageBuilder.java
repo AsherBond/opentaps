@@ -41,6 +41,7 @@ import java.util.List;
  * When this interface is combined with special list builders such as BshListBuilder, we
  * end up with a powerful way to define the construction of lists of data from within a script.
  *
+ * @param <T> the class of entities in the <code>List</code>
  * @see BshListBuilder
  */
 public interface PageBuilder<T> {
@@ -53,6 +54,6 @@ public interface PageBuilder<T> {
      * @return List with the final contents of the page
      * @throws Exception Any exceptions generated will be reported to the screen via ListBuilderException
      */
-    public List build(List<T> page) throws Exception;
+    public List<?> build(List<T> page) throws Exception;
 
 }

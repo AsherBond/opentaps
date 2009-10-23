@@ -17,25 +17,6 @@
 
 package org.opentaps.common.event;
 
-import javolution.util.*;
-
-import org.apache.commons.lang.StringUtils;
-import org.opentaps.common.pagination.PaginatorFactory;
-import org.opentaps.common.pagination.Paginator;
-import org.opentaps.common.pagination.PaginationState;
-import org.opentaps.common.util.UtilCommon;
-import org.opentaps.common.builder.ListBuilder;
-import org.opentaps.common.builder.ListBuilderException;
-import org.ofbiz.base.util.Debug;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletRequest;
-
-import net.sf.json.JSONObject;
-import net.sf.json.JSONArray;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -45,23 +26,44 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import javolution.util.*;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilValidate;
+import org.opentaps.common.builder.ListBuilder;
+import org.opentaps.common.builder.ListBuilderException;
+import org.opentaps.common.pagination.PaginationState;
+import org.opentaps.common.pagination.Paginator;
+import org.opentaps.common.pagination.PaginatorFactory;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.foundation.entity.EntityInterface;
 
 /**
  * Events that interact with paginators to fetch pages, change the sort order,
  * and change the size of the viewport.
- * 
- * @author Leon Torres (leon@opensourcestrategies.com)
  */
-public class PaginationEvents {
+public final class PaginationEvents {
 
-    public static final String module = PaginationEvents.class.getName();
+    private PaginationEvents() { }
+
+    private static final String MODULE = PaginationEvents.class.getName();
 
     /**
      * Catchall request for fetching pages. It accepts a paginatorName and an
      * action to perform.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return a <code>String</code> value
      */
     public static String paginate(HttpServletRequest request, HttpServletResponse response) {
-        List page = FastList.newInstance();
+        List<?> page = FastList.newInstance();
         Paginator paginator = PaginatorFactory.getPaginator(request);
         String action = UtilCommon.getParameter(request, "action");
         String pageNumberString = UtilCommon.getParameter(request, "pageNumber");
@@ -72,66 +74,68 @@ public class PaginationEvents {
                     try {
                         long pageNumber = Long.parseLong(pageNumberString);
                         page = paginator.getPageNumber(pageNumber);
-                    }
-                    catch (NumberFormatException e) {
-                        Debug.logWarning("Failed to get page numer [" + pageNumberString + "] to to format error: " + e.getMessage(), module);
+                    } catch (NumberFormatException e) {
+                        Debug.logWarning("Failed to get page numer [" + pageNumberString + "] to to format error: " + e.getMessage(), MODULE);
                         page = paginator.getCurrentPage();
                     }
-                }
-                else if (action == null || "getCurrentPage".equals(action)) {
+                } else if (action == null || "getCurrentPage".equals(action)) {
                     page = paginator.getCurrentPage();
-                }
-                else if ("getNextPage".equals(action)) {
+                } else if ("getNextPage".equals(action)) {
                     page = paginator.getNextPage();
-                }
-                else if ("getPreviousPage".equals(action)) {
+                } else if ("getPreviousPage".equals(action)) {
                     page = paginator.getPreviousPage();
-                }
-                else if ("getFirstPage".equals(action)) {
+                } else if ("getFirstPage".equals(action)) {
                     page = paginator.getFirstPage();
-                }
-                else if ("getLastPage".equals(action)) {
+                } else if ("getLastPage".equals(action)) {
                     page = paginator.getLastPage();
-                }
-                else {
-                    Debug.logWarning("Paginate action [" + action + "] not supported.", module);
+                } else {
+                    Debug.logWarning("Paginate action [" + action + "] not supported.", MODULE);
                     page = paginator.getCurrentPage();
                 }
-            }
-            catch (ListBuilderException e) {
+            } catch (ListBuilderException e) {
                 return doListBuilderExceptionResponse(request, response, paginator, e);
             }
         }
         return doPaginationResponse(request, response, paginator, page);
     }
 
+    /**
+     * Changes the paginator order by.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return a <code>String</code> value
+     */
     public static String changePaginationOrder(HttpServletRequest request, HttpServletResponse response) {
-        List page = FastList.newInstance();
+        List<?> page = FastList.newInstance();
         Paginator paginator = PaginatorFactory.getPaginator(request);
         if (paginator != null) {
             String orderByString = UtilCommon.getParameter(request, "orderBy");
             String orderByReverseString = UtilCommon.getParameter(request, "orderByReverse");
-            List orderBy = PaginationState.loadOrderBy(orderByString);
-            List orderByReverse = PaginationState.loadOrderBy(orderByReverseString);
+            List<String> orderBy = PaginationState.loadOrderBy(orderByString);
+            List<String> orderByReverse = PaginationState.loadOrderBy(orderByReverseString);
 
             if (orderByReverse == null) {
                 paginator.changeOrderBy(orderBy);
-            }
-            else {
+            } else {
                 paginator.changeOrderBy(orderBy, orderByReverse);
             }
             try {
                 page = paginator.getCurrentPage();
-            }
-            catch (ListBuilderException e) {
+            } catch (ListBuilderException e) {
                 return doListBuilderExceptionResponse(request, response, paginator, e);
             }
         }
         return doPaginationResponse(request, response, paginator, page);
     }
 
+    /**
+     * Changes the paginator view size.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return a <code>String</code> value
+     */
     public static String changePaginationViewSize(HttpServletRequest request, HttpServletResponse response) {
-        List page = FastList.newInstance();
+        List<?> page = FastList.newInstance();
         Paginator paginator = PaginatorFactory.getPaginator(request);
         if (paginator != null) {
             long delta = 0;
@@ -139,17 +143,16 @@ public class PaginationEvents {
             if (deltaValue != null) {
                 try {
                     delta = Long.parseLong(deltaValue);
-                }
-                catch (NumberFormatException e) {
-                    Debug.logError(e, e.getMessage(), module);
+                } catch (NumberFormatException e) {
+                    Debug.logError(e, e.getMessage(), MODULE);
                 }
             }
-            if (delta != 0)
+            if (delta != 0) {
                 paginator.changeViewSize(delta);
+            }
             try {
                 page = paginator.getCurrentPage();
-            }
-            catch (ListBuilderException e) {
+            } catch (ListBuilderException e) {
                 return doListBuilderExceptionResponse(request, response, paginator, e);
             }
         }
@@ -159,29 +162,38 @@ public class PaginationEvents {
     /**
      * Decides whether to do a JSON response or set the values in the request
      * attributes for formlets.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @param paginator a <code>Paginator</code> value
+     * @param page a <code>List</code> value
+     * @return a <code>String</code> value
      */
-    public static String doPaginationResponse(HttpServletRequest request, HttpServletResponse response, Paginator paginator, List page) {
-        if (paginator == null)
+    public static String doPaginationResponse(HttpServletRequest request, HttpServletResponse response, Paginator paginator, List<?> page) {
+        if (paginator == null) {
             return "success"; // Formlet event handler will deal with this
+        }
         if (paginator.isFormlet()) {
             return doPaginationResponseFormlet(request, paginator, page);
-        }
-        else {
+        } else {
             return doPaginationResponseJSON(response, paginator, page);
         }
     }
 
     /**
      * Builds a JSONObject response string with the following parameters:
-     * 
+     *
      * <ul>
      * <li><b>page:</b> JSONArray containing the page to render.</li>
      * <li><b>pageNumber:</b> The page number.</li>
      * <li><b>totalPages:</b> Total pages in the list.</li>
      * <li><b>viewSize:</b> The size of the viewport.</li>
-     * </li>
+     * </ul>
+     * @param response a <code>HttpServletResponse</code> value
+     * @param paginator a <code>Paginator</code> value
+     * @param page a <code>List</code> value
+     * @return a <code>String</code> value
      */
-    public static String doPaginationResponseJSON(HttpServletResponse response, Paginator paginator, List page) {
+    public static String doPaginationResponseJSON(HttpServletResponse response, Paginator paginator, List<?> page) {
         JSONObject map = new JSONObject();
         map.put("pageRows", JSONArray.fromObject(page).toString());
         if (paginator != null) {
@@ -194,12 +206,16 @@ public class PaginationEvents {
 
     /**
      * Stores result data in the request attributes for the formlet.
-     * 
+     *
      * Other data about the paginator and context are put in the template
      * context by FormletEventHandler, therefore we only care to return
      * information about the actual list of data.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param paginator a <code>Paginator</code> value
+     * @param page a <code>List</code> value
+     * @return a <code>String</code> value
      */
-    public static String doPaginationResponseFormlet(HttpServletRequest request, Paginator paginator, List page) {
+    public static String doPaginationResponseFormlet(HttpServletRequest request, Paginator paginator, List<?> page) {
         request.setAttribute("pageRows", page);
         return "success";
     }
@@ -214,11 +230,9 @@ public class PaginationEvents {
 
     /**
      * Export a paginated data list to Excel.
-     * 
-     * @param request
-     *            the servlet request
-     * @param response
-     *            servlet response
+     *
+     * @param request the servlet request
+     * @param response servlet response
      * @return a String object that represents the process status
      */
 
@@ -226,12 +240,12 @@ public class PaginationEvents {
         String strPaginatorName = request.getParameter("paginatorName");
         String strOpentapsApplicationName = request.getParameter("opentapsApplicationName");
         if (StringUtils.isEmpty(strPaginatorName)) {
-            Debug.logError("The parameter [paginatorName] is missing in the request.", module);
+            Debug.logError("The parameter [paginatorName] is missing in the request.", MODULE);
             return "error";
         }
 
         if (StringUtils.isEmpty(strOpentapsApplicationName)) {
-            Debug.logError("The parameter [opentapsApplicationName] is missing in the request.", module);
+            Debug.logError("The parameter [opentapsApplicationName] is missing in the request.", MODULE);
             return "error";
         }
 
@@ -243,73 +257,85 @@ public class PaginationEvents {
     private static String exportPaginatedListToExcel(final String strPaginatorName, final String strOpentapsApplicationName, HttpServletRequest request, HttpServletResponse response) {
         Paginator paginator = PaginatorFactory.getPaginator(request.getSession(), strPaginatorName, strOpentapsApplicationName);
         if (paginator == null) {
-            Debug.logError("Failed to retrieve the paginator [" + strPaginatorName + "] in the application [" + strOpentapsApplicationName + "]", module);
+            Debug.logError("Failed to retrieve the paginator [" + strPaginatorName + "] in the application [" + strOpentapsApplicationName + "]", MODULE);
             return "error";
         }
 
         // paginator exists in session
         ListBuilder listBuilder = paginator.getListBuilder();
         if (listBuilder == null) {
-            Debug.logError("Null list builder is found in the paginator [" + strPaginatorName + "] in the application [" + strOpentapsApplicationName + "]", module);
+            Debug.logError("Null list builder is found in the paginator [" + strPaginatorName + "] in the application [" + strOpentapsApplicationName + "]", MODULE);
             return "error";
         }
 
         List dataList = null;
         try {
             dataList = listBuilder.getCompleteList();
-        }
-        catch (ListBuilderException lbe) {
-            Debug.logError("ListBuilderException is caught while exporting the paginator [" + strPaginatorName + "] in the application [" + strOpentapsApplicationName + "] : " + lbe.getMessage(), module);
+        } catch (ListBuilderException lbe) {
+            Debug.logError("ListBuilderException is caught while exporting the paginator [" + strPaginatorName + "] in the application [" + strOpentapsApplicationName + "] : " + lbe.getMessage(), MODULE);
             return "error";
         }
 
         if (dataList == null || dataList.isEmpty()) {
-            Debug.logWarning("Empty data list is returned in the paginator [" + strPaginatorName + "] in the application [" + strOpentapsApplicationName + "]", module);
+            Debug.logWarning("Empty data list is returned in the paginator [" + strPaginatorName + "] in the application [" + strOpentapsApplicationName + "]", MODULE);
             return "error";
         }
+
+        // find the type of the List and convert to a List of Map
+        List<Map<String, Object>> mapDataList = FastList.newInstance();
+        if (UtilValidate.isNotEmpty(dataList)) {
+            for (Object o : dataList) {
+                // GenericValue implements Map<String, Object>
+                if (o instanceof Map) {
+                    mapDataList.add((Map<String, Object>) o);
+                } else if (o instanceof EntityInterface) {
+                    mapDataList.add(((EntityInterface) o).toMap());
+                }
+            }
+        }
+
 
         // write the data list to Excel
 
         // get the field key list
-        Map element = (Map) dataList.get(0);
+        Map<String, Object> element = mapDataList.get(0);
         List<String> keys = new ArrayList<String>();
         if (element != null) {
             Set<String> keySet = element.keySet();
             for (String key : keySet) {
-                if ("lastUpdatedStamp".equals(key) ||
-                    "lastUpdatedTxStamp".equals(key) ||
-                    "createdStamp".equals(key) ||
-                    "createdTxStamp".equals(key)) {
+                if ("lastUpdatedStamp".equals(key)
+                    || "lastUpdatedTxStamp".equals(key)
+                    || "createdStamp".equals(key)
+                    || "createdTxStamp".equals(key)) {
                     continue;
                 }
-                
+
                 keys.add(key);
             }
         }
 
         if (keys.isEmpty()) {
-            Debug.logError("Empty field name list is returned in the data list of paginator [" + strPaginatorName + "] in the application [" + strOpentapsApplicationName + "]", module);
+            Debug.logError("Empty field name list is returned in the data list of paginator [" + strPaginatorName + "] in the application [" + strOpentapsApplicationName + "]", MODULE);
             return "error";
         }
 
         // create a map for column header labels
-        Map columnHeaderMap = new HashMap();
+        Map<String, Object> columnHeaderMap = new HashMap<String, Object>();
         for (String key : keys) {
             columnHeaderMap.put(key, key);
         }
 
-        List excelDataList = new ArrayList();
+        List<Map<String, Object>> excelDataList = new ArrayList<Map<String, Object>>();
         excelDataList.add(columnHeaderMap);
-        excelDataList.addAll(dataList);
+        excelDataList.addAll(mapDataList);
 
         // using random string as part of file name, avoid multi user operate in same time.
         String fileName = "data_" + String.valueOf((int) (Math.random() * 100000)) + ".xls";
         String excelFilePath = getAbsoluteFilePath(request, fileName);
         try {
             UtilCommon.saveToExcel(excelFilePath, "data", keys, excelDataList);
-        }
-        catch (IOException ioe) {
-            Debug.logError("IOException is thrown while trying to write to the Excel file: " + ioe.getMessage(), module);
+        } catch (IOException ioe) {
+            Debug.logError("IOException is thrown while trying to write to the Excel file: " + ioe.getMessage(), MODULE);
             return "error";
         }
 
@@ -319,11 +345,11 @@ public class PaginationEvents {
     /**
      * Download an existing Excel file from the ${opentaps_home}/runtime/output
      * directory. The Excel file is deleted after the download.
-     * 
-     * @param filename
-     *            the file name String object
-     * @param response
-     *            servlet response
+     *
+     * @param filename the file name String object
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return a <code>String</code> value
      */
     private static String downloadExcel(String filename, HttpServletRequest request, HttpServletResponse response) {
         File file = null;
@@ -347,10 +373,10 @@ public class PaginationEvents {
 
             out.flush();
         } catch (FileNotFoundException e) {
-            Debug.logError("Failed to open the file: " + filename, module);
+            Debug.logError("Failed to open the file: " + filename, MODULE);
             return "error";
         } catch (IOException ioe) {
-            Debug.logError("IOException is thrown while trying to download the Excel file: " + ioe.getMessage(), module);
+            Debug.logError("IOException is thrown while trying to download the Excel file: " + ioe.getMessage(), MODULE);
             return "error";
         } finally {
             try {
@@ -361,7 +387,7 @@ public class PaginationEvents {
                     file.delete();
                 }
             } catch (IOException ioe) {
-                Debug.logError("IOException is thrown while trying to download the Excel file: " + ioe.getMessage(), module);
+                Debug.logError("IOException is thrown while trying to download the Excel file: " + ioe.getMessage(), MODULE);
                 return "error";
             }
         }
