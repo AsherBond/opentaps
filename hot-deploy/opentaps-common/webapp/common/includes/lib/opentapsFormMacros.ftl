@@ -790,7 +790,7 @@ For more information, please see documentation/opentapsFormMacros.html
       time += (Date.DAY * ${delta});
       
       var linkedDate = new Date(time);
-      linkedInput.value = opentaps.formatDate(linkedDate, '${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.ofbiz.base.UtilDateTime"].getDateFormat(locale)))}');
+      linkedInput.value = opentaps.formatDate(linkedDate, '${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.ofbiz.base.util.UtilDateTime"].getDateFormat(locale)))}');
     };
     </#if>
     Calendar.setup(
@@ -905,7 +905,7 @@ For more information, please see documentation/opentapsFormMacros.html
           if (calendar.dateClicked) {
             var input = document.getElementById('${name}_c_date');
             if (input) {
-              input.value = opentaps.formatDate(calendar.date, '${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.ofbiz.base.UtilDateTime"].getDateFormat(locale)))}');
+              input.value = opentaps.formatDate(calendar.date, '${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.ofbiz.base.util.UtilDateTime"].getDateFormat(locale)))}');
             }
             opentaps.addClass(document.getElementById('${name}-calendar-placeholder'), 'hidden');
           }
