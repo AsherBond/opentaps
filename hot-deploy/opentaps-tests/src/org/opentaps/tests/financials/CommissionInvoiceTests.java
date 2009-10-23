@@ -281,7 +281,7 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         String agentPartyId = createPartyFromTemplate("DemoSalesRep4", "FirstName for testCommissionsEarnedAtPayment", "LastName for testCommissionsEarnedAtPayment");
 
         // 1. Create a sales invoice from Company to DemoAccount1 for $100
-        String invoiceId1 = financialAsserts.createInvoice("DemoAccount1", "SALES_INVOICE");//, UtilDateTime.nowTimestamp(), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 30, UtilDateTime.getDefaultTimeZone(), Locale.US));
+        String invoiceId1 = financialAsserts.createInvoice("DemoAccount1", "SALES_INVOICE");//, UtilDateTime.nowTimestamp(), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 30, TimeZone.getDefault(), Locale.US));
         financialAsserts.createInvoiceItem(invoiceId1, "INV_PROD_ITEM", "GZ-1001", new BigDecimal("3.0"), new BigDecimal("10.00"), "Item 1");
         financialAsserts.createInvoiceItem(invoiceId1, "INV_PROD_ITEM", "GZ-1005", new BigDecimal("1.0"), new BigDecimal("70.00"), "Item 2");
 
@@ -289,7 +289,7 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         financialAsserts.updateInvoiceStatus(invoiceId1, "INVOICE_READY");
 
         // 3. Create a sales invoice from Company to DemoAccount1 for $200
-        String invoiceId2 = financialAsserts.createInvoice("DemoAccount1", "SALES_INVOICE");//, UtilDateTime.nowTimestamp(), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 30, UtilDateTime.getDefaultTimeZone(), Locale.US));
+        String invoiceId2 = financialAsserts.createInvoice("DemoAccount1", "SALES_INVOICE");//, UtilDateTime.nowTimestamp(), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 30, TimeZone.getDefault(), Locale.US));
         financialAsserts.createInvoiceItem(invoiceId2, "INV_PROD_ITEM", new BigDecimal("2.0"), new BigDecimal("100.0"), "Item 1");
 
         // 4. Mark invoice as READY

@@ -3,7 +3,7 @@
 
 <script type="text/javascript">
   var dateString = '${getLocalizedDate(Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp())}';
-  var dateFormat = '${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.opentaps.common.util.UtilDate"].getDateTimeFormat(locale)))}';
+  var dateFormat = '${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.ofbiz.base.util.UtilDateTime"].getDateTimeFormat(locale)))}';
   var formatedDate = opentaps.formatDate(opentaps.parseDate(dateString, dateFormat), dateFormat);
 </script>
 

@@ -26,7 +26,7 @@ timeZone = UtilCommon.getTimeZone(request);
 context{"testTimestampValue"} = UtilDateTime.nowTimestamp();
 
 context{"userTimeZone"} = timeZone.getDisplayName(true, TimeZone.LONG, locale);
-context{"defaultTimeZone"} = UtilDate.getDefaultTimeZone().getDisplayName(true, TimeZone.LONG, locale);
+context{"defaultTimeZone"} = TimeZone.getDefault().getDisplayName(true, TimeZone.LONG, locale);
 
 baseTimestamp = Timestamp.valueOf("2008-01-25 22:00:00.000");
 context{"baseTimestamp"} = baseTimestamp;
