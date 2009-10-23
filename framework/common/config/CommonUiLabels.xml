@@ -8774,4 +8774,13 @@
         <value xml:lang="zh">中文</value>
         <value xml:lang="zh_CN">中文</value>
     </property>
+
+    <!-- Added Opentaps labels used on every screens -->
+    <property key="OpentapsReleaseVersion">
+        <value xml:lang="en">1.4-Preview</value>
+    </property>
+
+    <property key="OpentapsProductName">
+        <value xml:lang="en">Opentaps Open Source ERP + CRM</value>
+    </property>
 </resource>

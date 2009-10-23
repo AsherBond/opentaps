@@ -25,7 +25,10 @@ under the License.
 </div>
 <!-- footer -->
 <div id="footer">
-    <div class="poweredBy"><span>Powered by <a href="http://ofbiz.apache.org" class="noicon">OFBiz</a></span><span>Copyright 2001-2008 <a href="http://www.apache.org">The Apache Software Foundation - www.apache.org</a></span><span><#include "../../../runtime/svninfo.ftl" /></span></div>
+    <div class="poweredBy"><a href="http://www.opentaps.org" class="noicon">${uiLabelMap.OpentapsProductName}</a> ${uiLabelMap.OpentapsReleaseVersion}.<br />
+  Opentaps is a trademark of <a href="http://www.opensourcestrategies.com" class="noicon">Open Source Strategies, Inc.</a><br />
+  This application is free software under the terms of the <a href="http://www.opentaps.org/index.php?option=com_content&amp;task=view&amp;id=16&amp;Itemid=36" class="noicon">Affero General Public License v3</a> WITH ABSOLUTELY NO WARRANTY.<br />  It is also available under <a href="http://www.opentaps.org/index.php?option=com_content&amp;task=blogcategory&amp;id=17&amp;Itemid=77" class="noicon">commercial licenses</a> from Open Source Strategies, Inc.<br />
+  (c) 2005-2009 <a href="http://www.opensourcestrategies.com" class="noicon">Open Source Strategies, Inc. </a></div>
 
 </div>
 <!-- footer -->
