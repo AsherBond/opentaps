@@ -20,6 +20,7 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <script type="text/javascript">
+/*<![CDATA[*/
 function showButtons() {
     var show = false;
     var buttons = document.getElementById('buttonsBar');
@@ -46,6 +47,7 @@ function showButtons() {
         }
     }
 }
+/*]]>*/
 </script>
 
 <@paginate name="listInvoices" list=invoiceListBuilder rememberPage=false>
@@ -86,7 +88,7 @@ function showButtons() {
                 </#if>
             </tr>
             </#list>
-        <tr><td colspan="10"><div id="buttonsBar" class="textright hidden"><@inputSubmit title="${uiLabelMap.CommonPrint}" onClick=""/></div></td></tr>
+        <tr><td colspan="10" id="buttonsBar" class="textright hidden"><@inputSubmit title="${uiLabelMap.CommonPrint}" onClick=""/></td></tr>
         </table>
     </form>
     </#noparse>
