@@ -246,7 +246,7 @@ public class UelFunctions {
     }
 
     public static String dateString(Timestamp stamp, TimeZone timeZone, Locale locale) {
-        DateFormat dateFormat = UtilDateTime.toDateFormat(UtilDateTime.DATE_FORMAT, timeZone, locale);
+        DateFormat dateFormat = UtilDateTime.toDateFormat(UtilDateTime.getDateFormat(locale), timeZone, locale);
         dateFormat.setTimeZone(timeZone);
         return dateFormat.format(stamp);
     }
@@ -258,7 +258,7 @@ public class UelFunctions {
     }
 
     public static String timeString(Timestamp stamp, TimeZone timeZone, Locale locale) {
-        DateFormat dateFormat = UtilDateTime.toTimeFormat(UtilDateTime.TIME_FORMAT, timeZone, locale);
+        DateFormat dateFormat = UtilDateTime.toTimeFormat(UtilDateTime.getTimeFormat(locale), timeZone, locale);
         dateFormat.setTimeZone(timeZone);
         return dateFormat.format(stamp);
     }

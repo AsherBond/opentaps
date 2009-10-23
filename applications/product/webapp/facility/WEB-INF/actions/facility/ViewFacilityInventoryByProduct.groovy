@@ -114,7 +114,7 @@ if (action) {
 
     // add the discontinuation date condition when productsSoldThruTimestamp is a string value
     if (UtilValidate.isNotEmpty(productsSoldThruTimestamp) && productsSoldThruTimestamp instanceof String) {
-        ts = UtilDateTime.stringToTimeStamp(productsSoldThruTimestamp, org.opentaps.common.util.UtilDate.getDateFormat(locale), timeZone, locale);
+        ts = UtilDateTime.stringToTimeStamp(productsSoldThruTimestamp, UtilDateTime.getDateFormat(locale), timeZone, locale);
         EntityCondition discontinuationDateCondition = new EntityConditionList(UtilMisc.toList(
                 new EntityExpr("salesDiscontinuationDate", EntityOperator.EQUALS, null),
                 new EntityExpr("salesDiscontinuationDate", EntityOperator.GREATER_THAN, ts)),

@@ -575,7 +575,7 @@ public class ObjectType {
             } else if ("Date".equals(type) || "java.sql.Date".equals(type)) {
                 DateFormat df = null;
                 if (format == null || format.length() == 0) {
-                    df = UtilDateTime.toDateFormat(UtilDateTime.DATE_FORMAT, timeZone, locale);
+                    df = UtilDateTime.toDateFormat(UtilDateTime.getDateFormat(locale), timeZone, locale);
                 } else {
                     df = UtilDateTime.toDateFormat(format, timeZone, locale);
                 }
@@ -588,7 +588,7 @@ public class ObjectType {
             } else if ("Time".equals(type) || "java.sql.Time".equals(type)) {
                 DateFormat df = null;
                 if (format == null || format.length() == 0) {
-                    df = UtilDateTime.toTimeFormat(UtilDateTime.TIME_FORMAT, timeZone, locale);
+                    df = UtilDateTime.toTimeFormat(UtilDateTime.getTimeFormat(locale), timeZone, locale);
                 } else {
                     df = UtilDateTime.toTimeFormat(format, timeZone, locale);
                 }
@@ -601,7 +601,7 @@ public class ObjectType {
             } else if ("Timestamp".equals(type) || "java.sql.Timestamp".equals(type)) {
                 DateFormat df = null;
                 if (format == null || format.length() == 0) {
-                    df = UtilDateTime.toDateTimeFormat(UtilDateTime.DATE_TIME_FORMAT, timeZone, locale);
+                    df = UtilDateTime.toDateTimeFormat(UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
                     // if time is missing add zeros
                     if (str.length() > 0 && !str.contains(":")) {
                         str = str + " 00:00:00.00";
@@ -797,7 +797,7 @@ public class ObjectType {
             if ("String".equals(type) || "java.lang.String".equals(type)) {
                 DateFormat df = null;
                 if (format == null || format.length() == 0) {
-                    df = UtilDateTime.toDateFormat(UtilDateTime.DATE_FORMAT, timeZone, locale);
+                    df = UtilDateTime.toDateFormat(UtilDateTime.getDateFormat(locale), timeZone, locale);
                 } else {
                     df = UtilDateTime.toDateFormat(format, timeZone, locale);
                 }
@@ -828,7 +828,7 @@ public class ObjectType {
             if ("String".equals(type) || "java.lang.String".equals(type)) {
                 DateFormat df = null;
                 if (format == null || format.length() == 0) {
-                    df = UtilDateTime.toTimeFormat(UtilDateTime.TIME_FORMAT, timeZone, locale);
+                    df = UtilDateTime.toTimeFormat(UtilDateTime.getTimeFormat(locale), timeZone, locale);
                 } else {
                     df = UtilDateTime.toTimeFormat(format, timeZone, locale);
                 }
@@ -857,7 +857,7 @@ public class ObjectType {
             if ("String".equals(type) || "java.lang.String".equals(type)) {
                 DateFormat df = null;
                 if (format == null || format.length() == 0) {
-                    df = UtilDateTime.toDateTimeFormat(UtilDateTime.DATE_TIME_FORMAT, timeZone, locale);
+                    df = UtilDateTime.toDateTimeFormat(UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
                 } else {
                     df = UtilDateTime.toDateTimeFormat(format, timeZone, locale);
                 }

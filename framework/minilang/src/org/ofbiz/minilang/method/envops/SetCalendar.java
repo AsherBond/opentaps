@@ -140,7 +140,7 @@ public class SetCalendar extends MethodOperation {
             if (timeZone == null) {
                 timeZone = TimeZone.getDefault();
             }
-            fromStamp = (Timestamp) ObjectType.simpleTypeConvert(newValue, "Timestamp", UtilDateTime.DATE_TIME_FORMAT, timeZone, locale, true);
+            fromStamp = (Timestamp) ObjectType.simpleTypeConvert(newValue, "Timestamp", UtilDateTime.getDateTimeFormat(locale), timeZone, locale, true);
         } catch (Exception e) {
             // Catching all exceptions - even potential ClassCastException
             if (Debug.verboseOn()) Debug.logVerbose("Error converting attributes to objects: " + e.getMessage(), module);
