@@ -17,27 +17,35 @@
 
 package com.opensourcestrategies.financials.invoice;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 import javax.servlet.http.HttpServletRequest;
 
 import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastList;
+import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.common.builder.EntityListBuilder;
+import org.opentaps.common.builder.PageBuilder;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.base.entities.BillingAccountAndRole;
 import org.opentaps.domain.base.entities.GlAccountOrganizationAndClass;
@@ -86,7 +94,6 @@ public final class InvoiceActions {
         GenericDelegator delegator = ac.getDelegator();
         Locale locale = ac.getLocale();
 
-        ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
         String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
         if (organizationPartyId == null) {
             return;
@@ -153,7 +160,7 @@ public final class InvoiceActions {
             p.put("paymentApplicationId", pa.getPaymentApplicationId());
             p.put("amountApplied", pa.getAmountApplied());
             StatusItem status = payment.getStatusItem();
-            p.put("statusDescription", status.get("description", locale));
+            p.put("statusDescription", status.get(StatusItem.Fields.description.name(), locale));
             if (invoice.isReturnInvoice() && payment.isCustomerRefund() && payment.isBillingAccountPayment()) {
                 // the billing account comes from the payment's other payment application
                 List<? extends PaymentApplication> applications = payment.getRelated(PaymentApplication.class);
@@ -292,7 +299,7 @@ public final class InvoiceActions {
                     boolean first = true;
                     for (String poId : orderCorrespondingPOs) {
                         if (first) {
-                            ordersList += uiLabelMap.get("OpentapsPONumber") + ":";
+                            ordersList += ac.getUiLabel("OpentapsPONumber") + ":";
                         } else {
                             ordersList += ", ";
                         }
@@ -323,6 +330,190 @@ public final class InvoiceActions {
             List<InvoiceAdjustmentType> types = invoiceRepository.getInvoiceAdjustmentTypes(organization, invoice);
             ac.put("invoiceAdjustmentTypes", types);
         }
+    }
+
+    /**
+     * Action for the find / list invoices screen.
+     * @param context the screen context
+     * @throws GeneralException if an error occurs
+     * @throws ParseException if an error occurs
+     */
+    public static void findInvoices(Map<String, Object> context) throws GeneralException, ParseException {
+
+        final ActionContext ac = new ActionContext(context);
+
+        final Locale locale = ac.getLocale();
+        final TimeZone timeZone = ac.getTimeZone();
+
+        // Finds invoices based on invoiceTypeId and various input parameters
+        String invoiceTypeId = ac.getString("invoiceTypeId");
+
+        // set the find form title here because of limitations with uiLabelMap, along with other variables
+        String findFormTitle = "";
+        boolean isReceivable = false;
+        boolean isPayable = false;
+        boolean isPartner = false;
+        boolean enableFindByOrder = false;
+        if ("SALES_INVOICE".equals(invoiceTypeId)) {
+            findFormTitle = ac.getUiLabel("FinancialsFindSalesInvoices");
+            isReceivable = true;
+            enableFindByOrder = true;
+        } else if ("PURCHASE_INVOICE".equals(invoiceTypeId)) {
+            findFormTitle = ac.getUiLabel("FinancialsFindPurchaseInvoices");
+            isPayable = true;
+            enableFindByOrder = true;
+        } else if ("CUST_RTN_INVOICE".equals(invoiceTypeId)) {
+            findFormTitle = ac.getUiLabel("FinancialsFindCustomerReturnInvoices");
+            isPayable = true;
+        } else if ("COMMISSION_INVOICE".equals(invoiceTypeId)) {
+            findFormTitle = ac.getUiLabel("FinancialsFindCommissionInvoices");
+            isPayable = true;
+        } else if ("INTEREST_INVOICE".equals(invoiceTypeId)) {
+            findFormTitle = ac.getUiLabel("FinancialsFindFinanceCharges");
+            isReceivable = true;
+        } else if ("PARTNER_INVOICE".equals(invoiceTypeId)) {
+            findFormTitle = ac.getUiLabel("FinancialsFindPartnerInvoices");
+            isPartner = true;
+        }
+        ac.put("findFormTitle", findFormTitle);
+        ac.put("isReceivable", isReceivable);
+        ac.put("isPayable", isPayable);
+        ac.put("isPartner", isPartner);
+        ac.put("enableFindByOrder", enableFindByOrder);
+
+        BillingDomainInterface billingDomain = ac.getDomainsDirectory().getBillingDomain();
+        InvoiceRepositoryInterface repository = billingDomain.getInvoiceRepository();
+
+        // get the list of statuses for the parametrized form ftl
+        List<StatusItem> statuses = repository.findListCache(StatusItem.class, repository.map(StatusItem.Fields.statusTypeId, "INVOICE_STATUS"), UtilMisc.toList(StatusItem.Fields.sequenceId.name()));
+        List<Map<String, Object>> statusList = new FastList<Map<String, Object>>();
+        for (StatusItem s : statuses) {
+            Map<String, Object> status = s.toMap();
+            status.put("statusDescription", s.get(StatusItem.Fields.description.name(), locale));
+            statusList.add(status);
+        }
+        ac.put("statuses", statusList);
+
+        // get the list of processing statuses for the parametrized form ftl
+        List<StatusItem> processingStatuses = repository.findListCache(StatusItem.class, repository.map(StatusItem.Fields.statusTypeId, "INVOICE_PROCESS_STTS"), UtilMisc.toList(StatusItem.Fields.sequenceId.name()));
+        List<Map<String, Object>> processingStatusList = new FastList<Map<String, Object>>();
+        // add None filter for the processing status
+        processingStatusList.add(UtilMisc.<String, Object>toMap(StatusItem.Fields.statusId.name(), "_NA_", "statusDescription", ac.getUiLabel("CommonNone")));
+        for (StatusItem s : processingStatuses) {
+            Map<String, Object> status = s.toMap();
+            status.put("statusDescription", s.get(StatusItem.Fields.description.name(), locale));
+            processingStatusList.add(status);
+        }
+        ac.put("processingStatuses", processingStatusList);
+
+        // now check if we want to actually do a find, which is triggered by performFind = Y
+        if (!"Y".equals(ac.getParameter("performFind"))) {
+            return;
+        }
+
+        // get the search parameters
+        String partyId = ac.getParameter("partyId");
+        String partyIdFrom = ac.getParameter("partyIdFrom");
+        String invoiceId = ac.getParameter("invoiceId");
+        String statusId = ac.getParameter("statusId");
+        String processingStatusId = ac.getParameter("processingStatusId");
+        String invoiceDateFrom = ac.getParameter("invoiceDateFrom");
+        String invoiceDateThru = ac.getParameter("invoiceDateThru");
+        String dueDateFrom = ac.getParameter("dueDateFrom");
+        String dueDateThru = ac.getParameter("dueDateThru");
+        String paidDateFrom = ac.getParameter("paidDateFrom");
+        String paidDateThru = ac.getParameter("paidDateThru");
+        String referenceNumber = ac.getParameter("referenceNumber");
+        String orderId = ac.getParameter("orderId");
+
+        // build search conditions
+        List<EntityCondition> search = new FastList<EntityCondition>();
+        if (partyId != null) {
+            search.add(EntityCondition.makeCondition(Invoice.Fields.partyId.name(), EntityOperator.EQUALS, partyId.trim()));
+        }
+        if (partyIdFrom != null) {
+            search.add(EntityCondition.makeCondition(Invoice.Fields.partyIdFrom.name(), EntityOperator.EQUALS, partyIdFrom.trim()));
+        }
+        if (invoiceId != null) {
+            search.add(EntityCondition.makeCondition(Invoice.Fields.invoiceId.name(), EntityOperator.EQUALS, invoiceId.trim()));
+        }
+        if (statusId != null) {
+            search.add(EntityCondition.makeCondition(Invoice.Fields.statusId.name(), EntityOperator.EQUALS, statusId.trim()));
+        }
+        if (processingStatusId != null) {
+            // this is a special case where we want an empty status
+            if ("_NA_".equals(processingStatusId)) {
+                search.add(EntityCondition.makeCondition(Invoice.Fields.processingStatusId.name(), EntityOperator.EQUALS, null));
+            } else {
+                search.add(EntityCondition.makeCondition(Invoice.Fields.processingStatusId.name(), EntityOperator.EQUALS, processingStatusId.trim()));
+            }
+        }
+        String dateFormat = UtilDate.getDateFormat(locale);
+        if (invoiceDateFrom != null) {
+            search.add(EntityCondition.makeCondition(Invoice.Fields.invoiceDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(invoiceDateFrom, dateFormat, timeZone, locale), timeZone, locale)));
+        }
+        if (dueDateFrom != null) {
+            search.add(EntityCondition.makeCondition(Invoice.Fields.dueDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(dueDateFrom, dateFormat, timeZone, locale), timeZone, locale)));
+        }
+        if (paidDateFrom != null) {
+            search.add(EntityCondition.makeCondition(Invoice.Fields.paidDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(paidDateFrom, dateFormat, timeZone, locale), timeZone, locale)));
+        }
+        if (invoiceDateThru != null) {
+            search.add(EntityCondition.makeCondition(Invoice.Fields.invoiceDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(invoiceDateThru, dateFormat, timeZone, locale), timeZone, locale)));
+        }
+        if (dueDateThru != null) {
+            search.add(EntityCondition.makeCondition(Invoice.Fields.dueDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(dueDateThru, dateFormat, timeZone, locale), timeZone, locale)));
+        }
+        if (paidDateThru != null) {
+            search.add(EntityCondition.makeCondition(Invoice.Fields.paidDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(paidDateThru, dateFormat, timeZone, locale), timeZone, locale)));
+        }
+        if (referenceNumber != null) {
+            search.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(Invoice.Fields.referenceNumber.name()), EntityOperator.LIKE, EntityFunction.UPPER("%" + referenceNumber + "%")));
+        }
+
+        if (enableFindByOrder && orderId != null) {
+            List<OrderItemBilling> orderItemBillings = repository.findList(OrderItemBilling.class, repository.map(OrderItemBilling.Fields.orderId, orderId));
+            if (UtilValidate.isNotEmpty(orderItemBillings)) {
+                Set<String> invoiceIds = Entity.getDistinctFieldValues(String.class, orderItemBillings, OrderItemBilling.Fields.invoiceId);
+                search.add(EntityCondition.makeCondition(Invoice.Fields.invoiceId.name(), EntityOperator.IN, invoiceIds));
+            }
+        }
+
+        // required conditions
+        search.add(EntityCondition.makeCondition(Invoice.Fields.invoiceTypeId.name(), EntityOperator.EQUALS, invoiceTypeId.trim()));
+
+
+        // Pagination
+        EntityListBuilder invoiceListBuilder = new EntityListBuilder(repository, Invoice.class, EntityCondition.makeCondition(search, EntityOperator.AND), UtilMisc.toList(Invoice.Fields.invoiceDate.desc()));
+        PageBuilder<Invoice> pageBuilder = new PageBuilder<Invoice>() {
+            @Override public List<Map<String, Object>> build(List<Invoice> page) throws Exception {
+                GenericDelegator delegator = ac.getDelegator();
+                List<Map<String, Object>> newPage = FastList.newInstance();
+                for (Invoice invoice : page) {
+                    Map<String, Object> newRow = FastMap.newInstance();
+                    newRow.putAll(invoice.toMap());
+
+                    StatusItem status = invoice.getStatusItem();
+                    newRow.put("statusDescription", status.get(StatusItem.Fields.description.name(), locale));
+                    StatusItem processingStatus = invoice.getProcessingStatusItem();
+                    if (processingStatus != null) {
+                        newRow.put("processingStatusDescription", processingStatus.get(StatusItem.Fields.description.name(), locale));
+                    }
+
+                    newRow.put("partyNameFrom", PartyHelper.getPartyName(delegator, invoice.getPartyIdFrom(), false));
+                    newRow.put("partyName", PartyHelper.getPartyName(delegator, invoice.getPartyId(), false));
+
+                    newRow.put("amount", invoice.getInvoiceTotal());
+                    newRow.put("outstanding", invoice.getOpenAmount());
+
+                    newPage.add(newRow);
+                }
+                return newPage;
+            }
+        };
+        invoiceListBuilder.setPageBuilder(pageBuilder);
+
+        ac.put("invoiceListBuilder", invoiceListBuilder);
     }
 
 }

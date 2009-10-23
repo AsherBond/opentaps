@@ -16,21 +16,25 @@
  */
 package org.opentaps.foundation.action;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import javax.servlet.http.HttpServletRequest;
 
+import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.LocalDispatcher;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
-import java.util.TimeZone;
 
 /**
  * A wrapper for the Action methods.
@@ -45,6 +49,7 @@ public class ActionContext {
     private DomainsLoader domainsLoader;
     private DomainsDirectory domainsDirectory;
     private TimeZone timeZone;
+    private ResourceBundleMapWrapper uiLabelMap;
 
     /**
      * Default constructor, wraps around the context <code>Map</code>.
@@ -226,4 +231,53 @@ public class ActionContext {
         return domainsDirectory;
     }
 
+    /**
+     * Gets the <code>uiLabelMap</code> for the context locale.
+     * @return a <code>ResourceBundleMapWrapper</code> value
+     */
+    public ResourceBundleMapWrapper getUiLabels() {
+        if (uiLabelMap == null) {
+            uiLabelMap = UtilMessage.getUiLabels(getLocale());
+        }
+        return uiLabelMap;
+    }
+
+    /**
+     * Gets a label expanded for the context locale.
+     * For more complex label operations see <code>UtilMessage</code>.
+     * @param label a <code>String</code> value
+     * @return a <code>String</code> value
+     */
+    public String getUiLabel(String label) {
+        return (String) getUiLabels().get(label);
+    }
+
+    // some autoboxing getter
+
+    /**
+     * Gets a value from the context as a <code>String</code>.
+     * @param key a <code>String</code> value
+     * @return a <code>String</code> value
+     */
+    public String getString(String key) {
+        return (String) get(key);
+    }
+
+    /**
+     * Gets a value from the context as a <code>Timestamp</code>.
+     * @param key a <code>String</code> value
+     * @return a <code>String</code> value
+     */
+    public Timestamp getTimestamp(String key) {
+        return (Timestamp) get(key);
+    }
+
+    /**
+     * Gets a value from the context as a <code>BigDecimal</code>.
+     * @param key a <code>String</code> value
+     * @return a <code>String</code> value
+     */
+    public BigDecimal getBigDecimal(String key) {
+        return (BigDecimal) get(key);
+    }
 }

@@ -24,14 +24,17 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericModelException;
+import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityListIterator;
+import org.opentaps.foundation.entity.EntityException;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 import org.opentaps.foundation.repository.ofbiz.Repository;
+import org.opentaps.foundation.util.FoundationUtils;
 
 /**
  * Basic builder to look up entities and view entities using
@@ -49,6 +52,7 @@ import org.opentaps.foundation.repository.ofbiz.Repository;
  */
 public class EntityListBuilder extends AbstractListBuilder {
 
+    /** Option to pass to the delegator methods to return distinct results. */
     public static final EntityFindOptions DISTINCT_READ_OPTIONS = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
 
     protected String entityName = null;
@@ -113,6 +117,70 @@ public class EntityListBuilder extends AbstractListBuilder {
         this(entityName, null, null, null, null, DISTINCT_READ_OPTIONS);
     }
 
+    // domain constructor
+
+    /**
+     * Full constructor for domain based lists, containing all possible fields.
+     * @param repository the <code>RepositoryInterface</code> to use
+     * @param entityClass the entity to find
+     * @param where an <code>EntityCondition</code> value
+     * @param having an <code>EntityCondition</code> value
+     * @param fieldsToSelect a <code>List</code> value
+     * @param orderBy a <code>List</code> value
+     * @param options an <code>EntityFindOptions</code> value
+     * @exception ListBuilderException if an error occurs
+     */
+    public EntityListBuilder(RepositoryInterface repository, Class<? extends EntityInterface> entityClass, EntityCondition where, EntityCondition having, Collection<String> fieldsToSelect, List<String> orderBy, EntityFindOptions options) throws ListBuilderException {
+        this.entityClass = entityClass;
+        try {
+            this.entityName = FoundationUtils.getEntityBaseName(entityClass);
+        } catch (EntityException e) {
+            throw new ListBuilderException("Field 'entityClass' cannot be read as an entity Class.  Please make sure it is.");
+        }
+        this.repository = repository;
+        this.where = where;
+        this.having = having;
+        this.fieldsToSelect = fieldsToSelect;
+        this.orderBy = orderBy;
+        this.options = options;
+    }
+
+    /**
+     * Distinct readonly lookup.
+     * @param repository the <code>RepositoryInterface</code> to use
+     * @param entityClass the entity to find
+     * @param where an <code>EntityCondition</code> value
+     * @param orderBy a <code>List</code> value
+     * @exception ListBuilderException if an error occurs
+     */
+    public EntityListBuilder(RepositoryInterface repository, Class<? extends EntityInterface> entityClass, EntityCondition where, List<String> orderBy) throws ListBuilderException {
+        this(repository, entityClass, where, null, null, orderBy, DISTINCT_READ_OPTIONS);
+    }
+
+    /**
+     * Distinct readonly lookup limited to certain fields.
+     * @param repository the <code>RepositoryInterface</code> to use
+     * @param entityClass the entity to find
+     * @param where an <code>EntityCondition</code> value
+     * @param fieldsToSelect a <code>List</code> value
+     * @param orderBy a <code>List</code> value
+     * @exception ListBuilderException if an error occurs
+     */
+    public EntityListBuilder(RepositoryInterface repository, Class<? extends EntityInterface> entityClass, EntityCondition where, Collection<String> fieldsToSelect, List<String> orderBy) throws ListBuilderException {
+        this(repository, entityClass, where, null, fieldsToSelect, orderBy, DISTINCT_READ_OPTIONS);
+    }
+
+    /**
+     * Distinct readonly lookup for all values.
+     * @param repository the <code>RepositoryInterface</code> to use
+     * @param entityClass the entity to find
+     * @exception ListBuilderException if an error occurs
+     */
+    public EntityListBuilder(RepositoryInterface repository, Class<? extends EntityInterface> entityClass) throws ListBuilderException {
+        this(repository, entityClass, null, null, null, null, DISTINCT_READ_OPTIONS);
+    }
+
+
     /**
      * As a convenience, the delegator is set when a call to the pagination macro is made.  This saves us a parameter in the constructors.
      * @param delegator a <code>GenericDelegator</code> value
@@ -129,6 +197,11 @@ public class EntityListBuilder extends AbstractListBuilder {
         return delegator;
     }
 
+    /**
+     * Initializes this <code>EntityListBuilder</code>.
+     * This opens the EntityListIterator and gets the total number of results.
+     * @exception ListBuilderException if an error occurs
+     */
     public void initialize() throws ListBuilderException {
         if (isInitialized()) {
             return;
@@ -159,10 +232,17 @@ public class EntityListBuilder extends AbstractListBuilder {
         }
     }
 
+    /**
+     * Checks if this <code>EntityListBuilder</code> has been initialized.
+     * @return a <code>boolean</code> value
+     */
     public boolean isInitialized() {
         return iterator != null;
     }
 
+    /**
+     * Closes this <code>EntityListBuilder</code> if it has been initialized.
+     */
     public void close() {
         if (isInitialized()) {
             try {
@@ -215,7 +295,7 @@ public class EntityListBuilder extends AbstractListBuilder {
         }
         try {
             // XXX Note:  EntityListIterator is a 1 based list, so we must add 1 to index
-            List results = iterator.getPartialList((int) cursorIndex + 1, (int) viewSize);
+            List<GenericValue> results = iterator.getPartialList((int) cursorIndex + 1, (int) viewSize);
             close();
             // convert to domain entities if needed
             if (repository != null && entityClass != null) {
@@ -240,6 +320,7 @@ public class EntityListBuilder extends AbstractListBuilder {
      * When the order specification changes, we have to rebuild the iterator.
      * This is done by closing the existing iterator and then changing the
      * orderBy variable.  The iterator will be re-initialized during a later operation.
+     * @param orderBy the new order by list
      */
     public void changeOrderBy(List<String> orderBy) {
         close();

@@ -77,7 +77,7 @@
                 <set field="sectionHeaderUiLabel" value="FinancialsInvoicePartners"/>
                 <set field="invoiceTypeId" value="PARTNER_INVOICE"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/partners/getPartnersForOrganization.bsh"/>
-                <script location="component://financials/webapp/financials/WEB-INF/actions/invoices/findInvoices.bsh"/>
+                <java location="com.opensourcestrategies.financials.invoice.InvoiceActions" invoke="findInvoices"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
