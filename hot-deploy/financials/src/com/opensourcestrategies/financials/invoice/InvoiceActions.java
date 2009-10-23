@@ -36,12 +36,9 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.security.Security;
-import org.ofbiz.service.LocalDispatcher;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
-import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.base.entities.BillingAccountAndRole;
 import org.opentaps.domain.base.entities.GlAccountOrganizationAndClass;
 import org.opentaps.domain.base.entities.InvoiceAdjustmentType;
@@ -61,10 +58,9 @@ import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
+import org.opentaps.foundation.action.ActionContext;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.exception.FoundationException;
-import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 
 
@@ -84,22 +80,21 @@ public final class InvoiceActions {
      */
     public static void viewInvoice(Map<String, Object> context) throws GeneralException {
 
-        HttpServletRequest request = (HttpServletRequest) context.get("request");
-        GenericDelegator delegator = (GenericDelegator) context.get("delegator");
-        Locale locale = (Locale) context.get("locale");
-        LocalDispatcher dispatcher = (LocalDispatcher) context.get("dispatcher");
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Security security = (Security) context.get("security");
+        ActionContext ac = new ActionContext(context);
+
+        HttpServletRequest request = ac.getRequest();
+        GenericDelegator delegator = ac.getDelegator();
+        Locale locale = ac.getLocale();
 
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
         String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
         if (organizationPartyId == null) {
             return;
         }
-        context.put("organizationPartyId", organizationPartyId);
+        ac.put("organizationPartyId", organizationPartyId);
 
         // get the view preference from the parameter
-        String useGwtParam = UtilCommon.getParameter(request, "useGwt");
+        String useGwtParam = ac.getParameter("useGwt");
         // get it from the database
         String useGwtPref = UtilCommon.getUserLoginViewPreference(request, "financials", "viewInvoice", "useGwt");
         boolean useGwt;
@@ -120,14 +115,13 @@ public final class InvoiceActions {
             // else default to true
             useGwt = true;
         }
-        context.put("useGwt", useGwt);
+        ac.put("useGwt", useGwt);
 
         // get the invoice from the domain
-        String invoiceId = (String) context.get("invoiceId");
-        DomainsLoader dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
-        BillingDomainInterface billingDomain = dl.loadDomainsDirectory().getBillingDomain();
+        String invoiceId = (String) ac.get("invoiceId");
+        BillingDomainInterface billingDomain = ac.getDomainsDirectory().getBillingDomain();
         InvoiceRepositoryInterface invoiceRepository = billingDomain.getInvoiceRepository();
-        OrganizationRepositoryInterface organizationRepository = dl.loadDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
+        OrganizationRepositoryInterface organizationRepository = ac.getDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
 
         Invoice invoice = null;
         try {
@@ -137,17 +131,17 @@ public final class InvoiceActions {
             // let the invoice == null check deal with this
         }
         if (invoice == null) {
-            context.put("decoratorLocation", "component://opentaps-common/widget/screens/common/CommonScreens.xml");
+            ac.put("decoratorLocation", "component://opentaps-common/widget/screens/common/CommonScreens.xml");
             return;
         }
-        context.put("invoice", invoice);
+        ac.put("invoice", invoice);
 
         // put to history
         InvoiceType invoiceType = invoice.getInvoiceType();
-        context.put("history", UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("FinancialsNavHistoryInvoice", locale, UtilMisc.toMap("invoiceId", invoiceId, "invoiceTypeName", invoiceType.get("description", locale))), "viewInvoice", UtilMisc.toList("invoiceId")));
+        ac.put("history", UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("FinancialsNavHistoryInvoice", locale, UtilMisc.toMap("invoiceId", invoiceId, "invoiceTypeName", invoiceType.get("description", locale))), "viewInvoice", UtilMisc.toList("invoiceId")));
 
         // get the invoice items
-        context.put("invoiceItems", invoice.getInvoiceItems());
+        ac.put("invoiceItems", invoice.getInvoiceItems());
 
         // get the application payments, we need to fetch the payment entity too
         List<? extends PaymentApplication> paymentApplications = invoice.getPaymentApplications();
@@ -174,33 +168,33 @@ public final class InvoiceActions {
                 payments.add(p);
             }
         }
-        context.put("payments", payments);
-        context.put("creditPayments", creditPayments);
+        ac.put("payments", payments);
+        ac.put("creditPayments", creditPayments);
 
         // these booleans group the invoices into tabs
-        context.put("isReceipt", invoice.isReceivable());
-        context.put("isDisbursement", invoice.isPayable());
-        context.put("isPartner", invoice.isPartnerInvoice());
+        ac.put("isReceipt", invoice.isReceivable());
+        ac.put("isDisbursement", invoice.isPayable());
+        ac.put("isPartner", invoice.isPartnerInvoice());
 
         // note Partner invoice are considered receivable invoice, so test for that first
         if (invoice.isPartnerInvoice()) {
-            context.put("decoratorLocation", "component://financials/widget/financials/screens/partners/PartnerScreens.xml");
+            ac.put("decoratorLocation", "component://financials/widget/financials/screens/partners/PartnerScreens.xml");
         } else if (invoice.isPayable()) {
-            context.put("decoratorLocation", "component://financials/widget/financials/screens/payables/PayablesScreens.xml");
+            ac.put("decoratorLocation", "component://financials/widget/financials/screens/payables/PayablesScreens.xml");
         } else if (invoice.isReceivable()) {
-            context.put("decoratorLocation", "component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml");
+            ac.put("decoratorLocation", "component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml");
         }
 
         // get the accounting tags for the invoice
         if (invoice.isCommissionInvoice()) {
-            context.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.COMMISSION_INVOICES_TAG, delegator));
+            ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.COMMISSION_INVOICES_TAG, delegator));
         } else if (invoice.isSalesInvoice()) {
-            context.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.SALES_INVOICES_TAG, delegator));
+            ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.SALES_INVOICES_TAG, delegator));
         } else if (invoice.isPurchaseInvoice()) {
-            context.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.PURCHASE_INVOICES_TAG, delegator));
+            ac.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.PURCHASE_INVOICES_TAG, delegator));
         }
 
-        context.put("billingPartyId", invoice.getTransactionPartyId());
+        ac.put("billingPartyId", invoice.getTransactionPartyId());
 
         // the billing address, which can be either the payment or billing location
         // TODO: this should be moved into invoice repository / Invoice
@@ -221,37 +215,37 @@ public final class InvoiceActions {
                 invoiceContactMechId = invoiceAddress.getContactMechId();
             }
         }
-        context.put("invoiceAddress", invoiceAddress);
-        context.put("invoiceContactMechId", invoiceContactMechId);
+        ac.put("invoiceAddress", invoiceAddress);
+        ac.put("invoiceContactMechId", invoiceContactMechId);
 
         // update permissions
         boolean hasUpdatePermission = false;
         boolean hasAdjustmentPermission = false;
-        if ((invoice.isReceivable() && security.hasEntityPermission("FINANCIALS", "_AR_INUPDT", userLogin)) || (invoice.isPayable() && security.hasEntityPermission("FINANCIALS", "_AP_INUPDT", userLogin))) {
+        if ((invoice.isReceivable() && ac.hasEntityPermission("FINANCIALS", "_AR_INUPDT")) || (invoice.isPayable() && ac.hasEntityPermission("FINANCIALS", "_AP_INUPDT"))) {
             hasUpdatePermission = invoice.isInProcess();
             hasAdjustmentPermission = invoice.isAdjustable();
         }
-        context.put("hasUpdatePermission", hasUpdatePermission);
-        context.put("hasAdjustmentPermission", hasAdjustmentPermission);
+        ac.put("hasUpdatePermission", hasUpdatePermission);
+        ac.put("hasAdjustmentPermission", hasAdjustmentPermission);
 
         // create permission
-        boolean hasCreatePermission = security.hasEntityPermission("FINANCIALS", "_AP_INCRTE", userLogin) || security.hasEntityPermission("FINANCIALS", "_AR_INCRTE", userLogin);
-        context.put("hasCreatePermission", hasCreatePermission);
+        boolean hasCreatePermission = ac.hasEntityPermission("FINANCIALS", "_AP_INCRTE") || ac.hasEntityPermission("FINANCIALS", "_AR_INCRTE");
+        ac.put("hasCreatePermission", hasCreatePermission);
 
         // writeoff permission
         boolean hasWriteoffPermission = false;
-        if ((invoice.isReceivable() && (security.hasEntityPermission("FINANCIALS", "_AR_INWRTOF", userLogin))
-             || !invoice.isReceivable() && (security.hasEntityPermission("FINANCIALS", "_AP_INWRTOF", userLogin)))
+        if ((invoice.isReceivable() && (ac.hasEntityPermission("FINANCIALS", "_AR_INWRTOF"))
+             || !invoice.isReceivable() && (ac.hasEntityPermission("FINANCIALS", "_AP_INWRTOF")))
             && (invoice.isReady() || invoice.isPaid())) {
             hasWriteoffPermission = true;
         }
-        context.put("hasWriteoffPermission", hasWriteoffPermission);
+        ac.put("hasWriteoffPermission", hasWriteoffPermission);
 
         // update permission implies that the header and items are editable, so get some data for the forms
         if (hasUpdatePermission) {
             List<GlAccountOrganizationAndClass> glAccounts = invoiceRepository.findListCache(GlAccountOrganizationAndClass.class, invoiceRepository.map(GlAccountOrganizationAndClass.Fields.organizationPartyId, organizationPartyId), UtilMisc.toList(GlAccountOrganizationAndClass.Fields.accountCode.name()));
-            context.put("glAccounts", glAccounts);
-            context.put("invoiceItemTypes", invoice.getApplicableInvoiceItemTypes());
+            ac.put("glAccounts", glAccounts);
+            ac.put("invoiceItemTypes", invoice.getApplicableInvoiceItemTypes());
 
             // party's billing and payment locations
             conditions = EntityCondition.makeCondition(EntityOperator.AND,
@@ -262,17 +256,17 @@ public final class InvoiceActions {
                                    EntityUtil.getFilterByDateExpr());
             List<PartyContactMechPurpose> purposes = invoiceRepository.findList(PartyContactMechPurpose.class, conditions);
             List<PostalAddress> addresses = Entity.getRelated(PostalAddress.class, purposes);
-            context.put("addresses", addresses);
+            ac.put("addresses", addresses);
 
             // available tax authorities
             List<TaxAuthorityAndDetail> taxAuthorities = invoiceRepository.findAllCache(TaxAuthorityAndDetail.class, UtilMisc.toList(TaxAuthorityAndDetail.Fields.abbreviation.name(), TaxAuthorityAndDetail.Fields.groupName.name()));
-            context.put("taxAuthorities", taxAuthorities);
+            ac.put("taxAuthorities", taxAuthorities);
         }
 
         // Invoice terms and term types
-        context.put("invoiceTerms", invoice.getInvoiceTerms());
+        ac.put("invoiceTerms", invoice.getInvoiceTerms());
         List<TermType> termTypes = organizationRepository.getValidTermTypes(invoice.getInvoiceTypeId());
-        context.put("termTypes", termTypes);
+        ac.put("termTypes", termTypes);
 
         // Prepare string that contains list of related order ids
         List<? extends OrderItemBilling> orderItemBillings = invoice.getOrderItemBillings();
@@ -310,7 +304,7 @@ public final class InvoiceActions {
             }
         }
         if (ordersList != null) {
-            context.put("ordersList", ordersList);
+            ac.put("ordersList", ordersList);
         }
 
         // billing accounts of the from party for Accounts Payable invoices
@@ -320,15 +314,15 @@ public final class InvoiceActions {
                           EntityCondition.makeCondition(BillingAccountAndRole.Fields.roleTypeId.name(), EntityOperator.EQUALS, "BILL_TO_CUSTOMER"),
                           EntityUtil.getFilterByDateExpr());
             List<BillingAccountAndRole> billingAccounts = invoiceRepository.findList(BillingAccountAndRole.class, conditions, UtilMisc.toList(BillingAccountAndRole.Fields.billingAccountId.name()));
-            context.put("billingAccounts", billingAccounts);
+            ac.put("billingAccounts", billingAccounts);
         }
 
         // invoice adjustment types
         if (invoice.isAdjustable()) {
             Organization organization = organizationRepository.getOrganizationById(organizationPartyId);
             List<InvoiceAdjustmentType> types = invoiceRepository.getInvoiceAdjustmentTypes(organization, invoice);
-            context.put("invoiceAdjustmentTypes", types);
+            ac.put("invoiceAdjustmentTypes", types);
         }
-
     }
+
 }
