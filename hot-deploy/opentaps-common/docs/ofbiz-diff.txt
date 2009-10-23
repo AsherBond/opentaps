@@ -223,9 +223,6 @@ Other API Changes
  * isDateTime
  * isTimestamp
 And UtilDateTime no longer defines:
- * getDateFormat
- * getTimeFormat
- * getDateTimeFormat
  * getJsDateTimeFormat
  * ... and others ...
 those are now in org.opentaps.common.util.UtilDate
