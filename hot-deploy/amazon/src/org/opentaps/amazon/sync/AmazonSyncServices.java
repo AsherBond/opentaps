@@ -229,7 +229,11 @@ public final class AmazonSyncServices {
 
             // Sanity check on the Amazon setup
             GenericValue productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", AmazonConstants.productStoreId));
-            if (productStore == null || UtilValidate.isEmpty(productStore.getString("inventoryFacilityId"))) {
+            if (productStore == null) {
+                // this is a failure for this service, but should not cause a global rollback
+                return UtilMessage.createAndLogServiceFailure(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_ProductStoreNotConfigured", UtilMisc.toMap("productStoreId", AmazonConstants.productStoreId), locale), MODULE);
+            } else if (UtilValidate.isEmpty(productStore.getString("inventoryFacilityId"))) {
+                // this is a serious configuration error.  If there is an amazon store but it has no facility, then it should cause a global rollback
                 return UtilMessage.createAndLogServiceError(UtilProperties.getMessage(AmazonConstants.errorResource, "AmazonError_InvalidAmazonProductStore", UtilMisc.toMap("productStoreId", AmazonConstants.productStoreId), locale), MODULE);
             }
 
