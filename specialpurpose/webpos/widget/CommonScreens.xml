@@ -37,7 +37,7 @@ under the License.
                 <set field="MainColumnStyle" value="center" global="true"/>
 
                 <!-- The default (global) shortcut icon -->
-                <set field="layoutSettings.shortcutIcon" value="/images/favicon.ico" global="true"/>
+                <set field="layoutSettings.shortcutIcon" value="/opentaps_images/favicon.ico" global="true"/>
 
                 <!-- The default (main) java scripts -->
                 <!-- NOTE: this should be included on each screen that uses it to avoid including it in all screens: -->
