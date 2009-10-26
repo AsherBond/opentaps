@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ *
+-->
+<entity-engine-xml>
+    <!-- Test data for test find order -->
+    <OrderHeader orderId="TEST10000" orderTypeId="SALES_ORDER" orderName="Test Order 10000" salesChannelEnumId="WEB_SALES_CHANNEL" orderDate="2009-10-15 03:15:00.000" entryDate="2009-10-15 00:00:00.000" priority="2" visitId="10002" statusId="ORDER_APPROVED" createdBy="admin" currencyUom="USD" webSiteId="OrderEntry" productStoreId="9000" remainingSubTotal="25" grandTotal="25" lastUpdatedStamp="2009-10-15 00:00:00.000" billFromPartyId="Company" billToPartyId="DemoAccount1" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderItem orderId="TEST10000" orderItemSeqId="00001" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="GZ-1000" isPromo="N" quantity="1.0" selectedAmount="0.0" unitPrice="25" unitListPrice="25.0" isModifiedPrice="N" itemDescription="Tiny Gizmo" correspondingPoId="" statusId="ITEM_APPROVED" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+
+    <OrderRole orderId="TEST10000" partyId="Company" roleTypeId="BILL_FROM_VENDOR" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderRole orderId="TEST10000" partyId="DemoAccount1" roleTypeId="BILL_TO_CUSTOMER" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderRole orderId="TEST10000" partyId="DemoAccount1" roleTypeId="END_USER_CUSTOMER" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderRole orderId="TEST10000" partyId="DemoAccount1" roleTypeId="PLACING_CUSTOMER" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderRole orderId="TEST10000" partyId="DemoAccount1" roleTypeId="SHIP_TO_CUSTOMER" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+
+    <OrderItemShipGroup orderId="TEST10000" shipGroupSeqId="00001" shipmentMethodTypeId="GROUND" carrierPartyId="UPS" carrierRoleTypeId="CARRIER" contactMechId="9015" maySplit="N" giftMessage="" isGift="N" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderItemShipGroupAssoc orderId="TEST10000" orderItemSeqId="00001" shipGroupSeqId="00001" quantity="1.0" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderItemShipGrpInvRes orderId="TEST10000" shipGroupSeqId="00001" orderItemSeqId="00001" inventoryItemId="9001" reserveOrderEnumId="INVRO_FIFO_REC" quantity="1.0" quantityNotAvailable="0.0" reservedDatetime="2008-04-23 16:49:31.474" createdDatetime="2008-04-23 16:49:31.474" promisedDatetime="2009-10-17 00:00:00.000" priority="2" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+
+    <OrderPaymentPreference orderPaymentPreferenceId="8100" orderId="TEST10000" paymentMethodTypeId="EXT_COD" presentFlag="N" swipedFlag="N" overflowFlag="N" maxAmount="25.00" statusId="PAYMENT_NOT_RECEIVED" createdDate="2009-10-15 10:00:00.000" createdByUserLogin="admin" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+
+    <OrderStatus orderStatusId="8100" statusId="ORDER_CREATED" orderId="TEST10000" statusDatetime="2008-04-23 16:49:27.392" statusUserLogin="admin" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderStatus orderStatusId="8101" statusId="ITEM_CREATED" orderId="TEST10000" orderItemSeqId="00001" statusDatetime="2008-04-23 16:49:27.392" statusUserLogin="admin" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderStatus orderStatusId="8102" statusId="ORDER_APPROVED" orderId="TEST10000" statusDatetime="2008-04-23 16:49:33.196" statusUserLogin="admin" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderStatus orderStatusId="8103" statusId="ITEM_APPROVED" orderId="TEST10000" orderItemSeqId="00001" statusDatetime="2008-04-23 16:49:33.513" statusUserLogin="admin" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+
+    <OrderContactMech orderId="TEST10000" contactMechPurposeTypeId="BILLING_LOCATION" contactMechId="DemoAddress1" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderContactMech orderId="TEST10000" contactMechPurposeTypeId="ORDER_EMAIL" contactMechId="DemoEmail1" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderContactMech orderId="TEST10000" contactMechPurposeTypeId="SHIPPING_LOCATION" contactMechId="DemoAddress1" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+
+
+    <OrderHeader orderId="TEST10001" orderTypeId="SALES_ORDER" orderName="Test Order 10001" salesChannelEnumId="WEB_SALES_CHANNEL" orderDate="2009-10-13 20:07:00.000" entryDate="2009-10-15 00:00:00.000" priority="2" visitId="10002" statusId="ORDER_CREATED" createdBy="admin" currencyUom="USD" webSiteId="OrderEntry" productStoreId="9000" remainingSubTotal="25" grandTotal="25" lastUpdatedStamp="2009-10-15 00:00:00.000" billFromPartyId="Company" billToPartyId="DemoAccount1" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderItem orderId="TEST10001" orderItemSeqId="00001" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="GZ-1000" isPromo="N" quantity="1.0" selectedAmount="0.0" unitPrice="25" unitListPrice="25.0" isModifiedPrice="N" itemDescription="Tiny Gizmo" correspondingPoId="" statusId="ITEM_APPROVED" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+
+    <OrderRole orderId="TEST10001" partyId="Company" roleTypeId="BILL_FROM_VENDOR" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderRole orderId="TEST10001" partyId="DemoAccount1" roleTypeId="BILL_TO_CUSTOMER" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderRole orderId="TEST10001" partyId="DemoAccount1" roleTypeId="END_USER_CUSTOMER" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderRole orderId="TEST10001" partyId="DemoAccount1" roleTypeId="PLACING_CUSTOMER" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderRole orderId="TEST10001" partyId="DemoAccount1" roleTypeId="SHIP_TO_CUSTOMER" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+
+    <OrderItemShipGroup orderId="TEST10001" shipGroupSeqId="00001" shipmentMethodTypeId="GROUND" carrierPartyId="UPS" carrierRoleTypeId="CARRIER" contactMechId="9015" maySplit="N" giftMessage="" isGift="N" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderItemShipGroupAssoc orderId="TEST10001" orderItemSeqId="00001" shipGroupSeqId="00001" quantity="1.0" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderItemShipGrpInvRes orderId="TEST10001" shipGroupSeqId="00001" orderItemSeqId="00001" inventoryItemId="9001" reserveOrderEnumId="INVRO_FIFO_REC" quantity="1.0" quantityNotAvailable="0.0" reservedDatetime="2008-04-23 16:49:31.474" createdDatetime="2008-04-23 16:49:31.474" promisedDatetime="2009-10-17 00:00:00.000" priority="2" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+
+    <OrderPaymentPreference orderPaymentPreferenceId="8101" orderId="TEST10001" paymentMethodTypeId="EXT_COD" presentFlag="N" swipedFlag="N" overflowFlag="N" maxAmount="25.00" statusId="PAYMENT_NOT_RECEIVED" createdDate="2009-10-15 10:00:00.000" createdByUserLogin="admin" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+
+    <OrderStatus orderStatusId="8104" statusId="ORDER_CREATED" orderId="TEST10001" statusDatetime="2008-04-23 16:49:27.392" statusUserLogin="admin" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderStatus orderStatusId="8105" statusId="ITEM_CREATED" orderId="TEST10001" orderItemSeqId="00001" statusDatetime="2008-04-23 16:49:27.392" statusUserLogin="admin" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+
+    <OrderContactMech orderId="TEST10001" contactMechPurposeTypeId="BILLING_LOCATION" contactMechId="DemoAddress1" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderContactMech orderId="TEST10001" contactMechPurposeTypeId="ORDER_EMAIL" contactMechId="DemoEmail1" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+    <OrderContactMech orderId="TEST10001" contactMechPurposeTypeId="SHIPPING_LOCATION" contactMechId="DemoAddress1" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
+
+
+    <OrderHeader orderId="TEST10002" orderTypeId="SALES_ORDER" orderName="Test Order 10002" salesChannelEnumId="WEB_SALES_CHANNEL" orderDate="2009-10-15 10:40:30.683" entryDate="2009-10-15 10:40:30.683" visitId="10040" statusId="ORDER_APPROVED" createdBy="admin" currencyUom="USD" webSiteId="OrderEntry" productStoreId="9000" remainingSubTotal="31.98" grandTotal="31.98" lastUpdatedStamp="2009-10-15 10:40:32.478" lastUpdatedTxStamp="2009-10-15 10:40:32.478" createdStamp="2009-10-15 10:40:30.923" createdTxStamp="2009-10-15 10:40:30.683" billFromPartyId="Company" billToPartyId="DemoCustomer"/>
+    <OrderItem orderId="TEST10002" orderItemSeqId="00001" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="GZ-1000" isPromo="N" quantity="1.0" selectedAmount="0.0" unitPrice="15.99" unitListPrice="15.0" isModifiedPrice="N" itemDescription="Tiny Gizmo" correspondingPoId="PO10001" statusId="ITEM_APPROVED" lastUpdatedStamp="2009-10-15 10:40:32.673" lastUpdatedTxStamp="2009-10-15 10:40:32.648" createdStamp="2009-10-15 10:40:30.943" createdTxStamp="2009-10-15 10:40:30.683"/>
+    <OrderItem orderId="TEST10002" orderItemSeqId="00002" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="GZ-1001" isPromo="N" quantity="1.0" selectedAmount="0.0" unitPrice="15.99" unitListPrice="25.99" isModifiedPrice="N" itemDescription="Tiny Gizmo" correspondingPoId="PO10001" statusId="ITEM_APPROVED" lastUpdatedStamp="2009-10-15 10:40:32.658" lastUpdatedTxStamp="2009-10-15 10:40:32.648" createdStamp="2009-10-15 10:40:30.953" createdTxStamp="2009-10-15 10:40:30.683"/>
+
+    <PartyRole partyId="DemoCustomer" roleTypeId="END_USER_CUSTOMER"/>
+    <PartyRole partyId="DemoCustomer" roleTypeId="SHIP_TO_CUSTOMER"/>
+    <PartyRole partyId="DemoCustomer" roleTypeId="PLACING_CUSTOMER"/>
+    
+    <OrderRole orderId="TEST10002" partyId="admin" roleTypeId="COMMISSION_AGENT" lastUpdatedStamp="2009-10-15 10:40:31.068" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:31.068" createdTxStamp="2009-10-15 10:40:30.683"/>
+    <OrderRole orderId="TEST10002" partyId="Company" roleTypeId="BILL_FROM_VENDOR" lastUpdatedStamp="2009-10-15 10:40:31.103" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:31.103" createdTxStamp="2009-10-15 10:40:30.683"/>
+    <OrderRole orderId="TEST10002" partyId="DemoCustomer" roleTypeId="BILL_TO_CUSTOMER" lastUpdatedStamp="2009-10-15 10:40:31.098" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:31.098" createdTxStamp="2009-10-15 10:40:30.683"/>
+    <OrderRole orderId="TEST10002" partyId="DemoCustomer" roleTypeId="END_USER_CUSTOMER" lastUpdatedStamp="2009-10-15 10:40:31.108" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:31.108" createdTxStamp="2009-10-15 10:40:30.683"/>
+    <OrderRole orderId="TEST10002" partyId="DemoCustomer" roleTypeId="PLACING_CUSTOMER" lastUpdatedStamp="2009-10-15 10:40:31.093" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:31.093" createdTxStamp="2009-10-15 10:40:30.683"/>
+    <OrderRole orderId="TEST10002" partyId="DemoCustomer" roleTypeId="SHIP_TO_CUSTOMER" lastUpdatedStamp="2009-10-15 10:40:31.104" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:31.104" createdTxStamp="2009-10-15 10:40:30.683"/>
+
+    <OrderItemShipGroup orderId="TEST10002" shipGroupSeqId="00001" shipmentMethodTypeId="GROUND" carrierPartyId="DemoCarrier" carrierRoleTypeId="CARRIER" contactMechId="9015" maySplit="N" isGift="N" lastUpdatedStamp="2009-10-15 10:40:31.018" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:31.018" createdTxStamp="2009-10-15 10:40:30.683"/>
+    <OrderItemShipGroupAssoc orderId="TEST10002" orderItemSeqId="00001" shipGroupSeqId="00001" quantity="1.0" lastUpdatedStamp="2009-10-15 10:40:31.063" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:31.063" createdTxStamp="2009-10-15 10:40:30.683"/>
+    <OrderItemShipGroupAssoc orderId="TEST10002" orderItemSeqId="00002" shipGroupSeqId="00001" quantity="1.0" lastUpdatedStamp="2009-10-15 10:40:31.043" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:31.043" createdTxStamp="2009-10-15 10:40:30.683"/>
+    <OrderItemShipGrpInvRes orderId="TEST10002" shipGroupSeqId="00001" orderItemSeqId="00001" inventoryItemId="9001" reserveOrderEnumId="INVRO_FIFO_REC" quantity="1.0" quantityNotAvailable="0.0" reservedDatetime="2008-04-23 16:49:31.474" createdDatetime="2009-10-15 10:40:30.683" promisedDatetime="2009-10-17 00:00:00.000" priority="2" lastUpdatedStamp="2009-10-15 10:40:31.043" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:31.043" createdTxStamp="2009-10-15 10:40:30.683"/>
+    <OrderItemShipGrpInvRes orderId="TEST10002" shipGroupSeqId="00001" orderItemSeqId="00002" inventoryItemId="9001" reserveOrderEnumId="INVRO_FIFO_REC" quantity="1.0" quantityNotAvailable="0.0" reservedDatetime="2008-04-23 16:49:31.474" createdDatetime="2009-10-15 10:40:30.683" promisedDatetime="2009-10-17 00:00:00.000" priority="2" lastUpdatedStamp="2009-10-15 10:40:31.043" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:31.043" createdTxStamp="2009-10-15 10:40:30.683"/>
+
+    <OrderPaymentPreference orderPaymentPreferenceId="8102" orderId="TEST10002" paymentMethodTypeId="EXT_COD" presentFlag="N" overflowFlag="N" maxAmount="15.15" statusId="PAYMENT_NOT_RECEIVED" createdDate="2009-10-15 10:40:30.933" createdByUserLogin="admin" lastUpdatedStamp="2009-10-15 10:40:31.113" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:31.113" createdTxStamp="2009-10-15 10:40:30.683"/>
+
+    <OrderStatus orderStatusId="8106" statusId="ORDER_CREATED" orderId="TEST10002" statusDatetime="2009-10-15 10:40:30.683" statusUserLogin="admin" lastUpdatedStamp="2009-10-15 10:40:30.933" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:30.933" createdTxStamp="2009-10-15 10:40:30.683"/>
+    <OrderStatus orderStatusId="8107" statusId="ITEM_CREATED" orderId="TEST10002" orderItemSeqId="00001" statusDatetime="2009-10-15 10:40:30.683" statusUserLogin="admin" lastUpdatedStamp="2009-10-15 10:40:30.948" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:30.948" createdTxStamp="2009-10-15 10:40:30.683"/>
+    <OrderStatus orderStatusId="8108" statusId="ITEM_CREATED" orderId="TEST10002" orderItemSeqId="00002" statusDatetime="2009-10-15 10:40:30.683" statusUserLogin="admin" lastUpdatedStamp="2009-10-15 10:40:30.958" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:30.958" createdTxStamp="2009-10-15 10:40:30.683"/>
+    <OrderStatus orderStatusId="8109" statusId="ORDER_APPROVED" orderId="TEST10002" statusDatetime="2009-10-15 10:40:32.478" statusUserLogin="admin" lastUpdatedStamp="2009-10-15 10:40:32.483" lastUpdatedTxStamp="2009-10-15 10:40:32.478" createdStamp="2009-10-15 10:40:32.483" createdTxStamp="2009-10-15 10:40:32.478"/>
+    <OrderStatus orderStatusId="8110" statusId="ITEM_APPROVED" orderId="TEST10002" orderItemSeqId="00002" statusDatetime="2009-10-15 10:40:32.653" statusUserLogin="admin" lastUpdatedStamp="2009-10-15 10:40:32.663" lastUpdatedTxStamp="2009-10-15 10:40:32.648" createdStamp="2009-10-15 10:40:32.663" createdTxStamp="2009-10-15 10:40:32.648"/>
+    <OrderStatus orderStatusId="8111" statusId="ITEM_APPROVED" orderId="TEST10002" orderItemSeqId="00001" statusDatetime="2009-10-15 10:40:32.653" statusUserLogin="admin" lastUpdatedStamp="2009-10-15 10:40:32.678" lastUpdatedTxStamp="2009-10-15 10:40:32.648" createdStamp="2009-10-15 10:40:32.678" createdTxStamp="2009-10-15 10:40:32.648"/>
+
+    <OrderContactMech orderId="TEST10002" contactMechPurposeTypeId="ORDER_EMAIL" contactMechId="9026" lastUpdatedStamp="2009-10-15 10:40:32.413" lastUpdatedTxStamp="2009-10-15 10:40:32.408" createdStamp="2009-10-15 10:40:32.413" createdTxStamp="2009-10-15 10:40:32.408"/>
+    <OrderContactMech orderId="TEST10002" contactMechPurposeTypeId="SHIPPING_LOCATION" contactMechId="9015" lastUpdatedStamp="2009-10-15 10:40:30.988" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:30.988" createdTxStamp="2009-10-15 10:40:30.683"/>
+
+
+</entity-engine-xml>

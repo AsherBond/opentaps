@@ -2351,7 +2351,7 @@ public class OpentapsTestCase extends TestCase {
     public void assertGwtLookupNotFound(EntityLookupService lookup, List<String> values, String fieldName) {
         Set<String> found = Entity.getDistinctFieldValues(String.class, lookup.getResults(), fieldName);
         for (String v : values) {
-            assertFalse("Results should contain " + v + ".", found.contains(v));
+            assertFalse("Results should not contain " + v + ".", found.contains(v));
         }
     }
 
@@ -2482,7 +2482,7 @@ public class OpentapsTestCase extends TestCase {
      * @return a String value
      */
     public static String dateStringToShortLocaleString(String dateString, String formatString) throws ParseException {
-        SimpleDateFormat defaultSdf = new SimpleDateFormat(UtilDateTime.getDateFormat(Locale.getDefault()));
+        SimpleDateFormat defaultSdf = new SimpleDateFormat(UtilDateTime.getDateTimeFormat(Locale.getDefault()));
         SimpleDateFormat sdf = new SimpleDateFormat(formatString);
         return defaultSdf.format(sdf.parse(dateString));
     }

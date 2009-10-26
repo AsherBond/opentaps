@@ -225,14 +225,22 @@ public final class InvoiceActions {
         ac.put("invoiceContactMechId", invoiceContactMechId);
 
         // update permissions
+        boolean hasDescriptiveUpdatePermission = false;
+        boolean allowDescriptiveEditOnly = false;
+        
         boolean hasUpdatePermission = false;
         boolean hasAdjustmentPermission = false;
         if ((invoice.isReceivable() && ac.hasEntityPermission("FINANCIALS", "_AR_INUPDT")) || (invoice.isPayable() && ac.hasEntityPermission("FINANCIALS", "_AP_INUPDT"))) {
             hasUpdatePermission = invoice.isInProcess();
             hasAdjustmentPermission = invoice.isAdjustable();
+            // allow update descriptive fields
+            allowDescriptiveEditOnly = (invoice.isReady() && "edit".equals(ac.getParameter("op")));
+            hasDescriptiveUpdatePermission = invoice.isReady();
         }
         ac.put("hasUpdatePermission", hasUpdatePermission);
         ac.put("hasAdjustmentPermission", hasAdjustmentPermission);
+        ac.put("allowDescriptiveEditOnly", allowDescriptiveEditOnly);
+        ac.put("hasDescriptiveUpdatePermission", hasDescriptiveUpdatePermission);
 
         // create permission
         boolean hasCreatePermission = ac.hasEntityPermission("FINANCIALS", "_AP_INCRTE") || ac.hasEntityPermission("FINANCIALS", "_AR_INCRTE");

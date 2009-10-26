@@ -718,6 +718,58 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
      * Creates a data column for this list view prior to configuring it which renders as a link to the given URL.
      * This method internally creates the necessary corresponding <code>ColumnConfig</code>.
      * @param label the column title label
+     * @param valueDefinition a <code>FieldDef</code> for the field containing the amount
+     * @param currencyCode the currency code string (a 3 chars code)
+     * @return the created <code>ColumnConfig</code> instance
+     * @see #makeColumn
+     */
+    protected ColumnConfig makeCurrencyColumn(String label, FieldDef valueDefinition, String currencyCode) {
+        if (fieldDefinitions == null) {
+            fieldDefinitions = new HashSet<FieldDef>();
+        }
+        if (columnConfigs == null) {
+            columnConfigs = new ArrayList<ColumnConfig>();
+        }
+
+        fieldDefinitions.add(valueDefinition);
+
+        CurrencyColumnConfig col = new CurrencyColumnConfig(label, valueDefinition.getName());
+        col.setCurrencyCode(currencyCode);
+        columnConfigs.add(col);
+        return col;
+    }
+
+    /**
+     * Creates a data column for this list view prior to configuring it.
+     * This method internally creates the necessary corresponding <code>ColumnConfig</code>.
+     * @param label the column title label
+     * @param currencyDefinition a <code>FieldDef</code> for the field containing the currency code
+     * @param valueDefinition a <code>FieldDef</code> for the field containing the amount
+     * @return the created <code>ColumnConfig</code> instance
+     * @see #makeColumn
+     */
+    protected ColumnConfig makeCurrencyColumn(String label, FieldDef currencyDefinition, FieldDef valueDefinition) {
+        if (fieldDefinitions == null) {
+            fieldDefinitions = new HashSet<FieldDef>();
+        }
+        if (columnConfigs == null) {
+            columnConfigs = new ArrayList<ColumnConfig>();
+        }
+
+        fieldDefinitions.add(valueDefinition);
+
+        // the currency field definition might not have been added yet, this is safe since fieldDefinitions is a Set
+        fieldDefinitions.add(currencyDefinition);
+
+        CurrencyColumnConfig col = new CurrencyColumnConfig(label, currencyDefinition.getName(), valueDefinition.getName());
+        columnConfigs.add(col);
+        return col;
+    }
+
+    /**
+     * Creates a data column for this list view prior to configuring it which renders as a link to the given URL.
+     * This method internally creates the necessary corresponding <code>ColumnConfig</code>.
+     * @param label the column title label
      * @param valueDefinition a <code>FieldDef</code> value
      * @param url the URL to be used for making the link, a placeholder can be used in the string for the field data. For example <code>/crmsfa/control/viewContact?partyId={0}</code>
      * @return the created <code>ColumnConfig</code> instance

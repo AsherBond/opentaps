@@ -18,13 +18,16 @@
 package org.opentaps.tests.crmsfa.orders;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import com.opensourcestrategies.financials.accounts.AccountsHelper;
 import com.opensourcestrategies.financials.util.UtilFinancial;
@@ -51,7 +54,15 @@ import org.opentaps.domain.order.OrderItemShipGrpInvRes;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.product.Product;
 import org.opentaps.domain.product.ProductRepositoryInterface;
+import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.repository.ofbiz.Repository;
+import org.opentaps.gwt.common.client.lookup.UtilLookup;
+import org.opentaps.gwt.common.client.lookup.configuration.OrderLookupConfiguration;
+import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
+import org.opentaps.gwt.common.server.InputProviderInterface;
+import org.opentaps.gwt.common.server.lookup.OrderLookupService;
+import org.opentaps.gwt.common.server.lookup.PartyLookupService;
+import org.opentaps.tests.gwt.TestInputProvider;
 import org.opentaps.tests.warehouse.InventoryAsserts;
 
 /**
@@ -3198,4 +3209,73 @@ public class OrderTests extends OrderTestCase {
     }
 
 
+    /**
+     * Test the GWT order lookup.
+     * @throws Exception if an error occurs
+     */
+    @SuppressWarnings("unchecked")
+    public void testGwtOrderLookup() throws Exception {
+        TimeZone timeZone = TimeZone.getDefault();
+        Locale locale = Locale.getDefault();
+        InputProviderInterface provider = new TestInputProvider(admin, dispatcher);
+
+        // 1. test find order by orderId
+        provider.setParameter(OrderLookupConfiguration.INOUT_ORDER_ID, "TEST10000");
+        OrderLookupService lookup = new OrderLookupService(provider);
+        lookup.findOrders(locale, timeZone);
+        assertEquals("There should just found one record with order Id [TEST10000].", 1, lookup.getResultTotalCount());
+        assertGwtLookupFound(lookup, Arrays.asList("TEST10000"), OrderLookupConfiguration.INOUT_ORDER_ID);
+
+        // 2. test find order by customer
+        provider = new TestInputProvider(admin, dispatcher);
+        provider.setParameter(OrderLookupConfiguration.INOUT_PARTY_ID, "DemoAccount1");
+        lookup = new OrderLookupService(provider);
+        lookup.findOrders(locale, timeZone);
+        // test we found the demo data: TEST10000/TEST10001
+        assertGwtLookupFound(lookup, Arrays.asList("TEST10000", "TEST10001"), OrderLookupConfiguration.INOUT_ORDER_ID);
+        assertGwtLookupNotFound(lookup, Arrays.asList("TEST10002"), OrderLookupConfiguration.INOUT_ORDER_ID);
+
+        // 3. test find order by PO#
+        provider = new TestInputProvider(admin, dispatcher);
+        provider.setParameter(OrderLookupConfiguration.INOUT_CORRESPONDING_PO_ID, "PO10001");
+        lookup = new OrderLookupService(provider);
+        lookup.findOrders(locale, timeZone);
+        // test we found the demo data: TEST10002, not found TEST10000/TEST10001
+        assertGwtLookupFound(lookup, Arrays.asList("TEST10002"), OrderLookupConfiguration.INOUT_ORDER_ID);
+        assertGwtLookupNotFound(lookup, Arrays.asList("TEST10000"), OrderLookupConfiguration.INOUT_ORDER_ID);
+        assertGwtLookupNotFound(lookup, Arrays.asList("TEST10001"), OrderLookupConfiguration.INOUT_ORDER_ID);
+
+        // 4. test find order by status
+        provider = new TestInputProvider(admin, dispatcher);
+        provider.setParameter(OrderLookupConfiguration.INOUT_STATUS_ID, "ORDER_APPROVED");
+        lookup = new OrderLookupService(provider);
+        lookup.findOrders(locale, timeZone);
+        // test we found the demo data: TEST10000/TEST10002, not found TEST10001
+        assertGwtLookupFound(lookup, Arrays.asList("TEST10000", "TEST10002"), OrderLookupConfiguration.INOUT_ORDER_ID);
+        assertGwtLookupNotFound(lookup, Arrays.asList("TEST10001"), OrderLookupConfiguration.INOUT_ORDER_ID);
+
+
+        provider = new TestInputProvider(admin, dispatcher);
+        provider.setParameter(OrderLookupConfiguration.INOUT_STATUS_ID, "ORDER_CREATED");
+        lookup = new OrderLookupService(provider);
+        lookup.findOrders(locale, timeZone);
+        // test we found the demo data: TEST10001, not found TEST10000/TEST10002
+        assertGwtLookupFound(lookup, Arrays.asList("TEST10001"), OrderLookupConfiguration.INOUT_ORDER_ID);
+        assertGwtLookupNotFound(lookup, Arrays.asList("TEST10000"), OrderLookupConfiguration.INOUT_ORDER_ID);
+        assertGwtLookupNotFound(lookup, Arrays.asList("TEST10002"), OrderLookupConfiguration.INOUT_ORDER_ID);
+
+        // 5. test find order by date range
+        // search the orders between 09/10/15 00:00:00 and 09/10/15 23:59:59
+        provider = new TestInputProvider(admin, dispatcher);
+        String fromDate = dateStringToShortLocaleString("09/10/15 00:00:00", "yy/MM/dd HH:mm:ss");
+        String thruDate = dateStringToShortLocaleString("09/10/15 23:59:59", "yy/MM/dd HH:mm:ss");
+        provider.setParameter(OrderLookupConfiguration.IN_FROM_DATE, fromDate);
+        provider.setParameter(OrderLookupConfiguration.IN_THRU_DATE, thruDate);
+        lookup = new OrderLookupService(provider);
+        lookup.findOrders(locale, timeZone);
+        // test we found the demo data: TEST10000/TEST10002, not found TEST10001
+        assertGwtLookupFound(lookup, Arrays.asList("TEST10000", "TEST10002"), OrderLookupConfiguration.INOUT_ORDER_ID);
+        assertGwtLookupNotFound(lookup, Arrays.asList("TEST10001"), OrderLookupConfiguration.INOUT_ORDER_ID);
+
+    }
 }

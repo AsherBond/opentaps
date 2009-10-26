@@ -25,7 +25,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -68,9 +67,10 @@ public final class OpportunitiesServices {
         String contactPartyId = (String) context.get("contactPartyId");
         String leadPartyId = (String) context.get("leadPartyId");
         String accountOrLeadPartyId = (String) context.get("accountOrLeadPartyId");
+
         try {
             if (UtilValidate.isNotEmpty(accountOrLeadPartyId)) {
-                String roleTypeId = PartyHelper.getFirstValidRoleTypeId(accountOrLeadPartyId, Arrays.asList("ACCOUNT","PROSPECT"), delegator);
+                String roleTypeId = PartyHelper.getFirstValidRoleTypeId(accountOrLeadPartyId, Arrays.asList("ACCOUNT", "PROSPECT"), delegator);
                 if ("ACCOUNT".equals(roleTypeId)) {
                     accountPartyId = accountOrLeadPartyId;
                 }
@@ -82,7 +82,7 @@ public final class OpportunitiesServices {
             if (UtilValidate.isEmpty(internalPartyId) && ((UtilValidate.isEmpty(accountPartyId) && UtilValidate.isEmpty(leadPartyId)) || (UtilValidate.isNotEmpty(accountPartyId) && UtilValidate.isNotEmpty(leadPartyId)))) {
                 return UtilMessage.createAndLogServiceError("Please specify an account or a lead (not both).", "CrmErrorCreateOpportunityFail", locale, MODULE);
             }
-    
+
             // track which partyId we're using, the account or the lead
             String partyId = null;
             if (UtilValidate.isNotEmpty(accountPartyId)) {
@@ -94,13 +94,13 @@ public final class OpportunitiesServices {
             if (UtilValidate.isNotEmpty(internalPartyId)) {
                 partyId = internalPartyId;
             }
-    
+
             // make sure userLogin has CRMSFA_OPP_CREATE permission for the account or lead
             if (!CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_OPP", "_CREATE", userLogin, partyId)) {
                 return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
             }
 
-            
+
             // set the accountPartyId or leadPartyId according to the role of internalPartyId
             if (UtilValidate.isNotEmpty(internalPartyId)) {
                 String roleTypeId = PartyHelper.getFirstValidInternalPartyRoleTypeId(internalPartyId, delegator);

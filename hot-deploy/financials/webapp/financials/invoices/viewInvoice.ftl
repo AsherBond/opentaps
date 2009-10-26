@@ -79,13 +79,17 @@ function notifyInvoiceItemsCount(n) {
     <#assign stateChangeLinks><@submitFormLink form="markInvoicePrintedAction" text=uiLabelMap.FinancialsPaymentStatusToPrinted class="subMenuButton"/></#assign>
   </#if>
   <@form name="writeoffInvoiceAction" url="setInvoiceStatus" invoiceId=invoice.invoiceId statusId="INVOICE_WRITEOFF" />
-  <#assign stateChangeLinks>${stateChangeLinks?default("")}<@submitFormLinkConfirm form="writeoffInvoiceAction" text=uiLabelMap.FinancialsWriteoff class="subMenuButtonDangerous"/></#assign>
+  <#assign stateChangeLinks>${stateChangeLinks!}<@submitFormLinkConfirm form="writeoffInvoiceAction" text=uiLabelMap.FinancialsWriteoff class="subMenuButtonDangerous"/></#assign>
 </#if>
 
 <#if invoice.isReady()>
   <@form name="voidInvoiceAction" url="voidInvoice" invoiceId=invoice.invoiceId />
   <#assign voidLink><@submitFormLinkConfirm form="voidInvoiceAction" text=uiLabelMap.FinancialsVoidInvoice class="subMenuButtonDangerous"/></#assign>
   <#assign stateChangeLinks = stateChangeLinks?default("") + voidLink />
+  <!-- also display the edit button when invoice is ready -->
+  <#if hasDescriptiveUpdatePermission>
+    <#assign stateChangeLinks>${stateChangeLinks!}<a href="viewInvoice?invoiceId=${invoice.invoiceId}&op=edit" class="subMenuButton">${uiLabelMap.CommonEdit}</a></#assign>
+  </#if>  
 </#if>
 
 <#if hasCreatePermission>
@@ -126,7 +130,7 @@ function notifyInvoiceItemsCount(n) {
       <#if hasUpdatePermission>
         <form method="post" action="<@ofbizUrl>updateInvoice</@ofbizUrl>" name="updateInvoice">
           <@inputHidden name="invoiceId" value="${invoice.invoiceId}"/>
-          <@inputHidden name="statusId" value="${invoice.statusId}"/> <#-- this is becaues the updateInvoice requires status -->
+          <@inputHidden name="statusId" value="${invoice.statusId}"/> <#-- this is because the updateInvoice requires status -->
           <#if parameters.oldRefNum?exists><@inputHidden name="oldRefNum" value=parameters.oldRefNum /></#if>
           <@displayRow title=uiLabelMap.CommonStatus text=invoice.getStatusItem().get("description", "FinancialsEntityLabel", locale) />
           <#if invoice.isAdjustable() || invoice.isModifiable()>
@@ -147,6 +151,32 @@ function notifyInvoiceItemsCount(n) {
           <@inputTextareaRow name="invoiceMessage" title=uiLabelMap.CommonMessage default=invoice.invoiceMessage />
           <@inputForceCompleteRow title=uiLabelMap.CommonUpdate forceTitle=uiLabelMap.OpentapsForceUpdate form="updateInvoice" /></td>
         </form>
+      <!-- allow update descriptive fields when allowDescriptiveEditOnly is true -->
+      <#elseif allowDescriptiveEditOnly>
+        <#if invoiceAddress?has_content>
+          <#assign displayAddress = invoiceAddress.address1?default("") +", "+ invoiceAddress.city?default("") +", "+ invoiceAddress.stateProvinceGeoId?default("") +" "+ invoiceAddress.postalCode?default("")>
+        </#if>
+        <form method="post" action="<@ofbizUrl>updateInvoice</@ofbizUrl>" name="updateInvoice">
+          <@inputHidden name="invoiceId" value="${invoice.invoiceId}"/>
+          <@inputHidden name="statusId" value="${invoice.statusId}"/> <#-- this is becaues the updateInvoice requires status -->
+          <#if parameters.oldRefNum?exists><@inputHidden name="oldRefNum" value=parameters.oldRefNum /></#if>
+          <@displayRow title=uiLabelMap.CommonStatus text=invoice.getStatusItem().get("description", "FinancialsEntityLabel", locale) />
+          <#if invoice.isAdjustable() || invoice.isModifiable()>
+            <tr>
+              <@displayTitleCell title=uiLabelMap.OpentapsOpenAmount />
+              <td class="tabletext"><@displayCurrency amount=invoice.getOpenAmount() currencyUomId=invoice.currencyUomId /></td>
+            </tr>
+          </#if>
+          <@displayDateRow title=uiLabelMap.AccountingInvoiceDate date=invoice.invoiceDate />
+          <@displayDateRow title=uiLabelMap.AccountingDueDate date=invoice.dueDate />
+          <@displayDateRow title=uiLabelMap.AccountingPaidDate date=invoice.paidDate />
+          <@displayRow title=uiLabelMap.AccountingBillingAddress text=displayAddress?if_exists />
+          <@inputTextRow name="referenceNumber" title=uiLabelMap.FinancialsReferenceNumber size=60 default=invoice.referenceNumber />
+          <@displayRow title="${uiLabelMap.OpentapsOrders}" text=ordersList?if_exists />
+          <@inputTextRow name="description" title=uiLabelMap.CommonDescription size=60 default=invoice.description />
+          <@inputTextareaRow name="invoiceMessage" title=uiLabelMap.CommonMessage default=invoice.invoiceMessage />
+          <@inputForceCompleteRow title=uiLabelMap.CommonUpdate forceTitle=uiLabelMap.OpentapsForceUpdate form="updateInvoice" /></td>
+        </form> 
       <#else>
         <#if invoiceAddress?has_content>
           <#assign displayAddress = invoiceAddress.address1?default("") +", "+ invoiceAddress.city?default("") +", "+ invoiceAddress.stateProvinceGeoId?default("") +" "+ invoiceAddress.postalCode?default("")>

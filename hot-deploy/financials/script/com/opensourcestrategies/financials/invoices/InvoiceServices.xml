@@ -16,6 +16,27 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
 <simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
 
@@ -30,6 +51,55 @@
         <check-errors/>
         <remove-value value-field="invoiceTerm"/>
         <check-errors/>
+    </simple-method>
+
+    <!-- this service was copied from accounting/script/org/ofbiz/accounting/invoice/InvoiceServices.xml, the only difference is to allow updating the invoice when its status is INVOICE_READY -->
+    <simple-method method-name="updateInvoice" short-description="Update the header of an existing Invoice">
+      <call-simple-method method-name="CheckUpdateInvoicePermission"/>
+      <!-- find the current record -->
+      <make-value value-name="lookupPKMap" entity-name="Invoice"/>
+      <set-pk-fields map-name="parameters" value-name="lookupPKMap"/>
+      <find-by-primary-key entity-name="Invoice" map-name="lookupPKMap" value-name="lookedUpValue"/>
+      <clone-value value-name="lookedUpValue" new-value-name="savedValue"/>
+      <set-nonpk-fields map-name="parameters" value-name="lookedUpValue"/>
+
+      <!-- only save if something has changed, do not update status here -->
+      <set from-field="savedValue.statusId" field="lookedUpValue.statusId"/>  <!-- get old status back -->
+      <if-compare-field field-name="lookedUpValue" operator="not-equals" to-field-name="savedValue" type="Object">
+        <store-value value-name="lookedUpValue"/> <!-- update all non status and key fields -->
+      </if-compare-field>
+
+      <!-- check if there is a status change if yes call invoice status update service -->
+      <if-compare-field field-name="parameters.statusId" operator="not-equals" to-field-name="savedValue.statusId">
+        <set from-field="parameters.invoiceId" field="inputMap.invoiceId"/>
+        <set from-field="parameters.statusId" field="inputMap.statusId"/>
+        <now-timestamp-to-env env-name="inputMap.statusDate"/>
+        <call-service service-name="setInvoiceStatus" in-map-name="inputMap"/>
+      </if-compare-field>
+    </simple-method>
+
+    <!-- checks permission and the invoice status, allow INVOICE_IN_PROCESS/INVOICE_READY -->
+    <simple-method method-name="CheckUpdateInvoicePermission" short-description="Check the user permission to update the invoice and if the invoiceStatus is in progress or ready">
+      <!-- check access to the accounting function -->
+      <check-permission permission="ACCOUNTING" action="_UPDATE">
+        <alt-permission permission="ACCOUNTING_ROLE" action="_UPDATE"/>
+        <fail-message message="Security Error: To update an Invoice you must have the ACCOUNTING_UPDATE or ACCOUNTING_ADMIN permission, or the limited ACCOUNTING_ROLE_UPDATE permission"/>
+      </check-permission>
+      <!-- find the current header record -->
+      <entity-one entity-name="Invoice" value-name="headerValue"/>
+      <if-empty field-name="headerValue">
+        <add-error><fail-message message="Invoice not found, invoice Id: ${invoiceId}"/></add-error>
+        <log level="info" message="Invoice not found, invoice Id: ${invoiceId}"/>
+        <check-errors/>
+      </if-empty>
+      <!-- check if the status is in progress or ready... -->
+      <if-compare field-name="headerValue.statusId" operator="not-equals" value="INVOICE_IN_PROCESS">
+        <if-compare field-name="headerValue.statusId" operator="not-equals" value="INVOICE_READY">
+          <add-error><fail-message message="Can only update Invoice, when status is in-process or ready...is now: ${headerValue.statusId}"/></add-error>
+          <log level="info" message="Can only update Invoice, when status is in-process or ready...is now: ${headerValue.statusId}"/>
+        </if-compare>
+      </if-compare>
+      <check-errors/>
     </simple-method>
 
 </simple-methods>

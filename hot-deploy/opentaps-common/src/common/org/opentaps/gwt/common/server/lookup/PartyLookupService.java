@@ -58,6 +58,11 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     private static final EntityCondition LEAD_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", "PROSPECT");
     private static final EntityCondition PARTNER_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", "PARTNER");
     private static final EntityCondition SUPPLIER_CONDITIONS = EntityCondition.makeCondition("roleTypeId", "SUPPLIER");
+    private static final EntityCondition CUSTOMER_CONDITIONS = EntityCondition.makeCondition(EntityOperator.OR,
+                                                                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT"),
+                                                                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "CONTACT"),
+                                                                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "PROSPECT"),
+                                                                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "PARTNER"));
     private static final EntityCondition ACCOUNT_OR_LEAD_CONDITIONS = EntityCondition.makeCondition(EntityOperator.OR,
                                                                                       EntityCondition.makeCondition("roleTypeIdFrom", "ACCOUNT"),
                                                                                       EntityCondition.makeCondition("roleTypeIdFrom", "PROSPECT"));
@@ -567,5 +572,27 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         return suggestParties(ACCOUNT_OR_QUALIFIED_LEAD_CONDITIONS);
     }
 
-}
+    /**
+     * AJAX event to suggest Customers.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the resulting JSON response
+     * @throws InfrastructureException if an error occurs
+     */
+    public static String suggestCustomers(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
+        InputProviderInterface provider = new HttpInputProvider(request);
+        JsonResponse json = new JsonResponse(response);
+        PartyLookupService service = new PartyLookupService(provider);
+        service.suggestCustomers();
+        return json.makeSuggestResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service);
+    }
 
+    /**
+     * Suggests a list of customers.
+     * @return the list of <code>PartyFromByRelnAndContactInfoAndPartyClassification</code>, or <code>null</code> if an error occurred
+     */
+    public List<PartyFromByRelnAndContactInfoAndPartyClassification> suggestCustomers() {
+        return suggestParties(CUSTOMER_CONDITIONS);
+    }
+
+}

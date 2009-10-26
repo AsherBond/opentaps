@@ -46,6 +46,7 @@
     <entity-resource type="data" reader-name="demo" loader="main" location="data/warehouse/WarehouseEntries.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/TestGeoData.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/common/HibernateSearchTestData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/crmsfa/OrderTestData.xml"/>
 
     <!-- Data required for tsung -->
     <entity-resource type="data" reader-name="demo" loader="main" location="data/TsungDemoData.xml"/>

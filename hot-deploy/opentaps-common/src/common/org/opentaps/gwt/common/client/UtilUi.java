@@ -18,6 +18,7 @@
 package org.opentaps.gwt.common.client;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import java.util.Map;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.gwtext.client.data.Record;
 import com.gwtext.client.widgets.MessageBox;
@@ -39,6 +41,10 @@ import org.opentaps.gwt.common.client.suggest.EntityAutocomplete;
 public abstract class UtilUi {
 
     private static final String MODULE = UtilUi.class.getName();
+
+    // used to convert date field values
+    private static final String DATE_FORMAT = "MM/dd/yy";
+    private static final String DATE_TIME_FORMAT = "MM/dd/yy HH:mm:ss.S";
 
     private UtilUi() { }
 
@@ -432,6 +438,20 @@ public abstract class UtilUi {
      */
     public static void logError(String message, Throwable t, String module, String method) {
         Log.error(formatLog(message, module, method), t);
+    }
+
+    public static String toDateString(Date date) {
+        if (date == null) {
+            return null;
+        }
+        return DateTimeFormat.getFormat(DATE_FORMAT).format(date);
+    }
+
+    public static String toDateTimeString(Date date) {
+        if (date == null) {
+            return null;
+        }
+        return DateTimeFormat.getFormat(DATE_TIME_FORMAT).format(date);
     }
 
 }

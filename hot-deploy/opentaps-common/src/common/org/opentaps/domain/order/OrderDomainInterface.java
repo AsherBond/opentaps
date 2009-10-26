@@ -53,4 +53,11 @@ public interface OrderDomainInterface extends DomainInterface {
      * @throws ServiceException if an error occurs
      */
     public SalesOpportunitySearchServiceInterface getSalesOpportunitySearchService() throws ServiceException;
+
+    /**
+     * Returns the sales order search repository.
+     * @return a <code>SalesOrderSearchRepositoryInterface</code> value
+     * @throws ServiceException if an error occurs
+     */
+    public SalesOrderSearchRepositoryInterface getSalesOrderSearchRepository() throws RepositoryException;
 }

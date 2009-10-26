@@ -335,5 +335,13 @@
         <attribute name="taxAuthPartyId" type="String" mode="IN" optional="true"/>
         <attribute name="taxAuthGeoId" type="String" mode="IN" optional="true"/>
         <attribute name="taxAuthorityRateSeqId" type="String" mode="IN" optional="true"/>
-    </service>    
+    </service>  
+
+    <!-- redefines the ofbiz service to also allow update invoice when status is INVOICE_READY -->
+    <service name="updateInvoice" engine="simple" default-entity-name="Invoice"
+        location="com/opensourcestrategies/financials/invoices/InvoiceServices.xml" invoke="updateInvoice">
+        <description>Update an existing Invoice</description>
+        <auto-attributes mode="IN" include="pk" optional="false"/>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>
+    </service>  
 </services>

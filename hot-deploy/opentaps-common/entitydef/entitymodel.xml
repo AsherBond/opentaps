@@ -1120,6 +1120,18 @@ under the License.
       <alias entity-alias="OI" name="correspondingPoId"/>
       <alias entity-alias="II" name="serialNumber"/>
       <alias entity-alias="II" name="lotId"/>
+      <!-- these fields value will replaced in findOrder method of SalesOrderSearchRepository, I define them here just for have these fields -->
+      <!-- this field use for display orderName + orderId in gwt listview -->
+      <alias entity-alias="OH" name="orderNameId" field="orderName"/>
+      <!-- this field use for display formatted order date in gwt listview -->
+      <alias entity-alias="OH" name="orderDateString" field="orderName"/>
+      <!-- this field use for display formatted ship date in gwt listview -->
+      <alias entity-alias="OH" name="shipByDateString" field="orderName"/>
+      <!-- this field use for display customer name in gwt listview -->
+      <alias entity-alias="OH" name="customerName" field="orderName"/>
+      <!-- this field use for display status description in gwt listview -->
+      <alias entity-alias="OH" name="statusDescription" field="orderName"/>
+
       <view-link entity-alias="OT" rel-entity-alias="OH">
         <key-map field-name="orderId"/>
       </view-link>

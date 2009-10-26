@@ -81,58 +81,42 @@ under the License.
     </screen>
 
     <!-- show a list of the orders of the logged in user -->
-    <screen name="myOrders">
+   <screen name="myOrders">
         <section>
             <actions>
-                <set field="pageTitleLabel" value="OrderOrders"/>    <!-- this is uiLabelMap property for the title of the HTML page -->
-                <set field="sectionHeaderUiLabel" value="OrderOrders"/>  <!-- this is for the main section of this page, ie <h2> -->
-                <!-- these will be reused in the script -->
-                <set field="parameters.partyIdTo" from-field="userLogin.partyId"/>
-                <set field="parameters.roleTypeIdFrom" value="ACCOUNT"/>
-                <set field="parameters.listIteratorNameToUse" value="ordersListIt"/>
-                <set field="listSortTarget" value="myOrders"/>
-                <!-- this script will do the lookup and pass results to the widgets below -->
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/myOrders.bsh"/>
+                <set field="pageTitleLabel" value="OrderOrders"/>
+                <set field="sectionHeaderUiLabel" value="OrderOrders"/>
+                <set field="findOrderWidget" value="myOrders"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmMyOrders}</label></container>
-                        <include-form name="ListOrders" location="component://crmsfa/widget/crmsfa/forms/orders/OrdersForms.xml"/>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindCrmsfaOrders.ftl"/></html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
-        </section>
+        </section>             
     </screen>
-
+        
    <screen name="findOrders">
         <section>
             <actions>
                 <set field="pageTitleLabel" value="CrmFindOrders"/>
                 <set field="sectionHeaderUiLabel" value="CrmFindOrders"/>
-                <set field="parameters.listIteratorNameToUse" value="ordersListIt"/> <!-- iterator for list of orders -->
-                <set field="listSortTarget" value="findOrders"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/findOrders.bsh"/>
-                <set field="findOrdersTarget" value="findOrders"/>
+                <set field="findOrderWidget" value="findOrders"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="subSectionBlock">
-                            <container style="form">
-                                <include-form name="FindOrders" location="component://crmsfa/widget/crmsfa/forms/orders/OrdersForms.xml"/>
-                            </container>
-                        </container>
-                        <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.OrderOrders}</label></container>
-                            <include-form name="ListOrders" location="component://crmsfa/widget/crmsfa/forms/orders/OrdersForms.xml"/>
-                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindCrmsfaOrders.ftl"/></html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
-        </section>    
+        </section>             
     </screen>
 
     <!-- This is the OFBiz orderview screen reappropriated for CRMSFA layout -->

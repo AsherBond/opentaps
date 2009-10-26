@@ -283,4 +283,54 @@
         <response name="error" type="none"/>
     </request-map>
                   
+    <!-- Order lookup requests -->
+    <request-map uri="gwtFindOrders">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.OrderLookupService" invoke="findOrders"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>    
+
+    <request-map uri="gwtSuggestCustomers">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.PartyLookupService" invoke="suggestCustomers"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    
+    <request-map uri="gwtSuggestOrderStatus">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.OrderStatusLookupService" invoke="suggestOrderStatus"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map> 
+     
+    <request-map uri="gwtSuggestProductStores">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.ProductStoreLookupService" invoke="suggestProductStores"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>    
+
+    <request-map uri="gwtSuggestLots">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.LotLookupService" invoke="suggestLots"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>                   
+
+    <request-map uri="gwtSuggestAccountsOrLeads">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.PartyLookupService" invoke="suggestAccountsOrLeads"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <request-map uri="gwtSuggestAccountsOrQualifiedLeads">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.PartyLookupService" invoke="suggestAccountsOrQualifiedLeads"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+                  
 </site-conf>

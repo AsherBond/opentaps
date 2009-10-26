@@ -15,6 +15,9 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.opentaps.gwt.common.client.form.field;
+
+import org.opentaps.gwt.common.client.UtilUi;
+
 /**
  * A Date input class.
  */
@@ -72,6 +75,14 @@ public class DateField extends com.gwtext.client.widgets.form.DateField {
     @Override public void setAllowBlank(boolean allow) {
         this.allowBlank = allow;
         super.setAllowBlank(allow);
+    }
+
+    /**
+     * Gets the date as a <code>String</code> formatted according to <code>UtilUi.DATE_FORMAT</code>.
+     * @return a formatted string of the date value
+     */
+    @Override public String getText() {
+        return UtilUi.toDateString(this.getValue());
     }
 
     /**

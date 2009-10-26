@@ -29,12 +29,14 @@ import com.gwtext.client.data.StringFieldDef;
 import com.gwtext.client.widgets.grid.CellMetadata;
 import com.gwtext.client.widgets.grid.ColumnConfig;
 import com.gwtext.client.widgets.grid.Renderer;
+
 /**
- * class for the Find opportunity form + list view pattern.
- *
-*/
+ * Class for the Find opportunity form + list view pattern.
+ */
 public class SalesOpportunityListView  extends EntityListView {
+
     private static final String MODULE = SalesOpportunityListView.class.getName();
+
     /**
      * Default constructor.
      */
@@ -54,7 +56,6 @@ public class SalesOpportunityListView  extends EntityListView {
      * Placeholder to remind extended classes that on of the init methods must be called.
      */
     public void init() {
-
         init(OpportunityLookupConfiguration.URL_FIND_OPPORTUNITIES, "/crmsfa/control/viewOpportunity?salesOpportunityId={0}", UtilUi.MSG.crmOpportunityId());
     }
 
@@ -77,18 +78,8 @@ public class SalesOpportunityListView  extends EntityListView {
         ColumnConfig columnOpportunityStage = makeColumn(UtilUi.MSG.crmStage(), new StringFieldDef(OpportunityLookupConfiguration.OUT_OPPORTUNITY_STAGE));
         columnOpportunityStage.setWidth(60);
 
-        ColumnConfig columnOpportunityAmount = makeColumn(UtilUi.MSG.commonAmount(), new StringFieldDef(OpportunityLookupConfiguration.OUT_ESTIMATED_AMOUNT));
+        ColumnConfig columnOpportunityAmount = makeCurrencyColumn(UtilUi.MSG.commonAmount(), new StringFieldDef(OpportunityLookupConfiguration.OUT_CURRENCY_UOM_ID), new StringFieldDef(OpportunityLookupConfiguration.OUT_ESTIMATED_AMOUNT));
         columnOpportunityAmount.setWidth(80);
-        columnOpportunityAmount.setRenderer(new Renderer() {
-            // render estimatedAmount as currency
-            public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
-                String estimatedAmount = record.getAsString(OpportunityLookupConfiguration.OUT_ESTIMATED_AMOUNT);
-                if (estimatedAmount == null) return estimatedAmount;
-                NumberFormat fmt = NumberFormat.getCurrencyFormat();
-                String formatted = fmt.format(new BigDecimal(estimatedAmount).doubleValue());
-                return formatted;
-            }
-        });
 
         ColumnConfig columnEstimatedCloseDate = makeColumn(UtilUi.MSG.crmEstClosed(), new StringFieldDef(OpportunityLookupConfiguration.OUT_ESTIMATED_CLOSE_DATE_STRING));
         columnEstimatedCloseDate.setWidth(90);

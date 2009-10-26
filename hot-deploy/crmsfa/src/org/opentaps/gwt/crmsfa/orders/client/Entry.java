@@ -16,6 +16,14 @@
  */
 package org.opentaps.gwt.crmsfa.orders.client;
 
+import org.opentaps.gwt.common.client.BaseEntry;
+import org.opentaps.gwt.common.client.UtilUi;
+import org.opentaps.gwt.common.client.form.FormNotificationInterface;
+import org.opentaps.gwt.common.client.form.OrderItemsEditable;
+import org.opentaps.gwt.common.client.listviews.OrderItemsEditableListView.OrderType;
+import org.opentaps.gwt.crmsfa.orders.client.form.FindOrdersForm;
+import org.opentaps.gwt.crmsfa.orders.client.form.ProductReReservationForm;
+
 import com.google.gwt.i18n.client.Dictionary;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
@@ -23,22 +31,18 @@ import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtext.client.widgets.Panel;
-import org.opentaps.gwt.common.client.BaseEntry;
-import org.opentaps.gwt.common.client.UtilUi;
-import org.opentaps.gwt.common.client.form.FormNotificationInterface;
-import org.opentaps.gwt.common.client.form.OrderItemsEditable;
-import org.opentaps.gwt.common.client.listviews.OrderItemsEditableListView.OrderType;
-import org.opentaps.gwt.crmsfa.orders.client.form.ProductReReservationForm;
 
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class Entry extends BaseEntry {
-
+    private static final String MY_ORDERS_ID = "myOrders";
+    private static final String FIND_ORDERS_ID = "findOrders";
     private static final String RE_RESERVE_DIALOG = "reReserveItemDialog";
     private static final String ORDER_ITEMS_ID = "orderItemsEntryGrid";
-
+    private FindOrdersForm findOrdersForm;
+    private FindOrdersForm myOrdersForm;
     /**
      * This is the entry point method.
      * It is loaded for page where the meta tag is found
@@ -82,8 +86,27 @@ public class Entry extends BaseEntry {
         if (RootPanel.get(ORDER_ITEMS_ID) != null) {
             loadOrderItems();
         }
-
+        if (RootPanel.get(MY_ORDERS_ID) != null) {
+            loadMyOrders();
+        }
+        if (RootPanel.get(FIND_ORDERS_ID) != null) {
+            loadFindOrders();
+        }
     }
+
+    private void loadMyOrders() {
+        myOrdersForm = new FindOrdersForm(false);
+        myOrdersForm.hideFilters();
+        myOrdersForm.getListView().filterMyOrTeamParties(getViewPref());
+        myOrdersForm.getListView().applyFilters();
+        RootPanel.get(MY_ORDERS_ID).add(myOrdersForm.getMainPanel());
+    }
+
+    private void loadFindOrders() {
+        findOrdersForm = new FindOrdersForm(true);
+        RootPanel.get(FIND_ORDERS_ID).add(findOrdersForm.getMainPanel());
+    }
+
 
     private void loadOrderItems() {
         OrderItemsEditable orderItemsEditable = new OrderItemsEditable(OrderType.SALES);
@@ -145,4 +168,13 @@ public class Entry extends BaseEntry {
         return $wnd.orderId;
     }-*/;
 
+    /**
+     * Retrieve GWT parameter viewPref. Parameter is optional.
+     * @return
+     *     Possible values are <code>MY_VALUES</code> (or <code>CaseLookupConfiguration.MY_VALUES</code>) and
+     *     <code>TEAM_VALUES</code> (or <code>CaseLookupConfiguration.TEAM_VALUES</code>)
+     */
+    private static native String getViewPref()/*-{
+        return $wnd.viewPref;
+    }-*/;
 }

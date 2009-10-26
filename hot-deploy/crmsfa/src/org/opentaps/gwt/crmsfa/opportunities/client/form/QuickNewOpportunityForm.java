@@ -40,7 +40,6 @@ public class QuickNewOpportunityForm extends ScreenletFormPanel {
 
     /**
      * Creates a new <code>QuickNewOpportunityForm</code> instance.
-     *
      */
     public QuickNewOpportunityForm() {
 
@@ -75,5 +74,4 @@ public class QuickNewOpportunityForm extends ScreenletFormPanel {
         // add the button with ui label
         addStandardSubmitButton(UtilUi.MSG.commonCreate());
     }
-
 }
