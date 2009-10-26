@@ -669,7 +669,27 @@ public class ServerHitBin {
             // solved adding a counter to the ServerHit's PK (a counter
             // counting multiple hits at the same startTime).
             try {
-                serverHit.create();
+            	//The problem with
+            	//
+            	//     serverHit.create();
+            	//
+            	// is that if there are two requests with the same startTime
+            	// (and YES there will be, e.g. if an applet or application
+            	// tries to pull data off the server through subsequent
+            	// requests) then this will go wrong and abort the actual
+            	// transaction we are interested in.
+            	// Another way instead of using create is to store or update,
+            	// that is overwrite in case there already was an entry, thus
+            	// avoiding the transaction being aborted which is not
+            	// less desireable than having multiple request with the
+            	// same startTime overwriting each other.
+            	// This may not satisfy those who want to record each and
+            	// every server hit even with equal startTimes but that could be
+            	// solved adding a counter to the ServerHit's PK (a counter
+            	// counting multiple hits at the same startTime).
+            	if (delegator.createOrStore(serverHit).equals(serverHit)) {
+            		Debug.log("Duplicate ServerHit was updated: " + serverHit, module);
+            		}
             } catch (GenericEntityException e) {
                 Debug.logError(e, "Could not save ServerHit:", module);
             }
