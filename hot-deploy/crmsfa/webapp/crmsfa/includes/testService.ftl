@@ -3,7 +3,7 @@
 
 <script type="text/javascript">
   var dateString = '${getLocalizedDate(Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp())}';
-  var dateFormat = '${StringUtil.wrapString(Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.ofbiz.base.util.UtilDateTime"].getDateTimeFormat(locale)))}';
+  var dateFormat = '${StringUtil.wrapString(Static["org.ofbiz.base.util.UtilDateTime"].getJsDateTimeFormat(Static["org.ofbiz.base.util.UtilDateTime"].getDateTimeFormat(locale)))}';
   var formatedDate = opentaps.formatDate(opentaps.parseDate(dateString, dateFormat), dateFormat);
 </script>
 
@@ -28,7 +28,7 @@
 <div class="subSectionBlock">
     <form name="testCalendarForm1" method="post" action="<@ofbizUrl>testDateTimeInput</@ofbizUrl>">
     <table class="twoColumnForm">
-        <@inputDateRow name="sampleTimestamp" title="Test Date macro"/>
+        <@inputDateRow name="sampleTimestamp1" title="Test Date macro"/>
         <@inputSubmitRow title="Submit"/>
     </table>
     </form>
@@ -37,7 +37,7 @@
 <div class="subSectionBlock">
     <form name="testCalendarForm2" method="post" action="<@ofbizUrl>testDateTimeInput</@ofbizUrl>">
     <table class="twoColumnForm">
-        <@inputDateTimeRow name="sampleTimestamp" title="Test DateTime macro"/>
+        <@inputDateTimeRow name="sampleTimestamp2" title="Test DateTime macro"/>
         <@inputSubmitRow title="Submit"/>
     </table>
     </form>
