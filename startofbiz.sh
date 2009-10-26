@@ -49,6 +49,6 @@ else
 fi
 
 # start ofbiz
-#$JAVA $VMARGS -jar ofbiz.jar $* >>$OFBIZ_LOG 2>>$OFBIZ_LOG&
-exec "$JAVA" $VMARGS -jar ofbiz.jar "$@"
+$JAVA $VMARGS -jar ofbiz.jar $* >>$OFBIZ_LOG 2>>$OFBIZ_LOG&
+#exec "$JAVA" $VMARGS -jar ofbiz.jar "$@"
 
