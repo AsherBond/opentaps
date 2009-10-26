@@ -66,6 +66,7 @@ div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${f
       <script type="text/javascript">
         var bgColor = '${bgcolor?default("")?replace("#", "")}';
       </script>
+    </#if>
       <script src="/${appName}/control/javascriptUiLabels.js" type="text/javascript"></script>
 
       <#assign javascripts = Static["org.opentaps.common.util.UtilConfig"].getJavascriptFiles(opentapsApplicationName, locale)/>
@@ -82,7 +83,6 @@ div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${f
           <script src="<@ofbizContentUrl>${StringUtil.wrapString(javascript)}</@ofbizContentUrl>" type="text/javascript"></script>
         </#if>
       </#list>
-    </#if>
 
     <#if gwtScripts?exists>
       <meta name="gwt:property" content="locale=${locale}"/>
@@ -124,9 +124,15 @@ div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${f
     </script>
   </#if>
 
+  <!-- got the url of link to ofbiz application -->
+  <#assign ofbizTabTarget= Static["org.opentaps.common.util.UtilConfig"].getPropertyValue(appName, appName + ".tab.ofbiz.target")/>
+  <#if ofbizTabTarget?exists>  
+    <#assign ofbizAppUrl=response.encodeURL(ofbizTabTarget)/>
+  </#if>
   <div style="float: left; margin-left: 10px; margin-top: 5px; margin-bottom: 10px;">
-    <img alt="${configProperties.get(opentapsApplicationName+".title")}" src="<@ofbizContentUrl>${configProperties.get("opentaps.logo")}</@ofbizContentUrl>"/>
+    <#if ofbizAppUrl?exists><a href="${ofbizAppUrl}"></#if><img alt="${configProperties.get(opentapsApplicationName+".title")}" src="<@ofbizContentUrl>${configProperties.get("opentaps.logo")}</@ofbizContentUrl>" border="0"/><#if ofbizAppUrl?exists></a></#if>
   </div>
+
   <div align="right" style="margin-left: 300px; margin-right: 10px; margin-top: 10px;">
 
     <div class="insideHeaderText">

@@ -977,17 +977,3 @@ opentaps.checkSupplierProductResponse = function(button, confirmMessage, data) {
 	}
 }
 
-opentaps.addUrlShortcut = function(shortcutString, targetUrl) {
-  shortcut.add(shortcutString, function() {
-      window.location = targetUrl;
-    }, {'disable_in_input':true});
-}
-
-opentaps.addFocusShortcut = function(shortcutString, targetElementId) {
-  shortcut.add(shortcutString, function() {
-      var el = document.getElementById(targetElementId);
-      if (el) {
-        el.focus();
-      }
-    }, {'disable_in_input':false});
-}
