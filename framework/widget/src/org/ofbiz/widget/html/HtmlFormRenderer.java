@@ -555,16 +555,19 @@ public class HtmlFormRenderer extends HtmlWidgetRenderer implements FormStringRe
         if (shortDateInput) {
             size = maxlength = 10;
             if (uiLabelMap != null) {
-                localizedInputTitle = (String) uiLabelMap.get("CommonFormatDate");
+                localizedInputTitle =
+                    UtilProperties.getMessage("CommonUiLabels", "CommonFormatLocalizedDateTime", UtilMisc.toMap("localizedFormat", dateFormat), locale); 
             }
         } else if ("time".equals(dateTimeField.getType())) {
             size = maxlength = 8;
             if (uiLabelMap != null) {
-                localizedInputTitle = (String) uiLabelMap.get("CommonFormatTime");
+                localizedInputTitle =
+                    UtilProperties.getMessage("CommonUiLabels", "CommonFormatLocalizedDateTime", UtilMisc.toMap("localizedFormat", timeFormat), locale);
             }
         } else {
             if (uiLabelMap != null) {
-                localizedInputTitle = (String) uiLabelMap.get("CommonFormatDateTime");
+                localizedInputTitle =
+                    UtilProperties.getMessage("CommonUiLabels", "CommonFormatLocalizedDateTime", UtilMisc.toMap("localizedFormat", dateTimeFormat), locale);
             }
         }
         writer.append(" title=\"");
