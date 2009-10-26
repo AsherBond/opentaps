@@ -240,7 +240,7 @@
             <display-entity entity-name="DataSource"/>
         </field>
         <field name="estimatedCloseDate" title="${uiLabelMap.CrmEstimatedCloseDate}" position="1">
-            <display description="${groovy:org.ofbiz.base.util.UtilDateTime.timeStampToString(opportunityAndParty.get(&quot;estimatedCloseDate&quot;), org.ofbiz.base.util.UtilDate.getDateFormat(locale), timeZone, locale)}"/>
+            <display description="${groovy:org.ofbiz.base.util.UtilDateTime.timeStampToString(opportunityAndParty.get(&quot;estimatedCloseDate&quot;), org.ofbiz.base.util.UtilDateTime.getDateFormat(locale), timeZone, locale)}"/>
         </field>
         <field name="description" title="${uiLabelMap.CommonDescription}"><display/></field>
         <field name="nextStep" title="${uiLabelMap.CrmNextStep}"><display/></field>
@@ -301,7 +301,7 @@
             <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(estimatedProbability)}"/>
         </field>
         <field name="estimatedCloseDate" title="${uiLabelMap.CrmEstimatedCloseDate}" widget-area-style="fieldWidth200">
-            <display description="${groovy:org.ofbiz.base.util.UtilDateTime.timeStampToString(estimatedCloseDate, org.ofbiz.base.util.UtilDate.getDateFormat(locale), timeZone, locale)}"/>
+            <display description="${groovy:org.ofbiz.base.util.UtilDateTime.timeStampToString(estimatedCloseDate, org.ofbiz.base.util.UtilDateTime.getDateFormat(locale), timeZone, locale)}"/>
         </field>
         <field name="estimatedAmount" title="${uiLabelMap.CrmOpportunityAmount}" widget-area-style="fieldWidth200">
             <display type="currency" currency="${currencyUomId}"/>
@@ -335,7 +335,7 @@
             <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(opportunityHistoryAndParty.get(&quot;estimatedProbability&quot;))}"/>
         </field>
         <field name="estimatedCloseDate" title="${uiLabelMap.CrmEstimatedCloseDate}" widget-area-style="fieldWidth200">
-            <display description="${groovy:org.ofbiz.base.util.UtilDateTime.timeStampToString(opportunityAndParty.get(&quot;estimatedCloseDate&quot;), org.ofbiz.base.util.UtilDate.getDateFormat(locale), timeZone, locale)}"/>
+            <display description="${groovy:org.ofbiz.base.util.UtilDateTime.timeStampToString(opportunityAndParty.get(&quot;estimatedCloseDate&quot;), org.ofbiz.base.util.UtilDateTime.getDateFormat(locale), timeZone, locale)}"/>
         </field>
         <field name="nextStep" title="${uiLabelMap.CrmNextStep}"><display/></field>
         <field name="changeNote" title="${uiLabelMap.CrmChangeNote}"><display/></field>
