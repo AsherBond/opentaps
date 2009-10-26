@@ -18,7 +18,7 @@ under the License.
 -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 <#if orderHeader?has_content>
-  <form name="addCommonToCartForm" action="<@ofbizUrl>addordertocart/orderstatus?orderId=${orderHeader.orderId}</@ofbizUrl>" method="GET">
+  <form name="addCommonToCartForm" action="<@ofbizUrl>addordertocart/orderstatus?orderId=${orderHeader.orderId}</@ofbizUrl>" method="POST">
     <input type="hidden" name="add_all" value="false">
     <input type="hidden" name="orderId" value="${orderHeader.orderId}">
     ${screens.render("component://ecommerce/widget/OrderScreens.xml#orderheader")}
