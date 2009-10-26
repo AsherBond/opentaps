@@ -74,6 +74,8 @@ framework/webapp/dtd/site-conf.xsd
 framework/webapp/src/org/ofbiz/webapp/control/ConfigXMLReader.java
 framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
 r13252, r13253 Port back request-redirect-filterparam
+framework/webapp/src/org/ofbiz/webapp/stats/ServerHitBin.java
+r13794 Avoid PK exceptions when multiple server hits at the same timestamp are stored
 
 framework/webapp/lib
 r13338 Updated itext-2.0.1.jar to iText-2.1.7.jar, necessary to work with our version of jasper report
