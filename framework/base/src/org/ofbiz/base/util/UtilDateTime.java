@@ -28,16 +28,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 /**
  * Utility class for handling java.util.Date, the java.sql data/time classes and related
  */
 public class UtilDateTime {
+
+    private static final String module = UtilDateTime.class.getName();
+
     public static final String[] months = {// // to be translated over CommonMonthName, see example in accounting
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November",
@@ -67,14 +72,14 @@ public class UtilDateTime {
      *   "LONG"   : locale long date format
      *   or concrete pattern string 
      */
-    public static final String DATE_FORMAT = "yyyy-MM-dd";
+    private static final String DATE_FORMAT = "DEFAULT";
 
     /**
      * JDBC escape format for java.sql.Timestamp conversions.
      * @deprecated DateTime format is combination of both DATE_FORMAT and TIME_FORMAT
      * @see UtilDateTime.getDateTimeFormat
      */
-    public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
+    private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
 
     /**
      * Time format pattern for time conversions.
@@ -84,7 +89,7 @@ public class UtilDateTime {
      *   "LONG"   : locale long time format
      *   or concrete pattern string 
      */
-    public static final String TIME_FORMAT = "HH:mm:ss";
+    private static final String TIME_FORMAT = "HH:mm:ss";
 
     public static double getInterval(Date from, Date thru) {
         return thru != null ? thru.getTime() - from.getTime() : 0;
@@ -1245,6 +1250,120 @@ public class UtilDateTime {
 
         SimpleDateFormat df = (SimpleDateFormat) SimpleDateFormat.getDateInstance(dateStyle, locale);
         return df.toPattern();
+    }
+
+    /**
+     * Default pattern that <code>getJsDateTimeFormat</code> can return in case of error or
+     * if given pattern element isn't supported by jscalendar .
+     */
+    public final static String fallBackJSPattern = "%Y-%m-%d %H:%M:%S.0";
+
+    /**
+     * Method converts given date/time pattern in SimpleDateFormat style to form that can be used by
+     * jscalendar.<br>Called from FTL and form widget rendering code for setup calendar.
+     *
+     * @param pattern Pattern to convert. Results of <code>getDate[Time]Format(locale)</code> as a rule.
+     * @return Date/time format pattern that conforms to <b>jscalendar</b> requirements.
+     */
+    public static String getJsDateTimeFormat(String pattern) {
+        if (UtilValidate.isEmpty(pattern)) {
+            throw new IllegalArgumentException("UtilDateTime.getJsDateTimeFormat: Pattern string can't be empty.");
+        }
+    
+        /*
+         * The table contains translation rules.
+         * Column number equals to placeholder length.
+         * For example:
+         *   Row  {"%m", "%m", "%b", "%B"},   // M (Month)
+         * represents how we should translate following patterns
+         *   "M" -> "%m", "MM" -> "%m", "MMM" -> "%b", "MMMM" -> "%B"
+         *
+         * Translation inpissible if array element equals to null.
+         * This means usualy that jscalendar has no equivalent for some Java
+         * pattern symbol and method returns fallBackJSPattern constant.
+         */
+        final String[][] translationTable = {
+                {null, null, null, null},   // G (Era designator)
+                {null, "%y", "%Y", "%Y"},   // y (Year)
+                {"%m", "%m", "%b", "%B"},   // M (Month)
+                {"%e", "%d", "%d", "%d"},   // d (Day in month)
+                {null, null, null, null},   // k (Hour in day 1-24)
+                {"%k", "%H", "%H", "%H"},   // H (Hour in day 0-23)
+                {"%M", "%M", "%M", "%M"},   // m (Minute in hour)
+                {"%S", "%S", "%S", "%S"},   // s (Second in minute)
+                {null, null, null, null},   // S (Millisecond)
+                {"%a", "%a", "%a", "%A"},   // E (Day in week)
+                {"%j", "%j", "%j", "%j"},   // D (Day in year)
+                {"%w", "%w", "%w", "%w"},   // F (Day of week in month)
+                {"%W", "%W", "%W", "%W"},   // w (Week in year)
+                {null, null, null, null},   // W (Week in month)
+                {"%p", "%p", "%p", "%p"},   // a (Am/pm marker)
+                {"%l", "%I", null, null},   // h (Hour in am/pm 1-12)
+                {null, null, null, null},   // K (Hour in am/pm 0-11)
+                {null, null, null, null},   // z (Time zone)
+                {null, null, null, null}    // Z (Time zone/RFC-822)
+        };
+    
+        String javaDateFormat = pattern;
+    
+        /* Unlocalized date/time pattern characters. */
+        final String patternChars = "GyMdkHmsSEDFwWahKzZ";
+    
+        // all others chars in source string are separators between fields.
+        List<String> tokens = Arrays.asList(javaDateFormat.split("[" + patternChars + "]"));
+        String separators = "";
+        Iterator<String> iterator = tokens.iterator();
+        while (iterator.hasNext()) {
+            String token = iterator.next();
+            if (UtilValidate.isNotEmpty(token) && separators.indexOf(token) == -1) {
+                separators += token;
+            }
+        }
+    
+        // Going over pattern elements and replace it by those in translation table
+        StringBuffer jsDateFormat = new StringBuffer();
+        StringTokenizer tokenizer = new StringTokenizer(javaDateFormat, separators, true);
+        while (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            if (UtilValidate.isEmpty(token)) {
+                continue;
+            }
+    
+            int index = patternChars.indexOf(token.charAt(0));
+            if (index == -1) {
+                // token is fixed part of pattern
+                jsDateFormat.append(token);
+                continue;
+            }
+    
+            String jsPlaceholder = null;
+            try {
+                // token is placeholder that we should replce by equivalent from table
+                jsPlaceholder = translationTable[index][token.length() - 1];
+            } catch (IndexOutOfBoundsException e) {
+                // specified Java pattern have some placeholder with length grater than supported
+                Debug.logError(e, "Wrong placeholder [" + token + "] in date/time pattern. Probably too long, maximum 4 chars allowed.", module);
+                return fallBackJSPattern;
+            }
+    
+            if (UtilValidate.isEmpty(jsPlaceholder)) {
+                //Ouch! jscalendar doesn't support milliseconds but some parts of framework
+                // require it. Just replace miiseconds with zero symbol.
+                if (token.startsWith("S")) {
+                    jsDateFormat.append("0");
+                    continue;
+                }
+                // Source pattern contains something that we can't translate. Return fallback pattern.
+                Debug.logError("Translation of date/time pattern [" + javaDateFormat + "] to jscalendar format is failed as jscalendar doesn't support placeholder [" + token + "]. Returns fallback pattern " + fallBackJSPattern, module);
+                return fallBackJSPattern;
+            }
+    
+            // add new element to target pattern
+            jsDateFormat.append(jsPlaceholder);
+        }
+    
+        return jsDateFormat.toString();
+    
     }
 
 }
