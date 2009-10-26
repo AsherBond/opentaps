@@ -21,13 +21,9 @@ under the License.
 <entity-engine-xml>
     <VisualTheme visualThemeId="FLAT_GREY" visualThemeSetId="BACKOFFICE" description="Flat Grey - Old OFBiz Standard Floating Layout"/>
     <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_STYLESHEET" resourceValue="/flatgrey/maincss.css" sequenceId="01"/>
-    <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_STYLESHEET" resourceValue="/opentaps_js/jscalendar-1.0/calendar-system.css" sequenceId="10"/>
-    <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/calendar.js" sequenceId="10"/>
-    <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/lang/calendar-en.js" sequenceId="11"/>
-    <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/calendar-setup.js" sequenceId="12"/>
     <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_RTL_STYLESHEET" resourceValue="/flatgrey/mainrtl.css" sequenceId="01"/>
     <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_SHORTCUT_ICON" resourceValue="/images/ofbiz.ico" sequenceId="01"/>
-    <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_HDR_IMAGE_URL" resourceValue="/opentaps_images/opentaps_logo.png" sequenceId="01"/>
+    <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_HDR_IMAGE_URL" resourceValue="/images/ofbiz_logo.gif" sequenceId="01"/>
     <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_HDR_TMPLT_LOC" resourceValue="component://flatgrey/includes/header.ftl" sequenceId="01"/>
     <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_MSG_TMPLT_LOC" resourceValue="component://common/webcommon/includes/messages.ftl" sequenceId="01"/>
     <VisualThemeResource visualThemeId="FLAT_GREY" resourceTypeEnumId="VT_FTR_TMPLT_LOC" resourceValue="component://flatgrey/includes/footer.ftl" sequenceId="01"/>
