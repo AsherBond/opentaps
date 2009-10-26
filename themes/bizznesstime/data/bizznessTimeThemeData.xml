@@ -21,7 +21,11 @@ under the License.
 <entity-engine-xml>
     <VisualTheme visualThemeId="BIZZNESS_TIME" visualThemeSetId="BACKOFFICE" description="It's bizzness, it's bizzness time.  I couldn't have said it better myself. This theme gets down"/>
     <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_STYLESHEET" resourceValue="/bizznesstime/css/style.css" sequenceId="01"/>
+    <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_STYLESHEET" resourceValue="/opentaps_js/jscalendar-1.0/calendar-system.css" sequenceId="10"/>
     <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/bizznesstime/js/application.js" sequenceId="01"/>
+    <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/calendar.js" sequenceId="10"/>
+    <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/lang/calendar-en.js" sequenceId="11"/>
+    <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/calendar-setup.js" sequenceId="12"/>
     <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_SHORTCUT_ICON" resourceValue="/images/ofbiz.ico" sequenceId="01"/>
     <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_HDR_IMAGE_URL" resourceValue="/opentaps_images/opentaps_logo.png" sequenceId="01"/>
     <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_HDR_TMPLT_LOC" resourceValue="component://bizznesstime/includes/header.ftl" sequenceId="01"/>

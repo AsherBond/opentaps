@@ -24,6 +24,10 @@ under the License.
     <VisualThemeResource visualThemeId="MULTIFLEX" resourceTypeEnumId="VT_STYLESHEET" resourceValue="/multiflex/style.css" sequenceId="02"/>
     <VisualThemeResource visualThemeId="MULTIFLEX" resourceTypeEnumId="VT_STYLESHEET" resourceValue="/images/prototypejs/popup.css" sequenceId="03"/>
     <VisualThemeResource visualThemeId="MULTIFLEX" resourceTypeEnumId="VT_STYLESHEET" resourceValue="/content/images/contentForum.css" sequenceId="04"/>
+    <VisualThemeResource visualThemeId="MULTIFLEX" resourceTypeEnumId="VT_STYLESHEET" resourceValue="/opentaps_js/jscalendar-1.0/calendar-system.css" sequenceId="10"/>
+    <VisualThemeResource visualThemeId="MULTIFLEX" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/calendar.js" sequenceId="10"/>
+    <VisualThemeResource visualThemeId="MULTIFLEX" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/lang/calendar-en.js" sequenceId="11"/>
+    <VisualThemeResource visualThemeId="MULTIFLEX" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/opentaps_js/jscalendar-1.0/calendar-setup.js" sequenceId="12"/>
     <VisualThemeResource visualThemeId="MULTIFLEX" resourceTypeEnumId="VT_SHORTCUT_ICON" resourceValue="/images/ofbiz.ico" sequenceId="01"/>
     <VisualThemeResource visualThemeId="MULTIFLEX" resourceTypeEnumId="VT_HDR_IMAGE_URL" resourceValue="/opentaps_images/opentaps_logo.png" sequenceId="01"/>
     <VisualThemeResource visualThemeId="MULTIFLEX" resourceTypeEnumId="VT_HDR_TMPLT_LOC" resourceValue="component://multiflex/includes/header.ftl" sequenceId="01"/>
