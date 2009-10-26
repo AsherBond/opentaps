@@ -108,6 +108,12 @@ r13738 Applied patch from JIRA 44, allow to use java action in addition to bsh a
 framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
 r13747 Remove non-serializable entries from each attribute that is an instance of Map
 
+framework/base/src/org/ofbiz/base/util/UtilDateTime.java
+r13784 Move method from UtilDate to UtilDateTime because it must be accessible from framework portion of code
+
+framework/widget/src/org/ofbiz/widget/html/HtmlFormRenderer.java
+r13786 Add jscalendar and localized date/time support to HTML form renderer
+
 Applications changes
 --------------------
 
@@ -222,9 +228,6 @@ Other API Changes
 - UtilValidate no longer defines:
  * isDateTime
  * isTimestamp
-And UtilDateTime no longer defines:
- * getJsDateTimeFormat
- * ... and others ...
 those are now in org.opentaps.common.util.UtilDate
 
 - UtilDateTime.toCalendar must have a TimeZone set or will throw a NPE. This can be indirect if for example the method s called from a service getting those from the context without checking
