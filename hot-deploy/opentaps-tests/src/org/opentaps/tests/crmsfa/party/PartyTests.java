@@ -30,8 +30,8 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.common.domain.party.PartyRepository;
 import org.opentaps.domain.DomainsLoader;
@@ -97,10 +97,10 @@ public class PartyTests extends OpentapsTestCase {
         // test retrieving specific contact mechs
         assertEquals("Received for Owner Email of DemoCSR is customerservice@mycompany.com", org.opentaps.common.party.PartyHelper.getEmailForPartyByPurpose("DemoCSR", "RECEIVE_EMAIL_OWNER", delegator), "customerservice@mycompany.com");
 
-        GenericValue contactMech = (GenericValue) org.opentaps.common.party.PartyHelper.getCurrentContactMechsForParty("DemoCSR", "EMAIL_ADDRESS", "RECEIVE_EMAIL_OWNER", UtilMisc.toList(new EntityExpr("infoString", EntityOperator.IN, emailAddresses)), delegator).get(0);
+        GenericValue contactMech = (GenericValue) org.opentaps.common.party.PartyHelper.getCurrentContactMechsForParty("DemoCSR", "EMAIL_ADDRESS", "RECEIVE_EMAIL_OWNER", UtilMisc.toList(EntityCondition.makeCondition("infoString", EntityOperator.IN, emailAddresses)), delegator).get(0);
         assertEquals("DemoCSR has a RECEIVE_EMAIL_OWNER email and it is customerservice@mycompany.com", contactMech.getString("infoString"), "customerservice@mycompany.com");
 
-        List<GenericValue> contactMechs = org.opentaps.common.party.PartyHelper.getCurrentContactMechsForParty("DemoCSR2", "EMAIL_ADDRESS", "RECEIVE_EMAIL_OWNER", UtilMisc.toList(new EntityExpr("infoString", EntityOperator.IN, emailAddresses)), delegator);
+        List<GenericValue> contactMechs = org.opentaps.common.party.PartyHelper.getCurrentContactMechsForParty("DemoCSR2", "EMAIL_ADDRESS", "RECEIVE_EMAIL_OWNER", UtilMisc.toList(EntityCondition.makeCondition("infoString", EntityOperator.IN, emailAddresses)), delegator);
         assertTrue("DemoCSR2 has no RECEIVE_EMAIL_OWNER email", UtilValidate.isEmpty(contactMechs));
 
     }
@@ -456,7 +456,6 @@ public class PartyTests extends OpentapsTestCase {
      * Test the GWT contact lookup.
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testGwtContactLookup() throws Exception {
         InputProviderInterface provider = new TestInputProvider(admin, dispatcher);
 
@@ -574,7 +573,12 @@ public class PartyTests extends OpentapsTestCase {
         lookup.findContacts();
 
         // check returned records are sorted correctly
-        List<GenericValue> expected = delegator.findByCondition("PartyFromByRelnAndContactInfoAndPartyClassification", new EntityConditionList(Arrays.asList(new EntityExpr(PartyLookupConfiguration.INOUT_LAST_NAME, true, EntityOperator.LIKE, "%e%", true), new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "CONTACT")), EntityOperator.AND), null, UtilMisc.toList(PartyLookupConfiguration.INOUT_PARTY_ID, PartyLookupConfiguration.INOUT_LAST_NAME), UtilMisc.toList(PartyLookupConfiguration.INOUT_LAST_NAME + " DESC"), Repository.DISTINCT_FIND_OPTIONS);
+        List<GenericValue> expected = delegator.findByCondition("PartyFromByRelnAndContactInfoAndPartyClassification", EntityCondition.makeCondition(EntityOperator.AND,
+                                        EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(PartyLookupConfiguration.INOUT_LAST_NAME), EntityOperator.LIKE, EntityFunction.UPPER("%e%")),
+                                        EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "CONTACT")),
+                                                                null,
+                                                                UtilMisc.toList(PartyLookupConfiguration.INOUT_PARTY_ID, PartyLookupConfiguration.INOUT_LAST_NAME),
+                                                                UtilMisc.toList(PartyLookupConfiguration.INOUT_LAST_NAME + " DESC"), Repository.DISTINCT_FIND_OPTIONS);
         expected = expected.subList(0, (UtilLookup.DEFAULT_LIST_PAGE_SIZE > expected.size() ? expected.size() : UtilLookup.DEFAULT_LIST_PAGE_SIZE));
         assertGwtLookupSort(lookup, PartyLookupConfiguration.INOUT_LAST_NAME, expected);
     }
@@ -744,7 +748,7 @@ public class PartyTests extends OpentapsTestCase {
         lookup.findAccounts();
 
         // check returned records are sorted correctly
-        List<GenericValue> expected = delegator.findByCondition("PartyFromByRelnAndContactInfoAndPartyClassification", new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT"), null, UtilMisc.toList(PartyLookupConfiguration.INOUT_PARTY_ID, PartyLookupConfiguration.INOUT_GROUP_NAME), UtilMisc.toList(PartyLookupConfiguration.INOUT_GROUP_NAME + " ASC"), Repository.DISTINCT_FIND_OPTIONS);
+        List<GenericValue> expected = delegator.findByCondition("PartyFromByRelnAndContactInfoAndPartyClassification", EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT"), null, UtilMisc.toList(PartyLookupConfiguration.INOUT_PARTY_ID, PartyLookupConfiguration.INOUT_GROUP_NAME), UtilMisc.toList(PartyLookupConfiguration.INOUT_GROUP_NAME + " ASC"), Repository.DISTINCT_FIND_OPTIONS);
         expected = expected.subList(0, (UtilLookup.DEFAULT_LIST_PAGE_SIZE > expected.size() ? expected.size() : UtilLookup.DEFAULT_LIST_PAGE_SIZE));
         assertGwtLookupSort(lookup, PartyLookupConfiguration.INOUT_GROUP_NAME, expected);
     }
@@ -917,7 +921,7 @@ public class PartyTests extends OpentapsTestCase {
         lookup.findPartners();
 
         // check returned records are sorted correctly
-        List<GenericValue> expected = delegator.findByCondition("PartyFromByRelnAndContactInfoAndPartyClassification", new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "PARTNER"), null, UtilMisc.toList(PartyLookupConfiguration.INOUT_PARTY_ID, PartyLookupConfiguration.INOUT_GROUP_NAME), UtilMisc.toList(PartyLookupConfiguration.INOUT_GROUP_NAME + " ASC"), Repository.DISTINCT_FIND_OPTIONS);
+        List<GenericValue> expected = delegator.findByCondition("PartyFromByRelnAndContactInfoAndPartyClassification", EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "PARTNER"), null, UtilMisc.toList(PartyLookupConfiguration.INOUT_PARTY_ID, PartyLookupConfiguration.INOUT_GROUP_NAME), UtilMisc.toList(PartyLookupConfiguration.INOUT_GROUP_NAME + " ASC"), Repository.DISTINCT_FIND_OPTIONS);
         expected = expected.subList(0, (UtilLookup.DEFAULT_LIST_PAGE_SIZE > expected.size() ? expected.size() : UtilLookup.DEFAULT_LIST_PAGE_SIZE));
         assertGwtLookupSort(lookup, PartyLookupConfiguration.INOUT_GROUP_NAME, expected);
     }
@@ -1025,7 +1029,7 @@ public class PartyTests extends OpentapsTestCase {
         lookup.findSuppliers();
 
         // check returned records are sorted correctly
-        List<GenericValue> expected = delegator.findByCondition("PartyFromByRelnAndContactInfoAndPartyClassification", new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "SUPPLIER"), null, UtilMisc.toList(PartyLookupConfiguration.INOUT_PARTY_ID, PartyLookupConfiguration.INOUT_GROUP_NAME), UtilMisc.toList(PartyLookupConfiguration.INOUT_GROUP_NAME + " ASC"), Repository.DISTINCT_FIND_OPTIONS);
+        List<GenericValue> expected = delegator.findByCondition("PartyFromByRelnAndContactInfoAndPartyClassification", EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "SUPPLIER"), null, UtilMisc.toList(PartyLookupConfiguration.INOUT_PARTY_ID, PartyLookupConfiguration.INOUT_GROUP_NAME), UtilMisc.toList(PartyLookupConfiguration.INOUT_GROUP_NAME + " ASC"), Repository.DISTINCT_FIND_OPTIONS);
         expected = expected.subList(0, (UtilLookup.DEFAULT_LIST_PAGE_SIZE > expected.size() ? expected.size() : UtilLookup.DEFAULT_LIST_PAGE_SIZE));
         assertGwtLookupSort(lookup, PartyLookupConfiguration.INOUT_GROUP_NAME, expected);
 
@@ -1133,7 +1137,7 @@ public class PartyTests extends OpentapsTestCase {
         lookup.findLeads();
 
         // check returned records are sorted correctly
-        List<GenericValue> expected = delegator.findByCondition("PartyFromByRelnAndContactInfoAndPartyClassification", new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "LEAD"), null, UtilMisc.toList(PartyLookupConfiguration.INOUT_PARTY_ID, PartyLookupConfiguration.INOUT_GROUP_NAME), UtilMisc.toList(PartyLookupConfiguration.INOUT_GROUP_NAME + " ASC"), Repository.DISTINCT_FIND_OPTIONS);
+        List<GenericValue> expected = delegator.findByCondition("PartyFromByRelnAndContactInfoAndPartyClassification", EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "LEAD"), null, UtilMisc.toList(PartyLookupConfiguration.INOUT_PARTY_ID, PartyLookupConfiguration.INOUT_GROUP_NAME), UtilMisc.toList(PartyLookupConfiguration.INOUT_GROUP_NAME + " ASC"), Repository.DISTINCT_FIND_OPTIONS);
         expected = expected.subList(0, (UtilLookup.DEFAULT_LIST_PAGE_SIZE > expected.size() ? expected.size() : UtilLookup.DEFAULT_LIST_PAGE_SIZE));
         assertGwtLookupSort(lookup, PartyLookupConfiguration.INOUT_GROUP_NAME, expected);
 

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -16,18 +16,18 @@
  */
 package org.opentaps.tests.financials;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+
 import javolution.util.FastList;
 import org.ofbiz.accounting.invoice.InvoiceWorker;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Unit tests for creating and dealing with partner invoices.
@@ -41,10 +41,11 @@ public class PartnerInvoiceTests extends FinancialsTestCase {
      * Creates a bunch of PARTNER_INVOICEs and then creates a SALES_INVOICE from them based on a PARTNER_AGREEMENT.
      * Tests that the invoice total of the sales invoice is correct and that the parties are correct.
      * This method specifies the agreement to be used.
+     * @exception GeneralException if an error occurs
      */
     public void testCreatePartnerSalesInvoiceFromAgreement() throws GeneralException {
         List<String> invoiceIdsInput = createPartnerInvoices();
-        Map input = UtilMisc.toMap("userLogin", demofinadmin);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("invoiceIds", invoiceIdsInput);
 
         // verify that not specifying an agreement causes a service error
@@ -52,7 +53,7 @@ public class PartnerInvoiceTests extends FinancialsTestCase {
 
         // create the partner sales invoice by specifying the agreement
         input.put("agreementId", "PARTNER_COMM_AGR1");
-        Map results = runAndAssertServiceSuccess("opentaps.createPartnerSalesInvoice", input);
+        Map<String, Object> results = runAndAssertServiceSuccess("opentaps.createPartnerSalesInvoice", input);
         String invoiceId = (String) results.get("invoiceId");
         assertNotNull("Invoice ID generated for partner sales invoice.", invoiceId);
 
@@ -67,10 +68,9 @@ public class PartnerInvoiceTests extends FinancialsTestCase {
         BigDecimal expectedAmount = asBigDecimal("279.99");
         assertEquals("Sales invoice to partner has expected total value.", invoiceTotal, expectedAmount);
 
-        List conditions = UtilMisc.toList(
-                new EntityExpr("invoiceId", EntityOperator.IN, invoiceIdsInput),
-                new EntityExpr("statusId", EntityOperator.EQUALS, "INVOICE_INV_PTNR")
-        );
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition("invoiceId", EntityOperator.IN, invoiceIdsInput),
+                EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "INVOICE_INV_PTNR"));
         List<GenericValue> partnerInvoices = delegator.findByAnd("Invoice", conditions);
         assertTrue("Partner invoices marked as invoiced to partner", partnerInvoices.size() == 3);
     }
@@ -79,10 +79,11 @@ public class PartnerInvoiceTests extends FinancialsTestCase {
      * Creates a bunch of PARTNER_INVOICEs and then creates a SALES_INVOICE from them based on a PARTNER_AGREEMENT.
      * Tests that the invoice total of the sales invoice is correct and that the parties are correct.
      * This method specifies the parties to be used.
+     * @exception GeneralException if an error occurs
      */
     public void testCreatePartnerSalesInvoiceFromParties() throws GeneralException {
         List<String> invoiceIdsInput = createPartnerInvoices();
-        Map input = UtilMisc.toMap("userLogin", demofinadmin);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("invoiceIds", invoiceIdsInput);
 
         // verify that not specifying the parties causes a service error
@@ -91,7 +92,7 @@ public class PartnerInvoiceTests extends FinancialsTestCase {
         // create the partner sales invoice by specifying the parties
         input.put("organizationPartyId", organizationPartyId);
         input.put("partnerPartyId", "demopartner1");
-        Map results = runAndAssertServiceSuccess("opentaps.createPartnerSalesInvoice", input);
+        Map<String, Object> results = runAndAssertServiceSuccess("opentaps.createPartnerSalesInvoice", input);
         String invoiceId = (String) results.get("invoiceId");
         assertNotNull("Invoice ID generated for partner sales invoice.", invoiceId);
 
@@ -106,10 +107,9 @@ public class PartnerInvoiceTests extends FinancialsTestCase {
         BigDecimal expectedAmount = asBigDecimal("279.99");
         assertEquals("Sales invoice to partner has expected total value.", invoiceTotal, expectedAmount);
 
-        List conditions = UtilMisc.toList(
-                new EntityExpr("invoiceId", EntityOperator.IN, invoiceIdsInput),
-                new EntityExpr("statusId", EntityOperator.EQUALS, "INVOICE_INV_PTNR")
-        );
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition("invoiceId", EntityOperator.IN, invoiceIdsInput),
+                EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "INVOICE_INV_PTNR"));
         List<GenericValue> partnerInvoices = delegator.findByAnd("Invoice", conditions);
         assertTrue("Partner invoices marked as invoiced to partner", partnerInvoices.size() == 3);
     }
@@ -125,27 +125,21 @@ public class PartnerInvoiceTests extends FinancialsTestCase {
                                           UtilDateTime.nowTimestamp(),
                                           "Test Partner Invoice #1",
                                           "testpartner1",
-                                          "Test of partner invoice.  This invoice is " +
-                                          "between our partner demopartner1 and its customer " +
-                                          "dp1acct1.");
+                                          "Test of partner invoice.  This invoice is between our partner demopartner1 and its customer dp1acct1.");
         invoiceIds.add(invoice);
 
         invoice = fa.createInvoice("dp1acct2", "PARTNER_INVOICE",
                                    UtilDateTime.nowTimestamp(),
                                    "Test Partner Invoice #2",
                                    "testpartner2",
-                                   "Test of partner invoice.  This invoice is " +
-                                   "between our partner demopartner1 and its customer " +
-                                   "dp1acct2.");
+                                   "Test of partner invoice.  This invoice is between our partner demopartner1 and its customer dp1acct2.");
         invoiceIds.add(invoice);
 
         invoice = fa.createInvoice("dp1a1contact1", "PARTNER_INVOICE",
                                    UtilDateTime.nowTimestamp(),
                                    "Test Partner Invoice #3",
                                    "testpartner3",
-                                   "Test of partner invoice.  This invoice is " +
-                                   "between our partner demopartner1 and its customer " +
-                                   "dp1a1contact1.");
+                                   "Test of partner invoice.  This invoice is between our partner demopartner1 and its customer dp1a1contact1.");
         invoiceIds.add(invoice);
 
         // add a basic product line item amount to each invoice and mark as ready (note quantity is null to see if anything crashes)

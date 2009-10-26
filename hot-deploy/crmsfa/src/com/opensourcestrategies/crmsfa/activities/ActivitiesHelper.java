@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -52,58 +52,55 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
 
 /**
- * Activities helper methods
- *
- * @author     <a href="mailto:cliberty@opensourcestrategies.com">Chris Liberty</a>
- * @version    $Rev$
+ * Activities helper methods.
  */
+public final class ActivitiesHelper {
 
-public class ActivitiesHelper {
+    private ActivitiesHelper() { }
 
-    public static final String module = ActivitiesHelper.class.getName();
-    public static final List ACTIVITY_WORKEFFORT_IDS = UtilMisc.toList( "TASK", "EVENT" ) ;
+    private static final String MODULE = ActivitiesHelper.class.getName();
+    public static final List<String> ACTIVITY_WORKEFFORT_IDS = UtilMisc.toList("TASK", "EVENT");
     public static final String crmsfaProperties = "crmsfa";
 
     /**
-     * Retrieve the internal partyIds involved with a workEffort
+     * Retrieve the internal partyIds involved with a workEffort.
      * @param workEffortId
      * @param delegator
      * @return List of partyIds
      */
     public static List findInternalWorkeffortPartyIds(String workEffortId, GenericDelegator delegator) {
-        List workEffortRoles = UtilMisc.toList("CAL_OWNER", "CAL_ATTENDEE");
-        List internalPartyIds = new ArrayList();
+        List<String> workEffortRoles = UtilMisc.toList("CAL_OWNER", "CAL_ATTENDEE");
+        List<String> internalPartyIds = new ArrayList<String>();
         try {
-            List assignedParties = delegator.findByAnd("WorkEffortPartyAssignment", UtilMisc.toList(
-                                                new EntityExpr("workEffortId", EntityOperator.EQUALS, workEffortId),
-                                                new EntityExpr("roleTypeId", EntityOperator.IN, workEffortRoles),
-                                                new EntityExpr("statusId", EntityOperator.EQUALS, "PRTYASGN_ASSIGNED")));
-            assignedParties = EntityUtil.filterByDate(assignedParties);
-            List assignedPartyIds = EntityUtil.getFieldListFromEntityList(assignedParties, "partyId", true);
+            List<GenericValue> assignedParties = delegator.findByAnd("WorkEffortPartyAssignment", UtilMisc.toList(
+                                                EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, workEffortId),
+                                                EntityCondition.makeCondition("roleTypeId", EntityOperator.IN, workEffortRoles),
+                                                EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "PRTYASGN_ASSIGNED"),
+                                                EntityUtil.getFilterByDateExpr()));
+            List<String> assignedPartyIds = EntityUtil.getFieldListFromEntityList(assignedParties, "partyId", true);
             if (assignedPartyIds != null) {
-                Iterator apit = assignedPartyIds.iterator();
-                while (apit.hasNext()) {
-                    String partyId = (String) apit.next();
-                    List conditions = UtilMisc.toList(new EntityExpr("partyId", EntityOperator.EQUALS, partyId), new EntityExpr("roleTypeId", EntityOperator.IN, PartyHelper.TEAM_MEMBER_ROLES));
-                    List roles = delegator.findByCondition("PartyRole", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+                for (String partyId : assignedPartyIds) {
+                    EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                                                       EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId),
+                                                       EntityCondition.makeCondition("roleTypeId", EntityOperator.IN, PartyHelper.TEAM_MEMBER_ROLES));
+                    List<GenericValue> roles = delegator.findByCondition("PartyRole", conditions, null, null);
                     if (roles != null && roles.size() > 0) {
                         internalPartyIds.add(partyId);
                     }
                 }
             }
-        } catch ( GenericEntityException e ) {
-            Debug.logError(e, "Unable to retrieve internal workEffort roles for workEffort: " + workEffortId, module);
+        } catch (GenericEntityException e) {
+            Debug.logError(e, "Unable to retrieve internal workEffort roles for workEffort: " + workEffortId, MODULE);
         }
         return internalPartyIds;
     }
-    
+
     public static String getEmailSubjectCaseFormatRegExp() {
         String emailSubjectCaseFormatRegExp = UtilProperties.getPropertyValue(crmsfaProperties, "crmsfa.case.emailSubjectCaseFormat.regExp", "\\\\[Case:(.*?)\\\\]");
         return emailSubjectCaseFormatRegExp.replaceAll("\\\\\\\\", "\\");
@@ -124,50 +121,62 @@ public class ActivitiesHelper {
         return emailSubjectOrderString.replaceAll("\\$\\{orderId\\}", orderId);
     }
 
-    public static List getCustRequestIdsFromCommEvent( GenericValue communicationEvent, GenericDelegator delegator ) throws GenericEntityException {
+    public static List<String> getCustRequestIdsFromCommEvent(GenericValue communicationEvent, GenericDelegator delegator) throws GenericEntityException {
         return getCustRequestIdsFromString(communicationEvent.getString("subject"), delegator);
     }
-        
-    public static List getCustRequestIdsFromString( String parseString, GenericDelegator delegator ) throws GenericEntityException {
-        String getEmailSubjectCaseFormatRegExp = getEmailSubjectCaseFormatRegExp();
-        Set custRequestIds = new TreeSet();
 
-        if ( UtilValidate.isNotEmpty(parseString)) {
+    public static List<String> getCustRequestIdsFromString(String parseString, GenericDelegator delegator) throws GenericEntityException {
+        String getEmailSubjectCaseFormatRegExp = getEmailSubjectCaseFormatRegExp();
+        Set<String> custRequestIds = new TreeSet<String>();
+
+        if (UtilValidate.isNotEmpty(parseString)) {
             Pattern pattern = Pattern.compile(getEmailSubjectCaseFormatRegExp);
             Matcher matcher = pattern.matcher(parseString);
             while (matcher.find()) {
-                if (matcher.group(1) != null) custRequestIds.add(matcher.group(1));
+                if (matcher.group(1) != null) {
+                    custRequestIds.add(matcher.group(1));
+                }
             }
         }
-        
-        if (UtilValidate.isEmpty(custRequestIds)) return new ArrayList();
-        
-        // Filter the retrieved custRequestIds against existing CustRequest entities
-        List custRequests = delegator.findByCondition("CustRequest", new EntityConditionList(UtilMisc.toList(new EntityExpr("custRequestId", EntityOperator.IN, custRequestIds)), EntityOperator.AND), null, null);
-        List validCustRequestIds = EntityUtil.getFieldListFromEntityList(custRequests, "custRequestId", true);
 
-        if (UtilValidate.isEmpty(custRequests)) return new ArrayList();
+        if (UtilValidate.isEmpty(custRequestIds)) {
+            return new ArrayList<String>();
+        }
+
+        // Filter the retrieved custRequestIds against existing CustRequest entities
+        List<GenericValue> custRequests = delegator.findByCondition("CustRequest", EntityCondition.makeCondition("custRequestId", EntityOperator.IN, custRequestIds), null, null);
+        List<String> validCustRequestIds = EntityUtil.getFieldListFromEntityList(custRequests, "custRequestId", true);
+
+        if (UtilValidate.isEmpty(custRequests)) {
+            return new ArrayList<String>();
+        }
 
         return validCustRequestIds;
     }
-        
-    public static List getOrderIdsFromString(String parseString, GenericDelegator delegator) throws GenericEntityException {
-        Set orderIds = new TreeSet();
-        if ( UtilValidate.isNotEmpty(parseString)) {
+
+    public static List<String> getOrderIdsFromString(String parseString, GenericDelegator delegator) throws GenericEntityException {
+        Set<String> orderIds = new TreeSet<String>();
+        if (UtilValidate.isNotEmpty(parseString)) {
             Pattern pattern = Pattern.compile(getEmailSubjectOrderFormatRegExp());
             Matcher matcher = pattern.matcher(parseString);
             while (matcher.find()) {
-                if (matcher.group(1) != null) orderIds.add(matcher.group(1));
+                if (matcher.group(1) != null) {
+                    orderIds.add(matcher.group(1));
+                }
             }
         }
-        
-        if (UtilValidate.isEmpty(orderIds)) return new ArrayList();
-        
-        // Filter the retrieved orderIds against existing CustRequest entities
-        List orderHeaders = delegator.findByCondition("OrderHeader", new EntityConditionList(UtilMisc.toList(new EntityExpr("orderId", EntityOperator.IN, orderIds)), EntityOperator.AND), null, null);
-        List validOrderIds = EntityUtil.getFieldListFromEntityList(orderHeaders, "orderId", true);
 
-        if (UtilValidate.isEmpty(orderHeaders)) return new ArrayList();
+        if (UtilValidate.isEmpty(orderIds)) {
+            return new ArrayList<String>();
+        }
+
+        // Filter the retrieved orderIds against existing CustRequest entities
+        List<GenericValue> orderHeaders = delegator.findByCondition("OrderHeader", EntityCondition.makeCondition("orderId", EntityOperator.IN, orderIds), null, null);
+        List<String> validOrderIds = EntityUtil.getFieldListFromEntityList(orderHeaders, "orderId", true);
+
+        if (UtilValidate.isEmpty(orderHeaders)) {
+            return new ArrayList<String>();
+        }
 
         return validOrderIds;
     }

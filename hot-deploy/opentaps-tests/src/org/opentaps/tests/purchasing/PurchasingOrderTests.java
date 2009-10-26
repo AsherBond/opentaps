@@ -19,7 +19,6 @@ package org.opentaps.tests.purchasing;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -33,8 +32,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.order.OrderReadHelper;
@@ -161,8 +159,10 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         pof.approveOrder();
 
         // 5. Verify all items are approved
-        List<EntityExpr> conditions = Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_APPROVED"));
-        long itemApprovedCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                                           EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_APPROVED"));
+        long itemApprovedCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertEquals(String.format("Wrong status for item in order [%1$s]", orderId), 5, itemApprovedCount);
 
         // 6. Verify PO status is approved
@@ -176,8 +176,10 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         runAndAssertServiceSuccess("warehouse.issueOrderItemToShipmentAndReceiveAgainstPO", inputParameters);
 
         // 8. Verify all items are completed
-        conditions = Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_COMPLETED"));
-        long itemCompletedCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                           EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_COMPLETED"));
+        long itemCompletedCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertEquals(String.format("Wrong status for item in order [%1$s]", orderId), 5, itemCompletedCount);
 
         // 9. Verify PO status is complete
@@ -240,10 +242,14 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         pof.approveOrder();
 
         // 6. Verify all items are approved and one item is cancelled
-        List<EntityExpr> conditions = Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_APPROVED"));
-        long itemApprovedCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
-        conditions = Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_CANCELLED"));
-        long itemCancelledCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                                           EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_APPROVED"));
+        long itemApprovedCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
+        conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                           EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_CANCELLED"));
+        long itemCancelledCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertTrue(String.format("Wrong status for item(s) in order [%1$s]", orderId), itemApprovedCount == 4 && itemCancelledCount == 1);
 
         // 7. Verify PO status is approve
@@ -255,10 +261,14 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         runAndAssertServiceSuccess("warehouse.issueOrderItemToShipmentAndReceiveAgainstPO", inputParameters);
 
         // 9. Verify all items are completed and one item is cancelled
-        conditions = Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_COMPLETED"));
-        long itemCompletedCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
-        conditions = Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_CANCELLED"));
-        itemCancelledCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                           EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_COMPLETED"));
+        long itemCompletedCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
+        conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                           EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_CANCELLED"));
+        itemCancelledCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertTrue(String.format("Wrong status for item(s) in order [%1$s]", orderId), itemCompletedCount == 4 && itemCancelledCount == 1);
 
         // 10. Verify PO status is complete
@@ -309,8 +319,10 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         pof.approveOrder();
 
         // 4. Verify all items are approved
-        List<EntityExpr> conditions = Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_APPROVED"));
-        long itemApprovedCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                                           EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_APPROVED"));
+        long itemApprovedCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertEquals(String.format("Wrong status for item in order [%1$s]", orderId), 3, itemApprovedCount);
 
         // 5. Verify PO status is approve
@@ -329,10 +341,14 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         runAndAssertServiceSuccess("warehouse.issueOrderItemToShipmentAndReceiveAgainstPO", inputParameters);
 
         // 9. Verify all items are completed and one item is cancelled
-        conditions = Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_COMPLETED"));
-        long itemCompletedCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
-        conditions = Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_CANCELLED"));
-        long itemCancelledCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                           EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_COMPLETED"));
+        long itemCompletedCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
+        conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                           EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_CANCELLED"));
+        long itemCancelledCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertTrue(String.format("Wrong status for item(s) in order [%1$s]", orderId), itemCompletedCount == 2 && itemCancelledCount == 1);
 
         // 10. Verify PO status is complete
@@ -383,8 +399,10 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         pof.cancelOrder();
 
         // 4. Verify all items are cancelled
-        List<EntityExpr> conditions = Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_CANCELLED"));
-        long itemCompletedCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                                           EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_CANCELLED"));
+        long itemCompletedCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertEquals(String.format("Wrong status for item in order [%1$s]", orderId), 5, itemCompletedCount);
 
         // 5. Verify PO status is cancel
@@ -433,24 +451,28 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         pof.approveOrder();
 
         // 4. Verify all items are approved
-        List<EntityExpr> conditions = Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_APPROVED"));
-        long itemApprovedCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                                           EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_APPROVED"));
+        long itemApprovedCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertEquals(String.format("Wrong status for item in order [%1$s]", orderId), 5, itemApprovedCount);
 
         // 5. Verify PO status is approve
-        pOrder = delegator.findByPrimaryKeyCache("OrderHeader", UtilMisc.toMap( "orderId", orderId));
+        pOrder = delegator.findByPrimaryKeyCache("OrderHeader", UtilMisc.toMap("orderId", orderId));
         assertEquals(String.format("Wrong status for order [%1$s]", orderId), "ORDER_APPROVED", pOrder.getString("statusId"));
 
         // 6. Cancel PO
         pof.cancelOrder();
 
         // 7. Verify all items are cancelled
-        conditions = Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_CANCELLED"));
-        long itemCompletedCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                           EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_CANCELLED"));
+        long itemCompletedCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertEquals(String.format("Wrong status for item in order [%1$s]", orderId), 5, itemCompletedCount);
 
         // 8. Verify PO status is cancel
-        pOrder = delegator.findByPrimaryKeyCache("OrderHeader", UtilMisc.toMap( "orderId", orderId));
+        pOrder = delegator.findByPrimaryKeyCache("OrderHeader", UtilMisc.toMap("orderId", orderId));
         assertEquals(String.format("Wrong status for order [%1$s]", orderId), "ORDER_CANCELLED", pOrder.getString("statusId"));
     }
 
@@ -502,8 +524,10 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         pof.approveOrder();
 
         // 4. Verify all items are approved
-        List<EntityExpr> conditions = Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_APPROVED"));
-        long itemApprovedCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                                           EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_APPROVED"));
+        long itemApprovedCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertEquals(String.format("Wrong status for item in order [%1$s]", orderId), 5, itemApprovedCount);
 
         // 5. Verify PO status is approve
@@ -515,15 +539,19 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         List<GenericValue> orderItems = new ArrayList<GenericValue>();
         // add first item of order
         orderItems.add((GenericValue) orh.getOrderItems().get(0));
-        Map<String, Object> inputParameters = createTestInputParametersForReceiveInventoryAgainstPurchaseOrderItems( orderId, orderItems, demowarehouse1);
+        Map<String, Object> inputParameters = createTestInputParametersForReceiveInventoryAgainstPurchaseOrderItems(orderId, orderItems, demowarehouse1);
         runAndAssertServiceSuccess("warehouse.issueOrderItemToShipmentAndReceiveAgainstPO", inputParameters);
 
         // 7. Verify all items are approved but one is completed
-        conditions = Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_APPROVED"));
-        itemApprovedCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                           EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_APPROVED"));
+        itemApprovedCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertEquals(String.format("Wrong status for item in order [%1$s]", orderId), 4, itemApprovedCount);
-        conditions = Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_COMPLETED"));
-        long itemCompletedCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                           EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_COMPLETED"));
+        long itemCompletedCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertEquals(String.format("Wrong status for item in order [%1$s]", orderId), 1, itemCompletedCount);
 
         // 8. Verify PO status is approved
@@ -534,12 +562,16 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         pof.cancelOrder();
 
         // 10. Verify all items are cancelled but one is completed
-        conditions = Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_CANCELLED"));
-        long itemCancelledCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                           EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_CANCELLED"));
+        long itemCancelledCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertEquals(String.format("There should have 4 items are cancelled in order [%1$s]", orderId), 4, itemCancelledCount);
 
-        conditions = Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_COMPLETED"));
-        itemCompletedCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                           EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_COMPLETED"));
+        itemCompletedCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertEquals(String.format("There should have 1 item is completed in order [%1$s]", orderId), 1, itemCompletedCount);
 
         // 11. Verify PO status is Completed
@@ -664,41 +696,41 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         assertEquals(String.format("Wrong status for order [%1$s]", orderId), "ORDER_COMPLETED", pOrder.getString("statusId"));
 
         // Verify that item for P1 is now COMPLETED
-        List<EntityExpr> conditions = Arrays.asList(
-             new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-             new EntityExpr("productId", EntityOperator.EQUALS, product1.getString("productId")),
-             new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_COMPLETED"));
-        long product1CompletedCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+             EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+             EntityCondition.makeCondition("productId", EntityOperator.EQUALS, product1.getString("productId")),
+             EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_COMPLETED"));
+        long product1CompletedCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertEquals("There should have 1 " + product1.getString("productId") + " item is COMPLETED", 1, product1CompletedCount);
 
         // Verify that item for P2 is now COMPLETED
-        conditions = Arrays.asList(
-             new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-             new EntityExpr("productId", EntityOperator.EQUALS, product2.getString("productId")),
-             new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_COMPLETED"));
-        long product2CompletedCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        conditions = EntityCondition.makeCondition(EntityOperator.AND,
+             EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+             EntityCondition.makeCondition("productId", EntityOperator.EQUALS, product2.getString("productId")),
+             EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_COMPLETED"));
+        long product2CompletedCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertEquals("There should have 1 " + product2.getString("productId") + " item is COMPLETED", 1, product2CompletedCount);
 
         // Verify that item for P3 is now CANCELLED
-        conditions = Arrays.asList(
-             new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-             new EntityExpr("productId", EntityOperator.EQUALS, product3.getString("productId")),
-             new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_CANCELLED"));
-        long product3CancelledCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        conditions = EntityCondition.makeCondition(EntityOperator.AND,
+             EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+             EntityCondition.makeCondition("productId", EntityOperator.EQUALS, product3.getString("productId")),
+             EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_CANCELLED"));
+        long product3CancelledCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertEquals("There should have 1 " + product3.getString("productId") + " item is CANCELLED", 1, product3CancelledCount);
 
         // Verify that item for P4 is now COMPLETED
-        conditions = Arrays.asList(
-             new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-             new EntityExpr("productId", EntityOperator.EQUALS, product4.getString("productId")),
-             new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_COMPLETED"));
-        long product4CompletedCount = delegator.findCountByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        conditions = EntityCondition.makeCondition(EntityOperator.AND,
+             EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+             EntityCondition.makeCondition("productId", EntityOperator.EQUALS, product4.getString("productId")),
+             EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ITEM_COMPLETED"));
+        long product4CompletedCount = delegator.findCountByCondition("OrderItem", conditions, null, null);
         assertEquals("There should have 1 " + product4.getString("productId") + " item is COMPLETED", 1, product4CompletedCount);
         // Verify that the orderItem for P4 has a cancelQuantity of 20
-        conditions = Arrays.asList(
-             new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-             new EntityExpr("productId", EntityOperator.EQUALS, product4.getString("productId")));
-        List items = delegator.findByCondition("OrderItem", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        conditions = EntityCondition.makeCondition(EntityOperator.AND,
+             EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+             EntityCondition.makeCondition("productId", EntityOperator.EQUALS, product4.getString("productId")));
+        List items = delegator.findByCondition("OrderItem", conditions, null, null);
         assertEquals("There should have 1 " + product4.getString("productId") + " item", 1, items.size());
         GenericValue item4 = (GenericValue) items.get(0);
         BigDecimal cancelQuantity = item4.getBigDecimal("cancelQuantity");
@@ -991,7 +1023,7 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         Collection orderData = new LinkedList();
         Map orderItemData = UtilMisc.toMap("orderId", order.getOrderId(), "orderItemSeqId", suppliesOrderItemSeqId, "quantity", "6.0");
         orderData.add(orderItemData);
-        Map results = dispatcher.runSync("invoiceSuppliesOrWorkEffortOrderItems", UtilMisc.toMap("orderData", orderData, "userLogin", admin));
+        dispatcher.runSync("invoiceSuppliesOrWorkEffortOrderItems", UtilMisc.toMap("orderData", orderData, "userLogin", admin));
 
         // now get the order items
         OrderItem physicalOrderItem = repository.getOrderItem(order,
@@ -1220,7 +1252,7 @@ public class PurchasingOrderTests extends OpentapsTestCase {
 
     @SuppressWarnings("unchecked")
     private void executePurchasingAndInvoicingSuppliesTest(String productIdPrefix) throws Exception {
-        String EXPENSE_GL_ACCOUNT_ID = "631200";
+        String expenseGlAccountId = "631200";
         FinancialAsserts financialAsserts = new FinancialAsserts(this, organizationPartyId, demofinadmin);
         Map initialBalances = financialAsserts.getFinancialBalances(UtilDateTime.nowTimestamp());
 
@@ -1233,7 +1265,7 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         createMainSupplierForProduct(product2.getString("productId"), demoSupplierPartyId, new BigDecimal("50.0"), "USD", new BigDecimal("0.0"), demopurch1);
         // set the EXPENSE GlAccountType of the second product to "631200"
         // (janitorial and other contract services)
-        delegator.create("ProductGlAccount", UtilMisc.toMap("productId", product2.getString("productId"), "organizationPartyId", organizationPartyId, "glAccountTypeId", "EXPENSE", "glAccountId", EXPENSE_GL_ACCOUNT_ID));
+        delegator.create("ProductGlAccount", UtilMisc.toMap("productId", product2.getString("productId"), "organizationPartyId", organizationPartyId, "glAccountTypeId", "EXPENSE", "glAccountId", expenseGlAccountId));
 
         // create a purchase order for the two products
         Map<GenericValue, BigDecimal> orderParams = new HashMap<GenericValue, BigDecimal>();
@@ -1294,7 +1326,7 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         Map accountMap = UtilFinancial.replaceGlAccountTypeWithGlAccountForOrg(organizationPartyId, expectedBalanceChanges, delegator);
         // additional expense accounts not defined with gl account type
         expectedBalanceChanges.put("650000", "100");
-        expectedBalanceChanges.put(EXPENSE_GL_ACCOUNT_ID, "1000");
+        expectedBalanceChanges.put(expenseGlAccountId, "1000");
         assertMapDifferenceCorrect(initialBalances, finalBalances, accountMap);
     }
 
@@ -1339,7 +1371,6 @@ public class PurchasingOrderTests extends OpentapsTestCase {
      *
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testPurchaseOrderReceiptAccountingTags() throws Exception {
         // 1. create test product
         GenericValue product1 = createTestProduct("testCompletePurchaseOrder Test Product 1", demopurch1);

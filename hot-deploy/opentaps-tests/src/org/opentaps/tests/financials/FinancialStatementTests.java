@@ -16,24 +16,23 @@
  */
 package org.opentaps.tests.financials;
 
-import org.ofbiz.base.util.UtilMisc;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import com.opensourcestrategies.financials.util.UtilFinancial;
 import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.domain.base.entities.CustomTimePeriod;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
-
-import com.opensourcestrategies.financials.util.UtilFinancial;
-
-import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Collection;
-import java.util.Iterator;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 /**
  * Verify financial statements are correct based on the data in hot-deploy/opentaps-tests/data/financials/StatementsTestData.xml
@@ -54,14 +53,13 @@ public class FinancialStatementTests extends FinancialsTestCase {
     String trialBalanceOrganizationPartyId = null;     // separate organization for trial balance tests
 
     @Override
-    @SuppressWarnings("unchecked")
     public void setUp() throws Exception {
         super.setUp();
 
         // post all test transactions
         List<GenericValue> transactionsToPost = delegator.findByAnd("AcctgTrans", UtilMisc.toList(
-                new EntityExpr("acctgTransId", EntityOperator.LIKE, "STATEMENT-TEST-%"),
-                new EntityExpr("isPosted", EntityOperator.EQUALS, "N")
+                EntityCondition.makeCondition("acctgTransId", EntityOperator.LIKE, "STATEMENT-TEST-%"),
+                EntityCondition.makeCondition("isPosted", EntityOperator.EQUALS, "N")
         ));
         for (GenericValue transaction : transactionsToPost) {
             dispatcher.runSync("postAcctgTrans", UtilMisc.toMap("acctgTransId", transaction.getString("acctgTransId"), "userLogin", demofinadmin));
@@ -96,7 +94,6 @@ public class FinancialStatementTests extends FinancialsTestCase {
      * @return the new organization party id
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private String setUpOrganizationForTrialBalance(String organizationPartyId) throws Exception {
         // copy the organization
         String newOrganizationPartyId = this.createOrganizationFromTemplate(STATEMENT_TEST_ORG, "Organization for Trial Balance Tests " + UtilDateTime.nowTimestamp());
@@ -154,10 +151,10 @@ public class FinancialStatementTests extends FinancialsTestCase {
     @SuppressWarnings("unchecked")
     public void testComplexTrialBalanceForAsOfDate() throws Exception {
         Timestamp asOfDate = UtilDateTime.toTimestamp(7, 1, 2009, 0, 0, 0);
-        Map params = UtilMisc.toMap("organizationPartyId", trialBalanceOrganizationPartyId, "asOfDate", asOfDate, "glFiscalTypeId", "ACTUAL", "userLogin", admin);
-        Map results = dispatcher.runSync("getTrialBalanceForDate", params);
+        Map<String, Object> params = UtilMisc.toMap("organizationPartyId", trialBalanceOrganizationPartyId, "asOfDate", asOfDate, "glFiscalTypeId", "ACTUAL", "userLogin", admin);
+        Map<String, Object> results = dispatcher.runSync("getTrialBalanceForDate", params);
 
-        Map expectedAssetAccountBalances = new HashMap();
+        Map<String, BigDecimal> expectedAssetAccountBalances = new HashMap<String, BigDecimal>();
         expectedAssetAccountBalances.put("110000", new BigDecimal("136743.22"));
         expectedAssetAccountBalances.put("120000", new BigDecimal("225100.00"));
         expectedAssetAccountBalances.put("121800", new BigDecimal("500.00"));
@@ -169,7 +166,7 @@ public class FinancialStatementTests extends FinancialsTestCase {
         expectedAssetAccountBalances.put("191900", new BigDecimal("-42500.00"));
         assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("assetAccountBalances")), expectedAssetAccountBalances);
 
-        Map expectedLiabilityAccountBalances = new HashMap();
+        Map<String, BigDecimal> expectedLiabilityAccountBalances = new HashMap<String, BigDecimal>();
         expectedLiabilityAccountBalances.put("210000", new BigDecimal("248769.00"));
         expectedLiabilityAccountBalances.put("221300", new BigDecimal("1200.00"));
         expectedLiabilityAccountBalances.put("222100", new BigDecimal("12500.00"));
@@ -185,20 +182,19 @@ public class FinancialStatementTests extends FinancialsTestCase {
         expectedLiabilityAccountBalances.put("240000", new BigDecimal("330000.00"));
         assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("liabilityAccountBalances")), expectedLiabilityAccountBalances);
 
-        Map expectedEquityAccountBalances = UtilMisc.toMap("340000", new BigDecimal("10000.00"), "341000", new BigDecimal("300000.00"), "336000", new BigDecimal("99174.22"), "334000", new BigDecimal("-1000"));
+        Map<String, BigDecimal> expectedEquityAccountBalances = UtilMisc.toMap("340000", new BigDecimal("10000.00"), "341000", new BigDecimal("300000.00"), "336000", new BigDecimal("99174.22"), "334000", new BigDecimal("-1000"));
         assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("equityAccountBalances")), expectedEquityAccountBalances);
 
-        Map expectedRevenueAccountBalances = UtilMisc.toMap("400000", new BigDecimal("374000.00"), "408000", new BigDecimal("42000.00"));
+        Map<String, BigDecimal> expectedRevenueAccountBalances = UtilMisc.toMap("400000", new BigDecimal("374000.00"), "408000", new BigDecimal("42000.00"));
         assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("revenueAccountBalances")), expectedRevenueAccountBalances);
 
         // this will verify the listed gl accounts of them
-        Map expectedExpenseAccountBalances = UtilMisc.toMap("500000", new BigDecimal("157000.00"), "510000", new BigDecimal("24625.78"), "601000", new BigDecimal("46300.00"), "611000", new BigDecimal("24000"), "675000", new BigDecimal("12500"), "787000", new BigDecimal("2500.0"));
+        Map<String, BigDecimal> expectedExpenseAccountBalances = UtilMisc.toMap("500000", new BigDecimal("157000.00"), "510000", new BigDecimal("24625.78"), "601000", new BigDecimal("46300.00"), "611000", new BigDecimal("24000"), "675000", new BigDecimal("12500"), "787000", new BigDecimal("2500.0"));
         expectedExpenseAccountBalances.put("901000", new BigDecimal("10000.0"));
         assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("expenseAccountBalances")), expectedExpenseAccountBalances);
 
-        Map expectedIncomeAccountBalances = UtilMisc.toMap("800000", new BigDecimal("750.0"), "810000", new BigDecimal("500.0"), "821000", new BigDecimal("-10000.0"));
-        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("incomeAccountBalances")), new HashMap());
-        Map expectedOtherAccountBalances = UtilMisc.toMap("890000", new BigDecimal("99174.22"));
+        assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("incomeAccountBalances")), new HashMap<GenericValue, BigDecimal>());
+        Map<String, BigDecimal> expectedOtherAccountBalances = UtilMisc.toMap("890000", new BigDecimal("99174.22"));
         assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("otherAccountBalances")), expectedOtherAccountBalances);
     }
 

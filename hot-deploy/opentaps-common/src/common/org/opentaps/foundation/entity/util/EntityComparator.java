@@ -19,7 +19,7 @@ package org.opentaps.foundation.entity.util;
 import java.util.Comparator;
 import java.util.List;
 
-import org.opentaps.foundation.entity.Entity;
+import org.opentaps.foundation.entity.EntityInterface;
 
 /**
  * A simple entity comparator for sort entities in collection.
@@ -27,10 +27,11 @@ import org.opentaps.foundation.entity.Entity;
  *
  * Collections.sort(orders, new EntityComparator("orderId,orderName desc"));
  */
-public class EntityComparator implements Comparator {
+public class EntityComparator implements Comparator<EntityInterface> {
+
     private String orderBy;
-    public static final int SORT_ASCENDING = 1;
-    public static final int SORT_DESCENDING = -1;
+    private static final int SORT_ASCENDING = 1;
+    private static final int SORT_DESCENDING = -1;
 
     /**
      * Creates a new <code>EntityComparator</code> instance.
@@ -52,22 +53,12 @@ public class EntityComparator implements Comparator {
     }
 
     /**
-     * Compares two values and return the result.
-     * @param o1 a <code>Object</code> value
-     * @param o2 a <code>Object</code> value
-     * @return a <code>int</code> value
-     */
-    public int compare(Object o1, Object o2) {
-        return compare((Entity) o1, (Entity) o2);
-    }
-
-    /**
      * Compares two entities and return the result.
-     * @param entity1 a <code>Entity</code> value
-     * @param entity2 a <code>Entity</code> value
+     * @param entity1 a <code>EntityInterface</code> value
+     * @param entity2 a <code>EntityInterface</code> value
      * @return a <code>int</code> value
      */
-    public int compare(Entity entity1, Entity entity2) {
+    public int compare(EntityInterface entity1, EntityInterface entity2) {
         // remove extra space from orign string
         String[] fields = orderBy.replaceAll("\\s+", " ").trim().split(",");
         for (int i = 0; i < fields.length; i++) {
@@ -77,7 +68,9 @@ public class EntityComparator implements Comparator {
             String fieldName = field[0];
             int fieldSortType = SORT_ASCENDING;
             if (field.length > 1) {
-                fieldSortType =  field[1].trim().equalsIgnoreCase("DESC") ? SORT_DESCENDING : SORT_ASCENDING;
+                if (field[1].trim().equalsIgnoreCase("DESC")) {
+                    fieldSortType = SORT_DESCENDING;
+                }
             }
             int result = compare(entity1, entity2, fieldName, fieldSortType);
             if (result != 0) {
@@ -89,24 +82,27 @@ public class EntityComparator implements Comparator {
 
     /**
      * Compares the order fields of two entities and return the result.
-     * @param o1 a <code>Entity</code> value
-     * @param o2 a <code>Entity</code> value
+     * @param o1 a <code>EntityInterface</code> value
+     * @param o2 a <code>EntityInterface</code> value
      * @param fieldName a <code>String</code> value
      * @param sortType a <code>int</code> value
      * @return a <code>int</code> value
      */
-    public int compare(Entity o1, Entity o2, String fieldName, int sortType) {
+    public int compare(EntityInterface o1, EntityInterface o2, String fieldName, int sortType) {
         if (o1 == null && o2 == null) {
             return 0;
         }
-        if (o1 == null  && o2 != null) {
+        if (o1 == null && o2 != null) {
             return -1 * sortType;
         }
-        if (o1 != null  && o2 == null) {
+        if (o1 != null && o2 == null) {
             return sortType;
         }
-        if (!o1.getClass().equals(o2.getClass())) {
-            return 0;
+        if (o1.get(fieldName) == null && o2.get(fieldName) != null) {
+            return -1 * sortType;
+        }
+        if (o1.get(fieldName) != null && o2.get(fieldName) == null) {
+            return sortType;
         }
         return sortType * ((Comparable) o1.get(fieldName)).compareTo(o2.get(fieldName));
     }

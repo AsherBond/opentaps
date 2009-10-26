@@ -35,8 +35,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityListIterator;
@@ -54,7 +53,7 @@ import org.opentaps.common.party.PartyContactHelper;
  */
 public class OrderImportServices {
 
-    public static String module = OrderImportServices.class.getName();
+    private static String MODULE = OrderImportServices.class.getName();
     public static final int decimals = UtilNumber.getBigDecimalScale("order.decimals");
     public static final int rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
     public static final BigDecimal ZERO = (new BigDecimal("0")).setScale(decimals, rounding);
@@ -97,7 +96,7 @@ public class OrderImportServices {
 
             if (UtilValidate.isEmpty(productStore)) {
                 String errMsg = "Error in importOrders service: product store [" + productStoreId + "] does not exist";
-                Debug.logError(errMsg, OrderImportServices.module);
+                Debug.logError(errMsg, MODULE);
                 return ServiceUtil.returnError(errMsg);
             }
 
@@ -107,7 +106,7 @@ public class OrderImportServices {
 
                 if (UtilValidate.isEmpty(productCatalog)) {
                     String errMsg = "Error in importOrders service: product catalog [" + productCatalog + "] does not exist";
-                    Debug.logError(errMsg, OrderImportServices.module);
+                    Debug.logError(errMsg, MODULE);
                     return ServiceUtil.returnError(errMsg);
                 }
             }
@@ -117,7 +116,7 @@ public class OrderImportServices {
 
             if (UtilValidate.isEmpty(companyParty)) {
                 String errMsg = "Error in importOrders service: company party [" + companyPartyId + "] does not exist";
-                Debug.logError(errMsg, OrderImportServices.module);
+                Debug.logError(errMsg, MODULE);
                 return ServiceUtil.returnError(errMsg);
             }
 
@@ -128,22 +127,22 @@ public class OrderImportServices {
             }
 
             // need to get an ELI because of possibly large number of records.  productId <> null will get all records
-            EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
-                        new EntityExpr("orderId", EntityOperator.NOT_EQUAL, null),
-                        new EntityExpr("processedTimestamp", EntityOperator.EQUALS, null)   // leave out previously processed orders
-                        ), EntityOperator.AND);
+            EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("orderId", EntityOperator.NOT_EQUAL, null),
+                        EntityCondition.makeCondition("processedTimestamp", EntityOperator.EQUALS, null)   // leave out previously processed orders
+                        );
             TransactionUtil.begin();   // since the service is not inside a transaction, this needs to be in its own transaction, or you'll get a harmless exception
             EntityListIterator importOrderHeaders = delegator.findListIteratorByCondition("DataImportOrderHeader", conditions, null, null);
             TransactionUtil.commit();
 
             GenericValue orderHeader = null;
-            while ((orderHeader = (GenericValue) importOrderHeaders.next()) != null) {
+            while ((orderHeader = importOrderHeaders.next()) != null) {
 
                 try {
 
                     List<GenericValue> toStore = OrderImportServices.decodeOrder(orderHeader, companyPartyId, productStore, prodCatalogId, purchaseOrderShipToContactMechId, importEmptyOrders.booleanValue(), calculateGrandTotal.booleanValue(), reserveInventory, delegator, userLogin);
                     if (toStore == null) {
-                        Debug.logWarning("Import of orderHeader[" + orderHeader.get("orderId") + "] was unsuccessful.", OrderImportServices.module);
+                        Debug.logWarning("Import of orderHeader[" + orderHeader.get("orderId") + "] was unsuccessful.", MODULE);
                     }
 
                     TransactionUtil.begin();
@@ -152,7 +151,7 @@ public class OrderImportServices {
 
                     // make reservation if requested
                     if (reserveInventory && !orderHeader.getBoolean("orderClosed") && "SALES_ORDER".equals(orderHeader.getString("orderTypeId"))) {
-                        Debug.logInfo("Starting product reservation against order [" + orderHeader.getString("orderId") + "]", module);
+                        Debug.logInfo("Starting product reservation against order [" + orderHeader.getString("orderId") + "]", MODULE);
 
                         String reserveOrderEnumId = productStore.getString("reserveOrderEnumId");
                         if (UtilValidate.isEmpty(reserveOrderEnumId)) {
@@ -166,7 +165,7 @@ public class OrderImportServices {
                             }
 
                             // we have order item
-                            Debug.logInfo("Reserve order item [" + currentEntity.getString("orderItemSeqId") + "]" , module);
+                            Debug.logInfo("Reserve order item [" + currentEntity.getString("orderItemSeqId") + "]" , MODULE);
                             Map<String, Object> callCtxt = FastMap.newInstance();
                             callCtxt.put("productStoreId", productStoreId);
                             callCtxt.put("productId", currentEntity.getString("productId"));
@@ -178,32 +177,32 @@ public class OrderImportServices {
 
                             Map<String, Object> callResult = dispatcher.runSync("reserveStoreInventory", callCtxt);
                             if (ServiceUtil.isError(callResult)) {
-                                Debug.logWarning("reserveStoreInventory returned error " + ServiceUtil.getErrorMessage(callResult), module);
+                                Debug.logWarning("reserveStoreInventory returned error " + ServiceUtil.getErrorMessage(callResult), MODULE);
                                 TransactionUtil.rollback();
                             }
 
-                            Debug.logWarning("The order item is reserved successfully", module);
+                            Debug.logWarning("The order item is reserved successfully", MODULE);
                         }
                     }
 
-                    Debug.logInfo("Successfully imported orderHeader [" + orderHeader.get("orderId") + "].", OrderImportServices.module);
+                    Debug.logInfo("Successfully imported orderHeader [" + orderHeader.get("orderId") + "].", MODULE);
                     imported++;
 
                     TransactionUtil.commit();
 
                 } catch (GenericEntityException e) {
                     TransactionUtil.rollback();
-                    Debug.logError(e, "Failed to import orderHeader[" + orderHeader.get("orderId") + "]. Error stack follows.", OrderImportServices.module);
+                    Debug.logError(e, "Failed to import orderHeader[" + orderHeader.get("orderId") + "]. Error stack follows.", MODULE);
                 } catch (Exception e) {
                     TransactionUtil.rollback();
-                    Debug.logError(e, "Import of orderHeader[" + orderHeader.get("orderId") + "] was unsuccessful. Error stack follows.", OrderImportServices.module);
+                    Debug.logError(e, "Import of orderHeader[" + orderHeader.get("orderId") + "] was unsuccessful. Error stack follows.", MODULE);
                 }
             }
             importOrderHeaders.close();
 
         } catch (GenericEntityException e) {
             String errMsg = "Error in importOrders service: " + e.getMessage();
-            Debug.logError(e, errMsg, OrderImportServices.module);
+            Debug.logError(e, errMsg, MODULE);
             return ServiceUtil.returnError(errMsg);
         }
 
@@ -244,12 +243,12 @@ public class OrderImportServices {
         boolean isSalesOrder = "SALES_ORDER".equals(orderTypeId);
         boolean isPurchaseOrder = "PURCHASE_ORDER".equals(orderTypeId);
 
-        Debug.logInfo("Importing orderHeader[" + orderId + "]", OrderImportServices.module);
+        Debug.logInfo("Importing orderHeader[" + orderId + "]", MODULE);
 
         // Check to make sure that an order with this ID doesn't already exist
         GenericValue existingOrderHeader = delegator.findByPrimaryKey("OrderHeader", UtilMisc.toMap("orderId", orderId));
         if (existingOrderHeader != null) {
-            Debug.logError("Ignoring duplicate orderHeader[" + orderId + "]", OrderImportServices.module);
+            Debug.logError("Ignoring duplicate orderHeader[" + orderId + "]", MODULE);
             return FastList.newInstance();
         }
 
@@ -305,7 +304,7 @@ public class OrderImportServices {
 
             GenericValue shipMeth = delegator.findByPrimaryKeyCache("ProductStoreShipmentMeth", UtilMisc.toMap("productStoreShipMethId", productStoreShipMethId));
             if (shipMeth == null) {
-                Debug.logWarning("Customer [" + customerPartyId + "] has no shipping method specified.  Assuming No Shipping.", module);
+                Debug.logWarning("Customer [" + customerPartyId + "] has no shipping method specified.  Assuming No Shipping.", MODULE);
                 shipMeth = delegator.makeValue("ProductStoreShipmentMeth", UtilMisc.toMap("partyId", "_NA_", "roleTypeId", "CARRIER", "shipmentMethodTypeId", "NO_SHIPPING"));
             }
             String shipmentMethodTypeId = shipMeth.getString("shipmentMethodTypeId");
@@ -314,10 +313,10 @@ public class OrderImportServices {
 
             List<GenericValue> shippingAddresses = PartyContactHelper.getContactMechsByPurpose(customerPartyId, "POSTAL_ADDRESS", "SHIPPING_LOCATION", true, delegator);
             if (shippingAddresses.size() > 1) {
-                Debug.logWarning("Customer [" + customerPartyId + "] has more than one shipping address.  Using first one.", module);
+                Debug.logWarning("Customer [" + customerPartyId + "] has more than one shipping address.  Using first one.", MODULE);
             }
             if (shippingAddresses.size() == 0) {
-                Debug.logInfo("No shipping address found for customer [" + customerPartyId + "].  Not creating ship group for the order.", module);
+                Debug.logInfo("No shipping address found for customer [" + customerPartyId + "].  Not creating ship group for the order.", MODULE);
             } else {
                 String contactMechId = EntityUtil.getFirst(shippingAddresses).getString("contactMechId");
                 oisg = delegator.makeValue("OrderItemShipGroup");
@@ -329,7 +328,7 @@ public class OrderImportServices {
                 oisg.put("maySplit", "N");
                 oisg.put("isGift", "N");
                 oisg.put("contactMechId", contactMechId);
-                Debug.logInfo("Created ship group for order at PostalAddress [" + contactMechId + "]", module);
+                Debug.logInfo("Created ship group for order at PostalAddress [" + contactMechId + "]", MODULE);
             }
         }
 
@@ -352,7 +351,7 @@ public class OrderImportServices {
         if (orderTax != null && orderTax > 0.0 && taxAuthPartyId != null) {
             GenericValue taxAuth = EntityUtil.getFirst(delegator.findByAndCache("TaxAuthority", UtilMisc.toMap("taxAuthPartyId", taxAuthPartyId)));
             if (taxAuth == null) {
-                Debug.logWarning("Order [" + orderId + "] has a tax to an unknown tax authority.  No entry for taxAuthPartyId [" + taxAuthPartyId + "] found in TaxAuthority.", module);
+                Debug.logWarning("Order [" + orderId + "] has a tax to an unknown tax authority.  No entry for taxAuthPartyId [" + taxAuthPartyId + "] found in TaxAuthority.", MODULE);
             } else {
                 GenericValue adj = delegator.makeValue("OrderAdjustment");
                 adj.put("orderAdjustmentId", delegator.getNextSeqId("OrderAdjustment"));
@@ -369,8 +368,8 @@ public class OrderImportServices {
 
         // OrderItems
 
-        List orderItemConditions = UtilMisc.toList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("processedTimestamp", EntityOperator.EQUALS, null));
-        List externalOrderItems = delegator.findByCondition("DataImportOrderItem", new EntityConditionList(orderItemConditions, EntityOperator.AND), null, null); //getExternalOrderItems(externalOrderHeader.getString("orderId"), delegator);
+        List orderItemConditions = UtilMisc.toList(EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId), EntityCondition.makeCondition("processedTimestamp", EntityOperator.EQUALS, null));
+        List externalOrderItems = delegator.findByCondition("DataImportOrderItem", EntityCondition.makeCondition(orderItemConditions, EntityOperator.AND), null, null); //getExternalOrderItems(externalOrderHeader.getString("orderId"), delegator);
 
         // If orders without orderItems should not be imported, return now without doing anything
         if (UtilValidate.isEmpty(externalOrderItems) && !importEmptyOrders) {
@@ -422,14 +421,14 @@ public class OrderImportServices {
 
             // purchase orders must assign all their order items to the oisg
             if ((isPurchaseOrder && oisg != null) || (isSalesOrder && reserveInventory && oisg != null)) {
-                Debug.logInfo("Begin to create OrderItemShipGroupAssoc", module);
+                Debug.logInfo("Begin to create OrderItemShipGroupAssoc", MODULE);
                 Map oisgAssocInput = FastMap.newInstance();
                 oisgAssocInput.put("orderId", orderId);
                 oisgAssocInput.put("orderItemSeqId", orderItemSeqId);
                 oisgAssocInput.put("shipGroupSeqId", defaultShipGroupSeqId);
                 oisgAssocInput.put("quantity", quantity);
                 oisgAssocs.add(delegator.makeValue("OrderItemShipGroupAssoc", oisgAssocInput));
-                Debug.logInfo("OrderItemShipGroupAssoc is created", module);
+                Debug.logInfo("OrderItemShipGroupAssoc is created", MODULE);
             }
 
             // line item tax, which must have itemTax and taxAuthPartyId defined
@@ -438,7 +437,7 @@ public class OrderImportServices {
             if (itemTax != null && itemTax > 0.0 && taxAuthPartyId != null) {
                 GenericValue taxAuth = EntityUtil.getFirst(delegator.findByAndCache("TaxAuthority", UtilMisc.toMap("taxAuthPartyId", taxAuthPartyId)));
                 if (taxAuth == null) {
-                    Debug.logWarning("Order Item [" + orderId + "," + orderItemSeqId + "] has a tax to an unknown tax authority.  No entry for taxAuthPartyId [" + taxAuthPartyId + "] found in TaxAuthority.", module);
+                    Debug.logWarning("Order Item [" + orderId + "," + orderItemSeqId + "] has a tax to an unknown tax authority.  No entry for taxAuthPartyId [" + taxAuthPartyId + "] found in TaxAuthority.", MODULE);
                 } else {
                     GenericValue adj = delegator.makeValue("OrderAdjustment");
                     adj.put("orderAdjustmentId", delegator.getNextSeqId("OrderAdjustment"));
@@ -463,7 +462,7 @@ public class OrderImportServices {
             // Get the grand total from the order items and order adjustments
             orderGrandTotal = getOrderGrandTotal(orderAdjustments, orderItems);
             if (orderGrandTotal.compareTo(BigDecimal.ZERO) == 0) {
-                Debug.logWarning("Order [" + orderId + "] had a zero calculated total, so we are using the DataImportOrderHeader grand total of [" + externalOrderHeader.getBigDecimal("grandTotal") + "]", module);
+                Debug.logWarning("Order [" + orderId + "] had a zero calculated total, so we are using the DataImportOrderHeader grand total of [" + externalOrderHeader.getBigDecimal("grandTotal") + "]", MODULE);
                 orderGrandTotal = externalOrderHeader.getBigDecimal("grandTotal").setScale(decimals, rounding);
             }
         } else {
@@ -483,7 +482,7 @@ public class OrderImportServices {
             GenericValue party = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId));
 
             if (UtilValidate.isEmpty(party)) {
-                Debug.logError("CustomerPartyId [" + customerPartyId + "] not found - not creating BILL_TO_CUSTOMER order role for orderId [" + orderId + "]", module);
+                Debug.logError("CustomerPartyId [" + customerPartyId + "] not found - not creating BILL_TO_CUSTOMER order role for orderId [" + orderId + "]", MODULE);
             } else {
                 // Ensure the party roles for the customer
                 roles.addAll(UtilImport.ensurePartyRoles(customerPartyId, UtilMisc.toList("PLACING_CUSTOMER", "BILL_TO_CUSTOMER", "SHIP_TO_CUSTOMER", "END_USER_CUSTOMER"), delegator));
@@ -507,7 +506,7 @@ public class OrderImportServices {
             // Make sure the supplier party exists
             GenericValue supplier = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", supplierPartyId));
             if (supplier == null) {
-                Debug.logError("SupplierPartyId [" + supplierPartyId + "] not found - not creating BILL_FROM_VENDOR order role for orderId [" + orderId + "]", module);
+                Debug.logError("SupplierPartyId [" + supplierPartyId + "] not found - not creating BILL_FROM_VENDOR order role for orderId [" + orderId + "]", MODULE);
             } else {
                 roles.addAll(UtilImport.ensurePartyRoles(supplierPartyId, UtilMisc.toList("SUPPLIER", "SUPPLIER_AGENT", "BILL_FROM_VENDOR", "SHIP_FROM_VENDOR"), delegator));
 

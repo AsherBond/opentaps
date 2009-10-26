@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -16,6 +16,8 @@
  */
 package com.opensourcestrategies.crmsfa.teams;
 
+import java.util.*;
+
 import javolution.util.FastSet;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
@@ -24,40 +26,34 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.util.UtilCommon;
 
-import java.util.*;
-
 /**
- * Team Helper methods which are designed to provide a consistent set of APIs that can be reused by 
+ * Team Helper methods which are designed to provide a consistent set of APIs that can be reused by
  * higher level services.
- *
- * @author     <a href="mailto:leon@opensourcestrategies.com">Leon Torres</a>
  */
+public final class TeamHelper {
 
-public class TeamHelper {
+    private TeamHelper() { }
 
-    public static final String module = TeamHelper.class.getName();
+    private static final String MODULE = TeamHelper.class.getName();
 
-    /** the possible security groups for a team member (basically the contents of SalesTeamRoleSecurity) */
-    public static final List TEAM_SECURITY_GROUPS = UtilMisc.toList("SALES_MANAGER", "SALES_REP", "SALES_REP_LIMITED", "CSR");
+    /** the possible security groups for a team member (basically the contents of SalesTeamRoleSecurity). */
+    public static final List<String> TEAM_SECURITY_GROUPS = UtilMisc.toList("SALES_MANAGER", "SALES_REP", "SALES_REP_LIMITED", "CSR");
 
     /** Find all active PartyRelationships that relates a partyId to a team or account. */
     public static List findActiveAccountOrTeamRelationships(String accountTeamPartyId, String roleTypeIdFrom, String teamMemberPartyId, GenericDelegator delegator) throws GenericEntityException {
-            EntityCondition conditions = new EntityConditionList( UtilMisc.toList(
-                    new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, roleTypeIdFrom),
-                    new EntityExpr("partyIdFrom", EntityOperator.EQUALS, accountTeamPartyId),
-                    new EntityExpr("partyIdTo", EntityOperator.EQUALS, teamMemberPartyId),
-                    new EntityExpr("partyRelationshipTypeId", EntityOperator.EQUALS, "ASSIGNED_TO"),
-                    EntityUtil.getFilterByDateExpr()
-                    ), EntityOperator.AND);
-            return delegator.findByCondition("PartyRelationship",  conditions, null, null);
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, roleTypeIdFrom),
+                    EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, accountTeamPartyId),
+                    EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, teamMemberPartyId),
+                    EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, "ASSIGNED_TO"),
+                    EntityUtil.getFilterByDateExpr());
+        return delegator.findByCondition("PartyRelationship",  conditions, null, null);
     }
 
     /**
@@ -66,30 +62,28 @@ public class TeamHelper {
     public static List<GenericValue> getActiveTeamMembers(Collection<String> teamPartyIds, GenericDelegator delegator) throws GenericEntityException {
         // this might happen if there are no teams set up yet
         if (UtilValidate.isEmpty(teamPartyIds)) {
-            Debug.logWarning("No team partyIds set, so getActiveTeamMembers returns null", module);
+            Debug.logWarning("No team partyIds set, so getActiveTeamMembers returns null", MODULE);
             return null;
         }
 
-        EntityCondition orConditions =  new EntityConditionList( UtilMisc.toList(
-                    new EntityExpr("securityGroupId", EntityOperator.EQUALS, "SALES_MANAGER"),
-                    new EntityExpr("securityGroupId", EntityOperator.EQUALS, "SALES_REP"),
-                    new EntityExpr("securityGroupId", EntityOperator.EQUALS, "SALES_REP_LIMITED"),
-                    new EntityExpr("securityGroupId", EntityOperator.EQUALS, "CSR")
-                    ), EntityOperator.OR);
-        EntityCondition conditions = new EntityConditionList( UtilMisc.toList(
-                    new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT_TEAM"),
-                    new EntityExpr("partyIdFrom", EntityOperator.IN, teamPartyIds),
-                    new EntityExpr("partyRelationshipTypeId", EntityOperator.EQUALS, "ASSIGNED_TO"),
+        EntityCondition orConditions = EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition("securityGroupId", EntityOperator.EQUALS, "SALES_MANAGER"),
+                    EntityCondition.makeCondition("securityGroupId", EntityOperator.EQUALS, "SALES_REP"),
+                    EntityCondition.makeCondition("securityGroupId", EntityOperator.EQUALS, "SALES_REP_LIMITED"),
+                    EntityCondition.makeCondition("securityGroupId", EntityOperator.EQUALS, "CSR"));
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT_TEAM"),
+                    EntityCondition.makeCondition("partyIdFrom", EntityOperator.IN, teamPartyIds),
+                    EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, "ASSIGNED_TO"),
                     orConditions,
-                    // new EntityExpr("securityGroupId", EntityOperator.IN, TEAM_SECURITY_GROUPS),  XXX TODO: found bug in mysql: this is not equivalent to using the or condition!
-                    EntityUtil.getFilterByDateExpr()
-                    ), EntityOperator.AND);
+                    // EntityCondition.makeCondition("securityGroupId", EntityOperator.IN, TEAM_SECURITY_GROUPS),  XXX TODO: found bug in mysql: this is not equivalent to using the or condition!
+                    EntityUtil.getFilterByDateExpr());
         EntityListIterator teamMembersIterator = delegator.findListIteratorByCondition(
-                "PartyToSummaryByRelationship", 
-                conditions, 
-                null, 
-                Arrays.asList("partyId", "firstName", "lastName"), 
-                Arrays.asList("firstName", "lastName"), 
+                "PartyToSummaryByRelationship",
+                conditions,
+                null,
+                Arrays.asList("partyId", "firstName", "lastName"),
+                Arrays.asList("firstName", "lastName"),
                 new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true)
                 );
         List<GenericValue> resultList = teamMembersIterator.getCompleteList();
@@ -104,53 +98,55 @@ public class TeamHelper {
 
     /** Get all active team members of all active teams.  Returns a list of PartyToSummaryByRelationship. */
     public static List<GenericValue> getActiveTeamMembers(GenericDelegator delegator) throws GenericEntityException {
-        List<EntityExpr> conditions = new ArrayList<EntityExpr>();
-        conditions.add(new EntityExpr("roleTypeId", EntityOperator.EQUALS, "ACCOUNT_TEAM"));
-        conditions.add(new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PARTY_DISABLED"));
-        List<GenericValue> teams = delegator.findByCondition("PartyRoleAndPartyDetail", new EntityConditionList(conditions, EntityOperator.AND), Arrays.asList("partyId"), null);
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                                           EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "ACCOUNT_TEAM"),
+                                           EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PARTY_DISABLED"));
+        List<GenericValue> teams = delegator.findByCondition("PartyRoleAndPartyDetail", conditions, Arrays.asList("partyId"), null);
         List<String> teamPartyIds = null;
-        if (UtilValidate.isNotEmpty(teams)) 
+        if (UtilValidate.isNotEmpty(teams)) {
             teamPartyIds = EntityUtil.getFieldListFromEntityList(teams, "partyId", true);
-        
+        }
+
         List<GenericValue> teamMembers = getActiveTeamMembers(teamPartyIds, delegator);
         return teamMembers;
     }
-    
+
     /**
      * Get the team members (as a list of partyId Strings) that the partyId currently shares a team with.  This is accomplished by finding all
      * active team members of teams that the partyId belongs to.  No security is checked here, that is the responsibility of upstream code.
      */
-    public static Collection getTeamMembersForPartyId(String partyId, GenericDelegator delegator) throws GenericEntityException {
-        Collection teamPartyIds = getTeamsForPartyId(partyId, delegator);
-        if (teamPartyIds.size() == 0) return teamPartyIds;
+    public static Collection<String> getTeamMembersForPartyId(String partyId, GenericDelegator delegator) throws GenericEntityException {
+        Collection<String> teamPartyIds = getTeamsForPartyId(partyId, delegator);
+        if (teamPartyIds.size() == 0) {
+            return teamPartyIds;
+        }
 
-        List relationships = getActiveTeamMembers(teamPartyIds, delegator);
-        Set partyIds = new HashSet();
-        for (Iterator iter = relationships.iterator(); iter.hasNext(); ) {
-            GenericValue relationship = (GenericValue) iter.next();
-            partyIds.add(relationship.get("partyId"));
+        List<GenericValue> relationships = getActiveTeamMembers(teamPartyIds, delegator);
+        Set<String> partyIds = new HashSet<String>();
+        for (Iterator<GenericValue> iter = relationships.iterator(); iter.hasNext();) {
+            GenericValue relationship = iter.next();
+            partyIds.add(relationship.getString("partyId"));
         }
         return partyIds;
     }
 
     /**
-     *  Get the teams (as a list of PartyRelationship.partyIdFrom) that the partyId currently belongs to.  A team relationship is defined with a 
-     *  PartyRelationship  where the partyIdFrom is the team Party, roleTypeIdFrom is ACCOUNT_TEAM, partyIdTo is input, partyRelationshipTypeId 
+     *  Get the teams (as a list of PartyRelationship.partyIdFrom) that the partyId currently belongs to.  A team relationship is defined with a
+     *  PartyRelationship  where the partyIdFrom is the team Party, roleTypeIdFrom is ACCOUNT_TEAM, partyIdTo is input, partyRelationshipTypeId
      *  is ASSIGNED_TO, and securityGroupId is either SALES_REP or SALES_MANAGER.
      */
-    public static Collection getTeamsForPartyId(String partyId, GenericDelegator delegator) throws GenericEntityException {
-        EntityCondition conditions = new EntityConditionList( UtilMisc.toList(
-                    new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT_TEAM"),
-                    new EntityExpr("partyIdTo", EntityOperator.EQUALS, partyId),
-                    new EntityExpr("partyRelationshipTypeId", EntityOperator.EQUALS, "ASSIGNED_TO"),
-                    new EntityExpr("securityGroupId", EntityOperator.IN, TEAM_SECURITY_GROUPS),
-                    EntityUtil.getFilterByDateExpr()
-                    ), EntityOperator.AND);
-        List relationships = delegator.findByCondition("PartyRelationship", conditions, null, null, null, UtilCommon.DISTINCT_READ_OPTIONS);
-        Set partyIds = new HashSet();
-        for (Iterator iter = relationships.iterator(); iter.hasNext(); ) {
-            GenericValue relationship = (GenericValue) iter.next();
-            partyIds.add(relationship.get("partyIdFrom"));
+    public static Collection<String> getTeamsForPartyId(String partyId, GenericDelegator delegator) throws GenericEntityException {
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT_TEAM"),
+                    EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyId),
+                    EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, "ASSIGNED_TO"),
+                    EntityCondition.makeCondition("securityGroupId", EntityOperator.IN, TEAM_SECURITY_GROUPS),
+                    EntityUtil.getFilterByDateExpr());
+        List<GenericValue> relationships = delegator.findByCondition("PartyRelationship", conditions, null, null, null, UtilCommon.DISTINCT_READ_OPTIONS);
+        Set<String> partyIds = new HashSet<String>();
+        for (Iterator<GenericValue> iter = relationships.iterator(); iter.hasNext();) {
+            GenericValue relationship = iter.next();
+            partyIds.add(relationship.getString("partyIdFrom"));
         }
         return partyIds;
     }
@@ -169,13 +165,12 @@ public class TeamHelper {
         }
 
         // then get all members related to these teams
-        EntityCondition conditions = new EntityConditionList( UtilMisc.toList(
-                    new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT_TEAM"),
-                    new EntityExpr("partyIdFrom", EntityOperator.IN, accountTeamPartyIds),
-                    new EntityExpr("partyRelationshipTypeId", EntityOperator.EQUALS, "ASSIGNED_TO"),
-                    new EntityExpr("securityGroupId", EntityOperator.IN, TEAM_SECURITY_GROUPS),
-                    EntityUtil.getFilterByDateExpr()
-                    ), EntityOperator.AND);
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT_TEAM"),
+                    EntityCondition.makeCondition("partyIdFrom", EntityOperator.IN, accountTeamPartyIds),
+                    EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, "ASSIGNED_TO"),
+                    EntityCondition.makeCondition("securityGroupId", EntityOperator.IN, TEAM_SECURITY_GROUPS),
+                    EntityUtil.getFilterByDateExpr());
         return delegator.findByCondition("PartyToSummaryByRelationship", conditions, null, null, UtilMisc.toList("firstName", "lastName"), UtilCommon.READ_ONLY_OPTIONS);
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -41,34 +41,29 @@
  */
 package com.opensourcestrategies.crmsfa.cases;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericDelegator;
-import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.GenericEntityException;
-import org.ofbiz.entity.transaction.TransactionUtil;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityFindOptions;
-import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.entity.util.EntityListIterator;
+import org.ofbiz.entity.util.EntityUtil;
 
 /**
  * Case utility methods.
- *
- * @author     <a href="mailto:leon@opensourcestrategies.com">Leon Torres</a>
- * @version    $Rev: 488 $
  */
-public class UtilCase {
+public final class UtilCase {
 
-    public static final String module = UtilCase.class.getName();
+    private UtilCase() { }
 
     // list the case statuses in one place in case the model changes
-    public static List CASE_STATUSES_COMPLETED = null;
+    public static List<String> CASE_STATUSES_COMPLETED = null;
     static {
         CASE_STATUSES_COMPLETED = UtilMisc.toList("CRQ_COMPLETED", "CRQ_CANCELLED", "CRQ_REJECTED");
     }
@@ -77,7 +72,7 @@ public class UtilCase {
      * Get the active account and contacts for a case.
      * @return List of PartyRelationshipAndCaseRoles with the requested partyId's.
      */
-    public static List getCaseAccountsAndContacts(GenericDelegator delegator, String custRequestId) throws GenericEntityException {
+    public static List<GenericValue> getCaseAccountsAndContacts(GenericDelegator delegator, String custRequestId) throws GenericEntityException {
         return getCasePartiesByRole(delegator, custRequestId, UtilMisc.toList("ACCOUNT", "CONTACT"));
     }
 
@@ -86,9 +81,9 @@ public class UtilCase {
      * @return partyId of contact or null
      */
     public static String getCasePrimaryContactPartyId(GenericDelegator delegator, String custRequestId) throws GenericEntityException {
-        List candidates = getCasePartiesByRole(delegator, custRequestId, UtilMisc.toList("CONTACT"));
+        List<GenericValue> candidates = getCasePartiesByRole(delegator, custRequestId, UtilMisc.toList("CONTACT"));
         if (candidates.size() > 0) {
-            return ((GenericValue) candidates.get(0)).getString("partyId");
+            return candidates.get(0).getString("partyId");
         }
         return null;
     }
@@ -98,48 +93,45 @@ public class UtilCase {
      * @return partyId of account or null
      */
     public static String getCasePrimaryAccountPartyId(GenericDelegator delegator, String custRequestId) throws GenericEntityException {
-        List candidates = getCasePartiesByRole(delegator, custRequestId, UtilMisc.toList("ACCOUNT"));
+        List<GenericValue> candidates = getCasePartiesByRole(delegator, custRequestId, UtilMisc.toList("ACCOUNT"));
         if (candidates.size() > 0) {
-            return ((GenericValue) candidates.get(0)).getString("partyId");
+            return candidates.get(0).getString("partyId");
         }
         return null;
     }
 
     /**
      * Helper method to get active party relationships related to a given case via the cust request roles. This is used, for instance, to
-     * get unexpired ACCOUNTS or CONTACTS related to the case. This method is to be used for logic, not presentation. Presentation 
+     * get unexpired ACCOUNTS or CONTACTS related to the case. This method is to be used for logic, not presentation. Presentation
      * requires ordering and fields from other joined entities. Don't use this directly, use one of the more convenient helper methods.
      * @return  A list of PartyRelationshipAndCaseRole with partyId's of the requested parties
      */
-    public static List getCasePartiesByRole(GenericDelegator delegator, String custRequestId, List roleTypeIds) 
-        throws GenericEntityException {
+    public static List<GenericValue> getCasePartiesByRole(GenericDelegator delegator, String custRequestId, List<String> roleTypeIds) throws GenericEntityException {
 
         // add each role type id to an OR condition list
-        List roleCondList = new ArrayList();
-        for (Iterator iter = roleTypeIds.iterator(); iter.hasNext(); ) {
-            String roleTypeId = (String) iter.next();
-            roleCondList.add(new EntityExpr("roleTypeId", EntityOperator.EQUALS, roleTypeId));
+        List<EntityCondition> roleCondList = new ArrayList<EntityCondition>();
+        for (String roleTypeId : roleTypeIds) {
+            roleCondList.add(EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, roleTypeId));
         }
-        EntityConditionList roleEntityCondList = new EntityConditionList(roleCondList, EntityOperator.OR);
+        EntityCondition roleEntityCondList = EntityCondition.makeCondition(roleCondList, EntityOperator.OR);
 
         // roleEntityCondList AND custRequestId = ${custRequestID} AND filterByDateExpr
-        EntityConditionList mainCondList = new EntityConditionList(UtilMisc.toList(
+        EntityCondition mainCondList = EntityCondition.makeCondition(EntityOperator.AND,
                     roleEntityCondList,
-                    new EntityExpr("custRequestId", EntityOperator.EQUALS, custRequestId), 
-                    EntityUtil.getFilterByDateExpr()
-                    ), EntityOperator.AND);
+                    EntityCondition.makeCondition("custRequestId", EntityOperator.EQUALS, custRequestId),
+                    EntityUtil.getFilterByDateExpr());
 
         TransactionUtil.begin();
         EntityListIterator partiesIt = delegator.findListIteratorByCondition("PartyRelationshipAndCaseRole", mainCondList, null,
                 UtilMisc.toList("partyId"),  // fields to select (right now we just want the partyId)
                 null, // fields to order by (unimportant here)
                 new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true));
-        List list = partiesIt.getCompleteList();
+        List<GenericValue> list = partiesIt.getCompleteList();
         partiesIt.close();
         TransactionUtil.commit();
         return list;
     }
-    
+
     /**
      * Finds all CustRequest which are open for a given party and role combination.  CustRequest must not be CANCELLED, REJECTED, or COMPLETED.
      * @param delegator
@@ -153,50 +145,46 @@ public class UtilCase {
         if (casesOrderBy == null) {
             casesOrderBy = "priority DESC";
         }
-        
-        EntityConditionList casesCond = getCasesForPartyCond(partyId, roleTypeId);
-        
-        EntityListIterator myCases = delegator.findListIteratorByCondition("PartyRelationshipAndCaseRole", casesCond, null, 
+
+        EntityCondition casesCond = getCasesForPartyCond(partyId, roleTypeId);
+
+        EntityListIterator myCases = delegator.findListIteratorByCondition("PartyRelationshipAndCaseRole", casesCond, null,
                 UtilMisc.toList("custRequestId", "custRequestName", "priority", "statusId", "custRequestTypeId", "custRequestCategoryId"),  // fields to select
                 UtilMisc.toList(casesOrderBy), // fields to order by
                 // the first true here is for "specifyTypeAndConcur"
                 // the second true is for a distinct select.  Apparently this is the only way the entity engine can do a distinct query
                 new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true));
-        
+
         return myCases;
     }
-    
+
     /**
-     * Returns the EntityConditionList that getCasesForParty constructs for finding all CustRequest which are open for
-     * a given party and role combination
-     * @param partyId
-     * @param roleTypeId
-     * @return EntityConditionList
+     * Returns the <code>EntityCondition</code> that getCasesForParty constructs for finding all CustRequest which are open for
+     * a given party and role combination.
+     * @param partyId the party ID
+     * @param roleTypeId the role type ID
+     * @return an <code>EntityCondition</code> value
      */
-    public static EntityConditionList getCasesForPartyCond(String partyId, String roleTypeId) {
-    	
-        EntityConditionList casesCond = new EntityConditionList(UtilMisc.toList(
-                new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "CRQ_COMPLETED"),
-                new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "CRQ_REJECTED"),
-                new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "CRQ_CANCELLED"),
-                new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, roleTypeId), 
-                new EntityExpr("partyIdFrom", EntityOperator.EQUALS, partyId)
-                ), EntityOperator.AND);    	
+    public static EntityCondition getCasesForPartyCond(String partyId, String roleTypeId) {
+
+        EntityCondition casesCond = EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "CRQ_COMPLETED"),
+                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "CRQ_REJECTED"),
+                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "CRQ_CANCELLED"),
+                EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, roleTypeId),
+                EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, partyId));
 
         return casesCond;
     }
-  
-    
+
+
     /**
      * Determine if the case has a status which should be considered "finished" or "history" or "done with".
      * It is recommended to use this instead of checking statuses by hand, because those can change.
+     * @param custRequest a <code>GenericValue</code> value
+     * @return a <code>boolean</code> value
      */
     public static boolean caseIsInactive(GenericValue custRequest) {
-        for (Iterator iter = CASE_STATUSES_COMPLETED.iterator(); iter.hasNext(); ) {
-            if (iter.next().equals(custRequest.getString("statusId"))) {
-                return true;
-            }
-        }
-        return false;
+        return CASE_STATUSES_COMPLETED.contains(custRequest.getString("statusId"));
     }
 }

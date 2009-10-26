@@ -24,12 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.util.UtilView;
@@ -88,21 +85,18 @@ public class CaseLookupService extends EntityLookupAndSuggestService {
         } else {
             Debug.logError("Current session do not have any UserLogin set.", MODULE);
         }
-        EntityCondition takerCond = new EntityConditionList(UtilMisc.toList(
-                new EntityExpr("partyId", EntityOperator.EQUALS, partyId),
-                new EntityExpr("roleTypeId", EntityOperator.EQUALS, "REQ_TAKER")
-                ), EntityOperator.AND);
+        EntityCondition takerCond = EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId),
+                EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "REQ_TAKER"));
 
         // or condition to find all cases for all accounts and contacts which the userLogin can view
-        EntityCondition roleCond = new EntityConditionList(UtilMisc.toList(
-                    new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT"),
-                    new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "CONTACT")
-                    ), EntityOperator.OR);
-        EntityCondition accountContactCond = new EntityConditionList(UtilMisc.toList(
+        EntityCondition roleCond = EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT"),
+                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "CONTACT"));
+        EntityCondition accountContactCond = EntityCondition.makeCondition(EntityOperator.AND,
                 roleCond,
-                new EntityExpr("partyIdTo", EntityOperator.EQUALS, partyId),
-                EntityUtil.getFilterByDateExpr() // filter out expired accounts and contacts
-                ), EntityOperator.AND);
+                EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyId),
+                EntityUtil.getFilterByDateExpr());
         prefCond = accountContactCond;
         // select parties assigned to current user or his team according to view preferences.
         if (getProvider().parameterIsPresent(CaseLookupConfiguration.IN_RESPONSIBILTY)) {
@@ -113,17 +107,15 @@ public class CaseLookupService extends EntityLookupAndSuggestService {
                     prefCond = takerCond;
                 }
         }
-        EntityCondition condition = new EntityConditionList(
-                UtilMisc.toList(
+        EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
                     // exclude these case statuses
-                    new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "CRQ_COMPLETED"),
-                    new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "CRQ_REJECTED"),
-                    new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "CRQ_CANCELLED"),
+                    EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "CRQ_COMPLETED"),
+                    EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "CRQ_REJECTED"),
+                    EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "CRQ_CANCELLED"),
                     // catalog requests should not be counted as cases
-                    new EntityExpr("custRequestTypeId", EntityOperator.NOT_EQUAL, "RF_CATALOG"),
+                    EntityCondition.makeCondition("custRequestTypeId", EntityOperator.NOT_EQUAL, "RF_CATALOG"),
                     // the my or team preference condition
-                    prefCond
-                    ), EntityOperator.AND);
+                    prefCond);
         if (getProvider().oneParameterIsPresent(BY_ADVANCED_FILTERS)) {
             custRequests = findCaseBy(CustRequestAndPartyRelationshipAndRole.class, condition, BY_ADVANCED_FILTERS);
         } else {
@@ -163,6 +155,6 @@ public class CaseLookupService extends EntityLookupAndSuggestService {
     private <T extends EntityInterface> List<T> findAllCases(Class<T> entity, EntityCondition condition) {
         List<EntityCondition> conds = new ArrayList<EntityCondition>();
         conds.add(condition);
-        return findList(entity, new EntityConditionList(conds, EntityOperator.AND));
+        return findList(entity, EntityCondition.makeCondition(conds, EntityOperator.AND));
     }
 }

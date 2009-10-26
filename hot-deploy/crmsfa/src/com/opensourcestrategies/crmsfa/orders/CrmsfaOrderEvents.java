@@ -46,8 +46,7 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.transaction.GenericTransactionException;
 import org.ofbiz.entity.transaction.TransactionUtil;
@@ -81,9 +80,6 @@ import org.opentaps.foundation.infrastructure.User;
 /**
  * CrmsfaOrderEvents - Order creation events (http servlets) specific to crmsfa.
  * TODO: refactor errors to use UtilMessage.createAndLogEventError()
- *
- * @author     <a href="mailto:leon@opensourcestrategies.com">Leon Torres</a>
- * @version    $Rev: 12 $
  */
 public final class CrmsfaOrderEvents {
 
@@ -182,7 +178,6 @@ public final class CrmsfaOrderEvents {
      * @param response a <code>HttpServletResponse</code> value
      * @return a <code>String</code> value
      */
-    @SuppressWarnings("unchecked")
     public static String countMatchingProducts(HttpServletRequest request, HttpServletResponse response) {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         String searchString = UtilCommon.getParameter(request, "productId");
@@ -204,24 +199,16 @@ public final class CrmsfaOrderEvents {
      * @param searchString a <code>String</code> value
      * @return an <code>EntityCondition</code> value
      */
-    @SuppressWarnings("unchecked")
     public static EntityCondition getMatchingProductsCondition(String searchString) {
-        List where = UtilMisc.toList(
-                // search string condition
-                new EntityConditionList(
-                        UtilMisc.toList(
-                                new EntityExpr("productId", true, EntityOperator.LIKE, searchString + "%", true),
-                                new EntityExpr("idValue", true, EntityOperator.LIKE, searchString + "%", true)
-                        ), EntityOperator.OR
-                ),
-                new EntityExpr("productTypeId", EntityOperator.NOT_EQUAL, "AGGREGATED"),
-                new EntityConditionList(UtilMisc.toList(
-                        new EntityExpr("isVirtual", EntityOperator.EQUALS, null),
-                        new EntityExpr("isVirtual", EntityOperator.EQUALS, "N"),
-                        new EntityExpr("isVirtual", EntityOperator.NOT_EQUAL, "Y")
-                ), EntityOperator.OR)
-        );
-        return new EntityConditionList(where, EntityOperator.AND);
+        return EntityCondition.makeCondition(EntityOperator.AND,
+                         EntityCondition.makeCondition(EntityOperator.OR,
+                                                       EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("productId"), EntityOperator.LIKE, EntityFunction.UPPER(searchString + "%")),
+                                                       EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("idValue"), EntityOperator.LIKE, EntityFunction.UPPER(searchString + "%"))),
+                         EntityCondition.makeCondition("productTypeId", EntityOperator.NOT_EQUAL, "AGGREGATED"),
+                         EntityCondition.makeCondition(EntityOperator.OR,
+                                                       EntityCondition.makeCondition("isVirtual", EntityOperator.EQUALS, null),
+                                                       EntityCondition.makeCondition("isVirtual", EntityOperator.EQUALS, "N"),
+                                                       EntityCondition.makeCondition("isVirtual", EntityOperator.NOT_EQUAL, "Y")));
     }
 
     /**
@@ -233,7 +220,6 @@ public final class CrmsfaOrderEvents {
      * @param response a <code>HttpServletResponse</code> value
      * @return a <code>String</code> value
      */
-    @SuppressWarnings("unchecked")
     public static String resumeOrder(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
         ShoppingCart cart = (ShoppingCart) session.getAttribute("shoppingCart");

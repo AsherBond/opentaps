@@ -1,22 +1,6 @@
-package org.opentaps.tests.common;
-
-import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
-import org.ofbiz.entity.GenericEntityException;
-import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
-import org.ofbiz.entity.condition.EntityOperator;
-import org.opentaps.common.query.Query;
-import org.opentaps.common.query.QueryFactory;
-import org.opentaps.tests.OpentapsTestCase;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 /*
-* Copyright (c) 2008 - 2009 Open Source Strategies, Inc.
-* 
+ * Copyright (c) 2008 - 2009 Open Source Strategies, Inc.
+ * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -29,7 +13,23 @@ import java.util.Map;
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
+package org.opentaps.tests.common;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.common.query.Query;
+import org.opentaps.common.query.QueryFactory;
+import org.opentaps.tests.OpentapsTestCase;
+
 public class QueryTests extends OpentapsTestCase {
 
     protected List<String> targetIds = new ArrayList<String>(); // a List of IDs we expect to find in the system
@@ -67,7 +67,7 @@ public class QueryTests extends OpentapsTestCase {
     }
 
     private void removeTestingRecords(GenericDelegator delegator) throws GenericEntityException {
-        delegator.removeByCondition("TestingNode", new EntityExpr("testingNodeId", EntityOperator.LIKE, "TEST%"));
+        delegator.removeByCondition("TestingNode", EntityCondition.makeCondition("testingNodeId", EntityOperator.LIKE, "TEST%"));
     }
 
     public void testSelectToList() throws Exception {
@@ -83,10 +83,10 @@ public class QueryTests extends OpentapsTestCase {
         // we loop through and remove each ID from the query's rows from the a List of expected IDs, so in the end there should be none.
         List<String> expectedIds = new ArrayList<String>();
         expectedIds.addAll(targetIds);
-        for (Map<String, Object> row:rows) {
+        for (Map<String, Object> row : rows) {
             // this also tests that the SQL TESTING_NODE_ID was correctly converted to testingNodeId
-            if (expectedIds.contains((String) row.get("testingNodeId"))) {
-                expectedIds.remove((String) row.get("testingNodeId"));
+            if (expectedIds.contains(row.get("testingNodeId"))) {
+                expectedIds.remove(row.get("testingNodeId"));
             }
         }
         assertEquals("Query [" + basicQuery + "] returned the right testingNodeIds", 0, expectedIds.size());
@@ -105,7 +105,7 @@ public class QueryTests extends OpentapsTestCase {
         // we loop through and remove each ID from the query's rows from the a List of expected IDs, so in the end there should be none.
         List<String> expectedIds = new ArrayList<String>();
         expectedIds.addAll(targetIds);
-        for (GenericValue row:rows) {
+        for (GenericValue row : rows) {
             assertEquals("Row [" + row + "] returned the correct GenericValue", ENTITY_NAME, row.getModelEntity().getEntityName());
             if (expectedIds.contains(row.getString("testingNodeId"))) {
                 expectedIds.remove(row.getString("testingNodeId"));
@@ -131,8 +131,8 @@ public class QueryTests extends OpentapsTestCase {
         expectedIds.addAll(targetIds);
         for (Map<String, Object> row : r1) {
             // this also tests that the SQL TESTING_NODE_ID was correctly converted to testingNodeId
-            if (expectedIds.contains((String) row.get("testingNodeId"))) {
-                expectedIds.remove((String) row.get("testingNodeId"));
+            if (expectedIds.contains(row.get("testingNodeId"))) {
+                expectedIds.remove(row.get("testingNodeId"));
             }
         }
         assertEquals("Parameterized query [" + basicQuery + "] returned the right testingNodeIds", 0, expectedIds.size());
@@ -157,5 +157,4 @@ public class QueryTests extends OpentapsTestCase {
         }
         assertEquals("Parameterized query [" + basicQuery + "] returned the right testingNodeIds", 0, expectedIds.size());
     }
-    
 }

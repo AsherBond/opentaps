@@ -28,7 +28,6 @@ import bsh.UtilEvalError;
 import javolution.util.FastList;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.opentaps.foundation.entity.EntityException;
@@ -161,7 +160,7 @@ public class BshListBuilder extends EntityListBuilder {
             return (EntityCondition) obj;
         }
         if (obj instanceof List) {
-            return new EntityConditionList((List) obj, EntityOperator.AND);
+            return EntityCondition.makeCondition((List) obj, EntityOperator.AND);
         }
         if (obj instanceof Map) {
             Map map = (Map) obj;

@@ -27,7 +27,8 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
 
 /**
  * Test for Returns.
@@ -119,7 +120,6 @@ public class ReturnTestCase extends OrderTestCase {
      * @param paymentStatus for the Payment
      * @param amount for the Payment
      */
-    @SuppressWarnings("unchecked")
     public void assertRefundPaymentExists(String returnId, String fromParty, String toParty, String paymentStatus, String amount) {
         try {
             // first find the invoices for the return by getting the ReturnItemBilling
@@ -130,17 +130,17 @@ public class ReturnTestCase extends OrderTestCase {
             }
 
             // find a PaymentAndApplication related to those invoices that match the given parameters
-            List conds = UtilMisc.toList(
-                    new EntityExpr("partyIdFrom",   EntityOperator.EQUALS, fromParty),
-                    new EntityExpr("partyIdTo",     EntityOperator.EQUALS, toParty),
-                    new EntityExpr("paymentTypeId", EntityOperator.EQUALS, "CUSTOMER_REFUND"),
-                    new EntityExpr("invoiceId",     EntityOperator.IN,     invoiceIds)
+            List<EntityCondition> conds = UtilMisc.<EntityCondition>toList(
+                    EntityCondition.makeCondition("partyIdFrom",   EntityOperator.EQUALS, fromParty),
+                    EntityCondition.makeCondition("partyIdTo",     EntityOperator.EQUALS, toParty),
+                    EntityCondition.makeCondition("paymentTypeId", EntityOperator.EQUALS, "CUSTOMER_REFUND"),
+                    EntityCondition.makeCondition("invoiceId",     EntityOperator.IN,     invoiceIds)
                 );
             if (amount != null) {
-                conds.add(new EntityExpr("amount",  EntityOperator.EQUALS, amount));
+                conds.add(EntityCondition.makeCondition("amount",  EntityOperator.EQUALS, amount));
             }
 
-            List<GenericValue> payments = delegator.findByCondition("PaymentAndApplication", new EntityConditionList(conds , EntityOperator.AND), null, null);
+            List<GenericValue> payments = delegator.findByCondition("PaymentAndApplication", EntityCondition.makeCondition(conds , EntityOperator.AND), null, null);
             assertTrue("Should be at least one 'CUSTOMER_REFUND' Payment from " + fromParty + " to " + toParty + " for Return [" + returnId + "] with status " + paymentStatus, payments.size() > 0);
         } catch (GenericEntityException e) {
             TestCase.fail("GenericEntityException: " + e.toString());
@@ -193,7 +193,6 @@ public class ReturnTestCase extends OrderTestCase {
      * @param returnId the return ID
      * @param status the status of the ReturnItems to check
      */
-    @SuppressWarnings("unchecked")
     public void assertReturnItemsStatusEquals(String returnId, String status) {
        try {
             List<GenericValue> items = delegator.findByAnd("ReturnItem", UtilMisc.toMap("returnId", returnId));
@@ -247,9 +246,9 @@ public class ReturnTestCase extends OrderTestCase {
      * we can also check that invoice match payments and status of payment / status of invoice and status of the order payment preference
      * are consistent.
      *
-     * @param returnId
-     * @param fromParty
-     * @param toParty
+     * @param returnId a <code>String</code> value
+     * @param fromParty a <code>String</code> value
+     * @param toParty a <code>String</code> value
      * @param invoiceStatus the status that must have all related invoices (most of the time there will be only one)
      *
      */

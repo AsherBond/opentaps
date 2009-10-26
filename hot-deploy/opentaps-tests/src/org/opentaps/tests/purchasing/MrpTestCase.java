@@ -16,18 +16,17 @@
  */
 package org.opentaps.tests.purchasing;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Iterator;
-import java.sql.Timestamp;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Timestamp;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.tests.OpentapsTestCase;
@@ -265,9 +264,9 @@ public class MrpTestCase extends OpentapsTestCase {
     }
 
     /**
-     * Method to check that some number of requirements exist with given product quantity, productId, 
+     * Method to check that some number of requirements exist with given product quantity, productId,
      * facilityId and statusId combination. We expect number of requirements equals to size of list of quantities.
-     * 
+     *
      * @param productId the product ID required
      * @param facilityId the facility ID for which the <code>Requirement</code> is to be found
      * @param requirementTypeId the <code>Requirement</code> type (eg: TRANSFER_REQUIREMENT, PRODUCT_REQUIREMENT, INTERNAL_REQUIREMENT)
@@ -283,7 +282,7 @@ public class MrpTestCase extends OpentapsTestCase {
         for (GenericValue req : requirements) {
             assertFalse("Requirement for product [" + productId + "] in status [" + statusId + "] for quantity [" + req.getBigDecimal("quantity").toString() + "] is wrong and should not be here", !assertNumberExistsInList(quantities, req.getBigDecimal("quantity")));
         }
-    } 
+    }
 
     /**
      * Method to check that no Requirements of the productId, facilityId, statusId and quantity.
@@ -299,11 +298,11 @@ public class MrpTestCase extends OpentapsTestCase {
     @SuppressWarnings("unchecked")
     protected void assertNoRequirementExistsWithQuantity(String productId, String facilityId, String requirementTypeId, String statusId, BigDecimal quantity) throws GenericEntityException {
         List conditions = UtilMisc.toList(
-                        new EntityExpr("requirementTypeId", EntityOperator.EQUALS, requirementTypeId),
-                        new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                        new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId),
-                        new EntityExpr("statusId", EntityOperator.EQUALS, statusId),
-                        new EntityExpr("quantity", EntityOperator.EQUALS, quantity));
+                        EntityCondition.makeCondition("requirementTypeId", EntityOperator.EQUALS, requirementTypeId),
+                        EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                        EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
+                        EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, statusId),
+                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, quantity));
         List requirements = delegator.findByAnd("Requirement", conditions);
         assertEquals("Should not have found any Requirement with conditions: productId=" + productId + " facilityId=" + facilityId + " requirementTypeId=" + requirementTypeId + " statusId=" + statusId + " quantity=" + quantity, 0, requirements.size());
     }
@@ -323,11 +322,11 @@ public class MrpTestCase extends OpentapsTestCase {
     @SuppressWarnings("unchecked")
     protected String assertRequirementExistsWithQuantity(String productId, String facilityId, String requirementTypeId, String statusId, BigDecimal quantity) throws GenericEntityException {
         List conditions = UtilMisc.toList(
-                        new EntityExpr("requirementTypeId", EntityOperator.EQUALS, requirementTypeId),
-                        new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                        new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId),
-                        new EntityExpr("statusId", EntityOperator.EQUALS, statusId),
-                        new EntityExpr("quantity", EntityOperator.EQUALS, quantity));
+                        EntityCondition.makeCondition("requirementTypeId", EntityOperator.EQUALS, requirementTypeId),
+                        EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                        EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
+                        EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, statusId),
+                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, quantity));
         GenericValue requirement = EntityUtil.getOnly(delegator.findByAnd("Requirement", conditions));
         assertNotNull("No Requirement found with conditions: productId=" + productId + " facilityId=" + facilityId + " requirementTypeId=" + requirementTypeId + " statusId=" + statusId + " quantity=" + quantity, requirement);
         return requirement.getString("requirementId");
@@ -384,20 +383,20 @@ public class MrpTestCase extends OpentapsTestCase {
     @SuppressWarnings("unchecked")
     private List getRequirements(String productId, String facilityId, String requirementTypeId, String statusId, Timestamp afterStartDate, Timestamp beforeStartDate, String toFacilityId) throws GenericEntityException {
         List conditions = UtilMisc.toList(
-                        new EntityExpr("requirementTypeId", EntityOperator.EQUALS, requirementTypeId),
-                        new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                        new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId));
+                        EntityCondition.makeCondition("requirementTypeId", EntityOperator.EQUALS, requirementTypeId),
+                        EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                        EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId));
         if (statusId != null) {
-            conditions.add(new EntityExpr("statusId", EntityOperator.EQUALS, statusId));
+            conditions.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, statusId));
         }
         if (toFacilityId != null) {
-            conditions.add(new EntityExpr("facilityIdTo", EntityOperator.EQUALS, toFacilityId));
+            conditions.add(EntityCondition.makeCondition("facilityIdTo", EntityOperator.EQUALS, toFacilityId));
         }
         if (afterStartDate != null) {
-            conditions.add(new EntityExpr("requirementStartDate", EntityOperator.GREATER_THAN, afterStartDate));
+            conditions.add(EntityCondition.makeCondition("requirementStartDate", EntityOperator.GREATER_THAN, afterStartDate));
         }
         if (beforeStartDate != null) {
-            conditions.add(new EntityExpr("requirementStartDate", EntityOperator.LESS_THAN, beforeStartDate));
+            conditions.add(EntityCondition.makeCondition("requirementStartDate", EntityOperator.LESS_THAN, beforeStartDate));
         }
         return delegator.findByAnd("Requirement", conditions);
     }
@@ -413,10 +412,10 @@ public class MrpTestCase extends OpentapsTestCase {
      */
     @SuppressWarnings("unchecked")
     protected void assertRequirementAssignedToOrder(String orderId, String requirementId, BigDecimal quantity) throws GenericEntityException {
-        List conditions = UtilMisc.toList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                new EntityExpr("requirementId", EntityOperator.EQUALS, requirementId),
-                new EntityExpr("quantity", EntityOperator.EQUALS, quantity));
-            List orderRequirementCommitements = delegator.findByCondition("OrderRequirementCommitment", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        List conditions = UtilMisc.toList(EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                EntityCondition.makeCondition("requirementId", EntityOperator.EQUALS, requirementId),
+                EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, quantity));
+            List orderRequirementCommitements = delegator.findByCondition("OrderRequirementCommitment", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, null);
             long orderRequirementAllocationCount = orderRequirementCommitements.size();
             assertEquals(String.format("Wrong number of proposed purchased order receipt (mrp inventory event) of requirement [%1$s] against order [%2$s]", requirementId, orderId), 1, orderRequirementAllocationCount);
     }
@@ -429,11 +428,11 @@ public class MrpTestCase extends OpentapsTestCase {
      */
     @SuppressWarnings("unchecked")
     protected void assertRequirementAssignedToSupplier(String supplierPartyId, String requirementId) throws GenericEntityException {
-        List conditions = UtilMisc.toList(new EntityExpr("partyId", EntityOperator.EQUALS, supplierPartyId),
-                new EntityExpr("requirementId", EntityOperator.EQUALS, requirementId),
-                new EntityExpr("roleTypeId", EntityOperator.EQUALS, "SUPPLIER"),
+        List conditions = UtilMisc.toList(EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, supplierPartyId),
+                EntityCondition.makeCondition("requirementId", EntityOperator.EQUALS, requirementId),
+                EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SUPPLIER"),
                 EntityUtil.getFilterByDateExpr());
-            List supplierRoles = delegator.findByCondition("RequirementRole", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+            List supplierRoles = delegator.findByCondition("RequirementRole", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, null);
             assertTrue("Requirement " + requirementId + " is not assigned to supplier " + supplierPartyId, UtilValidate.isNotEmpty(supplierRoles));
     }
 
@@ -448,21 +447,21 @@ public class MrpTestCase extends OpentapsTestCase {
      */
     @SuppressWarnings("unchecked")
     protected String assertInventoryTransferRequested(String facilityIdFrom, String facilityIdTo, String productId, BigDecimal quantity) throws GenericEntityException {
-        List invTransCond = UtilMisc.toList(new EntityExpr("transferStatusId", EntityOperator.EQUALS, "IXF_REQUESTED"),
-                            new EntityExpr("facilityId", EntityOperator.EQUALS, facilityIdFrom),
-                            new EntityExpr("facilityIdTo", EntityOperator.EQUALS, facilityIdTo),
-                            new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                            new EntityExpr("sendDate", EntityOperator.NOT_EQUAL, null),
-                            new EntityExpr("quantityOnHandTotal", EntityOperator.EQUALS, quantity));
+        List invTransCond = UtilMisc.toList(EntityCondition.makeCondition("transferStatusId", EntityOperator.EQUALS, "IXF_REQUESTED"),
+                            EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityIdFrom),
+                            EntityCondition.makeCondition("facilityIdTo", EntityOperator.EQUALS, facilityIdTo),
+                            EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                            EntityCondition.makeCondition("sendDate", EntityOperator.NOT_EQUAL, null),
+                            EntityCondition.makeCondition("quantityOnHandTotal", EntityOperator.EQUALS, quantity));
         Debug.logInfo("assertInventoryTransferRequested facilityIdFrom : [" + facilityIdFrom
                 + "], facilityIdTo : [" + facilityIdTo + "]"
                 + "], productId : [" + productId + "]"
                 + "], sendDate : [not null]"
                 + "], quantityOnHandTotal : [" + quantity + "]"
                 , MODULE);
-            List<GenericValue> invTransfers = delegator.findByAnd("InventoryTransferAndItem",  invTransCond);
-            assertEquals(String.format("Wrong number of requested inbound inventory transfers of product [%1$s]", productId), 1, invTransfers.size());
-            return EntityUtil.getFirst(invTransfers).getString("inventoryTransferId");
+        List<GenericValue> invTransfers = delegator.findByAnd("InventoryTransferAndItem",  invTransCond);
+        assertEquals(String.format("Wrong number of requested inbound inventory transfers of product [%1$s]", productId), 1, invTransfers.size());
+        return EntityUtil.getFirst(invTransfers).getString("inventoryTransferId");
 
     }
 }

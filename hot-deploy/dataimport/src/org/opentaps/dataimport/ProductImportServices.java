@@ -17,14 +17,19 @@
 
 package org.opentaps.dataimport;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityFindOptions;
@@ -33,14 +38,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
-
 import org.opentaps.common.util.UtilCommon;
-
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Import products via intermediate DataImportProduct entity.
@@ -51,7 +49,7 @@ public final class ProductImportServices {
 
     private ProductImportServices() { }
 
-    private static String module = ProductImportServices.class.getName();
+    private static String MODULE = ProductImportServices.class.getName();
     private static final int decimals = UtilNumber.getBigDecimalScale("order.decimals");
     private static final int rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
     private static final BigDecimal ZERO = (new BigDecimal("0")).setScale(decimals, rounding);
@@ -97,10 +95,10 @@ public final class ProductImportServices {
             }
 
             // need to get an ELI because of possibly large number of records.  productId <> null will get all records
-            EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
-                        new EntityExpr("productId", EntityOperator.NOT_EQUAL, null),
-                        new EntityExpr("processedTimestamp", EntityOperator.EQUALS, null)   // leave out previously processed products
-                        ), EntityOperator.AND);
+            EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("productId", EntityOperator.NOT_EQUAL, null),
+                        EntityCondition.makeCondition("processedTimestamp", EntityOperator.EQUALS, null)   // leave out previously processed products
+            );
             TransactionUtil.begin();   // since the service is not inside a transaction, this needs to be in its own transaction, or you'll get a harmless exception
             EntityListIterator importProducts = delegator.findListIteratorByCondition("DataImportProduct", conditions, null, null);
             List<GenericValue> products = importProducts.getCompleteList();
@@ -112,7 +110,7 @@ public final class ProductImportServices {
                     // use the helper method to decode the product into a List of GenericValues
                     List toStore = decodeProduct(product, now, goodIdentificationTypeId1, goodIdentificationTypeId2, delegator);
                     if (toStore == null) {
-                        Debug.logWarning("Faild to import product[" + product.get("productId") + "] because data was bad.  Check preceding warnings for reason.", module);
+                        Debug.logWarning("Faild to import product[" + product.get("productId") + "] because data was bad.  Check preceding warnings for reason.", MODULE);
                     }
 
                     // next we're going to store all each product's data in its own transaction, so if one product's data is bad, the others will still get stored
@@ -122,7 +120,7 @@ public final class ProductImportServices {
                     delegator.storeAll(toStore);
 
                     // log the import
-                    Debug.logInfo("Successfully imported product [" + product.get("productId") + "].", module);
+                    Debug.logInfo("Successfully imported product [" + product.get("productId") + "].", MODULE);
                     imported += 1;
 
                     TransactionUtil.commit();
@@ -130,17 +128,17 @@ public final class ProductImportServices {
                 } catch (GenericEntityException e) {
                     // if there was an error, we'll just skip this product
                     TransactionUtil.rollback();
-                    Debug.logError(e, "Faild to import product[" + product.get("productId") + "]. Error stack follows.", module);
+                    Debug.logError(e, "Faild to import product[" + product.get("productId") + "]. Error stack follows.", MODULE);
                 } catch (Exception e) {
                     TransactionUtil.rollback();
-                    Debug.logError(e, "Faild to import product[" + product.get("productId") + "]. Error stack follows.", module);
+                    Debug.logError(e, "Faild to import product[" + product.get("productId") + "]. Error stack follows.", MODULE);
                 }
             }
             importProducts.close();
 
         } catch (GenericEntityException e) {
             String message = "Cannot import products: Unable to use delegator to retrieve data from the database.  Error is: " + e.getMessage();
-            Debug.logError(e, message, module);
+            Debug.logError(e, message, MODULE);
             return ServiceUtil.returnError(message);
         }
 
@@ -178,7 +176,7 @@ public final class ProductImportServices {
         try {
             // Get a list of distinct facilityIds to import
             EntityListIterator facilitiesIterator = delegator.findListIteratorByCondition("DataImportInventory",
-                        new EntityExpr("processedTimestamp", EntityOperator.EQUALS, null),   // unprocessed records
+                        EntityCondition.makeCondition("processedTimestamp", EntityOperator.EQUALS, null),   // unprocessed records
                         null, // havingEntityConditions
                         UtilMisc.toList("facilityId"),
                         UtilMisc.toList("facilityId"),
@@ -191,17 +189,17 @@ public final class ProductImportServices {
             for (Iterator<GenericValue> facilitiesIt = facilities.iterator(); facilitiesIt.hasNext();) {
                 GenericValue facilityToImport = facilitiesIt.next();
                 int importedFromFacility = importInventoryToFacility(facilityToImport.getString("facilityId"), inventoryGlAccountId, offsettingGlAccountId, userLogin, dispatcher);
-                Debug.logInfo("Imported [" + importedFromFacility + "] inventory item records into facilityId [" + facilityToImport.getString("facilityId") + "]", module);
+                Debug.logInfo("Imported [" + importedFromFacility + "] inventory item records into facilityId [" + facilityToImport.getString("facilityId") + "]", MODULE);
                 totalImported += importedFromFacility;
             }
 
         } catch (GenericServiceException se) {
             String errMsg = "Error in importProductInventory service: " + se.getMessage();
-            Debug.logError(se, errMsg, module);
+            Debug.logError(se, errMsg, MODULE);
             return ServiceUtil.returnError(errMsg);
         } catch (GenericEntityException ee) {
             String errMsg = "Error in importProductInventory service: " + ee.getMessage();
-            Debug.logError(ee, errMsg, module);
+            Debug.logError(ee, errMsg, MODULE);
             return ServiceUtil.returnError(errMsg);
         }
 
@@ -229,7 +227,7 @@ public final class ProductImportServices {
 
         if (UtilValidate.isEmpty(facility)) {
             String errMsg = "Error in importProductInventory service: facility [" + facilityId + "] does not exist";
-            Debug.logError(errMsg, module);
+            Debug.logError(errMsg, MODULE);
             return 0;
         }
 
@@ -237,7 +235,7 @@ public final class ProductImportServices {
         GenericValue organizationParty = facility.getRelatedOneCache("OwnerParty");
         if (UtilValidate.isEmpty(organizationParty)) {
             String errMsg = "Error in importProductInventory service: owner party for facility [" + facilityId + "] does not exist";
-            Debug.logError(errMsg, module);
+            Debug.logError(errMsg, MODULE);
             return 0;
         }
         String organizationPartyId = organizationParty.getString("partyId");
@@ -248,14 +246,14 @@ public final class ProductImportServices {
         if (UtilValidate.isNotEmpty(inventoryGlAccountId)) {
             glAccountOrganization = delegator.findByPrimaryKeyCache("GlAccountOrganization", UtilMisc.toMap("glAccountId", inventoryGlAccountId, "organizationPartyId", organizationPartyId));
             if (glAccountOrganization == null) {
-                Debug.logError("Cannot import inventory: organization [" + organizationPartyId + "] does not have inventory General Ledger account [" + inventoryGlAccountId + "] defined in GlAccountOrganization.", module);
+                Debug.logError("Cannot import inventory: organization [" + organizationPartyId + "] does not have inventory General Ledger account [" + inventoryGlAccountId + "] defined in GlAccountOrganization.", MODULE);
                 return 0;
             }
         }
         if (UtilValidate.isNotEmpty(offsettingGlAccountId)) {
             glAccountOrganization = delegator.findByPrimaryKeyCache("GlAccountOrganization", UtilMisc.toMap("glAccountId", offsettingGlAccountId, "organizationPartyId", organizationPartyId));
             if (glAccountOrganization == null) {
-                Debug.logError("Cannot import inventory: organization [" + organizationPartyId + "] does not have offsetting General Ledger account [" + offsettingGlAccountId + "] defined in GlAccountOrganization.", module);
+                Debug.logError("Cannot import inventory: organization [" + organizationPartyId + "] does not have offsetting General Ledger account [" + offsettingGlAccountId + "] defined in GlAccountOrganization.", MODULE);
                 return 0;
             }
         }
@@ -263,7 +261,7 @@ public final class ProductImportServices {
         String currencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
         if (UtilValidate.isEmpty(currencyUomId)) {
             String errMsg = "Error in importProductInventory service: organization [" + organizationPartyId + "] does not have a baseCurrencyUomId defined in PartyAcctgPref";
-            Debug.logError(errMsg, module);
+            Debug.logError(errMsg, MODULE);
             return 0;
         }
 
@@ -278,11 +276,11 @@ public final class ProductImportServices {
         String acctgTransId = (String) createAcctgTransResults.get("acctgTransId");
 
         // need to get an ELI because of possibly large number of records.  productId <> null will get all records
-        EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
-                new EntityExpr("productId", EntityOperator.NOT_EQUAL, null),
-                new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId),
-                new EntityExpr("processedTimestamp", EntityOperator.EQUALS, null)   // leave out previously processed orders
-        ), EntityOperator.AND);
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition("productId", EntityOperator.NOT_EQUAL, null),
+                EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
+                EntityCondition.makeCondition("processedTimestamp", EntityOperator.EQUALS, null)   // leave out previously processed orders
+        );
         TransactionUtil.begin();
         EntityListIterator importProductInventory = delegator.findListIteratorByCondition("DataImportInventory", conditions, null, null);
         List<GenericValue> productInventoryList = importProductInventory.getCompleteList();
@@ -294,24 +292,24 @@ public final class ProductImportServices {
             try {
                 List toStore = decodeInventory(productInventory, organizationPartyId, facilityId, inventoryGlAccountId, offsettingGlAccountId, acctgTransId, currencyUomId, now, delegator);
                 if (toStore == null) {
-                    Debug.logWarning("Import of product inventory[" + productInventory.get("itemId") + "] was unsuccessful.", module);
+                    Debug.logWarning("Import of product inventory[" + productInventory.get("itemId") + "] was unsuccessful.", MODULE);
                 }
 
                 TransactionUtil.begin();
 
                 delegator.storeAll(toStore);
 
-                Debug.logInfo("Successfully imported product inventory [" + productInventory.get("itemId") + "].", module);
+                Debug.logInfo("Successfully imported product inventory [" + productInventory.get("itemId") + "].", MODULE);
                 imported++;
 
                 TransactionUtil.commit();
 
             } catch (GenericEntityException e) {
                 TransactionUtil.rollback();
-                Debug.logError(e, "Failed to import product inventory[" + productInventory.get("itemId") + "]. Error stack follows.", module);
+                Debug.logError(e, "Failed to import product inventory[" + productInventory.get("itemId") + "]. Error stack follows.", MODULE);
             } catch (Exception e) {
                 TransactionUtil.rollback();
-                Debug.logWarning(e, "Import of product inventory[" + productInventory.get("itemId") + "] was unsuccessful.", module);
+                Debug.logWarning(e, "Import of product inventory[" + productInventory.get("itemId") + "] was unsuccessful.", MODULE);
             }
         }
         importProductInventory.close();
@@ -337,7 +335,7 @@ public final class ProductImportServices {
     private static List<GenericValue> decodeProduct(GenericValue data, Timestamp now, String goodIdentificationTypeId1, String goodIdentificationTypeId2, GenericDelegator delegator) throws GenericEntityException, Exception {
         Map input;
         List toStore = FastList.newInstance();
-        Debug.logInfo("Now processing  data [" + data.get("productId") + "] description [" + data.get("description") + "]", module);
+        Debug.logInfo("Now processing  data [" + data.get("productId") + "] description [" + data.get("description") + "]", MODULE);
 
         // product
         input = FastMap.newInstance();
@@ -374,7 +372,7 @@ public final class ProductImportServices {
         if (UtilValidate.isNotEmpty(data.get("priceCurrencyUomId"))) {
            input.put("currencyUomId", data.get("priceCurrencyUomId"));
         } else {
-           Debug.logWarning("Product [" + data.get("productId") + "] did not have a price currency, setting to default of [" + UtilProperties.getPropertyValue("general", "currency.uom.id.default") + "]", module);
+           Debug.logWarning("Product [" + data.get("productId") + "] did not have a price currency, setting to default of [" + UtilProperties.getPropertyValue("general", "currency.uom.id.default") + "]", MODULE);
            input.put("currencyUomId", UtilProperties.getPropertyValue("general", "currency.uom.id.default"));
         }
         input.put("fromDate", now);
@@ -437,7 +435,7 @@ public final class ProductImportServices {
             // try to find the supplier
             GenericValue supplier = delegator.findByPrimaryKeyCache("Party", UtilMisc.toMap("partyId", supplierPartyId));
             if (UtilValidate.isEmpty(supplier)) {
-                 Debug.logInfo("Supplier with ID [" + supplierPartyId + "] not found, will be creating it", module);
+                 Debug.logInfo("Supplier with ID [" + supplierPartyId + "] not found, will be creating it", MODULE);
 
                  TransactionUtil.begin();
                  delegator.create("Party", UtilMisc.toMap("partyId", supplierPartyId, "partyTypeId", "PARTY_GROUP"));
@@ -483,7 +481,7 @@ public final class ProductImportServices {
     private static List<GenericValue> decodeInventory(GenericValue productInventory, String organizationPartyId, String facilityId, String inventoryGlAccountId, String offsettingGlAccountId, String acctgTransId, String currencyUomId, Timestamp now, GenericDelegator delegator) throws GenericEntityException, Exception {
         Map input;
         List toStore = FastList.newInstance();
-        Debug.logInfo("Now processing  data [" + productInventory.get("productId") + "]", module);
+        Debug.logInfo("Now processing  data [" + productInventory.get("productId") + "]", MODULE);
 
         String productId = productInventory.getString("productId");
         Double onHand = productInventory.getDouble("onHand");
@@ -509,7 +507,7 @@ public final class ProductImportServices {
         // Verify that productId exists
         GenericValue product = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId));
         if (product == null) {
-            Debug.logInfo("Could not find product [" + productId + "], not importing.", module);
+            Debug.logInfo("Could not find product [" + productId + "], not importing.", MODULE);
             return toStore;
         }
 

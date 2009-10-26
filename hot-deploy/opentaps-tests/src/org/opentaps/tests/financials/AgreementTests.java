@@ -32,8 +32,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.common.agreement.UtilAgreement;
 import org.opentaps.common.util.UtilCommon;
@@ -155,9 +154,8 @@ public class AgreementTests extends OpentapsTestCase {
     }
 
     /**
-     * This test checks if a party classification group plus net days agreement is working or not
-     * 
-     * @throws GeneralException 
+     * This test checks if a party classification group plus net days agreement is working or not.
+     * @throws GeneralException if an error occurs
      */
     public void testSalesAgreementNetDaysToGroup() throws GeneralException {
 
@@ -170,7 +168,7 @@ public class AgreementTests extends OpentapsTestCase {
         GenericValue invoice = delegator.findByPrimaryKey("Invoice", UtilMisc.toMap("invoiceId", invoiceId));
         Calendar invoiceDate = UtilDateTime.toCalendar(invoice.getTimestamp("invoiceDate"), timeZone, locale);
         Calendar dueDate = UtilDateTime.toCalendar(invoice.getTimestamp("dueDate"));
-        Calendar expectedDate = (Calendar)invoiceDate.clone();
+        Calendar expectedDate = (Calendar) invoiceDate.clone();
         expectedDate.add(Calendar.DATE, 30);
         expectedDate.set(Calendar.HOUR_OF_DAY, 23);
         expectedDate.set(Calendar.MINUTE, 59);
@@ -180,9 +178,8 @@ public class AgreementTests extends OpentapsTestCase {
     }
 
     /**
-     * This test checks if a sales agreement for a day of the month due date is correct or not
-     * 
-     * @throws GeneralException 
+     * This test checks if a sales agreement for a day of the month due date is correct or not.
+     * @throws GeneralException if an error occurs
      */
     public void testSalesAgreementOnDayOfMonthToGroup() throws GeneralException {
 
@@ -201,7 +198,7 @@ public class AgreementTests extends OpentapsTestCase {
         GenericValue invoice = delegator.findByPrimaryKey("Invoice", UtilMisc.toMap("invoiceId", invoiceId));
         Calendar invoiceDate = UtilDateTime.toCalendar(invoice.getTimestamp("invoiceDate"));
         Calendar dueDate = UtilDateTime.toCalendar(invoice.getTimestamp("dueDate"));
-        Calendar expectedDate = (Calendar)invoiceDate.clone();
+        Calendar expectedDate = (Calendar) invoiceDate.clone();
         expectedDate.add(Calendar.MONTH, 1);
         expectedDate.set(Calendar.DAY_OF_MONTH, 10);
         expectedDate.set(Calendar.HOUR_OF_DAY, 23);
@@ -224,7 +221,7 @@ public class AgreementTests extends OpentapsTestCase {
         invoice = delegator.findByPrimaryKey("Invoice", UtilMisc.toMap("invoiceId", invoiceId));
         invoiceDate = UtilDateTime.toCalendar(invoice.getTimestamp("invoiceDate"));
         dueDate = UtilDateTime.toCalendar(invoice.getTimestamp("dueDate"));
-        expectedDate = (Calendar)invoiceDate.clone();
+        expectedDate = (Calendar) invoiceDate.clone();
         expectedDate.add(Calendar.MONTH, 2);
         expectedDate.set(Calendar.DAY_OF_MONTH, 10);
         expectedDate.set(Calendar.HOUR_OF_DAY, 23);
@@ -236,20 +233,17 @@ public class AgreementTests extends OpentapsTestCase {
     }
 
     /**
-     * This test verifies if a sales agreement for a particular party is working
-     * 
-     * @throws GeneralExeption 
+     * This test verifies if a sales agreement for a particular party is working.
+     * @throws GeneralException if an error occurs
      */
     public void testSalesAgreementNetDaysToParty() throws GeneralException {
         performSalesAgreementNetDaysToPartyTest("democlass3", 60);
     }
 
     /**
-     * This test verifies that purchasing agreements work
-     *
-     * @throws GeneralException 
+     * This test verifies that purchasing agreements work.
+     * @throws GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testPurchaseAgreementNetDaysAndTermsToParty() throws GeneralException {
 
         // create purchase invoice from DemoSupplier to Company
@@ -265,12 +259,16 @@ public class AgreementTests extends OpentapsTestCase {
         assertEquals("Difference between invoiceDate and dueDate is 30 days.", invoiceDate.get(Calendar.DATE), dueDate.get(Calendar.DATE));
 
         // verify that the invoice has invoiceTerm.termTypeId=PURCH_VENDOR_ID and PURCH_FREIGHT whose text value equals those of AgreementTerm id "1003" and "1004"
-        List<EntityExpr> conditions = Arrays.asList(new EntityExpr("invoiceId", EntityOperator.EQUALS, invoiceId), new EntityExpr("termTypeId", EntityOperator.IN, Arrays.asList("PURCH_VENDOR_ID", "PURCH_FREIGHT")));
-        List<GenericValue> invoiceTerms = delegator.findByCondition("InvoiceTerm", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                                           EntityCondition.makeCondition("invoiceId", EntityOperator.EQUALS, invoiceId),
+                                           EntityCondition.makeCondition("termTypeId", EntityOperator.IN, Arrays.asList("PURCH_VENDOR_ID", "PURCH_FREIGHT")));
+        List<GenericValue> invoiceTerms = delegator.findByCondition("InvoiceTerm", conditions, null, null);
         String agreementTermId = null;
         for (GenericValue term : invoiceTerms) {
             agreementTermId = "PURCH_VENDOR_ID".equals(term.getString("termTypeId")) ? "1003" : "PURCH_FREIGHT".equals(term.getString("termTypeId")) ? "1004" : null;
-            if (UtilValidate.isEmpty(agreementTermId)) break;
+            if (UtilValidate.isEmpty(agreementTermId)) {
+                break;
+            }
 
             GenericValue agreementTerm = delegator.findByPrimaryKey("AgreementTerm", UtilMisc.toMap("agreementTermId", agreementTermId));
             String agreementTextValue = agreementTerm.getString("textValue");
@@ -285,21 +283,20 @@ public class AgreementTests extends OpentapsTestCase {
      * 1.  A credit limit is enforced so that customer invoices cannot be made READY above it
      * 2.  By making a payment and reducing the limit, the customer invoice can be made READY again
      * 3.  Receiving a customer payment in advance will cause the invoice to pass successfully as well
+     * @throws GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testCreditLimit() throws GeneralException {
         performCreditLimitTest("accountlimit100");
     }
 
     /**
-     * <br>The method performs credit limit test. Actually it creates invoices and payments in sequence 
-     * specified by actions argument.</br>
-     * 
-     * <br><strong>Important note!</strong> Payments are always applied to last invoice.</br>
-     * 
+     * The method performs credit limit test. Actually it creates invoices and payments in sequence
+     * specified by actions argument.
+     *
+     * <strong>Important note!</strong> Payments are always applied to last invoice.
+     *
      * @param partyId <code>partyIdTo</code> for invoices created.
-     * @param actions List of classes that carry required data to create invoices & theirs items, payments.
-     * @throws GeneralException
+     * @throws GeneralException if an error occurs
      * @see org.opentaps.tests.financials.AgreementTests.InvoiceAction
      * @see org.opentaps.tests.financials.AgreementTests.InvoiceItemAction
      * @see org.opentaps.tests.financials.AgreementTests.PaymentAction
@@ -351,12 +348,12 @@ public class AgreementTests extends OpentapsTestCase {
     }
 
     /**
-     * This method is implementation of the test to verify if a sales agreement for a particular 
-     * party and net payments days term is working
-     * 
+     * This method is implementation of the test to verify if a sales agreement for a particular
+     * party and net payments days term is working.
+     *
      * @param partyId <code>partyIdTo</code> for invoices created.
      * @param netPaymentDays Net payments days term value.
-     * @throws GeneralException
+     * @throws GeneralException if an error occurs
      */
     public void performSalesAgreementNetDaysToPartyTest(String partyId, int netPaymentDays) throws GeneralException {
 

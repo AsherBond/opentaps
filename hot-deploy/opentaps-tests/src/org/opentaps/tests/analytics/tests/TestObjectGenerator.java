@@ -32,7 +32,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.GenericServiceException;
@@ -45,7 +45,8 @@ import org.opentaps.common.order.SalesOrderFactory;
  */
 @SuppressWarnings("unchecked")
 public class TestObjectGenerator {
-    public static final String module = TestObjectGenerator.class.getName();
+
+    private static final String MODULE = TestObjectGenerator.class.getName();
 
     private GenericDelegator delegator = null;
     private LocalDispatcher dispatcher = null;
@@ -65,11 +66,14 @@ public class TestObjectGenerator {
     /**
      * Public constructor.
      *
-     * @throws GenericEntityException
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param dispatcher a <code>LocalDispatcher</code> value
+     * @exception GenericEntityException if an error occurs
      */
     public TestObjectGenerator(GenericDelegator delegator, LocalDispatcher dispatcher) throws GenericEntityException {
-        if (delegator == null || dispatcher == null)
+        if (delegator == null || dispatcher == null) {
             throw new IllegalArgumentException();
+        }
 
         this.delegator = delegator;
         this.dispatcher = dispatcher;
@@ -103,11 +107,12 @@ public class TestObjectGenerator {
     public Timestamp getRandomTime(Timestamp fromDate, Timestamp thruDate) {
         long fromTime = fromDate != null ? fromDate.getTime() : 0;
         long thruTime = thruDate != null ? thruDate.getTime() : UtilDateTime.nowTimestamp().getTime();
-        if (fromTime == 0)
+        if (fromTime == 0) {
             return UtilDateTime.nowTimestamp();
+        }
 
         double randomNumber = Math.random();
-        return new Timestamp(fromTime + ((long)((thruTime - fromTime) * randomNumber)));
+        return new Timestamp(fromTime + ((long) ((thruTime - fromTime) * randomNumber)));
     }
 
     /**
@@ -143,14 +148,14 @@ public class TestObjectGenerator {
      * TestGeoData entity and they represent real objects. Street address is completely made-up.
      *
      * @return <code>Map</code> with address elements. This <code>Map</code> could be added to <code>crmsfa.createAccount</code> context.
-     * @throws GenericServiceException
+     * @exception GenericServiceException if an error occurs
      */
     public Map getAddress() throws GenericServiceException {
         if (UtilValidate.isEmpty(postalCodesCache)) {
             try {
-                postalCodesCache = delegator.findByCondition("TestGeoData", new EntityExpr("city", EntityOperator.NOT_EQUAL, null), null, null);
+                postalCodesCache = delegator.findByCondition("TestGeoData", EntityCondition.makeCondition("city", EntityOperator.NOT_EQUAL, null), null, null);
             } catch (GenericEntityException e) {
-                Debug.logError(e, module);
+                Debug.logError(e, MODULE);
                 return null;
             }
             if (UtilValidate.isEmpty(postalCodesCache)) {
@@ -166,7 +171,7 @@ public class TestObjectGenerator {
         address.put("generalStateProvinceGeoId", postalCode.getString("stateGeoId"));
         address.put("generalPostalCode", postalCode.getString("postalCode"));
         address.put("generalCountryGeoId", postalCode.getString("countryGeoId"));
-        Debug.logInfo("Getting address: "+postalCode, module);
+        Debug.logInfo("Getting address: " + postalCode, MODULE);
 
         return address;
     }
@@ -180,8 +185,8 @@ public class TestObjectGenerator {
     public Map<String, String> getPhone() {
         Map<String, String> phone = FastMap.newInstance();
         phone.put("primaryPhoneCountryCode", "1");
-        phone.put("primaryPhoneAreaCode", String.format("%1$d%2$d%3$d", (getRandomIndex(8)+2), getRandomIndex(10), getRandomIndex(10)));
-        phone.put("primaryPhoneNumber", String.format("%1$d%2$d%3$d-%4$d%5$d%6$d%7$d", (getRandomIndex(9)+1), (getRandomIndex(9)+1), (getRandomIndex(9)+1), (getRandomIndex(9)+1), (getRandomIndex(9)+1), (getRandomIndex(9)+1), (getRandomIndex(9)+1)));
+        phone.put("primaryPhoneAreaCode", String.format("%1$d%2$d%3$d", (getRandomIndex(8) + 2), getRandomIndex(10), getRandomIndex(10)));
+        phone.put("primaryPhoneNumber", String.format("%1$d%2$d%3$d-%4$d%5$d%6$d%7$d", (getRandomIndex(9) + 1), (getRandomIndex(9) + 1), (getRandomIndex(9) + 1), (getRandomIndex(9) + 1), (getRandomIndex(9) + 1), (getRandomIndex(9) + 1), (getRandomIndex(9) + 1)));
         return phone;
     }
 
@@ -196,7 +201,11 @@ public class TestObjectGenerator {
 
     /**
      * Creates a number of parties at current time.
+     * @param count number of Accounts to create
+     * @return List of <code>party ID</code>
      * @see org.opentaps.tests.analytics.tests.TestObjectGenerator#getAccounts(int count, Timestamp fromDate, Timestamp thruDate)
+     * @throws GenericServiceException if an error occurs
+     * @throws GenericEntityException if an error occurs
      */
     public List<String> getAccounts(int count) throws GenericServiceException, GenericEntityException {
         return getAccounts(count, null, null);
@@ -212,13 +221,13 @@ public class TestObjectGenerator {
      * @param thruDate End of time range. May be <code>null</code>. In this case it takes on a value
      * equals to current time.
      * @return List of <code>party ID</code>
-     * @throws GenericServiceException
-     * @throws GenericEntityException
+     * @throws GenericServiceException if an error occurs
+     * @throws GenericEntityException if an error occurs
      */
     public List<String> getAccounts(int count, Timestamp fromDate, Timestamp thruDate) throws GenericServiceException, GenericEntityException {
         List<String> returns = FastList.newInstance();
         for (int c = 0; c < count; c++) {
-            Debug.logInfo("*** Generating account "+c+" out of "+count, module);
+            Debug.logInfo("*** Generating account " + c + " out of " + count, MODULE);
 
             Map<String, Object> callCtxt = FastMap.newInstance();
             // since each getCompanyName() gets a new random value, we have to store it to use it for the company name and the address
@@ -231,10 +240,11 @@ public class TestObjectGenerator {
             callCtxt.put("generalToName", companyName);
 
             Map<String, Object> results = dispatcher.runSync("crmsfa.createAccount", callCtxt);
-            if (ServiceUtil.isError(results))
+            if (ServiceUtil.isError(results)) {
                 return null;
+            }
 
-            String partyId = (String)results.get("partyId");
+            String partyId = (String) results.get("partyId");
 
             // change createDate to random date within given lag
             GenericValue party = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", partyId));
@@ -264,6 +274,8 @@ public class TestObjectGenerator {
     /**
      * Creates a number of parties at current time.
      * @see org.opentaps.tests.analytics.tests.TestObjectGenerator#getContacts(int count, Timestamp fromDate, Timestamp thruDate)
+     * @throws GenericServiceException if an error occurs
+     * @throws GenericEntityException if an error occurs
      */
     public List<String> getContacts(int count) throws GenericServiceException, GenericEntityException {
         return getContacts(count, null, null);
@@ -279,13 +291,13 @@ public class TestObjectGenerator {
      * @param thruDate End of time range. May be <code>null</code>. In this case it takes on a value
      * equals to current time.
      * @return List of <code>party ID</code>
-     * @throws GenericServiceException
-     * @throws GenericEntityException
+     * @throws GenericServiceException if an error occurs
+     * @throws GenericEntityException if an error occurs
      */
     public List<String> getContacts(int count, Timestamp fromDate, Timestamp thruDate) throws GenericServiceException, GenericEntityException {
         List<String> returns = FastList.newInstance();
         for (int c = 0; c < count; c++) {
-            Debug.logInfo("*** Generating contact "+c+" out of "+count, module);
+            Debug.logInfo("*** Generating contact " + c + " out of " + count, MODULE);
 
             Map<String, Object> callCtxt = FastMap.newInstance();
             // since each get__Name() gets a new random value, we have to store it to use it for the company name and the address
@@ -300,10 +312,11 @@ public class TestObjectGenerator {
             callCtxt.put("generalToName", firstName + " " + lastName);
 
             Map<String, Object> results = dispatcher.runSync("crmsfa.createContact", callCtxt);
-            if (ServiceUtil.isError(results))
+            if (ServiceUtil.isError(results)) {
                 return null;
+            }
 
-            String partyId = (String)results.get("partyId");
+            String partyId = (String) results.get("partyId");
 
             // change createDate to random date within given lag
             GenericValue party = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", partyId));
@@ -315,11 +328,13 @@ public class TestObjectGenerator {
             returns.add(partyId);
         }
         return returns;
-    };
+    }
 
     /**
      * Creates a number of orders at current time.
-     * @see org.opentaps.tests.analytics.tests.TestObjectGenerator#getOrders(int count, String organizationPartyId, Timestamp fromDate, Timestamp thruDate)
+     * @see org.opentaps.tests.analytics.tests.TestObjectGenerator#getOrders(int count, String organizationPartyId, Timestamp fromDate, Timestamp thruDate, List productIds)
+     * @throws GenericServiceException if an error occurs
+     * @throws GenericEntityException if an error occurs
      */
     public List<String> getOrders(int count, String organizationPartyId) throws GenericEntityException, GenericServiceException {
         return getOrders(count, organizationPartyId, null, null, null);
@@ -337,28 +352,28 @@ public class TestObjectGenerator {
      * @param thruDate End of time range. May be <code>null</code>. In this case it takes on a value
      * equals to current time.
      * @return List of <code>party ID</code>
-     * @throws GenericServiceException
-     * @throws GenericEntityException
+     * @throws GenericServiceException if an error occurs
+     * @throws GenericEntityException if an error occurs
      */
     public List<String> getOrders(int count, String organizationPartyId, Timestamp fromDate, Timestamp thruDate, List<String> productIds) throws GenericServiceException, GenericEntityException {
         String productStoreId = "9000";
         List<String> partyIds = getAccounts(count / 2, fromDate, thruDate);
-        List<GenericValue> parties = delegator.findByCondition("Party", new EntityExpr("partyId", EntityOperator.IN, partyIds), Arrays.asList("partyId", "createdDate"), null);
+        List<GenericValue> parties = delegator.findByCondition("Party", EntityCondition.makeCondition("partyId", EntityOperator.IN, partyIds), Arrays.asList("partyId", "createdDate"), null);
         List<GenericValue> products = FastList.newInstance();
         if (productIds == null) {
             products.add(delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", "GZ-1000")));
         } else {
-            products.addAll(delegator.findByCondition("Product", new EntityExpr("productId", EntityOperator.IN, productIds), null, null));
+            products.addAll(delegator.findByCondition("Product", EntityCondition.makeCondition("productId", EntityOperator.IN, productIds), null, null));
         }
         List<String> returns = FastList.newInstance();
         for (int c = 0; c < count; c++) {
-            Debug.logInfo("*** Generating order "+c+" out of "+count, module);
+            Debug.logInfo("*** Generating order " + c + " out of " + count, MODULE);
 
             // Ensure used account has date less or equals to order date.
             Timestamp orderDate = UtilDateTime.nowTimestamp();
             String selectedPartyId = null;
             Timestamp tempDate = getRandomTime(fromDate, thruDate);
-            List<GenericValue> filteredParties = EntityUtil.filterByCondition(parties, new EntityExpr("createdDate", EntityOperator.LESS_THAN_EQUAL_TO, tempDate));
+            List<GenericValue> filteredParties = EntityUtil.filterByCondition(parties, EntityCondition.makeCondition("createdDate", EntityOperator.LESS_THAN_EQUAL_TO, tempDate));
             if (filteredParties.size() > 0) {
                 selectedPartyId = filteredParties.get(getRandomIndex(filteredParties.size())).getString("partyId");
                 orderDate = tempDate;
@@ -411,7 +426,7 @@ public class TestObjectGenerator {
             }
 
         } catch (GenericServiceException e) {
-            Debug.logError("Unexpected error during product categories generation with message: " + e.getMessage(), module);
+            Debug.logError("Unexpected error during product categories generation with message: " + e.getMessage(), MODULE);
             return null;
         }
 
@@ -462,9 +477,8 @@ public class TestObjectGenerator {
             }
 
             if (UtilValidate.isNotEmpty(inCategories)) {
-                //
                 int i = 0;
-                int prodsPerCategory = (int)(productIds.size() / inCategories.size());
+                int prodsPerCategory = (int) (productIds.size() / inCategories.size());
                 for (String productCategoryId : inCategories) {
 
                     int boundary = i + prodsPerCategory;
@@ -486,7 +500,7 @@ public class TestObjectGenerator {
             }
 
         } catch (GenericServiceException e) {
-            Debug.logError("Unexpected error during products generation with message: " + e.getMessage(), module);
+            Debug.logError("Unexpected error during products generation with message: " + e.getMessage(), MODULE);
             return null;
         }
 
@@ -497,7 +511,7 @@ public class TestObjectGenerator {
         // find a party with role salesrep (by default no party has role commission agent)
         List<GenericValue> parties = delegator.findByAnd("PartyRole", UtilMisc.toMap("roleTypeId", "COMMISSION_AGENT"));
         if (UtilValidate.isEmpty(parties)) {
-            Debug.logWarning("No COMMISSION_AGENT party found, not setting any for the order.", module);
+            Debug.logWarning("No COMMISSION_AGENT party found, not setting any for the order.", MODULE);
             return;
         }
 

@@ -27,7 +27,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.domain.DomainsLoader;
@@ -86,17 +86,16 @@ public class EntityTests extends OpentapsTestCase {
     }
 
     private void removeTestData(GenericDelegator delegator) throws GenericEntityException {
-        delegator.removeByCondition("PaymentApplication", new EntityExpr("paymentApplicationId", EntityOperator.EQUALS, PAYMENT_APPLICATION_ID));
-        delegator.removeByCondition("InvoiceItem", new EntityExpr("invoiceId", EntityOperator.EQUALS, INVOICE_ID));
-        delegator.removeByCondition("Invoice", new EntityExpr("invoiceId", EntityOperator.EQUALS, INVOICE_ID));
-        delegator.removeByCondition("Payment", new EntityExpr("paymentId", EntityOperator.EQUALS, PAYMENT_ID));
+        delegator.removeByCondition("PaymentApplication", EntityCondition.makeCondition("paymentApplicationId", EntityOperator.EQUALS, PAYMENT_APPLICATION_ID));
+        delegator.removeByCondition("InvoiceItem", EntityCondition.makeCondition("invoiceId", EntityOperator.EQUALS, INVOICE_ID));
+        delegator.removeByCondition("Invoice", EntityCondition.makeCondition("invoiceId", EntityOperator.EQUALS, INVOICE_ID));
+        delegator.removeByCondition("Payment", EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, PAYMENT_ID));
     }
 
     /**
      * Tests converting a <code>GenericValue</code> to a domain base entity using <code>FoundationUtils.loadFromMap</code>.
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testEntityLoading() throws Exception {
         for (GenericValue enumeration : enumerations) {
             Enumeration enum1 = new Enumeration();

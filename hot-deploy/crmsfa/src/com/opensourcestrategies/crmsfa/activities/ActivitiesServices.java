@@ -78,8 +78,7 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.ByteWrapper;
 import org.ofbiz.entity.util.EntityUtil;
@@ -1559,11 +1558,10 @@ public final class ActivitiesServices {
                 // Attention : must check if there are pending activities otherwise the query will return all activities
                 if (UtilValidate.isNotEmpty(pendingActivities)) {
                     List<String> pendingActivitiesIds = EntityUtil.getFieldListFromEntityList(pendingActivities, "workEffortId", true);
-                    List<EntityCondition> pendingActivitiesFilteredBySecurityScopeExprList = new ArrayList<EntityCondition>();
-                    pendingActivitiesFilteredBySecurityScopeExprList.add(securityScopeMainCond);
-                    pendingActivitiesFilteredBySecurityScopeExprList.add(EntityCondition.makeCondition("workEffortId", EntityOperator.IN, pendingActivitiesIds));
-                    pendingActivitiesFilteredBySecurityScopeExprList.add(EntityUtil.getFilterByDateExpr());
-                    EntityCondition pendingActivitiesFilteredBySecurityScopeCond = EntityCondition.makeCondition(pendingActivitiesFilteredBySecurityScopeExprList, EntityOperator.AND);
+                    EntityCondition pendingActivitiesFilteredBySecurityScopeCond = EntityCondition.makeCondition(EntityOperator.AND,
+                                                                               securityScopeMainCond,
+                                                                               EntityCondition.makeCondition("workEffortId", EntityOperator.IN, pendingActivitiesIds),
+                                                                               EntityUtil.getFilterByDateExpr());
                     pendingActivities = delegator.findByCondition("WorkEffortAndPartyAssign", pendingActivitiesFilteredBySecurityScopeCond, null, fieldsToSelect, pendingOrderByFields, UtilCommon.DISTINCT_READ_OPTIONS);
                 }
 
@@ -1571,11 +1569,10 @@ public final class ActivitiesServices {
                 // Attention : must check if there are completed activities otherwise the query will return all activities
                 if (UtilValidate.isNotEmpty(completedActivities)) {
                     List<String> completedActivitiesIds = EntityUtil.getFieldListFromEntityList(completedActivities, "workEffortId", true);
-                    List<EntityCondition> completedActivitiesFilteredBySecurityScopeExprList = new ArrayList<EntityCondition>();
-                    completedActivitiesFilteredBySecurityScopeExprList.add(securityScopeMainCond);
-                    completedActivitiesFilteredBySecurityScopeExprList.add(EntityCondition.makeCondition("workEffortId", EntityOperator.IN , completedActivitiesIds));
-                    completedActivitiesFilteredBySecurityScopeExprList.add(EntityUtil.getFilterByDateExpr());
-                    EntityCondition completedActivitiesFilteredBySecurityScopeCond = EntityCondition.makeCondition(completedActivitiesFilteredBySecurityScopeExprList, EntityOperator.AND);
+                    EntityCondition completedActivitiesFilteredBySecurityScopeCond = EntityCondition.makeCondition(EntityOperator.AND,
+                                                                               securityScopeMainCond,
+                                                                               EntityCondition.makeCondition("workEffortId", EntityOperator.IN , completedActivitiesIds),
+                                                                               EntityUtil.getFilterByDateExpr());
                     completedActivities = delegator.findByCondition("WorkEffortAndPartyAssign", completedActivitiesFilteredBySecurityScopeCond, null, fieldsToSelect, completedOrderByFields, UtilCommon.DISTINCT_READ_OPTIONS);
                 }
             }
@@ -1792,7 +1789,7 @@ public final class ActivitiesServices {
                 }
 
             // find all the internal parties involved in this work effort
-            List internalAssignedParties = ActivitiesHelper.findInternalWorkeffortPartyIds(workEffortId, delegator);
+            List<String> internalAssignedParties = ActivitiesHelper.findInternalWorkeffortPartyIds(workEffortId, delegator);
             if (UtilValidate.isEmpty(internalAssignedParties)) {
                 Debug.logInfo("No CRM/SFA parties assigned to work effort [" + workEffortId + "], not creating time sheet entries", MODULE);
                 return ServiceUtil.returnSuccess();
@@ -1887,15 +1884,15 @@ public final class ActivitiesServices {
             String workEffortName = UtilValidate.isEmpty(workEffort.getString("workEffortName")) ? workEffortId : workEffort.getString("workEffortName");
 
             // Retrieve a list of all internal partyIds associated with the activity
-            Set internalPartyIds = new HashSet(ActivitiesHelper.findInternalWorkeffortPartyIds(workEffortId, delegator));
-            List allAssignedParties = delegator.findByAnd("WorkEffortPartyAssignment", UtilMisc.toList(
-                                                new EntityExpr("workEffortId", EntityOperator.EQUALS, workEffortId),
-                                                new EntityExpr("statusId", EntityOperator.EQUALS, "PRTYASGN_ASSIGNED")));
-            allAssignedParties = EntityUtil.filterByDate(allAssignedParties);
-            Set assignedPartyIds = new HashSet(EntityUtil.getFieldListFromEntityList(allAssignedParties, "partyId", true));
+            Set<String> internalPartyIds = new HashSet<String>(ActivitiesHelper.findInternalWorkeffortPartyIds(workEffortId, delegator));
+            List<GenericValue> allAssignedParties = delegator.findByAnd("WorkEffortPartyAssignment", UtilMisc.toList(
+                                                EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, workEffortId),
+                                                EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "PRTYASGN_ASSIGNED"),
+                                                EntityUtil.getFilterByDateExpr()));
+            Set<String> assignedPartyIds = new HashSet<String>(EntityUtil.<String>getFieldListFromEntityList(allAssignedParties, "partyId", true));
 
             // Notify all internal parties
-            Set partiesToNotify = new HashSet(internalPartyIds);
+            Set<String> partiesToNotify = new HashSet<String>(internalPartyIds);
 
             String eventTypeId = workEffort.getString("workEffortTypeId").toLowerCase();
             String eventType = null;
@@ -1922,7 +1919,7 @@ public final class ActivitiesServices {
             Map bodyParameters = UtilMisc.toMap("eventType", eventTypeId + eventType);
             bodyParameters.putAll(messageMap);
 
-            Map sendEmailsResult = dispatcher.runSync("crmsfa.sendCrmNotificationEmails", UtilMisc.toMap("notifyPartyIds", UtilMisc.toList(partiesToNotify), "eventType", "activity" + eventType, "subject", subject, "bodyParameters", bodyParameters, "userLogin", userLogin));
+            Map<String, Object>  sendEmailsResult = dispatcher.runSync("crmsfa.sendCrmNotificationEmails", UtilMisc.toMap("notifyPartyIds", UtilMisc.toList(partiesToNotify), "eventType", "activity" + eventType, "subject", subject, "bodyParameters", bodyParameters, "userLogin", userLogin));
             if (ServiceUtil.isError(sendEmailsResult)) {
                 return sendEmailsResult;
             }
@@ -2060,10 +2057,10 @@ public final class ActivitiesServices {
 
             // find the PartyAndContactMech of the given party, ass needed by associateCommunicationEventWorkEffortAndParties
             List<GenericValue> partyAndContactMechs = delegator.findByCondition("PartyAndContactMech",
-                                                             new EntityConditionList(UtilMisc.toList(
-                                                               new EntityExpr("partyId", EntityOperator.EQUALS, partyId),
-                                                               new EntityExpr("contactMechId", EntityOperator.EQUALS, contactMechId)
-                                                             ), EntityOperator.AND), null, UtilMisc.toList("fromDate"));
+                                                                                EntityCondition.makeCondition(EntityOperator.AND,
+                                                               EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId),
+                                                               EntityCondition.makeCondition("contactMechId", EntityOperator.EQUALS, contactMechId)),
+                                                                                null, UtilMisc.toList("fromDate"));
 
             // associate all emails FROM
             for (GenericValue commEvent : communicationEventsFrom) {
@@ -2136,11 +2133,11 @@ public final class ActivitiesServices {
         if (ci) {
             partyAndContactMechs = new ArrayList<GenericValue>();
             for (String address : addresses) {
-                List<GenericValue> partyAndContactMechPartial = delegator.findByCondition("PartyAndContactMech", new EntityConditionList(UtilMisc.toList(new EntityExpr("infoString", true, EntityOperator.EQUALS, address, true)), EntityOperator.AND), null, UtilMisc.toList("fromDate"));
+                List<GenericValue> partyAndContactMechPartial = delegator.findByCondition("PartyAndContactMech", EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("infoString"), EntityOperator.EQUALS, EntityFunction.UPPER(address)), null, UtilMisc.toList("fromDate"));
                 partyAndContactMechs.addAll(partyAndContactMechPartial);
             }
         } else {
-            partyAndContactMechs = delegator.findByCondition("PartyAndContactMech", new EntityConditionList(UtilMisc.toList(new EntityExpr("infoString", EntityOperator.IN, addresses)), EntityOperator.AND), null, UtilMisc.toList("fromDate"));
+            partyAndContactMechs = delegator.findByCondition("PartyAndContactMech", EntityCondition.makeCondition("infoString", EntityOperator.IN, addresses), null, UtilMisc.toList("fromDate"));
         }
 
         partyAndContactMechs = EntityUtil.filterByDate(partyAndContactMechs, true);
@@ -2152,9 +2149,9 @@ public final class ActivitiesServices {
         String caseInsensitiveEmail = UtilProperties.getPropertyValue("general.properties", "mail.address.caseInsensitive", "N");
         boolean ci = "Y".equals(caseInsensitiveEmail);
         if (ci) {
-            return delegator.findByCondition("WorkEffortCommunicationEventView", new EntityConditionList(UtilMisc.toList(new EntityExpr(field, true, EntityOperator.LIKE, address, true)), EntityOperator.AND), null, null);
+            return delegator.findByCondition("WorkEffortCommunicationEventView", EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(field), EntityOperator.LIKE, EntityFunction.UPPER(address)), null, null);
         } else {
-            return delegator.findByCondition("WorkEffortCommunicationEventView", new EntityConditionList(UtilMisc.toList(new EntityExpr(field, EntityOperator.LIKE, address)), EntityOperator.AND), null, null);
+            return delegator.findByCondition("WorkEffortCommunicationEventView", EntityCondition.makeCondition(field, EntityOperator.LIKE, address), null, null);
         }
     }
 

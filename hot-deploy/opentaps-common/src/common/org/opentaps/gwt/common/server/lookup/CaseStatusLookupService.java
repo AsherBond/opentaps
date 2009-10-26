@@ -22,7 +22,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.domain.base.entities.StatusItem;
 import org.opentaps.foundation.entity.EntityInterface;
@@ -62,7 +62,7 @@ public class CaseStatusLookupService extends EntityLookupAndSuggestService {
      * @return the list of Case status <code>StatusItem</code>
      */
     public List<StatusItem> suggestStatus() {
-        return findList(StatusItem.class, new EntityExpr(StatusItem.Fields.statusTypeId.name(), EntityOperator.EQUALS, "CUSTREQ_STTS"));
+        return findList(StatusItem.class, EntityCondition.makeCondition(StatusItem.Fields.statusTypeId.name(), EntityOperator.EQUALS, "CUSTREQ_STTS"));
     }
 
     @Override

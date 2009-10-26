@@ -48,7 +48,6 @@ public final class ContentHelper {
      * @return a <code>List</code> value
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getContentInfoForParty(String partyId, String roleTypeId, String contentPurposeEnumId, GenericDelegator delegator) throws GenericEntityException {
 
         // First get the PartyContent with the desired purpose and build a list of contentIds from it
@@ -63,12 +62,11 @@ public final class ContentHelper {
         }
 
         // get the unexpired contents for the party in the given role
-        EntityCondition conditions = new EntityConditionList(UtilMisc.toList(
-                    new EntityExpr("contentId", EntityOperator.IN, contentIds),
-                    new EntityExpr("partyId", EntityOperator.EQUALS, partyId),
-                    new EntityExpr("roleTypeId", EntityOperator.EQUALS, roleTypeId),
-                    EntityUtil.getFilterByDateExpr()
-                    ), EntityOperator.AND);
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                    EntityCondition.makeCondition("contentId", EntityOperator.IN, contentIds),
+                    EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId),
+                    EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, roleTypeId),
+                    EntityUtil.getFilterByDateExpr());
         return delegator.findByCondition("ContentAndRole", conditions, null, null);
     }
 
@@ -91,9 +89,8 @@ public final class ContentHelper {
      * @return list of entities
      * @throws GenericEntityException if an error occurs
     */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getContentInfoForCase(String custRequestId, GenericDelegator delegator) throws GenericEntityException {
-        return delegator.findByAnd("ContentAndCustRequest", Arrays.asList(new EntityExpr("custRequestId", EntityOperator.EQUALS, custRequestId), EntityUtil.getFilterByDateExpr()));
+        return delegator.findByAnd("ContentAndCustRequest", Arrays.asList(EntityCondition.makeCondition("custRequestId", EntityOperator.EQUALS, custRequestId), EntityUtil.getFilterByDateExpr()));
     }
 
     /**
@@ -103,9 +100,8 @@ public final class ContentHelper {
      * @return list of entities
      * @throws GenericEntityException if an error occurs
     */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getContentInfoForOpportunity(String salesOpportunityId, GenericDelegator delegator) throws GenericEntityException {
-        return delegator.findByAnd("ContentAndSalesOpportunity", Arrays.asList(new EntityExpr("salesOpportunityId", EntityOperator.EQUALS, salesOpportunityId), EntityUtil.getFilterByDateExpr()));
+        return delegator.findByAnd("ContentAndSalesOpportunity", Arrays.asList(EntityCondition.makeCondition("salesOpportunityId", EntityOperator.EQUALS, salesOpportunityId), EntityUtil.getFilterByDateExpr()));
     }
 
     /**
@@ -115,9 +111,8 @@ public final class ContentHelper {
      * @return list of entities
      * @throws GenericEntityException if an error occurs
     */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getContentInfoForActivity(String workEffortId, GenericDelegator delegator) throws GenericEntityException {
-        return delegator.findByAnd("ContentAndWorkEffort", Arrays.asList(new EntityExpr("workEffortId", EntityOperator.EQUALS, workEffortId), EntityUtil.getFilterByDateExpr()));
+        return delegator.findByAnd("ContentAndWorkEffort", Arrays.asList(EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, workEffortId), EntityUtil.getFilterByDateExpr()));
     }
 
     /**
@@ -127,9 +122,8 @@ public final class ContentHelper {
      * @return list of entities
      * @throws GenericEntityException if an error occurs
     */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getContentInfoForOrder(String orderId, GenericDelegator delegator) throws GenericEntityException {
-        return delegator.findByAnd("ContentAndOrder", Arrays.asList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), EntityUtil.getFilterByDateExpr()));
+        return delegator.findByAnd("ContentAndOrder", Arrays.asList(EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId), EntityUtil.getFilterByDateExpr()));
     }
 
     /**
@@ -139,8 +133,7 @@ public final class ContentHelper {
      * @return list of entities
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getContentInfoForQuote(String quoteId, GenericDelegator delegator) throws GenericEntityException {
-        return delegator.findByAnd("ContentAndQuote", Arrays.asList(new EntityExpr("quoteId", EntityOperator.EQUALS, quoteId), EntityUtil.getFilterByDateExpr()));
+        return delegator.findByAnd("ContentAndQuote", Arrays.asList(EntityCondition.makeCondition("quoteId", EntityOperator.EQUALS, quoteId), EntityUtil.getFilterByDateExpr()));
     }
 }

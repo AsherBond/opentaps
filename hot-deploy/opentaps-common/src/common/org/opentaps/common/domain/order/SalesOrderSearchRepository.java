@@ -17,21 +17,19 @@
 package org.opentaps.common.domain.order;
 
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import javolution.util.FastList;
-
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.party.party.PartyHelper;
 import org.opentaps.common.order.UtilOrder;
@@ -86,7 +84,7 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
         if (UtilValidate.isNotEmpty(fromDate)) {
             Timestamp fromDateTimestamp = UtilDate.toTimestamp(fromDate, timeZone, locale);
             if (UtilValidate.isNotEmpty(fromDateTimestamp)) {
-                searchConditions.add(new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.orderDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, fromDateTimestamp));
+                searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.orderDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, fromDateTimestamp));
             }
         }
 
@@ -94,31 +92,30 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
         if (UtilValidate.isNotEmpty(thruDate)) {
             Timestamp thruDateTimestamp = UtilDate.toTimestamp(thruDate, timeZone, locale);
             if (UtilValidate.isNotEmpty(thruDateTimestamp)) {
-                searchConditions.add(new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.orderDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, thruDateTimestamp));
+                searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.orderDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, thruDateTimestamp));
             }
         }
 
         // restrict search results to the company set up for CRM
-        searchConditions.add(new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.billFromPartyId.name(), EntityOperator.EQUALS, organizationPartyId));
+        searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.billFromPartyId.name(), EntityOperator.EQUALS, organizationPartyId));
 
         // other conditions to limit the list
-        searchConditions.add(new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.orderTypeId.name(), EntityOperator.EQUALS, "SALES_ORDER"));
-        searchConditions.add(new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.roleTypeId.name(), EntityOperator.EQUALS, "BILL_TO_CUSTOMER"));
+        searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.orderTypeId.name(), EntityOperator.EQUALS, "SALES_ORDER"));
+        searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.roleTypeId.name(), EntityOperator.EQUALS, "BILL_TO_CUSTOMER"));
 
         // select parties assigned to current user or his team according to view preferences.
         if (UtilValidate.isNotEmpty(viewPref)) {
             if (OrderLookupConfiguration.MY_VALUES.equals(viewPref)) {
-                EntityConditionList additionalConditions = new EntityConditionList(UtilMisc.toList(
-                        new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.orderTypeId.name(), EntityOperator.EQUALS, "SALES_ORDER"),
-                        new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.createdBy.name(), EntityOperator.EQUALS, userLoginId),
-                        new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.roleTypeId.name(), EntityOperator.EQUALS, "BILL_TO_CUSTOMER"),
-                        new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name(), EntityOperator.IN, UtilMisc.toList("ORDER_APPROVED", "ORDER_CREATED", "ORDER_HOLD", "ORDER_PROCESSING")),
-                        new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.billFromPartyId.name(), EntityOperator.EQUALS, organizationPartyId)
-                        ), EntityOperator.AND);
+                EntityCondition additionalConditions = EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.orderTypeId.name(), EntityOperator.EQUALS, "SALES_ORDER"),
+                        EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.createdBy.name(), EntityOperator.EQUALS, userLoginId),
+                        EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.roleTypeId.name(), EntityOperator.EQUALS, "BILL_TO_CUSTOMER"),
+                        EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name(), EntityOperator.IN, UtilMisc.toList("ORDER_APPROVED", "ORDER_CREATED", "ORDER_HOLD", "ORDER_PROCESSING")),
+                        EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.billFromPartyId.name(), EntityOperator.EQUALS, organizationPartyId));
                 searchConditions.add(additionalConditions);
             }
         }
-        EntityConditionList searchConditionList = new EntityConditionList(searchConditions, EntityOperator.AND);
+        EntityCondition searchConditionList = EntityCondition.makeCondition(searchConditions, EntityOperator.AND);
         List<EntityCondition> conds = new ArrayList<EntityCondition>();
         conds.add(searchConditionList);
         return findOrderListWithFilters(conds);
@@ -134,37 +131,37 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
      */
     private List<OrderHeaderItemAndRolesAndInvPending> findOrderListWithFilters(List<EntityCondition> conds) throws RepositoryException {
         if (UtilValidate.isNotEmpty(orderId)) {
-            conds.add(new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.orderId.name(), true, EntityOperator.EQUALS, orderId + "%", true));
+            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.orderId.name()), EntityOperator.EQUALS, EntityFunction.UPPER(orderId + "%")));
         }
         if (UtilValidate.isNotEmpty(statusId)) {
-            conds.add(new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name(), true, EntityOperator.EQUALS, statusId, true));
+            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name()), EntityOperator.EQUALS, EntityFunction.UPPER(statusId)));
         }
         if (UtilValidate.isNotEmpty(productStoreId)) {
-            conds.add(new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.productStoreId.name(), true, EntityOperator.EQUALS, productStoreId, true));
+            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.productStoreId.name()), EntityOperator.EQUALS, EntityFunction.UPPER(productStoreId)));
         }
         if (UtilValidate.isNotEmpty(createdBy)) {
-            conds.add(new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.createdBy.name(), true, EntityOperator.EQUALS, createdBy, true));
+            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.createdBy.name()), EntityOperator.EQUALS, EntityFunction.UPPER(createdBy)));
         }
         if (UtilValidate.isNotEmpty(orderName)) {
-            conds.add(new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.orderName.name(), true, EntityOperator.LIKE, orderName + "%", true));
+            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.orderName.name()), EntityOperator.LIKE, EntityFunction.UPPER(orderName + "%")));
         }
         if (UtilValidate.isNotEmpty(externalOrderId)) {
-            conds.add(new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.externalId.name(), true, EntityOperator.LIKE, externalOrderId + "%", true));
+            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.externalId.name()), EntityOperator.LIKE, EntityFunction.UPPER(externalOrderId + "%")));
         }
         if (UtilValidate.isNotEmpty(customerPartyId)) {
-            conds.add(new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.partyId.name(), true, EntityOperator.LIKE, customerPartyId + "%", true));
+            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.partyId.name()), EntityOperator.LIKE, EntityFunction.UPPER(customerPartyId + "%")));
         }
         if (UtilValidate.isNotEmpty(purchaseOrderId)) {
-            conds.add(new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.correspondingPoId.name(), true, EntityOperator.LIKE, purchaseOrderId + "%", true));
+            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.correspondingPoId.name()), EntityOperator.LIKE, EntityFunction.UPPER(purchaseOrderId + "%")));
         }
         if (UtilValidate.isNotEmpty(lotId)) {
-            conds.add(new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.lotId.name(), true, EntityOperator.LIKE, lotId + "%", true));
+            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.lotId.name()), EntityOperator.LIKE, EntityFunction.UPPER(lotId + "%")));
         }
         if (UtilValidate.isNotEmpty(serialNumber)) {
-            conds.add(new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.serialNumber.name(), true, EntityOperator.LIKE, serialNumber + "%", true));
+            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.serialNumber.name()), EntityOperator.LIKE, EntityFunction.UPPER(serialNumber + "%")));
         }
         if (UtilValidate.isNotEmpty(orderName)) {
-            conds.add(new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.orderName.name(), true, EntityOperator.LIKE, orderName + "%", true));
+            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.orderName.name()), EntityOperator.LIKE, EntityFunction.UPPER(orderName + "%")));
         }
         // add special condition with complete order
         return findOrdersByCondition(conds);
@@ -224,7 +221,7 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
             }
         }
         List<OrderHeaderItemAndRolesAndInvPending> orders = FastList.newInstance();
-        List<OrderHeaderItemAndRolesAndInvCompleted> completedOrders = findList(OrderHeaderItemAndRolesAndInvCompleted.class, new EntityConditionList(conds, EntityOperator.AND), fieldsToSelect, queryOrderBy);
+        List<OrderHeaderItemAndRolesAndInvCompleted> completedOrders = findList(OrderHeaderItemAndRolesAndInvCompleted.class, EntityCondition.makeCondition(conds, EntityOperator.AND), fieldsToSelect, queryOrderBy);
         for (OrderHeaderItemAndRolesAndInvCompleted order : completedOrders) {
             // clone OrderHeaderItemAndRolesAndInvCompleted entity as OrderHeaderItemAndRolesAndInvPending entity and put it to orders list
             OrderHeaderItemAndRolesAndInvPending newOrder = new OrderHeaderItemAndRolesAndInvPending();
@@ -237,9 +234,9 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
             orderIds.add(order.getOrderId());
         }
         if (UtilValidate.isNotEmpty(orderIds)) {
-            conds.add(new EntityExpr(OrderHeaderItemAndRolesAndInvPending.Fields.orderId.name(), EntityOperator.NOT_IN, orderIds));
+            conds.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.orderId.name(), EntityOperator.NOT_IN, orderIds));
         }
-        List<OrderHeaderItemAndRolesAndInvPending> pendingOrderList = findList(OrderHeaderItemAndRolesAndInvPending.class, new EntityConditionList(conds, EntityOperator.AND), fieldsToSelect, queryOrderBy);
+        List<OrderHeaderItemAndRolesAndInvPending> pendingOrderList = findList(OrderHeaderItemAndRolesAndInvPending.class, EntityCondition.makeCondition(conds, EntityOperator.AND), fieldsToSelect, queryOrderBy);
         orders.addAll(pendingOrderList);
 
         // add value for extra fields
@@ -264,7 +261,7 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
- 
+
     /** {@inheritDoc} */
     public void setOrderBy(List<String> orderBy) {
         this.orderBy = orderBy;

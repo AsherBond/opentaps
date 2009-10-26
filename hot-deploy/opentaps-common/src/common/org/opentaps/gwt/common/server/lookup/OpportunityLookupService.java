@@ -29,8 +29,6 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.party.PartyHelper;
@@ -83,8 +81,8 @@ public class OpportunityLookupService extends EntityLookupAndSuggestService {
     public List<SalesOpportunityAndPartyRelationshipAndStage> findOpportunities() {
         List<SalesOpportunityAndPartyRelationshipAndStage> opportunities;
         String partyId = null;
-        List combinedConditions = null;
-        EntityConditionList additionalConditions = null;
+        List<EntityCondition> combinedConditions = null;
+        EntityCondition additionalConditions = null;
         if (getProvider().getUser().getOfbizUserLogin() != null) {
             partyId = getProvider().getUser().getOfbizUserLogin().getString("partyId");
         } else {
@@ -97,36 +95,32 @@ public class OpportunityLookupService extends EntityLookupAndSuggestService {
                 // condition to find all cases where userLogin is the request taker
                 // decide which condition to use based on preferences (default is team)
                 if (OpportunityLookupConfiguration.MY_VALUES.equals(viewPref)) {
-                    additionalConditions = new EntityConditionList(UtilMisc.toList(
-                            new EntityExpr("opportunityStageId", EntityOperator.EQUALS, null),
-                            new EntityConditionList(UtilMisc.toList(
-                                    new EntityExpr("opportunityStageId", EntityOperator.NOT_EQUAL, null),
-                                    new EntityExpr("opportunityStageId", EntityOperator.NOT_EQUAL, "SOSTG_CLOSED"),
-                                    new EntityExpr("opportunityStageId", EntityOperator.NOT_EQUAL, "SOSTG_LOST")
-                                    ), EntityOperator.AND)
-                            ), EntityOperator.OR);
+                    additionalConditions = EntityCondition.makeCondition(EntityOperator.OR,
+                            EntityCondition.makeCondition("opportunityStageId", EntityOperator.EQUALS, null),
+                            EntityCondition.makeCondition(EntityOperator.AND,
+                                    EntityCondition.makeCondition("opportunityStageId", EntityOperator.NOT_EQUAL, null),
+                                    EntityCondition.makeCondition("opportunityStageId", EntityOperator.NOT_EQUAL, "SOSTG_CLOSED"),
+                                    EntityCondition.makeCondition("opportunityStageId", EntityOperator.NOT_EQUAL, "SOSTG_LOST"))
+                            );
                     combinedConditions = UtilMisc.toList(
-                            new EntityExpr("partyIdTo", EntityOperator.EQUALS, partyId),
-                            new EntityExpr("partyRelationshipTypeId", EntityOperator.EQUALS, "RESPONSIBLE_FOR"),
-                            new EntityConditionList(UtilMisc.toList(
-                                    new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "PROSPECT"),
-                                    new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT")
-                                    ), EntityOperator.OR),
+                            EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyId),
+                            EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, "RESPONSIBLE_FOR"),
+                            EntityCondition.makeCondition(EntityOperator.OR,
+                                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "PROSPECT"),
+                                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT")),
                             EntityUtil.getFilterByDateExpr()); // filter out expired accounts
                 } else {
                     // strategy: find all the accounts of the internalPartyId, then find all the opportunities of those accounts
-                    EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
-                                new EntityExpr("partyIdTo", EntityOperator.EQUALS, partyId),
-                                new EntityExpr("roleTypeIdFrom", EntityOperator.IN, UtilMisc.toList("ACCOUNT", "PROSPECT")),
-                                new EntityConditionList(UtilMisc.toList(
-                                        new EntityExpr("partyRelationshipTypeId", EntityOperator.EQUALS, "RESPONSIBLE_FOR"),
-                                        new EntityExpr("partyRelationshipTypeId", EntityOperator.EQUALS, "ASSIGNED_TO")
-                                        ), EntityOperator.OR),
-                                EntityUtil.getFilterByDateExpr()
-                                ), EntityOperator.AND);
+                    EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                                EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyId),
+                                EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.IN, UtilMisc.toList("ACCOUNT", "PROSPECT")),
+                                EntityCondition.makeCondition(EntityOperator.OR,
+                                        EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, "RESPONSIBLE_FOR"),
+                                        EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, "ASSIGNED_TO")),
+                                EntityUtil.getFilterByDateExpr());
                     try {
                         List<PartyRelationship> accounts = getRepository().findList(PartyRelationship.class, conditions);
-                        ArrayList accountIds = new ArrayList();
+                        List<String> accountIds = new ArrayList<String>();
                         for (PartyRelationship account : accounts) {
                             accountIds.add(account.getPartyIdFrom());
                         }
@@ -134,11 +128,10 @@ public class OpportunityLookupService extends EntityLookupAndSuggestService {
                         if (accountIds.size() < 1) {
                             return null;
                         }
-                     // build the condition to find opportunitied belonging to these accounts
-                        combinedConditions = UtilMisc.toList(
-                                new EntityExpr("partyIdFrom", EntityOperator.IN, accountIds),
-                                new EntityExpr("roleTypeIdFrom", EntityOperator.IN, UtilMisc.toList("ACCOUNT", "PROSPECT"))
-                                );
+                        // build the condition to find opportunitied belonging to these accounts
+                        combinedConditions = UtilMisc.<EntityCondition>toList(
+                                EntityCondition.makeCondition("partyIdFrom", EntityOperator.IN, accountIds),
+                                EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.IN, UtilMisc.toList("ACCOUNT", "PROSPECT")));
                     } catch (RepositoryException e) {
                         Debug.logError(e, MODULE);
                         return null;
@@ -146,18 +139,16 @@ public class OpportunityLookupService extends EntityLookupAndSuggestService {
                 }
         } else {
             combinedConditions = UtilMisc.toList(
-                    new EntityConditionList(UtilMisc.toList(
-                            new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "PROSPECT"),
-                            new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT")
-                            ), EntityOperator.OR),
+                    EntityCondition.makeCondition(EntityOperator.OR,
+                            EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "PROSPECT"),
+                            EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT")),
                     EntityUtil.getFilterByDateExpr()); // filter out expired accounts
         }
         // if additional conditions are passed in, add them as well
         if (additionalConditions != null) {
             combinedConditions.add(additionalConditions);
         }
-        EntityCondition condition = new EntityConditionList(
-                combinedConditions, EntityOperator.AND);
+        EntityCondition condition = EntityCondition.makeCondition(combinedConditions, EntityOperator.AND);
         if (getProvider().oneParameterIsPresent(BY_ADVANCED_FILTERS)) {
             opportunities = findOpportunitiesBy(SalesOpportunityAndPartyRelationshipAndStage.class, condition, BY_ADVANCED_FILTERS);
         } else {
@@ -201,6 +192,6 @@ public class OpportunityLookupService extends EntityLookupAndSuggestService {
     private <T extends EntityInterface> List<T> findAllOpportunities(Class<T> entity, EntityCondition condition) {
         List<EntityCondition> conds = new ArrayList<EntityCondition>();
         conds.add(condition);
-        return findList(entity, new EntityConditionList(conds, EntityOperator.AND));
+        return findList(entity, EntityCondition.makeCondition(conds, EntityOperator.AND));
     }
 }

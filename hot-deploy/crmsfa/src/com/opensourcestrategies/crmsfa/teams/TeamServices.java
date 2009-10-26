@@ -40,6 +40,8 @@
 
 package com.opensourcestrategies.crmsfa.teams;
 
+import java.util.*;
+
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 import org.ofbiz.base.util.UtilDateTime;
@@ -49,7 +51,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
@@ -59,8 +61,6 @@ import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
-
-import java.util.*;
 
 /**
  * Team services. The service documentation is in services_teams.xml.
@@ -185,7 +185,7 @@ public final class TeamServices {
         try {
             // expire all active relationships for team
             List relationships = delegator.findByAnd("PartyRelationship",
-                    UtilMisc.toList(new EntityExpr("partyIdFrom", EntityOperator.EQUALS, teamPartyId), EntityUtil.getFilterByDateExpr()));
+                    UtilMisc.toList(EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, teamPartyId), EntityUtil.getFilterByDateExpr()));
             PartyHelper.expirePartyRelationships(relationships, UtilDateTime.nowTimestamp(), dispatcher, userLogin);
 
             // set the team party to PARTY_DISABLED (note: if your version of ofbiz fails to do this, then replace this with direct entity ops)

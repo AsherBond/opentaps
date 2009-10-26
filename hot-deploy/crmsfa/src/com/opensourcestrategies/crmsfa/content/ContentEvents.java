@@ -35,7 +35,6 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
@@ -83,10 +82,9 @@ public final class ContentEvents {
 
             // ensure association exists between our party and content (ignore role because we're using module to check for security)
             List conditions = UtilMisc.toList(
-                    new EntityExpr("contentId", EntityOperator.EQUALS, contentId),
-                    new EntityExpr("partyId", EntityOperator.EQUALS, partyId),
-                    EntityUtil.getFilterByDateExpr()
-                    );
+                    EntityCondition.makeCondition("contentId", EntityOperator.EQUALS, contentId),
+                    EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId),
+                    EntityUtil.getFilterByDateExpr());
             GenericValue association = EntityUtil.getFirst(delegator.findByAnd("ContentRole", conditions));
             if (association == null) {
                 return UtilMessage.createAndLogEventError(request, "CrmErrorPermissionDenied", locale, MODULE);
@@ -127,10 +125,9 @@ public final class ContentEvents {
 
             // ensure association exists between case and content
             List conditions = UtilMisc.toList(
-                    new EntityExpr("contentId", EntityOperator.EQUALS, contentId),
-                    new EntityExpr("custRequestId", EntityOperator.EQUALS, custRequestId),
-                    EntityUtil.getFilterByDateExpr()
-                    );
+                    EntityCondition.makeCondition("contentId", EntityOperator.EQUALS, contentId),
+                    EntityCondition.makeCondition("custRequestId", EntityOperator.EQUALS, custRequestId),
+                    EntityUtil.getFilterByDateExpr());
             GenericValue association = EntityUtil.getFirst(delegator.findByAnd("CustRequestContent", conditions));
             if (association == null) {
                 return UtilMessage.createAndLogEventError(request, "CrmErrorPermissionDenied", locale, MODULE);
@@ -171,8 +168,8 @@ public final class ContentEvents {
 
             // ensure association exists between case and content
             List conditions = UtilMisc.toList(
-                    new EntityExpr("contentId", EntityOperator.EQUALS, contentId),
-                    new EntityExpr("salesOpportunityId", EntityOperator.EQUALS, salesOpportunityId),
+                    EntityCondition.makeCondition("contentId", EntityOperator.EQUALS, contentId),
+                    EntityCondition.makeCondition("salesOpportunityId", EntityOperator.EQUALS, salesOpportunityId),
                     EntityUtil.getFilterByDateExpr()
                     );
             GenericValue association = EntityUtil.getFirst(delegator.findByAnd("SalesOpportunityContent", conditions));
@@ -215,8 +212,8 @@ public final class ContentEvents {
 
             // ensure association exists between case and content
             List conditions = UtilMisc.toList(
-                    new EntityExpr("contentId", EntityOperator.EQUALS, contentId),
-                    new EntityExpr("workEffortId", EntityOperator.EQUALS, workEffortId),
+                    EntityCondition.makeCondition("contentId", EntityOperator.EQUALS, contentId),
+                    EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, workEffortId),
                     EntityUtil.getFilterByDateExpr()
                     );
             GenericValue association = EntityUtil.getFirst(delegator.findByAnd("WorkEffortContent", conditions));
@@ -317,10 +314,9 @@ public final class ContentEvents {
 
             // ensure association exists between case and content
             List conditions = UtilMisc.toList(
-                    new EntityExpr("contentId", EntityOperator.EQUALS, contentId),
-                    new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                    EntityUtil.getFilterByDateExpr()
-                    );
+                    EntityCondition.makeCondition("contentId", EntityOperator.EQUALS, contentId),
+                    EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                    EntityUtil.getFilterByDateExpr());
             GenericValue association = EntityUtil.getFirst(delegator.findByAnd("OrderHeaderContent", conditions));
             if (association == null) {
                 return UtilMessage.createAndLogEventError(request, "CrmErrorPermissionDenied", locale, MODULE);
@@ -343,7 +339,6 @@ public final class ContentEvents {
      * @param response a <code>HttpServletResponse</code> value
      * @return a <code>String</code> value
      */
-    @SuppressWarnings("unchecked")
     public static String downloadQuoteContent(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
@@ -361,10 +356,9 @@ public final class ContentEvents {
 
             // ensure association exists between quote and content
             List<EntityCondition> conditions = UtilMisc.toList(
-                    new EntityExpr("contentId", EntityOperator.EQUALS, contentId),
-                    new EntityExpr("quoteId", EntityOperator.EQUALS, quoteId),
-                    EntityUtil.getFilterByDateExpr()
-                    );
+                    EntityCondition.makeCondition("contentId", EntityOperator.EQUALS, contentId),
+                    EntityCondition.makeCondition("quoteId", EntityOperator.EQUALS, quoteId),
+                    EntityUtil.getFilterByDateExpr());
             GenericValue association = EntityUtil.getFirst(delegator.findByAnd("QuoteContent", conditions));
             if (association == null) {
                 return UtilMessage.createAndLogEventError(request, "CrmErrorPermissionDenied", locale, MODULE);

@@ -23,8 +23,6 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.model.ModelField;
@@ -55,7 +53,8 @@ import java.util.Map;
  * TODO: configure a timeout for each row
  */
 public class OpentapsImporter {
-    public static String module = OpentapsImporter.class.getName();
+
+    private static String MODULE = OpentapsImporter.class.getName();
 
     protected String entityName = null;
     protected ImportDecoder decoder = null;
@@ -66,7 +65,7 @@ public class OpentapsImporter {
     protected List<String> orderBy = null;
     protected int maxToImport = -1;
 
-    // a positive failure threshold means we're counting, otherwise we're not  
+    // a positive failure threshold means we're counting, otherwise we're not
     protected int failureThreshold = 0;
 
     /**
@@ -121,7 +120,7 @@ public class OpentapsImporter {
 
     /**
      * Remove the max number of imports constraint.  All records will be imported.  Note that by default,
-     * the importer will attempt to import everything, so this method only makes sense when using setMaxToImport(). 
+     * the importer will attempt to import everything, so this method only makes sense when using setMaxToImport().
      */
     public void unsetMaxToImport() {
         this.maxToImport = -1;
@@ -149,35 +148,40 @@ public class OpentapsImporter {
      * the actual import are caught and logged, then the import process continues to the next entry.
      */
     public int runImport() throws GenericEntityException {
-        EntityConditionList statusCond = new EntityConditionList( UtilMisc.toList(
-                new EntityExpr("importStatusId", EntityOperator.EQUALS, "DATAIMP_NOT_PROC"),
-                new EntityExpr("importStatusId", EntityOperator.EQUALS, "DATAIMP_FAILED"),
-                new EntityExpr("importStatusId", EntityOperator.EQUALS, null)
-                ), EntityOperator.OR);
-        List conds = UtilMisc.toList(statusCond);
-        if (conditions != null) conds.add(conditions);
+        EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, "DATAIMP_NOT_PROC"),
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, "DATAIMP_FAILED"),
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
+        List<EntityCondition> conds = UtilMisc.toList(statusCond);
+        if (conditions != null) {
+            conds.add(conditions);
+        }
 
         TransactionUtil.begin();
         EntityListIterator iterator = delegator.findListIteratorByCondition(entityName,
-                new EntityConditionList(conds, EntityOperator.AND),
+                EntityCondition.makeCondition(conds, EntityOperator.AND),
                 null, null, orderBy, UtilCommon.DISTINCT_READ_OPTIONS);
         TransactionUtil.commit();
 
         Timestamp now = UtilDateTime.nowTimestamp();
         int imported = 0;
         int consecutiveFailures = 0;
-        Debug.logInfo("=== Running Import of " + entityName + " ===", module);
-        if (maxToImport > 0) Debug.logInfo("Importing a maximum of " + maxToImport + " records.", module);
+        Debug.logInfo("=== Running Import of " + entityName + " ===", MODULE);
+        if (maxToImport > 0) {
+            Debug.logInfo("Importing a maximum of " + maxToImport + " records.", MODULE);
+        }
 
         GenericValue flatEntity = null;
-        while ((flatEntity = (GenericValue) iterator.next()) != null) {
+        while ((flatEntity = iterator.next()) != null) {
             try {
                 // begin the transaction for this row
                 TransactionUtil.begin();
 
                 // decode the flat entity into a set of normalized opentaps entities
                 List<GenericValue> toStore = decoder.decode(flatEntity, now, delegator, dispatcher, args);
-                if (toStore == null || toStore.size() == 0) continue;
+                if (toStore == null || toStore.size() == 0) {
+                    continue;
+                }
 
                 // store the entities in a transaction
                 delegator.storeAll(toStore);
@@ -191,12 +195,12 @@ public class OpentapsImporter {
                 // we're done, so commit
                 TransactionUtil.commit();
 
-                Debug.logInfo("Successfully imported " + entityName + " " + makePkString(flatEntity), module);
+                Debug.logInfo("Successfully imported " + entityName + " " + makePkString(flatEntity), MODULE);
                 imported += 1;
                 consecutiveFailures = 0;
             } catch (Exception e) {
                 String message = "Failed to import " + entityName + " " + makePkString(flatEntity) + ": " + e.getMessage();
-                Debug.logError(e, message, module);
+                Debug.logError(e, message, MODULE);
 
                 // roll back the decoding and the storing (if this fails then the import ends)
                 TransactionUtil.rollback();
@@ -209,21 +213,21 @@ public class OpentapsImporter {
 
                 consecutiveFailures += 1;
             }
-            
+
             if (failureThreshold > 0 && consecutiveFailures >= failureThreshold) {
-                Debug.logInfo("Aborting Import:  " + consecutiveFailures + " consecutive import failures occured.", module);
+                Debug.logInfo("Aborting Import:  " + consecutiveFailures + " consecutive import failures occured.", MODULE);
                 break;
             }
 
             if (maxToImport > 0 && imported == maxToImport) {
-                Debug.logInfo("Stopping import: " + imported + " records have been imported as specified.", module);
+                Debug.logInfo("Stopping import: " + imported + " records have been imported as specified.", MODULE);
                 break;
             }
         }
         iterator.close();
 
-        Debug.logInfo("Imported " + imported + " Entries", module);
-        Debug.logInfo("=== Finished Import " + entityName + " ===", module);
+        Debug.logInfo("Imported " + imported + " Entries", MODULE);
+        Debug.logInfo("=== Finished Import " + entityName + " ===", MODULE);
 
         return imported;
     }
@@ -232,10 +236,12 @@ public class OpentapsImporter {
     public String makePkString(GenericValue value) {
         StringBuffer buff = new StringBuffer("[");
         ModelEntity model = value.getModelEntity();
-        for (Iterator iter = model.getPksIterator(); iter.hasNext(); ) {
-            ModelField field = (ModelField) iter.next();
+        for (Iterator<ModelField> iter = model.getPksIterator(); iter.hasNext();) {
+            ModelField field = iter.next();
             buff.append(value.get(field.getName()));
-            if (iter.hasNext()) buff.append(", ");
+            if (iter.hasNext()) {
+                buff.append(", ");
+            }
         }
         buff.append("]");
         return buff.toString();

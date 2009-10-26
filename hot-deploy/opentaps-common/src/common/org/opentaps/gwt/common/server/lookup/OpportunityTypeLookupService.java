@@ -22,7 +22,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.domain.base.entities.Enumeration;
 import org.opentaps.foundation.entity.EntityInterface;
@@ -62,7 +62,7 @@ public class OpportunityTypeLookupService extends EntityLookupAndSuggestService 
      * @return the list of party classifications <code>Enumeration</code>
      */
     public List<Enumeration> suggestOpportunityTypes() {
-        return findList(Enumeration.class, new EntityExpr(Enumeration.Fields.enumTypeId.name(), EntityOperator.EQUALS, "SO_TYPES"));
+        return findList(Enumeration.class, EntityCondition.makeCondition(Enumeration.Fields.enumTypeId.name(), EntityOperator.EQUALS, "SO_TYPES"));
     }
 
     @Override

@@ -27,15 +27,10 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.GenericServiceException;
-import org.opentaps.domain.DomainsLoader;
-import org.opentaps.domain.inventory.InventoryDomainInterface;
-import org.opentaps.domain.inventory.InventoryRepositoryInterface;
-import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.tests.financials.FinancialsTestCase;
 
 /**
@@ -485,7 +480,6 @@ public class ProductionRunTestCase extends FinancialsTestCase {
      * @param wegsQuantities the <code>Map</code> of productId: quantity that should be found
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     protected void assertWorkEffortHasWegs(String workEffortId, String wegsTypeId, Map<String, BigDecimal> wegsQuantities) throws GenericEntityException {
         List<GenericValue> allWegs = delegator.findByAnd("WorkEffortGoodStandard", UtilMisc.toMap("workEffortId", workEffortId, "workEffortGoodStdTypeId", wegsTypeId));
         Set<String> productIds = wegsQuantities.keySet();
@@ -495,9 +489,9 @@ public class ProductionRunTestCase extends FinancialsTestCase {
             assertNotEmpty("Did not find expected WEGS for workEffort [" + workEffortId + "] product " + productId + " x " + qty + ", instead found WEGS: " + allWegs, expectedWegs);
         }
         List<GenericValue> unexpectedWegs = delegator.findByAnd("WorkEffortGoodStandard", UtilMisc.toList(
-                 new EntityExpr("workEffortId", EntityOperator.EQUALS, workEffortId),
-                 new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, wegsTypeId),
-                 new EntityExpr("productId", EntityOperator.NOT_IN, productIds)));
+                 EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, workEffortId),
+                 EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, wegsTypeId),
+                 EntityCondition.makeCondition("productId", EntityOperator.NOT_IN, productIds)));
         assertEmpty("Found unexpected WEGS for workEffort [" + workEffortId + "]", unexpectedWegs);
     }
 
