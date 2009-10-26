@@ -493,7 +493,7 @@ public final class InvoiceActions {
         // Pagination
         EntityListBuilder invoiceListBuilder = new EntityListBuilder(repository, Invoice.class, EntityCondition.makeCondition(search, EntityOperator.AND), UtilMisc.toList(Invoice.Fields.invoiceDate.desc()));
         PageBuilder<Invoice> pageBuilder = new PageBuilder<Invoice>() {
-            @Override public List<Map<String, Object>> build(List<Invoice> page) throws Exception {
+            public List<Map<String, Object>> build(List<Invoice> page) throws Exception {
                 GenericDelegator delegator = ac.getDelegator();
                 List<Map<String, Object>> newPage = FastList.newInstance();
                 for (Invoice invoice : page) {
