@@ -78,7 +78,7 @@
         list-name="ordersListIt">
         <field name="orderDate" title="${uiLabelMap.OrderOrderDate}"
             header-link="${listSortTarget}?ordersOrderBy=orderDate&amp;${findParams}#ListOrders" header-link-style="orderByHeaderLink">
-            <display description="${groovy:org.ofbiz.base.util.UtilDateTime.timeStampToString(orderDate, org.opentaps.common.util.UtilDate.getDateTimeFormat(locale), timeZone, locale)}"/>
+            <display description="${groovy:org.ofbiz.base.util.UtilDateTime.timeStampToString(orderDate, org.ofbiz.base.util.UtilDateTime.getDateTimeFormat(locale), timeZone, locale)}"/>
         </field>
         <field name="orderId" title="${uiLabelMap.CrmOrderNameID}" widget-style="linktext"
             use-when="(isLookup==void) || (isLookup==null) || !(isLookup.equals(&quot;true&quot;))"

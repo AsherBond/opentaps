@@ -30,11 +30,10 @@ import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilAccountingTags;
 import java.text.ParseException;
-import org.opentaps.common.util.UtilDate;
 
 locale = UtilHttp.getLocale(request);
 timeZone = UtilCommon.getTimeZone(request);
-dateTimeFormat = UtilDate.getDateTimeFormat(locale);
+dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
 organizationPartyId = session.getAttribute("organizationPartyId");
 
 //put to history

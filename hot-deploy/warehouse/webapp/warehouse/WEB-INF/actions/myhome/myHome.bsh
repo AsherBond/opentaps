@@ -38,7 +38,6 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.servlet.ServletUtilities;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.RectangleInsets;
-import org.opentaps.common.util.UtilDate;
 
 context.put("totalStockMoves", 0);
 context.put("totalInventoryTransfers", 0);
@@ -75,7 +74,7 @@ if (summary == null) {
     return;
 }
 
-sdf = new SimpleDateFormat(UtilDate.getDateTimeFormat(UtilHttp.getLocale(request)));
+sdf = new SimpleDateFormat(UtilDateTime.getDateTimeFormat(UtilHttp.getLocale(request)));
 
 context.put("totalStockMoves", summary.getLong("RequiredStockMoves"));
 context.put("totalInventoryTransfers", summary.getLong("RequestedInventoryTransfers"));

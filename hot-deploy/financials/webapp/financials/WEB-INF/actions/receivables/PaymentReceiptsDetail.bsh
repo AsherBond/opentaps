@@ -29,11 +29,10 @@ import com.opensourcestrategies.financials.util.UtilFinancial;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.util.UtilCommon;
 import java.text.ParseException;
-import org.opentaps.common.util.UtilDate;
 
 locale = UtilHttp.getLocale(request);
 timeZone = UtilCommon.getTimeZone(request);
-dateTimeFormat = UtilDate.getDateTimeFormat(locale);
+dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
 
 //put to history
 context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsPaymentReceiptsDetail"));
