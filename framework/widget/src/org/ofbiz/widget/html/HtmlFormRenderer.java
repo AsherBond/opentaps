@@ -22,6 +22,7 @@ package org.ofbiz.widget.html;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
@@ -38,6 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 import javolution.util.FastList;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
@@ -511,6 +514,19 @@ public class HtmlFormRenderer extends HtmlWidgetRenderer implements FormStringRe
         String paramName = modelFormField.getParameterName(context);
         String defaultDateTimeString = dateTimeField.getDefaultDateTimeString(context);
 
+        TimeZone timeZone = (TimeZone) context.get("timeZone");
+        if (timeZone == null) {
+            timeZone = TimeZone.getDefault();
+        }
+        Locale locale = (Locale) context.get("locale");
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+
+        String dateFormat = UtilDateTime.getDateFormat(locale);
+        String dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
+        String timeFormat = UtilDateTime.getTimeFormat(locale);
+
         Map<String, String> uiLabelMap = UtilGenerics.checkMap(context.get("uiLabelMap"));
         if (uiLabelMap == null) {
             Debug.logWarning("Could not find uiLabelMap in context", module);
@@ -557,11 +573,11 @@ public class HtmlFormRenderer extends HtmlWidgetRenderer implements FormStringRe
 
         String value = modelFormField.getEntry(context, dateTimeField.getDefaultValue(context));
         if (UtilValidate.isNotEmpty(value)) {
-            if (value.length() > maxlength) {
-                value = value.substring(0, maxlength);
-            }
+            // let's assume that date and time are separated by space,
+            // time succeeds date and both parts may have changeable size.
+            String[] valueParts = value.split(" ");
             writer.append(" value=\"");
-            writer.append(value);
+            writer.append(shortDateInput ? valueParts[0] : value);
             writer.append('"');
         }
 
@@ -589,29 +605,55 @@ public class HtmlFormRenderer extends HtmlWidgetRenderer implements FormStringRe
 
         // add calendar pop-up button and seed data IF this is not a "time" type date-time
         if (!"time".equals(dateTimeField.getType())) {
-            if (shortDateInput) {
-                writer.append("<a href=\"javascript:call_cal_notime(document.");
-            } else {
-                writer.append("<a href=\"javascript:call_cal(document.");
-            }
-            writer.append(modelFormField.getModelForm().getCurrentFormName(context));
-            writer.append('.');
-            if ("time-dropdown".equals(dateTimeField.getInputMethod())) {
-                writer.append(UtilHttp.makeCompositeParam(paramName, "date"));
-            } else {
-                writer.append(paramName);
-            }
-            writer.append(",'");
-            writer.append(UtilHttp.encodeBlanks(modelFormField.getEntry(context, defaultDateTimeString)));
-            writer.append("');\">");
+            writer.append("<a href=\"javascript:opentaps.toggleClass(document.getElementById('");
+            writer.append(idName);
+            writer.append("-calendar-placeholder'), 'hidden');\">");
 
-            writer.append("<img src=\"");
+            writer.append("<img id=\"");
+            writer.append(idName);
+            writer.append("-button\" src=\"");
             this.appendContentUrl(writer, "/images/cal.gif");
             writer.append("\" width=\"16\" height=\"16\" border=\"0\" alt=\"");
             writer.append(localizedIconTitle);
             writer.append("\" title=\"");
             writer.append(localizedIconTitle);
             writer.append("\"/></a>");
+
+            // add container for jscalendar and setup script
+            writer.append("<table id=\"");
+            writer.append(idName);
+            writer.append("-calendar-placeholder\" style=\"border: 0px; width: auto;\" class=\"hidden\"></table>\n");
+            writer.append("<script type=\"text/javascript\">\n");
+            writer.append("  function sampleTimestamp_onDateChange(calendar) {\n");
+            writer.append("    if (calendar.dateClicked) {\n");
+            writer.append("      var y = calendar.date.getFullYear();\n");
+            writer.append("      var m = calendar.date.getMonth();\n");
+            writer.append("      var d = calendar.date.getDate();\n");
+            writer.append("      var input = document.getElementById('");
+            writer.append(idName);
+            writer.append("');\n");
+            writer.append("      if (input) {\n");
+            writer.append("        input.value = y+'-'+((m < 9) ? (\"0\" + (1+m)) : (1+m))+'-'+((d < 10) ? (\"0\" + d) : d);\n");
+            writer.append("      }\n");
+            writer.append("      opentaps.addClass(document.getElementById('");
+            writer.append(idName);
+            writer.append("-calendar-placeholder'), 'hidden');\n");
+            writer.append("  }};\n");
+            writer.append("  Calendar.setup({\n");
+            writer.append("    inputField: \"");
+            writer.append(idName);
+            writer.append("\",\n");
+            writer.append("    ifFormat: \"");
+            writer.append(shortDateInput ? UtilDateTime.getJsDateTimeFormat(dateFormat) : UtilDateTime.getJsDateTimeFormat(dateTimeFormat));
+            writer.append("\",\n");
+            writer.append("    button: \"");
+            writer.append(idName);
+            writer.append("-button\",\n");
+            writer.append("    align: \"Bl\",\n");
+            writer.append("    weekNumbers: false,\n");
+            writer.append("    showOthers: true,\n");
+            writer.append("    cache: true});\n");
+            writer.append("</script>");
         }
 
         // if we have an input method of time-dropdown, then render two dropdowns
@@ -623,10 +665,10 @@ public class HtmlFormRenderer extends HtmlWidgetRenderer implements FormStringRe
             // set the Calendar to the default time of the form or now()
             Calendar cal = null;
             try {
-                Timestamp defaultTimestamp = Timestamp.valueOf(modelFormField.getEntry(context, defaultDateTimeString));
+                Timestamp defaultTimestamp = UtilDateTime.stringToTimeStamp(modelFormField.getEntry(context, defaultDateTimeString), dateTimeFormat, timeZone, locale);
                 cal = Calendar.getInstance();
                 cal.setTime(defaultTimestamp);
-            } catch (IllegalArgumentException e) {
+            } catch (ParseException e) {
                 Debug.logWarning("Form widget field [" + paramName + "] with input-method=\"time-dropdown\" was not able to understand the default time ["
                         + defaultDateTimeString + "]. The parsing error was: " + e.getMessage(), module);
             }
