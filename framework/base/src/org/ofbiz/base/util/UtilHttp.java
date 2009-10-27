@@ -1221,7 +1221,7 @@ public class UtilHttp {
                     dateTime += "0";
                 }
                 dateTime += minutes;
-                String timeFormat = UtilDateTime.getDateTimeFormat(locale);
+                String timeFormat = UtilDateTime.getTimeFormat(locale);
                 if (timeFormat.indexOf("ss") > 0) {
                     dateTime += ":00";
                 }
