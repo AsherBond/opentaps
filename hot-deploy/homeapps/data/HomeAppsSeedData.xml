@@ -67,7 +67,7 @@ Logging in, applications will be displayed if-and-only-if the authenticated user
 <HomeWebApps applicationId="documentation" applicationName="Online Manuals" description="Your online reference for users manuals, reference guides, and developer information."
              imageUrl="/opentaps_images/homeapps/docs.png" imageHoverUrl="/opentaps_images/homeapps/docs_hover.png" linkUrl="http://www.opentaps.org/docs/" lastUpdatedStamp="2009-07-18 16:41:58.415"
              lastUpdatedTxStamp="2009-07-18 16:41:58.415" createdStamp="2009-07-18 16:12:28.395" createdTxStamp="2009-07-18 16:12:28.395"/>
-<HomeWebApps applicationId="huamnres" applicationName="Human Resources" description="Human resources application"
+<HomeWebApps applicationId="humanres" applicationName="Human Resources" description="Human resources application"
     imageUrl="/opentaps_images/homeapps/humanres.png" imageHoverUrl="/opentaps_images/homeapps/humanres_hover.png" linkUrl="/humanres/control/main"/> 
 
 
