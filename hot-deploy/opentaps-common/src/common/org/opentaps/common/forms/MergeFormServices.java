@@ -31,64 +31,68 @@ import org.opentaps.common.util.UtilCommon;
 
 /**
  * Merge Form services. The service documentation is in services_forms.xml.
- *
- * @author <a href="mailto:richard.a.coss@state.or.us">Richard Coss</a>
  */
-public class MergeFormServices {
+public final class MergeFormServices {
 
-    public static final String module = MergeFormServices.class.getName();
+    private MergeFormServices() { }
+
+    private static final String MODULE = MergeFormServices.class.getName();
     public static final String errorResource = "OpentapsErrorLabels";
 
     /* For MergeForm */
 
-    public static Map createMergeForm(DispatchContext dctx, Map context) {
+    public static Map<String, Object> createMergeForm(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
-        Boolean privateForm = "Y".equals((String) context.get("privateForm"));
+        Boolean privateForm = "Y".equals(context.get("privateForm"));
 
         GenericValue mergeForm = null;
         String mergeFormId = delegator.getNextSeqId("MergeForm");
-        Map newMergeFormMap = UtilMisc.toMap("mergeFormId", mergeFormId);
+        Map<String, Object> newMergeFormMap = UtilMisc.<String, Object>toMap("mergeFormId", mergeFormId);
         mergeForm = delegator.makeValue("MergeForm", newMergeFormMap);
         mergeForm.setNonPKFields(context);
-        if (! privateForm) mergeForm.set("partyId", null);
+        if (!privateForm) {
+            mergeForm.set("partyId", null);
+        }
         try {
             delegator.create(mergeForm);
         } catch (GenericEntityException e) {
             String errorMessage = UtilProperties.getMessage(errorResource, "OpentapsError_CreateMergeFormFail", locale);
-            Debug.logError(errorMessage, module);
+            Debug.logError(errorMessage, MODULE);
             return ServiceUtil.returnError(errorMessage);
         }
 
         return ServiceUtil.returnSuccess();
     }
 
-    public static Map updateMergeForm(DispatchContext dctx, Map context) {
-        Map result = ServiceUtil.returnSuccess();
+    public static Map<String, Object> updateMergeForm(DispatchContext dctx, Map<String, Object> context) {
+        Map<String, Object> result = ServiceUtil.returnSuccess();
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         String mergeFormId = (String) context.get("mergeFormId");
-        Boolean privateForm = "Y".equals((String) context.get("privateForm"));
+        Boolean privateForm = "Y".equals(context.get("privateForm"));
 
         GenericValue mergeForm = null;
         try {
-            Map newMergeFormMap = UtilMisc.toMap("mergeFormId", mergeFormId);
+            Map<String, Object> newMergeFormMap = UtilMisc.<String, Object>toMap("mergeFormId", mergeFormId);
             mergeForm = delegator.findByPrimaryKey("MergeForm", newMergeFormMap);
             mergeForm.setNonPKFields(context);
-            if ((! privateForm)) mergeForm.set("partyId", null);
+            if ((!privateForm)) {
+                mergeForm.set("partyId", null);
+            }
             delegator.store(mergeForm);
         } catch (GenericEntityException e) {
             String errorMessage = UtilProperties.getMessage(errorResource, "OpentapsError_UpdateMergeFormFail", locale);
-            Debug.logError(errorMessage, module);
+            Debug.logError(errorMessage, MODULE);
             return ServiceUtil.returnError(errorMessage);
         }
-        
+
         result.put("mergeFormId", mergeFormId);
         return result;
     }
-    
-    public static Map deleteMergeForm(DispatchContext dctx, Map context) {
-        Map result = ServiceUtil.returnSuccess();
+
+    public static Map<String, Object> deleteMergeForm(DispatchContext dctx, Map<String, Object> context) {
+        Map<String, Object> result = ServiceUtil.returnSuccess();
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         String mergeFormId = (String) context.get("mergeFormId");
@@ -97,7 +101,7 @@ public class MergeFormServices {
             delegator.removeByAnd("MergeForm", UtilMisc.toMap("mergeFormId", mergeFormId));
         } catch (GenericEntityException e) {
             String errorMessage = UtilProperties.getMessage(errorResource, "OpentapsError_DeleteMergeFormFail", locale);
-            Debug.logError(errorMessage, module);
+            Debug.logError(errorMessage, MODULE);
             return ServiceUtil.returnError(errorMessage);
         }
 
@@ -106,14 +110,14 @@ public class MergeFormServices {
 
     /* For MergeFormCategory */
 
-    public static Map createMergeFormCategory(DispatchContext dctx, Map context) {
+    public static Map<String, Object> createMergeFormCategory(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         GenericValue mergeFormCategory = null;
         String mergeFormCategoryId = delegator.getNextSeqId("MergeFormCategory");
-        Map newMergeFormCategoryMap = UtilMisc.toMap("mergeFormCategoryId", mergeFormCategoryId);
+        Map<String, Object> newMergeFormCategoryMap = UtilMisc.<String, Object>toMap("mergeFormCategoryId", mergeFormCategoryId);
         mergeFormCategory = delegator.makeValue("MergeFormCategory", newMergeFormCategoryMap);
         mergeFormCategory.setNonPKFields(context);
 
@@ -121,41 +125,41 @@ public class MergeFormServices {
             delegator.create(mergeFormCategory);
         } catch (GenericEntityException e) {
             String errorMessage = UtilProperties.getMessage(errorResource, "OpentapsError_CreateMergeFormCategoryFail", locale);
-            Debug.logError(errorMessage, module);
+            Debug.logError(errorMessage, MODULE);
             return ServiceUtil.returnError(errorMessage);
         }
 
         return ServiceUtil.returnSuccess();
     }
 
-    public static Map updateMergeFormCategory(DispatchContext dctx, Map context) {
-        Map result = ServiceUtil.returnSuccess();
+    public static Map<String, Object> updateMergeFormCategory(DispatchContext dctx, Map<String, Object> context) {
+        Map<String, Object> result = ServiceUtil.returnSuccess();
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         String mergeFormCategoryId = (String) context.get("mergeFormCategoryId");
 
         GenericValue mergeFormCategory = null;
         try {
-            Map newMergeFormCategoryMap = UtilMisc.toMap("mergeFormCategoryId", mergeFormCategoryId);
+            Map<String, Object> newMergeFormCategoryMap = UtilMisc.<String, Object>toMap("mergeFormCategoryId", mergeFormCategoryId);
             mergeFormCategory = delegator.findByPrimaryKey("MergeFormCategory", newMergeFormCategoryMap);
             mergeFormCategory.setNonPKFields(context);
             delegator.store(mergeFormCategory);
         } catch (GenericEntityException e) {
             String errorMessage = UtilProperties.getMessage(errorResource, "OpentapsError_UpdateMergeFormCategoryFail", locale);
-            Debug.logError(errorMessage, module);
+            Debug.logError(errorMessage, MODULE);
             return ServiceUtil.returnError(errorMessage);
         }
-        
+
         result.put("mergeFormCategoryId", mergeFormCategoryId);
         return result;
     }
-    
-    public static Map deleteMergeFormCategory(DispatchContext dctx, Map context) {
-        Map result = ServiceUtil.returnSuccess();
+
+    public static Map<String, Object> deleteMergeFormCategory(DispatchContext dctx, Map<String, Object> context) {
+        Map<String, Object> result = ServiceUtil.returnSuccess();
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         String mergeFormCategoryId = (String) context.get("mergeFormCategoryId");
-        
+
         try {
             // first we remove all association MergeFormToCategory
             delegator.removeByAnd("MergeFormToCategory", UtilMisc.toMap("mergeFormCategoryId", mergeFormCategoryId));
@@ -163,7 +167,7 @@ public class MergeFormServices {
             delegator.removeByAnd("MergeFormCategory", UtilMisc.toMap("mergeFormCategoryId", mergeFormCategoryId));
         } catch (GenericEntityException e) {
             String errorMessage = UtilProperties.getMessage(errorResource, "OpentapsError_DeleteMergeFormCategoryFail", locale);
-            Debug.logError(errorMessage, module);
+            Debug.logError(errorMessage, MODULE);
             return ServiceUtil.returnError(errorMessage);
         }
 
