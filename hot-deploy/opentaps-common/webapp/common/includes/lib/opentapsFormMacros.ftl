@@ -115,6 +115,14 @@ For more information, please see documentation/opentapsFormMacros.html
   ${Static["org.opentaps.common.util.UtilMessage"].expandLabel( label, locale, params)}
 </#macro>
 
+<#function now>
+  <#return getLocalizedDate(Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp()) />
+</#function>
+
+<#function today>
+  <#return getLocalizedDate(Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp(), "DATE") />
+</#function>
+
 <#-- Format should be one of the DATE_TIME, DATE, TIME, DATE_ONLY -->
 <#function getLocalizedDate date="" format="DATE_TIME" encode=false>
 
