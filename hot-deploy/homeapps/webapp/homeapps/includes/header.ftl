@@ -26,6 +26,7 @@
  -->
 
 <link href="/opentaps_css/integratingweb/opentaps.css" rel="stylesheet" type="text/css" />
+<link rel="shortcut icon" href="<@ofbizContentUrl>/opentaps_images/favicon.ico</@ofbizContentUrl>">
 
 
     <script type="text/javascript">
