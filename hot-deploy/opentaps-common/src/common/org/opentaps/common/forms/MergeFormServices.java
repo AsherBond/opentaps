@@ -98,6 +98,9 @@ public final class MergeFormServices {
         String mergeFormId = (String) context.get("mergeFormId");
 
         try {
+            // first we remove all association MergeFormToCategory
+            delegator.removeByAnd("MergeFormToCategory", UtilMisc.toMap("mergeFormId", mergeFormId));
+            // then remove the form
             delegator.removeByAnd("MergeForm", UtilMisc.toMap("mergeFormId", mergeFormId));
         } catch (GenericEntityException e) {
             String errorMessage = UtilProperties.getMessage(errorResource, "OpentapsError_DeleteMergeFormFail", locale);
