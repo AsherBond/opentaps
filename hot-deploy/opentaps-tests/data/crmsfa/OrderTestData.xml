@@ -18,6 +18,17 @@
 -->
 <entity-engine-xml>
     <!-- Test data for test find order -->
+    <PartyRole partyId="DemoCustomer" roleTypeId="BILL_TO_CUSTOMER"/>
+    <PartyRole partyId="DemoCustomer" roleTypeId="END_USER_CUSTOMER"/>
+    <PartyRole partyId="DemoCustomer" roleTypeId="SHIP_TO_CUSTOMER"/>
+    <PartyRole partyId="DemoCustomer" roleTypeId="PLACING_CUSTOMER"/>
+    
+    <PartyRole partyId="DemoAccount1" roleTypeId="BILL_TO_CUSTOMER"/>
+    <PartyRole partyId="DemoAccount1" roleTypeId="END_USER_CUSTOMER"/>
+    <PartyRole partyId="DemoAccount1" roleTypeId="SHIP_TO_CUSTOMER"/>
+    <PartyRole partyId="DemoAccount1" roleTypeId="PLACING_CUSTOMER"/>
+
+
     <OrderHeader orderId="TEST10000" orderTypeId="SALES_ORDER" orderName="Test Order 10000" salesChannelEnumId="WEB_SALES_CHANNEL" orderDate="2009-10-15 03:15:00.000" entryDate="2009-10-15 00:00:00.000" priority="2" visitId="10002" statusId="ORDER_APPROVED" createdBy="admin" currencyUom="USD" webSiteId="OrderEntry" productStoreId="9000" remainingSubTotal="25" grandTotal="25" lastUpdatedStamp="2009-10-15 00:00:00.000" billFromPartyId="Company" billToPartyId="DemoAccount1" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
     <OrderItem orderId="TEST10000" orderItemSeqId="00001" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="GZ-1000" isPromo="N" quantity="1.0" selectedAmount="0.0" unitPrice="25" unitListPrice="25.0" isModifiedPrice="N" itemDescription="Tiny Gizmo" correspondingPoId="" statusId="ITEM_APPROVED" lastUpdatedStamp="2009-10-15 00:00:00.000" lastUpdatedTxStamp="2009-10-15 00:00:00.000" createdStamp="2009-10-15 00:00:00.000" createdTxStamp="2009-10-15 00:00:00.000"/>
 
@@ -70,11 +81,6 @@
     <OrderItem orderId="TEST10002" orderItemSeqId="00001" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="GZ-1000" isPromo="N" quantity="1.0" selectedAmount="0.0" unitPrice="15.99" unitListPrice="15.0" isModifiedPrice="N" itemDescription="Tiny Gizmo" correspondingPoId="PO10001" statusId="ITEM_APPROVED" lastUpdatedStamp="2009-10-15 10:40:32.673" lastUpdatedTxStamp="2009-10-15 10:40:32.648" createdStamp="2009-10-15 10:40:30.943" createdTxStamp="2009-10-15 10:40:30.683"/>
     <OrderItem orderId="TEST10002" orderItemSeqId="00002" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="GZ-1001" isPromo="N" quantity="1.0" selectedAmount="0.0" unitPrice="15.99" unitListPrice="25.99" isModifiedPrice="N" itemDescription="Tiny Gizmo" correspondingPoId="PO10001" statusId="ITEM_APPROVED" lastUpdatedStamp="2009-10-15 10:40:32.658" lastUpdatedTxStamp="2009-10-15 10:40:32.648" createdStamp="2009-10-15 10:40:30.953" createdTxStamp="2009-10-15 10:40:30.683"/>
 
-    <PartyRole partyId="DemoCustomer" roleTypeId="END_USER_CUSTOMER"/>
-    <PartyRole partyId="DemoCustomer" roleTypeId="SHIP_TO_CUSTOMER"/>
-    <PartyRole partyId="DemoCustomer" roleTypeId="PLACING_CUSTOMER"/>
-    
-    <OrderRole orderId="TEST10002" partyId="admin" roleTypeId="COMMISSION_AGENT" lastUpdatedStamp="2009-10-15 10:40:31.068" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:31.068" createdTxStamp="2009-10-15 10:40:30.683"/>
     <OrderRole orderId="TEST10002" partyId="Company" roleTypeId="BILL_FROM_VENDOR" lastUpdatedStamp="2009-10-15 10:40:31.103" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:31.103" createdTxStamp="2009-10-15 10:40:30.683"/>
     <OrderRole orderId="TEST10002" partyId="DemoCustomer" roleTypeId="BILL_TO_CUSTOMER" lastUpdatedStamp="2009-10-15 10:40:31.098" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:31.098" createdTxStamp="2009-10-15 10:40:30.683"/>
     <OrderRole orderId="TEST10002" partyId="DemoCustomer" roleTypeId="END_USER_CUSTOMER" lastUpdatedStamp="2009-10-15 10:40:31.108" lastUpdatedTxStamp="2009-10-15 10:40:30.683" createdStamp="2009-10-15 10:40:31.108" createdTxStamp="2009-10-15 10:40:30.683"/>
