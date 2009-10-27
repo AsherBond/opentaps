@@ -21,8 +21,11 @@ package org.ofbiz.base.util;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import org.apache.commons.validator.EmailValidator;
+import org.apache.commons.validator.routines.CalendarValidator;
 
 /**
  * General input/data validation methods
@@ -1350,5 +1353,45 @@ public class UtilValidate {
             errorDetails.append(checkMessage);
         }
         return isValid;
+    }
+
+    /**
+     * Verify if date/time string match pattern and is valid.
+     * @param value a <code>String</code> value
+     * @param pattern a <code>String</code> value
+     * @param locale a <code>Locale</code> value
+     * @param timeZone a <code>TimeZone</code> value
+     * @return a <code>boolean</code> value
+     */
+    public static boolean isDateTime(String value, String pattern, Locale locale, TimeZone timeZone) {
+        CalendarValidator validator = new CalendarValidator();
+        if (timeZone == null) {
+            return (validator.validate(value, pattern, locale) != null);
+        }
+        return (validator.validate(value, pattern, locale, timeZone) != null);
+    }
+
+    /**
+     * Verify if date/time string match pattern and is valid.
+     * @param value a <code>String</code> value
+     * @param pattern a <code>String</code> value
+     * @param locale a <code>Locale</code> value
+     * @return a <code>boolean</code> value
+     */
+    public static boolean isDateTime(String value, String pattern, Locale locale) {
+        return isDateTime(value, pattern, locale, null);
+    }
+
+    /**
+     * Verify either date/time string conforms timestamp pattern.
+     * @param value a <code>String</code> value
+     * @return a <code>boolean</code> value
+     */
+    public static boolean isTimestamp(String value) {
+        if (value.length() == 10) {
+            return isDateTime(value, "yyyy-MM-dd", Locale.getDefault());
+        } else {
+            return isDateTime(value, "yyyy-MM-dd HH:mm:ss.S", Locale.getDefault());
+        }
     }
 }

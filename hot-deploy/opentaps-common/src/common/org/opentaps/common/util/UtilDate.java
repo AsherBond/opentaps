@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import javolution.util.FastMap;
-import org.apache.commons.validator.routines.CalendarValidator;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilValidate;
@@ -95,8 +94,8 @@ public abstract class UtilDate {
                         dateObj != null &&
                         (
                                 // validation method distinguish patterns with or without milliseconds placeholder
-                                UtilDate.isDateTime(timestamp, dateTimeFormat, locale, timeZone) ||
-                                UtilDate.isDateTime(timestamp, dateTimeFormat + ".S", locale, timeZone)
+                                UtilValidate.isDateTime(timestamp, dateTimeFormat, locale, timeZone) ||
+                                UtilValidate.isDateTime(timestamp, dateTimeFormat + ".S", locale, timeZone)
                         )
                 ) {
                     hasTime = true;
@@ -109,7 +108,7 @@ public abstract class UtilDate {
                 df = new SimpleDateFormat(dateFormat, locale);
                 //df.setTimeZone(timeZone);
                 dateObj = df.parse(timestamp, pos);
-                if (dateObj != null && UtilDate.isDateTime(timestamp, dateFormat, locale, timeZone)) {
+                if (dateObj != null && UtilValidate.isDateTime(timestamp, dateFormat, locale, timeZone)) {
                     hasDate = true;
                 }
             }
@@ -161,7 +160,7 @@ public abstract class UtilDate {
      */
     public static Timestamp toTimestamp(String timestampString, TimeZone timeZone, Locale locale) {
         String dateFormat = getDateFormat(timestampString, locale);
-        if (!UtilDate.isDateTime(timestampString, dateFormat, locale)) {
+        if (!UtilValidate.isDateTime(timestampString, dateFormat, locale)) {
             // timestampString doesn't match pattern
             return null;
         }
@@ -231,46 +230,6 @@ public abstract class UtilDate {
     }
 
     /**
-     * Verify if date/time string match pattern and is valid.
-     * @param value a <code>String</code> value
-     * @param pattern a <code>String</code> value
-     * @param locale a <code>Locale</code> value
-     * @param timeZone a <code>TimeZone</code> value
-     * @return a <code>boolean</code> value
-     */
-    public static boolean isDateTime(String value, String pattern, Locale locale, TimeZone timeZone) {
-        CalendarValidator validator = new CalendarValidator();
-        if (timeZone == null) {
-            return (validator.validate(value, pattern, locale) != null);
-        }
-        return (validator.validate(value, pattern, locale, timeZone) != null);
-    }
-
-    /**
-     * Verify if date/time string match pattern and is valid.
-     * @param value a <code>String</code> value
-     * @param pattern a <code>String</code> value
-     * @param locale a <code>Locale</code> value
-     * @return a <code>boolean</code> value
-     */
-    public static boolean isDateTime(String value, String pattern, Locale locale) {
-        return isDateTime(value, pattern, locale, null);
-    }
-
-    /**
-     * Verify either date/time string conforms timestamp pattern.
-     * @param value a <code>String</code> value
-     * @return a <code>boolean</code> value
-     */
-    public static boolean isTimestamp(String value) {
-        if (value.length() == 10) {
-            return isDateTime(value, "yyyy-MM-dd", Locale.getDefault());
-        } else {
-            return isDateTime(value, "yyyy-MM-dd HH:mm:ss.S", Locale.getDefault());
-        }
-    }
-
-    /**
      * Converts an SQL <code>Timestamp</code> to an SQL <code>Date</code>.
      *
      * @param ts a <code>Timestamp</code> value
@@ -295,7 +254,7 @@ public abstract class UtilDate {
             // Date and time in localized format
             dateFormat = UtilDateTime.getDateTimeFormat(locale);
         }
-        if(!UtilDate.isDateTime(dateString, dateFormat, locale)) {
+        if(!UtilValidate.isDateTime(dateString, dateFormat, locale)) {
             if (UtilValidate.isEmpty(dateString)) {
                 return null;
             }

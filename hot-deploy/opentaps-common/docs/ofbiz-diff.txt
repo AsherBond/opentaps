@@ -227,11 +227,6 @@ r13477 change productsSoldThruTimestamp to timestamp when it is a string value
 Other API Changes
 -----------------
 
-- UtilValidate no longer defines:
- * isDateTime
- * isTimestamp
-those are now in org.opentaps.common.util.UtilDate
-
 - UtilDateTime.toCalendar must have a TimeZone set or will throw a NPE. This can be indirect if for example the method s called from a service getting those from the context without checking
 if the timezone / locale are actually set. UtilDate.toCalendar handles this case more gracefully by defaulting to the system timezone / locale.
 Note: this only affects two services in WorkEffortServices.java : processWorkEffortEventReminders and getWorkEffortEventsByPeriod
