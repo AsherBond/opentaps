@@ -2555,6 +2555,9 @@
         <value xml:lang="zh">格式: yyyy-MM-dd HH:mm:ss.SSS</value>
         <value xml:lang="zh_CN">年-月-日 时:分:秒</value>
     </property>
+    <property key="CommonFormatLocalizedDateTime">
+        <value xml:lang="en">Format: ${localizedFormat}</value>
+    </property>
     <property key="CommonFormatTime">
         <value xml:lang="ar">النمط: س س:د د:ث ث</value>
         <value xml:lang="en">Format: HH:mm:ss.SSS</value>
