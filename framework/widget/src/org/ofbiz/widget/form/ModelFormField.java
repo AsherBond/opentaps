@@ -770,6 +770,9 @@ public class ModelFormField {
                     DateFormat df = UtilDateTime.toDateTimeFormat(UtilDateTime.getDateTimeFormat(locale), timeZone, null);
                     returnValue = df.format((java.util.Date) retVal);
                 } else if (retVal instanceof java.lang.String) {
+
+                    returnValue = retVal.toString();
+
                     //under some conditions we have string in timestamp format here and should convert it to system acceptable format format.
                     if (UtilValidate.isTimestamp((String) retVal)) {
                         Timestamp ts = null;
@@ -785,8 +788,7 @@ public class ModelFormField {
                         if (UtilValidate.isDateTime(localizedDate, UtilDateTime.getDateTimeFormat(locale), locale, timeZone)) {
                             returnValue = localizedDate;
                         }
-                    }
-                    returnValue = retVal.toString();
+                    };
                 } else {
                     returnValue = retVal.toString();
                 }
