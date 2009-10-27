@@ -574,11 +574,17 @@ public class ObjectType {
                 }
             } else if ("Date".equals(type) || "java.sql.Date".equals(type)) {
                 DateFormat df = null;
-                if (format == null || format.length() == 0) {
-                    df = UtilDateTime.toDateFormat(UtilDateTime.getDateFormat(locale), timeZone, locale);
-                } else {
-                    df = UtilDateTime.toDateFormat(format, timeZone, locale);
+
+                // check str in old format yyyy-MM-dd
+                if (str.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                    format = "yyyy-MM-dd";
                 }
+
+                String dateFormat = UtilValidate.isEmpty(format) ? UtilDateTime.getDateFormat(locale) : format;
+                if (!UtilValidate.isDateTime(str, dateFormat, locale, timeZone)) {
+                    throw new GeneralException("Invalid format. Could not convert " + str + " to " + type);
+                }
+                df = UtilDateTime.toDateFormat(dateFormat, timeZone, locale);
                 try {
                     Date fieldDate = df.parse(str);
                     return new java.sql.Date(fieldDate.getTime());
@@ -600,15 +606,13 @@ public class ObjectType {
                 }
             } else if ("Timestamp".equals(type) || "java.sql.Timestamp".equals(type)) {
                 DateFormat df = null;
-                if (format == null || format.length() == 0) {
-                    df = UtilDateTime.toDateTimeFormat(UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
-                    // if time is missing add zeros
-                    if (str.length() > 0 && !str.contains(":")) {
-                        str = str + " 00:00:00.00";
-                    }
+
+                /* check if str in timestamp format */
+                if (str.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$") || str.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d+$")) {
+                    format = "yyyy-MM-dd HH:mm:ss.S";
                     // hack to mimic Timestamp.valueOf() method
                     if (str.length() > 0 && !str.contains(".")) {
-                        str = str + ".0";
+                        str += ".0";
                     } else {
                         // DateFormat has a funny way of parsing milliseconds:
                         // 00:00:00.2 parses to 00:00:00.002
@@ -618,11 +622,37 @@ public class ObjectType {
                             str = str + "000".substring(timeSplit[1].length());
                         }
                     }
-                } else {
-                    df = UtilDateTime.toDateTimeFormat(format, timeZone, locale);
+                } else if (str.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                    format = "yyyy-MM-dd HH:mm:ss.S";
+                    str += " 00:00:00.0";
                 }
+
+                Date fieldDate = null;
+
                 try {
-                    Date fieldDate = df.parse(str);
+                    if (UtilValidate.isEmpty(format)) {
+                        try {
+                            String dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
+                            if (!UtilValidate.isDateTime(str, dateTimeFormat, locale, timeZone)) {
+                                throw new ParseException("Invalid format. Could not convert " + str + " to " + type, 0);
+                            }
+                            df = UtilDateTime.toDateTimeFormat(dateTimeFormat, timeZone, null);
+                            fieldDate = df.parse(str);
+                        } catch (ParseException e) {
+                            String dateFormat = UtilDateTime.getDateFormat(locale);
+                            if (!UtilValidate.isDateTime(str, dateFormat, locale, timeZone)) {
+                                throw new GeneralException("Invalid format. Could not convert " + str + " to " + type);
+                            }
+                            df = UtilDateTime.toDateTimeFormat(dateFormat, timeZone, locale);
+                            fieldDate = df.parse(str);
+                        }
+                    } else {
+                        if (!UtilValidate.isDateTime(str, format, locale, timeZone)) {
+                            throw new GeneralException("Invalid format. Could not convert " + str + " to " + type);
+                        }
+                        df = UtilDateTime.toDateTimeFormat(format, timeZone, null);
+                        fieldDate = df.parse(str);
+                    }
                     return new java.sql.Timestamp(fieldDate.getTime());
                 } catch (ParseException e1) {
                     throw new GeneralException("Could not convert " + str + " to " + type + ": ", e1);
