@@ -32,7 +32,7 @@
       <fo:table-row>
   
         <fo:table-cell>
-          <#assign largeImageUrl = productContentWrapper.get("LARGE_IMAGE_URL")?default("")/>
+          <#assign largeImageUrl = (productContentWrapper.get("LARGE_IMAGE_URL"))?default("")/>
           <#if largeImageUrl?has_content>
             <fo:block>
   	      <fo:external-graphic  width="252pt" overflow="hidden"  src="<@ofbizContentUrl>${largeImageUrl}</@ofbizContentUrl>" content-height="scale-to-fit"/>
@@ -44,20 +44,20 @@
       	  <fo:block keep-together="always">
 
             <fo:block>
-              <fo:inline font-weight="bold">${productContentWrapper.get("PRODUCT_NAME")?default("")}</fo:inline>
+              <fo:inline font-weight="bold">${(productContentWrapper.get("PRODUCT_NAME"))?default("")}</fo:inline>
               <#if product.productId?has_content>
                 <fo:inline space-before="1pt">(${product.productId})</fo:inline>
               </#if>
             </fo:block>
             
-            <#assign description = productContentWrapper.get("DESCRIPTION")?default("")/>
+            <#assign description = (productContentWrapper.get("DESCRIPTION"))?default(product.description)?default("")/>
             <#if description?has_content>
               <fo:block space-before="5pt">
                 ${description}
               </fo:block>
             </#if>
             
-            <#assign longDescription = productContentWrapper.get("LONG_DESCRIPTION")?default("")/>
+            <#assign longDescription = (productContentWrapper.get("LONG_DESCRIPTION"))?default(product.comments)?default("")/>
             <#if longDescription?has_content>
               <fo:block space-before="5pt">
                 ${longDescription}
