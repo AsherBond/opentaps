@@ -90,6 +90,7 @@ import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.base.entities.OrderItemShipGroupAssoc;
+import org.opentaps.domain.base.entities.SupplierProduct;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderItem;
 import org.opentaps.domain.order.OrderRepositoryInterface;
@@ -1962,6 +1963,23 @@ public final class OrderServices {
 
                 // if update, then put it into list which will be saved
                 if (update) {
+                    // make sure there is a SupplierProduct entry else the loadCartFromOrder will fail
+                    SupplierProduct supplierProduct = purchasingRepository.getSupplierProduct(order.getBillFromVendorPartyId(), orderItem.getProductId(), orderItem.getQuantity(), order.getCurrencyUom());
+                    if (supplierProduct == null) {
+                        // create a supplier product
+                        supplierProduct = new SupplierProduct();
+                        supplierProduct.setProductId(orderItem.getProductId());
+                        supplierProduct.setSupplierProductId(orderItem.getProductId());
+                        supplierProduct.setPartyId(order.getBillFromVendorPartyId());
+                        supplierProduct.setMinimumOrderQuantity(BigDecimal.ZERO);
+                        supplierProduct.setLastPrice(BigDecimal.ZERO);
+                        supplierProduct.setCurrencyUomId(order.getCurrencyUom());
+                        supplierProduct.setAvailableFromDate(UtilDateTime.nowTimestamp());
+                        supplierProduct.setComments(UtilMessage.expandLabel("PurchOrderCreateSupplierProductByUserLogin", UtilMisc.toMap("userLoginId", userLogin.getString("userLoginId")), locale));
+                        //use purchasingRepository to create new SupplierProduct
+                        purchasingRepository.createSupplierProduct(supplierProduct);
+                        Debug.logInfo("Created SupplierProduct for productId [" + orderItem.getProductId() + "], supplier [" + order.getBillFromVendorPartyId() + "]", MODULE);
+                    }
                     updatedOrderItems.add(orderItem);
                 }
             }
