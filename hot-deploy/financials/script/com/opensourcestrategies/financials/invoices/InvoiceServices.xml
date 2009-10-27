@@ -57,23 +57,23 @@ under the License.
     <simple-method method-name="updateInvoice" short-description="Update the header of an existing Invoice">
       <call-simple-method method-name="CheckUpdateInvoicePermission"/>
       <!-- find the current record -->
-      <make-value value-name="lookupPKMap" entity-name="Invoice"/>
-      <set-pk-fields map-name="parameters" value-name="lookupPKMap"/>
-      <find-by-primary-key entity-name="Invoice" map-name="lookupPKMap" value-name="lookedUpValue"/>
-      <clone-value value-name="lookedUpValue" new-value-name="savedValue"/>
-      <set-nonpk-fields map-name="parameters" value-name="lookedUpValue"/>
+      <make-value value-field="lookupPKMap" entity-name="Invoice"/>
+      <set-pk-fields map="parameters" value-field="lookupPKMap"/>
+      <find-by-primary-key entity-name="Invoice" map="lookupPKMap" value-field="lookedUpValue"/>
+      <clone-value value-field="lookedUpValue" new-value-field="savedValue"/>
+      <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
 
       <!-- only save if something has changed, do not update status here -->
       <set from-field="savedValue.statusId" field="lookedUpValue.statusId"/>  <!-- get old status back -->
-      <if-compare-field field-name="lookedUpValue" operator="not-equals" to-field-name="savedValue" type="Object">
-        <store-value value-name="lookedUpValue"/> <!-- update all non status and key fields -->
+      <if-compare-field field="lookedUpValue" operator="not-equals" to-field="savedValue" type="Object">
+        <store-value value-field="lookedUpValue"/> <!-- update all non status and key fields -->
       </if-compare-field>
 
       <!-- check if there is a status change if yes call invoice status update service -->
-      <if-compare-field field-name="parameters.statusId" operator="not-equals" to-field-name="savedValue.statusId">
+      <if-compare-field field="parameters.statusId" operator="not-equals" to-field="savedValue.statusId">
         <set from-field="parameters.invoiceId" field="inputMap.invoiceId"/>
         <set from-field="parameters.statusId" field="inputMap.statusId"/>
-        <now-timestamp-to-env env-name="inputMap.statusDate"/>
+        <now-timestamp field="inputMap.statusDate"/>
         <call-service service-name="setInvoiceStatus" in-map-name="inputMap"/>
       </if-compare-field>
     </simple-method>
@@ -86,15 +86,15 @@ under the License.
         <fail-message message="Security Error: To update an Invoice you must have the ACCOUNTING_UPDATE or ACCOUNTING_ADMIN permission, or the limited ACCOUNTING_ROLE_UPDATE permission"/>
       </check-permission>
       <!-- find the current header record -->
-      <entity-one entity-name="Invoice" value-name="headerValue"/>
-      <if-empty field-name="headerValue">
+      <entity-one entity-name="Invoice" value-field="headerValue"/>
+      <if-empty field="headerValue">
         <add-error><fail-message message="Invoice not found, invoice Id: ${invoiceId}"/></add-error>
         <log level="info" message="Invoice not found, invoice Id: ${invoiceId}"/>
         <check-errors/>
       </if-empty>
       <!-- check if the status is in progress or ready... -->
-      <if-compare field-name="headerValue.statusId" operator="not-equals" value="INVOICE_IN_PROCESS">
-        <if-compare field-name="headerValue.statusId" operator="not-equals" value="INVOICE_READY">
+      <if-compare field="headerValue.statusId" operator="not-equals" value="INVOICE_IN_PROCESS">
+        <if-compare field="headerValue.statusId" operator="not-equals" value="INVOICE_READY">
           <add-error><fail-message message="Can only update Invoice, when status is in-process or ready...is now: ${headerValue.statusId}"/></add-error>
           <log level="info" message="Can only update Invoice, when status is in-process or ready...is now: ${headerValue.statusId}"/>
         </if-compare>
