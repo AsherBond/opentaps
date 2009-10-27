@@ -427,8 +427,8 @@ public class ContactSyncHandler extends AbstractSyncHandler<Contact> implements 
         _newKeys = new HashSet<String>();  //always clear
 
         //detect default values for missing data
-        _defaultCountryGeoId = UtilProperties.getPropertyValue("general", "country.geo.id.default");
-        _defaultStateGeoId_US = UtilProperties.getPropertyValue("general", "state.geo.id.default.us");
+        _defaultCountryGeoId = UtilProperties.getPropertyValue("opentaps", "defaultCountryGeoId");
+        _defaultStateGeoId_US = UtilProperties.getPropertyValue("opentaps", "state.geo.id.default.us");
     }
 
     //=== private behaviour ===
