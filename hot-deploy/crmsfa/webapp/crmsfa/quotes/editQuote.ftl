@@ -48,7 +48,7 @@
           <@inputHidden name="createdByPartyId" value="${userLogin.partyId}"/>
           <@inputHidden name="quoteTypeId" value="PRODUCT_QUOTE"/>
           <@inputHidden name="currencyUomId" value=defaultCurrencyUomId?if_exists />
-          <@inputHidden name="validFromDate" value=now() />
+          <@inputHidden name="validFromDate" value=getNow() />
           <@inputAutoCompleteAccountRow name="partyId" id="partyId" title=uiLabelMap.CrmAccount titleClass="requiredField" styleClass="inputAutoCompleteQuick" />
           <@inputLookupRow name="contactPartyId" title=uiLabelMap.CrmContact lookup="LookupContacts" form=formAction />
           <@inputSelectRow name="productStoreId" title=uiLabelMap.OrderProductStore list=productStores displayField="storeName" titleClass="requiredField" default=defaultProductStoreId?if_exists ignoreParameters=true />
