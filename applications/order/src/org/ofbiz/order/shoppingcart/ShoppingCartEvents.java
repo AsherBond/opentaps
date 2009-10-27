@@ -22,11 +22,14 @@ package org.ofbiz.order.shoppingcart;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
+
 import javolution.util.FastMap;
 import java.sql.Timestamp;
 
@@ -1681,6 +1684,7 @@ public class ShoppingCartEvents {
         String orderName = request.getParameter("orderName");
         String correspondingPoId = request.getParameter("correspondingPoId");
         Locale locale = UtilHttp.getLocale(request);
+        TimeZone timeZone = UtilHttp.getTimeZone(request);
         Map result = null;
 
         // set the agreement if specified otherwise set the currency
@@ -1722,18 +1726,18 @@ public class ShoppingCartEvents {
         // set the default ship before and after dates if supplied
         try {
             if (UtilValidate.isNotEmpty(shipBeforeDateStr)) {
-                if (shipBeforeDateStr.length() == 10) shipBeforeDateStr += " 00:00:00.000";
-                cart.setDefaultShipBeforeDate(java.sql.Timestamp.valueOf(shipBeforeDateStr));
+                cart.setDefaultShipBeforeDate(UtilDateTime.stringToTimeStamp(shipBeforeDateStr, UtilDateTime.getDateFormat(locale), timeZone, locale));
             }
             if (UtilValidate.isNotEmpty(shipAfterDateStr)) {
-                if (shipAfterDateStr.length() == 10) shipAfterDateStr += " 00:00:00.000";
-                cart.setDefaultShipAfterDate(java.sql.Timestamp.valueOf(shipAfterDateStr));
+                cart.setDefaultShipAfterDate(UtilDateTime.stringToTimeStamp(shipAfterDateStr, UtilDateTime.getDateFormat(locale), timeZone, locale));
             }
             if (UtilValidate.isNotEmpty(cancelBackOrderDateStr)) {
-                if (cancelBackOrderDateStr.length() == 10) cancelBackOrderDateStr += " 00:00:00.000";
-                cart.setCancelBackOrderDate(java.sql.Timestamp.valueOf(cancelBackOrderDateStr));
+                cart.setCancelBackOrderDate(UtilDateTime.stringToTimeStamp(cancelBackOrderDateStr, UtilDateTime.getDateFormat(locale), timeZone, locale));
             }
         } catch (IllegalArgumentException e) {
+            request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+            return "error";
+        } catch (ParseException e) {
             request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
             return "error";
         }
