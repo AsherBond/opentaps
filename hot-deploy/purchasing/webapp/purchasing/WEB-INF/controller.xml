@@ -626,7 +626,18 @@
     <request-map uri="addOrderItem">
         <security https="true" auth="true"/>
         <event type="java" path="org.opentaps.common.order.OrderEvents" invoke="addOrderItem"/>
-        <response name="success" type="request-redirect" value="createOrderMainScreen"/>
+        <response name="success" type="request-redirect" value="createOrderMainScreen">
+          <redirect-parameter name="tag1"/>
+          <redirect-parameter name="tag2"/>
+          <redirect-parameter name="tag3"/>
+          <redirect-parameter name="tag4"/>
+          <redirect-parameter name="tag5"/>
+          <redirect-parameter name="tag6"/>
+          <redirect-parameter name="tag7"/>
+          <redirect-parameter name="tag8"/>
+          <redirect-parameter name="tag9"/>
+          <redirect-parameter name="tag10"/>
+        </response>
         <response name="error" type="view" value="createOrderMainScreen"/>
         <!-- when the user enters a configurable or virtual product, we should take them to a screen where they can configure or choose a variant -->
         <response name="configureProduct" type="view" value="configureProduct"/>

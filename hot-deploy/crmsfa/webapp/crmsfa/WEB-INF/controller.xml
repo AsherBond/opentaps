@@ -2356,7 +2356,18 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="addOrderItem">
         <security https="true" auth="true"/>
         <event type="java" path="org.opentaps.common.order.OrderEvents" invoke="addOrderItem"/>
-        <response name="success" type="request-redirect-noparam" value="createOrderMainScreen"/>
+        <response name="success" type="request-redirect" value="createOrderMainScreen">
+          <redirect-parameter name="tag1"/>
+          <redirect-parameter name="tag2"/>
+          <redirect-parameter name="tag3"/>
+          <redirect-parameter name="tag4"/>
+          <redirect-parameter name="tag5"/>
+          <redirect-parameter name="tag6"/>
+          <redirect-parameter name="tag7"/>
+          <redirect-parameter name="tag8"/>
+          <redirect-parameter name="tag9"/>
+          <redirect-parameter name="tag10"/>
+        </response>
         <response name="error" type="request" value="createOrderMainScreen"/>
         <!-- If the product has a survey and the survey has not been submitted yet, then we render the survey. -->
         <response name="survey" type="view" value="orderItemSurvey"/>

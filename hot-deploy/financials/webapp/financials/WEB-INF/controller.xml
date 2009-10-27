@@ -1649,6 +1649,16 @@
         <event type="service" invoke="createInvoiceItem"/>
         <response name="success" type="request-redirect" value="viewInvoice">
           <redirect-parameter name="invoiceId"/>
+          <redirect-parameter name="acctgTagEnumId1"/>
+          <redirect-parameter name="acctgTagEnumId2"/>
+          <redirect-parameter name="acctgTagEnumId3"/>
+          <redirect-parameter name="acctgTagEnumId4"/>
+          <redirect-parameter name="acctgTagEnumId5"/>
+          <redirect-parameter name="acctgTagEnumId6"/>
+          <redirect-parameter name="acctgTagEnumId7"/>
+          <redirect-parameter name="acctgTagEnumId8"/>
+          <redirect-parameter name="acctgTagEnumId9"/>
+          <redirect-parameter name="acctgTagEnumId10"/>
         </response>
         <response name="error" type="view" value="viewInvoice"/>
     </request-map>
