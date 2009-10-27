@@ -21,8 +21,10 @@ package org.ofbiz.widget.form;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -758,7 +760,7 @@ public class ModelFormField {
                     NumberFormat nf = NumberFormat.getInstance(locale);
                     nf.setMaximumFractionDigits(10);
                     returnValue = nf.format(retVal);
-                } else if (retVal instanceof java.sql.Date) {
+                } else if (retVal instanceof java.sql.Date || retVal instanceof java.util.Date) {
                     DateFormat df = UtilDateTime.toDateFormat(UtilDateTime.getDateFormat(locale), timeZone, null);
                     returnValue = df.format((java.util.Date) retVal);
                 } else if (retVal instanceof java.sql.Time) {
@@ -767,14 +769,37 @@ public class ModelFormField {
                 } else if (retVal instanceof java.sql.Timestamp) {
                     DateFormat df = UtilDateTime.toDateTimeFormat(UtilDateTime.getDateTimeFormat(locale), timeZone, null);
                     returnValue = df.format((java.util.Date) retVal);
-                } else if (retVal instanceof java.util.Date) {
-                    DateFormat df = UtilDateTime.toDateTimeFormat("EEE MMM dd hh:mm:ss z yyyy", timeZone, null);
-                    returnValue = df.format((java.util.Date) retVal);
+                } else if (retVal instanceof java.lang.String) {
+                    //under some conditions we have string in timestamp format here and should convert it to system acceptable format format.
+                    if (UtilValidate.isTimestamp((String) retVal)) {
+                        Timestamp ts = null;
+                        try {
+                            ts = UtilDateTime.stringToTimeStamp((String) retVal, "yyyy-MM-dd HH:mm:ss.S", timeZone, locale);
+                        } catch (ParseException e) {
+                            try {
+                                ts = UtilDateTime.stringToTimeStamp((String) retVal, "yyyy-MM-dd", timeZone, locale);
+                            } catch (ParseException pe) {
+                                returnValue = retVal.toString();
+                            };                        }
+                        String localizedDate = UtilDateTime.timeStampToString(ts, UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
+                        if (UtilValidate.isDateTime(localizedDate, UtilDateTime.getDateTimeFormat(locale), locale, timeZone)) {
+                            returnValue = localizedDate;
+                        }
+                    }
+                    returnValue = retVal.toString();
                 } else {
                     returnValue = retVal.toString();
                 }
             } else {
-                returnValue = defaultValue;
+                // defaultValue at this point may have type String and timestamp format. It's good chance
+                // convert this string to localized representation.
+                String localizedDefaultValue = null;
+                if (defaultValue.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d+$")) {
+                    localizedDefaultValue = UtilDateTime.timeStampToString(Timestamp.valueOf(defaultValue), UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
+                } else if (defaultValue.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                    localizedDefaultValue = UtilDateTime.timeStampToString(Timestamp.valueOf(defaultValue + " 00:00:00.0"), UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
+                }
+                returnValue = UtilValidate.isEmpty(localizedDefaultValue) ? defaultValue : localizedDefaultValue;
             }
         }
 
