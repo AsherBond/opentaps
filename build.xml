@@ -460,6 +460,14 @@ under the License.
             <arg value="test"/>
         </java>
     </target>
+    <target name="test-html-report">
+      <junitreport todir="./runtime/logs">
+        <fileset dir="./runtime/logs">
+          <include name="tests.xml"/>
+        </fileset>
+        <report format="frames" todir="./runtime/tests"/>
+      </junitreport>
+    </target>
     <target name="_save-runtime-data">
         <delete file="runtime/data.zip"/>
         <zip zipfile="runtime/data.zip" compress="no">
