@@ -105,31 +105,29 @@ public class FindOrdersForm extends FindEntityForm<OrderListView> {
         Panel mainPanel = new Panel();
         mainPanel.setLayout(new ColumnLayout());
 
-        Panel columnOnePanel = new Panel();
-        columnOnePanel.setLayout(new FormLayout());
-        Panel columnTwoPanel = new Panel();
-        columnTwoPanel.setLayout(new FormLayout());
+        SubFormPanel columnOnePanel = new SubFormPanel(getMainForm());
+        SubFormPanel columnTwoPanel = new SubFormPanel(getMainForm());
 
         mainPanel.add(columnOnePanel, new ColumnLayoutData(.5));
         mainPanel.add(columnTwoPanel, new ColumnLayoutData(.5));
 
-        columnOnePanel.add(orderIdInput);
-        columnTwoPanel.add(externalIdInput);
+        columnOnePanel.addField(orderIdInput);
+        columnTwoPanel.addField(externalIdInput);
 
-        columnOnePanel.add(orderNameInput);
-        columnTwoPanel.add(customerInput);
+        columnOnePanel.addField(orderNameInput);
+        columnTwoPanel.addField(customerInput);
 
-        columnOnePanel.add(productStoreInput);
-        columnTwoPanel.add(orderStatusInput);
+        columnOnePanel.addField(productStoreInput);
+        columnTwoPanel.addField(orderStatusInput);
 
-        columnOnePanel.add(correspondingPoIdInput);
-        columnTwoPanel.add(createdByInput);
+        columnOnePanel.addField(correspondingPoIdInput);
+        columnTwoPanel.addField(createdByInput);
 
-        columnOnePanel.add(fromDateInput);
-        columnTwoPanel.add(thruDateInput);
+        columnOnePanel.addField(fromDateInput);
+        columnTwoPanel.addField(thruDateInput);
 
-        columnOnePanel.add(lotInput);
-        columnTwoPanel.add(serialNumberInput);
+        columnOnePanel.addField(lotInput);
+        columnTwoPanel.addField(serialNumberInput);
 
         filterPanel.add(mainPanel);
 

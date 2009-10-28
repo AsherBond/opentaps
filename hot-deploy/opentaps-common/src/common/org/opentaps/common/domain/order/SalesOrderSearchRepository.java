@@ -131,7 +131,7 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
      */
     private List<OrderHeaderItemAndRolesAndInvPending> findOrderListWithFilters(List<EntityCondition> conds) throws RepositoryException {
         if (UtilValidate.isNotEmpty(orderId)) {
-            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.orderId.name()), EntityOperator.EQUALS, EntityFunction.UPPER(orderId + "%")));
+            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.orderId.name()), EntityOperator.LIKE, EntityFunction.UPPER(orderId + "%")));
         }
         if (UtilValidate.isNotEmpty(statusId)) {
             conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name()), EntityOperator.EQUALS, EntityFunction.UPPER(statusId)));
