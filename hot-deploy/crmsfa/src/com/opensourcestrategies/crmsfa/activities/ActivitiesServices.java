@@ -659,7 +659,16 @@ public final class ActivitiesServices {
 
             // Get communicationEventId
             String communicationEventId = (String) serviceResults.get("communicationEventId");
-
+            if (communicationEventId == null) {
+                // the storeIncomingEmail of ofbiz09.04 will return success without a communicationEventId when the email is a duplicate
+                // based on CommunicationEvent.messageId, so if that's the case we must return an error
+                MimeMessage message = wrapper.getMessage();
+                try {
+                    return ServiceUtil.returnError("Email from [" + message.getFrom() + "] with subject [" + message.getSubject() + "] and message ID [" + message.getMessageID() + "] was not stored with a communicationEventId.  Possible cause is that this message has already been stored.");
+                } catch (MessagingException ex) {
+                    return ServiceUtil.returnError(ex.getMessage());
+                }
+            }
             // Find CommunicationEvent from its Id
             GenericValue communicationEvent = delegator.findByPrimaryKey("CommunicationEvent", UtilMisc.toMap("communicationEventId", communicationEventId));
 
@@ -676,8 +685,10 @@ public final class ActivitiesServices {
                 for (int x = 0; x < addressesFrom.length; x++) {
                     emailAddressesFrom.add(((InternetAddress) addressesFrom[x]).getAddress());
                 }
-                for (int x = 0; x < addressesTo.length; x++) {
-                    emailAddressesTo.add(((InternetAddress) addressesTo[x]).getAddress());
+                if (addressesTo != null) {
+                    for (int x = 0; x < addressesTo.length; x++) {
+                        emailAddressesTo.add(((InternetAddress) addressesTo[x]).getAddress());
+                    }
                 }
                 if (addressesCC != null) {
                     for (int x = 0; x < addressesCC.length; x++) {
