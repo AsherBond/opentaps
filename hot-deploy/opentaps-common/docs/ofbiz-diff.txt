@@ -241,6 +241,10 @@ r13199 Small fix for cancelOrderItem, so that it sets an item as completed if pa
 applications/party/script/org/ofbiz/party/contact/PartyContactMechServices.xml
 r13048 fix the createPartyContactMech service to return the contact mech id if it reuses an existing contact mech
 
+applications/party/src/org/ofbiz/party/communication/CommunicationEventServices.java
+r13836 NPE fixes for storeIncomingEmail
+r13838 comment out email messageID duplicate checking 
+
 applications/order/servicedef/secas.xml
 r13211 Comment out SECAs on cancelOrderItem since those are redefined in hot-deploy/opentaps-common/servicedef/secas_orders.xml
 
