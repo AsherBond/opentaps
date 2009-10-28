@@ -634,7 +634,9 @@ public class HtmlFormRenderer extends HtmlWidgetRenderer implements FormStringRe
             writer.append(idName);
             writer.append("-calendar-placeholder\" style=\"border: 0px; width: auto;\" class=\"hidden\"></table>\n");
             writer.append("<script type=\"text/javascript\">\n");
-            writer.append("  function sampleTimestamp_onDateChange(calendar) {\n");
+            writer.append("  function ");
+            writer.append(idName);
+            writer.append("_onDateChange(calendar) {\n");
             writer.append("    if (calendar.dateClicked) {\n");
             writer.append("      var y = calendar.date.getFullYear();\n");
             writer.append("      var m = calendar.date.getMonth();\n");
