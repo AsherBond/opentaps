@@ -92,6 +92,11 @@
   display:inline-block;
 }
 
+/* fix the pager current page input height */
+.x-tbar-page-number { 
+    height:12px !important;
+}
+
 /* Special css class to hide the Tab Bar in TabPanel */
 
 .tabBarHidden .x-tab-panel .x-tab-panel-header { 
