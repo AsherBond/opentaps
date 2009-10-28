@@ -133,6 +133,7 @@ public class TestRunContainer implements Container {
             results.addListener(xml);
 
             // add the suite to the xml listener
+            Debug.log("[JUNIT:Suite:Start] Starting test suite: " + suite.getName(), module);
             xml.startTestSuite(test);
             // run the tests
             suite.run(results);
@@ -140,6 +141,7 @@ public class TestRunContainer implements Container {
             // rollback all entity operations performed by the delegator
             testDelegator.rollback();
             xml.endTestSuite(test);
+            Debug.log("[JUNIT:Suite:End] Ending test suite: " + suite.getName(), module);
 
             // display the results
             Debug.log("[JUNIT] Pass: " + results.wasSuccessful() + " | # Tests: " + results.runCount() + " | # Failed: " +
@@ -204,20 +206,23 @@ public class TestRunContainer implements Container {
 
     class JunitListener implements TestListener {
 
+        private long startTime;
+
         public void addError(Test test, Throwable throwable) {
             Debug.logWarning(throwable, "[JUNIT (error)] - " + test.getClass().getName() + " : " + throwable.toString(), module);
         }
 
         public void addFailure(Test test, AssertionFailedError assertionFailedError) {
-            Debug.logWarning("[JUNIT (failure)] - " + test.getClass().getName() + " : " + assertionFailedError.getMessage(), module);
+            Debug.logWarning(assertionFailedError, "[JUNIT (failure)] - " + test.getClass().getName() + " : " + assertionFailedError.getMessage(), module);
         }
 
         public void endTest(Test test) {
-            //Debug.logInfo("[JUNIT] : " + test.getClass().getName() + " finished.", module);
+            Debug.logInfo("[JUNIT (end)] : " + test + " finished. (in " + (System.currentTimeMillis() - startTime) + " ms)", module);
         }
 
         public void startTest(Test test) {
-           //Debug.logInfo("[JUNIT] : " + test.getClass().getName() + " starting...", module);
+           Debug.logInfo("[JUNIT (start)] : " + test + " starting...", module);
+           startTime = System.currentTimeMillis();
         }
     }
 }

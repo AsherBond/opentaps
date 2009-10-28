@@ -462,8 +462,8 @@ under the License.
     </target>
     <target name="test-html-report">
       <junitreport todir="./runtime/logs">
-        <fileset dir="./runtime/logs">
-          <include name="tests.xml"/>
+        <fileset dir="./runtime/logs/test-results/">
+          <include name="*.xml"/>
         </fileset>
         <report format="frames" todir="./runtime/tests"/>
       </junitreport>
