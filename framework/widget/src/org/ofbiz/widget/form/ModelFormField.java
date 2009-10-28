@@ -760,7 +760,7 @@ public class ModelFormField {
                     NumberFormat nf = NumberFormat.getInstance(locale);
                     nf.setMaximumFractionDigits(10);
                     returnValue = nf.format(retVal);
-                } else if (retVal instanceof java.sql.Date || retVal instanceof java.util.Date) {
+                } else if (retVal instanceof java.sql.Date) {
                     DateFormat df = UtilDateTime.toDateFormat(UtilDateTime.getDateFormat(locale), timeZone, null);
                     returnValue = df.format((java.util.Date) retVal);
                 } else if (retVal instanceof java.sql.Time) {
@@ -768,6 +768,9 @@ public class ModelFormField {
                     returnValue = df.format((java.util.Date) retVal);
                 } else if (retVal instanceof java.sql.Timestamp) {
                     DateFormat df = UtilDateTime.toDateTimeFormat(UtilDateTime.getDateTimeFormat(locale), timeZone, null);
+                    returnValue = df.format((java.util.Date) retVal);
+                } else if (retVal instanceof java.util.Date) {
+                    DateFormat df = UtilDateTime.toDateFormat(UtilDateTime.getDateFormat(locale), timeZone, null);
                     returnValue = df.format((java.util.Date) retVal);
                 } else if (retVal instanceof java.lang.String) {
 
@@ -2094,6 +2097,10 @@ public class ModelFormField {
 
         public boolean getAlsoHidden() {
             return alsoHidden;
+        }
+
+        public String getType() {
+            return type;
         }
 
         public String getDescription(Map<String, Object> context) {

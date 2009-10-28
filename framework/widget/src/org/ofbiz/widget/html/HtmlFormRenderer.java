@@ -199,6 +199,12 @@ public class HtmlFormRenderer extends HtmlWidgetRenderer implements FormStringRe
         if (UtilValidate.isEmpty(description)) {
             this.renderFormatEmptySpace(writer, context, modelFormField.getModelForm());
         } else {
+            if ("date".equals(displayField.getType())) {
+                // let's assume that date and time are separated by space,
+                // time succeeds date and both parts may have changeable size.
+                String[] valueParts = description.split(" ");
+                description = valueParts[0];
+            }
             writer.append(description);
         }
 
@@ -535,6 +541,7 @@ public class HtmlFormRenderer extends HtmlWidgetRenderer implements FormStringRe
 
         // whether the date field is short form, yyyy-mm-dd
         boolean shortDateInput = ("date".equals(dateTimeField.getType()) || "time-dropdown".equals(dateTimeField.getInputMethod()) ? true : false);
+        boolean shortTimeInput = "time".equals(dateTimeField.getType()) ? true : false;
 
         writer.append("<input type=\"text\"");
 
@@ -580,7 +587,7 @@ public class HtmlFormRenderer extends HtmlWidgetRenderer implements FormStringRe
             // time succeeds date and both parts may have changeable size.
             String[] valueParts = value.split(" ");
             writer.append(" value=\"");
-            writer.append(shortDateInput ? valueParts[0] : value);
+            writer.append(shortDateInput ? valueParts[0] : shortTimeInput ? valueParts[1] : value);
             writer.append('"');
         }
 
