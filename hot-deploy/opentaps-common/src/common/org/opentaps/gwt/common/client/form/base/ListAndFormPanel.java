@@ -142,6 +142,9 @@ public abstract class ListAndFormPanel<TFORM extends BaseFormPanel, TLIST extend
      */
     public void setLabelLength(Integer length) {
         labelLength = length;
+        if (getMainForm() != null) {
+            getMainForm().setLabelWidth(getLabelLength());
+        }
     }
 
     /**
@@ -190,6 +193,12 @@ public abstract class ListAndFormPanel<TFORM extends BaseFormPanel, TLIST extend
      */
     public void setFormWidth(Integer width) {
         formWidth = width;
+        if (getMainForm() != null) {
+            getMainForm().setWidth(getFormInnerWidth());
+        }
+        if (getMainFormPanel() != null) {
+            getMainFormPanel().setWidth(getFormWidth());
+        }
     }
 
     /**

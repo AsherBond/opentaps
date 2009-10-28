@@ -16,6 +16,11 @@
  */
 package org.opentaps.gwt.crmsfa.orders.client.form;
 
+import com.gwtext.client.widgets.Panel;
+import com.gwtext.client.widgets.form.TextField;
+import com.gwtext.client.widgets.layout.ColumnLayout;
+import com.gwtext.client.widgets.layout.ColumnLayoutData;
+import com.gwtext.client.widgets.layout.FormLayout;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.FindEntityForm;
 import org.opentaps.gwt.common.client.form.base.SubFormPanel;
@@ -26,39 +31,36 @@ import org.opentaps.gwt.common.client.suggest.LotAutocomplete;
 import org.opentaps.gwt.common.client.suggest.OrderStatusAutocomplete;
 import org.opentaps.gwt.common.client.suggest.ProductStoreAutocomplete;
 
-import com.gwtext.client.widgets.Panel;
-import com.gwtext.client.widgets.form.TextField;
-
 /**
  * Form class for find order in crmsfa.
  */
 public class FindOrdersForm extends FindEntityForm<OrderListView> {
 
-    protected final SubFormPanel filterByAdvancedTab;
+    private final SubFormPanel filterPanel;
     // Order Id
-    protected final TextField orderIdInput;
+    private final TextField orderIdInput;
     // External ID
-    protected final TextField externalIdInput;
+    private final TextField externalIdInput;
     // Order Name
-    protected final TextField orderNameInput;
+    private final TextField orderNameInput;
     // Customer
-    protected final CustomerAutocomplete customerInput;
+    private final CustomerAutocomplete customerInput;
     // Lookup  Product Store
-    protected final ProductStoreAutocomplete productStoreInput;
+    private final ProductStoreAutocomplete productStoreInput;
     // Status
-    protected final OrderStatusAutocomplete orderStatusInput;
+    private final OrderStatusAutocomplete orderStatusInput;
     // PO #
-    protected final TextField correspondingPoIdInput;
+    private final TextField correspondingPoIdInput;
     // From Date
-    protected DateField fromDateInput;
+    private final DateField fromDateInput;
     // Thru Date
-    protected DateField thruDateInput;
+    private final DateField thruDateInput;
     // Created By
-    protected final TextField createdByInput;
+    private final TextField createdByInput;
     // Lot ID
-    protected final LotAutocomplete lotInput;
+    private final LotAutocomplete lotInput;
     // Serial Number
-    protected final TextField serialNumberInput;
+    private final TextField serialNumberInput;
 
 
     private final OrderListView orderListView;
@@ -76,6 +78,12 @@ public class FindOrdersForm extends FindEntityForm<OrderListView> {
      */
     public FindOrdersForm(boolean autoLoad) {
         super(UtilUi.MSG.crmFindOrders());
+
+        // change the form dimensions to accommodate two columns
+        setLabelLength(100);
+        setInputLength(180);
+        setFormWidth(675);
+
         orderIdInput = new TextField(UtilUi.MSG.orderOrderId(), "orderId", getInputLength());
         externalIdInput = new TextField(UtilUi.MSG.orderExternalId(), "externalId", getInputLength());
         orderNameInput = new TextField(UtilUi.MSG.orderOrderName(), "orderName", getInputLength());
@@ -88,20 +96,42 @@ public class FindOrdersForm extends FindEntityForm<OrderListView> {
         createdByInput = new TextField(UtilUi.MSG.commonCreatedBy(), "createdBy", getInputLength());
         lotInput = new LotAutocomplete(UtilUi.MSG.productLotId(), "lotId", getInputLength());
         serialNumberInput = new TextField(UtilUi.MSG.productSerialNumber(), "serialNumber", getInputLength());
-        // Build the filter by advanced tab
-        filterByAdvancedTab = getMainForm().addTab(UtilUi.MSG.findByAdvanced());
-        filterByAdvancedTab.addField(orderIdInput);
-        filterByAdvancedTab.addField(externalIdInput);
-        filterByAdvancedTab.addField(orderNameInput);
-        filterByAdvancedTab.addField(customerInput);
-        filterByAdvancedTab.addField(productStoreInput);
-        filterByAdvancedTab.addField(orderStatusInput);
-        filterByAdvancedTab.addField(correspondingPoIdInput);
-        filterByAdvancedTab.addField(fromDateInput);
-        filterByAdvancedTab.addField(thruDateInput);
-        filterByAdvancedTab.addField(createdByInput);
-        filterByAdvancedTab.addField(lotInput);
-        filterByAdvancedTab.addField(serialNumberInput);
+
+        // Build the filter tab
+        filterPanel = getMainForm().addTab(UtilUi.MSG.crmFindOrders());
+        // hide the tab bar since we only use one tab
+        getMainForm().hideTabBar();
+
+        Panel mainPanel = new Panel();
+        mainPanel.setLayout(new ColumnLayout());
+
+        Panel columnOnePanel = new Panel();
+        columnOnePanel.setLayout(new FormLayout());
+        Panel columnTwoPanel = new Panel();
+        columnTwoPanel.setLayout(new FormLayout());
+
+        mainPanel.add(columnOnePanel, new ColumnLayoutData(.5));
+        mainPanel.add(columnTwoPanel, new ColumnLayoutData(.5));
+
+        columnOnePanel.add(orderIdInput);
+        columnTwoPanel.add(externalIdInput);
+
+        columnOnePanel.add(orderNameInput);
+        columnTwoPanel.add(customerInput);
+
+        columnOnePanel.add(productStoreInput);
+        columnTwoPanel.add(orderStatusInput);
+
+        columnOnePanel.add(correspondingPoIdInput);
+        columnTwoPanel.add(createdByInput);
+
+        columnOnePanel.add(fromDateInput);
+        columnTwoPanel.add(thruDateInput);
+
+        columnOnePanel.add(lotInput);
+        columnTwoPanel.add(serialNumberInput);
+
+        filterPanel.add(mainPanel);
 
         orderListView = new OrderListView();
         orderListView.setAutoLoad(autoLoad);
@@ -109,7 +139,8 @@ public class FindOrdersForm extends FindEntityForm<OrderListView> {
         addListView(orderListView);
     }
 
-    protected void filterByAdvanced() {
+    @Override protected void filter() {
+        getListView().clearFilters();
         getListView().filterByOrderId(orderIdInput.getText());
         getListView().filterByExternalId(externalIdInput.getText());
         getListView().filterByOrderName(orderNameInput.getText());
@@ -122,14 +153,6 @@ public class FindOrdersForm extends FindEntityForm<OrderListView> {
         getListView().filterByCreatedBy(createdByInput.getText());
         getListView().filterByLotId(lotInput.getText());
         getListView().filterBySerialNumber(serialNumberInput.getText());
-    }
-
-    @Override protected void filter() {
-        getListView().clearFilters();
-        Panel p = getMainForm().getTabPanel().getActiveTab();
-        if (p == filterByAdvancedTab) {
-            filterByAdvanced();
-        }
         getListView().applyFilters();
     }
 

@@ -57,9 +57,9 @@ public class TabbedFormPanel extends BaseFormPanel {
     }
 
     /**
-     * Describe <code>addTab</code> method here.
-     * @param title a <code>String</code> value
-     * @return a <code>Panel</code> value
+     * Adds a Tab to the form and return the <code>SubFormPanel</code>.
+     * @param title the tab title
+     * @return a <code>SubFormPanel</code> value
      */
     public SubFormPanel addTab(String title) {
         SubFormPanel p = new SubFormPanel(this);
@@ -88,5 +88,24 @@ public class TabbedFormPanel extends BaseFormPanel {
      */
     public void setInnerPadding(int padding) {
         innerPadding = padding;
+    }
+
+    /**
+     * Hides the tab bar.
+     * Usefull when the form only has one tab and the tab bar is therefore not needed.
+     * By default the tab bar is displayed.
+     * @see #showTabBar
+     */
+    public void hideTabBar() {
+        addClass("tabBarHidden");
+    }
+
+    /**
+     * Shows the tab bar.
+     * By default the tab bar is displayed.
+     * @see #hideTabBar
+     */
+    public void showTabBar() {
+        removeClass("tabBarHidden");
     }
 }

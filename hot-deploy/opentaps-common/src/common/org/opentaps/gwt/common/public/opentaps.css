@@ -92,6 +92,15 @@
   display:inline-block;
 }
 
+/* Special css class to hide the Tab Bar in TabPanel */
+
+.tabBarHidden .x-tab-panel .x-tab-panel-header { 
+    display: none;
+}
+.tabBarHidden .x-tab-panel .x-tab-panel-body { 
+    border-top: 1px solid #D0D0D0; /* restore the top border using the same color as the panel */
+}
+
 /* Higher contrast mask */
 .ext-el-mask {
     background:#555 !important;
