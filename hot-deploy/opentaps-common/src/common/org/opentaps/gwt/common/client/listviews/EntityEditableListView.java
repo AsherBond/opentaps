@@ -96,6 +96,9 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
     private RecordDef recordDef;
     private RowSelectionModel selectionModel = new RowSelectionModel(true);
 
+    private Button saveAllButton;
+    private Button revertButton;
+
     private Set<String> recordPrimaryKeyFields;
     private Set<FieldDef> fieldDefinitions = new HashSet<FieldDef>();
     private List<ColumnConfig> columnConfigs = new ArrayList<ColumnConfig>();
@@ -844,11 +847,12 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
      * Adds a reload button to the grid for reverting any changes made.
      */
     protected void makeReloadButton() {
-        addButton(new Button("Revert", new ButtonListenerAdapter() {
+        revertButton = new Button(UtilUi.MSG.revert(), new ButtonListenerAdapter() {
                 @Override public void onClick(Button button, EventObject e) {
                     loadFirstPage();
                 }
-            }));
+            });
+        addButton(revertButton);
     }
 
     /**
@@ -866,11 +870,12 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
      */
     protected void makeSaveAllButton(String url, Map<String, String> additionalBatchData) {
         this.additionalBatchData = additionalBatchData;
-        addButton(new Button("Save All", new ButtonListenerAdapter() {
+        saveAllButton = new Button(UtilUi.MSG.saveAll(), new ButtonListenerAdapter() {
                 @Override public void onClick(Button button, EventObject e) {
                     doBatchAction();
                 }
-            }));
+            });
+        addButton(saveAllButton);
         saveAllUrl = url;
     }
 
@@ -1586,11 +1591,26 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
         store.remove(globalPermissionsRecord);
 
         // if the grid is not editable, or if global permissions do not have create / update or delete, hide those columns
-        if (createUpdateIndex > 0 && (!editable || (!globalPermissions.canCreate() && !globalPermissions.canUpdate()))) {
-            getColumnModel().setHidden(createUpdateIndex, true);
+        boolean noUpdateCreate = !editable || (!globalPermissions.canCreate() && !globalPermissions.canUpdate());
+        boolean noDelete = !editable || !globalPermissions.canDelete();
+
+        UtilUi.logInfo("noUpdateCreate = " + noUpdateCreate + ", noDelete = " + noDelete, MODULE, "onLoad");
+
+        if (createUpdateIndex > 0) {
+            getColumnModel().setHidden(createUpdateIndex, noUpdateCreate);
         }
-        if (deleteIndex > 0 && (!editable || !globalPermissions.canDelete())) {
-            getColumnModel().setHidden(deleteIndex, true);
+
+        if (deleteIndex > 0) {
+            getColumnModel().setHidden(deleteIndex, noDelete);
+        }
+
+        // if cannot create / update and delete, hide the Save all button
+        if (saveAllButton != null) {
+            if (noUpdateCreate && noDelete) {
+                saveAllButton.hide();
+            } else {
+                saveAllButton.show();
+            }
         }
 
         addRowIfCreatePermission();
