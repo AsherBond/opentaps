@@ -489,9 +489,15 @@ public class CommunicationEventServices {
             Address[] addressesBCC = message.getRecipients(MimeMessage.RecipientType.BCC);
             String messageId = message.getMessageID();
 
-            String aboutThisEmail = "message [" + messageId + "] from [" +
-                (addressesFrom[0] == null? "not found" : addressesFrom[0].toString()) + "] to [" +
+            String aboutThisEmail = "message [" + messageId + "]";
+            if (addressesFrom != null) {
+                aboutThisEmail += " from [" +
+                (addressesFrom[0] == null? "not found" : addressesFrom[0].toString()) + "]";
+            }
+            if (addressesTo != null) {
+                aboutThisEmail += " to [" +
                 (addressesTo[0] == null? "not found" : addressesTo[0].toString()) + "]";
+            }
             if (Debug.verboseOn()) Debug.logVerbose("Processing Incoming Email " + aboutThisEmail, module);
 
             // ignore the message when the spam status = yes
@@ -621,11 +627,15 @@ public class CommunicationEventServices {
             Set emailAddressesTo = new TreeSet();
             Set emailAddressesCC = new TreeSet();
             Set emailAddressesBCC = new TreeSet();
-            for (int x = 0 ; x < addressesFrom.length ; x++) {
-                emailAddressesFrom.add(((InternetAddress) addressesFrom[x]).getAddress());
+            if (addressesFrom != null) {
+                for (int x = 0 ; x < addressesFrom.length ; x++) {
+                    emailAddressesFrom.add(((InternetAddress) addressesFrom[x]).getAddress());
+                }
             }
-            for (int x = 0 ; x < addressesTo.length ; x++) {
-                emailAddressesTo.add(((InternetAddress) addressesTo[x]).getAddress());
+            if (addressesTo != null) {
+                for (int x = 0 ; x < addressesTo.length ; x++) {
+                    emailAddressesTo.add(((InternetAddress) addressesTo[x]).getAddress());
+                }
             }
             if (addressesCC != null) {
                 for (int x = 0 ; x < addressesCC.length ; x++) {
@@ -661,13 +671,17 @@ public class CommunicationEventServices {
                 commEventMap.put("partyIdTo", partyIdTo);
                 commEventMap.put("contactMechIdTo", contactMechIdTo);
             } else {
-                commNote += "Sent to: " + ((InternetAddress)addressesTo[0]).getAddress()  + "; ";
-                if (deliveredTo != null) {
+                if (addressesTo != null) {
+                    commNote += "Sent to: " + ((InternetAddress)addressesTo[0]).getAddress()  + "; ";
+                }
+                 if (deliveredTo != null) {
                     commNote += "Delivered-To: " + deliveredTo + "; ";
                 }
             }
 
-            commNote += "Sent to: " + ((InternetAddress)addressesTo[0]).getAddress()  + "; ";
+            if (addressesTo != null) {
+                commNote += "Sent to: " + ((InternetAddress)addressesTo[0]).getAddress()  + "; ";
+            }
             commNote += "Delivered-To: " + deliveredTo + "; ";
 
             if (partyIdTo != null && partyIdFrom != null) {
