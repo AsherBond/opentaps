@@ -1806,6 +1806,8 @@ public interface CommonMessages extends Messages {
     String commonFormatDateFieldNotCorrect();
     @DefaultMessage("Format: yyyy-MM-dd HH:mm:ss.SSS")
     String commonFormatDateTime();
+    @DefaultMessage("Format: {0}")
+    String commonFormatLocalizedDateTime(String localizedFormat);
     @DefaultMessage("Format: HH:mm:ss.SSS")
     String commonFormatTime();
     @DefaultMessage("Found")
@@ -9132,6 +9134,8 @@ public interface CommonMessages extends Messages {
     String opentapsError_ShippingMethodOrAddressMissing();
     @DefaultMessage("The Thru Date must be after the From Date")
     String opentapsError_ThruDateAfterFromDate();
+    @DefaultMessage("Unable to get print service for printer [{0}]")
+    String opentapsError_UnablePrintService(String printerName);
     @DefaultMessage("Error updating merge form category")
     String opentapsError_UpdateMergeFormCategoryFail();
     @DefaultMessage("Error updating merge form")
@@ -9368,7 +9372,7 @@ public interface CommonMessages extends Messages {
     String opentapsProductIsDiscontinued(String productName, String productId);
     @DefaultMessage("Product {0} ({1}) has not been introduced yet.")
     String opentapsProductIsNotIntroduced(String productName, String productId);
-    @DefaultMessage("opentaps Open Source ERP + CRM")
+    @DefaultMessage("Opentaps Open Source ERP + CRM")
     String opentapsProductName();
     @DefaultMessage("Promised By")
     String opentapsPromisedDate();
@@ -13788,6 +13792,8 @@ public interface CommonMessages extends Messages {
     String productCategoryContentType_description_LINK2_ALT_TEXT();
     @DefaultMessage("Description - Long")
     String productCategoryContentType_description_LONG_DESCRIPTION();
+    @DefaultMessage("Category Description")
+    String productCategoryDescription();
     @DefaultMessage("Category ID")
     String productCategoryId();
     @DefaultMessage("Category Image URL")
@@ -16726,10 +16732,14 @@ public interface CommonMessages extends Messages {
     String rejectionReason_description_SRJ_NOT_ORDERED();
     @DefaultMessage("Over Shipped")
     String rejectionReason_description_SRJ_OVER_SHIPPED();
+    @DefaultMessage("Revert")
+    String revert();
     @DefaultMessage("Russian")
     String ru();
     @DefaultMessage("SFA")
     String sFA();
+    @DefaultMessage("Save All")
+    String saveAll();
     @DefaultMessage("The server return Unknown request while accessing the {0}")
     String serverEmptyResponseError(String resource);
     @DefaultMessage("The server returned error {0} while accessing the {1}")
