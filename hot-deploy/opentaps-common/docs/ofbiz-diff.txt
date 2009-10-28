@@ -6,8 +6,23 @@ Overall changes
 ---------------
 Commented out various webapps and components which duplicate or are superseded by opentaps.
 r13679, 13743, 13753
+
 applications/*/webapp/*/WEB-INF/web.xml
 r13646 Added ofbizServerName context-param for JBOSS integration
+
+framework/common/widget/CommonScreens.xml
+specialpurpose/ecommerce/widget/CommonScreens.xml
+specialpurpose/webpos/widget/CommonScreens.xml
+r13762 Changed favicon to the opentaps icon
+
+framework/common/config/CommonUiLabels.xml
+specialpurpose/cmssite/template/ofbiz/ofbizFooter.ftl
+specialpurpose/ecommerce/webapp/ecommerce/includes/footer.ftl
+specialpurpose/webpos/webapp/webpos/includes/Footer.ftl
+themes/bizznesstime/includes/footer.ftl
+themes/flatgrey/includes/footer.ftl
+themes/multiflex/includes/footer.ftl
+r13761, r13800 Fix ofbiz footers to include Opentaps
 
 Framework changes
 -----------------
@@ -116,6 +131,12 @@ r13784 Move method from UtilDate to UtilDateTime because it must be accessible f
 framework/widget/src/org/ofbiz/widget/html/HtmlFormRenderer.java
 r13786 Add jscalendar and localized date/time support to HTML form renderer
 
+framework/webapp/config/url.properties
+r13789 disable https by default for demo purposes
+
+framework/widget/src/org/ofbiz/widget/html/HtmlFormRenderer.java
+r13798 Show tooltip with correct format
+
 Applications changes
 --------------------
 
@@ -222,7 +243,7 @@ applications/product/script/org/ofbiz/shipment/picklist/PicklistServices.xml
 r13649 Changed Warehouse Dashboard to exclude any completed pick lists.
 
 applications/product/webapp/facility/WEB-INF/actions/facility/ViewFacilityInventoryByProduct.groovy
-r13477 change productsSoldThruTimestamp to timestamp when it is a string value 
+r13477 change productsSoldThruTimestamp to timestamp when it is a string value
 
 Other API Changes
 -----------------
