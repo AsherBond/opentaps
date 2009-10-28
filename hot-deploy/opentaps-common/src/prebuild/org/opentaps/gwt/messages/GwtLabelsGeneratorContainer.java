@@ -333,6 +333,11 @@ public final class GwtLabelsGeneratorContainer implements Container {
             properties = loadPropertiesFile(fileName, locale);
             propertiesFileName = getPropertiesFileName(fileName, locale);
         }
+        if (properties == null) {
+            Debug.logError("Null properties for fileName [" + fileName + "] and locale [" + locale + "]", MODULE);
+            return;
+        }
+
         // this regex identifies FreeMarker placeholders in the label text
         // eg: Welcome ${firstName} ${lastName}
         // It supports first level recursions like ${amountApplied?currency(${isoCode})}
@@ -355,7 +360,7 @@ public final class GwtLabelsGeneratorContainer implements Container {
         Pattern fakePlaceholderPattern = Pattern.compile(fakePlaceholderRegex);
 
         // loop over each labels from the loaded file
-        Iterator<Entry <Object, Object>> it = properties.entrySet().iterator();
+        Iterator<Entry<Object, Object>> it = properties.entrySet().iterator();
         while (it.hasNext()) {
             Entry<Object, Object> entry = it.next();
 
