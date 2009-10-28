@@ -518,7 +518,7 @@ public class CommunicationEventServices {
                 return ServiceUtil.returnSuccess(" Message Ignored: no 'From' address specified");
             }
 
-            // make sure this isn't a duplicate
+            /* Commenting out this feature for now, as it seems to be preventing emails from being stored.  Si 2009-10-27
             List commEvents;
             try {
                 commEvents = delegator.findByAnd("CommunicationEvent", UtilMisc.toMap("messageId", messageId));
@@ -532,7 +532,7 @@ public class CommunicationEventServices {
             } else {
                 Debug.logInfo("Persisting New Email: " + aboutThisEmail, module);
             }
-
+*/
 
             // get the related partId's
             List toParties = buildListOfPartyInfoFromEmailAddresses(addressesTo, userLogin, dispatcher);
