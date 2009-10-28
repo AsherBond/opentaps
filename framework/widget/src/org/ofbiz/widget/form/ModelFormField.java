@@ -670,13 +670,13 @@ public class ModelFormField {
     }
 
     public String getEntry(Map<String, Object> context , String defaultValue) {
-        return this.getEntry(context, "", null);
+        return this.getEntry(context, defaultValue, null);
     }
 
     /**
      * Gets the entry from the context that corresponds to this field; if this
      * form is being rendered in an error condition (ie isError in the context
-     * is true) then the value will be retreived from the parameters Map in
+     * is true) then the value will be retrieved from the parameters Map in
      * the context.
      *
      * @param context a <code>Map</code> value
@@ -796,10 +796,12 @@ public class ModelFormField {
                 // defaultValue at this point may have type String and timestamp format. It's good chance
                 // convert this string to localized representation.
                 String localizedDefaultValue = null;
-                if (defaultValue.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d+$")) {
-                    localizedDefaultValue = UtilDateTime.timeStampToString(Timestamp.valueOf(defaultValue), UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
-                } else if (defaultValue.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
-                    localizedDefaultValue = UtilDateTime.timeStampToString(Timestamp.valueOf(defaultValue + " 00:00:00.0"), UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
+                if (UtilValidate.isNotEmpty(defaultValue)) {
+                    if (defaultValue.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d+$")) {
+                        localizedDefaultValue = UtilDateTime.timeStampToString(Timestamp.valueOf(defaultValue), UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
+                    } else if (defaultValue.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                        localizedDefaultValue = UtilDateTime.timeStampToString(Timestamp.valueOf(defaultValue + " 00:00:00.0"), UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
+                    }
                 }
                 returnValue = UtilValidate.isEmpty(localizedDefaultValue) ? defaultValue : localizedDefaultValue;
             }
