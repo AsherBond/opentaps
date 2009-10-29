@@ -845,6 +845,7 @@ public final class LedgerServices {
             OrganizationRepositoryInterface ori =  domains.getOrganizationDomain().getOrganizationRepository();
             Organization organization = ori.getOrganizationById(payment.getOrganizationPartyId());
             GenericValue paymentValue = delegator.findByPrimaryKey("Payment", UtilMisc.toMap("paymentId", paymentId));
+            Map<String, Object> results;
 
             // check the payment if ready to post, else return error.  This should only return false if your organization
             // has been configured to require accounting tags for payment applications, and the payment is not fully allocated
@@ -853,11 +854,15 @@ public final class LedgerServices {
             }
             // payroll runs this other service.  the extra parameters prevent a new transaction from being opened
             if (payment.isPayCheck()) {
-                return dispatcher.runSync("postPaycheckToGl", UtilMisc.toMap("paycheck", paymentValue, "userLogin", userLogin), 60, false);
+                results = dispatcher.runSync("postPaycheckToGl", UtilMisc.toMap("paycheck", paymentValue, "userLogin", userLogin), 60, false);
+                String acctgTransId = (String) results.get("acctgTransId");
+                results = ServiceUtil.returnSuccess();
+                results.put("acctgTransIds", UtilMisc.toList(acctgTransId));
+                return results;
             }
 
             // figure out the parties involved and the payment gl account
-            Map results = dispatcher.runSync("getPaymentAccountAndParties", UtilMisc.toMap("paymentId", paymentId), -1, false);
+            results = dispatcher.runSync("getPaymentAccountAndParties", UtilMisc.toMap("paymentId", paymentId), -1, false);
             if (results.get(ModelService.RESPONSE_MESSAGE).equals(ModelService.RESPOND_ERROR)) {
                 return results;
             }
