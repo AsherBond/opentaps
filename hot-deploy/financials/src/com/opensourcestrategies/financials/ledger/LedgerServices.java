@@ -845,7 +845,7 @@ public final class LedgerServices {
             OrganizationRepositoryInterface ori =  domains.getOrganizationDomain().getOrganizationRepository();
             Organization organization = ori.getOrganizationById(payment.getOrganizationPartyId());
             GenericValue paymentValue = delegator.findByPrimaryKey("Payment", UtilMisc.toMap("paymentId", paymentId));
-            
+
             // check the payment if ready to post, else return error.  This should only return false if your organization
             // has been configured to require accounting tags for payment applications, and the payment is not fully allocated
             if (!payment.isReadyToPost()) {
@@ -871,21 +871,21 @@ public final class LedgerServices {
                 Debug.logWarning("Payment [" + paymentId + "] has an amount of [" + payment.getAmount() + "], not posting", MODULE);
                 return ServiceUtil.returnSuccess();
             }
-            
+
             // construct transaction entries for posting
             List acctgTransEntries = FastList.newInstance();
             if (organization.allocatePaymentTagsToApplications()) {
                 // if allocate payment tags in application, then it should make one transaction entry per payment application and copy the tags
-                // from the payment application to the transaction entry.  
+                // from the payment application to the transaction entry.
                 for (PaymentApplication appl : payment.getPaymentApplications()) {
                     Map offsettingGlAccountAmounts = new HashMap();
-                    
+
                     // skip payment applications with null amount
                     if (appl.getAmountApplied() == null) {
                         Debug.logWarning("Payment Application " + appl + " has a null amount, skipping", MODULE);
                         continue;
                     }
-                    
+
                     // determine the offsetting GL account for the applied amount
                     BigDecimal applAmount = appl.getAmountApplied().multiply(conversionFactor);
                     Map paymentGlAccountAmounts = UtilMisc.toMap(paymentGlAccountId, applAmount);
@@ -903,7 +903,7 @@ public final class LedgerServices {
                         String offsettingGlAccountId = getOffsettingPaymentGlAccount(dispatcher, paymentValue, organizationPartyId, userLogin);
                         offsettingGlAccountAmounts.put(offsettingGlAccountId, applAmount);
                     }
-                    
+
                     // determine which to credit and debit
                     Map creditGlAccountAmounts = null;
                     Map debitGlAccountAmounts = null;
@@ -923,7 +923,7 @@ public final class LedgerServices {
                     if (debitGlAccountAmounts == null || (debitGlAccountAmounts.keySet().size() == 0)) {
                         return ServiceUtil.returnError("No debit GL accounts found for payment posting");
                     }
-                    
+
                     // create transaction entries for this payment application, and add it to the list of accounting transaction entries for posting
                     acctgTransEntries.addAll(makePaymentEntries(appl, creditGlAccountAmounts, debitGlAccountAmounts,
                             organizationPartyId, transactionPartyId, delegator));
@@ -1017,7 +1017,7 @@ public final class LedgerServices {
         } else {
             return ServiceUtil.returnError("No accounting transaction entries created for payment [" + paymentId + "]");
         }
-            
+
         } catch (GenericEntityException ex) {
             return ServiceUtil.returnError(ex.getMessage());
         } catch (GenericServiceException ex) {
@@ -1144,7 +1144,6 @@ public final class LedgerServices {
      * @exception GenericServiceException if an error occurs
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private static Map<String, Object> postPaycheckEntry(String acctgTransId, String glAccountId, String debitCreditFlag, String organizationPartyId, String postingPartyId, String postingRoleTypeId,
                                          String employeePartyId, BigDecimal amount, String currencyUomId, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericServiceException, GenericEntityException {
 
@@ -1257,7 +1256,7 @@ public final class LedgerServices {
     /**
      * A little helper method to postPaymentToGl.
      * This method will copy all accounting tags from Payment to each AcctgTransEntry
-     * @param payment a <code>GenericValue</code> value
+     * @param paymentApplication a <code>GenericValue</code> value
      * @param creditGlAccountAmounts a <code>Map</code> value
      * @param debitGlAccountAmounts a <code>Map</code> value
      * @param organizationPartyId a <code>String</code> value
@@ -2387,7 +2386,7 @@ public final class LedgerServices {
             // domain repository
             DomainsLoader dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
             InventoryRepositoryInterface inventoryRepository = dl.loadDomainsDirectory().getInventoryDomain().getInventoryRepository();
-            InventoryItem domainInventoryItem = Repository.loadFromGeneric(InventoryItem.class, inventoryItem, (Repository) inventoryRepository);
+            InventoryItem domainInventoryItem = Repository.loadFromGeneric(InventoryItem.class, inventoryItem, inventoryRepository);
             BigDecimal inventoryItemOldUnitCost = domainInventoryItem.getOldUnitCost();
             BigDecimal oldUnitCost = inventoryItemOldUnitCost == null ? null : inventoryItemOldUnitCost.setScale(4, BigDecimal.ROUND_HALF_UP);
 
@@ -2909,7 +2908,7 @@ public final class LedgerServices {
                 String inventoryItemId = (String) inventoryItemIdsIt.next();
                 GenericValue inventoryItem = delegator.findByPrimaryKey("InventoryItem", UtilMisc.toMap("inventoryItemId", inventoryItemId));
 
-                InventoryItem domainInventoryItem = Repository.loadFromGeneric(InventoryItem.class, inventoryItem, (Repository) inventoryRepository);
+                InventoryItem domainInventoryItem = Repository.loadFromGeneric(InventoryItem.class, inventoryItem, inventoryRepository);
 
                 BigDecimal unitCost = domainInventoryItem.getUnitCost();
                 String productId = domainInventoryItem.getProductId();
