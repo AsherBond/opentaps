@@ -18,17 +18,19 @@
 package org.opentaps.tests.crmsfa.orders;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javolution.util.FastMap;
 import junit.framework.TestCase;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
@@ -72,9 +74,9 @@ public class OrderTestCase extends OpentapsTestCase {
 
     @Override
     public void tearDown() throws Exception {
-        super.tearDown();
         // recreate the promo 9020 which we removed in setUp
-        delegator.create("ProductStorePromoAppl", UtilMisc.<String, Object>toMap("productStoreId", "9000", "productPromoId", "9020", "sequenceNum", new Integer(1), "fromDate", UtilDate.toTimestamp("2001-05-13 12:00:00", null, null)));
+        delegator.create("ProductStorePromoAppl", UtilMisc.<String, Object>toMap("productStoreId", "9000", "productPromoId", "9020", "sequenceNum", new Integer(1), "fromDate", UtilDate.toTimestamp("2001-05-13 12:00:00.0", TimeZone.getDefault(), Locale.getDefault())));
+        super.tearDown();
     }
 
     /**
