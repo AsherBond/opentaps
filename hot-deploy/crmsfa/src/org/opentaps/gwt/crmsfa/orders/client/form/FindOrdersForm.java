@@ -135,10 +135,7 @@ public class FindOrdersForm extends FindEntityForm<OrderListView> {
         columnTwoPanel.add(UtilUi.makeBlankFormCell());
 
         columnOnePanel.addField(lotInput);
-        columnTwoPanel.add(UtilUi.makeBlankFormCell());
-
-        columnOnePanel.addField(serialNumberInput);
-        columnTwoPanel.add(UtilUi.makeBlankFormCell());
+        columnTwoPanel.addField(serialNumberInput);
 
         filterPanel.add(mainPanel);
 
