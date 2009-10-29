@@ -39,7 +39,7 @@ framework/common/src/org/ofbiz/common/FindServices.java
 applications/product/webapp/facility/WEB-INF/actions/facility/ViewFacilityInventoryByProduct.groovy
 applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCartEvents.java
 In revisions:
-r13768, r13769, r13784, r13786, r13798, rr13812-13818, r13822, 13824, 13833, 13834
+r13768, r13769, r13784, r13786, r13798, r13812-r13818, r13822, r13824, r13833, r13834
 
 Framework changes
 -----------------
@@ -142,17 +142,13 @@ r13738 Applied patch from JIRA 44, allow to use java action in addition to bsh a
 framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
 r13747 Remove non-serializable entries from each attribute that is an instance of Map
 
-framework/base/src/org/ofbiz/base/util/UtilDateTime.java
-r13784 Move method from UtilDate to UtilDateTime because it must be accessible from framework portion of code
-
-framework/widget/src/org/ofbiz/widget/html/HtmlFormRenderer.java
-r13786 Add jscalendar and localized date/time support to HTML form renderer
-
 framework/webapp/config/url.properties
 r13789 disable https by default for demo purposes
 
-framework/widget/src/org/ofbiz/widget/html/HtmlFormRenderer.java
-r13798 Show tooltip with correct format
+framework/service/servicedef/services_test_se.xml
+framework/service/src/org/ofbiz/service/test/ServiceEngineTestServices.java
+framework/service/testdef/servicetests.xml
+Fix concurrency issue for service-eca-global-event-exec test, see JIRA 3124 as this should be a temporary hack
 
 Applications changes
 --------------------

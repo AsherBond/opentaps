@@ -62,6 +62,10 @@ under the License.
     <test-case case-name="service-eca-global-event-exec">
         <service-test service-name="testServiceEcaGlobalEventExec"/>
     </test-case>
+    <!-- the global ecas run in separate threads, so they may not finish before the assert unless we pause -->
+    <test-case case-name="service-eca-global-event-exec-pause">
+        <service-test service-name="testPause"/>
+    </test-case>
     <test-case case-name="service-eca-global-event-exec-assert-data">
         <entity-xml action="assert" entity-xml-url="component://service/testdef/data/ServiceEcaGlobalEventAssertData.xml"/>
     </test-case>

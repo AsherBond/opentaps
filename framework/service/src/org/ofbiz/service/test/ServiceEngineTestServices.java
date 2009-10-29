@@ -40,6 +40,18 @@ public class ServiceEngineTestServices {
 
     public static final String module = ServiceEngineTestServices.class.getName();
 
+    // a simple way to introduce pauses in the tests
+    public static Map<String, Object> testPause(DispatchContext dctx, Map<String, ? extends Object> context) {
+        // sleep 5 seconds
+        try {
+            Debug.logInfo("Waiting 5s ...", module);
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            return ServiceUtil.returnError(e.toString());
+        }
+        return ServiceUtil.returnSuccess();
+    }
+
     public static Map<String, Object> testServiceDeadLockRetry(DispatchContext dctx, Map<String, ? extends Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         try {

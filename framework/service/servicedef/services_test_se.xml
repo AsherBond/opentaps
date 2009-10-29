@@ -84,4 +84,10 @@ under the License.
     <service name="testServiceEcaGlobalEventExecOnRollback" engine="java" auth="false"
         location="org.ofbiz.service.test.ServiceEngineTestServices" invoke="testServiceEcaGlobalEventExecOnRollback">
     </service>
+
+    <!-- a simple pause service -->
+    <service name="testPause" engine="java" auth="false"
+        location="org.ofbiz.service.test.ServiceEngineTestServices" invoke="testPause">
+        <implements service="testServiceInterface"/>
+    </service>
 </services>
