@@ -423,7 +423,7 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
                     continue;
                 }
 
-                BigDecimal resPackedQty = this.getPackedQuantity(orderId, orderItemSeqId, shipGroupSeqId, res.getString("inventoryItemId"), -1);
+                BigDecimal resPackedQty = this.getPackedQuantity(orderId, orderItemSeqId, shipGroupSeqId, productId, res.getString("inventoryItemId"), -1);
                 if (resPackedQty.compareTo(resQty) >= 0) {
                     continue;
                 } else if (!update) {
@@ -464,7 +464,7 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
                     continue;
                 }
 
-                BigDecimal resPackedQty = this.getPackedQuantity(orderId, orderItemSeqId, shipGroupSeqId, res.getString("inventoryItemId"), -1);
+                BigDecimal resPackedQty = this.getPackedQuantity(orderId, orderItemSeqId, shipGroupSeqId, productId, res.getString("inventoryItemId"), -1);
                 if (resPackedQty.compareTo(resQty) >= 0) {
                     continue;
                 } else if (!update) {
