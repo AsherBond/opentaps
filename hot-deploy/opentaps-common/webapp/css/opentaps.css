@@ -245,6 +245,10 @@ div.sectionHeaderTitle span {
     font: normal 10px Verdana, Arial, Helvetica, sans-serif;
     color: #AA0000;
 }
+.requiredColumn {
+    text-decoration: none;
+    color: #AA0000;
+}
 .fieldDateTime {
     width: 150px;
 }
@@ -1233,4 +1237,15 @@ margin:0;
     border-style: solid;
     list-style: none;
     background: white;
+}
+
+.inputBoxFixedWidth {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-weight: normal;
+background: #FFFFFF;
+font-size: 8pt;
+background: white;
+border: #999999 solid 1px;
+margin: 2px;
+width: 120px;
 }

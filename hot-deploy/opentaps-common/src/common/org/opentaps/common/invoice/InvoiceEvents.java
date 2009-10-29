@@ -49,6 +49,7 @@ import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.base.entities.InvoiceAdjustment;
 import org.opentaps.domain.base.entities.InvoiceAdjustmentType;
 import org.opentaps.domain.base.entities.InvoiceTerm;
+import org.opentaps.domain.base.entities.PartyAcctgPreference;
 import org.opentaps.domain.base.entities.Payment;
 import org.opentaps.domain.base.entities.PaymentApplication;
 import org.opentaps.domain.base.entities.PaymentMethodType;
@@ -56,6 +57,8 @@ import org.opentaps.domain.base.entities.PostalAddress;
 import org.opentaps.domain.base.entities.TermType;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
+import org.opentaps.domain.organization.Organization;
+import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
@@ -151,6 +154,11 @@ public final class InvoiceEvents {
 
         DomainsDirectory domains = dl.loadDomainsDirectory();
         InvoiceRepositoryInterface invr = domains.getBillingDomain().getInvoiceRepository();
+        OrganizationRepositoryInterface ori =  domains.getOrganizationDomain().getOrganizationRepository();
+        Organization organization = ori.getOrganizationById(organizationPartyId);
+        PartyAcctgPreference partyAcctgPreference = organization.getPartyAcctgPreference();
+        // if groupSalesTaxOnInvoicePdf equals Y, then Group all the sales invoice's sales tax items together as one line item on the sales invoice PDF
+        String groupSalesTaxOnInvoicePdf = partyAcctgPreference == null ? "N" : (partyAcctgPreference.getGroupSalesTaxOnInvoicePdf() == null ? "N" : partyAcctgPreference.getGroupSalesTaxOnInvoicePdf());
 
         // load invoice object and put it to report parameters
         Invoice invoice = invr.getInvoiceById(invoiceId);
@@ -183,7 +191,7 @@ public final class InvoiceEvents {
 
         // Retrieve invoice items.  Unfortunately we can't use InvoiceItem objects for now due to
         // complicated requirements that affect items appearance in final document.
-        List<Map<String, Object>> invoiceItems = InvoiceHelper.getInvoiceLinesForPresentation(delegator, invoice.getInvoiceId());
+        List<Map<String, Object>> invoiceItems = InvoiceHelper.getInvoiceLinesForPresentation(delegator, invoice.getInvoiceId(), new Boolean(groupSalesTaxOnInvoicePdf.equals("Y")));
         // extraInfo & extraDetails maps mainly used by InvoiceFirstLine subreport.
         Map<String, Object> extraInfo = FastMap.newInstance();
         List<Map<String, String>> extraDetails = FastList.newInstance();

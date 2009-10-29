@@ -68,4 +68,7 @@
     <!-- Default footer for PDF -->
     <PartyAcctgPreference partyId="Company" salesInvoiceFooterText="opentaps Open Source ERP + CRM - www.opentaps.org" />
 
+    <!-- This setting will take effect to group tax item in a same line of Invoice PDF -->
+    <PartyAcctgPreference partyId="Company" groupSalesTaxOnInvoicePDF="Y"/>
+
 </entity-engine-xml>

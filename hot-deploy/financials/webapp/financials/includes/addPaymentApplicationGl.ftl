@@ -28,6 +28,9 @@
         <td><@inputAutoCompleteGlAccount name="overrideGlAccountId" id="overrideGlAccountId" /></td>
       </tr>
       <@inputTextRow title=uiLabelMap.CommonAmount size="10" name="amountApplied" titleClass="requiredField" />
+	  <#if tagTypes?has_content && allocatePaymentTagsToApplications>
+	    <@accountingTagsSelectRows tags=tagTypes prefix="acctgTagEnumId" entity=paymentValue! />
+	  </#if>      
       <@inputSubmitRow title=uiLabelMap.CommonApply />
     </table>
   </div>

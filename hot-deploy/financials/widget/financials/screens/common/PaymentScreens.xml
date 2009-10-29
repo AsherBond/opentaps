@@ -122,7 +122,9 @@
         <section>
             <widgets>
                <container>
-                   <include-form name="editPaymentApplications" location="component://financials/widget/financials/forms/common/PaymentForms.xml"/>
+                    <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/editPaymentApplications.ftl"/></html>
+                    </platform-specific>
                </container>
             </widgets>
         </section>       
@@ -131,7 +133,9 @@
         <section>
             <widgets>
                <container>
-                   <include-form name="viewPaymentApplications" location="component://financials/widget/financials/forms/common/PaymentForms.xml"/>
+                    <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/viewPaymentApplications.ftl"/></html>
+                    </platform-specific>               
                </container>
             </widgets>
         </section>       
@@ -140,7 +144,9 @@
         <section>
             <widgets>
                 <container>
-                   <include-form name="invoicePaymentApplicationList" location="component://financials/widget/financials/forms/common/PaymentForms.xml"/>
+                    <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/invoicePaymentApplicationList.ftl"/></html>
+                    </platform-specific>
                 </container>
             </widgets>
         </section>       
@@ -158,7 +164,9 @@
         <section>
             <widgets>
                 <container>
-                    <include-form name="editPaymentApplicationsTax" location="component://financials/widget/financials/forms/common/PaymentForms.xml"/>
+                    <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/editPaymentApplicationsTax.ftl"/></html>
+                    </platform-specific>                          
                 </container>
             </widgets>
         </section>       
@@ -167,7 +175,9 @@
         <section>
             <widgets>
                 <container>
-                    <include-form name="viewPaymentApplicationsTax" location="component://financials/widget/financials/forms/common/PaymentForms.xml"/>
+                    <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/viewPaymentApplicationsTax.ftl"/></html>
+                    </platform-specific>                
                 </container>
             </widgets>
         </section>       
@@ -187,7 +197,9 @@
         <section>
             <widgets>
                <container>
-                   <include-form name="editPaymentApplicationsGl" location="component://financials/widget/financials/forms/common/PaymentForms.xml"/>
+                    <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/editPaymentApplicationsGl.ftl"/></html>
+                    </platform-specific>                   
                </container>
             </widgets>
         </section>       
@@ -196,7 +208,9 @@
         <section>
             <widgets>
                <container>
-                   <include-form name="viewPaymentApplicationsGl" location="component://financials/widget/financials/forms/common/PaymentForms.xml"/>
+                    <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/viewPaymentApplicationsGl.ftl"/></html>
+                    </platform-specific>                   
                </container>
             </widgets>
         </section>       

@@ -67,6 +67,16 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
+        fields.put("acctgTagEnumId1", "ACCTG_TAG_ENUM_ID1");
+        fields.put("acctgTagEnumId2", "ACCTG_TAG_ENUM_ID2");
+        fields.put("acctgTagEnumId3", "ACCTG_TAG_ENUM_ID3");
+        fields.put("acctgTagEnumId4", "ACCTG_TAG_ENUM_ID4");
+        fields.put("acctgTagEnumId5", "ACCTG_TAG_ENUM_ID5");
+        fields.put("acctgTagEnumId6", "ACCTG_TAG_ENUM_ID6");
+        fields.put("acctgTagEnumId7", "ACCTG_TAG_ENUM_ID7");
+        fields.put("acctgTagEnumId8", "ACCTG_TAG_ENUM_ID8");
+        fields.put("acctgTagEnumId9", "ACCTG_TAG_ENUM_ID9");
+        fields.put("acctgTagEnumId10", "ACCTG_TAG_ENUM_ID10");
 fieldMapColumns.put("PaymentApplication", fields);
 }
   public static enum Fields implements EntityFieldInterface<PaymentApplication> {
@@ -82,7 +92,17 @@ fieldMapColumns.put("PaymentApplication", fields);
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
-    createdTxStamp("createdTxStamp");
+    createdTxStamp("createdTxStamp"),
+    acctgTagEnumId1("acctgTagEnumId1"),
+    acctgTagEnumId2("acctgTagEnumId2"),
+    acctgTagEnumId3("acctgTagEnumId3"),
+    acctgTagEnumId4("acctgTagEnumId4"),
+    acctgTagEnumId5("acctgTagEnumId5"),
+    acctgTagEnumId6("acctgTagEnumId6"),
+    acctgTagEnumId7("acctgTagEnumId7"),
+    acctgTagEnumId8("acctgTagEnumId8"),
+    acctgTagEnumId9("acctgTagEnumId9"),
+    acctgTagEnumId10("acctgTagEnumId10");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -122,6 +142,26 @@ fieldMapColumns.put("PaymentApplication", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
+   @Column(name="ACCTG_TAG_ENUM_ID1")
+   private String acctgTagEnumId1;
+   @Column(name="ACCTG_TAG_ENUM_ID2")
+   private String acctgTagEnumId2;
+   @Column(name="ACCTG_TAG_ENUM_ID3")
+   private String acctgTagEnumId3;
+   @Column(name="ACCTG_TAG_ENUM_ID4")
+   private String acctgTagEnumId4;
+   @Column(name="ACCTG_TAG_ENUM_ID5")
+   private String acctgTagEnumId5;
+   @Column(name="ACCTG_TAG_ENUM_ID6")
+   private String acctgTagEnumId6;
+   @Column(name="ACCTG_TAG_ENUM_ID7")
+   private String acctgTagEnumId7;
+   @Column(name="ACCTG_TAG_ENUM_ID8")
+   private String acctgTagEnumId8;
+   @Column(name="ACCTG_TAG_ENUM_ID9")
+   private String acctgTagEnumId9;
+   @Column(name="ACCTG_TAG_ENUM_ID10")
+   private String acctgTagEnumId10;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -165,6 +205,80 @@ fieldMapColumns.put("PaymentApplication", fields);
    )
    
    private GlAccount glAccount = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID1", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Enumeration tag1Enumeration = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID2", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Enumeration tag2Enumeration = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID3", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Enumeration tag3Enumeration = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID4", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Enumeration tag4Enumeration = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID5", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Enumeration tag5Enumeration = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID6", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Enumeration tag6Enumeration = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID7", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Enumeration tag7Enumeration = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID8", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Enumeration tag8Enumeration = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID9", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Enumeration tag9Enumeration = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID10", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Enumeration tag10Enumeration = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PAYMENT_APPLICATION_ID")
+   
+   private List<AcctgTrans> acctgTranses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORIG_PAYMENT_APPLICATION_ID")
    
@@ -185,7 +299,7 @@ fieldMapColumns.put("PaymentApplication", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("paymentApplicationId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("paymentApplicationId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("toPaymentId");this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("amountApplied");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("paymentApplicationId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("toPaymentId");this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("amountApplied");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -291,6 +405,76 @@ fieldMapColumns.put("PaymentApplication", fields);
     public void setCreatedTxStamp(Timestamp createdTxStamp) {
         this.createdTxStamp = createdTxStamp;
     }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId1 the acctgTagEnumId1 to set
+     */
+    public void setAcctgTagEnumId1(String acctgTagEnumId1) {
+        this.acctgTagEnumId1 = acctgTagEnumId1;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId2 the acctgTagEnumId2 to set
+     */
+    public void setAcctgTagEnumId2(String acctgTagEnumId2) {
+        this.acctgTagEnumId2 = acctgTagEnumId2;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId3 the acctgTagEnumId3 to set
+     */
+    public void setAcctgTagEnumId3(String acctgTagEnumId3) {
+        this.acctgTagEnumId3 = acctgTagEnumId3;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId4 the acctgTagEnumId4 to set
+     */
+    public void setAcctgTagEnumId4(String acctgTagEnumId4) {
+        this.acctgTagEnumId4 = acctgTagEnumId4;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId5 the acctgTagEnumId5 to set
+     */
+    public void setAcctgTagEnumId5(String acctgTagEnumId5) {
+        this.acctgTagEnumId5 = acctgTagEnumId5;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId6 the acctgTagEnumId6 to set
+     */
+    public void setAcctgTagEnumId6(String acctgTagEnumId6) {
+        this.acctgTagEnumId6 = acctgTagEnumId6;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId7 the acctgTagEnumId7 to set
+     */
+    public void setAcctgTagEnumId7(String acctgTagEnumId7) {
+        this.acctgTagEnumId7 = acctgTagEnumId7;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId8 the acctgTagEnumId8 to set
+     */
+    public void setAcctgTagEnumId8(String acctgTagEnumId8) {
+        this.acctgTagEnumId8 = acctgTagEnumId8;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId9 the acctgTagEnumId9 to set
+     */
+    public void setAcctgTagEnumId9(String acctgTagEnumId9) {
+        this.acctgTagEnumId9 = acctgTagEnumId9;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTagEnumId10 the acctgTagEnumId10 to set
+     */
+    public void setAcctgTagEnumId10(String acctgTagEnumId10) {
+        this.acctgTagEnumId10 = acctgTagEnumId10;
+    }
 
     /**
      * Auto generated value accessor.
@@ -383,6 +567,76 @@ fieldMapColumns.put("PaymentApplication", fields);
     public Timestamp getCreatedTxStamp() {
         return this.createdTxStamp;
     }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId1() {
+        return this.acctgTagEnumId1;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId2() {
+        return this.acctgTagEnumId2;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId3() {
+        return this.acctgTagEnumId3;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId4() {
+        return this.acctgTagEnumId4;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId5() {
+        return this.acctgTagEnumId5;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId6() {
+        return this.acctgTagEnumId6;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId7() {
+        return this.acctgTagEnumId7;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId8() {
+        return this.acctgTagEnumId8;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId9() {
+        return this.acctgTagEnumId9;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcctgTagEnumId10() {
+        return this.acctgTagEnumId10;
+    }
 
     /**
      * Auto generated method that gets the related <code>Payment</code> by the relation named <code>Payment</code>.
@@ -462,6 +716,127 @@ fieldMapColumns.put("PaymentApplication", fields);
         return this.glAccount;
     }
     /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>tag1Enumeration</code>.
+     * @return the <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Enumeration gettag1Enumeration() throws RepositoryException {
+        if (this.tag1Enumeration == null) {
+            this.tag1Enumeration = getRelatedOne(Enumeration.class, "tag1Enumeration");
+        }
+        return this.tag1Enumeration;
+    }
+    /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>tag2Enumeration</code>.
+     * @return the <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Enumeration gettag2Enumeration() throws RepositoryException {
+        if (this.tag2Enumeration == null) {
+            this.tag2Enumeration = getRelatedOne(Enumeration.class, "tag2Enumeration");
+        }
+        return this.tag2Enumeration;
+    }
+    /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>tag3Enumeration</code>.
+     * @return the <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Enumeration gettag3Enumeration() throws RepositoryException {
+        if (this.tag3Enumeration == null) {
+            this.tag3Enumeration = getRelatedOne(Enumeration.class, "tag3Enumeration");
+        }
+        return this.tag3Enumeration;
+    }
+    /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>tag4Enumeration</code>.
+     * @return the <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Enumeration gettag4Enumeration() throws RepositoryException {
+        if (this.tag4Enumeration == null) {
+            this.tag4Enumeration = getRelatedOne(Enumeration.class, "tag4Enumeration");
+        }
+        return this.tag4Enumeration;
+    }
+    /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>tag5Enumeration</code>.
+     * @return the <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Enumeration gettag5Enumeration() throws RepositoryException {
+        if (this.tag5Enumeration == null) {
+            this.tag5Enumeration = getRelatedOne(Enumeration.class, "tag5Enumeration");
+        }
+        return this.tag5Enumeration;
+    }
+    /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>tag6Enumeration</code>.
+     * @return the <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Enumeration gettag6Enumeration() throws RepositoryException {
+        if (this.tag6Enumeration == null) {
+            this.tag6Enumeration = getRelatedOne(Enumeration.class, "tag6Enumeration");
+        }
+        return this.tag6Enumeration;
+    }
+    /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>tag7Enumeration</code>.
+     * @return the <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Enumeration gettag7Enumeration() throws RepositoryException {
+        if (this.tag7Enumeration == null) {
+            this.tag7Enumeration = getRelatedOne(Enumeration.class, "tag7Enumeration");
+        }
+        return this.tag7Enumeration;
+    }
+    /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>tag8Enumeration</code>.
+     * @return the <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Enumeration gettag8Enumeration() throws RepositoryException {
+        if (this.tag8Enumeration == null) {
+            this.tag8Enumeration = getRelatedOne(Enumeration.class, "tag8Enumeration");
+        }
+        return this.tag8Enumeration;
+    }
+    /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>tag9Enumeration</code>.
+     * @return the <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Enumeration gettag9Enumeration() throws RepositoryException {
+        if (this.tag9Enumeration == null) {
+            this.tag9Enumeration = getRelatedOne(Enumeration.class, "tag9Enumeration");
+        }
+        return this.tag9Enumeration;
+    }
+    /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>tag10Enumeration</code>.
+     * @return the <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Enumeration gettag10Enumeration() throws RepositoryException {
+        if (this.tag10Enumeration == null) {
+            this.tag10Enumeration = getRelatedOne(Enumeration.class, "tag10Enumeration");
+        }
+        return this.tag10Enumeration;
+    }
+    /**
+     * Auto generated method that gets the related <code>AcctgTrans</code> by the relation named <code>AcctgTrans</code>.
+     * @return the list of <code>AcctgTrans</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AcctgTrans> getAcctgTranses() throws RepositoryException {
+        if (this.acctgTranses == null) {
+            this.acctgTranses = getRelated(AcctgTrans.class, "AcctgTrans");
+        }
+        return this.acctgTranses;
+    }
+    /**
      * Auto generated method that gets the related <code>AgreementTermBilling</code> by the relation named <code>AgreementTermBilling</code>.
      * @return the list of <code>AgreementTermBilling</code>
      * @throws RepositoryException if an error occurs
@@ -535,6 +910,83 @@ fieldMapColumns.put("PaymentApplication", fields);
     }
     /**
      * Auto generated value setter.
+     * @param tag1Enumeration the tag1Enumeration to set
+    */
+    public void settag1Enumeration(Enumeration tag1Enumeration) {
+        this.tag1Enumeration = tag1Enumeration;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag2Enumeration the tag2Enumeration to set
+    */
+    public void settag2Enumeration(Enumeration tag2Enumeration) {
+        this.tag2Enumeration = tag2Enumeration;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag3Enumeration the tag3Enumeration to set
+    */
+    public void settag3Enumeration(Enumeration tag3Enumeration) {
+        this.tag3Enumeration = tag3Enumeration;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag4Enumeration the tag4Enumeration to set
+    */
+    public void settag4Enumeration(Enumeration tag4Enumeration) {
+        this.tag4Enumeration = tag4Enumeration;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag5Enumeration the tag5Enumeration to set
+    */
+    public void settag5Enumeration(Enumeration tag5Enumeration) {
+        this.tag5Enumeration = tag5Enumeration;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag6Enumeration the tag6Enumeration to set
+    */
+    public void settag6Enumeration(Enumeration tag6Enumeration) {
+        this.tag6Enumeration = tag6Enumeration;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag7Enumeration the tag7Enumeration to set
+    */
+    public void settag7Enumeration(Enumeration tag7Enumeration) {
+        this.tag7Enumeration = tag7Enumeration;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag8Enumeration the tag8Enumeration to set
+    */
+    public void settag8Enumeration(Enumeration tag8Enumeration) {
+        this.tag8Enumeration = tag8Enumeration;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag9Enumeration the tag9Enumeration to set
+    */
+    public void settag9Enumeration(Enumeration tag9Enumeration) {
+        this.tag9Enumeration = tag9Enumeration;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag10Enumeration the tag10Enumeration to set
+    */
+    public void settag10Enumeration(Enumeration tag10Enumeration) {
+        this.tag10Enumeration = tag10Enumeration;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTranses the acctgTranses to set
+    */
+    public void setAcctgTranses(List<AcctgTrans> acctgTranses) {
+        this.acctgTranses = acctgTranses;
+    }
+    /**
+     * Auto generated value setter.
      * @param agreementTermBillings the agreementTermBillings to set
     */
     public void setAgreementTermBillings(List<AgreementTermBilling> agreementTermBillings) {
@@ -566,6 +1018,16 @@ fieldMapColumns.put("PaymentApplication", fields);
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
         setCreatedTxStamp((Timestamp) mapValue.get("createdTxStamp"));
+        setAcctgTagEnumId1((String) mapValue.get("acctgTagEnumId1"));
+        setAcctgTagEnumId2((String) mapValue.get("acctgTagEnumId2"));
+        setAcctgTagEnumId3((String) mapValue.get("acctgTagEnumId3"));
+        setAcctgTagEnumId4((String) mapValue.get("acctgTagEnumId4"));
+        setAcctgTagEnumId5((String) mapValue.get("acctgTagEnumId5"));
+        setAcctgTagEnumId6((String) mapValue.get("acctgTagEnumId6"));
+        setAcctgTagEnumId7((String) mapValue.get("acctgTagEnumId7"));
+        setAcctgTagEnumId8((String) mapValue.get("acctgTagEnumId8"));
+        setAcctgTagEnumId9((String) mapValue.get("acctgTagEnumId9"));
+        setAcctgTagEnumId10((String) mapValue.get("acctgTagEnumId10"));
         postInit();
     }
 
@@ -586,6 +1048,16 @@ fieldMapColumns.put("PaymentApplication", fields);
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());
         mapValue.put("createdTxStamp", getCreatedTxStamp());
+        mapValue.put("acctgTagEnumId1", getAcctgTagEnumId1());
+        mapValue.put("acctgTagEnumId2", getAcctgTagEnumId2());
+        mapValue.put("acctgTagEnumId3", getAcctgTagEnumId3());
+        mapValue.put("acctgTagEnumId4", getAcctgTagEnumId4());
+        mapValue.put("acctgTagEnumId5", getAcctgTagEnumId5());
+        mapValue.put("acctgTagEnumId6", getAcctgTagEnumId6());
+        mapValue.put("acctgTagEnumId7", getAcctgTagEnumId7());
+        mapValue.put("acctgTagEnumId8", getAcctgTagEnumId8());
+        mapValue.put("acctgTagEnumId9", getAcctgTagEnumId9());
+        mapValue.put("acctgTagEnumId10", getAcctgTagEnumId10());
         return mapValue;
     }
 

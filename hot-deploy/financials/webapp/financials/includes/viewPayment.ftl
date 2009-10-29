@@ -31,11 +31,11 @@ If you have come this far, payment should be a valid Payment Object.
   <#if payment.isNotPaid()>
     <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<a class="subMenuButton" href="<@ofbizUrl>editPayment?paymentId=${payment.paymentId}</@ofbizUrl>">${uiLabelMap.CommonEdit}</a></#assign>
   </#if>
-  <#if isDisbursement && payment.isNotPaid()>
+  <#if isDisbursement && payment.isNotPaid() && payment.isReadyToPost()>
     <@form name="paymentSentAction" url="setPaymentStatus" paymentId=payment.paymentId statusId="PMNT_SENT" />
     <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<@submitFormLink form="paymentSentAction" text=uiLabelMap.FinancialsPaymentStatusToSent class="subMenuButton" /></#assign>
   </#if>
-  <#if !isDisbursement && payment.isNotPaid()>
+  <#if !isDisbursement && payment.isNotPaid() && payment.isReadyToPost()>
     <@form name="paymentReceivedAction" url="setPaymentStatus" paymentId=payment.paymentId statusId="PMNT_RECEIVED" />
     <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<@submitFormLink form="paymentReceivedAction" text=uiLabelMap.FinancialsPaymentStatusToReceived class="subMenuButton" /></#assign>
   </#if>
@@ -119,7 +119,7 @@ If you have come this far, payment should be a valid Payment Object.
     <@sectionHeader title=uiLabelMap.FinancialsPaymentApplications headerClass="screenlet-header" titleClass="boxhead" />
     <div class="screenlet-body">
       <#if paymentApplicationsList?has_content>
-        <#if hasApplyPermission>
+        <#if hasApplyPermission && !(allocatePaymentTagsToApplications && (payment.isReceived() || payment.isSent()))>
           <#if isTaxPayment>
             ${screens.render("component://financials/widget/financials/screens/common/PaymentScreens.xml#EditPaymentApplicationsTax")}
           <#else>
@@ -135,7 +135,7 @@ If you have come this far, payment should be a valid Payment Object.
       </#if>
       <#if paymentApplicationsList?has_content && paymentApplicationsListGlAccounts?has_content><br/></#if>
       <#if paymentApplicationsListGlAccounts?has_content>
-        <#if hasApplyPermission>
+        <#if hasApplyPermission && !(allocatePaymentTagsToApplications && (payment.isReceived() || payment.isSent()))>
           ${screens.render("component://financials/widget/financials/screens/common/PaymentScreens.xml#EditPaymentApplicationsGl")}
         <#else>
           ${screens.render("component://financials/widget/financials/screens/common/PaymentScreens.xml#ViewPaymentApplicationsGl")}
@@ -181,7 +181,7 @@ If you have come this far, payment should be a valid Payment Object.
 </#if>
 
 
-<#if hasAmountToApply && hasApplyPermission>
+<#if hasAmountToApply && hasApplyPermission && !(allocatePaymentTagsToApplications && (payment.isReceived() || payment.isSent()))>
   <div class="screenlet">
     <#if isTaxPayment>
       <@sectionHeader title=uiLabelMap.FinancialsApplyPaymentToTaxAuth headerClass="screenlet-header" titleClass="boxhead" />
@@ -204,7 +204,7 @@ If you have come this far, payment should be a valid Payment Object.
     </#if>  
   </div>
 </#if>  
-<#if hasAmountToApply && hasApplyPermission>
+<#if hasAmountToApply && hasApplyPermission && !(allocatePaymentTagsToApplications && (payment.isReceived() || payment.isSent()))>
   <div class="screenlet">  
     <@sectionHeader title=uiLabelMap.FinancialsApplyPaymentToGlAccount headerClass="screenlet-header" titleClass="boxhead" />
     <div class="screenlet-body">${screens.render("component://financials/widget/financials/screens/common/PaymentScreens.xml#AddPaymentApplicationGl")}</div>

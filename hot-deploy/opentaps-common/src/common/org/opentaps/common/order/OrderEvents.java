@@ -1399,11 +1399,14 @@ public final class OrderEvents {
             Map<String, Object> shipGroupLine = FastMap.newInstance();
 
             String carrierName = org.opentaps.common.party.PartyHelper.getPartyName(shipGroup.getCarrierParty());
-            if (carrierName != null) {
+            if (UtilValidate.isNotEmpty(carrierName)) {
                 shipGroupLine.put("carrierName", carrierName);
             }
             if (shipGroup.getShipmentMethodType() != null) {
                 shipGroupLine.put("shipmentMethodType", shipGroup.getShipmentMethodType().getDescription());
+            }
+            if (UtilValidate.isNotEmpty(shipGroup.getShippingInstructions())) {
+                shipGroupLine.put("shippingInstructions", shipGroup.getShippingInstructions());
             }
             shipGroupList.add(shipGroupLine);
         }

@@ -375,11 +375,11 @@ For more information, please see documentation/opentapsFormMacros.html
  </tr>
 </#macro>
 
-<#macro inputSelect name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false>
+<#macro inputSelect name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false class="inputBox">
   <#if key == ""><#assign listKey = name><#else><#assign listKey = key></#if>
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
-  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>disabled="disabled"</#if>>
+  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="${class}" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>disabled="disabled"</#if>>
     <#if !required><option value="">${defaultOptionText}</option></#if>
     <#list list as option>
       <#if option.get(listKey) == defaultValue || listKey == defaultValue><#assign selected = "selected=\"selected\""><#else><#assign selected = ""></#if>
@@ -638,18 +638,18 @@ For more information, please see documentation/opentapsFormMacros.html
 </#macro>
 
 <#-- auto complete Product -->
-<#macro inputAutoCompleteProduct name url="getAutoCompleteProduct" id="" form="" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name url=url id=id form=form lookup="LookupProduct" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+<#macro inputAutoCompleteProduct name url="getAutoCompleteProduct" id="" form="" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 maxlength=50 errorField="" tabIndex="" onChange="">
+  <@inputAutoComplete name=name url=url id=id form=form lookup="LookupProduct" styleClass=styleClass default=default index=index size=size maxlength=maxlength errorField=errorField tabIndex=tabIndex onChange=onChange/>
 </#macro>
 
-<#macro inputAutoCompleteProductCell name url="getAutoCompleteProduct" id="" form="" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <td><@inputAutoCompleteProduct name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/></td>
+<#macro inputAutoCompleteProductCell name url="getAutoCompleteProduct" id="" form="" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 maxlength=50 errorField="" tabIndex="" onChange="">
+  <td><@inputAutoCompleteProduct name=name id=id url=url styleClass=styleClass default=default index=index size=size maxlength=maxlength errorField=errorField tabIndex=tabIndex onChange=onChange/></td>
 </#macro>
 
-<#macro inputAutoCompleteProductRow title name titleClass="tableheadtext" url="getAutoCompleteProduct" id="" form="" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+<#macro inputAutoCompleteProductRow title name titleClass="tableheadtext" url="getAutoCompleteProduct" id="" form="" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 maxlength=50 errorField="" tabIndex="" onChange="">
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputAutoCompleteProductCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+    <@inputAutoCompleteProductCell name=name id=id url=url styleClass=styleClass default=default index=index size=size maxlength=maxlength errorField=errorField tabIndex=tabIndex onChange=onChange/>
   </tr>
 </#macro>
 
@@ -1473,5 +1473,50 @@ For more information, please see documentation/opentapsFormMacros.html
         <b>${tag.description}:</b> ${tagValue.description}
       </#if>
     </#list>
+  </#list>
+</#macro>
+
+<#macro accountingTagsInputCells tags prefix="tag" tagColSpan="1" suffix="" entity="" tabIndex="" readonly="false">
+  <#assign ti=tabIndex />
+  <#list tags as tag>
+  <#assign tagName="${prefix}${tag.index}" />
+  <!-- only display tags that are set to something -->
+  <#assign fieldName = "acctgTagEnumId${tag.index}"/>
+    <#if entity?has_content>
+      <#assign default=entity.get("acctgTagEnumId${tag.index}")! />
+    <#elseif tag.hasDefaultValue()>
+      <#assign default=tag.defaultValue />
+    </#if>
+    <#if tag.isRequired()>
+      <#assign tagTitleClass="tableheadtext requiredField" />
+    <#else>
+      <#assign tagTitleClass="tableheadtext" />
+    </#if>
+  <#if readonly == "true">  
+	 <#if entity?has_content && entity.get(fieldName)?has_content>
+	  <tr class="viewManyTR2">  
+	    <td/>
+	    <td><span class="${tagTitleClass}">${tag.description}</span></td>
+	    <td colspan=tagColSpan>
+        <#list tag.tagValues as tagValue>
+	      <#if tagValue.enumId == entity.get(fieldName)>
+	        ${tagValue.description}
+	      </#if>
+	    </#list>
+	    </td>
+	  </tr> 
+	 </#if>	    
+  <#else>
+	  <tr class="viewManyTR2">  
+	    <td/>
+	    <td colspan=${tagColSpan}><span class="${tagTitleClass}">${tag.description}</span></td>
+	    <td colspan=${tagColSpan}>
+    	<@inputSelect name="${tagName}" list=tag.tagValues key="enumId" displayField="description" required=false default=default ignoreParameters=true/>
+	    </td>
+	  </tr>  
+  </#if>
+   <#if ti?has_content>
+     <#assign ti=ti+1 />
+   </#if>
   </#list>
 </#macro>

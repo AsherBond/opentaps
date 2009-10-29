@@ -44,6 +44,7 @@ import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
+import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
@@ -63,10 +64,14 @@ import org.opentaps.common.product.UtilProduct;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.base.entities.InvoiceAdjustment;
+import org.opentaps.domain.base.entities.PaymentApplication;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
+import org.opentaps.domain.billing.payment.Payment;
+import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
 import org.opentaps.domain.inventory.InventoryItem;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
 import org.opentaps.domain.ledger.InvoiceLedgerServiceInterface;
@@ -830,18 +835,29 @@ public final class LedgerServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-
+        Locale locale = (Locale) context.get("locale");
         String paymentId = (String) context.get("paymentId");
         try {
-            GenericValue payment = delegator.findByPrimaryKey("Payment", UtilMisc.toMap("paymentId", paymentId));
-
+            DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+            DomainsDirectory domains = domainLoader.loadDomainsDirectory();
+            PaymentRepositoryInterface paymentRepository = domains.getBillingDomain().getPaymentRepository();
+            Payment payment = paymentRepository.getPaymentById(paymentId);
+            OrganizationRepositoryInterface ori =  domains.getOrganizationDomain().getOrganizationRepository();
+            Organization organization = ori.getOrganizationById(payment.getOrganizationPartyId());
+            GenericValue paymentValue = delegator.findByPrimaryKey("Payment", UtilMisc.toMap("paymentId", paymentId));
+            
+            // check the payment if ready to post, else return error.  This should only return false if your organization
+            // has been configured to require accounting tags for payment applications, and the payment is not fully allocated
+            if (!payment.isReadyToPost()) {
+                return ServiceUtil.returnError(UtilProperties.getMessage("FinancialsErrorLabels", "FinancialsError_CannotPostPartiallyAllocatedPaymentToGl", locale));
+            }
             // payroll runs this other service.  the extra parameters prevent a new transaction from being opened
-            if (UtilFinancial.isPaycheck(payment)) {
-                return dispatcher.runSync("postPaycheckToGl", UtilMisc.toMap("paycheck", payment, "userLogin", userLogin), 60, false);
+            if (payment.isPayCheck()) {
+                return dispatcher.runSync("postPaycheckToGl", UtilMisc.toMap("paycheck", paymentValue, "userLogin", userLogin), 60, false);
             }
 
             // figure out the parties involved and the payment gl account
-            Map<String, Object> results = dispatcher.runSync("getPaymentAccountAndParties", UtilMisc.toMap("paymentId", paymentId), -1, false);
+            Map results = dispatcher.runSync("getPaymentAccountAndParties", UtilMisc.toMap("paymentId", paymentId), -1, false);
             if (results.get(ModelService.RESPONSE_MESSAGE).equals(ModelService.RESPOND_ERROR)) {
                 return results;
             }
@@ -850,79 +866,139 @@ public final class LedgerServices {
             String paymentGlAccountId = (String) results.get("glAccountId");
 
             // determine the amount of the payment involved
-            BigDecimal conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, payment.getString("currencyUomId"));
-            if ((payment.get("amount") == null) || (payment.getBigDecimal("amount").signum() == 0)) {
-                Debug.logWarning("Payment [" + paymentId + "] has an amount of [" + payment.getBigDecimal("amount") + "], not posting", MODULE);
+            BigDecimal conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, payment.getCurrencyUomId());
+            if ((payment.getAmount() == null) || (payment.getAmount().compareTo(BigDecimal.ZERO) == 0)) {
+                Debug.logWarning("Payment [" + paymentId + "] has an amount of [" + payment.getAmount() + "], not posting", MODULE);
                 return ServiceUtil.returnSuccess();
             }
-            BigDecimal transactionAmount = conversionFactor.multiply(payment.getBigDecimal("amount"));
-
-            // These Maps hold glAccountId (String) -> amount (BigDecimal) pairs are designed to track how much of the payment goes to each gl account.
-            Map<String, BigDecimal> paymentGlAccountAmounts = UtilMisc.toMap(paymentGlAccountId, transactionAmount);
-            Map<String, BigDecimal> offsettingGlAccountAmounts = new HashMap<String, BigDecimal>();
-
-            // TODO: Use BigDecimal for this.
-            // Loop through all PaymentApplications and see if each one implies a specific offsetting GL account either because it is
-            // specifically named or because it is part of a tax payment and if so, use the amount of that application
-            BigDecimal unassignedAmount = transactionAmount;
-
-            List<GenericValue> paymentApplications = payment.getRelated("PaymentApplication");
-            for (Iterator<GenericValue> pAi = paymentApplications.iterator(); pAi.hasNext();) {
-                GenericValue appl = pAi.next();
-
-                if (appl.get("amountApplied") == null) {
+            
+            // construct transaction entries for posting
+            List acctgTransEntries = FastList.newInstance();
+            if (organization.allocatePaymentTagsToApplications()) {
+                // if allocate payment tags in application, then it should make one transaction entry per payment application and copy the tags
+                // from the payment application to the transaction entry.  
+                for (PaymentApplication appl : payment.getPaymentApplications()) {
+                    Map offsettingGlAccountAmounts = new HashMap();
+                    
+                    // skip payment applications with null amount
+                    if (appl.getAmountApplied() == null) {
                         Debug.logWarning("Payment Application " + appl + " has a null amount, skipping", MODULE);
                         continue;
-                }
-                BigDecimal applAmount = appl.getBigDecimal("amountApplied").multiply(conversionFactor);
-
-                if (appl.getString("overrideGlAccountId") != null) {
-                    offsettingGlAccountAmounts.put(appl.getString("overrideGlAccountId"), applAmount);
-                    unassignedAmount = unassignedAmount.subtract(applAmount);
-                } else if (appl.getString("taxAuthGeoId") != null) {
+                    }
+                    
+                    // determine the offsetting GL account for the applied amount
+                    BigDecimal applAmount = appl.getAmountApplied().multiply(conversionFactor);
+                    Map paymentGlAccountAmounts = UtilMisc.toMap(paymentGlAccountId, applAmount);
+                    if (appl.getOverrideGlAccountId() != null) {
+                        // if the payment application already has a gl account, then use it
+                        offsettingGlAccountAmounts.put(appl.getOverrideGlAccountId(), applAmount);
+                    } else if (appl.getTaxAuthGeoId() != null) {
+                        // if payment is applied to tax auth, then get the gl account for the tax authority
                         GenericValue taxAuthGlAccount = delegator.findByPrimaryKeyCache("TaxAuthorityGlAccount",
-                                        UtilMisc.toMap("organizationPartyId", organizationPartyId, "taxAuthPartyId", transactionPartyId, "taxAuthGeoId", appl.getString("taxAuthGeoId")));
+                                            UtilMisc.toMap("organizationPartyId", organizationPartyId, "taxAuthPartyId", transactionPartyId, "taxAuthGeoId", appl.getTaxAuthGeoId()));
+                        offsettingGlAccountAmounts.put(taxAuthGlAccount.getString("glAccountId"), applAmount);
+                    } else {
+                        // otherwise, use the offsetting GL account of the payment for the payment application's amount
+                        // NOTE: this must be done here, since SALES_TAX_PAYMENT would not have offsetting gl accounts configured -- its GL is configured with tax authority
+                        String offsettingGlAccountId = getOffsettingPaymentGlAccount(dispatcher, paymentValue, organizationPartyId, userLogin);
+                        offsettingGlAccountAmounts.put(offsettingGlAccountId, applAmount);
+                    }
+                    
+                    // determine which to credit and debit
+                    Map creditGlAccountAmounts = null;
+                    Map debitGlAccountAmounts = null;
+                    if (payment.isDisbursement()) {
+                        creditGlAccountAmounts = paymentGlAccountAmounts;
+                        debitGlAccountAmounts = offsettingGlAccountAmounts;
+                    } else if (payment.isReceipt()) {
+                        creditGlAccountAmounts = offsettingGlAccountAmounts;
+                        debitGlAccountAmounts = paymentGlAccountAmounts;
+                    } else {
+                        return ServiceUtil.returnError("Cannot Post Payment to GL: Payment with paymentId " + paymentId + " has unsupported paymentTypeId " + payment.getPaymentTypeId() + " (Must be or have a parent type of DISBURSEMENT or RECEIPT.)");
+                    }
+
+                    if ((creditGlAccountAmounts == null) || (creditGlAccountAmounts.keySet().size() == 0)) {
+                        return ServiceUtil.returnError("No credit GL accounts found for payment posting");
+                    }
+                    if (debitGlAccountAmounts == null || (debitGlAccountAmounts.keySet().size() == 0)) {
+                        return ServiceUtil.returnError("No debit GL accounts found for payment posting");
+                    }
+                    
+                    // create transaction entries for this payment application, and add it to the list of accounting transaction entries for posting
+                    acctgTransEntries.addAll(makePaymentEntries(appl, creditGlAccountAmounts, debitGlAccountAmounts,
+                            organizationPartyId, transactionPartyId, delegator));
+                }
+            } else {
+                // accounting tags, if any, are in payment itself.  We will need to check for application-specific gl accounts, otherwise post based on payment's gl accounts
+                BigDecimal transactionAmount = conversionFactor.multiply(payment.getAmount());
+
+                // These Maps hold glAccountId (String) -> amount (Double) pairs are designed to track how much of the payment goes to each gl account.
+                Map paymentGlAccountAmounts = UtilMisc.toMap(paymentGlAccountId, transactionAmount);
+                Map offsettingGlAccountAmounts = new HashMap();
+
+                // TODO: Use BigDecimal for this.
+                // Loop through all PaymentApplications and see if each one implies a specific offsetting GL account either because it is
+                // specifically named or because it is part of a tax payment and if so, use the amount of that application
+                BigDecimal unassignedAmount = transactionAmount;
+
+                List paymentApplications = payment.getPaymentApplications();
+                for (Iterator pAi = paymentApplications.iterator(); pAi.hasNext();) {
+                    PaymentApplication appl = (PaymentApplication) pAi.next();
+
+                    if (appl.getAmountApplied() == null) {
+                        Debug.logWarning("Payment Application " + appl + " has a null amount, skipping", MODULE);
+                        continue;
+                    }
+                    BigDecimal applAmount = appl.getAmountApplied().multiply(conversionFactor);
+
+                    if (appl.getOverrideGlAccountId() != null) {
+                        offsettingGlAccountAmounts.put(appl.getOverrideGlAccountId(), applAmount);
+                        unassignedAmount = unassignedAmount.subtract(applAmount);
+                    } else if (appl.getString("taxAuthGeoId") != null) {
+                        GenericValue taxAuthGlAccount = delegator.findByPrimaryKeyCache("TaxAuthorityGlAccount",
+                                            UtilMisc.toMap("organizationPartyId", organizationPartyId, "taxAuthPartyId", transactionPartyId, "taxAuthGeoId", appl.getTaxAuthGeoId()));
                         offsettingGlAccountAmounts.put(taxAuthGlAccount.getString("glAccountId"), applAmount);
                         unassignedAmount = unassignedAmount.subtract(applAmount);
+                    }
                 }
+
+                // now put the residual into the offsettingGlAccountId
+                if (unassignedAmount.compareTo(BigDecimal.ZERO) == 1) {
+                    // NOTE: this must be done here, since SALES_TAX_PAYMENT would not have offsetting gl accounts configured -- its GL is configured with tax authority
+                    String offsettingGlAccountId = getOffsettingPaymentGlAccount(dispatcher, paymentValue, organizationPartyId, userLogin);
+                    offsettingGlAccountAmounts.put(offsettingGlAccountId, unassignedAmount);
+                }
+
+                // determine which to credit and debit
+                Map creditGlAccountAmounts = null;
+                Map debitGlAccountAmounts = null;
+                if (payment.isDisbursement()) {
+                    creditGlAccountAmounts = paymentGlAccountAmounts;
+                    debitGlAccountAmounts = offsettingGlAccountAmounts;
+                } else if (payment.isReceipt()) {
+                    creditGlAccountAmounts = offsettingGlAccountAmounts;
+                    debitGlAccountAmounts = paymentGlAccountAmounts;
+                } else {
+                    return ServiceUtil.returnError("Cannot Post Payment to GL: Payment with paymentId " + paymentId + " has unsupported paymentTypeId " + payment.getPaymentTypeId() + " (Must be or have a parent type of DISBURSEMENT or RECEIPT.)");
+                }
+
+                if ((creditGlAccountAmounts == null) || (creditGlAccountAmounts.keySet().size() == 0)) {
+                    return ServiceUtil.returnError("No credit GL accounts found for posting payment [" + paymentId + "]");
+                }
+                if (debitGlAccountAmounts == null) {
+                    return ServiceUtil.returnError("No debit GL accounts found for posting payment [" + paymentId + "]");
+                }
+                acctgTransEntries = makePaymentEntries(payment, creditGlAccountAmounts, debitGlAccountAmounts, organizationPartyId, transactionPartyId, delegator);
             }
 
-            // now put the residual into the offsettingGlAccountId
-            if (unassignedAmount.signum() > 0) {
-                String offsettingGlAccountId = getOffsettingPaymentGlAccount(dispatcher, payment, organizationPartyId, userLogin);
-                offsettingGlAccountAmounts.put(offsettingGlAccountId, unassignedAmount);
-            }
-
-            // determine which to credit and debit
-            Map<String, BigDecimal> creditGlAccountAmounts = null;
-            Map<String, BigDecimal> debitGlAccountAmounts = null;
-            if (UtilAccounting.isDisbursement(payment)) {
-                creditGlAccountAmounts = paymentGlAccountAmounts;
-                debitGlAccountAmounts = offsettingGlAccountAmounts;
-            } else if (UtilAccounting.isReceipt(payment)) {
-                creditGlAccountAmounts = offsettingGlAccountAmounts;
-                debitGlAccountAmounts = paymentGlAccountAmounts;
-            } else {
-                return ServiceUtil.returnError("Cannot Post Payment to GL: Payment with paymentId " + paymentId + " has unsupported paymentTypeId " + payment.getString("paymentTypeId") + " (Must be or have a parent type of DISBURSEMENT or RECEIPT.)");
-            }
-
-            if ((creditGlAccountAmounts == null) || (creditGlAccountAmounts.keySet().size() == 0)) {
-                return ServiceUtil.returnError("No credit GL accounts found for payment posting");
-            }
-            if (debitGlAccountAmounts == null) {
-                return ServiceUtil.returnError("No debit GL accounts found for payment posting");
-            }
-
-            List<GenericValue> acctgTransEntries = makePaymentEntries(payment, creditGlAccountAmounts, debitGlAccountAmounts,
-                    organizationPartyId, transactionPartyId, delegator);
-
-            // Post transaction
-            Map<String, Object> tmpMap = UtilMisc.<String, Object>toMap("acctgTransEntries", acctgTransEntries,
+        // Post transaction
+        if (UtilValidate.isNotEmpty(acctgTransEntries)) {
+            Map tmpMap = UtilMisc.toMap("acctgTransEntries", acctgTransEntries,
                     "glFiscalTypeId", "ACTUAL", "acctgTransTypeId", "PAYMENT_ACCTG_TRANS",
                     "paymentId", paymentId, "userLogin", userLogin);
             // set the transaction date to the effective date of the payment
-            if (payment.get("effectiveDate") != null) {
-                tmpMap.put("transactionDate", payment.get("effectiveDate"));
+            if (payment.getEffectiveDate() != null) {
+                tmpMap.put("transactionDate", payment.getEffectiveDate());
             } else {
                 Debug.logWarning("Payment [" + paymentId + "] has no effective date, transaction date will be set to now", MODULE);
                 tmpMap.put("transactionDate", UtilDateTime.nowTimestamp());
@@ -932,14 +1008,25 @@ public final class LedgerServices {
 
             if (((String) tmpMap.get(ModelService.RESPONSE_MESSAGE)).equals(ModelService.RESPOND_SUCCESS)) {
                 results = ServiceUtil.returnSuccess();
-                results.put("acctgTransId", tmpMap.get("acctgTransId"));
+                String acctgTransId = (String) tmpMap.get("acctgTransId");
+                results.put("acctgTransIds", UtilMisc.toList(acctgTransId));
                 return results;
             } else {
                 return tmpMap;
             }
+        } else {
+            return ServiceUtil.returnError("No accounting transaction entries created for payment [" + paymentId + "]");
+        }
+            
         } catch (GenericEntityException ex) {
             return ServiceUtil.returnError(ex.getMessage());
         } catch (GenericServiceException ex) {
+            return ServiceUtil.returnError(ex.getMessage());
+        } catch (RepositoryException ex) {
+            return ServiceUtil.returnError(ex.getMessage());
+        } catch (InfrastructureException ex) {
+            return ServiceUtil.returnError(ex.getMessage());
+        } catch (EntityNotFoundException ex) {
             return ServiceUtil.returnError(ex.getMessage());
         }
     }
@@ -1136,7 +1223,7 @@ public final class LedgerServices {
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static List makePaymentEntries(GenericValue payment, Map creditGlAccountAmounts, Map debitGlAccountAmounts,
+    private static List makePaymentEntries(Payment payment, Map creditGlAccountAmounts, Map debitGlAccountAmounts,
             String organizationPartyId, String transactionPartyId, GenericDelegator delegator) throws GenericEntityException {
         List acctgTransEntries = new LinkedList();
         int itemSeq = 1;
@@ -1159,6 +1246,50 @@ public final class LedgerServices {
                     "organizationPartyId", organizationPartyId, "acctgTransEntryTypeId", "_NA_");
             tmpMap.put("partyId", transactionPartyId);
             UtilAccountingTags.putAllAccountingTags(payment, tmpMap);
+            GenericValue debitAcctTransEntry = delegator.makeValue("AcctgTransEntry", tmpMap);
+            acctgTransEntries.add(debitAcctTransEntry);
+            itemSeq++;
+        }
+
+        return acctgTransEntries;
+    }
+
+    /**
+     * A little helper method to postPaymentToGl.
+     * This method will copy all accounting tags from Payment to each AcctgTransEntry
+     * @param payment a <code>GenericValue</code> value
+     * @param creditGlAccountAmounts a <code>Map</code> value
+     * @param debitGlAccountAmounts a <code>Map</code> value
+     * @param organizationPartyId a <code>String</code> value
+     * @param transactionPartyId a <code>String</code> value
+     * @param delegator a <code>GenericDelegator</code> value
+     * @return a <code>List</code> value
+     * @exception GenericEntityException if an error occurs
+     */
+    @SuppressWarnings("unchecked")
+    private static List makePaymentEntries(PaymentApplication paymentApplication, Map creditGlAccountAmounts, Map debitGlAccountAmounts,
+            String organizationPartyId, String transactionPartyId, GenericDelegator delegator) throws GenericEntityException {
+        List acctgTransEntries = new LinkedList();
+        int itemSeq = 1;
+        for (Iterator ai = creditGlAccountAmounts.keySet().iterator(); ai.hasNext();) {
+            String creditGlAccountId = (String) ai.next();
+            Map tmpMap = UtilMisc.toMap("glAccountId", creditGlAccountId, "debitCreditFlag", "C",
+                    "amount", creditGlAccountAmounts.get(creditGlAccountId), "acctgTransEntrySeqId", Integer.toString(itemSeq),
+                    "organizationPartyId", organizationPartyId, "acctgTransEntryTypeId", "_NA_");
+            tmpMap.put("partyId", transactionPartyId);
+            UtilAccountingTags.putAllAccountingTags(paymentApplication, tmpMap);          // for Payments it's OK to copy the tags right over
+            GenericValue creditAcctTransEntry = delegator.makeValue("AcctgTransEntry", tmpMap);
+            acctgTransEntries.add(creditAcctTransEntry);
+            itemSeq++;
+        }
+
+        for (Iterator ai = debitGlAccountAmounts.keySet().iterator(); ai.hasNext();) {
+            String debitGlAccountId = (String) ai.next();
+            Map tmpMap = UtilMisc.toMap("glAccountId", debitGlAccountId, "debitCreditFlag", "D",
+                    "amount", debitGlAccountAmounts.get(debitGlAccountId), "acctgTransEntrySeqId", Integer.toString(itemSeq),
+                    "organizationPartyId", organizationPartyId, "acctgTransEntryTypeId", "_NA_");
+            tmpMap.put("partyId", transactionPartyId);
+            UtilAccountingTags.putAllAccountingTags(paymentApplication, tmpMap);
             GenericValue debitAcctTransEntry = delegator.makeValue("AcctgTransEntry", tmpMap);
             acctgTransEntries.add(debitAcctTransEntry);
             itemSeq++;

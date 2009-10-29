@@ -79,6 +79,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
         fields.put("costingMethodId", "COSTING_METHOD_ID");
         fields.put("salesInvoiceFooterText", "SALES_INVOICE_FOOTER_TEXT");
+        fields.put("groupSalesTaxOnInvoicePdf", "GROUP_SALES_TAX_ON_INVOICE_PDF");
+        fields.put("allocPaymentTagsToAppl", "ALLOC_PAYMENT_TAGS_TO_APPL");
 fieldMapColumns.put("PartyAcctgPreference", fields);
 }
   public static enum Fields implements EntityFieldInterface<PartyAcctgPreference> {
@@ -106,7 +108,9 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     costingMethodId("costingMethodId"),
-    salesInvoiceFooterText("salesInvoiceFooterText");
+    salesInvoiceFooterText("salesInvoiceFooterText"),
+    groupSalesTaxOnInvoicePdf("groupSalesTaxOnInvoicePdf"),
+    allocPaymentTagsToAppl("allocPaymentTagsToAppl");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -170,6 +174,10 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
    private String costingMethodId;
    @Column(name="SALES_INVOICE_FOOTER_TEXT")
    private String salesInvoiceFooterText;
+   @Column(name="GROUP_SALES_TAX_ON_INVOICE_PDF")
+   private String groupSalesTaxOnInvoicePdf;
+   @Column(name="ALLOC_PAYMENT_TAGS_TO_APPL")
+   private String allocPaymentTagsToAppl;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -252,7 +260,7 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("fiscalYearStartMonth");this.allFieldsNames.add("fiscalYearStartDay");this.allFieldsNames.add("taxFormId");this.allFieldsNames.add("cogsMethodId");this.allFieldsNames.add("baseCurrencyUomId");this.allFieldsNames.add("invoiceSequenceEnumId");this.allFieldsNames.add("invoiceIdPrefix");this.allFieldsNames.add("lastInvoiceNumber");this.allFieldsNames.add("lastInvoiceRestartDate");this.allFieldsNames.add("useInvoiceIdForReturns");this.allFieldsNames.add("quoteSequenceEnumId");this.allFieldsNames.add("quoteIdPrefix");this.allFieldsNames.add("lastQuoteNumber");this.allFieldsNames.add("orderSequenceEnumId");this.allFieldsNames.add("orderIdPrefix");this.allFieldsNames.add("lastOrderNumber");this.allFieldsNames.add("refundPaymentMethodId");this.allFieldsNames.add("errorGlJournalId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("costingMethodId");this.allFieldsNames.add("salesInvoiceFooterText");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("fiscalYearStartMonth");this.allFieldsNames.add("fiscalYearStartDay");this.allFieldsNames.add("taxFormId");this.allFieldsNames.add("cogsMethodId");this.allFieldsNames.add("baseCurrencyUomId");this.allFieldsNames.add("invoiceSequenceEnumId");this.allFieldsNames.add("invoiceIdPrefix");this.allFieldsNames.add("lastInvoiceNumber");this.allFieldsNames.add("lastInvoiceRestartDate");this.allFieldsNames.add("useInvoiceIdForReturns");this.allFieldsNames.add("quoteSequenceEnumId");this.allFieldsNames.add("quoteIdPrefix");this.allFieldsNames.add("lastQuoteNumber");this.allFieldsNames.add("orderSequenceEnumId");this.allFieldsNames.add("orderIdPrefix");this.allFieldsNames.add("lastOrderNumber");this.allFieldsNames.add("refundPaymentMethodId");this.allFieldsNames.add("errorGlJournalId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("costingMethodId");this.allFieldsNames.add("salesInvoiceFooterText");this.allFieldsNames.add("groupSalesTaxOnInvoicePdf");this.allFieldsNames.add("allocPaymentTagsToAppl");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -442,6 +450,20 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
     public void setSalesInvoiceFooterText(String salesInvoiceFooterText) {
         this.salesInvoiceFooterText = salesInvoiceFooterText;
     }
+    /**
+     * Auto generated value setter.
+     * @param groupSalesTaxOnInvoicePdf the groupSalesTaxOnInvoicePdf to set
+     */
+    public void setGroupSalesTaxOnInvoicePdf(String groupSalesTaxOnInvoicePdf) {
+        this.groupSalesTaxOnInvoicePdf = groupSalesTaxOnInvoicePdf;
+    }
+    /**
+     * Auto generated value setter.
+     * @param allocPaymentTagsToAppl the allocPaymentTagsToAppl to set
+     */
+    public void setAllocPaymentTagsToAppl(String allocPaymentTagsToAppl) {
+        this.allocPaymentTagsToAppl = allocPaymentTagsToAppl;
+    }
 
     /**
      * Auto generated value accessor.
@@ -617,6 +639,20 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
      */
     public String getSalesInvoiceFooterText() {
         return this.salesInvoiceFooterText;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getGroupSalesTaxOnInvoicePdf() {
+        return this.groupSalesTaxOnInvoicePdf;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAllocPaymentTagsToAppl() {
+        return this.allocPaymentTagsToAppl;
     }
 
     /**
@@ -831,6 +867,8 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
         setCreatedTxStamp((Timestamp) mapValue.get("createdTxStamp"));
         setCostingMethodId((String) mapValue.get("costingMethodId"));
         setSalesInvoiceFooterText((String) mapValue.get("salesInvoiceFooterText"));
+        setGroupSalesTaxOnInvoicePdf((String) mapValue.get("groupSalesTaxOnInvoicePdf"));
+        setAllocPaymentTagsToAppl((String) mapValue.get("allocPaymentTagsToAppl"));
         postInit();
     }
 
@@ -863,6 +901,8 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
         mapValue.put("createdTxStamp", getCreatedTxStamp());
         mapValue.put("costingMethodId", getCostingMethodId());
         mapValue.put("salesInvoiceFooterText", getSalesInvoiceFooterText());
+        mapValue.put("groupSalesTaxOnInvoicePdf", getGroupSalesTaxOnInvoicePdf());
+        mapValue.put("allocPaymentTagsToAppl", getAllocPaymentTagsToAppl());
         return mapValue;
     }
 

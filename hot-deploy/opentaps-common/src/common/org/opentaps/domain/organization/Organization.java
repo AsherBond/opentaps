@@ -157,5 +157,15 @@ public class Organization extends Party {
             return OrganizationRepositoryInterface.class.cast(repository);
         }
     }
+    
+    /**
+     * Checks if this organization use allocate Payment tags to Applications.
+     * @return a <code>Boolean</code> value
+     * @exception RepositoryException if an error occurs
+     */
+    public Boolean allocatePaymentTagsToApplications() throws RepositoryException {
+        if (getPartyAcctgPreference().getAllocPaymentTagsToAppl() == null) return Boolean.FALSE;
+        return "Y".equals(getPartyAcctgPreference().getAllocPaymentTagsToAppl());
+    }
 
 }

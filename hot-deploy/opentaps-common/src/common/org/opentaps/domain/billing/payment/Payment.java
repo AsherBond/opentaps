@@ -16,11 +16,16 @@
  */
 package org.opentaps.domain.billing.payment;
 
+import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.domain.base.entities.PaymentApplication;
+import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
+import org.opentaps.domain.organization.Organization;
+import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.domain.party.Party;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.ofbiz.base.util.UtilNumber;
+import org.ofbiz.base.util.UtilValidate;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -255,4 +260,49 @@ public class Payment extends org.opentaps.domain.base.entities.Payment {
             return PaymentRepositoryInterface.class.cast(repository);
         }
     }
+
+
+    /**
+     * Checks if the payment is ready to post.
+     * This method should return true:
+     * 1.  if Organization.allocatePaymentTagsToApplications() is not set to "Y"
+     * 2. if Organization.allocatePaymentTagsToApplications() is set to "Y"
+     *  2.1. if there are accounting tags for payments of this type (disbursement or receipt),
+     *  2.2. then check that the payment has been fully allocated -- Payment total amount minus sum of payment applications is zero
+     * @return a <code>Boolean</code> value
+     * @throws RepositoryException if an error occurs
+     */
+    public Boolean isReadyToPost() throws RepositoryException {
+        OrganizationRepositoryInterface ori =  repository.getDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
+        try {
+            Organization organization = ori.getOrganizationById(getOrganizationPartyId());
+            if (!organization.allocatePaymentTagsToApplications()) {
+                return Boolean.TRUE;
+            } else {
+                List<AccountingTagConfigurationForOrganizationAndUsage> tags = ori.getAccountingTagConfiguration(getOrganizationPartyId(), isDisbursement() ? UtilAccountingTags.DISBURSEMENT_PAYMENT_TAG : UtilAccountingTags.RECEIPT_PAYMENT_TAG);
+                for (AccountingTagConfigurationForOrganizationAndUsage tag : tags) {
+                    // if any paymentApplication of this payment missing some required tag, then return false
+                    if (tag.isRequired()) {
+                        for (PaymentApplication paymentApplication : getPaymentApplications()) {
+                            if (UtilValidate.isEmpty(paymentApplication.get("acctgTagEnumId" + tag.getIndex()))) {
+                                return Boolean.FALSE;
+                            }
+                        }
+                    }
+                }
+                // check the payment if have been full allocated
+                BigDecimal leftAmount = getAmount();
+                for (PaymentApplication paymentApplication : getPaymentApplications()) {
+                    leftAmount = leftAmount.subtract(paymentApplication.getAmountApplied()).setScale(DECIMALS, ROUNDING);
+                }
+                if (leftAmount.compareTo(BigDecimal.ZERO) == 0) {
+                    //the payment has been fully allocated
+                    return Boolean.TRUE;
+                }
+            }
+        } catch (EntityNotFoundException e) {
+            throw new RepositoryException(e);
+        }
+        return Boolean.FALSE;
+    }    
 }

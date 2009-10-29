@@ -87,7 +87,7 @@ under the License.
             Posts a payment to General Ledger.
         </description>
         <auto-attributes include="pk" mode="IN" optional="false"/>
-        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+        <attribute name="acctgTransIds" type="java.util.List" mode="OUT" optional="true"/>
     </service>
     <service name="postPaycheckToGl" engine="java"
             location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="postPaycheckToGl">

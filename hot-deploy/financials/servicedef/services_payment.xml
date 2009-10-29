@@ -41,7 +41,19 @@ under the License.
     <description>Accounting Services - Invoice</description>
     <vendor>Open Source Strategies, Inc.</vendor>
     <version>1.0</version>
-    
+    <service name="accountingTagsEntityInterface" engine="interface">
+        <description>Interface for the accounting tags in an entity.</description>
+        <attribute name="acctgTagEnumId1" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId2" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId3" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId4" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId5" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId6" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId7" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId8" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId9" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId10" type="String" mode="IN" optional="true"/>
+    </service>     
     <service name="createPaymentApplication" engine="java" 
             location="com.opensourcestrategies.financials.payment.PaymentServices" invoke="createPaymentApplication" auth="true">
         <description>
@@ -51,6 +63,7 @@ under the License.
           If the amount to apply is greater than what is required for an invoice, it will apply only the required amount.  If you
           want to return an error instead, use parameter checkForOverApplication with value true.
         </description>
+        <implements service="accountingTagsEntityInterface"/>
         <attribute name="paymentId" type="String" mode="IN" optional="false"/>
         <attribute name="invoiceId" type="String" mode="IN" optional="true"/>
         <attribute name="invoiceItemSeqId" type="String" mode="IN" optional="true"/>

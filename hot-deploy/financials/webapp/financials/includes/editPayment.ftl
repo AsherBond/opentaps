@@ -196,7 +196,7 @@
     <td nowrap="nowrap"><input type="text" class="inputBox" name="paymentRefNum" value="<#if paymentValue?has_content>${paymentValue.paymentRefNum?if_exists}</#if>"/></td>
   </tr>
 
-  <#if tagTypes?has_content>
+  <#if tagTypes?has_content && !allocatePaymentTagsToApplications>
     <@accountingTagsSelectRows tags=tagTypes prefix="acctgTagEnumId" entity=paymentValue! />
   </#if>
 

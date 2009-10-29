@@ -397,6 +397,29 @@ public final class UtilAccountingTags {
             map.put(mapPrefix + i, value.get(ENTITY_TAG_PREFIX + i));
         }
     }
+    
+    /**
+     * Copy all the acctgTagEnumId_ fields from a <code>GenericValue</code> to a <code>Map</code>.
+     * @param value the input <code>GenericValue</code>
+     * @param map the output <code>Map</code>
+     */
+    @SuppressWarnings("unchecked")
+    public static void putAllAccountingTags(Entity value, Map map) {
+        putAllAccountingTags(value, map, ENTITY_TAG_PREFIX);
+    }
+    
+    /**
+     * Copy all the acctgTagEnumId_ fields from a <code>GenericValue</code> to a <code>Map</code>.
+     * @param value the input <code>GenericValue</code>
+     * @param map the output <code>Map</code>
+     * @param mapPrefix the prefix used in the output map, defaults to ENTITY_TAG_PREFIX
+     */
+    @SuppressWarnings("unchecked")
+    public static void putAllAccountingTags(Entity value, Map map, String mapPrefix) {
+        for (int i = 1; i <= TAG_COUNT; i++) {
+            map.put(mapPrefix + i, value.get(ENTITY_TAG_PREFIX + i));
+        }
+    }
 
     /**
      * Copy all the acctgTagEnumId_ fields from a <code>Map</code> to a <code>GenericValue</code>.

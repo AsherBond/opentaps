@@ -54,6 +54,10 @@ boolean isDisbursement = false;
 paymentId = UtilCommon.getParameter(request, "paymentId");
 
 dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+organizationRepository = dl.loadDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
+organization = organizationRepository.getOrganizationById(organizationPartyId);
+context.put("allocatePaymentTagsToApplications", organization.allocatePaymentTagsToApplications());
+
 billingDomain = dl.loadDomainsDirectory().getBillingDomain();
 paymentRepository = billingDomain.getPaymentRepository();
 Payment payment = null;
@@ -171,6 +175,16 @@ if (! payment.isVoided()) {
         paymentApplicationMap.put("paymentApplicationId", application.getPaymentApplicationId());
         paymentApplicationMap.put("amountApplied", application.getAmountApplied());
         paymentApplicationMap.put("taxAuthGeoId", application.getTaxAuthGeoId());
+        paymentApplicationMap.put("acctgTagEnumId1", application.getAcctgTagEnumId1());
+        paymentApplicationMap.put("acctgTagEnumId2", application.getAcctgTagEnumId2());
+        paymentApplicationMap.put("acctgTagEnumId3", application.getAcctgTagEnumId3());
+        paymentApplicationMap.put("acctgTagEnumId4", application.getAcctgTagEnumId4());
+        paymentApplicationMap.put("acctgTagEnumId5", application.getAcctgTagEnumId5());
+        paymentApplicationMap.put("acctgTagEnumId6", application.getAcctgTagEnumId6());
+        paymentApplicationMap.put("acctgTagEnumId7", application.getAcctgTagEnumId7());
+        paymentApplicationMap.put("acctgTagEnumId8", application.getAcctgTagEnumId8());
+        paymentApplicationMap.put("acctgTagEnumId9", application.getAcctgTagEnumId9());
+        paymentApplicationMap.put("acctgTagEnumId10", application.getAcctgTagEnumId10());
         
         invoiceId = application.getInvoiceId();
         invoice = null;

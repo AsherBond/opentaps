@@ -683,4 +683,24 @@ public class FinancialAsserts extends OpentapsTestCase {
         delegator.storeAll(copies);
         return invoiceId;
     }
+
+    /**
+     * Creates a PaymentApplication, with accountingTags for the PaymentApplication.
+     * @param amount
+     * @param paymentId
+     * @param invoiceId
+     * @param accountingTags
+     */
+    public void updatePaymentApplication(BigDecimal amount, String paymentId, String invoiceId, Map accountingTags) {
+
+        Map input = UtilMisc.toMap("userLogin", userLogin);
+        input.put("paymentId", paymentId);
+        input.put("invoiceId", invoiceId);
+        input.put("amountApplied", amount);
+        if (accountingTags != null) {
+            input.putAll(accountingTags);
+        }
+        runAndAssertServiceSuccess("updatePaymentApplication", input);
+    }
+
 }

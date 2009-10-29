@@ -30,6 +30,8 @@ import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.ofbiz.Repository;
+import org.opentaps.domain.organization.Organization;
+
 
 //Data Prep for Editing a Payment
 
@@ -45,12 +47,16 @@ if (paymentId == null) {
   paymentId = request.getParameter("paymentId");
 }
 
+dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+organizationRepository = dl.loadDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
+organization = organizationRepository.getOrganizationById(organizationPartyId);
+context.put("allocatePaymentTagsToApplications", organization.allocatePaymentTagsToApplications());
+
 GenericValue paymentValue = null;
 Payment payment = null;
 // have paymentId, get the Payment so we can edit it
 if (UtilValidate.isNotEmpty(paymentId)) {
     
-    dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
     billingDomain = dl.loadDomainsDirectory().getBillingDomain();
     paymentRepository = billingDomain.getPaymentRepository();
 

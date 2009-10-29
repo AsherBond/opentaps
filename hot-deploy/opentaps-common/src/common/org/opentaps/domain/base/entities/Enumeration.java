@@ -532,6 +532,46 @@ fieldMapColumns.put("Enumeration", fields);
    
    private List<Payment> tag10Payments = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID1")
+   
+   private List<PaymentApplication> tag1PaymentApplications = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID2")
+   
+   private List<PaymentApplication> tag2PaymentApplications = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID3")
+   
+   private List<PaymentApplication> tag3PaymentApplications = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID4")
+   
+   private List<PaymentApplication> tag4PaymentApplications = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID5")
+   
+   private List<PaymentApplication> tag5PaymentApplications = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID6")
+   
+   private List<PaymentApplication> tag6PaymentApplications = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID7")
+   
+   private List<PaymentApplication> tag7PaymentApplications = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID8")
+   
+   private List<PaymentApplication> tag8PaymentApplications = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID9")
+   
+   private List<PaymentApplication> tag9PaymentApplications = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ACCTG_TAG_ENUM_ID10")
+   
+   private List<PaymentApplication> tag10PaymentApplications = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_SERVICE_TYPE_ENUM_ID")
    
    private List<PaymentGatewayResponse> serviceTypePaymentGatewayResponses = null;
@@ -1992,6 +2032,116 @@ fieldMapColumns.put("Enumeration", fields);
         return this.tag10Payments;
     }
     /**
+     * Auto generated method that gets the related <code>PaymentApplication</code> by the relation named <code>tag1PaymentApplication</code>.
+     * @return the list of <code>PaymentApplication</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PaymentApplication> gettag1PaymentApplications() throws RepositoryException {
+        if (this.tag1PaymentApplications == null) {
+            this.tag1PaymentApplications = getRelated(PaymentApplication.class, "tag1PaymentApplication");
+        }
+        return this.tag1PaymentApplications;
+    }
+    /**
+     * Auto generated method that gets the related <code>PaymentApplication</code> by the relation named <code>tag2PaymentApplication</code>.
+     * @return the list of <code>PaymentApplication</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PaymentApplication> gettag2PaymentApplications() throws RepositoryException {
+        if (this.tag2PaymentApplications == null) {
+            this.tag2PaymentApplications = getRelated(PaymentApplication.class, "tag2PaymentApplication");
+        }
+        return this.tag2PaymentApplications;
+    }
+    /**
+     * Auto generated method that gets the related <code>PaymentApplication</code> by the relation named <code>tag3PaymentApplication</code>.
+     * @return the list of <code>PaymentApplication</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PaymentApplication> gettag3PaymentApplications() throws RepositoryException {
+        if (this.tag3PaymentApplications == null) {
+            this.tag3PaymentApplications = getRelated(PaymentApplication.class, "tag3PaymentApplication");
+        }
+        return this.tag3PaymentApplications;
+    }
+    /**
+     * Auto generated method that gets the related <code>PaymentApplication</code> by the relation named <code>tag4PaymentApplication</code>.
+     * @return the list of <code>PaymentApplication</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PaymentApplication> gettag4PaymentApplications() throws RepositoryException {
+        if (this.tag4PaymentApplications == null) {
+            this.tag4PaymentApplications = getRelated(PaymentApplication.class, "tag4PaymentApplication");
+        }
+        return this.tag4PaymentApplications;
+    }
+    /**
+     * Auto generated method that gets the related <code>PaymentApplication</code> by the relation named <code>tag5PaymentApplication</code>.
+     * @return the list of <code>PaymentApplication</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PaymentApplication> gettag5PaymentApplications() throws RepositoryException {
+        if (this.tag5PaymentApplications == null) {
+            this.tag5PaymentApplications = getRelated(PaymentApplication.class, "tag5PaymentApplication");
+        }
+        return this.tag5PaymentApplications;
+    }
+    /**
+     * Auto generated method that gets the related <code>PaymentApplication</code> by the relation named <code>tag6PaymentApplication</code>.
+     * @return the list of <code>PaymentApplication</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PaymentApplication> gettag6PaymentApplications() throws RepositoryException {
+        if (this.tag6PaymentApplications == null) {
+            this.tag6PaymentApplications = getRelated(PaymentApplication.class, "tag6PaymentApplication");
+        }
+        return this.tag6PaymentApplications;
+    }
+    /**
+     * Auto generated method that gets the related <code>PaymentApplication</code> by the relation named <code>tag7PaymentApplication</code>.
+     * @return the list of <code>PaymentApplication</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PaymentApplication> gettag7PaymentApplications() throws RepositoryException {
+        if (this.tag7PaymentApplications == null) {
+            this.tag7PaymentApplications = getRelated(PaymentApplication.class, "tag7PaymentApplication");
+        }
+        return this.tag7PaymentApplications;
+    }
+    /**
+     * Auto generated method that gets the related <code>PaymentApplication</code> by the relation named <code>tag8PaymentApplication</code>.
+     * @return the list of <code>PaymentApplication</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PaymentApplication> gettag8PaymentApplications() throws RepositoryException {
+        if (this.tag8PaymentApplications == null) {
+            this.tag8PaymentApplications = getRelated(PaymentApplication.class, "tag8PaymentApplication");
+        }
+        return this.tag8PaymentApplications;
+    }
+    /**
+     * Auto generated method that gets the related <code>PaymentApplication</code> by the relation named <code>tag9PaymentApplication</code>.
+     * @return the list of <code>PaymentApplication</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PaymentApplication> gettag9PaymentApplications() throws RepositoryException {
+        if (this.tag9PaymentApplications == null) {
+            this.tag9PaymentApplications = getRelated(PaymentApplication.class, "tag9PaymentApplication");
+        }
+        return this.tag9PaymentApplications;
+    }
+    /**
+     * Auto generated method that gets the related <code>PaymentApplication</code> by the relation named <code>tag10PaymentApplication</code>.
+     * @return the list of <code>PaymentApplication</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PaymentApplication> gettag10PaymentApplications() throws RepositoryException {
+        if (this.tag10PaymentApplications == null) {
+            this.tag10PaymentApplications = getRelated(PaymentApplication.class, "tag10PaymentApplication");
+        }
+        return this.tag10PaymentApplications;
+    }
+    /**
      * Auto generated method that gets the related <code>PaymentGatewayResponse</code> by the relation named <code>ServiceTypePaymentGatewayResponse</code>.
      * @return the list of <code>PaymentGatewayResponse</code>
      * @throws RepositoryException if an error occurs
@@ -3108,6 +3258,76 @@ fieldMapColumns.put("Enumeration", fields);
     */
     public void settag10Payments(List<Payment> tag10Payments) {
         this.tag10Payments = tag10Payments;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag1PaymentApplications the tag1PaymentApplications to set
+    */
+    public void settag1PaymentApplications(List<PaymentApplication> tag1PaymentApplications) {
+        this.tag1PaymentApplications = tag1PaymentApplications;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag2PaymentApplications the tag2PaymentApplications to set
+    */
+    public void settag2PaymentApplications(List<PaymentApplication> tag2PaymentApplications) {
+        this.tag2PaymentApplications = tag2PaymentApplications;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag3PaymentApplications the tag3PaymentApplications to set
+    */
+    public void settag3PaymentApplications(List<PaymentApplication> tag3PaymentApplications) {
+        this.tag3PaymentApplications = tag3PaymentApplications;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag4PaymentApplications the tag4PaymentApplications to set
+    */
+    public void settag4PaymentApplications(List<PaymentApplication> tag4PaymentApplications) {
+        this.tag4PaymentApplications = tag4PaymentApplications;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag5PaymentApplications the tag5PaymentApplications to set
+    */
+    public void settag5PaymentApplications(List<PaymentApplication> tag5PaymentApplications) {
+        this.tag5PaymentApplications = tag5PaymentApplications;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag6PaymentApplications the tag6PaymentApplications to set
+    */
+    public void settag6PaymentApplications(List<PaymentApplication> tag6PaymentApplications) {
+        this.tag6PaymentApplications = tag6PaymentApplications;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag7PaymentApplications the tag7PaymentApplications to set
+    */
+    public void settag7PaymentApplications(List<PaymentApplication> tag7PaymentApplications) {
+        this.tag7PaymentApplications = tag7PaymentApplications;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag8PaymentApplications the tag8PaymentApplications to set
+    */
+    public void settag8PaymentApplications(List<PaymentApplication> tag8PaymentApplications) {
+        this.tag8PaymentApplications = tag8PaymentApplications;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag9PaymentApplications the tag9PaymentApplications to set
+    */
+    public void settag9PaymentApplications(List<PaymentApplication> tag9PaymentApplications) {
+        this.tag9PaymentApplications = tag9PaymentApplications;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tag10PaymentApplications the tag10PaymentApplications to set
+    */
+    public void settag10PaymentApplications(List<PaymentApplication> tag10PaymentApplications) {
+        this.tag10PaymentApplications = tag10PaymentApplications;
     }
     /**
      * Auto generated value setter.

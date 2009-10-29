@@ -2272,6 +2272,7 @@ public class OpentapsTestCase extends TestCase {
         List<GenericValue> invoiceGlAccountTypes = delegator.findByCondition("InvoiceGlAccountType", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
         List<GenericValue> invoiceAdjustmentGlAccounts = delegator.findByCondition("InvoiceAdjustmentGlAccount", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
         List<GenericValue> acctgTagEnumTypes = delegator.findByCondition("AcctgTagEnumType", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
+        List<GenericValue> taxAuthorityGlAccounts = delegator.findByCondition("TaxAuthorityGlAccount", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
         List<GenericValue> copies = new FastList<GenericValue>();
         // copy PartyAcctgPreference
         if (partyAcctgPreference != null) {
@@ -2303,6 +2304,7 @@ public class OpentapsTestCase extends TestCase {
         copies.addAll(copyEntitiesWithNewOrganizationPartyId(invoiceGlAccountTypes, newPartyId));
         copies.addAll(copyEntitiesWithNewOrganizationPartyId(invoiceAdjustmentGlAccounts, newPartyId));
         copies.addAll(copyEntitiesWithNewOrganizationPartyId(acctgTagEnumTypes, newPartyId));
+        copies.addAll(copyEntitiesWithNewOrganizationPartyId(taxAuthorityGlAccounts, newPartyId));
         delegator.storeAll(copies);
         Debug.logInfo("call createOrganizationFromTemplate use template [" + templatePartyId + "], return partyId [" + newPartyId + "]", MODULE);
         return newPartyId;

@@ -169,13 +169,39 @@ public final class InvoiceHelper {
      * @return the invoice lines
      * @exception GenericEntityException if an error occurs
      */
+    @SuppressWarnings("unchecked")
     public static List<Map<String, Object>> getInvoiceLinesForPresentation(GenericDelegator delegator, String invoiceId) throws GenericEntityException {
+        return getInvoiceLinesForPresentation(delegator, invoiceId, Boolean.FALSE);
+    }
+    /**
+     * <p>Gets the list of lines as should appear in a presentation invoice.  Each line
+     * can either be a single invoice item or an aggregation of invoice items based
+     * on some type.  For instance, if an order line item is associated with several
+     * invoice items, they will be grouped into one line with the product ID, quantity
+     * ordered, quantity shipped, and so on.</p>
+     *
+     * <p>The description field is either the invoice item's description, the tax rate
+     * description, or invoice item type's description.</p>
+     *
+     * <ul>Currently implemented groupings:
+     * <li> One line per order item with quantity ordered, shipped, backOrdered, and the amount (unit price).  The amountTotal field is (shipped * amount).
+     *      A field orderItem contains the actual order item.
+     * </li>
+     * <li> One line per tax rate group, which is based on taxAuthorityRateSeqId.  The amountTotal field is the total tax amount for this group. </li>
+     * </ul>
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param invoiceId a <code>String</code> value
+     * @param groupSalesTaxOnInvoicePdf  a <code>Boolean</code> value
+     * @exception GenericEntityException if an error occurs
+     */
+    @SuppressWarnings("unchecked")
+    public static List<Map<String, Object>> getInvoiceLinesForPresentation(GenericDelegator delegator, String invoiceId, Boolean groupSalesTaxOnInvoicePdf) throws GenericEntityException {
+
         List<Map<String, Object>> invoiceLines = FastList.newInstance();
         List<GenericValue> invoiceItems = delegator.findByAnd("InvoiceItem", UtilMisc.toMap("invoiceId", invoiceId), UtilMisc.toList("invoiceItemSeqId"));
-
         // groups of invoice items for presentation
         Map<GenericValue, List<GenericValue>> orderItemGroup = FastMap.newInstance();
-        Map<GenericValue, List<GenericValue>> taxGroup = FastMap.newInstance();
+        Map<String, List<GenericValue>> taxGroup = FastMap.newInstance();
 
         // the first step is to group the invoice items by various heuristics, and remove them from list as well
         for (Iterator<GenericValue> iter = invoiceItems.iterator(); iter.hasNext();) {
@@ -197,17 +223,13 @@ public final class InvoiceHelper {
 
             // group the tax items
             if ("ITM_SALES_TAX".equals(invoiceItem.get("invoiceItemTypeId"))) {
-                GenericValue taxAuthRate = invoiceItem.getRelatedOne("TaxAuthorityParty");
-                if ((taxAuthRate == null) || (taxGroup.get(taxAuthRate) == null)) {
-                    Debug.logError("Invoice item [" + invoiceItem + "] is a sales tax item but has no tax authority party and will not be shown on invoice PDF", MODULE);
-                    continue;
-                }
-                List<GenericValue> invoiceItemList = taxGroup.get(taxAuthRate);
+                String key = groupSalesTaxOnInvoicePdf ? invoiceItem.getString("description") : invoiceItem.getString("invoiceItemSeqId");
+                List<GenericValue> invoiceItemList = taxGroup.get(key);
                 if (invoiceItemList == null) {
                     invoiceItemList = FastList.<GenericValue>newInstance();
                 }
                 invoiceItemList.add(invoiceItem);
-                taxGroup.put(taxAuthRate, invoiceItemList);
+                taxGroup.put(key, invoiceItemList);
                 iter.remove();
                 continue;
             }
@@ -251,8 +273,8 @@ public final class InvoiceHelper {
                     invoiceLine.put("carrierPartyId", shipmentRouteSegment.get("carrierPartyId"));
                     invoiceLine.put("shipmentMethodTypeId", shipmentRouteSegment.get("shipmentMethodTypeId"));
                     List<EntityExpr> conditions = Arrays.asList(
-                        EntityCondition.makeCondition("shipmentId", EntityOperator.EQUALS, issuance.get("shipmentId")),
-                        EntityCondition.makeCondition("trackingCode", EntityOperator.NOT_EQUAL, null)
+                            EntityCondition.makeCondition("shipmentId", EntityOperator.EQUALS, issuance.get("shipmentId")),
+                            EntityCondition.makeCondition("trackingCode", EntityOperator.NOT_EQUAL, null)
                     );
                     List<GenericValue> codes = delegator.findByAnd("ShipmentPackageRouteSeg", conditions, UtilMisc.toList("shipmentPackageSeqId", "shipmentRouteSegmentId"));
                     List<String> trackingCodes = FastList.newInstance();
@@ -268,21 +290,24 @@ public final class InvoiceHelper {
         }
 
         // generate invoice lines from the tax group
-        for (GenericValue taxAuthRate : taxGroup.keySet()) {
-            List<GenericValue> invoiceItemList = taxGroup.get(taxAuthRate);
-            Map<String, Object> invoiceLine = aggregateInvoiceItemsForPresentation(invoiceItemList, false);
+        for (String key : taxGroup.keySet()) {
+            List<GenericValue> invoiceItemList = taxGroup.get(key);
+            Map<String, Object> invoiceLine = aggregateInvoiceItemsForPresentation(invoiceItemList, !groupSalesTaxOnInvoicePdf);
             invoiceLines.add(invoiceLine);
         }
 
         // add the remaining invoice items to the lines
         for (GenericValue invoiceItem  : invoiceItems) {
             Map<String, Object> invoiceLine = joinInvoiceItemForPresentation(invoiceItem);
+            BigDecimal amountTotal = invoiceItem.getBigDecimal("quantity").multiply(invoiceItem.getBigDecimal("amount")).setScale(decimals + 1, rounding);
+            invoiceLine.put("amountTotal", amountTotal);
             invoiceLines.add(invoiceLine);
         }
 
         return invoiceLines;
-    }
 
+    }
+    
     /**
      * Retrieve a list of AgreementTerms which apply to an invoice.
      * @param delegator a <code>GenericDelegator</code> value

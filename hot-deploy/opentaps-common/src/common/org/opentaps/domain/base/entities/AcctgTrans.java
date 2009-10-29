@@ -84,6 +84,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("createdStamp", "CREATED_STAMP");
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
         fields.put("invoiceAdjustmentId", "INVOICE_ADJUSTMENT_ID");
+        fields.put("paymentApplicationId", "PAYMENT_APPLICATION_ID");
 fieldMapColumns.put("AcctgTrans", fields);
 }
   public static enum Fields implements EntityFieldInterface<AcctgTrans> {
@@ -117,7 +118,8 @@ fieldMapColumns.put("AcctgTrans", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
-    invoiceAdjustmentId("invoiceAdjustmentId");
+    invoiceAdjustmentId("invoiceAdjustmentId"),
+    paymentApplicationId("paymentApplicationId");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -193,6 +195,8 @@ fieldMapColumns.put("AcctgTrans", fields);
    private Timestamp createdTxStamp;
    @Column(name="INVOICE_ADJUSTMENT_ID")
    private String invoiceAdjustmentId;
+   @Column(name="PAYMENT_APPLICATION_ID")
+   private String paymentApplicationId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TRANS_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -311,6 +315,13 @@ fieldMapColumns.put("AcctgTrans", fields);
    )
    
    private InvoiceAdjustment invoiceAdjustment = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PAYMENT_APPLICATION_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private PaymentApplication paymentApplication = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="acctgTrans", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ACCTG_TRANS_ID")
    
@@ -335,7 +346,7 @@ fieldMapColumns.put("AcctgTrans", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("acctgTransId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("isPosted");this.allFieldsNames.add("postedDate");this.allFieldsNames.add("scheduledPostingDate");this.allFieldsNames.add("glJournalId");this.allFieldsNames.add("glFiscalTypeId");this.allFieldsNames.add("voucherRef");this.allFieldsNames.add("voucherDate");this.allFieldsNames.add("groupStatusId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("physicalInventoryId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("finAccountTransId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("receiptId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("theirAcctgTransId");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("invoiceAdjustmentId");
+      this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("isPosted");this.allFieldsNames.add("postedDate");this.allFieldsNames.add("scheduledPostingDate");this.allFieldsNames.add("glJournalId");this.allFieldsNames.add("glFiscalTypeId");this.allFieldsNames.add("voucherRef");this.allFieldsNames.add("voucherDate");this.allFieldsNames.add("groupStatusId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("physicalInventoryId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("finAccountTransId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("receiptId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("theirAcctgTransId");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("invoiceAdjustmentId");this.allFieldsNames.add("paymentApplicationId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -567,6 +578,13 @@ fieldMapColumns.put("AcctgTrans", fields);
     public void setInvoiceAdjustmentId(String invoiceAdjustmentId) {
         this.invoiceAdjustmentId = invoiceAdjustmentId;
     }
+    /**
+     * Auto generated value setter.
+     * @param paymentApplicationId the paymentApplicationId to set
+     */
+    public void setPaymentApplicationId(String paymentApplicationId) {
+        this.paymentApplicationId = paymentApplicationId;
+    }
 
     /**
      * Auto generated value accessor.
@@ -785,6 +803,13 @@ fieldMapColumns.put("AcctgTrans", fields);
     public String getInvoiceAdjustmentId() {
         return this.invoiceAdjustmentId;
     }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPaymentApplicationId() {
+        return this.paymentApplicationId;
+    }
 
     /**
      * Auto generated method that gets the related <code>AcctgTransType</code> by the relation named <code>AcctgTransType</code>.
@@ -996,6 +1021,17 @@ fieldMapColumns.put("AcctgTrans", fields);
         return this.invoiceAdjustment;
     }
     /**
+     * Auto generated method that gets the related <code>PaymentApplication</code> by the relation named <code>PaymentApplication</code>.
+     * @return the <code>PaymentApplication</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public PaymentApplication getPaymentApplication() throws RepositoryException {
+        if (this.paymentApplication == null) {
+            this.paymentApplication = getRelatedOne(PaymentApplication.class, "PaymentApplication");
+        }
+        return this.paymentApplication;
+    }
+    /**
      * Auto generated method that gets the related <code>AcctgTransAttribute</code> by the relation named <code>AcctgTransAttribute</code>.
      * @return the list of <code>AcctgTransAttribute</code>
      * @throws RepositoryException if an error occurs
@@ -1164,6 +1200,13 @@ fieldMapColumns.put("AcctgTrans", fields);
     }
     /**
      * Auto generated value setter.
+     * @param paymentApplication the paymentApplication to set
+    */
+    public void setPaymentApplication(PaymentApplication paymentApplication) {
+        this.paymentApplication = paymentApplication;
+    }
+    /**
+     * Auto generated value setter.
      * @param acctgTransAttributes the acctgTransAttributes to set
     */
     public void setAcctgTransAttributes(List<AcctgTransAttribute> acctgTransAttributes) {
@@ -1301,6 +1344,7 @@ fieldMapColumns.put("AcctgTrans", fields);
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
         setCreatedTxStamp((Timestamp) mapValue.get("createdTxStamp"));
         setInvoiceAdjustmentId((String) mapValue.get("invoiceAdjustmentId"));
+        setPaymentApplicationId((String) mapValue.get("paymentApplicationId"));
         postInit();
     }
 
@@ -1339,6 +1383,7 @@ fieldMapColumns.put("AcctgTrans", fields);
         mapValue.put("createdStamp", getCreatedStamp());
         mapValue.put("createdTxStamp", getCreatedTxStamp());
         mapValue.put("invoiceAdjustmentId", getInvoiceAdjustmentId());
+        mapValue.put("paymentApplicationId", getPaymentApplicationId());
         return mapValue;
     }
 

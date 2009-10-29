@@ -200,6 +200,49 @@ under the License.
         <prim-key field="encumbranceDetailTypeId"/>
     </entity>
 
+
+    <extend-entity entity-name="PaymentApplication">
+        <field name="acctgTagEnumId1" type="id-ne"/>
+        <field name="acctgTagEnumId2" type="id-ne"/>
+        <field name="acctgTagEnumId3" type="id-ne"/>
+        <field name="acctgTagEnumId4" type="id-ne"/>
+        <field name="acctgTagEnumId5" type="id-ne"/>
+        <field name="acctgTagEnumId6" type="id-ne"/>
+        <field name="acctgTagEnumId7" type="id-ne"/>
+        <field name="acctgTagEnumId8" type="id-ne"/>
+        <field name="acctgTagEnumId9" type="id-ne"/>
+        <field name="acctgTagEnumId10" type="id-ne"/>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAYMENT_APP_TAG1" title="tag1">
+            <key-map field-name="acctgTagEnumId1" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAYMENT_APP_TAG2" title="tag2">
+            <key-map field-name="acctgTagEnumId2" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAYMENT_APP_TAG3" title="tag3">
+            <key-map field-name="acctgTagEnumId3" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAYMENT_APP_TAG4" title="tag4">
+            <key-map field-name="acctgTagEnumId4" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAYMENT_APP_TAG5" title="tag5">
+            <key-map field-name="acctgTagEnumId5" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAYMENT_APP_TAG6" title="tag6">
+            <key-map field-name="acctgTagEnumId6" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAYMENT_APP_TAG7" title="tag7">
+            <key-map field-name="acctgTagEnumId7" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAYMENT_APP_TAG8" title="tag8">
+            <key-map field-name="acctgTagEnumId8" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAYMENT_APP_TAG9" title="tag9">
+            <key-map field-name="acctgTagEnumId9" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAYMENT_APP_TAG10" title="tag10">
+            <key-map field-name="acctgTagEnumId10" rel-field-name="enumId"/>
+        </relation>
+    </extend-entity>
     <!-- ========================================== -->
     <!-- com.opensourcestrategies.financials.ledger -->  
     <!-- ========================================== -->
@@ -209,6 +252,10 @@ under the License.
         <relation type="one" rel-entity-name="InvoiceAdjustment">
             <key-map field-name="invoiceAdjustmentId"/>
         </relation>
+        <field name="paymentApplicationId" type="id"/>
+        <relation type="one" rel-entity-name="PaymentApplication">
+            <key-map field-name="paymentApplicationId"/>
+        </relation>        
     </extend-entity>
 
     <entity entity-name="AcctgTransEntryRole" package-name="com.opensourcestrategies.financials.ledger"
