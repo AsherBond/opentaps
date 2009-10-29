@@ -1034,6 +1034,21 @@ public class OrderTests extends OrderTestCase {
     }
 
     /**
+     * Tests it is possible to update quantity after an order item has been partially shipped
+     * and the inventory quantities are correct
+     * @throws GeneralException
+     */
+    public void testUpdateQuantityOfPartiallyShippedOrderItem() throws GeneralException {
+    	// get initial ATP and QOH of GZ-2644
+    	// create a sales order for 5 of GZ-2644
+    	// approve the sales order
+    	// pack and ship 2 out of 5 of GZ-2644
+    	// update quantity of GZ-2644 order item to 3
+    	// get final ATP and QOH of GZ-2644
+    	// verify that ATP has changed by -3 and QOH has changed by -2
+    }
+    
+    /**
      * Tests over reservations of inventory to an order.
      * @exception GeneralException if an error occurs
      */
