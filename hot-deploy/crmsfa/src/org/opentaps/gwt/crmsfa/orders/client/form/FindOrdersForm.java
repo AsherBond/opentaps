@@ -16,7 +16,9 @@
  */
 package org.opentaps.gwt.crmsfa.orders.client.form;
 
+import com.google.gwt.user.client.ui.HTML;
 import com.gwtext.client.widgets.Panel;
+import com.gwtext.client.widgets.form.Label;
 import com.gwtext.client.widgets.form.TextField;
 import com.gwtext.client.widgets.layout.ColumnLayout;
 import com.gwtext.client.widgets.layout.ColumnLayoutData;
@@ -113,21 +115,30 @@ public class FindOrdersForm extends FindEntityForm<OrderListView> {
 
         columnOnePanel.addField(orderIdInput);
         columnTwoPanel.addField(externalIdInput);
-
+        
         columnOnePanel.addField(orderNameInput);
-        columnTwoPanel.addField(customerInput);
+        columnTwoPanel.add(new HTML("&nbsp;"));
+        
+        columnOnePanel.addField(customerInput);
+        columnTwoPanel.addField(productStoreInput);
 
-        columnOnePanel.addField(productStoreInput);
-        columnTwoPanel.addField(orderStatusInput);
+        columnOnePanel.addField(orderStatusInput);
+        columnTwoPanel.add(new HTML("&nbsp;"));
 
         columnOnePanel.addField(correspondingPoIdInput);
-        columnTwoPanel.addField(createdByInput);
+        columnTwoPanel.add(new HTML("&nbsp;"));
 
         columnOnePanel.addField(fromDateInput);
         columnTwoPanel.addField(thruDateInput);
 
+        columnOnePanel.addField(createdByInput);
+        columnTwoPanel.add(new HTML("&nbsp;"));
+
         columnOnePanel.addField(lotInput);
-        columnTwoPanel.addField(serialNumberInput);
+        columnTwoPanel.add(new HTML("&nbsp;"));
+
+        columnOnePanel.addField(serialNumberInput);
+        columnTwoPanel.add(new HTML("&nbsp;"));
 
         filterPanel.add(mainPanel);
 

@@ -137,3 +137,10 @@
 }
 
 
+.gwtWidget .gwt-HTML
+{
+    font-size:20px;
+	width: 100px;
+	margin: 2px;
+    padding:0px;
+}
