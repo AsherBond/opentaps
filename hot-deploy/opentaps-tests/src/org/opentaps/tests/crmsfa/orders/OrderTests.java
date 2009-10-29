@@ -1,4 +1,4 @@
- /*
+/*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
@@ -18,7 +18,6 @@
 package org.opentaps.tests.crmsfa.orders;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -54,14 +53,10 @@ import org.opentaps.domain.order.OrderItemShipGrpInvRes;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.product.Product;
 import org.opentaps.domain.product.ProductRepositoryInterface;
-import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.repository.ofbiz.Repository;
-import org.opentaps.gwt.common.client.lookup.UtilLookup;
 import org.opentaps.gwt.common.client.lookup.configuration.OrderLookupConfiguration;
-import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 import org.opentaps.gwt.common.server.InputProviderInterface;
 import org.opentaps.gwt.common.server.lookup.OrderLookupService;
-import org.opentaps.gwt.common.server.lookup.PartyLookupService;
 import org.opentaps.tests.gwt.TestInputProvider;
 import org.opentaps.tests.warehouse.InventoryAsserts;
 
@@ -386,7 +381,6 @@ public class OrderTests extends OrderTestCase {
      * Verify that the last 5 serialized inventory items (in the order of their received date field) are the ones which are now reserved in the OrderItemShipGrpInvRes table.
      * @exception GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testSerializedInventoryReservation() throws GeneralException {
 
         // create test product
@@ -593,7 +587,6 @@ public class OrderTests extends OrderTestCase {
      * 7.  Verify a new InventoryItem with ATP = -2.0 and QOH = 0 has been created for this product
      * @exception GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testDefectiveSerInventoryItemReservation() throws GeneralException {
 
         // create test product
@@ -674,7 +667,6 @@ public class OrderTests extends OrderTestCase {
      * 8.  Verify that the product has ATP = -2 and QOH = 3
      * @exception GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testDefectiveInventoryItemReservation() throws GeneralException {
         // create test product
         GenericValue testProduct = createTestProduct("Non-serialized Test Product", demowarehouse1);
@@ -2130,7 +2122,6 @@ public class OrderTests extends OrderTestCase {
      * This test verifies re-reserving inventory in a new facility and also what happens when an inventory transfer should fulfill the reservation.
      * @throws GeneralException in an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testReReserveInventoryAndInventoryTransfer() throws GeneralException {
 
         OrderRepositoryInterface repository = getOrderRepository(admin);
@@ -3213,7 +3204,6 @@ public class OrderTests extends OrderTestCase {
      * Test the GWT order lookup.
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testGwtOrderLookup() throws Exception {
         TimeZone timeZone = TimeZone.getDefault();
         Locale locale = Locale.getDefault();
