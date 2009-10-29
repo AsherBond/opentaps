@@ -92,6 +92,10 @@ under the License.
             <filelist dir="." files="framework/build.xml"/>
         </subant>
     </target>
+    
+    <target name="clean-indexs">
+        <delete verbose="on" dir="runtime/lucene"/>
+    </target>
 
     <target name="clean-cache"
         description="Clean the UtilCache file if errors found with old objects in the cache (Java runtime error something like 'local class incompatible')">
