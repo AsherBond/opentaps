@@ -59,6 +59,7 @@ import org.opentaps.gwt.common.server.InputProviderInterface;
 import org.opentaps.gwt.common.server.lookup.OrderLookupService;
 import org.opentaps.tests.gwt.TestInputProvider;
 import org.opentaps.tests.warehouse.InventoryAsserts;
+import org.opentaps.gwt.common.client.lookup.UtilLookup;
 
 /**
  * Order related unit tests.
@@ -3219,6 +3220,7 @@ public class OrderTests extends OrderTestCase {
         // 2. test find order by customer
         provider = new TestInputProvider(admin, dispatcher);
         provider.setParameter(OrderLookupConfiguration.INOUT_PARTY_ID, "DemoAccount1");
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999"); // set high pager limit so other test won't mask the expected results
         lookup = new OrderLookupService(provider);
         lookup.findOrders(locale, timeZone);
         // test we found the demo data: TEST10000/TEST10001
@@ -3228,6 +3230,7 @@ public class OrderTests extends OrderTestCase {
         // 3. test find order by PO#
         provider = new TestInputProvider(admin, dispatcher);
         provider.setParameter(OrderLookupConfiguration.INOUT_CORRESPONDING_PO_ID, "PO10001");
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999"); // set high pager limit so other test won't mask the expected results
         lookup = new OrderLookupService(provider);
         lookup.findOrders(locale, timeZone);
         // test we found the demo data: TEST10002, not found TEST10000/TEST10001
@@ -3238,6 +3241,7 @@ public class OrderTests extends OrderTestCase {
         // 4. test find order by status
         provider = new TestInputProvider(admin, dispatcher);
         provider.setParameter(OrderLookupConfiguration.INOUT_STATUS_ID, "ORDER_APPROVED");
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999"); // set high pager limit so other test won't mask the expected results
         lookup = new OrderLookupService(provider);
         lookup.findOrders(locale, timeZone);
         // test we found the demo data: TEST10000/TEST10002, not found TEST10001
@@ -3247,6 +3251,7 @@ public class OrderTests extends OrderTestCase {
 
         provider = new TestInputProvider(admin, dispatcher);
         provider.setParameter(OrderLookupConfiguration.INOUT_STATUS_ID, "ORDER_CREATED");
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999"); // set high pager limit so other test won't mask the expected results
         lookup = new OrderLookupService(provider);
         lookup.findOrders(locale, timeZone);
         // test we found the demo data: TEST10001, not found TEST10000/TEST10002
@@ -3261,6 +3266,7 @@ public class OrderTests extends OrderTestCase {
         String thruDate = dateStringToShortLocaleString("09/10/15 23:59:59", "yy/MM/dd HH:mm:ss");
         provider.setParameter(OrderLookupConfiguration.IN_FROM_DATE, fromDate);
         provider.setParameter(OrderLookupConfiguration.IN_THRU_DATE, thruDate);
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999"); // set high pager limit so other test won't mask the expected results
         lookup = new OrderLookupService(provider);
         lookup.findOrders(locale, timeZone);
         // test we found the demo data: TEST10000/TEST10002, not found TEST10001
