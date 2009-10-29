@@ -223,9 +223,7 @@ public final class AmazonProductServices {
                 conditions.add(EntityCondition.makeCondition("productId", EntityOperator.EQUALS, prodId));
             }
 
-            TransactionUtil.begin();
             EntityListIterator amazonProductsIt = delegator.findListIteratorByCondition("ViewAmazonProducts", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, Arrays.asList("productId"));
-            TransactionUtil.commit();
 
             // Prepare Product Feed document
             Document productFeed = AmazonConstants.soapClient.createDocumentHeader(AmazonConstants.messageTypeProduct);
