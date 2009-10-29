@@ -405,10 +405,11 @@ public abstract class UtilCommon {
             if (UtilValidate.isNotEmpty(acctgPref)) {
                 return acctgPref.getString(fieldId);
             } else {
+                Debug.logWarning("Cannot get accounting preference [" + fieldId + "] for [" + organizationPartyId + "], no PartyAcctgPreference found.", MODULE);
                 return null;
             }
         } catch (GenericEntityException ex) {
-            Debug.logError("Problem getting [" + fieldId + "] for [" + organizationPartyId + "]: " + ex.getMessage(), MODULE);
+            Debug.logError("Problem getting accounting preference [" + fieldId + "] for [" + organizationPartyId + "]: " + ex.getMessage(), MODULE);
             return null;
         }
     }
