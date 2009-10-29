@@ -18,6 +18,7 @@
 package org.opentaps.tests.crmsfa.orders;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,6 +40,7 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilDate;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderAdjustment;
 import org.opentaps.domain.order.OrderRepositoryInterface;
@@ -64,11 +66,15 @@ public class OrderTestCase extends OpentapsTestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
+        // remove the promo 9020 which is time based and does not work well with unit tests
+        delegator.removeByAnd("ProductStorePromoAppl", UtilMisc.toMap("productStoreId", "9000", "productPromoId", "9020"));
     }
 
     @Override
     public void tearDown() throws Exception {
         super.tearDown();
+        // recreate the promo 9020 which we removed in setUp
+        delegator.create("ProductStorePromoAppl", UtilMisc.<String, Object>toMap("productStoreId", "9000", "productPromoId", "9020", "sequenceNum", new Integer(1), "fromDate", UtilDate.toTimestamp("2001-05-13 12:00:00", null, null)));
     }
 
     /**
