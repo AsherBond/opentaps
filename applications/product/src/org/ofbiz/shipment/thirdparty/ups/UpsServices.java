@@ -400,6 +400,19 @@ public class UpsServices {
             Element serviceElement = UtilXml.addChildElement(shipmentElement, "Service", shipmentConfirmRequestDoc);
             UtilXml.addChildElementValue(serviceElement, "Code", carrierShipmentMethod.getString("carrierServiceCode"), shipmentConfirmRequestDoc);
 
+            // ShipmentServiceOptions can contain OnCallAir, Notification, SaturdayPickup, SaturdayDelivery elements
+            Element serviceOptionsElement = UtilXml.addChildElement(shipmentElement, "ShipmentServiceOptions", shipmentConfirmRequestDoc);
+            // Child of Shipment: Notification
+            // notifications are sent to the primary order's shipment notification email.  Note that contactMechPurposeTypeId is a PK field of OrderContactMech so there should only be one 
+            List orderEmails = delegator.findByAnd("OrderContactMech", UtilMisc.toMap("orderId", shipment.get("primaryOrderId"), "contactMechPurposeTypeId", "ORDER_EMAIL"));
+            if (UtilValidate.isNotEmpty(orderEmails)) {
+                GenericValue orderEmail = ((GenericValue) orderEmails.get(0)).getRelatedOne("ContactMech");
+                Element notificationElement = UtilXml.addChildElement(serviceOptionsElement, "Notification", shipmentConfirmRequestDoc);
+                UtilXml.addChildElementValue(notificationElement, "NotificationCode", "6", shipmentConfirmRequestDoc);  // 6 - Shipment Notification
+                Element emailMessageElement = UtilXml.addChildElement(notificationElement, "EMailMessage", shipmentConfirmRequestDoc);
+                UtilXml.addChildElementValue(emailMessageElement, "EMailAddress", orderEmail.getString("infoString"), shipmentConfirmRequestDoc);
+            }
+
             // Child of Shipment: Package
             ListIterator<GenericValue> shipmentPackageRouteSegIter = shipmentPackageRouteSegs.listIterator();
             while (shipmentPackageRouteSegIter.hasNext()) {
