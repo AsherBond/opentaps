@@ -117,28 +117,28 @@ public class FindOrdersForm extends FindEntityForm<OrderListView> {
         columnTwoPanel.addField(externalIdInput);
         
         columnOnePanel.addField(orderNameInput);
-        columnTwoPanel.add(new HTML("&nbsp;"));
+        columnTwoPanel.add(UtilUi.makeBlankFormCell());
         
         columnOnePanel.addField(customerInput);
         columnTwoPanel.addField(productStoreInput);
 
         columnOnePanel.addField(orderStatusInput);
-        columnTwoPanel.add(new HTML("&nbsp;"));
+        columnTwoPanel.add(UtilUi.makeBlankFormCell());
 
         columnOnePanel.addField(correspondingPoIdInput);
-        columnTwoPanel.add(new HTML("&nbsp;"));
+        columnTwoPanel.add(UtilUi.makeBlankFormCell());
 
         columnOnePanel.addField(fromDateInput);
         columnTwoPanel.addField(thruDateInput);
 
         columnOnePanel.addField(createdByInput);
-        columnTwoPanel.add(new HTML("&nbsp;"));
+        columnTwoPanel.add(UtilUi.makeBlankFormCell());
 
         columnOnePanel.addField(lotInput);
-        columnTwoPanel.add(new HTML("&nbsp;"));
+        columnTwoPanel.add(UtilUi.makeBlankFormCell());
 
         columnOnePanel.addField(serialNumberInput);
-        columnTwoPanel.add(new HTML("&nbsp;"));
+        columnTwoPanel.add(UtilUi.makeBlankFormCell());
 
         filterPanel.add(mainPanel);
 

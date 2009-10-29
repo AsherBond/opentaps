@@ -28,6 +28,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Widget;
 import com.gwtext.client.data.Record;
 import com.gwtext.client.widgets.MessageBox;
 import com.gwtext.client.widgets.MessageBoxConfig;
@@ -452,6 +454,10 @@ public abstract class UtilUi {
             return null;
         }
         return DateTimeFormat.getFormat(DATE_TIME_FORMAT).format(date);
+    }
+    
+    public static Widget makeBlankFormCell() {
+    	return new HTML("<span class='gwt-blank-field'>&nbsp;</span>");
     }
 
 }
