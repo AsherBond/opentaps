@@ -56,14 +56,12 @@
     </p>
 
     <p><b>${uiLabelMap.FinancialsTax}</b>
+    <#assign transformTimestamp = Static["org.opentaps.common.reporting.UtilReports"].getTrasformationTimeByType("SALES_TAX_FACT", delegator)?if_exists />
+    <br/><i><#if transformTimestamp?has_content>${uiLabelMap.OpentapsDataAsOf}&nbsp;<@displayDate date=transformTimestamp/><#else>No data</#if></i>
+    &nbsp;(<a class="linktext" href="<@ofbizUrl>SalesTaxReportReloadDatamarts</@ofbizUrl>">${uiLabelMap.FinancialsSalesTaxReloadDatamarts}</a>)
     <ul class="bulletList">
     <li><a href="<@ofbizUrl>TaxSummary</@ofbizUrl>">${uiLabelMap.AccountingTaxSummary}</a></li>
-    <li>
-        <a href="<@ofbizUrl>SalesTaxReportSetup</@ofbizUrl>">${uiLabelMap.FinancialsSalesTaxStatement}</a>
-        <#assign transformTimestamp = Static["org.opentaps.common.reporting.UtilReports"].getTrasformationTimeByType("SALES_TAX_FACT", delegator)?if_exists />
-        <br/><i><#if transformTimestamp?has_content>${uiLabelMap.OpentapsDataAsOf}&nbsp;<@displayDate date=transformTimestamp/><#else>No data</#if></i>
-        &nbsp;(<a class="linktext" href="<@ofbizUrl>SalesTaxReportReloadDatamarts</@ofbizUrl>">${uiLabelMap.FinancialsSalesTaxReloadDatamarts}</a>)
-    </li>
+    <li><a href="<@ofbizUrl>SalesTaxReportSetup</@ofbizUrl>">${uiLabelMap.FinancialsSalesTaxStatement}</a></li>
     </ul>
     </p>
 
