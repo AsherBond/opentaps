@@ -262,6 +262,9 @@ r13649 Changed Warehouse Dashboard to exclude any completed pick lists.
 applications/product/webapp/facility/WEB-INF/actions/facility/ViewFacilityInventoryByProduct.groovy
 r13477 change productsSoldThruTimestamp to timestamp when it is a string value
 
+applications/product/src/org/ofbiz/shipment/thirdparty/ups/UpsServices.java
+r13859 e-mail customers a shipping confirmation that includes tracking numbers for the package when UPS shipping labels are created
+
 Other API Changes
 -----------------
 
