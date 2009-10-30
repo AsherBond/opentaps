@@ -160,12 +160,10 @@ public final class CommonServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map testDateTimeInput(DispatchContext dctx, Map context) {
+    public static Map<String, Object> testDateTimeInput(DispatchContext dctx, Map<String, ?> context) {
         Timestamp sample = (Timestamp) context.get("sampleTimestamp");
         String result = sample.toString();
-
-        return ServiceUtil.returnSuccess("Your sent timestamp: " + result.toString());
+        return UtilValidate.isNotEmpty(result) ? ServiceUtil.returnSuccess("Your sent timestamp: " + result.toString()) : ServiceUtil.returnSuccess();
     }
 
     /**

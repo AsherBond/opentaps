@@ -28,7 +28,7 @@
 <div class="subSectionBlock">
     <form name="testCalendarForm1" method="post" action="<@ofbizUrl>testDateTimeInput</@ofbizUrl>">
     <table class="twoColumnForm">
-        <@inputDateRow name="sampleTimestamp1" title="Test Date macro"/>
+        <@inputDateRow name="sampleTimestamp" title="Test Date macro"/>
         <@inputSubmitRow title="Submit"/>
     </table>
     </form>
@@ -37,7 +37,7 @@
 <div class="subSectionBlock">
     <form name="testCalendarForm2" method="post" action="<@ofbizUrl>testDateTimeInput</@ofbizUrl>">
     <table class="twoColumnForm">
-        <@inputDateTimeRow name="sampleTimestamp2" title="Test DateTime macro"/>
+        <@inputDateTimeRow name="sampleTimestamp" title="Test DateTime macro"/>
         <@inputSubmitRow title="Submit"/>
     </table>
     </form>
