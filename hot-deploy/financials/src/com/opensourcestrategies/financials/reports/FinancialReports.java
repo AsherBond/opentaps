@@ -1264,10 +1264,13 @@ public final class FinancialReports {
                                         EntityCondition.makeCondition("taxAuthPartyId", EntityOperator.EQUALS, taxInfo.get("taxAuthPartyId")),
                                         EntityCondition.makeCondition("taxAuthGeoId", EntityOperator.EQUALS, taxInfo.get("taxAuthGeoId")));
                         taxInvItemFact.set("taxAuthorityDimId", UtilEtl.lookupDimension("TaxAuthorityDim", "taxAuthorityDimId", taxAuthCondList, delegator));
-                        BigDecimal taxDue = (BigDecimal) taxInfo.get("taxDue");
-                        taxInvItemFact.set("taxDue", taxDue != null ? taxDue.doubleValue() : null);
                         BigDecimal taxable = (BigDecimal) taxInfo.get("taxable");
-                        taxInvItemFact.set("taxable", taxable.subtract(totalRefunds).doubleValue());
+                        if (taxable != null) {
+                            taxable = taxable.subtract(totalRefunds);
+                        }
+                        taxInvItemFact.set("taxable", taxable);
+                        BigDecimal taxDue = (BigDecimal) taxInfo.get("taxDue");
+                        taxInvItemFact.set("taxDue", (taxDue != null && taxable.compareTo(BigDecimal.ZERO) > 0) ? taxDue.doubleValue() : 0.0);
                         sequenceId++;
                         taxInvItemFact.set("taxInvItemFactId", sequenceId);
                         taxInvItemFact.create();
