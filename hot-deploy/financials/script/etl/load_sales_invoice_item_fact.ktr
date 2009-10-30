@@ -250,7 +250,7 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>395</xloc>
-      <yloc>461</yloc>
+      <yloc>463</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -420,16 +420,23 @@ WHERE
            <schema_name/>
            </partitioning>
     <connection>ofbiz_ods</connection>
-    <sql>SELECT INVOICE_ITEM.INVOICE_ID, INVOICE_ITEM_SEQ_ID,
-INVOICE_ITEM.QUANTITY*INVOICE_ITEM.AMOUNT AS TOTAL_SALES_AMOUNT,
-INVOICE.INVOICE_DATE,
-INVOICE.CURRENCY_UOM_ID,
-INVOICE.PARTY_ID_FROM
-FROM INVOICE, INVOICE_ITEM
-WHERE INVOICE_ITEM.INVOICE_ID = INVOICE.INVOICE_ID
-AND INVOICE.INVOICE_TYPE_ID = &apos;SALES_INVOICE&apos;
-AND INVOICE.STATUS_ID IN (&apos;INVOICE_READY&apos;, &apos;INVOICE_PAID&apos;)
-AND INVOICE_ITEM.INVOICE_ITEM_TYPE_ID NOT IN (&apos;INV_SALES_TAX&apos;, &apos;ITM_SALES_TAX&apos;)</sql>
+    <sql>SELECT
+  INVOICE_ITEM.INVOICE_ID, INVOICE_ITEM_SEQ_ID,
+  INVOICE_ITEM.QUANTITY*INVOICE_ITEM.AMOUNT AS TOTAL_SALES_AMOUNT,
+  INVOICE.INVOICE_DATE,
+  INVOICE.CURRENCY_UOM_ID,
+  INVOICE.PARTY_ID_FROM
+FROM
+  INVOICE, INVOICE_ITEM
+WHERE
+  INVOICE_ITEM.INVOICE_ID = INVOICE.INVOICE_ID
+  AND INVOICE.INVOICE_TYPE_ID = &apos;SALES_INVOICE&apos;
+  AND INVOICE.STATUS_ID IN (&apos;INVOICE_READY&apos;, &apos;INVOICE_PAID&apos;)
+  AND INVOICE_ITEM.INVOICE_ITEM_TYPE_ID NOT IN (
+    &apos;INV_SALES_TAX&apos;,
+    &apos;ITM_SALES_TAX&apos;,
+    &apos;ITM_PROMOTION_ADJ&apos;,
+    &apos;ITM_SHIPPING_CHARGES&apos;)</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -515,13 +522,15 @@ GROUP BY
            </partitioning>
     <connection>ofbiz_ods</connection>
     <rowlimit>0</rowlimit>
-    <sql>SELECT SUM(INVOICE_ITEM.QUANTITY*INVOICE_ITEM.AMOUNT) AS TOTAL_PROMOTIONS
-FROM INVOICE_ITEM
-WHERE INVOICE_ITEM_TYPE_ID IN (&apos;ITM_PROMOTION_ADJ&apos;, &apos;ITM_DISCOUNT_ADJ&apos;)
-AND INVOICE_ITEM.PARENT_INVOICE_ID = ?
-AND INVOICE_ITEM.PARENT_INVOICE_ITEM_SEQ_ID = ?
-GROUP BY INVOICE_ITEM.PARENT_INVOICE_ID,
-INVOICE_ITEM.PARENT_INVOICE_ITEM_SEQ_ID</sql>
+    <sql>SELECT
+  SUM(INVOICE_ITEM.QUANTITY*INVOICE_ITEM.AMOUNT) AS TOTAL_PROMOTIONS
+FROM
+  INVOICE_ITEM
+WHERE
+  INVOICE_ITEM_TYPE_ID IN (&apos;ITM_PROMOTION_ADJ&apos;, &apos;ITM_DISCOUNT_ADJ&apos;)
+  AND INVOICE_ITEM.PARENT_INVOICE_ID = ?
+  AND INVOICE_ITEM.PARENT_INVOICE_ITEM_SEQ_ID = ?
+GROUP BY INVOICE_ITEM.PARENT_INVOICE_ID, INVOICE_ITEM.PARENT_INVOICE_ITEM_SEQ_ID</sql>
     <outer_join>Y</outer_join>
     <replace_vars>N</replace_vars>
     <parameter>
@@ -1266,7 +1275,7 @@ if ((_TOTAL_SII_AMOUNT_FOR_REFUND_ALLOC_CALC != null) &amp;&amp; (str2num(_TOTAL
       </field>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>177</xloc>
-      <yloc>461</yloc>
+      <yloc>464</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

@@ -1189,9 +1189,9 @@ public final class FinancialReports {
             DateFormat yearNumberFmt = new SimpleDateFormat("yyyy");
 
             EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                    EntityCondition.makeCondition("invoiceTypeId", EntityOperator.EQUALS, "SALES_INVOICE"),
+                    EntityCondition.makeCondition("invoiceTypeId", "SALES_INVOICE"),
                     EntityCondition.makeCondition("statusId", EntityOperator.NOT_IN, Arrays.asList("INVOICE_IN_PROCESS", "INVOICE_CANCELLED", "INVOICE_VOIDED", "INVOICE_WRITEOFF")),
-                    EntityCondition.makeCondition("invoiceItemTypeId", EntityOperator.NOT_IN, Arrays.asList("ITM_SALES_TAX", "INV_SALES_TAX"))
+                    EntityCondition.makeCondition("invoiceItemTypeId", EntityOperator.NOT_IN, Arrays.asList("ITM_SALES_TAX", "INV_SALES_TAX", "ITM_PROMOTION_ADJ", "ITM_SHIPPING_CHARGES"))
             );
             EntityListIterator itemsIterator = delegator.findListIteratorByCondition(salesInvoiceItems, conditions, null, selectList, UtilMisc.toList("invoiceId", "invoiceItemSeqId"), null);
             GenericValue invoiceItem = null;
