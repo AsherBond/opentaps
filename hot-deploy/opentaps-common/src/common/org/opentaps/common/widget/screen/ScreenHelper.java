@@ -75,15 +75,15 @@ public class ScreenHelper {
      * @throws SAXException
      * @throws ParserConfigurationException
      */
-    public static String renderScreenLocationAsText(String screenLocation, DispatchContext dctx, Map screenContext, Map screenParameters) throws GeneralException, IOException, SAXException, ParserConfigurationException {
+    public static String renderScreenLocationAsText(String screenLocation, DispatchContext dctx, Map<String, Object> screenContext, Map<String, Object> screenParameters) throws GeneralException, IOException, SAXException, ParserConfigurationException {
 
          
         // Construct a new writer and use it to construct a new ScreenRenderer instead of using
         //  any ScreenRenderer that might exist in the context, so that output from any nested calls to
         //  ${screens.render(...)} is captured
         Writer writer = new StringWriter();
-        ScreenRenderer screens = new ScreenRenderer(writer, MapStack.create(screenContext), new HtmlScreenRenderer());
-        ScreenRenderer.populateBasicContext(MapStack.create(screenContext), screens, screenParameters, dctx.getDelegator(), dctx.getDispatcher(), dctx.getSecurity(), (Locale) screenContext.get("locale"), (GenericValue) screenContext.get("userLogin"));
+        ScreenRenderer screens = new ScreenRenderer(writer, MapStack.<String>create(screenContext), new HtmlScreenRenderer());
+        ScreenRenderer.populateBasicContext(MapStack.<String>create(screenContext), screens, screenParameters, dctx.getDelegator(), dctx.getDispatcher(), dctx.getSecurity(), (Locale) screenContext.get("locale"), (GenericValue) screenContext.get("userLogin"));
 
         // Get the screen and render it
         ScreenStringRenderer renderer = screens.getScreenStringRenderer();

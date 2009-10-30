@@ -86,6 +86,7 @@ public final class CommonServices {
     private CommonServices() { }
 
     private static final String MODULE = CommonServices.class.getName();
+
     /**
      * Save a rendered FO screen to a PDF file.
      * @param dctx a <code>DispatchContext</code> value
@@ -93,12 +94,12 @@ public final class CommonServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map saveFOScreenToPDFFile(DispatchContext dctx, Map context) {
+    public static Map<String, Object> saveFOScreenToPDFFile(DispatchContext dctx, Map<String, ?> context) {
         String screenLocation = (String) context.get("screenLocation");
         String savePath = (String) context.get("savePath");
         String fileName = (String) context.get("fileName");
-        Map screenContext = (Map) context.get("screenContext");
-        Map screenParameters = (Map) context.get("screenParameters");
+        Map<String, Object> screenContext = (Map<String, Object>) context.get("screenContext");
+        Map<String, Object> screenParameters = (Map<String, Object>) context.get("screenParameters");
 
         // Render the template as FO text, then render the FO
         ByteArrayOutputStream baos = null;
@@ -140,8 +141,7 @@ public final class CommonServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map purgeNavHistory(DispatchContext dctx, Map context) {
+    public static Map<String, Object> purgeNavHistory(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
 
@@ -172,8 +172,7 @@ public final class CommonServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map runServiceEngineTests(DispatchContext dctx, Map context) {
+    public static Map<String, Object> runServiceEngineTests(DispatchContext dctx, Map<String, ?> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
         Integer iterations = (Integer) context.get("iterations");
@@ -287,8 +286,7 @@ public final class CommonServices {
             UtilMessage.createAndLogServiceError(gte, MODULE);
         }
 
-        Map results = ServiceUtil.returnSuccess();
-        return results;
+        return ServiceUtil.returnSuccess();
     }
 
     /**
@@ -297,8 +295,7 @@ public final class CommonServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map testEmptyService(DispatchContext dctx, Map context) {
+    public static Map<String, Object> testEmptyService(DispatchContext dctx, Map<String, ?> context) {
         return ServiceUtil.returnSuccess();
     }
 
@@ -308,8 +305,7 @@ public final class CommonServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map testEmptySeca(DispatchContext dctx, Map context) {
+    public static Map<String, Object> testEmptySeca(DispatchContext dctx, Map<String, ?> context) {
         return ServiceUtil.returnSuccess();
     }
 
@@ -319,8 +315,7 @@ public final class CommonServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map testIterateTestEntity(DispatchContext dctx, Map context) {
+    public static Map<String, Object> testIterateTestEntity(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
 
         Timestamp startAt = UtilDateTime.nowTimestamp();
@@ -350,8 +345,7 @@ public final class CommonServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map testIterateTestEntityCache(DispatchContext dctx, Map context) {
+    public static Map<String, Object> testIterateTestEntityCache(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
 
         Timestamp startAt = UtilDateTime.nowTimestamp();
@@ -381,8 +375,7 @@ public final class CommonServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map testQueryTestEntity(DispatchContext dctx, Map context) {
+    public static Map<String, Object> testQueryTestEntity(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
 
         Timestamp startAt = UtilDateTime.nowTimestamp();
@@ -399,7 +392,7 @@ public final class CommonServices {
         try {
             EntityListIterator iter = delegator.findListIteratorByCondition(dv, null, null, null, null, UtilCommon.DISTINCT_READ_OPTIONS);
             recordset = iter.getCompleteList();
-            for (GenericValue testEntity : recordset) {
+            for (@SuppressWarnings("unused") GenericValue testEntity : recordset) {
             }
             iter.close();
             finishAt = UtilDateTime.nowTimestamp();
@@ -421,8 +414,7 @@ public final class CommonServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map testUpdateTestEntity(DispatchContext dctx, Map context) {
+    public static Map<String, Object> testUpdateTestEntity(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
 
         Timestamp startAt = null;
@@ -460,8 +452,7 @@ public final class CommonServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map testCreateTestEntity(DispatchContext dctx, Map context) {
+    public static Map<String, Object> testCreateTestEntity(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
 
         Integer records = (Integer) context.get("records");
