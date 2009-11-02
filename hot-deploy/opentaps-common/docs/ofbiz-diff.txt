@@ -150,6 +150,9 @@ framework/service/src/org/ofbiz/service/test/ServiceEngineTestServices.java
 framework/service/testdef/servicetests.xml
 Fix concurrency issue for service-eca-global-event-exec test, see JIRA 3124 as this should be a temporary hack
 
+framework/base/src/org/ofbiz/base/util/template/FreeMarkerWorker.java
+Fix issues in the freemarker template caching causing different template string but same template locations to be cached under the same key.
+
 Applications changes
 --------------------
 

@@ -169,15 +169,16 @@ public class FreeMarkerWorker {
     }
 
     public static Environment renderTemplateFromString(String templateString, String templateLocation, Map<String, Object> context, Appendable outWriter) throws TemplateException, IOException {
-        Template template = cachedTemplates.get(templateLocation);
+        String cacheKey = templateLocation + "@" + templateString;
+        Template template = cachedTemplates.get(cacheKey);
         if (template == null) {
             synchronized (cachedTemplates) {
-                template = cachedTemplates.get(templateLocation);
+                template = cachedTemplates.get(cacheKey);
                 if (template == null) {
                     Reader templateReader = new StringReader(templateString);
                     template = new Template(templateLocation, templateReader, defaultOfbizConfig);
                     templateReader.close();
-                    cachedTemplates.put(templateLocation, template);
+                    cachedTemplates.put(cacheKey, template);
                 }
             }
         }
