@@ -495,11 +495,11 @@ public final class PartyHelper {
 
                         GenericValue stateProvGeo = shipLoc.getRelatedOne("StateProvinceGeo");
                         if (UtilValidate.isNotEmpty(stateProvGeo)) {
-                            templateContext.put("orderShippingStateProvince",stateProvGeo.get("geoName") );
+                            templateContext.put("orderShippingStateProvince", stateProvGeo.get("geoName"));
                         }
                         GenericValue countryGeo = shipLoc.getRelatedOne("CountryGeo");
                         if (UtilValidate.isNotEmpty(countryGeo)) {
-                            templateContext.put("orderShippingCountry",countryGeo.get("geoName") );
+                            templateContext.put("orderShippingCountry", countryGeo.get("geoName"));
                         }
                     }
 
@@ -517,7 +517,9 @@ public final class PartyHelper {
                     }
 
                     GenericValue statusItem = shipment.getRelatedOne("StatusItem");
-                    if (UtilValidate.isNotEmpty(statusItem)) templateContext.put("shipmentStatus", statusItem.get("description", locale));
+                    if (UtilValidate.isNotEmpty(statusItem)) {
+                        templateContext.put("shipmentStatus", statusItem.get("description", locale));
+                    }
                 }
 
             } else if (UtilValidate.isNotEmpty(orderId)) {
@@ -528,7 +530,9 @@ public final class PartyHelper {
 
                     // Default to the first ship group if no shipGroupSeqId is provided
                     List shipGroups = orh.getOrderItemShipGroups();
-                    if (UtilValidate.isNotEmpty(shipGroups)) shipGroup = (GenericValue) shipGroups.get(0);
+                    if (UtilValidate.isNotEmpty(shipGroups)) {
+                        shipGroup = (GenericValue) shipGroups.get(0);
+                    }
                 }
 
                 if (UtilValidate.isNotEmpty(shipGroup)) {
@@ -541,11 +545,11 @@ public final class PartyHelper {
 
                         GenericValue stateProvGeo = shipLoc.getRelatedOne("StateProvinceGeo");
                         if (UtilValidate.isNotEmpty(stateProvGeo)) {
-                            templateContext.put("orderShippingStateProvince",stateProvGeo.get("geoName"));
+                            templateContext.put("orderShippingStateProvince", stateProvGeo.get("geoName"));
                         }
                         GenericValue countryGeo = shipLoc.getRelatedOne("CountryGeo");
                         if (UtilValidate.isNotEmpty(countryGeo)) {
-                            templateContext.put("orderShippingCountry",countryGeo.get("geoName"));
+                            templateContext.put("orderShippingCountry", countryGeo.get("geoName"));
                         }
                     }
 
