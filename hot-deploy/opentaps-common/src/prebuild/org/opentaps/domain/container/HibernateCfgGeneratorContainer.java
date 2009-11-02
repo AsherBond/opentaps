@@ -35,27 +35,14 @@
  *******************************************************************************/
 
 /* This file has been modified by Open Source Strategies, Inc. */
-
 package org.opentaps.domain.container;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -68,39 +55,16 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.commons.io.FileUtils;
-import org.jvnet.inflector.Noun;
 import org.ofbiz.base.container.Container;
-import org.ofbiz.base.container.ContainerConfig;
 import org.ofbiz.base.container.ContainerException;
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.ObjectType;
-import org.ofbiz.base.util.UtilProperties;
-import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.base.util.template.FreeMarkerWorker;
-import org.ofbiz.entity.GenericDelegator;
-import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.config.DatasourceInfo;
-import org.ofbiz.entity.config.DelegatorInfo;
 import org.ofbiz.entity.config.EntityConfigUtil;
-import org.ofbiz.entity.model.ModelEntity;
-import org.ofbiz.entity.model.ModelField;
-import org.ofbiz.entity.model.ModelFieldType;
-import org.ofbiz.entity.model.ModelKeyMap;
-import org.ofbiz.entity.model.ModelReader;
-import org.ofbiz.entity.model.ModelRelation;
-import org.ofbiz.entity.model.ModelUtil;
-import org.ofbiz.entity.model.ModelViewEntity;
-import org.ofbiz.entity.model.ModelViewEntity.ModelAlias;
-import org.ofbiz.entity.model.ModelViewEntity.ModelMemberEntity;
-import org.ofbiz.entity.model.ModelViewEntity.ModelViewLink;
 import org.ofbiz.service.ServiceDispatcher;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
-
-import freemarker.template.TemplateException;
 
 /**
  * Some utility routines for loading seed data.
@@ -116,13 +80,14 @@ public class HibernateCfgGeneratorContainer implements Container {
     private final static String HIBERNATE_SEARCH_INDEX_PATH = "runtime/lucene/indexes";
     // hibernate configuration file ext
     private final static String HIBERNATE_CFG_EXT = ".cfg.xml";
-    // hibernate dialets maps
+    // hibernate dialects maps
     private static final HashMap<String, String> DIALECTS = new HashMap<String, String>();
     static {
         DIALECTS.put("hsql", "org.hibernate.dialect.HSQLDialect");
         DIALECTS.put("derby", "org.hibernate.dialect.DerbyDialect");
         DIALECTS.put("mysql", "org.opentaps.foundation.entity.hibernate.OpentapsMySQLDialect");
         DIALECTS.put("postgres", "org.hibernate.dialect.PostgreSQLDialect");
+        DIALECTS.put("postnew", "org.hibernate.dialect.PostgreSQLDialect");
         DIALECTS.put("oracle", "org.hibernate.dialect.OracleDialect");
         DIALECTS.put("sapdb", "org.hibernate.dialect.SAPDBDialect");
         DIALECTS.put("sybase", "org.hibernate.dialect.SybaseDialect");
@@ -155,7 +120,6 @@ public class HibernateCfgGeneratorContainer implements Container {
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public boolean start() throws ContainerException {
         try {
             File hibernateFile = new File(HIBERNATE_COMMON_PATH);
@@ -177,12 +141,8 @@ public class HibernateCfgGeneratorContainer implements Container {
         return true;
     }
 
-
-
-
     /** {@inheritDoc} */
     public void stop() throws ContainerException { }
-
 
     /**
      * Generates the hibernate configuration file for each data source using the <code>hibernate.cfg.xml</code> as a template

@@ -62,7 +62,7 @@ public class Infrastructure {
     protected GenericValue systemUserLogin = null;  // Sometimes, the system user must be used by the Factory or Repository that use the ofbiz Infrastructure
     // create this map for store all of session factory
     private static Map<String, SessionFactory> sessionFactories = FastMap.newInstance();
-    // hibernate dialets maps
+    // hibernate dialects maps
     public static final HashMap<String, String> DIALECTS = new HashMap<String, String>();
     private static final String HELPER_NAME = "org.ofbiz";
     static {
@@ -70,6 +70,7 @@ public class Infrastructure {
         DIALECTS.put("derby", "org.hibernate.dialect.DerbyDialect");
         DIALECTS.put("mysql", "org.opentaps.foundation.entity.hibernate.OpentapsMySQLDialect");
         DIALECTS.put("postgres", "org.hibernate.dialect.PostgreSQLDialect");
+        DIALECTS.put("postnew", "org.hibernate.dialect.PostgreSQLDialect");
         DIALECTS.put("oracle", "org.hibernate.dialect.OracleDialect");
         DIALECTS.put("sapdb", "org.hibernate.dialect.SAPDBDialect");
         DIALECTS.put("sybase", "org.hibernate.dialect.SybaseDialect");
@@ -142,7 +143,7 @@ public class Infrastructure {
             sessionFactory = annotationConfiguration.configure(HIBERNATE_CFG_PATH + datasourceName + HIBERNATE_CFG_EXT).buildSessionFactory();
             Debug.logVerbose("listing loaded entities ...", MODULE);
             Map metadata = sessionFactory.getAllClassMetadata();
-            //iterator all classess which are success load of hibernate, it just only for debug use.
+            //iterator all classes which are success load of hibernate, it just only for debug use.
             for (Iterator i = metadata.values().iterator(); i.hasNext();) {
                 EntityPersister persister = (EntityPersister) i.next();
                 String className = persister.getClassMetadata().getEntityName();
