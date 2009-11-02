@@ -85,9 +85,9 @@ public class FinancialAsserts extends OpentapsTestCase {
      * Same as below, with checkBalanceSheet = true.
      * @param asOfDate the date to get the balance for
      * @param tags optional accounting tag to use when getting the balances, as a Map of tag1 -> value1, tag2 -> value2, ...
-     * @returnthe financial balance <code>Map</code> of glAccountId => balance
+     * @return the financial balance <code>Map</code> of glAccountId => balance
      */
-    public Map<String, Number> getFinancialBalances(Timestamp asOfDate, Map tags) {
+    public Map<String, Number> getFinancialBalances(Timestamp asOfDate, Map<String, String> tags) {
         return getFinancialBalances(asOfDate, tags, true);
     }
 
@@ -109,17 +109,17 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @return the financial balance <code>Map</code> of glAccountId => balance
      */
     @SuppressWarnings("unchecked")
-    public Map<String, Number> getFinancialBalances(Timestamp asOfDate, Map tags, boolean checkBalanceSheet) {
+    public Map<String, Number> getFinancialBalances(Timestamp asOfDate, Map<String, String> tags, boolean checkBalanceSheet) {
         Timestamp fromDate = getLastClosedDate();
         Map<String, Number> balances = FastMap.newInstance();
 
         // run the income statement, which returns the income statement accounts and their sums
-        Map input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "fromDate", fromDate, "thruDate", asOfDate, "userLogin", userLogin, "glFiscalTypeId", "ACTUAL");
+        Map<String, Object> input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "fromDate", fromDate, "thruDate", asOfDate, "userLogin", userLogin, "glFiscalTypeId", "ACTUAL");
         if (tags != null) {
             input.putAll(tags);
         }
-        Map results = runAndAssertServiceSuccess("getIncomeStatementAccountSumsByDate", input, -1, false);
-        Map<GenericValue, Number> incomeStatement = (Map) results.get("glAccountSums");
+        Map<String, Object> results = runAndAssertServiceSuccess("getIncomeStatementAccountSumsByDate", input, -1, false);
+        Map<GenericValue, Number> incomeStatement = (Map<GenericValue, Number>) results.get("glAccountSums");
         for (GenericValue account : incomeStatement.keySet()) {
             BigDecimal balance = (UtilCommon.asBigDecimal(incomeStatement.get(account))).setScale(DECIMALS, ROUNDING);
             balances.put(account.getString("glAccountId"), balance);
@@ -131,9 +131,9 @@ public class FinancialAsserts extends OpentapsTestCase {
             input.putAll(tags);
         }
         results = runAndAssertServiceSuccess("getBalanceSheetForDate", input, -1, false);
-        Map<GenericValue, Number> assetAccountBalances = (Map) results.get("assetAccountBalances");
-        Map<GenericValue, Number> liabilityAccountBalances = (Map) results.get("liabilityAccountBalances");
-        Map<GenericValue, Number> equityAccountBalances = (Map) results.get("equityAccountBalances");
+        Map<GenericValue, Number> assetAccountBalances = (Map<GenericValue, Number>) results.get("assetAccountBalances");
+        Map<GenericValue, Number> liabilityAccountBalances = (Map<GenericValue, Number>) results.get("liabilityAccountBalances");
+        Map<GenericValue, Number> equityAccountBalances = (Map<GenericValue, Number>) results.get("equityAccountBalances");
 
         // Assets = Liabilities + Equity
         if (checkBalanceSheet) {
@@ -292,7 +292,6 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param description is the invoice description
      * @return invoiceId created
      */
-    @SuppressWarnings("unchecked")
     public String createInvoice(String partyIdTo, String invoiceTypeId, Timestamp invoiceDate, Timestamp dueDate, String invoiceMessage, String referenceNumber, String description) {
         Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
         input.put("invoiceTypeId", invoiceTypeId);
@@ -379,7 +378,7 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param description the invoice item description
      * @param accountingTags optional accounting tag to use when getting the balances, as a Map of tag1 -> value1, tag2 -> value2, ...
      */
-    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, String productId, BigDecimal quantity, BigDecimal amount, String description, Map accountingTags) {
+    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, String productId, BigDecimal quantity, BigDecimal amount, String description, Map<String, String> accountingTags) {
         Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
         input.put("invoiceId", invoiceId);
         input.put("invoiceItemTypeId", invoiceItemTypeId);
@@ -406,7 +405,7 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param description the invoice item description
      * @param accountingTags optional accounting tag to use when getting the balances, as a Map of tag1 -> value1, tag2 -> value2, ...
      */
-    public void updateInvoiceItem(String invoiceId, String invoiceItemSeqId, String invoiceItemTypeId, String productId, BigDecimal quantity, BigDecimal amount, String description, Map accountingTags) {
+    public void updateInvoiceItem(String invoiceId, String invoiceItemSeqId, String invoiceItemTypeId, String productId, BigDecimal quantity, BigDecimal amount, String description, Map<String, String> accountingTags) {
         Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
         input.put("invoiceId", invoiceId);
         input.put("invoiceItemSeqId", invoiceItemSeqId);
@@ -492,7 +491,7 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param accountingTags optional accounting tag to use when getting the balances, as a Map of tag1 -> value1, tag2 -> value2, ...
      * @return the created payment ID
      */
-    public String createPayment(BigDecimal amount, String partyIdFrom, String paymentTypeId, String paymentMethodTypeId, String endStatus, Map accountingTags) {
+    public String createPayment(BigDecimal amount, String partyIdFrom, String paymentTypeId, String paymentMethodTypeId, String endStatus, Map<String, String> accountingTags) {
         return createPaymentAndApplication(amount, partyIdFrom, organizationPartyId, paymentTypeId, paymentMethodTypeId, null, null, endStatus, accountingTags);
     }
 
@@ -527,7 +526,7 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param accountingTags optional accounting tag to use when getting the balances, as a Map of tag1 -> value1, tag2 -> value2, ...
      * @return the created payment ID
      */
-    public String createPaymentAndApplication(BigDecimal amount, String partyIdFrom, String partyIdTo, String paymentTypeId, String paymentMethodTypeId, String paymentMethodId, String invoiceId, String endStatus, Map accountingTags) {
+    public String createPaymentAndApplication(BigDecimal amount, String partyIdFrom, String partyIdTo, String paymentTypeId, String paymentMethodTypeId, String paymentMethodId, String invoiceId, String endStatus, Map<String, String> accountingTags) {
         Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
         input.put("amount", amount);
         input.put("currencyUomId", "USD");
@@ -691,9 +690,9 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param invoiceId
      * @param accountingTags
      */
-    public void updatePaymentApplication(BigDecimal amount, String paymentId, String invoiceId, Map accountingTags) {
+    public void updatePaymentApplication(BigDecimal amount, String paymentId, String invoiceId, Map<String, String> accountingTags) {
 
-        Map input = UtilMisc.toMap("userLogin", userLogin);
+        Map<String, Object> input = UtilMisc.toMap("userLogin", userLogin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
         input.put("amountApplied", amount);
