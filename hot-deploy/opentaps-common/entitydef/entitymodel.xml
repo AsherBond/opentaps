@@ -871,11 +871,11 @@ under the License.
     <extend-entity entity-name="PartyAcctgPreference">
         <field name="costingMethodId" type="id"/>
         <field name="salesInvoiceFooterText" type="description"/>
+        <field name="groupSalesTaxOnInvoicePdf" type="indicator"/>
+        <field name="allocPaymentTagsToAppl" type="indicator"/>
         <relation type="one" fk-name="ACTGPREF_COSTMETH" title="CostingMethod" rel-entity-name="Enumeration">
             <key-map field-name="costingMethodId" rel-field-name="enumId"/>
         </relation>
-        <field name="groupSalesTaxOnInvoicePdf" type="indicator"/>
-        <field name="allocPaymentTagsToAppl" type="indicator"/>
     </extend-entity>
 
     <!-- ================================== -->
