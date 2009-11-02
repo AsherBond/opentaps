@@ -69,7 +69,6 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
-import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
@@ -790,14 +789,11 @@ public final class EmailServices {
                     EntityCondition.makeCondition("workEffortId", workEffortId),
                     EntityUtil.getFilterByDateExpr());
 
-        EntityListIterator partiesIt = delegator.findListIteratorByCondition("WorkEffortPartyAssignment", mainCondList, null,
+        return delegator.findByCondition("WorkEffortPartyAssignment", mainCondList, null,
                 null,
                 null, // fields to order by (unimportant here)
                 new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true));
-        List<GenericValue> parties = partiesIt.getCompleteList();
-        partiesIt.close();
 
-        return parties;
     }
 
 }
