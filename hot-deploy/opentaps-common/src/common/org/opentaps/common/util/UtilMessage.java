@@ -127,7 +127,7 @@ public final class UtilMessage {
                     // in non-typical location.
                     localizedLabels.addBottomResourceBundle(UtilProperties.getResourceBundle("org/opentaps/analytics/locale/messages", locale));
                 } catch (IllegalArgumentException e) {
-                    Debug.logWarning("Resorce bundle for analytics isn't found.", MODULE);
+                    Debug.logWarning("Resource bundle for analytics not found.", MODULE);
                 }
 
                 UI_LABELS.put(locale, localizedLabels);
