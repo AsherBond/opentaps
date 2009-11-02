@@ -23,7 +23,7 @@
     <service name="opentaps.prepareEmailInterface" engine="interface" location="" invoke="">
         <attribute name="sendTo" type="String" mode="IN" optional="true"/>
         <attribute name="subject" type="String" mode="IN" optional="true"/>
-        <attribute name="content" type="String" mode="IN" optional="true" allow-html="safe"/>
+        <attribute name="content" type="String" mode="IN" optional="true" allow-html="any"/>
         <attribute name="workEffortId" type="String" mode="OUT" optional="false"/>
         <attribute name="communicationEventId" type="String" mode="OUT" optional="false"/>
     </service>
