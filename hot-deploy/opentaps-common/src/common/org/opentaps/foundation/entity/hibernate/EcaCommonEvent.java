@@ -132,6 +132,10 @@ public class EcaCommonEvent {
     public static GenericValue afterSave(Entity entity, GenericDelegator delegator) throws GenericEntityException {
         if (entity==null) return null;
         GenericValue value = HibernateUtil.entityToGenericValue(entity, delegator);
+        
+        // always clear cache before the operation
+        delegator.clearCacheLine(value);
+
         // get eca event map
         Map ecaEventMap = delegator.getEntityEcaHandler().getEntityEventMap(value.getEntityName());
         if (ecaEventMap != null) {
@@ -190,6 +194,10 @@ public class EcaCommonEvent {
         if (entity==null) return;
         try {
             GenericValue value = HibernateUtil.entityToGenericValue(entity, delegator);
+            
+            // always clear cache before the operation
+            delegator.clearCacheLine(value);
+            
             // get eca event map
             Map ecaEventMap = delegator.getEntityEcaHandler().getEntityEventMap(value.getEntityName());
             if (ecaEventMap != null) {

@@ -1358,12 +1358,13 @@ public class HibernateTests extends OpentapsTestCase {
         // open a new session, if session has opened, then close it first
         reOpenSession();
         UserTransaction tx = session.beginUserTransaction();
-        String hql = "delete from TestEntityItem";
+        String hql = "from TestEntity";
         Query query = session.createQuery(hql);
-        query.executeUpdate();
-        hql = "delete from TestEntity";
-        query = session.createQuery(hql);
-        query.executeUpdate();
+        List<TestEntity> list = query.list();
+        for (TestEntity testEntity : list) {
+            session.delete(testEntity);
+            Debug.logInfo("removeTestData testId : " + testEntity.getTestId(), MODULE);
+        }
         session.flush();
         tx.commit();
     }

@@ -126,6 +126,7 @@ public class Infrastructure {
             annotationConfiguration.getEventListeners().setDeleteEventListeners(deleteEventListeners);
             annotationConfiguration.getEventListeners().setLoadEventListeners(loadEventListeners);
             annotationConfiguration.getEventListeners().setSaveEventListeners(saveEventListeners);
+            annotationConfiguration.getEventListeners().setUpdateEventListeners(saveOrUpdateEventListeners);
             //get groupHelpName for retrieve database connection information.
             String groupHelperName = (String) EntityConfigUtil.getDelegatorInfo(delegatorName).groupMap.get(getHelperName());
             Debug.logVerbose("groupHelperName : " + groupHelperName, MODULE);

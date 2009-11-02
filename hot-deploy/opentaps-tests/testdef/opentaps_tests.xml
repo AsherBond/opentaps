@@ -26,6 +26,7 @@
     <test-case case-name="pojo-service-tests"><junit-test-suite class-name="org.opentaps.tests.service.POJOServiceTests"/></test-case>
     <test-case case-name="hibernate-tests"><junit-test-suite class-name="org.opentaps.tests.entity.HibernateTests"/></test-case>
     <test-case case-name="search-tests"><junit-test-suite class-name="org.opentaps.tests.search.SearchTests"/></test-case>
+    <test-case case-name="entity-engine-tests"><junit-test-suite class-name="org.opentaps.tests.entity.EntityEngineTests"/></test-case>
 
     <!-- framework tests for performance and analysis -->
     <test-case case-name="framework-race-conditions"><junit-test-suite class-name="org.opentaps.tests.framework.RaceConditionTests"/></test-case>
