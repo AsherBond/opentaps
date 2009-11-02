@@ -26,9 +26,11 @@
     <!-- Data -->
     <entity-resource type="data" reader-name="seed" loader="main" location="data/AmazonSeedData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/AmazonVariationSeedData.xml"/>
-    <!--
-    Uncomment this for an example of setting up an Amazon store plus scheduling Amazon related jobs
+    
     <entity-resource type="data" reader-name="demo" loader="main" location="data/AmazonDemoSetup.xml"/>
+    <!--
+    Uncomment this for an example of scheduling Amazon related jobs
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/AmazonJobs.xml"/>
     -->
     <entity-resource type="data" reader-name="demo" loader="main" location="data/AmazonDemoData.xml"/>
 
