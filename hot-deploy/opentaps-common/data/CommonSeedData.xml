@@ -199,7 +199,7 @@ under the License.
     <ContactMechPurposeType contactMechPurposeTypeId="RECEIVE_EMAIL_OWNER" description="Owner of Received Emails"/>
     <ContactMechTypePurpose contactMechTypeId="EMAIL_ADDRESS" contactMechPurposeTypeId="RECEIVE_EMAIL_OWNER"/>
        
-    <ContactMechType contactMechTypeId="SKYPE" hasParent="N" description="Skype"/>
+    <ContactMechType contactMechTypeId="SKYPE" parentTypeId="ELECTRONIC_ADDRESS" hasTable="N" description="Skype"/>
 
     <!-- Used to create a new medium of communication -->
     <CommunicationEventType communicationEventTypeId="INTERNAL_MESSAGE" description="Internal Message Communication Type"/>
