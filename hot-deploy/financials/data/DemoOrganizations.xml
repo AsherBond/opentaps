@@ -68,7 +68,10 @@
     <!-- Default footer for PDF -->
     <PartyAcctgPreference partyId="Company" salesInvoiceFooterText="opentaps Open Source ERP + CRM - www.opentaps.org" />
 
-    <!-- This setting will take effect to group tax item in a same line of Invoice PDF -->
+    <!-- If set to Y, all tax items of an invoice will be grouped on the same line in the Invoice PDF document -->
     <PartyAcctgPreference partyId="Company" groupSalesTaxOnInvoicePdf="Y"/>
+
+    <!-- If set to Y, instead of setting accounting tags at the Paymnet level, they will set at the PaymentApplication level -->
+    <PartyAcctgPreference partyId="Company" allocPaymentTagsToAppl="N"/>
 
 </entity-engine-xml>
