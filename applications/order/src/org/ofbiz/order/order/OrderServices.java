@@ -1164,6 +1164,26 @@ public class OrderServices {
                                 continue;
                             }
                             if (reserveInventory) {
+
+                                // use the quantity from the orderItemShipGroupAssoc, NOT the orderItem, these are reserved by item-group assoc
+                                BigDecimal quantityToReserve = orderItemShipGroupAssoc.getBigDecimal("quantity");
+                                // account for canceled quantity
+                                BigDecimal cancelQuantity = orderItemShipGroupAssoc.getBigDecimal("cancelQuantity");
+                                if (cancelQuantity != null) {
+                                    quantityToReserve = quantityToReserve.subtract(cancelQuantity);
+                                }
+                                // account for already issued quantity
+                                List<GenericValue> issuances = delegator.findByAnd("ItemIssuance", UtilMisc.toMap("orderId", orderItem.getString("orderId"), "orderItemSeqId", orderItem.getString("orderItemSeqId"), "shipGroupSeqId", orderItemShipGroupAssoc.getString("shipGroupSeqId")));
+                                for (GenericValue issuance : issuances) {
+                                    BigDecimal iqty = issuance.getBigDecimal("quantity");
+                                    BigDecimal icqty = issuance.getBigDecimal("cancelQuantity");
+                                    if (icqty != null) {
+                                        iqty = iqty.subtract(icqty);
+                                    }
+                                    quantityToReserve = quantityToReserve.subtract(iqty);
+                                }
+
+
                                 // for MARKETING_PKG_PICK reserve the components
                                 if ("MARKETING_PKG_PICK".equals(product.get("productTypeId"))) {
                                     Map componentsRes = dispatcher.runSync("getAssociatedProducts", UtilMisc.toMap("productId", orderItem.getString("productId"), "type", "PRODUCT_COMPONENT"));
@@ -1176,8 +1196,7 @@ public class OrderServices {
                                         while (assocProductsIter.hasNext()) {
                                             GenericValue productAssoc = (GenericValue) assocProductsIter.next();
                                             BigDecimal quantityOrd = productAssoc.getBigDecimal("quantity");
-                                            BigDecimal quantityKit = orderItemShipGroupAssoc.getBigDecimal("quantity");
-                                            BigDecimal quantity = quantityOrd.multiply(quantityKit);
+                                            BigDecimal quantity = quantityOrd.multiply(quantityToReserve);
                                             Map reserveInput = new HashMap();
                                             reserveInput.put("productStoreId", productStoreId);
                                             reserveInput.put("productId", productAssoc.getString("productIdTo"));
@@ -1208,12 +1227,6 @@ public class OrderServices {
                                     reserveInput.put("orderItemSeqId", orderItem.getString("orderItemSeqId"));
                                     reserveInput.put("shipGroupSeqId", orderItemShipGroupAssoc.getString("shipGroupSeqId"));
                                     reserveInput.put("facilityId", shipGroupFacilityId);
-                                    // use the quantity from the orderItemShipGroupAssoc, NOT the orderItem, these are reserved by item-group assoc
-                                    BigDecimal quantityToReserve = orderItemShipGroupAssoc.getBigDecimal("quantity");
-                                    BigDecimal cancelQuantity = orderItemShipGroupAssoc.getBigDecimal("cancelQuantity");
-                                    if (cancelQuantity != null) {
-                                        quantityToReserve = quantityToReserve.subtract(cancelQuantity);
-                                    }
                                     reserveInput.put("quantity", quantityToReserve);
                                     reserveInput.put("userLogin", userLogin);
                                     Map reserveResult = dispatcher.runSync("reserveStoreInventory", reserveInput);
@@ -1899,6 +1912,25 @@ public class OrderServices {
                     aisgaCancelQuantity = BigDecimal.ZERO;
                 }
                 BigDecimal availableQuantity = orderItemShipGroupAssoc.getBigDecimal("quantity").subtract(aisgaCancelQuantity);
+                if (availableQuantity == null) availableQuantity = BigDecimal.ZERO;
+
+                // account for already issued quantity
+                BigDecimal issuedQuantity = BigDecimal.ZERO;
+                try {
+                    List<GenericValue> issuances = delegator.findByAnd("ItemIssuance", UtilMisc.toMap("orderId", orderItem.getString("orderId"), "orderItemSeqId", orderItem.getString("orderItemSeqId"), "shipGroupSeqId", orderItemShipGroupAssoc.getString("shipGroupSeqId")));
+                    for (GenericValue issuance : issuances) {
+                        BigDecimal iqty = issuance.getBigDecimal("quantity");
+                        BigDecimal icqty = issuance.getBigDecimal("cancelQuantity");
+                        if (icqty != null) {
+                            iqty = iqty.subtract(icqty);
+                        }
+                        issuedQuantity = issuedQuantity.add(iqty);
+                    }
+                } catch (GenericEntityException e) {
+                    Debug.logError(e, module);
+                    return ServiceUtil.returnError(UtilProperties.getMessage(resource_error,"OrderErrorCannotGetOrderItemAssocEntity", UtilMisc.toMap("itemMsgInfo",itemMsgInfo), locale));
+                }
+                availableQuantity = availableQuantity.subtract(issuedQuantity).max(BigDecimal.ZERO);
 
                 BigDecimal itemCancelQuantity = orderItem.getBigDecimal("cancelQuantity");
                 if (itemCancelQuantity == null) {
@@ -1906,7 +1938,6 @@ public class OrderServices {
                 }
                 BigDecimal originalItemQuantity = orderItem.getBigDecimal("quantity");
                 BigDecimal itemQuantity = originalItemQuantity.subtract(itemCancelQuantity);
-                if (availableQuantity == null) availableQuantity = BigDecimal.ZERO;
                 if (itemQuantity == null) itemQuantity = BigDecimal.ZERO;
 
                 BigDecimal thisCancelQty = null;
