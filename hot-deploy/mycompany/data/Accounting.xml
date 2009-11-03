@@ -24,16 +24,16 @@
     <PartyAcctgPreference partyId="Company" baseCurrencyUomId="USD" cogsMethodId="COGS_AVG_COST"/>
 
     <!-- fiscal years -->
-    <CustomTimePeriod customTimePeriod="MY0001" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2008-01-01" thruDate="2009-01-01" isClosed="N" periodNum="2008" periodName="Fiscal Year"/>
-    <CustomTimePeriod customTimePeriod="MY0002" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2009-01-01" thruDate="2010-01-01" isClosed="N" periodNum="2009" periodName="Fiscal Year"/>
-    <CustomTimePeriod customTimePeriod="MY0003" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2010-01-01" thruDate="2011-01-01" isClosed="N" periodNum="2010" periodName="Fiscal Year"/>
-    <CustomTimePeriod customTimePeriod="MY0004" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2011-01-01" thruDate="2012-01-01" isClosed="N" periodNum="2011" periodName="Fiscal Year"/>
-    <CustomTimePeriod customTimePeriod="MY0005" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2012-01-01" thruDate="2013-01-01" isClosed="N" periodNum="2012" periodName="Fiscal Year"/>
-    <CustomTimePeriod customTimePeriod="MY0006" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2013-01-01" thruDate="2014-01-01" isClosed="N" periodNum="2013" periodName="Fiscal Year"/>
-    <CustomTimePeriod customTimePeriod="MY0007" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2014-01-01" thruDate="2015-01-01" isClosed="N" periodNum="2014" periodName="Fiscal Year"/>
-    <CustomTimePeriod customTimePeriod="MY0008" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2015-01-01" thruDate="2016-01-01" isClosed="N" periodNum="2015" periodName="Fiscal Year"/>
-    <CustomTimePeriod customTimePeriod="MY0009" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2016-01-01" thruDate="2017-01-01" isClosed="N" periodNum="2016" periodName="Fiscal Year"/>
-    <CustomTimePeriod customTimePeriod="MY0010" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2017-01-01" thruDate="2018-01-01" isClosed="N" periodNum="2017" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="MY0001" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2008-01-01" thruDate="2009-01-01" isClosed="N" periodNum="2008" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="MY0002" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2009-01-01" thruDate="2010-01-01" isClosed="N" periodNum="2009" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="MY0003" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2010-01-01" thruDate="2011-01-01" isClosed="N" periodNum="2010" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="MY0004" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2011-01-01" thruDate="2012-01-01" isClosed="N" periodNum="2011" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="MY0005" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2012-01-01" thruDate="2013-01-01" isClosed="N" periodNum="2012" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="MY0006" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2013-01-01" thruDate="2014-01-01" isClosed="N" periodNum="2013" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="MY0007" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2014-01-01" thruDate="2015-01-01" isClosed="N" periodNum="2014" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="MY0008" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2015-01-01" thruDate="2016-01-01" isClosed="N" periodNum="2015" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="MY0009" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2016-01-01" thruDate="2017-01-01" isClosed="N" periodNum="2016" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="MY0010" organizationPartyId="Company" periodTypeId="FISCAL_YEAR" fromDate="2017-01-01" thruDate="2018-01-01" isClosed="N" periodNum="2017" periodName="Fiscal Year"/>
 
     <!-- add fiscal quarters here if you need them using CustomTimePeriod as well -->
 
