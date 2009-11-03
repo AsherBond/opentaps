@@ -169,10 +169,10 @@ public final class InvoiceHelper {
      * @return the invoice lines
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<Map<String, Object>> getInvoiceLinesForPresentation(GenericDelegator delegator, String invoiceId) throws GenericEntityException {
         return getInvoiceLinesForPresentation(delegator, invoiceId, Boolean.FALSE);
     }
+
     /**
      * <p>Gets the list of lines as should appear in a presentation invoice.  Each line
      * can either be a single invoice item or an aggregation of invoice items based
@@ -192,9 +192,9 @@ public final class InvoiceHelper {
      * @param delegator a <code>GenericDelegator</code> value
      * @param invoiceId a <code>String</code> value
      * @param groupSalesTaxOnInvoicePdf  a <code>Boolean</code> value
+     * @return the invoice lines
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<Map<String, Object>> getInvoiceLinesForPresentation(GenericDelegator delegator, String invoiceId, Boolean groupSalesTaxOnInvoicePdf) throws GenericEntityException {
 
         List<Map<String, Object>> invoiceLines = FastList.newInstance();
