@@ -22,7 +22,7 @@
 
     <!-- Sales Order that's closed -->
     <DataImportOrderHeader orderId="DS10002" orderTypeId="SALES_ORDER" customerPartyId="DemoCustomer" orderDate="2008-01-01 00:00:00" currencyUomId="USD"
-        shippingTotal="10.00" taxTotal="7.95" adjustmentsTotal="-25.00" grandTotal="200.00"
+        shippingTotal="10.00" orderTax="7.95" adjustmentsTotal="-25.00" grandTotal="200.00"
         comments="This is a test import order" orderClosed="Y"/>
     <DataImportOrderItem orderId="DS10002" productId="GZ-1000" quantity="5" quantityShipped="5" price="15.99" itemAdjustmentsTotal="-10.00" customerPo="DC12345" comments="This is a test item"/>
     <DataImportOrderItem orderId="DS10002" productId="GZ-1001" quantity="5" quantityShipped="3" price="15.99" itemAdjustmentsTotal="-10.00" customerPo="DC12345" comments="This is a second® test item"/>
