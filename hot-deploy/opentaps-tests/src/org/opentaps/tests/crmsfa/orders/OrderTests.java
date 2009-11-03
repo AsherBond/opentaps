@@ -1057,12 +1057,18 @@ public class OrderTests extends OrderTestCase {
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
         order.put(testProduct, new BigDecimal("5.0"));
         User = DemoCSR;
-        SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoAccount1, productStoreId);
+        SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoAccount1, productStoreId, null, "DemoAddress1");
         String orderId = salesOrder.getOrderId();
         Debug.logInfo("testUpdateQuantityOfPartiallyShippedOrderItem created order [" + orderId + "]", MODULE);
 
         // approve the sales order
         salesOrder.approveOrder();
+
+        // check the tax adjustments
+
+        // there should be one SALES_TAX OrderAdjustment from CA (6.25%) for the 5 products
+        BigDecimal expectedTax = new BigDecimal("55.55").multiply(new BigDecimal("6.25")).divide(PERCENT_SCALE, SALES_TAX_CALC_DECIMALS, SALES_TAX_ROUNDING);
+        checkSalesTax(orderId, "CA_BOE", 1, expectedTax);
 
         // pack and ship 2 out of 5
         Map<String, Map<String, BigDecimal>> toPackItems = new HashMap<String, Map<String, BigDecimal>>();
@@ -1082,6 +1088,15 @@ public class OrderTests extends OrderTestCase {
         // verify that ATP has changed by -3 and QOH has changed by -2
         assertEquals("ATP has changed by -3", finalAtp, initAtp.subtract(new BigDecimal("3.0")));
         assertEquals("QOH has changed by -2", finalQoh, initQoh.subtract(new BigDecimal("2.0")));
+
+        // check the final tax adjustments
+        // Note: the updateOrderItem service will not delete the previous adjustments since they are
+        //  already billed
+
+        // there should be the original SALES_TAX OrderAdjustment from CA (6.25%) for the 5 products
+        // there should be the new SALES_TAX OrderAdjustment from CA (6.25%) for the 3 products
+        expectedTax = new BigDecimal("88.88").multiply(new BigDecimal("6.25")).divide(PERCENT_SCALE, SALES_TAX_CALC_DECIMALS, SALES_TAX_ROUNDING);
+        checkSalesTax(orderId, "CA_BOE", 2, expectedTax);
     }
 
     /**
