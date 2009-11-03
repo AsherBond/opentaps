@@ -28,8 +28,8 @@
 
     <!-- A partner agreement is a special type of agreement which uses the same items and terms as commissions to share billing logic -->
     <AgreementType agreementTypeId="PARTNER_AGREEMENT" description="Partner" hasTable="N" parentTypeId=""/>
-    <AgreementToItemMap agreementTypeId="PARTNER_AGREEMENT" agreementItemTypeId="COMM_PAYMENT" sequenceNum="1" defaultDescription="Partner payment terms" autoCreate="Y" maxAllowed="1"/>
-    <AgreementToItemMap agreementTypeId="PARTNER_AGREEMENT" agreementItemTypeId="COMM_RATES" sequenceNum="3" defaultDescription="Partner rates" autoCreate="Y" maxAllowed="1"/>
+    <AgreementToItemMap agreementTypeId="PARTNER_AGREEMENT" agreementItemTypeId="COMM_PAYMENT" sequenceNum="1" autoCreate="Y" maxAllowed="1"/>
+    <AgreementToItemMap agreementTypeId="PARTNER_AGREEMENT" agreementItemTypeId="COMM_RATES" sequenceNum="3" autoCreate="Y" maxAllowed="1"/>
 
     <!-- Special status to mark the partner invoices as processed so we know they were invoiced. -->
     <StatusItem statusId="INVOICE_INV_PTNR" statusTypeId="INVOICE_STATUS" statusCode="INVOICED" sequenceId="20" description="Invoiced to Partner"/>

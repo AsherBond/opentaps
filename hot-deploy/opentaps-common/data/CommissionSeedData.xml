@@ -78,10 +78,10 @@
     <ProductCategoryType productCategoryTypeId="COMMISSION_CATEGORY" hasTable="N" description="Products in this kind of category qualify for commissions"/>
 
     <!-- An agreement can be made of up of these four item types. -->
-    <AgreementToItemMap agreementTypeId="COMMISSION_AGREEMENT" agreementItemTypeId="COMM_PAYMENT" sequenceNum="1" defaultDescription="Commission payout terms" autoCreate="Y" maxAllowed="1"/>
-    <AgreementToItemMap agreementTypeId="COMMISSION_AGREEMENT" agreementItemTypeId="COMM_TIMING" sequenceNum="2" defaultDescription="Timing of Commissions" autoCreate="Y" maxAllowed="1"/>
-    <AgreementToItemMap agreementTypeId="COMMISSION_AGREEMENT" agreementItemTypeId="COMM_CUSTOMERS" sequenceNum="3" defaultDescription="Commission customers" autoCreate="Y" maxAllowed="1"/>
-    <AgreementToItemMap agreementTypeId="COMMISSION_AGREEMENT" agreementItemTypeId="COMM_RATES" sequenceNum="4" defaultDescription="Commission rates" autoCreate="Y" maxAllowed="1"/>
+    <AgreementToItemMap agreementTypeId="COMMISSION_AGREEMENT" agreementItemTypeId="COMM_PAYMENT" sequenceNum="1" autoCreate="Y" maxAllowed="1"/>
+    <AgreementToItemMap agreementTypeId="COMMISSION_AGREEMENT" agreementItemTypeId="COMM_TIMING" sequenceNum="2" autoCreate="Y" maxAllowed="1"/>
+    <AgreementToItemMap agreementTypeId="COMMISSION_AGREEMENT" agreementItemTypeId="COMM_CUSTOMERS" sequenceNum="3" autoCreate="Y" maxAllowed="1"/>
+    <AgreementToItemMap agreementTypeId="COMMISSION_AGREEMENT" agreementItemTypeId="COMM_RATES" sequenceNum="4" autoCreate="Y" maxAllowed="1"/>
 
     <!-- Identify which terms are payment items -->
     <AgreementItemToTermMap agreementItemTypeId="COMM_PAYMENT" termTypeId="FIN_PAYMENT_TERM" maxAllowed="1"/>
