@@ -132,7 +132,7 @@ under the License.
       </#if>
       <#if shipGroup.shippingInstructions?has_content>
       <fo:table-row>
-        <fo:table-cell><fo:block font-weight="bold">${uiLabelMap.OrderIntructions}</fo:block></fo:table-cell>
+        <fo:table-cell><fo:block font-weight="bold">${uiLabelMap.OrderInstructions}</fo:block></fo:table-cell>
         <fo:table-cell><fo:block>${shipGroup.shippingInstructions}</fo:block></fo:table-cell>
       </fo:table-row>
       </#if>       
