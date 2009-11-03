@@ -1650,6 +1650,7 @@ public final class FinancialReports {
         try {
             long rowCount = delegator.findCountByCondition("DateDim", null, null);
             if (rowCount < 2) {
+                Debug.logInfo("Creating date dimension ...", MODULE);
                 UtilEtl.setupDateDimension(delegator, timeZone, locale);
             }
 
