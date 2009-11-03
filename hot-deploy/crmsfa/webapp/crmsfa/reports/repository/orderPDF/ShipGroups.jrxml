@@ -103,7 +103,7 @@
 					<textElement>
 						<font pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{OrderIntructions} + ":"]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{OrderInstructions} + ":"]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>

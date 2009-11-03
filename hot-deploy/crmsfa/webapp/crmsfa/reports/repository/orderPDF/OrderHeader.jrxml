@@ -115,7 +115,7 @@
 					<textElement>
 						<font size="11"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$R{CommonCustomer}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{OpentapsCustomer}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
