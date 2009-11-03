@@ -224,6 +224,12 @@ public final class InvoiceHelper {
             // group the tax items
             if ("ITM_SALES_TAX".equals(invoiceItem.get("invoiceItemTypeId"))) {
                 String key = groupSalesTaxOnInvoicePdf ? invoiceItem.getString("description") : invoiceItem.getString("invoiceItemSeqId");
+
+                // avoid NPE in the fast map
+                if (key == null) {
+                    key = "";
+                }
+
                 List<GenericValue> invoiceItemList = taxGroup.get(key);
                 if (invoiceItemList == null) {
                     invoiceItemList = FastList.<GenericValue>newInstance();
@@ -307,7 +313,7 @@ public final class InvoiceHelper {
         return invoiceLines;
 
     }
-    
+
     /**
      * Retrieve a list of AgreementTerms which apply to an invoice.
      * @param delegator a <code>GenericDelegator</code> value
