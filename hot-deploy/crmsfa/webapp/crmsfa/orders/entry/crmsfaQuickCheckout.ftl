@@ -158,7 +158,7 @@
     var spinnerData = updateShipGroupEstimates && isShippable(shipGroupSeqId) ? {target: 'shippingInfo_' + shipGroupSeqId} : null;
     
     <#-- Call request on server and then call the handle function to deal with the response -->
-    opentaps.sendRequest('<@ofbizUrl>updateShipGroup</@ofbizUrl>', content, handleFunction, spinnerData, true, 60000);
+    opentaps.sendRequest('<@ofbizUrl>updateShipGroup</@ofbizUrl>', content, handleFunction, spinnerData, true, 600000);
      
   }
 
