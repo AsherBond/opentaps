@@ -89,6 +89,7 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.base.entities.OrderAdjustmentBilling;
 import org.opentaps.domain.base.entities.OrderItemShipGroupAssoc;
 import org.opentaps.domain.base.entities.SupplierProduct;
 import org.opentaps.domain.order.Order;
@@ -97,6 +98,8 @@ import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 import org.opentaps.domain.purchasing.PurchasingRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
+import org.opentaps.foundation.entity.hibernate.Query;
+import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
@@ -1091,10 +1094,11 @@ public final class OrderServices {
 
         // run promotions to handle all changes in the cart
         ProductPromoWorker.doPromotions(cart, dispatcher);
-
+        // the variable store the return sucess message
+        String warningMessage = null;
         // save all the updated information
         try {
-            saveUpdatedCartToOrder(dispatcher, delegator, cart, locale, userLogin, orderId, UtilMisc.toMap("itemReasonMap", itemReasonMap, "itemCommentMap", itemCommentMap));
+            warningMessage = saveUpdatedCartToOrder(dispatcher, delegator, cart, locale, userLogin, orderId, UtilMisc.toMap("itemReasonMap", itemReasonMap, "itemCommentMap", itemCommentMap));
         } catch (GeneralException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
@@ -1106,7 +1110,7 @@ public final class OrderServices {
             Debug.logError(e, MODULE);
         }
 
-        Map result = ServiceUtil.returnSuccess();
+        Map result = ServiceUtil.returnSuccess(warningMessage);
         result.put("shoppingCart", cart);
         result.put("orderId", orderId);
         return result;
@@ -1336,10 +1340,11 @@ public final class OrderServices {
         } catch (GeneralException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
-
+        // the variable store the return sucess message
+        String warningMessage = null;
         // save all the updated information
         try {
-            saveUpdatedCartToOrder(dispatcher, delegator, cart, locale, userLogin, orderId);
+           warningMessage = saveUpdatedCartToOrder(dispatcher, delegator, cart, locale, userLogin, orderId);
         } catch (GeneralException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
@@ -1351,7 +1356,7 @@ public final class OrderServices {
             Debug.logError(e, MODULE);
         }
 
-        Map result = ServiceUtil.returnSuccess();
+        Map result = ServiceUtil.returnSuccess(warningMessage);
         result.put("shoppingCart", cart);
         result.put("orderId", orderId);
         return result;
@@ -1504,8 +1509,8 @@ public final class OrderServices {
     /*
      * Added accounting tags support.
      */
-    private static void saveUpdatedCartToOrder(LocalDispatcher dispatcher, GenericDelegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId) throws GeneralException {
-        saveUpdatedCartToOrder(dispatcher, delegator, cart, locale, userLogin, orderId, null);
+    private static String saveUpdatedCartToOrder(LocalDispatcher dispatcher, GenericDelegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId) throws GeneralException {
+        return saveUpdatedCartToOrder(dispatcher, delegator, cart, locale, userLogin, orderId, null);
     }
 
     /*
@@ -1513,7 +1518,8 @@ public final class OrderServices {
      * (TODO: changeMap unused)
      */
     @SuppressWarnings("unchecked")
-    private static void saveUpdatedCartToOrder(LocalDispatcher dispatcher, GenericDelegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId, Map changeMap) throws GeneralException {
+    private static String saveUpdatedCartToOrder(LocalDispatcher dispatcher, GenericDelegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId, Map changeMap) throws GeneralException {
+        String warningMessage = null;
         // get/set the shipping estimates.  if it's a SALES ORDER, then return an error if there are no ship estimates
         int shipGroups = cart.getShipGroupSize();
         for (int gi = 0; gi < shipGroups; gi++) {
@@ -1689,13 +1695,27 @@ public final class OrderServices {
 
         // remove the adjustments
         try {
-            EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
-                                                                 EntityCondition.makeCondition("orderId", orderId),
-                                                                 EntityCondition.makeCondition(EntityOperator.OR,
-                                                                                               EntityCondition.makeCondition("orderAdjustmentTypeId", "PROMOTION_ADJUSTMENT"),
-                                                                                               EntityCondition.makeCondition("orderAdjustmentTypeId", "SHIPPING_CHARGES"),
-                                                                                               EntityCondition.makeCondition("orderAdjustmentTypeId", "SALES_TAX")));
-            delegator.removeByCondition("OrderAdjustment", cond);
+            DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+            DomainsDirectory dd = domainLoader.loadDomainsDirectory();
+            Session session = dd.getInfrastructure().getSession();
+            String hql = "from OrderAdjustmentBilling eo where eo.orderAdjustment.orderId = :orderId ";
+            Query query = session.createQuery(hql);
+            query.setString("orderId", orderId);
+            List<OrderAdjustmentBilling> orderAdjustmentBillingList = query.list();
+            if (orderAdjustmentBillingList.size() > 0) {
+                // if order adjustment billings already exist for the order adjustments, do not make any changes to the order adjustments .
+                // return success, but with a message "Order adjustments were not changed because some adjustments have already been invoiced.
+                warningMessage = UtilMessage.expandLabel("OpentapsOrderAdustementsNotChangedForAlreadyInvoiced", locale);
+            } else {
+                // remove the adjustments
+                EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
+                                                                     EntityCondition.makeCondition("orderId", orderId),
+                                                                     EntityCondition.makeCondition(EntityOperator.OR,
+                                                                                                   EntityCondition.makeCondition("orderAdjustmentTypeId", "PROMOTION_ADJUSTMENT"),
+                                                                                                   EntityCondition.makeCondition("orderAdjustmentTypeId", "SHIPPING_CHARGES"),
+                                                                                                   EntityCondition.makeCondition("orderAdjustmentTypeId", "SALES_TAX")));
+                delegator.removeByCondition("OrderAdjustment", cond);
+            }
         } catch (GenericEntityException e) {
             Debug.logError(e, MODULE);
             throw new GeneralException(e.getMessage());
@@ -1737,6 +1757,7 @@ public final class OrderServices {
         if (resErrorMessages.size() > 0) {
             throw new GeneralException(ServiceUtil.getErrorMessage(ServiceUtil.returnError(resErrorMessages)));
         }
+        return warningMessage;
     }
 
     /**
