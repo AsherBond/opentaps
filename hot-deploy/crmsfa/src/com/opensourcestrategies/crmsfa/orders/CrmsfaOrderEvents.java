@@ -143,6 +143,7 @@ public final class CrmsfaOrderEvents {
 
         OpentapsShoppingCart opentapsCart = new OpentapsShoppingCart(delegator, productStoreId, webSiteId, UtilHttp.getLocale(request), currencyUomId, billToCustomerPartyId, billFromVendorPartyId);
         session.setAttribute("shoppingCart", opentapsCart);
+        opentapsCart.setProductStoreId(productStoreId);
 
         changeOrderParty(request, opentapsCart);
 
