@@ -54,7 +54,7 @@
     <ProductAverageCost organizationPartyId="CompanySub1" productId="GZ-1004" averageCost="10.00" fromDate="2006-08-01 00:00:00"/>
 
     <!-- Shipping method used to create test sales order -->
-    <ProductStoreShipmentMeth productStoreShipmentMethId="TEST_SHIP_METH" productStoreId="9000" partyId="_NA_" shipmentMethodTypeId="STANDARD" roleTypeId="CARRIER" />
+    <ProductStoreShipmentMeth productStoreShipMethId="TEST_SHIP_METH" productStoreId="9000" partyId="_NA_" shipmentMethodTypeId="STANDARD" roleTypeId="CARRIER" />
 
     <!-- Custom time periods for CompanySub1 so that we can have ledger postings for it.  Without these, postings for this organization are not made. -->
     <CustomTimePeriod customTimePeriodId="TEST001" organizationPartyId="CompanySub1" periodTypeId="FISCAL_YEAR" fromDate="2007-01-01" thruDate="2008-01-01" isClosed="N" periodNum="2007" periodName="Fiscal Year"/>
