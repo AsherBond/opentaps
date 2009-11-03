@@ -60,6 +60,7 @@
 	<field name="description" class="java.lang.String"/>
 	<field name="quantity" class="java.math.BigDecimal"/>
 	<field name="amount" class="java.math.BigDecimal"/>
+	<field name="amountTotal" class="java.math.BigDecimal"/>
 
 	<variable name="INVOICE_STATUS_ID" class="java.lang.String" resetType="Report" calculation="Nothing">
 		<initialValueExpression><![CDATA[((Invoice)$P{invoice}).getStatusId()]]></initialValueExpression>
@@ -506,7 +507,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{quantity}.multiply($F{amount})]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{amountTotal}]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>
