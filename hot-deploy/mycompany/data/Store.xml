@@ -53,8 +53,7 @@ under the License.
            authDeclinedMessage="There has been a problem with your method of payment. Please try a different method or call customer service."
            authFraudMessage="Your order has been rejected and your account has been disabled due to fraud."
            authErrorMessage="Problem connecting to payment processor; we will continue to retry and notify you by email."
-           storeCreditValidDays="90"
-           styleSheet="/images/ecommain.css" headerLogo="/opentaps_images/opentaps_logo.png" autoApproveInvoice="Y" shipIfCaptureFails="Y" autoApproveOrder="Y"/>
+           storeCreditValidDays="90" autoApproveInvoice="Y" shipIfCaptureFails="Y" autoApproveOrder="Y"/>
 
     <!-- payment settings including reference to credit card payment processors -->
 
