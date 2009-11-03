@@ -1035,48 +1035,55 @@ public class OrderTests extends OrderTestCase {
 
     /**
      * Tests it is possible to update quantity after an order item has been partially shipped
-     * and the inventory quantities are correct
-     * @throws GeneralException
+     * and the inventory quantities are correct.
+     * @throws GeneralException if an error occurs
      */
     public void testUpdateQuantityOfPartiallyShippedOrderItem() throws GeneralException {
-    	// get initial ATP and QOH of GZ-2644
-        Map<String, Object> callResults = getProductAvailability("GZ-2644");
-        BigDecimal init_atp = (BigDecimal) callResults.get("availableToPromiseTotal");
-        BigDecimal init_qoh = (BigDecimal) callResults.get("quantityOnHandTotal");
-        Debug.logInfo("Initial ATP : " + init_atp + ", Initial QOH : " + init_qoh, MODULE);
-        
-    	// create a sales order for 5 of GZ-2644
+        // create a product
+        BigDecimal productUnitPrice = new BigDecimal("11.11");
+        final GenericValue testProduct = createTestProduct("testSalesOrderParties Test Product", demowarehouse1);
+        assignDefaultPrice(testProduct, productUnitPrice, admin);
+
+        // receive 5.0 units of the product as non serialized inventory
+        receiveInventoryProduct(testProduct, new BigDecimal("5.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("99.0"), demowarehouse1);
+
+        // get initial ATP and QOH
+        Map<String, Object> callResults = getProductAvailability(testProduct.getString("productId"));
+        BigDecimal initAtp = (BigDecimal) callResults.get("availableToPromiseTotal");
+        BigDecimal initQoh = (BigDecimal) callResults.get("quantityOnHandTotal");
+        Debug.logInfo("Initial ATP : " + initAtp + ", Initial QOH : " + initQoh, MODULE);
+
+        // create a sales order for 5
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        GenericValue GZ2644 = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", "GZ-2644"));
-        order.put(GZ2644, new BigDecimal("5.0"));
+        order.put(testProduct, new BigDecimal("5.0"));
         User = DemoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoAccount1, productStoreId);
         String orderId = salesOrder.getOrderId();
         Debug.logInfo("testUpdateQuantityOfPartiallyShippedOrderItem created order [" + orderId + "]", MODULE);
-        
-    	// approve the sales order
+
+        // approve the sales order
         salesOrder.approveOrder();
-        
-    	// pack and ship 2 out of 5 of GZ-2644
+
+        // pack and ship 2 out of 5
         Map<String, Map<String, BigDecimal>> toPackItems = new HashMap<String, Map<String, BigDecimal>>();
         toPackItems.put("00001", UtilMisc.toMap("00001", new BigDecimal("2.0")));
         runAndAssertServiceSuccess("testShipOrderManual", UtilMisc.toMap("orderId", salesOrder.getOrderId(), "facilityId", facilityId, "items", toPackItems, "userLogin", admin));
 
-        
-    	// update quantity of GZ-2644 order item to 3
-        updateOrderItem(orderId, "00001", "3.0", null, "update quantity of GZ-2644 order item to 3", DemoCSR);
-        
-    	// get final ATP and QOH of GZ-2644
-        callResults = getProductAvailability("GZ-2644");
-        BigDecimal final_atp = (BigDecimal) callResults.get("availableToPromiseTotal");
-        BigDecimal final_qoh = (BigDecimal) callResults.get("quantityOnHandTotal");
-        Debug.logInfo("Final ATP : " + final_atp + ", Final QOH : " + final_qoh, MODULE);
-        
-    	// verify that ATP has changed by -3 and QOH has changed by -2
-        assertEquals("ATP has changed by -3", final_atp, init_atp.subtract(new BigDecimal("3.0")));
-        assertEquals("QOH has changed by -2", final_qoh, init_qoh.subtract(new BigDecimal("2.0")));
+
+        // update quantity of the order item to 3
+        updateOrderItem(orderId, "00001", "3.0", null, "updated quantity to 3", DemoCSR);
+
+        // get final ATP and QOH
+        callResults = getProductAvailability(testProduct.getString("productId"));
+        BigDecimal finalAtp = (BigDecimal) callResults.get("availableToPromiseTotal");
+        BigDecimal finalQoh = (BigDecimal) callResults.get("quantityOnHandTotal");
+        Debug.logInfo("Final ATP : " + finalAtp + ", Final QOH : " + finalQoh, MODULE);
+
+        // verify that ATP has changed by -3 and QOH has changed by -2
+        assertEquals("ATP has changed by -3", finalAtp, initAtp.subtract(new BigDecimal("3.0")));
+        assertEquals("QOH has changed by -2", finalQoh, initQoh.subtract(new BigDecimal("2.0")));
     }
-    
+
     /**
      * Tests over reservations of inventory to an order.
      * @exception GeneralException if an error occurs

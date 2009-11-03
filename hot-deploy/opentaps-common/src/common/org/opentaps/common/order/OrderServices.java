@@ -973,8 +973,6 @@ public final class OrderServices {
 
             if (cartItem != null) {
                 BigDecimal qty = itemTotals.get(itemSeqId);
-
-                Debug.logWarning("Set cart item qty for item : " + itemSeqId + " = " + qty, MODULE);
                 BigDecimal priceSave = cartItem.getBasePrice();
 
                 // set quantity
