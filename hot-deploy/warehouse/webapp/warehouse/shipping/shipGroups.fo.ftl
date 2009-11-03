@@ -106,7 +106,7 @@ under the License.
           </fo:block>
 
           <#if data.phoneNumber?exists>
-            <fo:block>(${data.phoneNumber.areaCode}) ${data.phoneNumber.contactNumber}</fo:block>
+            <fo:block>${uiLabelMap.OpentapsPhoneNumber}: ${data.phoneNumber.countryCode?if_exists} (${data.phoneNumber.areaCode}) ${data.phoneNumber.contactNumber}</fo:block>
           </#if>
         <#else>
           <fo:block>${uiLabelMap.CommonTo}: ${uiLabelMap.OpentapsUnknown}</fo:block>

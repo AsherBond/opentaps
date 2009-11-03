@@ -157,7 +157,7 @@ if ("Y".equals(context.get("performFind")) ||
     allConditions = new EntityConditionList(searchConditions, EntityOperator.AND);
 
     fields = Arrays.asList(new Object[] {"orderId", "orderDate", "orderName", "partyId", "statusId", "grandTotal", "currencyUom"});
-    orderBy = UtilMisc.toList("orderDate");
+    orderBy = UtilMisc.toList("orderDate DESC");
 
     iterator = delegator.findListIteratorByCondition("OrderHeaderAndRoles", allConditions, null, fields, orderBy, UtilCommon.DISTINCT_READ_OPTIONS);
     initResultList = iterator.getPartialList(viewIndex.intValue(), viewSize.intValue());

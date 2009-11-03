@@ -107,12 +107,14 @@ import org.opentaps.domain.base.entities.OrderHeaderNoteView;
 import org.opentaps.domain.base.entities.OrderTerm;
 import org.opentaps.domain.base.entities.PostalAddress;
 import org.opentaps.domain.base.entities.SupplierProduct;
+import org.opentaps.domain.base.entities.TelecomNumber;
 import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderAdjustment;
 import org.opentaps.domain.order.OrderItemShipGroup;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
+import org.opentaps.domain.party.Party;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.domain.purchasing.PurchasingRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
@@ -1375,6 +1377,20 @@ public final class OrderEvents {
                 jrParameters.put("supplierAddress", supplierAddress);
             }
         }
+
+        // get the client phone number
+        Party client = order.getPlacingCustomer();
+        if (client != null) {
+            Map<String, Object> contactMechLine = FastMap.newInstance();
+            TelecomNumber clientPhone = client.getPrimaryPhone();
+            if (clientPhone != null) {
+                List<Map<String, Object>> clientPhoneNumbers = FastList.newInstance();
+                contactMechLine.putAll(clientPhone.toMap());
+                clientPhoneNumbers.add(contactMechLine);
+                jrParameters.put("clientPhoneNumberList", new JRMapCollectionDataSource(clientPhoneNumbers));
+            }
+        }
+        
         // retrieve contact mech info and pass it to JR
         List<Map<String, Object>> orderContactMechList = FastList.newInstance();
         for (OrderContactMech orderContactMech : order.getOrderContactMeches()) {

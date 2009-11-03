@@ -22,14 +22,35 @@
 
 import javolution.util.FastMap;
 import javolution.util.FastList;
-
+import javolution.util.FastMap;
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.domain.DomainsDirectory;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.order.Order;
+import org.opentaps.domain.order.OrderRepositoryInterface;
+import org.opentaps.domain.party.Party;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.warehouse.WarehouseHelper;
 
 orderId = parameters.get("orderId");
 if (orderId == null) return;
+
+DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+DomainsDirectory dd = domainLoader.loadDomainsDirectory();
+OrderRepositoryInterface orderRepository = dd.getOrderDomain().getOrderRepository();
+Order order = orderRepository.getOrderById(orderId);
+
+Party customer = order.getPlacingCustomer();
+
+// each ship group can have a phone number associated
+// specifically, but if none we fall back to the customer
+// primary phone
+if (client != null) {
+    customerPrimaryPhone = customer.getPrimaryPhone();
+}
 
 shipGroupSeqId = parameters.get("shipGroupSeqId");
 facilityId = parameters.get("facilityId");
@@ -71,6 +92,10 @@ for (iter = shipGroups.iterator(); iter.hasNext(); ) {
     data.put("address", address);
 
     phoneNumber = shipGroup.getRelatedOne("TelecomTelecomNumber");
+    if (phoneNumber == null) {
+        phoneNumber = customerPrimaryPhone;
+    }
+    
     data.put("phoneNumber", phoneNumber);
 
     carrierShipmentMethod = shipGroup.getRelatedOne("CarrierShipmentMethod");
