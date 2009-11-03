@@ -271,6 +271,12 @@ public class InvoiceItemEditableListView extends EntityEditableListView {
 
     // happen when a specific record field has been edited
     @Override public void cellValueChanged(final Record record, final String field, final Object oldValue, final int rowIndex, final int colIndex) {
+
+        // check if the product ID is filled (it may be empty for non product items)
+        if (record.isEmpty(InvoiceItemLookupConfiguration.INOUT_PRODUCT)) {
+            return;
+        }
+
         // only react if the product ID changed
         BigDecimal quantity = null;
         final String productId = record.getAsString(InvoiceItemLookupConfiguration.INOUT_PRODUCT);
