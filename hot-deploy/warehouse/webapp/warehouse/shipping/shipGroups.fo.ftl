@@ -40,7 +40,8 @@ under the License.
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.fo.ftl"/>
-
+<fo:block space-before="40pt" space-after="40pt">
+</fo:block>
 <#escape x as x?xml>
 
 <#list shipGroups as shipGroup>
@@ -131,7 +132,7 @@ under the License.
       </#if>
       <#if shipGroup.shippingInstructions?has_content>
       <fo:table-row>
-        <fo:table-cell><fo:block font-weight="bold">${uiLabelMap.OrderInstructions}</fo:block></fo:table-cell>
+        <fo:table-cell><fo:block font-weight="bold">${uiLabelMap.OrderIntructions}</fo:block></fo:table-cell>
         <fo:table-cell><fo:block>${shipGroup.shippingInstructions}</fo:block></fo:table-cell>
       </fo:table-row>
       </#if>       
