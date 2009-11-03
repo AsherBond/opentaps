@@ -37,6 +37,7 @@ import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderItem;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import javolution.util.FastMap;
+import org.opentaps.tests.financials.FinancialAsserts;
 
 /**
  * Order Sales Tax related unit tests.
@@ -155,6 +156,7 @@ public class SalesTaxTests extends OrderTestCase {
     /**
      * Verify summary gross sales, discounts, taxable and tax amount values in TaxInvoiceItemFact entity
      * for an order.
+     * 
      * @param orderId a <code>String</code> value
      * @param authPartyId a <code>String</code> value
      * @param authGeoId a <code>String</code> value
@@ -168,63 +170,18 @@ public class SalesTaxTests extends OrderTestCase {
      */
     public void assertSalesTaxFact(String orderId, String authPartyId, String authGeoId, double grossSales, double discounts, double refunds, double netAmount, double taxable, double tax) throws GeneralException {
 
-        BigDecimal tempGrossSales = BigDecimal.ZERO;
-        BigDecimal tempDiscounts = BigDecimal.ZERO;
-        BigDecimal tempRefunds = BigDecimal.ZERO;
-        BigDecimal tempNetAmount = BigDecimal.ZERO;
-        BigDecimal tempTaxable = BigDecimal.ZERO;
-        BigDecimal tempTax = BigDecimal.ZERO;
+        FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, admin);
 
-        // find tax authority
-        Long taxAuthDimId = -1L; //nonexistent key
-        GenericValue taxAuthDim = EntityUtil.getFirst(delegator.findByAnd("TaxAuthorityDim", UtilMisc.toMap("taxAuthPartyId", authPartyId, "taxAuthGeoId", authGeoId)));
-        if (taxAuthDim != null) {
-            taxAuthDimId = taxAuthDim.getLong("taxAuthorityDimId");
-        }
-
+        // find invoice id from order id and verify values
         List<GenericValue> orderItemBillings = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("orderId", orderId));
         String invoiceId = EntityUtil.getFirst(orderItemBillings).getString("invoiceId");
-
-        List<GenericValue> taxFacts = delegator.findByAnd(
-                "TaxInvoiceItemFact",
-                UtilMisc.toMap("invoiceId", invoiceId)
-        );
-        Set<String> uniqueItemId = FastSet.<String>newInstance();
-        for (GenericValue fact : taxFacts) {
-            String invoiceItemId = fact.getString("invoiceItemSeqId");
-            if (uniqueItemId.contains(invoiceItemId)) {
-                continue;
-            }
-            uniqueItemId.add(invoiceItemId);
-            tempGrossSales = tempGrossSales.add(fact.getBigDecimal("grossAmount"));
-            tempDiscounts = tempDiscounts.add(fact.getBigDecimal("discounts"));
-            tempRefunds = tempRefunds.add(fact.getBigDecimal("refunds"));
-            tempNetAmount = tempNetAmount.add(fact.getBigDecimal("netAmount"));
-            BigDecimal taxDue = fact.getBigDecimal("taxDue");
-            if (taxDue != null && taxDue.compareTo(BigDecimal.ZERO) != 0) {
-                tempTaxable = tempTaxable.add(fact.getBigDecimal("taxable"));
-            }
-        }
-
-        taxFacts = delegator.findByAnd(
-                "TaxInvoiceItemFact",
-                UtilMisc.toMap("invoiceId", invoiceId, "taxAuthorityDimId", taxAuthDimId)
-        );
-        for (GenericValue fact : taxFacts) {
-            tempTax = tempTax.add(fact.getBigDecimal("taxDue"));
-        }
-
-        assertEquals("TaxInvoiceItemFact entity contains wrong gross sales amount for invoice " + invoiceId, tempGrossSales, BigDecimal.valueOf(grossSales));
-        assertEquals("TaxInvoiceItemFact entity contains wrong discounts for invoice " + invoiceId, tempDiscounts, BigDecimal.valueOf(discounts));
-        assertEquals("TaxInvoiceItemFact entity contains wrong refunds for invoice " + invoiceId, tempRefunds, BigDecimal.valueOf(refunds));
-        assertEquals("TaxInvoiceItemFact entity contains wrong net amounts for invoice " + invoiceId, tempNetAmount, BigDecimal.valueOf(netAmount));
-        assertEquals("TaxInvoiceItemFact entity contains wrong taxable amounts for invoice " + invoiceId, tempTaxable, BigDecimal.valueOf(taxable));
-        assertEquals("TaxInvoiceItemFact entity contains wrong taxes for invoice " + invoiceId, tempTax, BigDecimal.valueOf(tax));
+        fa.assertSalesTaxFact(invoiceId, authPartyId, authGeoId, grossSales, discounts, refunds, netAmount, taxable, tax);
     }
 
     /**
-     * Verify summary gross sales, discounts, taxable and tax amount values in TaxInvoiceItemFact entity
+     * Verify summary gross sales, discounts, refunds and net amount values in SalesInvoiceItemFact entity
      * for an order.
+     * 
      * @param orderId a <code>String</code> value
      * @param grossSales a <code>double</code> value
      * @param discounts a <code>double</code> value
@@ -234,26 +191,12 @@ public class SalesTaxTests extends OrderTestCase {
      */
     public void assertSalesFact(String orderId, double grossSales, double discounts, double refunds, double netAmount) throws GeneralException {
 
-        BigDecimal tempGrossSales = BigDecimal.ZERO;
-        BigDecimal tempDiscounts = BigDecimal.ZERO;
-        BigDecimal tempRefunds = BigDecimal.ZERO;
-        BigDecimal tempNetAmount = BigDecimal.ZERO;
+        FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, admin);
 
+        // find invoice id from order id and verify values
         List<GenericValue> orderItemBillings = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("orderId", orderId));
         String invoiceId = EntityUtil.getFirst(orderItemBillings).getString("invoiceId");
-
-        List<GenericValue> saleFacts = delegator.findByAnd("SalesInvoiceItemFact", UtilMisc.toMap("invoiceId", invoiceId));
-        for (GenericValue fact : saleFacts) {
-            tempGrossSales = tempGrossSales.add(fact.getBigDecimal("grossAmount"));
-            tempDiscounts = tempDiscounts.add(fact.getBigDecimal("discounts"));
-            tempRefunds = tempRefunds.add(fact.getBigDecimal("refunds"));
-            tempNetAmount = tempNetAmount.add(fact.getBigDecimal("netAmount"));
-        }
-
-        assertEquals("TaxInvoiceItemFact entity contains wrong gross sales amount for invoice " + invoiceId, tempGrossSales, BigDecimal.valueOf(grossSales));
-        assertEquals("TaxInvoiceItemFact entity contains wrong discounts for invoice " + invoiceId, tempDiscounts, BigDecimal.valueOf(discounts));
-        assertEquals("TaxInvoiceItemFact entity contains wrong refunds for invoice " + invoiceId, tempRefunds, BigDecimal.valueOf(refunds));
-        assertEquals("TaxInvoiceItemFact entity contains wrong net amounts for invoice " + invoiceId, tempNetAmount, BigDecimal.valueOf(netAmount));
+        fa.assertSalesFact(invoiceId, grossSales, discounts, refunds, netAmount);
     }
 
     /**

@@ -19,12 +19,16 @@ package org.opentaps.tests.financials;
 import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastList;
 import javolution.util.FastMap;
+import javolution.util.FastSet;
 import junit.framework.TestCase;
+
+import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.financials.domain.billing.invoice.InvoiceSpecification;
@@ -34,6 +38,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Delegation object that holds assert() methods and util methods for
@@ -323,9 +328,10 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param invoiceItemTypeId is the type of the invoice item
      * @param quantity to add on the invoice
      * @param amount price of the invoice item
+     * @return new invoice item sequence identifier
      */
-    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, BigDecimal quantity, BigDecimal amount) {
-        createInvoiceItem(invoiceId, invoiceItemTypeId, null, quantity, amount, null);
+    public String createInvoiceItem(String invoiceId, String invoiceItemTypeId, BigDecimal quantity, BigDecimal amount) {
+        return createInvoiceItem(invoiceId, invoiceItemTypeId, null, quantity, amount, null);
     }
 
     /**
@@ -336,9 +342,10 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param quantity to add on the invoice
      * @param amount price of the invoice item
      * @param description the invoice item description
+     * @return new invoice item sequence identifier
      */
-    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, BigDecimal quantity, BigDecimal amount, String description) {
-        createInvoiceItem(invoiceId, invoiceItemTypeId, null, quantity, amount, description);
+    public String createInvoiceItem(String invoiceId, String invoiceItemTypeId, BigDecimal quantity, BigDecimal amount, String description) {
+        return createInvoiceItem(invoiceId, invoiceItemTypeId, null, quantity, amount, description);
     }
 
     /**
@@ -349,9 +356,10 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param productId the invoice item product
      * @param quantity to add on the invoice
      * @param amount price of the invoice item
+     * @return new invoice item sequence identifier
      */
-    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, String productId, BigDecimal quantity, BigDecimal amount) {
-        createInvoiceItem(invoiceId, invoiceItemTypeId, productId, quantity, amount, null);
+    public String createInvoiceItem(String invoiceId, String invoiceItemTypeId, String productId, BigDecimal quantity, BigDecimal amount) {
+        return createInvoiceItem(invoiceId, invoiceItemTypeId, productId, quantity, amount, null);
     }
 
     /**
@@ -363,9 +371,10 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param quantity to add on the invoice
      * @param amount price of the invoice item
      * @param description the invoice item description
+     * @return new invoice item sequence identifier
      */
-    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, String productId, BigDecimal quantity, BigDecimal amount, String description) {
-        createInvoiceItem(invoiceId, invoiceItemTypeId, productId, quantity, amount, description, null);
+    public String createInvoiceItem(String invoiceId, String invoiceItemTypeId, String productId, BigDecimal quantity, BigDecimal amount, String description) {
+        return createInvoiceItem(invoiceId, invoiceItemTypeId, productId, quantity, amount, description, null);
     }
 
     /**
@@ -377,8 +386,9 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param amount price of the invoice item
      * @param description the invoice item description
      * @param accountingTags optional accounting tag to use when getting the balances, as a Map of tag1 -> value1, tag2 -> value2, ...
+     * @return new invoice item sequence identifier
      */
-    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, String productId, BigDecimal quantity, BigDecimal amount, String description, Map<String, String> accountingTags) {
+    public String createInvoiceItem(String invoiceId, String invoiceItemTypeId, String productId, BigDecimal quantity, BigDecimal amount, String description, Map<String, String> accountingTags) {
         Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
         input.put("invoiceId", invoiceId);
         input.put("invoiceItemTypeId", invoiceItemTypeId);
@@ -391,9 +401,51 @@ public class FinancialAsserts extends OpentapsTestCase {
         if (accountingTags != null) {
             input.putAll(accountingTags);
         }
-        runAndAssertServiceSuccess("createInvoiceItem", input);
+        Map<String, Object> output = runAndAssertServiceSuccess("createInvoiceItem", input);
+        return (String) output.get("invoiceItemSeqId");
     }
 
+    /**
+     * Creates sales tax invoice item.
+     * 
+     * @param invoiceId an invoice identifier
+     * @param parentItemSeqId an product invoice item on which taxes are calculated
+     * @param taxAuthPartyId tax authority geographical location
+     * @param taxAuthGeoId tax authority party
+     * @param amount tax amount
+     * @return new invoice item sequence identifier
+     * @throws GenericEntityException
+     */
+    public String createTaxInvoiceItem(String invoiceId, String parentItemSeqId, String taxAuthPartyId, String taxAuthGeoId, BigDecimal amount) throws GenericEntityException {
+        assertNotNull(invoiceId);
+        assertNotNull(taxAuthPartyId);
+        assertNotNull(taxAuthGeoId);
+
+        GenericValue taxAuth = delegator.findByPrimaryKey("TaxAuthority", UtilMisc.toMap("taxAuthGeoId", taxAuthGeoId, "taxAuthPartyId", taxAuthPartyId));
+        assertNotNull("Tax authority isn't found.", taxAuth);
+
+        GenericValue parentInvoiceItem = null;
+        if (UtilValidate.isNotEmpty(parentItemSeqId)) {
+            parentInvoiceItem = delegator.findByPrimaryKey("InvoiceItem", UtilMisc.toMap("invoiceId", invoiceId, "invoiceItemSeqId", parentItemSeqId));
+        }
+
+        Map<String, Object> ctx = FastMap.<String, Object>newInstance();
+        ctx.put("userLogin", userLogin);
+        ctx.put("invoiceId", invoiceId);
+        ctx.put("invoiceItemTypeId", "ITM_SALES_TAX");
+        ctx.put("quantity", BigDecimal.ONE);
+        ctx.put("amount", amount);
+        ctx.put("taxAuthGeoId", taxAuthGeoId);
+        ctx.put("taxAuthPartyId", taxAuthPartyId);
+        if (parentInvoiceItem != null) {
+            ctx.put("parentInvoiceId", invoiceId);
+            ctx.put("parentInvoiceItemSeqId", parentItemSeqId);
+            ctx.put("productId", parentInvoiceItem.getString("productId"));
+        }
+
+        Map<String, Object> results = runAndAssertServiceSuccess("createInvoiceItem", ctx);
+        return (String) results.get("invoiceItemSeqId");
+    }
 
     /**
      * Update an invoice item with optional accountingTags.
@@ -688,7 +740,7 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param amount the payment application amount
      * @param paymentId the payment ID to apply
      * @param invoiceId the invoice ID to apply to
-     * @param accountingTags the <code>Map</code> of accountign tags to set
+     * @param accountingTags the <code>Map</code> of accounting tags to set
      */
     public void updatePaymentApplication(BigDecimal amount, String paymentId, String invoiceId, Map<String, String> accountingTags) {
 
@@ -700,6 +752,127 @@ public class FinancialAsserts extends OpentapsTestCase {
             input.putAll(accountingTags);
         }
         runAndAssertServiceSuccess("updatePaymentApplication", input);
+    }
+
+    /**
+     * Verify summary gross sales, discounts, taxable and tax amount values in TaxInvoiceItemFact entity
+     * for an organization or for particular invoice.
+     * 
+     * @param invoiceId a <code>String</code> value
+     * @param authPartyId a <code>String</code> value
+     * @param authGeoId a <code>String</code> value
+     * @param grossSales a <code>double</code> value
+     * @param discounts a <code>double</code> value
+     * @param refunds a <code>double</code> value
+     * @param netAmount a <code>double</code> value
+     * @param taxable a <code>double</code> value
+     * @param tax a <code>double</code> value
+     * @exception GeneralException if an error occurs
+     */
+    public void assertSalesTaxFact(String invoiceId, String authPartyId, String authGeoId, double grossSales, double discounts, double refunds, double netAmount, double taxable, double tax) throws GeneralException {
+
+        BigDecimal tempGrossSales = BigDecimal.ZERO;
+        BigDecimal tempDiscounts = BigDecimal.ZERO;
+        BigDecimal tempRefunds = BigDecimal.ZERO;
+        BigDecimal tempNetAmount = BigDecimal.ZERO;
+        BigDecimal tempTaxable = BigDecimal.ZERO;
+        BigDecimal tempTax = BigDecimal.ZERO;
+
+        // find organization dimension
+        List<GenericValue> orgDimList = delegator.findByAnd("OrganiztionDim", UtilMisc.toMap("organizationPartyId", organizationPartyId));
+        assertNotEmpty("There is no any company with ID [" + organizationPartyId + "] in organization dimension.", orgDimList);
+        Long organizationDimKey = EntityUtil.getFirst(orgDimList).getLong("organizationDimId");
+
+        // find tax authority
+        Long taxAuthDimId = -1L; //nonexistent key
+        GenericValue taxAuthDim = EntityUtil.getFirst(delegator.findByAnd("TaxAuthorityDim", UtilMisc.toMap("taxAuthPartyId", authPartyId, "taxAuthGeoId", authGeoId)));
+        if (taxAuthDim != null) {
+            taxAuthDimId = taxAuthDim.getLong("taxAuthorityDimId");
+        }
+
+        // select tax invoice item facts filtered out by organization and invoice (optionally)
+        Map<String, Object> conditions = UtilMisc.<String, Object>toMap("organizationDimId", organizationDimKey);
+        if (UtilValidate.isNotEmpty(invoiceId)) {
+            conditions.put("invoiceId", invoiceId);
+        }
+        List<GenericValue> taxFacts = delegator.findByAnd("TaxInvoiceItemFact", conditions);
+        // accumulate values taking into consideration several facts may exist for the same
+        // invoice item but for different tax authorities
+        Set<String> uniqueItemId = FastSet.<String>newInstance();
+        for (GenericValue fact : taxFacts) {
+            String invoiceItemId = fact.getString("invoiceItemSeqId");
+            if (uniqueItemId.contains(invoiceItemId)) {
+                continue;
+            }
+            uniqueItemId.add(invoiceItemId);
+            tempGrossSales = tempGrossSales.add(fact.getBigDecimal("grossAmount"));
+            tempDiscounts = tempDiscounts.add(fact.getBigDecimal("discounts"));
+            tempRefunds = tempRefunds.add(fact.getBigDecimal("refunds"));
+            tempNetAmount = tempNetAmount.add(fact.getBigDecimal("netAmount"));
+            BigDecimal taxDue = fact.getBigDecimal("taxDue");
+            if (taxDue != null && taxDue.compareTo(BigDecimal.ZERO) != 0) {
+                tempTaxable = tempTaxable.add(fact.getBigDecimal("taxable"));
+            }
+        }
+
+        // find and accumulate tax amount for given tax authority
+        conditions.put("taxAuthorityDimId", taxAuthDimId);
+        taxFacts = delegator.findByAnd("TaxInvoiceItemFact", conditions);
+        for (GenericValue fact : taxFacts) {
+            tempTax = tempTax.add(fact.getBigDecimal("taxDue"));
+        }
+
+        // verify summaries
+        assertEquals("TaxInvoiceItemFact entity contains wrong gross sales amount for invoice " + invoiceId, tempGrossSales, BigDecimal.valueOf(grossSales));
+        assertEquals("TaxInvoiceItemFact entity contains wrong discounts for invoice " + invoiceId, tempDiscounts, BigDecimal.valueOf(discounts));
+        assertEquals("TaxInvoiceItemFact entity contains wrong refunds for invoice " + invoiceId, tempRefunds, BigDecimal.valueOf(refunds));
+        assertEquals("TaxInvoiceItemFact entity contains wrong net amounts for invoice " + invoiceId, tempNetAmount, BigDecimal.valueOf(netAmount));
+        assertEquals("TaxInvoiceItemFact entity contains wrong taxable amounts for invoice " + invoiceId, tempTaxable, BigDecimal.valueOf(taxable));
+        assertEquals("TaxInvoiceItemFact entity contains wrong taxes for invoice " + invoiceId, tempTax, BigDecimal.valueOf(tax));
+    }
+
+    /**
+     * Verify summary gross sales, discounts, refunds and net amount values in SalesInvoiceItemFact entity
+     * for an organization or for particular invoice.
+     *
+     * @param invoiceId a <code>String</code> value
+     * @param grossSales a <code>double</code> value
+     * @param discounts a <code>double</code> value
+     * @param refunds a <code>double</code> value
+     * @param netAmount a <code>double</code> value
+     * @exception GeneralException if an error occurs
+     */
+    public void assertSalesFact(String invoiceId, double grossSales, double discounts, double refunds, double netAmount) throws GeneralException {
+
+        BigDecimal tempGrossSales = BigDecimal.ZERO;
+        BigDecimal tempDiscounts = BigDecimal.ZERO;
+        BigDecimal tempRefunds = BigDecimal.ZERO;
+        BigDecimal tempNetAmount = BigDecimal.ZERO;
+
+        // find organization dimension
+        List<GenericValue> orgDimList = delegator.findByAnd("OrganiztionDim", UtilMisc.toMap("organizationPartyId", organizationPartyId));
+        assertNotEmpty("There is no any company with ID [" + organizationPartyId + "] in organization dimension.", orgDimList);
+        Long organizationDimKey = EntityUtil.getFirst(orgDimList).getLong("organizationDimId");
+
+        // select sales invoice item facts filtered out by organization and invoice (optionally)
+        Map<String, Object> conditions = UtilMisc.<String, Object>toMap("organizationDimId", organizationDimKey);
+        if (UtilValidate.isNotEmpty(invoiceId)) {
+            conditions.put("invoiceId", invoiceId);
+        }
+        List<GenericValue> saleFacts = delegator.findByAnd("SalesInvoiceItemFact", conditions);
+        // accumulate values
+        for (GenericValue fact : saleFacts) {
+            tempGrossSales = tempGrossSales.add(fact.getBigDecimal("grossAmount"));
+            tempDiscounts = tempDiscounts.add(fact.getBigDecimal("discounts"));
+            tempRefunds = tempRefunds.add(fact.getBigDecimal("refunds"));
+            tempNetAmount = tempNetAmount.add(fact.getBigDecimal("netAmount"));
+        }
+
+        // verify summaries
+        assertEquals("TaxInvoiceItemFact entity contains wrong gross sales amount for invoice " + invoiceId, tempGrossSales, BigDecimal.valueOf(grossSales));
+        assertEquals("TaxInvoiceItemFact entity contains wrong discounts for invoice " + invoiceId, tempDiscounts, BigDecimal.valueOf(discounts));
+        assertEquals("TaxInvoiceItemFact entity contains wrong refunds for invoice " + invoiceId, tempRefunds, BigDecimal.valueOf(refunds));
+        assertEquals("TaxInvoiceItemFact entity contains wrong net amounts for invoice " + invoiceId, tempNetAmount, BigDecimal.valueOf(netAmount));
     }
 
 }
