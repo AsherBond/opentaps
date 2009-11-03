@@ -3251,6 +3251,113 @@ public class OrderTests extends OrderTestCase {
         assertOrderCompleted(orderId);
     }
 
+    /**
+     * Test that the cancelOrderItem service correctly account for already shipped item.
+     * @throws GeneralException if an error occurs
+     */
+    @SuppressWarnings("unchecked")
+    public void testCancelRemainingItems() throws GeneralException {
+
+        receiveInventoryProduct(WG1111, new BigDecimal("50.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("50.0"), demowarehouse1);
+
+        // get initial ATP and QOH
+        Map<String, Object> callResults = getProductAvailability(WG1111.getString("productId"));
+        BigDecimal initAtp = (BigDecimal) callResults.get("availableToPromiseTotal");
+        BigDecimal initQoh = (BigDecimal) callResults.get("quantityOnHandTotal");
+        Debug.logInfo("Initial ATP : " + initAtp + ", Initial QOH : " + initQoh, MODULE);
+
+        // 1. make the order 10x WG-1111
+        Map<GenericValue, BigDecimal> orderItems = FastMap.newInstance();
+        orderItems.put(WG1111, new BigDecimal("10.0"));
+        User = DemoCSR;
+        SalesOrderFactory salesOrder = testCreatesSalesOrder(orderItems, DemoCustomer, productStoreId);
+        String orderId = salesOrder.getOrderId();
+        OrderRepositoryInterface repository = getOrderRepository(admin);
+        Order order = repository.getOrderById(salesOrder.getOrderId());
+
+        // Find the order item
+        OrderItem WG1111Item = null;
+        for (OrderItem item : order.getOrderItems()) {
+            if (WG1111.get("productId").equals(item.getProductId())) {
+                WG1111Item = item;
+            }
+        }
+        assertNotNull("Did not find order item for WG-1111 in order [" + orderId + "]", WG1111Item);
+
+        // This is a hack to force the creation of promo items:
+        //  Update the order with same quantities
+        Map<String, Object> ctxt = new HashMap<String, Object>();
+        ctxt.put("userLogin", User);
+        ctxt.put("orderId", orderId);
+        ctxt.put("itemQtyMap", UtilMisc.toMap(WG1111Item.getOrderItemSeqId() + ":00001", "10.0"));
+        ctxt.put("itemPriceMap", UtilMisc.toMap(WG1111Item.getOrderItemSeqId(), "59.99"));
+        ctxt.put("overridePriceMap", new HashMap());
+        runAndAssertServiceSuccess("opentaps.updateOrderItems", ctxt);
+
+        assertNormalOrderItems(orderId, UtilMisc.toMap("WG-1111", new BigDecimal("10.0")));
+        assertPromoItemExists(orderId, "WG-1111", new BigDecimal("1.0"), "9000", "ITEM_CREATED");
+
+        // Find the order items
+        order = repository.getOrderById(salesOrder.getOrderId());
+        OrderItem WG1111ItemPromo = null;
+        WG1111Item = null;
+        for (OrderItem item : order.getOrderItems()) {
+            if (WG1111.get("productId").equals(item.getProductId())) {
+                if (item.isPromo()) {
+                    WG1111ItemPromo = item;
+                } else {
+                    WG1111Item = item;
+                }
+            }
+        }
+        assertNotNull("Did not find order item for WG-1111 in order [" + orderId + "]", WG1111Item);
+        assertNotNull("Did not find promo order item for WG-1111 in order [" + orderId + "]", WG1111ItemPromo);
+
+        // 2. ship 1x WG-1111
+        Map<String, Map<String, BigDecimal>> itemsToPack = FastMap.newInstance();
+        itemsToPack.put("00001", UtilMisc.toMap(WG1111Item.getOrderItemSeqId(), new BigDecimal("1.0")));
+        runAndAssertServiceSuccess("testShipOrderManual", UtilMisc.toMap("orderId", order.getOrderId(), "facilityId", facilityId, "items", itemsToPack, "userLogin", admin));
+
+        // 3. cancel the remaining by not specifying the quantity
+        ctxt = FastMap.newInstance();
+        ctxt.put("userLogin", User);
+        ctxt.put("orderId", orderId);
+        ctxt.put("orderItemSeqId", WG1111Item.getOrderItemSeqId());
+        ctxt.put("shipGroupSeqId", "00001");
+        runAndAssertServiceSuccess("cancelOrderItem", ctxt);
+
+        // Find the order items
+        order = repository.getOrderById(salesOrder.getOrderId());
+        WG1111ItemPromo = null;
+        WG1111Item = null;
+        for (OrderItem item : order.getOrderItems()) {
+            if (WG1111.get("productId").equals(item.getProductId())) {
+                if (item.isPromo()) {
+                    WG1111ItemPromo = item;
+                } else {
+                    WG1111Item = item;
+                }
+            }
+        }
+        assertNotNull("Did not find order item for WG-1111 in order [" + orderId + "]", WG1111Item);
+        assertNotNull("Did not find promo order item for WG-1111 in order [" + orderId + "]", WG1111ItemPromo);
+
+        assertOrderItemStatus("Order item WG-1111 should be COMPLETED once we canceled the remaining items", orderId, "00001", "ITEM_COMPLETED");
+        assertOrderItemStatus("Promo Order item should be cancelled after cancelling the remaining items", orderId, WG1111ItemPromo.getOrderItemSeqId(), "ITEM_CANCELLED");
+
+        // check the whole order is now completed
+        assertOrderCompleted(orderId);
+
+        // check the reservations correctly accounted for the issued quantity as well
+        callResults = getProductAvailability(WG1111.getString("productId"));
+        BigDecimal finalAtp = (BigDecimal) callResults.get("availableToPromiseTotal");
+        BigDecimal finalQoh = (BigDecimal) callResults.get("quantityOnHandTotal");
+        Debug.logInfo("Final ATP : " + finalAtp + ", Final QOH : " + finalQoh, MODULE);
+
+        // verify that ATP has changed by -1 and QOH has changed by -1
+        assertEquals("ATP has changed by -1", finalAtp, initAtp.subtract(new BigDecimal("1.0")));
+        assertEquals("QOH has changed by -1", finalQoh, initQoh.subtract(new BigDecimal("1.0")));
+    }
 
     /**
      * Test the GWT order lookup.
