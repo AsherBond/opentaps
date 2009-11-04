@@ -1695,6 +1695,14 @@ public final class OrderServices {
             Query query = session.createQuery(hql);
             query.setString("orderId", orderId);
             List<OrderAdjustmentBilling> orderAdjustmentBillingList = query.list();
+            
+            // adjustments to remove or offset
+            EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
+                                                                 EntityCondition.makeCondition("orderId", orderId),
+                                                                 EntityCondition.makeCondition(EntityOperator.OR,
+                                                                                               EntityCondition.makeCondition("orderAdjustmentTypeId", "PROMOTION_ADJUSTMENT"),
+                                                                                               EntityCondition.makeCondition("orderAdjustmentTypeId", "SHIPPING_CHARGES"),
+                                                                                               EntityCondition.makeCondition("orderAdjustmentTypeId", "SALES_TAX")));
             if (orderAdjustmentBillingList.size() > 0) {
                 // if order adjustment billings already exist for the order adjustments, do not make any changes to the order adjustments .
                 // return success, but with a message "Order adjustments were not changed because some adjustments have already been invoiced.
@@ -1702,7 +1710,7 @@ public final class OrderServices {
                 // if order adjustment billings already exist for the order adjustments, do not remove the existing order adjustments, but
                 // offset them instead
                 List<GenericValue> offsetAdjustments = new ArrayList<GenericValue>();
-                for (GenericValue oa : delegator.findByAnd("OrderAdjustment", UtilMisc.toMap("orderId", orderId))) {
+                for (GenericValue oa : delegator.findByCondition("OrderAdjustment", cond, null, null)) {
                     BigDecimal oaAmount = oa.getBigDecimal("amount");
                     if (oaAmount != null) {
                         GenericValue offset = delegator.makeValue("OrderAdjustment", oa.getAllFields());
@@ -1714,12 +1722,6 @@ public final class OrderServices {
                 toStore.addAll(offsetAdjustments);
             } else {
                 // remove the adjustments
-                EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
-                                                                     EntityCondition.makeCondition("orderId", orderId),
-                                                                     EntityCondition.makeCondition(EntityOperator.OR,
-                                                                                                   EntityCondition.makeCondition("orderAdjustmentTypeId", "PROMOTION_ADJUSTMENT"),
-                                                                                                   EntityCondition.makeCondition("orderAdjustmentTypeId", "SHIPPING_CHARGES"),
-                                                                                                   EntityCondition.makeCondition("orderAdjustmentTypeId", "SALES_TAX")));
                 delegator.removeByCondition("OrderAdjustment", cond);
             }
         } catch (GenericEntityException e) {
