@@ -58,6 +58,7 @@
     <test-case case-name="payment-tests"><junit-test-suite class-name="org.opentaps.tests.financials.PaymentTests"/></test-case>
     <test-case case-name="billing-account-tests"><junit-test-suite class-name="org.opentaps.tests.financials.BillingAccountTests"/></test-case>
     <test-case case-name="encumbrance-tests"><junit-test-suite class-name="org.opentaps.tests.financials.EncumbranceTests"/></test-case>
+    <test-case case-name="fin-sales-tax-tests"><junit-test-suite class-name="org.opentaps.tests.financials.SalesTaxTests"/></test-case>
 
     <!-- purchasing -->
     <test-case case-name="mrp-tests"><junit-test-suite class-name="org.opentaps.tests.purchasing.MrpTests"/></test-case>

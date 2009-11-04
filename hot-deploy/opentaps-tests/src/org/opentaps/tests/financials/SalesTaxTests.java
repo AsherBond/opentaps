@@ -124,6 +124,7 @@ public class SalesTaxTests extends FinancialsTestCase {
     }
 
     /**
+     * Verify sales tax facts changed correctly after an invoice is made ready and paid.
      * 
      * @throws GeneralException
      */
@@ -188,6 +189,21 @@ public class SalesTaxTests extends FinancialsTestCase {
         // taxable sales for OR has increased by $100
         // sales tax for NV  has increased by $5
         // sales tax for OR has increased by $8
+        if (totalSales == null) {
+            totalSales = BigDecimal.ZERO;
+        }
+        if (taxableNV ==  null) {
+            taxableNV = BigDecimal.ZERO;
+        }
+        if (taxableOR ==  null) {
+            taxableOR = BigDecimal.ZERO;
+        }
+        if (taxNV ==  null) {
+            taxNV = BigDecimal.ZERO;
+        }
+        if (taxOR ==  null) {
+            taxOR = BigDecimal.ZERO;
+        }
 
         // calculate new values
         totalSales = totalSales.add(BigDecimal.valueOf(300.0));
@@ -208,7 +224,7 @@ public class SalesTaxTests extends FinancialsTestCase {
         assertEquals("Incorrect sales tax amount", taxOR, results[1]);
 
         //7. set invoice as paid
-        fa.createPaymentAndApplication(BigDecimal.valueOf(313.0), customerPartyId, organizationPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD", null, invoiceId, "PMNT_RECEIVED");
+        fa.createPaymentAndApplication(BigDecimal.valueOf(313.0), customerPartyId, organizationPartyId, "CUSTOMER_PAYMENT", "EXT_OFFLINE", null, invoiceId, "PMNT_RECEIVED");
 
         //8. run sales tax transformation  a third time
         runAndAssertServiceSuccess("loadSalesTaxData", UtilMisc.toMap("userLogin", admin));
@@ -224,9 +240,15 @@ public class SalesTaxTests extends FinancialsTestCase {
         results = (Object[]) taxAuthQry.list().get(0);
         assertEquals("Incorrect taxable amount", taxableOR, results[0]);
         assertEquals("Incorrect sales tax amount", taxOR, results[1]);
-        
+
     }
 
+    /**
+     * These tests verify that voided invoice doesn't affect sales tax facts
+     * because these invoices should not be taken into account calculating taxes.
+     * 
+     * @throws GeneralException
+     */
     public void testTaxTransformationForVoidedInvoice() throws GeneralException {
         String customerPartyId = createPartyFromTemplate("DemoAccount1", "Test customer");
         FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, demofinadmin);
@@ -303,6 +325,12 @@ public class SalesTaxTests extends FinancialsTestCase {
 
     }
 
+    /**
+     * These tests verify that written off invoice doesn't affect sales tax facts
+     * because these invoices should not be taken into account calculating taxes.
+     * 
+     * @throws GeneralException
+     */
     public void testTaxTransformationForWrittenOffInvoice() throws GeneralException {
 
         String customerPartyId = createPartyFromTemplate("DemoAccount1", "Test customer");
@@ -341,19 +369,6 @@ public class SalesTaxTests extends FinancialsTestCase {
         taxableOR = (BigDecimal) results[0];
         taxOR = (BigDecimal) results[1];
 
-        if (taxableNV ==  null) {
-            taxableNV = BigDecimal.ZERO;
-        }
-        if (taxableOR ==  null) {
-            taxableOR = BigDecimal.ZERO;
-        }
-        if (taxNV ==  null) {
-            taxNV = BigDecimal.ZERO;
-        }
-        if (taxOR ==  null) {
-            taxOR = BigDecimal.ZERO;
-        }
-
         //2. create a sales invoice with
         String invoiceId = fa.createInvoice(customerPartyId, "SALES_INVOICE");
         //3. invoice item 1 for $100
@@ -388,6 +403,14 @@ public class SalesTaxTests extends FinancialsTestCase {
         assertEquals("Incorrect sales tax amount", taxOR, results[1]);
     }
 
+    /**
+     * Finds tax authority dimension identifier for given geo and party.
+     * 
+     * @param session Hibernate session
+     * @param taxAuthGeoId Tax authority geographical unit
+     * @param taxAuthPartyId Tax authority party
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public Long findTaxAuthDimension(Session session, String taxAuthGeoId, String taxAuthPartyId) {
         Query q = session.createQuery("from TaxAuthorityDim where taxAuthGeoId = :taxAuthGeoId and taxAuthPartyId = :taxAuthPartyId");
