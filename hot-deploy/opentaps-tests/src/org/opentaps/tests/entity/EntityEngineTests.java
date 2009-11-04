@@ -49,7 +49,7 @@ public class EntityEngineTests extends OpentapsTestCase {
         String testId = delegator.getNextSeqId("TestEntity");
         delegator.create("TestEntity", UtilMisc.toMap("testId", testId, "testStringField", originalDescription));
         GenericValue originalTestEntityGV = delegator.findByPrimaryKeyCache("TestEntity", UtilMisc.toMap("testId", testId));
-        assertEquals("Test string field from generic value retrieved after TestEntity is created is not correct", originalTestEntityGV.getString("testStringField"), originalDescription);
+        assertEquals("Test string field from generic value retrieved after generic value create is not correct", originalTestEntityGV.getString("testStringField"), originalDescription);
     }
     
     /**
@@ -73,8 +73,7 @@ public class EntityEngineTests extends OpentapsTestCase {
         // load it again, this time it should come into the cache
         GenericValue reloadedTestEntityGV = delegator.findByPrimaryKeyCache("TestEntity", UtilMisc.toMap("testId", testId));
 
-        assertEquals("Test string field from original and reloaded TestEntity do not equal", reloadedTestEntityGV.getString("testStringField"), testEntityGV.getString("testStringField"));
-        assertEquals("Test string field from reloaded TestEntity and generic value retrieved after TestEntity is updated do not equal", newDescription, reloadedTestEntityGV.getString("testStringField"));
+        assertEquals("Test string field from original and reloaded generic value from cache do not equal", reloadedTestEntityGV.getString("testStringField"), testEntityGV.getString("testStringField"));
     }
 
     
