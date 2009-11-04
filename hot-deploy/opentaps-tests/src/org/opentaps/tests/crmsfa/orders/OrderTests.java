@@ -1094,9 +1094,10 @@ public class OrderTests extends OrderTestCase {
         //  already billed
 
         // there should be the original SALES_TAX OrderAdjustment from CA (6.25%) for the 5 products
+        // there should be the original SALES_TAX OrderAdjustment from CA (6.25%) for the 5 products negated
         // there should be the new SALES_TAX OrderAdjustment from CA (6.25%) for the 3 products
-        expectedTax = new BigDecimal("88.88").multiply(new BigDecimal("6.25")).divide(PERCENT_SCALE, SALES_TAX_CALC_DECIMALS, SALES_TAX_ROUNDING);
-        checkSalesTax(orderId, "CA_BOE", 2, expectedTax);
+        expectedTax = new BigDecimal("33.33").multiply(new BigDecimal("6.25")).divide(PERCENT_SCALE, SALES_TAX_CALC_DECIMALS, SALES_TAX_ROUNDING);
+        checkSalesTax(orderId, "CA_BOE", 3, expectedTax);
     }
 
     /**
