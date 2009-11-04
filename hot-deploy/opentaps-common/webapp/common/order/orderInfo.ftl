@@ -102,9 +102,9 @@ under the License.
       <#-- order status history -->
       <@infoRowNested title=uiLabelMap.OrderStatusHistory>
         <div class="tabletext">${uiLabelMap.OrderCurrentStatus}: ${order.status.get("description",locale)}</div>
-        <#if order.orderStatuses?has_content>
+        <#if order.excludePayementProcessOrderStatuses?has_content>
           <hr class="sepbar"/>
-          <#list order.orderStatuses as orderStatus>
+          <#list order.excludePayementProcessOrderStatuses as orderStatus>
             <div class="tabletext">
               ${getLocalizedDate(orderStatus.statusDatetime, "DATE_TIME")}: ${orderStatus.statusItem.get("description",locale)} ${uiLabelMap.CommonBy} ${orderStatus.statusUserLogin?default("unknown")}</div>
           </#list>
