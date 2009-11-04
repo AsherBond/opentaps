@@ -25,7 +25,7 @@ rem ### Delete the last log
 rem del %OFBIZ_LOG%
 
 rem ###VM args block ####################################################
-rem set MEMIF=-Xms128M -Xmx512M
+rem set MEMIF=-Xms512M -Xmx1024M -XX:MaxPermSize=256M
 rem # RMI settings
 rem set DEBUG=-Dsun.rmi.server.exceptionTrace=true
 rem # Automatic IP address for Windows
