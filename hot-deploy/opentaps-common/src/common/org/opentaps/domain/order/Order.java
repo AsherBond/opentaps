@@ -68,7 +68,6 @@ public class Order extends org.opentaps.domain.base.entities.OrderHeader {
     private List<OrderPaymentPreference> paymentPreferences;
     private List<OrderPaymentPreference> nonCancelledPaymentPreferences;
     private List<OrderStatus> orderStatuses;
-    private List<OrderStatus> orderStatusesExcludingPaymentProcessing;
     private List<PostalAddress> billingAddresses;
     private List<PostalAddress> shippingAddresses;
     private List<Payment> payments;
@@ -706,24 +705,6 @@ public class Order extends org.opentaps.domain.base.entities.OrderHeader {
         return orderStatuses;
     }
 
-    /**
-     * Gets the order statuses except the status related to the payment processor for this order.
-     * This list describe the history of status this order went through, with the current status being the first of the list.
-     * @return list of <code>OrderStatus</code> from current to oldest, that relate this order to a <code>StatusItem</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<OrderStatus> getOrderStatusesExcludingPaymentProcessing() throws RepositoryException {
-        if (orderStatusesExcludingPaymentProcessing == null) {
-            orderStatusesExcludingPaymentProcessing = new ArrayList<OrderStatus>();
-            for (OrderStatus orderStatus : getOrderStatuses()) {
-                if (orderStatus.getOrderPaymentPreference() == null) {
-                    orderStatusesExcludingPaymentProcessing.add(orderStatus);
-                }
-            }
-        }
-        return orderStatusesExcludingPaymentProcessing;
-    }
-    
     /**
      * Gets this order current <code>StatusItem</code>.
      * This is an alias for {@link org.opentaps.domain.base.entities.OrderHeader#getStatusItem}.

@@ -230,7 +230,10 @@ public class OrderRepository extends Repository implements OrderRepositoryInterf
             EntityCondition.makeCondition(EntityOperator.OR,
                 EntityCondition.makeCondition("orderItemSeqId", null),
                 EntityCondition.makeCondition("orderItemSeqId", DataModelConstants.SEQ_ID_NA),
-                EntityCondition.makeCondition("orderItemSeqId", ""))
+                EntityCondition.makeCondition("orderItemSeqId", "")),
+            // In ofbiz 09.04 whenever order payments are processed, an order status is stored.
+            // This will filter out the order statuses which are actually payment statuses.
+            EntityCondition.makeCondition("orderPaymentPreferenceId", null)
         );
         return findList(OrderStatus.class, conditions, Arrays.asList("-statusDatetime"));
     }
