@@ -206,12 +206,22 @@ public class BaseFormPanel extends FormPanel implements FormListener {
         return createButton;
     }
 
-    protected void setFieldListeners(FieldInterface field) {
+    /**
+     * Sets the form standard listeners (submit on enter, ...) to the given <code>FieldInterface</code>.
+     * Use only when the field was not added with the {@link #addField} method.
+     * @param field a <code>FieldInterface</code> value
+     */
+    public void setFieldListeners(FieldInterface field) {
         field.addListener(submitOnEnterKey);
         field.addListener(fieldChangedListener);
     }
 
-    protected void setFieldListeners(Field field) {
+    /**
+     * Sets the form standard listeners (submit on enter, ...) to the given <code>Field</code>.
+     * Use only when the field was not added with the {@link #addField} method.
+     * @param field a <code>Field</code> value
+     */
+    public void setFieldListeners(Field field) {
         field.addListener(submitOnEnterKey);
         field.addListener(fieldChangedListener);
     }
