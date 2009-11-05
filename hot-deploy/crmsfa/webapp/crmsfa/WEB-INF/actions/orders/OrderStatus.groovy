@@ -110,7 +110,7 @@ if (orderId) {
                 if (currentUserOrderRoles) {
                     hasPermission = true;
                 }
-            } else {
+            } else if (userLogin) {
                 // regardless of permission, allow if this is the supplier
                 currentUserSupplierOrderRoles = orderHeader.getRelated("OrderRole", [partyId : userLogin.partyId, roleTypeId : "SUPPLIER_AGENT"], null);
                 if (currentUserSupplierOrderRoles) {
