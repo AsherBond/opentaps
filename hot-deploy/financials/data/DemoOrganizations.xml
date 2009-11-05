@@ -52,10 +52,8 @@
     <PartyRelationship partyIdFrom="CompanySub1" partyIdTo="CompanySub3" roleTypeIdFrom="PARENT_ORGANIZATION" roleTypeIdTo="ORGANIZATION_UNIT"
         fromDate="2000-01-01 00:00:00" partyRelationshipTypeId="GROUP_ROLLUP"/>
 
-    <!-- This setting will make sure there are no gaps in the sequence of invoiceIds 
-    <PartyAcctgPreference partyId="Company" invoiceSequenceEnumId="INVSQ_ENF_SEQ"/>
-    -->
     <!-- default accounting preference settings -->
+    <PartyAcctgPreference partyId="Company" taxFormId="US_IRS_1120" cogsMethodId="COGS_AVG_COST" baseCurrencyUomId="USD" salesInvoiceFooterText="opentaps Open Source ERP + CRM - www.opentaps.org" />
     <PartyAcctgPreference partyId="CompanySub1" taxFormId="US_IRS_1120" cogsMethodId="COGS_AVG_COST" baseCurrencyUomId="USD"/>
     <PartyAcctgPreference partyId="CompanySub2" taxFormId="US_IRS_1120" cogsMethodId="COGS_AVG_COST" baseCurrencyUomId="USD"/>
     <PartyAcctgPreference partyId="CompanySub3" taxFormId="US_IRS_1120" cogsMethodId="COGS_AVG_COST" baseCurrencyUomId="USD"/>
@@ -65,9 +63,9 @@
     <UomConversionDated uomId="USD" uomIdTo="CAD" conversionFactor="1.2528" fromDate="2005-05-03 00:00:00" />
     <UomConversionDated uomId="USD" uomIdTo="CHF" conversionFactor="1.1982" fromDate="2005-05-03 00:00:00" />
 
-    <!-- Default footer for PDF -->
-    <PartyAcctgPreference partyId="Company" salesInvoiceFooterText="opentaps Open Source ERP + CRM - www.opentaps.org" />
-
+    <!-- This setting will make sure there are no gaps in the sequence of invoiceIds 
+    <PartyAcctgPreference partyId="Company" invoiceSequenceEnumId="INVSQ_ENF_SEQ"/>
+    -->
     <!-- If set to Y, all tax items of an invoice will be grouped on the same line in the Invoice PDF document -->
     <PartyAcctgPreference partyId="Company" groupSalesTaxOnInvoicePdf="Y"/>
 
