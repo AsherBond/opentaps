@@ -779,7 +779,7 @@ public class FinancialAsserts extends OpentapsTestCase {
         BigDecimal tempTax = BigDecimal.ZERO;
 
         // find organization dimension
-        List<GenericValue> orgDimList = delegator.findByAnd("OrganiztionDim", UtilMisc.toMap("organizationPartyId", organizationPartyId));
+        List<GenericValue> orgDimList = delegator.findByAnd("OrganizationDim", UtilMisc.toMap("organizationPartyId", organizationPartyId));
         assertNotEmpty("There is no any company with ID [" + organizationPartyId + "] in organization dimension.", orgDimList);
         Long organizationDimKey = EntityUtil.getFirst(orgDimList).getLong("organizationDimId");
 
@@ -850,7 +850,7 @@ public class FinancialAsserts extends OpentapsTestCase {
         BigDecimal tempNetAmount = BigDecimal.ZERO;
 
         // find organization dimension
-        List<GenericValue> orgDimList = delegator.findByAnd("OrganiztionDim", UtilMisc.toMap("organizationPartyId", organizationPartyId));
+        List<GenericValue> orgDimList = delegator.findByAnd("OrganizationDim", UtilMisc.toMap("organizationPartyId", organizationPartyId));
         assertNotEmpty("There is no any company with ID [" + organizationPartyId + "] in organization dimension.", orgDimList);
         Long organizationDimKey = EntityUtil.getFirst(orgDimList).getLong("organizationDimId");
 
