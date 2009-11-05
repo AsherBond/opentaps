@@ -1075,9 +1075,31 @@ public class OrderTests extends OrderTestCase {
         toPackItems.put("00001", UtilMisc.toMap("00001", new BigDecimal("2.0")));
         runAndAssertServiceSuccess("testShipOrderManual", UtilMisc.toMap("orderId", salesOrder.getOrderId(), "facilityId", facilityId, "items", toPackItems, "userLogin", admin));
 
+        // try to update the order item to 3, this should fail as we do not specify what to do with the adjustments
+        // and there are already some adjustments billed
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", DemoCSR);
+        input.put("orderId", orderId);
+        input.put("itemDescriptionMap", UtilMisc.toMap("00001", "updated quantity to 3"));
+        input.put("itemQtyMap", UtilMisc.toMap("00001:1", "3.0"));
+        input.put("itemPriceMap", new HashMap<String, String>());
+        input.put("overridePriceMap", new HashMap<String, String>());
+        runAndAssertServiceError("opentaps.updateOrderItems", input);
 
-        // update quantity of the order item to 3
-        updateOrderItem(orderId, "00001", "3.0", null, "updated quantity to 3", DemoCSR);
+        // update quantity of the order item to 3, specify forceComplete and NOT to recalculate the adjustments
+        input = UtilMisc.<String, Object>toMap("userLogin", DemoCSR);
+        input.put("orderId", orderId);
+        input.put("forceComplete", "Y");
+        input.put("recalcAdjustments", "N");
+        input.put("itemDescriptionMap", UtilMisc.toMap("00001", "updated quantity to 3"));
+        input.put("itemQtyMap", UtilMisc.toMap("00001:1", "3.0"));
+        input.put("itemPriceMap", new HashMap<String, String>());
+        input.put("overridePriceMap", new HashMap<String, String>());
+        runAndAssertServiceSuccess("opentaps.updateOrderItems", input);
+
+        // the tax should not have changed
+        // there should be one SALES_TAX OrderAdjustment from CA (6.25%) for the 5 products
+        expectedTax = new BigDecimal("55.55").multiply(new BigDecimal("6.25")).divide(PERCENT_SCALE, SALES_TAX_CALC_DECIMALS, SALES_TAX_ROUNDING);
+        checkSalesTax(orderId, "CA_BOE", 1, expectedTax);
 
         // get final ATP and QOH
         callResults = getProductAvailability(testProduct.getString("productId"));
@@ -1089,6 +1111,17 @@ public class OrderTests extends OrderTestCase {
         assertEquals("ATP has changed by -3", finalAtp, initAtp.subtract(new BigDecimal("3.0")));
         assertEquals("QOH has changed by -2", finalQoh, initQoh.subtract(new BigDecimal("2.0")));
 
+        // update quantity of the order item to 3, specify forceComplete and DO recalculate the adjustments
+        input = UtilMisc.<String, Object>toMap("userLogin", DemoCSR);
+        input.put("orderId", orderId);
+        input.put("forceComplete", "Y");
+        input.put("recalcAdjustments", "Y");
+        input.put("itemDescriptionMap", UtilMisc.toMap("00001", "updated quantity to 3"));
+        input.put("itemQtyMap", UtilMisc.toMap("00001:1", "3.0"));
+        input.put("itemPriceMap", new HashMap<String, String>());
+        input.put("overridePriceMap", new HashMap<String, String>());
+        runAndAssertServiceSuccess("opentaps.updateOrderItems", input);
+
         // check the final tax adjustments
         // Note: the updateOrderItem service will not delete the previous adjustments since they are
         //  already billed
@@ -1098,6 +1131,16 @@ public class OrderTests extends OrderTestCase {
         // there should be the new SALES_TAX OrderAdjustment from CA (6.25%) for the 3 products
         expectedTax = new BigDecimal("33.33").multiply(new BigDecimal("6.25")).divide(PERCENT_SCALE, SALES_TAX_CALC_DECIMALS, SALES_TAX_ROUNDING);
         checkSalesTax(orderId, "CA_BOE", 3, expectedTax);
+
+        // get final ATP and QOH
+        callResults = getProductAvailability(testProduct.getString("productId"));
+        finalAtp = (BigDecimal) callResults.get("availableToPromiseTotal");
+        finalQoh = (BigDecimal) callResults.get("quantityOnHandTotal");
+        Debug.logInfo("Final ATP : " + finalAtp + ", Final QOH : " + finalQoh, MODULE);
+
+        // verify that ATP has changed by -3 and QOH has changed by -2 (same as before)
+        assertEquals("ATP has changed by -3", finalAtp, initAtp.subtract(new BigDecimal("3.0")));
+        assertEquals("QOH has changed by -2", finalQoh, initQoh.subtract(new BigDecimal("2.0")));
     }
 
     /**
