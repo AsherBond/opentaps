@@ -209,7 +209,7 @@ public class JasperReportsViewHandler extends AbstractViewHandler {
                 String datasourceName = delegator.getEntityHelperName(info);
                 String jndiDataSourceName = (String) parameters.get("jndiDS");
 
-                if (UtilValidate.isNotEmpty(datasourceName)) {
+                if (UtilValidate.isNotEmpty(datasourceName) && UtilValidate.isEmail(jndiDataSourceName)) {
                     // given entity
                     conn = ConnectionFactory.getConnection(datasourceName);
                     jp = JasperFillManager.fillReport(report, parameters, conn);
