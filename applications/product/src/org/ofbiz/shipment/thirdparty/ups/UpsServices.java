@@ -471,6 +471,11 @@ public class UpsServices {
                 UtilXml.addChildElementValue(referenceNumberElement, "Code", "MK", shipmentConfirmRequestDoc);
                 UtilXml.addChildElementValue(referenceNumberElement, "Value", shipmentPackage.getString("shipmentPackageSeqId"), shipmentConfirmRequestDoc);
 
+                // add orderId as a shipment reference
+                Element orderReferenceNumberElement = UtilXml.addChildElement(packageElement, "ReferenceNumber", shipmentConfirmRequestDoc);
+                UtilXml.addChildElementValue(orderReferenceNumberElement, "Code", "TN", shipmentConfirmRequestDoc);
+                UtilXml.addChildElementValue(orderReferenceNumberElement, "Value", shipment.getString("primaryOrderId"), shipmentConfirmRequestDoc);
+                
                 if (carrierShipmentBoxType != null && carrierShipmentBoxType.get("oversizeCode") != null) {
                     UtilXml.addChildElementValue(packageElement, "OversizePackage", carrierShipmentBoxType.getString("oversizeCode"), shipmentConfirmRequestDoc);
                 }
