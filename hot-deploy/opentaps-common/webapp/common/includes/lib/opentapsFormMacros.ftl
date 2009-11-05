@@ -200,18 +200,18 @@ For more information, please see documentation/opentapsFormMacros.html
 </#macro>
 
 
-<#macro displayIndicator value="" class="tabletext">
-  <span class="${class}"><#if value == "Y">${uiLabelMap.CommonYes}<#elseif value == "N">${uiLabelMap.CommonNo}<#else>${uiLabelMap.OpentapsUnknown}</#if></span>
+<#macro displayIndicator value="" class="tabletext" yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
+  <span class="${class}"><#if value == "Y">${yesLabel}<#elseif value == "N">${noLabel}<#else>${uiLabelMap.OpentapsUnknown}</#if></span>
 </#macro>
 
-<#macro displayIndicatorCell value="" class="tabletext" blockClass="">
-  <td class="${blockClass}"><@displayIndicator value=value class=class /></td>
+<#macro displayIndicatorCell value="" class="tabletext" blockClass="" yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
+  <td class="${blockClass}"><@displayIndicator value=value class=class yesLabel=yesLabel noLabel=noLabel /></td>
 </#macro>
 
-<#macro displayIndicatorRow title value="" class="tabletext" blockClass="" titleClass="tableheadtext">
+<#macro displayIndicatorRow title value="" class="tabletext" blockClass="" titleClass="tableheadtext" yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@displayIndicatorCell value=value class=class blockClass=blockClass />
+    <@displayIndicatorCell value=value class=class blockClass=blockClass yesLabel=yesLabel noLabel=noLabel />
   </tr>
 </#macro>
 
@@ -744,23 +744,23 @@ For more information, please see documentation/opentapsFormMacros.html
 </#macro>
 
 
-<#macro inputIndicator name required=true default="" index=-1 onChange="" ignoreParameters=false>
+<#macro inputIndicator name required=true default="" index=-1 onChange="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
   <select name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}">
     <#if !required><option value=""></option></#if>
-    <option <#if defaultValue == "Y">selected="selected"</#if> value="Y">${uiLabelMap.CommonYes}</option>
-    <option <#if defaultValue == "N">selected="selected"</#if> value="N">${uiLabelMap.CommonNo}</option>
+    <option <#if defaultValue == "Y">selected="selected"</#if> value="Y">${yesLabel}</option>
+    <option <#if defaultValue == "N">selected="selected"</#if> value="N">${noLabel}</option>
   </select>
 </#macro>
 
-<#macro inputIndicatorCell name required=true default="" index=-1 onChange="" ignoreParameters=false>
-  <td><@inputIndicator name=name required=required default=default index=index onChange=onChange ignoreParameters=ignoreParameters /></td>
+<#macro inputIndicatorCell name required=true default="" index=-1 onChange="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
+  <td><@inputIndicator name=name required=required default=default index=index onChange=onChange ignoreParameters=ignoreParameters yesLabel=yesLabel noLabel=noLabel /></td>
 </#macro>
 
-<#macro inputIndicatorRow name title required=true default="" titleClass="tableheadtext" index=-1 onChange="" ignoreParameters=false>
+<#macro inputIndicatorRow name title required=true default="" titleClass="tableheadtext" index=-1 onChange="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputIndicatorCell name=name required=required default=default index=index onChange=onChange ignoreParameters=ignoreParameters />
+    <@inputIndicatorCell name=name required=required default=default index=index onChange=onChange ignoreParameters=ignoreParameters yesLabel=yesLabel noLabel=noLabel />
   </tr>
 </#macro>
 
