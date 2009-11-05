@@ -96,13 +96,13 @@ public class SalesTaxTests extends FinancialsTestCase {
         assertEquals("Incorrect total sales", totalSales, (BigDecimal) (totalSalesQry.list().get(0)));
         taxAuthQry.setLong("taxAuthDimId", taxNVAuthDimId);
         results = (Object[]) taxAuthQry.list().get(0);
-        assertEquals("Incorrect taxable amount", taxableNV, results[0]);
-        assertEquals("Incorrect sales tax amount", taxNV, results[1]);
+        assertEquals("Incorrect taxable amount", taxableNV, (BigDecimal) results[0]);
+        assertEquals("Incorrect sales tax amount", taxNV, (BigDecimal) results[1]);
 
         taxAuthQry.setLong("taxAuthDimId", taxORAuthDimId);
         results = (Object[]) taxAuthQry.list().get(0);
-        assertEquals("Incorrect taxable amount", taxableOR, results[0]);
-        assertEquals("Incorrect sales tax amount", taxOR, results[1]);
+        assertEquals("Incorrect taxable amount", taxableOR, (BigDecimal) results[0]);
+        assertEquals("Incorrect sales tax amount", taxOR, (BigDecimal) results[1]);
 
         //7. cancel sales invoice
         fa.updateInvoiceStatus(invoiceId, "INVOICE_CANCELLED");
@@ -114,13 +114,13 @@ public class SalesTaxTests extends FinancialsTestCase {
         assertEquals("Incorrect total sales", totalSales, (BigDecimal) (totalSalesQry.list().get(0)));
         taxAuthQry.setLong("taxAuthDimId", taxNVAuthDimId);
         results = (Object[]) taxAuthQry.list().get(0);
-        assertEquals("Incorrect taxable amount", taxableNV, results[0]);
-        assertEquals("Incorrect sales tax amount", taxNV, results[1]);
+        assertEquals("Incorrect taxable amount", taxableNV, (BigDecimal) results[0]);
+        assertEquals("Incorrect sales tax amount", taxNV, (BigDecimal) results[1]);
 
         taxAuthQry.setLong("taxAuthDimId", taxORAuthDimId);
         results = (Object[]) taxAuthQry.list().get(0);
-        assertEquals("Incorrect taxable amount", taxableOR, results[0]);
-        assertEquals("Incorrect sales tax amount", taxOR, results[1]);
+        assertEquals("Incorrect taxable amount", taxableOR, (BigDecimal) results[0]);
+        assertEquals("Incorrect sales tax amount", taxOR, (BigDecimal) results[1]);
     }
 
     /**
@@ -215,13 +215,13 @@ public class SalesTaxTests extends FinancialsTestCase {
         assertEquals("Incorrect total sales", totalSales, (BigDecimal) (totalSalesQry.list().get(0)));
         taxAuthQry.setLong("taxAuthDimId", taxNVAuthDimId);
         results = (Object[]) taxAuthQry.list().get(0);
-        assertEquals("Incorrect taxable amount", taxableNV, results[0]);
-        assertEquals("Incorrect sales tax amount", taxNV, results[1]);
+        assertEquals("Incorrect taxable amount", taxableNV, (BigDecimal) results[0]);
+        assertEquals("Incorrect sales tax amount", taxNV, (BigDecimal) results[1]);
 
         taxAuthQry.setLong("taxAuthDimId", taxORAuthDimId);
         results = (Object[]) taxAuthQry.list().get(0);
-        assertEquals("Incorrect taxable amount", taxableOR, results[0]);
-        assertEquals("Incorrect sales tax amount", taxOR, results[1]);
+        assertEquals("Incorrect taxable amount", taxableOR, (BigDecimal) results[0]);
+        assertEquals("Incorrect sales tax amount", taxOR, (BigDecimal) results[1]);
 
         //7. set invoice as paid
         fa.createPaymentAndApplication(BigDecimal.valueOf(313.0), customerPartyId, organizationPartyId, "CUSTOMER_PAYMENT", "EXT_OFFLINE", null, invoiceId, "PMNT_RECEIVED");
@@ -233,13 +233,13 @@ public class SalesTaxTests extends FinancialsTestCase {
         assertEquals("Incorrect total sales", totalSales, (BigDecimal) (totalSalesQry.list().get(0)));
         taxAuthQry.setLong("taxAuthDimId", taxNVAuthDimId);
         results = (Object[]) taxAuthQry.list().get(0);
-        assertEquals("Incorrect taxable amount", taxableNV, results[0]);
-        assertEquals("Incorrect sales tax amount", taxNV, results[1]);
+        assertEquals("Incorrect taxable amount", taxableNV, (BigDecimal) results[0]);
+        assertEquals("Incorrect sales tax amount", taxNV, (BigDecimal) results[1]);
 
         taxAuthQry.setLong("taxAuthDimId", taxORAuthDimId);
         results = (Object[]) taxAuthQry.list().get(0);
-        assertEquals("Incorrect taxable amount", taxableOR, results[0]);
-        assertEquals("Incorrect sales tax amount", taxOR, results[1]);
+        assertEquals("Incorrect taxable amount", taxableOR, (BigDecimal) results[0]);
+        assertEquals("Incorrect sales tax amount", taxOR, (BigDecimal) results[1]);
 
     }
 
@@ -315,13 +315,13 @@ public class SalesTaxTests extends FinancialsTestCase {
         assertEquals("Incorrect total sales", totalSales, (BigDecimal) (totalSalesQry.list().get(0)));
         taxAuthQry.setLong("taxAuthDimId", taxNVAuthDimId);
         results = (Object[]) taxAuthQry.list().get(0);
-        assertEquals("Incorrect taxable amount", taxableNV, results[0]);
-        assertEquals("Incorrect sales tax amount", taxNV, results[1]);
+        assertEquals("Incorrect taxable amount", taxableNV, (BigDecimal) results[0]);
+        assertEquals("Incorrect sales tax amount", taxNV, (BigDecimal) results[1]);
 
         taxAuthQry.setLong("taxAuthDimId", taxORAuthDimId);
         results = (Object[]) taxAuthQry.list().get(0);
-        assertEquals("Incorrect taxable amount", taxableOR, results[0]);
-        assertEquals("Incorrect sales tax amount", taxOR, results[1]);
+        assertEquals("Incorrect taxable amount", taxableOR, (BigDecimal) results[0]);
+        assertEquals("Incorrect sales tax amount", taxOR, (BigDecimal) results[1]);
 
     }
 
@@ -394,13 +394,13 @@ public class SalesTaxTests extends FinancialsTestCase {
         assertEquals("Incorrect total sales", totalSales, (BigDecimal) (totalSalesQry.list().get(0)));
         taxAuthQry.setLong("taxAuthDimId", taxNVAuthDimId);
         results = (Object[]) taxAuthQry.list().get(0);
-        assertEquals("Incorrect taxable amount", taxableNV, results[0]);
-        assertEquals("Incorrect sales tax amount", taxNV, results[1]);
+        assertEquals("Incorrect taxable amount", taxableNV, (BigDecimal) results[0]);
+        assertEquals("Incorrect sales tax amount", taxNV, (BigDecimal) results[1]);
 
         taxAuthQry.setLong("taxAuthDimId", taxORAuthDimId);
         results = (Object[]) taxAuthQry.list().get(0);
-        assertEquals("Incorrect taxable amount", taxableOR, results[0]);
-        assertEquals("Incorrect sales tax amount", taxOR, results[1]);
+        assertEquals("Incorrect taxable amount", taxableOR, (BigDecimal) results[0]);
+        assertEquals("Incorrect sales tax amount", taxOR, (BigDecimal) results[1]);
     }
 
     /**
