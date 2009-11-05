@@ -7621,7 +7621,7 @@
         <value xml:lang="de">Kategorie ID</value>
         <value xml:lang="en">Category ID</value>
         <value xml:lang="es">Código de Categoría</value>
-        <value xml:lang="fr">Réf. de catégorie</value>
+        <value xml:lang="fr">Réf. de catég.</value>
         <value xml:lang="it">Codice Categoria</value>
         <value xml:lang="ro">Cod Categorie</value>
         <value xml:lang="ru">Категория</value>
@@ -9425,6 +9425,10 @@
         <value xml:lang="th">ERROR: ผิดพลาด ! ไม่พบสินค้า</value>
         <value xml:lang="zh">错误：没有找到产品</value>
     </property>
+    <property key="ProductErrorNothingToExport">
+        <value xml:lang="en">ERROR: Nothing To Export</value>
+        <value xml:lang="fr">ERREUR : rien à exporter</value>
+    </property>    
     <property key="ProductErrorShipmentNotPurchaseShipment">
         <value xml:lang="de">Lieferung ${shipmentId} ist keine Einkaufslieferung</value>
         <value xml:lang="en">Shipment ${shipmentId} is not a Purchase Shipment</value>
