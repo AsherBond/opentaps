@@ -855,6 +855,8 @@ public final class OrderServices {
             callCtx = new HashMap<String, Object>();
             callCtx.put("userLogin", userLogin);
             callCtx.put("orderId", orderId);
+            callCtx.put("recalcAdjustments", context.get("recalcAdjustments"));
+            callCtx.put("forceComplete", context.get("forceComplete"));
             callCtx.put("overridePriceMap", filteredOverridePriceMap);
             callCtx.put("itemDescriptionMap", filteredItemDescriptionMap);
             callCtx.put("itemPriceMap", filteredItemPriceMap);
@@ -922,6 +924,10 @@ public final class OrderServices {
         Map<String, String> itemAttributesMap = (Map<String, String>) context.get("itemAttributesMap");
         Map<String, String> itemEstimatedShipDateMap  = (Map<String, String>) context.get("itemShipDateMap");
         Map<String, String> itemEstimatedDeliveryDateMap = (Map<String, String>) context.get("itemDeliveryDateMap");
+
+        // default to True which is the default behavior in ofbiz
+        boolean recalcAdjustments = !"N".equals(context.get("recalcAdjustments"));
+        boolean forceComplete = "Y".equals(context.get("forceComplete"));
 
         // those new inputs above could be null
         if (itemReasonMap == null) {
@@ -1094,7 +1100,11 @@ public final class OrderServices {
         ProductPromoWorker.doPromotions(cart, dispatcher);
         // save all the updated information
         try {
-            saveUpdatedCartToOrder(dispatcher, delegator, cart, locale, userLogin, orderId, UtilMisc.toMap("itemReasonMap", itemReasonMap, "itemCommentMap", itemCommentMap));
+            boolean res = saveUpdatedCartToOrder(dispatcher, delegator, cart, locale, userLogin, orderId, UtilMisc.toMap("itemReasonMap", itemReasonMap, "itemCommentMap", itemCommentMap), forceComplete, recalcAdjustments);
+            if (!res) {
+                return UtilMessage.createAndLogServiceError("The order has adjustments that are already billed, please specify whether or not to recalculate the remaining adjustments.", MODULE);
+            }
+
         } catch (GeneralException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
@@ -1502,9 +1512,10 @@ public final class OrderServices {
 
     /*
      * Added accounting tags support.
+     * Return false if the change need to recalculate the adjustments but some are already billed, and forceComplete was not set
      */
-    private static void saveUpdatedCartToOrder(LocalDispatcher dispatcher, GenericDelegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId) throws GeneralException {
-        saveUpdatedCartToOrder(dispatcher, delegator, cart, locale, userLogin, orderId, null);
+    private static boolean saveUpdatedCartToOrder(LocalDispatcher dispatcher, GenericDelegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId) throws GeneralException {
+        return saveUpdatedCartToOrder(dispatcher, delegator, cart, locale, userLogin, orderId, null, false, true);
     }
 
     /*
@@ -1512,7 +1523,28 @@ public final class OrderServices {
      * (TODO: changeMap unused)
      */
     @SuppressWarnings("unchecked")
-    private static void saveUpdatedCartToOrder(LocalDispatcher dispatcher, GenericDelegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId, Map changeMap) throws GeneralException {
+    private static boolean saveUpdatedCartToOrder(LocalDispatcher dispatcher, GenericDelegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId, Map changeMap, boolean forceComplete, boolean recalcAdjustments) throws GeneralException {
+
+        // find out early if there are billed adjustment, this would need forceComplete to be set or fail
+        boolean hasBilledAdjustments = false;
+        DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+        DomainsDirectory dd = domainLoader.loadDomainsDirectory();
+        Session session = dd.getInfrastructure().getSession();
+        String hql = "from OrderAdjustmentBilling eo where eo.orderAdjustment.orderId = :orderId ";
+        Query query = session.createQuery(hql);
+        query.setString("orderId", orderId);
+        List<OrderAdjustmentBilling> orderAdjustmentBillingList = query.list();
+
+        // adjustments to remove or offset
+        if (orderAdjustmentBillingList.size() > 0) {
+            // if order adjustment billings already exist for the order adjustments, do not make any changes to the order adjustments .
+            // return false if forceComplete is not set
+            hasBilledAdjustments = true;
+            if (!forceComplete) {
+                return false;
+            }
+        }
+
         // get/set the shipping estimates.  if it's a SALES ORDER, then return an error if there are no ship estimates
         int shipGroups = cart.getShipGroupSize();
         for (int gi = 0; gi < shipGroups; gi++) {
@@ -1552,7 +1584,9 @@ public final class OrderServices {
         List toStore = new LinkedList();
         List orderItems = cart.makeOrderItems();
         toStore.addAll(orderItems);
-        toStore.addAll(cart.makeAllAdjustments());
+        if (recalcAdjustments) {
+            toStore.addAll(cart.makeAllAdjustments());
+        }
         toStore.addAll(cart.makeAllShipGroupInfos());
         toStore.addAll(cart.makeAllOrderPaymentInfos(dispatcher));
 
@@ -1571,13 +1605,17 @@ public final class OrderServices {
                     dropShipGroupIds.add(valueObj.getString("shipGroupSeqId"));
                 }
             } else if ("OrderAdjustment".equals(valueObj.getEntityName())) {
-                // shipping / tax adjustment(s)
-                if (valueObj.get("orderItemSeqId") == null || valueObj.getString("orderItemSeqId").length() == 0) {
-                    valueObj.set("orderItemSeqId", DataModelConstants.SEQ_ID_NA);
+                if (recalcAdjustments) {
+                    // shipping / tax adjustment(s)
+                    if (valueObj.get("orderItemSeqId") == null || valueObj.getString("orderItemSeqId").length() == 0) {
+                        valueObj.set("orderItemSeqId", DataModelConstants.SEQ_ID_NA);
+                    }
+                    valueObj.set("orderAdjustmentId", delegator.getNextSeqId("OrderAdjustment"));
+                    valueObj.set("createdDate", UtilDateTime.nowTimestamp());
+                    valueObj.set("createdByUserLogin", userLogin.getString("userLoginId"));
+                } else {
+                    tsi.remove();
                 }
-                valueObj.set("orderAdjustmentId", delegator.getNextSeqId("OrderAdjustment"));
-                valueObj.set("createdDate", UtilDateTime.nowTimestamp());
-                valueObj.set("createdByUserLogin", userLogin.getString("userLoginId"));
             } else if ("OrderPaymentPreference".equals(valueObj.getEntityName())) {
                 if (valueObj.get("orderPaymentPreferenceId") == null) {
                     valueObj.set("orderPaymentPreferenceId", delegator.getNextSeqId("OrderPaymentPreference"));
@@ -1686,47 +1724,38 @@ public final class OrderServices {
             }
         }
 
-        // remove the adjustments
-        try {
-            DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
-            DomainsDirectory dd = domainLoader.loadDomainsDirectory();
-            Session session = dd.getInfrastructure().getSession();
-            String hql = "from OrderAdjustmentBilling eo where eo.orderAdjustment.orderId = :orderId ";
-            Query query = session.createQuery(hql);
-            query.setString("orderId", orderId);
-            List<OrderAdjustmentBilling> orderAdjustmentBillingList = query.list();
-            
-            // adjustments to remove or offset
-            EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
-                                                                 EntityCondition.makeCondition("orderId", orderId),
-                                                                 EntityCondition.makeCondition(EntityOperator.OR,
-                                                                                               EntityCondition.makeCondition("orderAdjustmentTypeId", "PROMOTION_ADJUSTMENT"),
-                                                                                               EntityCondition.makeCondition("orderAdjustmentTypeId", "SHIPPING_CHARGES"),
-                                                                                               EntityCondition.makeCondition("orderAdjustmentTypeId", "SALES_TAX")));
-            if (orderAdjustmentBillingList.size() > 0) {
-                // if order adjustment billings already exist for the order adjustments, do not make any changes to the order adjustments .
-                // return success, but with a message "Order adjustments were not changed because some adjustments have already been invoiced.
-
-                // if order adjustment billings already exist for the order adjustments, do not remove the existing order adjustments, but
-                // offset them instead
-                List<GenericValue> offsetAdjustments = new ArrayList<GenericValue>();
-                for (GenericValue oa : delegator.findByCondition("OrderAdjustment", cond, null, null)) {
-                    BigDecimal oaAmount = oa.getBigDecimal("amount");
-                    if (oaAmount != null) {
-                        GenericValue offset = delegator.makeValue("OrderAdjustment", oa.getAllFields());
-                        offset.set("amount", oaAmount.negate());
-                        offset.set("orderAdjustmentId", delegator.getNextSeqId("OrderAdjustment"));
-                        offsetAdjustments.add(offset);
+        // remove or offset the adjustments
+        if (recalcAdjustments) {
+            try {
+                EntityCondition adjustmentCondition = EntityCondition.makeCondition(EntityOperator.AND,
+                                                             EntityCondition.makeCondition("orderId", orderId),
+                                                             EntityCondition.makeCondition(EntityOperator.OR,
+                                                                                           EntityCondition.makeCondition("orderAdjustmentTypeId", "PROMOTION_ADJUSTMENT"),
+                                                                                           EntityCondition.makeCondition("orderAdjustmentTypeId", "SHIPPING_CHARGES"),
+                                                                                           EntityCondition.makeCondition("orderAdjustmentTypeId", "SALES_TAX")));
+                if (hasBilledAdjustments) {
+                    // if order adjustment billings already exist for the order adjustments, do not remove the existing order adjustments, but
+                    // offset them instead
+                    // at this point we know forceComplete is true
+                    List<GenericValue> offsetAdjustments = new ArrayList<GenericValue>();
+                    for (GenericValue oa : delegator.findByCondition("OrderAdjustment", adjustmentCondition, null, null)) {
+                        BigDecimal oaAmount = oa.getBigDecimal("amount");
+                        if (oaAmount != null) {
+                            GenericValue offset = delegator.makeValue("OrderAdjustment", oa.getAllFields());
+                            offset.set("amount", oaAmount.negate());
+                            offset.set("orderAdjustmentId", delegator.getNextSeqId("OrderAdjustment"));
+                            offsetAdjustments.add(offset);
+                        }
                     }
+                    toStore.addAll(offsetAdjustments);
+                } else {
+                    // else just remove the adjustments
+                    delegator.removeByCondition("OrderAdjustment", adjustmentCondition);
                 }
-                toStore.addAll(offsetAdjustments);
-            } else {
-                // remove the adjustments
-                delegator.removeByCondition("OrderAdjustment", cond);
+            } catch (GenericEntityException e) {
+                Debug.logError(e, MODULE);
+                throw new GeneralException(e.getMessage());
             }
-        } catch (GenericEntityException e) {
-            Debug.logError(e, MODULE);
-            throw new GeneralException(e.getMessage());
         }
 
         // store the new items/adjustments
@@ -1765,6 +1794,8 @@ public final class OrderServices {
         if (resErrorMessages.size() > 0) {
             throw new GeneralException(ServiceUtil.getErrorMessage(ServiceUtil.returnError(resErrorMessages)));
         }
+
+        return true;
     }
 
     /**

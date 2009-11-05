@@ -277,6 +277,8 @@ under the License.
 
           <tr>
             <td align="right" colspan="3">
+              <@inputHidden name="forceComplete" value="Y"/>
+              <@inputIndicator name="recalcAdjustments" default="Y" yesLabel="Recalculate adjustments" noLabel="Do not recalculate adjustments" /><br/>
               <@inputSubmit title=uiLabelMap.OrderUpdateItems />
             </td>
           </tr>
