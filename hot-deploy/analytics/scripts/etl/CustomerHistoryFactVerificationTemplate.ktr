@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transformation>
+  <info>
+    <name>Customer History Fact Verification</name>
+    <description>Compare the CustomerHistoryFact data and the data from the operational database</description>
+    <extended_description/>
+    <trans_version/>
+    <trans_status>0</trans_status>
+    <directory>&#47;</directory>
+    <log>
+      <read/>
+      <write/>
+      <input/>
+      <output/>
+      <update/>
+      <rejected/>
+      <connection/>
+      <table/>
+      <use_batchid>Y</use_batchid>
+      <use_logfield>N</use_logfield>
+    </log>
+    <maxdate>
+      <connection/>
+      <table/>
+      <field/>
+      <offset>0.0</offset>
+      <maxdiff>0.0</maxdiff>
+    </maxdate>
+    <size_rowset>10000</size_rowset>
+    <sleep_time_empty>50</sleep_time_empty>
+    <sleep_time_full>50</sleep_time_full>
+    <unique_connections>N</unique_connections>
+    <feedback_shown>Y</feedback_shown>
+    <feedback_size>50000</feedback_size>
+    <using_thread_priorities>Y</using_thread_priorities>
+    <shared_objects_file/>
+    <dependencies>
+    </dependencies>
+    <partitionschemas>
+    </partitionschemas>
+    <slaveservers>
+    </slaveservers>
+    <clusterschemas>
+    </clusterschemas>
+  <modified_user>admin</modified_user>
+  <modified_date>2008&#47;04&#47;03 09:44:16.023</modified_date>
+  </info>
+  <notepads>
+    <notepad>
+      <note>Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+
+This program is free software; you can redistribute it and&#47;or modify
+it under the terms of the Honest Public License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+Honest Public License for more details.
+
+You should have received a copy of the Honest Public License
+along with this program; if not, write to Funambol,
+643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA</note>
+      <xloc>192</xloc>
+      <yloc>420</yloc>
+      <width>521</width>
+      <heigth>244</heigth>
+    </notepad>
+  </notepads>
+  <connection>
+    <name>analytics</name>
+    <server/>
+    <type>MYSQL</type>
+    <access>JNDI</access>
+    <database>analytics</database>
+    <port>-1</port>
+    <username/>
+    <password>Encrypted </password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>INITIAL_POOL_SIZE</code><attribute>5</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>MAXIMUM_POOL_SIZE</code><attribute>10</attribute></attribute>
+      <attribute><code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>-1</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>STREAM_RESULTS</code><attribute>N</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>operational</name>
+    <server>localhost</server>
+    <type>POSTGRESQL</type>
+    <access>JNDI</access>
+    <database>operational</database>
+    <port>-1</port>
+    <username>ofbiz</username>
+    <password>Encrypted 2be98afc86aa7f2e4cb79ce7fd890a6c0</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>INITIAL_POOL_SIZE</code><attribute>5</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>MAXIMUM_POOL_SIZE</code><attribute>10</attribute></attribute>
+      <attribute><code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>-1</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>STREAM_RESULTS</code><attribute>N</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <order>
+  <hop> <from>expected lifetime number of orders and order total</from><to>expected lifetime number of returns</to><enabled>Y</enabled> </hop>  <hop> <from>expected lifetime number of returns</from><to>expected gross lifetime returns total</to><enabled>Y</enabled> </hop>  <hop> <from>Customer History Facts</from><to>expected lifetime number of orders and order total</to><enabled>Y</enabled> </hop>  <hop> <from>expected gross lifetime returns total</from><to>add adjustment</to><enabled>Y</enabled> </hop>  <hop> <from>add adjustment</from><to>Map empty adjustments values to 0</to><enabled>Y</enabled> </hop>  <hop> <from>Map empty adjustments values to 0</from><to>Map empty returns values to 0</to><enabled>Y</enabled> </hop>  <hop> <from>Map empty returns values to 0</from><to>Calculate expected liftime, returns total and net order value</to><enabled>Y</enabled> </hop>  <hop> <from>Calculate expected liftime, returns total and net order value</from><to>Map empty returns values 0</to><enabled>Y</enabled> </hop>  <hop> <from>Calculate deltas</from><to>Insert &#47; Update</to><enabled>Y</enabled> </hop>  <hop> <from>Map empty returns values 0</from><to>Calculate deltas</to><enabled>Y</enabled> </hop>  </order>
+  <step>
+    <name>Calculate deltas</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>Y</compatible>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>&#47;&#47;var expected_lifetime_net_order_value = expected_lifetime_order_total - expected_lifetime_return_total;
+
+var delta_lifetime_number_of_orders;
+var delta_lifetime_number_of_returns;
+delta_lifetime_number_of_orders = delta(expected_lifetime_number_of_orders.getInteger(),  lifetime_number_of_orders.getInteger());
+delta_lifetime_number_of_returns = delta(expected_lifetime_number_of_returns.getInteger(), lifetime_number_of_returns.getInteger());
+
+var delta_lifetime_order_total;
+var delta_lifetime_return_total;
+delta_lifetime_order_total = delta(expected_lifetime_order_total.getNumber(),  lifetime_order_total.getNumber());
+delta_lifetime_return_total = delta(expected_lifetime_return_total.getNumber(), lifetime_return_total.getNumber());
+
+var delta_lifetime_net_order_value;
+delta_lifetime_net_order_value = delta(expected_lifetime_net_order_value.getNumber(), lifetime_net_order_value.getNumber());
+
+var max_abs_delta = max(abs(delta_lifetime_number_of_orders), abs(delta_lifetime_number_of_orders));
+max_abs_delta = max(max_abs_delta, abs(delta_lifetime_order_total));
+max_abs_delta = max(max_abs_delta, abs(delta_lifetime_return_total));
+max_abs_delta = max(max_abs_delta, abs(delta_lifetime_net_order_value));
+
+
+&#47;&#47; calculate the delate
+function delta(expected, actual) {
+  if (actual == null) actual = 0;
+  if (expected == null) expected = 0;
+
+  if (actual == expected) return 0;
+
+  if (expected == 0) return -1;
+  if (actual == 0) {
+    if (expected &gt; 0) return 1;
+    return -1;
+  }
+  
+  return (expected - actual)&#47;actual;
+}
+
+function max(a, b) {
+  if (a &gt; b) return a;
+  return b;
+}
+</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>delta_lifetime_number_of_orders</name>
+        <rename>delta_lifetime_number_of_orders</rename>
+        <type>Number</type>
+        <length>16</length>
+        <precision>2</precision>
+      </field>      <field>        <name>delta_lifetime_number_of_returns</name>
+        <rename>delta_lifetime_number_of_returns</rename>
+        <type>Number</type>
+        <length>16</length>
+        <precision>2</precision>
+      </field>      <field>        <name>delta_lifetime_order_total</name>
+        <rename>delta_lifetime_order_total</rename>
+        <type>Number</type>
+        <length>16</length>
+        <precision>2</precision>
+      </field>      <field>        <name>delta_lifetime_return_total</name>
+        <rename>delta_lifetime_return_total</rename>
+        <type>Number</type>
+        <length>16</length>
+        <precision>2</precision>
+      </field>      <field>        <name>delta_lifetime_net_order_value</name>
+        <rename>delta_lifetime_net_order_value</rename>
+        <type>Number</type>
+        <length>16</length>
+        <precision>2</precision>
+      </field>      <field>        <name>max_abs_delta</name>
+        <rename>max_abs_delta</rename>
+        <type>Number</type>
+        <length>16</length>
+        <precision>2</precision>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>740</xloc>
+      <yloc>353</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Calculate expected liftime, returns total and net order value</name>
+    <type>Calculator</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+       <calculation><field_name>expected_lifetime_return_total</field_name>
+<calc_type>SUBTRACT</calc_type>
+<field_a>gross_amount_base_currency</field_a>
+<field_b>discount_amount_base_currency</field_b>
+<field_c/>
+<value_type>Number</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<remove>N</remove>
+<conversion_mask/>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+       <calculation><field_name>expected_lifetime_net_order_value</field_name>
+<calc_type>SUBTRACT</calc_type>
+<field_a>expected_lifetime_order_total</field_a>
+<field_b>expected_lifetime_return_total</field_b>
+<field_c/>
+<value_type>Number</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<remove>N</remove>
+<conversion_mask/>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>451</xloc>
+      <yloc>234</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Customer History Facts</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>analytics</connection>
+    <sql>SELECT 
+  CHF.customer_dim_key,
+  CHF.organization_id,
+  TIMESTAMP(CONCAT(year,&apos;-&apos;,month,&apos;-&apos;,day),&apos;23:59:59&apos;) AS as_of_date,
+  CHF.as_of_date_key,
+  CHF.lifetime_number_of_orders,
+  CHF.lifetime_number_of_returns,
+  CHF.lifetime_order_total,
+  CHF.lifetime_return_total,
+  CHF.lifetime_net_order_value,
+  CDIM.org_customer_id
+FROM
+  CUSTOMER_HISTORY_FACT as CHF
+JOIN
+  CUSTOMER_DIMENSION as CDIM on CHF.customer_dim_key = CDIM.customer_dim_key
+JOIN
+  DATE_DIMENSION as DD on CHF.as_of_date_key = DD.date_dim_key
+</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>Y</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>137</xloc>
+      <yloc>30</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Insert &#47; Update</name>
+    <type>InsertUpdate</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>analytics</connection>
+    <commit>100</commit>
+    <update_bypassed>N</update_bypassed>
+    <lookup>
+      <schema/>
+      <table>CUSTOMER_HISTORY_FACT_VERIFICATION</table>
+      <key>
+        <name>customer_dim_key</name>
+        <field>customer_dim_key</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>organization_id</name>
+        <field>organization_id</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>as_of_date_key</name>
+        <field>as_of_date_key</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>customer_dim_key</name>
+        <rename>customer_dim_key</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>organization_id</name>
+        <rename>organization_id</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>as_of_date_key</name>
+        <rename>as_of_date_key</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>expected_lifetime_number_of_orders</name>
+        <rename>expected_lifetime_number_of_orders</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>expected_lifetime_order_total</name>
+        <rename>expected_lifetime_order_total</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>expected_lifetime_number_of_returns</name>
+        <rename>expected_lifetime_number_of_returns</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>expected_lifetime_return_total</name>
+        <rename>expected_lifetime_return_total</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>expected_lifetime_net_order_value</name>
+        <rename>expected_lifetime_net_order_value</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>delta_lifetime_number_of_orders</name>
+        <rename>delta_lifetime_number_of_orders</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>delta_lifetime_number_of_returns</name>
+        <rename>delta_lifetime_number_of_returns</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>delta_lifetime_order_total</name>
+        <rename>delta_lifetime_order_total</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>delta_lifetime_return_total</name>
+        <rename>delta_lifetime_return_total</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>delta_lifetime_net_order_value</name>
+        <rename>delta_lifetime_net_order_value</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>max_abs_delta</name>
+        <rename>max_abs_delta</rename>
+        <update>N</update>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>134</xloc>
+      <yloc>353</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Map empty adjustments values to 0</name>
+    <type>ValueMapper</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <field_to_use>discount_amount_base_currency</field_to_use>
+    <target_field/>
+    <non_match_default/>
+    <fields>
+      <field>
+        <source_value/>
+        <target_value>0</target_value>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>134</xloc>
+      <yloc>109</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Map empty returns values 0</name>
+    <type>ValueMapper</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <field_to_use>lifetime_return_total</field_to_use>
+    <target_field/>
+    <non_match_default/>
+    <fields>
+      <field>
+        <source_value/>
+        <target_value>0</target_value>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>740</xloc>
+      <yloc>234</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Map empty returns values to 0</name>
+    <type>ValueMapper</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <field_to_use>gross_amount_base_currency</field_to_use>
+    <target_field/>
+    <non_match_default/>
+    <fields>
+      <field>
+        <source_value/>
+        <target_value>0</target_value>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>134</xloc>
+      <yloc>234</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>add adjustment</name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>operational</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT
+  SUM(ra.amount) as discount_amount_base_currency
+FROM
+  RETURN_HEADER rh
+JOIN
+  RETURN_ADJUSTMENT ra ON ra.return_id = rh.return_id
+WHERE
+  rh.STATUS_ID NOT IN (&apos;RETURN_CANCELLED&apos;)
+  AND rh.TO_PARTY_ID = ?
+  AND rh.FROM_PARTY_ID LIKE ?
+  AND rh.ENTRY_DATE &lt;= ?
+</sql>
+    <outer_join>Y</outer_join>
+    <parameter>
+      <field>
+        <name>organization_id</name>
+        <type>-</type>
+      </field>
+      <field>
+        <name>org_customer_id</name>
+        <type>-</type>
+      </field>
+      <field>
+        <name>as_of_date</name>
+        <type>-</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>450</xloc>
+      <yloc>109</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>expected gross lifetime returns total</name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>operational</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT 
+  SUM(ri.return_quantity * return_price) as gross_amount_base_currency
+FROM
+  RETURN_ITEM as ri
+JOIN
+  RETURN_HEADER rh on rh.return_id = ri.return_id
+WHERE 
+  rh.STATUS_ID NOT IN (&apos;RETURN_CANCELLED&apos;)
+  AND rh.TO_PARTY_ID = ?
+  AND rh.FROM_PARTY_ID LIKE ?
+  AND rh.ENTRY_DATE &lt;= ?</sql>
+    <outer_join>N</outer_join>
+    <parameter>
+      <field>
+        <name>organization_id</name>
+        <type>-</type>
+      </field>
+      <field>
+        <name>org_customer_id</name>
+        <type>-</type>
+      </field>
+      <field>
+        <name>as_of_date</name>
+        <type>-</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>740</xloc>
+      <yloc>109</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>expected lifetime number of orders and order total</name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>operational</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT 
+  COUNT(DISTINCT(oh.order_id)) AS expected_lifetime_number_of_orders,
+  SUM((oi.quantity - COALESCE(oi.cancel_quantity,0)) * oi.unit_price) AS expected_lifetime_order_total
+FROM 
+  ORDER_HEADER oh
+LEFT JOIN 
+  ORDER_ITEM oi ON oi.order_id = oh.order_id
+WHERE 
+  oh.order_type_id = &apos;SALES_ORDER&apos;
+  AND oh.status_id NOT IN (&apos;ORDER_CANCELLED&apos;, &apos;ORDER_REJECTED&apos;)
+  AND oh.bill_from_party_id LIKE ?
+  AND oh.bill_to_party_id = ?
+  AND oh.order_date &lt;= ?</sql>
+    <outer_join>N</outer_join>
+    <parameter>
+      <field>
+        <name>organization_id</name>
+        <type>-</type>
+      </field>
+      <field>
+        <name>org_customer_id</name>
+        <type>-</type>
+      </field>
+      <field>
+        <name>as_of_date</name>
+        <type>-</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>450</xloc>
+      <yloc>30</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>expected lifetime number of returns</name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>operational</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT 
+  COUNT(RETURN_ID) as expected_lifetime_number_of_returns
+FROM 
+  RETURN_HEADER 
+WHERE
+  STATUS_ID NOT IN (&apos;RETURN_CANCELLED&apos;)
+  AND TO_PARTY_ID = ?
+  AND FROM_PARTY_ID LIKE ?
+  AND ENTRY_DATE &lt;= ?</sql>
+    <outer_join>N</outer_join>
+    <parameter>
+      <field>
+        <name>organization_id</name>
+        <type>-</type>
+      </field>
+      <field>
+        <name>org_customer_id</name>
+        <type>-</type>
+      </field>
+      <field>
+        <name>as_of_date</name>
+        <type>-</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>740</xloc>
+      <yloc>30</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step_error_handling>
+  </step_error_handling>
+   <slave-step-copy-partition-distribution>
+</slave-step-copy-partition-distribution>
+   <slave_transformation>N</slave_transformation>
+</transformation>

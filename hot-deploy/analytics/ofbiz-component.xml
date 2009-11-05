@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<ofbiz-component name="analytics"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/ofbiz-component.xsd">
+
+    <resource-loader name="main" type="component"/>
+
+    <!-- class path for Java build files, config properties files, and script files -->
+    <classpath type="dir" location="config"/>
+    <classpath type="jar" location="lib/*"/>
+    <classpath type="jar" location="build/lib/*"/>
+
+    <!-- data -->
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/AnalyticsSecurity.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/CustomerAnalysisReports.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/SalesAnalysisReports.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/OtherReports.xml"/>
+
+    <!-- service definition files -->
+    <service-resource type="model" loader="main" location="servicedef/services.xml"/>
+
+    <!-- this MCA or mail-condition-action is used for sorting incoming emails 
+    <service-resource type="mca" loader="main" location="servicedef/smcas.xml"/>-->
+
+    <webapp name="analyticsgwt"
+        title="Opentaps Commons GWT Components"
+        server="default-server"
+        location="webapp/analyticsgwt"
+        mount-point="/analyticsgwt"
+        app-bar-display="false"/>
+
+    <webapp name="analytics"
+        title="Analytics"
+        server="default-server"
+        location="webapp/analytics"
+        base-permission="ANALYTICS"
+        mount-point="/analytics"
+        app-bar-display="false"/>
+
+</ofbiz-component>
+
+

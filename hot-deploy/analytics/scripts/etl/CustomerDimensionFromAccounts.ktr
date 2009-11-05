@@ -1,0 +1,778 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transformation>
+  <info>
+    <name>Extract Customers From Accounts</name>
+    <description>Extract the customers from opentaps into the customer dimension</description>
+    <extended_description/>
+    <trans_version/>
+    <trans_status>0</trans_status>
+    <directory>&#47;</directory>
+    <log>
+      <read/>
+      <write/>
+      <input/>
+      <output/>
+      <update/>
+      <rejected/>
+      <connection/>
+      <table/>
+      <use_batchid>Y</use_batchid>
+      <use_logfield>N</use_logfield>
+    </log>
+    <maxdate>
+      <connection/>
+      <table/>
+      <field/>
+      <offset>0.0</offset>
+      <maxdiff>0.0</maxdiff>
+    </maxdate>
+    <size_rowset>10000</size_rowset>
+    <sleep_time_empty>50</sleep_time_empty>
+    <sleep_time_full>50</sleep_time_full>
+    <unique_connections>N</unique_connections>
+    <feedback_shown>Y</feedback_shown>
+    <feedback_size>50000</feedback_size>
+    <using_thread_priorities>Y</using_thread_priorities>
+    <shared_objects_file/>
+    <dependencies>
+    </dependencies>
+    <partitionschemas>
+    </partitionschemas>
+    <slaveservers>
+    </slaveservers>
+    <clusterschemas>
+    </clusterschemas>
+  <modified_user>admin</modified_user>
+  <modified_date>2008&#47;04&#47;03 09:44:16.023</modified_date>
+  </info>
+  <notepads>
+    <notepad>
+      <note>only the newest 
+phone number is taken</note>
+      <xloc>400</xloc>
+      <yloc>141</yloc>
+      <width>179</width>
+      <heigth>46</heigth>
+    </notepad>
+    <notepad>
+      <note>Our source of party id are the unexpired ACCOUNTs in PartyRelationship</note>
+      <xloc>26</xloc>
+      <yloc>12</yloc>
+      <width>538</width>
+      <heigth>28</heigth>
+    </notepad>
+    <notepad>
+      <note>Opentaps creates addresses as 
+GENERAL_LOCATION
+SHIPPING_LOCATION
+BILLING_LOCATION
+
+We only take the GENERAL_LOCATION
+
+country, state, region are taken from the 
+country_geo_id, 
+state_province_geo_id, 
+county_geo_id
+and store the associated geo_name</note>
+      <xloc>260</xloc>
+      <yloc>216</yloc>
+      <width>317</width>
+      <heigth>226</heigth>
+    </notepad>
+    <notepad>
+      <note>Write the first 3 chars
+of postal_code into
+postal_code3digit</note>
+      <xloc>315</xloc>
+      <yloc>642</yloc>
+      <width>171</width>
+      <heigth>64</heigth>
+    </notepad>
+    <notepad>
+      <note>Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+
+This program is free software; you can redistribute it and&#47;or modify
+it under the terms of the Honest Public License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+Honest Public License for more details.
+
+You should have received a copy of the Honest Public License
+along with this program; if not, write to Funambol,
+643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA</note>
+      <xloc>177</xloc>
+      <yloc>733</yloc>
+      <width>521</width>
+      <heigth>244</heigth>
+    </notepad>
+  </notepads>
+  <connection>
+    <name>Opentaps Analytics Data Warehouse</name>
+    <server/>
+    <type>MYSQL</type>
+    <access>JNDI</access>
+    <database>analytics</database>
+    <port>-1</port>
+    <username/>
+    <password>Encrypted </password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>INITIAL_POOL_SIZE</code><attribute>5</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>MAXIMUM_POOL_SIZE</code><attribute>10</attribute></attribute>
+      <attribute><code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>-1</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>operational</name>
+    <server>localhost</server>
+    <type>POSTGRESQL</type>
+    <access>JNDI</access>
+    <database>operational</database>
+    <port>-1</port>
+    <username>ofbiz</username>
+    <password>Encrypted 2be98afc86aa7f2e4cb79ce7fd890a6c0</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>INITIAL_POOL_SIZE</code><attribute>5</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>MAXIMUM_POOL_SIZE</code><attribute>10</attribute></attribute>
+      <attribute><code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>-1</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>opentaps-analytics</name>
+    <server>localhost</server>
+    <type>MYSQL</type>
+    <access>Native</access>
+    <database>opentaps_analytics</database>
+    <port>3306</port>
+    <username>opentaps</username>
+    <password>Encrypted 2be98afc86aa7f2e4a409ab7eca93bfc9</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>INITIAL_POOL_SIZE</code><attribute>5</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>MAXIMUM_POOL_SIZE</code><attribute>10</attribute></attribute>
+      <attribute><code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>3306</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <order>
+  <hop> <from>Add organization_id variable</from><to>Insert &#47; Update Mapping</to><enabled>Y</enabled> </hop>  <hop> <from>Customers (Party ID)</from><to>Address</to><enabled>Y</enabled> </hop>  <hop> <from>Address</from><to>Merge Address</to><enabled>Y</enabled> </hop>  <hop> <from>Customers (Party ID)</from><to>Names and type</to><enabled>Y</enabled> </hop>  <hop> <from>Names and type</from><to>Merge Address</to><enabled>Y</enabled> </hop>  <hop> <from>Insert &#47; Update Mapping</from><to>compute postal code 3 digit</to><enabled>Y</enabled> </hop>  <hop> <from>Other Email join</from><to>Add organization_id variable</to><enabled>Y</enabled> </hop>  <hop> <from>Phone Number join</from><to>Primary Email join</to><enabled>Y</enabled> </hop>  <hop> <from>Primary Email join</from><to>Other Email join</to><enabled>Y</enabled> </hop>  <hop> <from>Merge Address</from><to>Phone Number join</to><enabled>Y</enabled> </hop>  <hop> <from>compute postal code 3 digit</from><to>format customer name</to><enabled>Y</enabled> </hop>  <hop> <from>format customer name</from><to>Insert &#47; Update</to><enabled>Y</enabled> </hop>  </order>
+  <step>
+    <name>Add organization_id variable</name>
+    <type>GetVariable</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>organization_id</name>
+        <variable>${organizationId}</variable>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>626</xloc>
+      <yloc>579</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Address</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>operational</connection>
+    <sql>SELECT 
+  pcm.party_id,
+  coalesce(a.attn_name, &apos;&apos;) as attn_name,
+  coalesce(a.address1, &apos;&apos;) as address1,
+  coalesce(a.city, &apos;&apos;) as city,
+  coalesce(g_country.geo_name, &apos;&apos;) AS country,
+  coalesce(g_state.abbreviation, &apos;&apos;) AS state,
+  coalesce(g_county.geo_name, &apos;&apos;) AS region,
+  coalesce(a.postal_code, &apos;&apos;) as postal_code
+FROM PARTY_CONTACT_MECH pcm
+JOIN POSTAL_ADDRESS a ON a.contact_mech_id = pcm.contact_mech_id 
+JOIN PARTY_CONTACT_MECH_PURPOSE pcmp ON pcmp.contact_mech_id = pcm.contact_mech_id 
+LEFT JOIN GEO g_country ON g_country.geo_id = a.country_geo_id
+LEFT JOIN GEO g_county ON g_county.geo_id = a.county_geo_id
+LEFT JOIN GEO g_state ON g_state.geo_id = a.state_province_geo_id
+WHERE
+  pcm.party_id = ? AND 
+  pcmp.contact_mech_purpose_type_id = &apos;GENERAL_LOCATION&apos; AND
+  (pcm.thru_date IS NULL OR pcm.thru_date &gt; now()) AND 
+  (pcm.from_date &lt; now())
+ORDER BY
+  pcm.from_date DESC</sql>
+    <limit>1</limit>
+    <lookup>Customers (Party ID)</lookup>
+    <execute_each_row>Y</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>204</xloc>
+      <yloc>251</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Customers (Party ID)</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>N</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>operational</connection>
+    <sql>SELECT DISTINCT PARTY_ID_FROM
+FROM PARTY_RELATIONSHIP 
+WHERE ROLE_TYPE_ID_FROM = &apos;ACCOUNT&apos; AND 
+FROM_DATE &lt; NOW() AND 
+(THRU_DATE IS NULL OR THRU_DATE &gt; NOW())</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>Y</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>77</xloc>
+      <yloc>73</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Insert &#47; Update</name>
+    <type>InsertUpdate</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>Opentaps Analytics Data Warehouse</connection>
+    <commit>100</commit>
+    <update_bypassed>N</update_bypassed>
+    <lookup>
+      <schema/>
+      <table>CUSTOMER_DIMENSION</table>
+      <key>
+        <name>org_customer_id</name>
+        <field>org_customer_id</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>org_customer_id</name>
+        <rename>org_customer_id</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>customer_name</name>
+        <rename>customer_name</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>first_name</name>
+        <rename>first_name</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>last_name</name>
+        <rename>last_name</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>company_name</name>
+        <rename>company_name</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>customer_type</name>
+        <rename>customer_type</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>street_address_line1</name>
+        <rename>street_address_line1</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>city</name>
+        <rename>city</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>state</name>
+        <rename>state</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>country</name>
+        <rename>country</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>region</name>
+        <rename>region</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>postal_code</name>
+        <rename>postal_code</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>postal_code3digit</name>
+        <rename>postal_code3digit</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>phone_country</name>
+        <rename>phone_country</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>phone_area_code</name>
+        <rename>phone_area_code</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>phone_number</name>
+        <rename>phone_number</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>organization_id</name>
+        <rename>organization_id</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>created_date_and_time</name>
+        <rename>created_date_and_time</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>primary_email</name>
+        <rename>primary_email</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>attn_name</name>
+        <rename>attn_name</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>other_email</name>
+        <rename>other_email</rename>
+        <update>Y</update>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>74</xloc>
+      <yloc>579</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Insert &#47; Update Mapping</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>      <field>        <name>party_id</name>
+        <rename>org_customer_id</rename>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>first_name</name>
+        <rename/>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>last_name</name>
+        <rename/>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>company_name</name>
+        <rename/>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>customer_type</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>address1</name>
+        <rename>street_address_line1</rename>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>country</name>
+        <rename/>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>state</name>
+        <rename/>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>region</name>
+        <rename/>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>city</name>
+        <rename/>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>postal_code</name>
+        <rename/>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>organization_id</name>
+        <rename/>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>phone_country</name>
+        <rename/>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>phone_area_code</name>
+        <rename/>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>phone_number</name>
+        <rename/>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>created_date_and_time</name>
+        <rename/>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>primary_email</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>attn_name</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>other_email</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>        <select_unspecified>N</select_unspecified>
+    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>488</xloc>
+      <yloc>579</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Merge Address</name>
+    <type>MergeJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+<join_type>LEFT OUTER</join_type>
+<step1>Names and type</step1>
+<step2>Address</step2>
+    <keys_1>
+      <key>party_id</key>
+    </keys_1>
+    <keys_2>
+      <key>party_id</key>
+    </keys_2>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>204</xloc>
+      <yloc>466</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Names and type</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>operational</connection>
+    <sql>SELECT
+  p.party_id,
+  pt.party_classification_group_id AS customer_type,
+  pe.first_name,
+  pe.last_name,
+  pg.group_name AS company_name,
+  p.created_stamp AS created_date_and_time
+FROM
+  PARTY p
+LEFT JOIN PERSON pe ON pe.party_id = p.party_id
+LEFT JOIN PARTY_GROUP pg ON pg.party_id = p.party_id
+JOIN PARTY_CLASSIFICATION pt ON pt.party_id = p.party_id and pt.from_date &lt; now() and (pt.thru_date is null or pt.thru_date &gt; now())
+WHERE
+  p.party_id = ?</sql>
+    <limit>0</limit>
+    <lookup>Customers (Party ID)</lookup>
+    <execute_each_row>Y</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>77</xloc>
+      <yloc>320</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Other Email join</name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>operational</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT coalesce(CM.INFO_STRING, &apos;&apos;) AS other_email
+FROM PARTY_CONTACT_MECH AS PCM
+JOIN PARTY_CONTACT_MECH_PURPOSE AS PCMP ON (PCM.PARTY_ID = PCMP.PARTY_ID AND PCM.CONTACT_MECH_ID = PCMP.CONTACT_MECH_ID AND (PCMP.FROM_DATE &lt; NOW()) AND (PCMP.THRU_DATE IS NULL OR PCM.THRU_DATE &gt; NOW()) AND PCMP.CONTACT_MECH_PURPOSE_TYPE_ID = &apos;OTHER_EMAIL&apos;)
+JOIN CONTACT_MECH AS CM ON PCM.CONTACT_MECH_ID = CM.CONTACT_MECH_ID
+WHERE CM.CONTACT_MECH_TYPE_ID = &apos;EMAIL_ADDRESS&apos;
+AND (PCM.ALLOW_SOLICITATION &lt;&gt; &apos;N&apos; OR PCM.ALLOW_SOLICITATION IS NULL)
+AND PCM.FROM_DATE &lt; NOW()
+AND (PCM.THRU_DATE IS NULL OR PCM.THRU_DATE &gt; NOW())
+AND PCM.PARTY_ID = ?</sql>
+    <outer_join>Y</outer_join>
+    <parameter>
+      <field>
+        <name>party_id</name>
+        <type>String</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>626</xloc>
+      <yloc>466</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Phone Number join</name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>operational</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT 
+  pcm.party_id,
+  coalesce(t.country_code, &apos;&apos;) AS phone_country,
+  coalesce(t.area_code, &apos;&apos;) AS phone_area_code,
+  coalesce(t.contact_number, &apos;&apos;) AS phone_number
+FROM PARTY_CONTACT_MECH pcm
+JOIN TELECOM_NUMBER t ON t.contact_mech_id = pcm.contact_mech_id 
+WHERE
+  pcm.party_id = ? AND 
+  (pcm.thru_date IS NULL OR pcm.thru_date &gt; now()) AND 
+  (pcm.from_date &lt; now())
+ORDER BY
+  pcm.from_date DESC</sql>
+    <outer_join>Y</outer_join>
+    <parameter>
+      <field>
+        <name>party_id</name>
+        <type>String</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>342</xloc>
+      <yloc>466</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Primary Email join</name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>operational</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT PCMP.PARTY_ID,
+    coalesce(CM.INFO_STRING, &apos;&apos;) AS primary_email
+FROM PARTY_CONTACT_MECH AS PCM
+JOIN PARTY_CONTACT_MECH_PURPOSE AS PCMP ON (PCM.PARTY_ID = PCMP.PARTY_ID AND PCM.CONTACT_MECH_ID = PCMP.CONTACT_MECH_ID AND (PCMP.FROM_DATE &lt; NOW()) AND (PCMP.THRU_DATE IS NULL OR PCM.THRU_DATE &gt; NOW()) AND PCMP.CONTACT_MECH_PURPOSE_TYPE_ID = &apos;PRIMARY_EMAIL&apos;)
+JOIN CONTACT_MECH AS CM ON PCM.CONTACT_MECH_ID = CM.CONTACT_MECH_ID
+WHERE CM.CONTACT_MECH_TYPE_ID = &apos;EMAIL_ADDRESS&apos;
+AND (PCM.ALLOW_SOLICITATION &lt;&gt; &apos;N&apos; OR PCM.ALLOW_SOLICITATION IS NULL)
+AND PCM.PARTY_ID = ?
+AND PCM.FROM_DATE &lt; NOW()
+AND (PCM.THRU_DATE IS NULL OR PCM.THRU_DATE &gt; NOW())
+</sql>
+    <outer_join>Y</outer_join>
+    <parameter>
+      <field>
+        <name>party_id</name>
+        <type>String</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>488</xloc>
+      <yloc>466</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>compute postal code 3 digit</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>Y</compatible>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>var postal_code3digit;
+
+var pc = postal_code.getString();
+if (pc != null) {
+	postal_code3digit = pc.substr(0,3);
+} else {
+	postal_code3digit = null;
+}
+</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>postal_code3digit</name>
+        <rename>postal_code3digit</rename>
+        <type>String</type>
+        <length>3</length>
+        <precision>-1</precision>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>342</xloc>
+      <yloc>579</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>format customer name</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>Y</compatible>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>var customer_name;
+
+customer_name = company_name.getString();
+
+if (customer_name == null || company_name == &quot;&quot;) {
+  customer_name = last_name.getString() + &quot;, &quot; + first_name.getString();
+}
+
+customer_name += &quot; (&quot; + org_customer_id.getString() + &quot;)&quot;;</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>customer_name</name>
+        <rename>customer_name</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>204</xloc>
+      <yloc>579</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step_error_handling>
+  </step_error_handling>
+   <slave-step-copy-partition-distribution>
+</slave-step-copy-partition-distribution>
+   <slave_transformation>N</slave_transformation>
+</transformation>

@@ -1,0 +1,822 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!--
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+    name="SalesByCategory"
+    columnCount="1"
+    printOrder="Vertical"
+    orientation="Landscape"
+    pageWidth="842"
+    pageHeight="595"
+    columnWidth="782"
+    columnSpacing="0"
+    leftMargin="30"
+    rightMargin="30"
+    topMargin="20"
+    bottomMargin="20"
+    whenNoDataType="AllSectionsNoDetail"
+    isTitleNewPage="false"
+    isSummaryNewPage="false"
+    resourceBundle="org/opentaps/analytics/locale/messages">
+  <property name="ireport.scriptlethandling" value="0" />
+  <property name="ireport.encoding" value="UTF-8" />
+  <property name="friendly.name" value="%SalesByCategory-title" />
+  <property name="description" value="%SalesByCategory-description" />
+  <import value="java.util.*" />
+  <import value="net.sf.jasperreports.engine.*" />
+  <import value="net.sf.jasperreports.engine.data.*" />
+
+  <style
+      name="DetailsCurrency"
+      isDefault="false"
+      hAlign="Right"
+      vAlign="Middle"
+      fontName="Arial"
+      fontSize="8"
+      pattern="#,##0.00"
+      isBlankWhenNull="true"
+      />
+  <style
+      name="DetailsNormal"
+      isDefault="false"
+      hAlign="Left"
+      vAlign="Middle"
+      fontName="Arial"
+      fontSize="8"
+      isBlankWhenNull="true"
+      />
+  <style
+      name="DetailsBold"
+      isDefault="false"
+      style="DetailsNormal"
+      hAlign="Left"
+      vAlign="Middle"
+      fontName="Arial"
+      isBold="true"
+      />
+  <style
+      name="DetailsQuantity"
+      isDefault="false"
+      style="DetailsCurrency"
+      fontName="Arial"
+      fontSize="8"
+      pattern="#,##0"
+      />
+  <style
+      name="DetailsPercents"
+      isDefault="false"
+      style="DetailsQuantity"
+      pattern="#,##0.0 %"
+      />
+
+  <parameter name="queryConditions" isForPrompting="false" class="java.lang.String">
+    <defaultValueExpression ><![CDATA["1=1"]]></defaultValueExpression>
+  </parameter>
+  <queryString language="sql"><![CDATA[
+  SELECT
+    PDIM.category as Category,
+  SUM(quantity) as UnitsSold,
+  SUM(gross_amount_base_currency) as ValueSold,
+  SUM(discount_amount_base_currency) as Discount,
+  SUM(returned_quantity) as UnitsReturned,
+  SUM(returned_net_amount_base_currency) as ValueReturned,
+  SUM(returned_quantity)/SUM(quantity) as PercentReturned,
+  SUM(quantity - returned_quantity) as NetUnitsSold,
+  SUM(net_amount_base_currency - returned_net_amount_base_currency) as NetSales,
+  (SELECT 
+    SUM(net_amount_base_currency - returned_net_amount_base_currency) 
+    FROM ORDER_ITEM_FACT OIFACT
+    LEFT OUTER JOIN PRODUCT_DIMENSION PDIM ON OIFACT.product_dim_key = PDIM.product_dim_key
+    LEFT OUTER JOIN CUSTOMER_DIMENSION CDIM ON OIFACT.customer_dim_key = CDIM.customer_dim_key
+    LEFT OUTER JOIN SALES_REP_DIMENSION SRDIM ON OIFACT.sales_rep_dim_key = SRDIM.sales_rep_dim_key
+    LEFT OUTER JOIN SALES_TEAM_DIMENSION STDIM ON OIFACT.sales_team_dim_key = STDIM.sales_team_dim_key
+    LEFT OUTER JOIN DATE_DIMENSION DDIM ON OIFACT.order_date_key = DDIM.date_dim_key
+    WHERE $P!{queryConditions} AND OIFACT.resolution_status != 'CANCELLED'
+  ) as TotalNetSales
+  FROM
+  ORDER_ITEM_FACT OIFACT
+  LEFT OUTER JOIN PRODUCT_DIMENSION PDIM ON OIFACT.product_dim_key = PDIM.product_dim_key
+  LEFT OUTER JOIN CUSTOMER_DIMENSION CDIM ON OIFACT.customer_dim_key = CDIM.customer_dim_key
+  LEFT OUTER JOIN SALES_REP_DIMENSION SRDIM ON OIFACT.sales_rep_dim_key = SRDIM.sales_rep_dim_key
+  LEFT OUTER JOIN SALES_TEAM_DIMENSION STDIM ON OIFACT.sales_team_dim_key = STDIM.sales_team_dim_key
+  LEFT OUTER JOIN DATE_DIMENSION DDIM ON OIFACT.order_date_key = DDIM.date_dim_key
+  WHERE $P!{queryConditions} AND OIFACT.resolution_status != 'CANCELLED'
+  GROUP BY
+  PDIM.category
+  ORDER BY
+  PDIM.category
+  ]]></queryString>
+
+    <field name="Category" class="java.lang.String"/>
+  <field name="UnitsSold" class="java.lang.Double"/>
+  <field name="ValueSold" class="java.lang.Double"/>
+  <field name="Discount" class="java.lang.Double"/>
+  <field name="UnitsReturned" class="java.lang.Double"/>
+  <field name="ValueReturned" class="java.lang.Double"/>
+  <field name="PercentReturned" class="java.lang.Double"/>
+  <field name="NetUnitsSold" class="java.lang.Double"/>
+  <field name="NetSales" class="java.lang.Double"/>
+  <field name="TotalNetSales" class="java.lang.Double"/>
+
+  <variable name="TotalValueReturned" class="java.lang.Number" calculation="Sum">
+    <variableExpression><![CDATA[$F{ValueReturned}]]></variableExpression>
+  </variable>
+  <variable name="TotalUnitsReturned" class="java.lang.Number" calculation="Sum">
+    <variableExpression><![CDATA[$F{UnitsReturned}]]></variableExpression>
+  </variable>
+  <variable name="TotalValueSold" class="java.lang.Number" calculation="Sum">
+    <variableExpression><![CDATA[$F{ValueSold}]]></variableExpression>
+  </variable>
+  <variable name="TotalUnitsSold" class="java.lang.Number" calculation="Sum">
+    <variableExpression><![CDATA[$F{UnitsSold}]]></variableExpression>
+  </variable>
+  <variable name="TotalNetUnitsSold" class="java.lang.Number" calculation="Sum">
+    <variableExpression><![CDATA[$F{NetUnitsSold}]]></variableExpression>
+  </variable>
+  <variable name="TotalDiscount" class="java.lang.Number" calculation="Sum">
+    <variableExpression><![CDATA[$F{Discount}]]></variableExpression>
+  </variable>
+
+  <variable name="lineIndex" class="java.lang.Integer" resetType="Report" calculation="Nothing">
+    <variableExpression><![CDATA[Integer.valueOf($V{lineIndex}.intValue() + 1)]]></variableExpression>
+    <initialValueExpression><![CDATA[Integer.valueOf(0)]]></initialValueExpression>
+  </variable>
+
+  <background>
+    <band height="0"  isSplitAllowed="true" >
+    </band>
+  </background>
+  <title>
+    <band height="0"  isSplitAllowed="true" >
+    </band>
+  </title>
+  <pageHeader>
+    <band height="42"  isSplitAllowed="true" >
+      <textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            x="0"
+            y="0"
+            width="782"
+            height="28"
+            key="textField-6"/>
+        <box>
+          <topPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement textAlignment="Center" verticalAlignment="Middle">
+          <font pdfFontName="Helvetica-Bold" size="18" isBold="true"/>
+        </textElement>
+        <textFieldExpression class="java.lang.String"><![CDATA[$R{SalesByCategory-title}]]></textFieldExpression>
+      </textField>
+    </band>
+  </pageHeader>
+  <columnHeader>
+    <band height="24" isSplitAllowed="true" >
+      <textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            x="0"
+            y="0"
+            width="292"
+            height="24"
+            key="textField-firstColumn"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement verticalAlignment="Middle">
+          <font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.String"><![CDATA[$R{ColumnCategory}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            x="292"
+            y="0"
+            width="50"
+            height="24"
+            key="textField-8"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement textAlignment="Right" verticalAlignment="Middle">
+          <font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.String"><![CDATA[$R{ColumnUnitsSold}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            x="342"
+            y="0"
+            width="65"
+            height="24"
+            key="textField-9"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement textAlignment="Right" verticalAlignment="Middle">
+          <font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.String"><![CDATA[$R{ColumnValueSold}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            x="407"
+            y="0"
+            width="65"
+            height="24"
+            key="textField-10"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement textAlignment="Right" verticalAlignment="Middle">
+          <font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.String"><![CDATA[$R{ColumnDiscount}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            x="472"
+            y="0"
+            width="50"
+            height="24"
+            key="textField-11"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement textAlignment="Right" verticalAlignment="Middle">
+          <font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.String"><![CDATA[$R{ColumnUnitsReturned}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            x="522"
+            y="0"
+            width="65"
+            height="24"
+            key="textField-12"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement textAlignment="Right" verticalAlignment="Middle">
+          <font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.String"><![CDATA[$R{ColumnValueReturned}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            x="587"
+            y="0"
+            width="40"
+            height="24"
+            key="textField-13"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement textAlignment="Right" verticalAlignment="Middle">
+          <font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.String"><![CDATA[$R{ColumnPercentageReturned}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            x="627"
+            y="0"
+            width="50"
+            height="24"
+            key="textField-14"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement textAlignment="Right" verticalAlignment="Middle">
+          <font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.String"><![CDATA[$R{ColumnNetUnitsSold}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            x="677"
+            y="0"
+            width="65"
+            height="24"
+            key="textField-15"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement textAlignment="Right" verticalAlignment="Middle">
+          <font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.String"><![CDATA[$R{ColumnNetSales}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            x="742"
+            y="0"
+            width="40"
+            height="24"
+            key="textField-16"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement textAlignment="Right" verticalAlignment="Middle">
+          <font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.String"><![CDATA[$R{ColumnPercentageTotal}]]></textFieldExpression>
+      </textField>
+    </band>
+  </columnHeader>
+  <detail>
+    <band height="12"  isSplitAllowed="true" >
+      <rectangle>
+        <reportElement
+            x="0"
+            y="0"
+            width="782"
+            height="12"
+            backcolor="#CCCCCC"
+            key="lineBackground"
+            stretchType="RelativeToTallestObject">
+          <printWhenExpression><![CDATA[Boolean.valueOf(!(($V{lineIndex}.intValue() % 2) > 0))]]></printWhenExpression>
+        </reportElement>
+        <graphicElement stretchType="RelativeToTallestObject" pen="None"/>
+      </rectangle>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsNormal"
+            x="0"
+            y="0"
+            width="292"
+            height="12"
+            key="fieldFirstColumn"/>
+        <box>
+          <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font size="8"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.String"><![CDATA[($F{Category} == "#null" || $F{Category} == null) ? null : $F{Category}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsQuantity"
+            x="292"
+            y="0"
+            width="50"
+            height="12"
+            key="fieldUnitsSold"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font size="8"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.Number"><![CDATA[$F{UnitsSold}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsCurrency"
+            x="342"
+            y="0"
+            width="65"
+            height="12"
+            key="fieldValueSold"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font/>
+        </textElement>
+        <textFieldExpression   class="java.lang.Number"><![CDATA[$F{ValueSold}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsCurrency"
+            x="407"
+            y="0"
+            width="65"
+            height="12"
+            key="fieldDiscount"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font/>
+        </textElement>
+        <textFieldExpression   class="java.lang.Number"><![CDATA[$F{Discount}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsQuantity"
+            x="472"
+            y="0"
+            width="50"
+            height="12"
+            key="fieldUnitsReturned"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font/>
+        </textElement>
+        <textFieldExpression   class="java.lang.Number"><![CDATA[$F{UnitsReturned}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsCurrency"
+            x="522"
+            y="0"
+            width="65"
+            height="12"
+            key="fieldValueReturned"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font/>
+        </textElement>
+        <textFieldExpression   class="java.lang.Number"><![CDATA[$F{ValueReturned}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsPercents"
+            x="587"
+            y="0"
+            width="40"
+            height="12"
+            key="fieldPercentReturned"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font/>
+        </textElement>
+        <textFieldExpression   class="java.lang.Number"><![CDATA[$F{PercentReturned}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsQuantity"
+            x="627"
+            y="0"
+            width="50"
+            height="12"
+            key="fieldNetUnitsSold"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font/>
+        </textElement>
+        <textFieldExpression   class="java.lang.Number"><![CDATA[$F{NetUnitsSold}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsCurrency"
+            x="677"
+            y="0"
+            width="65"
+            height="12"
+            key="fieldNetSales"/>
+        <box>
+          <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font/>
+        </textElement>
+        <textFieldExpression   class="java.lang.Number"><![CDATA[$F{NetSales}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsPercents"
+            x="742"
+            y="0"
+            width="40"
+            height="12"
+            key="fieldPercentsOfTotal"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font/>
+        </textElement>
+        <textFieldExpression   class="java.lang.Number"><![CDATA[Double.valueOf($F{NetSales}.doubleValue()/$F{TotalNetSales}.doubleValue())]]></textFieldExpression>
+      </textField>
+    </band>
+  </detail>
+  <columnFooter>
+    <band height="0"  isSplitAllowed="true" >
+    </band>
+  </columnFooter>
+  <pageFooter>
+    <band height="34"  isSplitAllowed="true" >
+      <textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            x="550"
+            y="19"
+            width="185"
+            height="14"
+            key="textField-3"
+            positionType="FixRelativeToBottom"
+            isPrintRepeatedValues="false"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement textAlignment="Right">
+          <font fontName="Helvetica" size="10"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.String"><![CDATA[$R{CommonPage}+ " " + $V{PAGE_NUMBER} + $R{CommonOf}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            mode="Transparent"
+            x="737"
+            y="19"
+            width="45"
+            height="14"
+            key="textField-4"
+            positionType="FixRelativeToBottom"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font/>
+        </textElement>
+        <textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" pattern="M/dd/yy h:mm a" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            x="0"
+            y="19"
+            width="150"
+            height="14"
+            key="textField-5"
+            positionType="FixRelativeToBottom"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font/>
+        </textElement>
+        <textFieldExpression   class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+      </textField>
+    </band>
+  </pageFooter>
+  <summary>
+    <band height="12"  isSplitAllowed="true" >
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsQuantity"
+            x="292"
+            y="0"
+            width="50"
+            height="12"
+            key="fieldTotalUnitsSold"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.Number"><![CDATA[$V{TotalUnitsSold}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsCurrency"
+            x="342"
+            y="0"
+            width="65"
+            height="12"
+            key="fieldTotalValueSold"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font pdfFontName="Helvetica-Bold" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.Number"><![CDATA[$V{TotalValueSold}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsCurrency"
+            x="407"
+            y="0"
+            width="65"
+            height="12"
+            key="fieldTotalDiscount"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font pdfFontName="Helvetica-Bold" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.Number"><![CDATA[$V{TotalDiscount}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsQuantity"
+            x="472"
+            y="0"
+            width="50"
+            height="12"
+            key="fieldTotalUnitsReturned"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font pdfFontName="Helvetica-Bold" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.Number"><![CDATA[$V{TotalUnitsReturned}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsCurrency"
+            x="522"
+            y="0"
+            width="65"
+            height="12"
+            key="fieldTotalValueReturned"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font pdfFontName="Helvetica-Bold" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.Number"><![CDATA[$V{TotalValueReturned}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsPercents"
+            x="587"
+            y="0"
+            width="40"
+            height="12"
+            key="fieldAvgPercentReturned"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font pdfFontName="Helvetica-Bold" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.Double"><![CDATA[Double.valueOf($V{TotalUnitsReturned}.doubleValue()/$V{TotalUnitsSold}.doubleValue())]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsQuantity"
+            x="627"
+            y="0"
+            width="50"
+            height="12"
+            key="fieldTotalNetUnitsSold"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font pdfFontName="Helvetica-Bold" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.Number"><![CDATA[$V{TotalNetUnitsSold}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            style="DetailsCurrency"
+            x="677"
+            y="0"
+            width="65"
+            height="12"
+            key="fieldTotalNetSales"/>
+        <box leftPadding="1" rightPadding="1">
+          <topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement>
+          <font pdfFontName="Helvetica-Bold" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.Number"><![CDATA[$F{TotalNetSales}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+        <reportElement
+            x="240"
+            y="0"
+            width="52"
+            height="12"
+            key="staticText"/>
+        <box>
+          <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+          <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+        </box>
+        <textElement textAlignment="Right">
+          <font pdfFontName="Helvetica-Bold" isBold="true"/>
+        </textElement>
+        <textFieldExpression   class="java.lang.String"><![CDATA[$R{CommonTotals}]]></textFieldExpression>
+      </textField>
+    </band>
+  </summary>
+</jasperReport>

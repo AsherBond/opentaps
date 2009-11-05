@@ -1,0 +1,17 @@
+<module>
+
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name='com.google.gwt.user.theme.standard.Standard'/>
+    <inherits name="com.gwtext.GwtExt"/>
+    <inherits name="com.googlecode.gwt.math.Math"/>
+    <inherits name="com.google.gwt.i18n.I18N"/>
+
+    <extend-property name="locale" values="en"/>
+
+    <!-- stylesheet src="opentaps.css"/-->
+    <stylesheet src="resources/css/ext-all.css"/>
+    <stylesheet src="resources/css/xtheme-gray.css"/>
+    <script src="adapter/ext/ext-base.js" />
+    <script src="ext-all.js" />
+
+</module>

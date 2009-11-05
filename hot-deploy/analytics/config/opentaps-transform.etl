@@ -1,0 +1,18 @@
+#
+# List of ETL templates which extract and load/update
+# warehouse data.
+#
+SalesTeamDimensionTemplate.ktr
+SalesRepDimensionTemplate.ktr
+CustomerDimensionTemplate.ktr
+ProductDimensionTemplate.ktr
+StoreDimensionTemplate.ktr
+ChannelDimensionTemplate.ktr
+OrderItemFactTemplate.ktr
+ReturnItemFactTemplate.ktr
+CustomerHistoryFactTemplate.ktr
+MapLocationDimensionTemplate.ktr
+DashboardSalesOverTimeFactTemplate.ktr
+DashboardCustomerLocationMapFactTemplate.ktr
+DashboardTopCustomersFactTemplate.ktr
+DashboardSalesByCategoryCountryMonthFactTemplate.ktr

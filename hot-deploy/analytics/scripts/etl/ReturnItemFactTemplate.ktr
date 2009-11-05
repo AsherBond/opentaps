@@ -1,0 +1,943 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transformation>
+  <info>
+    <name>Extract Return items</name>
+    <description>Extract the return items from opentaps into the return item fact</description>
+    <extended_description/>
+    <trans_version/>
+    <trans_status>0</trans_status>
+    <directory>&#47;</directory>
+    <log>
+      <read/>
+      <write/>
+      <input/>
+      <output/>
+      <update/>
+      <rejected/>
+      <connection/>
+      <table/>
+      <use_batchid>Y</use_batchid>
+      <use_logfield>N</use_logfield>
+    </log>
+    <maxdate>
+      <connection/>
+      <table/>
+      <field/>
+      <offset>0.0</offset>
+      <maxdiff>0.0</maxdiff>
+    </maxdate>
+    <size_rowset>10000</size_rowset>
+    <sleep_time_empty>50</sleep_time_empty>
+    <sleep_time_full>50</sleep_time_full>
+    <unique_connections>N</unique_connections>
+    <feedback_shown>Y</feedback_shown>
+    <feedback_size>50000</feedback_size>
+    <using_thread_priorities>Y</using_thread_priorities>
+    <shared_objects_file/>
+    <dependencies>
+    </dependencies>
+    <partitionschemas>
+    </partitionschemas>
+    <slaveservers>
+    </slaveservers>
+    <clusterschemas>
+    </clusterschemas>
+  <modified_user>admin</modified_user>
+  <modified_date>2008&#47;04&#47;03 09:44:16.023</modified_date>
+  </info>
+  <notepads>
+    <notepad>
+      <note>Read Returns</note>
+      <xloc>113</xloc>
+      <yloc>22</yloc>
+      <width>109</width>
+      <heigth>28</heigth>
+    </notepad>
+    <notepad>
+      <note>Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+
+This program is free software; you can redistribute it and&#47;or modify
+it under the terms of the Honest Public License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+Honest Public License for more details.
+
+You should have received a copy of the Honest Public License
+along with this program; if not, write to Funambol,
+643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA</note>
+      <xloc>222</xloc>
+      <yloc>370</yloc>
+      <width>521</width>
+      <heigth>244</heigth>
+    </notepad>
+  </notepads>
+  <connection>
+    <name>analytics</name>
+    <server/>
+    <type>MYSQL</type>
+    <access>JNDI</access>
+    <database>analytics</database>
+    <port>-1</port>
+    <username/>
+    <password>Encrypted </password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>INITIAL_POOL_SIZE</code><attribute>5</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>MAXIMUM_POOL_SIZE</code><attribute>10</attribute></attribute>
+      <attribute><code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>-1</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>operational</name>
+    <server>localhost</server>
+    <type>POSTGRESQL</type>
+    <access>JNDI</access>
+    <database>operational</database>
+    <port>-1</port>
+    <username>ofbiz</username>
+    <password>Encrypted 2be98afc86aa7f2e4cb79ce7fd890a6c0</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>INITIAL_POOL_SIZE</code><attribute>5</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>MAXIMUM_POOL_SIZE</code><attribute>10</attribute></attribute>
+      <attribute><code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>-1</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <order>
+  <hop> <from>Insert &#47; Update Mapping</from><to>Insert &#47; Update</to><enabled>Y</enabled> </hop>  <hop> <from>Customer Dim lookup</from><to>Store Dim lookup</to><enabled>Y</enabled> </hop>  <hop> <from>Generate Resolution Status</from><to>Insert &#47; Update Mapping</to><enabled>Y</enabled> </hop>  <hop> <from>Order Date Dim lookup</from><to>Channel Dim lookup</to><enabled>Y</enabled> </hop>  <hop> <from>Channel Dim lookup</from><to>Product Dim lookup</to><enabled>Y</enabled> </hop>  <hop> <from>Product Dim lookup</from><to>Generate Resolution Status</to><enabled>Y</enabled> </hop>  <hop> <from>Return</from><to>Return Fact Key Sequence</to><enabled>Y</enabled> </hop>  <hop> <from>Return Date Dim lookup</from><to>Order Date Dim lookup</to><enabled>Y</enabled> </hop>  <hop> <from>Return Fact Key Sequence</from><to>Add adjustment</to><enabled>Y</enabled> </hop>  <hop> <from>Calculator</from><to>Customer Dim lookup</to><enabled>Y</enabled> </hop>  <hop> <from>Store Dim lookup</from><to>Extract date from timestamp</to><enabled>Y</enabled> </hop>  <hop> <from>Extract date from timestamp</from><to>Return Date Dim lookup</to><enabled>Y</enabled> </hop>  <hop> <from>Map empty currency values to 0</from><to>Calculator</to><enabled>Y</enabled> </hop>  <hop> <from>Add adjustment</from><to>Map empty currency values to 0</to><enabled>Y</enabled> </hop>  </order>
+  <step>
+    <name>Add adjustment</name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>operational</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT * from (SELECT
+     sum(RA.amount) AS discount_amount_base_currency
+FROM
+     RETURN_ADJUSTMENT RA
+WHERE
+    RA.return_id = ? AND RA.return_item_seq_id = ?
+AND RA.return_adjustment_type_id &lt;&gt; &apos;SALES_TAX&apos;) DISCNT
+</sql>
+    <outer_join>Y</outer_join>
+    <parameter>
+      <field>
+        <name>return_id</name>
+        <type>String</type>
+      </field>
+      <field>
+        <name>return_item_seq_id</name>
+        <type>String</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>455</xloc>
+      <yloc>80</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Calculator</name>
+    <type>Calculator</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+       <calculation><field_name>gross_amount_base_currency</field_name>
+<calc_type>MULTIPLY</calc_type>
+<field_a>return_quantity</field_a>
+<field_b>return_price</field_b>
+<field_c/>
+<value_type>Number</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<remove>N</remove>
+<conversion_mask>0.00</conversion_mask>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+       <calculation><field_name>net_amount_base_currency</field_name>
+<calc_type>SUBTRACT</calc_type>
+<field_a>gross_amount_base_currency</field_a>
+<field_b>discount_amount_base_currency</field_b>
+<field_c/>
+<value_type>Number</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<remove>N</remove>
+<conversion_mask/>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>726</xloc>
+      <yloc>80</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Channel Dim lookup</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>analytics</connection>
+    <cache>Y</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>1000</cache_size>
+    <lookup>
+      <schema/>
+      <table>CHANNEL_DIMENSION</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>sales_channel_enum_id</name>
+        <field>channel_id</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>channel_dim_key</name>
+        <rename>channel_dim_key</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>110</xloc>
+      <yloc>184</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Customer Dim lookup</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>analytics</connection>
+    <cache>Y</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>1000</cache_size>
+    <lookup>
+      <schema/>
+      <table>CUSTOMER_DIMENSION</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>from_party_id</name>
+        <field>org_customer_id</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>customer_dim_key</name>
+        <rename>customer_dim_key</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>852</xloc>
+      <yloc>81</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Extract date from timestamp</name>
+    <type>Calculator</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+       <calculation><field_name>year_order</field_name>
+<calc_type>YEAR_OF_DATE</calc_type>
+<field_a>order_date</field_a>
+<field_b/>
+<field_c/>
+<value_type>Integer</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<remove>N</remove>
+<conversion_mask/>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+       <calculation><field_name>month_order</field_name>
+<calc_type>MONTH_OF_DATE</calc_type>
+<field_a>order_date</field_a>
+<field_b/>
+<field_c/>
+<value_type>Integer</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<remove>N</remove>
+<conversion_mask/>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+       <calculation><field_name>day_order</field_name>
+<calc_type>DAY_OF_MONTH</calc_type>
+<field_a>order_date</field_a>
+<field_b/>
+<field_c/>
+<value_type>Integer</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<remove>N</remove>
+<conversion_mask/>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+       <calculation><field_name>year_return</field_name>
+<calc_type>YEAR_OF_DATE</calc_type>
+<field_a>return_date</field_a>
+<field_b/>
+<field_c/>
+<value_type>Integer</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<remove>N</remove>
+<conversion_mask/>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+       <calculation><field_name>month_return</field_name>
+<calc_type>MONTH_OF_DATE</calc_type>
+<field_a>return_date</field_a>
+<field_b/>
+<field_c/>
+<value_type>Integer</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<remove>N</remove>
+<conversion_mask/>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+       <calculation><field_name>day_return</field_name>
+<calc_type>DAY_OF_MONTH</calc_type>
+<field_a>return_date</field_a>
+<field_b/>
+<field_c/>
+<value_type>Integer</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<remove>N</remove>
+<conversion_mask/>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>659</xloc>
+      <yloc>184</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Generate Resolution Status</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>Y</compatible>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>&#47;&#47;Script here
+
+var s = status_id.getString();
+
+var rs = null;
+
+if (s == null) {
+  rs = &quot;REJECTED&quot;;
+} else if (s == &quot;RETURN_CANCELLED&quot;) {
+  rs = &quot;CANCELLED&quot;;
+} else if (s == &quot;RETURN_COMPLETED&quot;) {
+  rs = &quot;COMPLETED&quot;;
+} else {
+  rs = &quot;PENDING&quot;;
+}
+</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>rs</name>
+        <rename>resolution_status</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>298</xloc>
+      <yloc>282</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Insert &#47; Update</name>
+    <type>InsertUpdate</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>analytics</connection>
+    <commit>100</commit>
+    <update_bypassed>N</update_bypassed>
+    <lookup>
+      <schema/>
+      <table>RETURN_ITEM_FACT</table>
+      <key>
+        <name>return_fact_key</name>
+        <field>return_fact_key</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>return_id</name>
+        <rename>return_id</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>return_item_seq_id</name>
+        <rename>return_item_seq_id</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>quantity</name>
+        <rename>quantity</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>gross_amount_base_currency</name>
+        <rename>gross_amount_base_currency</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>organization_id</name>
+        <rename>organization_id</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>customer_dim_key</name>
+        <rename>customer_dim_key</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>store_dim_key</name>
+        <rename>store_dim_key</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>order_date_key</name>
+        <rename>order_date_key</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>resolution_status</name>
+        <rename>resolution_status</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>channel_dim_key</name>
+        <rename>channel_dim_key</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>product_dim_key</name>
+        <rename>product_dim_key</rename>
+        <update>N</update>
+      </value>
+      <value>
+        <name>discount_amount_base_currency</name>
+        <rename>discount_amount_base_currency</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>net_amount_base_currency</name>
+        <rename>net_amount_base_currency</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>return_date_key</name>
+        <rename>return_date_key</rename>
+        <update>N</update>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>652</xloc>
+      <yloc>282</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Insert &#47; Update Mapping</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>      <field>        <name>return_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>return_item_seq_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>return_quantity</name>
+        <rename>quantity</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>gross_amount_base_currency</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>organization_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>return_fact_key</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>customer_dim_key</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>store_dim_key</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>order_date_key</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>resolution_status</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>channel_dim_key</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>product_dim_key</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>discount_amount_base_currency</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>net_amount_base_currency</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>return_date_key</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>        <select_unspecified>N</select_unspecified>
+    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>491</xloc>
+      <yloc>282</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Map empty currency values to 0</name>
+    <type>ValueMapper</type>
+    <description/>
+    <distribute>N</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <field_to_use>discount_amount_base_currency</field_to_use>
+    <target_field/>
+    <non_match_default/>
+    <fields>
+      <field>
+        <source_value/>
+        <target_value>0</target_value>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>587</xloc>
+      <yloc>79</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Order Date Dim lookup</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>analytics</connection>
+    <cache>Y</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>1000</cache_size>
+    <lookup>
+      <schema/>
+      <table>DATE_DIMENSION</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>year_order</name>
+        <field>year</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>month_order</name>
+        <field>month</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>day_order</name>
+        <field>day</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>date_dim_key</name>
+        <rename>order_date_key</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>278</xloc>
+      <yloc>184</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Product Dim lookup</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>analytics</connection>
+    <cache>Y</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>1000</cache_size>
+    <lookup>
+      <schema/>
+      <table>PRODUCT_DIMENSION</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>product_id</name>
+        <field>product_id</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>product_dim_key</name>
+        <rename>product_dim_key</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>110</xloc>
+      <yloc>282</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Return</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>N</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>operational</connection>
+    <sql>SELECT ri.return_id as return_id,
+  ri.return_item_seq_id as return_item_seq_id,
+  rh.from_party_id as from_party_id,
+  rh.to_party_id as organization_id,
+  oh.product_store_id as product_store_id,
+  oh.sales_channel_enum_id as sales_channel_enum_id,
+  oh.order_date as order_date,
+  rh.entry_date as return_date,
+  ri.product_id as product_id,
+  ri.return_quantity as return_quantity,
+  ri.return_price as return_price,
+  ri.status_id as status_id
+FROM ORDER_HEADER as oh,
+  RETURN_HEADER as rh,
+  RETURN_ITEM as ri
+WHERE rh.to_party_id LIKE &apos;${organizationId}&apos;
+AND rh.return_id = ri.return_id
+AND oh.order_id = ri.order_id
+</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>Y</variables_active>
+    <lazy_conversion_active>Y</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>153</xloc>
+      <yloc>80</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Return Date Dim lookup</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>analytics</connection>
+    <cache>Y</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>1000</cache_size>
+    <lookup>
+      <schema/>
+      <table>DATE_DIMENSION</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>year_return</name>
+        <field>year</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>month_return</name>
+        <field>month</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>day_return</name>
+        <field>day</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>date_dim_key</name>
+        <rename>return_date_key</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>458</xloc>
+      <yloc>184</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Return Fact Key Sequence</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <valuename>return_fact_key</valuename>
+      <use_database>N</use_database>
+      <connection/>
+      <schema/>
+      <seqname>SEQ_</seqname>
+      <use_counter>Y</use_counter>
+      <counter_name/>
+      <start_at>1</start_at>
+      <increment_by>1</increment_by>
+      <max_value>9999999</max_value>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>292</xloc>
+      <yloc>80</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Store Dim lookup</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>analytics</connection>
+    <cache>Y</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>1000</cache_size>
+    <lookup>
+      <schema/>
+      <table>STORE_DIMENSION</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>product_store_id</name>
+        <field>store_id</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>store_dim_key</name>
+        <rename>store_dim_key</rename>
+        <default/>
+        <type>Integer</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>850</xloc>
+      <yloc>184</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Select values</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>        <select_unspecified>N</select_unspecified>
+      <meta>        <name>discount_amount_base_currency</name>
+        <rename>discount_amount_base_currency</rename>
+        <type>Number</type>
+        <length>40</length>
+        <precision>3</precision>
+        <conversion_mask/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>800</xloc>
+      <yloc>280</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step_error_handling>
+  </step_error_handling>
+   <slave-step-copy-partition-distribution>
+</slave-step-copy-partition-distribution>
+   <slave_transformation>N</slave_transformation>
+</transformation>

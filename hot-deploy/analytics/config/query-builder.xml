@@ -1,0 +1,105 @@
+<!--
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<query-builder>
+
+    <!-- Report parameters -->
+    <reports>
+        <report name="CustomerLifeTimeOrders">
+            <parameters dimension="customer-dimension">
+                <!-- Just sample. Set of available conditions under a dimension may be restricted to a few of them.
+                <include-condition id="customer-customer"/>
+                <include-condition id="customer-state"/>
+                <include-condition id="customer-region"/>
+                -->                
+            </parameters>
+        </report>
+        <report name="CustomerByCountry">
+            <parameters dimension="customer-dimension"/>
+        </report>
+        <report name="CustomerByPostalCodeCountry">
+            <parameters dimension="customer-dimension"/>
+        </report>
+        <report name="CustomerBy3DigCodeCountry">
+            <parameters dimension="customer-dimension"/>
+        </report>
+        <report name="CustomerByStateCountry">
+            <parameters dimension="customer-dimension"/>
+        </report>
+        <report name="CustomerByCityStateCountry">
+            <parameters dimension="customer-dimension"/>
+        </report>
+    </reports>
+
+    <!-- QueryBuilder conditions -->
+    <!--
+        Server-side configuration for analytics query builder application.
+        Query builder relies on these data when displays list of available conditions, 
+        groups they by dimension and builds final SQL expression.
+
+         Brief description:
+         Element <dimension/>
+             Attributes:
+             id    - Unique identifier for dimension. Any string.
+             name  - Friendly name that appears as group label on query builder screen. 
+                     It can be final string or reference to external string resource, pattern %PropertyKey 
+             table - Actual table for this dimension in analytics database
+         Element <condition/>
+             Attributes:
+             id        - Unique identifier for condition. Any string.
+             selected  - This boolean value should be false unless you want to see 
+                         this condition as selected in right side section of query builder screen. 
+             fieldName - Name of a field in the dimension table. Final expression compare condition 
+                         value and this field.
+             label     - Friendly name for condition, may reference external string using the same pattern 
+                         as <dimension name=.../>.
+             value     - Always empty. However you can preset condition value if you like.
+             javaType  - Java type of the value, currently String and Integer make sense only. Use fully qualified name.
+     -->
+    <conditions>
+        <dimension id="product-dimension" name="%DimensionProduct" table="PRODUCT_DIMENSION">
+            <condition id="product-product-id" selected="false" fieldName="product_id" label="%ParameterProductId" value="" javaType="java.lang.String"/>
+            <condition id="product-product-name" selected="false" fieldName="product_name" label="%ParameterProductName" value="" javaType="java.lang.String"/>
+            <condition id="product-category" selected="false" fieldName="category" label="%ParameterProductCategory" value="" javaType="java.lang.String"/>
+            <condition id="product-brand" selected="false" fieldName="brand" label="%ParameterProductBrand" value="" javaType="java.lang.String"/>
+            <condition id="product-type" selected="false" fieldName="product_type" label="%ParameterProductType" value="" javaType="java.lang.String"/>
+            <condition id="product-style" selected="false" fieldName="style" label="%ParameterProductStyle" value="" javaType="java.lang.String"/>
+            <condition id="product-color" selected="false" fieldName="color" label="%ParameterProductColor" value="" javaType="java.lang.String"/>
+            <condition id="product-sku" selected="false" fieldName="sku" label="%ParameterProductSKU" value="" javaType="java.lang.String"/>
+            <condition id="product-upc" selected="false" fieldName="upc" label="%ParameterProductUPC" value="" javaType="java.lang.String"/>
+            <condition id="product-supplier" selected="false" fieldName="supplier_name" label="%ParameterProductSupplier" value="" javaType="java.lang.String"/>
+        </dimension>
+        <dimension id="customer-dimension" name="%DimensionCustomer" table="CUSTOMER_DIMENSION">
+            <condition id="customer-customer" selected="false" fieldName="customer_name" label="%ParameterCustomerName" value="" javaType="java.lang.String"/>
+            <condition id="customer-company" selected="false" fieldName="organization_id" label="%ParameterCompanyName" value="" javaType="java.lang.String"/>
+            <condition id="customer-city" selected="false" fieldName="city" label="%ParameterCity" value="" javaType="java.lang.String"/>
+            <condition id="customer-state" selected="false" fieldName="state" label="%ParameterState" value="" javaType="java.lang.String"/>
+            <condition id="customer-region" selected="false" fieldName="region" label="%ParameterRegion" value="" javaType="java.lang.String"/>
+            <condition id="customer-country" selected="false" fieldName="country" label="%ParameterCountry" value="" javaType="java.lang.String"/>
+            <condition id="customer-postal-code" selected="false" fieldName="postal_code" label="%ParameterPostalCode" value="" javaType="java.lang.String"/>
+            <condition id="customer-industry" selected="false" fieldName="industry" label="%ParameterIndustry" value="" javaType="java.lang.String"/>
+            <condition id="customer-sales-team" selected="false" fieldName="sales_team_name" label="%ParameterSalesTeam" value="" javaType="java.lang.String"/>
+        </dimension>
+        <dimension id="date-dimension" name="%DimensionDate" table="DATE_DIMENSION">
+            <condition id="date-year" selected="false" fieldName="year" label="%ParameterDateYear" value="" javaType="java.lang.Integer"/>
+            <condition id="date-month" selected="false" fieldName="month" label="%ParameterDateMonth" value="" javaType="java.lang.Integer"/>
+            <condition id="date-day" selected="false" fieldName="day" label="%ParameterDateDay" value="" javaType="java.lang.Integer"/>
+            <condition id="date-day-of-week" selected="false" fieldName="day_of_week" label="%ParameterDateDayOfWeek" value="" javaType="java.lang.Integer"/>
+            <condition id="date-week-of-year" selected="false" fieldName="week_of_year" label="%ParameterDateWeekOfYear" value="" javaType="java.lang.Integer"/>
+        </dimension>
+    </conditions>
+
+</query-builder>

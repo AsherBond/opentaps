@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<entity-engine-xml>
+
+    <!-- Customer analysis reports -->
+    <ReportRegistry reportId="CSTR_LFTM_ORDERS" shortName="Customer Lifetime Orders" description="Orders and returns summary for lifetime by customer." reportLocation="component://analytics/webapp/analytics/solutions/CustomerAnalysis/CustomerLifeTimeOrders.jrxml"/>
+    <ReportRegistry reportId="CSTR_ADDR_LIST" shortName="Customer Address List" description="Name, Addresses, and Emails of Customers for Export." reportLocation="component://analytics/webapp/analytics/solutions/CustomerAnalysis/CustomerAddressList.jrxml"/>
+
+    <ReportGroupMember reportGroupId="CRMSFA_CUST_ANALYSE" reportId="CSTR_LFTM_ORDERS" sequenceNum="100"/>
+    <ReportGroupMember reportGroupId="ANLTCS_CUST_ANALYSE" reportId="CSTR_LFTM_ORDERS" sequenceNum="100"/>
+    <ReportGroupMember reportGroupId="CRMSFA_CUST_ANALYSE" reportId="CSTR_ADDR_LIST" sequenceNum="101"/>
+    <ReportGroupMember reportGroupId="ANLTCS_CUST_ANALYSE" reportId="CSTR_ADDR_LIST" sequenceNum="101"/>
+
+</entity-engine-xml>

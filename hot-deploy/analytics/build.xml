@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<!--
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<project name="opentaps Analytics Component" default="jar" basedir=".">
+
+    <filelist id="commons-builds" dir=".." files="opentaps-common/build.xml"/>
+
+    <!-- ================================================================== -->
+    <!-- Initialization of all property settings                            -->
+    <!-- ================================================================== -->
+
+    <target name="init">
+        <property environment="env"/>
+        <property name="desc" value="Analytics Component"/>
+        <property name="name" value="opentaps-analytics"/>
+        <property name="src.dir" value="src"/>
+        <property name="dtd.dir" value="dtd"/>
+        <property name="lib.dir" value="lib"/>
+        <property name="build.dir" value="build"/>        
+        <property name="gwt.deploy.dir" value="./webapp/analyticsgwt"/>
+        <property name="gwt.module.base" value="org.opentaps.analytics.gwt"/>
+        <property name="gwt.src.common" value="../opentaps-common/src/common/org/opentaps/gwt"/>
+        <property name="gwt.src.base" value="./src/org/opentaps/analytics/gwt"/>
+        <property name="gwt.module.list" value="query"/>
+        <property name="ofbiz.dir" value="../../"/> 
+    </target>
+
+    <target name="buildCommons">
+        <subant>
+            <filelist refid="commons-builds"/>
+        </subant>
+    </target>
+
+    <target name="classpath" depends="buildCommons">
+        <path id="local.class.path">
+            <fileset dir="${lib.dir}" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/base/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/base/lib/commons" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/base/lib/etl" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/base/lib/j2eespecs" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/base/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/entity/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/entity/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/datafile/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/security/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/service/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/service/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/minilang/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/webapp/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/webapp/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/common/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/applications/accounting/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/applications/content/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/applications/securityext/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/applications/party/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/applications/product/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/applications/order/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib/hibernate" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/build/lib" includes="*.jar"/>
+        </path>
+    </target>
+
+    <target name="gwtclasspath" depends="init">
+        <path id="gwt.class.path">
+            <fileset dir="${ofbiz.dir}/framework/base/lib" includes="*.jar"/>
+            <pathelement location="${ofbiz.dir}/hot-deploy/analytics/src"/>
+            <pathelement location="${ofbiz.dir}/hot-deploy/opentaps-common/src/common"/>
+            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib" includes="gwt*.jar"/>
+            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib/gwt-dev" includes="gwt*.jar"/>
+        </path>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- Removes all created files and directories                          -->
+    <!-- ================================================================== -->
+
+    <target name="clean" depends="clean-lib">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="clean-lib" depends="init">
+        <delete dir="${build.dir}/lib"/>
+    </target>
+
+    <target name="clean-gwt" depends="init">
+      <delete dir="${gwt.deploy.dir}"/>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- Makes sure the needed directory structure is in place              -->
+    <!-- ================================================================== -->
+
+    <target name="prepare" depends="clean-lib">
+        <mkdir dir="${build.dir}/classes"/>
+        <mkdir dir="${build.dir}/lib"/>
+    </target>
+
+    <target name="prepare-docs" depends="init">
+        <mkdir dir="${build.dir}/javadocs"/>
+    </target>
+
+    <target name="prepare-gwt" depends="gwtclasspath">
+      <mkdir dir="${gwt.deploy.dir}"/>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- Compilation of the source files                                    -->
+    <!-- ================================================================== -->
+
+    <target name="classes" depends="prepare,classpath">
+    	<javac debug="on" deprecation="on" destdir="${build.dir}/classes">
+            <classpath>
+                <path refid="local.class.path"/>
+            </classpath>
+            <src path="${src.dir}"/>
+        </javac>
+
+        <copy todir="${build.dir}/classes">
+            <fileset dir="${src.dir}" includes="**/*.properties,**/*.xml,**/*.bsh,**/*.logic,**/*.js,**/*.jacl,**/*.py"/>
+        </copy>
+    </target>
+
+    <target name="jar" depends="classes">
+        <jar jarfile="${build.dir}/lib/${name}.jar" basedir="${build.dir}/classes"/>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- Compilation of GWT files                                           -->
+    <!-- ================================================================== -->
+
+    <target name="gwt-code" depends="prepare-gwt">
+        <subant target="gwt-compile-modules" inheritall="true" inheritrefs="true">
+            <filelist dir="." files="../opentaps-common/build.xml"/>
+        </subant>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- Build JavaDoc                                                      -->
+    <!-- ================================================================== -->
+
+    <target name="docs" depends="prepare-docs,classpath">
+        <javadoc packagenames="com.opensourcestrategies.crmsfa.*"
+            classpathref="local.class.path"
+            destdir="${build.dir}/javadocs"
+            Windowtitle="Open Source Strategies - ${desc}">
+            <sourcepath path="${src.dir}"/>
+        </javadoc>
+    </target>
+
+    <target name="all" depends="jar,docs"/>
+</project>

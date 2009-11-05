@@ -1,0 +1,53 @@
+/** Opentaps CSS for GWT */
+
+.gwt-screenlet {
+  background-color:#FFFFFF;
+  border:1px solid #999999;
+  margin-bottom:10px;
+  width:100%;
+}
+
+.gwt-screenlet-header {
+  padding:1px 4px;
+  vertical-align:middle;
+  font-family:Verdana,Arial,Helvetica,sans-serif;
+  font-size:8pt;
+  font-weight:bold;
+  margin:0;
+  text-decoration:none;
+}
+
+.gwt-screenlet-body {
+  background-color:#FFFFFF;
+  padding:4px;
+}
+
+.gwt-screenlet-body .x-form-item  {
+  padding:0 !important;
+}
+
+.x-form-item-label {
+  color:#000000;
+  font-family:Verdana,Arial,Helvetica,sans-serif;
+  font-size:10px;
+  font-size-adjust:none;
+  font-stretch:normal;
+  font-style:normal;
+  font-variant:normal;
+  font-weight:normal;
+  line-height:normal;
+  text-decoration:none;
+}
+
+.requiredField .x-form-item-label {
+  color:#AA0000;
+  font-family:Verdana,Arial,Helvetica,sans-serif;
+  font-size:10px;
+  font-size-adjust:none;
+  font-stretch:normal;
+  font-style:normal;
+  font-variant:normal;
+  font-weight:normal;
+  line-height:normal;
+  text-decoration:none;
+}

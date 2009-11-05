@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transformation>
+  <info>
+    <name>Product Dimension Transformation</name>
+    <description>Extract Product information into the Product dimension</description>
+    <extended_description/>
+    <trans_version/>
+    <trans_status>0</trans_status>
+    <directory>&#47;</directory>
+    <log>
+      <read/>
+      <write/>
+      <input/>
+      <output/>
+      <update/>
+      <rejected/>
+      <connection/>
+      <table/>
+      <use_batchid>Y</use_batchid>
+      <use_logfield>N</use_logfield>
+    </log>
+    <maxdate>
+      <connection/>
+      <table/>
+      <field/>
+      <offset>0.0</offset>
+      <maxdiff>0.0</maxdiff>
+    </maxdate>
+    <size_rowset>10000</size_rowset>
+    <sleep_time_empty>50</sleep_time_empty>
+    <sleep_time_full>50</sleep_time_full>
+    <unique_connections>N</unique_connections>
+    <feedback_shown>Y</feedback_shown>
+    <feedback_size>50000</feedback_size>
+    <using_thread_priorities>Y</using_thread_priorities>
+    <shared_objects_file/>
+    <dependencies>
+    </dependencies>
+    <partitionschemas>
+    </partitionschemas>
+    <slaveservers>
+    </slaveservers>
+    <clusterschemas>
+    </clusterschemas>
+  <modified_user>admin</modified_user>
+  <modified_date>2008&#47;04&#47;29 01:13:52.577</modified_date>
+  </info>
+  <notepads>
+    <notepad>
+      <note>Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+
+This program is free software; you can redistribute it and&#47;or modify
+it under the terms of the Honest Public License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+Honest Public License for more details.
+
+You should have received a copy of the Honest Public License
+along with this program; if not, write to Funambol,
+643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA</note>
+      <xloc>167</xloc>
+      <yloc>388</yloc>
+      <width>378</width>
+      <heigth>179</heigth>
+    </notepad>
+  </notepads>
+  <connection>
+    <name>operational</name>
+    <server>localhost</server>
+    <type>POSTGRESQL</type>
+    <access>JNDI</access>
+    <database>operational</database>
+    <port>-1</port>
+    <username>ofbiz</username>
+    <password>Encrypted 2be98afc86aa7f2e4cb79ce7fd890a6c0</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>INITIAL_POOL_SIZE</code><attribute>5</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>MAXIMUM_POOL_SIZE</code><attribute>10</attribute></attribute>
+      <attribute><code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>-1</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>analytics</name>
+    <server/>
+    <type>MYSQL</type>
+    <access>JNDI</access>
+    <database>analytics</database>
+    <port>-1</port>
+    <username/>
+    <password>Encrypted </password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>INITIAL_POOL_SIZE</code><attribute>5</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>MAXIMUM_POOL_SIZE</code><attribute>10</attribute></attribute>
+      <attribute><code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>-1</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <order>
+  <hop> <from>Product</from><to>Add organization_id variable</to><enabled>Y</enabled> </hop>  <hop> <from>Add organization_id variable</from><to>Supplier Join </to><enabled>Y</enabled> </hop>  <hop> <from>Supplier Join </from><to>Category Join</to><enabled>Y</enabled> </hop>  <hop> <from>Category Join</from><to>Check empty org_supplier_id</to><enabled>Y</enabled> </hop>  <hop> <from>Check empty org_supplier_id</from><to>Check empty supplier_name</to><enabled>Y</enabled> </hop>  <hop> <from>Check empty supplier_name</from><to>Check empty category</to><enabled>Y</enabled> </hop>  <hop> <from>Check empty category</from><to>Insert &#47; Update</to><enabled>Y</enabled> </hop>  </order>
+  <step>
+    <name>Add organization_id variable</name>
+    <type>GetVariable</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>organization_id</name>
+        <variable>${organizationId}</variable>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>233</xloc>
+      <yloc>100</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Category Join</name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>operational</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT
+  coalesce(pcp.category_name, pc.category_name, p.primary_product_category_id, pc.product_category_id, &apos;Unknown&apos;) as category
+FROM
+  PRODUCT p
+LEFT JOIN PRODUCT_CATEGORY_MEMBER pcm ON p.product_id = pcm.product_id AND ((pcm.from_date is null) or (pcm.from_date &lt; now())) AND ((pcm.thru_date is null) or (pcm.thru_date &gt; now()))
+LEFT JOIN PRODUCT_CATEGORY pcp ON p.primary_product_category_id = pcp.product_category_id
+LEFT JOIN PRODUCT_CATEGORY pc ON pcm.product_category_id = pc.product_category_id
+
+WHERE
+p.product_id = ? AND
+pc.product_category_type_id = &apos;CATALOG_CATEGORY&apos; 
+LIMIT 1 OFFSET 0
+</sql>
+    <outer_join>Y</outer_join>
+    <parameter>
+      <field>
+        <name>product_id</name>
+        <type>String</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>506</xloc>
+      <yloc>99</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Check empty category</name>
+    <type>ValueMapper</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <field_to_use>category</field_to_use>
+    <target_field/>
+    <non_match_default/>
+    <fields>
+      <field>
+        <source_value/>
+        <target_value>Unknown</target_value>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>694</xloc>
+      <yloc>282</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Check empty org_supplier_id</name>
+    <type>ValueMapper</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <field_to_use>org_supplier_id</field_to_use>
+    <target_field/>
+    <non_match_default/>
+    <fields>
+      <field>
+        <source_value/>
+        <target_value>Unknown</target_value>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>688</xloc>
+      <yloc>100</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Check empty supplier_name</name>
+    <type>ValueMapper</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <field_to_use>supplier_name</field_to_use>
+    <target_field/>
+    <non_match_default/>
+    <fields>
+      <field>
+        <source_value/>
+        <target_value>Unknown</target_value>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>692</xloc>
+      <yloc>194</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Insert &#47; Update</name>
+    <type>InsertUpdate</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>analytics</connection>
+    <commit>100</commit>
+    <update_bypassed>N</update_bypassed>
+    <lookup>
+      <schema/>
+      <table>PRODUCT_DIMENSION</table>
+      <key>
+        <name>product_id</name>
+        <field>product_id</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>org_supplier_id</name>
+        <field>org_supplier_id</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>organization_id</name>
+        <field>organization_id</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>product_id</name>
+        <rename>product_id</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>product_type</name>
+        <rename>product_type_id</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>product_name</name>
+        <rename>product_name</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>category</name>
+        <rename>category</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>brand</name>
+        <rename>brand_name</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>height</name>
+        <rename>height</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>length</name>
+        <rename>depth</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>width</name>
+        <rename>width</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>weight</name>
+        <rename>weight</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>sku</name>
+        <rename>sku</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>upc</name>
+        <rename>upc</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>supplier_name</name>
+        <rename>supplier_name</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>org_supplier_id</name>
+        <rename>org_supplier_id</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>organization_id</name>
+        <rename>organization_id</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>est_base_currency_cost</name>
+        <rename>est_base_currency_cost</rename>
+        <update>Y</update>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>474</xloc>
+      <yloc>282</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Product</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>operational</connection>
+    <sql>SELECT
+  p.product_id AS product_id,
+  coalesce(p.product_type_id, &apos;Unknown&apos;) AS product_type_id,
+  coalesce(p.product_name, p.internal_name, p.product_id, &apos;Unknown&apos;) AS product_name,
+  coalesce(p.brand_name, &apos;Unknown&apos;) AS brand_name,
+  p.weight AS weight,
+  p.product_height AS height,
+  p.product_width AS width,
+  p.product_depth AS depth,
+  coalesce(g1.id_value, &apos;Unknown&apos;) AS sku,
+  coalesce(g2.id_value, &apos;Unknown&apos;) AS upc
+FROM
+  PRODUCT p
+LEFT JOIN GOOD_IDENTIFICATION g1 ON p.product_id = g1.product_id AND g1.good_identification_type_id = &apos;SKU&apos;
+LEFT JOIN GOOD_IDENTIFICATION g2 ON p.product_id = g2.product_id AND g2.good_identification_type_id = &apos;UPCA&apos;
+ORDER BY p.product_id 
+</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>Y</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>92</xloc>
+      <yloc>99</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Supplier Join </name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>operational</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT 
+  coalesce(sp.party_id, &apos;Unknown&apos;) AS org_supplier_id,
+  sp.last_price AS est_base_currency_cost,
+  sp.minimum_order_quantity AS minimum_order_quantity,
+  coalesce(pg.group_name, &apos;Unknown&apos;) AS supplier_name
+FROM SUPPLIER_PRODUCT sp
+LEFT JOIN PARTY_GROUP pg ON pg.party_id = sp.party_id
+WHERE
+  sp.product_id = ?
+ORDER BY
+  sp.available_from_date DESC
+LIMIT 1 OFFSET 0</sql>
+    <outer_join>Y</outer_join>
+    <parameter>
+      <field>
+        <name>product_id</name>
+        <type>String</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>369</xloc>
+      <yloc>98</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step_error_handling>
+  </step_error_handling>
+   <slave-step-copy-partition-distribution>
+</slave-step-copy-partition-distribution>
+   <slave_transformation>N</slave_transformation>
+</transformation>
