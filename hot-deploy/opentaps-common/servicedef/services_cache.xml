@@ -20,7 +20,7 @@
     <description>Services that create index for the delegator operate.</description>
     <vendor>Open Source Strategies, Inc.</vendor>
 
-    <service name="opentaps.evictHibernateCache" engine="pojo" transaction-timeout="600" location="org.opentaps.common.domain.cache.HibernateCacheService" invoke="evictHibernateCache" auth="true">
+    <service name="opentaps.evictHibernateCache" engine="pojo" transaction-timeout="600" location="org.opentaps.common.domain.cache.HibernateCacheService" invoke="evictHibernateCache" auth="false">
         <description>the service that evict hibernate cache on ofbiz's CRUD</description>
         <attribute name="entityName" type="String" mode="IN" optional="true"/>
         <attribute name="pk" type="org.ofbiz.entity.GenericEntity" mode="IN" optional="true"/>
