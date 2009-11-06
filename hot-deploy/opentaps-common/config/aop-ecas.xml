@@ -20,6 +20,5 @@
         <aspect class="org.opentaps.aspect.secas.CommonServiceAspects"/>
         <aspect class="org.opentaps.aspect.secas.IndexForDelegatorAspects"/>
         <aspect class="org.opentaps.aspect.secas.order.OrderAspects"/>
-        <aspect class="org.opentaps.aspect.secas.EvdictHibernateCacheAspects"/>
     </system>
 </aspectwerkz>
