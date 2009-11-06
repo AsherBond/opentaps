@@ -55,7 +55,7 @@ public class TestObjectGenerator {
 
     private static final List<String> GREEK        = Arrays.asList("Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota", "Kappa", "Lambda", "Mu", "Nu", "Xi", "Omicron", "Pi", "Rho", "Sigma", "Tau", "Upsilon", "Phi", "Chi", "Psi", "Omega");
     private static final List<String> NAMES        = Arrays.asList("Jacob", "Emily", "Michael", "Emma", "Joshua", "Madison", "Ethan", "Isabella", "Matthew", "Ava", "Daniel", "Abigail", "Christopher", "Olivia", "Andrew", "Hannah", "Anthony", "Sophia", "William", "Samantha", "Tyler", "Nicholas");
-    private static final List<String> PARTICLES    = Arrays.asList("Fermion", "Boson", "Quark", "Electron", "Positron", "Muon", "Tau Lepton", "Photon", "Graviton", "Gluon", "Higgs", "Hadron", "Baryon", "Nucleon", "Neutrino", "Neutron", "Proton", "Phonon", "Exciton", "Plasmon", "Polariton", "Polaron", "Magnon");
+    private static final List<String> PARTICLES    = Arrays.asList("Fermion", "Boson", "Quark", "Electron", "Positron", "Muon", "Lepton", "Photon", "Graviton", "Gluon", "Higgs", "Hadron", "Baryon", "Nucleon", "Neutrino", "Neutron", "Proton", "Phonon", "Exciton", "Plasmon", "Polariton", "Polaron", "Magnon");
     private static final List<String> CORPTYPES    = Arrays.asList("Industries", "Corp.", "Inc.", "Ltd.", "Enterprises", "Syndicates", "Partners", "and Sons", "Gmbh.", "Visions", "Soft", "Consultants", "Services");
     private static final List<String> STREET_TYPES = Arrays.asList("Blvd", "St", "Ln", "Ave", "Rd", "Alley", "Place", "Way");
 
