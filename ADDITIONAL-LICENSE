@@ -52,6 +52,7 @@ Commons BeanUtils                 Apache 2.0                  hot-deploy/opentap
 Commons Digester                  Apache 2.0                  hot-deploy/opentaps-common/lib/commons-digester-1.8.1.jar
 Shortcuts                         BSD                         hot-deploy/opentaps-common/webapp/js/shortcuts.js
 Pentaho Data Integration Engine   LGPL                        framework/base/lib/etl
+ehcache                           Apache 2.0                  hot-deploy/opentaps-common/lib/hibernate/ehcache-1.2.3.jar
 
 (1)  This project uses the Creative Commons Attribution-Share Alike 3.0 License.  Please
      review the license before using it for any other purpose.
