@@ -43,7 +43,6 @@ import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.domain.base.entities.PartyContactInfo;
@@ -208,7 +207,7 @@ public class HibernateTests extends OpentapsTestCase {
         delegator.create("TestEntity", UtilMisc.toMap("testId", testId, "testStringField", "testHibernateCanDecryptDelegatorEncryptedValue", "testEncrypt", beforeEncryptValue));
 
         //load entity by hibernate
-        TestEntity testEntity = (TestEntity) session.load(TestEntity.class, testId);
+        TestEntity testEntity = (TestEntity) session.get(TestEntity.class, testId);
         // verify delegator can decrypt the encrypt field which save by hibernate
         assertEquals("The testEncrypt field value of TestEnity that load by hiberate should equals " + beforeEncryptValue + ".", beforeEncryptValue, testEntity.getTestEncrypt());
     }
@@ -255,7 +254,7 @@ public class HibernateTests extends OpentapsTestCase {
         assertNotEquals("After save the testEncrypt field value shouldn't equals " + beforeEncryptValue + ".", beforeEncryptValue, testEntity.getTestEncrypt());
         Debug.logInfo("After save the testEncrypt field is " + testEntity.getTestEncrypt(), MODULE);
         //verify after load, the testEncrypt field value should equals initial value
-        testEntity = (TestEntity) session.load(TestEntity.class, testEntity.getTestId());
+        testEntity = (TestEntity) session.get(TestEntity.class, testEntity.getTestId());
         assertEquals("After reload the TestEntity, testEncrypt field value should equals " + beforeEncryptValue + ".", beforeEncryptValue, testEntity.getTestEncrypt());
         Debug.logInfo("After load the testEncrypt field is " + testEntity.getTestEncrypt(), MODULE);
 
@@ -303,7 +302,7 @@ public class HibernateTests extends OpentapsTestCase {
         // wait one minute
         pause("wait a minute", minute);
         //Find the entity, update it, and store again
-        testEntity = (TestEntity) session.load(TestEntity.class, testEntity.getTestId());
+        testEntity = (TestEntity) session.get(TestEntity.class, testEntity.getTestId());
         tx.begin();
         testEntity.setTestStringField("new value for testAutomaticalStoreTimestamps");
         session.save(testEntity);
@@ -400,7 +399,7 @@ public class HibernateTests extends OpentapsTestCase {
         session.flush();
         tx.commit();
 
-        TestEntity loadEntity = (TestEntity) session.load(TestEntity.class, newTestEntity.getTestId());
+        TestEntity loadEntity = (TestEntity) session.get(TestEntity.class, newTestEntity.getTestId());
         assertNotNull("Cannot find TestEntity with Id " + newTestEntity.getTestId() + " in hibernate", loadEntity);
     }
 
@@ -417,13 +416,13 @@ public class HibernateTests extends OpentapsTestCase {
         TestEntity testEntity = createAndSaveTestEntity("old value");
         // try to modify this entity
         UserTransaction tx = session.beginUserTransaction();
-        TestEntity loadEntity = (TestEntity) session.load(TestEntity.class, testEntity.getTestId());
+        TestEntity loadEntity = (TestEntity) session.get(TestEntity.class, testEntity.getTestId());
         assertEquals("Correct value should is old string value", loadEntity.getTestStringField(), "old value");
         loadEntity.setTestStringField("new value");
         session.update(loadEntity);
         session.flush();
         tx.commit();
-        loadEntity = (TestEntity) session.load(TestEntity.class, testEntity.getTestId());
+        loadEntity = (TestEntity) session.get(TestEntity.class, testEntity.getTestId());
         assertEquals("Correct value should is new string value", loadEntity.getTestStringField(), "new value");
     }
 
@@ -526,7 +525,7 @@ public class HibernateTests extends OpentapsTestCase {
         session.flush();
         tx.commit();
 
-        TestEntity loadEntity = (TestEntity) session.load(TestEntity.class, newTestEntity.getTestId());
+        TestEntity loadEntity = (TestEntity) session.get(TestEntity.class, newTestEntity.getTestId());
         assertNotNull("Cannot find TestEntity with Id " + newTestEntity.getTestId() + " in hibernate", loadEntity);
     }
 
@@ -540,14 +539,14 @@ public class HibernateTests extends OpentapsTestCase {
         // open a new session, if session has opened, then close it first
         reOpenSession();
         Transaction tx = session.beginTransaction();
-        TestEntity loadEntity = (TestEntity) session.load(TestEntity.class, testEntityId1);
+        TestEntity loadEntity = (TestEntity) session.get(TestEntity.class, testEntityId1);
         assertEquals("Correct value should is old string value", loadEntity.getTestStringField(), "old value");
         loadEntity.setTestStringField("new value");
         session.update(loadEntity);
         session.flush();
         tx.commit();
 
-        loadEntity = (TestEntity) session.load(TestEntity.class, testEntityId1);
+        loadEntity = (TestEntity) session.get(TestEntity.class, testEntityId1);
         assertEquals("Correct value should is new string value", loadEntity.getTestStringField(), "new value");
     }
 
@@ -561,7 +560,7 @@ public class HibernateTests extends OpentapsTestCase {
         // open a new session, if session has opened, then close it first
         reOpenSession();
         Transaction tx = session.beginTransaction();
-        TestEntity demoTestEntity2 = (TestEntity) session.load(TestEntity.class, testEntityId2);
+        TestEntity demoTestEntity2 = (TestEntity) session.get(TestEntity.class, testEntityId2);
         assertNotNull("TestEntity with Id " + testEntityId2 + " should can retrieve by hibernate", demoTestEntity2);
         session.delete(demoTestEntity2);
         session.flush();
@@ -936,7 +935,7 @@ public class HibernateTests extends OpentapsTestCase {
         tx.commit();
         // retrieve the second TestEntity and verify that its value has been
         // updated
-        secondTestEntity = (TestEntity) session.load(TestEntity.class, secondTestEntity.getTestId());
+        secondTestEntity = (TestEntity) session.get(TestEntity.class, secondTestEntity.getTestId());
         assertEquals("secondTestEntity.getTestStringField() should be new value", "new value", secondTestEntity.getTestStringField());
     }
 
@@ -992,7 +991,7 @@ public class HibernateTests extends OpentapsTestCase {
         reOpenSession();
 
         // reload testEntity from Database
-        testEntity = (TestEntity) session.load(TestEntity.class, testEntity.getTestId());
+        testEntity = (TestEntity) session.get(TestEntity.class, testEntity.getTestId());
         // verify hibernate can retrieve blob field from entity
         String currentCRCCode = getCRCCode(testEntity.getTestBlobField());
         assertEquals("hibernate should retrieve same blob field value from entity, crc32 code : " + fileCRCCode1, fileCRCCode1, currentCRCCode);
@@ -1006,7 +1005,7 @@ public class HibernateTests extends OpentapsTestCase {
 
         reOpenSession();
         // reload testEntity from Database
-        testEntity = (TestEntity) session.load(TestEntity.class, testEntity.getTestId());
+        testEntity = (TestEntity) session.get(TestEntity.class, testEntity.getTestId());
         // verify hibernate can retrieve blob field from entity
         currentCRCCode = getCRCCode(testEntity.getTestBlobField());
         assertEquals("testBlobField should not change.", fileCRCCode1, currentCRCCode);
@@ -1021,7 +1020,7 @@ public class HibernateTests extends OpentapsTestCase {
 
         reOpenSession();
         // reload testEntity from Database
-        testEntity = (TestEntity) session.load(TestEntity.class, testEntity.getTestId());
+        testEntity = (TestEntity) session.get(TestEntity.class, testEntity.getTestId());
         // verify hibernate can retrieve blob field from entity
         currentCRCCode = getCRCCode(testEntity.getTestBlobField());
         assertEquals("testBlobField should change to " + fileCRCCode2 + ".", fileCRCCode2, currentCRCCode);
@@ -1077,7 +1076,7 @@ public class HibernateTests extends OpentapsTestCase {
         tx.commit();
         reOpenSession();
         // reload testEntity from Database
-        testEntity = (TestEntity) session.load(TestEntity.class, testEntity.getTestId());
+        testEntity = (TestEntity) session.get(TestEntity.class, testEntity.getTestId());
         // verify hibernate can retrieve blob field from entity
         String newCRCCode = getCRCCode(testEntity.getTestBlobField());
         Debug.logInfo("old crc32 is :" + oldCRCCode + ", new crc 32 is : " + newCRCCode, MODULE);
@@ -1128,7 +1127,7 @@ public class HibernateTests extends OpentapsTestCase {
         tx.commit();
 
         // reload TestEntity from hibernate
-        testEntity = (TestEntity) session.load(TestEntity.class, testEntityId);
+        testEntity = (TestEntity) session.get(TestEntity.class, testEntityId);
         // verify that you can get all 10 TestEntityItem values from
         // TestEntity.getTestEntityItem()
         assertEquals("Should found 10 TestEntityItem values from TestEntity.getTestEntityItem()", 10, testEntity.getTestEntityItems().size());
@@ -1177,7 +1176,7 @@ public class HibernateTests extends OpentapsTestCase {
         session.flush();
         tx.commit();
         // reload TestEntity from hibernate
-        testEntity = (TestEntity) session.load(TestEntity.class, testEntityId);
+        testEntity = (TestEntity) session.get(TestEntity.class, testEntityId);
         // verify that you can get all 9 TestEntityItem values from
         // TestEntity.getTestEntityItem()
         assertEquals("Should found 9 TestEntityItem values from TestEntity.getTestEntityItem()", 9, testEntity.getTestEntityItems().size());
@@ -1189,7 +1188,7 @@ public class HibernateTests extends OpentapsTestCase {
         session.flush();
         tx.commit();
         // reload TestEntity from hibernate
-        testEntity = (TestEntity) session.load(TestEntity.class, testEntityId);
+        testEntity = (TestEntity) session.get(TestEntity.class, testEntityId);
         // verify that you cannot found any TestEntityItem from
         // TestEntity.getTestEntityItem()
         assertEquals("Shouldn't found any TestEntityItem values from TestEntity.getTestEntityItem()", 0, testEntity.getTestEntityItems().size());
@@ -1317,7 +1316,7 @@ public class HibernateTests extends OpentapsTestCase {
     	// now update the description field
     	String newDescription = "New test entity description";
     	Transaction tx = session.beginTransaction();
-    	TestEntity reloadedTestEntity = (TestEntity) session.load(TestEntity.class, originalTestEntity.getTestId());
+    	TestEntity reloadedTestEntity = (TestEntity) session.get(TestEntity.class, originalTestEntity.getTestId());
     	reloadedTestEntity.setTestStringField(newDescription);
     	session.update(reloadedTestEntity);
     	session.flush();
@@ -1365,7 +1364,7 @@ public class HibernateTests extends OpentapsTestCase {
         String testId = delegator.getNextSeqId("TestEntity");
         GenericValue testEntityGV = delegator.create("TestEntity", UtilMisc.toMap("testId", testId, "testStringField", originalDescription));
 
-        TestEntity testEntity = (TestEntity) session.load(TestEntity.class, testId);
+        TestEntity testEntity = (TestEntity) session.get(TestEntity.class, testId);
         assertEquals("Test string field from generic value retrieved after TestEntity is created is not correct", testEntity.getTestStringField(), testEntityGV.getString("testStringField"));
     }    
     
@@ -1382,11 +1381,10 @@ public class HibernateTests extends OpentapsTestCase {
         GenericValue testEntityGV = delegator.create("TestEntity", UtilMisc.toMap("testId", testId, "testStringField", originalDescription));
         
         // this is important: the first load puts it into the hibernate cache
-        TestEntity testEntity = (TestEntity) session.load(TestEntity.class, testId);
+        TestEntity testEntity = (TestEntity) session.get(TestEntity.class, testId);
         // now update the description field by ofbiz
         String newDescription = "New test entity description";
         testEntityGV.setString("testStringField", newDescription);
-        Debug.logInfo("update TestEntity.testStringField [" + testId + "] to " + newDescription, MODULE);
         testEntityGV.store();
         
         // this is important: We need reopen hibernate session for load the change come from ofbiz's engine
@@ -1414,19 +1412,18 @@ public class HibernateTests extends OpentapsTestCase {
         GenericValue testEntityGV = delegator.create("TestEntity", UtilMisc.toMap("testId", testId, "testStringField", originalDescription));
         
         // this is important: the first load puts it into the hibernate cache
-        TestEntity testEntity = (TestEntity) session.load(TestEntity.class, testId);
+        TestEntity testEntity = (TestEntity) session.get(TestEntity.class, testId);
         // check we can get the TestEntity by hibernate
         assertNotNull(testEntity);
         
          // now delete the test entity using delegator
-        Debug.logInfo("remove TestEntity [" + testId + "]", MODULE);
         delegator.removeByPrimaryKey(testEntityGV.getPrimaryKey());
         
         // check if the hibernate load still has this value around
         // this is important: We need reopen hibernate session for load the change come from ofbiz's engine
         // create new hibernate session is not expensive, if we keep a long session and try to update the 1st level cache, it will be more expensive than re-open it.
         reOpenSession();
-        TestEntity reloadedTestEntity = (TestEntity) session.load(TestEntity.class, testId);
+        TestEntity reloadedTestEntity = (TestEntity) session.get(TestEntity.class, testId);
         assertNull(reloadedTestEntity);
         
 
@@ -1439,16 +1436,13 @@ public class HibernateTests extends OpentapsTestCase {
     private void removeTestData() throws Exception {
         // open a new session, if session has opened, then close it first
         reOpenSession();
-        Debug.logInfo("begin removeTestData at " + UtilDateTime.nowTimestamp(), MODULE);
         String hql = "from TestEntity";
         Query query = session.createQuery(hql);
         List<TestEntity> list = query.list();
         for (TestEntity testEntity : list) {
             session.delete(testEntity);
-            Debug.logInfo("removeTestData testId : " + testEntity.getTestId(), MODULE);
         }
         session.flush();
-        Debug.logInfo("end removeTestData at " + UtilDateTime.nowTimestamp(), MODULE);
     }
 
     /**
