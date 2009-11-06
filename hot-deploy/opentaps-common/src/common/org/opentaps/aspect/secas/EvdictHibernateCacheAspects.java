@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published

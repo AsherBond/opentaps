@@ -40,7 +40,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.jdbc.Work;
 import org.hibernate.stat.SessionStatistics;
-import org.hibernate.transform.Transformers;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
@@ -97,8 +96,7 @@ public class Session implements org.hibernate.Session {
         } catch (GenericTransactionException e) {
             // TODO Auto-generated catch block
             Debug.logError(e, MODULE);
-            throw new HibernateException(
-                    "cause GenericTransactionException in call TransactionUtil.begin().");
+            throw new HibernateException("cause GenericTransactionException in call TransactionUtil.begin().");
         }
     }
 
@@ -116,8 +114,7 @@ public class Session implements org.hibernate.Session {
             TransactionUtil.commit(beganTransaction);
         } catch (GenericTransactionException e) {
             Debug.logError(e, MODULE);
-            throw new HibernateException(
-                    "cause GenericTransactionException in call TransactionUtil.commit(boolean).");
+            throw new HibernateException("cause GenericTransactionException in call TransactionUtil.commit(boolean).");
         }
     }
 
@@ -180,6 +177,7 @@ public class Session implements org.hibernate.Session {
         return con;
     }
 
+    @SuppressWarnings("deprecation")
     public Connection connection() throws HibernateException {
 
         return hibernateSession.connection();
@@ -238,21 +236,17 @@ public class Session implements org.hibernate.Session {
             if (entity.isView()) {
                 // if it is a view-entity, we should transform hql to native sql
                 // query.
-                String nameQueryString = getNamedQuery(
-                        "select" + entity.getClass().getSimpleName() + "s")
-                        .getQueryString();
+                String nameQueryString = getNamedQuery("select" + entity.getClass().getSimpleName() + "s").getQueryString();
                 String sqlString = nameQueryString
                         + " "
                         + HibernateUtil.hqlToSql(queryString, HibernateUtil.retrieveClassName(queryString),
                                 HibernateUtil.retrieveClassAlias(queryString),
                                 entity.fieldMapColumns.get(entity.getClass()
                                         .getSimpleName()));
-                Debug.logInfo("Querying [" + entity.getBaseEntityName()
-                        + "] with query [" + sqlString + "]", MODULE);
+                Debug.logVerbose("Querying [" + entity.getBaseEntityName() + "] with query [" + sqlString + "]", MODULE);
                 org.hibernate.Query hibernateQuery = hibernateSession.createSQLQuery(sqlString);
                 // set result transformer to change result to the class of entity
-                hibernateQuery.setResultTransformer(OpentapsTransformer.aliasToBean(entity
-                        .getClass()));
+                hibernateQuery.setResultTransformer(OpentapsTransformer.aliasToBean(entity.getClass()));
                 Query query = new Query(hibernateQuery, entity.getBaseEntityName(), encryptParameters, crypto);
                 return query;
             } else {
@@ -320,7 +314,7 @@ public class Session implements org.hibernate.Session {
 
     public void evict(Object object) throws HibernateException {
 
-        hibernateSession.equals(object);
+        hibernateSession.evict(object);
     }
 
     public void flush() throws HibernateException {
@@ -500,6 +494,7 @@ public class Session implements org.hibernate.Session {
         hibernateSession.persist(entityName, object);
     }
 
+    @SuppressWarnings("deprecation")
     public void reconnect() throws HibernateException {
 
         hibernateSession.reconnect();
@@ -592,7 +587,7 @@ public class Session implements org.hibernate.Session {
         // change format to String.
         DecimalFormat df = new DecimalFormat("0000");
         String nextSeqId = df.format(HibernateUtil.getNextSeqId(newSession, seqName));
-        Debug.logInfo("Generate seqId [" + nextSeqId + "] for " + seqName, MODULE);
+        Debug.logVerbose("Generate seqId [" + nextSeqId + "] for " + seqName, MODULE);
         return nextSeqId;
     }
 

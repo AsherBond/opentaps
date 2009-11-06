@@ -108,8 +108,8 @@
       <java classname="org.codehaus.aspectwerkz.compiler.AspectWerkzC" fork="true">
         <jvmarg value="-Daspectwerkz.definition.file=${aopConfig}"/>
         <jvmarg value="-Daspectwerkz.transform.filter=no"/>
-        <jvmarg value="-Daspectwerkz.transform.verbose=true"/> 
-        <jvmarg value="-Daspectwerkz.transform.details=true"/> 
+        <!-- <jvmarg value="-Daspectwerkz.transform.verbose=true"/> -->
+        <!-- <jvmarg value="-Daspectwerkz.transform.details=true"/> -->
         <arg value="-verify"/>
         <classpath refid="local.class.path" />
         <classpath>
