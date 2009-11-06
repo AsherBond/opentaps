@@ -79,6 +79,7 @@
     <service-resource type="model" loader="main" location="servicedef/services_search.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_orders.xml"/> 
     <service-resource type="model" loader="main" location="servicedef/services_email.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_cache.xml"/>
     
     <!--service-resource type="model" loader="main" location="servicedef/services_pricepromo.xml"/-->
 

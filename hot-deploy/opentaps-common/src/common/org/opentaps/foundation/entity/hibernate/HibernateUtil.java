@@ -16,6 +16,7 @@
  */
 package org.opentaps.foundation.entity.hibernate;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -36,12 +37,14 @@ import org.ofbiz.entity.EntityCryptoException;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericPK;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.model.ModelField;
 import org.ofbiz.entity.util.EntityCrypto;
 import org.opentaps.domain.base.entities.SequenceValueItem;
 import org.opentaps.foundation.entity.Entity;
+import org.opentaps.foundation.infrastructure.Infrastructure;
 
 
 /**
@@ -227,7 +230,7 @@ public class HibernateUtil {
     public static Entity getEntityInstanceByClassName(String className) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         // add default entity package name if it doesn't already have one
         if (className.indexOf(".") < 0) {
-            className = "org.opentaps.domain.base.entities." + className;
+            className = Infrastructure.ENTITY_PACKAGE + "." + className;
         }
         Entity entity = (Entity) Class.forName(className).newInstance();
         return entity;
@@ -599,6 +602,36 @@ public class HibernateUtil {
             return getExceptionCause(e.getCause());
         } else {
             return e;
+        }
+    }
+    
+    /**
+     * generate Entity pk object by GenericPK.
+     *
+     * @param genericPk a <code>GenericEntity</code> instance
+     * @return a <code>Serializable</code> instance
+     * @throws ClassNotFoundException if an error occurs 
+     * @throws IllegalAccessException if an error occurs 
+     * @throws InstantiationException if an error occurs
+     * @throws InvocationTargetException if an error occurs
+     * @throws NoSuchMethodException if an error occurs
+     * @throws IllegalArgumentException if an error occurs
+     */
+    public static Serializable genericPkToEntityPk(GenericEntity genericPk) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, NoSuchMethodException, InvocationTargetException {
+        if (genericPk == null) {
+            return null;
+        } else if (genericPk.size() == 1) {
+            String key = (String) genericPk.getAllKeys().toArray()[0];
+            Serializable entityPk = (Serializable) genericPk.get(key);
+            return entityPk;
+        } else {
+            String entityPkName = Infrastructure.ENTITY_PACKAGE + "." + genericPk.getEntityName() + "Pk";
+            Serializable entityPk = (Serializable) Class.forName(entityPkName).newInstance();
+            for (String key : genericPk.getAllKeys()) {
+                Object value = genericPk.get(key);
+                setFieldValue(entityPk, key, value);
+            }
+            return entityPk;
         }
     }
 }

@@ -16,6 +16,7 @@
  */
 package org.opentaps.foundation.infrastructure;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -28,6 +29,8 @@ import org.hibernate.event.PersistEventListener;
 import org.hibernate.event.SaveOrUpdateEventListener;
 
 import org.hibernate.event.DeleteEventListener;
+import org.hibernate.metadata.ClassMetadata;
+import org.hibernate.metadata.CollectionMetadata;
 import org.hibernate.persister.entity.EntityPersister;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
@@ -90,6 +93,8 @@ public class Infrastructure {
     public final static String HIBERNATE_SEARCH_INDEX_PATH = "runtime/lucene/indexes";
     /** Hibernate configuration file ext. */
     public final static String HIBERNATE_CFG_EXT = ".cfg.xml";
+    /** Hibernate entity package name */
+    public final static String ENTITY_PACKAGE = "org.opentaps.domain.base.entities";
 
     /**
      * Gets the Hibernate <code>SessionFactory</code> object for the corresponding delegator.
@@ -234,4 +239,85 @@ public class Infrastructure {
         return this.systemUserLogin;
     }
 
+    /**
+     * Evict all entries of entityName from the second-level cache.
+     * @param entityName a <code>String</code> value
+     */
+    public void evictHibernateCache(String entityName)  {
+        evictHibernateCache(entityName, null);
+    }
+    
+    /**
+     * Evict an entry from the second-level cache.
+     * @param persistentClass a <code>Class</code> instance
+     * @param id a <code>Serializable</code> instance
+     */
+    public void evictHibernateCache(String entityName, Serializable id)  {
+        if (entityName.indexOf(".") < 0) {
+            // if entity name haven't package, then add it
+            entityName = ENTITY_PACKAGE + "." + entityName;
+        }
+        try {
+            Class persistentClass = Class.forName(entityName);
+            evictHibernateCache(persistentClass, id);
+        } catch (ClassNotFoundException e) {
+            Debug.logError(e, MODULE);
+        }
+    }
+    
+    /**
+     * Evict all entries of persistentClass from the second-level cache.
+     * @param persistentClass a <code>Class</code> instance
+     */
+    public void evictHibernateCache(Class persistentClass)  {
+        evictHibernateCache(persistentClass, null);
+    }
+    
+    /**
+     * Evict an entry from the second-level cache.
+     * @param persistentClass a <code>Class</code> instance
+     * @param id a <code>Serializable</code> instance
+     */
+    public void evictHibernateCache(Class persistentClass, Serializable id)  {
+        SessionFactory sessionFactory = getSessionFactory(delegator.getDelegatorName());
+        evictHibernateCache(sessionFactory, persistentClass, id);
+    }
+    
+    /**
+     * Evict an entry from the second-level cache.
+     * @param sessionFactory a <code>SessionFactory</code> instance
+     * @param persistentClass a <code>Class</code> instance
+     * @param id a <code>Serializable</code> instance
+     */
+    public void evictHibernateCache(SessionFactory sessionFactory, Class persistentClass, Serializable id)  {
+        if(id == null) {
+            sessionFactory.evict(persistentClass);
+        } else {
+            sessionFactory.evict(persistentClass, id);
+        }
+    }
+    
+    /**
+     * Clear hibernate second-level cache.
+     */
+    public void evictHibernateCache()  {
+        SessionFactory sessionFactory = getSessionFactory(delegator.getDelegatorName());
+        evictHibernateCache(sessionFactory);
+    }
+    
+    /**
+     * Clear hibernate second-level cache.
+     * @param sessionFactory a <code>SessionFactory</code> instance
+     */
+    public void evictHibernateCache(SessionFactory sessionFactory)  {
+        Map<String, CollectionMetadata> roleMap = sessionFactory.getAllCollectionMetadata();
+        for (String roleName : roleMap.keySet()) {
+            sessionFactory.evictCollection(roleName);
+        }
+        Map<String, ClassMetadata> entityMap = sessionFactory.getAllClassMetadata();
+        for (String entityName : entityMap.keySet()) {
+            sessionFactory.evictEntity(entityName);
+        }
+        sessionFactory.evictQueries();
+    }
 }
