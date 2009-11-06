@@ -19,6 +19,7 @@ package org.opentaps.foundation.entity.hibernate;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -199,8 +200,20 @@ public class HibernateUtil {
     public static void setFieldValue(Object object, String fieldName, Object fieldValue) throws  NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         if (fieldValue != null) {
             String setter = "set" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
-            Method setMethod = object.getClass().getMethod(setter, new Class[]{fieldValue.getClass()});
-            setMethod.invoke(object, fieldValue);
+            Method[] methods = object.getClass().getDeclaredMethods();
+            for (Method method : methods) {
+            	if (method.getName().equals(setter) && method.getParameterTypes().length == 1) {
+            		// just work on find same method name in target class
+            		if (method.getParameterTypes()[0].equals(fieldValue.getClass())) {
+                        method.invoke(object, fieldValue);
+            		} else {
+            			if (method.getParameterTypes()[0].equals(BigDecimal.class) && fieldValue.getClass().equals(Double.class)) {
+            				BigDecimal bigDecimalValue = new BigDecimal((Double) fieldValue);
+            			    method.invoke(object, bigDecimalValue);
+            			}
+            		}
+            	}
+            }
         }
     }
 
