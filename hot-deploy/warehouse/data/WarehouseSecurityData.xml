@@ -67,7 +67,7 @@
     <SecurityGroupPermission groupId="WRHS_USER" permissionId="WORKEFFORTMGR_DELETE"/>
 
     <!-- Warehouse admin can perform any action in any Warehouse -->
-    <SecurityGroup groupId="WRHS_ADMIN" description="Warehouse Admin with permissions to perform any action in any Warehouse"/>
+    <SecurityGroup groupId="WRHS_ADMIN" description="Warehouse Adminstrator can perform any action in any Warehouse, including creating new warehouses or assigning users to warehouses"/>
     <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="WRHS_ADMIN"/>
     <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="FACILITY_ADMIN"/>
     <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="ORDERMGR_UPDATE"/>
@@ -86,7 +86,7 @@
     <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="ASSETMAINT_ADMIN"/>
     
     <!-- Warehouse manager can perform any action in the Warehouse -->
-    <SecurityGroup groupId="WRHS_MANAGER" description="Warehouse Manager with permissions to perform any action in the Warehouse"/>
+    <SecurityGroup groupId="WRHS_MANAGER" description="Warehouse Manager can perform any action in the Warehouses where he is assigned as a Manager"/>
     <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_VIEW"/>
     <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_INV_VIEW"/>
     <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_INV_RCPO"/>
