@@ -294,19 +294,39 @@ public class Session implements org.hibernate.Session {
     }
 
     public Object get(Class clazz, Serializable id) throws HibernateException {
-        return hibernateSession.get(clazz, id);
+        List<String> encryptFields = HibernateUtil.getEncryptFieldsByClassName(clazz.getCanonicalName(), delegator);
+        Entity entity = (Entity) hibernateSession.get(clazz, id);
+        if (entity != null) {
+            HibernateUtil.decryptField(clazz.getSimpleName(), encryptFields, crypto, entity);
+        }
+        return entity;
     }
 
     public Object get(String entityName, Serializable id) throws HibernateException {
-        return hibernateSession.get(entityName, id);
+        List<String> encryptFields = HibernateUtil.getEncryptFieldsByClassName(entityName, delegator);
+        Entity entity = (Entity) hibernateSession.get(entityName, id);
+        if (entity != null) {
+            HibernateUtil.decryptField(entity.getClass().getSimpleName(), encryptFields, crypto, entity);
+        }
+        return entity;
     }
 
     public Object get(Class clazz, Serializable id, LockMode lockMode) throws HibernateException {
-        return hibernateSession.get(clazz, id, lockMode);
+        List<String> encryptFields = HibernateUtil.getEncryptFieldsByClassName(clazz.getCanonicalName(), delegator);
+        Entity entity = (Entity) hibernateSession.get(clazz, id, lockMode);
+        if (entity != null) {
+            HibernateUtil.decryptField(clazz.getSimpleName(), encryptFields, crypto, entity);
+        }
+        return entity;
     }
 
     public Object get(String entityName, Serializable id, LockMode lockMode) throws HibernateException {
-        return hibernateSession.get(entityName, id, lockMode);
+        List<String> encryptFields = HibernateUtil.getEncryptFieldsByClassName(entityName, delegator);
+        Entity entity = (Entity) hibernateSession.get(entityName, id, lockMode);
+        if (entity != null) {
+            HibernateUtil.decryptField(entity.getClass().getSimpleName(), encryptFields, crypto, entity);
+        }
+        return entity;
     }
 
     public CacheMode getCacheMode() {
