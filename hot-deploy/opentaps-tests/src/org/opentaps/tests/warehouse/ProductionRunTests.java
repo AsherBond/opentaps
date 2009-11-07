@@ -25,11 +25,14 @@ import java.util.Set;
 
 import com.opensourcestrategies.financials.util.UtilCOGS;
 import com.opensourcestrategies.financials.util.UtilFinancial;
+
+import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
@@ -1747,7 +1750,8 @@ public class ProductionRunTests extends ProductionRunTestCase {
 
         // get and verify backward tracing data
         results = runAndAssertServiceSuccess("warehouse.traceInventoryUsage", UtilMisc.toMap("inventoryItemId", producedInventoryId, "traceDirection", "BACKWARD", "userLogin", admin));
-        List<InventoryItemTraceDetail> usageLog = ((List<List<InventoryItemTraceDetail>>) results.get("usageLog")).get(0);
+        List<List<InventoryItemTraceDetail>> usageLogs = ((List<List<InventoryItemTraceDetail>>) results.get("usageLog"));
+        List<InventoryItemTraceDetail> usageLog = UtilValidate.isEmpty(usageLogs) ? FastList.<InventoryItemTraceDetail>newInstance() : usageLogs.get(0);
         // should be six records there, 2 RECEIPTs of raw materials and 2 MANUF_RAW_MAT
         assertEquals("Unexpected count of trace events", 4, usageLog.size());
 
@@ -1768,7 +1772,6 @@ public class ProductionRunTests extends ProductionRunTestCase {
      * Creates a manufactured product with two BOM and test the default BOM simulation, and the simulation specifying the alternate routing BOM.
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testMultipleBomSimulation() throws Exception {
         // Create a test product
         final GenericValue product = createTestProduct("test Multiple BOM Simulation Product", demowarehouse1);
@@ -1821,7 +1824,6 @@ public class ProductionRunTests extends ProductionRunTestCase {
      * The quantities of the other raw materials should not have changed.  Therefore, the net change of all the raw materials quantity should be zero.
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testMultipleBomProduction() throws Exception {
         // Create a test product
         final GenericValue product = createTestProduct("test Multiple BOM Production Product", demowarehouse1);
@@ -2285,7 +2287,6 @@ public class ProductionRunTests extends ProductionRunTestCase {
      * Produce marketing package GZ-BRACKET and verify inventory changes.
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testProduceMarketingPackage() throws Exception {
         // remember original inventory value for GZ-BRACKET, GZ-1000, GZ-1001 and GZ-1004
         InventoryAsserts inventoryAsserts = new InventoryAsserts(this, facilityId, organizationPartyId, demowarehouse1);

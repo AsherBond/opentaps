@@ -184,7 +184,6 @@ public class PaymentTests extends FinancialsTestCase {
      * Verify that AmericanExpress glAccountId +7.89, ACCOUNTS_RECEIVABLE -7.89
      * @exception GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testCustomerDepositWithCreditCard() throws GeneralException {
         FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, demofinadmin);
 
