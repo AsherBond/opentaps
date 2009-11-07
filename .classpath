@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="framework/testtools/src"/>
-	<classpathentry kind="src" path="hot-deploy/amazon/src"/>
-	<classpathentry kind="src" path="hot-deploy/financials/src"/>
-	<classpathentry kind="src" path="hot-deploy/warehouse/src"/>
-	<classpathentry kind="src" path="hot-deploy/purchasing/src"/>
-	<classpathentry kind="src" path="hot-deploy/opentaps-common/src/common"/>
-	<classpathentry kind="src" path="hot-deploy/opentaps-common/src/prebuild"/>
-	<classpathentry kind="src" path="hot-deploy/crmsfa/src"/>
-	<classpathentry kind="src" path="framework/webslinger/src"/>
-	<classpathentry kind="src" path="specialpurpose/oagis/src"/>
-	<classpathentry kind="src" path="specialpurpose/hhfacility/src"/>
-	<classpathentry kind="src" path="specialpurpose/assetmaint/src"/>
-	<classpathentry kind="src" path="specialpurpose/pos/src"/>
-	<classpathentry kind="src" path="specialpurpose/projectmgr/src"/>
-	<classpathentry kind="src" path="specialpurpose/ebay/src"/>
-	<classpathentry kind="src" path="specialpurpose/googlebase/src"/>
-	<classpathentry kind="src" path="specialpurpose/ldap/src"/>
+	<classpathentry kind="src" path="framework/appserver/src"/>
 	<classpathentry kind="src" path="framework/base/src"/>
-	<classpathentry kind="src" path="framework/start/src"/>
+	<classpathentry kind="src" path="framework/bi/src"/>
+	<classpathentry kind="src" path="framework/catalina/src"/>
+	<classpathentry kind="src" path="framework/common/src"/>
+	<classpathentry kind="src" path="framework/datafile/src"/>
+	<classpathentry excluding="org/ofbiz/entity/connection/XaPoolConnectionFactory.java" kind="src" path="framework/entity/src"/>
+	<classpathentry kind="src" path="framework/entityext/src"/>
+	<classpathentry kind="src" path="framework/example/src"/>
 	<classpathentry kind="src" path="framework/geronimo/src"/>
+	<classpathentry kind="src" path="framework/guiapp/src"/>
+	<classpathentry kind="src" path="framework/jetty/src"/>
+	<classpathentry kind="src" path="framework/minilang/src"/>
+	<classpathentry kind="src" path="framework/security/src"/>
+	<classpathentry kind="src" path="framework/service/src"/>
+	<classpathentry kind="src" path="framework/start/src"/>
+	<classpathentry kind="src" path="framework/testtools/src"/>
+	<classpathentry kind="src" path="framework/webslinger/src"/>
+	<classpathentry excluding="org/ofbiz/webapp/ftl/FreeMarkerViewRenderer.java|org/ofbiz/webapp/ftl/JpCacheIncludeTransform.java|org/ofbiz/webapp/view/FopPdfViewHandler.java|org/ofbiz/webapp/view/GenericViewRenderer.java|org/ofbiz/webapp/view/JPublishViewHandler.java|org/ofbiz/webapp/view/JPublishWrapper.java|org/ofbiz/webapp/view/JasperReportsPdfViewHandler.java|org/ofbiz/webapp/view/JasperReportsXmlViewHandler.java|org/ofbiz/webapp/view/JasperReportsJXlsViewHandler.java|org/ofbiz/webapp/view/JasperReportsPoiXlsViewHandler.java" kind="src" path="framework/webapp/src"/>
+	<classpathentry kind="src" path="framework/webtools/src"/>
+	<classpathentry kind="src" path="framework/widget/src"/>
 	<classpathentry excluding="org/ofbiz/accounting/thirdparty/clearcommerce/**|org/ofbiz/accounting/thirdparty/cybersource/**|org/ofbiz/accounting/thirdparty/verisign/**|org/ofbiz/accounting/thirdparty/worldpay/**" kind="src" path="applications/accounting/src"/>
 	<classpathentry excluding="org/ofbiz/content/openoffice/|org/ofbiz/content/report/" kind="src" path="applications/content/src"/>
-	<classpathentry kind="src" path="specialpurpose/ecommerce/src"/>
 	<classpathentry kind="src" path="applications/manufacturing/src"/>
 	<classpathentry kind="src" path="applications/marketing/src"/>
 	<classpathentry excluding="org/ofbiz/order/thirdparty/taxware/**" kind="src" path="applications/order/src"/>
@@ -31,26 +31,28 @@
 	<classpathentry excluding="ShipmentScaleApplet.java" kind="src" path="applications/product/src"/>
 	<classpathentry excluding="org/ofbiz/securityext/thirdparty/truition/TruitionCoReg.java" kind="src" path="applications/securityext/src"/>
 	<classpathentry kind="src" path="applications/workeffort/src"/>
-	<classpathentry kind="src" path="framework/bi/src"/>
-	<classpathentry kind="src" path="framework/appserver/src"/>
-	<classpathentry kind="src" path="framework/catalina/src"/>
-	<classpathentry kind="src" path="framework/common/src"/>
-	<classpathentry kind="src" path="framework/datafile/src"/>
-	<classpathentry excluding="org/ofbiz/entity/connection/XaPoolConnectionFactory.java" kind="src" path="framework/entity/src"/>
-	<classpathentry kind="src" path="framework/entityext/src"/>
-	<classpathentry kind="src" path="framework/example/src"/>
-	<classpathentry kind="src" path="framework/guiapp/src"/>
-	<classpathentry kind="src" path="framework/jetty/src"/>
-	<classpathentry kind="src" path="framework/minilang/src"/>
-	<classpathentry kind="src" path="framework/security/src"/>
-	<classpathentry kind="src" path="framework/service/src"/>
+	<classpathentry kind="src" path="specialpurpose/assetmaint/src"/>
+	<classpathentry kind="src" path="specialpurpose/ebay/src"/>
+	<classpathentry kind="src" path="specialpurpose/ecommerce/src"/>
+	<classpathentry kind="src" path="specialpurpose/googlebase/src"/>
+	<classpathentry kind="src" path="specialpurpose/hhfacility/src"/>
+	<classpathentry kind="src" path="specialpurpose/ldap/src"/>
+	<classpathentry kind="src" path="specialpurpose/oagis/src"/>
+	<classpathentry kind="src" path="specialpurpose/pos/src"/>
+	<classpathentry kind="src" path="specialpurpose/projectmgr/src"/>
 	<classpathentry excluding="org/enhydra/|org/ofbiz/" kind="src" path="specialpurpose/shark/src"/>
-	<classpathentry excluding="org/ofbiz/webapp/ftl/FreeMarkerViewRenderer.java|org/ofbiz/webapp/ftl/JpCacheIncludeTransform.java|org/ofbiz/webapp/view/FopPdfViewHandler.java|org/ofbiz/webapp/view/GenericViewRenderer.java|org/ofbiz/webapp/view/JPublishViewHandler.java|org/ofbiz/webapp/view/JPublishWrapper.java|org/ofbiz/webapp/view/JasperReportsPdfViewHandler.java|org/ofbiz/webapp/view/JasperReportsXmlViewHandler.java|org/ofbiz/webapp/view/JasperReportsJXlsViewHandler.java|org/ofbiz/webapp/view/JasperReportsPoiXlsViewHandler.java" kind="src" path="framework/webapp/src"/>
-	<classpathentry kind="src" path="framework/webtools/src"/>
-	<classpathentry kind="src" path="framework/widget/src"/>
 	<classpathentry kind="src" path="specialpurpose/workflow/src"/>
-	<classpathentry kind="src" path="hot-deploy/opentaps-tests/src"/>
+	<classpathentry kind="src" path="hot-deploy/opentaps-common/src/common"/>
+	<classpathentry kind="src" path="hot-deploy/opentaps-common/src/prebuild"/>
+	<classpathentry kind="src" path="hot-deploy/amazon/src"/>
 	<classpathentry kind="src" path="hot-deploy/analytics/src"/>
+	<classpathentry kind="src" path="hot-deploy/crmsfa/src"/>
+    <classpathentry kind="src" path="hot-deploy/dataimport/src"/>
+	<classpathentry kind="src" path="hot-deploy/financials/src"/>
+    <classpathentry kind="src" path="hot-deploy/funambol/src"/>
+	<classpathentry kind="src" path="hot-deploy/opentaps-tests/src"/>
+    <classpathentry kind="src" path="hot-deploy/purchasing/src"/>
+    <classpathentry kind="src" path="hot-deploy/warehouse/src"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/velocity-1.6.1.jar"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/DataVision-1.0.0.jar"/>
 	<classpathentry kind="lib" path="framework/service/lib/wsdl4j.jar"/>
