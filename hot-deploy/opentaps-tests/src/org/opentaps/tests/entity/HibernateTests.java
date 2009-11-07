@@ -1047,7 +1047,7 @@ public class HibernateTests extends OpentapsTestCase {
         Timestamp testDateTimeField = new java.sql.Timestamp(timeDate.getTime());
 
         Long testNumericField = new Long(123456789);
-        BigDecimal testFloatingPointField = new BigDecimal(98765432.12).setScale(DECIMALS, ROUNDING);
+        BigDecimal testFloatingPointField = new BigDecimal("98765432.12").setScale(DECIMALS, ROUNDING);
         // store a file into the blob
         File file = new File("hot-deploy/opentaps-common/webapp/images/opentaps_logo.png");
         byte[] data = getBytesFromFile(file);
