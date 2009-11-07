@@ -1089,8 +1089,8 @@ public class HibernateTests extends OpentapsTestCase {
         assertEquals("hibernate should retrieve same timestamp field value from entity.", testDateTimeField, testEntity.getTestDateTimeField());
         // verify hibernate can retrieve email field from entity
         assertEquals("hibernate should retrieve same email field value from entity.", testEmailField, testEntity.getTestEmailField());
-        // verify hibernate can retrieve floating point field from entity
-        assertEquals("hibernate should retrieve same floating point field value from entity.", testFloatingPointField, testEntity.getTestFloatingPointField());
+        // verify hibernate can retrieve floating point field from entity, round the field value for it might lost accuracy after store in database
+        assertEquals("hibernate should retrieve same floating point field value from entity.", testEntity.getTestFloatingPointField().setScale(DECIMALS, ROUNDING), testFloatingPointField);
         // verify hibernate can retrieve numerict field from entity
         assertEquals("hibernate should retrieve same numeric field value from entity.", testNumericField, testEntity.getTestNumericField());
         // verify hibernate can retrieve string field from entity
