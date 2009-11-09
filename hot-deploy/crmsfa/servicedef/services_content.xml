@@ -107,8 +107,8 @@ ending in UrlResource.
         <description>Creates a PartyContent entry and required roles</description>
         <auto-attributes include="pk" mode="IN" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
-        <override name="fromDate" mode="IN" optional="true"/>
         <attribute name="roleTypeId" type="String" mode="IN" optional="false"/>
+        <override name="fromDate" mode="IN" optional="true"/>
     </service>
 
     <service name="crmsfa.createCustRequestContent" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" 
