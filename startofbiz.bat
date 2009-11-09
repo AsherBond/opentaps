@@ -25,7 +25,7 @@ rem ### Delete the last log
 rem del %OFBIZ_LOG%
 
 rem ###VM args block ####################################################
-rem set MEMIF=-Xms512M -Xmx1024M -XX:MaxPermSize=256M
+rem set MEMIF=-Xms512M -Xmx1536M -XX:MaxPermSize=1024M
 rem # RMI settings
 rem set DEBUG=-Dsun.rmi.server.exceptionTrace=true
 rem # Automatic IP address for Windows
@@ -51,5 +51,5 @@ rem "%JAVA_HOME%\bin\java" -Xms128M -Xmx512M -Xdebug -Xnoagent -Djava.compiler=N
 
 rem ### Simple easy to read line
 echo on
-"%JAVA_HOME%\bin\java" -Xms512M -Xmx1024M -XX:MaxPermSize=256M -jar ofbiz.jar > runtime\logs\console.log
+"%JAVA_HOME%\bin\java" -Xms512M -Xmx1536M -XX:MaxPermSize=1024M -jar ofbiz.jar > runtime\logs\console.log
 
