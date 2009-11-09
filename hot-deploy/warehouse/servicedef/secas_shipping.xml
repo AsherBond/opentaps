@@ -38,12 +38,6 @@
         <action service="setShipmentCurrency" mode="sync"/>
     </eca>
 
-    <!-- Need to rebalance newly received inventory against open back orders -->
-    <eca service="receiveInventoryProduct" event="commit">
-        <condition field-name="inventoryItemId" operator="is-not-empty"/>
-        <action service="balanceInventoryItems" mode="sync"/>
-    </eca>
-
     <!-- Need to automatically taken apart using the disassemble service -->
     <eca service="receiveInventoryProduct" event="commit">
         <condition field-name="inventoryItemId" operator="is-not-empty"/>
