@@ -49,11 +49,21 @@ public class EvdictHibernateCacheAspects {
         Debug.logVerbose("run clearAllCaches(boolean distribute)", MODULE);
         // clear hibernate cache
         Map<String, Object> inputParams = UtilMisc.<String, Object>toMap();
+        LocalDispatcher dispatcher = getDispatcher();
+        boolean isEcasDisabled = dispatcher.isEcasDisabled();
         try {
-            LocalDispatcher dispatcher = getDispatcher();
+            // disable ecas before call opentaps.evictHibernateCache service
+            if (!isEcasDisabled) {
+                dispatcher.disableEcas();
+            }
             dispatcher.runSync("opentaps.evictHibernateCache", inputParams, -1, false);
         } catch (GenericServiceException e) {
             Debug.logError(e, MODULE);
+        } finally {
+            if (!isEcasDisabled) {
+                // enable again after call opentaps.evictHibernateCache service
+                dispatcher.enableEcas();
+            }
         }
     }
 
@@ -69,11 +79,21 @@ public class EvdictHibernateCacheAspects {
         Debug.logVerbose("run clearCacheLine(entityName), entityName = " + entityName, MODULE);
         // clear hibernate cache
         Map<String, Object> inputParams = UtilMisc.<String, Object>toMap("entityName", entityName);
+        LocalDispatcher dispatcher = getDispatcher();
+        boolean isEcasDisabled = dispatcher.isEcasDisabled();
         try {
-            LocalDispatcher dispatcher = getDispatcher();
+            // disable ecas before call opentaps.evictHibernateCache service
+            if (!isEcasDisabled) {
+                dispatcher.disableEcas();
+            }
             dispatcher.runSync("opentaps.evictHibernateCache", inputParams, -1, false);
         } catch (GenericServiceException e) {
             Debug.logError(e, MODULE);
+        } finally {
+            if (!isEcasDisabled) {
+                // enable again after call opentaps.evictHibernateCache service
+                dispatcher.enableEcas();
+            }
         }
     }
 
@@ -90,11 +110,21 @@ public class EvdictHibernateCacheAspects {
         Debug.logVerbose("run clearCacheLine(entityName, Map<String, ? extends Object> fields), entityName = " + entityName + ", fields = " + fields, MODULE);
         // clear hibernate cache
         Map<String, Object> inputParams = UtilMisc.<String, Object>toMap("entityName", entityName);
+        LocalDispatcher dispatcher = getDispatcher();
+        boolean isEcasDisabled = dispatcher.isEcasDisabled();
         try {
-            LocalDispatcher dispatcher = getDispatcher();
+            // disable ecas before call opentaps.evictHibernateCache service
+            if (!isEcasDisabled) {
+                dispatcher.disableEcas();
+            }
             dispatcher.runSync("opentaps.evictHibernateCache", inputParams, -1, false);
         } catch (GenericServiceException e) {
             Debug.logError(e, MODULE);
+        } finally {
+            if (!isEcasDisabled) {
+                // enable again after call opentaps.evictHibernateCache service
+                dispatcher.enableEcas();
+            }
         }
     }
 
@@ -111,11 +141,21 @@ public class EvdictHibernateCacheAspects {
         Debug.logVerbose("run clearCacheLineFlexible(GenericEntity dummyPK, boolean distribute), dummyPK = " + dummyPK , MODULE);
         // clear hibernate cache
         Map<String, Object> inputParams = UtilMisc.<String, Object>toMap("entityName", dummyPK.getEntityName(), "pk", dummyPK);
+        LocalDispatcher dispatcher = getDispatcher();
+        boolean isEcasDisabled = dispatcher.isEcasDisabled();
         try {
-            LocalDispatcher dispatcher = getDispatcher();
+            // disable ecas before call opentaps.evictHibernateCache service
+            if (!isEcasDisabled) {
+                dispatcher.disableEcas();
+            }
             dispatcher.runSync("opentaps.evictHibernateCache", inputParams, -1, false);
         } catch (GenericServiceException e) {
             Debug.logError(e, MODULE);
+        } finally {
+            if (!isEcasDisabled) {
+                // enable again after call opentaps.evictHibernateCache service
+                dispatcher.enableEcas();
+            }
         }
 
     }
@@ -133,11 +173,21 @@ public class EvdictHibernateCacheAspects {
         Debug.logVerbose("run clearCacheLineByCondition(String entityName, EntityCondition condition, boolean distribute), entityName = " + entityName + ", condition = " + condition , MODULE);
         // clear hibernate cache
         Map<String, Object> inputParams = UtilMisc.<String, Object>toMap("entityName", entityName, "condition", condition);
+        LocalDispatcher dispatcher = getDispatcher();
+        boolean isEcasDisabled = dispatcher.isEcasDisabled();
         try {
-            LocalDispatcher dispatcher = getDispatcher();
+            // disable ecas before call opentaps.evictHibernateCache service
+            if (!isEcasDisabled) {
+                dispatcher.disableEcas();
+            }
             dispatcher.runSync("opentaps.evictHibernateCache", inputParams, -1, false);
         } catch (GenericServiceException e) {
             Debug.logError(e, MODULE);
+        } finally {
+            if (!isEcasDisabled) {
+                // enable again after call opentaps.evictHibernateCache service
+                dispatcher.enableEcas();
+            }
         }
     }
 
@@ -153,11 +203,21 @@ public class EvdictHibernateCacheAspects {
         Debug.logVerbose("run clearCacheLine(GenericPK primaryKey, boolean distribute), primaryKey = " + primaryKey , MODULE);
         // clear hibernate cache
         Map<String, Object> inputParams = UtilMisc.<String, Object>toMap("entityName", primaryKey.getEntityName(), "pk", primaryKey);
+        LocalDispatcher dispatcher = getDispatcher();
+        boolean isEcasDisabled = dispatcher.isEcasDisabled();
         try {
-            LocalDispatcher dispatcher = getDispatcher();
+            // disable ecas before call opentaps.evictHibernateCache service
+            if (!isEcasDisabled) {
+                dispatcher.disableEcas();
+            }
             dispatcher.runSync("opentaps.evictHibernateCache", inputParams, -1, false);
         } catch (GenericServiceException e) {
             Debug.logError(e, MODULE);
+        } finally {
+            if (!isEcasDisabled) {
+                // enable again after call opentaps.evictHibernateCache service
+                dispatcher.enableEcas();
+            }
         }
     }
 
@@ -173,11 +233,21 @@ public class EvdictHibernateCacheAspects {
         Debug.logVerbose("run clearCacheLine(GenericValue value, boolean distribute), value = " + value , MODULE);
         // clear hibernate cache
         Map<String, Object> inputParams = UtilMisc.<String, Object>toMap("entityName", value.getEntityName(), "pk", value.getPrimaryKey());
+        LocalDispatcher dispatcher = getDispatcher();
+        boolean isEcasDisabled = dispatcher.isEcasDisabled();
         try {
-            LocalDispatcher dispatcher = getDispatcher();
             dispatcher.runSync("opentaps.evictHibernateCache", inputParams, -1, false);
+            // disable ecas before call opentaps.evictHibernateCache service
+            if (!isEcasDisabled) {
+                dispatcher.disableEcas();
+            }
         } catch (GenericServiceException e) {
             Debug.logError(e, MODULE);
+        } finally {
+            if (!isEcasDisabled) {
+                // enable again after call opentaps.evictHibernateCache service
+                dispatcher.enableEcas();
+            }
         }
     }
 
