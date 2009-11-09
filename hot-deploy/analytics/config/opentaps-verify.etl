@@ -1,4 +1,0 @@
-#
-# List of ETL templates which verify warehouse data.
-#
-CustomerHistoryFactVerificationTemplate.ktr

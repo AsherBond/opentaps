@@ -33,12 +33,6 @@
     <entity-resource type="data" reader-name="seed" loader="main" location="data/SalesAnalysisReports.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/OtherReports.xml"/>
 
-    <!-- service definition files -->
-    <service-resource type="model" loader="main" location="servicedef/services.xml"/>
-
-    <!-- this MCA or mail-condition-action is used for sorting incoming emails 
-    <service-resource type="mca" loader="main" location="servicedef/smcas.xml"/>-->
-
     <webapp name="analyticsgwt"
         title="Opentaps Commons GWT Components"
         server="default-server"
