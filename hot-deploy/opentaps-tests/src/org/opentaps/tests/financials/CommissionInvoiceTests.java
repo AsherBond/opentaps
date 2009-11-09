@@ -276,6 +276,7 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
     public void testCommissionsEarnedAtPayment() throws GeneralException {
         FinancialAsserts financialAsserts = new FinancialAsserts(this, organizationPartyId, demofinadmin);
         Timestamp now = UtilDateTime.nowTimestamp();
+        pause("Mysql timestamp workaround pause");
 
         // copy DemoSalesRep4, which has a commission agreement we want to test
         String agentPartyId = createPartyFromTemplate("DemoSalesRep4", "FirstName for testCommissionsEarnedAtPayment", "LastName for testCommissionsEarnedAtPayment");
@@ -336,6 +337,7 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         assertEquals("Wrong commission amount", commInv2Total, BigDecimal.valueOf(1.5));
 
         now = UtilDateTime.nowTimestamp();
+        pause("Mysql timestamp workaround pause");
 
         // 11. Receive second Payment from DemoAccount1 to Company for $30, apply $30 of it to invoice from (1)
         String paymentId2 = financialAsserts.createPayment(new BigDecimal("30.0"), "DemoAccount1", "CUSTOMER_PAYMENT", "COMPANY_CHECK");

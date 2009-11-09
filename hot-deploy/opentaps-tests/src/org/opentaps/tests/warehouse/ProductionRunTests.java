@@ -570,6 +570,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         input.put("workEffortId", productionRunId);
         input.put("productId", "PRUNTEST_PROD1");
         input.put("quantity", new BigDecimal("2"));
+        pause("Workaround MYSQL Timestamp PK collision");
         result = runAndAssertServiceSuccess("opentaps.productionRunProduce", input);
         assertAllInventoryValuesEqual(inventoryAsserts);
 
