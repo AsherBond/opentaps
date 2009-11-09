@@ -3796,8 +3796,6 @@ public interface CommonMessages extends Messages {
     String crmRecepientParty();
     @DefaultMessage("Related Party")
     String crmRelatedParty();
-    @DefaultMessage("1.4-Preview")
-    String crmReleaseVersion();
     @DefaultMessage("Remove Selected")
     String crmRemoveSelected();
     @DefaultMessage("Breakdown by BMC zone")
@@ -4748,6 +4746,8 @@ public interface CommonMessages extends Messages {
     String financialsAdjustInventoryValues();
     @DefaultMessage("Adjust Values")
     String financialsAdjustValues();
+    @DefaultMessage("Adjustment")
+    String financialsAdjustment();
     @DefaultMessage("Adjustment Amount")
     String financialsAdjustmentAmount();
     @DefaultMessage("Adjustment Type")
@@ -5062,6 +5062,8 @@ public interface CommonMessages extends Messages {
     String financialsError_CannotPostFailedTagBalance(String acctgTransId, String tagIndex, String tagValue, String credit, String debit);
     @DefaultMessage("Transaction [{0}] will not be posted because trial balance fails. Total credit is [{1}], total debit is [{2}].")
     String financialsError_CannotPostFailedTrialBalance(String acctgTransId, String credit, String debit);
+    @DefaultMessage("Payment cannot be posted yet because it has not been allocated as is required for your organization.")
+    String financialsError_CannotPostPartiallyAllocatedPaymentToGl();
     @DefaultMessage("Not posting GL Accounting Transaction with ID [{0}] because it''s not scheduled to be posted yet.  The scheduled posting date is [{1}]")
     String financialsError_CannotPostScheduledTransaction(String acctgTransId, String scheduledPostingDate);
     @DefaultMessage("There no correct organization party id specified. Invoice [{0}] PDF can not be created.")
@@ -5546,8 +5548,6 @@ public interface CommonMessages extends Messages {
     String financialsReferenceNumber();
     @DefaultMessage("Related Order ID")
     String financialsRelatedOrderId();
-    @DefaultMessage("Release 1.4-Preview")
-    String financialsReleaseVersion();
     @DefaultMessage("Error")
     String financialsReport_Error();
     @DefaultMessage("Data source have no data to fill this report.")
@@ -9308,6 +9308,8 @@ public interface CommonMessages extends Messages {
     String opentapsOption();
     @DefaultMessage("Added {0} of {1} to ship group {2}")
     String opentapsOrderAddedItem(String quantity, String productId, String shipGroupSeqId);
+    @DefaultMessage("Order adjustments were not changed because some adjustments have already been invoiced.")
+    String opentapsOrderAdustementsNotChangedForAlreadyInvoiced();
     @DefaultMessage("Edit or Add Items")
     String opentapsOrderEditAddItem();
     @DefaultMessage("Edit Order")
@@ -9408,7 +9410,7 @@ public interface CommonMessages extends Messages {
     String opentapsReceived();
     @DefaultMessage("Region")
     String opentapsRegion();
-    @DefaultMessage("1.4-Preview")
+    @DefaultMessage("1.4-Preview-2")
     String opentapsReleaseVersion();
     @DefaultMessage("Reply")
     String opentapsReply();
@@ -14208,6 +14210,8 @@ public interface CommonMessages extends Messages {
     String productErrorNoFacilityAvailable();
     @DefaultMessage("ERROR: No packages found for this shipment")
     String productErrorNoPackagesFoundForShipment();
+    @DefaultMessage("ERROR: Nothing To Export")
+    String productErrorNothingToExport();
     @DefaultMessage("ERROR: Order with ID [{0}] not found")
     String productErrorOrderIdNotFound(String orderId);
     @DefaultMessage("Order {0} is not a Purchase Order")
