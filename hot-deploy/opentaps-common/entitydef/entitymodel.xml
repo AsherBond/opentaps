@@ -522,10 +522,10 @@ under the License.
         <relation type="one" fk-name="ATFRT_TO_PARTY" rel-entity-name="Party">
             <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
         </relation>
-        <relation type="one" rel-entity-name="RoleType">
+        <relation type="one" rel-entity-name="RoleType" fk-name="ATFRT_RT">
             <key-map field-name="roleTypeId"/>
         </relation>
-        <relation type="one" rel-entity-name="AgreementType">
+        <relation type="one" rel-entity-name="AgreementType" fk-name="ATFRT_AT">
             <key-map field-name="agreementTypeId"/>
         </relation>
     </entity>

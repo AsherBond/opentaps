@@ -183,10 +183,10 @@
 
         <prim-key field="glAccountTransEntryFactId"/>
 
-        <relation rel-entity-name="GlAccount" type="one">
+        <relation rel-entity-name="GlAccount" type="one" fk-name="GATEF_GA" >
             <key-map field-name="glAccountId"/>
         </relation>
-        <relation rel-entity-name="AcctgTransEntry" type="one">
+        <relation rel-entity-name="AcctgTransEntry" type="one" fk-name="GATEF_ATE" >
             <key-map field-name="acctgTransId"/>
             <key-map field-name="acctgTransEntrySeqId"/>
         </relation>
