@@ -76,7 +76,7 @@ public final class MarketingCampaignServices {
         String marketingCampaignId = (String) context.get("marketingCampaignId");
 
         // check parametrized security
-        if (!CrmsfaSecurity.hasPartyRelationSecurity(security, MODULE, operation, userLogin, partyId)) {
+        if (!CrmsfaSecurity.hasPartyRelationSecurity(security, module, operation, userLogin, partyId)) {
             return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
         try {
@@ -121,7 +121,7 @@ public final class MarketingCampaignServices {
         String marketingCampaignId = (String) context.get("marketingCampaignId");
 
         // check parametrized security
-        if (!CrmsfaSecurity.hasPartyRelationSecurity(security, MODULE, operation, userLogin, partyId)) {
+        if (!CrmsfaSecurity.hasPartyRelationSecurity(security, module, operation, userLogin, partyId)) {
             return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
         try {
