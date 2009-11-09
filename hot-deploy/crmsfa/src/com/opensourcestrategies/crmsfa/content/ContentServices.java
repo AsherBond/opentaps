@@ -84,6 +84,7 @@ public final class ContentServices {
         }
         context.put("roleTypeId", roleTypeId);
         context.put("contentPurposeEnumId", contentPurposeEnumId);
+        context.put("partyContentTypeId", "USERDEF");
         Map results = createContent(dctx, context, "crmsfa.createPartyContent");
         if (ServiceUtil.isError(results)) {
             return results;
@@ -216,6 +217,7 @@ public final class ContentServices {
             GenericValue value = delegator.makeValue("PartyContent");
             value.setPKFields(context);
             value.setNonPKFields(context);
+            value.set("fromDate", context.get("fromDate") == null ? UtilDateTime.nowTimestamp() : context.get("fromDate"));
             value.create();
 
             value = delegator.makeValue("ContentRole");
