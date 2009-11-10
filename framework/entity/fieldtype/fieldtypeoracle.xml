@@ -77,6 +77,6 @@ under the License.
     <!-- Pentaho Data Integration (aka Kettle) SQL Types -->
     <field-type-def type="surrogate-key" sql-type="NUMBER(8)" java-type="Long"><validate method="isSignedLong" /></field-type-def>
     <field-type-def type="version" sql-type="NUMBER(4)" java-type="Long"><validate method="isSignedLong" /></field-type-def>
-    <field-type-def type="fact-amount" sql-type="NUMBER(17,2)" java-type="Double"><validate method="isSignedDouble" /></field-type-def>
+    <field-type-def type="fact-amount" sql-type="NUMBER(17,2)" java-type="java.math.BigDecimal"><validate method="isSignedDouble" /></field-type-def>
 
 </fieldtypemodel>
