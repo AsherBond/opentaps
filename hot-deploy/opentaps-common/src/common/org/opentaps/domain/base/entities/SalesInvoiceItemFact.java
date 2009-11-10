@@ -62,6 +62,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("organizationDimId", "ORGANIZATION_DIM_ID");
         fields.put("invoiceId", "INVOICE_ID");
         fields.put("invoiceItemSeqId", "INVOICE_ITEM_SEQ_ID");
+        fields.put("invoiceAdjustmentId", "INVOICE_ADJUSTMENT_ID");
         fields.put("grossAmount", "GROSS_AMOUNT");
         fields.put("discounts", "DISCOUNTS");
         fields.put("refunds", "REFUNDS");
@@ -80,6 +81,7 @@ fieldMapColumns.put("SalesInvoiceItemFact", fields);
     organizationDimId("organizationDimId"),
     invoiceId("invoiceId"),
     invoiceItemSeqId("invoiceItemSeqId"),
+    invoiceAdjustmentId("invoiceAdjustmentId"),
     grossAmount("grossAmount"),
     discounts("discounts"),
     refunds("refunds"),
@@ -115,6 +117,8 @@ fieldMapColumns.put("SalesInvoiceItemFact", fields);
    private String invoiceId;
    @Column(name="INVOICE_ITEM_SEQ_ID")
    private String invoiceItemSeqId;
+   @Column(name="INVOICE_ADJUSTMENT_ID")
+   private String invoiceAdjustmentId;
    @Column(name="GROSS_AMOUNT")
    private BigDecimal grossAmount;
    @Column(name="DISCOUNTS")
@@ -143,7 +147,7 @@ fieldMapColumns.put("SalesInvoiceItemFact", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("salesInvItemFactId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("salesInvItemFactId");this.allFieldsNames.add("dateDimId");this.allFieldsNames.add("storeDimId");this.allFieldsNames.add("currencyDimId");this.allFieldsNames.add("organizationDimId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("grossAmount");this.allFieldsNames.add("discounts");this.allFieldsNames.add("refunds");this.allFieldsNames.add("netAmount");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("salesInvItemFactId");this.allFieldsNames.add("dateDimId");this.allFieldsNames.add("storeDimId");this.allFieldsNames.add("currencyDimId");this.allFieldsNames.add("organizationDimId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("invoiceAdjustmentId");this.allFieldsNames.add("grossAmount");this.allFieldsNames.add("discounts");this.allFieldsNames.add("refunds");this.allFieldsNames.add("netAmount");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -206,6 +210,13 @@ fieldMapColumns.put("SalesInvoiceItemFact", fields);
      */
     public void setInvoiceItemSeqId(String invoiceItemSeqId) {
         this.invoiceItemSeqId = invoiceItemSeqId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param invoiceAdjustmentId the invoiceAdjustmentId to set
+     */
+    public void setInvoiceAdjustmentId(String invoiceAdjustmentId) {
+        this.invoiceAdjustmentId = invoiceAdjustmentId;
     }
     /**
      * Auto generated value setter.
@@ -315,6 +326,13 @@ fieldMapColumns.put("SalesInvoiceItemFact", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getInvoiceAdjustmentId() {
+        return this.invoiceAdjustmentId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>BigDecimal</code>
      */
     public BigDecimal getGrossAmount() {
@@ -384,6 +402,7 @@ fieldMapColumns.put("SalesInvoiceItemFact", fields);
         setOrganizationDimId((Long) mapValue.get("organizationDimId"));
         setInvoiceId((String) mapValue.get("invoiceId"));
         setInvoiceItemSeqId((String) mapValue.get("invoiceItemSeqId"));
+        setInvoiceAdjustmentId((String) mapValue.get("invoiceAdjustmentId"));
         setGrossAmount(convertToBigDecimal(mapValue.get("grossAmount")));
         setDiscounts(convertToBigDecimal(mapValue.get("discounts")));
         setRefunds(convertToBigDecimal(mapValue.get("refunds")));
@@ -406,6 +425,7 @@ fieldMapColumns.put("SalesInvoiceItemFact", fields);
         mapValue.put("organizationDimId", getOrganizationDimId());
         mapValue.put("invoiceId", getInvoiceId());
         mapValue.put("invoiceItemSeqId", getInvoiceItemSeqId());
+        mapValue.put("invoiceAdjustmentId", getInvoiceAdjustmentId());
         mapValue.put("grossAmount", getGrossAmount());
         mapValue.put("discounts", getDiscounts());
         mapValue.put("refunds", getRefunds());
