@@ -20,5 +20,9 @@
         <aspect class="org.opentaps.aspect.secas.CommonServiceAspects"/>
         <aspect class="org.opentaps.aspect.secas.IndexForDelegatorAspects"/>
         <aspect class="org.opentaps.aspect.secas.order.OrderAspects"/>
+        <!-- disable hibernate second cache default, if you want enable it, please uncomment following comment lines -->
+        <!--
+        <aspect class="org.opentaps.aspect.secas.EvdictHibernateCacheAspects"/>
+        -->
     </system>
 </aspectwerkz>

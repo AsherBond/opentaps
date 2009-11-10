@@ -56,7 +56,7 @@ public class HibernateCacheService extends Service implements HibernateCacheServ
             } else if (pk != null) {
                 getInfrastructure().evictHibernateCache(pk.getEntityName(), HibernateUtil.genericPkToEntityPk(pk));
             } else {
-                getInfrastructure().evictHibernateCache(pk.getEntityName());
+                getInfrastructure().evictHibernateCache(entityName);
             }
         } catch (GenericEntityException e) {
             throw new ServiceException(e);

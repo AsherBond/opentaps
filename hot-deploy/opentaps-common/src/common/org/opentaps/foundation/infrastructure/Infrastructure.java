@@ -279,7 +279,7 @@ public class Infrastructure {
      * @param id a <code>Serializable</code> instance
      */
     public void evictHibernateCache(Class persistentClass, Serializable id)  {
-        SessionFactory sessionFactory = getSessionFactory(delegator.getDelegatorName());
+        SessionFactory sessionFactory = sessionFactories.get(delegator.getDelegatorName());
         evictHibernateCache(sessionFactory, persistentClass, id);
     }
     
@@ -290,10 +290,12 @@ public class Infrastructure {
      * @param id a <code>Serializable</code> instance
      */
     public void evictHibernateCache(SessionFactory sessionFactory, Class persistentClass, Serializable id)  {
-        if(id == null) {
-            sessionFactory.evict(persistentClass);
-        } else {
-            sessionFactory.evict(persistentClass, id);
+        if (sessionFactory != null) {
+            if(id == null) {
+                sessionFactory.evict(persistentClass);
+            } else {
+                sessionFactory.evict(persistentClass, id);
+            }
         }
     }
     
@@ -301,7 +303,7 @@ public class Infrastructure {
      * Clear hibernate second-level cache.
      */
     public void evictHibernateCache()  {
-        SessionFactory sessionFactory = getSessionFactory(delegator.getDelegatorName());
+        SessionFactory sessionFactory = sessionFactories.get(delegator.getDelegatorName());
         evictHibernateCache(sessionFactory);
     }
     
@@ -310,14 +312,16 @@ public class Infrastructure {
      * @param sessionFactory a <code>SessionFactory</code> instance
      */
     public void evictHibernateCache(SessionFactory sessionFactory)  {
-        Map<String, CollectionMetadata> roleMap = sessionFactory.getAllCollectionMetadata();
-        for (String roleName : roleMap.keySet()) {
-            sessionFactory.evictCollection(roleName);
+        if (sessionFactory != null) {
+            Map<String, CollectionMetadata> roleMap = sessionFactory.getAllCollectionMetadata();
+            for (String roleName : roleMap.keySet()) {
+                sessionFactory.evictCollection(roleName);
+            }
+            Map<String, ClassMetadata> entityMap = sessionFactory.getAllClassMetadata();
+            for (String entityName : entityMap.keySet()) {
+                sessionFactory.evictEntity(entityName);
+            }
+            sessionFactory.evictQueries();
         }
-        Map<String, ClassMetadata> entityMap = sessionFactory.getAllClassMetadata();
-        for (String entityName : entityMap.keySet()) {
-            sessionFactory.evictEntity(entityName);
-        }
-        sessionFactory.evictQueries();
     }
 }
