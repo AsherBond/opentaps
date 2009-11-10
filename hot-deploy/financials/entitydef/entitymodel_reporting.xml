@@ -123,6 +123,7 @@
         <field name="organizationDimId" type="surrogate-key"/>
         <field name="invoiceId" type="id"/>
         <field name="invoiceItemSeqId" type="id"/>
+        <field name="invoiceAdjustmentId" type="id"/>
         <field name="grossAmount" type="fact-amount"/>
         <field name="discounts" type="fact-amount"/>
         <field name="refunds" type="fact-amount"/>
@@ -141,6 +142,7 @@
         <field name="organizationDimId" type="surrogate-key"/>
         <field name="invoiceId" type="id"/>
         <field name="invoiceItemSeqId" type="id"/>
+        <field name="invoiceAdjustmentId" type="id"/>
         <field name="grossAmount" type="fact-amount"/>
         <field name="discounts" type="fact-amount"/>
         <field name="refunds" type="fact-amount"/>
