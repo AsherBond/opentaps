@@ -18,7 +18,7 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<#if communicationEvent?exists>
+<#if communicationEvent?exists && workEffort.emailDeleted?default("N") == "N">
 
 <div class="form">
 

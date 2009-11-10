@@ -19,7 +19,7 @@
 
 <#-- TODO: re-factor all of ActivitiesScreens.xml#viewActivity into this FTL from the screen widget -->
 
-<#if (workEffort?has_content) && (workEffort.workEffortPurposeTypeId?has_content) && (workEffort.workEffortPurposeTypeId == "WEPT_TASK_EMAIL")>
+<#if (workEffort?has_content) && (workEffort.workEffortPurposeTypeId?has_content) && (workEffort.workEffortPurposeTypeId == "WEPT_TASK_EMAIL") && communicationEvent?has_content>
     ${screens.render("component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml#viewEmailActivity")}
 <#else>
     ${screens.render("component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml#viewActivity")}

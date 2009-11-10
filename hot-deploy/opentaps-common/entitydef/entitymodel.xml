@@ -2413,5 +2413,8 @@ under the License.
             <key-map field-name="userLoginId"/>
         </relation>
     </entity>
-  
+
+    <extend-entity entity-name="WorkEffort">
+        <field name="emailDeleted" type="indicator"/>
+    </extend-entity>  
 </entitymodel>
