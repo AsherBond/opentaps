@@ -43,6 +43,10 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
+
+import org.hibernate.Criteria;
+import org.hibernate.ScrollableResults;
+import org.hibernate.criterion.Restrictions;
 import org.ofbiz.accounting.util.UtilAccounting;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
@@ -73,6 +77,12 @@ import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.domain.base.entities.Invoice;
+import org.opentaps.domain.base.entities.TaxInvoiceItemFact;
+import org.opentaps.foundation.entity.hibernate.Query;
+import org.opentaps.foundation.entity.hibernate.Session;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.pentaho.di.core.exception.KettleException;
 
@@ -1360,7 +1370,52 @@ public final class FinancialReports {
             }
             iter2.close();
 
+            // handle invoice adjustments
+            Session session = new Infrastructure(dctx.getDispatcher()).getSession();
+            Query q = session.createQuery("select invoiceId, sum(amount) from InvoiceAdjustment where invoiceId in (:uniqIds) group by invoiceId");
+            q.setParameterList("uniqIds", uniqueInvoices);
+            ScrollableResults adjustmentAmounts = q.scroll();
+            while (adjustmentAmounts.next()) {
+
+                String invoiceId = adjustmentAmounts.getString(0);
+                BigDecimal totalAmount = adjustmentAmounts.getBigDecimal(1);
+
+                //retrieve invoice
+                Criteria invoiceCriteria = session.createCriteria(Invoice.class);
+                invoiceCriteria.add(Restrictions.eq("invoiceId", invoiceId));
+                Invoice invoice = (Invoice) invoiceCriteria.uniqueResult();
+
+                GenericValue taxInvItemFact = delegator.makeValue("TaxInvoiceItemFact");
+                Timestamp invoiceDate = invoice.getInvoiceDate();
+                String dayOfMonth = dayOfMonthFmt.format(invoiceDate);
+                String monthOfYear = monthOfYearFmt.format(invoiceDate);
+                String yearNumber = yearNumberFmt.format(invoiceDate);
+                EntityCondition dateDimConditions = EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("dayOfMonth", dayOfMonth),
+                        EntityCondition.makeCondition("monthOfYear", monthOfYear),
+                        EntityCondition.makeCondition("yearNumber", yearNumber));
+                taxInvItemFact.set("dateDimId", UtilEtl.lookupDimension("DateDim", "dateDimId", dateDimConditions, delegator));
+                taxInvItemFact.set("storeDimId", 0L);
+                taxInvItemFact.set("taxAuthorityDimId", 0L);
+                taxInvItemFact.set("currencyDimId", UtilEtl.lookupDimension("CurrencyDim", "currencyDimId", EntityCondition.makeCondition("uomId", invoice.getCurrencyUomId()), delegator));
+                taxInvItemFact.set("organizationDimId", UtilEtl.lookupDimension("OrganizationDim", "organizationDimId", EntityCondition.makeCondition("organizationPartyId", invoice.getPartyIdFrom()), delegator));
+                taxInvItemFact.set("invoiceId", invoiceId);
+                taxInvItemFact.set("grossAmount", BigDecimal.ZERO);
+                taxInvItemFact.set("discounts", totalAmount);
+                taxInvItemFact.set("refunds", BigDecimal.ZERO);
+                taxInvItemFact.set("netAmount", BigDecimal.ZERO);
+                taxInvItemFact.set("taxable", BigDecimal.ZERO);
+                taxInvItemFact.set("taxDue", BigDecimal.ZERO);
+                sequenceId++;
+                taxInvItemFact.set("taxInvItemFactId", sequenceId);
+                taxInvItemFact.create();
+            }
+            adjustmentAmounts.close();
+
+
         } catch (GenericEntityException e) {
+            return UtilMessage.createAndLogServiceError(e, MODULE);
+        } catch (InfrastructureException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
 
