@@ -78,7 +78,6 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.base.entities.Invoice;
-import org.opentaps.domain.base.entities.TaxInvoiceItemFact;
 import org.opentaps.foundation.entity.hibernate.Query;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
@@ -1227,18 +1226,18 @@ public final class FinancialReports {
                 }
 
                 BigDecimal grossAmount = quantity.multiply(amount);
-                taxInvItemFact.set("grossAmount", grossAmount != null ? grossAmount.doubleValue() : null);
+                taxInvItemFact.set("grossAmount", grossAmount != null ? grossAmount : null);
 
                 // set total promotions amount
                 BigDecimal totalPromotions = getTotalPromoAmount(invoiceId, invoiceItemSeqId, delegator);
-                taxInvItemFact.set("discounts", totalPromotions != null ? totalPromotions.doubleValue() : null);
+                taxInvItemFact.set("discounts", totalPromotions != null ? totalPromotions : null);
 
                 // set total refunds
                 BigDecimal totalRefunds = getTotalRefundAmount(invoiceId, invoiceItemSeqId, delegator);
-                taxInvItemFact.set("refunds", totalRefunds != null ? totalRefunds.doubleValue() : null);
+                taxInvItemFact.set("refunds", totalRefunds != null ? totalRefunds : null);
 
                 // set net amount
-                taxInvItemFact.set("netAmount", grossAmount.subtract(totalRefunds).add(totalPromotions).doubleValue());
+                taxInvItemFact.set("netAmount", grossAmount.subtract(totalRefunds).add(totalPromotions));
 
                 // set tax due amount
                 List<Map<String, Object>> taxes = getTaxDueAmount(invoiceId, invoiceItemSeqId, delegator);
@@ -1250,9 +1249,9 @@ public final class FinancialReports {
                 String yearNumber = yearNumberFmt.format(invoiceDate);
 
                 EntityCondition dateDimConditions = EntityCondition.makeCondition(EntityOperator.AND,
-                        EntityCondition.makeCondition("dayOfMonth", EntityOperator.EQUALS, dayOfMonth),
-                        EntityCondition.makeCondition("monthOfYear", EntityOperator.EQUALS, monthOfYear),
-                        EntityCondition.makeCondition("yearNumber", EntityOperator.EQUALS, yearNumber));
+                        EntityCondition.makeCondition("dayOfMonth", dayOfMonth),
+                        EntityCondition.makeCondition("monthOfYear", monthOfYear),
+                        EntityCondition.makeCondition("yearNumber", yearNumber));
                 taxInvItemFact.set("dateDimId", UtilEtl.lookupDimension("DateDim", "dateDimId", dateDimConditions, delegator));
 
                 // lookup and set store dimension id
@@ -1280,15 +1279,15 @@ public final class FinancialReports {
                         }
                         taxInvItemFact.set("taxable", taxable);
                         BigDecimal taxDue = (BigDecimal) taxInfo.get("taxDue");
-                        taxInvItemFact.set("taxDue", (taxDue != null && taxable.compareTo(BigDecimal.ZERO) > 0) ? taxDue.doubleValue() : 0.0);
+                        taxInvItemFact.set("taxDue", (taxDue != null && taxable.compareTo(BigDecimal.ZERO) > 0) ? taxDue : BigDecimal.ZERO);
                         sequenceId++;
                         taxInvItemFact.set("taxInvItemFactId", sequenceId);
                         taxInvItemFact.create();
                     }
                 } else {
                     taxInvItemFact.set("taxAuthorityDimId", Long.valueOf(0));
-                    taxInvItemFact.set("taxDue", 0.0);
-                    taxInvItemFact.set("taxable", 0.0);
+                    taxInvItemFact.set("taxDue", BigDecimal.ZERO);
+                    taxInvItemFact.set("taxable", BigDecimal.ZERO);
                     sequenceId++;
                     taxInvItemFact.set("taxInvItemFactId", sequenceId);
                     taxInvItemFact.create();
@@ -1325,7 +1324,7 @@ public final class FinancialReports {
 
             // handle tax invoice items w/o parent invoice/item
             EntityCondition invoiceLevelTaxConditions = EntityCondition.makeCondition(EntityOperator.AND,
-                            EntityCondition.makeCondition("invoiceItemTypeId", EntityOperator.EQUALS, "ITM_SALES_TAX"),
+                            EntityCondition.makeCondition("invoiceItemTypeId", "ITM_SALES_TAX"),
                             EntityCondition.makeCondition("invoiceId", EntityOperator.IN, uniqueInvoices),
                             EntityCondition.makeCondition("parentInvoiceId", EntityOperator.EQUALS, null),
                             EntityCondition.makeCondition("parentInvoiceItemSeqId", EntityOperator.EQUALS, null));
@@ -1341,28 +1340,28 @@ public final class FinancialReports {
                     String monthOfYear = monthOfYearFmt.format(invoiceDate);
                     String yearNumber = yearNumberFmt.format(invoiceDate);
                     EntityCondition dateDimConditions = EntityCondition.makeCondition(EntityOperator.AND,
-                            EntityCondition.makeCondition("dayOfMonth", EntityOperator.EQUALS, dayOfMonth),
-                            EntityCondition.makeCondition("monthOfYear", EntityOperator.EQUALS, monthOfYear),
-                            EntityCondition.makeCondition("yearNumber", EntityOperator.EQUALS, yearNumber));
+                            EntityCondition.makeCondition("dayOfMonth", dayOfMonth),
+                            EntityCondition.makeCondition("monthOfYear", monthOfYear),
+                            EntityCondition.makeCondition("yearNumber", yearNumber));
 
                     GenericValue taxInvItemFact = delegator.makeValue("TaxInvoiceItemFact");
                     taxInvItemFact.set("dateDimId", UtilEtl.lookupDimension("DateDim", "dateDimId", dateDimConditions, delegator));
                     taxInvItemFact.set("storeDimId", lookupStoreDim(tax.getString("invoiceId"), tax.getString("invoiceItemSeqId"), delegator));
                     EntityCondition taxAuthCondList = EntityCondition.makeCondition(EntityOperator.AND,
-                            EntityCondition.makeCondition("taxAuthPartyId", EntityOperator.EQUALS, tax.get("taxAuthPartyId")),
-                            EntityCondition.makeCondition("taxAuthGeoId", EntityOperator.EQUALS, tax.get("taxAuthGeoId")));
+                            EntityCondition.makeCondition("taxAuthPartyId", tax.get("taxAuthPartyId")),
+                            EntityCondition.makeCondition("taxAuthGeoId", tax.get("taxAuthGeoId")));
                     taxInvItemFact.set("taxAuthorityDimId", UtilEtl.lookupDimension("TaxAuthorityDim", "taxAuthorityDimId", taxAuthCondList, delegator));
                     taxInvItemFact.set("currencyDimId", UtilEtl.lookupDimension("CurrencyDim", "currencyDimId", EntityCondition.makeCondition("uomId", EntityOperator.EQUALS, tax.getString("currencyUomId")), delegator));
                     taxInvItemFact.set("organizationDimId", UtilEtl.lookupDimension("OrganizationDim", "organizationDimId", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, tax.getString("partyIdFrom")), delegator));
                     taxInvItemFact.set("invoiceId", tax.getString("invoiceId"));
                     taxInvItemFact.set("invoiceItemSeqId", tax.getString("invoiceItemSeqId"));
-                    taxInvItemFact.set("grossAmount", 0.0);
-                    taxInvItemFact.set("discounts", 0.0);
-                    taxInvItemFact.set("refunds", 0.0);
-                    taxInvItemFact.set("netAmount", 0.0);
-                    taxInvItemFact.set("taxable", 0.0);
+                    taxInvItemFact.set("grossAmount", BigDecimal.ZERO);
+                    taxInvItemFact.set("discounts", BigDecimal.ZERO);
+                    taxInvItemFact.set("refunds", BigDecimal.ZERO);
+                    taxInvItemFact.set("netAmount", BigDecimal.ZERO);
+                    taxInvItemFact.set("taxable", BigDecimal.ZERO);
                     BigDecimal totalAmount = tax.getBigDecimal("totalAmount");
-                    taxInvItemFact.set("taxDue", totalAmount != null ? totalAmount.doubleValue() : null);
+                    taxInvItemFact.set("taxDue", totalAmount != null ? totalAmount : null);
                     sequenceId++;
                     taxInvItemFact.set("taxInvItemFactId", sequenceId);
                     taxInvItemFact.create();
@@ -1372,13 +1371,14 @@ public final class FinancialReports {
 
             // handle invoice adjustments
             Session session = new Infrastructure(dctx.getDispatcher()).getSession();
-            Query q = session.createQuery("select invoiceId, sum(amount) from InvoiceAdjustment where invoiceId in (:uniqIds) group by invoiceId");
+            Query q = session.createQuery("select invoiceId, invoiceAdjustmentId, amount from InvoiceAdjustment where invoiceId in (:uniqIds)");
             q.setParameterList("uniqIds", uniqueInvoices);
             ScrollableResults adjustmentAmounts = q.scroll();
             while (adjustmentAmounts.next()) {
 
                 String invoiceId = adjustmentAmounts.getString(0);
-                BigDecimal totalAmount = adjustmentAmounts.getBigDecimal(1);
+                String invoiceAdjustmentId = adjustmentAmounts.getString(1);
+                BigDecimal totalAmount = adjustmentAmounts.getBigDecimal(2);
 
                 //retrieve invoice
                 Criteria invoiceCriteria = session.createCriteria(Invoice.class);
@@ -1400,6 +1400,7 @@ public final class FinancialReports {
                 taxInvItemFact.set("currencyDimId", UtilEtl.lookupDimension("CurrencyDim", "currencyDimId", EntityCondition.makeCondition("uomId", invoice.getCurrencyUomId()), delegator));
                 taxInvItemFact.set("organizationDimId", UtilEtl.lookupDimension("OrganizationDim", "organizationDimId", EntityCondition.makeCondition("organizationPartyId", invoice.getPartyIdFrom()), delegator));
                 taxInvItemFact.set("invoiceId", invoiceId);
+                taxInvItemFact.set("invoiceAdjustmentId", invoiceAdjustmentId);
                 taxInvItemFact.set("grossAmount", BigDecimal.ZERO);
                 taxInvItemFact.set("discounts", totalAmount);
                 taxInvItemFact.set("refunds", BigDecimal.ZERO);
