@@ -1,6 +1,6 @@
 <#--
  * Copyright (c) 2007 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -36,145 +36,146 @@ under the License.
 
 <#-- This file has been modified from the version included with the Apache-licensed OFBiz facility application -->
 <#-- This file has been modified by Open Source Strategies, Inc. -->
-        
+
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-    <div class="head1">${uiLabelMap.ProductInventoryTransfersFor} <span class="head2"><#if facility?exists>${(facility.facilityName)?if_exists}</#if> [${uiLabelMap.CommonId}:${facilityId?if_exists}]</span></div>
-    <#if activeOnly>
-        <a href="<@ofbizUrl>FindFacilityTransfers?facilityId=${facilityId}&activeOnly=false</@ofbizUrl>" class="buttontext">[${uiLabelMap.ProductActiveAndInactive}]</a>
-    <#else>
-        <a href="<@ofbizUrl>FindFacilityTransfers?facilityId=${facilityId}&activeOnly=true</@ofbizUrl>" class="buttontext">[${uiLabelMap.ProductActiveOnly}]</a>
-    </#if>
-    <a href="<@ofbizUrl>FindFacilityTransfers?facilityId=${facilityId}&completeRequested=true</@ofbizUrl>" class="buttontext">[${uiLabelMap.ProductCompleteRequestedTransfers}]</a>
-    <a href="<@ofbizUrl>TransferInventoryItem?facilityId=${facilityId}</@ofbizUrl>" class="buttontext">[${uiLabelMap.ProductInventoryTransfer}]</a>
-    
-    <br/>
-    <#if (toTransfers.size() > 0)>
-        <br/>
-        <div class="head1">${uiLabelMap.CommonTo}:<span class="head2">&nbsp;<#if facility?exists>${(facility.facilityName)?if_exists}</#if> [${uiLabelMap.CommonId}:${facilityId?if_exists}]</span></div>
-        <table border="1" cellpadding="2" cellspacing="0" width="100%">
-            <tr>
-            <td><div class="tabletext"><b>${uiLabelMap.ProductTransferId}</b></div></td>
-            <td><div class="tabletext"><b>${uiLabelMap.ProductItem}</b></div></td>      
-            <td><div class="tabletext"><b>${uiLabelMap.CommonFrom}</b></div></td>
-            <td><div class="tabletext"><b>${uiLabelMap.CommonSendDate}</b></div></td>
-            <td><div class="tabletext"><b>${uiLabelMap.CommonStatus}</b></div></td>
-            <td>&nbsp;</td>
-            </tr>
-        
-            <#list toTransfers as transfer>
-            <tr>
-            <td><div class="tabletext"><a href="<@ofbizUrl>TransferInventoryItem?inventoryTransferId=${(transfer.inventoryTransferId)?if_exists}</@ofbizUrl>" class="buttontext">&nbsp;${(transfer.inventoryTransferId)?if_exists}</a></div></td>
-            <td><div class="tabletext"><a href="<@ofbizUrl>EditInventoryItem?inventoryItemId=${(transfer.inventoryItemId)?if_exists}</@ofbizUrl>" class="buttontext">&nbsp;${(transfer.inventoryItemId)?if_exists}</a></div></td>      
-            <td>
-                <#assign fac = delegator.findByPrimaryKey("Facility", Static["org.ofbiz.base.util.UtilMisc"].toMap("facilityId", transfer.getString("facilityId")))>
-                <div class="tabletext">&nbsp;<#if fac?exists>${(fac.facilityName)?if_exists}</#if>&nbsp;[${(transfer.facilityId)?if_exists}]</div>
-            </td>
-            <td><div class="tabletext">&nbsp;${getLocalizedDate(transfer.sendDate)}</div></td>
-            <td>
-                <#if (transfer.statusId)?exists>
-                    <#assign transferStatus = delegator.findByPrimaryKey("StatusItem", Static["org.ofbiz.base.util.UtilMisc"].toMap("statusId", transfer.statusId))>
-                    <div class="tabletext">&nbsp;${(transferStatus.get("description",locale))?if_exists}</div>
-                </#if>
-            </td>
-            <td align="center"><div class="tabletext"><a href="<@ofbizUrl>TransferInventoryItem?inventoryTransferId=${(transfer.inventoryTransferId)?if_exists}</@ofbizUrl>" class="buttontext">[${uiLabelMap.CommonEdit}]</a></div></td>
-            </tr>
-            </#list>
-        </table>
-    </#if>
-    
-    <#if (fromTransfers.size() > 0)>
-    <#if completeRequested>
-    <form name="CompleteRequested" method="post" action="CheckInventoryForCompleteRequestedTransfers?completeRequested=true&facilityId=${facility.facilityId}">
-    </#if>
-        <br/>
-        <div class="head1">${uiLabelMap.CommonFrom}:<span class="head2">&nbsp;<#if facility?exists>${(facility.facilityName)?if_exists}</#if> [${uiLabelMap.CommonId}:${facilityId?if_exists}]</span></div>
-        <table border="1" cellpadding="2" cellspacing="0" width="100%">
-            <tr>
-            <td><div class="tabletext"><b>${uiLabelMap.ProductTransferId}</b></div></td>
-            <td><div class="tabletext"><b>${uiLabelMap.ProductItem}</b></div></td>      
-            <td><div class="tabletext"><b>${uiLabelMap.ProductProductId}</b></div></td>      
-            <td><div class="tabletext"><b>${uiLabelMap.ProductInternalName}</b></div></td>      
-            <td><div class="tabletext"><b>${uiLabelMap.ProductSerialAtpQoh}</b></div></td>      
-            <td><div class="tabletext"><b>${uiLabelMap.CommonTo}</b></div></td>
-            <td><div class="tabletext"><b>${uiLabelMap.CommonSendDate}</b></div></td>
-            <#if !completeRequested>
-            <td><div class="tabletext"><b>${uiLabelMap.CommonStatus}</b></div></td>
-            </#if>
-            <td align="center">
-              <#if completeRequested>
-              <span class="tableheadtext">Select<br><input name="selectAll" value="Y" onclick="javascript:toggleAll(this, 'CompleteRequested');" type="checkbox"></span>
-              <#else>
-              &nbsp;
-              </#if>
-            </td>
-            </tr>
-        
-            <#list fromTransfers as transfer>
-            <#assign inventoryItem = transfer.getRelatedOne("InventoryItem")?if_exists>
-            <#if inventoryItem?has_content>
-              <#assign product = inventoryItem.getRelatedOne("Product")?if_exists>
-            </#if>
-            <tr>
-            <td><div class="tabletext"><a href="<@ofbizUrl>TransferInventoryItem?inventoryTransferId=${(transfer.inventoryTransferId)?if_exists}</@ofbizUrl>" class="buttontext">&nbsp;${(transfer.inventoryTransferId)?if_exists}</a></div></td>
-            <td><div class="tabletext"><a href="<@ofbizUrl>EditInventoryItem?inventoryItemId=${(transfer.inventoryItemId)?if_exists}</@ofbizUrl>" class="buttontext">&nbsp;${(transfer.inventoryItemId)?if_exists}</a></div></td>      
-            <td>
-              <#if product?exists>
-              <span class="tabletext">${product.productId}</span>
-              </#if>
-            </td>
-            <td>
-              <#if product?exists>
-              <span class="tabletext">${product.internalName?if_exists}</span>
-              </#if>
-            </td>
-            <td class="tabletext">
-              <#if inventoryItem?exists && inventoryItem.inventoryItemTypeId.equals("NON_SERIAL_INV_ITEM")>
-                ${(inventoryItem.availableToPromiseTotal)?if_exists}&nbsp;/&nbsp;${(inventoryItem.quantityOnHandTotal)?if_exists}
-              <#elseif inventoryItem?exists && inventoryItem.inventoryItemTypeId.equals("SERIALIZED_INV_ITEM")>
-                ${inventoryItem.serialNumber?if_exists}
-              </#if>
-            </td>
-            <td>
-                <#assign fac = delegator.findByPrimaryKey("Facility", Static["org.ofbiz.base.util.UtilMisc"].toMap("facilityId", transfer.getString("facilityIdTo")))>
-                <div class="tabletext">&nbsp;<#if fac?exists>${(fac.facilityName)?if_exists}</#if>&nbsp;[${(transfer.facilityIdTo)?if_exists}]</div>
-            </td>
-            <td><div class="tabletext">&nbsp;${getLocalizedDate(transfer.sendDate)}</div></td>
-            <#if !completeRequested>
-            <td>
-                <#if (transfer.statusId)?exists>
-                    <#assign transferStatus = delegator.findByPrimaryKey("StatusItem", Static["org.ofbiz.base.util.UtilMisc"].toMap("statusId", transfer.statusId))>
-                    <div class="tabletext">&nbsp;${(transferStatus.get("description",locale))?if_exists}</div>
-                </#if>
-            </td>
-            </#if>
-            <td align="center"><div class="tabletext">
-                <#if completeRequested>
-                <input type="hidden" name="inventoryTransferId_o_${transfer_index}" value="${transfer.inventoryTransferId}">
-                <input type="hidden" name="inventoryItemId_o_${transfer_index}" value="${transfer.inventoryItemId}">
-                <input type="hidden" name="statusId_o_${transfer_index}" value="IXF_COMPLETE">
-                <input name="_rowSubmit_o_${transfer_index}" value="Y" type="checkbox">
-                <#else>
-                <a href="<@ofbizUrl>TransferInventoryItem?inventoryTransferId=${(transfer.inventoryTransferId)?if_exists}</@ofbizUrl>" class="buttontext">[${uiLabelMap.CommonEdit}]</a>
-                </#if>
-            </div></td>
-            </tr>
-            <#assign rowCount = transfer_index + 1>
-            </#list>
-            <#if completeRequested>
-            <tr><td colspan="8" align="right">
-                <input type="hidden" name="_rowCount" value="${rowCount}">
-                <input type="hidden" name="_useRowSubmit" value="Y"/>
-                <input type="hidden" name="forceComplete" value="${parameters.forceComplete?default("false")}"/>
-                <#if parameters.forceComplete?default("false") == "true">
-                  <@inputConfirm title=uiLabelMap.WarehouseForceComplete form="CompleteRequested" />
-                <#else>
-                  <input type="submit" class="smallSubmit" value="${uiLabelMap.ProductComplete}"/>
-                </#if>
-            </td></tr>
-            </#if>
-        </table>
-      <#if completeRequested>
-      </form>
+<div class="head1">${uiLabelMap.ProductInventoryTransfersFor} <span class="head2"><#if facility?exists>${(facility.facilityName)?if_exists}</#if> [${uiLabelMap.CommonId}:${facilityId?if_exists}]</span></div>
+<#if activeOnly>
+  <a href="<@ofbizUrl>FindFacilityTransfers?facilityId=${facilityId}&activeOnly=false</@ofbizUrl>" class="buttontext">[${uiLabelMap.ProductActiveAndInactive}]</a>
+<#else>
+  <a href="<@ofbizUrl>FindFacilityTransfers?facilityId=${facilityId}&activeOnly=true</@ofbizUrl>" class="buttontext">[${uiLabelMap.ProductActiveOnly}]</a>
+</#if>
+<a href="<@ofbizUrl>FindFacilityTransfers?facilityId=${facilityId}&completeRequested=true</@ofbizUrl>" class="buttontext">[${uiLabelMap.ProductCompleteRequestedTransfers}]</a>
+<a href="<@ofbizUrl>TransferInventoryItem?facilityId=${facilityId}</@ofbizUrl>" class="buttontext">[${uiLabelMap.ProductInventoryTransfer}]</a>
+
+<br/>
+<#if toTransfers?has_content>
+  <br/>
+  <div class="head1">${uiLabelMap.CommonTo}:<span class="head2">&nbsp;<#if facility?exists>${(facility.facilityName)?if_exists}</#if> [${uiLabelMap.CommonId}:${facilityId?if_exists}]</span></div>
+  <table class="listTable">
+    <tr class="listTableHeader">
+      <td>${uiLabelMap.ProductTransferId}</td>
+      <td>${uiLabelMap.ProductItem}</td>
+      <td>${uiLabelMap.ProductProductId}</td>
+      <td>${uiLabelMap.ProductInternalName}</td>
+      <td>${uiLabelMap.ProductSerialAtpQoh}</td>
+      <td>${uiLabelMap.CommonFrom}</td>
+      <td>${uiLabelMap.CommonSendDate}</td>
+      <td>${uiLabelMap.CommonStatus}</td>
+      <td>&nbsp;</td>
+    </tr>
+
+    <#list toTransfers as transfer>
+      <#assign inventoryItem = transfer.getRelatedOneCache("InventoryItem")?if_exists/>
+      <#if inventoryItem?has_content>
+        <#assign product = inventoryItem.getRelatedOneCache("Product")?if_exists/>
       </#if>
+      <#assign fac = transfer.getRelatedOneCache("Facility")?if_exists/>
+      <tr class="${tableRowClass(transfer_index)}">
+        <@displayLinkCell href="TransferInventoryItem?inventoryTransferId=${transfer.inventoryTransferId!}" text=transfer.inventoryTransferId! />
+        <@displayLinkCell href="EditInventoryItem?inventoryItemId=${transfer.inventoryItemId!}" text=transfer.inventoryItemId! />
+        <@displayCell text=(product.productId)! />
+        <@displayCell text=(product.internalName)! />
+        <#if inventoryItem?exists && inventoryItem.inventoryItemTypeId.equals("NON_SERIAL_INV_ITEM")>
+          <@displayCell text="${(inventoryItem.availableToPromiseTotal)!}&nbsp;/&nbsp;${(inventoryItem.quantityOnHandTotal)!}" />
+        <#elseif inventoryItem?exists && inventoryItem.inventoryItemTypeId.equals("SERIALIZED_INV_ITEM")>
+          <@displayCell text=inventoryItem.serialNumber! />
+        </#if>
+        <@displayCell text="${(fac.facilityName)!}&nbsp;[${(transfer.facilityId)!}]" />
+        <@displayDateCell date=transfer.sendDate! />
+        <td>
+          <#if (transfer.statusId)?exists>
+            <#assign transferStatus = transfer.getRelatedOneCache("StatusItem")?if_exists />
+            <@display text="${(transferStatus.get(\"description\", locale))!}" />
+          </#if>
+        </td>
+        <td align="center">
+          <@displayLink href="TransferInventoryItem?inventoryTransferId=${transfer.inventoryTransferId!}" text=uiLabelMap.CommonEdit class="buttontext"/>
+        </td>
+      </tr>
+    </#list>
+  </table>
+</#if>
+
+<#if fromTransfers?has_content>
+  <#if completeRequested>
+    <form name="CompleteRequested" method="post" action="CheckInventoryForCompleteRequestedTransfers?completeRequested=true&facilityId=${facility.facilityId}">
+  </#if>
+  <br/>
+  <div class="head1">${uiLabelMap.CommonFrom}:<span class="head2">&nbsp;<#if facility?exists>${(facility.facilityName)?if_exists}</#if> [${uiLabelMap.CommonId}:${facilityId?if_exists}]</span></div>
+  <table class="listTable">
+    <tr class="listTableHeader">
+      <td>${uiLabelMap.ProductTransferId}</td>
+      <td>${uiLabelMap.ProductItem}</td>
+      <td>${uiLabelMap.ProductProductId}</td>
+      <td>${uiLabelMap.ProductInternalName}</td>
+      <td>${uiLabelMap.ProductSerialAtpQoh}</td>
+      <td>${uiLabelMap.CommonTo}</td>
+      <td>${uiLabelMap.CommonSendDate}</td>
+      <#if !completeRequested>
+        <td>${uiLabelMap.CommonStatus}</td>
+      </#if>
+      <td align="center">
+        <#if completeRequested><@inputMultiSelectAll form="CompleteRequested" /><#else>&nbsp;</#if>
+      </td>
+    </tr>
+
+    <#list fromTransfers as transfer>
+      <#assign inventoryItem = transfer.getRelatedOneCache("InventoryItem")?if_exists/>
+      <#if inventoryItem?has_content>
+        <#assign product = inventoryItem.getRelatedOneCache("Product")?if_exists/>
+      </#if>
+      <#assign fac = transfer.getRelatedOneCache("ToFacility")?if_exists/>
+      <tr class="${tableRowClass(transfer_index)}">
+        <@displayLinkCell href="TransferInventoryItem?inventoryTransferId=${transfer.inventoryTransferId!}" text=transfer.inventoryTransferId! />
+        <@displayLinkCell href="EditInventoryItem?inventoryItemId=${transfer.inventoryItemId!}" text=transfer.inventoryItemId! />
+        <@displayCell text=(product.productId)! />
+        <@displayCell text=(product.internalName)! />
+        <#if inventoryItem?exists && inventoryItem.inventoryItemTypeId.equals("NON_SERIAL_INV_ITEM")>
+          <@displayCell text="${(inventoryItem.availableToPromiseTotal)!}&nbsp;/&nbsp;${(inventoryItem.quantityOnHandTotal)!}" />
+        <#elseif inventoryItem?exists && inventoryItem.inventoryItemTypeId.equals("SERIALIZED_INV_ITEM")>
+          <@displayCell text=inventoryItem.serialNumber! />
+        </#if>
+        <@displayCell text="${(fac.facilityName)!}&nbsp;[${(transfer.facilityIdTo)!}]" />
+        <@displayDateCell date=transfer.sendDate! />
+        <#if !completeRequested>
+          <td>
+            <#if (transfer.statusId)?exists>
+              <#assign transferStatus = transfer.getRelatedOneCache("StatusItem")?if_exists />
+              <@display text="${(transferStatus.get(\"description\", locale))!}" />
+            </#if>
+          </td>
+        </#if>
+        <td align="center">
+          <#if completeRequested>
+            <@inputHidden index=transfer_index name="inventoryTransferId" value=transfer.inventoryTransferId!/>
+            <@inputHidden index=transfer_index name="inventoryItemId" value=transfer.inventoryItemId!/>
+            <@inputHidden index=transfer_index name="statusId" value="IXF_COMPLETE"/>
+            <@inputMultiCheck index=transfer_index/>
+          <#else>
+            <@displayLink href="TransferInventoryItem?inventoryTransferId=${transfer.inventoryTransferId!}" text=uiLabelMap.CommonEdit class="buttontext"/>
+          </#if>
+        </td>
+      </tr>
+      <#assign rowCount = transfer_index + 1/>
+    </#list>
+    
+    <#if completeRequested>
+      <tr>
+        <td colspan="8" align="right">
+          <@inputHidden name="_rowCount" value="${rowCount}"/>
+          <@inputHiddenUseRowSubmit />
+          <@inputHidden name="forceComplete" value="${parameters.forceComplete?default(\"false\")}"/>
+          <#if parameters.forceComplete?default("false") == "true">
+            <@inputConfirm title=uiLabelMap.WarehouseForceComplete form="CompleteRequested" />
+          <#else>
+            <@inputSubmit title=uiLabelMap.ProductComplete />
+          </#if>
+        </td>
+      </tr>
     </#if>
+  </table>
+  <#if completeRequested>
+    </form>
+  </#if>
+</#if>
