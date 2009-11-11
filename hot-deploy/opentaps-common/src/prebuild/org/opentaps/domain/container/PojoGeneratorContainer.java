@@ -44,6 +44,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -56,6 +57,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import freemarker.template.TemplateException;
 import org.apache.commons.io.FileUtils;
 import org.jvnet.inflector.Noun;
 import org.ofbiz.base.container.Container;
@@ -79,9 +81,13 @@ import org.ofbiz.entity.model.ModelViewEntity;
 import org.ofbiz.entity.model.ModelViewEntity.ModelAlias;
 import org.ofbiz.entity.model.ModelViewEntity.ModelMemberEntity;
 import org.ofbiz.entity.model.ModelViewEntity.ModelViewLink;
+import org.ofbiz.service.DispatchContext;
+import org.ofbiz.service.GenericDispatcher;
+import org.ofbiz.service.GenericServiceException;
+import org.ofbiz.service.LocalDispatcher;
+import org.ofbiz.service.ModelParam;
+import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceDispatcher;
-
-import freemarker.template.TemplateException;
 
 /**
  * Some utility routines for loading seed data.
@@ -98,22 +104,32 @@ public class PojoGeneratorContainer implements Container {
     }
 
     /** Config file. */
-    private String configFile = null;
+    private String configFile;
 
     /** The path of output. */
-    private String outputPath = null;
+    private String entityOutputPath;
+    private String serviceOutputPath;
 
-    /** Java class FTL Template. */
-    private String template = null;
+    /** Java service class FTL Template. */
+    private String serviceTemplate;
+
+    /** Java entity class FTL Template. */
+    private String entityTemplate;
 
     /** Hibernate IdClass FTL Template. */
-    private String pkTemplate = null;
+    private String pkTemplate;
 
     /** Hibernate Search PkBridge FTL Template. */
-    private String pkBridgeTemplate = null;
+    private String pkBridgeTemplate;
 
     /** Hibernate configuration FTL Template. */
-    private String hibernateCfgTemplate = null;
+    private String hibernateCfgTemplate;
+    private String hibernateCfgPath;
+
+    private Properties entitySearchProperties;
+    private String delegatorNameToUse;
+    private GenericDelegator delegator;
+
 
     /**
      * Creates a new <code>PojoGeneratorContainer</code> instance.
@@ -138,15 +154,15 @@ public class PojoGeneratorContainer implements Container {
     public boolean start() throws ContainerException {
         ContainerConfig.Container cfg = ContainerConfig.getContainer(containerName, configFile);
         ContainerConfig.Container.Property delegatorNameProp = cfg.getProperty("delegator-name");
-        ContainerConfig.Container.Property outputPathProp = cfg.getProperty("output-path");
-        ContainerConfig.Container.Property templateProp = cfg.getProperty("template");
+        ContainerConfig.Container.Property entityOutputPathProp = cfg.getProperty("entityOutputPath");
+        ContainerConfig.Container.Property serviceOutputPathProp = cfg.getProperty("serviceOutputPath");
+        ContainerConfig.Container.Property entityTemplateProp = cfg.getProperty("entityTemplate");
+        ContainerConfig.Container.Property serviceTemplateProp = cfg.getProperty("serviceTemplate");
         ContainerConfig.Container.Property pkTemplateProp = cfg.getProperty("pkTemplate");
         ContainerConfig.Container.Property pkBridgeTemplateProp = cfg.getProperty("pkBridgeTemplate");
         ContainerConfig.Container.Property hibernateCfgTemplateProp = cfg.getProperty("hibernateCfgTemplate");
         ContainerConfig.Container.Property hibernateCfgProp = cfg.getProperty("hibernateCfgPath");
-        Properties entitySearchProperties = UtilProperties.getProperties("entitysearch.properties");
-
-        String delegatorNameToUse = null;
+        entitySearchProperties = UtilProperties.getProperties("entitysearch.properties");
 
         // get delegator to use from the container configuration
         if (delegatorNameProp == null || delegatorNameProp.value == null || delegatorNameProp.value.length() == 0) {
@@ -156,35 +172,47 @@ public class PojoGeneratorContainer implements Container {
         }
 
         // get the delegator
-        GenericDelegator delegator = GenericDelegator.getGenericDelegator(delegatorNameToUse);
+        delegator = GenericDelegator.getGenericDelegator(delegatorNameToUse);
         if (delegator == null) {
             throw new ContainerException("Invalid delegator name: " + delegatorNameToUse);
         }
 
         // get output path to use from the container configuration
-        if (outputPathProp == null || outputPathProp.value == null || outputPathProp.value.length() == 0) {
+        if (entityOutputPathProp == null || entityOutputPathProp.value == null || entityOutputPathProp.value.length() == 0) {
             throw new ContainerException("Invalid output-name defined in container configuration");
         } else {
-            outputPath = outputPathProp.value;
+            entityOutputPath = entityOutputPathProp.value;
         }
 
         // check the output path
-        File outputDir = new File(outputPath);
+        File outputDir = new File(entityOutputPath);
         if (!outputDir.canWrite()) {
-            throw new ContainerException("Unable to use output path: [" + outputPath + "], it is not writable");
+            throw new ContainerException("Unable to use entity output path: [" + entityOutputPath + "], it is not writable");
+        }
+
+        // get output path to use from the container configuration
+        if (serviceOutputPathProp == null || serviceOutputPathProp.value == null || serviceOutputPathProp.value.length() == 0) {
+            throw new ContainerException("Invalid output-name defined in container configuration");
+        } else {
+            serviceOutputPath = serviceOutputPathProp.value;
+        }
+
+        // check the output path
+        outputDir = new File(serviceOutputPath);
+        if (!outputDir.canWrite()) {
+            throw new ContainerException("Unable to use service output path: [" + serviceOutputPath + "], it is not writable");
         }
 
         // get the template file to use from the container configuration
-        if (templateProp == null || templateProp.value == null || templateProp.value.length() == 0) {
-            throw new ContainerException("Invalid template defined in container configuration");
+        if (entityTemplateProp == null || entityTemplateProp.value == null || entityTemplateProp.value.length() == 0) {
+            throw new ContainerException("Invalid entity template defined in container configuration");
         } else {
-            template = templateProp.value;
+            entityTemplate = entityTemplateProp.value;
         }
-
-        // check the template file
-        File templateFile = new File(template);
-        if (!templateFile.canRead()) {
-            throw new ContainerException("Unable to read template file: [" + template + "]");
+        if (serviceTemplateProp == null || serviceTemplateProp.value == null || serviceTemplateProp.value.length() == 0) {
+            throw new ContainerException("Invalid service template defined in container configuration");
+        } else {
+            serviceTemplate = serviceTemplateProp.value;
         }
 
         // get the primay key template file to use from the container configuration
@@ -194,12 +222,6 @@ public class PojoGeneratorContainer implements Container {
             pkTemplate = pkTemplateProp.value;
         }
 
-        // check the pk template file
-        File pkTemplateFile = new File(pkTemplate);
-        if (!pkTemplateFile.canRead()) {
-            throw new ContainerException("Unable to read pk template file: [" + pkTemplate + "]");
-        }
-
         // get the primay key template file to use from the container configuration
         if (hibernateCfgTemplateProp == null || hibernateCfgTemplateProp.value == null || hibernateCfgTemplateProp.value.length() == 0) {
             throw new ContainerException("Invalid hibernate cfg template defined in container configuration");
@@ -207,17 +229,273 @@ public class PojoGeneratorContainer implements Container {
             hibernateCfgTemplate = hibernateCfgTemplateProp.value;
         }
 
-        // check the pk template file
-        File cfgTemplateFile = new File(hibernateCfgTemplate);
-        if (!cfgTemplateFile.canRead()) {
-            throw new ContainerException("Unable to read hibernate cfg template file: [" + hibernateCfgTemplate + "]");
-        }
-
         // get the primay key bridge template file to use from the container configuration
         if (pkBridgeTemplateProp == null || pkBridgeTemplateProp.value == null || pkBridgeTemplateProp.value.length() == 0) {
             throw new ContainerException("Invalid pk bridge template defined in container configuration");
         } else {
             pkBridgeTemplate = pkBridgeTemplateProp.value;
+        }
+
+        // get hibernate.cfg.xml output path to use from the container configuration
+        if (hibernateCfgProp == null || hibernateCfgProp.value == null || hibernateCfgProp.value.length() == 0) {
+            throw new ContainerException("Invalid hibernate cfg path defined in container configuration");
+        } else {
+            hibernateCfgPath = hibernateCfgProp.value;
+        }
+
+        return generateEntities() && generateServices();
+    }
+
+    private boolean generateServices() throws ContainerException {
+
+        // check the service template file
+        File serviceTemplateFile = new File(serviceTemplate);
+        if (!serviceTemplateFile.canRead()) {
+            throw new ContainerException("Unable to read service template file: [" + serviceTemplate + "]");
+        }
+
+        // get services list
+        LocalDispatcher localDispatcher = GenericDispatcher.getLocalDispatcher("webtools", delegator);
+        DispatchContext dispatchContext = localDispatcher.getDispatchContext();
+        Set<String> serviceNames = dispatchContext.getAllServiceNames();
+
+        // record errors for summary
+        List<String> errorEntities = new LinkedList<String>();
+        // record view entities
+        List<String> viewEntities = new LinkedList<String>();
+
+        int totalGeneratedClasses = 0;
+        if (serviceNames != null && serviceNames.size() > 0) {
+            Debug.logImportant("=-=-=-=-=-=-= Generating the POJO services ...", MODULE);
+            Map<String, String> generatedServices = new HashMap<String, String>();
+            for (String serviceName : serviceNames) {
+                ModelService modelService = null;
+                try {
+                    modelService = dispatchContext.getModelService(serviceName);
+                } catch (GenericServiceException e) {
+                    Debug.logError(e, MODULE);
+                }
+
+                if (modelService == null) {
+                    errorEntities.add(serviceName);
+                    Debug.logError("Error getting the service model for [" + serviceName + "]", MODULE);
+                    continue;
+                }
+
+                // service names can include characters which cannot be used in class names
+                // and we also need to upper the first char to conform to the Java standard
+                String serviceClassName = makeClassName(serviceName);
+
+                // check if we have a conflict after the name change
+                if (generatedServices.containsKey(serviceClassName)) {
+                    Debug.logError("Service [" + serviceName + "] has conflicting class name with service [" + generatedServices.get(serviceClassName) + "], both resolved to [" + serviceClassName + "]", MODULE);
+                    errorEntities.add(serviceName);
+                    continue;
+                }
+
+                Map<String, Object> entityInfo = new HashMap<String, Object>();
+
+                // distinct types for the import section
+                Set<String> types = new TreeSet<String>();
+                // a type for each field during declarations
+                Map<String, String> fieldTypes = new TreeMap<String, String>();
+                // temporary, those are stored at the end of each param so we test duplicates
+                Map<String, ModelParam> fieldModels = new TreeMap<String, ModelParam>();
+                // map parameter names to valid java field names
+                Map<String, String> inFieldNames = new TreeMap<String, String>();
+                Map<String, String> outFieldNames = new TreeMap<String, String>();
+                // read the service parameters
+                Map<String, String> paramNames = new TreeMap<String, String>(); // for the enums
+                Map<String, ModelParam> inParams = new TreeMap<String, ModelParam>();
+                Map<String, ModelParam> outParams = new TreeMap<String, ModelParam>();
+                // names of the get and set methods, we need two sets for In and Out parameters
+                Map<String, String> inGetMethodNames = new TreeMap<String, String>();
+                Map<String, String> inSetMethodNames = new TreeMap<String, String>();
+                Map<String, String> outGetMethodNames = new TreeMap<String, String>();
+                Map<String, String> outSetMethodNames = new TreeMap<String, String>();
+
+                boolean hasError = false;
+                for (ModelParam p : modelService.getModelParamList()) {
+                    // use the class name transform, we will append "in" or "out" to get the field name
+                    String fieldName = makeClassName(p.name);
+                    String shortFieldName = Character.toLowerCase(fieldName.charAt(0)) + fieldName.substring(1);
+
+                    // check that two different parameter names did not translate into the same java field
+                    // eg: some.param and someParam
+                    if ((!paramNames.containsKey(p.name) && paramNames.containsValue(shortFieldName))) {
+                        errorEntities.add(serviceName);
+                        Debug.logError("Service [" + serviceName + "] has parameter [" + p.name + "] which conflicts with another of its parameters that was translated to the same java field [" + fieldName + "]", MODULE);
+                        hasError = true;
+                        break;
+                    }
+
+                    // for the enumeration
+                    paramNames.put(p.name, shortFieldName);
+
+                    try {
+                        if (p.isIn()) {
+                            inParams.put(p.name, p);
+                            inGetMethodNames.put(p.name, accessorMethodName("getIn", fieldName));
+                            inSetMethodNames.put(p.name, accessorMethodName("setIn", fieldName));
+                            if (inFieldNames.containsKey(p.name)) {
+                                Debug.logWarning("Service [" + serviceName + "] redefines IN parameter [" + p.name + "] (used attribute instead of override, or redefined an auto attribute)", MODULE);
+                            }
+                            inFieldNames.put(p.name, "in" + fieldName);
+                        }
+                        // no else, can be INOUT
+                        if (p.isOut()) {
+                            outParams.put(p.name, p);
+                            outGetMethodNames.put(p.name, accessorMethodName("getOut", fieldName));
+                            outSetMethodNames.put(p.name, accessorMethodName("setOut", fieldName));
+                            if (outFieldNames.containsKey(p.name)) {
+                                Debug.logWarning("Service [" + serviceName + "] redefines OUT parameter [" + p.name + "] (used attribute instead of override, or redefined an auto attribute)", MODULE);
+                            }
+                            outFieldNames.put(p.name, "out" + fieldName);
+                        }
+                    } catch (IllegalArgumentException e) {
+                        errorEntities.add(serviceName);
+                        Debug.logError(e, MODULE);
+                        hasError = true;
+                        break;
+                    }
+                    // this is the short type: ie, java.lang.String -> String; java.util.HashMap -> HashMap, etc.
+                    String shortType = p.type;
+                    int idx = shortType.lastIndexOf(".");
+
+                    if (idx > 0) {
+                        // need to work around some compilation issues for service that are using a type defined in their own
+                        // application, fallback to the generic Object
+                        if (shortType.startsWith("org.opentaps.") && !shortType.startsWith("org.opentaps.common")) {
+                            Debug.logWarning("Service [" + serviceName + "] field [" + p.name + "] has type [" + p.type + "] which is not available yet, falling back to 'Object'.", MODULE);
+                            shortType = "Object";
+                        } else {
+                            shortType = shortType.substring(idx + 1);
+                            types.add(p.type);
+                        }
+                    } else {
+                        // some short types also need to be imported
+                        if (Arrays.asList("List", "Map", "Set", "Date").contains(p.type)) {
+                            types.add("java.util." + p.type);
+                        } else if (Arrays.asList("GenericValue", "GenericEntity", "GenericPK").contains(p.type)) {
+                            types.add("org.ofbiz.entity." + p.type);
+                        } else if (Arrays.asList("Timestamp").contains(p.type)) {
+                            types.add("java.sql." + p.type);
+                        } else if ("BigDecimal".equals(p.type)) {
+                            types.add("java.math." + p.type);
+                        }
+                    }
+
+                    // check that if a parameter is defined IN and OUT it has the same type
+                    if (fieldTypes.containsKey(p.name) && !shortType.equals(fieldTypes.get(p.name))) {
+                        // this can happen if the service redefined an internal parameter
+                        ModelParam p2 = fieldModels.get(p.name);
+                        if (p2 != null && (p2.internal || p.internal)) {
+                            Debug.logWarning("Service [" + serviceName + "] has parameter [" + p.name + "] with type [" + shortType + "] which conflicts with an internal service parameter of the same name and with type [" + fieldTypes.get(p.name) + "]", MODULE);
+                        } else {
+                            errorEntities.add(serviceName);
+                            Debug.logError("Service [" + serviceName + "] has parameter [" + p.name + "] with type [" + shortType + "] which conflicts with another definition of this parameter that has type [" + fieldTypes.get(p.name) + "]", MODULE);
+                            hasError = true;
+                            break;
+                        }
+                    }
+
+                    fieldTypes.put(p.name, shortType);
+                    fieldModels.put(p.name, p);
+                }
+
+                if (hasError) {
+                    continue;
+                }
+
+                entityInfo.put("name", serviceName);
+                entityInfo.put("className", serviceClassName);
+                entityInfo.put("types", types);
+                entityInfo.put("fieldTypes", fieldTypes);
+                entityInfo.put("inFieldNames", inFieldNames);
+                entityInfo.put("outFieldNames", outFieldNames);
+                entityInfo.put("inGetMethodNames", inGetMethodNames);
+                entityInfo.put("inSetMethodNames", inSetMethodNames);
+                entityInfo.put("outGetMethodNames", outGetMethodNames);
+                entityInfo.put("outSetMethodNames", outSetMethodNames);
+                entityInfo.put("paramNames", paramNames);
+                entityInfo.put("inParams", inParams);
+                entityInfo.put("outParams", outParams);
+
+                // render it as FTL
+                Writer writer = new StringWriter();
+                try {
+                    FreeMarkerWorker.renderTemplateAtLocation(serviceTemplate, entityInfo, writer);
+                } catch (MalformedURLException e) {
+                    Debug.logError(e, MODULE);
+                    errorEntities.add(serviceName);
+                    break;
+                } catch (TemplateException e) {
+                    Debug.logError(e, MODULE);
+                    errorEntities.add(serviceName);
+                    break;
+                } catch (IOException e) {
+                    Debug.logError(e, MODULE);
+                    errorEntities.add(serviceName);
+                    break;
+                } catch (IllegalArgumentException e) {
+                    Debug.logError(e, MODULE);
+                    errorEntities.add(serviceName);
+                    break;
+                }
+
+                // write it as a Java file
+                File file = new File(serviceOutputPath + serviceClassName + fileExtension);
+                try {
+                    FileUtils.writeStringToFile(file, writer.toString(), "UTF-8");
+                } catch (IOException e) {
+                    Debug.logError(e, "Aborting, error writing file " + serviceOutputPath + serviceClassName + fileExtension, MODULE);
+                    errorEntities.add(serviceName);
+                    break;
+                }
+                // increment counter
+                generatedServices.put(serviceClassName, serviceName);
+                totalGeneratedClasses++;
+            }
+        } else {
+            Debug.logImportant("=-=-=-=-=-=-= No service found.", MODULE);
+        }
+
+        // error summary
+        if (errorEntities.size() > 0) {
+            Debug.logImportant("The following services could not be generated:", MODULE);
+            for (String name : errorEntities) {
+                Debug.logImportant(name, MODULE);
+            }
+        }
+
+        Debug.logImportant("=-=-=-=-=-=-= Finished the POJO services generation with " + totalGeneratedClasses + " classes generated.", MODULE);
+
+        if (errorEntities.size() > 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    private boolean generateEntities() throws ContainerException {
+
+        // check the entity template file
+        File entityTemplateFile = new File(entityTemplate);
+        if (!entityTemplateFile.canRead()) {
+            throw new ContainerException("Unable to read entity template file: [" + entityTemplate + "]");
+        }
+
+        // check the pk template file
+        File pkTemplateFile = new File(pkTemplate);
+        if (!pkTemplateFile.canRead()) {
+            throw new ContainerException("Unable to read pk template file: [" + pkTemplate + "]");
+        }
+
+        // check the pk template file
+        File cfgTemplateFile = new File(hibernateCfgTemplate);
+        if (!cfgTemplateFile.canRead()) {
+            throw new ContainerException("Unable to read hibernate cfg template file: [" + hibernateCfgTemplate + "]");
         }
 
         // check the pk template file
@@ -635,7 +913,7 @@ public class PojoGeneratorContainer implements Container {
                 // render it as FTL
                 Writer writer = new StringWriter();
                 try {
-                    FreeMarkerWorker.renderTemplateAtLocation(template, entityInfo, writer);
+                    FreeMarkerWorker.renderTemplateAtLocation(entityTemplate, entityInfo, writer);
                 } catch (MalformedURLException e) {
                     Debug.logError(e, MODULE);
                     errorEntities.add(entityName);
@@ -655,11 +933,11 @@ public class PojoGeneratorContainer implements Container {
                 }
 
                 // write it as a Java file
-                File file = new File(outputPath + entityName + fileExtension);
+                File file = new File(entityOutputPath + entityName + fileExtension);
                 try {
                     FileUtils.writeStringToFile(file, writer.toString(), "UTF-8");
                 } catch (IOException e) {
-                    Debug.logError(e, "Aborting, error writing file " + outputPath + entityName + fileExtension, MODULE);
+                    Debug.logError(e, "Aborting, error writing file " + entityOutputPath + entityName + fileExtension, MODULE);
                     errorEntities.add(entityName);
                     break;
                 }
@@ -745,11 +1023,11 @@ public class PojoGeneratorContainer implements Container {
                     }
 
                     // write it as a Java file (PK)
-                    File pkFile = new File(outputPath + entityName + "Pk" + fileExtension);
+                    File pkFile = new File(entityOutputPath + entityName + "Pk" + fileExtension);
                     try {
                         FileUtils.writeStringToFile(pkFile, pkWriter.toString(), "UTF-8");
                     } catch (IOException e) {
-                        Debug.logError(e, "Aborting, error writing file " + outputPath + entityName + "Pk" + fileExtension, MODULE);
+                        Debug.logError(e, "Aborting, error writing file " + entityOutputPath + entityName + "Pk" + fileExtension, MODULE);
                         errorEntities.add(entityName);
                         break;
                     }
@@ -777,11 +1055,11 @@ public class PojoGeneratorContainer implements Container {
                     }
 
                     // write it as a Java file (PK)
-                    File pkBridgeFile = new File(outputPath + "/bridge/" + entityName + "PkBridge" + fileExtension);
+                    File pkBridgeFile = new File(entityOutputPath + "/bridge/" + entityName + "PkBridge" + fileExtension);
                     try {
                         FileUtils.writeStringToFile(pkBridgeFile, pkBridgeWriter.toString(), "UTF-8");
                     } catch (IOException e) {
-                        Debug.logError(e, "Aborting, error writing file " + outputPath + "/bridge/" + entityName + "PkBridge" + fileExtension, MODULE);
+                        Debug.logError(e, "Aborting, error writing file " + entityOutputPath + "/bridge/" + entityName + "PkBridge" + fileExtension, MODULE);
                         errorEntities.add(entityName);
                         break;
                     }
@@ -803,13 +1081,6 @@ public class PojoGeneratorContainer implements Container {
                 Debug.logError(e1, MODULE);
             } catch (IOException e1) {
                 Debug.logError(e1, MODULE);
-            }
-            // get hibernate.cfg.xml output path to use from the container configuration
-            String hibernateCfgPath = null;
-            if (hibernateCfgProp == null || hibernateCfgProp.value == null || hibernateCfgProp.value.length() == 0) {
-                throw new ContainerException("Invalid hibernate cfg path defined in container configuration");
-            } else {
-                hibernateCfgPath = hibernateCfgProp.value;
             }
             // write it as a hibernate.cfg.xml
             File hibernateFile = new File(hibernateCfgPath);
@@ -844,6 +1115,40 @@ public class PojoGeneratorContainer implements Container {
 
     /** {@inheritDoc} */
     public void stop() throws ContainerException { }
+
+    /**
+     * Transform a string into a class name by capitalizing the first char and filtering invliad chars.
+     * @param name the name to transform
+     * @return a class name
+     */
+    public static String makeClassName(String name) {
+        if (UtilValidate.isEmpty(name)) {
+            throw new IllegalArgumentException("className called for null or empty string");
+        } else {
+            int idx = -1;
+            String className = Character.toUpperCase(name.charAt(0)) + name.substring(1);
+            className = filterChar(className, ".");
+            className = filterChar(className, "_");
+            className = filterChar(className, "-");
+            return className;
+        }
+    }
+
+    private static String filterChar(String name, String filter) {
+            int idx = -1;
+            String newName = name;
+            while ((idx = newName.indexOf(filter)) >= 0) {
+                String temp = newName.substring(0, idx);
+                if (newName.length() > (idx + 1)) {
+                    temp += Character.toUpperCase(newName.charAt(idx + 1));
+                }
+                if (newName.length() > (idx + 2)) {
+                    temp += newName.substring(idx + 2);
+                }
+                newName = temp;
+            }
+            return newName;
+    }
 
     /**
      * Standardize accessor method names.  If fieldName is orderId, will return "prefix" + OrderId.

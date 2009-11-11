@@ -48,10 +48,12 @@ under the License.
     <!-- load the pojo generator load container, runs the entity data load stuff -->
     <container name="pojo-generator-container" class="org.opentaps.domain.container.PojoGeneratorContainer">
         <property name="delegator-name" value="default"/>
-        <property name="template" value="hot-deploy/opentaps-common/templates/BaseEntity.ftl"/>
+        <property name="serviceTemplate" value="hot-deploy/opentaps-common/templates/BaseService.ftl"/>
+        <property name="entityTemplate" value="hot-deploy/opentaps-common/templates/BaseEntity.ftl"/>
         <property name="pkTemplate" value="hot-deploy/opentaps-common/templates/BaseEntityPk.ftl"/>
         <property name="pkBridgeTemplate" value="hot-deploy/opentaps-common/templates/BaseEntityPkBridge.ftl"/>
-        <property name="output-path" value="hot-deploy/opentaps-common/src/common/org/opentaps/domain/base/entities/"/>
+        <property name="entityOutputPath" value="hot-deploy/opentaps-common/src/common/org/opentaps/domain/base/entities/"/>
+        <property name="serviceOutputPath" value="hot-deploy/opentaps-common/src/common/org/opentaps/domain/base/services/"/>
         <property name="hibernateCfgTemplate" value="hot-deploy/opentaps-common/templates/HibernateCfg.ftl"/>
         <property name="hibernateCfgPath" value="hot-deploy/opentaps-common/config/hibernate.cfg.xml"/>
     </container>
