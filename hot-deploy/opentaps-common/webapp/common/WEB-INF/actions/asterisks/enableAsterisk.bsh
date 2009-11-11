@@ -21,13 +21,31 @@ import org.ofbiz.entity.*;
 import org.ofbiz.entity.condition.*;
 import org.ofbiz.base.util.*;
 import org.opentaps.common.util.*;
+import org.ofbiz.entity.util.EntityUtil; 
 /**
  * This function check if enable asterisk.
  */
 String enabled = UtilProperties.getPropertyValue("asterisk.properties", "asterisk.enabled", "N");
-Debug.log("asterisk enabled:" + enabled); 
-if(enabled.equals("Y")) {
-	globalContext = context.get("globalContext");
-	UtilCommon.addGwtScript(globalContext, "commongwt/org.opentaps.gwt.common.asterisk.asterisk");
-	Debug.log("enable commongwt/org.opentaps.gwt.common.asterisk.asterisk"); 
+// check the asterisk feature if enabled
+if (enabled.equals("Y")) {
+    hasAstUser = false;                                                                                      
+    userLogin = context.get("userLogin");
+    // check if existing AsteriskUser relate current login
+    if (userLogin != null) {                                                                                      
+       userLoginId = userLogin.get("userLoginId");
+       conditionList = new ArrayList();
+	   conditionList.add(new EntityExpr("userLoginId", EntityOperator.EQUALS, userLoginId));
+	   conditionList.add(EntityUtil.getFilterByDateExpr());
+	   conditionEc = new EntityConditionList(conditionList, EntityOperator.AND);                                                      
+       asteriskUserList = delegator.findByConditionCache("AsteriskUser", conditionEc, null, UtilMisc.toList("-fromDate"));   
+       if (asteriskUserList.size() > 0) {                                                                          
+          hasAstUser = true;                                                                                     
+       }                                                                                                         
+    }
+    // enable the asterisk feature
+    if (hasAstUser) {
+	   globalContext = context.get("globalContext");
+	   UtilCommon.addGwtScript(globalContext, "commongwt/org.opentaps.gwt.common.asterisk.asterisk");
+	   Debug.log("enable commongwt/org.opentaps.gwt.common.asterisk.asterisk");
+	} 
 }
