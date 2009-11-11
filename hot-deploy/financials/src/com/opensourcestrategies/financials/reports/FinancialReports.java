@@ -32,21 +32,19 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import com.opensourcestrategies.financials.financials.FinancialServices;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 
-import org.hibernate.Criteria;
 import org.hibernate.ScrollableResults;
-import org.hibernate.criterion.Restrictions;
 import org.ofbiz.accounting.util.UtilAccounting;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
@@ -77,13 +75,14 @@ import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
-import org.opentaps.domain.base.entities.Invoice;
 import org.opentaps.foundation.entity.hibernate.Query;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.pentaho.di.core.exception.KettleException;
+
+import com.opensourcestrategies.financials.financials.FinancialServices;
 
 /**
  * Events preparing data passed to Jasper reports.
@@ -1153,7 +1152,13 @@ public final class FinancialReports {
     }
 
     /**
-     * Load data to TaxInvoiceItemFact entity.
+     * <p>Load data to TaxInvoiceItemFact entity.</p>
+     * 
+     * <p>TODO: It would be great to rework this service and use Hibernate API. This might make
+     * code more understandable and independent of underlying database.<br>
+     * Make sense also rid of sales invoice item fact Kettle transformation and fill out both fact tables
+     * in one procedure as they very similar.</p>
+     * 
      * @param dctx a <code>DispatchContext</code> instance
      * @param context the service context <code>Map</code>
      * @return the service response <code>Map</code>
@@ -1369,54 +1374,7 @@ public final class FinancialReports {
             }
             iter2.close();
 
-            // handle invoice adjustments
-            Session session = new Infrastructure(dctx.getDispatcher()).getSession();
-            Query q = session.createQuery("select invoiceId, invoiceAdjustmentId, amount from InvoiceAdjustment where invoiceId in (:uniqIds)");
-            q.setParameterList("uniqIds", uniqueInvoices);
-            ScrollableResults adjustmentAmounts = q.scroll();
-            while (adjustmentAmounts.next()) {
-
-                String invoiceId = adjustmentAmounts.getString(0);
-                String invoiceAdjustmentId = adjustmentAmounts.getString(1);
-                BigDecimal totalAmount = adjustmentAmounts.getBigDecimal(2);
-
-                //retrieve invoice
-                Criteria invoiceCriteria = session.createCriteria(Invoice.class);
-                invoiceCriteria.add(Restrictions.eq("invoiceId", invoiceId));
-                Invoice invoice = (Invoice) invoiceCriteria.uniqueResult();
-
-                GenericValue taxInvItemFact = delegator.makeValue("TaxInvoiceItemFact");
-                Timestamp invoiceDate = invoice.getInvoiceDate();
-                String dayOfMonth = dayOfMonthFmt.format(invoiceDate);
-                String monthOfYear = monthOfYearFmt.format(invoiceDate);
-                String yearNumber = yearNumberFmt.format(invoiceDate);
-                EntityCondition dateDimConditions = EntityCondition.makeCondition(EntityOperator.AND,
-                        EntityCondition.makeCondition("dayOfMonth", dayOfMonth),
-                        EntityCondition.makeCondition("monthOfYear", monthOfYear),
-                        EntityCondition.makeCondition("yearNumber", yearNumber));
-                taxInvItemFact.set("dateDimId", UtilEtl.lookupDimension("DateDim", "dateDimId", dateDimConditions, delegator));
-                taxInvItemFact.set("storeDimId", 0L);
-                taxInvItemFact.set("taxAuthorityDimId", 0L);
-                taxInvItemFact.set("currencyDimId", UtilEtl.lookupDimension("CurrencyDim", "currencyDimId", EntityCondition.makeCondition("uomId", invoice.getCurrencyUomId()), delegator));
-                taxInvItemFact.set("organizationDimId", UtilEtl.lookupDimension("OrganizationDim", "organizationDimId", EntityCondition.makeCondition("organizationPartyId", invoice.getPartyIdFrom()), delegator));
-                taxInvItemFact.set("invoiceId", invoiceId);
-                taxInvItemFact.set("invoiceAdjustmentId", invoiceAdjustmentId);
-                taxInvItemFact.set("grossAmount", BigDecimal.ZERO);
-                taxInvItemFact.set("discounts", totalAmount);
-                taxInvItemFact.set("refunds", BigDecimal.ZERO);
-                taxInvItemFact.set("netAmount", BigDecimal.ZERO);
-                taxInvItemFact.set("taxable", BigDecimal.ZERO);
-                taxInvItemFact.set("taxDue", BigDecimal.ZERO);
-                sequenceId++;
-                taxInvItemFact.set("taxInvItemFactId", sequenceId);
-                taxInvItemFact.create();
-            }
-            adjustmentAmounts.close();
-
-
         } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, MODULE);
-        } catch (InfrastructureException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
 
@@ -1677,6 +1635,86 @@ public final class FinancialReports {
     }
 
     /**
+     * <p>Look over invoice adjustments and transform  them into into sales and tax invoice item facts.
+     * Thus an adjustment amount is added into discount column of the fact table and this is only
+     * currency column affected.</p>
+     * 
+     * <p>TODO: Store entities with Hibernate API after the bug related to id generator will be fixed.
+     * This is impossible for now because fact tables have numeric PK.</p>
+     * 
+     * @param session Hibernate session
+     * @throws GenericEntityException  
+     */
+    public static void loadInvoiceAdjustments(Session session, GenericDelegator delegator) throws GenericEntityException {
+        // initial keys value
+        Long taxInvItemFactKey = (Long) session.createQuery("select max(taxInvItemFactId) from TaxInvoiceItemFact").uniqueResult();
+        if (taxInvItemFactKey == null) {
+            taxInvItemFactKey = 0L;
+        }
+        Long salesInvItemFactKey = (Long) session.createQuery("select max(salesInvItemFactId) from SalesInvoiceItemFact").uniqueResult();
+        if (salesInvItemFactKey == null) {
+            salesInvItemFactKey = 0L;
+        }
+
+        Query invAdjQry = session.createQuery("select IA.invoiceAdjustmentId, IA.invoiceId, IA.amount, I.partyIdFrom, I.invoiceDate, I.currencyUomId from InvoiceAdjustment IA, Invoice I where IA.invoiceId = I.invoiceId and I.invoiceTypeId = 'SALES_INVOICE' and I.statusId not in ('INVOICE_IN_PROCESS', 'INVOICE_CANCELLED', 'INVOICE_VOIDED', 'INVOICE_WRITEOFF')");
+        ScrollableResults adjustments = invAdjQry.scroll();
+        while (adjustments.next()) {
+
+            String invoiceId = adjustments.getString(1);
+            String invoiceAdjustmentId = adjustments.getString(0);
+            BigDecimal amount = adjustments.getBigDecimal(2);
+            String organizationPartyId = adjustments.getString(3);
+            Timestamp invoiceDate = (Timestamp) adjustments.get(4);
+            String currencyUomId = adjustments.getString(5);
+
+            // lookup date dimension
+            DateFormat dayOfMonthFmt = new SimpleDateFormat("dd");
+            DateFormat monthOfYearFmt = new SimpleDateFormat("MM");
+            DateFormat yearNumberFmt = new SimpleDateFormat("yyyy");
+
+            String dayOfMonth = dayOfMonthFmt.format(invoiceDate);
+            String monthOfYear = monthOfYearFmt.format(invoiceDate);
+            String yearNumber = yearNumberFmt.format(invoiceDate);
+
+            EntityCondition dateDimConditions = EntityCondition.makeCondition(EntityOperator.AND,
+                    EntityCondition.makeCondition("dayOfMonth", dayOfMonth),
+                    EntityCondition.makeCondition("monthOfYear", monthOfYear),
+                    EntityCondition.makeCondition("yearNumber", yearNumber));
+            Long dateDimId = UtilEtl.lookupDimension("DateDim", "dateDimId", dateDimConditions, delegator);
+
+            // lookup currency dimension
+            Long currencyDimId = UtilEtl.lookupDimension("CurrencyDim", "currencyDimId", EntityCondition.makeCondition("uomId", currencyUomId), delegator);
+ 
+            // lookup organization dimension
+            Long organizationDimId = UtilEtl.lookupDimension("OrganizationDim", "organizationDimId", EntityCondition.makeCondition("organizationPartyId", organizationPartyId), delegator);
+
+            Map<String, Object> value = FastMap.<String, Object>newInstance();
+            value.put("dateDimId", dateDimId);
+            value.put("storeDimId", 0L);
+            value.put("taxAuthorityDimId", 0L);
+            value.put("currencyDimId", currencyDimId);
+            value.put("organizationDimId", organizationDimId);
+            value.put("invoiceId", invoiceId);
+            value.put("invoiceAdjustmentId", invoiceAdjustmentId);
+            value.put("grossAmount", BigDecimal.ZERO);
+            value.put("discounts", amount);
+            value.put("refunds", BigDecimal.ZERO);
+            value.put("netAmount", BigDecimal.ZERO);
+            value.put("taxable", BigDecimal.ZERO);
+            value.put("taxDue", BigDecimal.ZERO);
+
+            value.put("taxInvItemFactId", ++taxInvItemFactKey);
+            value.put("salesInvItemFactId", ++salesInvItemFactKey);
+
+            // creates rows for both fact tables
+            delegator.create(delegator.makeValidValue("TaxInvoiceItemFact", value));
+            delegator.create(delegator.makeValidValue("SalesInvoiceItemFact", value));
+
+        }
+        adjustments.close();
+    }
+
+    /**
      * Wrapper service that run Kettle sales tax transformations and loadTaxInvoiceItemFact service.
      * @param dctx a <code>DispatchContext</code> instance
      * @param context the service context <code>Map</code>
@@ -1730,6 +1768,7 @@ public final class FinancialReports {
             UtilEtl.runTrans("component://financials/script/etl/load_sales_invoice_item_fact.ktr", null);
             UtilEtl.runTrans("component://financials/script/etl/load_invoice_level_promotions.ktr", null);
             dispatcher.runSync("financials.loadTaxInvoiceItemFact", UtilMisc.toMap("userLogin", userLogin, "locale", locale));
+            loadInvoiceAdjustments(new Infrastructure(dispatcher).getSession(), delegator);
 
             new InitialContext().unbind("java:comp/env/jdbc/default_delegator");
 
@@ -1751,8 +1790,9 @@ public final class FinancialReports {
         } catch (KettleException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            return UtilMessage.createAndLogServiceError(e, MODULE);
+        } catch (InfrastructureException e) {
+            return UtilMessage.createAndLogServiceError(e, MODULE);
         }
 
         return results;
