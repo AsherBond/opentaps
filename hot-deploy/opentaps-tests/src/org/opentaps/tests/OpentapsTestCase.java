@@ -94,6 +94,7 @@ import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
+import org.opentaps.foundation.service.ServiceWrapper;
 import org.opentaps.gwt.common.server.lookup.EntityLookupAndSuggestService;
 import org.opentaps.gwt.common.server.lookup.EntityLookupService;
 
@@ -512,6 +513,31 @@ public class OpentapsTestCase extends TestCase {
      * Runs a service synchronously and asserts that the result is a success.  If it fails or errors out, then the
      * assert message is the error message from the service.  The service is run with default timeout specified in the
      * service definition inside a new transaction.
+     * @param <T> the class of <code>ServiceWrapper</code>
+     * @param service a <code>ServiceWrapper</code> providing the input and that will contain the output
+     */
+    public <T extends ServiceWrapper> void runAndAssertServiceSuccess(T service) {
+        service.putAllOutput(runAndAssertServiceSuccess(service.name(), service.inputMap()));
+    }
+
+    /**
+     * Runs a service synchronously and asserts that the result is a success.  If it fails or errors out, then the
+     * assert message is the error message from the service.  The service is run with default timeout specified in the
+     * service definition inside a new transaction.
+     * @param <T> the class of <code>ServiceWrapper</code>
+     * @param service a <code>ServiceWrapper</code> providing the input and that will contain the output
+     * @param transactionTimeOut specifies transaction timeout.  If 0 or less and requireNewTransaction is true, then service is run with default timeout.  Otherwise it's
+     * run with user specified timeout and transaction setting
+     * @param requireNewTransaction specifies if new transaction is required
+     */
+    public <T extends ServiceWrapper> void runAndAssertServiceSuccess(T service, int transactionTimeOut, boolean requireNewTransaction) {
+        service.putAllOutput(runAndAssertServiceSuccess(service.name(), service.inputMap(), transactionTimeOut, requireNewTransaction));
+    }
+
+    /**
+     * Runs a service synchronously and asserts that the result is a success.  If it fails or errors out, then the
+     * assert message is the error message from the service.  The service is run with default timeout specified in the
+     * service definition inside a new transaction.
      * @param serviceName name of the service to call
      * @param input the service input <code>Map</code>
      * @return the <code>Map</code> returned by the service
@@ -556,6 +582,17 @@ public class OpentapsTestCase extends TestCase {
     }
 
     /**
+     * Runs a service synchronously and asserts that it causes an error and rollback.  If it is not an error,
+     * the assert message will be the service message.  Note that service failures are not considered errors because
+     * they do not cause rollbacks.
+     * @param <T> the class of <code>ServiceWrapper</code>
+     * @param service a <code>ServiceWrapper</code> providing the input and that will contain the output
+     */
+    public <T extends ServiceWrapper> void runAndAssertServiceError(T service) {
+        runAndAssertServiceError(service.name(), service.inputMap());
+    }
+
+    /**
      * Runs the service synchronously and asserts that it causes an error and rollback.  If it is not an error,
      * the assert message will be the service message.  Note that service failures are not considered errors because
      * they do not cause rollbacks.
@@ -577,6 +614,17 @@ public class OpentapsTestCase extends TestCase {
             Debug.logInfo("Service " + serviceName + " returned an error, as expected. Results: " + results + "\n\tService input: " + input, MODULE);
         }
         Debug.set(Debug.ERROR, true);
+    }
+
+    /**
+     * Runs the service synchronously and asserts that it causes an error and rollback.  If it is not an error,
+     * the assert message will be the service message.  Note that service failures are not considered errors because
+     * they do not cause rollbacks.
+     * @param <T> the class of <code>ServiceWrapper</code>
+     * @param service a <code>ServiceWrapper</code> providing the input and that will contain the output
+     */
+    public <T extends ServiceWrapper> void runAndAssertServiceFailure(T service) {
+        runAndAssertServiceFailure(service.name(), service.inputMap());
     }
 
     /**
