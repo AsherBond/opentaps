@@ -15,6 +15,8 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
 <#if facility.facilityId?exists>
   <#assign title = uiLabelMap.WarehouseViewWarehouse />
   <#assign target = "updateWarehouse" />
@@ -25,89 +27,23 @@
   <#assign submitName = uiLabelMap.CommonCreate />
 </#if>
 
-<div class="sectionHeader">${title}</div>
+<div class="subSectionHeader"><span class="subSectionTitle">${title}</span></div>
 
 <form name="createOrEditWarehouse" method="post" action="<@ofbizUrl>${target}</@ofbizUrl>">
   <#if facility.facilityId?exists>
-  <input type="hidden" name="facilityId" value="${facility.facilityId}"/>
+    <@inputHidden name="facilityId" value=facility.facilityId />
   </#if>
 
-<div class="form">
+  <table class="twoColumnForm">
 
-  <div class="formRow">
-    <span class="formLabelRequired">${uiLabelMap.CommonName}</span>
-    <span class="formInputSpan">
-      <input type="text" name="facilityName" class="inputBox" value="${facility.facilityName?default("")}" size="40"/>
-    </span>
-  </div>
+    <@inputTextRow name="facilityName" title=uiLabelMap.CommonName titleClass="requiredField" size=40 default=(facility.facilityName)! />
+    <@inputSelectRow name="facilityTypeId" title=uiLabelMap.ProductFacilityType titleClass="requiredField" list=facilityTypes key="facilityTypeId" displayField="description" default=(facility.facilityTypeId)! />
+    <@inputTextRow name="squareFootage" title=uiLabelMap.ProductSquareFootage size=6 default=(facility.squareFootage)! />
+    <@inputAutoCompletePartyGroupRow name="ownerPartyId" title=uiLabelMap.ProductFacilityOwner titleClass="requiredField" size=30 default=(facility.ownerPartyId)! />
+    <@inputSelectRow name="defaultInventoryItemTypeId" title=uiLabelMap.ProductInventoryItemType titleClass="requiredField" list=inventoryItemTypes key="inventoryItemTypeId" displayField="description" default=(facility.defaultInventoryItemTypeId)! />
+    <@inputSelectRow name="defaultWeightUomId" title=uiLabelMap.ProductFacilityDefaultWeightUnit list=weightUomList key="uomId" displayField="description" default=(facility.defaultWeightUomId)! />
+    <@inputTextRow name="defaultDaysToShip" title=uiLabelMap.WarehouseDefaultDaysToShip size=6 default=(facility.defaultDaysToShip)! />
+    <@inputSubmitRow title=submitName />
 
-  <div class="formRow">
-    <span class="formLabelRequired">${uiLabelMap.ProductFacilityType}</span>
-    <span class="formInputSpan">
-        <select name="facilityTypeId" class="inputBox">
-          <#list facilityTypes as type>
-            <#if facility.facilityTypeId?default("") == type.facilityTypeId><#assign selected = "selected"><#else><#assign selected = ""></#if>
-            <option ${selected} value="${type.facilityTypeId}">${type.description}</option>
-          </#list>
-        </select>
-    </span>
-  </div>
-
-  <div class="formRow">
-    <span class="formLabel">${uiLabelMap.ProductSquareFootage}</span>
-    <span class="formInputSpan">
-      <input type="text" name="squareFootage" class="inputBox" size="6" value="${facility.squareFootage?default("")}"/>
-    </span>
-  </div>
-
-  <div class="formRow">
-    <span class="formLabelRequired">${uiLabelMap.ProductFacilityOwner}</span>
-    <span class="formInputSpan">
-        <input type="text" class="inputBox" name="ownerPartyId" value="${facility.ownerPartyId?if_exists}" size="10"/>
-        <a href="javascript:call_fieldlookup2(document.createOrEditWarehouse.ownerPartyId,'LookupPartyName');"><img src="/images/fieldlookup.gif" alt="Lookup" border="0" height="16" width="16"></a>
-    </span>
-  </div>
-
-  <div class="formRow">
-    <span class="formLabelRequired">${uiLabelMap.ProductInventoryItemType}</span>
-    <span class="formInputSpan">
-        <select name="defaultInventoryItemTypeId" class="inputBox">
-          <#list inventoryItemTypes as type>
-            <#if facility.defaultInventoryItemTypeId?default("") == type.inventoryItemTypeId><#assign selected = "selected"><#else><#assign selected = ""></#if>
-            <option ${selected} value="${type.inventoryItemTypeId}">${type.description}</option>
-          </#list>
-        </select>
-    </span>
-  </div>
-
-  <div class="formRow">
-    <span class="formLabel">${uiLabelMap.ProductFacilityDefaultWeightUnit}</span>
-    <span class="formInputSpan">
-        <select name="defaultWeightUomId" class="inputBox">
-          <option value="">None</option>
-          <#list weightUomList as weight>
-            <#if facility.defaultWeightUomId?default("") == weight.uomId><#assign selected = "selected"><#else><#assign selected = ""></#if>
-            <option ${selected} value="${weight.uomId}">${weight.description}</option>
-          </#list>
-        </select>
-    </span>
-  </div>
-
-
-  <div class="formRow">
-    <span class="formLabel">${uiLabelMap.WarehouseDefaultDaysToShip}</span>
-    <span class="formInputSpan">
-      <input type="text" name="defaultDaysToShip" class="inputBox" size="6" value="${facility.defaultDaysToShip?default("")}"/>
-    </span>
-  </div>
-
-  <div class="formRow">
-    <span class="formInputSpan">
-      <input type="submit" class="smallSubmit" value="${submitName}"></input>
-    </span>
-  </div>
-
-  <div class="spacer">&nbsp;</div>
-</div>
-
+  </table>
 </form>

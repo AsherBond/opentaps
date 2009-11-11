@@ -123,9 +123,9 @@ under the License.
     </td>
   </tr>
 </table>
+</div>
   <#else>
     <div class="tabletext">${uiLabelMap.CommonNoContactInformationOnFile}.</div>
 </#if>
 
-</div>
 </#if>

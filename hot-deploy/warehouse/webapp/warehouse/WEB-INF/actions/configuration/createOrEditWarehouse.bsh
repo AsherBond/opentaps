@@ -61,5 +61,10 @@ inventoryItemTypes = delegator.findAllCache("InventoryItemType", UtilMisc.toList
 context.put("inventoryItemTypes", inventoryItemTypes);
 
 // unit of measures
-weightUomList = delegator.findByAndCache("Uom", UtilMisc.toMap("uomTypeId", "WEIGHT_MEASURE"));
+weightUomList = UtilMisc.toList(UtilMisc.toMap("description", "None", "uomId", ""));
+weightUomList2 = delegator.findByAndCache("Uom", UtilMisc.toMap("uomTypeId", "WEIGHT_MEASURE"));
+if (weightUomList2 != null) {
+    weightUomList.addAll(weightUomList2);
+}
+
 context.put("weightUomList", weightUomList);
