@@ -53,6 +53,7 @@ public class CreateProjectTask extends ServiceWrapper {
         communicationEventId("communicationEventId"),
         currentStatusId("currentStatusId"),
         description("description"),
+        emailDeleted("emailDeleted"),
         estimateCalcMethod("estimateCalcMethod"),
         estimatedCompletionDate("estimatedCompletionDate"),
         estimatedHours("estimatedHours"),
@@ -130,6 +131,7 @@ public class CreateProjectTask extends ServiceWrapper {
     private String inCommunicationEventId;
     private String inCurrentStatusId;
     private String inDescription;
+    private String inEmailDeleted;
     private String inEstimateCalcMethod;
     private Timestamp inEstimatedCompletionDate;
     private Double inEstimatedHours;
@@ -262,6 +264,14 @@ public class CreateProjectTask extends ServiceWrapper {
      */
     public String getInDescription() {
         return this.inDescription;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInEmailDeleted() {
+        return this.inEmailDeleted;
     }
     /**
      * Auto generated value accessor.
@@ -804,6 +814,15 @@ public class CreateProjectTask extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inEmailDeleted the inEmailDeleted to set
+    */
+    public void setInEmailDeleted(String inEmailDeleted) {
+        this.inParameters.add("emailDeleted");
+        this.inEmailDeleted = inEmailDeleted;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inEstimateCalcMethod the inEstimateCalcMethod to set
     */
     public void setInEstimateCalcMethod(String inEstimateCalcMethod) {
@@ -1332,6 +1351,7 @@ public class CreateProjectTask extends ServiceWrapper {
         if (inParameters.contains("communicationEventId")) mapValue.put("communicationEventId", getInCommunicationEventId());
         if (inParameters.contains("currentStatusId")) mapValue.put("currentStatusId", getInCurrentStatusId());
         if (inParameters.contains("description")) mapValue.put("description", getInDescription());
+        if (inParameters.contains("emailDeleted")) mapValue.put("emailDeleted", getInEmailDeleted());
         if (inParameters.contains("estimateCalcMethod")) mapValue.put("estimateCalcMethod", getInEstimateCalcMethod());
         if (inParameters.contains("estimatedCompletionDate")) mapValue.put("estimatedCompletionDate", getInEstimatedCompletionDate());
         if (inParameters.contains("estimatedHours")) mapValue.put("estimatedHours", getInEstimatedHours());
@@ -1409,6 +1429,7 @@ public class CreateProjectTask extends ServiceWrapper {
         if (mapValue.containsKey("communicationEventId")) setInCommunicationEventId((String) mapValue.get("communicationEventId"));
         if (mapValue.containsKey("currentStatusId")) setInCurrentStatusId((String) mapValue.get("currentStatusId"));
         if (mapValue.containsKey("description")) setInDescription((String) mapValue.get("description"));
+        if (mapValue.containsKey("emailDeleted")) setInEmailDeleted((String) mapValue.get("emailDeleted"));
         if (mapValue.containsKey("estimateCalcMethod")) setInEstimateCalcMethod((String) mapValue.get("estimateCalcMethod"));
         if (mapValue.containsKey("estimatedCompletionDate")) setInEstimatedCompletionDate((Timestamp) mapValue.get("estimatedCompletionDate"));
         if (mapValue.containsKey("estimatedHours")) setInEstimatedHours((Double) mapValue.get("estimatedHours"));

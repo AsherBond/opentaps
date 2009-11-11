@@ -27,30 +27,27 @@ import javolution.util.FastMap;
 
 import org.opentaps.foundation.service.ServiceWrapper;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
 
 /**
- * Auto generated base service entity crmsfa.createPartyContent.
+ * Auto generated base service entity opentaps.evictHibernateCache.
  */
-public class CrmsfaCreatePartyContent extends ServiceWrapper {
+public class OpentapsEvictHibernateCache extends ServiceWrapper {
 
     /** The service name as used by the service engine. */
-    public static final String NAME = "crmsfa.createPartyContent";
+    public static final String NAME = "opentaps.evictHibernateCache";
 
     /** The enumeration of input parameters. */
     public static enum In {
-        contentId("contentId"),
-        contentPurposeEnumId("contentPurposeEnumId"),
-        fromDate("fromDate"),
+        condition("condition"),
+        entityName("entityName"),
         locale("locale"),
-        partyContentTypeId("partyContentTypeId"),
-        partyId("partyId"),
-        roleTypeId("roleTypeId"),
-        thruDate("thruDate"),
+        pk("pk"),
         timeZone("timeZone"),
         userLogin("userLogin");
         private final String _fieldName;
@@ -72,14 +69,10 @@ public class CrmsfaCreatePartyContent extends ServiceWrapper {
         public String getName() { return this._fieldName; }
     }
 
-    private String inContentId;
-    private String inContentPurposeEnumId;
-    private Timestamp inFromDate;
+    private EntityCondition inCondition;
+    private String inEntityName;
     private Locale inLocale;
-    private String inPartyContentTypeId;
-    private String inPartyId;
-    private String inRoleTypeId;
-    private Timestamp inThruDate;
+    private GenericEntity inPk;
     private TimeZone inTimeZone;
     private GenericValue inUserLogin;
     private String outErrorMessage;
@@ -96,27 +89,19 @@ public class CrmsfaCreatePartyContent extends ServiceWrapper {
 
     /**
      * Auto generated value accessor.
-     * This parameter is required.
-     * @return <code>String</code>
+     * This parameter is optional.
+     * @return <code>EntityCondition</code>
      */
-    public String getInContentId() {
-        return this.inContentId;
+    public EntityCondition getInCondition() {
+        return this.inCondition;
     }
     /**
      * Auto generated value accessor.
      * This parameter is optional.
      * @return <code>String</code>
      */
-    public String getInContentPurposeEnumId() {
-        return this.inContentPurposeEnumId;
-    }
-    /**
-     * Auto generated value accessor.
-     * This parameter is optional.
-     * @return <code>Timestamp</code>
-     */
-    public Timestamp getInFromDate() {
-        return this.inFromDate;
+    public String getInEntityName() {
+        return this.inEntityName;
     }
     /**
      * Auto generated value accessor.
@@ -128,35 +113,11 @@ public class CrmsfaCreatePartyContent extends ServiceWrapper {
     }
     /**
      * Auto generated value accessor.
-     * This parameter is required.
-     * @return <code>String</code>
-     */
-    public String getInPartyContentTypeId() {
-        return this.inPartyContentTypeId;
-    }
-    /**
-     * Auto generated value accessor.
-     * This parameter is required.
-     * @return <code>String</code>
-     */
-    public String getInPartyId() {
-        return this.inPartyId;
-    }
-    /**
-     * Auto generated value accessor.
-     * This parameter is required.
-     * @return <code>String</code>
-     */
-    public String getInRoleTypeId() {
-        return this.inRoleTypeId;
-    }
-    /**
-     * Auto generated value accessor.
      * This parameter is optional.
-     * @return <code>Timestamp</code>
+     * @return <code>GenericEntity</code>
      */
-    public Timestamp getInThruDate() {
-        return this.inThruDate;
+    public GenericEntity getInPk() {
+        return this.inPk;
     }
     /**
      * Auto generated value accessor.
@@ -241,30 +202,21 @@ public class CrmsfaCreatePartyContent extends ServiceWrapper {
 
     /**
      * Auto generated value setter.
-     * This parameter is required.
-     * @param inContentId the inContentId to set
+     * This parameter is optional.
+     * @param inCondition the inCondition to set
     */
-    public void setInContentId(String inContentId) {
-        this.inParameters.add("contentId");
-        this.inContentId = inContentId;
+    public void setInCondition(EntityCondition inCondition) {
+        this.inParameters.add("condition");
+        this.inCondition = inCondition;
     }
     /**
      * Auto generated value setter.
      * This parameter is optional.
-     * @param inContentPurposeEnumId the inContentPurposeEnumId to set
+     * @param inEntityName the inEntityName to set
     */
-    public void setInContentPurposeEnumId(String inContentPurposeEnumId) {
-        this.inParameters.add("contentPurposeEnumId");
-        this.inContentPurposeEnumId = inContentPurposeEnumId;
-    }
-    /**
-     * Auto generated value setter.
-     * This parameter is optional.
-     * @param inFromDate the inFromDate to set
-    */
-    public void setInFromDate(Timestamp inFromDate) {
-        this.inParameters.add("fromDate");
-        this.inFromDate = inFromDate;
+    public void setInEntityName(String inEntityName) {
+        this.inParameters.add("entityName");
+        this.inEntityName = inEntityName;
     }
     /**
      * Auto generated value setter.
@@ -277,39 +229,12 @@ public class CrmsfaCreatePartyContent extends ServiceWrapper {
     }
     /**
      * Auto generated value setter.
-     * This parameter is required.
-     * @param inPartyContentTypeId the inPartyContentTypeId to set
-    */
-    public void setInPartyContentTypeId(String inPartyContentTypeId) {
-        this.inParameters.add("partyContentTypeId");
-        this.inPartyContentTypeId = inPartyContentTypeId;
-    }
-    /**
-     * Auto generated value setter.
-     * This parameter is required.
-     * @param inPartyId the inPartyId to set
-    */
-    public void setInPartyId(String inPartyId) {
-        this.inParameters.add("partyId");
-        this.inPartyId = inPartyId;
-    }
-    /**
-     * Auto generated value setter.
-     * This parameter is required.
-     * @param inRoleTypeId the inRoleTypeId to set
-    */
-    public void setInRoleTypeId(String inRoleTypeId) {
-        this.inParameters.add("roleTypeId");
-        this.inRoleTypeId = inRoleTypeId;
-    }
-    /**
-     * Auto generated value setter.
      * This parameter is optional.
-     * @param inThruDate the inThruDate to set
+     * @param inPk the inPk to set
     */
-    public void setInThruDate(Timestamp inThruDate) {
-        this.inParameters.add("thruDate");
-        this.inThruDate = inThruDate;
+    public void setInPk(GenericEntity inPk) {
+        this.inParameters.add("pk");
+        this.inPk = inPk;
     }
     /**
      * Auto generated value setter.
@@ -410,14 +335,10 @@ public class CrmsfaCreatePartyContent extends ServiceWrapper {
     /** {@inheritDoc} */
     public Map<String, Object> inputMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
-        if (inParameters.contains("contentId")) mapValue.put("contentId", getInContentId());
-        if (inParameters.contains("contentPurposeEnumId")) mapValue.put("contentPurposeEnumId", getInContentPurposeEnumId());
-        if (inParameters.contains("fromDate")) mapValue.put("fromDate", getInFromDate());
+        if (inParameters.contains("condition")) mapValue.put("condition", getInCondition());
+        if (inParameters.contains("entityName")) mapValue.put("entityName", getInEntityName());
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
-        if (inParameters.contains("partyContentTypeId")) mapValue.put("partyContentTypeId", getInPartyContentTypeId());
-        if (inParameters.contains("partyId")) mapValue.put("partyId", getInPartyId());
-        if (inParameters.contains("roleTypeId")) mapValue.put("roleTypeId", getInRoleTypeId());
-        if (inParameters.contains("thruDate")) mapValue.put("thruDate", getInThruDate());
+        if (inParameters.contains("pk")) mapValue.put("pk", getInPk());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         return mapValue;
@@ -439,14 +360,10 @@ public class CrmsfaCreatePartyContent extends ServiceWrapper {
 
     /** {@inheritDoc} */
     public void putAllInput(Map<String, Object> mapValue) {
-        if (mapValue.containsKey("contentId")) setInContentId((String) mapValue.get("contentId"));
-        if (mapValue.containsKey("contentPurposeEnumId")) setInContentPurposeEnumId((String) mapValue.get("contentPurposeEnumId"));
-        if (mapValue.containsKey("fromDate")) setInFromDate((Timestamp) mapValue.get("fromDate"));
+        if (mapValue.containsKey("condition")) setInCondition((EntityCondition) mapValue.get("condition"));
+        if (mapValue.containsKey("entityName")) setInEntityName((String) mapValue.get("entityName"));
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
-        if (mapValue.containsKey("partyContentTypeId")) setInPartyContentTypeId((String) mapValue.get("partyContentTypeId"));
-        if (mapValue.containsKey("partyId")) setInPartyId((String) mapValue.get("partyId"));
-        if (mapValue.containsKey("roleTypeId")) setInRoleTypeId((String) mapValue.get("roleTypeId"));
-        if (mapValue.containsKey("thruDate")) setInThruDate((Timestamp) mapValue.get("thruDate"));
+        if (mapValue.containsKey("pk")) setInPk((GenericEntity) mapValue.get("pk"));
         if (mapValue.containsKey("timeZone")) setInTimeZone((TimeZone) mapValue.get("timeZone"));
         if (mapValue.containsKey("userLogin")) setInUserLogin((GenericValue) mapValue.get("userLogin"));
     }
@@ -464,41 +381,41 @@ public class CrmsfaCreatePartyContent extends ServiceWrapper {
     }
 
     /**
-     * Construct a <code>CrmsfaCreatePartyContent</code> from the input values of the given <code>CrmsfaCreatePartyContent</code>.
-     * @param input a <code>CrmsfaCreatePartyContent</code>
+     * Construct a <code>OpentapsEvictHibernateCache</code> from the input values of the given <code>OpentapsEvictHibernateCache</code>.
+     * @param input a <code>OpentapsEvictHibernateCache</code>
      */
-    public static CrmsfaCreatePartyContent fromInput(CrmsfaCreatePartyContent input) {
-        CrmsfaCreatePartyContent service = new CrmsfaCreatePartyContent();
+    public static OpentapsEvictHibernateCache fromInput(OpentapsEvictHibernateCache input) {
+        OpentapsEvictHibernateCache service = new OpentapsEvictHibernateCache();
         service.putAllInput(input.inputMap());
         return service;
     }
 
     /**
-     * Construct a <code>CrmsfaCreatePartyContent</code> from the output values of the given <code>CrmsfaCreatePartyContent</code>.
-     * @param output a <code>CrmsfaCreatePartyContent</code>
+     * Construct a <code>OpentapsEvictHibernateCache</code> from the output values of the given <code>OpentapsEvictHibernateCache</code>.
+     * @param output a <code>OpentapsEvictHibernateCache</code>
      */
-    public static CrmsfaCreatePartyContent fromOutput(CrmsfaCreatePartyContent output) {
-        CrmsfaCreatePartyContent service = new CrmsfaCreatePartyContent();
+    public static OpentapsEvictHibernateCache fromOutput(OpentapsEvictHibernateCache output) {
+        OpentapsEvictHibernateCache service = new OpentapsEvictHibernateCache();
         service.putAllOutput(output.outputMap());
         return service;
     }
 
     /**
-     * Construct a <code>CrmsfaCreatePartyContent</code> from the given input <code>Map</code>.
+     * Construct a <code>OpentapsEvictHibernateCache</code> from the given input <code>Map</code>.
      * @param mapValue the service input <code>Map</code>
      */
-    public static CrmsfaCreatePartyContent fromInput(Map<String, Object> mapValue) {
-        CrmsfaCreatePartyContent service = new CrmsfaCreatePartyContent();
+    public static OpentapsEvictHibernateCache fromInput(Map<String, Object> mapValue) {
+        OpentapsEvictHibernateCache service = new OpentapsEvictHibernateCache();
         service.putAllInput(mapValue);
         return service;
     }
 
     /**
-     * Construct a <code>CrmsfaCreatePartyContent</code> from the given output <code>Map</code>.
+     * Construct a <code>OpentapsEvictHibernateCache</code> from the given output <code>Map</code>.
      * @param mapValue the service output <code>Map</code>
      */
-    public static CrmsfaCreatePartyContent fromOutput(Map<String, Object> mapValue) {
-        CrmsfaCreatePartyContent service = new CrmsfaCreatePartyContent();
+    public static OpentapsEvictHibernateCache fromOutput(Map<String, Object> mapValue) {
+        OpentapsEvictHibernateCache service = new OpentapsEvictHibernateCache();
         service.putAllOutput(mapValue);
         return service;
     }
