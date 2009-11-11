@@ -25,11 +25,11 @@
   <table class="twoColumnForm">
     <@displayLinkRow title=uiLabelMap.PurchPrimaryWarehouse href="viewBackupWarehouses?facilityId=${facilityTo.facilityId}" text="${facilityTo.facilityName} (${facilityTo.facilityId})" />    
     <@inputTextRow name="facilityName" title=uiLabelMap.CommonName titleClass="requiredField" />
-    <@inputLookupRow name="ownerPartyId" title=uiLabelMap.ProductFacilityOwner form="createBackupWarehouse" lookup="LookupPerson" titleClass="requiredField" />
+    <@inputAutoCompletePartyGroupRow name="ownerPartyId" title=uiLabelMap.ProductFacilityOwner titleClass="requiredField" size=30/>
     <@inputCurrencySelectRow name="currencyUomId" title=uiLabelMap.CommonCurrency titleClass="requiredField" />
     <@inputSelectRow name="defaultInventoryItemTypeId" title=uiLabelMap.ProductInventoryItemType
         list=inventoryItemTypes key="inventoryItemTypeId" displayField="description" required=true titleClass="requiredField" default=defaultInventoryItemTypeId />
-    <@inputLookupRow name="managerPartyId" title=uiLabelMap.PurchInitialManager form="createBackupWarehouse" lookup="LookupPerson" titleClass="requiredField" />
+    <@inputAutoCompleteUserLoginPartyRow name="managerPartyId" title=uiLabelMap.PurchInitialManager titleClass="requiredField" size=30/>
     <@inputTextRow name="sequenceNum" title=uiLabelMap.CommonPriority titleClass="requiredField" size=3 />
     <@inputDateTimeRow name="fromDate" title=uiLabelMap.CommonFrom form="createFacilityAssoc" default=nowTimestamp titleClass="requiredField" />
     <@inputDateTimeRow name="thruDate" title=uiLabelMap.CommonThru form="createFacilityAssoc" />

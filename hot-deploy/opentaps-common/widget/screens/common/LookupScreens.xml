@@ -279,10 +279,34 @@
         </section>
     </screen>
 
+    <screen name="LookupPartyGroup">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PartyLookupPartyGroup"/>
+                <set field="entityName" value="PartyGroup"/>
+                <set field="queryString" from-field="result.queryString"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/>
+            </actions>
+            <widgets>
+              <decorator-screen name="CommonLookup">
+                <decorator-section name="lookup-body">
+                  <container style="subSectionBlock">
+                    <container style="form">
+                      <include-form name="lookupPartyGroup" location="component://party/webapp/partymgr/lookup/LookupForms.xml"/>
+                    </container>
+                  </container>
+                  <include-form name="listLookupPartyGroup" location="component://party/webapp/partymgr/lookup/LookupForms.xml"/>
+                </decorator-section>
+              </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
     <screen name="LookupUserLoginAndPartyDetails">
         <section>
             <actions>
-                <set field="pageTitleLabel" value="${uiLabelMap.PartyLookupUserLoginAndPartyDetails}"/>
+                <set field="pageTitleLabel" value="PartyLookupUserLoginAndPartyDetails"/>
                 <set field="entityName" value="UserLoginAndPartyDetails"/>
                 <set field="queryString" from-field="result.queryString"/>
                 <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>

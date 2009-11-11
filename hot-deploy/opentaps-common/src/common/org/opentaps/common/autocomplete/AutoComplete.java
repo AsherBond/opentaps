@@ -112,8 +112,37 @@ public final class AutoComplete {
      * @return a <code>String</code> value
      */
     public static String getAutoCompletePartyIds(HttpServletRequest request, HttpServletResponse response) {
-        // get any party (but can be related to another user)
         return autocompletePartyIdsByCondition(null, "PartySummaryCRMView", request, response);
+    }
+
+    /**
+     * Retrieves the auto complete any Party Group IDs with a given keyword.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return a <code>String</code> value
+     */
+    public static String getAutoCompletePartyGroupIds(HttpServletRequest request, HttpServletResponse response) {
+        return autocompletePartyIdsByCondition(EntityCondition.makeCondition("partyTypeId", "PARTY_GROUP"), "PartySummaryCRMView", request, response);
+    }
+
+    /**
+     * Retrieves the auto complete any Person Party IDs with a given keyword.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return a <code>String</code> value
+     */
+    public static String getAutoCompletePersonIds(HttpServletRequest request, HttpServletResponse response) {
+        return autocompletePartyIdsByCondition(EntityCondition.makeCondition("partyTypeId", "PERSON"), "PartySummaryCRMView", request, response);
+    }
+
+    /**
+     * Retrieves the auto complete any party with a user login IDs with a given keyword.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return a <code>String</code> value
+     */
+    public static String getAutoCompleteUserLoginPartyIds(HttpServletRequest request, HttpServletResponse response) {
+        return autocompletePartyIdsByCondition(null, "UserLoginAndPartyDetails", request, response);
     }
 
     private static String autocompletePartyIdsByCondition(EntityCondition condition, String entityName, HttpServletRequest request, HttpServletResponse response) {

@@ -937,6 +937,11 @@ padding: 0px 6px;
 color: #666666;
 }
 
+.basic-table tr .smallSubmit,
+.basic-table tr .smallSubmitDisabled { 
+line-height: 1.8em;
+}
+
 .mediumSubmit,
 .largeSubmit,
 .loginButton {

@@ -171,6 +171,24 @@
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>
+    <request-map uri="getAutoCompletePartyGroupIds">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.autocomplete.AutoComplete" invoke="getAutoCompletePartyGroupIds"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="getAutoCompletePersonIds">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.autocomplete.AutoComplete" invoke="getAutoCompletePersonIds"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="getAutoCompleteUserLoginPartyIds">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.autocomplete.AutoComplete" invoke="getAutoCompleteUserLoginPartyIds"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
     <request-map uri="getAutoCompleteGlAccounts">
         <security https="true" auth="true"/>
         <event type="java" path="org.opentaps.common.autocomplete.AutoComplete" invoke="getAutoCompleteGlAccounts"/>

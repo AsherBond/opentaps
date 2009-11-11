@@ -543,7 +543,7 @@ For more information, please see documentation/opentapsFormMacros.html
 
 <#-- auto complete any Party -->
 <#macro inputAutoCompleteParty name id="" url="getAutoCompletePartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name url=url id=id form=form lookup="LookupPartyName" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+  <@inputAutoComplete name=name url=url id=id lookup="LookupPartyName" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
 </#macro>
 
 <#macro inputAutoCompletePartyCell name id="" url="getAutoCompletePartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
@@ -557,9 +557,57 @@ For more information, please see documentation/opentapsFormMacros.html
   </tr>
 </#macro>
 
+<#-- auto complete any PartyGroup -->
+<#macro inputAutoCompletePartyGroup name id="" url="getAutoCompletePartyGroupIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+  <@inputAutoComplete name=name url=url id=id lookup="LookupPartyGroup" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+</#macro>
+
+<#macro inputAutoCompletePartyGroupCell name id="" url="getAutoCompletePartyGroupIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+  <td><@inputAutoCompletePartyGroup name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/></td>
+</#macro>
+
+<#macro inputAutoCompletePartyGroupRow title name titleClass="tableheadtext" id="" url="getAutoCompletePartyGroupIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+  <tr>
+    <td class="titleCell"><span class="${titleClass}">${title}</span></td>
+    <@inputAutoCompletePartyGroupCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange />
+  </tr>
+</#macro>
+
+<#-- auto complete any Person -->
+<#macro inputAutoCompletePerson name id="" url="getAutoCompletePersonIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+  <@inputAutoComplete name=name url=url id=id lookup="LookupPartyName" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+</#macro>
+
+<#macro inputAutoCompletePersonCell name id="" url="getAutoCompletePersonIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+  <td><@inputAutoCompletePerson name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/></td>
+</#macro>
+
+<#macro inputAutoCompletePersonRow title name titleClass="tableheadtext" id="" url="getAutoCompletePersonIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+  <tr>
+    <td class="titleCell"><span class="${titleClass}">${title}</span></td>
+    <@inputAutoCompletePersonCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange />
+  </tr>
+</#macro>
+
+<#-- auto complete any Party with User Login -->
+<#macro inputAutoCompleteUserLoginParty name id="" url="getAutoCompleteUserLoginPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+  <@inputAutoComplete name=name url=url id=id lookup="LookupUserLoginAndPartyDetails" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+</#macro>
+
+<#macro inputAutoCompleteUserLoginPartyCell name id="" url="getAutoCompleteUserLoginPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+  <td><@inputAutoCompleteUserLoginParty name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/></td>
+</#macro>
+
+<#macro inputAutoCompleteUserLoginPartyRow title name titleClass="tableheadtext" id="" url="getAutoCompleteUserLoginPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+  <tr>
+    <td class="titleCell"><span class="${titleClass}">${title}</span></td>
+    <@inputAutoCompleteUserLoginPartyCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange />
+  </tr>
+</#macro>
+
 <#-- auto complete any CRM Party (contact, accout, lead, partner) -->
 <#macro inputAutoCompleteCrmParty name id="" url="getAutoCompleteCrmPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name url=url id=id form=form lookup="LookupPartyName" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+  <@inputAutoComplete name=name url=url id=id lookup="LookupPartyName" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
 </#macro>
 
 <#macro inputAutoCompleteCrmPartyCell name id="" url="getAutoCompleteCrmPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
@@ -575,7 +623,7 @@ For more information, please see documentation/opentapsFormMacros.html
 
 <#-- auto complete Supplier -->
 <#macro inputAutoCompleteSupplier name id="" url="getAutoCompleteSupplierPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name url=url id=id form=form lookup="LookupSupplier" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+  <@inputAutoComplete name=name url=url id=id lookup="LookupSupplier" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
 </#macro>
 
 <#macro inputAutoCompleteSupplierCell name id="" url="getAutoCompleteSupplierPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
@@ -591,7 +639,7 @@ For more information, please see documentation/opentapsFormMacros.html
 
 <#-- auto complete Account, Contact and Prospect -->
 <#macro inputAutoCompleteClient name id="" url="getAutoCompleteClientPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name url=url id=id form=form lookup="LookupClients" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange />
+  <@inputAutoComplete name=name url=url id=id lookup="LookupClients" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange />
 </#macro>
 
 <#macro inputAutoCompleteClientCell name id="" url="getAutoCompleteClientPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
@@ -607,7 +655,7 @@ For more information, please see documentation/opentapsFormMacros.html
 
 <#-- auto complete Account -->
 <#macro inputAutoCompleteAccount name id="" url="getAutoCompleteAccountPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name url=url id=id form=form lookup="LookupAccounts" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+  <@inputAutoComplete name=name url=url id=id  lookup="LookupAccounts" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
 </#macro>
 
 <#macro inputAutoCompleteAccountCell name id="" url="getAutoCompleteAccountPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
@@ -623,7 +671,7 @@ For more information, please see documentation/opentapsFormMacros.html
 
 <#-- auto complete GlAccount -->
 <#macro inputAutoCompleteGlAccount name id="" url="getAutoCompleteGlAccounts" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name url=url id=id form=form lookup="LookupGlAccount" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange />
+  <@inputAutoComplete name=name url=url id=id lookup="LookupGlAccount" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange />
 </#macro>
 
 <#macro inputAutoCompleteGlAccountCell name id="" url="getAutoCompleteGlAccounts" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
