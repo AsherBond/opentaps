@@ -404,6 +404,19 @@ public class SalesTaxTests extends FinancialsTestCase {
     }
 
     /**
+     * Test checks if the sales invoice item and tax invoice item fact table
+     * contains correct discounts value that should follow created invoice adjustment.
+     * 
+     * 1. run sales tax transformations
+     * 2. create an sales invoice
+     * 3. add invoice item 1 WG-1111 for $59.99
+     * 4. mark invoice READY
+     * 5. add invoice adjustment for -$6.99
+     * 6. run sales tax transformation again 
+     * 7. verify discounts value increased for 6.99 for both sales and tax fact tables
+     */
+
+    /**
      * Finds tax authority dimension identifier for given geo and party.
      * 
      * @param session Hibernate session
