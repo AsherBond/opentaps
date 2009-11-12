@@ -406,15 +406,55 @@ public class SalesTaxTests extends FinancialsTestCase {
     /**
      * Test checks if the sales invoice item and tax invoice item fact table
      * contains correct discounts value that should follow created invoice adjustment.
-     * 
-     * 1. run sales tax transformations
-     * 2. create an sales invoice
-     * 3. add invoice item 1 WG-1111 for $59.99
-     * 4. mark invoice READY
-     * 5. add invoice adjustment for -$6.99
-     * 6. run sales tax transformation again 
-     * 7. verify discounts value increased for 6.99 for both sales and tax fact tables
+     * @throws GeneralException 
      */
+    public void testSalesTaxTransformationForInvoiceAdjustments() throws GeneralException {
+        String customerPartyId = createPartyFromTemplate("DemoAccount1", "Test customer");
+        FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, demofinadmin);
+        Session session = new Infrastructure(dispatcher).getSession();
+
+        BigDecimal adjustmentAmount = BigDecimal.valueOf(-6.99);
+
+        // prepare query that help us to collect summary amounts
+        Query totalSalesFactDiscountQry =
+            session.createQuery("select sum(discounts) from SalesInvoiceItemFact");
+        Query totalTaxFactDiscountQry =
+            session.createQuery("select sum(discounts) from TaxInvoiceItemFact");
+
+        // 1. create an sales invoice
+        String invoiceId = fa.createInvoice(customerPartyId, "SALES_INVOICE");
+
+        // 2. add invoice item 1 WG-1111 for $59.99
+        fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", BigDecimal.ONE, BigDecimal.valueOf(59.99));
+
+        // 3. mark invoice READY
+        fa.updateInvoiceStatus(invoiceId, "INVOICE_READY");
+
+        // 4. run sales tax transformations
+        runAndAssertServiceSuccess("loadSalesTaxData", UtilMisc.toMap("userLogin", admin));
+
+        BigDecimal initialSalesFactDiscounts = (BigDecimal) totalSalesFactDiscountQry.uniqueResult();
+        BigDecimal initialTaxFactDiscounts = (BigDecimal) totalTaxFactDiscountQry.uniqueResult();
+
+        // 5. add invoice adjustment for -$6.99
+        Map<String, Object> callCtxt = UtilMisc.toMap(
+                "userLogin", admin,
+                "invoiceId", invoiceId,
+                "invoiceAdjustmentTypeId", "CASH_DISCOUNT",
+                "adjustmentAmount", adjustmentAmount
+        );
+        runAndAssertServiceSuccess("createInvoiceAdjustment", callCtxt);
+
+        // 6. run sales tax transformation again 
+        runAndAssertServiceSuccess("loadSalesTaxData", UtilMisc.toMap("userLogin", admin));
+
+        // 7. verify discounts value increased for 6.99 for both sales and tax fact tables
+        assertEquals("SalesInvoiceItemFact table has wrong discounts amount after invoice adjustment added",
+                (BigDecimal) totalSalesFactDiscountQry.uniqueResult(), initialSalesFactDiscounts.add(adjustmentAmount));
+        assertEquals("TaxInvoiceItemFact table has wrong discounts amount after invoice adjustment added",
+                (BigDecimal) totalTaxFactDiscountQry.uniqueResult(), initialTaxFactDiscounts.add(adjustmentAmount));
+
+    }
 
     /**
      * Finds tax authority dimension identifier for given geo and party.
