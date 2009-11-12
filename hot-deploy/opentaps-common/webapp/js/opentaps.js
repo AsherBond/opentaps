@@ -977,3 +977,10 @@ opentaps.checkSupplierProductResponse = function(button, confirmMessage, data) {
 	}
 }
 
+opentaps.hideDiv = function(divId) {
+    document.getElementById(divId).style.display="none";
+}
+
+opentaps.displayDiv = function(divId) {
+    document.getElementById(divId).style.display="";
+}

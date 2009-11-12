@@ -33,6 +33,17 @@ context.put("inventoryItemTypes", delegator.findAllCache("InventoryItemType"));
 
 // we should only set up the product receiving page if there is a productId
 productId = parameters.get("productId");
+
+// get the accounting tags for the facility owner
+acctgTags = UtilAccountingTags.getAccountingTagsForOrganization(facility.getString("ownerPartyId"), UtilAccountingTags.PURCHASE_ORDER_TAG, delegator);
+context.put("acctgTags", acctgTags);
+
+context.put("inventoryItemTypeId", parameters.get("inventoryItemTypeId"));
+
+warehouseSecurity = new WarehouseSecurity(security, userLogin, parameters.get("facilityId"));
+context.put("hasSetCostPermission", warehouseSecurity.hasFacilityPermission("WRHS_INV_SETCOST"));
+
+
 if (UtilValidate.isNotEmpty(productId)) {
     svcResult = dispatcher.runSync("getProductByComprehensiveSearch", UtilMisc.toMap("productId", productId));
     if (ServiceUtil.isError(svcResult) || ServiceUtil.isFailure(svcResult)) {
@@ -61,14 +72,7 @@ if (UtilValidate.isNotEmpty(productId)) {
         context.put("unitCost", svcResult.get("productCost"));
     }
 
-    // get the accounting tags for the facility owner
-    acctgTags = UtilAccountingTags.getAccountingTagsForOrganization(facility.getString("ownerPartyId"), UtilAccountingTags.PURCHASE_ORDER_TAG, delegator);
-    context.put("acctgTags", acctgTags);
 
-    context.put("inventoryItemTypeId", parameters.get("inventoryItemTypeId"));
-
-    warehouseSecurity = new WarehouseSecurity(security, userLogin, parameters.get("facilityId"));
-    context.put("hasSetCostPermission", warehouseSecurity.hasFacilityPermission("WRHS_INV_SETCOST"));
 
     // find back ordered items
     // use product.productId in case the productId passed in parameters was a goodId which was used to look up the product

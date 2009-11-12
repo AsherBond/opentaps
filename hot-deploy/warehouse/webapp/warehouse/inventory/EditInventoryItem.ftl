@@ -104,17 +104,21 @@ under the License.
             </td>
           </tr>
       </#if>
-      <@inputDateTimeRow title=uiLabelMap.ProductDateReceived name="datetimeReceived" default=(inventoryItemData.datetimeReceived.toString())?if_exists />
-      <@inputDateTimeRow title=uiLabelMap.ProductExpireDate name="expireDate" default=(inventoryItemData.expireDate.toString())?if_exists />
+      <@inputDateTimeRow title=uiLabelMap.ProductDateReceived name="datetimeReceived" default=(inventoryItemData.datetimeReceived)?if_exists />
+      <@inputDateTimeRow title=uiLabelMap.ProductExpireDate name="expireDate" default=(inventoryItemData.expireDate)?if_exists />
       <tr>
-        <@displayTitleCell title=uiLabelMap.ProductFacilityContainer />
+        <@displayTitleCell title=uiLabelMap.ProductFacility />
         <td>
-            <span class="tabletext">${uiLabelMap.ProductSelectFacility} : </span>
+            <span class="tabletext">
+            <#if inventoryItem?exists>
+                   ${(facility.facilityName)?if_exists} [${inventoryItem.facilityId}]
+                   <@inputHidden name="facilityId" value=facilityId! />
+            <#else>
+                   ${uiLabelMap.ProductSelectFacility} : 
+            </#if>
+            </span>
+            <#if !inventoryItem?exists>
             <select name="facilityId" class="selectBox">
-              <#if inventoryItem?exists>
-                  <option value="${inventoryItem.facilityId}">${(facility.facilityName)?if_exists} [${inventoryItem.facilityId}]</option>
-                  <option value="${inventoryItem.facilityId}">----</option>
-              </#if>
               <#if !tryEntity && requestParameters.facilityId?has_content>
                   <#assign selectedFacilityId = requestParameters.facilityId>
               </#if>
@@ -125,6 +129,7 @@ under the License.
             <br/>
             <span class="tabletext">${uiLabelMap.ProductOrEnterContainerId} :</span>
             <@inputText name="containerId" default=(inventoryItemData.containerId)! />
+            </#if>
          </td>
        </tr>
       <tr>
@@ -147,9 +152,13 @@ under the License.
         </td>
       </tr>
       <@inputLookupRow title=uiLabelMap.ProductLotId name="lotId" lookup="LookupLot" form="inventoryItemForm" default=(inventoryItemData.lotId)! />
-      <@inputTextRow title=uiLabelMap.ProductUomId name="uomId" default=(inventoryItemData.uomId)! />
-      <@inputTextRow title=uiLabelMap.ProductBinNumber name="binNumber" default=(inventoryItemData.binNumber)! />
-      <@inputTextRow title=uiLabelMap.ProductPerUnitPrice name="unitCost" default=(inventoryItemData.unitCost)?default(0) />
+      <@inputHidden name="uomId" value=(inventoryItemData.uomId)! />
+      <@inputHidden name="binNumber" value=(inventoryItemData.binNumber)! />
+      <#if (hasSetCostPermission) || !(inventoryItemData.unitCost?has_content) || (inventoryItemData.unitCost == 0)>
+        <@inputTextRow title=uiLabelMap.ProductPerUnitPrice name="unitCost" default=(inventoryItemData.unitCost)?default(0) />
+      <#else>
+        <@inputHidden name="unitCost" value=(inventoryItemData.unitCost)?default(0)/>
+      </#if>
       <@inputTextRow title=uiLabelMap.ProductComments name="comments" default=(inventoryItemData.comments)! />
       <#-- accounting tags for this item -->
       <#if tagTypes?has_content>
