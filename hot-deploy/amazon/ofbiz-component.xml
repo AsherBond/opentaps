@@ -52,9 +52,11 @@
     <service-resource type="model" loader="main" location="servicedef/services_amazon.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_amazon_sync.xml"/>
     
-    <!-- these tests require the demo data to be loaded -->
+    <!-- these tests require the demo data to be loaded 
+    They are commented out here and run in opentaps-tests module along with the rest of the tests, so we
+    get one results file.  You can also uncomment them here and run the tests inside of this component.
     <test-suite loader="main" location="testdef/amazon_tests.xml"/>
-
+    -->
     <webapp name="amazon"
         title="Amazon"
         server="default-server"
