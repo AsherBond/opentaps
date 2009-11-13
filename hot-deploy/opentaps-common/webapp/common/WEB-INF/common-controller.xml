@@ -88,12 +88,6 @@
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>   
-    
-    <request-map uri="getReceiveInventoryProductRelatedsJSON">
-        <event type="java" path="org.opentaps.common.event.AjaxEvents" invoke="getReceiveInventoryProductRelatedsJSON"/>
-        <response name="success" type="none"/>
-        <response name="error" type="none"/>
-    </request-map> 
 
     <request-map uri="getCurrentIncomingNumberFromVoIPServer">
         <event type="json" invoke="getCurrentIncomingNumberFromFacetPhoneServer"/>
