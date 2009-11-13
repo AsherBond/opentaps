@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -56,6 +56,24 @@ import org.opentaps.common.util.*;
 String partyId = parameters.get("partyId");
 context.put("partyId", partyId);
 
+// build toName default value that have to be concantanation of first and last name
+toName = "";
+party = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", partyId));
+// build default value for toName if party is person.
+if (party != null && "PERSON".equals(party.get("partyTypeId"))) {
+    person = delegator.findByPrimaryKey("Person", UtilMisc.toMap("partyId", partyId));
+    if (person != null) {
+        firstName = person.getString("firstName");
+         if (UtilValidate.isNotEmpty(firstName)) {
+            toName += firstName;
+         }
+         lastName = person.getString("lastName");
+         if (UtilValidate.isNotEmpty(lastName)) {
+             toName += (" " + lastName);
+         }
+    }
+}
+
 Map mechMap = new HashMap();
 ContactMechWorker.getContactMechAndRelated(request, partyId, mechMap);
 
@@ -68,6 +86,9 @@ if ("createPostalAddressAndPurpose".equals(mechMap{"requestName"})) {
 context.put("mechMap", mechMap);
 // put contactMech directly in the context so that the ftl can see it
 context.put("contactMech", mechMap.get("contactMech"));
+if (context.get("contactMech") == null && UtilValidate.isNotEmpty(toName)) {
+    context.put("defaultToName", toName);
+}
 
 // set the edit title label according to the current contact mech type
 contactMechTypeId = mechMap.get("contactMechTypeId");

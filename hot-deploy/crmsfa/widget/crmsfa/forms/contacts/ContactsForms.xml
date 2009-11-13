@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -21,8 +21,8 @@
     <!-- create a contact form -->
     <form name="createContactForm" type="single" target="createContact" title="" 
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
-        <field name="firstName" title="${uiLabelMap.PartyFirstName}" position="1" title-style="requiredField"><text size="30" maxlength="100"/></field>
-        <field name="lastName" title="${uiLabelMap.PartyLastName}" position="2" title-style="requiredField"><text size="30" maxlength="100"/></field>
+        <field name="firstName" title="${uiLabelMap.PartyFirstName}" position="1" title-style="requiredField" id-name="firstNameField" event="onchange" action="ensureToName()"><text size="30" maxlength="100"/></field>
+        <field name="lastName" title="${uiLabelMap.PartyLastName}" position="2" title-style="requiredField" id-name="lastNameField" event="onchange" action="ensureToName()"><text size="30" maxlength="100"/></field>
         <field name="firstNameLocal" title="${uiLabelMap.CrmFirstNameLocal}" position="1"><text size="30" maxlength="100"/></field>
         <field name="lastNameLocal" title="${uiLabelMap.CrmLastNameLocal}" position="2"><text size="30" maxlength="100"/></field>
         <field name="personalTitle" title="${uiLabelMap.CrmSalutation}" position="1"><text size="30" maxlength="100"/></field>
@@ -51,7 +51,7 @@
         <field name="primaryEmail" title="${uiLabelMap.PartyEmailAddress}" position="1"><text size="30" maxlength="60"/></field>
         <!-- general correspondence postal address -->
         <field name="" widget-area-style="formSectionHeader" widget-style="formSectionHeaderTitle"><display description="${uiLabelMap.CrmPrimaryAddress}"/> </field>
-        <field name="generalToName" title="${uiLabelMap.PartyToName}" position="1"><text size="30" maxlength="100"/></field>
+        <field name="generalToName" title="${uiLabelMap.PartyToName}" position="1" id-name="generalToNameField"><text size="30" maxlength="100"/></field>
         <field name="generalAttnName" title="${uiLabelMap.PartyAttentionName}" position="2"><text size="30" maxlength="100"/></field>
         <field name="generalAddress1" title="${uiLabelMap.PartyAddressLine1}" position="1"><text size="30" maxlength="100"/></field>
         <field name="generalAddress2" title="${uiLabelMap.PartyAddressLine2}" position="2"><text size="30" maxlength="100"/></field>

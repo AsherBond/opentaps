@@ -17,7 +17,45 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
+<script type="text/JavaScript">
+<!--
+/**
+ * Value of toName field should be concatenation of first and last name by default. 
+ */
+function ensureToName() {
+    var toNameValue = "";
+
+    var firstName = document.getElementById('firstNameField');
+    if (firstName) {
+        var firstNameValue = firstName.value;
+        if (firstNameValue && firstNameValue.length > 0) {
+            toNameValue += firstNameValue;
+        } 
+    }
+
+    var lastName = document.getElementById('lastNameField');
+    if (lastName) {
+        var lastNameValue = lastName.value;
+        if (lastNameValue && lastNameValue.length > 0) {
+            if (toNameValue.length > 0) {
+                toNameValue += ' ';
+            }
+            toNameValue += lastNameValue;
+        } 
+    }
+
+    var toName = document.getElementById('generalToNameField');
+    if (toName) {
+        toName.value = toNameValue
+    }
+
+    return true;
+}
+//-->
+</script>
+
 ${screens.render("component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml#createContactForm")}
+
 <#if validatePostalAddresses>
   <div id="postalAddressValidationContainer" class="tabletext">
       <@flexArea targetId="postalAddressValidationError" class="postalAddressValidationError" controlClassOpen="hidden" controlClassClosed="hidden" state="closed" enabled=false><div>lskdjf</div></@flexArea>

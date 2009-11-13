@@ -174,7 +174,7 @@
     <#if "POSTAL_ADDRESS" = mechMap.contactMechTypeId?if_exists>
       <tr>
         <@displayTitleCell title=uiLabelMap.PartyToName />
-        <@inputTextCell name="toName" default="${(mechMap.postalAddress.toName)?default(request.getParameter('toName')?if_exists)}" />
+        <@inputTextCell name="toName" default="${(mechMap.postalAddress.toName)?default(request.getParameter('toName')?default(defaultToName)?if_exists)}" />
       </tr>
       <tr>
         <@displayTitleCell title=uiLabelMap.PartyAttentionName />
