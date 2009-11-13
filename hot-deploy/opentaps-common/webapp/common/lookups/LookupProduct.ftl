@@ -67,8 +67,7 @@
 </#macro>
 
 <form name="LookupProduct" method="post" action="${lookupAction?default("LookupProduct")}">
-  <@inputHidden name="noConditionFind" value="Y"/>
-  <@inputHidden name="isVariant" value="N" />
+  <@inputHidden name="noConditionFind" value="Y"/> <#-- ask the LookupProduct.bsh to do a find of all products when there are no other find parameters -->
   <table>
 
     <@inputRowTextSearch name="productId" title=uiLabelMap.ProductProductId default=parameters.productId />

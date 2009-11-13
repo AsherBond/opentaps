@@ -55,7 +55,9 @@ inputFields.remove("facilityId");
 results = dispatcher.runSync("prepareFind", UtilMisc.toMap("inputFields", inputFields, "entityName", "ProductAndGoodIdentification"));
 if (ServiceUtil.isError(results)) return;
 conditions = results.get("entityConditionList");
-if (conditions == null) return;
+// this prevents an automatic find of all products when the Lookup Product screen first opens up
+// but allows you to use the form without parameters to do a find because noConditionFind is a hidden paramater
+if ((conditions == null) && (parameters.get("noConditionFind") == null)) return;
 
 fields = UtilMisc.toList("productId", "productTypeId", "brandName", "internalName");
 if (!ignoreGoodId) {
