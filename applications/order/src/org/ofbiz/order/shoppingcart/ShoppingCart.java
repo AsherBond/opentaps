@@ -3645,7 +3645,14 @@ public class ShoppingCart implements Serializable {
             opp.set("paymentMethodTypeId", "EXT_BILLACT");
             opp.set("presentFlag", "N");
             opp.set("overflowFlag", "N");
-            opp.set("maxAmount", billingAccountAmountSelected);
+            /* IW-22: If a change due is found,
+             * the maxAmount field will be populated with the total amount of the cart. */
+            if((this.getGrandTotal().subtract(this.getPaymentTotal())).compareTo(BigDecimal.ZERO) < 0 ){
+                opp.set("maxAmount", this.getGrandTotal());
+            }else{ //ORIGINAL
+                opp.set("maxAmount", new Double(billingAccountAmountSelected.doubleValue()));
+            }
+            /* /IW-22 */
             opp.set("statusId", "PAYMENT_NOT_RECEIVED");
             allOpPrefs.add(opp);
             remainingAmount = remainingAmount.subtract(billingAccountAmountSelected);
@@ -3660,7 +3667,14 @@ public class ShoppingCart implements Serializable {
                 inf.amount = remainingAmount;
                 remainingAmount = BigDecimal.ZERO;
             }
-            allOpPrefs.addAll(inf.makeOrderPaymentInfos(this.getDelegator(), this));
+            /* IW-22: makeOrderPaymentInfosHandlingChangeDue is a new method that handle the total amount
+            * of the cart: this kind of implementation is due by the fact that CartPaymentInfo is an inner class.*/
+            if((this.getGrandTotal().subtract(this.getPaymentTotal())).compareTo(BigDecimal.ZERO) < 0 ){
+            	allOpPrefs.addAll(inf.makeOrderPaymentInfosHandlingChangeDue(this.getDelegator(), this.getGrandTotal().doubleValue()));
+            }else{
+            	allOpPrefs.addAll(inf.makeOrderPaymentInfos(this.getDelegator(), this));
+            }
+            /* /IW-22 */
         }
         return allOpPrefs;
     }
@@ -4753,6 +4767,81 @@ public class ShoppingCart implements Serializable {
                     Debug.log("Creating OrderPaymentPreference - " + opp, module);
                     values.add(opp);
                 }
+            }
+
+            return values;
+        }
+
+        public List makeOrderPaymentInfosHandlingChangeDue(GenericDelegator delegator, double currentCartTotal) {
+            GenericValue valueObj = this.getValueObject(delegator);
+            List values = new LinkedList();
+            if (valueObj != null) {
+                // first create a BILLING_LOCATION for the payment method address if there is one
+                if ("PaymentMethod".equals(valueObj.getEntityName())) {
+                    //String paymentMethodTypeId = valueObj.getString("paymentMethodTypeId");
+                    //String paymentMethodId = valueObj.getString("paymentMethodId");
+                    //Map lookupFields = UtilMisc.toMap("paymentMethodId", paymentMethodId);
+                    String billingAddressId = null;
+
+                    GenericValue billingAddress = this.getBillingAddress(delegator);
+                    if (billingAddress != null) {
+                        billingAddressId = billingAddress.getString("contactMechId");
+                    }
+
+                    if (UtilValidate.isNotEmpty(billingAddressId)) {
+                        GenericValue orderCm = delegator.makeValue("OrderContactMech");
+                        orderCm.set("contactMechPurposeTypeId", "BILLING_LOCATION");
+                        orderCm.set("contactMechId", billingAddressId);
+                        values.add(orderCm);
+                    }
+                }
+
+                BigDecimal amountBd = new BigDecimal(amount.doubleValue());
+                amountBd = amountBd.setScale(scale, rounding);
+
+                // create the OrderPaymentPreference record
+                GenericValue opp = delegator.makeValue("OrderPaymentPreference", new HashMap());
+                opp.set("paymentMethodTypeId", valueObj.getString("paymentMethodTypeId"));
+                opp.set("presentFlag", isPresent ? "Y" : "N");
+                opp.set("overflowFlag", overflow ? "Y" : "N");
+                opp.set("paymentMethodId", paymentMethodId);
+                opp.set("finAccountId", finAccountId);
+                opp.set("billingPostalCode", postalCode);
+                /* IW-22:  the currentCartTotal parameter will be the value persisted in the DB table
+                * OrderPaymentPreference. In this way, in case of a a change due, the change amount
+                * given to the customer will not be recorder and diplayed in the financials apps.
+                *
+                * This was the default behaviour before our patches (so, basically, we had to reconcile
+                * the changes due too...clearly not needed)*/
+
+                BigDecimal currentCT = new BigDecimal(currentCartTotal);
+                currentCT = currentCT.setScale(scale, rounding);
+
+
+                opp.set("maxAmount", currentCT);
+
+                /* /IW-22 */
+
+                if (refNum != null) {
+                    opp.set("manualRefNum", refNum[0]);
+                    opp.set("manualAuthCode", refNum[1]);
+                }
+                if (securityCode != null) {
+                    opp.set("securityCode", securityCode);
+                }
+                if (paymentMethodId != null || "FIN_ACCOUNT".equals(paymentMethodTypeId)) {
+                    opp.set("statusId", "PAYMENT_NOT_AUTH");
+                } else if (paymentMethodTypeId != null) {
+                    // external payment method types require notification when received
+                    // internal payment method types are assumed to be in-hand
+                    if (paymentMethodTypeId.startsWith("EXT_")) {
+                        opp.set("statusId", "PAYMENT_NOT_RECEIVED");
+                    } else {
+                        opp.set("statusId", "PAYMENT_RECEIVED");
+                    }
+                }
+                Debug.log("Creating OrderPaymentPreference - " + opp, module);
+                values.add(opp);
             }
 
             return values;

@@ -362,6 +362,17 @@ under the License.
             <arg value="pos"/>
         </java>
     </target>
+    <target name="run-pos-debug" >
+	        <java jar="ofbiz.jar" fork="true">
+	            <jvmarg value="${memory.max.param}"/>
+	            <jvmarg value="${permmemory.max.param}"/>
+	        	<jvmarg value="-Xnoagent"/>
+	        	<jvmarg value="-Djava.compiler=NONE"/>
+	        	<jvmarg value="-Xdebug"/>
+	        	<jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8091"/>
+	            <arg value="pos"/>
+	        </java>
+	    </target>
     <target name="run-install" depends="refresh-hibernatecfg,server"
         description="This loads all configured data; meant for generic OFBiz development, testing, demonstration, etc purposes">
         <java jar="ofbiz.jar" fork="true">

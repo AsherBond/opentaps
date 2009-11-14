@@ -855,7 +855,7 @@ public class PosTransaction implements Serializable {
         }
 
         // get the change due
-        BigDecimal change = grandTotal.subtract(paymentAmt);
+        BigDecimal change = (paymentAmt.subtract(grandTotal));
 
         // notify the change due
         output.print(UtilProperties.getMessage(PosTransaction.resource,"PosChange",defaultLocale) + " " + UtilFormatOut.formatPrice(this.getTotalDue().negate()));

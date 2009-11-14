@@ -1081,8 +1081,11 @@ public class CheckOutHelper {
 
         // check to see if we should auto-invoice/bill
         if (faceToFace) {
-            if (Debug.verboseOn()) Debug.logVerbose("Face-To-Face Sale - " + orderId, module);
-            CheckOutHelper.adjustFaceToFacePayment(orderId, orderTotal, allPaymentPreferences, userLogin, delegator);
+            /* IW-22: commented out: we don't need it, and it's storing a second OrderPaymentPreference in the DB
+             * causing the next services to post to the GL the negative amount too..*/
+            //if (Debug.verboseOn()) Debug.logVerbose("Face-To-Face Sale - " + orderId, module);
+            //CheckOutHelper.adjustFaceToFacePayment(orderId, orderTotal, allPaymentPreferences, userLogin, delegator);
+            /* /IW-22 */
             boolean ok = OrderChangeHelper.completeOrder(dispatcher, userLogin, orderId);
             if (Debug.verboseOn()) Debug.logVerbose("Complete Order Result - " + ok, module);
             if (!ok) {
