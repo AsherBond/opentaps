@@ -126,14 +126,12 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
                 service.putAllOutput(results);
                 GenericValue productGv = service.getOutProduct();
                 if (productGv != null) {
-                    // get Product domain object and return
-                    product = getProductById(productGv.getString("productId"));
+                    // construct Product domain object and return
+                    product = loadFromGeneric(Product.class, productGv);
                 }
             }
             return product;
         } catch (GenericServiceException e) {
-            throw new RepositoryException(e);
-        } catch (EntityNotFoundException e) {
             throw new RepositoryException(e);
         }
     }
