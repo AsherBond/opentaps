@@ -408,4 +408,13 @@ public interface OrderRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public List<AccountingTagConfigurationForOrganizationAndUsage> validateTagParameters(OpentapsShoppingCart cart, ShoppingCartItem item) throws RepositoryException;
+
+    /**
+     * Finds the OrderItemShipGrpInvRes by product id/facility id.  Returns empty list if none found.
+     * @param product id
+     * @param facility id
+     * @return OrderItemShipGrpInvRes list
+     * @throws RepositoryException
+     */
+    public List<OrderItemShipGrpInvRes> getBackOrderedInventoryReservations(String productId, String facilityId) throws RepositoryException;
 }

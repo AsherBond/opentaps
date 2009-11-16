@@ -22,17 +22,23 @@ import java.util.Map;
 
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.domain.base.entities.GoodIdentification;
 import org.opentaps.domain.base.entities.ProductAssoc;
+import org.opentaps.domain.base.services.GetProductByComprehensiveSearch;
 import org.opentaps.domain.product.Product;
 import org.opentaps.domain.product.ProductRepositoryInterface;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityNotFoundException;
+import org.opentaps.foundation.entity.hibernate.Query;
+import org.opentaps.foundation.entity.hibernate.Session;
+import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 
@@ -106,5 +112,43 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
 
         List<ProductAssoc> variants = findList(ProductAssoc.class, conditions);
         return findList(Product.class, EntityCondition.makeCondition(Product.Fields.productId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(variants, ProductAssoc.Fields.productIdTo)));
+    }
+    
+    /** {@inheritDoc} */
+    public Product getProductByComprehensiveSearch(String id) throws RepositoryException {
+        try {
+            Product product = null;
+            // use Pojo service wrappers to call GetProductByComprehensiveSearch service
+            GetProductByComprehensiveSearch service = new GetProductByComprehensiveSearch();
+            service.setInProductId(id);
+            Map results = getDispatcher().runSync(service.name(), service.inputMap());
+            if (!(ServiceUtil.isError(results) || ServiceUtil.isFailure(results))) {
+                service.putAllOutput(results);
+                GenericValue productGv = service.getOutProduct();
+                if (productGv != null) {
+                    // get Product domain object and return
+                    product = getProductById(productGv.getString("productId"));
+                }
+            }
+            return product;
+        } catch (GenericServiceException e) {
+            throw new RepositoryException(e);
+        } catch (EntityNotFoundException e) {
+            throw new RepositoryException(e);
+        }
+    }
+    
+    /** {@inheritDoc} */
+    public List<GoodIdentification> getAlternateProductIds(String productId) throws RepositoryException {
+        String hql = "from GoodIdentification eo where eo.id.productId = :productId";
+        try {
+            Session session = getInfrastructure().getSession();
+            Query query = session.createQuery(hql);
+            query.setParameter("productId", productId);
+            List<GoodIdentification> goodIdentifications = query.list();
+            return goodIdentifications;
+        } catch (InfrastructureException e) {
+            throw new RepositoryException(e);
+        }
     }
 }

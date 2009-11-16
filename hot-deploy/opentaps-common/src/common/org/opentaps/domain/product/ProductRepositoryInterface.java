@@ -16,6 +16,7 @@
  */
 package org.opentaps.domain.product;
 
+import org.opentaps.domain.base.entities.GoodIdentification;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
@@ -73,4 +74,20 @@ public interface ProductRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException
      */
     public List<Product> getVariants(Product product) throws RepositoryException;
+
+    /**
+     * Finds the Product by product id.  Returns empty list if none found.
+     * @param product id
+     * @return product list
+     * @throws RepositoryException
+     */
+    public Product getProductByComprehensiveSearch(String id) throws RepositoryException;
+    
+    /**
+     * Finds the GoodIdentification by product id.  Returns empty list if none found.
+     * @param product id
+     * @return GoodIdentification list
+     * @throws RepositoryException
+     */
+    public List<GoodIdentification> getAlternateProductIds(String productId) throws RepositoryException;
 }

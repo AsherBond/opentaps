@@ -20,6 +20,7 @@ package org.opentaps.common.domain.order;
 import java.math.BigDecimal;
 import java.util.*;
 
+import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.common.DataModelConstants;
@@ -66,6 +67,7 @@ import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderAdjustment;
 import org.opentaps.domain.order.OrderItem;
 import org.opentaps.domain.order.OrderItemShipGroup;
+import org.opentaps.domain.order.OrderItemShipGrpInvRes;
 import org.opentaps.domain.order.OrderPaymentPreference;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.order.OrderRole;
@@ -81,7 +83,10 @@ import org.opentaps.domain.product.Product;
 import org.opentaps.domain.product.ProductRepositoryInterface;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityNotFoundException;
+import org.opentaps.foundation.entity.hibernate.Query;
+import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 
@@ -523,6 +528,29 @@ public class OrderRepository extends Repository implements OrderRepositoryInterf
             organizationRepository = getDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
         }
         return organizationRepository;
+    }
+    
+    /** {@inheritDoc} */
+    public List<OrderItemShipGrpInvRes> getBackOrderedInventoryReservations(String productId, String facilityId) throws RepositoryException {
+        String hql = "from OrderItemShipGrpInvRes eo where eo.inventoryItem.productId = :productId and eo.inventoryItem.facilityId = :facilityId and eo.quantityNotAvailable is not null order by eo.reservedDatetime, eo.sequenceId";
+        try {
+            Session session = getInfrastructure().getSession();
+            Query query = session.createQuery(hql);
+            query.setParameter("productId", productId);
+            query.setParameter("facilityId", facilityId);
+            List<org.opentaps.domain.base.entities.OrderItemShipGrpInvRes> items = query.list();
+            List<OrderItemShipGrpInvRes> resultSet = new ArrayList<OrderItemShipGrpInvRes>();
+            // change entity from org.opentaps.domain.base.entities.OrderItemShipGrpInvRes to org.opentaps.domain.order.OrderItemShipGrpInvRes
+            for (org.opentaps.domain.base.entities.OrderItemShipGrpInvRes item : items) {
+                OrderItemShipGrpInvRes entity = new OrderItemShipGrpInvRes();
+                entity.initRepository(this);
+                entity.fromMap(item.toMap());
+                resultSet.add(entity);
+            }
+            return resultSet;
+        } catch (InfrastructureException e) {
+            throw new RepositoryException(e);
+        }
     }
 
 }

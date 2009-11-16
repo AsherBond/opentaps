@@ -17,7 +17,6 @@
 
 package org.opentaps.warehouse.inventory;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -36,22 +35,26 @@ import net.sf.json.JSONObject;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilHttp;
-import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
-import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.base.entities.Facility;
 import org.opentaps.domain.base.entities.GoodIdentification;
-import org.opentaps.domain.base.entities.OrderItemShipGrpInvRes;
-import org.opentaps.domain.base.entities.Product;
+import org.opentaps.domain.base.entities.PartyAcctgPreference;
 import org.opentaps.domain.base.entities.ProductFacilityLocation;
-import org.opentaps.foundation.entity.hibernate.Query;
-import org.opentaps.foundation.entity.hibernate.Session;
+import org.opentaps.domain.inventory.InventoryRepositoryInterface;
+import org.opentaps.domain.order.OrderItemShipGrpInvRes;
+import org.opentaps.domain.order.OrderRepositoryInterface;
+import org.opentaps.domain.organization.Organization;
+import org.opentaps.domain.organization.OrganizationRepositoryInterface;
+import org.opentaps.domain.product.Product;
+import org.opentaps.domain.product.ProductRepositoryInterface;
+import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
+import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 
 /**
@@ -81,7 +84,6 @@ public final class AjaxEvents {
      */
     @SuppressWarnings("unchecked")
     public static String getReceiveInventoryProductRelatedsJSON(HttpServletRequest request, HttpServletResponse response) throws GenericEntityException {
-        GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) request.getSession(true).getAttribute("userLogin");
         String productId = UtilCommon.getParameter(request, "productId");
@@ -89,93 +91,80 @@ public final class AjaxEvents {
         TimeZone timeZone = UtilCommon.getTimeZone(request);
         Locale locale = UtilHttp.getLocale(request);
         
-        GenericValue facility = delegator.findByPrimaryKeyCache("Facility", UtilMisc.toMap("facilityId", facilityId));
         Map<String, Object> resp = new HashMap<String, Object>();
         try {
-            Infrastructure infrastructure = new Infrastructure(dispatcher);
-            Session session = infrastructure.getSession();
-            Map svcResult = dispatcher.runSync("getProductByComprehensiveSearch", UtilMisc.toMap("productId", productId));
-            if (!(ServiceUtil.isError(svcResult) || ServiceUtil.isFailure(svcResult))) {
-                GenericValue productGv = (GenericValue) svcResult.get("product");
-                if (productGv != null) {
-                    resp.put("internalName", productGv.getString("internalName"));
-                    resp.put("productId", productGv.getString("productId"));
-                    // fill the productFacilityLocations selections
-                    Product product = (Product) session.get(Product.class, productGv.getString("productId"));
-                    List<ProductFacilityLocation> productFacilityLocations = (List<ProductFacilityLocation>) product.getProductFacilityLocations();
-                    List<Map<String, Object>> values = new ArrayList<Map<String, Object>>();
-                    for (ProductFacilityLocation productFacilityLocation: productFacilityLocations) {
-                        if (facilityId.equals(productFacilityLocation.getFacilityId())) {
-                            Map<String, Object> value = new HashMap<String, Object>();
-                            value.put("locationSeqId", productFacilityLocation.getLocationSeqId());
-                            if (productFacilityLocation.getFacilityLocation() != null) {
-                                value.put("facilityLocationAreaId", productFacilityLocation.getFacilityLocation().getAreaId());
-                                value.put("facilityLocationAisleId", productFacilityLocation.getFacilityLocation().getAisleId());
-                                value.put("facilityLocationSectionId", productFacilityLocation.getFacilityLocation().getSectionId());
-                                value.put("facilityLocationLevelId", productFacilityLocation.getFacilityLocation().getLevelId());
-                                value.put("facilityLocationPositionId", productFacilityLocation.getFacilityLocation().getPositionId());
-                                if (productFacilityLocation.getFacilityLocation().getTypeEnumeration() != null) {
-                                    value.put("facilityLocationTypeEnumDescription", productFacilityLocation.getFacilityLocation().getTypeEnumeration().get("description", locale));
-                                }
+            // initial domain objects
+            DomainsLoader dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+            ProductRepositoryInterface productRepository = dl.loadDomainsDirectory().getProductDomain().getProductRepository();
+            OrderRepositoryInterface orderRepository = dl.loadDomainsDirectory().getOrderDomain().getOrderRepository();
+            InventoryRepositoryInterface inventoryRepository = dl.loadDomainsDirectory().getInventoryDomain().getInventoryRepository();
+            OrganizationRepositoryInterface organizationRepository = dl.loadDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
+            // get Product domain object by product id
+            Product product = productRepository.getProductByComprehensiveSearch(productId);
+            // get Facility domain object
+            Facility facility = inventoryRepository.getFacilityById(facilityId);
+            if (product != null) {
+                Organization organization = organizationRepository.getOrganizationById(facility.getOwnerPartyId());
+                PartyAcctgPreference facilityOwnerAcctgPref = organization.getPartyAcctgPreference();
+                resp.put("internalName", product.getInternalName());
+                resp.put("productId", product.getProductId());
+                resp.put("unitCost", product.getStandardCost(facilityOwnerAcctgPref.getBaseCurrencyUomId()));
+                // retrieve ProductFacilityLocation entities and set it to response
+                List<ProductFacilityLocation> productFacilityLocations = (List<ProductFacilityLocation>) product.getProductFacilityLocations();
+                List<Map<String, Object>> values = new ArrayList<Map<String, Object>>();
+                for (ProductFacilityLocation productFacilityLocation: productFacilityLocations) {
+                    if (facilityId.equals(productFacilityLocation.getFacilityId())) {
+                        Map<String, Object> value = new HashMap<String, Object>();
+                        value.put("locationSeqId", productFacilityLocation.getLocationSeqId());
+                        if (productFacilityLocation.getFacilityLocation() != null) {
+                            value.put("facilityLocationAreaId", productFacilityLocation.getFacilityLocation().getAreaId());
+                            value.put("facilityLocationAisleId", productFacilityLocation.getFacilityLocation().getAisleId());
+                            value.put("facilityLocationSectionId", productFacilityLocation.getFacilityLocation().getSectionId());
+                            value.put("facilityLocationLevelId", productFacilityLocation.getFacilityLocation().getLevelId());
+                            value.put("facilityLocationPositionId", productFacilityLocation.getFacilityLocation().getPositionId());
+                            if (productFacilityLocation.getFacilityLocation().getTypeEnumeration() != null) {
+                                value.put("facilityLocationTypeEnumDescription", productFacilityLocation.getFacilityLocation().getTypeEnumeration().get("description", locale));
                             }
-                            values.add(value);
                         }
-                    }
-                    resp.put("productFacilityLocations", values);
-                    String hql = "from GoodIdentification eo where eo.id.productId = :productId";
-                    Query query = session.createQuery(hql);
-                    query.setParameter("productId", productGv.get("productId"));
-                    List<GoodIdentification> goodIdentifications = query.list();
-                    values = new ArrayList<Map<String, Object>>();
-                    for (GoodIdentification goodIdentification : goodIdentifications) {
-                        Map<String, Object> value = new HashMap<String, Object>();
-                        value.put("goodIdentificationTypeId", goodIdentification.getGoodIdentificationTypeId());
-                        value.put("idValue", goodIdentification.getIdValue());
                         values.add(value);
                     }
-                    resp.put("goodIdentifications", values);
-                    
-                    GenericValue facilityOwnerAcctgPref = delegator.findByPrimaryKeyCache("PartyAcctgPreference", UtilMisc.toMap("partyId", facility.getString("ownerPartyId")));
-                    
-                    svcResult = dispatcher.runSync("getProductCost", UtilMisc.toMap("productId", productGv.getString("productId"),
-                                    "costComponentTypePrefix", "EST_STD", "currencyUomId", facilityOwnerAcctgPref.get("baseCurrencyUomId"),
-                                    "userLogin", userLogin));
-                    if (!ServiceUtil.isError(svcResult)) {
-                        BigDecimal unitCost = (BigDecimal) svcResult.get("productCost");
-                        resp.put("unitCost", unitCost);
-                    }
-                    
-                    // find back ordered items
-                    // use product.productId in case the productId passed in parameters was a goodId which was used to look up the product
-                    hql = "from OrderItemShipGrpInvRes eo where eo.inventoryItem.productId = :productId and eo.inventoryItem.facilityId = :facilityId and eo.quantityNotAvailable is not null order by eo.reservedDatetime, eo.sequenceId";
-                    query = session.createQuery(hql);
-                    query.setParameter("productId", productGv.get("productId"));
-                    query.setParameter("facilityId", facilityId);
-                    List<OrderItemShipGrpInvRes> backOrderedItems = query.list();
-                    values = new ArrayList<Map<String, Object>>();
-                    for (OrderItemShipGrpInvRes backOrderedItem : backOrderedItems) {
-                        Map<String, Object> value = new HashMap<String, Object>();
-                        value.put("reservedDatetime", UtilDateTime.timeStampToString(backOrderedItem.getReservedDatetime(), timeZone, locale));
-                        value.put("sequenceId", backOrderedItem.getSequenceId());
-                        value.put("orderId", backOrderedItem.getOrderId());
-                        value.put("orderItemSeqId", backOrderedItem.getOrderItemSeqId());
-                        value.put("quantity", backOrderedItem.getQuantity());
-                        value.put("quantityNotAvailable", backOrderedItem.getQuantityNotAvailable());
-                        values.add(value);
-                    }
-                    resp.put("backOrderedItems", values);
                 }
+                resp.put("productFacilityLocations", values);
+                // retrieve GoodIdentification entities and set it to response
+                List<GoodIdentification> goodIdentifications = productRepository.getAlternateProductIds(product.getProductId());
+                values = new ArrayList<Map<String, Object>>();
+                for (GoodIdentification goodIdentification : goodIdentifications) {
+                    Map<String, Object> value = new HashMap<String, Object>();
+                    value.put("goodIdentificationTypeId", goodIdentification.getGoodIdentificationTypeId());
+                    value.put("idValue", goodIdentification.getIdValue());
+                    values.add(value);
+                }
+                resp.put("goodIdentifications", values);
+                
+                
+                // find back ordered items
+                // use product.productId in case the productId passed in parameters was a goodId which was used to look up the product
+                List<OrderItemShipGrpInvRes> backOrderedItems = orderRepository.getBackOrderedInventoryReservations(product.getProductId(), facilityId);
+                values = new ArrayList<Map<String, Object>>();
+                for (OrderItemShipGrpInvRes backOrderedItem : backOrderedItems) {
+                    Map<String, Object> value = new HashMap<String, Object>();
+                    value.put("reservedDatetime", UtilDateTime.timeStampToString(backOrderedItem.getReservedDatetime(), timeZone, locale));
+                    value.put("sequenceId", backOrderedItem.getSequenceId());
+                    value.put("orderId", backOrderedItem.getOrderId());
+                    value.put("orderItemSeqId", backOrderedItem.getOrderItemSeqId());
+                    value.put("quantity", backOrderedItem.getQuantity());
+                    value.put("quantityNotAvailable", backOrderedItem.getQuantityNotAvailable());
+                    values.add(value);
+                }
+                resp.put("backOrderedItems", values);
             }
-        } catch (GenericEntityException e) {
-            Debug.logError(e.getMessage(), MODULE);
-            return doJSONResponse(response, FastList.newInstance());
-        } catch (GenericServiceException e) {
-            Debug.logError(e.getMessage(), MODULE);
-            return doJSONResponse(response, FastList.newInstance());
         } catch (InfrastructureException e) {
             Debug.logError(e.getMessage(), MODULE);
             return doJSONResponse(response, FastList.newInstance());
         } catch (RepositoryException e) {
+            Debug.logError(e.getMessage(), MODULE);
+            return doJSONResponse(response, FastList.newInstance());
+        } catch (EntityNotFoundException e) {
             Debug.logError(e.getMessage(), MODULE);
             return doJSONResponse(response, FastList.newInstance());
         }
