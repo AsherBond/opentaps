@@ -45,6 +45,7 @@ import javolution.util.FastSet;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 
 import org.hibernate.ScrollableResults;
+import org.hibernate.Transaction;
 import org.ofbiz.accounting.util.UtilAccounting;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
@@ -75,6 +76,8 @@ import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.domain.base.entities.SalesInvoiceItemFact;
+import org.opentaps.domain.base.entities.TaxInvoiceItemFact;
 import org.opentaps.foundation.entity.hibernate.Query;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
@@ -1638,23 +1641,13 @@ public final class FinancialReports {
      * <p>Look over invoice adjustments and transform  them into into sales and tax invoice item facts.
      * Thus an adjustment amount is added into discount column of the fact table and this is only
      * currency column affected.</p>
-     * 
-     * <p>TODO: Store entities with Hibernate API after the bug related to id generator will be fixed.
-     * This is impossible for now because fact tables have numeric PK.</p>
-     * 
+     *
      * @param session Hibernate session
      * @throws GenericEntityException  
      */
     public static void loadInvoiceAdjustments(Session session, GenericDelegator delegator) throws GenericEntityException {
-        // initial keys value
-        Long taxInvItemFactKey = (Long) session.createQuery("select max(taxInvItemFactId) from TaxInvoiceItemFact").uniqueResult();
-        if (taxInvItemFactKey == null) {
-            taxInvItemFactKey = 0L;
-        }
-        Long salesInvItemFactKey = (Long) session.createQuery("select max(salesInvItemFactId) from SalesInvoiceItemFact").uniqueResult();
-        if (salesInvItemFactKey == null) {
-            salesInvItemFactKey = 0L;
-        }
+
+        Transaction tx = session.beginTransaction();
 
         Query invAdjQry = session.createQuery("select IA.invoiceAdjustmentId, IA.invoiceId, IA.amount, I.partyIdFrom, I.invoiceDate, I.currencyUomId from InvoiceAdjustment IA, Invoice I where IA.invoiceId = I.invoiceId and I.invoiceTypeId = 'SALES_INVOICE' and I.statusId not in ('INVOICE_IN_PROCESS', 'INVOICE_CANCELLED', 'INVOICE_VOIDED', 'INVOICE_WRITEOFF')");
         ScrollableResults adjustments = invAdjQry.scroll();
@@ -1688,30 +1681,40 @@ public final class FinancialReports {
             // lookup organization dimension
             Long organizationDimId = UtilEtl.lookupDimension("OrganizationDim", "organizationDimId", EntityCondition.makeCondition("organizationPartyId", organizationPartyId), delegator);
 
-            Map<String, Object> value = FastMap.<String, Object>newInstance();
-            value.put("dateDimId", dateDimId);
-            value.put("storeDimId", 0L);
-            value.put("taxAuthorityDimId", 0L);
-            value.put("currencyDimId", currencyDimId);
-            value.put("organizationDimId", organizationDimId);
-            value.put("invoiceId", invoiceId);
-            value.put("invoiceAdjustmentId", invoiceAdjustmentId);
-            value.put("grossAmount", BigDecimal.ZERO);
-            value.put("discounts", amount);
-            value.put("refunds", BigDecimal.ZERO);
-            value.put("netAmount", BigDecimal.ZERO);
-            value.put("taxable", BigDecimal.ZERO);
-            value.put("taxDue", BigDecimal.ZERO);
-
-            value.put("taxInvItemFactId", ++taxInvItemFactKey);
-            value.put("salesInvItemFactId", ++salesInvItemFactKey);
-
             // creates rows for both fact tables
-            delegator.create(delegator.makeValidValue("TaxInvoiceItemFact", value));
-            delegator.create(delegator.makeValidValue("SalesInvoiceItemFact", value));
+
+            TaxInvoiceItemFact taxFact= new TaxInvoiceItemFact();
+            taxFact.setDateDimId(dateDimId);
+            taxFact.setStoreDimId(0L);
+            taxFact.setTaxAuthorityDimId(0L);
+            taxFact.setCurrencyDimId(currencyDimId);
+            taxFact.setOrganizationDimId(organizationDimId);
+            taxFact.setInvoiceId(invoiceId);
+            taxFact.setInvoiceAdjustmentId(invoiceAdjustmentId);
+            taxFact.setGrossAmount(BigDecimal.ZERO);
+            taxFact.setDiscounts(amount);
+            taxFact.setRefunds(BigDecimal.ZERO);
+            taxFact.setNetAmount(BigDecimal.ZERO);
+            taxFact.setTaxable(BigDecimal.ZERO);
+            taxFact.setTaxDue(BigDecimal.ZERO);
+            session.save(taxFact);
+
+            SalesInvoiceItemFact salesFact = new SalesInvoiceItemFact();
+            salesFact.setDateDimId(dateDimId);
+            salesFact.setStoreDimId(0L);
+            salesFact.setCurrencyDimId(currencyDimId);
+            salesFact.setOrganizationDimId(organizationDimId);
+            salesFact.setInvoiceId(invoiceId);
+            salesFact.setInvoiceAdjustmentId(invoiceAdjustmentId);
+            salesFact.setGrossAmount(BigDecimal.ZERO);
+            salesFact.setDiscounts(amount);
+            salesFact.setRefunds(BigDecimal.ZERO);
+            salesFact.setNetAmount(BigDecimal.ZERO);
+            session.save(salesFact);
 
         }
         adjustments.close();
+        tx.commit();
     }
 
     /**
