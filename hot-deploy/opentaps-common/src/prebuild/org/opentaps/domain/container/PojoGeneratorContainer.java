@@ -150,7 +150,6 @@ public class PojoGeneratorContainer implements Container {
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public boolean start() throws ContainerException {
         ContainerConfig.Container cfg = ContainerConfig.getContainer(containerName, configFile);
         ContainerConfig.Container.Property delegatorNameProp = cfg.getProperty("delegator-name");
@@ -780,9 +779,9 @@ public class PojoGeneratorContainer implements Container {
                                 ModelEntity refEntity = modelReader.getModelEntity(modelRelation.getRelEntityName());
                                 // manyToOne field
                                 String refField = "";
-                                Iterator it = refEntity.getRelationsIterator();
+                                Iterator<ModelRelation> it = refEntity.getRelationsIterator();
                                 while (it.hasNext()) {
-                                    ModelRelation relation = (ModelRelation) it.next();
+                                    ModelRelation relation = it.next();
                                     //if relation map modelRelation
                                     if (relation.getRelEntityName().equals(entityName) && relation.getKeyMapsSize() == 1
                                             && relation.getKeyMap(0).getFieldName().equals(joinField)) {
@@ -832,10 +831,10 @@ public class PojoGeneratorContainer implements Container {
                     Map<String, String> fieldMapColumns = new TreeMap<String, String>();
                     List<String> relationAlias = new LinkedList<String>();
                     ModelViewEntity modelViewEntity = (ModelViewEntity) modelEntity;
-                    Iterator aliasIter = modelViewEntity.getAliasesIterator();
+                    Iterator<ModelAlias> aliasIter = modelViewEntity.getAliasesIterator();
                     // iterate all fields, construct select sentence
                     while (aliasIter.hasNext()) {
-                        ModelAlias alias = (ModelAlias) aliasIter.next();
+                        ModelAlias alias = aliasIter.next();
                         String columnName = ModelUtil.javaNameToDbName(alias.getField());
                         if (fieldMapAlias.size() > 0) {
                             query.append(",");
@@ -861,9 +860,9 @@ public class PojoGeneratorContainer implements Container {
                             // get all the pk fields of the first entity which become members of the class
                             try {
                                 ModelEntity firstEntity = modelReader.getModelEntity(modelMemberEntity.getEntityName());
-                                 Iterator it = firstEntity.getPksIterator();
+                                 Iterator<ModelField> it = firstEntity.getPksIterator();
                                  while (it.hasNext()) {
-                                     ModelField field = (ModelField) it.next();
+                                     ModelField field = it.next();
                                      //just need one pk, else secondary pk would be null
                                      if (fieldMapAlias.containsKey(field.getName()) && viewEntityPks.size()==0) {
                                          viewEntityPks.add(field.getName());
@@ -874,9 +873,9 @@ public class PojoGeneratorContainer implements Container {
                             }
                         } else {
                             // join table
-                            Iterator viewLinkIter = modelViewEntity.getViewLinksIterator();
+                            Iterator<ModelViewLink> viewLinkIter = modelViewEntity.getViewLinksIterator();
                             while (viewLinkIter.hasNext()) {
-                                ModelViewLink modelViewLink = (ModelViewLink) viewLinkIter.next();
+                                ModelViewLink modelViewLink = viewLinkIter.next();
                                 if (relationAlias.contains(modelViewLink.getEntityAlias())
                                         && relationAlias.contains(modelViewLink.getRelEntityAlias())
                                         && (tableAlias.equals(modelViewLink.getEntityAlias()) || tableAlias.equals(modelViewLink.getRelEntityAlias()))
@@ -1125,7 +1124,6 @@ public class PojoGeneratorContainer implements Container {
         if (UtilValidate.isEmpty(name)) {
             throw new IllegalArgumentException("className called for null or empty string");
         } else {
-            int idx = -1;
             String className = Character.toUpperCase(name.charAt(0)) + name.substring(1);
             className = filterChar(className, ".");
             className = filterChar(className, "_");

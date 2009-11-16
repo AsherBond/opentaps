@@ -62,7 +62,9 @@ public class OpentapsIdentifierGenerator extends TransactionHelper implements Pe
     // seq initial value
     public static final int SEQUENCE_INIT_VALUE = 10000;
     // increment size
-    private final int incrementSize = 1;
+    private static final int DEF_INCREMENT_SIZE = 1;
+    private int incrementSize = DEF_INCREMENT_SIZE;
+
     private String selectQuery;
     private String insertQuery;
     private String updateQuery;
@@ -84,7 +86,6 @@ public class OpentapsIdentifierGenerator extends TransactionHelper implements Pe
     public Object generatorKey() {
         return SEQUENCE_TABLE_NAME;
     }
-
 
     /**
      * Configure this instance, given the value of parameters
@@ -125,9 +126,9 @@ public class OpentapsIdentifierGenerator extends TransactionHelper implements Pe
         String query = "select " + StringHelper.qualify(alias, SEQUENCE_VALUE_COLUMN)
                 + " from " + SEQUENCE_TABLE_NAME + ' ' + alias
                 + " where " + StringHelper.qualify(alias, SEQUENCE_TYPE_COLUMN) + "=?";
-        HashMap lockMap = new HashMap();
+        HashMap<String, LockMode> lockMap = new HashMap<String, LockMode>();
         lockMap.put(alias, LockMode.UPGRADE);
-        Map updateTargetColumnsMap = Collections.singletonMap(alias, new String[] {SEQUENCE_VALUE_COLUMN});
+        Map<String, String[]> updateTargetColumnsMap = Collections.singletonMap(alias, new String[] {SEQUENCE_VALUE_COLUMN});
         return dialect.applyLocksToSql(query, lockMap, updateTargetColumnsMap);
     }
 
@@ -292,4 +293,3 @@ public class OpentapsIdentifierGenerator extends TransactionHelper implements Pe
         return new String[] {sqlDropString.toString()};
     }
 }
-
