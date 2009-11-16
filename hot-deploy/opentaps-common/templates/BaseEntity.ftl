@@ -132,7 +132,12 @@ fieldMapColumns.put("${name}", fields);
   <#-- do not declare the field if it is a field of composite key -->
     <#if primaryKeys.contains(field) && primaryKeys.size() == 1>
         <#if "SequenceValueItem" != name>
+        <#assign fieldShortType = fieldTypes.get(field)/>
+        <#if "Long" == fieldShortType || "Integer" == fieldShortType>
+   @org.hibernate.annotations.GenericGenerator(name="${name}_GEN",  strategy="increment")
+        <#else>
    @org.hibernate.annotations.GenericGenerator(name="${name}_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
+        </#if>
    @GeneratedValue(generator="${name}_GEN")
         </#if>
    @Id
