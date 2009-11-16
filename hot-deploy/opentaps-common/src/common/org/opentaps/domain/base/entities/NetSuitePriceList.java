@@ -103,7 +103,7 @@ fieldMapColumns.put("NetSuitePriceList", fields);
    private String isonline;
    @Column(name="PRICE_TYPE_EXTID")
    private String priceTypeExtid;
-   @org.hibernate.annotations.GenericGenerator(name="NetSuitePriceList_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
+   @org.hibernate.annotations.GenericGenerator(name="NetSuitePriceList_GEN",  strategy="increment")
    @GeneratedValue(generator="NetSuitePriceList_GEN")
    @Id
    @Column(name="PRICE_TYPE_ID")

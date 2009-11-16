@@ -85,7 +85,7 @@ fieldMapColumns.put("CurrencyDim", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
-   @org.hibernate.annotations.GenericGenerator(name="CurrencyDim_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
+   @org.hibernate.annotations.GenericGenerator(name="CurrencyDim_GEN",  strategy="increment")
    @GeneratedValue(generator="CurrencyDim_GEN")
    @Id
    @Column(name="CURRENCY_DIM_ID")

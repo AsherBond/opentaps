@@ -256,7 +256,7 @@ fieldMapColumns.put("NetSuiteItem", fields);
    private String istaxable;
    @Column(name="ITEM_EXTID")
    private String itemExtid;
-   @org.hibernate.annotations.GenericGenerator(name="NetSuiteItem_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
+   @org.hibernate.annotations.GenericGenerator(name="NetSuiteItem_GEN",  strategy="increment")
    @GeneratedValue(generator="NetSuiteItem_GEN")
    @Id
    @Column(name="ITEM_ID")

@@ -91,7 +91,7 @@ fieldMapColumns.put("DateDim", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
-   @org.hibernate.annotations.GenericGenerator(name="DateDim_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
+   @org.hibernate.annotations.GenericGenerator(name="DateDim_GEN",  strategy="increment")
    @GeneratedValue(generator="DateDim_GEN")
    @Id
    @Column(name="DATE_DIM_ID")

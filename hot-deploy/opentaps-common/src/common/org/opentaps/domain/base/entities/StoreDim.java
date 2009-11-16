@@ -87,7 +87,7 @@ fieldMapColumns.put("StoreDim", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
-   @org.hibernate.annotations.GenericGenerator(name="StoreDim_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
+   @org.hibernate.annotations.GenericGenerator(name="StoreDim_GEN",  strategy="increment")
    @GeneratedValue(generator="StoreDim_GEN")
    @Id
    @Column(name="STORE_DIM_ID")

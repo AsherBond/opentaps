@@ -100,7 +100,7 @@ fieldMapColumns.put("SalesInvoiceItemFact", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
-   @org.hibernate.annotations.GenericGenerator(name="SalesInvoiceItemFact_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
+   @org.hibernate.annotations.GenericGenerator(name="SalesInvoiceItemFact_GEN",  strategy="increment")
    @GeneratedValue(generator="SalesInvoiceItemFact_GEN")
    @Id
    @Column(name="SALES_INV_ITEM_FACT_ID")

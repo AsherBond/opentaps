@@ -104,7 +104,7 @@ fieldMapColumns.put("NetSuiteItemPrice", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
-   @org.hibernate.annotations.GenericGenerator(name="NetSuiteItemPrice_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
+   @org.hibernate.annotations.GenericGenerator(name="NetSuiteItemPrice_GEN",  strategy="increment")
    @GeneratedValue(generator="NetSuiteItemPrice_GEN")
    @Id
    @Column(name="PRICE_ID")

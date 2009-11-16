@@ -196,7 +196,7 @@ fieldMapColumns.put("NetSuiteCustomer", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
-   @org.hibernate.annotations.GenericGenerator(name="NetSuiteCustomer_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
+   @org.hibernate.annotations.GenericGenerator(name="NetSuiteCustomer_GEN",  strategy="increment")
    @GeneratedValue(generator="NetSuiteCustomer_GEN")
    @Id
    @Column(name="CUSTOMER_ID")

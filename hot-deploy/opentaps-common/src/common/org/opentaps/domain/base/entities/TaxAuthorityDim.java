@@ -93,7 +93,7 @@ fieldMapColumns.put("TaxAuthorityDim", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
-   @org.hibernate.annotations.GenericGenerator(name="TaxAuthorityDim_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
+   @org.hibernate.annotations.GenericGenerator(name="TaxAuthorityDim_GEN",  strategy="increment")
    @GeneratedValue(generator="TaxAuthorityDim_GEN")
    @Id
    @Column(name="TAX_AUTHORITY_DIM_ID")

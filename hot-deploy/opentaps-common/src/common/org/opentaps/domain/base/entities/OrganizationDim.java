@@ -87,7 +87,7 @@ fieldMapColumns.put("OrganizationDim", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
-   @org.hibernate.annotations.GenericGenerator(name="OrganizationDim_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
+   @org.hibernate.annotations.GenericGenerator(name="OrganizationDim_GEN",  strategy="increment")
    @GeneratedValue(generator="OrganizationDim_GEN")
    @Id
    @Column(name="ORGANIZATION_DIM_ID")
