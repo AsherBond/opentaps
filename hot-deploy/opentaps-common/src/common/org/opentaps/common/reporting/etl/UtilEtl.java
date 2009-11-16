@@ -399,17 +399,28 @@ public final class UtilEtl {
     }
 
     /**
-     * @throws GenericEntityException 
-     * 
+     * Creates DateDim entity and fill it with initial values.<br>
+     * Each row represents a day from 100 year time span starting from 1/1/1970.
+     * This method is valid for one occasion only, every time it run date dimension is cleared
+     * and filled with the same data. 
+     *
+     * @param delegator An instance of <tt>GenericDelegator</tt>
+     * @param timeZone Context timezone
+     * @param locale Context locale
+     * @throws GenericEntityException
      */
     public static void setupDateDimension(GenericDelegator delegator, TimeZone timeZone, Locale locale) throws GenericEntityException {
+        // time range covered by date dimension
         int YEARS = 100;
+
+        // calculate start and end dates of time range
         Timestamp startDate = UtilDate.toTimestamp("1970-01-01 00:00:00.0", timeZone, locale);
         Timestamp endDate = UtilDateTime.adjustTimestamp(startDate, Calendar.YEAR, YEARS, timeZone, locale);
 
         long sequentialKey = 1L;
         Timestamp current = startDate;
 
+        // prepare formats to obtain date components
         DateFormat dayOfMonthFmt = new SimpleDateFormat("dd");
         DateFormat weekOfYearFmt = new SimpleDateFormat("ww");
         DateFormat monthOfYearFmt = new SimpleDateFormat("MM");
@@ -417,15 +428,19 @@ public final class UtilEtl {
         DateFormat nameDayFmt = new SimpleDateFormat("E");
         DateFormat nameMonthFmt = new SimpleDateFormat("MMMM");
 
-        // clear DateDim
+        // clear date dimension
         delegator.removeByCondition("DateDim", EntityCondition.makeCondition("dateDimId", EntityOperator.NOT_EQUAL, null));
 
         // default row w/ 0 key
         delegator.create("DateDim", UtilMisc.toMap("dateDimId", Long.valueOf(0L)));
 
+        // main loop, an iteration for each day from start to end date
         do {
+
+            // Calendar object operates with Date
             Date currentDate = new Date(current.getTime());
 
+            // create a dimension row
             GenericValue dateDim = delegator.makeValue("DateDim");
             dateDim.set("dateDimId", Long.valueOf(sequentialKey));
             dateDim.set("dayOfMonth", dayOfMonthFmt.format(currentDate));
@@ -434,7 +449,7 @@ public final class UtilEtl {
             dateDim.set("yearNumber", yearNumberFmt.format(currentDate));
             dateDim.set("nameDay", nameDayFmt.format(currentDate));
             dateDim.set("nameMonth", nameMonthFmt.format(currentDate));
-            Calendar cal = Calendar.getInstance(timeZone, locale);
+            Calendar cal = Calendar.getInstance(); // calendar for default locale and timezone
             cal.setTime(currentDate);
             int monthNum = cal.get(Calendar.MONTH);
             if (monthNum <= 3) {
@@ -448,7 +463,10 @@ public final class UtilEtl {
             }
             dateDim.create();
 
-            current = UtilDateTime.adjustTimestamp(current, Calendar.DAY_OF_YEAR, 1, timeZone, locale);
+            // increase counter by 1 day
+            cal.add(Calendar.DAY_OF_YEAR, 1);
+            current = new Timestamp(cal.getTimeInMillis());
+
             sequentialKey++;
 
         } while(current.compareTo(endDate) < 0);

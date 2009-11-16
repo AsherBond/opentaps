@@ -1178,11 +1178,14 @@ public final class FinancialReports {
             timeZone = TimeZone.getDefault();
         }
 
+        // collection of unique invoice id
         Set<String> uniqueInvoices = FastSet.<String>newInstance();
         Long sequenceId = 0L;
 
         try {
 
+            // find all invoice items (as join Invoice and InvoiceItem) from involved invoices 
+            // and which aren't sales tax, promotion or shipping charges
             DynamicViewEntity salesInvoiceItems = new DynamicViewEntity();
             salesInvoiceItems.addMemberEntity("I", "Invoice");
             salesInvoiceItems.addMemberEntity("II", "InvoiceItem");
@@ -1212,6 +1215,8 @@ public final class FinancialReports {
             );
             EntityListIterator itemsIterator = delegator.findListIteratorByCondition(salesInvoiceItems, conditions, null, selectList, UtilMisc.toList("invoiceId", "invoiceItemSeqId"), null);
             GenericValue invoiceItem = null;
+
+            // iterate over found items and build fact item for each
             while ((invoiceItem = itemsIterator.next()) != null) {
                 GenericValue taxInvItemFact = delegator.makeValue("TaxInvoiceItemFact");
 
@@ -1222,7 +1227,7 @@ public final class FinancialReports {
                 taxInvItemFact.put("invoiceId", invoiceId);
                 taxInvItemFact.put("invoiceItemSeqId", invoiceItemSeqId);
 
-                // set gross amount
+                // store quantity and amount in variables
                 BigDecimal quantity = invoiceItem.getBigDecimal("quantity");
                 if (quantity == null) {
                     quantity = BigDecimal.ONE;
@@ -1233,6 +1238,7 @@ public final class FinancialReports {
                     amount = BigDecimal.ZERO;
                 }
 
+                // set gross amount
                 BigDecimal grossAmount = quantity.multiply(amount);
                 taxInvItemFact.set("grossAmount", grossAmount != null ? grossAmount : null);
 
@@ -1245,12 +1251,14 @@ public final class FinancialReports {
                 taxInvItemFact.set("refunds", totalRefunds != null ? totalRefunds : null);
 
                 // set net amount
+                // net amount is total sales minus returns and plus adjustments
                 taxInvItemFact.set("netAmount", grossAmount.subtract(totalRefunds).add(totalPromotions));
 
                 // set tax due amount
                 List<Map<String, Object>> taxes = getTaxDueAmount(invoiceId, invoiceItemSeqId, delegator);
 
                 // lookup and set date dimension id
+                // TODO: date dimension lookup deserves a separate method accepting only argument of Timestamp
                 Timestamp invoiceDate = invoiceItem.getTimestamp("invoiceDate");
                 String dayOfMonth = dayOfMonthFmt.format(invoiceDate);
                 String monthOfYear = monthOfYearFmt.format(invoiceDate);
@@ -1305,6 +1313,8 @@ public final class FinancialReports {
 
             itemsIterator.close();
 
+            // following code retrieve all sales tax invoice items that have no parent invoice item
+            // hence can't be linked to any product invoice item and described as separate fact row.
             DynamicViewEntity dv = new DynamicViewEntity();
             dv.addMemberEntity("I", "Invoice");
             dv.addMemberEntity("II", "InvoiceItem");
@@ -1330,7 +1340,6 @@ public final class FinancialReports {
             selectList.add("partyIdFrom");
             selectList.add("invoiceDate");
 
-            // handle tax invoice items w/o parent invoice/item
             EntityCondition invoiceLevelTaxConditions = EntityCondition.makeCondition(EntityOperator.AND,
                             EntityCondition.makeCondition("invoiceItemTypeId", "ITM_SALES_TAX"),
                             EntityCondition.makeCondition("invoiceId", EntityOperator.IN, uniqueInvoices),
@@ -1339,10 +1348,14 @@ public final class FinancialReports {
 
             EntityListIterator iter2 = delegator.findListIteratorByCondition(dv, invoiceLevelTaxConditions, null, selectList, null, null);
             GenericValue tax = null;
+
+            // iterate over found records and create fact row for each
+            // every such fact looks like ordinary one but has only valued amount taxDue, all other equals to zero
             while ((tax = iter2.next()) != null) {
                 BigDecimal amount = tax.getBigDecimal("totalAmount");
                 if (amount != null) {
 
+                    // date lookup conditions
                     Timestamp invoiceDate = tax.getTimestamp("invoiceDate");
                     String dayOfMonth = dayOfMonthFmt.format(invoiceDate);
                     String monthOfYear = monthOfYearFmt.format(invoiceDate);
@@ -1352,12 +1365,15 @@ public final class FinancialReports {
                             EntityCondition.makeCondition("monthOfYear", monthOfYear),
                             EntityCondition.makeCondition("yearNumber", yearNumber));
 
-                    GenericValue taxInvItemFact = delegator.makeValue("TaxInvoiceItemFact");
-                    taxInvItemFact.set("dateDimId", UtilEtl.lookupDimension("DateDim", "dateDimId", dateDimConditions, delegator));
-                    taxInvItemFact.set("storeDimId", lookupStoreDim(tax.getString("invoiceId"), tax.getString("invoiceItemSeqId"), delegator));
+                    // tax authority lookup conditions
                     EntityCondition taxAuthCondList = EntityCondition.makeCondition(EntityOperator.AND,
                             EntityCondition.makeCondition("taxAuthPartyId", tax.get("taxAuthPartyId")),
                             EntityCondition.makeCondition("taxAuthGeoId", tax.get("taxAuthGeoId")));
+
+                    GenericValue taxInvItemFact = delegator.makeValue("TaxInvoiceItemFact");
+
+                    taxInvItemFact.set("dateDimId", UtilEtl.lookupDimension("DateDim", "dateDimId", dateDimConditions, delegator));
+                    taxInvItemFact.set("storeDimId", lookupStoreDim(tax.getString("invoiceId"), tax.getString("invoiceItemSeqId"), delegator));
                     taxInvItemFact.set("taxAuthorityDimId", UtilEtl.lookupDimension("TaxAuthorityDim", "taxAuthorityDimId", taxAuthCondList, delegator));
                     taxInvItemFact.set("currencyDimId", UtilEtl.lookupDimension("CurrencyDim", "currencyDimId", EntityCondition.makeCondition("uomId", EntityOperator.EQUALS, tax.getString("currencyUomId")), delegator));
                     taxInvItemFact.set("organizationDimId", UtilEtl.lookupDimension("OrganizationDim", "organizationDimId", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, tax.getString("partyIdFrom")), delegator));
@@ -1372,6 +1388,7 @@ public final class FinancialReports {
                     taxInvItemFact.set("taxDue", totalAmount != null ? totalAmount : null);
                     sequenceId++;
                     taxInvItemFact.set("taxInvItemFactId", sequenceId);
+
                     taxInvItemFact.create();
                 }
             }
@@ -1403,6 +1420,8 @@ public final class FinancialReports {
     private static List<Map<String, Object>> getTaxDueAmount(String invoiceId, String invoiceItemSeqId, GenericDelegator delegator) throws GenericEntityException {
         List<Map<String, Object>> taxes = FastList.newInstance();
 
+        // find sales tax invoice items which have given invoice item as parent
+        // and calculate product of quantity and amount for each record
         DynamicViewEntity dv = new DynamicViewEntity();
         ComplexAlias a = new ComplexAlias("*");
         a.addComplexAliasMember(new ComplexAliasField("II", "quantity", "1.0", null));
@@ -1426,9 +1445,11 @@ public final class FinancialReports {
 
         List<String> selectList = UtilMisc.toList("totalTaxDue", "taxAuthPartyId", "taxAuthGeoId");
 
+        // retrieve complete list because only small number of sales tax items might be related to an invoice item
         EntityListIterator iter = delegator.findListIteratorByCondition(dv, conditionList, null, selectList, null, null);
         List<GenericValue> taxItems = iter.getCompleteList();
         iter.close();
+
         for (GenericValue taxItem : taxItems) {
             BigDecimal taxDue = taxItem.getBigDecimal("totalTaxDue");
             BigDecimal taxAdjAmount = BigDecimal.ZERO;
@@ -1446,6 +1467,7 @@ public final class FinancialReports {
             }
 
             // track relation to order and further to return invoice
+            // OrderItemBilling -> ReturnItem -> ReturnItemBilling -> InvoiceItem
             List<GenericValue> orderItemBillings = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("invoiceId", invoiceId, "invoiceItemSeqId", invoiceItemSeqId));
             for (GenericValue orderItemBilling : orderItemBillings) {
                 List<GenericValue> returnItems = delegator.findByAnd("ReturnItem", UtilMisc.toMap("orderId", orderItemBilling.getString("orderId"), "orderItemSeqId", orderItemBilling.getString("orderItemSeqId")));
@@ -1455,6 +1477,8 @@ public final class FinancialReports {
                         String ribInvoiceId = returnItemBilling.getString("invoiceId");
                         String ribInvoiceItemSeqId = returnItemBilling.getString("invoiceItemSeqId");
 
+                        // retrieve return invoice items as join of Invoice and InvoiceItem
+                        // and calculate product of quantity and amount for each record
                         DynamicViewEntity rdv = new DynamicViewEntity();
                         rdv.addMemberEntity("RI", "Invoice");
                         rdv.addMemberEntity("RII", "InvoiceItem");
@@ -1484,6 +1508,8 @@ public final class FinancialReports {
                         EntityListIterator iter1 = delegator.findListIteratorByCondition(rdv, conditionList1, null, Arrays.asList("totalTaxRefundAdj"), null, null);
                         List<GenericValue> taxAdjs = iter1.getCompleteList();
                         iter1.close();
+
+                        // add up sales tax adjustments
                         for (GenericValue taxAdj : taxAdjs) {
                             BigDecimal totalTaxRefundAdj = taxAdj.getBigDecimal("totalTaxRefundAdj");
                             if (totalTaxRefundAdj != null) {
@@ -1494,9 +1520,10 @@ public final class FinancialReports {
                 }
             }
 
+            // tad due w/o tax adjustments
             taxDue = taxDue.subtract(taxAdjAmount);
 
-            //
+            // add all significant things into return value
             taxes.add(UtilMisc.<String, Object>toMap(
                     "taxDue", taxDue,
                     "taxAuthPartyId", taxAuthPartyId,
@@ -1521,13 +1548,16 @@ public final class FinancialReports {
         BigDecimal totalRefunds = BigDecimal.ZERO;
         long totalRefundsIiNum = 0;
 
-        // find order item corresponding to given sales invoice item
+        // find order item corresponding to given sales invoice item, available in OrderItemBilling
         List<GenericValue> orderItemBillings = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("invoiceId", invoiceId, "invoiceItemSeqId", invoiceItemSeqId));
         if (UtilValidate.isEmpty(orderItemBillings)) {
             // not found
             return BigDecimal.ZERO;
         }
 
+        // find all return invoice items related to given invoice item looking through 
+        // OrderItemBilling -> ReturnItem -> ReturnItemBilling
+        // add up product of quantity and amount of each item to calculate returns amount
         for (GenericValue orderBillingItem : orderItemBillings) {
             List<GenericValue> returnItems = delegator.findByAnd("ReturnItem", UtilMisc.toMap("orderId", orderBillingItem.getString("orderId"), "orderItemSeqId", orderBillingItem.getString("orderItemSeqId")));
             for (GenericValue returnItem : returnItems) {
@@ -1567,12 +1597,15 @@ public final class FinancialReports {
     private static BigDecimal getTotalPromoAmount(String invoiceId, String invoiceItemSeqId, GenericDelegator delegator) throws GenericEntityException {
         BigDecimal totalPromotions = BigDecimal.ZERO;
 
+        // find promotion/discount invoice items which have given invoice item as a parent 
         EntityCondition promoConditions = EntityCondition.makeCondition(EntityOperator.AND,
                 EntityCondition.makeCondition("parentInvoiceId", EntityOperator.EQUALS, invoiceId),
                 EntityCondition.makeCondition("parentInvoiceItemSeqId", EntityOperator.EQUALS, invoiceItemSeqId),
                 EntityCondition.makeCondition("invoiceItemTypeId", EntityOperator.IN, Arrays.asList("ITM_PROMOTION_ADJ", "ITM_DISCOUNT_ADJ")));
-
         List<GenericValue> promoItems = delegator.findByCondition("InvoiceItem", promoConditions, UtilMisc.toSet("quantity", "amount"), null);
+
+        // add up each product of quantity and amount to get total promotion amount related to specified invoice item
+        // default value for quantity is 1 and for amount is 0
         if (UtilValidate.isNotEmpty(promoItems)) {
             for (GenericValue promoItem : promoItems) {
                 BigDecimal quantity = promoItem.getBigDecimal("quantity");
@@ -1595,11 +1628,14 @@ public final class FinancialReports {
      * @throws GenericEntityException
      */
     private static Long lookupStoreDim(String invoiceId, String invoiceItemSeqId, GenericDelegator delegator) throws GenericEntityException {
+        // store dim has a special record with key 0 with meaning "no product store"
         Long notfound = 0L;
         if (invoiceId == null && invoiceItemSeqId == null) {
             return notfound;
         }
 
+        // in order to get product store id for an invoice item we have to find OrderItemBilling 
+        // entity for the invoice item and further corresponding OrderHeader.productStoreId
         DynamicViewEntity dv = new DynamicViewEntity();
         dv.addMemberEntity("OIB", "OrderItemBilling");
         dv.addMemberEntity("OH", "OrderHeader");
@@ -1614,9 +1650,12 @@ public final class FinancialReports {
                 EntityCondition.makeCondition("invoiceId", EntityOperator.EQUALS, invoiceId),
                 EntityCondition.makeCondition("invoiceItemSeqId", EntityOperator.EQUALS, invoiceItemSeqId));
 
+        // retrieve first record
         EntityListIterator iter = delegator.findListIteratorByCondition(dv, conditionList, null, UtilMisc.toList("productStoreId"), null, null);
         GenericValue orderStore = EntityUtil.getFirst(iter.getCompleteList());
         iter.close();
+
+        // it isn't necessary order have to be found
         if (orderStore == null) {
             return notfound;
         }
@@ -1626,6 +1665,7 @@ public final class FinancialReports {
             return notfound;
         }
 
+        // find store dimension key for given productStoreId
         GenericValue storeDim = EntityUtil.getFirst(
                 delegator.findByCondition("StoreDim", EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, productStoreId), Arrays.asList("storeDimId"), null)
         );
@@ -1633,6 +1673,7 @@ public final class FinancialReports {
             return notfound;
         }
 
+        // return store dimension key
         Long storeDimId = storeDim.getLong("storeDimId");
         return storeDimId == null ? notfound : storeDimId;
     }
@@ -1649,10 +1690,16 @@ public final class FinancialReports {
 
         Transaction tx = session.beginTransaction();
 
+        // retrieve data as scrollable result set.
+        // this is join of InvoiceAdjustment and Invoice entities and each record has all required data
+        // to create new fact row
         Query invAdjQry = session.createQuery("select IA.invoiceAdjustmentId, IA.invoiceId, IA.amount, I.partyIdFrom, I.invoiceDate, I.currencyUomId from InvoiceAdjustment IA, Invoice I where IA.invoiceId = I.invoiceId and I.invoiceTypeId = 'SALES_INVOICE' and I.statusId not in ('INVOICE_IN_PROCESS', 'INVOICE_CANCELLED', 'INVOICE_VOIDED', 'INVOICE_WRITEOFF')");
         ScrollableResults adjustments = invAdjQry.scroll();
+
+        // iterate over record set
         while (adjustments.next()) {
 
+            // keep result fields in variables as a matter of convenience
             String invoiceId = adjustments.getString(1);
             String invoiceAdjustmentId = adjustments.getString(0);
             BigDecimal amount = adjustments.getBigDecimal(2);
@@ -1682,7 +1729,6 @@ public final class FinancialReports {
             Long organizationDimId = UtilEtl.lookupDimension("OrganizationDim", "organizationDimId", EntityCondition.makeCondition("organizationPartyId", organizationPartyId), delegator);
 
             // creates rows for both fact tables
-
             TaxInvoiceItemFact taxFact= new TaxInvoiceItemFact();
             taxFact.setDateDimId(dateDimId);
             taxFact.setStoreDimId(0L);
@@ -1714,11 +1760,13 @@ public final class FinancialReports {
 
         }
         adjustments.close();
-        tx.commit();
+        tx.commit(); // persist result, don't move this statement upper
     }
 
     /**
-     * Wrapper service that run Kettle sales tax transformations and loadTaxInvoiceItemFact service.
+     * Wrapper service that prepare fact tables on behalf of sales tax report
+     * running Kettle sales tax transformations and loadTaxInvoiceItemFact service.
+     * 
      * @param dctx a <code>DispatchContext</code> instance
      * @param context the service context <code>Map</code>
      * @return the service response <code>Map</code>
@@ -1737,6 +1785,8 @@ public final class FinancialReports {
         }
 
         String organizationPartyId = (String) context.get("organizationPartyId");
+        // since organization party id attribute is optional we use special value
+        // in case no id is provided, in order to keep this fact in runtime data 
         if (UtilValidate.isEmpty(organizationPartyId)) {
             organizationPartyId = "ALL";
         }
@@ -1760,6 +1810,8 @@ public final class FinancialReports {
             delegator.removeByCondition("SalesInvoiceItemFact", EntityCondition.makeCondition("dateDimId", EntityOperator.NOT_EQUAL, null));
             delegator.removeByCondition("TaxInvoiceItemFact", EntityCondition.makeCondition("dateDimId", EntityOperator.NOT_EQUAL, null));
 
+            // ETL transformations use JNDI to obtain database connection parameters.
+            // We have to put proper data source into naming context before run transformations.
             String dataSourceName = delegator.getGroupHelperName("org.ofbiz");
             DataSourceImpl datasource = new DataSourceImpl(dataSourceName);
             new InitialContext().rebind("java:comp/env/jdbc/default_delegator", (DataSource) datasource);
@@ -1770,9 +1822,11 @@ public final class FinancialReports {
             UtilEtl.runTrans("component://financials/script/etl/load_organization_dimension.ktr", null);
             UtilEtl.runTrans("component://financials/script/etl/load_sales_invoice_item_fact.ktr", null);
             UtilEtl.runTrans("component://financials/script/etl/load_invoice_level_promotions.ktr", null);
+            // ... and invoke other required services and methods
             dispatcher.runSync("financials.loadTaxInvoiceItemFact", UtilMisc.toMap("userLogin", userLogin, "locale", locale));
             loadInvoiceAdjustments(new Infrastructure(dispatcher).getSession(), delegator);
 
+            // unregister data source
             new InitialContext().unbind("java:comp/env/jdbc/default_delegator");
 
             // keep runtime info
