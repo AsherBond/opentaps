@@ -45,7 +45,7 @@ import java.util.Map;
 public class JFreeFinancialCharts {
 
     /**
-     * Liquidity snapshot chart.  Docmentation is at http://www.opentaps.org/docs/index.php/Financials_Home_Screen
+     * Liquidity snapshot chart.  Documentation is at http://www.opentaps.org/docs/index.php/Financials_Home_Screen
      *
      * Because a user might not have permission to view balances in all areas, this method takes into consideration
      * the ability to view various bars in the chart.
@@ -54,7 +54,7 @@ public class JFreeFinancialCharts {
      * @return String filename pointing to the chart, to be used with showChart URI request
      */
     public static String createLiquiditySnapshotChart(Map<String, GenericValue> accountsMap, List<GenericValue> creditCardAccounts, Locale locale, boolean hasReceivablesPermission, boolean hasPayablesPermission, boolean hasInventoryPermission) throws GenericEntityException, IOException {
-        Map uiLabelMap = UtilMessage.getUiLabels(locale);
+        Map<String, Object> uiLabelMap = UtilMessage.getUiLabels(locale);
 
         // create the dataset
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();

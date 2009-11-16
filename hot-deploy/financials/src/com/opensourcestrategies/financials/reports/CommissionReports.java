@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -28,11 +29,11 @@ import javax.servlet.http.HttpSession;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
+
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -69,10 +70,7 @@ public final class CommissionReports {
 
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request.getSession());
-
-        // TODO: in case we need to localize, replace the static labels in the .jrxml with jrParameters generated from these
         TimeZone timeZone = UtilCommon.getTimeZone(request);
-        ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
 
         // get the report constraints
         String organizationPartyId = (String) session.getAttribute("organizationPartyId");
