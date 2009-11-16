@@ -598,9 +598,10 @@ public class OpentapsTestCase extends TestCase {
      * they do not cause rollbacks.
      * @param serviceName name of the service to call
      * @param input the service input <code>Map</code>
+     * @return the <code>Map</code> returned by the service
      */
     @SuppressWarnings("unchecked")
-    public void runAndAssertServiceError(String serviceName, Map input) {
+    public Map runAndAssertServiceError(String serviceName, Map input) {
         Debug.logInfo("runAndAssertServiceError: [" + serviceName + "] with input: " + input, MODULE);
         Map results = null;
         try {
@@ -614,6 +615,7 @@ public class OpentapsTestCase extends TestCase {
             Debug.logInfo("Service " + serviceName + " returned an error, as expected. Results: " + results + "\n\tService input: " + input, MODULE);
         }
         Debug.set(Debug.ERROR, true);
+        return results;
     }
 
     /**
