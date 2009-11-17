@@ -16,13 +16,10 @@
  */
 package com.opensourcestrategies.crmsfa.content;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.opensourcestrategies.crmsfa.party.PartyHelper;
-import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -41,6 +38,9 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+
 /**
  * Content services. The service documentation is in services_content.xml.
  *
@@ -58,7 +58,6 @@ public final class ContentServices {
      * @param context a <code>Map</code> value
      * @return the <code>Map</code> value.
      */
-    @SuppressWarnings("unchecked")
     public static Map<String, Object> createContentForParty(DispatchContext dctx, Map<String, Object> context) {
         Security security = dctx.getSecurity();
         Locale locale = UtilCommon.getLocale(context);
@@ -85,7 +84,7 @@ public final class ContentServices {
         context.put("roleTypeId", roleTypeId);
         context.put("contentPurposeEnumId", contentPurposeEnumId);
         context.put("partyContentTypeId", "USERDEF");
-        Map results = createContent(dctx, context, "crmsfa.createPartyContent");
+        Map<String, Object> results = createContent(dctx, context, "crmsfa.createPartyContent");
         if (ServiceUtil.isError(results)) {
             return results;
         }
@@ -99,13 +98,12 @@ public final class ContentServices {
      * @param context a <code>Map</code> value
      * @return the <code>Map</code> value.
      */
-    @SuppressWarnings("unchecked")
     public static Map<String, Object> createContentForCase(DispatchContext dctx, Map<String, Object> context) {
         String custRequestId = (String) context.get("custRequestId");
         if (!CrmsfaSecurity.hasCasePermission(dctx.getSecurity(), "_UPDATE", (GenericValue) context.get("userLogin"), custRequestId)) {
             return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", UtilCommon.getLocale(context), MODULE);
         }
-        Map results = createContent(dctx, context, "crmsfa.createCustRequestContent");
+        Map<String, Object> results = createContent(dctx, context, "crmsfa.createCustRequestContent");
         if (ServiceUtil.isError(results)) {
             return results;
         }
@@ -120,13 +118,12 @@ public final class ContentServices {
      * @param context a <code>Map</code> value
      * @return the <code>Map</code> value.
      */
-    @SuppressWarnings("unchecked")
     public static Map<String, Object> createContentForOpportunity(DispatchContext dctx, Map<String, Object> context) {
         String salesOpportunityId = (String) context.get("salesOpportunityId");
         if (!CrmsfaSecurity.hasOpportunityPermission(dctx.getSecurity(), "_UPDATE", (GenericValue) context.get("userLogin"), salesOpportunityId)) {
             return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", UtilCommon.getLocale(context), MODULE);
         }
-        Map results = createContent(dctx, context, "crmsfa.createSalesOpportunityContent");
+        Map<String, Object> results = createContent(dctx, context, "crmsfa.createSalesOpportunityContent");
         if (ServiceUtil.isError(results)) {
             return results;
         }
@@ -140,14 +137,13 @@ public final class ContentServices {
      * @param context a <code>Map</code> value
      * @return the <code>Map</code> value.
      */
-    @SuppressWarnings("unchecked")
     public static Map<String, Object> createContentForActivity(DispatchContext dctx, Map<String, Object> context) {
         String workEffortId = (String) context.get("workEffortId");
         if (!CrmsfaSecurity.hasActivityPermission(dctx.getSecurity(), "_UPDATE", (GenericValue) context.get("userLogin"), workEffortId)) {
             return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", UtilCommon.getLocale(context), MODULE);
         }
         context.put("workEffortContentTypeId", "CREATED_MEDIA");
-        Map results = createContent(dctx, context, "createWorkEffortContent");
+        Map<String, Object> results = createContent(dctx, context, "createWorkEffortContent");
         if (ServiceUtil.isError(results)) {
             return results;
         }
@@ -156,13 +152,12 @@ public final class ContentServices {
     }
 
     /**
-     * Parametrized create content service.
+     * Parameterized create content service.
      * @param dctx a <code>DispatchContext</code> value
      * @param context a <code>Map</code> value
      * @param createContentAssocService a <code>String</code> value
      * @return the <code>Map</code> value.
      */
-    @SuppressWarnings("unchecked")
     private static Map<String, Object> createContent(DispatchContext dctx, Map<String, Object> context, String createContentAssocService) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
@@ -180,14 +175,14 @@ public final class ContentServices {
             }
 
             ModelService service = dctx.getModelService(uploadServiceName);
-            Map input = service.makeValid(context, "IN");
+            Map<String, Object> input = service.makeValid(context, "IN");
             // if upload order attach file, then add uploadFolder parameter
             String orderId = (String) context.get("orderId");
             if ("FILE".equals(contentTypeId) && orderId != null) {
                 //specific upload folder, like Order_100011/
                 input.put("uploadFolder", org.opentaps.common.content.ContentServices.ORDERCONTENT_PREV + orderId);
             }
-            Map servResults = dispatcher.runSync(uploadServiceName, input);
+            Map<String, Object> servResults = dispatcher.runSync(uploadServiceName, input);
             if (ServiceUtil.isError(servResults)) {
                 return UtilMessage.createAndLogServiceError(servResults, "CrmErrorCreateContentFail", locale, MODULE);
             }
@@ -420,7 +415,6 @@ public final class ContentServices {
      * @param context a <code>Map</code> value
      * @return the <code>Map</code> value.
      */
-    @SuppressWarnings("unchecked")
     public static Map<String, Object> removeContent(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
@@ -461,32 +455,31 @@ public final class ContentServices {
 
             // We're going to expire the content relationship first
             String entityName = null;
-            List conditions = UtilMisc.toList(EntityCondition.makeCondition("contentId", EntityOperator.EQUALS, contentId), EntityUtil.getFilterByDateExpr());
+            List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("contentId", contentId), EntityUtil.getFilterByDateExpr());
             if (partyId != null) {
                 entityName = "ContentRole";
-                conditions.add(EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId));
+                conditions.add(EntityCondition.makeCondition("partyId", partyId));
             } else if (workEffortId != null) {
                 entityName = "WorkEffortContent";
-                conditions.add(EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, workEffortId));
+                conditions.add(EntityCondition.makeCondition("workEffortId", workEffortId));
             } else if (custRequestId != null) {
                 entityName = "CustRequestContent";
-                conditions.add(EntityCondition.makeCondition("custRequestId", EntityOperator.EQUALS, custRequestId));
+                conditions.add(EntityCondition.makeCondition("custRequestId", custRequestId));
             } else if (salesOpportunityId != null) {
                 entityName = "SalesOpportunityContent";
-                conditions.add(EntityCondition.makeCondition("salesOpportunityId", EntityOperator.EQUALS, salesOpportunityId));
+                conditions.add(EntityCondition.makeCondition("salesOpportunityId", salesOpportunityId));
             } else if (orderId != null) {
                 entityName = "OrderHeaderContent";
-                conditions.add(EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId));
+                conditions.add(EntityCondition.makeCondition("orderId", orderId));
             } else if (quoteId != null) {
                 entityName = "QuoteContent";
-                conditions.add(EntityCondition.makeCondition("quoteId", EntityOperator.EQUALS, quoteId));
+                conditions.add(EntityCondition.makeCondition("quoteId", quoteId));
             }
-            List relationships = delegator.findByAnd(entityName, conditions);
+            List<GenericValue> relationships = delegator.findByAnd(entityName, conditions);
             if (relationships.size() == 0) {
                 return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
             }
-            for (Iterator iter = relationships.iterator(); iter.hasNext();) {
-                GenericValue relationship = (GenericValue) iter.next();
+            for (GenericValue relationship : relationships) {
                 relationship.set("thruDate", UtilDateTime.nowTimestamp());
                 relationship.store();
             }
@@ -503,16 +496,15 @@ public final class ContentServices {
      * @param context a <code>Map</code> value
      * @return the <code>Map</code> value.
      */
-    @SuppressWarnings("unchecked")
     public static Map<String, Object> createOrderContent(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
         try {
             String contentId = (String) context.get("contentId");
             String orderId = (String) context.get("orderId");
-            List conditions = UtilMisc.toList(EntityCondition.makeCondition("contentId", EntityOperator.EQUALS, contentId), EntityUtil.getFilterByDateExpr());
-            conditions.add(EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId));
-            List relationships = delegator.findByAnd("OrderHeaderContent", conditions);
+            List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("contentId", contentId), EntityUtil.getFilterByDateExpr());
+            conditions.add(EntityCondition.makeCondition("orderId", orderId));
+            List<GenericValue> relationships = delegator.findByAnd("OrderHeaderContent", conditions);
             if (relationships.size() == 0) {
                 // if not exist the OrderHeaderContent, then create one.
                 GenericValue value = delegator.makeValue("OrderHeaderContent");

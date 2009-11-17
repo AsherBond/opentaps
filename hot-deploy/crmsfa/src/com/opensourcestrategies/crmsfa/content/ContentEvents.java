@@ -23,23 +23,28 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
-import org.ofbiz.base.util.*;
+import org.ofbiz.base.util.Base64;
+import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.content.data.DataResourceWorker;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
+
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 
 /**
  * Content servlet methods.
@@ -58,7 +63,6 @@ public final class ContentEvents {
      * @param response a <code>HttpServletResponse</code> value
      * @return the <code>String</code> content value.
      */
-    @SuppressWarnings("unchecked")
     public static String downloadPartyContent(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
@@ -81,9 +85,9 @@ public final class ContentEvents {
             }
 
             // ensure association exists between our party and content (ignore role because we're using module to check for security)
-            List conditions = UtilMisc.toList(
-                    EntityCondition.makeCondition("contentId", EntityOperator.EQUALS, contentId),
-                    EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId),
+            List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
+                    EntityCondition.makeCondition("contentId", contentId),
+                    EntityCondition.makeCondition("partyId", partyId),
                     EntityUtil.getFilterByDateExpr());
             GenericValue association = EntityUtil.getFirst(delegator.findByAnd("ContentRole", conditions));
             if (association == null) {
@@ -107,7 +111,6 @@ public final class ContentEvents {
      * @param response a <code>HttpServletResponse</code> value
      * @return the <code>String</code> content value.
      */
-    @SuppressWarnings("unchecked")
     public static String downloadCaseContent(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
@@ -124,9 +127,9 @@ public final class ContentEvents {
             }
 
             // ensure association exists between case and content
-            List conditions = UtilMisc.toList(
-                    EntityCondition.makeCondition("contentId", EntityOperator.EQUALS, contentId),
-                    EntityCondition.makeCondition("custRequestId", EntityOperator.EQUALS, custRequestId),
+            List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
+                    EntityCondition.makeCondition("contentId", contentId),
+                    EntityCondition.makeCondition("custRequestId", custRequestId),
                     EntityUtil.getFilterByDateExpr());
             GenericValue association = EntityUtil.getFirst(delegator.findByAnd("CustRequestContent", conditions));
             if (association == null) {
@@ -150,7 +153,6 @@ public final class ContentEvents {
      * @param response a <code>HttpServletResponse</code> value
      * @return the <code>String</code> content value.
      */
-    @SuppressWarnings("unchecked")
     public static String downloadOpportunityContent(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
@@ -167,9 +169,9 @@ public final class ContentEvents {
             }
 
             // ensure association exists between case and content
-            List conditions = UtilMisc.toList(
-                    EntityCondition.makeCondition("contentId", EntityOperator.EQUALS, contentId),
-                    EntityCondition.makeCondition("salesOpportunityId", EntityOperator.EQUALS, salesOpportunityId),
+            List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
+                    EntityCondition.makeCondition("contentId", contentId),
+                    EntityCondition.makeCondition("salesOpportunityId", salesOpportunityId),
                     EntityUtil.getFilterByDateExpr()
                     );
             GenericValue association = EntityUtil.getFirst(delegator.findByAnd("SalesOpportunityContent", conditions));
@@ -194,7 +196,6 @@ public final class ContentEvents {
      * @param response a <code>HttpServletResponse</code> value
      * @return the <code>String</code> content value.
      */
-    @SuppressWarnings("unchecked")
     public static String downloadActivityContent(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
@@ -211,9 +212,9 @@ public final class ContentEvents {
             }
 
             // ensure association exists between case and content
-            List conditions = UtilMisc.toList(
-                    EntityCondition.makeCondition("contentId", EntityOperator.EQUALS, contentId),
-                    EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, workEffortId),
+            List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
+                    EntityCondition.makeCondition("contentId", contentId),
+                    EntityCondition.makeCondition("workEffortId", workEffortId),
                     EntityUtil.getFilterByDateExpr()
                     );
             GenericValue association = EntityUtil.getFirst(delegator.findByAnd("WorkEffortContent", conditions));
@@ -233,7 +234,7 @@ public final class ContentEvents {
     }
 
 
-    // get the contentId and verify that we have something to download
+    /** Get the contentId and verify that we have something to download */
     private static GenericValue getDataResource(HttpServletRequest request) throws GenericEntityException {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
 
@@ -249,14 +250,13 @@ public final class ContentEvents {
         return dataResource;
     }
 
-    // find the file and write it to the client stream
-    @SuppressWarnings("unchecked")
+    /** Find the file and write it to the client stream. */
     private static String serveDataResource(HttpServletRequest request, HttpServletResponse response, GenericValue dataResource) {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         HttpSession session = request.getSession();
         Locale locale = UtilHttp.getLocale(request);
         ServletContext application = session.getServletContext();
-        Map input = UtilMisc.toMap("contentId", request.getParameter("contentId"));
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("contentId", request.getParameter("contentId"));
         try {
             String fileLocation = dataResource.getString("objectInfo");
             String fileName = dataResource.getString("dataResourceName");
@@ -296,7 +296,6 @@ public final class ContentEvents {
      * @param response a <code>HttpServletResponse</code> value
      * @return the <code>String</code> content value.
      */
-    @SuppressWarnings("unchecked")
     public static String downloadOrderContent(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
@@ -313,9 +312,9 @@ public final class ContentEvents {
             }
 
             // ensure association exists between case and content
-            List conditions = UtilMisc.toList(
-                    EntityCondition.makeCondition("contentId", EntityOperator.EQUALS, contentId),
-                    EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+            List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
+                    EntityCondition.makeCondition("contentId", contentId),
+                    EntityCondition.makeCondition("orderId", orderId),
                     EntityUtil.getFilterByDateExpr());
             GenericValue association = EntityUtil.getFirst(delegator.findByAnd("OrderHeaderContent", conditions));
             if (association == null) {
@@ -356,8 +355,8 @@ public final class ContentEvents {
 
             // ensure association exists between quote and content
             List<EntityCondition> conditions = UtilMisc.toList(
-                    EntityCondition.makeCondition("contentId", EntityOperator.EQUALS, contentId),
-                    EntityCondition.makeCondition("quoteId", EntityOperator.EQUALS, quoteId),
+                    EntityCondition.makeCondition("contentId", contentId),
+                    EntityCondition.makeCondition("quoteId", quoteId),
                     EntityUtil.getFilterByDateExpr());
             GenericValue association = EntityUtil.getFirst(delegator.findByAnd("QuoteContent", conditions));
             if (association == null) {
