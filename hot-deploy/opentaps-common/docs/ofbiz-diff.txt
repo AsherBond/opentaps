@@ -237,6 +237,11 @@ r13468 comment the quote status item and status valid change for the it conflict
 applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCart.java
 r12896 made some methods / attributes protected instead of private, so we can access them in OpentapsShoppingCart
 
+applications/order/src/org/ofbiz/order/shoppingcart/CheckOutHelper.java
+applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCart.java
+specialpurpose/pos/src/org/ofbiz/pos/PosTransaction.java
+r13991 Fix problem of POS trying to create negative payments instead of refunds (same as r12431 from opentaps 1.0.x) -- euronymous666 
+
 applications/order/servicedef/secas.xml
 r13192 Removed ofbiz new seca that auto invoice services when approved, this conflicts with the perform service -> invoice performed services workflow in opentaps.
 
