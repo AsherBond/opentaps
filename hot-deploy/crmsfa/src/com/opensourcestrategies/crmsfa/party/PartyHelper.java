@@ -56,6 +56,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import javolution.util.FastList;
+
 import freemarker.template.TemplateException;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
@@ -254,8 +256,8 @@ public final class PartyHelper {
 
     /**
      * This array determines the entities in which to delete the party and the order of deletion.
-     * Party should be the very last element. The second element in each row denotes the partyId
-     * field to check. XXX Note: We are deleting historical data. For instance, activity records
+     * The second element in each row denotes the partyId field to check.
+     * XXX Note: We are deleting historical data. For instance, activity records
      * involving the partyId will be gone forever!
      */
     private static String[][] CRM_PARTY_DELETE_CASCADE = {
@@ -271,9 +273,12 @@ public final class PartyHelper {
         {"PartyRelationship", "partyIdFrom"},
         {"PartyRelationship", "partyIdTo"},
         {"Person", "partyId"},
+        {"CommunicationEventRole", "partyId"},
+        {"ContentRole", "partyId"},
+        {"FacilityParty", "partyId"},
         {"PartyRole", "partyId"},
-        {"PartyStatus", "partyId"},
-        {"Party", "partyId"}
+        {"PartyContent", "partyId"},
+        {"PartyStatus", "partyId"}
     };
 
     /**
@@ -285,16 +290,31 @@ public final class PartyHelper {
      * the entities to the CASCADE array above.
      *
      * XXX Warning, this method is very brittle. It is essentially emulating the ON DELETE CASCADE functionality
-     * of well featured databases, but very poorly. As the datamodel evolves, this method would have to be updatd.
+     * of well featured databases, but very poorly. As the datamodel evolves, this method would have to be updated.
      */
     public static void deleteCrmParty(String partyId, GenericDelegator delegator) throws GenericEntityException {
+        // remove related entities from constant list
         for (int i = 0; i < CRM_PARTY_DELETE_CASCADE.length; i++) {
             String entityName = CRM_PARTY_DELETE_CASCADE[i][0];
             String fieldName = CRM_PARTY_DELETE_CASCADE[i][1];
 
-            Map input = UtilMisc.toMap(fieldName, partyId);
+            Map<String, Object> input = UtilMisc.<String, Object>toMap(fieldName, partyId);
             delegator.removeByAnd(entityName, input);
         }
+
+        // remove communication events
+        GenericValue party = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", partyId));
+        List<GenericValue> commEvnts = FastList.<GenericValue>newInstance();
+        commEvnts.addAll(party.getRelated("ToCommunicationEvent"));
+        commEvnts.addAll(party.getRelated("FromCommunicationEvent"));
+        for (GenericValue commEvnt : commEvnts) {
+            commEvnt.removeRelated("CommunicationEventRole");
+            commEvnt.removeRelated("CommunicationEventWorkEff");
+            delegator.removeValue(commEvnt);
+        }
+
+        // finally remove party
+        delegator.removeValue(party);
     }
 
     /**
