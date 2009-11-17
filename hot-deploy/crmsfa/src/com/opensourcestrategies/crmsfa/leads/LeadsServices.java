@@ -415,6 +415,8 @@ public class LeadsServices {
                 accountContent.set("partyId", accountPartyId);
                 accountContent.set("contentId", contentRole.get("contentId"));
                 accountContent.set("contentPurposeEnumId", "PTYCNT_CRMSFA");
+                accountContent.set("partyContentTypeId", "USERDEF");
+                accountContent.set("fromDate", UtilDateTime.nowTimestamp());
                 accountContent.create();
 
                 GenericValue accountContentRole = delegator.makeValue("ContentRole");
