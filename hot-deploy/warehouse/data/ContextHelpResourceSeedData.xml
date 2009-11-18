@@ -58,5 +58,6 @@
     <ContextHelpResource contextHelpResourceId="WRHS_MANAGELOTS" screenName="manageLots" applicationName="warehouse" remotePageName="Manage_Lots_Screen" remotePageVersion="0"/>
     <ContextHelpResource contextHelpResourceId="WRHS_CREATELOT" screenName="createLotForm" applicationName="warehouse" remotePageName="Create_New_Lot_Screen" remotePageVersion="0"/>
     <ContextHelpResource contextHelpResourceId="WRHS_RECVINVITM" screenName="receiveInventoryItem" applicationName="warehouse" remotePageName="Receive_Inventory_Item_Screen" remotePageVersion="0"/>
+    <ContextHelpResource contextHelpResourceId="WRHS_TRACE_INV" screenName="traceInventory" applicationName="warehouse" remotePageName="Trace_Inventory_Screen" remotePageVersion="0"/>
 
 </entity-engine-xml>
