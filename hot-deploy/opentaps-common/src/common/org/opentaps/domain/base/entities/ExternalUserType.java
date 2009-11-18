@@ -46,28 +46,24 @@ import java.lang.String;
 import java.sql.Timestamp;
 
 /**
- * Auto generated base entity AsteriskUser.
+ * Auto generated base entity ExternalUserType.
  */
 @javax.persistence.Entity
-@Table(name="ASTERISK_USER")
-public class AsteriskUser extends Entity {
+@Table(name="EXTERNAL_USER_TYPE")
+public class ExternalUserType extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
-        fields.put("userLoginId", "USER_LOGIN_ID");
-        fields.put("extension", "EXTENSION");
-        fields.put("fromDate", "FROM_DATE");
-        fields.put("thruDate", "THRU_DATE");
+        fields.put("externalUserTypeId", "EXTERNAL_USER_TYPE_ID");
+        fields.put("description", "DESCRIPTION");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
-fieldMapColumns.put("AsteriskUser", fields);
+fieldMapColumns.put("ExternalUserType", fields);
 }
-  public static enum Fields implements EntityFieldInterface<AsteriskUser> {
-    userLoginId("userLoginId"),
-    extension("extension"),
-    fromDate("fromDate"),
-    thruDate("thruDate"),
+  public static enum Fields implements EntityFieldInterface<ExternalUserType> {
+    externalUserTypeId("externalUserTypeId"),
+    description("description"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -82,29 +78,13 @@ fieldMapColumns.put("AsteriskUser", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
-   @EmbeddedId
-
-   @FieldBridge(impl = org.opentaps.domain.base.entities.bridge.AsteriskUserPkBridge.class)
-     private AsteriskUserPk id = new AsteriskUserPk();
-   
-    /**
-     * Auto generated Id accessor.
-     * @return <code>AsteriskUserPk</code>
-     */
-      public AsteriskUserPk getId() {
-         return id;
-      }
-    /**
-     * Auto generated Id setter.
-     * @param id a <code>AsteriskUserPk</code> value to set
-    */   
-      public void setId(AsteriskUserPk id) {
-         this.id = id;
-      }
-   @Column(name="USER_LOGIN_ID")
-   private String userLoginId;
-   @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   @org.hibernate.annotations.GenericGenerator(name="ExternalUserType_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
+   @GeneratedValue(generator="ExternalUserType_GEN")
+   @Id
+   @Column(name="EXTERNAL_USER_TYPE_ID")
+   private String externalUserTypeId;
+   @Column(name="DESCRIPTION")
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -113,26 +93,23 @@ fieldMapColumns.put("AsteriskUser", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
-   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
-   @JoinColumn(name="USER_LOGIN_ID", insertable=false, updatable=false)
-   @org.hibernate.annotations.Generated(
-      org.hibernate.annotations.GenerationTime.ALWAYS
-   )
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="EXTERNAL_USER_TYPE_ID")
    
-   private UserLogin userLogin = null;
+   private List<ExternalUser> externalUsers = null;
 
   /**
    * Default constructor.
    */
-  public AsteriskUser() {
+  public ExternalUserType() {
       super();
-      this.baseEntityName = "AsteriskUser";
+      this.baseEntityName = "ExternalUserType";
       this.isView = false;
       
       this.primaryKeyNames = new ArrayList<String>();
-      this.primaryKeyNames.add("extension");this.primaryKeyNames.add("fromDate");
+      this.primaryKeyNames.add("externalUserTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("extension");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("externalUserTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -142,38 +119,24 @@ fieldMapColumns.put("AsteriskUser", fields);
    * Constructor with a repository.
    * @param repository a <code>RepositoryInterface</code> value
    */
-  public AsteriskUser(RepositoryInterface repository) {
+  public ExternalUserType(RepositoryInterface repository) {
       this();
       initRepository(repository);
   }
 
     /**
      * Auto generated value setter.
-     * @param userLoginId the userLoginId to set
+     * @param externalUserTypeId the externalUserTypeId to set
      */
-    public void setUserLoginId(String userLoginId) {
-        this.userLoginId = userLoginId;
+    public void setExternalUserTypeId(String externalUserTypeId) {
+        this.externalUserTypeId = externalUserTypeId;
     }
     /**
      * Auto generated value setter.
-     * @param extension the extension to set
+     * @param description the description to set
      */
-    public void setExtension(String extension) {
-        id.setExtension(extension);
-    }
-    /**
-     * Auto generated value setter.
-     * @param fromDate the fromDate to set
-     */
-    public void setFromDate(Timestamp fromDate) {
-        id.setFromDate(fromDate);
-    }
-    /**
-     * Auto generated value setter.
-     * @param thruDate the thruDate to set
-     */
-    public void setThruDate(Timestamp thruDate) {
-        this.thruDate = thruDate;
+    public void setDescription(String description) {
+        this.description = description;
     }
     /**
      * Auto generated value setter.
@@ -208,29 +171,15 @@ fieldMapColumns.put("AsteriskUser", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getUserLoginId() {
-        return this.userLoginId;
+    public String getExternalUserTypeId() {
+        return this.externalUserTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getExtension() {
-        return this.id.getExtension();
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>Timestamp</code>
-     */
-    public Timestamp getFromDate() {
-        return this.id.getFromDate();
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>Timestamp</code>
-     */
-    public Timestamp getThruDate() {
-        return this.thruDate;
+    public String getDescription() {
+        return this.description;
     }
     /**
      * Auto generated value accessor.
@@ -262,23 +211,23 @@ fieldMapColumns.put("AsteriskUser", fields);
     }
 
     /**
-     * Auto generated method that gets the related <code>UserLogin</code> by the relation named <code>UserLogin</code>.
-     * @return the <code>UserLogin</code>
+     * Auto generated method that gets the related <code>ExternalUser</code> by the relation named <code>ExternalUser</code>.
+     * @return the list of <code>ExternalUser</code>
      * @throws RepositoryException if an error occurs
      */
-    public UserLogin getUserLogin() throws RepositoryException {
-        if (this.userLogin == null) {
-            this.userLogin = getRelatedOne(UserLogin.class, "UserLogin");
+    public List<? extends ExternalUser> getExternalUsers() throws RepositoryException {
+        if (this.externalUsers == null) {
+            this.externalUsers = getRelated(ExternalUser.class, "ExternalUser");
         }
-        return this.userLogin;
+        return this.externalUsers;
     }
 
     /**
      * Auto generated value setter.
-     * @param userLogin the userLogin to set
+     * @param externalUsers the externalUsers to set
     */
-    public void setUserLogin(UserLogin userLogin) {
-        this.userLogin = userLogin;
+    public void setExternalUsers(List<ExternalUser> externalUsers) {
+        this.externalUsers = externalUsers;
     }
 
 
@@ -286,10 +235,8 @@ fieldMapColumns.put("AsteriskUser", fields);
     @Override
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
-        setUserLoginId((String) mapValue.get("userLoginId"));
-        setExtension((String) mapValue.get("extension"));
-        setFromDate((Timestamp) mapValue.get("fromDate"));
-        setThruDate((Timestamp) mapValue.get("thruDate"));
+        setExternalUserTypeId((String) mapValue.get("externalUserTypeId"));
+        setDescription((String) mapValue.get("description"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -301,10 +248,8 @@ fieldMapColumns.put("AsteriskUser", fields);
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
-        mapValue.put("userLoginId", getUserLoginId());
-        mapValue.put("extension", getExtension());
-        mapValue.put("fromDate", getFromDate());
-        mapValue.put("thruDate", getThruDate());
+        mapValue.put("externalUserTypeId", getExternalUserTypeId());
+        mapValue.put("description", getDescription());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

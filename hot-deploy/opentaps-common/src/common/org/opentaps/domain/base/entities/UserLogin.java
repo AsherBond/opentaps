@@ -152,10 +152,6 @@ fieldMapColumns.put("UserLogin", fields);
    private transient Person person = null;
    private transient PartyGroup partyGroup = null;
    @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="USER_LOGIN_ID")
-   
-   private List<AsteriskUser> asteriskUsers = null;
-   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OPEN_USER_LOGIN_ID")
    
    private List<CashDrawer> openCashDrawers = null;
@@ -739,17 +735,6 @@ fieldMapColumns.put("UserLogin", fields);
             this.partyGroup = getRelatedOne(PartyGroup.class, "PartyGroup");
         }
         return this.partyGroup;
-    }
-    /**
-     * Auto generated method that gets the related <code>AsteriskUser</code> by the relation named <code>AsteriskUser</code>.
-     * @return the list of <code>AsteriskUser</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends AsteriskUser> getAsteriskUsers() throws RepositoryException {
-        if (this.asteriskUsers == null) {
-            this.asteriskUsers = getRelated(AsteriskUser.class, "AsteriskUser");
-        }
-        return this.asteriskUsers;
     }
     /**
      * Auto generated method that gets the related <code>CashDrawer</code> by the relation named <code>OpenCashDrawer</code>.
@@ -1509,13 +1494,6 @@ fieldMapColumns.put("UserLogin", fields);
     */
     public void setPartyGroup(PartyGroup partyGroup) {
         this.partyGroup = partyGroup;
-    }
-    /**
-     * Auto generated value setter.
-     * @param asteriskUsers the asteriskUsers to set
-    */
-    public void setAsteriskUsers(List<AsteriskUser> asteriskUsers) {
-        this.asteriskUsers = asteriskUsers;
     }
     /**
      * Auto generated value setter.

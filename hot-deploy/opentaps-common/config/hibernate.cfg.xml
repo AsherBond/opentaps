@@ -1097,7 +1097,8 @@
   <mapping class="org.opentaps.domain.base.entities.ReportGroupMember"/>
   <mapping class="org.opentaps.domain.base.entities.ReportGroupMemberRegistry"/>
   <mapping class="org.opentaps.domain.base.entities.TestGeoData"/>
-  <mapping class="org.opentaps.domain.base.entities.AsteriskUser"/>
+  <mapping class="org.opentaps.domain.base.entities.ExternalUser"/>
+  <mapping class="org.opentaps.domain.base.entities.ExternalUserType"/>
   <mapping class="org.opentaps.domain.base.entities.ViewHistory"/>
   <mapping class="org.opentaps.domain.base.entities.ContextHelpResource"/>
   <mapping class="org.opentaps.domain.base.entities.UserLoginViewPreference"/>
