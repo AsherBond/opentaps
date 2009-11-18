@@ -15,6 +15,7 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#assign dateFormat = StringUtil.wrapString(Static["org.ofbiz.base.util.UtilDateTime"].getJsDateTimeFormat(Static["org.ofbiz.base.util.UtilDateTime"].getDateFormat(locale)))/>
 
@@ -59,9 +60,11 @@ opentaps.addOnLoad(setInterval('updateTime()', 1000*60 /*1 min*/));
 <#assign updateTarget = "updateTaskForm"/>
 </#if>
 
+<@form name="cancelActivityForm" url="updateActivityWithoutAssoc" workEffortId=workEffort.workEffortId currentStatusId="TASK_CANCELLED"/>
+
 <div class="subSectionHeader">
     <div class="subSectionTitle">${activityTypeLabel}</div>
     <#if hasUpdatePermission == true>
-    <div class="subMenuBar"><a class="subMenuButton" href="${updateTarget}?${activityValueParams}">${uiLabelMap.CommonEdit}</a><a class="subMenuButton" href="updateActivityWithoutAssoc?workEffortId=${workEffort.workEffortId}&${cancelActivityParams?if_exists}">${uiLabelMap.CommonCancel}</a></div>
+    <div class="subMenuBar"><a class="subMenuButton" href="${updateTarget}?${activityValueParams}">${uiLabelMap.CommonEdit}</a><@submitFormLink form="cancelActivityForm" text=uiLabelMap.CommonCancel/></a></div>
     </#if>
 </div>
