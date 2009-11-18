@@ -34,7 +34,7 @@ The whole idea is to keep things simple and not use the screen widget where unne
 <script type="text/javascript">
 var facilityList = {
     <#list facilities as facility>
-    ${facility.facilityId}: "${facility.facilityName}"<#if facility_has_next>,</#if>
+    "${facility.facilityId}": "${facility.facilityName}"<#if facility_has_next>,</#if>
     </#list>
 };
 var orderId = "${order.orderId}";
