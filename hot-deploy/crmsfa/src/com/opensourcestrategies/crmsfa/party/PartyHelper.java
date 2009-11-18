@@ -58,7 +58,6 @@ import java.util.TimeZone;
 
 import javolution.util.FastList;
 
-import freemarker.template.TemplateException;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
@@ -82,6 +81,8 @@ import org.opentaps.common.order.UtilOrder;
 import org.opentaps.common.party.PartyContactHelper;
 import org.opentaps.common.template.freemarker.FreemarkerUtil;
 import org.opentaps.common.util.UtilCommon;
+
+import freemarker.template.TemplateException;
 
 /**
  * Party Helper methods which are designed to provide a consistent set of APIs that can be reused by
@@ -110,7 +111,7 @@ public final class PartyHelper {
      * @return the first roleTypeId from possibleRoleTypeIds which is actually found in PartyRole for the given partyId
      * @throws GenericEntityException
      */
-    public static String getFirstValidRoleTypeId(String partyId, List possibleRoleTypeIds, GenericDelegator delegator) throws GenericEntityException {
+    public static String getFirstValidRoleTypeId(String partyId, List<String> possibleRoleTypeIds, GenericDelegator delegator) throws GenericEntityException {
         return org.opentaps.common.party.PartyHelper.getFirstValidRoleTypeId(partyId, possibleRoleTypeIds, delegator);
 
     }
@@ -157,9 +158,9 @@ public final class PartyHelper {
      * @return false if no relationship was created or true if operation succeeds
      */
     public static boolean createNewPartyToRelationship(String partyIdTo, String partyIdFrom, String roleTypeIdFrom,
-            String partyRelationshipTypeId, String securityGroupId, List validToPartyRoles, Timestamp fromDate,
+            String partyRelationshipTypeId, String securityGroupId, List<String> validToPartyRoles, Timestamp fromDate,
             boolean expireExistingRelationships, GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher)
-        throws GenericEntityException, GenericServiceException {
+            throws GenericEntityException, GenericServiceException {
 
         return org.opentaps.common.party.PartyHelper.createNewPartyToRelationship(partyIdTo, partyIdFrom, roleTypeIdFrom, partyRelationshipTypeId, securityGroupId,
                 validToPartyRoles, fromDate, expireExistingRelationships, userLogin, delegator, dispatcher);
@@ -169,9 +170,9 @@ public final class PartyHelper {
      * Same as above except uses a default of now for the timestamp.
      */
     public static boolean createNewPartyToRelationship(String partyIdTo, String partyIdFrom, String roleTypeIdFrom,
-            String partyRelationshipTypeId, String securityGroupId, List validToPartyRoles,
+            String partyRelationshipTypeId, String securityGroupId, List<String> validToPartyRoles,
             boolean expireExistingRelationships, GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher)
-        throws GenericEntityException, GenericServiceException {
+            throws GenericEntityException, GenericServiceException {
         return createNewPartyToRelationship(partyIdTo, partyIdFrom, roleTypeIdFrom,
                 partyRelationshipTypeId, securityGroupId, validToPartyRoles, UtilDateTime.nowTimestamp(),
                 expireExistingRelationships, userLogin, delegator, dispatcher);
@@ -180,7 +181,7 @@ public final class PartyHelper {
     /**
      * Expires a list of PartyRelationships that are still active on expireDate.
      */
-    public static void expirePartyRelationships(List partyRelationships, Timestamp expireDate, LocalDispatcher dispatcher, GenericValue userLogin)
+    public static void expirePartyRelationships(List<GenericValue> partyRelationships, Timestamp expireDate, LocalDispatcher dispatcher, GenericValue userLogin)
         throws GenericServiceException {
         org.opentaps.common.party.PartyHelper.expirePartyRelationships(partyRelationships, expireDate, dispatcher, userLogin);
     }
@@ -208,20 +209,20 @@ public final class PartyHelper {
      * @param   partyRelationshipTypeId         The party relationship (e.g., reps that are RESPONSIBLE_FOR an account)
      * @param   partyIdFrom                     The partyId of the account/contact/lead
      * @param   roleTypeIdFrom                  The role of the account/contact/lead (e.g., ACCOUNT, CONTACT, LEAD)
-     * @param   securityGroupId                 Optional securityGroupId of the relationsihp
+     * @param   securityGroupId                 Optional securityGroupId of the relationship
      * @param   activeDate                      Check only for active relationships as of this timestamp
      * @return  First non-expired PartySummaryCRMView or null if none found
      */
     public static GenericValue getActivePartyByRole(String partyRelationshipTypeId, String partyIdFrom, String roleTypeIdFrom, String securityGroupId,
             Timestamp activeDate, GenericDelegator delegator)
-        throws GenericEntityException {
+            throws GenericEntityException {
         return org.opentaps.common.party.PartyHelper.getActivePartyByRole(partyRelationshipTypeId, partyIdFrom, roleTypeIdFrom, securityGroupId, activeDate, delegator);
     }
 
     /** As above but without security group Id specified */
     public static GenericValue getActivePartyByRole(String partyRelationshipTypeId, String partyIdFrom, String roleTypeIdFrom,
             Timestamp activeDate, GenericDelegator delegator)
-        throws GenericEntityException {
+            throws GenericEntityException {
         return getActivePartyByRole(partyRelationshipTypeId, partyIdFrom, roleTypeIdFrom, null, activeDate, delegator);
     }
 
@@ -238,7 +239,7 @@ public final class PartyHelper {
      */
     public static void copyToPartyRelationships(String partyIdFrom, String roleTypeIdFrom, String partyRelationshipTypeId,
             String newPartyIdFrom, String newRoleTypeIdFrom, GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher)
-        throws GenericEntityException, GenericServiceException {
+            throws GenericEntityException, GenericServiceException {
 
         org.opentaps.common.party.PartyHelper.copyToPartyRelationships(partyIdFrom, roleTypeIdFrom, partyRelationshipTypeId, newPartyIdFrom, newRoleTypeIdFrom, userLogin, delegator, dispatcher);
 
@@ -249,7 +250,7 @@ public final class PartyHelper {
      */
     public static void copyToPartyRelationships(String partyIdFrom, String roleTypeIdFrom, String newPartyIdFrom, String newRoleTypeIdFrom,
             GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher)
-        throws GenericEntityException, GenericServiceException {
+            throws GenericEntityException, GenericServiceException {
 
         copyToPartyRelationships(partyIdFrom, roleTypeIdFrom, null, newPartyIdFrom, newRoleTypeIdFrom, userLogin, delegator, dispatcher);
     }
@@ -411,7 +412,7 @@ public final class PartyHelper {
      * @param roles         Optional list of CRMSFA roles to limit to.  If roles is null or empty, uses the default CLIENT_PARTY_ROLES.
      * @return EntityListIterator of results or null if the find condition is nothing.
      */
-    public static EntityListIterator findActiveClientParties(GenericDelegator delegator, LocalDispatcher dispatcher, Map parameters, List roles, EntityCondition ec) throws GeneralException {
+    public static EntityListIterator findActiveClientParties(GenericDelegator delegator, LocalDispatcher dispatcher, Map<String, ?> parameters, List<String> roles, EntityCondition ec) throws GeneralException {
         EntityCondition conditions = getActiveClientPartiesCondition(dispatcher, parameters, roles, ec);
         List<String> orderBy = getActiveClientPartiesOrderBy(parameters);
         return delegator.findListIteratorByCondition("PartyFromSummaryByRelationship", conditions, null, FIND_PARTY_FIELDS,
@@ -419,7 +420,7 @@ public final class PartyHelper {
                 UtilCommon.DISTINCT_READ_OPTIONS);
     }
 
-    private static EntityCondition getActiveClientPartiesCondition(LocalDispatcher dispatcher, Map parameters, List roles, EntityCondition ec) throws GeneralException {
+    private static EntityCondition getActiveClientPartiesCondition(LocalDispatcher dispatcher, Map<String, ?> parameters, List<String> roles, EntityCondition ec) throws GeneralException {
         Map<String, Object> results = dispatcher.runSync("prepareFind", UtilMisc.toMap("entityName", "PartyFromSummaryByRelationship", "inputFields", parameters,
                 "filterByDate", "Y", "noConditionFind", "N"));
         if (ServiceUtil.isError(results)) {
@@ -430,8 +431,8 @@ public final class PartyHelper {
             return null;
         }
 
-        List conditionRoles = (roles == null || roles.size() == 0 ? CLIENT_PARTY_ROLES : roles);
-        List combinedConditions = UtilMisc.toList(findConditions, EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.IN, conditionRoles));
+        List<String> conditionRoles = (roles == null || roles.size() == 0 ? CLIENT_PARTY_ROLES : roles);
+        List<EntityCondition> combinedConditions = UtilMisc.<EntityCondition>toList(findConditions, EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.IN, conditionRoles));
         if (ec != null) {
             combinedConditions.add(ec);
         }
@@ -439,8 +440,8 @@ public final class PartyHelper {
         return EntityCondition.makeCondition(combinedConditions, EntityOperator.AND);
     }
 
-    private static List getActiveClientPartiesOrderBy(Map parameters) {
-         List orderBy = UtilMisc.toList("groupName", "lastName", "companyName"); // fields to order by (default)
+    private static List<String> getActiveClientPartiesOrderBy(Map<String, ?> parameters) {
+        List<String> orderBy = UtilMisc.toList("groupName", "lastName", "companyName"); // fields to order by (default)
 
         // see if we're given a different order by
         String requestOrderBy = (String) parameters.get("activeOrderBy");
@@ -452,14 +453,14 @@ public final class PartyHelper {
         return orderBy;
     }
 
-     /** As above, but only consider the search parameters with optional conditions. */
-    public static EntityListIterator findActiveClientParties(GenericDelegator delegator, LocalDispatcher dispatcher, Map parameters, EntityCondition ec) throws GeneralException {
+    /** As above, but only consider the search parameters with optional conditions. */
+    public static EntityListIterator findActiveClientParties(GenericDelegator delegator, LocalDispatcher dispatcher, Map<String, ?> parameters, EntityCondition ec) throws GeneralException {
         return findActiveClientParties(delegator, dispatcher, parameters, null, ec);
     }
 
     /** Finds all active accounts, contacts, leads and so on of a given partyId */
     public static EntityListIterator findActiveClientParties(GenericDelegator delegator, LocalDispatcher dispatcher, String partyId) throws GeneralException {
-        Map parameters = UtilMisc.toMap("partyIdTo", partyId);
+        Map<String, Object> parameters = UtilMisc.<String, Object>toMap("partyIdTo", partyId);
         return findActiveClientParties(delegator, dispatcher, parameters, null, null);
     }
 
@@ -481,22 +482,22 @@ public final class PartyHelper {
     /**
      * As findActiveClientParties, but returns a ListBuilder for use in pagination.
      */
-    public static ListBuilder findActiveClientPartiesListBuilder(LocalDispatcher dispatcher, Map parameters, List roles, EntityCondition ec) throws GeneralException {
+    public static ListBuilder findActiveClientPartiesListBuilder(LocalDispatcher dispatcher, Map<String, ?> parameters, List<String> roles, EntityCondition ec) throws GeneralException {
         EntityCondition conditions = getActiveClientPartiesCondition(dispatcher, parameters, roles, ec);
-        List orderBy = getActiveClientPartiesOrderBy(parameters);
+        List<String> orderBy = getActiveClientPartiesOrderBy(parameters);
         return new EntityListBuilder("PartyFromSummaryByRelationship", conditions, FIND_PARTY_FIELDS, orderBy);
     }
 
-    public static Map assembleCrmsfaFormMergeContext(GenericDelegator delegator, Locale locale, String partyId, String orderId, String shipGroupSeqId, String shipmentId, TimeZone timeZone) {
-        Map templateContext = assembleCrmsfaGenericFormMergeContext(timeZone, locale);
+    public static Map<String, Object> assembleCrmsfaFormMergeContext(GenericDelegator delegator, Locale locale, String partyId, String orderId, String shipGroupSeqId, String shipmentId, TimeZone timeZone) {
+        Map<String, Object> templateContext = assembleCrmsfaGenericFormMergeContext(timeZone, locale);
         templateContext.putAll(assembleCrmsfaPartyFormMergeContext(delegator, partyId));
         templateContext.putAll(assembleCrmsfaOrderFormMergeContext(delegator, orderId));
         templateContext.putAll(assembleCrmsfaShipmentFormMergeContext(delegator, orderId, shipGroupSeqId, shipmentId, locale));
         return templateContext;
     }
 
-    public static Map assembleCrmsfaShipmentFormMergeContext(GenericDelegator delegator, String orderId, String shipGroupSeqId, String shipmentId, Locale locale) {
-        Map templateContext = new HashMap();
+    public static Map<String, Object> assembleCrmsfaShipmentFormMergeContext(GenericDelegator delegator, String orderId, String shipGroupSeqId, String shipmentId, Locale locale) {
+        Map<String, Object> templateContext = new HashMap<String, Object>();
 
         try {
 
@@ -587,7 +588,7 @@ public final class PartyHelper {
                     }
 
                     // Find any shipments relating to this ship group
-                    List shipments = delegator.findByAnd("Shipment", UtilMisc.toMap("primaryOrderId", orderId, "primaryShipGroupSeqId", shipGroup.getString("shipGroupSeqId")), UtilMisc.toList("createdStamp DESC"));
+                    List<GenericValue> shipments = delegator.findByAnd("Shipment", UtilMisc.toMap("primaryOrderId", orderId, "primaryShipGroupSeqId", shipGroup.getString("shipGroupSeqId")), UtilMisc.toList("createdStamp DESC"));
                     GenericValue shipment = EntityUtil.getFirst(shipments);
                     if (UtilValidate.isNotEmpty(shipment)) {
                         GenericValue statusItem = shipment.getRelatedOne("StatusItem");
@@ -603,8 +604,8 @@ public final class PartyHelper {
         return templateContext;
     }
 
-    public static Map assembleCrmsfaOrderFormMergeContext(GenericDelegator delegator, String orderId) {
-        Map templateContext = new HashMap();
+    public static Map<String, Object> assembleCrmsfaOrderFormMergeContext(GenericDelegator delegator, String orderId) {
+        Map<String, Object> templateContext = new HashMap<String, Object>();
         if (UtilValidate.isNotEmpty(orderId)) {
             try {
                 OrderReadHelper orh = new OrderReadHelper(delegator, orderId);
@@ -640,9 +641,9 @@ public final class PartyHelper {
                 }
 
                 List<GenericValue> orderItemVals = orh.getOrderItems();
-                List<Map> orderItems = new ArrayList<Map>();
+                List<Map<String, Object>> orderItems = new ArrayList<Map<String, Object>>();
                 for (GenericValue orderItemVal : orderItemVals) {
-                    Map orderItem = orderItemVal.getAllFields();
+                    Map<String, Object> orderItem = orderItemVal.getAllFields();
                     GenericValue product = orderItemVal.getRelatedOne("Product");
                     if (UtilValidate.isEmpty(product)) {
                         continue;
@@ -661,52 +662,52 @@ public final class PartyHelper {
         return templateContext;
     }
 
-    public static Map assembleCrmsfaGenericFormMergeContext(TimeZone timeZone, Locale locale) {
-        Map templateContext = new HashMap();
+    public static Map<String, Object> assembleCrmsfaGenericFormMergeContext(TimeZone timeZone, Locale locale) {
+        Map<String, Object> templateContext = new HashMap<String, Object>();
 
         Calendar now = Calendar.getInstance(timeZone, locale);
         String mmddyyyy = new java.text.SimpleDateFormat("MM/dd/yyyy").format(now.getTime());
         String mmddyyyy2 = new java.text.SimpleDateFormat("MM-dd-yyyy").format(now.getTime());
         String yyyymmdd = new java.text.SimpleDateFormat("yyyy/MM/dd").format(now.getTime());
         String yyyymmdd2 = new java.text.SimpleDateFormat("yyyy-MM-dd").format(now.getTime());
-        int month = new Integer(now.get(Calendar.MONTH)).intValue();
+        Integer month = Integer.valueOf(now.get(Calendar.MONTH));
         month++;
-        String monthStr = "" + month;
+        String monthStr = month.toString();
         if (monthStr.length() == 1) {
             monthStr = "0" + monthStr;
         }
         //TODO: oandreyev. Test this code more carefully.
         ArrayList<String> monthNames = (ArrayList<String>)UtilDateTime.getMonthNames(locale);
         String monthName = monthNames.get(month - 1);
-//        String monthLabel = null;
-//        if (month == 1) {
-//            monthLabel = "CommonJanuary";
-//        } else if (month == 2) {
-//            monthLabel = "CommonFebruary";
-//        } else if (month == 3) {
-//            monthLabel = "CommonMarch";
-//        } else if (month == 4) {
-//            monthLabel = "CommonApril";
-//        } else if (month == 5) {
-//            monthLabel = "CommonMay";
-//        } else if (month == 6) {
-//            monthLabel = "CommonJune";
-//        } else if (month == 7) {
-//            monthLabel = "CommonJuly";
-//        } else if (month == 8) {
-//            monthLabel = "CommonAugust";
-//        } else if (month == 9) {
-//            monthLabel = "CommonSeptember";
-//        } else if (month == 10) {
-//            monthLabel = "CommonOctober";
-//        } else if (month == 11) {
-//            monthLabel = "CommonNovember";
-//        } else if (month == 12) {
-//            monthLabel = "CommonDecember";
-//        }
-//        if (UtilValidate.isNotEmpty(monthLabel)) {
-//            monthName = UtilProperties.getMessage("CommonUiLabels", monthLabel, locale);
-//        }
+        //String monthLabel = null;
+        //if (month == 1) {
+        //    monthLabel = "CommonJanuary";
+        //} else if (month == 2) {
+        //    monthLabel = "CommonFebruary";
+        //} else if (month == 3) {
+        //    monthLabel = "CommonMarch";
+        //} else if (month == 4) {
+        //    monthLabel = "CommonApril";
+        //} else if (month == 5) {
+        //    monthLabel = "CommonMay";
+        //} else if (month == 6) {
+        //    monthLabel = "CommonJune";
+        //} else if (month == 7) {
+        //    monthLabel = "CommonJuly";
+        //} else if (month == 8) {
+        //    monthLabel = "CommonAugust";
+        //} else if (month == 9) {
+        //    monthLabel = "CommonSeptember";
+        //} else if (month == 10) {
+        //    monthLabel = "CommonOctober";
+        //} else if (month == 11) {
+        //    monthLabel = "CommonNovember";
+        //} else if (month == 12) {
+        //    monthLabel = "CommonDecember";
+        //}
+        //if (UtilValidate.isNotEmpty(monthLabel)) {
+        //    monthName = UtilProperties.getMessage("CommonUiLabels", monthLabel, locale);
+        //}
 
         templateContext.put("mmddyyyy", mmddyyyy);
         templateContext.put("mmddyyyy2", mmddyyyy2);
@@ -720,8 +721,8 @@ public final class PartyHelper {
         return templateContext;
     }
 
-    public static Map assembleCrmsfaPartyFormMergeContext(GenericDelegator delegator, String partyId) {
-        Map templateContext = new HashMap();
+    public static Map<String, Object> assembleCrmsfaPartyFormMergeContext(GenericDelegator delegator, String partyId) {
+        Map<String, Object> templateContext = new HashMap<String, Object>();
         if (UtilValidate.isNotEmpty(partyId)) {
             try {
                 String email = PartyContactHelper.getElectronicAddressByPurpose(partyId, "EMAIL_ADDRESS", "PRIMARY_EMAIL", delegator);
@@ -747,11 +748,11 @@ public final class PartyHelper {
                     }
                 }
                 GenericValue party = delegator.findByPrimaryKey("PartySummaryCRMView", UtilMisc.toMap("partyId", partyId));
-                Map partyMap = party.getAllFields();
+                Map<String, Object> partyMap = party.getAllFields();
                 if (UtilValidate.isNotEmpty(partyMap)) {
-                    Iterator pmf = partyMap.keySet().iterator();
+                    Iterator<String> pmf = partyMap.keySet().iterator();
                     while (pmf.hasNext()) {
-                        String fieldName = (String) pmf.next();
+                        String fieldName = pmf.next();
                         Object value = partyMap.get(fieldName);
                         if (UtilValidate.isNotEmpty(value)) {
                             templateContext.put(fieldName, value);
@@ -773,7 +774,7 @@ public final class PartyHelper {
     }
 
     public static Map<String, String> mergePartyWithForm(GenericDelegator delegator, String mergeFormId, String partyId, String orderId, String shipGroupSeqId, String shipmentId, Locale locale, boolean leaveTags, TimeZone timeZone, boolean highlightTags) throws GenericEntityException {
-        Map mergeContext = PartyHelper.assembleCrmsfaFormMergeContext(delegator, locale, partyId, orderId, shipGroupSeqId, shipmentId, timeZone);
+        Map<String, Object> mergeContext = PartyHelper.assembleCrmsfaFormMergeContext(delegator, locale, partyId, orderId, shipGroupSeqId, shipmentId, timeZone);
         GenericValue mergeForm = delegator.findByPrimaryKey("MergeForm", UtilMisc.toMap("mergeFormId", mergeFormId));
         if (mergeForm == null) return null;
         String mergeFormText = mergeForm.getString("mergeFormText");
@@ -801,7 +802,7 @@ public final class PartyHelper {
     }
 
     /**
-     * Retreive the last deactivation date if the party is currently deactivated.
+     * Retrieve the last deactivation date if the party is currently deactivated.
      * @param partyId
      * @param delegator
      * @return the timestamp of last deactivation, null if the party is not deactivated
@@ -816,12 +817,12 @@ public final class PartyHelper {
         // party is currently deactivated, get the deactivation date
         try {
 
-           List<GenericValue> deactivationDates = delegator.findByAnd("PartyDeactivation", UtilMisc.toMap("partyId", partyId), UtilMisc.toList("-deactivationTimestamp"));
-           if (UtilValidate.isNotEmpty(deactivationDates)) {
-               return (Timestamp) deactivationDates.get(0).get("deactivationTimestamp");
-           } else {
-               Debug.logWarning("The party [" + partyId + "] status is disabled but there is no registered deactivation date.", MODULE);
-           }
+            List<GenericValue> deactivationDates = delegator.findByAnd("PartyDeactivation", UtilMisc.toMap("partyId", partyId), UtilMisc.toList("-deactivationTimestamp"));
+            if (UtilValidate.isNotEmpty(deactivationDates)) {
+                return (Timestamp) deactivationDates.get(0).get("deactivationTimestamp");
+            } else {
+                Debug.logWarning("The party [" + partyId + "] status is disabled but there is no registered deactivation date.", MODULE);
+            }
 
         } catch (GenericEntityException e) {
             Debug.logError(e, MODULE);
@@ -847,7 +848,7 @@ public final class PartyHelper {
     /** Checks if the given party with role is unassigned. */
     public static boolean isUnassigned(GenericDelegator delegator, String partyId, String roleTypeId) throws GenericEntityException {
         List<GenericValue> activeRelationships = EntityUtil.filterByDate(delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdFrom", partyId, "roleTypeIdFrom", roleTypeId,
-                                                                                                                                 "partyRelationshipTypeId", "ASSIGNED_TO")));
+                "partyRelationshipTypeId", "ASSIGNED_TO")));
         return activeRelationships.size() == 0;
     }
 
@@ -858,9 +859,9 @@ public final class PartyHelper {
         if (roleTypeIdTo == null) {
             return false;
         }
-        List activeRelationships = EntityUtil.filterByDate(delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdFrom", partyId, "roleTypeIdFrom", roleTypeId,
-                                                                                                                   "partyIdTo", userLogin.get("partyId"), "roleTypeIdTo", roleTypeIdTo,
-                                                                                                                   "partyRelationshipTypeId", "ASSIGNED_TO")));
+        List<GenericValue> activeRelationships = EntityUtil.filterByDate(delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdFrom", partyId, "roleTypeIdFrom", roleTypeId,
+                "partyIdTo", userLogin.get("partyId"), "roleTypeIdTo", roleTypeIdTo,
+                "partyRelationshipTypeId", "ASSIGNED_TO")));
         return activeRelationships.size() > 0;
     }
 
@@ -873,13 +874,13 @@ public final class PartyHelper {
      * @param partyIdTo a String object that represents the To party ID
      * @return a List of GenericValue objects
      */
-    public static List findActiveAssignedToPartyRelationships(final GenericDelegator delegator, final String partyIdFrom, final String roleTypeIdFrom, final String partyIdTo) throws GenericEntityException {
+    public static List<GenericValue> findActiveAssignedToPartyRelationships(final GenericDelegator delegator, final String partyIdFrom, final String roleTypeIdFrom, final String partyIdTo) throws GenericEntityException {
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                                           EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, partyIdFrom),
-                                           EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, roleTypeIdFrom),
-                                           EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyIdTo),
-                                           EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, "ASSIGNED_TO"),
-                                           EntityUtil.getFilterByDateExpr());
+                EntityCondition.makeCondition("partyIdFrom", partyIdFrom),
+                EntityCondition.makeCondition("roleTypeIdFrom", roleTypeIdFrom),
+                EntityCondition.makeCondition("partyIdTo", partyIdTo),
+                EntityCondition.makeCondition("partyRelationshipTypeId", "ASSIGNED_TO"),
+                EntityUtil.getFilterByDateExpr());
         return delegator.findByCondition("PartyRelationship", conditions, null, null);
     }
 

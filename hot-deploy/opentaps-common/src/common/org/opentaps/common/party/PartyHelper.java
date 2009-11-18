@@ -48,6 +48,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import javolution.util.FastList;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilFormatOut;
@@ -90,20 +91,14 @@ public final class PartyHelper {
      * @return the first roleTypeId from possibleRoleTypeIds which is actually found in PartyRole for the given partyId
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
-    public static String getFirstValidRoleTypeId(String partyId, List possibleRoleTypeIds, GenericDelegator delegator) throws GenericEntityException {
+    public static String getFirstValidRoleTypeId(String partyId, List<String> possibleRoleTypeIds, GenericDelegator delegator) throws GenericEntityException {
 
-        List partyRoles = delegator.findByAndCache("PartyRole", UtilMisc.toMap("partyId", partyId));
+        List<GenericValue> partyRoles = delegator.findByAndCache("PartyRole", UtilMisc.toMap("partyId", partyId));
 
         // iterate across all possible roleTypeIds from the parameter
-        Iterator iterValid = possibleRoleTypeIds.iterator();
-        while (iterValid.hasNext()) {
-            String possibleRoleTypeId = (String) iterValid.next();
-
+        for (String possibleRoleTypeId : possibleRoleTypeIds) {
             // try to look for each one in the list of PartyRoles
-            Iterator partyRolesIter = partyRoles.iterator();
-            while (partyRolesIter.hasNext()) {
-                GenericValue partyRole = (GenericValue) partyRolesIter.next();
+            for (GenericValue partyRole : partyRoles) {
                 if (possibleRoleTypeId.equals(partyRole.getString("roleTypeId")))  {
                     return possibleRoleTypeId;
                 }
@@ -135,8 +130,7 @@ public final class PartyHelper {
      * @throws GenericEntityException if an error occurs
      * @throws GenericServiceException if an error occurs
      */
-    @SuppressWarnings("unchecked")
-    public static boolean createNewPartyToRelationship(String partyIdTo, String partyIdFrom, String roleTypeIdFrom, String partyRelationshipTypeId, String securityGroupId, List validToPartyRoles, Timestamp fromDate, boolean expireExistingRelationships, GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher) throws GenericEntityException, GenericServiceException {
+    public static boolean createNewPartyToRelationship(String partyIdTo, String partyIdFrom, String roleTypeIdFrom, String partyRelationshipTypeId, String securityGroupId, List<String> validToPartyRoles, Timestamp fromDate, boolean expireExistingRelationships, GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher) throws GenericEntityException, GenericServiceException {
 
         // get the first valid roleTypeIdTo from a list of possible roles for the partyIdTo
         // this will be the role we use as roleTypeIdTo in PartyRelationship.
@@ -152,17 +146,17 @@ public final class PartyHelper {
          * are not expired on the fromDate and then expire them
          */
         if (expireExistingRelationships) {
-            List partyRelationships = delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdFrom", partyIdFrom, "partyRelationshipTypeId", partyRelationshipTypeId));
+            List<GenericValue> partyRelationships = delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdFrom", partyIdFrom, "partyRelationshipTypeId", partyRelationshipTypeId));
             expirePartyRelationships(partyRelationships, fromDate, dispatcher, userLogin);
         }
 
         // call createPartyRelationship service to create PartyRelationship using parameters and the role we just found
-        Map input = UtilMisc.toMap("partyIdTo", partyIdTo, "roleTypeIdTo", roleTypeIdTo, "partyIdFrom", partyIdFrom, "roleTypeIdFrom", roleTypeIdFrom);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("partyIdTo", partyIdTo, "roleTypeIdTo", roleTypeIdTo, "partyIdFrom", partyIdFrom, "roleTypeIdFrom", roleTypeIdFrom);
         input.put("partyRelationshipTypeId", partyRelationshipTypeId);
         input.put("securityGroupId", securityGroupId);
         input.put("fromDate", fromDate);
         input.put("userLogin", userLogin);
-        Map serviceResult = dispatcher.runSync("createPartyRelationship", input);
+        Map<String, Object> serviceResult = dispatcher.runSync("createPartyRelationship", input);
 
         if (ServiceUtil.isError(serviceResult)) {
             return false;
