@@ -29,25 +29,21 @@
     <Person partyId="DemoEmployee1" firstName="Demo" lastName="Employee One"/>
     <UserLogin partyId="DemoEmployee1" userLoginId="demowarehouse1" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s"/>
     <UserLoginSecurityGroup userLoginId="demowarehouse1" groupId="WRHS_ADMIN" fromDate="2007-01-01 00:00:00"/>
-    <AsteriskUser extension="830" fromDate="2005-12-01 00:00:00" userLoginId="demowarehouse1"/>
 
     <Party partyId="DemoEmployee2" partyTypeId="PERSON"/>
     <Person partyId="DemoEmployee2" firstName="Demo" lastName="Employee Two"/>
     <UserLogin partyId="DemoEmployee2" userLoginId="demowarehouse2" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s"/>
     <UserLoginSecurityGroup userLoginId="demowarehouse2" groupId="WRHS_USER" fromDate="2007-01-01 00:00:00"/>
-    <AsteriskUser extension="831" fromDate="2005-12-01 00:00:00" userLoginId="demowarehouse2"/>
 
     <Party partyId="DemoShipper1" partyTypeId="PERSON"/>
     <Person partyId="DemoShipper1" firstName="Demo" lastName="Shipper One"/>
     <UserLogin partyId="DemoShipper1" userLoginId="demoshipper1" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s"/>
     <UserLoginSecurityGroup userLoginId="demoshipper1" groupId="WRHS_USER" fromDate="2007-01-01 00:00:00"/>
-    <AsteriskUser extension="832" fromDate="2005-12-01 00:00:00" userLoginId="demoshipper1"/>
 
     <Party partyId="DemoEmployee3" partyTypeId="PERSON"/>
     <Person partyId="DemoEmployee3" firstName="Demo" lastName="Employee Three"/>
     <UserLogin partyId="DemoEmployee3" userLoginId="demowarehouse3" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s"/>
     <UserLoginSecurityGroup userLoginId="demowarehouse3" groupId="WRHS_USER" fromDate="2007-01-01 00:00:00"/>
-    <AsteriskUser extension="833" fromDate="2005-12-01 00:00:00" userLoginId="demowarehouse3"/>
 
     <FacilityPartyPermission facilityId="WebStoreWarehouse" partyId="DemoEmployee1" securityGroupId="WRHS_MANAGER" fromDate="2007-01-01 00:00:00"/>
     <FacilityPartyPermission facilityId="MyRetailStore" partyId="DemoEmployee2" securityGroupId="WRHS_MANAGER" fromDate="2007-01-01 00:00:00"/>

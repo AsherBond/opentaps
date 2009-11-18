@@ -31,7 +31,7 @@
     <bean id="opentapsShippingDomain" class="org.opentaps.warehouse.domain.shipping.ShippingDomain"/>
     <bean id="opentapsManufacturingDomain" class="org.opentaps.warehouse.domain.manufacturing.ManufacturingDomain"/>
     <bean id="opentapsPurchasingDomain" class="org.opentaps.purchasing.domain.PurchasingDomain"/>
-
+    <bean id="opentapsVoipDomain" class="org.opentaps.asterisk.domain.AsteriskDomain"/>
     <!-- The bean id "domainsDirectory" is used by DomainsLoader, so do not change this.-->
     <bean id="domainsDirectory" class="org.opentaps.domain.DomainsDirectory">
         <!-- the property names reference members of DomainsDirectory class and are set using setters by Spring -->
@@ -45,6 +45,7 @@
         <property name="shippingDomain"><ref bean="opentapsShippingDomain"/></property>
         <property name="manufacturingDomain"><ref bean="opentapsManufacturingDomain"/></property>
         <property name="purchasingDomain"><ref bean="opentapsPurchasingDomain"/></property>
+        <property name="voipDomain"><ref bean="opentapsVoipDomain"/></property>
     </bean>
     
 </beans>

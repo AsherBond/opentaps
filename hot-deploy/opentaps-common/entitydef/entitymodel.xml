@@ -2145,22 +2145,28 @@ under the License.
     </extend-entity>
 
     <!-- ============================ -->
-    <!-- org.opentaps.common.asterisk -->
+    <!-- org.opentaps.common.voip -->
     <!-- ============================ -->    
-    <entity entity-name="AsteriskUser"
-            package-name="org.ofbiz.party.contact"
-            title="Party Asterisk User Entity">
-      <field name="userLoginId" type="id-vlong-ne"></field>
-      <field name="extension" type="id-ne"></field>
-      <field name="fromDate" type="date-time"></field>
-      <field name="thruDate" type="date-time"></field>
-      <prim-key field="extension"/>
-      <prim-key field="fromDate"/>      
-      <relation type="one" fk-name="ASTERISKUSER_USER" rel-entity-name="UserLogin">
-        <key-map field-name="userLoginId"/>
+    <entity entity-name="ExternalUser"
+            package-name="org.opentaps.common"
+            title="External User Entity">
+      <field name="autoId" type="id-ne" />
+      <field name="partyId" type="id" />
+      <field name="externalUserTypeId" type="id" />
+      <field name="externalUserId" type="short-varchar" />
+      <field name="externalPassword" type="short-varchar" encrypt="true"/>
+      <prim-key field="autoId"/>
+      <relation type="one" fk-name="EXTERNALUSER_USERTYPE" rel-entity-name="ExternalUserType">
+        <key-map field-name="externalUserTypeId"/>
       </relation>
     </entity>  
-    
+    <entity entity-name="ExternalUserType"
+            package-name="org.opentaps.common"
+            title="External User Type Entity">
+      <field name="externalUserTypeId" type="id-ne"/>
+      <field name="description"  type="description"/>
+      <prim-key field="externalUserTypeId"/>
+    </entity>    
     <!-- ========================= -->
     <!-- org.opentaps.common.other -->
     <!-- ========================= -->

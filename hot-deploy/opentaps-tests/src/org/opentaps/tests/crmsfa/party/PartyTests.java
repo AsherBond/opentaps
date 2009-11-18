@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import junit.framework.TestCase;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
@@ -37,7 +37,6 @@ import org.opentaps.common.domain.party.PartyRepository;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.base.entities.PostalAddress;
 import org.opentaps.domain.base.entities.TelecomNumber;
-import org.opentaps.domain.base.entities.UserLogin;
 import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.Party;
@@ -54,6 +53,8 @@ import org.opentaps.gwt.common.server.InputProviderInterface;
 import org.opentaps.gwt.common.server.lookup.PartyLookupService;
 import org.opentaps.tests.OpentapsTestCase;
 import org.opentaps.tests.gwt.TestInputProvider;
+
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
 
 /**
  * Party related tests.
@@ -402,41 +403,6 @@ public class PartyTests extends OpentapsTestCase {
         assertEquals("Correct number of parties found", 0, parties.size());
     }
 
-    /**
-     * Tests testGetUserByExtension for lookup an asterisk extension.
-     * @throws Exception if an error occurs
-     */
-    public void testGetUserByExtension() throws Exception {
-        DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(admin));
-        PartyDomainInterface partyDomain = domainLoader.loadDomainsDirectory().getPartyDomain();
-        PartyRepositoryInterface repo = partyDomain.getPartyRepository();
-        UserLogin userLogin = repo.getUserLoginByExtension("801");
-        assertNotNull("Could not find any UserLogin", userLogin);
-    }
-
-    /**
-     * Tests testGetUserByExtension for lookup an non existing asterisk extension.
-     * @throws Exception if an error occurs
-     */
-    public void testGetUserByExtensionForNonExistingNumber() throws Exception {
-        DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(admin));
-        PartyDomainInterface partyDomain = domainLoader.loadDomainsDirectory().getPartyDomain();
-        PartyRepositoryInterface repo = partyDomain.getPartyRepository();
-        UserLogin userLogin = repo.getUserLoginByExtension("999");
-        assertNull("There should be no any UserLogin matched", userLogin);
-    }
-
-    /**
-     * Tests testGetUserByExtension for lookup an asterisk extension.
-     * @throws Exception if an error occurs
-     */
-    public void testGetUserByExtensionForReassignedNumber() throws Exception {
-        DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(admin));
-        PartyDomainInterface partyDomain = domainLoader.loadDomainsDirectory().getPartyDomain();
-        PartyRepositoryInterface repo = partyDomain.getPartyRepository();
-        UserLogin userLogin = repo.getUserLoginByExtension("803");
-        assertEquals("Correct of UserLogin is DemoSalesRep4", "DemoSalesRep4", userLogin.getUserLoginId());
-    }
 
     /**
      * Tests testGetSubAccounts for lookup sub Account.

@@ -240,4 +240,8 @@ under the License.
 
     <!-- it use in InventoryTests.testNonSerializedInventoryVarianceWithAccountingTags -->
     <Enumeration description="Transit" enumCode="VAR_TRANSIT" enumId="VAR_TRANSIT" sequenceId="09" enumTypeId="IID_REASON"/>
+
+    <!-- define ExternalUserType for voip -->
+    <ExternalUserType externalUserTypeId="ASTERISK" description="Asterisk VOIP User"/>
+
 </entity-engine-xml>

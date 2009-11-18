@@ -20,13 +20,11 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.opentaps.domain.base.entities.AsteriskUser;
+import org.opentaps.domain.base.entities.ExternalUser;
 import org.opentaps.domain.base.entities.PartyNoteView;
 import org.opentaps.domain.base.entities.PartySummaryCRMView;
 import org.opentaps.domain.base.entities.PostalAddress;
 import org.opentaps.domain.base.entities.TelecomNumber;
-import org.opentaps.domain.base.entities.UserLogin;
 import org.opentaps.domain.billing.payment.PaymentMethod;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
@@ -171,13 +169,6 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
      */
     public Set<Party> getPartyByPhoneNumber(String phoneNumber) throws RepositoryException;
 
-    /**
-     * Finds the <code>UserLogin</code> matching the given asterisk extension.
-     * @return the <code>UserLogin</code> matching the given asterisk extension
-     * @param extension the extension number to find
-     * @throws RepositoryException if an error occurs
-     */
-    public UserLogin getUserLoginByExtension(String extension) throws RepositoryException;
 
     /**
      * Finds the first unexpired <code>AsteriskUser</code> matching the given <code>User</code>.
@@ -186,7 +177,7 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      * @throws InfrastructureException if an error occurs
      */
-    public AsteriskUser getAsteriskUserForUser(User user) throws RepositoryException, InfrastructureException;
+    public ExternalUser getExternalUserForUser(String externalUserTypeId, User user) throws RepositoryException, InfrastructureException;
 
     /**
      * Finds the list of <code>PartyNoteView</code> related to the given <code>Party</code>.

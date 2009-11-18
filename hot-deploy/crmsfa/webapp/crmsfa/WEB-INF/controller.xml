@@ -1259,7 +1259,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     </request-map>
     <request-map uri="logTaskFormAndDial">
         <security auth="true" https="true"/>
-        <event type="java" path="org.opentaps.common.event.AsteriskEvents" invoke="makeOutgoingCall"/>
+        <event type="java" path="org.opentaps.common.event.VoipEvents" invoke="makeOutgoingCall"/>
         <response name="success" type="request-redirect-noparam" value="logTaskForm"/>
         <response name="error" type="request-redirect-noparam" value="logTaskForm"/>
     </request-map>

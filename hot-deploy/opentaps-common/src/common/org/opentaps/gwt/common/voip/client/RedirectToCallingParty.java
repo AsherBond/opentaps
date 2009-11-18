@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.gwt.common.asterisk.client;
+package org.opentaps.gwt.common.voip.client;
 
 import java.util.Date;
 
@@ -33,13 +33,13 @@ import org.opentaps.gwt.common.client.config.OpentapsConfig;
 import com.google.gwt.core.client.GWT;
 
 /**
- * the Entry point classes of Asterisk Receive Call In.
+ * the Entry point classes of Voip Receive Call In.
  */
 public class RedirectToCallingParty extends BaseEntry {
 
     private String remoteUrl = "gwtCallInAccount";
-    private String checkFrequencySecondsUrl = "gwtAsteriskCheckFrequency";
-    private String asteriskNotificationDiv = "gwtAsteriskNotification";
+    private String checkFrequencySecondsUrl = "gwtVoipCheckFrequency";
+    private String voipkNotificationDiv = "gwtVoipNotification";
 
     /**
      * This is the entry point method.
@@ -60,7 +60,6 @@ public class RedirectToCallingParty extends BaseEntry {
                     }
 
                     public void onResponseReceived(Request request, Response response) {
-                        // TODO Auto-generated method stub
                         if (response.getStatusCode() == Response.SC_OK) {
                             String returnText = response.getText();
                             if (!returnText.equals("")) {
@@ -96,10 +95,10 @@ public class RedirectToCallingParty extends BaseEntry {
                                     if (response.getStatusCode() == Response.SC_OK) {
                                         String returnText = response.getText();
                                         if (!returnText.equals("")) {
-                                            RootPanel.get(asteriskNotificationDiv).clear();
+                                            RootPanel.get(voipkNotificationDiv).clear();
                                             OpentapsConfig config = new OpentapsConfig();
                                             HTML callInTips = new HTML(UtilUi.MSG.callInDisplayMessage(config.getCallInEventIcon(), returnText));
-                                            RootPanel.get(asteriskNotificationDiv).add(callInTips);
+                                            RootPanel.get(voipkNotificationDiv).add(callInTips);
                                         }
                                     }
                                 }

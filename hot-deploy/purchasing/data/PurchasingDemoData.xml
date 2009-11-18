@@ -23,7 +23,6 @@
     <!-- password is opentaps -->
     <UserLogin partyId="DemoEmployeeA" userLoginId="demopurch1" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s"/>
     <UserLoginSecurityGroup userLoginId="demopurch1" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
-    <AsteriskUser extension="820" fromDate="2005-12-01 00:00:00" userLoginId="demopurch1"/>
     <ContactMech contactMechId="DemoEmpAEmail" contactMechTypeId="EMAIL_ADDRESS" infoString="purchasing_manager@opentaps.org"/>
     <PartyContactMech partyId="DemoEmployeeA" contactMechId="DemoEmpAEmail" fromDate="2006-01-01 00:00:00"/>
     <PartyContactMechPurpose partyId="DemoEmployeeA" contactMechId="DemoEmpAEmail" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2006-01-01 00:00:00"/>
@@ -49,7 +48,6 @@
     <Person partyId="DemoEmployeeB" firstName="Demo" lastName="Employee B"/>
     <UserLogin partyId="DemoEmployeeB" userLoginId="demopurch2" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s"/>
     <UserLoginSecurityGroup userLoginId="demopurch2" groupId="PRCH_TEST" fromDate="2007-01-01 00:00:00"/>
-    <AsteriskUser extension="821" fromDate="2005-12-01 00:00:00" userLoginId="demopurch2"/>
     
     <!-- for demo purposes -->
     <UserLoginSecurityGroup userLoginId="admin" groupId="PRCH_TEST" fromDate="2007-01-01 00:00:00"/>
@@ -821,5 +819,6 @@ For more information on this, and how to apply and follow the GNU AGPL, see
     <Person partyId="purchentry" firstName="Purchasing" lastName="Entry"/>
     <UserLogin partyId="purchentry" userLoginId="purchentry" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s"/>
     <UserLoginSecurityGroup userLoginId="purchentry" groupId="PRCH_CLERK" fromDate="2009-06-11 09:12:38.0" lastUpdatedStamp="2009-06-11 09:12:38.0" lastUpdatedTxStamp="2009-06-11 09:12:38.0" createdStamp="2009-06-11 09:12:38.0" createdTxStamp="2009-06-11 09:12:38.0"/>
+
     
 </entity-engine-xml>

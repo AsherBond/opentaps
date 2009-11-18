@@ -161,9 +161,10 @@ under the License.
     <entity-group group="org.ofbiz" entity="TestGeoData"/>
     
     <!-- ============================ -->
-    <!-- org.opentaps.common.asterisk -->
+    <!-- org.opentaps.common.voip -->
     <!-- ============================ -->    
-    <entity-group group="org.ofbiz" entity="AsteriskUser" />
+    <entity-group group="org.ofbiz" entity="ExternalUser" />
+    <entity-group group="org.ofbiz" entity="ExternalUserType" />
     
     <!-- ========================= -->
     <!-- org.opentaps.common.other -->

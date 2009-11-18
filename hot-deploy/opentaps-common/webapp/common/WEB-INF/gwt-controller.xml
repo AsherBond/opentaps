@@ -189,16 +189,16 @@
         <response name="error" type="none"/>
     </request-map>
 
-    <!-- Asterisk request -->
+    <!-- voip request -->
     <request-map uri="gwtCallInAccount">
         <security https="true" auth="true"/>
-        <event type="java" path="org.opentaps.gwt.common.server.lookup.AsteriskLookupService" invoke="callInAccount"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.VoipLookupService" invoke="callInAccount"/>
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map> 
-    <request-map uri="gwtAsteriskCheckFrequency">
+    <request-map uri="gwtVoipCheckFrequency">
         <security https="true" auth="true"/>
-        <event type="java" path="org.opentaps.gwt.common.server.lookup.AsteriskLookupService" invoke="asteriskCheckFrequencySeconds"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.VoipLookupService" invoke="checkFrequencySeconds"/>
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>

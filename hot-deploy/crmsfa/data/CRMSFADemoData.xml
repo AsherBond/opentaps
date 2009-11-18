@@ -32,7 +32,6 @@
         to see or modify any data -->
     <UserLogin partyId="DemoSalesManager" userLoginId="demologinonly" currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
     <UserLoginSecurityGroup userLoginId="demologinonly" groupId="CRMSFA_LOGIN_ONLY" fromDate="2005-12-01 00:00:00"/>    
-    <AsteriskUser extension="800" fromDate="2005-12-01 00:00:00" userLoginId="demologinonly"/>   
     <PartyRole partyId="DemoSalesManager" roleTypeId="ACCOUNT_MANAGER"/>
     <ContactMech contactMechId="DemoMgrEmail1" contactMechTypeId="EMAIL_ADDRESS" infoString="salesmanager@opentaps.org"/>
     <PartyContactMech partyId="DemoSalesManager" contactMechId="DemoMgrEmail1" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/> 
@@ -44,7 +43,6 @@
     <Person partyId="DemoSalesRep1" firstName="Demo" lastName="Sales Rep 1"/>
     <UserLogin partyId="DemoSalesRep1" userLoginId="DemoSalesRep1"  currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
     <UserLoginSecurityGroup userLoginId="DemoSalesRep1" groupId="SALES_REP_LIMITED" fromDate="2005-12-01 00:00:00"/>
-    <AsteriskUser extension="801" fromDate="2005-12-01 00:00:00" userLoginId="DemoSalesRep1"/>   
     <PartyRole partyId="DemoSalesRep1" roleTypeId="ACCOUNT_MANAGER"/>  <!-- this rep can be an account manager or a rep on an account -->
     <PartyRole partyId="DemoSalesRep1" roleTypeId="ACCOUNT_REP"/>
     <PartyRole partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/> <!-- TODO: needed this to fix bug, find out why (CustRequestRole required this) -->
@@ -57,7 +55,6 @@
     <Person partyId="DemoSalesRep2" firstName="Demo" lastName="Sales Rep 2"/>
     <UserLogin partyId="DemoSalesRep2" userLoginId="DemoSalesRep2" currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
     <UserLoginSecurityGroup userLoginId="DemoSalesRep2" groupId="SALES_REP_LIMITED" fromDate="2005-12-01 00:00:00"/>
-    <AsteriskUser extension="802" fromDate="2005-12-01 00:00:00" userLoginId="DemoSalesRep2"/>   
     <PartyRole partyId="DemoSalesRep2" roleTypeId="ACCOUNT_MANAGER"/>  <!-- this rep can be an account manager or a rep on an account -->
     <PartyRole partyId="DemoSalesRep2" roleTypeId="ACCOUNT_REP"/> 
     <ContactMech contactMechId="DemoRepEmail2" contactMechTypeId="EMAIL_ADDRESS" infoString="salesrep2@opentaps.org"/>
@@ -69,7 +66,6 @@
     <Person partyId="DemoSalesRep3" firstName="Demo" lastName="Sales Rep 3"/>
     <UserLogin partyId="DemoSalesRep3" userLoginId="DemoSalesRep3" currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
     <UserLoginSecurityGroup userLoginId="DemoSalesRep3" groupId="SALES_REP_LIMITED" fromDate="2005-12-01 00:00:00"/>
-    <AsteriskUser extension="803" fromDate="2005-12-01 00:00:00" thruDate="2008-01-01 00:00:00" userLoginId="DemoSalesRep3"/>   
     <PartyRole partyId="DemoSalesRep3" roleTypeId="ACCOUNT_REP"/>
     <ContactMech contactMechId="DemoRepEmail3" contactMechTypeId="EMAIL_ADDRESS" infoString="salesrep3@opentaps.org"/>
     <PartyContactMech partyId="DemoSalesRep3" contactMechId="DemoRepEmail3" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/> 
@@ -80,7 +76,6 @@
     <Person partyId="DemoSalesRep4" firstName="Demo" lastName="Sales Rep 4"/>
     <UserLogin partyId="DemoSalesRep4" userLoginId="DemoSalesRep4" currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
     <UserLoginSecurityGroup userLoginId="DemoSalesRep4" groupId="SALES_REP_TRAINEE" fromDate="2005-12-01 00:00:00"/>
-    <AsteriskUser extension="803" fromDate="2008-02-01 00:00:00" userLoginId="DemoSalesRep4"/>   
     <PartyRole partyId="DemoSalesRep4" roleTypeId="ACCOUNT_REP"/>
     <ContactMech contactMechId="DemoRepEmail4" contactMechTypeId="EMAIL_ADDRESS" infoString="salesrep4@opentaps.org"/>
     <PartyContactMech partyId="DemoSalesRep4" contactMechId="DemoRepEmail4" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/> 
@@ -91,7 +86,6 @@
     <Person partyId="DemoCSR" firstName="Demo" lastName="B2B CSR"/>
     <UserLogin partyId="DemoCSR" userLoginId="DemoCSR" currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
     <UserLoginSecurityGroup userLoginId="DemoCSR" groupId="CSR" fromDate="2005-12-01 00:00:00"/>
-    <AsteriskUser extension="805" fromDate="2005-12-01 00:00:00" userLoginId="DemoCSR"/>   
     <PartyRole partyId="DemoCSR" roleTypeId="CUST_SERVICE_REP"/>
     <ContactMech contactMechId="DemoCSREmail" contactMechTypeId="EMAIL_ADDRESS" infoString="democsr@opentaps.org"/>
     <PartyContactMech partyId="DemoCSR" contactMechId="DemoCSREmail" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/>
@@ -105,7 +99,6 @@
     <Person partyId="DemoCSR2" firstName="Demo" lastName="B2C CSR"/>
     <UserLogin partyId="DemoCSR2" userLoginId="DemoCSR2" currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
     <UserLoginSecurityGroup userLoginId="DemoCSR2" groupId="CSR_B2C" fromDate="2005-12-01 00:00:00"/>
-    <AsteriskUser extension="806" fromDate="2005-12-01 00:00:00" userLoginId="DemoCSR2"/>   
     <PartyRole partyId="DemoCSR2" roleTypeId="CUST_SERVICE_REP"/>
     <ContactMech contactMechId="DemoCSR2Email" contactMechTypeId="EMAIL_ADDRESS" infoString="DemoCSR2@opentaps.org"/>
     <PartyContactMech partyId="DemoCSR2" contactMechId="DemoCSR2Email" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/>
@@ -116,7 +109,6 @@
     <Person partyId="DemoCalUser" firstName="Demo" lastName="Calendar User"/>
     <UserLogin partyId="DemoCalUser" userLoginId="DemoCalUser" currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
     <UserLoginSecurityGroup userLoginId="DemoCalUser" groupId="CRMSFA_TASKS_ONLY" fromDate="2005-12-01 00:00:00"/>
-    <AsteriskUser extension="807" fromDate="2005-12-01 00:00:00" userLoginId="DemoCalUser"/>   
     <PartyRole partyId="DemoCalUser" roleTypeId="ACCOUNT_REP"/>
     <ContactMech contactMechId="DemoCalEmail" contactMechTypeId="EMAIL_ADDRESS" infoString="democaluser@opentaps.org"/>
     <PartyContactMech partyId="DemoCalUser" contactMechId="DemoCalEmail" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/>
@@ -127,7 +119,6 @@
     <Person partyId="DemoCalContact" firstName="Demo" lastName="Calendar and Contacts User"/>
     <UserLogin partyId="DemoCalContact" userLoginId="DemoCalContact" currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
     <UserLoginSecurityGroup userLoginId="DemoCalContact" groupId="CRMSFA_CONTACT_TASKS" fromDate="2005-12-01 00:00:00"/>
-    <AsteriskUser extension="808" fromDate="2005-12-01 00:00:00" userLoginId="DemoCalContact"/>   
     <PartyRole partyId="DemoCalContact" roleTypeId="ACCOUNT_REP"/>
     <ContactMech contactMechId="DemoCalContactEmail" contactMechTypeId="EMAIL_ADDRESS" infoString="DemoCalContact@opentaps.org"/>
     <PartyContactMech partyId="DemoCalContact" contactMechId="DemoCalContactEmail" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/>
@@ -616,4 +607,5 @@
     <Enumeration description="Artwork" enumCode="2" enumId="ARTWORK" sequenceId="02" enumTypeId="CONTENT_CLASS"/>
     <Enumeration description="Contract" enumCode="3" enumId="CONTRACT" sequenceId="03" enumTypeId="CONTENT_CLASS"/>
     <Enumeration description="Other" enumCode="9" enumId="OTHER" sequenceId="09" enumTypeId="CONTENT_CLASS"/>
+
 </entity-engine-xml>

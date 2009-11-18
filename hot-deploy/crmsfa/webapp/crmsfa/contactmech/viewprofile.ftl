@@ -160,15 +160,15 @@
                   </div>
               <#elseif "TELECOM_NUMBER" == contactMech.contactMechTypeId>
                   <#assign telecomNumber = contactMechMap.telecomNumber>
-                  <#assign asteriskEnabled = Static["org.ofbiz.base.util.UtilProperties"].getPropertyValue("asterisk.properties", "asterisk.enabled")>
+                  <#assign voipEnabled = Static["org.ofbiz.base.util.UtilProperties"].getPropertyValue("voip.properties", "voip.enabled")>
                   <div class="tabletext">
-                  <#if asteriskEnabled?default("") == "Y">
+                  <#if voipEnabled?default("") == "Y">
                   <a href="<@ofbizUrl>logTaskFormAndDial?workEffortPurposeTypeId=WEPT_TASK_PHONE_CALL&contactMechIdTo=${contactMech.contactMechId}&internalPartyId=${parameters.partyId?if_exists}&donePage=${donePage?if_exists}</@ofbizUrl>" class="linktext">
                   </#if>	
                     ${telecomNumber.countryCode?if_exists}
                     <#if telecomNumber.areaCode?has_content>${telecomNumber.areaCode?default("000")}-</#if>${telecomNumber.contactNumber?default("000-0000")}
                     <#if partyContactMech.extension?has_content>${uiLabelMap.PartyContactExt}&nbsp;${partyContactMech.extension}</#if>
-                  <#if asteriskEnabled?default("") == "Y"> 
+                  <#if voipEnabled?default("") == "Y"> 
                     </a>
                   </#if>	  
                   </div>

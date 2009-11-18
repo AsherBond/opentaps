@@ -91,7 +91,7 @@ div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${f
 
 
 <body>
-  <#assign callInEventIcon = Static["org.ofbiz.base.util.UtilProperties"].getPropertyValue("asterisk.properties", "asterisk.icon.callInEvent")>
+  <#assign callInEventIcon = Static["org.ofbiz.base.util.UtilProperties"].getPropertyValue("voip.properties", "voip.icon.callInEvent")>
   <#if gwtScripts?exists>
     <#list gwtScripts as gwtScript>
       <@gwtModule widget=gwtScript />
@@ -158,7 +158,7 @@ div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${f
         <b>${uiLabelMap.ProductOrganization}</b>:&nbsp;${applicationSetupOrganization.groupName}&nbsp; (<@displayLink text="${uiLabelMap.CommonChange}" href="selectOrganizationForm"/>)
       </div>
     </#if>
-    <div class="gwtAsteriskNotification" id="gwtAsteriskNotification">
+    <div class="gwtVoipNotification" id="gwtVoipNotification">
     </div>
     <#assign helpUrl = Static["org.opentaps.common.util.UtilCommon"].getUrlContextHelpResource(delegator, appName, parameters._CURRENT_VIEW_, screenState?default(""))!/>
       <div class="liveHelp">

@@ -22,7 +22,7 @@
  * Usage: Asterisk Util Class
  */
 
-package org.opentaps.common.asterisk;
+package org.opentaps.asterisk;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -220,7 +220,7 @@ public final class AsteriskUtil {
         originateAction.setCallerId(callFrom);
         originateAction.setPriority(new Integer(1));
         originateAction.setTimeout(new Long(TIMEOUT)); // 30 seconds timeout
-        Debug.logInfo("Calling from: " + originateAction.getChannel() + ", to: " + originateAction.getExten(), MODULE);
+        Debug.logInfo("Calling from: " + originateAction.getChannel() + ", to: " + originateAction.getExten() + ", asterisk connection state : " + managerConnection.getState(), MODULE);
 
         // send the originate action and wait for a maximum of 30 seconds for Asterisk to send a reply
         try {

@@ -197,7 +197,7 @@
     </request-map>
     <request-map uri="makeOutgoingCall">
         <security auth="true" https="true"/>
-        <event type="java" path="org.opentaps.common.event.AsteriskEvents" invoke="makeOutgoingCall"/>
+        <event type="java" path="org.opentaps.common.event.VoipEvents" invoke="makeOutgoingCall"/>
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>

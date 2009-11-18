@@ -34,11 +34,12 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.GenericServiceException;
 import org.opentaps.common.party.PartyContactHelper;
-import org.opentaps.domain.base.entities.AsteriskUser;
+import org.opentaps.domain.base.entities.ExternalUser;
 import org.opentaps.domain.base.entities.PartyContactDetailByPurpose;
 import org.opentaps.domain.base.entities.PartyFromSummaryByRelationship;
 import org.opentaps.domain.base.entities.PartyNoteView;
@@ -326,45 +327,25 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
         return "replace(replace(replace(replace(replace(" + phoneNumberField + ",' ',''),'-',''),'.',''),'(',''),')','')";
     }
 
-    /** {@inheritDoc} */
-    public UserLogin getUserLoginByExtension(String extension) throws RepositoryException {
-        EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                         EntityCondition.makeCondition(AsteriskUser.Fields.extension.name(), extension),
-                         EntityUtil.getFilterByDateExpr());
-        List<AsteriskUser> asteriskUsers = findList(AsteriskUser.class, conditions);
-
-        // if not found, return null
-        if (asteriskUsers.size() < 0) {
-            Debug.logWarning("No AsteriskUser was found for the extension [" + extension + "], return null.", MODULE);
-        } else if (asteriskUsers.size() > 1) {
-            Debug.logWarning("More than one AsteriskUser was found for the extension [" + extension + "], returning the first match.", MODULE);
-        }
-
-        if (asteriskUsers.isEmpty()) {
-            return null;
-        } else {
-            return asteriskUsers.get(0).getUserLogin();
-        }
-    }
 
     /** {@inheritDoc} */
-    public AsteriskUser getAsteriskUserForUser(User user) throws RepositoryException, InfrastructureException {
-        EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                        EntityCondition.makeCondition(AsteriskUser.Fields.userLoginId.name(), user.getUserId()),
-                        EntityUtil.getFilterByDateExpr());
-        List<AsteriskUser> asteriskUsers = findList(AsteriskUser.class, conditions);
+    public ExternalUser getExternalUserForUser(String externalUserTypeId, User user) throws RepositoryException, InfrastructureException {
+        EntityConditionList<EntityExpr> conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition(ExternalUser.Fields.partyId.name(), EntityOperator.EQUALS, user.getOfbizUserLogin().getString("partyId")),
+                EntityCondition.makeCondition(ExternalUser.Fields.externalUserTypeId.name(), EntityOperator.EQUALS, externalUserTypeId));
+        List<ExternalUser> externalUsers = findList(ExternalUser.class, conditions);
 
         // if not found, return null
-        if (asteriskUsers.size() < 0) {
-            Debug.logWarning("No AsteriskUser was found for the userLoginId [" + user.getUserId() + "], return null.", MODULE);
-        } else if (asteriskUsers.size() > 1) {
-            Debug.logWarning("More than one AsteriskUser was found for the userLoginId [" + user.getUserId() + "], returning the first match.", MODULE);
+        if (externalUsers.size() < 0) {
+            Debug.logWarning("No ExternalUser was found for the userLoginId [" + user.getUserId() + "], return null.", MODULE);
+        } else if (externalUsers.size() > 1) {
+            Debug.logWarning("More than one ExternalUser was found for the userLoginId [" + user.getUserId() + "], returning the first match.", MODULE);
         }
 
-        if (asteriskUsers.isEmpty()) {
+        if (externalUsers.isEmpty()) {
             return null;
         } else {
-            return asteriskUsers.get(0);
+            return externalUsers.get(0);
         }
     }
 
