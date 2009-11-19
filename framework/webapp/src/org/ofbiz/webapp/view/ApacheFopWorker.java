@@ -80,7 +80,7 @@ public class ApacheFopWorker {
                     String fopFontBaseUrl = fopFactory.getFontBaseURL();
                     if (fopFontBaseUrl == null) {
                         String ofbizHome = System.getProperty("ofbiz.home");
-                        fopFontBaseUrl = UtilProperties.getPropertyValue("fop.properties", "fop.font.base.url", "file:///" + ofbizHome + "/framework/webapp/config/");
+                        fopFontBaseUrl = UtilProperties.getPropertyValue("fop.properties", "fop.font.base.url", ofbizHome + "/hot-deploy/opentaps-common/lib/DejaVu/");
                         fopFactory.setFontBaseURL(fopFontBaseUrl);
                     }
                     Debug.logInfo("FOP-FontBaseURL: " + fopFontBaseUrl, module);
