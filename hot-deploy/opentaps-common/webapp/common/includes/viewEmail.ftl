@@ -74,7 +74,7 @@
   </div>
   </#if>
 
-  <#if communicationEvent.contentMimeTypeId?exists && communicationEvent.contentMimeTypeId == "text/html">
+  <#if communicationEvent.contentMimeTypeId?exists && communicationEvent.contentMimeTypeId.equals("text/html")>
     <#assign textModeClass = "smallSubmit">
     <#assign htmlModeClass = "smallSubmitDisabled">
     <#assign textOnClick = "javascript:text_mode()">
@@ -83,7 +83,7 @@
 
   <div class="formRow">
     <span class="formFullRowText">
-    <#if (communicationEvent.contentMimeTypeId?has_content) && (communicationEvent.contentMimeTypeId == "text/plain")>
+    <#if (communicationEvent.contentMimeTypeId?has_content) && communicationEvent.contentMimeTypeId.equals("text/plain")>
     <textarea class="inputBox" cols="100" rows="20" readonly="readonly">${communicationEvent.content?if_exists}</textarea>
     <#else>
     <#-- wrap html emails around a little box -->
