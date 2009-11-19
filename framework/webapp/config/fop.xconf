@@ -43,6 +43,9 @@ the location of this file.
        value is specified as auto -->
   <default-page-settings height="11in" width="8.26in"/>
 
+  <!-- In order to use DejaVu fonts we have to disable caching -->
+  <use-cache>false</use-cache>
+
   <!-- Information for specific renderers -->
   <!-- Uses renderer mime type for renderers -->
   <renderers>
@@ -94,6 +97,69 @@ the location of this file.
           <font-triplet name="ArialMT" style="normal" weight="bold"/>
         </font>
         -->
+
+        <!-- DejaVu fonts -->
+        <font metrics-url="DejaVuSans.xml" kerning="yes" embed-url="DejaVuSans.ttf">
+            <font-triplet name="DejaVuSans" style="normal" weight="normal"/>
+        </font>
+        <font metrics-url="DejaVuSans-Bold.xml" kerning="yes" embed-url="DejaVuSans-Bold.ttf">
+            <font-triplet name="DejaVuSans" style="normal" weight="bold"/>
+        </font>
+        <font metrics-url="DejaVuSans-BoldOblique.xml" kerning="yes" embed-url="DejaVuSans-BoldOblique.ttf">
+            <font-triplet name="DejaVuSans" style="oblique" weight="bold"/>
+        </font>
+        <font metrics-url="DejaVuSansCondensed.xml" kerning="yes" embed-url="DejaVuSansCondensed.ttf">
+            <font-triplet name="DejaVuSansCondensed" style="normal" weight="normal"/>
+        </font>
+        <font metrics-url="DejaVuSansCondensed-Bold.xml" kerning="yes" embed-url="DejaVuSansCondensed-Bold.ttf">
+            <font-triplet name="DejaVuSansCondensed" style="normal" weight="bold"/>
+        </font>
+        <font metrics-url="DejaVuSansCondensed-BoldOblique.xml" kerning="yes" embed-url="DejaVuSansCondensed-BoldOblique.ttf">
+            <font-triplet name="DejaVuSansCondensed" style="oblique" weight="bold"/>
+        </font>
+        <font metrics-url="DejaVuSansCondensed-Oblique.xml" kerning="yes" embed-url="DejaVuSansCondensed-Oblique.ttf">
+            <font-triplet name="DejaVuSansCondensed" style="oblique" weight="bold"/>
+        </font>
+        <font metrics-url="DejaVuSans-ExtraLight.xml" kerning="yes" embed-url="DejaVuSans-ExtraLight.ttf">
+            <font-triplet name="DejaVuSans-ExtraLight" style="normal" weight="normal"/>
+        </font>
+        <font metrics-url="DejaVuSansMono.xml" kerning="yes" embed-url="DejaVuSansMono.ttf">
+            <font-triplet name="DejaVuSansMono" style="normal" weight="normal"/>
+        </font>
+        <font metrics-url="DejaVuSansMono-Bold.xml" kerning="yes" embed-url="DejaVuSansMono-Bold.ttf">
+            <font-triplet name="DejaVuSansMono" style="normal" weight="bold"/>
+        </font>
+        <font metrics-url="DejaVuSansMono-BoldOblique.xml" kerning="yes" embed-url="DejaVuSansMono-BoldOblique.ttf">
+            <font-triplet name="DejaVuSansMono" style="oblique" weight="bold"/>
+        </font>
+        <font metrics-url="DejaVuSansMono-Oblique.xml" kerning="yes" embed-url="DejaVuSansMono-Oblique.ttf">
+            <font-triplet name="DejaVuSansMono" style="oblique" weight="normal"/>
+        </font>
+        <font metrics-url="DejaVuSerif.xml" kerning="yes" embed-url="DejaVuSerif.ttf">
+            <font-triplet name="DejaVuSerif" style="normal" weight="normal"/>
+        </font>
+        <font metrics-url="DejaVuSerif-Bold.xml" kerning="yes" embed-url="DejaVuSerif-Bold.ttf">
+            <font-triplet name="DejaVuSerif" style="normal" weight="bold"/>
+        </font>
+        <font metrics-url="DejaVuSerif-BoldItalic.xml" kerning="yes" embed-url="DejaVuSerif-BoldItalic.ttf">
+            <font-triplet name="DejaVuSerif" style="italic" weight="bold"/>
+        </font>
+        <font metrics-url="DejaVuSerif-Italic.xml" kerning="yes" embed-url="DejaVuSerif-Italic.ttf">
+            <font-triplet name="DejaVuSerif" style="italic" weight="normal"/>
+        </font>
+        <font metrics-url="DejaVuSerifCondensed.xml" kerning="yes" embed-url="DejaVuSerifCondensed.ttf">
+            <font-triplet name="DejaVuSerifCondensed" style="normal" weight="normal"/>
+        </font>
+        <font metrics-url="DejaVuSerifCondensed-Bold.xml" kerning="yes" embed-url="DejaVuSerifCondensed-Bold.ttf">
+            <font-triplet name="DejaVuSerifCondensed" style="normal" weight="bold"/>
+        </font>
+        <font metrics-url="DejaVuSerifCondensed-BoldItalic.xml" kerning="yes" embed-url="DejaVuSerifCondensed-BoldItalic.ttf">
+            <font-triplet name="DejaVuSerifCondensed" style="italic" weight="bold"/>
+        </font>
+        <font metrics-url="DejaVuSerifCondensed-Italic.xml" kerning="yes" embed-url="DejaVuSerifCondensed-Italic.ttf">
+            <font-triplet name="DejaVuSerifCondensed" style="italic" weight="normal"/>
+        </font>
+
       </fonts>
 
       <!-- This option lets you specify additional options on an XML handler -->
