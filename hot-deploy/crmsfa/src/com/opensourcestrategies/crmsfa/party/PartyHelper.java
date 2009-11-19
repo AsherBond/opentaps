@@ -311,6 +311,7 @@ public final class PartyHelper {
         for (GenericValue commEvnt : commEvnts) {
             commEvnt.removeRelated("CommunicationEventRole");
             commEvnt.removeRelated("CommunicationEventWorkEff");
+            commEvnt.removeRelated("CommEventContentAssoc");
             delegator.removeValue(commEvnt);
         }
 
