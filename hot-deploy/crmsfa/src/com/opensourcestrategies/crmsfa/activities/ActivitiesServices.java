@@ -2034,13 +2034,7 @@ public final class ActivitiesServices {
                 return deleteCommunicationEventResult;
             }
 
-            // mark the email is deleted
-            GenericValue workEffort = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
-            workEffort.setString("emailDeleted", "Y");
-            workEffort.store();
         } catch (GenericServiceException ex) {
-            return UtilMessage.createAndLogServiceError(ex, locale, MODULE);
-        } catch (GenericEntityException ex) {
             return UtilMessage.createAndLogServiceError(ex, locale, MODULE);
         }
 

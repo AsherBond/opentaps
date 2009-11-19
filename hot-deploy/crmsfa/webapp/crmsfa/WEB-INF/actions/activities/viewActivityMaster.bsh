@@ -18,13 +18,4 @@
 import org.ofbiz.base.util.*;
 
 workEffortId = parameters.get("workEffortId");
-workEffort = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
-context.put("workEffort", workEffort);
-if (workEffort.get("workEffortTypeId").equals("TASK")) {
-    // get the first related comm event (we're supposed to have only one but the data model is too flexible)
-    candidates = workEffort.getRelated("CommunicationEventWorkEff");
-    if (candidates.size() > 0) {
-        communicationEvent = candidates.get(0).getRelatedOne("CommunicationEvent");
-        context.put("communicationEvent", communicationEvent);
-    }
-}
+context.put("workEffort", delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId)));

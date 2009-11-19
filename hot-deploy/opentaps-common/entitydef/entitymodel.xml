@@ -2420,7 +2420,4 @@ under the License.
         </relation>
     </entity>
 
-    <extend-entity entity-name="WorkEffort">
-        <field name="emailDeleted" type="indicator"/>
-    </extend-entity>  
 </entitymodel>
