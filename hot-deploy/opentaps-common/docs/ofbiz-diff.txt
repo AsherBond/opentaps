@@ -160,8 +160,10 @@ framework/security/src/org/ofbiz/security/OFBizSecurity.java
 r13919 Fix possible NPE in OFBizSecurity
 
 framework/webapp/config/fop.xconf
+framework/webapp/src/org/ofbiz/webapp/view/ApacheFopWorker.java
 r14022 Disable cache (that used for keep font triplet info) because it doesn't work and throw classloader exception.
        Also add references to fonts that are in opentaps-common/lib/DejaVu by default
+r13024 Set up font base URL
 
 Applications changes
 --------------------
