@@ -49,7 +49,7 @@
     <screen name="main-section-template">
         <section>
             <actions>
-                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/voip/enableVoip.bsh"/>
+                <java location="org.opentaps.domain.voip.VoipScreenActions" invoke="enableVoip"/>
             </actions>   
             <widgets>     
                <decorator-screen name="main-application-decorator" location="${parameters.mainApplicationDecoratorLocation}">

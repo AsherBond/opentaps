@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -31,7 +31,7 @@ public interface VoipRepositoryInterface  extends RepositoryInterface {
      * @return ExternalUser instance, return null if not found
      * @throws RepositoryException if an error occurs
      */
-    public ExternalUser getExternalUserForUser(User user) throws RepositoryException;
+    public ExternalUser getVoipExtensionForUser(User user) throws RepositoryException;
     
     /**
      * Gets the link for the Account that matching the current call in.

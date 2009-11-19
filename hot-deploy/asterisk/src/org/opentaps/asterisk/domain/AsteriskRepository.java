@@ -64,7 +64,7 @@ public class AsteriskRepository extends Repository implements VoipRepositoryInte
     }
 
     /** {@inheritDoc} */
-    public ExternalUser getExternalUserForUser(User user) throws RepositoryException {
+    public ExternalUser getVoipExtensionForUser(User user) throws RepositoryException {
         PartyDomainInterface partyDomain = getDomainsDirectory().getPartyDomain();
         PartyRepositoryInterface repository = partyDomain.getPartyRepository();
         ExternalUser externalUser;
@@ -82,7 +82,7 @@ public class AsteriskRepository extends Repository implements VoipRepositoryInte
         PartyRepositoryInterface repository = partyDomain.getPartyRepository();
         // retrieve login user's extension phone number
         try {
-            ExternalUser externalUser = getExternalUserForUser(user);
+            ExternalUser externalUser = getVoipExtensionForUser(user);
             String extension = "";
             if (externalUser != null && externalUser.getExternalUserId() != null) {
                 extension = externalUser.getExternalUserId();
