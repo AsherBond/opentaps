@@ -93,6 +93,7 @@ import org.opentaps.common.domain.party.PartyRepository;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.base.services.DeleteWorkEffort;
 import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.PartyDomainInterface;
@@ -2020,6 +2021,7 @@ public final class ActivitiesServices {
             return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
 
+        
         try {
 
             // Call the deleteCommunicationEventWorkEff service
@@ -2033,7 +2035,12 @@ public final class ActivitiesServices {
             if (ServiceUtil.isError(deleteCommunicationEventResult)) {
                 return deleteCommunicationEventResult;
             }
-
+            
+            // Call the deleteWorkEffort service
+            Map<String, Object> deleteWorkEffortResult = dispatcher.runSync("deleteWorkEffort", UtilMisc.toMap("workEffortId", workEffortId, "userLogin", userLogin));
+            if (ServiceUtil.isError(deleteWorkEffortResult)) {
+                return deleteWorkEffortResult;
+            }
         } catch (GenericServiceException ex) {
             return UtilMessage.createAndLogServiceError(ex, locale, MODULE);
         }
