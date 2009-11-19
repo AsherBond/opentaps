@@ -27,7 +27,6 @@ import java.util.Map;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
@@ -36,18 +35,24 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.GenericServiceException;
-import org.ofbiz.service.ServiceUtil;
 import org.opentaps.domain.base.entities.Facility;
 import org.opentaps.domain.base.entities.InventoryTransfer;
 import org.opentaps.domain.base.entities.OrderItemShipGrpInvRes;
 import org.opentaps.domain.base.entities.ProductFacility;
+import org.opentaps.domain.base.services.CancelOrderItemShipGrpInvResService;
+import org.opentaps.domain.base.services.CompleteInventoryTransferOldService;
+import org.opentaps.domain.base.services.CreateInventoryItemDetailService;
+import org.opentaps.domain.base.services.DecomposeInventoryItemService;
+import org.opentaps.domain.base.services.GetOrderItemShipGroupEstimatedShipDateService;
+import org.opentaps.domain.base.services.ReserveOrderItemInventoryService;
+import org.opentaps.domain.base.services.UpdateInventoryTransferService;
 import org.opentaps.domain.inventory.InventoryDomainInterface;
 import org.opentaps.domain.inventory.InventoryItem;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
-import org.opentaps.domain.inventory.OrderInventoryServiceInterface;
-import org.opentaps.domain.inventory.PicklistAndBinAndItem;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface.FacilityLocationType;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface.InventoryReservationOrder;
+import org.opentaps.domain.inventory.OrderInventoryServiceInterface;
+import org.opentaps.domain.inventory.PicklistAndBinAndItem;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderDomainInterface;
 import org.opentaps.domain.order.OrderItemShipGroup;
@@ -202,16 +207,15 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
 
             // Cancel all reservations
             for (OrderItemShipGrpInvRes res : sortedReservations) {
-                Map<String, Object> input = FastMap.newInstance();
-                input.put("userLogin", getUser().getOfbizUserLogin());
-                input.put("orderId", res.getOrderId());
-                input.put("orderItemSeqId", res.getOrderItemSeqId());
-                input.put("inventoryItemId", res.getInventoryItemId());
-                input.put("shipGroupSeqId", res.getShipGroupSeqId());
                 Debug.logInfo("balanceInventoryItems: Canceling reservation on inventory [" + res.getInventoryItemId() + "] for product [" + item.getProductId() + "] for order item [" + res.getOrderId() + ":" + res.getOrderItemSeqId() + "] quantity [" + res.getQuantity() + "]; facility [" + item.getFacilityId() + "]", MODULE);
-                Map<String, Object> tmpResult = runSync("cancelOrderItemShipGrpInvRes", input);
-                if (ServiceUtil.isError(tmpResult)) {
-                    throw new ServiceException(ServiceUtil.getErrorMessage(tmpResult));
+                CancelOrderItemShipGrpInvResService service = new CancelOrderItemShipGrpInvResService(getUser());
+                service.setInOrderId(res.getOrderId());
+                service.setInOrderItemSeqId(res.getOrderItemSeqId());
+                service.setInInventoryItemId(res.getInventoryItemId());
+                service.setInShipGroupSeqId(res.getShipGroupSeqId());
+                service.runSync(getInfrastructure());
+                if (service.isError()) {
+                    throw new ServiceException(service.getErrorMessage());
                 }
             }
 
@@ -369,21 +373,20 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                     invItemValue.store();
 
                     // store OrderItemShipGrpInvRes record
-                    Map<String, Object> reserveOisgirMap = FastMap.newInstance();
-                    reserveOisgirMap.put("userLogin", getUser().getOfbizUserLogin());
-                    reserveOisgirMap.put("orderId", orderId);
-                    reserveOisgirMap.put("orderItemSeqId", orderItemSeqId);
-                    reserveOisgirMap.put("shipGroupSeqId", shipGroupSeqId);
-                    reserveOisgirMap.put("inventoryItemId", inventoryItem.getInventoryItemId());
-                    reserveOisgirMap.put("reserveOrderEnumId", reserveOrderEnumId);
-                    reserveOisgirMap.put("reservedDatetime", reservedDatetime);
-                    reserveOisgirMap.put("promisedDatetime", promisedDatetime);
-                    reserveOisgirMap.put("quantity", BigDecimal.ONE);
+                    ReserveOrderItemInventoryService service = new ReserveOrderItemInventoryService(getUser());
+                    service.setInOrderId(orderId);
+                    service.setInOrderItemSeqId(orderItemSeqId);
+                    service.setInShipGroupSeqId(shipGroupSeqId);
+                    service.setInInventoryItemId(inventoryItem.getInventoryItemId());
+                    service.setInReserveOrderEnumId(reserveOrderEnumId);
+                    service.setInReservedDatetime(reservedDatetime);
+                    service.setInPromisedDatetime(promisedDatetime);
+                    service.setInQuantity(BigDecimal.ONE);
                     if (UtilValidate.isNotEmpty(sequenceId)) {
-                        reserveOisgirMap.put("sequenceId", sequenceId);
+                        service.setInSequenceId(sequenceId);
                     }
                     Debug.logInfo("reserveInventoryItem: reserving 1 SERIALIZED_INV_ITEM of " + inventoryItem.getProductId() + " on inventory " + inventoryItem.getInventoryItemId() + ".", MODULE);
-                    runSync("reserveOrderItemInventory", reserveOisgirMap);
+                    service.runSync(getInfrastructure());
 
                     quantityNotReserved = quantityNotReserved.subtract(BigDecimal.ONE);
                 }
@@ -399,30 +402,28 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                         }
 
                         // instead of updating InventoryItem, add an InventoryItemDetail
-                        Map<String, Object> createDetailMap = FastMap.newInstance();
-                        createDetailMap.put("userLogin", getUser().getOfbizUserLogin());
-                        createDetailMap.put("inventoryItemId", inventoryItem.getInventoryItemId());
-                        createDetailMap.put("orderId", orderId);
-                        createDetailMap.put("orderItemSeqId", orderItemSeqId);
-                        createDetailMap.put("availableToPromiseDiff", deductAmount.negate());
-                        getInfrastructure().getDispatcher().runSync("createInventoryItemDetail", createDetailMap);
+                        CreateInventoryItemDetailService service = new CreateInventoryItemDetailService(getUser());
+                        service.setInOrderId(orderId);
+                        service.setInOrderItemSeqId(orderItemSeqId);
+                        service.setInInventoryItemId(inventoryItem.getInventoryItemId());
+                        service.setInAvailableToPromiseDiff(deductAmount.negate());
+                        service.runSync(getInfrastructure());
 
                         // create OrderItemShipGrpInvRes record
-                        Map<String, Object> reserveOisgirMap = FastMap.newInstance();
-                        reserveOisgirMap.put("userLogin", getUser().getOfbizUserLogin());
-                        reserveOisgirMap.put("orderId", orderId);
-                        reserveOisgirMap.put("orderItemSeqId", orderItemSeqId);
-                        reserveOisgirMap.put("shipGroupSeqId", shipGroupSeqId);
-                        reserveOisgirMap.put("inventoryItemId", inventoryItem.getInventoryItemId());
-                        reserveOisgirMap.put("reserveOrderEnumId", reserveOrderEnumId);
-                        reserveOisgirMap.put("reservedDatetime", reservedDatetime);
-                        reserveOisgirMap.put("quantity", deductAmount);
-                        reserveOisgirMap.put("promisedDatetime", promisedDatetime);
+                        ReserveOrderItemInventoryService service2 = new ReserveOrderItemInventoryService(getUser());
+                        service2.setInOrderId(orderId);
+                        service2.setInOrderItemSeqId(orderItemSeqId);
+                        service2.setInInventoryItemId(inventoryItem.getInventoryItemId());
+                        service2.setInShipGroupSeqId(shipGroupSeqId);
+                        service2.setInReserveOrderEnumId(reserveOrderEnumId);
+                        service2.setInReservedDatetime(reservedDatetime);
+                        service2.setInQuantity(deductAmount);
+                        service2.setInPromisedDatetime(promisedDatetime);
                         if (UtilValidate.isNotEmpty(sequenceId)) {
-                            reserveOisgirMap.put("sequenceId", sequenceId);
+                            service2.setInSequenceId(sequenceId);
                         }
                         Debug.logInfo("reserveInventoryItem: reserving " + deductAmount + " NON_SERIAL_INV_ITEM of " + inventoryItem.getProductId() + " on inventory " + inventoryItem.getInventoryItemId() + ".", MODULE);
-                        runSync("reserveOrderItemInventory", reserveOisgirMap);
+                        service2.runSync(getInfrastructure());
 
                         quantityNotReserved = quantityNotReserved.subtract(deductAmount);
                     }
@@ -578,33 +579,31 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                     if (toReserve.compareTo(BigDecimal.ZERO) > 0) {
                         // subtract quantityNotReserved from the availableToPromise of existing inventory item
                         // instead of updating InventoryItem, add an InventoryItemDetail
-                        Map<String, Object> context = FastMap.newInstance();
-                        context.put("userLogin", getUser().getOfbizUserLogin());
-                        context.put("inventoryItemId", lastNonSerInventoryItem.getInventoryItemId());
-                        context.put("orderId", orderId);
-                        context.put("orderItemSeqId", orderItemSeqId);
-                        context.put("shipGroupSeqId", shipGroupSeqId);
-                        context.put("availableToPromiseDiff", toReserve.negate());
-                        runSync("createInventoryItemDetail", context);
+                        CreateInventoryItemDetailService service = new CreateInventoryItemDetailService(getUser());
+                        service.setInOrderId(orderId);
+                        service.setInOrderItemSeqId(orderItemSeqId);
+                        service.setInInventoryItemId(lastNonSerInventoryItem.getInventoryItemId());
+                        service.setInShipGroupSeqId(shipGroupSeqId);
+                        service.setInAvailableToPromiseDiff(toReserve.negate());
+                        service.runSync(getInfrastructure());
 
                         // calculate the promiseDatetime
                         Timestamp promisedDatetime = calculatePromisedDatetime(lastNonSerInventoryItem, order.getOrderDate(), inventoryRepository);
 
                         // reserve order item inventory
-                        context = FastMap.newInstance();
-                        context.put("userLogin", getUser().getOfbizUserLogin());
-                        context.put("orderId", orderId);
-                        context.put("orderItemSeqId", orderItemSeqId);
-                        context.put("shipGroupSeqId", shipGroupSeqId);
-                        context.put("inventoryItemId", lastNonSerInventoryItem.getInventoryItemId());
-                        context.put("reserveOrderEnumId", reserveOrderEnumId);
-                        context.put("quantity", toReserve);
-                        context.put("quantityNotAvailable", toReserve);
-                        context.put("reservedDatetime", reservedDatetime);
-                        context.put("promisedDatetime", promisedDatetime);
-                        context.put("sequenceId", sequenceId);
-                        context.put("priority", priority);
-                        runSync("reserveOrderItemInventory", context);
+                        ReserveOrderItemInventoryService service2 = new ReserveOrderItemInventoryService(getUser());
+                        service2.setInOrderId(orderId);
+                        service2.setInOrderItemSeqId(orderItemSeqId);
+                        service2.setInInventoryItemId(lastNonSerInventoryItem.getInventoryItemId());
+                        service2.setInShipGroupSeqId(shipGroupSeqId);
+                        service2.setInReserveOrderEnumId(reserveOrderEnumId);
+                        service2.setInReservedDatetime(reservedDatetime);
+                        service2.setInQuantity(toReserve);
+                        service2.setInQuantityNotAvailable(toReserve);
+                        service2.setInPromisedDatetime(promisedDatetime);
+                        service2.setInPriority(priority);
+                        service2.setInSequenceId(sequenceId);
+                        service2.runSync(getInfrastructure());
 
                         quantityNotReserved = quantityNotReserved.subtract(toReserve);
                     }
@@ -629,33 +628,31 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                     InventoryItem newNonSerInventoryItem = inventoryRepository.getInventoryItemById(inventoryItemOutId);
 
                     // also create a detail record with the quantities
-                    Map<String, Object> context = FastMap.newInstance();
-                    context.put("userLogin", getUser().getOfbizUserLogin());
-                    context.put("inventoryItemId", newNonSerInventoryItem.getInventoryItemId());
-                    context.put("orderId", orderId);
-                    context.put("orderItemSeqId", orderItemSeqId);
-                    context.put("shipGroupSeqId", shipGroupSeqId);
-                    context.put("availableToPromiseDiff", quantityNotReserved.negate());
-                    runSync("createInventoryItemDetail", context);
+                    CreateInventoryItemDetailService service = new CreateInventoryItemDetailService(getUser());
+                    service.setInOrderId(orderId);
+                    service.setInOrderItemSeqId(orderItemSeqId);
+                    service.setInInventoryItemId(newNonSerInventoryItem.getInventoryItemId());
+                    service.setInShipGroupSeqId(shipGroupSeqId);
+                    service.setInAvailableToPromiseDiff(quantityNotReserved.negate());
+                    service.runSync(getInfrastructure());
 
                     // calculate the promiseDatetime
                     Timestamp promisedDatetime = calculatePromisedDatetime(newNonSerInventoryItem, order.getOrderDate(), inventoryRepository);
 
                     // create OrderItemShipGrpInvRes record
-                    context = FastMap.newInstance();
-                    context.put("userLogin", getUser().getOfbizUserLogin());
-                    context.put("orderId", orderId);
-                    context.put("orderItemSeqId", orderItemSeqId);
-                    context.put("shipGroupSeqId", shipGroupSeqId);
-                    context.put("inventoryItemId", newNonSerInventoryItem.getInventoryItemId());
-                    context.put("reserveOrderEnumId", reserveOrderEnumId);
-                    context.put("quantity", quantityNotReserved);
-                    context.put("quantityNotAvailable", quantityNotReserved);
-                    context.put("reservedDatetime", reservedDatetime);
-                    context.put("promisedDatetime", promisedDatetime);
-                    context.put("sequenceId", sequenceId);
-                    context.put("priority", priority);
-                    runSync("reserveOrderItemInventory", context);
+                    ReserveOrderItemInventoryService service2 = new ReserveOrderItemInventoryService(getUser());
+                    service2.setInOrderId(orderId);
+                    service2.setInOrderItemSeqId(orderItemSeqId);
+                    service2.setInInventoryItemId(newNonSerInventoryItem.getInventoryItemId());
+                    service2.setInShipGroupSeqId(shipGroupSeqId);
+                    service2.setInReserveOrderEnumId(reserveOrderEnumId);
+                    service2.setInReservedDatetime(reservedDatetime);
+                    service2.setInQuantity(quantityNotReserved);
+                    service2.setInQuantityNotAvailable(quantityNotReserved);
+                    service2.setInPromisedDatetime(promisedDatetime);
+                    service2.setInPriority(priority);
+                    service2.setInSequenceId(sequenceId);
+                    service2.runSync(getInfrastructure());
 
                 }
             }
@@ -686,15 +683,14 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
 
             // cancel reservations
             for (OrderItemShipGrpInvRes reservItem : reservations) {
-                Map<String, Object> ctxt = FastMap.newInstance();
-                ctxt.put("userLogin", getUser().getOfbizUserLogin());
-                ctxt.put("orderId", reservItem.getOrderId());
-                ctxt.put("orderItemSeqId", reservItem.getOrderItemSeqId());
-                ctxt.put("inventoryItemId", reservItem.getInventoryItemId());
-                ctxt.put("shipGroupSeqId", reservItem.getShipGroupSeqId());
-                Map<String, Object> results = runSync("cancelOrderItemShipGrpInvRes", ctxt);
-                if (ServiceUtil.isError(results)) {
-                    throw new ServiceException(ServiceUtil.getErrorMessage(results));
+                CancelOrderItemShipGrpInvResService service = new CancelOrderItemShipGrpInvResService(getUser());
+                service.setInOrderId(reservItem.getOrderId());
+                service.setInOrderItemSeqId(reservItem.getOrderItemSeqId());
+                service.setInInventoryItemId(reservItem.getInventoryItemId());
+                service.setInShipGroupSeqId(reservItem.getShipGroupSeqId());
+                service.runSync(getInfrastructure());
+                if (service.isError()) {
+                    throw new ServiceException(service.getErrorMessage());
                 }
             }
 
@@ -768,14 +764,17 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
             InventoryDomainInterface inventoryDomain = getDomainsDirectory().getInventoryDomain();
             InventoryRepositoryInterface inventoryRepository = inventoryDomain.getInventoryRepository();
             InventoryTransfer transfer = inventoryRepository.getInventoryTransferById(inventoryTransferId);
-            Map<String, Object> input = createInputMap();
-            input.put("inventoryTransferId", inventoryTransferId);
+
             if (transfer.getStatusId().equals("IXF_COMPLETE")) {
-                runSync("completeInventoryTransferOld", input);
+                CompleteInventoryTransferOldService service = new CompleteInventoryTransferOldService(getUser());
+                service.setInInventoryTransferId(inventoryTransferId);
+                service.runSync(getInfrastructure());
             } else {
-                input.put("statusId", "IXF_COMPLETE");
-                input.put("inventoryItemId", transfer.getInventoryItemId());
-                runSync("updateInventoryTransfer", input);
+                UpdateInventoryTransferService service = new UpdateInventoryTransferService(getUser());
+                service.setInInventoryTransferId(inventoryTransferId);
+                service.setInStatusId("IXF_COMPLETE");
+                service.setInInventoryItemId(transfer.getInventoryItemId());
+                service.runSync(getInfrastructure());
             }
 
         } catch (GeneralException ex) {
@@ -791,9 +790,9 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
             InventoryItem item = inventoryRepository.getInventoryItemById(this.inventoryItemId);
             // if received PURCH_PKG_AUTO product into invertorym, then split it to components
             if ("PURCH_PKG_AUTO".equals(item.getProduct().getProductTypeId())) {
-              Map<String, Object> input = createInputMap();
-              input.put("inventoryItemId", this.inventoryItemId);
-              runSync("decomposeInventoryItem", input);
+                DecomposeInventoryItemService service = new DecomposeInventoryItemService(getUser());
+                service.setInInventoryItemId(this.inventoryItemId);
+                service.runSync(getInfrastructure());
             }
         } catch (GeneralException ex) {
             throw new ServiceException(ex);
@@ -809,11 +808,11 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
             Order order = orderRepository.getOrderById(orderId);
             OrderItemShipGroup shipGroup = order.getOrderItemShipGroup(shipGroupSeqId);
             // calculate the ship group estimatedShipDate from all its reservations
-            Map<String, Object> input = createInputMap();
-            input.put("orderId", orderId);
-            input.put("shipGroupSeqId", shipGroupSeqId);
-            Map<String, Object> result = runSync("getOrderItemShipGroupEstimatedShipDate", input);
-            Timestamp estimatedShipDate = (Timestamp) result.get("estimatedShipDate");
+            GetOrderItemShipGroupEstimatedShipDateService service = new GetOrderItemShipGroupEstimatedShipDateService(getUser());
+            service.setInOrderId(orderId);
+            service.setInShipGroupSeqId(shipGroupSeqId);
+            service.runSync(getInfrastructure());
+            Timestamp estimatedShipDate = service.getOutEstimatedShipDate();
 
             // update the ship group estimatedShipDate
             shipGroup.setEstimatedShipDate(estimatedShipDate);

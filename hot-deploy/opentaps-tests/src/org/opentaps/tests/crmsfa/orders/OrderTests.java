@@ -44,30 +44,30 @@ import org.ofbiz.security.Security;
 import org.ofbiz.security.SecurityFactory;
 import org.opentaps.common.order.SalesOrderFactory;
 import org.opentaps.domain.base.entities.InvoiceItem;
-import org.opentaps.domain.base.services.CancelOrderItem;
-import org.opentaps.domain.base.services.CancelOrderItemInvResQty;
-import org.opentaps.domain.base.services.ChangeOrderItemStatus;
-import org.opentaps.domain.base.services.CompleteInventoryTransfer;
-import org.opentaps.domain.base.services.CreateInventoryTransfer;
-import org.opentaps.domain.base.services.CreatePartyPostalAddress;
-import org.opentaps.domain.base.services.CreatePaymentFromPreference;
-import org.opentaps.domain.base.services.CreatePhysicalInventoryAndVariance;
-import org.opentaps.domain.base.services.CreatePicklistFromOrders;
-import org.opentaps.domain.base.services.FindOrdersToPickMove;
-import org.opentaps.domain.base.services.GetInventoryAvailableByFacility;
-import org.opentaps.domain.base.services.GetProduct;
-import org.opentaps.domain.base.services.OpentapsAppendOrderItem;
-import org.opentaps.domain.base.services.OpentapsInvoiceNonPhysicalOrderItems;
-import org.opentaps.domain.base.services.OpentapsUpdateOrderItems;
-import org.opentaps.domain.base.services.QuickShipOrderByItem;
-import org.opentaps.domain.base.services.ReserveProductInventoryByFacility;
-import org.opentaps.domain.base.services.ReserveStoreInventory;
-import org.opentaps.domain.base.services.SetInvoiceReadyAndCheckIfPaid;
-import org.opentaps.domain.base.services.TestShipOrder;
-import org.opentaps.domain.base.services.TestShipOrderManual;
-import org.opentaps.domain.base.services.UpdateInventoryItem;
-import org.opentaps.domain.base.services.UpdatePostalAddress;
-import org.opentaps.domain.base.services.UpdateProductStore;
+import org.opentaps.domain.base.services.CancelOrderItemService;
+import org.opentaps.domain.base.services.CancelOrderItemInvResQtyService;
+import org.opentaps.domain.base.services.ChangeOrderItemStatusService;
+import org.opentaps.domain.base.services.CompleteInventoryTransferService;
+import org.opentaps.domain.base.services.CreateInventoryTransferService;
+import org.opentaps.domain.base.services.CreatePartyPostalAddressService;
+import org.opentaps.domain.base.services.CreatePaymentFromPreferenceService;
+import org.opentaps.domain.base.services.CreatePhysicalInventoryAndVarianceService;
+import org.opentaps.domain.base.services.CreatePicklistFromOrdersService;
+import org.opentaps.domain.base.services.FindOrdersToPickMoveService;
+import org.opentaps.domain.base.services.GetInventoryAvailableByFacilityService;
+import org.opentaps.domain.base.services.GetProductService;
+import org.opentaps.domain.base.services.OpentapsAppendOrderItemService;
+import org.opentaps.domain.base.services.OpentapsInvoiceNonPhysicalOrderItemsService;
+import org.opentaps.domain.base.services.OpentapsUpdateOrderItemsService;
+import org.opentaps.domain.base.services.QuickShipOrderByItemService;
+import org.opentaps.domain.base.services.ReserveProductInventoryByFacilityService;
+import org.opentaps.domain.base.services.ReserveStoreInventoryService;
+import org.opentaps.domain.base.services.SetInvoiceReadyAndCheckIfPaidService;
+import org.opentaps.domain.base.services.TestShipOrderService;
+import org.opentaps.domain.base.services.TestShipOrderManualService;
+import org.opentaps.domain.base.services.UpdateInventoryItemService;
+import org.opentaps.domain.base.services.UpdatePostalAddressService;
+import org.opentaps.domain.base.services.UpdateProductStoreService;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
@@ -219,7 +219,7 @@ public class OrderTests extends OrderTestCase {
 
         // Call opentaps.appendOrderItem to add 1 additional GZ-1000
         // append item to order by UPC
-        OpentapsAppendOrderItem service = new OpentapsAppendOrderItem();
+        OpentapsAppendOrderItemService service = new OpentapsAppendOrderItemService();
         service.setInUserLogin(admin);
         service.setInOrderId(salesOrder.getOrderId());
         service.setInProductId("043000285213");
@@ -427,7 +427,7 @@ public class OrderTests extends OrderTestCase {
         }
 
         // set the ProductStore's reserveOrderEnumId to FIFO Received
-        UpdateProductStore service = new UpdateProductStore();
+        UpdateProductStoreService service = new UpdateProductStoreService();
         service.setInUserLogin(admin);
         service.setInProductStoreId("9000");
         service.setInReserveOrderEnumId("INVRO_FIFO_REC");
@@ -442,7 +442,7 @@ public class OrderTests extends OrderTestCase {
         Debug.logInfo("testSerializedInventoryReservation created order [" + orderId + "]", MODULE);
 
         // verify ATP = 5
-        GetProduct getProduct = new GetProduct();
+        GetProductService getProduct = new GetProductService();
         getProduct.setInUserLogin(demowarehouse1);
         getProduct.setInProductId(productId);
         runAndAssertServiceSuccess(getProduct);
@@ -476,7 +476,7 @@ public class OrderTests extends OrderTestCase {
         assertProductATP(product, new BigDecimal("10.0"));
 
         // set the ProductStore's reserveOrderEnumId to LIFO Received
-        service = new UpdateProductStore();
+        service = new UpdateProductStoreService();
         service.setInUserLogin(admin);
         service.setInProductStoreId("9000");
         service.setInReserveOrderEnumId("INVRO_LIFO_REC");
@@ -639,9 +639,9 @@ public class OrderTests extends OrderTestCase {
 
         // set status of first two inventory items to Defective
         int i = 0;
-        UpdateInventoryItem updateInventoryItem;
+        UpdateInventoryItemService updateInventoryItem;
         for (GenericValue inventoryItem : inventories) {
-            updateInventoryItem = new UpdateInventoryItem();
+            updateInventoryItem = new UpdateInventoryItemService();
             updateInventoryItem.setInUserLogin(demowarehouse1);
             updateInventoryItem.setInInventoryItemId(inventoryItem.getString("inventoryItemId"));
             updateInventoryItem.setInStatusId("INV_DEFECTIVE");
@@ -659,7 +659,7 @@ public class OrderTests extends OrderTestCase {
         List<String> availableInventoryIds = EntityUtil.getFieldListFromEntityList(availableInventories, "inventoryItemId", true);
 
         // check availability for the product. Expected QOH/ATP = 3
-        GetProduct getProduct = new GetProduct();
+        GetProductService getProduct = new GetProductService();
         getProduct.setInUserLogin(demowarehouse1);
         getProduct.setInProductId(productId);
         runAndAssertServiceSuccess(getProduct);
@@ -724,7 +724,7 @@ public class OrderTests extends OrderTestCase {
         String inventoryItemId = (String) inventory.get("inventoryItemId");
 
         // create a physical inventory variance for -2.0 QOH and -2.0 ATP with reason "Damaged"
-        CreatePhysicalInventoryAndVariance call = new CreatePhysicalInventoryAndVariance();
+        CreatePhysicalInventoryAndVarianceService call = new CreatePhysicalInventoryAndVarianceService();
         call.setInUserLogin(demowarehouse1);
         call.setInInventoryItemId(inventoryItemId);
         call.setInAvailableToPromiseVar(new BigDecimal("-2.0"));
@@ -733,7 +733,7 @@ public class OrderTests extends OrderTestCase {
         runAndAssertServiceSuccess(call);
 
         // check availability for the product. Expected QOH/ATP = 3
-        GetProduct getProduct = new GetProduct();
+        GetProductService getProduct = new GetProductService();
         getProduct.setInUserLogin(demowarehouse1);
         getProduct.setInProductId(productId);
         runAndAssertServiceSuccess(getProduct);
@@ -899,7 +899,7 @@ public class OrderTests extends OrderTestCase {
 
         // This is a hack to force the creation of promo items:
         //  Update the order with same quantities
-        OpentapsUpdateOrderItems updateItems = new OpentapsUpdateOrderItems();
+        OpentapsUpdateOrderItemsService updateItems = new OpentapsUpdateOrderItemsService();
         updateItems.setInUserLogin(User);
         updateItems.setInOrderId(orderId);
         updateItems.setInItemQtyMap(UtilMisc.toMap(GZ1005Item.getOrderItemSeqId() + ":00001", "1.0", WG1111Item.getOrderItemSeqId() + ":00001", "10.0"));
@@ -935,7 +935,7 @@ public class OrderTests extends OrderTestCase {
         assertEquals("Order [" + orderId + "] global adjustment incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-283.99"));
 
         // 3. cancel 8 x WG-1111
-        CancelOrderItem cancelItem = new CancelOrderItem();
+        CancelOrderItemService cancelItem = new CancelOrderItemService();
         cancelItem.setInUserLogin(User);
         cancelItem.setInOrderId(orderId);
         cancelItem.setInOrderItemSeqId(WG1111Item.getOrderItemSeqId());
@@ -966,7 +966,7 @@ public class OrderTests extends OrderTestCase {
         assertEquals("Order [" + orderId + "] global adjustment incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-236.00"));
 
         // 5. cancel 1x GZ-1005
-        cancelItem = new CancelOrderItem();
+        cancelItem = new CancelOrderItemService();
         cancelItem.setInUserLogin(User);
         cancelItem.setInOrderId(orderId);
         cancelItem.setInOrderItemSeqId(GZ1005Item.getOrderItemSeqId());
@@ -993,7 +993,7 @@ public class OrderTests extends OrderTestCase {
         assertEquals("Order [" + orderId + "] global adjustment incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-12.00"));
 
         // 7. cancel remaining 2x WG-1111
-        cancelItem = new CancelOrderItem();
+        cancelItem = new CancelOrderItemService();
         cancelItem.setInUserLogin(User);
         cancelItem.setInOrderId(orderId);
         cancelItem.setInOrderItemSeqId(WG1111Item.getOrderItemSeqId());
@@ -1058,7 +1058,7 @@ public class OrderTests extends OrderTestCase {
         Debug.logInfo("testCancelByUpdateOrderItems created order [" + orderId + "]", MODULE);
 
         // cancel the items by changing its quantity to 0
-        OpentapsUpdateOrderItems updateItems = new OpentapsUpdateOrderItems();
+        OpentapsUpdateOrderItemsService updateItems = new OpentapsUpdateOrderItemsService();
         updateItems.setInUserLogin(User);
         updateItems.setInOrderId(orderId);
         updateItems.setInItemQtyMap(UtilMisc.toMap("00001:00001", "0.0", "00002:00001", ".0"));
@@ -1074,7 +1074,7 @@ public class OrderTests extends OrderTestCase {
         Debug.logInfo("testCancelByUpdateOrderItems created second order [" + orderId + "]", MODULE);
 
         // cancel the items by changing its quantity to 0
-        updateItems = new OpentapsUpdateOrderItems();
+        updateItems = new OpentapsUpdateOrderItemsService();
         updateItems.setInUserLogin(User);
         updateItems.setInOrderId(orderId);
         updateItems.setInItemQtyMap(UtilMisc.toMap("00001:00001", "0.0", "00002:00001", ".0"));
@@ -1125,7 +1125,7 @@ public class OrderTests extends OrderTestCase {
         // pack and ship 2 out of 5
         Map<String, Map<String, BigDecimal>> toPackItems = new HashMap<String, Map<String, BigDecimal>>();
         toPackItems.put("00001", UtilMisc.toMap("00001", new BigDecimal("2.0")));
-        TestShipOrderManual ship = new TestShipOrderManual();
+        TestShipOrderManualService ship = new TestShipOrderManualService();
         ship.setInUserLogin(admin);
         ship.setInOrderId(orderId);
         ship.setInFacilityId(facilityId);
@@ -1134,7 +1134,7 @@ public class OrderTests extends OrderTestCase {
 
         // try to update the order item to 3, this should fail as we do not specify what to do with the adjustments
         // and there are already some adjustments billed
-        OpentapsUpdateOrderItems updateItems = new OpentapsUpdateOrderItems();
+        OpentapsUpdateOrderItemsService updateItems = new OpentapsUpdateOrderItemsService();
         updateItems.setInUserLogin(DemoCSR);
         updateItems.setInOrderId(orderId);
         updateItems.setInItemDescriptionMap(UtilMisc.toMap("00001", "updated quantity to 3"));
@@ -1144,7 +1144,7 @@ public class OrderTests extends OrderTestCase {
         runAndAssertServiceError(updateItems);
 
         // update quantity of the order item to 3, specify forceComplete and NOT to recalculate the adjustments
-        updateItems = new OpentapsUpdateOrderItems();
+        updateItems = new OpentapsUpdateOrderItemsService();
         updateItems.setInUserLogin(DemoCSR);
         updateItems.setInOrderId(orderId);
         updateItems.setInItemDescriptionMap(UtilMisc.toMap("00001", "updated quantity to 3"));
@@ -1170,7 +1170,7 @@ public class OrderTests extends OrderTestCase {
         assertEquals("ATP has changed by -3", finalAtp, initAtp.subtract(new BigDecimal("3.0")));
         assertEquals("QOH has changed by -2", finalQoh, initQoh.subtract(new BigDecimal("2.0")));
 
-        updateItems = new OpentapsUpdateOrderItems();
+        updateItems = new OpentapsUpdateOrderItemsService();
         updateItems.setInUserLogin(DemoCSR);
         updateItems.setInOrderId(orderId);
         updateItems.setInItemDescriptionMap(UtilMisc.toMap("00001", "updated quantity to 3"));
@@ -1214,7 +1214,7 @@ public class OrderTests extends OrderTestCase {
         Debug.logInfo("testInventoryOverReservation created order [" + salesOrder.getOrderId() + "]", MODULE);
 
         // try to reserve more inventory using various methods
-        ReserveProductInventoryByFacility commonInput = new ReserveProductInventoryByFacility();
+        ReserveProductInventoryByFacilityService commonInput = new ReserveProductInventoryByFacilityService();
         commonInput.setInOrderId(salesOrder.getOrderId());
         commonInput.setInOrderItemSeqId("00001");
         commonInput.setInQuantity(new BigDecimal("1.0"));
@@ -1222,17 +1222,17 @@ public class OrderTests extends OrderTestCase {
         commonInput.setInShipGroupSeqId("00001");
         commonInput.setInProductId(GZ1005.getString("productId"));
 
-        ReserveStoreInventory reserveStoreInventory = ReserveStoreInventory.fromInput(commonInput.inputMap());
+        ReserveStoreInventoryService reserveStoreInventory = ReserveStoreInventoryService.fromInput(commonInput.inputMap());
         reserveStoreInventory.setInProductStoreId(productStoreId);
         runAndAssertServiceError(reserveStoreInventory);
 
-        ReserveProductInventoryByFacility reserveProductInventoryByFacility = ReserveProductInventoryByFacility.fromInput(commonInput);
+        ReserveProductInventoryByFacilityService reserveProductInventoryByFacility = ReserveProductInventoryByFacilityService.fromInput(commonInput);
         reserveProductInventoryByFacility.setInFacilityId(facilityId);
         reserveProductInventoryByFacility.setInRequireInventory("N");
         runAndAssertServiceError(reserveProductInventoryByFacility);
 
         // cancel the reservation
-        CancelOrderItemInvResQty cancelOrderItemInvResQty = new CancelOrderItemInvResQty();
+        CancelOrderItemInvResQtyService cancelOrderItemInvResQty = new CancelOrderItemInvResQtyService();
         cancelOrderItemInvResQty.setInUserLogin(admin);
         cancelOrderItemInvResQty.setInOrderId(salesOrder.getOrderId());
         cancelOrderItemInvResQty.setInOrderItemSeqId("00001");
@@ -1240,27 +1240,27 @@ public class OrderTests extends OrderTestCase {
         runAndAssertServiceSuccess(cancelOrderItemInvResQty);
 
         // reserve one item
-        reserveProductInventoryByFacility = ReserveProductInventoryByFacility.fromInput(commonInput);
+        reserveProductInventoryByFacility = ReserveProductInventoryByFacilityService.fromInput(commonInput);
         reserveProductInventoryByFacility.setInFacilityId(facilityId);
         reserveProductInventoryByFacility.setInRequireInventory("N");
         runAndAssertServiceSuccess(reserveProductInventoryByFacility);
 
         // reserve 5 more items (total 6), causing an error due to over reservation of 1
-        reserveProductInventoryByFacility = ReserveProductInventoryByFacility.fromInput(commonInput);
+        reserveProductInventoryByFacility = ReserveProductInventoryByFacilityService.fromInput(commonInput);
         reserveProductInventoryByFacility.setInFacilityId(facilityId);
         reserveProductInventoryByFacility.setInRequireInventory("N");
         reserveProductInventoryByFacility.setInQuantity(new BigDecimal("5"));
         runAndAssertServiceError(reserveProductInventoryByFacility);
 
         // reserve 4 more
-        reserveProductInventoryByFacility = ReserveProductInventoryByFacility.fromInput(commonInput);
+        reserveProductInventoryByFacility = ReserveProductInventoryByFacilityService.fromInput(commonInput);
         reserveProductInventoryByFacility.setInFacilityId(facilityId);
         reserveProductInventoryByFacility.setInRequireInventory("N");
         reserveProductInventoryByFacility.setInQuantity(new BigDecimal("4"));
         runAndAssertServiceSuccess(reserveProductInventoryByFacility);
 
         // ensure error on any more reservations
-        reserveProductInventoryByFacility = ReserveProductInventoryByFacility.fromInput(commonInput);
+        reserveProductInventoryByFacility = ReserveProductInventoryByFacilityService.fromInput(commonInput);
         reserveProductInventoryByFacility.setInFacilityId(facilityId);
         reserveProductInventoryByFacility.setInRequireInventory("N");
         reserveProductInventoryByFacility.setInQuantity(new BigDecimal("1"));
@@ -1304,7 +1304,7 @@ public class OrderTests extends OrderTestCase {
         inventoryAsserts.assertInventoryChange(productId, new BigDecimal("10.0"), new BigDecimal("3.0"), initialInventory);
 
         // 7. Use createPhysicalInventoryVariance to change ATP and QOH of the inventoryItem from +3 by -7 and from +10 by 0
-        CreatePhysicalInventoryAndVariance createPhysicalInventoryAndVariance = new CreatePhysicalInventoryAndVariance();
+        CreatePhysicalInventoryAndVarianceService createPhysicalInventoryAndVariance = new CreatePhysicalInventoryAndVarianceService();
         createPhysicalInventoryAndVariance.setInUserLogin(demowarehouse1);
         createPhysicalInventoryAndVariance.setInInventoryItemId(inventoryItemId);
         createPhysicalInventoryAndVariance.setInAvailableToPromiseVar(new BigDecimal("-10.0"));
@@ -1434,7 +1434,7 @@ public class OrderTests extends OrderTestCase {
         inventoryItemIds.add(inventoryItemId);
 
         // 8. use createPhysicalInventoryVariance service to increase ATP and QOH of newly received item by +5 and +5
-        CreatePhysicalInventoryAndVariance createPhysicalInventoryAndVariance = new CreatePhysicalInventoryAndVariance();
+        CreatePhysicalInventoryAndVarianceService createPhysicalInventoryAndVariance = new CreatePhysicalInventoryAndVarianceService();
         createPhysicalInventoryAndVariance.setInUserLogin(demowarehouse1);
         createPhysicalInventoryAndVariance.setInInventoryItemId(inventoryItemId);
         createPhysicalInventoryAndVariance.setInAvailableToPromiseVar(new BigDecimal("5.0"));
@@ -1585,7 +1585,7 @@ public class OrderTests extends OrderTestCase {
         // perform service B
         GenericValue serviceItemB = EntityUtil.getFirst(delegator.findByAnd("OrderItem", UtilMisc.toMap("orderId", orderId, "productId", serviceB.get("productId"))));
         assertNotNull(serviceItemB);
-        ChangeOrderItemStatus changeOrderItemStatus = new ChangeOrderItemStatus();
+        ChangeOrderItemStatusService changeOrderItemStatus = new ChangeOrderItemStatusService();
         changeOrderItemStatus.setInUserLogin(admin);
         changeOrderItemStatus.setInOrderId(orderId);
         changeOrderItemStatus.setInOrderItemSeqId(serviceItemB.getString("orderItemSeqId"));
@@ -1593,7 +1593,7 @@ public class OrderTests extends OrderTestCase {
         runAndAssertServiceSuccess(changeOrderItemStatus);
 
         // invoice the order
-        OpentapsInvoiceNonPhysicalOrderItems invoiceNonPhysicalOrderItems = new OpentapsInvoiceNonPhysicalOrderItems();
+        OpentapsInvoiceNonPhysicalOrderItemsService invoiceNonPhysicalOrderItems = new OpentapsInvoiceNonPhysicalOrderItemsService();
         invoiceNonPhysicalOrderItems.setInUserLogin(admin);
         invoiceNonPhysicalOrderItems.setInOrderId(orderId);
         runAndAssertServiceSuccess(invoiceNonPhysicalOrderItems);
@@ -1615,7 +1615,7 @@ public class OrderTests extends OrderTestCase {
         }
 
         // ship the order and ensure header and items are completed
-        TestShipOrder ship = new TestShipOrder();
+        TestShipOrderService ship = new TestShipOrderService();
         ship.setInUserLogin(demowarehouse1);
         ship.setInOrderId(orderId);
         ship.setInFacilityId(facilityId);
@@ -1642,7 +1642,7 @@ public class OrderTests extends OrderTestCase {
         Debug.logInfo("testDontShipOrder has created order [" + salesOrder.getOrderId() + "]", MODULE);
 
         // try ship test order
-        TestShipOrder ship = new TestShipOrder();
+        TestShipOrderService ship = new TestShipOrderService();
         ship.setInUserLogin(demowarehouse1);
         ship.setInOrderId(salesOrder.getOrderId());
         ship.setInFacilityId(facilityId);
@@ -1686,7 +1686,7 @@ public class OrderTests extends OrderTestCase {
         Debug.logInfo("testSplitShipment created order [" + orderId + "]", MODULE);
 
         // 5.  Ship 25 units
-        QuickShipOrderByItem quickShipOrderByItem = new QuickShipOrderByItem();
+        QuickShipOrderByItemService quickShipOrderByItem = new QuickShipOrderByItemService();
         quickShipOrderByItem.setInUserLogin(admin);
         quickShipOrderByItem.setInOrderId(orderId);
         quickShipOrderByItem.setInShipGroupSeqId("00001");
@@ -1695,7 +1695,7 @@ public class OrderTests extends OrderTestCase {
         runAndAssertServiceSuccess(quickShipOrderByItem);
 
         // 6.  Cancel 25 units
-        CancelOrderItem cancelItem = new CancelOrderItem();
+        CancelOrderItemService cancelItem = new CancelOrderItemService();
         cancelItem.setInUserLogin(DemoCSR);
         cancelItem.setInOrderId(orderId);
         cancelItem.setInOrderItemSeqId("00001");
@@ -1866,7 +1866,7 @@ public class OrderTests extends OrderTestCase {
 
         // 6. Cancel the ship group (manullay building the whole map to match what the web interface would send)
         Debug.logInfo("testCancelOrderWithPromoItems Cancelling ship group ......", MODULE);
-        OpentapsUpdateOrderItems updateOrderItems = new OpentapsUpdateOrderItems();
+        OpentapsUpdateOrderItemsService updateOrderItems = new OpentapsUpdateOrderItemsService();
         updateOrderItems.setInUserLogin(DemoCSR);
         updateOrderItems.setInOrderId(orderId);
         updateOrderItems.setInOverridePriceMap(new HashMap());
@@ -1943,7 +1943,7 @@ public class OrderTests extends OrderTestCase {
         for (Invoice invoice : invoices) {
             // this special method will check for payments applied to invoice and mark it after it has been PAID
             // otherwise, setting invoice to READY won't do it.
-            SetInvoiceReadyAndCheckIfPaid setInvoiceReadyAndCheckIfPaid = new SetInvoiceReadyAndCheckIfPaid();
+            SetInvoiceReadyAndCheckIfPaidService setInvoiceReadyAndCheckIfPaid = new SetInvoiceReadyAndCheckIfPaidService();
             setInvoiceReadyAndCheckIfPaid.setInUserLogin(admin);
             setInvoiceReadyAndCheckIfPaid.setInInvoiceId(invoice.getInvoiceId());
             runAndAssertServiceSuccess(setInvoiceReadyAndCheckIfPaid);
@@ -1972,7 +1972,7 @@ public class OrderTests extends OrderTestCase {
         assignDefaultPrice(testProduct, new BigDecimal("50.0"), admin);
 
         // create a new shipping address
-        CreatePartyPostalAddress createPartyPostalAddress = new CreatePartyPostalAddress();
+        CreatePartyPostalAddressService createPartyPostalAddress = new CreatePartyPostalAddressService();
         createPartyPostalAddress.setInUserLogin(admin);
         createPartyPostalAddress.setInPartyId(partyId);
         createPartyPostalAddress.setInToName("Shipping Address");
@@ -1999,7 +1999,7 @@ public class OrderTests extends OrderTestCase {
         testCreatesSalesOrder(order, partyId, productStoreId, "EXT_OFFLINE", null, contactMechId);
 
         // verify the ATP went down by 2 for this product in my retail store warehouse
-        GetInventoryAvailableByFacility getInventoryAvailableByFacility = new GetInventoryAvailableByFacility();
+        GetInventoryAvailableByFacilityService getInventoryAvailableByFacility = new GetInventoryAvailableByFacilityService();
         getInventoryAvailableByFacility.setInProductId(testProduct.getString("productId"));
         getInventoryAvailableByFacility.setInFacilityId("MyRetailStore");
         runAndAssertServiceSuccess(getInventoryAvailableByFacility);
@@ -2008,7 +2008,7 @@ public class OrderTests extends OrderTestCase {
         assertEquals("ATP of product went down by expected amount in MyRetailStore", -2.0, atp);
 
         // update the address and repeat test (we'll use updatePostalAddress since that's the core service called by all update address services)
-        UpdatePostalAddress updatePostalAddress = new UpdatePostalAddress();
+        UpdatePostalAddressService updatePostalAddress = new UpdatePostalAddressService();
         updatePostalAddress.setInUserLogin(admin);
         updatePostalAddress.setInAddress1("Test Street Version 2");
         updatePostalAddress.setInCity("New York");
@@ -2031,7 +2031,7 @@ public class OrderTests extends OrderTestCase {
         order.put(testProduct, new BigDecimal("2.0"));
         User = DemoCSR;
         testCreatesSalesOrder(order, partyId, productStoreId, "EXT_OFFLINE", null, contactMechId);
-        getInventoryAvailableByFacility = new GetInventoryAvailableByFacility();
+        getInventoryAvailableByFacility = new GetInventoryAvailableByFacilityService();
         getInventoryAvailableByFacility.setInProductId(testProduct.getString("productId"));
         getInventoryAvailableByFacility.setInFacilityId("MyRetailStore");
         runAndAssertServiceSuccess(getInventoryAvailableByFacility);
@@ -2077,7 +2077,7 @@ public class OrderTests extends OrderTestCase {
         oppParams.put("paymentMethodTypeId", "CREDIT_CARD");
         delegator.create("OrderPaymentPreference", oppParams);
 
-        CreatePaymentFromPreference createPaymentFromPreference = new CreatePaymentFromPreference();
+        CreatePaymentFromPreferenceService createPaymentFromPreference = new CreatePaymentFromPreferenceService();
         createPaymentFromPreference.setInUserLogin(admin);
         createPaymentFromPreference.setInOrderPaymentPreferenceId(paymentPref1);
         createPaymentFromPreference.setInPaymentFromId(customerPartyId);
@@ -2091,7 +2091,7 @@ public class OrderTests extends OrderTestCase {
         oppParams.put("maxAmount", orderFactory.getGrandTotal().subtract(new BigDecimal("100")));
         delegator.create("OrderPaymentPreference", oppParams);
 
-        createPaymentFromPreference = new CreatePaymentFromPreference();
+        createPaymentFromPreference = new CreatePaymentFromPreferenceService();
         createPaymentFromPreference.setInUserLogin(admin);
         createPaymentFromPreference.setInOrderPaymentPreferenceId(paymentPref2);
         createPaymentFromPreference.setInPaymentFromId(customerPartyId);
@@ -2100,7 +2100,7 @@ public class OrderTests extends OrderTestCase {
         runAndAssertServiceSuccess(createPaymentFromPreference);
 
         // 7.  Ship the order
-        TestShipOrder ship = new TestShipOrder();
+        TestShipOrderService ship = new TestShipOrderService();
         ship.setInUserLogin(demowarehouse1);
         ship.setInOrderId(orderId);
         ship.setInFacilityId(facilityId);
@@ -2336,7 +2336,7 @@ public class OrderTests extends OrderTestCase {
         Debug.logInfo("After re-reserved to another facility ReservedQuantity: " + afterReservedQuantity, MODULE);
         assertEquals("after product re-reserved to another facility, OrderItem.getReservedQuantity() should not changed.", afterReservedQuantity, beforeReservedQuantity);
         // cancel the order
-        CancelOrderItem cancelOrderItem = new CancelOrderItem();
+        CancelOrderItemService cancelOrderItem = new CancelOrderItemService();
         cancelOrderItem.setInUserLogin(DemoCSR);
         cancelOrderItem.setInOrderId(orderFactory.getOrderId());
         cancelOrderItem.setInOrderItemSeqId("00001");
@@ -2400,7 +2400,7 @@ public class OrderTests extends OrderTestCase {
         assertEquals("Quantity backordered for the order item.", orderItem.getShortfalledQuantity(), BigDecimal.valueOf(2.0));
 
         // transfer 5 from Web Store to My Retail Store
-        CreateInventoryTransfer createInventoryTransfer = new CreateInventoryTransfer();
+        CreateInventoryTransferService createInventoryTransfer = new CreateInventoryTransferService();
         createInventoryTransfer.setInUserLogin(demowarehouse1);
         createInventoryTransfer.setInFacilityId(facilityId);
         createInventoryTransfer.setInFacilityIdTo(facilityId1);
@@ -2410,7 +2410,7 @@ public class OrderTests extends OrderTestCase {
         runAndAssertServiceSuccess(createInventoryTransfer);
         String inventoryTransferId  = createInventoryTransfer.getOutInventoryTransferId();
 
-        CompleteInventoryTransfer completeInventoryTransfer = new CompleteInventoryTransfer();
+        CompleteInventoryTransferService completeInventoryTransfer = new CompleteInventoryTransferService();
         completeInventoryTransfer.setInUserLogin(demowarehouse1);
         completeInventoryTransfer.setInInventoryTransferId(inventoryTransferId);
         pause("Workaround pause for MySQL");
@@ -2498,7 +2498,7 @@ public class OrderTests extends OrderTestCase {
         String inventoryItemId2 = inventoryItem.getString("inventoryItemId");
 
         // cancel the order
-        CancelOrderItem cancelOrderItem = new CancelOrderItem();
+        CancelOrderItemService cancelOrderItem = new CancelOrderItemService();
         cancelOrderItem.setInUserLogin(DemoCSR);
         cancelOrderItem.setInOrderId(orderFactory.getOrderId());
         cancelOrderItem.setInOrderItemSeqId("00001");
@@ -2710,14 +2710,14 @@ public class OrderTests extends OrderTestCase {
         GenericValue customer = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId));
 
         // record each store findOrdersToPickMove initial number
-        FindOrdersToPickMove findOrdersToPickMove = new FindOrdersToPickMove();
+        FindOrdersToPickMoveService findOrdersToPickMove = new FindOrdersToPickMoveService();
         findOrdersToPickMove.setInUserLogin(admin);
         findOrdersToPickMove.setInFacilityId(facilityId);
         findOrdersToPickMove.setInMaxNumberOfOrders(new Long(1000));
         runAndAssertServiceSuccess(findOrdersToPickMove);
         Long webStoreReadyToPickInitNumber = findOrdersToPickMove.getOutNReturnedOrders();
 
-        findOrdersToPickMove = new FindOrdersToPickMove();
+        findOrdersToPickMove = new FindOrdersToPickMoveService();
         findOrdersToPickMove.setInUserLogin(admin);
         findOrdersToPickMove.setInFacilityId(facilityId1);
         findOrdersToPickMove.setInMaxNumberOfOrders(new Long(1000));
@@ -2822,7 +2822,7 @@ public class OrderTests extends OrderTestCase {
         // this should test the findOrdersToPickMove service which return the number of order ready to pick
         // so we need to test this value before creating the order, and now, and check the quantity increased by 2 (because of the two ship groups)
         // this should be checked on both facilities
-        findOrdersToPickMove = new FindOrdersToPickMove();
+        findOrdersToPickMove = new FindOrdersToPickMoveService();
         findOrdersToPickMove.setInUserLogin(admin);
         findOrdersToPickMove.setInFacilityId(facilityId);
         findOrdersToPickMove.setInMaxNumberOfOrders(new Long(1000));
@@ -2830,7 +2830,7 @@ public class OrderTests extends OrderTestCase {
         Long webStoreReadyToPickCurrentNumber = findOrdersToPickMove.getOutNReturnedOrders();
         assertEquals("quantity of order ready to pick should increased by 1 in Facility [" + facilityId + "]", (int) (webStoreReadyToPickInitNumber + 2), webStoreReadyToPickCurrentNumber.intValue());
 
-        findOrdersToPickMove = new FindOrdersToPickMove();
+        findOrdersToPickMove = new FindOrdersToPickMoveService();
         findOrdersToPickMove.setInUserLogin(admin);
         findOrdersToPickMove.setInFacilityId(facilityId1);
         findOrdersToPickMove.setInMaxNumberOfOrders(new Long(1000));
@@ -2846,7 +2846,7 @@ public class OrderTests extends OrderTestCase {
         // -- should have 5 x productA, 3 x productB and 7 x productC in the picklist for Web Store
         // -- should have 5 x ProductB and 3 x productC in the picklist for My Retail Store
         List orderIdList = UtilMisc.toList(order.getOrderId());
-        CreatePicklistFromOrders createPicklistFromOrders = new CreatePicklistFromOrders();
+        CreatePicklistFromOrdersService createPicklistFromOrders = new CreatePicklistFromOrdersService();
         createPicklistFromOrders.setInUserLogin(admin);
         createPicklistFromOrders.setInOrderIdList(orderIdList);
         createPicklistFromOrders.setInFacilityId(facilityId);
@@ -2891,7 +2891,7 @@ public class OrderTests extends OrderTestCase {
         assertTrue("should have 3 x productC in the picklist for Web Store", have3ProductCForWebStore);
         assertTrue("should have 4 x productC in the picklist for Web Store", have4ProductCForWebStore);
 
-        createPicklistFromOrders = new CreatePicklistFromOrders();
+        createPicklistFromOrders = new CreatePicklistFromOrdersService();
         createPicklistFromOrders.setInUserLogin(admin);
         createPicklistFromOrders.setInOrderIdList(orderIdList);
         createPicklistFromOrders.setInFacilityId(facilityId1);
@@ -2929,7 +2929,7 @@ public class OrderTests extends OrderTestCase {
         // -- ship group 1: 5 x productA, 3 x productB and 3 x productC
         // -- ship group 2: 4 x productC
         // check that 2 invoices were created
-        TestShipOrder testShipOrder = new TestShipOrder();
+        TestShipOrderService testShipOrder = new TestShipOrderService();
         testShipOrder.setInUserLogin(demowarehouse1);
         testShipOrder.setInOrderId(order.getOrderId());
         testShipOrder.setInFacilityId(facilityId);
@@ -2982,7 +2982,7 @@ public class OrderTests extends OrderTestCase {
         // check that OrderItemShipGroup status IS OISG_PACKED for ship group 1
         // check 1 shipments was created and contains the correct items: 5 x productB
         // check that 1 invoices was created
-        testShipOrder = new TestShipOrder();
+        testShipOrder = new TestShipOrderService();
         testShipOrder.setInUserLogin(demowarehouse1);
         testShipOrder.setInOrderId(order.getOrderId());
         testShipOrder.setInFacilityId(facilityId1);
@@ -3015,7 +3015,7 @@ public class OrderTests extends OrderTestCase {
         // check that OrderItemShipGroup status IS OISG_PACKED for ship group 1 and 2
         // check 1 shipments was created and contains the correct items: 3 x productC
         // check that 1 invoices was created
-        testShipOrder = new TestShipOrder();
+        testShipOrder = new TestShipOrderService();
         testShipOrder.setInUserLogin(demowarehouse1);
         testShipOrder.setInOrderId(order.getOrderId());
         testShipOrder.setInFacilityId(facilityId1);
@@ -3106,7 +3106,7 @@ public class OrderTests extends OrderTestCase {
         Order order = orderRepository.getOrderById(salesOrder.getOrderId());
 
         // pack order
-        TestShipOrder testShipOrder = new TestShipOrder();
+        TestShipOrderService testShipOrder = new TestShipOrderService();
         testShipOrder.setInUserLogin(demowarehouse1);
         testShipOrder.setInOrderId(order.getOrderId());
         testShipOrder.setInFacilityId(facilityId);
@@ -3273,7 +3273,7 @@ public class OrderTests extends OrderTestCase {
 
         // This is a hack to force the creation of promo items:
         //  Update the order with same quantities
-        OpentapsUpdateOrderItems updateItems = new OpentapsUpdateOrderItems();
+        OpentapsUpdateOrderItemsService updateItems = new OpentapsUpdateOrderItemsService();
         updateItems.setInUserLogin(User);
         updateItems.setInOrderId(orderId);
         updateItems.setInItemQtyMap(UtilMisc.toMap(WG1111Item.getOrderItemSeqId() + ":00001", "10.0", WG5569Item.getOrderItemSeqId() + ":00001", "10.0"));
@@ -3328,7 +3328,7 @@ public class OrderTests extends OrderTestCase {
         // 2. ship 1x WG-1111
         Map<String, Map<String, BigDecimal>> itemsToPack = FastMap.newInstance();
         itemsToPack.put("00001", UtilMisc.toMap(WG1111Item.getOrderItemSeqId(), new BigDecimal("1.0")));
-        TestShipOrderManual ship = new TestShipOrderManual();
+        TestShipOrderManualService ship = new TestShipOrderManualService();
         ship.setInUserLogin(admin);
         ship.setInOrderId(order.getOrderId());
         ship.setInFacilityId(facilityId);
@@ -3336,7 +3336,7 @@ public class OrderTests extends OrderTestCase {
         runAndAssertServiceSuccess(ship);
 
         // 3. cancel 8x WG-1111
-        CancelOrderItem cancelOrderItem = new CancelOrderItem();
+        CancelOrderItemService cancelOrderItem = new CancelOrderItemService();
         cancelOrderItem.setInUserLogin(User);
         cancelOrderItem.setInOrderId(orderId);
         cancelOrderItem.setInOrderItemSeqId(WG1111Item.getOrderItemSeqId());
@@ -3387,7 +3387,7 @@ public class OrderTests extends OrderTestCase {
         assertEquals("Order [" + orderId + "] global adjustment incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-60.00"));
 
         // 4. cancel the remaining normal WG-1111
-        cancelOrderItem = new CancelOrderItem();
+        cancelOrderItem = new CancelOrderItemService();
         cancelOrderItem.setInUserLogin(User);
         cancelOrderItem.setInOrderId(orderId);
         cancelOrderItem.setInOrderItemSeqId(WG1111Item.getOrderItemSeqId());
@@ -3437,7 +3437,7 @@ public class OrderTests extends OrderTestCase {
         assertEquals("Order [" + orderId + "] global adjustment incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-54.00"));
 
         // 5. cancel 10 remaining WG-5569
-        cancelOrderItem = new CancelOrderItem();
+        cancelOrderItem = new CancelOrderItemService();
         cancelOrderItem.setInUserLogin(User);
         cancelOrderItem.setInOrderId(orderId);
         cancelOrderItem.setInOrderItemSeqId(WG5569Item.getOrderItemSeqId());
@@ -3523,7 +3523,7 @@ public class OrderTests extends OrderTestCase {
 
         // This is a hack to force the creation of promo items:
         //  Update the order with same quantities
-        OpentapsUpdateOrderItems updateItems = new OpentapsUpdateOrderItems();
+        OpentapsUpdateOrderItemsService updateItems = new OpentapsUpdateOrderItemsService();
         updateItems.setInUserLogin(User);
         updateItems.setInOrderId(orderId);
         updateItems.setInItemQtyMap(UtilMisc.toMap(WG1111Item.getOrderItemSeqId() + ":00001", "10.0"));
@@ -3553,7 +3553,7 @@ public class OrderTests extends OrderTestCase {
         // 2. ship 1x WG-1111
         Map<String, Map<String, BigDecimal>> itemsToPack = FastMap.newInstance();
         itemsToPack.put("00001", UtilMisc.toMap(WG1111Item.getOrderItemSeqId(), new BigDecimal("1.0")));
-        TestShipOrderManual ship = new TestShipOrderManual();
+        TestShipOrderManualService ship = new TestShipOrderManualService();
         ship.setInUserLogin(admin);
         ship.setInOrderId(order.getOrderId());
         ship.setInFacilityId(facilityId);
@@ -3561,7 +3561,7 @@ public class OrderTests extends OrderTestCase {
         runAndAssertServiceSuccess(ship);
 
         // 3. cancel the remaining by not specifying the quantity
-        CancelOrderItem cancelOrderItem = new CancelOrderItem();
+        CancelOrderItemService cancelOrderItem = new CancelOrderItemService();
         cancelOrderItem.setInUserLogin(User);
         cancelOrderItem.setInOrderId(orderId);
         cancelOrderItem.setInOrderItemSeqId(WG1111Item.getOrderItemSeqId());

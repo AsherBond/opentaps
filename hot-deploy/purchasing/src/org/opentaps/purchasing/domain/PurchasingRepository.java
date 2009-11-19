@@ -18,17 +18,16 @@ package org.opentaps.purchasing.domain;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.service.GenericServiceException;
-import org.ofbiz.service.ServiceUtil;
 import org.opentaps.domain.base.entities.SupplierProduct;
+import org.opentaps.domain.base.services.CreateSupplierProductService;
+import org.opentaps.domain.base.services.GetSuppliersForProductService;
 import org.opentaps.domain.purchasing.PurchasingRepositoryInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
+import org.opentaps.foundation.service.ServiceException;
 
 /** {@inheritDoc} */
 public class PurchasingRepository extends Repository implements PurchasingRepositoryInterface {
@@ -46,17 +45,18 @@ public class PurchasingRepository extends Repository implements PurchasingReposi
     @SuppressWarnings("unchecked")
     public SupplierProduct getSupplierProduct(String supplierPartyId, String productId, BigDecimal quantityToPurchase, String currencyUomId) throws RepositoryException {
         GenericValue supplierProduct = null;
-        Map<String, Object> params = UtilMisc.<String, Object>toMap("productId", productId,
-                "partyId", supplierPartyId,
-                "currencyUomId", currencyUomId,
-                "quantity", quantityToPurchase);
         try {
-            Map<String, Object> result = getDispatcher().runSync("getSuppliersForProduct", params);
-            List<GenericValue> productSuppliers = (List<GenericValue>) result.get("supplierProducts");
+            GetSuppliersForProductService service = new GetSuppliersForProductService();
+            service.setInProductId(productId);
+            service.setInPartyId(supplierPartyId);
+            service.setInCurrencyUomId(currencyUomId);
+            service.setInQuantity(quantityToPurchase);
+            service.runSync(getInfrastructure());
+            List<GenericValue> productSuppliers = service.getOutSupplierProducts();
             if ((productSuppliers != null) && (productSuppliers.size() > 0)) {
                 supplierProduct = productSuppliers.get(0);
             }
-        } catch (GenericServiceException e) {
+        } catch (ServiceException e) {
             Debug.logError(e.getMessage(), MODULE);
         }
 
@@ -69,50 +69,50 @@ public class PurchasingRepository extends Repository implements PurchasingReposi
 
     /** {@inheritDoc} */
     public void createSupplierProduct(SupplierProduct supplierProduct) throws RepositoryException {
-        Map<String, Object> supplierProductMap = UtilMisc.<String, Object>toMap("productId", supplierProduct.getProductId());
-        supplierProductMap.put("supplierProductId", supplierProduct.getSupplierProductId());
+        CreateSupplierProductService service = new CreateSupplierProductService();
+        service.setInSupplierProductId(supplierProduct.getSupplierProductId());
         // contruct parameters for call service
-        supplierProductMap.put("partyId", supplierProduct.getPartyId());
-        supplierProductMap.put("minimumOrderQuantity",  supplierProduct.getMinimumOrderQuantity());
-        supplierProductMap.put("lastPrice",  supplierProduct.getLastPrice());
-        supplierProductMap.put("currencyUomId",  supplierProduct.getCurrencyUomId());
-        supplierProductMap.put("availableFromDate",  supplierProduct.getAvailableFromDate());
-        supplierProductMap.put("comments",  supplierProduct.getComments());
+        service.setInPartyId(supplierProduct.getPartyId());
+        service.setInMinimumOrderQuantity(supplierProduct.getMinimumOrderQuantity());
+        service.setInLastPrice(supplierProduct.getLastPrice());
+        service.setInCurrencyUomId(supplierProduct.getCurrencyUomId());
+        service.setInAvailableFromDate(supplierProduct.getAvailableFromDate());
+        service.setInComments(supplierProduct.getComments());
         if (supplierProduct.getAvailableThruDate() != null) {
-            supplierProductMap.put("availableThruDate",  supplierProduct.getAvailableThruDate());
+            service.setInAvailableThruDate(supplierProduct.getAvailableThruDate());
         }
         if (supplierProduct.getCanDropShip() != null) {
-            supplierProductMap.put("canDropShip",  supplierProduct.getCanDropShip());
+            service.setInCanDropShip(supplierProduct.getCanDropShip());
         }
         if (supplierProduct.getOrderQtyIncrements() != null) {
-            supplierProductMap.put("orderQtyIncrements",  supplierProduct.getOrderQtyIncrements());
+            service.setInOrderQtyIncrements(supplierProduct.getOrderQtyIncrements());
         }
         if (supplierProduct.getQuantityUomId() != null) {
-            supplierProductMap.put("quantityUomId",  supplierProduct.getQuantityUomId());
+            service.setInQuantityUomId(supplierProduct.getQuantityUomId());
         }
         if (supplierProduct.getStandardLeadTimeDays() != null) {
-            supplierProductMap.put("standardLeadTimeDays",  supplierProduct.getStandardLeadTimeDays());
+            service.setInStandardLeadTimeDays(supplierProduct.getStandardLeadTimeDays());
         }
         if (supplierProduct.getSupplierProductName() != null) {
-            supplierProductMap.put("supplierProductName",  supplierProduct.getSupplierProductName());
+            service.setInSupplierProductName(supplierProduct.getSupplierProductName());
         }
         if (supplierProduct.getSupplierPrefOrderId() != null) {
-            supplierProductMap.put("supplierPrefOrderId",  supplierProduct.getSupplierPrefOrderId());
+            service.setInSupplierPrefOrderId(supplierProduct.getSupplierPrefOrderId());
         }
         if (supplierProduct.getSupplierRatingTypeId() != null) {
-            supplierProductMap.put("supplierRatingTypeId",  supplierProduct.getSupplierRatingTypeId());
+            service.setInSupplierRatingTypeId(supplierProduct.getSupplierRatingTypeId());
         }
         if (supplierProduct.getUnitsIncluded() != null) {
-            supplierProductMap.put("unitsIncluded",  supplierProduct.getUnitsIncluded());
+            service.setInUnitsIncluded(supplierProduct.getUnitsIncluded());
         }
-        supplierProductMap.put("userLogin", getInfrastructure().getSystemUserLogin());
+        service.setInUserLogin(getInfrastructure().getSystemUserLogin());
         try {
             //call service to create supplierProduct
-            Map<String, Object> results = getDispatcher().runSync("createSupplierProduct", supplierProductMap);
-            if (ServiceUtil.isError(results)) {
+            service.runSync(getInfrastructure());
+            if (service.isError()) {
                 throw new RepositoryException("can not create supplier product");
             }
-        } catch (GenericServiceException e) {
+        } catch (ServiceException e) {
             throw new RepositoryException(e);
         }
     }

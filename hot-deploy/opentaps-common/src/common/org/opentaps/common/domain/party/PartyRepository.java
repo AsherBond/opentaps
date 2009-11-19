@@ -25,9 +25,7 @@ import java.util.Set;
 
 import javolution.util.FastList;
 import javolution.util.FastSet;
-
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
@@ -37,7 +35,6 @@ import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.service.GenericServiceException;
 import org.opentaps.common.party.PartyContactHelper;
 import org.opentaps.domain.base.entities.ExternalUser;
 import org.opentaps.domain.base.entities.PartyContactDetailByPurpose;
@@ -46,7 +43,7 @@ import org.opentaps.domain.base.entities.PartyNoteView;
 import org.opentaps.domain.base.entities.PartySummaryCRMView;
 import org.opentaps.domain.base.entities.PostalAddress;
 import org.opentaps.domain.base.entities.TelecomNumber;
-import org.opentaps.domain.base.entities.UserLogin;
+import org.opentaps.domain.base.services.GetPartyNameForDateService;
 import org.opentaps.domain.billing.payment.PaymentMethod;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.party.Account;
@@ -61,6 +58,7 @@ import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
+import org.opentaps.foundation.service.ServiceException;
 
 /** {@inheritDoc} */
 public class PartyRepository extends Repository implements PartyRepositoryInterface {
@@ -249,8 +247,12 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
     /** {@inheritDoc} */
     public Map<String, Object> getPartyNameForDate(Party party, Timestamp date) throws RepositoryException {
         try {
-            return getDispatcher().runSync("getPartyNameForDate", UtilMisc.toMap("userLogin", getUser().getOfbizUserLogin(), "partyId", party.getPartyId(), "compareDate", date));
-        } catch (GenericServiceException e) {
+            GetPartyNameForDateService service = new GetPartyNameForDateService(getUser());
+            service.setInPartyId(party.getPartyId());
+            service.setInCompareDate(date);
+            service.runSync(getInfrastructure());
+            return service.outputMap();
+        } catch (ServiceException e) {
             throw new RepositoryException(e);
         }
     }

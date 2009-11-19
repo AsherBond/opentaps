@@ -26,17 +26,14 @@ import java.util.TreeMap;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
-import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.service.GenericServiceException;
 import org.opentaps.common.domain.party.PartyRepository;
 import org.opentaps.common.util.UtilAccountingTags;
-import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.domain.base.entities.AcctgTagEnumType;
 import org.opentaps.domain.base.entities.AgreementTermTypesByDocumentType;
@@ -49,6 +46,7 @@ import org.opentaps.domain.base.entities.PartyAcctgPreference;
 import org.opentaps.domain.base.entities.PartyRole;
 import org.opentaps.domain.base.entities.PaymentMethod;
 import org.opentaps.domain.base.entities.TermType;
+import org.opentaps.domain.base.services.ConvertUomService;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
@@ -59,6 +57,7 @@ import org.opentaps.foundation.entity.hibernate.Query;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.foundation.service.ServiceException;
 
 /**
  * {@inheritDoc}
@@ -163,20 +162,22 @@ public class OrganizationRepository extends PartyRepository implements Organizat
             }
 
             // this does a currency conversion, based on currencyUomId and the party's accounting preferences.  conversionFactor will be used for postings
-            Map<String, Object> tmpResult = getDispatcher().runSync("convertUom", UtilMisc.<String, Object>toMap("originalValue", conversionFactor.doubleValue(),
-                                                                                                 "uomId", currencyUomId,
-                                                                                                 "uomIdTo", accountingPreference.getBaseCurrencyUomId(),
-                                                                                                 "asOfDate", asOfDate), 1, false);  // no transaction for convertUom
+            ConvertUomService service = new ConvertUomService();
+            service.setInOriginalValue(conversionFactor);
+            service.setInUomId(currencyUomId);
+            service.setInUomIdTo(accountingPreference.getBaseCurrencyUomId());
+            service.setInAsOfDate(asOfDate);
+            service.runSyncNoNewTransaction(getInfrastructure());
 
-            if (UtilCommon.isSuccess(tmpResult)) {
-                conversionFactor = BigDecimal.valueOf((Double) tmpResult.get("convertedValue"));
+            if (service.isSuccess()) {
+                conversionFactor = service.getOutConvertedValue();
             } else {
                 throw new RepositoryException("Currency conversion failed: No currencyUomId defined in PartyAcctgPreference entity for organizationPartyId " + organization.getPartyId());
             }
 
             return conversionFactor;
 
-        } catch (GenericServiceException e) {
+        } catch (ServiceException e) {
             throw new RepositoryException(e);
         } catch (EntityNotFoundException e) {
             throw new RepositoryException(e);

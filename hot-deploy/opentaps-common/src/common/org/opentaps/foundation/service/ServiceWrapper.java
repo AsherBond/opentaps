@@ -18,6 +18,11 @@ package org.opentaps.foundation.service;
 
 import java.util.Map;
 
+import org.ofbiz.service.GenericServiceException;
+import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+
 /**
  * This is the base class for the pojo service wrappers.
  * They wrap the input / output <code>Map</code> and give
@@ -26,10 +31,33 @@ import java.util.Map;
 public abstract class ServiceWrapper {
 
     /**
+     * Creates a new <code>ServiceWrapper</code> instance.
+     */
+    public ServiceWrapper() { }
+
+    /**
      * Gets the service name as used by the service engine.
      * @return the service engine name
      */
     public abstract String name();
+
+    /**
+     * Checks if the services uses a transaction.
+     * @return if the service uses a transaction
+     */
+    public abstract Boolean usesTransaction();
+
+    /**
+     * Checks if the services requires a new transaction.
+     * @return if the service requires a new transaction
+     */
+    public abstract Boolean requiresNewTransaction();
+
+    /**
+     * Checks if the services requires authentication.
+     * @return if the service requires authentication
+     */
+    public abstract Boolean requiresAuthentication();
 
     /**
      * Gets the service input <code>Map</code> (can be passed to the dispatcher).
@@ -54,5 +82,75 @@ public abstract class ServiceWrapper {
      * @param mapValue the service output <code>Map</code>
      */
     public abstract void putAllOutput(Map<String, Object> mapValue);
+
+    /**
+     * Runs the service with the wrapper's inputs, and set the outputs.
+     * @param infrastructure an <code>Infrastructure</code> value
+     * @exception ServiceException if an error occurs
+     */
+    public void runSync(Infrastructure infrastructure) throws ServiceException {
+        try {
+            putAllOutput(infrastructure.getDispatcher().runSync(name(), inputMap()));
+        } catch (GenericServiceException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    /**
+     * Runs the service with the wrapper's inputs, and set the outputs.
+     * @param infrastructure an <code>Infrastructure</code> value
+     * @exception ServiceException if an error occurs
+     */
+    public void runSyncNoNewTransaction(Infrastructure infrastructure) throws ServiceException {
+        runSync(infrastructure, -1, false);
+    }
+
+    /**
+     * Runs the service with the wrapper's inputs, and set the outputs.
+     * This overrides the default transaction timeout and require transaction settings.
+     * @param infrastructure an <code>Infrastructure</code> value
+     * @param transactionTimeout the overriding timeout for the transaction (if we started it), use <code>-1</code> to use the service default
+     * @param requireNewTransaction if true we will suspend and create a new transaction so we are sure to start
+     * @exception ServiceException if an error occurs
+     */
+    public void runSync(Infrastructure infrastructure, int transactionTimeout, boolean requireNewTransaction) throws ServiceException {
+        try {
+            putAllOutput(infrastructure.getDispatcher().runSync(name(), inputMap(), transactionTimeout, requireNewTransaction));
+        } catch (GenericServiceException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    /**
+     * Checks if the service response is an error.
+     * @return a <code>boolean</code> value
+     */
+    public Boolean isError() {
+        return ServiceUtil.isError(this.outputMap());
+    }
+
+    /**
+     * Checks if the service response is a failure.
+     * @return a <code>boolean</code> value
+     */
+    public Boolean isFailure() {
+        return ServiceUtil.isFailure(this.outputMap());
+    }
+
+    /**
+     * Checks if the service response is a success.
+     * @return a <code>boolean</code> value
+     */
+    public Boolean isSuccess() {
+        return UtilCommon.isSuccess(this.outputMap());
+    }
+
+    /**
+     * Gets the service error message string if any.
+     * @return a <code>String</code> value
+     */
+    public String getErrorMessage() {
+        return ServiceUtil.getErrorMessage(this.outputMap());
+    }
 
 }

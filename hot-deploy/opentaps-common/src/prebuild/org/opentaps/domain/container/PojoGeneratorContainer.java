@@ -283,7 +283,7 @@ public class PojoGeneratorContainer implements Container {
 
                 // service names can include characters which cannot be used in class names
                 // and we also need to upper the first char to conform to the Java standard
-                String serviceClassName = makeClassName(serviceName);
+                String serviceClassName = makeClassName(serviceName) + "Service";
 
                 // check if we have a conflict after the name change
                 if (generatedServices.containsKey(serviceClassName)) {
@@ -296,8 +296,16 @@ public class PojoGeneratorContainer implements Container {
 
                 // distinct types for the import section
                 Set<String> types = new TreeSet<String>();
+                types.add("java.util.Map");
+                types.add("java.util.Set");
+                types.add("javolution.util.FastMap");
+                types.add("javolution.util.FastSet");
+                if (modelService.auth) {
+                    types.add("org.opentaps.foundation.infrastructure.User");
+                }
                 // a type for each field during declarations
                 Map<String, String> fieldTypes = new TreeMap<String, String>();
+                Map<String, String> fieldRealTypes = new TreeMap<String, String>();
                 // temporary, those are stored at the end of each param so we test duplicates
                 Map<String, ModelParam> fieldModels = new TreeMap<String, ModelParam>();
                 // map parameter names to valid java field names
@@ -367,6 +375,7 @@ public class PojoGeneratorContainer implements Container {
                         if (shortType.startsWith("org.opentaps.") && !shortType.startsWith("org.opentaps.common")) {
                             Debug.logWarning("Service [" + serviceName + "] field [" + p.name + "] has type [" + p.type + "] which is not available yet, falling back to 'Object'.", MODULE);
                             shortType = "Object";
+                            fieldRealTypes.put(p.name, p.type);
                         } else {
                             shortType = shortType.substring(idx + 1);
                             types.add(p.type);
@@ -410,6 +419,7 @@ public class PojoGeneratorContainer implements Container {
                 entityInfo.put("className", serviceClassName);
                 entityInfo.put("types", types);
                 entityInfo.put("fieldTypes", fieldTypes);
+                entityInfo.put("fieldRealTypes", fieldRealTypes);
                 entityInfo.put("inFieldNames", inFieldNames);
                 entityInfo.put("outFieldNames", outFieldNames);
                 entityInfo.put("inGetMethodNames", inGetMethodNames);
@@ -419,6 +429,14 @@ public class PojoGeneratorContainer implements Container {
                 entityInfo.put("paramNames", paramNames);
                 entityInfo.put("inParams", inParams);
                 entityInfo.put("outParams", outParams);
+                entityInfo.put("requiresAuth", modelService.auth);
+                entityInfo.put("requiresNewTransaction", modelService.requireNewTransaction);
+                entityInfo.put("usesTransaction", modelService.useTransaction);
+                entityInfo.put("serviceDescription", modelService.description);
+                entityInfo.put("serviceEngine", modelService.engineName);
+                entityInfo.put("serviceLocation", modelService.location);
+                entityInfo.put("serviceInvoke", modelService.invoke);
+                entityInfo.put("serviceDefinition", modelService.definitionLocation);
 
                 // render it as FTL
                 Writer writer = new StringWriter();

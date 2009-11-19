@@ -20,7 +20,6 @@ package org.opentaps.common.domain.order;
 import java.math.BigDecimal;
 import java.util.*;
 
-import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.common.DataModelConstants;
@@ -32,8 +31,6 @@ import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
-import org.ofbiz.service.GenericServiceException;
-import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.domain.order.OrderSpecification.OrderTypeEnum;
 import org.opentaps.common.order.shoppingcart.OpentapsShoppingCart;
 import org.opentaps.common.util.UtilAccountingTags;
@@ -59,6 +56,8 @@ import org.opentaps.domain.base.entities.ProductStoreFacilityByAddress;
 import org.opentaps.domain.base.entities.ProductStoreShipmentMeth;
 import org.opentaps.domain.base.entities.ProductStoreShipmentMethView;
 import org.opentaps.domain.base.entities.TelecomNumber;
+import org.opentaps.domain.base.services.ChangeOrderItemStatusService;
+import org.opentaps.domain.base.services.GetReturnableItemsService;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.billing.payment.PaymentGatewayResponse;
@@ -89,11 +88,10 @@ import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
+import org.opentaps.foundation.service.ServiceException;
 
 
-/**
- * {@inheritDoc}
- */
+/** {@inheritDoc}. */
 public class OrderRepository extends Repository implements OrderRepositoryInterface {
 
     private PartyRepositoryInterface partyRepository;
@@ -166,11 +164,13 @@ public class OrderRepository extends Repository implements OrderRepositoryInterf
     public Map<OrderItem, Map> getReturnableItemsMap(Order order) throws RepositoryException {
         Map<OrderItem, Map> returnableItems = new HashMap<OrderItem, Map>();
         try {
-            Map returnableItemServiceMap = getDispatcher().runSync("getReturnableItems", UtilMisc.toMap("orderId", order.getOrderId()));
-            if (returnableItemServiceMap.get("returnableItems") != null) {
-                returnableItems = (Map<OrderItem, Map>) returnableItemServiceMap.get("returnableItems");
+            GetReturnableItemsService service = new GetReturnableItemsService();
+            service.setInOrderId(order.getOrderId());
+            service.runSync(getInfrastructure());
+            if (service.getOutReturnableItems() != null) {
+                returnableItems = service.getOutReturnableItems();
             }
-        } catch (GenericServiceException e) {
+        } catch (ServiceException e) {
             throw new RepositoryException(e);
         }
         return returnableItems;
@@ -401,19 +401,17 @@ public class OrderRepository extends Repository implements OrderRepositoryInterf
 
     // this might be an example of how to deal with method explosion while still hiding the ERP specific string keys like "ITEM_COMPLETED"
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public void changeOrderItemStatus(OrderItem orderItem, String statusId) throws RepositoryException {
         try {
-            Map results = getDispatcher().runSync("changeOrderItemStatus", UtilMisc.toMap(
-                    "orderId", orderItem.get("orderId"),
-                    "orderItemSeqId", orderItem.get("orderItemSeqId"),
-                    "statusId", statusId,
-                    "userLogin", getUser().getOfbizUserLogin())
-            );
-            if (ServiceUtil.isError(results)) {
-                throw new RepositoryException(ServiceUtil.getErrorMessage(results));
+            ChangeOrderItemStatusService service = new ChangeOrderItemStatusService(getUser());
+            service.setInOrderId(orderItem.getOrderId());
+            service.setInOrderItemSeqId(orderItem.getOrderItemSeqId());
+            service.setInStatusId(statusId);
+            service.runSync(getInfrastructure());
+            if (service.isError()) {
+                throw new RepositoryException(service.getErrorMessage());
             }
-        } catch (GenericServiceException e) {
+        } catch (ServiceException e) {
             throw new RepositoryException(e);
         }
     }
@@ -529,7 +527,7 @@ public class OrderRepository extends Repository implements OrderRepositoryInterf
         }
         return organizationRepository;
     }
-    
+
     /** {@inheritDoc} */
     public List<OrderItemShipGrpInvRes> getBackOrderedInventoryReservations(String productId, String facilityId) throws RepositoryException {
         String hql = "from OrderItemShipGrpInvRes eo where eo.inventoryItem.productId = :productId and eo.inventoryItem.facilityId = :facilityId and eo.quantityNotAvailable is not null order by eo.reservedDatetime, eo.sequenceId";

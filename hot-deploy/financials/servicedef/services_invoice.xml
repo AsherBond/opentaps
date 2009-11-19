@@ -52,7 +52,7 @@
         <attribute name="invoiceId" type="String" mode="OUT" optional="true"/>
     </service>
 
-    <service name="createInvoiceForOrder" engine="java"
+    <service name="createInvoiceForOrder" engine="java" auth="true"
         location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="createInvoiceForOrder">
         <description>
             Create an invoice from existing order

@@ -18,13 +18,12 @@ package org.opentaps.financials.domain.billing.invoice;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.domain.order.OrderSpecification;
+import org.opentaps.domain.base.services.CreateInvoiceForOrderService;
 import org.opentaps.domain.billing.invoice.OrderInvoicingServiceInterface;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderDomainInterface;
@@ -42,7 +41,7 @@ import org.opentaps.foundation.service.ServiceException;
  */
 public class OrderInvoicingService extends Service implements OrderInvoicingServiceInterface {
 
-    private static final String module = OrderInvoicingService.class.getName();
+    private static final String MODULE = OrderInvoicingService.class.getName();
 
     private String orderId = null;
     private String invoiceId = null;
@@ -101,16 +100,19 @@ public class OrderInvoicingService extends Service implements OrderInvoicingServ
 
             // create a new invoice for the order items
             // because of the way createInvoiceForOrder is written (665 lines of code!) we'd have to do some re-factoring before we can add the items to an existing invoice
-            Map<String, Object> tmpResult = getInfrastructure().getDispatcher().runSync("createInvoiceForOrder", UtilMisc.toMap("orderId", orderId, "billItems", Repository.genericValueFromEntity(getInfrastructure().getDelegator(), itemsToInvoice), "userLogin", getUser().getOfbizUserLogin()), 7200, false);  // no new transaction
-            if (ServiceUtil.isError(tmpResult)) {
-                throw new ServiceException(ServiceUtil.getErrorMessage(tmpResult));
+            CreateInvoiceForOrderService service = new CreateInvoiceForOrderService(getUser());
+            service.setInOrderId(orderId);
+            service.setInBillItems(Repository.genericValueFromEntity(getInfrastructure().getDelegator(), itemsToInvoice));
+            service.runSyncNoNewTransaction(getInfrastructure());
+            if (service.isError()) {
+                throw new ServiceException(service.getErrorMessage());
             }
 
             // change the status of the order items to COMPLETED
             order.setItemsStatus(itemsToInvoice, OrderSpecification.OrderItemStatusEnum.COMPLETED.getStatusId());
 
             // set the invoiceId of new invoice created
-            this.invoiceId = (String) tmpResult.get("invoiceId");
+            this.invoiceId = service.getOutInvoiceId();
 
         } catch (GeneralException ex) {
             throw new ServiceException(ex);

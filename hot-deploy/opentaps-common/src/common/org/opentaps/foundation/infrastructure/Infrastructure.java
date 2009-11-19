@@ -246,13 +246,13 @@ public class Infrastructure {
     public void evictHibernateCache(String entityName)  {
         evictHibernateCache(entityName, null);
     }
-    
+
     /**
      * Evict an entry from the second-level cache.
-     * @param persistentClass a <code>Class</code> instance
+     * @param entityName the name of the entity
      * @param id a <code>Serializable</code> instance
      */
-    public void evictHibernateCache(String entityName, Serializable id)  {
+    public void evictHibernateCache(String entityName, Serializable id) {
         if (entityName.indexOf(".") < 0) {
             // if entity name haven't package, then add it
             entityName = ENTITY_PACKAGE + "." + entityName;
@@ -264,41 +264,41 @@ public class Infrastructure {
             Debug.logError(e, MODULE);
         }
     }
-    
+
     /**
      * Evict all entries of persistentClass from the second-level cache.
      * @param persistentClass a <code>Class</code> instance
      */
-    public void evictHibernateCache(Class persistentClass)  {
+    public void evictHibernateCache(Class persistentClass) {
         evictHibernateCache(persistentClass, null);
     }
-    
+
     /**
      * Evict an entry from the second-level cache.
      * @param persistentClass a <code>Class</code> instance
      * @param id a <code>Serializable</code> instance
      */
-    public void evictHibernateCache(Class persistentClass, Serializable id)  {
+    public void evictHibernateCache(Class persistentClass, Serializable id) {
         SessionFactory sessionFactory = sessionFactories.get(delegator.getDelegatorName());
         evictHibernateCache(sessionFactory, persistentClass, id);
     }
-    
+
     /**
      * Evict an entry from the second-level cache.
      * @param sessionFactory a <code>SessionFactory</code> instance
      * @param persistentClass a <code>Class</code> instance
      * @param id a <code>Serializable</code> instance
      */
-    public void evictHibernateCache(SessionFactory sessionFactory, Class persistentClass, Serializable id)  {
+    public void evictHibernateCache(SessionFactory sessionFactory, Class persistentClass, Serializable id) {
         if (sessionFactory != null) {
-            if(id == null) {
+            if (id == null) {
                 sessionFactory.evict(persistentClass);
             } else {
                 sessionFactory.evict(persistentClass, id);
             }
         }
     }
-    
+
     /**
      * Clear hibernate second-level cache.
      */
@@ -306,12 +306,12 @@ public class Infrastructure {
         SessionFactory sessionFactory = sessionFactories.get(delegator.getDelegatorName());
         evictHibernateCache(sessionFactory);
     }
-    
+
     /**
      * Clear hibernate second-level cache.
      * @param sessionFactory a <code>SessionFactory</code> instance
      */
-    public void evictHibernateCache(SessionFactory sessionFactory)  {
+    public void evictHibernateCache(SessionFactory sessionFactory) {
         if (sessionFactory != null) {
             Map<String, CollectionMetadata> roleMap = sessionFactory.getAllCollectionMetadata();
             for (String roleName : roleMap.keySet()) {

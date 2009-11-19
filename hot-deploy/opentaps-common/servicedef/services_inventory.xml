@@ -102,7 +102,7 @@
         <description>Completes the inventory transfer</description>
         <attribute name="inventoryTransferId" type="String" mode="IN" optional="false"/>
     </service>
-    <service name="completeInventoryTransferOld" engine="java"
+    <service name="completeInventoryTransferOld" engine="java" auth="true"
             location="org.ofbiz.product.inventory.InventoryServices" invoke="completeInventoryTransfer">
         <description>Completes the inventory transfer</description>
         <attribute name="inventoryTransferId" type="String" mode="IN" optional="false"/>

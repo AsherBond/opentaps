@@ -1,16 +1,6 @@
-package org.opentaps.foundation.infrastructure;
-
-import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.model.ModelEntity;
-import java.util.HashSet;
-import java.util.Set;
-import org.ofbiz.entity.GenericDelegator;
-import java.util.List;
-import org.ofbiz.entity.GenericEntityException;
-
 /*
-* Copyright (c) 2008 - 2009 Open Source Strategies, Inc.
-* 
+ * Copyright (c) 2008 - 2009 Open Source Strategies, Inc.
+ * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -23,7 +13,18 @@ import org.ofbiz.entity.GenericEntityException;
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
+package org.opentaps.foundation.infrastructure;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.model.ModelEntity;
+
 
 /**
  * A general concept of User to be used across all the frameworks.  One goal of this class is to translate User from one
@@ -40,15 +41,24 @@ public class User {
     /**
      * Default constructor.
      */
-    public User() {
-        //
-    }
+    public User() { }
 
+    /**
+     * Creates a new <code>User</code> instance.
+     * @param userLogin a <code>GenericValue</code> value
+     * @exception InfrastructureException if an error occurs
+     */
     public User(GenericValue userLogin) throws InfrastructureException {
         this();
         setOfbizUserLogin(userLogin);
     }
 
+    /**
+     * Creates a new <code>User</code> instance.
+     * @param userLogin a <code>GenericValue</code> value
+     * @param delegator a <code>GenericDelegator</code> value
+     * @exception InfrastructureException if an error occurs
+     */
     public User(GenericValue userLogin, GenericDelegator delegator) throws InfrastructureException {
         this();
         setOfbizUserLogin(userLogin);
@@ -90,16 +100,15 @@ public class User {
     }
 
     /**
-     * Return unique identifier of the User object
-     * @return
-     * @throws InfrastructureException
+     * Returns the unique identifier of this <code>User</code> object.
+     * @return an unique identifier
+     * @throws InfrastructureException if an error occurs
      */
     public String getUserId() throws InfrastructureException {
         if (getOfbizUserLogin() != null) {
             return getOfbizUserLogin().getString("userLoginId");
-        }
-        // handle other types of user identifiers as they become available
-          else {
+        } else {
+            // handle other types of user identifiers as they become available
             throw new InfrastructureException("User has no known identifier");
         }
     }

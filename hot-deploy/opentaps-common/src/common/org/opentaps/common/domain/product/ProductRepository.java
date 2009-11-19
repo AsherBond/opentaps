@@ -18,7 +18,6 @@ package org.opentaps.common.domain.product;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -27,11 +26,11 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.service.GenericServiceException;
-import org.ofbiz.service.ServiceUtil;
 import org.opentaps.domain.base.entities.GoodIdentification;
 import org.opentaps.domain.base.entities.ProductAssoc;
-import org.opentaps.domain.base.services.GetProductByComprehensiveSearch;
+import org.opentaps.domain.base.services.CalculateProductPriceService;
+import org.opentaps.domain.base.services.GetProductByComprehensiveSearchService;
+import org.opentaps.domain.base.services.GetProductCostService;
 import org.opentaps.domain.product.Product;
 import org.opentaps.domain.product.ProductRepositoryInterface;
 import org.opentaps.foundation.entity.Entity;
@@ -41,6 +40,7 @@ import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
+import org.opentaps.foundation.service.ServiceException;
 
 /** {@inheritDoc} */
 public class ProductRepository extends Repository implements ProductRepositoryInterface {
@@ -70,35 +70,34 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
     public BigDecimal getUnitPrice(Product product, BigDecimal quantity, String currencyUomId, String partyId) throws RepositoryException {
 
         try {
-            Map<String, ?> results = getDispatcher().runSync("calculateProductPrice", UtilMisc.toMap(
-                    "userLogin", getUser().getOfbizUserLogin(),
-                    "product", Repository.genericValueFromEntity(product),
-                    "partyId", partyId,
-                    "quantity", quantity,
-                    "currencyUomId", currencyUomId), -1, false);
-            if (ServiceUtil.isError(results)) {
-                throw new RepositoryException(ServiceUtil.getErrorMessage(results));
+            CalculateProductPriceService service = new CalculateProductPriceService();
+            service.setInProduct(Repository.genericValueFromEntity(product));
+            service.setInPartyId(partyId);
+            service.setInQuantity(quantity);
+            service.setInCurrencyUomId(currencyUomId);
+            service.runSyncNoNewTransaction(getInfrastructure());
+            if (service.isError()) {
+                throw new RepositoryException(service.getErrorMessage());
             }
-            return (BigDecimal) results.get("price");
-        } catch (GenericServiceException e) {
+            return service.getOutPrice();
+        } catch (ServiceException e) {
             throw new RepositoryException(e);
         }
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public BigDecimal getStandardCost(Product product, String currencyUomId) throws RepositoryException {
         try {
-            Map results = getDispatcher().runSync("getProductCost", UtilMisc.toMap(
-                    "userLogin", getUser().getOfbizUserLogin(),
-                    "productId", product.getProductId(),
-                    "currencyUomId", currencyUomId,
-                    "costComponentTypePrefix", "EST_STD"));
-            if (ServiceUtil.isError(results)) {
-                throw new RepositoryException(ServiceUtil.getErrorMessage(results));
+            GetProductCostService service = new GetProductCostService(getUser());
+            service.setInProductId(product.getProductId());
+            service.setInCurrencyUomId(currencyUomId);
+            service.setInCostComponentTypePrefix("EST_STD");
+            service.runSync(getInfrastructure());
+            if (service.isError()) {
+                throw new RepositoryException(service.getErrorMessage());
             }
-            return (BigDecimal) results.get("productCost");
-        } catch (GenericServiceException e) {
+            return service.getOutProductCost();
+        } catch (ServiceException e) {
             throw new RepositoryException(e);
         }
     }
@@ -113,17 +112,15 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
         List<ProductAssoc> variants = findList(ProductAssoc.class, conditions);
         return findList(Product.class, EntityCondition.makeCondition(Product.Fields.productId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(variants, ProductAssoc.Fields.productIdTo)));
     }
-    
+
     /** {@inheritDoc} */
     public Product getProductByComprehensiveSearch(String id) throws RepositoryException {
         try {
             Product product = null;
-            // use Pojo service wrappers to call GetProductByComprehensiveSearch service
-            GetProductByComprehensiveSearch service = new GetProductByComprehensiveSearch();
+            GetProductByComprehensiveSearchService service = new GetProductByComprehensiveSearchService();
             service.setInProductId(id);
-            Map results = getDispatcher().runSync(service.name(), service.inputMap());
-            if (!(ServiceUtil.isError(results) || ServiceUtil.isFailure(results))) {
-                service.putAllOutput(results);
+            service.runSync(getInfrastructure());
+            if (service.isSuccess()) {
                 GenericValue productGv = service.getOutProduct();
                 if (productGv != null) {
                     // construct Product domain object and return
@@ -131,11 +128,11 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
                 }
             }
             return product;
-        } catch (GenericServiceException e) {
+        } catch (ServiceException e) {
             throw new RepositoryException(e);
         }
     }
-    
+
     /** {@inheritDoc} */
     public List<GoodIdentification> getAlternateProductIds(String productId) throws RepositoryException {
         String hql = "from GoodIdentification eo where eo.id.productId = :productId";

@@ -17,20 +17,17 @@
 package org.opentaps.warehouse.domain.manufacturing;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
-import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericDelegator;
-import org.opentaps.domain.manufacturing.ProductionRun;
+import org.opentaps.domain.base.services.GetProductionRunCostService;
 import org.opentaps.domain.manufacturing.ManufacturingRepositoryInterface;
+import org.opentaps.domain.manufacturing.ProductionRun;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
-import org.ofbiz.service.ServiceUtil;
-import org.ofbiz.service.GenericServiceException;
-
+import org.opentaps.foundation.service.ServiceException;
 
 /** {@inheritDoc} */
 public class ManufacturingRepository extends Repository implements ManufacturingRepositoryInterface {
@@ -71,18 +68,16 @@ public class ManufacturingRepository extends Repository implements Manufacturing
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public BigDecimal getProductionRunCost(ProductionRun productionRun) throws RepositoryException {
         try {
-            Map results = getDispatcher().runSync("getProductionRunCost", UtilMisc.toMap(
-                    "workEffortId", productionRun.getWorkEffortId(),
-                    "userLogin", getUser().getOfbizUserLogin())
-            );
-            if (ServiceUtil.isError(results)) {
-                throw new RepositoryException(ServiceUtil.getErrorMessage(results));
+            GetProductionRunCostService service = new GetProductionRunCostService(getUser());
+            service.setInWorkEffortId(productionRun.getWorkEffortId());
+            service.runSync(getInfrastructure());
+            if (service.isError()) {
+                throw new RepositoryException(service.getErrorMessage());
             }
-            return (BigDecimal) results.get("totalCost");
-        } catch (GenericServiceException e) {
+            return service.getOutTotalCost();
+        } catch (ServiceException e) {
             throw new RepositoryException(e);
         }
     }
