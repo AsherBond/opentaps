@@ -171,8 +171,8 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
 
 
     /**
-     * Finds the first unexpired <code>AsteriskUser</code> matching the given <code>User</code>.
-     * @return the <code>AsteriskUser</code> matching the given <code>User</code>
+     * Finds the first unexpired <code>ExternalUser</code> matching the given <code>User</code>.
+     * @return the <code>ExternalUser</code> matching the given <code>User</code>
      * @param user the <code>User</code>
      * @throws RepositoryException if an error occurs
      * @throws InfrastructureException if an error occurs
