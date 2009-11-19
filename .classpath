@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="framework/appserver/src"/>
+	<classpathentry kind="src" path="hot-deploy/asterisk/src"/>
 	<classpathentry kind="src" path="framework/base/src"/>
 	<classpathentry kind="src" path="framework/bi/src"/>
 	<classpathentry kind="src" path="framework/catalina/src"/>
@@ -47,12 +48,12 @@
 	<classpathentry kind="src" path="hot-deploy/amazon/src"/>
 	<classpathentry kind="src" path="hot-deploy/analytics/src"/>
 	<classpathentry kind="src" path="hot-deploy/crmsfa/src"/>
-    <classpathentry kind="src" path="hot-deploy/dataimport/src"/>
+	<classpathentry kind="src" path="hot-deploy/dataimport/src"/>
 	<classpathentry kind="src" path="hot-deploy/financials/src"/>
-    <classpathentry kind="src" path="hot-deploy/funambol/src"/>
+	<classpathentry kind="src" path="hot-deploy/funambol/src"/>
 	<classpathentry kind="src" path="hot-deploy/opentaps-tests/src"/>
-    <classpathentry kind="src" path="hot-deploy/purchasing/src"/>
-    <classpathentry kind="src" path="hot-deploy/warehouse/src"/>
+	<classpathentry kind="src" path="hot-deploy/purchasing/src"/>
+	<classpathentry kind="src" path="hot-deploy/warehouse/src"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/velocity-1.6.1.jar"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/DataVision-1.0.0.jar"/>
 	<classpathentry kind="lib" path="framework/service/lib/wsdl4j.jar"/>
@@ -175,7 +176,6 @@
 	<classpathentry kind="lib" path="framework/webslinger/lib/webslinger-extension-velocity-20090320-c73d2e782311.jar"/>
 	<classpathentry kind="lib" path="framework/webslinger/lib/webslinger-extension-wiki-20090320-c73d2e782311.jar"/>
 	<classpathentry kind="lib" path="framework/webslinger/lib/webslinger-launcher-20090320-c73d2e782311.jar"/>
-	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/asterisk/asterisk-java-0.3.1.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/hibernate/ejb3-persistence.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/hibernate/hibernate-3.3.1.GA.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/hibernate/hibernate-annotations-3.4.0.GA.jar"/>
@@ -203,5 +203,6 @@
 	<classpathentry kind="lib" path="framework/base/lib/etl/kettle-core.jar"/>
 	<classpathentry kind="lib" path="framework/base/lib/etl/kettle-db.jar"/>
 	<classpathentry kind="lib" path="framework/base/lib/etl/kettle-engine.jar"/>
+	<classpathentry kind="lib" path="hot-deploy/asterisk/lib/asterisk-java-0.3.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
