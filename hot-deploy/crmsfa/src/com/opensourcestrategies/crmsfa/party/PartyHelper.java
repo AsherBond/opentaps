@@ -277,6 +277,7 @@ public final class PartyHelper {
         {"CommunicationEventRole", "partyId"},
         {"ContentRole", "partyId"},
         {"FacilityParty", "partyId"},
+        {"MarketingCampaignRole", "partyId"},
         {"PartyRole", "partyId"},
         {"PartyContent", "partyId"},
         {"PartyStatus", "partyId"}
