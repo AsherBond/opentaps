@@ -172,8 +172,13 @@
 
             <#if hasUpdatePermission?exists>
             <td>
+                 <form name="deleteContactMechForm${contactMechMap_index}" method="post" action="<@ofbizUrl>deleteContactMech</@ofbizUrl>">
+                      <@inputHidden name="partyId" value="${partySummary.partyId}"/>
+                      <@inputHidden name="contactMechId" value="${contactMech.contactMechId}"/>
+                      <@inputHidden name="donePage" value="${donePage}"/>
+                  </form>
                   <a href="<@ofbizUrl>${editContactMechPage}?partyId=${partySummary.partyId}&contactMechId=${contactMech.contactMechId}&DONE_PAGE=${donePageEscaped}</@ofbizUrl>"><img src="<@ofbizContentUrl>/opentaps_images/edit.gif</@ofbizContentUrl>" width="22" height="21" border="0" alt="${uiLabelMap.CommonUpdate}"/></a>&nbsp;
-                  <a href="<@ofbizUrl>deleteContactMech?partyId=${partySummary.partyId}&contactMechId=${contactMech.contactMechId}&donePage=${donePage}</@ofbizUrl>"><img src="<@ofbizContentUrl>/images/dojo/src/widget/templates/buttons/delete.gif</@ofbizContentUrl>" width="18" height="18" border="0" alt="${uiLabelMap.CommonExpire}"/></a>&nbsp;&nbsp;
+                  <a href="javascript:document.deleteContactMechForm${contactMechMap_index}.submit()"><img src="<@ofbizContentUrl>/images/dojo/src/widget/templates/buttons/delete.gif</@ofbizContentUrl>" width="18" height="18" border="0" alt="${uiLabelMap.CommonExpire}"/></a>&nbsp;&nbsp;
             </td>
             </#if>
 
