@@ -209,7 +209,7 @@ fieldMapColumns.put("Facility", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GeoPoint geoPointGeoPoint = null;
+   private GeoPoint geoPoint = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RESERVE_ORDER_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -803,15 +803,15 @@ fieldMapColumns.put("Facility", fields);
         return this.facilityTypeAttrs;
     }
     /**
-     * Auto generated method that gets the related <code>GeoPoint</code> by the relation named <code>Geo PointGeoPoint</code>.
+     * Auto generated method that gets the related <code>GeoPoint</code> by the relation named <code>GeoPoint</code>.
      * @return the <code>GeoPoint</code>
      * @throws RepositoryException if an error occurs
      */
-    public GeoPoint getGeoPointGeoPoint() throws RepositoryException {
-        if (this.geoPointGeoPoint == null) {
-            this.geoPointGeoPoint = getRelatedOne(GeoPoint.class, "Geo PointGeoPoint");
+    public GeoPoint getGeoPoint() throws RepositoryException {
+        if (this.geoPoint == null) {
+            this.geoPoint = getRelatedOne(GeoPoint.class, "GeoPoint");
         }
-        return this.geoPointGeoPoint;
+        return this.geoPoint;
     }
     /**
      * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>Enumeration</code>.
@@ -1400,10 +1400,10 @@ fieldMapColumns.put("Facility", fields);
     }
     /**
      * Auto generated value setter.
-     * @param geoPointGeoPoint the geoPointGeoPoint to set
+     * @param geoPoint the geoPoint to set
     */
-    public void setGeoPointGeoPoint(GeoPoint geoPointGeoPoint) {
-        this.geoPointGeoPoint = geoPointGeoPoint;
+    public void setGeoPoint(GeoPoint geoPoint) {
+        this.geoPoint = geoPoint;
     }
     /**
      * Auto generated value setter.

@@ -55,6 +55,7 @@ public class BlockingTestScvService extends ServiceWrapper {
 
     /** The enumeration of input parameters. */
     public static enum In {
+        duration("duration"),
         locale("locale"),
         message("message"),
         timeZone("timeZone"),
@@ -87,6 +88,7 @@ public class BlockingTestScvService extends ServiceWrapper {
     }
 
 
+    private Long inDuration;
     private Locale inLocale;
     private String inMessage;
     private TimeZone inTimeZone;
@@ -104,6 +106,14 @@ public class BlockingTestScvService extends ServiceWrapper {
     private Set<String> inParameters = FastSet.newInstance();
     private Set<String> outParameters = FastSet.newInstance();
 
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>Long</code>
+     */
+    public Long getInDuration() {
+        return this.inDuration;
+    }
     /**
      * Auto generated value accessor.
      * This parameter is optional.
@@ -209,6 +219,15 @@ public class BlockingTestScvService extends ServiceWrapper {
         return this.outUserLogin;
     }
 
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inDuration the inDuration to set
+    */
+    public void setInDuration(Long inDuration) {
+        this.inParameters.add("duration");
+        this.inDuration = inDuration;
+    }
     /**
      * Auto generated value setter.
      * This parameter is optional.
@@ -350,6 +369,7 @@ public class BlockingTestScvService extends ServiceWrapper {
     /** {@inheritDoc} */
     public Map<String, Object> inputMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
+        if (inParameters.contains("duration")) mapValue.put("duration", getInDuration());
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
         if (inParameters.contains("message")) mapValue.put("message", getInMessage());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
@@ -376,6 +396,7 @@ public class BlockingTestScvService extends ServiceWrapper {
 
     /** {@inheritDoc} */
     public void putAllInput(Map<String, Object> mapValue) {
+        if (mapValue.containsKey("duration")) setInDuration((Long) mapValue.get("duration"));
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
         if (mapValue.containsKey("message")) setInMessage((String) mapValue.get("message"));
         if (mapValue.containsKey("timeZone")) setInTimeZone((TimeZone) mapValue.get("timeZone"));

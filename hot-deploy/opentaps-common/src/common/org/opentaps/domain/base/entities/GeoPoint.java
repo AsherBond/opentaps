@@ -135,7 +135,7 @@ fieldMapColumns.put("GeoPoint", fields);
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_POINT_ID")
    
-   private List<Facility> geoPointFacilitys = null;
+   private List<Facility> facilitys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="geoPoint", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GEO_POINT_ID")
    
@@ -151,7 +151,7 @@ fieldMapColumns.put("GeoPoint", fields);
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_POINT_ID")
    
-   private List<PostalAddress> geoPointPostalAddresses = null;
+   private List<PostalAddress> postalAddresses = null;
 
   /**
    * Default constructor.
@@ -369,15 +369,15 @@ fieldMapColumns.put("GeoPoint", fields);
         return this.containerGeoPoints;
     }
     /**
-     * Auto generated method that gets the related <code>Facility</code> by the relation named <code>Geo PointFacility</code>.
+     * Auto generated method that gets the related <code>Facility</code> by the relation named <code>Facility</code>.
      * @return the list of <code>Facility</code>
      * @throws RepositoryException if an error occurs
      */
-    public List<? extends Facility> getGeoPointFacilitys() throws RepositoryException {
-        if (this.geoPointFacilitys == null) {
-            this.geoPointFacilitys = getRelated(Facility.class, "Geo PointFacility");
+    public List<? extends Facility> getFacilitys() throws RepositoryException {
+        if (this.facilitys == null) {
+            this.facilitys = getRelated(Facility.class, "Facility");
         }
-        return this.geoPointFacilitys;
+        return this.facilitys;
     }
     /**
      * Auto generated method that gets the related <code>FacilityLocationGeoPoint</code> by the relation named <code>FacilityLocationGeoPoint</code>.
@@ -413,15 +413,15 @@ fieldMapColumns.put("GeoPoint", fields);
         return this.partyGeoPoints;
     }
     /**
-     * Auto generated method that gets the related <code>PostalAddress</code> by the relation named <code>Geo PointPostalAddress</code>.
+     * Auto generated method that gets the related <code>PostalAddress</code> by the relation named <code>PostalAddress</code>.
      * @return the list of <code>PostalAddress</code>
      * @throws RepositoryException if an error occurs
      */
-    public List<? extends PostalAddress> getGeoPointPostalAddresses() throws RepositoryException {
-        if (this.geoPointPostalAddresses == null) {
-            this.geoPointPostalAddresses = getRelated(PostalAddress.class, "Geo PointPostalAddress");
+    public List<? extends PostalAddress> getPostalAddresses() throws RepositoryException {
+        if (this.postalAddresses == null) {
+            this.postalAddresses = getRelated(PostalAddress.class, "PostalAddress");
         }
-        return this.geoPointPostalAddresses;
+        return this.postalAddresses;
     }
 
     /**
@@ -447,10 +447,10 @@ fieldMapColumns.put("GeoPoint", fields);
     }
     /**
      * Auto generated value setter.
-     * @param geoPointFacilitys the geoPointFacilitys to set
+     * @param facilitys the facilitys to set
     */
-    public void setGeoPointFacilitys(List<Facility> geoPointFacilitys) {
-        this.geoPointFacilitys = geoPointFacilitys;
+    public void setFacilitys(List<Facility> facilitys) {
+        this.facilitys = facilitys;
     }
     /**
      * Auto generated value setter.
@@ -475,10 +475,10 @@ fieldMapColumns.put("GeoPoint", fields);
     }
     /**
      * Auto generated value setter.
-     * @param geoPointPostalAddresses the geoPointPostalAddresses to set
+     * @param postalAddresses the postalAddresses to set
     */
-    public void setGeoPointPostalAddresses(List<PostalAddress> geoPointPostalAddresses) {
-        this.geoPointPostalAddresses = geoPointPostalAddresses;
+    public void setPostalAddresses(List<PostalAddress> postalAddresses) {
+        this.postalAddresses = postalAddresses;
     }
 
     /**
