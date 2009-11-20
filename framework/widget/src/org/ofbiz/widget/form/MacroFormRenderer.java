@@ -209,8 +209,6 @@ public class MacroFormRenderer implements FormStringRenderer {
                     }
                 }
             }
-            sr.append("\" inPlaceEditorId=\"");
-            sr.append(idName);
             sr.append("\" inPlaceEditorUrl=\"");
             sr.append(url);
             sr.append("\" inPlaceEditorParams=\"");

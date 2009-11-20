@@ -20,6 +20,7 @@
 package org.ofbiz.base.util.cache;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -116,7 +117,9 @@ public class UtilCache<K, V> implements Serializable {
 
         setPropertiesParams(cacheName);
 
-        utilCacheTable.put(name, this);
+        synchronized (utilCacheTable) {
+            utilCacheTable.put(name, this);
+        }
     }
 
     public UtilCache(String cacheName, int maxSize, long expireTime, boolean useSoftReference) {
@@ -144,8 +147,9 @@ public class UtilCache<K, V> implements Serializable {
         String name = "specified" + this.getNextDefaultIndex("specified");
 
         setPropertiesParams(name);
-
-        utilCacheTable.put(name, this);
+        synchronized (utilCacheTable) {
+            utilCacheTable.put(name, this);
+        }
     }
 
     /** This constructor takes a name for the cache, puts itself in the utilCacheTable.
@@ -158,8 +162,9 @@ public class UtilCache<K, V> implements Serializable {
 
         setPropertiesParams("default");
         setPropertiesParams(cacheName);
-
-        utilCacheTable.put(name, this);
+        synchronized (utilCacheTable) {
+            utilCacheTable.put(name, this);
+        }
     }
 
     /** This constructor takes a name for the cache, puts itself in the utilCacheTable.
@@ -171,8 +176,9 @@ public class UtilCache<K, V> implements Serializable {
 
         setPropertiesParams("default");
         setPropertiesParams(cacheName);
-
-        utilCacheTable.put(name, this);
+        synchronized (utilCacheTable) {
+            utilCacheTable.put(name, this);
+        }
     }
 
     /** Default constructor, all members stay at default values as defined in cache.properties, or the defaults in this file if cache.properties is not found, or there are no 'default' entries in it. */
@@ -180,7 +186,9 @@ public class UtilCache<K, V> implements Serializable {
         setPropertiesParams("default");
 
         name = "default" + this.getNextDefaultIndex("default");
-        utilCacheTable.put(name, this);
+        synchronized (utilCacheTable) {
+            utilCacheTable.put(name, this);
+        }
     }
 
     protected String getNextDefaultIndex(String cacheName) {
@@ -399,10 +407,24 @@ public class UtilCache<K, V> implements Serializable {
 
     /** Removes all elements from this cache */
     public static void clearAllCaches() {
-        for (Map.Entry<String, UtilCache<?, ?>> entry: utilCacheTable.entrySet()) {
-            UtilCache<?, ?> utilCache = entry.getValue();
-            utilCache.clear();
+        // We make a copy since clear may take time
+        List<UtilCache<?,?>> list = getUtilCacheTableValuesImage();
+        for (UtilCache<?,?> cache : list) {
+            cache.clear();
         }
+        list.clear();
+    }
+
+    /**
+     * Return an image of the values at a time
+     * @return {@link List}
+     */
+    private static List getUtilCacheTableValuesImage() {
+        List list = new ArrayList(utilCacheTable.size());
+        synchronized (utilCacheTable) {
+            list.addAll(utilCacheTable.values());
+        }
+        return list;
     }
 
     /** Getter for the name of the UtilCache instance.
@@ -633,10 +655,12 @@ public class UtilCache<K, V> implements Serializable {
 
     /** Clears all expired cache entries from all caches */
     public static void clearExpiredFromAllCaches() {
-        for (Map.Entry<String, UtilCache<?, ?>> entry: utilCacheTable.entrySet()) {
-            UtilCache<?, ?> utilCache = entry.getValue();
+        // We make a copy since clear may take time
+        List<UtilCache<?,?>> list = getUtilCacheTableValuesImage();
+        for (UtilCache<?,?> utilCache : list) {
             utilCache.clearExpired();
         }
+        list.clear();
     }
 
     /** Checks for a non-expired key in a specific cache */
@@ -651,13 +675,20 @@ public class UtilCache<K, V> implements Serializable {
 
     public static void clearCachesThatStartWith(String startsWith) {
         synchronized (utilCacheTable) {
-            for (Map.Entry<String, UtilCache<?, ?>> entry: utilCacheTable.entrySet()) {
-                String name = entry.getKey();
-                if (name.startsWith(startsWith)) {
-                    UtilCache<?, ?> cache = entry.getValue();
-                    cache.clear();
+            List<UtilCache<?, ?>> cachesToClear = FastList.newInstance();
+            synchronized (utilCacheTable) {
+                for (Map.Entry<String, UtilCache<?, ?>> entry: utilCacheTable.entrySet()) {
+                    String name = entry.getKey();
+                    if (name.startsWith(startsWith)) {
+                        UtilCache<?, ?> cache = entry.getValue();
+                        cachesToClear.add(cache);
+                    }
                 }
             }
+            for (UtilCache<?,?> cache : cachesToClear) {
+                cache.clear();
+            }
+            cachesToClear.clear();
         }
     }
 
@@ -669,8 +700,6 @@ public class UtilCache<K, V> implements Serializable {
 
     @SuppressWarnings("unchecked")
     public static <K, V> UtilCache<K, V> findCache(String cacheName) {
-        synchronized (UtilCache.utilCacheTable) {
-            return (UtilCache<K, V>) UtilCache.utilCacheTable.get(cacheName);
-        }
+        return (UtilCache<K, V>) UtilCache.utilCacheTable.get(cacheName);
     }
 }

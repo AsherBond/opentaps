@@ -1,5 +1,5 @@
 Based on revisions:
-https://svn.apache.org/repos/asf/ofbiz/branches/release09.04@832909
+https://svn.apache.org/repos/asf/ofbiz/branches/release09.04@882330
 svn://svn.opentaps.org/opentaps_all/versions/1.0/tags/tests-passed-20091026
 
 Overall changes
@@ -155,9 +155,6 @@ r13869 Be more permissive for the HTML in the email bodies.
 
 framework/base/src/org/ofbiz/base/util/template/FreeMarkerWorker.java
 r13870 Fix issues in the freemarker template caching causing different template string but same template locations to be cached under the same key.
-
-framework/security/src/org/ofbiz/security/OFBizSecurity.java
-r13919 Fix possible NPE in OFBizSecurity
 
 framework/webapp/config/fop.xconf
 framework/webapp/src/org/ofbiz/webapp/view/ApacheFopWorker.java

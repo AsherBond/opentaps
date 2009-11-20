@@ -1168,7 +1168,7 @@ under the License.
       <relation type="one" fk-name="POST_ADDR_PCGEO" title="PostalCode" rel-entity-name="Geo">
         <key-map field-name="postalCodeGeoId" rel-field-name="geoId"/>
       </relation>
-      <relation type="one" fk-name="POST_ADDR_GEOPT" title="Geo Point" rel-entity-name="GeoPoint">
+      <relation type="one" fk-name="POST_ADDR_GEOPT" rel-entity-name="GeoPoint">
         <key-map field-name="geoPointId"/>
       </relation>
       <index name="ADDRESS1_IDX">
