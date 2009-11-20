@@ -142,7 +142,7 @@ public final class InvoiceServices {
      * @return the service response <code>Map</code>
      */
     @SuppressWarnings("unchecked")
-    public static Map createPartnerSalesInvoice(DispatchContext dctx, Map context) {
+    public static Map<String, Object> createPartnerSalesInvoice(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -186,7 +186,7 @@ public final class InvoiceServices {
             // verify the input invoice or find the earliest defined active partner invoice
             GenericValue agreement = null;
             if (UtilValidate.isNotEmpty(agreementId)) {
-                List conditions = UtilMisc.toList(
+                List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
                         EntityCondition.makeCondition("agreementId", EntityOperator.EQUALS, agreementId),
                         EntityUtil.getFilterByDateExpr()
                 );
@@ -199,7 +199,7 @@ public final class InvoiceServices {
                     return UtilMessage.createServiceError("", locale, UtilMisc.toMap("agreementId", agreementId, "requiredAgreement", requiredAgreement.get("description", locale)));
                 }
             } else if (UtilValidate.isNotEmpty(organizationPartyId) && UtilValidate.isNotEmpty(partnerPartyId)) {
-                List conditions = UtilMisc.toList(
+                List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
                         EntityCondition.makeCondition("agreementTypeId", EntityOperator.EQUALS, "PARTNER_AGREEMENT"),
                         EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, organizationPartyId),
                         EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partnerPartyId),
@@ -217,16 +217,16 @@ public final class InvoiceServices {
 
             // use the factory to handle all the complex details of creating the invoice from an agreement
             String currencyUomId = UtilCommon.getOrgBaseCurrency(agreement.getString("partyIdFrom"), dctx.getDelegator());
-            Map results = AgreementInvoiceFactory.createInvoiceFromAgreement(dctx, context, agreement, invoices, "SALES_INVOICE", "PARTNER", currencyUomId, false, true);
+            Map<String, Object> results = AgreementInvoiceFactory.createInvoiceFromAgreement(dctx, context, agreement, invoices, "SALES_INVOICE", "PARTNER", currencyUomId, false, true);
             if (ServiceUtil.isError(results)) {
                 return results;
             }
 
             // mark every input invoice as invoiced to partner
-            Map input = UtilMisc.toMap("userLogin", context.get("userLogin"), "statusId", "INVOICE_INV_PTNR");
+            Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", context.get("userLogin"), "statusId", "INVOICE_INV_PTNR");
             for (String invoiceId : invoiceIds) {
                 input.put("invoiceId", invoiceId);
-                Map statusChangeResults = dispatcher.runSync("setInvoiceStatus", input);
+                Map<String, Object> statusChangeResults = dispatcher.runSync("setInvoiceStatus", input);
                 if (ServiceUtil.isError(statusChangeResults)) {
                     return statusChangeResults;
                 }
@@ -246,8 +246,7 @@ public final class InvoiceServices {
      * @param context the service parameters <code>Map</code>
      * @return the service response <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map createInterestInvoice(DispatchContext dctx, Map context) {
+    public static Map<String, Object> createInterestInvoice(DispatchContext dctx, Map<String, ?> context) {
 
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -277,7 +276,7 @@ public final class InvoiceServices {
         }
 
         try {
-            Map createInvoiceServiceMap = new HashMap();
+            Map<String, Object> createInvoiceServiceMap = new HashMap<String, Object>();
             createInvoiceServiceMap.put("invoiceTypeId", "INTEREST_INVOICE");
             createInvoiceServiceMap.put("partyIdFrom", partyIdFrom);
             createInvoiceServiceMap.put("partyId", partyIdTo);
@@ -291,13 +290,13 @@ public final class InvoiceServices {
             }
 
             // Create the interest invoice
-            Map createInvoiceResult = dispatcher.runSync("createInvoice", createInvoiceServiceMap);
+            Map<String, Object> createInvoiceResult = dispatcher.runSync("createInvoice", createInvoiceServiceMap);
             if (ServiceUtil.isError(createInvoiceResult)) {
                 return UtilMessage.createAndLogServiceError(createInvoiceResult, "FinancialsServiceErrorCreatingFinanceCharge", locale, MODULE);
             }
             String invoiceId = (String) createInvoiceResult.get("invoiceId");
 
-            Map createInvoiceItemServiceMap = new HashMap();
+            Map<String, Object> createInvoiceItemServiceMap = new HashMap<String, Object>();
             createInvoiceItemServiceMap.put("invoiceId", invoiceId);
             createInvoiceItemServiceMap.put("parentInvoiceId", parentInvoiceId);
             createInvoiceItemServiceMap.put("description", description);
@@ -307,19 +306,19 @@ public final class InvoiceServices {
             createInvoiceItemServiceMap.put("userLogin", userLogin);
 
             // Create a single InvoiceItem for the finance charge
-            Map createInvoiceItemResult = dispatcher.runSync("createInvoiceItem", createInvoiceItemServiceMap);
+            Map<String, Object> createInvoiceItemResult = dispatcher.runSync("createInvoiceItem", createInvoiceItemServiceMap);
             if (ServiceUtil.isError(createInvoiceItemResult)) {
                 return ServiceUtil.returnError(UtilMessage.expandLabel("FinancialsServiceErrorCreatingFinanceChargeItem", locale, createInvoiceItemServiceMap), null, null, createInvoiceItemResult);
             }
 
             // Set the invoice status to ready to trigger the GL posting services
-            Map setInvoiceStatusMap = UtilMisc.toMap("invoiceId", invoiceId, "statusId", "INVOICE_READY", "userLogin", userLogin);
-            Map setInvoiceStatusResult = dispatcher.runSync("setInvoiceStatus", setInvoiceStatusMap);
+            Map<String, Object> setInvoiceStatusMap = UtilMisc.toMap("invoiceId", invoiceId, "statusId", "INVOICE_READY", "userLogin", userLogin);
+            Map<String, Object> setInvoiceStatusResult = dispatcher.runSync("setInvoiceStatus", setInvoiceStatusMap);
             if (ServiceUtil.isError(setInvoiceStatusResult)) {
                 return ServiceUtil.returnError(UtilMessage.expandLabel("FinancialsServiceErrorFinanceChargeStatus", locale, setInvoiceStatusMap), null, null, setInvoiceStatusResult);
             }
 
-            Map serviceResult = ServiceUtil.returnSuccess();
+            Map<String, Object> serviceResult = ServiceUtil.returnSuccess();
             serviceResult.put("invoiceId", invoiceId);
             return serviceResult;
 
@@ -350,7 +349,7 @@ public final class InvoiceServices {
         String invoiceId = (String) context.get("invoiceId");
         try {
             ModelService service = dctx.getModelService("updateInvoice");
-            Map input = service.makeValid(context, "IN");
+            Map<String, Object> input = service.makeValid(context, "IN");
             Map<String, Object> results = dispatcher.runSync("updateInvoice", input);
             if (ServiceUtil.isError(results)) {
                 return results;
@@ -366,11 +365,12 @@ public final class InvoiceServices {
                                         EntityCondition.makeCondition("contactMechPurposeTypeId", "PAYMENT_LOCATION")), 
                                         EntityOperator.OR)), EntityOperator.AND));
 
-                input = UtilMisc.toMap("invoiceId", invoiceId, "contactMechId", contactMechId);
-                delegator.removeByAnd("InvoiceContactMech", input);
-
-                input.put("userLogin", userLogin);
-                input.put("contactMechPurposeTypeId", "BILLING_LOCATION");
+                input = UtilMisc.<String, Object>toMap(
+                        "invoiceId", invoiceId,
+                        "contactMechId", contactMechId,
+                        "userLogin", userLogin,
+                        "contactMechPurposeTypeId", "BILLING_LOCATION"
+                );
                 results = dispatcher.runSync("createInvoiceContactMech", input);
                 if (ServiceUtil.isError(results)) {
                     return results;
@@ -382,7 +382,7 @@ public final class InvoiceServices {
                     return results;
                 }
             } else {
-                input = UtilMisc.toMap("invoiceId", invoiceId);
+                input = UtilMisc.<String, Object>toMap("invoiceId", invoiceId);
                 delegator.removeByAnd("InvoiceContactMech", input);
             }
 
@@ -405,8 +405,7 @@ public final class InvoiceServices {
      * @param context the service parameters <code>Map</code>
      * @return the service response <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map sendInvoiceEmail(DispatchContext dctx, Map context) {
+    public static Map<String, Object> sendInvoiceEmail(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -416,14 +415,14 @@ public final class InvoiceServices {
             GenericValue invoice = delegator.findByPrimaryKey("Invoice", UtilMisc.toMap("invoiceId", invoiceId));
             String whichPartyField = (UtilFinancial.isReceivableInvoice(invoice) ? "partyIdFrom" : "partyId");
 
-            List invoiceLines = InvoiceHelper.getInvoiceLinesForPresentation(delegator, invoiceId);
+            List<Map<String, Object>> invoiceLines = InvoiceHelper.getInvoiceLinesForPresentation(delegator, invoiceId);
 
             // context parameters for the invoice fo.ftl
-            Map bodyParameters = UtilMisc.toMap("invoiceId", invoiceId, "userLogin", userLogin, "locale", UtilCommon.getLocale(context), "invoiceLines", invoiceLines);
+            Map<String, Object> bodyParameters = UtilMisc.<String, Object>toMap("invoiceId", invoiceId, "userLogin", userLogin, "locale", UtilCommon.getLocale(context), "invoiceLines", invoiceLines);
             bodyParameters.putAll(UtilCommon.getOrganizationHeaderInfo(invoice.getString(whichPartyField), delegator));
 
             ModelService service = dctx.getModelService("sendMailFromScreen");
-            Map input = service.makeValid(context, "IN");
+            Map<String, Object> input = service.makeValid(context, "IN");
             input.put("xslfoAttachScreenLocation", "component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#InvoicePDF");
             input.put("bodyParameters", bodyParameters);
             input.put("attachmentName", "Invoice" + invoiceId + ".pdf");
@@ -448,7 +447,7 @@ public final class InvoiceServices {
      * @return the service response <code>Map</code>
      */
     @SuppressWarnings("unchecked")
-    public static Map processCheckRun(DispatchContext dctx, Map context) {
+    public static Map<String, Object> processCheckRun(DispatchContext dctx, Map<String, ?> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -489,10 +488,10 @@ public final class InvoiceServices {
         Map partyInvoices = new HashMap();
 
         // Construct a map of partyId -> invoiceTypeId -> invoiceId : invoiceAmount
-        Iterator rit = _rowSubmits.keySet().iterator();
+        Iterator<String> rit = _rowSubmits.keySet().iterator();
         while (rit.hasNext()) {
 
-            String rowNumber = (String) rit.next();
+            String rowNumber = rit.next();
 
             // Ignore unchecked rows
             if (!"Y".equals(_rowSubmits.get(rowNumber))) {
@@ -637,8 +636,7 @@ public final class InvoiceServices {
      * @param context the service parameters <code>Map</code>
      * @return the service response <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map updateInvoiceRecurrence(DispatchContext dctx, Map context) {
+    public static Map<String, Object> updateInvoiceRecurrence(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         String invoiceId = (String) context.get("invoiceId");
         String recurrenceRuleId = (String) context.get("recurrenceRuleId");
@@ -714,7 +712,7 @@ public final class InvoiceServices {
      * @return the service response <code>Map</code>
      */
     @SuppressWarnings("unchecked")
-    public static Map runInvoiceRecurrence(DispatchContext dctx, Map context) {
+    public static Map<String, Object> runInvoiceRecurrence(DispatchContext dctx, Map<String, ?> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
 
@@ -820,8 +818,7 @@ public final class InvoiceServices {
      * @param context the service parameters <code>Map</code>
      * @return the service response <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map cloneInvoice(DispatchContext dctx, Map context) {
+    public static Map<String, Object> cloneInvoice(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -869,11 +866,9 @@ public final class InvoiceServices {
             updateValues(delegator.findByAnd("InvoiceItemAttribute", UtilMisc.toMap("invoiceId", invoiceId)), "invoiceId", newInvoiceId, delegator);
             updateValues(invoice.getRelated("InvoiceContactMech"), "invoiceId", newInvoiceId, delegator);
 
-            List invoiceTerms = invoice.getRelated("InvoiceTerm");
-            Iterator itit = invoiceTerms.iterator();
-            while (itit.hasNext()) {
-                GenericValue invoiceTerm = (GenericValue) itit.next();
-                List invoiceTermAttributes = invoiceTerm.getRelated("InvoiceTermAttribute");
+            List<GenericValue> invoiceTerms = invoice.getRelated("InvoiceTerm");
+            for (GenericValue invoiceTerm : invoiceTerms) {
+                List<GenericValue> invoiceTermAttributes = invoiceTerm.getRelated("InvoiceTermAttribute");
                 String newInvoiceTermId = delegator.getNextSeqId("InvoiceTerm");
                 invoiceTerm.set("invoiceId", newInvoiceId);
                 invoiceTerm.set("invoiceTermId", newInvoiceTermId);
@@ -883,13 +878,13 @@ public final class InvoiceServices {
 
             // Update the invoice status for non-purchase orders
             if (!"PURCHASE_INVOICE".equals(invoice.getString("invoiceTypeId"))) {
-                Map setInvoiceStatusResult = dispatcher.runSync("setInvoiceStatus", UtilMisc.toMap("invoiceId", invoiceId, "statusId", "INVOICE_READY", "userLogin", userLogin));
+                Map<String, Object> setInvoiceStatusResult = dispatcher.runSync("setInvoiceStatus", UtilMisc.toMap("invoiceId", invoiceId, "statusId", "INVOICE_READY", "userLogin", userLogin));
                 if (ServiceUtil.isError(setInvoiceStatusResult)) {
                     return setInvoiceStatusResult;
                 }
             }
 
-            Map result = ServiceUtil.returnSuccess();
+            Map<String, Object> result = ServiceUtil.returnSuccess();
             result.put("invoiceId", newInvoiceId);
             return result;
         } catch (GenericEntityException e) {
@@ -901,14 +896,11 @@ public final class InvoiceServices {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private static void updateValues(List values, String fieldName, String newFieldValue, GenericDelegator delegator) throws GenericEntityException {
+    private static void updateValues(List<GenericValue> values, String fieldName, String newFieldValue, GenericDelegator delegator) throws GenericEntityException {
         if (values == null) {
             return;
         }
-        Iterator it = values.iterator();
-        while (it.hasNext()) {
-            GenericValue value = (GenericValue) it.next();
+        for (GenericValue value : values) {
             value.set(fieldName, newFieldValue);
             delegator.create(value);
         }
@@ -2114,15 +2106,6 @@ public final class InvoiceServices {
     }
      */
 
-    /**
-     * Implementation opentaps.createCommissionInvoicesOnConfirmedPayment service
-     * Creates commission invoice when customer has paid sales invoice and payment is confirmed.
-     *
-     * @param dctx a <code>DispatchContext</code> value
-     * @param context the service parameters <code>Map</code>
-     * @return the service response <code>Map</code>
-     */
-    @SuppressWarnings("unchecked")
     public static Map<String, ? extends Object> createCommissionInvoicesOnConfirmedPayment(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();

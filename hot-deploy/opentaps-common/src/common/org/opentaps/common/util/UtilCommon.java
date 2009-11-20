@@ -1599,7 +1599,7 @@ public abstract class UtilCommon {
      * @param context a context <code>Map</code> value
      * @return a <code>TimeZone</code> value
      */
-    public static TimeZone getTimeZone(Map<String, Object> context) {
+    public static TimeZone getTimeZone(Map<String, ?> context) {
         TimeZone tz = (TimeZone) context.get("timeZone");
         if (tz == null) {
             tz = TimeZone.getDefault();

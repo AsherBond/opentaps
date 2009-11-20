@@ -80,7 +80,7 @@ public class AgreementInvoiceFactory {
      * @param isDisbursement If set to true, then the invoice will be from the agent to the organization.  If false, then the other way around.
      * @param group Whether to group the invoice items by productId and invoiceItemTypeId.  The parentInvoiceId and parentInvoiceItemTypeId will be discarded.
      */
-    public static Map createInvoiceFromAgreement(DispatchContext dctx, Map<String, Object> context, GenericValue agreement, Collection<GenericValue> invoices, String invoiceTypeId, String agentRoleTypeId, String currencyUomId, boolean isDisbursement, boolean group) throws GeneralException {
+    public static Map<String, Object> createInvoiceFromAgreement(DispatchContext dctx, Map<String, ?> context, GenericValue agreement, Collection<GenericValue> invoices, String invoiceTypeId, String agentRoleTypeId, String currencyUomId, boolean isDisbursement, boolean group) throws GeneralException {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -187,7 +187,7 @@ public class AgreementInvoiceFactory {
      * for ordering, grouping and tracking via InvoiceItem.parentInvoiceId or InvoiceItemAssoc.  They are grouped by
      * their agreementTermId in a map.
      */
-    public static Map<String, Collection<Map<String, Object>>> createInvoiceItemsForAgreement(DispatchContext dctx, Map<String, Object> context, GenericValue agreement, Collection<GenericValue> invoices) throws GeneralException {
+    public static Map<String, Collection<Map<String, Object>>> createInvoiceItemsForAgreement(DispatchContext dctx, Map<String, ?> context, GenericValue agreement, Collection<GenericValue> invoices) throws GeneralException {
         GenericDelegator delegator = dctx.getDelegator();
         Map<String, Collection<Map<String, Object>>> invoiceItems = new FastMap<String, Collection<Map<String, Object>>>();
         Collection<GenericValue> terms = delegator.findByAnd("AgreementAndItemAndTerm", UtilMisc.toMap("agreementId", agreement.get("agreementId")));
@@ -203,7 +203,7 @@ public class AgreementInvoiceFactory {
      * term items of type COMM_RATES, which applies a flat commission to the invoice item types defined in
      * AgreementInvoiceItemType.
      */
-    private static Collection<Map<String, Object>> processAgreementTerm(DispatchContext dctx, Map<String, Object> context, GenericValue agreement, GenericValue term, Collection<GenericValue> invoices) throws GeneralException {
+    private static Collection<Map<String, Object>> processAgreementTerm(DispatchContext dctx, Map<String, ?> context, GenericValue agreement, GenericValue term, Collection<GenericValue> invoices) throws GeneralException {
         List<Map<String, Object>> items = FastList.newInstance();
         Locale locale = UtilCommon.getLocale(context);
 
@@ -426,7 +426,7 @@ public class AgreementInvoiceFactory {
      * The ordering is based on AgreementInvoiceItemTypeMap.sequenceNum and other things.
      * TODO: ordering is not implemented yet
      */
-    public static Map createCollatedInvoiceItems(GenericValue agreement, Map<String, Collection<Map<String, Object>>> items, String invoiceId, GenericValue userLogin, DispatchContext dctx, Map context) throws GeneralException {
+    public static Map<String, Object> createCollatedInvoiceItems(GenericValue agreement, Map<String, Collection<Map<String, Object>>> items, String invoiceId, GenericValue userLogin, DispatchContext dctx, Map<String, ?> context) throws GeneralException {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         int sequence = 1;
         for (String agreementTermId : items.keySet()) {
@@ -457,7 +457,7 @@ public class AgreementInvoiceFactory {
      * The amounts and quantities are merged such that there is 1 quantity of the merged amount.
      * TODO: no actual ordering yet (but they are grouped)
      */
-    public static Map createGroupedInvoiceItems(GenericValue agreement, Map<String, Collection<Map<String, Object>>> items, String invoiceId, GenericValue userLogin, DispatchContext dctx) throws GeneralException {
+    public static Map<String, Object> createGroupedInvoiceItems(GenericValue agreement, Map<String, Collection<Map<String, Object>>> items, String invoiceId, GenericValue userLogin, DispatchContext dctx) throws GeneralException {
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
         // group the items
