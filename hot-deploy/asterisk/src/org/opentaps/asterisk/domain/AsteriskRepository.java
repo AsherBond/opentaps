@@ -50,13 +50,10 @@ public class AsteriskRepository extends Repository implements VoipRepositoryInte
 
     /**
      * If you want the full infrastructure including the dispatcher, then you must have the User.
-     * 
-     * @param infrastructure
-     *            the domain infrastructure
-     * @param userLogin
-     *            the Ofbiz <code>UserLogin</code> generic value
-     * @throws RepositoryException
-     *             if an error occurs
+     *
+     * @param infrastructure the domain infrastructure
+     * @param userLogin the Ofbiz <code>UserLogin</code> generic value
+     * @throws RepositoryException if an error occurs
      */
     public AsteriskRepository(Infrastructure infrastructure, GenericValue userLogin)
             throws RepositoryException {
@@ -75,7 +72,7 @@ public class AsteriskRepository extends Repository implements VoipRepositoryInte
         }
         return externalUser;
     }
-    
+
     /** {@inheritDoc} */
     public String getCallInPartyLink(User user) throws RepositoryException {
         PartyDomainInterface partyDomain = getDomainsDirectory().getPartyDomain();
@@ -132,7 +129,7 @@ public class AsteriskRepository extends Repository implements VoipRepositoryInte
             throw new RepositoryException(e);
         }
     }
-    
+
     /** {@inheritDoc} */
     public void makeOutgoingCall(User user, TelecomNumber telecomNumber) throws RepositoryException {
         try {
