@@ -25,7 +25,6 @@
       <filelist dir="." files="warehouse/build.xml"/>
       <filelist dir="." files="dataimport/build.xml"/>
       <filelist dir="." files="funambol/build.xml"/>
-      <filelist dir="." files="asterisk/build.xml"/>
       <filelist dir="." files="opentaps-tests/build.xml"/>
     </subant>
     <echo message="[build] ========== Done Building Opentaps modules =========="/>
@@ -41,7 +40,6 @@
         <exclude name="warehouse/build.xml"/>
         <exclude name="dataimport/build.xml"/>
         <exclude name="funambol/build.xml"/>
-        <exclude name="asterisk/build.xml"/>
         <exclude name="opentaps-tests/build.xml"/>
         <include name="**/build.xml"/>
       </fileset>
