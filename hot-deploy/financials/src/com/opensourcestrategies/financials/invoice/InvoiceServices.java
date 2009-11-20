@@ -350,7 +350,7 @@ public final class InvoiceServices {
         String invoiceId = (String) context.get("invoiceId");
         try {
             ModelService service = dctx.getModelService("updateInvoice");
-            Map<String, Object> input = service.makeValid(context, "IN");
+            Map input = service.makeValid(context, "IN");
             Map<String, Object> results = dispatcher.runSync("updateInvoice", input);
             if (ServiceUtil.isError(results)) {
                 return results;
