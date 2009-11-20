@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Shopping List Interface.
@@ -715,6 +716,8 @@ public class ShoppingListInterfaceService extends ServiceWrapper {
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("visitorId")) mapValue.put("visitorId", getInVisitorId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -797,6 +800,14 @@ public class ShoppingListInterfaceService extends ServiceWrapper {
     public static ShoppingListInterfaceService fromInput(Map<String, Object> mapValue) {
         ShoppingListInterfaceService service = new ShoppingListInterfaceService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

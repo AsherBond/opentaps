@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Wrapper for the OFBiz completePack service, plus any additional warehouse-app-specific logic.
@@ -536,6 +537,8 @@ public class WarehouseCompletePackService extends ServiceWrapper {
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("weightUomId")) mapValue.put("weightUomId", getInWeightUomId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -610,6 +613,14 @@ public class WarehouseCompletePackService extends ServiceWrapper {
     public static WarehouseCompletePackService fromInput(Map<String, Object> mapValue) {
         WarehouseCompletePackService service = new WarehouseCompletePackService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

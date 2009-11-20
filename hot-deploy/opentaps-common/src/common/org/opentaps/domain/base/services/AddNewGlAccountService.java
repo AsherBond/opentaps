@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Adds a new Gl Account and then associate it with the organizationPartyId in GlAccountOrganization.
@@ -476,6 +477,8 @@ public class AddNewGlAccountService extends ServiceWrapper {
         if (inParameters.contains("postedBalance")) mapValue.put("postedBalance", getInPostedBalance());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -546,6 +549,14 @@ public class AddNewGlAccountService extends ServiceWrapper {
     public static AddNewGlAccountService fromInput(Map<String, Object> mapValue) {
         AddNewGlAccountService service = new AddNewGlAccountService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

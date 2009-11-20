@@ -33,6 +33,7 @@ import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.common.manufacturing.bom.BomTree;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Returns a BOM tree (an object that represents a configured bill of material tree in memory). Useful for tree traversal (breakdown, explosion, implosion)..
@@ -475,6 +476,8 @@ public class GetBOMTreeService extends ServiceWrapper {
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("type")) mapValue.put("type", getInType());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -546,6 +549,14 @@ public class GetBOMTreeService extends ServiceWrapper {
     public static GetBOMTreeService fromInput(Map<String, Object> mapValue) {
         GetBOMTreeService service = new GetBOMTreeService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

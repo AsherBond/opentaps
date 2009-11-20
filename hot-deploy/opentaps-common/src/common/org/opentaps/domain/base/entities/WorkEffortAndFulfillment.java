@@ -51,7 +51,7 @@ import java.sql.Timestamp;
  * Auto generated base entity WorkEffortAndFulfillment.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectWorkEffortAndFulfillments", query="SELECT WEF.DESCRIPTION AS \"description\",WEF.FIXED_ASSET_ID AS \"fixedAssetId\",WEF.FACILITY_ID AS \"facilityId\",REQ.FACILITY_ID AS \"facilityId\",REQ.FIXED_ASSET_ID AS \"fixedAssetId\",REQ.DESCRIPTION AS \"description\",REQ.CREATED_DATE AS \"createdDate\",WEF.WORK_EFFORT_ID AS \"workEffortId\",WEF.WORK_EFFORT_TYPE_ID AS \"workEffortTypeId\",WEF.CURRENT_STATUS_ID AS \"currentStatusId\",WEF.LAST_STATUS_UPDATE AS \"lastStatusUpdate\",WEF.WORK_EFFORT_PURPOSE_TYPE_ID AS \"workEffortPurposeTypeId\",WEF.WORK_EFFORT_PARENT_ID AS \"workEffortParentId\",WEF.SCOPE_ENUM_ID AS \"scopeEnumId\",WEF.PRIORITY AS \"priority\",WEF.PERCENT_COMPLETE AS \"percentComplete\",WEF.WORK_EFFORT_NAME AS \"workEffortName\",WEF.SHOW_AS_ENUM_ID AS \"showAsEnumId\",WEF.SEND_NOTIFICATION_EMAIL AS \"sendNotificationEmail\",WEF.LOCATION_DESC AS \"locationDesc\",WEF.ESTIMATED_START_DATE AS \"estimatedStartDate\",WEF.ESTIMATED_COMPLETION_DATE AS \"estimatedCompletionDate\",WEF.ACTUAL_START_DATE AS \"actualStartDate\",WEF.ACTUAL_COMPLETION_DATE AS \"actualCompletionDate\",WEF.ESTIMATED_MILLI_SECONDS AS \"estimatedMilliSeconds\",WEF.ESTIMATED_SETUP_MILLIS AS \"estimatedSetupMillis\",WEF.ESTIMATE_CALC_METHOD AS \"estimateCalcMethod\",WEF.ACTUAL_MILLI_SECONDS AS \"actualMilliSeconds\",WEF.ACTUAL_SETUP_MILLIS AS \"actualSetupMillis\",WEF.TOTAL_MILLI_SECONDS_ALLOWED AS \"totalMilliSecondsAllowed\",WEF.TOTAL_MONEY_ALLOWED AS \"totalMoneyAllowed\",WEF.MONEY_UOM_ID AS \"moneyUomId\",WEF.SPECIAL_TERMS AS \"specialTerms\",WEF.TIME_TRANSPARENCY AS \"timeTransparency\",WEF.UNIVERSAL_ID AS \"universalId\",WEF.SOURCE_REFERENCE_ID AS \"sourceReferenceId\",WEF.INFO_URL AS \"infoUrl\",WEF.RECURRENCE_INFO_ID AS \"recurrenceInfoId\",WEF.TEMP_EXPR_ID AS \"tempExprId\",WEF.RUNTIME_DATA_ID AS \"runtimeDataId\",WEF.NOTE_ID AS \"noteId\",WEF.SERVICE_LOADER_NAME AS \"serviceLoaderName\",WEF.QUANTITY_TO_PRODUCE AS \"quantityToProduce\",WEF.QUANTITY_PRODUCED AS \"quantityProduced\",WEF.QUANTITY_REJECTED AS \"quantityRejected\",WEF.RESERV_PERSONS AS \"reservPersons\",WEF.RESERV2ND_P_P_PERC AS \"reserv2ndPPPerc\",WEF.RESERV_NTH_P_P_PERC AS \"reservNthPPPerc\",WEF.ACCOMMODATION_MAP_ID AS \"accommodationMapId\",WEF.ACCOMMODATION_SPOT_ID AS \"accommodationSpotId\",WEF.REVISION_NUMBER AS \"revisionNumber\",WEF.CREATED_DATE AS \"createdDate\",WEF.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",WEF.LAST_MODIFIED_DATE AS \"lastModifiedDate\",WEF.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",WEF.EMAIL_DELETED AS \"emailDeleted\",WRF.REQUIREMENT_ID AS \"requirementId\",WRF.WORK_REQ_FULF_TYPE_ID AS \"workReqFulfTypeId\",REQ.REQUIREMENT_TYPE_ID AS \"requirementTypeId\",REQ.DELIVERABLE_ID AS \"deliverableId\",REQ.PRODUCT_ID AS \"productId\",REQ.STATUS_ID AS \"statusId\",REQ.REQUIREMENT_START_DATE AS \"requirementStartDate\",REQ.REQUIRED_BY_DATE AS \"requiredByDate\",REQ.ESTIMATED_BUDGET AS \"estimatedBudget\",REQ.QUANTITY AS \"quantity\",REQ.USE_CASE AS \"useCase\",REQ.REASON AS \"reason\",REQ.ORDER_ITEM_TYPE_ID AS \"orderItemTypeId\",REQ.FACILITY_ID_TO AS \"facilityIdTo\" FROM WORK_EFFORT WEF INNER JOIN WORK_REQUIREMENT_FULFILLMENT WRF ON WEF.WORK_EFFORT_ID = WRF.WORK_EFFORT_ID INNER JOIN REQUIREMENT REQ ON WRF.REQUIREMENT_ID = REQ.REQUIREMENT_ID", resultSetMapping="WorkEffortAndFulfillmentMapping")
+@NamedNativeQuery(name="selectWorkEffortAndFulfillments", query="SELECT WEF.DESCRIPTION AS \"description\",WEF.FIXED_ASSET_ID AS \"fixedAssetId\",WEF.FACILITY_ID AS \"facilityId\",REQ.FACILITY_ID AS \"facilityId\",REQ.FIXED_ASSET_ID AS \"fixedAssetId\",REQ.DESCRIPTION AS \"description\",REQ.CREATED_DATE AS \"createdDate\",WEF.WORK_EFFORT_ID AS \"workEffortId\",WEF.WORK_EFFORT_TYPE_ID AS \"workEffortTypeId\",WEF.CURRENT_STATUS_ID AS \"currentStatusId\",WEF.LAST_STATUS_UPDATE AS \"lastStatusUpdate\",WEF.WORK_EFFORT_PURPOSE_TYPE_ID AS \"workEffortPurposeTypeId\",WEF.WORK_EFFORT_PARENT_ID AS \"workEffortParentId\",WEF.SCOPE_ENUM_ID AS \"scopeEnumId\",WEF.PRIORITY AS \"priority\",WEF.PERCENT_COMPLETE AS \"percentComplete\",WEF.WORK_EFFORT_NAME AS \"workEffortName\",WEF.SHOW_AS_ENUM_ID AS \"showAsEnumId\",WEF.SEND_NOTIFICATION_EMAIL AS \"sendNotificationEmail\",WEF.LOCATION_DESC AS \"locationDesc\",WEF.ESTIMATED_START_DATE AS \"estimatedStartDate\",WEF.ESTIMATED_COMPLETION_DATE AS \"estimatedCompletionDate\",WEF.ACTUAL_START_DATE AS \"actualStartDate\",WEF.ACTUAL_COMPLETION_DATE AS \"actualCompletionDate\",WEF.ESTIMATED_MILLI_SECONDS AS \"estimatedMilliSeconds\",WEF.ESTIMATED_SETUP_MILLIS AS \"estimatedSetupMillis\",WEF.ESTIMATE_CALC_METHOD AS \"estimateCalcMethod\",WEF.ACTUAL_MILLI_SECONDS AS \"actualMilliSeconds\",WEF.ACTUAL_SETUP_MILLIS AS \"actualSetupMillis\",WEF.TOTAL_MILLI_SECONDS_ALLOWED AS \"totalMilliSecondsAllowed\",WEF.TOTAL_MONEY_ALLOWED AS \"totalMoneyAllowed\",WEF.MONEY_UOM_ID AS \"moneyUomId\",WEF.SPECIAL_TERMS AS \"specialTerms\",WEF.TIME_TRANSPARENCY AS \"timeTransparency\",WEF.UNIVERSAL_ID AS \"universalId\",WEF.SOURCE_REFERENCE_ID AS \"sourceReferenceId\",WEF.INFO_URL AS \"infoUrl\",WEF.RECURRENCE_INFO_ID AS \"recurrenceInfoId\",WEF.TEMP_EXPR_ID AS \"tempExprId\",WEF.RUNTIME_DATA_ID AS \"runtimeDataId\",WEF.NOTE_ID AS \"noteId\",WEF.SERVICE_LOADER_NAME AS \"serviceLoaderName\",WEF.QUANTITY_TO_PRODUCE AS \"quantityToProduce\",WEF.QUANTITY_PRODUCED AS \"quantityProduced\",WEF.QUANTITY_REJECTED AS \"quantityRejected\",WEF.RESERV_PERSONS AS \"reservPersons\",WEF.RESERV2ND_P_P_PERC AS \"reserv2ndPPPerc\",WEF.RESERV_NTH_P_P_PERC AS \"reservNthPPPerc\",WEF.ACCOMMODATION_MAP_ID AS \"accommodationMapId\",WEF.ACCOMMODATION_SPOT_ID AS \"accommodationSpotId\",WEF.REVISION_NUMBER AS \"revisionNumber\",WEF.CREATED_DATE AS \"createdDate\",WEF.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",WEF.LAST_MODIFIED_DATE AS \"lastModifiedDate\",WEF.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",WRF.REQUIREMENT_ID AS \"requirementId\",WRF.WORK_REQ_FULF_TYPE_ID AS \"workReqFulfTypeId\",REQ.REQUIREMENT_TYPE_ID AS \"requirementTypeId\",REQ.DELIVERABLE_ID AS \"deliverableId\",REQ.PRODUCT_ID AS \"productId\",REQ.STATUS_ID AS \"statusId\",REQ.REQUIREMENT_START_DATE AS \"requirementStartDate\",REQ.REQUIRED_BY_DATE AS \"requiredByDate\",REQ.ESTIMATED_BUDGET AS \"estimatedBudget\",REQ.QUANTITY AS \"quantity\",REQ.USE_CASE AS \"useCase\",REQ.REASON AS \"reason\",REQ.ORDER_ITEM_TYPE_ID AS \"orderItemTypeId\",REQ.FACILITY_ID_TO AS \"facilityIdTo\" FROM WORK_EFFORT WEF INNER JOIN WORK_REQUIREMENT_FULFILLMENT WRF ON WEF.WORK_EFFORT_ID = WRF.WORK_EFFORT_ID INNER JOIN REQUIREMENT REQ ON WRF.REQUIREMENT_ID = REQ.REQUIREMENT_ID", resultSetMapping="WorkEffortAndFulfillmentMapping")
 @SqlResultSetMapping(name="WorkEffortAndFulfillmentMapping", entities={
 @EntityResult(entityClass=WorkEffortAndFulfillment.class, fields = {
 @FieldResult(name="workEffortDescription", column="workEffortDescription")
@@ -109,7 +109,6 @@ import java.sql.Timestamp;
 ,@FieldResult(name="createdByUserLogin", column="createdByUserLogin")
 ,@FieldResult(name="lastModifiedDate", column="lastModifiedDate")
 ,@FieldResult(name="lastModifiedByUserLogin", column="lastModifiedByUserLogin")
-,@FieldResult(name="emailDeleted", column="emailDeleted")
 ,@FieldResult(name="requirementId", column="requirementId")
 ,@FieldResult(name="workReqFulfTypeId", column="workReqFulfTypeId")
 ,@FieldResult(name="requirementTypeId", column="requirementTypeId")
@@ -185,7 +184,6 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("createdByUserLogin", "WEF.CREATED_BY_USER_LOGIN");
         fields.put("lastModifiedDate", "WEF.LAST_MODIFIED_DATE");
         fields.put("lastModifiedByUserLogin", "WEF.LAST_MODIFIED_BY_USER_LOGIN");
-        fields.put("emailDeleted", "WEF.EMAIL_DELETED");
         fields.put("requirementId", "WRF.REQUIREMENT_ID");
         fields.put("workReqFulfTypeId", "WRF.WORK_REQ_FULF_TYPE_ID");
         fields.put("requirementTypeId", "REQ.REQUIREMENT_TYPE_ID");
@@ -258,7 +256,6 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
     createdByUserLogin("createdByUserLogin"),
     lastModifiedDate("lastModifiedDate"),
     lastModifiedByUserLogin("lastModifiedByUserLogin"),
-    emailDeleted("emailDeleted"),
     requirementId("requirementId"),
     workReqFulfTypeId("workReqFulfTypeId"),
     requirementTypeId("requirementTypeId"),
@@ -394,8 +391,6 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
     
    private String lastModifiedByUserLogin;
     
-   private String emailDeleted;
-    
    private String requirementId;
     
    private String workReqFulfTypeId;
@@ -518,7 +513,7 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("workEffortId");this.primaryKeyNames.add("requirementId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("workEffortDescription");this.allFieldsNames.add("workEffortFixedAssetId");this.allFieldsNames.add("workEffortFacilityId");this.allFieldsNames.add("requirementFacilityId");this.allFieldsNames.add("requirementFixedAssetId");this.allFieldsNames.add("requirementDescription");this.allFieldsNames.add("requirementCreationDate");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("workEffortTypeId");this.allFieldsNames.add("currentStatusId");this.allFieldsNames.add("lastStatusUpdate");this.allFieldsNames.add("workEffortPurposeTypeId");this.allFieldsNames.add("workEffortParentId");this.allFieldsNames.add("scopeEnumId");this.allFieldsNames.add("priority");this.allFieldsNames.add("percentComplete");this.allFieldsNames.add("workEffortName");this.allFieldsNames.add("showAsEnumId");this.allFieldsNames.add("sendNotificationEmail");this.allFieldsNames.add("locationDesc");this.allFieldsNames.add("estimatedStartDate");this.allFieldsNames.add("estimatedCompletionDate");this.allFieldsNames.add("actualStartDate");this.allFieldsNames.add("actualCompletionDate");this.allFieldsNames.add("estimatedMilliSeconds");this.allFieldsNames.add("estimatedSetupMillis");this.allFieldsNames.add("estimateCalcMethod");this.allFieldsNames.add("actualMilliSeconds");this.allFieldsNames.add("actualSetupMillis");this.allFieldsNames.add("totalMilliSecondsAllowed");this.allFieldsNames.add("totalMoneyAllowed");this.allFieldsNames.add("moneyUomId");this.allFieldsNames.add("specialTerms");this.allFieldsNames.add("timeTransparency");this.allFieldsNames.add("universalId");this.allFieldsNames.add("sourceReferenceId");this.allFieldsNames.add("infoUrl");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("tempExprId");this.allFieldsNames.add("runtimeDataId");this.allFieldsNames.add("noteId");this.allFieldsNames.add("serviceLoaderName");this.allFieldsNames.add("quantityToProduce");this.allFieldsNames.add("quantityProduced");this.allFieldsNames.add("quantityRejected");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("accommodationMapId");this.allFieldsNames.add("accommodationSpotId");this.allFieldsNames.add("revisionNumber");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("emailDeleted");this.allFieldsNames.add("requirementId");this.allFieldsNames.add("workReqFulfTypeId");this.allFieldsNames.add("requirementTypeId");this.allFieldsNames.add("deliverableId");this.allFieldsNames.add("productId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("requirementStartDate");this.allFieldsNames.add("requiredByDate");this.allFieldsNames.add("estimatedBudget");this.allFieldsNames.add("quantity");this.allFieldsNames.add("useCase");this.allFieldsNames.add("reason");this.allFieldsNames.add("orderItemTypeId");this.allFieldsNames.add("facilityIdTo");
+      this.allFieldsNames.add("workEffortDescription");this.allFieldsNames.add("workEffortFixedAssetId");this.allFieldsNames.add("workEffortFacilityId");this.allFieldsNames.add("requirementFacilityId");this.allFieldsNames.add("requirementFixedAssetId");this.allFieldsNames.add("requirementDescription");this.allFieldsNames.add("requirementCreationDate");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("workEffortTypeId");this.allFieldsNames.add("currentStatusId");this.allFieldsNames.add("lastStatusUpdate");this.allFieldsNames.add("workEffortPurposeTypeId");this.allFieldsNames.add("workEffortParentId");this.allFieldsNames.add("scopeEnumId");this.allFieldsNames.add("priority");this.allFieldsNames.add("percentComplete");this.allFieldsNames.add("workEffortName");this.allFieldsNames.add("showAsEnumId");this.allFieldsNames.add("sendNotificationEmail");this.allFieldsNames.add("locationDesc");this.allFieldsNames.add("estimatedStartDate");this.allFieldsNames.add("estimatedCompletionDate");this.allFieldsNames.add("actualStartDate");this.allFieldsNames.add("actualCompletionDate");this.allFieldsNames.add("estimatedMilliSeconds");this.allFieldsNames.add("estimatedSetupMillis");this.allFieldsNames.add("estimateCalcMethod");this.allFieldsNames.add("actualMilliSeconds");this.allFieldsNames.add("actualSetupMillis");this.allFieldsNames.add("totalMilliSecondsAllowed");this.allFieldsNames.add("totalMoneyAllowed");this.allFieldsNames.add("moneyUomId");this.allFieldsNames.add("specialTerms");this.allFieldsNames.add("timeTransparency");this.allFieldsNames.add("universalId");this.allFieldsNames.add("sourceReferenceId");this.allFieldsNames.add("infoUrl");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("tempExprId");this.allFieldsNames.add("runtimeDataId");this.allFieldsNames.add("noteId");this.allFieldsNames.add("serviceLoaderName");this.allFieldsNames.add("quantityToProduce");this.allFieldsNames.add("quantityProduced");this.allFieldsNames.add("quantityRejected");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("accommodationMapId");this.allFieldsNames.add("accommodationSpotId");this.allFieldsNames.add("revisionNumber");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("requirementId");this.allFieldsNames.add("workReqFulfTypeId");this.allFieldsNames.add("requirementTypeId");this.allFieldsNames.add("deliverableId");this.allFieldsNames.add("productId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("requirementStartDate");this.allFieldsNames.add("requiredByDate");this.allFieldsNames.add("estimatedBudget");this.allFieldsNames.add("quantity");this.allFieldsNames.add("useCase");this.allFieldsNames.add("reason");this.allFieldsNames.add("orderItemTypeId");this.allFieldsNames.add("facilityIdTo");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -920,13 +915,6 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
      */
     public void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
         this.lastModifiedByUserLogin = lastModifiedByUserLogin;
-    }
-    /**
-     * Auto generated value setter.
-     * @param emailDeleted the emailDeleted to set
-     */
-    public void setEmailDeleted(String emailDeleted) {
-        this.emailDeleted = emailDeleted;
     }
     /**
      * Auto generated value setter.
@@ -1411,13 +1399,6 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
      */
     public String getLastModifiedByUserLogin() {
         return this.lastModifiedByUserLogin;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getEmailDeleted() {
-        return this.emailDeleted;
     }
     /**
      * Auto generated value accessor.
@@ -2102,7 +2083,6 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
         setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
         setLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
         setLastModifiedByUserLogin((String) mapValue.get("lastModifiedByUserLogin"));
-        setEmailDeleted((String) mapValue.get("emailDeleted"));
         setRequirementId((String) mapValue.get("requirementId"));
         setWorkReqFulfTypeId((String) mapValue.get("workReqFulfTypeId"));
         setRequirementTypeId((String) mapValue.get("requirementTypeId"));
@@ -2179,7 +2159,6 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
         mapValue.put("createdByUserLogin", getCreatedByUserLogin());
         mapValue.put("lastModifiedDate", getLastModifiedDate());
         mapValue.put("lastModifiedByUserLogin", getLastModifiedByUserLogin());
-        mapValue.put("emailDeleted", getEmailDeleted());
         mapValue.put("requirementId", getRequirementId());
         mapValue.put("workReqFulfTypeId", getWorkReqFulfTypeId());
         mapValue.put("requirementTypeId", getRequirementTypeId());

@@ -33,6 +33,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * .
@@ -1496,6 +1497,8 @@ public class InterfaceProductService extends ServiceWrapper {
         if (inParameters.contains("weight")) mapValue.put("weight", getInWeight());
         if (inParameters.contains("weightUomId")) mapValue.put("weightUomId", getInWeightUomId());
         if (inParameters.contains("widthUomId")) mapValue.put("widthUomId", getInWidthUomId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -1617,6 +1620,14 @@ public class InterfaceProductService extends ServiceWrapper {
     public static InterfaceProductService fromInput(Map<String, Object> mapValue) {
         InterfaceProductService service = new InterfaceProductService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

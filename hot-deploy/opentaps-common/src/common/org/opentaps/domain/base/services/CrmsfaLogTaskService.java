@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Logs an email, phone call, or specified work effort purpose type. The userLogin must have _UPDATE permissions for the associated parties,
@@ -535,6 +536,8 @@ public class CrmsfaLogTaskService extends ServiceWrapper {
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("workEffortName")) mapValue.put("workEffortName", getInWorkEffortName());
         if (inParameters.contains("workEffortPurposeTypeId")) mapValue.put("workEffortPurposeTypeId", getInWorkEffortPurposeTypeId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -609,6 +612,14 @@ public class CrmsfaLogTaskService extends ServiceWrapper {
     public static CrmsfaLogTaskService fromInput(Map<String, Object> mapValue) {
         CrmsfaLogTaskService service = new CrmsfaLogTaskService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

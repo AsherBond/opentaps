@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * 
@@ -477,6 +478,8 @@ public class IssueProductionRunTaskComponentService extends ServiceWrapper {
         if (inParameters.contains("workEffort")) mapValue.put("workEffort", getInWorkEffort());
         if (inParameters.contains("workEffortGoodStandard")) mapValue.put("workEffortGoodStandard", getInWorkEffortGoodStandard());
         if (inParameters.contains("workEffortId")) mapValue.put("workEffortId", getInWorkEffortId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -547,6 +550,14 @@ public class IssueProductionRunTaskComponentService extends ServiceWrapper {
     public static IssueProductionRunTaskComponentService fromInput(Map<String, Object> mapValue) {
         IssueProductionRunTaskComponentService service = new IssueProductionRunTaskComponentService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

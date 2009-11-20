@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Update Payment Gateway Configuration Payflow Pro.
@@ -734,6 +735,8 @@ public class UpdateGatewayConfigurationPayflowProService extends ServiceWrapper 
         if (inParameters.contains("userId")) mapValue.put("userId", getInUserId());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("vendor")) mapValue.put("vendor", getInVendor());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -817,6 +820,14 @@ public class UpdateGatewayConfigurationPayflowProService extends ServiceWrapper 
     public static UpdateGatewayConfigurationPayflowProService fromInput(Map<String, Object> mapValue) {
         UpdateGatewayConfigurationPayflowProService service = new UpdateGatewayConfigurationPayflowProService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

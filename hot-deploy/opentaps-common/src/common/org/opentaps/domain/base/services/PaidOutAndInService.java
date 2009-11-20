@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Paid Out and In.
@@ -395,6 +396,8 @@ public class PaidOutAndInService extends ServiceWrapper {
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("type")) mapValue.put("type", getInType());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -461,6 +464,14 @@ public class PaidOutAndInService extends ServiceWrapper {
     public static PaidOutAndInService fromInput(Map<String, Object> mapValue) {
         PaidOutAndInService service = new PaidOutAndInService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

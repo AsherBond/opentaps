@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Add a participant with role CAL_ATTENDEE to an event or activity. Requires _UPDATE permission on all associated parties, cases, and
@@ -556,6 +557,8 @@ public class CrmsfaAddWorkEffortPartyAssignmentService extends ServiceWrapper {
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("workEffortId")) mapValue.put("workEffortId", getInWorkEffortId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -630,6 +633,14 @@ public class CrmsfaAddWorkEffortPartyAssignmentService extends ServiceWrapper {
     public static CrmsfaAddWorkEffortPartyAssignmentService fromInput(Map<String, Object> mapValue) {
         CrmsfaAddWorkEffortPartyAssignmentService service = new CrmsfaAddWorkEffortPartyAssignmentService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

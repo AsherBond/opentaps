@@ -33,6 +33,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Upload and attach a file to a WorkEffort.
@@ -1471,6 +1472,8 @@ public class UploadWorkEffortContentFileService extends ServiceWrapper {
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("workEffortContentTypeId")) mapValue.put("workEffortContentTypeId", getInWorkEffortContentTypeId());
         if (inParameters.contains("workEffortId")) mapValue.put("workEffortId", getInWorkEffortId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -1596,6 +1599,14 @@ public class UploadWorkEffortContentFileService extends ServiceWrapper {
     public static UploadWorkEffortContentFileService fromInput(Map<String, Object> mapValue) {
         UploadWorkEffortContentFileService service = new UploadWorkEffortContentFileService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

@@ -33,6 +33,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Creates a ReturnItemResponse record..
@@ -455,6 +456,8 @@ public class CreateReturnItemResponseService extends ServiceWrapper {
         if (inParameters.contains("responseDate")) mapValue.put("responseDate", getInResponseDate());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -525,6 +528,14 @@ public class CreateReturnItemResponseService extends ServiceWrapper {
     public static CreateReturnItemResponseService fromInput(Map<String, Object> mapValue) {
         CreateReturnItemResponseService service = new CreateReturnItemResponseService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

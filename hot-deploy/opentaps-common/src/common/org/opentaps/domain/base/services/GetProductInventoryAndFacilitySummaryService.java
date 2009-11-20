@@ -33,6 +33,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Get ATP/QOH Availability for a list of OrderItems by summing over all facilities.  If the item is a MARKETING_PKG_AUTO/PICK, then put its quantity available from components
@@ -588,6 +589,8 @@ public class GetProductInventoryAndFacilitySummaryService extends ServiceWrapper
         if (inParameters.contains("statusId")) mapValue.put("statusId", getInStatusId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -673,6 +676,14 @@ public class GetProductInventoryAndFacilitySummaryService extends ServiceWrapper
     public static GetProductInventoryAndFacilitySummaryService fromInput(Map<String, Object> mapValue) {
         GetProductInventoryAndFacilitySummaryService service = new GetProductInventoryAndFacilitySummaryService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

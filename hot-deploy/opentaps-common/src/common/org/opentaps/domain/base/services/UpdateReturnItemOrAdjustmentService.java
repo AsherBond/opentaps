@@ -33,6 +33,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * update Return Item or Adjustment based on the parameters passed in.
@@ -1135,6 +1136,8 @@ public class UpdateReturnItemOrAdjustmentService extends ServiceWrapper {
         if (inParameters.contains("taxAuthorityRateSeqId")) mapValue.put("taxAuthorityRateSeqId", getInTaxAuthorityRateSeqId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -1239,6 +1242,14 @@ public class UpdateReturnItemOrAdjustmentService extends ServiceWrapper {
     public static UpdateReturnItemOrAdjustmentService fromInput(Map<String, Object> mapValue) {
         UpdateReturnItemOrAdjustmentService service = new UpdateReturnItemOrAdjustmentService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Calculate the previously invoiced amount for an OrderAdjustment.
@@ -354,6 +355,8 @@ public class CalculateInvoicedAdjustmentTotalService extends ServiceWrapper {
         if (inParameters.contains("orderAdjustment")) mapValue.put("orderAdjustment", getInOrderAdjustment());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -419,6 +422,14 @@ public class CalculateInvoicedAdjustmentTotalService extends ServiceWrapper {
     public static CalculateInvoicedAdjustmentTotalService fromInput(Map<String, Object> mapValue) {
         CalculateInvoicedAdjustmentTotalService service = new CalculateInvoicedAdjustmentTotalService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

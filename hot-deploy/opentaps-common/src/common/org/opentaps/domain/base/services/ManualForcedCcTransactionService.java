@@ -21,7 +21,7 @@ package org.opentaps.domain.base.services;
 // EXTEND THIS CLASS INSTEAD.
 
 import org.opentaps.foundation.infrastructure.InfrastructureException;
-import org.opentaps.foundation.service.ServiceWrapperWithAuth;
+import org.opentaps.foundation.service.ServiceWrapper;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -43,7 +43,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Invoke: processManualCcTx
  * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_paymentmethod.xml
  */
-public class ManualForcedCcTransactionService extends ServiceWrapperWithAuth {
+public class ManualForcedCcTransactionService extends ServiceWrapper {
 
     /** The service name as used by the service engine. */
     public static final String NAME = "manualForcedCcTransaction";
@@ -821,8 +821,8 @@ public class ManualForcedCcTransactionService extends ServiceWrapperWithAuth {
         if (inParameters.contains("titleOnCard")) mapValue.put("titleOnCard", getInTitleOnCard());
         if (inParameters.contains("transactionType")) mapValue.put("transactionType", getInTransactionType());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
-          // allow the User set to override the userLogin
-          if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -914,10 +914,10 @@ public class ManualForcedCcTransactionService extends ServiceWrapperWithAuth {
         service.putAllInput(mapValue);
         if (mapValue.containsKey("userLogin")) {
             GenericValue userGv = (GenericValue) mapValue.get("userLogin");
-            try {
-                service.setUser(new User(userGv, userGv.getDelegator()));
-            } catch (InfrastructureException e) {
-                // this may happen if the user login is null
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
             }
         }
         return service;

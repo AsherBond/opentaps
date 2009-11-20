@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Removes a team member from the specified account or account team. 
@@ -355,6 +356,8 @@ public class CrmsfaRemoveTeamMemberService extends ServiceWrapper {
         if (inParameters.contains("teamMemberPartyId")) mapValue.put("teamMemberPartyId", getInTeamMemberPartyId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -419,6 +422,14 @@ public class CrmsfaRemoveTeamMemberService extends ServiceWrapper {
     public static CrmsfaRemoveTeamMemberService fromInput(Map<String, Object> mapValue) {
         CrmsfaRemoveTeamMemberService service = new CrmsfaRemoveTeamMemberService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

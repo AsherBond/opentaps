@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Update a calendar ExceptionDay.
@@ -355,6 +356,8 @@ public class RemoveCalendarExceptionDayService extends ServiceWrapper {
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -419,6 +422,14 @@ public class RemoveCalendarExceptionDayService extends ServiceWrapper {
     public static RemoveCalendarExceptionDayService fromInput(Map<String, Object> mapValue) {
         RemoveCalendarExceptionDayService service = new RemoveCalendarExceptionDayService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

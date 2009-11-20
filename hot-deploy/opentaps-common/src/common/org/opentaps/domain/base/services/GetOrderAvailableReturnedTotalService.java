@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Get the total amount of all returns for an order: orderTotal, returnTotal - totals so far.  availableReturnTotal = orderTotal - returnTotal - adjustment.  Used for checking if the return total has gone over the order total.  If countNewReturnItems is set to Boolean.TRUE then return items in the CREATED state will be counted.  This should only be the case during quickRefundEntireOrder..
@@ -432,6 +433,8 @@ public class GetOrderAvailableReturnedTotalService extends ServiceWrapper {
         if (inParameters.contains("orderId")) mapValue.put("orderId", getInOrderId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -503,6 +506,14 @@ public class GetOrderAvailableReturnedTotalService extends ServiceWrapper {
     public static GetOrderAvailableReturnedTotalService fromInput(Map<String, Object> mapValue) {
         GetOrderAvailableReturnedTotalService service = new GetOrderAvailableReturnedTotalService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

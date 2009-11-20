@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * This service merges the contact details of two parties, partyId merges into partyIdTo.
@@ -553,6 +554,8 @@ public class MergeContactsService extends ServiceWrapper {
         if (inParameters.contains("useContactNum2")) mapValue.put("useContactNum2", getInUseContactNum2());
         if (inParameters.contains("useEmail2")) mapValue.put("useEmail2", getInUseEmail2());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -628,6 +631,14 @@ public class MergeContactsService extends ServiceWrapper {
     public static MergeContactsService fromInput(Map<String, Object> mapValue) {
         MergeContactsService service = new MergeContactsService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

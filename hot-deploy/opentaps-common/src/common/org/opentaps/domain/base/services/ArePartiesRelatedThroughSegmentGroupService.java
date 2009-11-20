@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Determine: are Parties Related Through SegmentGroup?.
@@ -413,6 +414,8 @@ public class ArePartiesRelatedThroughSegmentGroupService extends ServiceWrapper 
         if (inParameters.contains("toPartyId")) mapValue.put("toPartyId", getInToPartyId());
         if (inParameters.contains("toRoleTypeId")) mapValue.put("toRoleTypeId", getInToRoleTypeId());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -481,6 +484,14 @@ public class ArePartiesRelatedThroughSegmentGroupService extends ServiceWrapper 
     public static ArePartiesRelatedThroughSegmentGroupService fromInput(Map<String, Object> mapValue) {
         ArePartiesRelatedThroughSegmentGroupService service = new ArePartiesRelatedThroughSegmentGroupService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Force the JVM to run the GC.
@@ -314,6 +315,8 @@ public class ForceGarbageCollectionService extends ServiceWrapper {
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -376,6 +379,14 @@ public class ForceGarbageCollectionService extends ServiceWrapper {
     public static ForceGarbageCollectionService fromInput(Map<String, Object> mapValue) {
         ForceGarbageCollectionService service = new ForceGarbageCollectionService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

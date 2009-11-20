@@ -51,7 +51,7 @@ import java.sql.Timestamp;
  * Auto generated base entity ProjectPhaseTaskAndTimeEntryTimeSheet.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectProjectPhaseTaskAndTimeEntryTimeSheets", query="SELECT WEP.WORK_EFFORT_ID AS \"workEffortId\",WEP.WORK_EFFORT_NAME AS \"workEffortName\",WEPH.WORK_EFFORT_ID AS \"workEffortId\",WEPH.WORK_EFFORT_NAME AS \"workEffortName\",TS.STATUS_ID AS \"statusId\",TS.PARTY_ID AS \"partyId\",WET.WORK_EFFORT_ID AS \"workEffortId\",WET.WORK_EFFORT_TYPE_ID AS \"workEffortTypeId\",WET.CURRENT_STATUS_ID AS \"currentStatusId\",WET.LAST_STATUS_UPDATE AS \"lastStatusUpdate\",WET.WORK_EFFORT_PURPOSE_TYPE_ID AS \"workEffortPurposeTypeId\",WET.WORK_EFFORT_PARENT_ID AS \"workEffortParentId\",WET.SCOPE_ENUM_ID AS \"scopeEnumId\",WET.PRIORITY AS \"priority\",WET.PERCENT_COMPLETE AS \"percentComplete\",WET.WORK_EFFORT_NAME AS \"workEffortName\",WET.SHOW_AS_ENUM_ID AS \"showAsEnumId\",WET.SEND_NOTIFICATION_EMAIL AS \"sendNotificationEmail\",WET.DESCRIPTION AS \"description\",WET.LOCATION_DESC AS \"locationDesc\",WET.ESTIMATED_START_DATE AS \"estimatedStartDate\",WET.ESTIMATED_COMPLETION_DATE AS \"estimatedCompletionDate\",WET.ACTUAL_START_DATE AS \"actualStartDate\",WET.ACTUAL_COMPLETION_DATE AS \"actualCompletionDate\",WET.ESTIMATED_MILLI_SECONDS AS \"estimatedMilliSeconds\",WET.ESTIMATED_SETUP_MILLIS AS \"estimatedSetupMillis\",WET.ESTIMATE_CALC_METHOD AS \"estimateCalcMethod\",WET.ACTUAL_MILLI_SECONDS AS \"actualMilliSeconds\",WET.ACTUAL_SETUP_MILLIS AS \"actualSetupMillis\",WET.TOTAL_MILLI_SECONDS_ALLOWED AS \"totalMilliSecondsAllowed\",WET.TOTAL_MONEY_ALLOWED AS \"totalMoneyAllowed\",WET.MONEY_UOM_ID AS \"moneyUomId\",WET.SPECIAL_TERMS AS \"specialTerms\",WET.TIME_TRANSPARENCY AS \"timeTransparency\",WET.UNIVERSAL_ID AS \"universalId\",WET.SOURCE_REFERENCE_ID AS \"sourceReferenceId\",WET.FIXED_ASSET_ID AS \"fixedAssetId\",WET.FACILITY_ID AS \"facilityId\",WET.INFO_URL AS \"infoUrl\",WET.RECURRENCE_INFO_ID AS \"recurrenceInfoId\",WET.TEMP_EXPR_ID AS \"tempExprId\",WET.RUNTIME_DATA_ID AS \"runtimeDataId\",WET.NOTE_ID AS \"noteId\",WET.SERVICE_LOADER_NAME AS \"serviceLoaderName\",WET.QUANTITY_TO_PRODUCE AS \"quantityToProduce\",WET.QUANTITY_PRODUCED AS \"quantityProduced\",WET.QUANTITY_REJECTED AS \"quantityRejected\",WET.RESERV_PERSONS AS \"reservPersons\",WET.RESERV2ND_P_P_PERC AS \"reserv2ndPPPerc\",WET.RESERV_NTH_P_P_PERC AS \"reservNthPPPerc\",WET.ACCOMMODATION_MAP_ID AS \"accommodationMapId\",WET.ACCOMMODATION_SPOT_ID AS \"accommodationSpotId\",WET.REVISION_NUMBER AS \"revisionNumber\",WET.CREATED_DATE AS \"createdDate\",WET.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",WET.LAST_MODIFIED_DATE AS \"lastModifiedDate\",WET.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",WET.EMAIL_DELETED AS \"emailDeleted\",TE.TIME_ENTRY_ID AS \"timeEntryId\",TE.PARTY_ID AS \"partyId\",TE.FROM_DATE AS \"fromDate\",TE.THRU_DATE AS \"thruDate\",TE.RATE_TYPE_ID AS \"rateTypeId\",TE.TIMESHEET_ID AS \"timesheetId\",TE.INVOICE_ID AS \"invoiceId\",TE.INVOICE_ITEM_SEQ_ID AS \"invoiceItemSeqId\",TE.HOURS AS \"hours\",TE.COMMENTS AS \"comments\" FROM WORK_EFFORT WEP INNER JOIN WORK_EFFORT WEPH ON WEP.WORK_EFFORT_ID = WEPH.WORK_EFFORT_PARENT_ID INNER JOIN WORK_EFFORT WET ON WEPH.WORK_EFFORT_ID = WET.WORK_EFFORT_PARENT_ID INNER JOIN TIME_ENTRY TE ON WET.WORK_EFFORT_ID = TE.WORK_EFFORT_ID INNER JOIN TIMESHEET TS ON TE.TIMESHEET_ID = TS.TIMESHEET_ID", resultSetMapping="ProjectPhaseTaskAndTimeEntryTimeSheetMapping")
+@NamedNativeQuery(name="selectProjectPhaseTaskAndTimeEntryTimeSheets", query="SELECT WEP.WORK_EFFORT_ID AS \"workEffortId\",WEP.WORK_EFFORT_NAME AS \"workEffortName\",WEPH.WORK_EFFORT_ID AS \"workEffortId\",WEPH.WORK_EFFORT_NAME AS \"workEffortName\",TS.STATUS_ID AS \"statusId\",TS.PARTY_ID AS \"partyId\",WET.WORK_EFFORT_ID AS \"workEffortId\",WET.WORK_EFFORT_TYPE_ID AS \"workEffortTypeId\",WET.CURRENT_STATUS_ID AS \"currentStatusId\",WET.LAST_STATUS_UPDATE AS \"lastStatusUpdate\",WET.WORK_EFFORT_PURPOSE_TYPE_ID AS \"workEffortPurposeTypeId\",WET.WORK_EFFORT_PARENT_ID AS \"workEffortParentId\",WET.SCOPE_ENUM_ID AS \"scopeEnumId\",WET.PRIORITY AS \"priority\",WET.PERCENT_COMPLETE AS \"percentComplete\",WET.WORK_EFFORT_NAME AS \"workEffortName\",WET.SHOW_AS_ENUM_ID AS \"showAsEnumId\",WET.SEND_NOTIFICATION_EMAIL AS \"sendNotificationEmail\",WET.DESCRIPTION AS \"description\",WET.LOCATION_DESC AS \"locationDesc\",WET.ESTIMATED_START_DATE AS \"estimatedStartDate\",WET.ESTIMATED_COMPLETION_DATE AS \"estimatedCompletionDate\",WET.ACTUAL_START_DATE AS \"actualStartDate\",WET.ACTUAL_COMPLETION_DATE AS \"actualCompletionDate\",WET.ESTIMATED_MILLI_SECONDS AS \"estimatedMilliSeconds\",WET.ESTIMATED_SETUP_MILLIS AS \"estimatedSetupMillis\",WET.ESTIMATE_CALC_METHOD AS \"estimateCalcMethod\",WET.ACTUAL_MILLI_SECONDS AS \"actualMilliSeconds\",WET.ACTUAL_SETUP_MILLIS AS \"actualSetupMillis\",WET.TOTAL_MILLI_SECONDS_ALLOWED AS \"totalMilliSecondsAllowed\",WET.TOTAL_MONEY_ALLOWED AS \"totalMoneyAllowed\",WET.MONEY_UOM_ID AS \"moneyUomId\",WET.SPECIAL_TERMS AS \"specialTerms\",WET.TIME_TRANSPARENCY AS \"timeTransparency\",WET.UNIVERSAL_ID AS \"universalId\",WET.SOURCE_REFERENCE_ID AS \"sourceReferenceId\",WET.FIXED_ASSET_ID AS \"fixedAssetId\",WET.FACILITY_ID AS \"facilityId\",WET.INFO_URL AS \"infoUrl\",WET.RECURRENCE_INFO_ID AS \"recurrenceInfoId\",WET.TEMP_EXPR_ID AS \"tempExprId\",WET.RUNTIME_DATA_ID AS \"runtimeDataId\",WET.NOTE_ID AS \"noteId\",WET.SERVICE_LOADER_NAME AS \"serviceLoaderName\",WET.QUANTITY_TO_PRODUCE AS \"quantityToProduce\",WET.QUANTITY_PRODUCED AS \"quantityProduced\",WET.QUANTITY_REJECTED AS \"quantityRejected\",WET.RESERV_PERSONS AS \"reservPersons\",WET.RESERV2ND_P_P_PERC AS \"reserv2ndPPPerc\",WET.RESERV_NTH_P_P_PERC AS \"reservNthPPPerc\",WET.ACCOMMODATION_MAP_ID AS \"accommodationMapId\",WET.ACCOMMODATION_SPOT_ID AS \"accommodationSpotId\",WET.REVISION_NUMBER AS \"revisionNumber\",WET.CREATED_DATE AS \"createdDate\",WET.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",WET.LAST_MODIFIED_DATE AS \"lastModifiedDate\",WET.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",TE.TIME_ENTRY_ID AS \"timeEntryId\",TE.PARTY_ID AS \"partyId\",TE.FROM_DATE AS \"fromDate\",TE.THRU_DATE AS \"thruDate\",TE.RATE_TYPE_ID AS \"rateTypeId\",TE.TIMESHEET_ID AS \"timesheetId\",TE.INVOICE_ID AS \"invoiceId\",TE.INVOICE_ITEM_SEQ_ID AS \"invoiceItemSeqId\",TE.HOURS AS \"hours\",TE.COMMENTS AS \"comments\" FROM WORK_EFFORT WEP INNER JOIN WORK_EFFORT WEPH ON WEP.WORK_EFFORT_ID = WEPH.WORK_EFFORT_PARENT_ID INNER JOIN WORK_EFFORT WET ON WEPH.WORK_EFFORT_ID = WET.WORK_EFFORT_PARENT_ID INNER JOIN TIME_ENTRY TE ON WET.WORK_EFFORT_ID = TE.WORK_EFFORT_ID INNER JOIN TIMESHEET TS ON TE.TIMESHEET_ID = TS.TIMESHEET_ID", resultSetMapping="ProjectPhaseTaskAndTimeEntryTimeSheetMapping")
 @SqlResultSetMapping(name="ProjectPhaseTaskAndTimeEntryTimeSheetMapping", entities={
 @EntityResult(entityClass=ProjectPhaseTaskAndTimeEntryTimeSheet.class, fields = {
 @FieldResult(name="projectId", column="projectId")
@@ -111,7 +111,6 @@ import java.sql.Timestamp;
 ,@FieldResult(name="createdByUserLogin", column="createdByUserLogin")
 ,@FieldResult(name="lastModifiedDate", column="lastModifiedDate")
 ,@FieldResult(name="lastModifiedByUserLogin", column="lastModifiedByUserLogin")
-,@FieldResult(name="emailDeleted", column="emailDeleted")
 ,@FieldResult(name="timeEntryId", column="timeEntryId")
 ,@FieldResult(name="partyId", column="partyId")
 ,@FieldResult(name="fromDate", column="fromDate")
@@ -185,7 +184,6 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("createdByUserLogin", "WET.CREATED_BY_USER_LOGIN");
         fields.put("lastModifiedDate", "WET.LAST_MODIFIED_DATE");
         fields.put("lastModifiedByUserLogin", "WET.LAST_MODIFIED_BY_USER_LOGIN");
-        fields.put("emailDeleted", "WET.EMAIL_DELETED");
         fields.put("timeEntryId", "TE.TIME_ENTRY_ID");
         fields.put("partyId", "TE.PARTY_ID");
         fields.put("fromDate", "TE.FROM_DATE");
@@ -256,7 +254,6 @@ fieldMapColumns.put("ProjectPhaseTaskAndTimeEntryTimeSheet", fields);
     createdByUserLogin("createdByUserLogin"),
     lastModifiedDate("lastModifiedDate"),
     lastModifiedByUserLogin("lastModifiedByUserLogin"),
-    emailDeleted("emailDeleted"),
     timeEntryId("timeEntryId"),
     partyId("partyId"),
     fromDate("fromDate"),
@@ -392,8 +389,6 @@ fieldMapColumns.put("ProjectPhaseTaskAndTimeEntryTimeSheet", fields);
     
    private String lastModifiedByUserLogin;
     
-   private String emailDeleted;
-    
    private String timeEntryId;
     
    private String partyId;
@@ -434,7 +429,7 @@ fieldMapColumns.put("ProjectPhaseTaskAndTimeEntryTimeSheet", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("projectId");this.primaryKeyNames.add("phaseId");this.primaryKeyNames.add("workEffortId");this.primaryKeyNames.add("timeEntryId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("projectId");this.allFieldsNames.add("projectName");this.allFieldsNames.add("phaseId");this.allFieldsNames.add("phaseName");this.allFieldsNames.add("timesheetStatusId");this.allFieldsNames.add("timesheetPartyId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("workEffortTypeId");this.allFieldsNames.add("currentStatusId");this.allFieldsNames.add("lastStatusUpdate");this.allFieldsNames.add("workEffortPurposeTypeId");this.allFieldsNames.add("workEffortParentId");this.allFieldsNames.add("scopeEnumId");this.allFieldsNames.add("priority");this.allFieldsNames.add("percentComplete");this.allFieldsNames.add("workEffortName");this.allFieldsNames.add("showAsEnumId");this.allFieldsNames.add("sendNotificationEmail");this.allFieldsNames.add("description");this.allFieldsNames.add("locationDesc");this.allFieldsNames.add("estimatedStartDate");this.allFieldsNames.add("estimatedCompletionDate");this.allFieldsNames.add("actualStartDate");this.allFieldsNames.add("actualCompletionDate");this.allFieldsNames.add("estimatedMilliSeconds");this.allFieldsNames.add("estimatedSetupMillis");this.allFieldsNames.add("estimateCalcMethod");this.allFieldsNames.add("actualMilliSeconds");this.allFieldsNames.add("actualSetupMillis");this.allFieldsNames.add("totalMilliSecondsAllowed");this.allFieldsNames.add("totalMoneyAllowed");this.allFieldsNames.add("moneyUomId");this.allFieldsNames.add("specialTerms");this.allFieldsNames.add("timeTransparency");this.allFieldsNames.add("universalId");this.allFieldsNames.add("sourceReferenceId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("infoUrl");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("tempExprId");this.allFieldsNames.add("runtimeDataId");this.allFieldsNames.add("noteId");this.allFieldsNames.add("serviceLoaderName");this.allFieldsNames.add("quantityToProduce");this.allFieldsNames.add("quantityProduced");this.allFieldsNames.add("quantityRejected");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("accommodationMapId");this.allFieldsNames.add("accommodationSpotId");this.allFieldsNames.add("revisionNumber");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("emailDeleted");this.allFieldsNames.add("timeEntryId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("rateTypeId");this.allFieldsNames.add("timesheetId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("hours");this.allFieldsNames.add("comments");
+      this.allFieldsNames.add("projectId");this.allFieldsNames.add("projectName");this.allFieldsNames.add("phaseId");this.allFieldsNames.add("phaseName");this.allFieldsNames.add("timesheetStatusId");this.allFieldsNames.add("timesheetPartyId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("workEffortTypeId");this.allFieldsNames.add("currentStatusId");this.allFieldsNames.add("lastStatusUpdate");this.allFieldsNames.add("workEffortPurposeTypeId");this.allFieldsNames.add("workEffortParentId");this.allFieldsNames.add("scopeEnumId");this.allFieldsNames.add("priority");this.allFieldsNames.add("percentComplete");this.allFieldsNames.add("workEffortName");this.allFieldsNames.add("showAsEnumId");this.allFieldsNames.add("sendNotificationEmail");this.allFieldsNames.add("description");this.allFieldsNames.add("locationDesc");this.allFieldsNames.add("estimatedStartDate");this.allFieldsNames.add("estimatedCompletionDate");this.allFieldsNames.add("actualStartDate");this.allFieldsNames.add("actualCompletionDate");this.allFieldsNames.add("estimatedMilliSeconds");this.allFieldsNames.add("estimatedSetupMillis");this.allFieldsNames.add("estimateCalcMethod");this.allFieldsNames.add("actualMilliSeconds");this.allFieldsNames.add("actualSetupMillis");this.allFieldsNames.add("totalMilliSecondsAllowed");this.allFieldsNames.add("totalMoneyAllowed");this.allFieldsNames.add("moneyUomId");this.allFieldsNames.add("specialTerms");this.allFieldsNames.add("timeTransparency");this.allFieldsNames.add("universalId");this.allFieldsNames.add("sourceReferenceId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("infoUrl");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("tempExprId");this.allFieldsNames.add("runtimeDataId");this.allFieldsNames.add("noteId");this.allFieldsNames.add("serviceLoaderName");this.allFieldsNames.add("quantityToProduce");this.allFieldsNames.add("quantityProduced");this.allFieldsNames.add("quantityRejected");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("accommodationMapId");this.allFieldsNames.add("accommodationSpotId");this.allFieldsNames.add("revisionNumber");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("timeEntryId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("rateTypeId");this.allFieldsNames.add("timesheetId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("hours");this.allFieldsNames.add("comments");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -850,13 +845,6 @@ fieldMapColumns.put("ProjectPhaseTaskAndTimeEntryTimeSheet", fields);
      */
     public void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
         this.lastModifiedByUserLogin = lastModifiedByUserLogin;
-    }
-    /**
-     * Auto generated value setter.
-     * @param emailDeleted the emailDeleted to set
-     */
-    public void setEmailDeleted(String emailDeleted) {
-        this.emailDeleted = emailDeleted;
     }
     /**
      * Auto generated value setter.
@@ -1332,13 +1320,6 @@ fieldMapColumns.put("ProjectPhaseTaskAndTimeEntryTimeSheet", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getEmailDeleted() {
-        return this.emailDeleted;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
     public String getTimeEntryId() {
         return this.timeEntryId;
     }
@@ -1524,7 +1505,6 @@ fieldMapColumns.put("ProjectPhaseTaskAndTimeEntryTimeSheet", fields);
         setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
         setLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
         setLastModifiedByUserLogin((String) mapValue.get("lastModifiedByUserLogin"));
-        setEmailDeleted((String) mapValue.get("emailDeleted"));
         setTimeEntryId((String) mapValue.get("timeEntryId"));
         setPartyId((String) mapValue.get("partyId"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
@@ -1599,7 +1579,6 @@ fieldMapColumns.put("ProjectPhaseTaskAndTimeEntryTimeSheet", fields);
         mapValue.put("createdByUserLogin", getCreatedByUserLogin());
         mapValue.put("lastModifiedDate", getLastModifiedDate());
         mapValue.put("lastModifiedByUserLogin", getLastModifiedByUserLogin());
-        mapValue.put("emailDeleted", getEmailDeleted());
         mapValue.put("timeEntryId", getTimeEntryId());
         mapValue.put("partyId", getPartyId());
         mapValue.put("fromDate", getFromDate());

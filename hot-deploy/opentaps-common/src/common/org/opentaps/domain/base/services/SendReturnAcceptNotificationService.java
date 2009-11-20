@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Send a notification that a return has been accepted.
@@ -334,6 +335,8 @@ public class SendReturnAcceptNotificationService extends ServiceWrapper {
         if (inParameters.contains("returnId")) mapValue.put("returnId", getInReturnId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -397,6 +400,14 @@ public class SendReturnAcceptNotificationService extends ServiceWrapper {
     public static SendReturnAcceptNotificationService fromInput(Map<String, Object> mapValue) {
         SendReturnAcceptNotificationService service = new SendReturnAcceptNotificationService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

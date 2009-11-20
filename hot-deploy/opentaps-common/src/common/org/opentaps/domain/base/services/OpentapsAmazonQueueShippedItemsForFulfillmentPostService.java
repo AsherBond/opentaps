@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Queues any shipment quantities related to a Shipment/ShipmentRouteSegment derived from an Amazon order for fulfillment confirmation posting.
@@ -354,6 +355,8 @@ public class OpentapsAmazonQueueShippedItemsForFulfillmentPostService extends Se
         if (inParameters.contains("shipmentRouteSegmentId")) mapValue.put("shipmentRouteSegmentId", getInShipmentRouteSegmentId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -418,6 +421,14 @@ public class OpentapsAmazonQueueShippedItemsForFulfillmentPostService extends Se
     public static OpentapsAmazonQueueShippedItemsForFulfillmentPostService fromInput(Map<String, Object> mapValue) {
         OpentapsAmazonQueueShippedItemsForFulfillmentPostService service = new OpentapsAmazonQueueShippedItemsForFulfillmentPostService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

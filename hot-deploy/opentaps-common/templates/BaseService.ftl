@@ -21,7 +21,7 @@ package org.opentaps.domain.base.services;
 // EXTEND THIS CLASS INSTEAD.
 
 import org.opentaps.foundation.infrastructure.InfrastructureException;
-import org.opentaps.foundation.service.${requiresAuth?string("ServiceWrapperWithAuth", "ServiceWrapper")};
+import org.opentaps.foundation.service.ServiceWrapper;
 
 <#-- imports for all the fields' types -->
 <#list types as type>
@@ -37,7 +37,7 @@ import ${type};
  * Invoke: ${serviceInvoke}
  * Defined in: ${serviceDefinition}
  */
-public class ${className} extends ${requiresAuth?string("ServiceWrapperWithAuth", "ServiceWrapper")} {
+public class ${className} extends ServiceWrapper {
 
     /** The service name as used by the service engine. */
     public static final String NAME = "${name}";
@@ -177,10 +177,8 @@ public class ${className} extends ${requiresAuth?string("ServiceWrapperWithAuth"
         <#list inParams.keySet() as field>
         if (inParameters.contains("${field}")) mapValue.put("${field}", ${inGetMethodNames.get(field)}());
         </#list>
-        <#if requiresAuth>
-          // allow the User set to override the userLogin
-          if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
-        </#if>
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -233,16 +231,14 @@ public class ${className} extends ${requiresAuth?string("ServiceWrapperWithAuth"
     public static ${className} fromInput(Map<String, Object> mapValue) {
         ${className} service = new ${className}();
         service.putAllInput(mapValue);
-        <#if requiresAuth>
         if (mapValue.containsKey("userLogin")) {
             GenericValue userGv = (GenericValue) mapValue.get("userLogin");
-            try {
-                service.setUser(new User(userGv, userGv.getDelegator()));
-            } catch (InfrastructureException e) {
-                // this may happen if the user login is null
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
             }
         }
-        </#if>
         return service;
     }
 

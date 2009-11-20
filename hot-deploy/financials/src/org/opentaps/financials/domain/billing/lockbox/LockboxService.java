@@ -20,7 +20,6 @@ package org.opentaps.financials.domain.billing.lockbox;
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +28,9 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.domain.base.entities.PaymentMethodAndEftAccount;
+import org.opentaps.domain.base.services.CreatePaymentApplicationService;
+import org.opentaps.domain.base.services.FinancialsCreatePaymentService;
+import org.opentaps.domain.base.services.SetPaymentStatusService;
 import org.opentaps.domain.billing.BillingDomainInterface;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
@@ -407,44 +409,43 @@ public class LockboxService extends Service implements LockboxServiceInterface {
                     }
 
                     // create the Payment
-                    Map<String, Object> input = new HashMap<String, Object>();
-                    input.put("paymentTypeId", "CUSTOMER_PAYMENT");
-                    input.put("paymentMethodTypeId", "COMPANY_CHECK");
+                    FinancialsCreatePaymentService service = new FinancialsCreatePaymentService();
+                    service.setInPaymentTypeId("CUSTOMER_PAYMENT");
+                    service.setInPaymentMethodTypeId("COMPANY_CHECK");
                     // payment against invoice or just a customer account
                     if (detail.getInvoice() != null) {
-                        input.put("partyIdTo", detail.getInvoice().getPartyIdFrom());
-                        input.put("partyIdFrom", detail.getInvoice().getPartyId());
-                        input.put("currencyUomId", detail.getInvoice().getCurrencyUomId());
+                        service.setInPartyIdTo(detail.getInvoice().getPartyIdFrom());
+                        service.setInPartyIdFrom(detail.getInvoice().getPartyId());
+                        service.setInCurrencyUomId(detail.getInvoice().getCurrencyUomId());
                     } else {
-                        input.put("partyIdTo", org.getPartyId());
-                        input.put("partyIdFrom", detail.getCustomer().getPartyId());
-                        input.put("currencyUomId", org.getPartyAcctgPreference().getBaseCurrencyUomId());
+                        service.setInPartyIdTo(org.getPartyId());
+                        service.setInPartyIdFrom(detail.getCustomer().getPartyId());
+                        service.setInCurrencyUomId(org.getPartyAcctgPreference().getBaseCurrencyUomId());
                     }
                     // receive ONLY the amount to apply, the cash discount will be accounted as an invoice adjustment
-                    input.put("amount", detail.getAmountToApply());
-                    input.put("statusId", "PMNT_NOT_PAID");
-                    input.put("effectiveDate", batch.getDatetimeEntered());
+                    service.setInAmount(detail.getAmountToApply());
+                    service.setInStatusId("PMNT_NOT_PAID");
+                    service.setInEffectiveDate(batch.getDatetimeEntered());
                     // add some references
-                    input.put("paymentRefNum", item.getCheckNumber());
-                    input.put("comments", expandLabel("FinancialsLockboxCommentPayment", UtilMisc.toMap("batchId", batch.getBatchId())));
+                    service.setInPaymentRefNum(item.getCheckNumber());
+                    service.setInComments(expandLabel("FinancialsLockboxCommentPayment", UtilMisc.toMap("batchId", batch.getBatchId())));
                     // set the payment method, so that when the payment is posted, it will debit directly to the checking account and not the undeposited receipts account
                     if (item.getAccountNumber() != null) {
-                    PaymentMethodAndEftAccount targetPaymentMethod = repository.getPaymentMethod(item.getAccountNumber(), item.getRoutingNumber());
-                    if (targetPaymentMethod != null) {
-                        input.put("paymentMethodId", targetPaymentMethod.getPaymentMethodId());
-                    } else {
-                        Debug.logWarning("No payment method found for lockbox batch [" + item.getLockboxBatchId() + "] and seq [" + item.getItemSeqId() + "]", MODULE);
-                    }
+                        PaymentMethodAndEftAccount targetPaymentMethod = repository.getPaymentMethod(item.getAccountNumber(), item.getRoutingNumber());
+                        if (targetPaymentMethod != null) {
+                            service.setInPaymentMethodId(targetPaymentMethod.getPaymentMethodId());
+                        } else {
+                            Debug.logWarning("No payment method found for lockbox batch [" + item.getLockboxBatchId() + "] and seq [" + item.getItemSeqId() + "]", MODULE);
+                        }
                     } else {
                         Debug.logWarning("No account number found for lockbox batch [" + item.getLockboxBatchId() + "] and seq [" + item.getItemSeqId() + "]", MODULE);
                     }
 
                     // call the createPayment service
-                    input.put("userLogin", getUser().getOfbizUserLogin());
-                    Map<String, Object> results = runSync("financials.createPayment", input);
+                    runSync(service);
 
                     // get the created payment id
-                    String paymentId = (String) results.get("paymentId");
+                    String paymentId = service.getOutPaymentId();
 
                     if (detail.getInvoice() != null) {
 
@@ -466,28 +467,26 @@ public class LockboxService extends Service implements LockboxServiceInterface {
                             // this will throw an EntityNotFoundException if the GL account is not found
                             GeneralLedgerAccount lockboxGlAccount = ledgerRepository.getDefaultLedgerAccount("LOCKBOX_CASH_DISC", org.getPartyId());
                             // create the PaymentApplication
-                            input = new HashMap<String, Object>();
-                            input.put("paymentId", paymentId);
-                            input.put("overrideGlAccountId", lockboxGlAccount.getGlAccountId());
+                            CreatePaymentApplicationService service2 = new CreatePaymentApplicationService();
+                            service2.setInPaymentId(paymentId);
+                            service2.setInOverrideGlAccountId(lockboxGlAccount.getGlAccountId());
                             // the cash discount on the LockboxItemDetail has an opposite sign:
                             // -$10 means to apply 10$ of the payment to the GL account
-                            input.put("amountApplied", detail.getCashDiscount().negate());
+                            service2.setInAmountApplied(detail.getCashDiscount().negate());
                             // call the createPaymentApplication service
-                            input.put("userLogin", getUser().getOfbizUserLogin());
-                            results = runSync("createPaymentApplication", input);
+                            runSync(service2);
                         }
 
                         // create the PaymentApplication
-                        input = new HashMap<String, Object>();
-                        input.put("paymentId", paymentId);
-                        input.put("invoiceId", detail.getInvoice().getInvoiceId());
-                        input.put("amountApplied", detail.getAmountToApplyToInvoice());
+                        CreatePaymentApplicationService service2 = new CreatePaymentApplicationService();
+                        service2.setInPaymentId(paymentId);
+                        service2.setInInvoiceId(detail.getInvoice().getInvoiceId());
+                        service2.setInAmountApplied(detail.getAmountToApplyToInvoice());
                         // call the createPaymentApplication service
-                        input.put("userLogin", getUser().getOfbizUserLogin());
-                        results = runSync("createPaymentApplication", input);
+                        runSync(service2);
 
                         // get the created payment application id
-                        String paymentApplicationId = (String) results.get("paymentApplicationId");
+                        String paymentApplicationId = service2.getOutPaymentApplicationId();
 
                         detail.setPaymentApplicationId(paymentApplicationId);
 
@@ -499,12 +498,11 @@ public class LockboxService extends Service implements LockboxServiceInterface {
                     repository.update(detail);
 
                     // set payment as received
-                    input = new HashMap<String, Object>();
-                    input.put("paymentId", paymentId);
-                    input.put("statusId", "PMNT_RECEIVED");
+                    SetPaymentStatusService service2 = new SetPaymentStatusService();
+                    service2.setInPaymentId(paymentId);
+                    service2.setInStatusId("PMNT_RECEIVED");
                     // call the setPaymentStatus service
-                    input.put("userLogin", getUser().getOfbizUserLogin());
-                    results = runSync("setPaymentStatus", input);
+                    runSync(service2);
 
                     // decrease the pending amount for the batch
                     batch.setOutstandingAmount(batch.getOutstandingAmount().subtract(detail.getAmountToApply()));

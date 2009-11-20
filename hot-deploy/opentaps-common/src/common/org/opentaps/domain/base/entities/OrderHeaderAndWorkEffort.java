@@ -51,7 +51,7 @@ import java.sql.Timestamp;
  * Auto generated base entity OrderHeaderAndWorkEffort.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectOrderHeaderAndWorkEfforts", query="SELECT WE.WORK_EFFORT_ID AS \"workEffortId\",WE.WORK_EFFORT_TYPE_ID AS \"workEffortTypeId\",WE.CURRENT_STATUS_ID AS \"currentStatusId\",WE.LAST_STATUS_UPDATE AS \"lastStatusUpdate\",WE.WORK_EFFORT_PURPOSE_TYPE_ID AS \"workEffortPurposeTypeId\",WE.WORK_EFFORT_PARENT_ID AS \"workEffortParentId\",WE.SCOPE_ENUM_ID AS \"scopeEnumId\",WE.PRIORITY AS \"priority\",WE.PERCENT_COMPLETE AS \"percentComplete\",WE.WORK_EFFORT_NAME AS \"workEffortName\",WE.SHOW_AS_ENUM_ID AS \"showAsEnumId\",WE.SEND_NOTIFICATION_EMAIL AS \"sendNotificationEmail\",WE.DESCRIPTION AS \"description\",WE.LOCATION_DESC AS \"locationDesc\",WE.ESTIMATED_START_DATE AS \"estimatedStartDate\",WE.ESTIMATED_COMPLETION_DATE AS \"estimatedCompletionDate\",WE.ACTUAL_START_DATE AS \"actualStartDate\",WE.ACTUAL_COMPLETION_DATE AS \"actualCompletionDate\",WE.ESTIMATED_MILLI_SECONDS AS \"estimatedMilliSeconds\",WE.ESTIMATED_SETUP_MILLIS AS \"estimatedSetupMillis\",WE.ESTIMATE_CALC_METHOD AS \"estimateCalcMethod\",WE.ACTUAL_MILLI_SECONDS AS \"actualMilliSeconds\",WE.ACTUAL_SETUP_MILLIS AS \"actualSetupMillis\",WE.TOTAL_MILLI_SECONDS_ALLOWED AS \"totalMilliSecondsAllowed\",WE.TOTAL_MONEY_ALLOWED AS \"totalMoneyAllowed\",WE.MONEY_UOM_ID AS \"moneyUomId\",WE.SPECIAL_TERMS AS \"specialTerms\",WE.TIME_TRANSPARENCY AS \"timeTransparency\",WE.UNIVERSAL_ID AS \"universalId\",WE.SOURCE_REFERENCE_ID AS \"sourceReferenceId\",WE.FIXED_ASSET_ID AS \"fixedAssetId\",WE.FACILITY_ID AS \"facilityId\",WE.INFO_URL AS \"infoUrl\",WE.RECURRENCE_INFO_ID AS \"recurrenceInfoId\",WE.TEMP_EXPR_ID AS \"tempExprId\",WE.RUNTIME_DATA_ID AS \"runtimeDataId\",WE.NOTE_ID AS \"noteId\",WE.SERVICE_LOADER_NAME AS \"serviceLoaderName\",WE.QUANTITY_TO_PRODUCE AS \"quantityToProduce\",WE.QUANTITY_PRODUCED AS \"quantityProduced\",WE.QUANTITY_REJECTED AS \"quantityRejected\",WE.RESERV_PERSONS AS \"reservPersons\",WE.RESERV2ND_P_P_PERC AS \"reserv2ndPPPerc\",WE.RESERV_NTH_P_P_PERC AS \"reservNthPPPerc\",WE.ACCOMMODATION_MAP_ID AS \"accommodationMapId\",WE.ACCOMMODATION_SPOT_ID AS \"accommodationSpotId\",WE.REVISION_NUMBER AS \"revisionNumber\",WE.CREATED_DATE AS \"createdDate\",WE.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",WE.LAST_MODIFIED_DATE AS \"lastModifiedDate\",WE.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",WE.EMAIL_DELETED AS \"emailDeleted\",OH.ORDER_ID AS \"orderId\",OH.ORDER_TYPE_ID AS \"orderTypeId\",OH.ORDER_NAME AS \"orderName\",OH.EXTERNAL_ID AS \"externalId\",OH.SALES_CHANNEL_ENUM_ID AS \"salesChannelEnumId\",OH.ORDER_DATE AS \"orderDate\",OH.ENTRY_DATE AS \"entryDate\",OH.VISIT_ID AS \"visitId\",OH.STATUS_ID AS \"statusId\",OH.CREATED_BY AS \"createdBy\",OH.FIRST_ATTEMPT_ORDER_ID AS \"firstAttemptOrderId\",OH.CURRENCY_UOM AS \"currencyUom\",OH.SYNC_STATUS_ID AS \"syncStatusId\",OH.BILLING_ACCOUNT_ID AS \"billingAccountId\",OH.ORIGIN_FACILITY_ID AS \"originFacilityId\",OH.WEB_SITE_ID AS \"webSiteId\",OH.PRODUCT_STORE_ID AS \"productStoreId\",OH.TERMINAL_ID AS \"terminalId\",OH.TRANSACTION_ID AS \"transactionId\",OH.AUTO_ORDER_SHOPPING_LIST_ID AS \"autoOrderShoppingListId\",OH.NEEDS_INVENTORY_ISSUANCE AS \"needsInventoryIssuance\",OH.IS_RUSH_ORDER AS \"isRushOrder\",OH.INTERNAL_CODE AS \"internalCode\",OH.REMAINING_SUB_TOTAL AS \"remainingSubTotal\",OH.GRAND_TOTAL AS \"grandTotal\",OH.BILL_FROM_PARTY_ID AS \"billFromPartyId\",OH.BILL_TO_PARTY_ID AS \"billToPartyId\" FROM WORK_EFFORT WE INNER JOIN ORDER_HEADER_WORK_EFFORT OHWE ON WE.WORK_EFFORT_ID = OHWE.WORK_EFFORT_ID INNER JOIN ORDER_HEADER_WORK_EFFORT OHWE ON OHWE.ORDER_ID = OH.ORDER_ID", resultSetMapping="OrderHeaderAndWorkEffortMapping")
+@NamedNativeQuery(name="selectOrderHeaderAndWorkEfforts", query="SELECT WE.WORK_EFFORT_ID AS \"workEffortId\",WE.WORK_EFFORT_TYPE_ID AS \"workEffortTypeId\",WE.CURRENT_STATUS_ID AS \"currentStatusId\",WE.LAST_STATUS_UPDATE AS \"lastStatusUpdate\",WE.WORK_EFFORT_PURPOSE_TYPE_ID AS \"workEffortPurposeTypeId\",WE.WORK_EFFORT_PARENT_ID AS \"workEffortParentId\",WE.SCOPE_ENUM_ID AS \"scopeEnumId\",WE.PRIORITY AS \"priority\",WE.PERCENT_COMPLETE AS \"percentComplete\",WE.WORK_EFFORT_NAME AS \"workEffortName\",WE.SHOW_AS_ENUM_ID AS \"showAsEnumId\",WE.SEND_NOTIFICATION_EMAIL AS \"sendNotificationEmail\",WE.DESCRIPTION AS \"description\",WE.LOCATION_DESC AS \"locationDesc\",WE.ESTIMATED_START_DATE AS \"estimatedStartDate\",WE.ESTIMATED_COMPLETION_DATE AS \"estimatedCompletionDate\",WE.ACTUAL_START_DATE AS \"actualStartDate\",WE.ACTUAL_COMPLETION_DATE AS \"actualCompletionDate\",WE.ESTIMATED_MILLI_SECONDS AS \"estimatedMilliSeconds\",WE.ESTIMATED_SETUP_MILLIS AS \"estimatedSetupMillis\",WE.ESTIMATE_CALC_METHOD AS \"estimateCalcMethod\",WE.ACTUAL_MILLI_SECONDS AS \"actualMilliSeconds\",WE.ACTUAL_SETUP_MILLIS AS \"actualSetupMillis\",WE.TOTAL_MILLI_SECONDS_ALLOWED AS \"totalMilliSecondsAllowed\",WE.TOTAL_MONEY_ALLOWED AS \"totalMoneyAllowed\",WE.MONEY_UOM_ID AS \"moneyUomId\",WE.SPECIAL_TERMS AS \"specialTerms\",WE.TIME_TRANSPARENCY AS \"timeTransparency\",WE.UNIVERSAL_ID AS \"universalId\",WE.SOURCE_REFERENCE_ID AS \"sourceReferenceId\",WE.FIXED_ASSET_ID AS \"fixedAssetId\",WE.FACILITY_ID AS \"facilityId\",WE.INFO_URL AS \"infoUrl\",WE.RECURRENCE_INFO_ID AS \"recurrenceInfoId\",WE.TEMP_EXPR_ID AS \"tempExprId\",WE.RUNTIME_DATA_ID AS \"runtimeDataId\",WE.NOTE_ID AS \"noteId\",WE.SERVICE_LOADER_NAME AS \"serviceLoaderName\",WE.QUANTITY_TO_PRODUCE AS \"quantityToProduce\",WE.QUANTITY_PRODUCED AS \"quantityProduced\",WE.QUANTITY_REJECTED AS \"quantityRejected\",WE.RESERV_PERSONS AS \"reservPersons\",WE.RESERV2ND_P_P_PERC AS \"reserv2ndPPPerc\",WE.RESERV_NTH_P_P_PERC AS \"reservNthPPPerc\",WE.ACCOMMODATION_MAP_ID AS \"accommodationMapId\",WE.ACCOMMODATION_SPOT_ID AS \"accommodationSpotId\",WE.REVISION_NUMBER AS \"revisionNumber\",WE.CREATED_DATE AS \"createdDate\",WE.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",WE.LAST_MODIFIED_DATE AS \"lastModifiedDate\",WE.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",OH.ORDER_ID AS \"orderId\",OH.ORDER_TYPE_ID AS \"orderTypeId\",OH.ORDER_NAME AS \"orderName\",OH.EXTERNAL_ID AS \"externalId\",OH.SALES_CHANNEL_ENUM_ID AS \"salesChannelEnumId\",OH.ORDER_DATE AS \"orderDate\",OH.ENTRY_DATE AS \"entryDate\",OH.VISIT_ID AS \"visitId\",OH.STATUS_ID AS \"statusId\",OH.CREATED_BY AS \"createdBy\",OH.FIRST_ATTEMPT_ORDER_ID AS \"firstAttemptOrderId\",OH.CURRENCY_UOM AS \"currencyUom\",OH.SYNC_STATUS_ID AS \"syncStatusId\",OH.BILLING_ACCOUNT_ID AS \"billingAccountId\",OH.ORIGIN_FACILITY_ID AS \"originFacilityId\",OH.WEB_SITE_ID AS \"webSiteId\",OH.PRODUCT_STORE_ID AS \"productStoreId\",OH.TERMINAL_ID AS \"terminalId\",OH.TRANSACTION_ID AS \"transactionId\",OH.AUTO_ORDER_SHOPPING_LIST_ID AS \"autoOrderShoppingListId\",OH.NEEDS_INVENTORY_ISSUANCE AS \"needsInventoryIssuance\",OH.IS_RUSH_ORDER AS \"isRushOrder\",OH.INTERNAL_CODE AS \"internalCode\",OH.REMAINING_SUB_TOTAL AS \"remainingSubTotal\",OH.GRAND_TOTAL AS \"grandTotal\",OH.BILL_FROM_PARTY_ID AS \"billFromPartyId\",OH.BILL_TO_PARTY_ID AS \"billToPartyId\" FROM WORK_EFFORT WE INNER JOIN ORDER_HEADER_WORK_EFFORT OHWE ON WE.WORK_EFFORT_ID = OHWE.WORK_EFFORT_ID INNER JOIN ORDER_HEADER_WORK_EFFORT OHWE ON OHWE.ORDER_ID = OH.ORDER_ID", resultSetMapping="OrderHeaderAndWorkEffortMapping")
 @SqlResultSetMapping(name="OrderHeaderAndWorkEffortMapping", entities={
 @EntityResult(entityClass=OrderHeaderAndWorkEffort.class, fields = {
 @FieldResult(name="workEffortId", column="workEffortId")
@@ -105,7 +105,6 @@ import java.sql.Timestamp;
 ,@FieldResult(name="createdByUserLogin", column="createdByUserLogin")
 ,@FieldResult(name="lastModifiedDate", column="lastModifiedDate")
 ,@FieldResult(name="lastModifiedByUserLogin", column="lastModifiedByUserLogin")
-,@FieldResult(name="emailDeleted", column="emailDeleted")
 ,@FieldResult(name="orderId", column="orderId")
 ,@FieldResult(name="orderTypeId", column="orderTypeId")
 ,@FieldResult(name="orderName", column="orderName")
@@ -190,7 +189,6 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("createdByUserLogin", "WE.CREATED_BY_USER_LOGIN");
         fields.put("lastModifiedDate", "WE.LAST_MODIFIED_DATE");
         fields.put("lastModifiedByUserLogin", "WE.LAST_MODIFIED_BY_USER_LOGIN");
-        fields.put("emailDeleted", "WE.EMAIL_DELETED");
         fields.put("orderId", "OH.ORDER_ID");
         fields.put("orderTypeId", "OH.ORDER_TYPE_ID");
         fields.put("orderName", "OH.ORDER_NAME");
@@ -272,7 +270,6 @@ fieldMapColumns.put("OrderHeaderAndWorkEffort", fields);
     createdByUserLogin("createdByUserLogin"),
     lastModifiedDate("lastModifiedDate"),
     lastModifiedByUserLogin("lastModifiedByUserLogin"),
-    emailDeleted("emailDeleted"),
     orderId("orderId"),
     orderTypeId("orderTypeId"),
     orderName("orderName"),
@@ -413,8 +410,6 @@ fieldMapColumns.put("OrderHeaderAndWorkEffort", fields);
     
    private String lastModifiedByUserLogin;
     
-   private String emailDeleted;
-    
    private String orderId;
     
    private String orderTypeId;
@@ -480,7 +475,7 @@ fieldMapColumns.put("OrderHeaderAndWorkEffort", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("workEffortId");this.primaryKeyNames.add("orderId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("workEffortTypeId");this.allFieldsNames.add("currentStatusId");this.allFieldsNames.add("lastStatusUpdate");this.allFieldsNames.add("workEffortPurposeTypeId");this.allFieldsNames.add("workEffortParentId");this.allFieldsNames.add("scopeEnumId");this.allFieldsNames.add("priority");this.allFieldsNames.add("percentComplete");this.allFieldsNames.add("workEffortName");this.allFieldsNames.add("showAsEnumId");this.allFieldsNames.add("sendNotificationEmail");this.allFieldsNames.add("description");this.allFieldsNames.add("locationDesc");this.allFieldsNames.add("estimatedStartDate");this.allFieldsNames.add("estimatedCompletionDate");this.allFieldsNames.add("actualStartDate");this.allFieldsNames.add("actualCompletionDate");this.allFieldsNames.add("estimatedMilliSeconds");this.allFieldsNames.add("estimatedSetupMillis");this.allFieldsNames.add("estimateCalcMethod");this.allFieldsNames.add("actualMilliSeconds");this.allFieldsNames.add("actualSetupMillis");this.allFieldsNames.add("totalMilliSecondsAllowed");this.allFieldsNames.add("totalMoneyAllowed");this.allFieldsNames.add("moneyUomId");this.allFieldsNames.add("specialTerms");this.allFieldsNames.add("timeTransparency");this.allFieldsNames.add("universalId");this.allFieldsNames.add("sourceReferenceId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("infoUrl");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("tempExprId");this.allFieldsNames.add("runtimeDataId");this.allFieldsNames.add("noteId");this.allFieldsNames.add("serviceLoaderName");this.allFieldsNames.add("quantityToProduce");this.allFieldsNames.add("quantityProduced");this.allFieldsNames.add("quantityRejected");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("accommodationMapId");this.allFieldsNames.add("accommodationSpotId");this.allFieldsNames.add("revisionNumber");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("emailDeleted");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("orderName");this.allFieldsNames.add("externalId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("visitId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdBy");this.allFieldsNames.add("firstAttemptOrderId");this.allFieldsNames.add("currencyUom");this.allFieldsNames.add("syncStatusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("webSiteId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("terminalId");this.allFieldsNames.add("transactionId");this.allFieldsNames.add("autoOrderShoppingListId");this.allFieldsNames.add("needsInventoryIssuance");this.allFieldsNames.add("isRushOrder");this.allFieldsNames.add("internalCode");this.allFieldsNames.add("remainingSubTotal");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("billFromPartyId");this.allFieldsNames.add("billToPartyId");
+      this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("workEffortTypeId");this.allFieldsNames.add("currentStatusId");this.allFieldsNames.add("lastStatusUpdate");this.allFieldsNames.add("workEffortPurposeTypeId");this.allFieldsNames.add("workEffortParentId");this.allFieldsNames.add("scopeEnumId");this.allFieldsNames.add("priority");this.allFieldsNames.add("percentComplete");this.allFieldsNames.add("workEffortName");this.allFieldsNames.add("showAsEnumId");this.allFieldsNames.add("sendNotificationEmail");this.allFieldsNames.add("description");this.allFieldsNames.add("locationDesc");this.allFieldsNames.add("estimatedStartDate");this.allFieldsNames.add("estimatedCompletionDate");this.allFieldsNames.add("actualStartDate");this.allFieldsNames.add("actualCompletionDate");this.allFieldsNames.add("estimatedMilliSeconds");this.allFieldsNames.add("estimatedSetupMillis");this.allFieldsNames.add("estimateCalcMethod");this.allFieldsNames.add("actualMilliSeconds");this.allFieldsNames.add("actualSetupMillis");this.allFieldsNames.add("totalMilliSecondsAllowed");this.allFieldsNames.add("totalMoneyAllowed");this.allFieldsNames.add("moneyUomId");this.allFieldsNames.add("specialTerms");this.allFieldsNames.add("timeTransparency");this.allFieldsNames.add("universalId");this.allFieldsNames.add("sourceReferenceId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("infoUrl");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("tempExprId");this.allFieldsNames.add("runtimeDataId");this.allFieldsNames.add("noteId");this.allFieldsNames.add("serviceLoaderName");this.allFieldsNames.add("quantityToProduce");this.allFieldsNames.add("quantityProduced");this.allFieldsNames.add("quantityRejected");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("accommodationMapId");this.allFieldsNames.add("accommodationSpotId");this.allFieldsNames.add("revisionNumber");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("orderName");this.allFieldsNames.add("externalId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("visitId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdBy");this.allFieldsNames.add("firstAttemptOrderId");this.allFieldsNames.add("currencyUom");this.allFieldsNames.add("syncStatusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("webSiteId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("terminalId");this.allFieldsNames.add("transactionId");this.allFieldsNames.add("autoOrderShoppingListId");this.allFieldsNames.add("needsInventoryIssuance");this.allFieldsNames.add("isRushOrder");this.allFieldsNames.add("internalCode");this.allFieldsNames.add("remainingSubTotal");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("billFromPartyId");this.allFieldsNames.add("billToPartyId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -854,13 +849,6 @@ fieldMapColumns.put("OrderHeaderAndWorkEffort", fields);
      */
     public void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
         this.lastModifiedByUserLogin = lastModifiedByUserLogin;
-    }
-    /**
-     * Auto generated value setter.
-     * @param emailDeleted the emailDeleted to set
-     */
-    public void setEmailDeleted(String emailDeleted) {
-        this.emailDeleted = emailDeleted;
     }
     /**
      * Auto generated value setter.
@@ -1413,13 +1401,6 @@ fieldMapColumns.put("OrderHeaderAndWorkEffort", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getEmailDeleted() {
-        return this.emailDeleted;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
     public String getOrderId() {
         return this.orderId;
     }
@@ -1664,7 +1645,6 @@ fieldMapColumns.put("OrderHeaderAndWorkEffort", fields);
         setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
         setLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
         setLastModifiedByUserLogin((String) mapValue.get("lastModifiedByUserLogin"));
-        setEmailDeleted((String) mapValue.get("emailDeleted"));
         setOrderId((String) mapValue.get("orderId"));
         setOrderTypeId((String) mapValue.get("orderTypeId"));
         setOrderName((String) mapValue.get("orderName"));
@@ -1750,7 +1730,6 @@ fieldMapColumns.put("OrderHeaderAndWorkEffort", fields);
         mapValue.put("createdByUserLogin", getCreatedByUserLogin());
         mapValue.put("lastModifiedDate", getLastModifiedDate());
         mapValue.put("lastModifiedByUserLogin", getLastModifiedByUserLogin());
-        mapValue.put("emailDeleted", getEmailDeleted());
         mapValue.put("orderId", getOrderId());
         mapValue.put("orderTypeId", getOrderTypeId());
         mapValue.put("orderName", getOrderName());

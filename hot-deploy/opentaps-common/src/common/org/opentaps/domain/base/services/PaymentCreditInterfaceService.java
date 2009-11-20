@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Generic Payment Credit Interface.
@@ -647,6 +648,8 @@ public class PaymentCreditInterfaceService extends ServiceWrapper {
         if (inParameters.contains("referenceCode")) mapValue.put("referenceCode", getInReferenceCode());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -734,6 +737,14 @@ public class PaymentCreditInterfaceService extends ServiceWrapper {
     public static PaymentCreditInterfaceService fromInput(Map<String, Object> mapValue) {
         PaymentCreditInterfaceService service = new PaymentCreditInterfaceService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

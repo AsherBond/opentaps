@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Removes a quote from an opportunity provided user has CRMSFA_OPP_UPDATE permission on this opportunity's account..
@@ -354,6 +355,8 @@ public class CrmsfaRemoveQuoteFromOpportunityService extends ServiceWrapper {
         if (inParameters.contains("salesOpportunityId")) mapValue.put("salesOpportunityId", getInSalesOpportunityId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -418,6 +421,14 @@ public class CrmsfaRemoveQuoteFromOpportunityService extends ServiceWrapper {
     public static CrmsfaRemoveQuoteFromOpportunityService fromInput(Map<String, Object> mapValue) {
         CrmsfaRemoveQuoteFromOpportunityService service = new CrmsfaRemoveQuoteFromOpportunityService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

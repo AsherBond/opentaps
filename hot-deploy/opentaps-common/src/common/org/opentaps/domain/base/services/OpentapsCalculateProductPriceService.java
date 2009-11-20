@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Calculate a Product's Price from ofbiz calculateProductPrice service and adding the map price information.
@@ -860,6 +861,8 @@ public class OpentapsCalculateProductPriceService extends ServiceWrapper {
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("webSiteId")) mapValue.put("webSiteId", getInWebSiteId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -964,6 +967,14 @@ public class OpentapsCalculateProductPriceService extends ServiceWrapper {
     public static OpentapsCalculateProductPriceService fromInput(Map<String, Object> mapValue) {
         OpentapsCalculateProductPriceService service = new OpentapsCalculateProductPriceService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

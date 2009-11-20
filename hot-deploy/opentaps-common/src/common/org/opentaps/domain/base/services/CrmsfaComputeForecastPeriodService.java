@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Computes a forecast for a given time period from the opportunities in that time period using a supplied quota amount. 
@@ -437,6 +438,8 @@ public class CrmsfaComputeForecastPeriodService extends ServiceWrapper {
         if (inParameters.contains("salesForecastId")) mapValue.put("salesForecastId", getInSalesForecastId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -505,6 +508,14 @@ public class CrmsfaComputeForecastPeriodService extends ServiceWrapper {
     public static CrmsfaComputeForecastPeriodService fromInput(Map<String, Object> mapValue) {
         CrmsfaComputeForecastPeriodService service = new CrmsfaComputeForecastPeriodService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

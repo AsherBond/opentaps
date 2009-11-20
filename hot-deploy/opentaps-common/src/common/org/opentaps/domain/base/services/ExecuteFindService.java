@@ -33,6 +33,7 @@ import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.util.EntityListIterator;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Generic service to return an entity iterator.
@@ -455,6 +456,8 @@ public class ExecuteFindService extends ServiceWrapper {
         if (inParameters.contains("orderByList")) mapValue.put("orderByList", getInOrderByList());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -525,6 +528,14 @@ public class ExecuteFindService extends ServiceWrapper {
     public static ExecuteFindService fromInput(Map<String, Object> mapValue) {
         ExecuteFindService service = new ExecuteFindService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

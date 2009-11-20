@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Remove a participant with role CAL_ATTENDEE from the event or activity. Requires _UPDATE permission on all associated parties, cases, and
@@ -355,6 +356,8 @@ public class CrmsfaRemoveWorkEffortPartyAssignmentService extends ServiceWrapper
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("workEffortId")) mapValue.put("workEffortId", getInWorkEffortId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -419,6 +422,14 @@ public class CrmsfaRemoveWorkEffortPartyAssignmentService extends ServiceWrapper
     public static CrmsfaRemoveWorkEffortPartyAssignmentService fromInput(Map<String, Object> mapValue) {
         CrmsfaRemoveWorkEffortPartyAssignmentService service = new CrmsfaRemoveWorkEffortPartyAssignmentService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

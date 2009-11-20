@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Assigns a SalesOpportunity to an Account provided the userLogin has CRMSFA_ACCOUNT_UPDATE permission on this account..
@@ -354,6 +355,8 @@ public class CrmsfaAssignOpportunityToAccountService extends ServiceWrapper {
         if (inParameters.contains("salesOpportunityId")) mapValue.put("salesOpportunityId", getInSalesOpportunityId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -418,6 +421,14 @@ public class CrmsfaAssignOpportunityToAccountService extends ServiceWrapper {
     public static CrmsfaAssignOpportunityToAccountService fromInput(Map<String, Object> mapValue) {
         CrmsfaAssignOpportunityToAccountService service = new CrmsfaAssignOpportunityToAccountService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

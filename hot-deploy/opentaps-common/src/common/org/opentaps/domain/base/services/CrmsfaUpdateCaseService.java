@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Updates a Case. Requires CRMSFA_CASE_UPDATE on any of the accounts or contacts associated with case..
@@ -474,6 +475,8 @@ public class CrmsfaUpdateCaseService extends ServiceWrapper {
         if (inParameters.contains("statusId")) mapValue.put("statusId", getInStatusId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -544,6 +547,14 @@ public class CrmsfaUpdateCaseService extends ServiceWrapper {
     public static CrmsfaUpdateCaseService fromInput(Map<String, Object> mapValue) {
         CrmsfaUpdateCaseService service = new CrmsfaUpdateCaseService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

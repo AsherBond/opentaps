@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Gets a Set of product features (distinct).
@@ -373,6 +374,8 @@ public class GetProductFeatureSetService extends ServiceWrapper {
         if (inParameters.contains("productId")) mapValue.put("productId", getInProductId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -439,6 +442,14 @@ public class GetProductFeatureSetService extends ServiceWrapper {
     public static GetProductFeatureSetService fromInput(Map<String, Object> mapValue) {
         GetProductFeatureSetService service = new GetProductFeatureSetService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

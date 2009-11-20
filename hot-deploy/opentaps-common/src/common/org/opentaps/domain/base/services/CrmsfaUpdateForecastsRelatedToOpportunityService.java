@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * When an opportunity is created or updated, forecasts for the opportunity's estimatedCloseDate must be updated to include
@@ -377,6 +378,8 @@ public class CrmsfaUpdateForecastsRelatedToOpportunityService extends ServiceWra
         if (inParameters.contains("salesOpportunityId")) mapValue.put("salesOpportunityId", getInSalesOpportunityId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -442,6 +445,14 @@ public class CrmsfaUpdateForecastsRelatedToOpportunityService extends ServiceWra
     public static CrmsfaUpdateForecastsRelatedToOpportunityService fromInput(Map<String, Object> mapValue) {
         CrmsfaUpdateForecastsRelatedToOpportunityService service = new CrmsfaUpdateForecastsRelatedToOpportunityService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

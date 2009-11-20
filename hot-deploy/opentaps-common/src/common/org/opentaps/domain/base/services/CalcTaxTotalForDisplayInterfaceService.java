@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Tax Calc Total For Display Service Interface.
@@ -492,6 +493,8 @@ public class CalcTaxTotalForDisplayInterfaceService extends ServiceWrapper {
         if (inParameters.contains("shippingPrice")) mapValue.put("shippingPrice", getInShippingPrice());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -566,6 +569,14 @@ public class CalcTaxTotalForDisplayInterfaceService extends ServiceWrapper {
     public static CalcTaxTotalForDisplayInterfaceService fromInput(Map<String, Object> mapValue) {
         CalcTaxTotalForDisplayInterfaceService service = new CalcTaxTotalForDisplayInterfaceService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

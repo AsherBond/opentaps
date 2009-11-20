@@ -20,19 +20,21 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.opentaps.domain.base.entities.Requirement;
 import org.opentaps.domain.base.entities.RequirementRole;
+import org.opentaps.domain.base.entities.SupplierProduct;
+import org.opentaps.domain.base.services.PurchasingUpdateRequirementSupplierService;
+import org.opentaps.domain.base.services.UpdateRequirementService;
 import org.opentaps.domain.purchasing.PurchasingDomainInterface;
 import org.opentaps.domain.purchasing.planning.PlanningRepositoryInterface;
 import org.opentaps.domain.purchasing.planning.requirement.RequirementServiceInterface;
+import org.opentaps.foundation.exception.FoundationException;
 import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
-import org.opentaps.domain.base.entities.SupplierProduct;
 
 /** {@inheritDoc} */
 public class RequirementService extends Service implements RequirementServiceInterface {
@@ -99,12 +101,12 @@ public class RequirementService extends Service implements RequirementServiceInt
             // this force the check that the requirement exists
             planningRepository.getRequirementById(requirementId);
             // update the status to REQ_REJECTED using the updateRequirement service in order to allow SECAs to fire
-            Map<String, Object> input = createInputMap();
-            input.put("requirementId", requirementId);
-            input.put("statusId", "REQ_REJECTED");
-            runSync("updateRequirement", input);
+            UpdateRequirementService service = new UpdateRequirementService();
+            service.setInRequirementId(requirementId);
+            service.setInStatusId("REQ_REJECTED");
+            runSync(service);
 
-        } catch (GeneralException ex) {
+        } catch (FoundationException ex) {
             throw new ServiceException(ex);
         }
     }
@@ -123,20 +125,20 @@ public class RequirementService extends Service implements RequirementServiceInt
             // update the quantity if needed
             if (quantity != null && requirement.getQuantity().compareTo(quantity) != 0) {
                 Debug.logInfo("Updating the quantity of Requirement [" + requirementId + "] from [" + requirement.getQuantity() + "] to [" + quantity + "]" , MODULE);
-                Map<String, Object> input = createInputMap();
-                input.put("requirementId", requirementId);
-                input.put("quantity", quantity);
-                runSync("updateRequirement", input);
+                UpdateRequirementService service = new UpdateRequirementService();
+                service.setInRequirementId(requirementId);
+                service.setInQuantity(quantity);
+                runSync(service);
             }
             // change the supplier, only for a PRODUCT_REQUIREMENT (purchasing requirement)
             Debug.logInfo("Should update the supplier of Requirement [" + requirement + "] from [" + partyId + "] to [" + newPartyId + "] ???" , MODULE);
             if ("PRODUCT_REQUIREMENT".equals(requirement.getRequirementTypeId()) && newPartyId != null && partyId != null && !partyId.equals(newPartyId)) {
                 Debug.logInfo("Updating the supplier of Requirement [" + requirementId + "] from [" + partyId + "] to [" + newPartyId + "]" , MODULE);
-                Map<String, Object> input = createInputMap();
-                input.put("requirementId", requirementId);
-                input.put("partyId", partyId);
-                input.put("newPartyId", newPartyId);
-                runSync("purchasing.updateRequirementSupplier", input);
+                PurchasingUpdateRequirementSupplierService service = new PurchasingUpdateRequirementSupplierService();
+                service.setInRequirementId(requirementId);
+                service.setInPartyId(partyId);
+                service.setInNewPartyId(newPartyId);
+                runSync(service);
             }
         } catch (GeneralException ex) {
             throw new ServiceException(ex);

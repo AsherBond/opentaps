@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Gets a group of user preferences..
@@ -373,6 +374,8 @@ public class GetUserPreferenceGroupService extends ServiceWrapper {
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("userPrefGroupTypeId")) mapValue.put("userPrefGroupTypeId", getInUserPrefGroupTypeId());
         if (inParameters.contains("userPrefLoginId")) mapValue.put("userPrefLoginId", getInUserPrefLoginId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -439,6 +442,14 @@ public class GetUserPreferenceGroupService extends ServiceWrapper {
     public static GetUserPreferenceGroupService fromInput(Map<String, Object> mapValue) {
         GetUserPreferenceGroupService service = new GetUserPreferenceGroupService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

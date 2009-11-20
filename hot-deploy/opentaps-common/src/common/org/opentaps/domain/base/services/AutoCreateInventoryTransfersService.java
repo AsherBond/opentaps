@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Auto create inventory transfers for parts needed by production runs during a time period, taking into account
@@ -397,6 +398,8 @@ public class AutoCreateInventoryTransfersService extends ServiceWrapper {
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("warehouseFacilityId")) mapValue.put("warehouseFacilityId", getInWarehouseFacilityId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -463,6 +466,14 @@ public class AutoCreateInventoryTransfersService extends ServiceWrapper {
     public static AutoCreateInventoryTransfersService fromInput(Map<String, Object> mapValue) {
         AutoCreateInventoryTransfersService service = new AutoCreateInventoryTransfersService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

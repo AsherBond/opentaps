@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Uploads a user supplied file into the content system.  This service uses a simplification of the content datamodel: 
@@ -497,6 +498,8 @@ public class UploadFileService extends ServiceWrapper {
         if (inParameters.contains("uploadFolder")) mapValue.put("uploadFolder", getInUploadFolder());
         if (inParameters.contains("uploadedFile")) mapValue.put("uploadedFile", getInUploadedFile());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -570,6 +573,14 @@ public class UploadFileService extends ServiceWrapper {
     public static UploadFileService fromInput(Map<String, Object> mapValue) {
         UploadFileService service = new UploadFileService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

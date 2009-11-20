@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Remove a WorkEffort - Product Assoc, for linking WorkEffort to In or Out  Product,
@@ -397,6 +398,8 @@ public class RemoveWorkEffortGoodStandardService extends ServiceWrapper {
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("workEffortGoodStdTypeId")) mapValue.put("workEffortGoodStdTypeId", getInWorkEffortGoodStdTypeId());
         if (inParameters.contains("workEffortId")) mapValue.put("workEffortId", getInWorkEffortId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -463,6 +466,14 @@ public class RemoveWorkEffortGoodStandardService extends ServiceWrapper {
     public static RemoveWorkEffortGoodStandardService fromInput(Map<String, Object> mapValue) {
         RemoveWorkEffortGoodStandardService service = new RemoveWorkEffortGoodStandardService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

@@ -22,10 +22,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import javolution.util.FastMap;
 import org.ofbiz.security.Security;
-import org.ofbiz.service.GenericServiceException;
-import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
@@ -145,33 +142,28 @@ public class Service implements ServiceInterface {
     }
 
     /**
-     * Convenience method to generate an input <code>Map</code> to be passed to an Ofbiz service which sets the current <code>UserLogin</code>.
-     * @return a <code>Map</code> with the current <code>User</code> <code>UserLogin</code>
+     * Convenience method to call an Ofbiz service wrapper, setting the user and infrastructure.
+     * The service will NOT be run in a seprate transaction, since your service is probably inside of a transaction.
+     * @param service the service to run
+     * @throws ServiceException if an error occurs
      */
-    public Map<String, Object> createInputMap() {
-        Map<String, Object> input = FastMap.newInstance();
-        input.put("userLogin", getUser().getOfbizUserLogin());
-        return input;
+    public void runSync(ServiceWrapper service) throws ServiceException {
+        runSync(service, getUser());
     }
 
     /**
-     * Convenience method to call an Ofbiz service and return the results <code>Map</code>.
+     * Convenience method to call an Ofbiz service wrapper, setting the user and infrastructure.
      * The service will NOT be run in a seprate transaction, since your service is probably inside of a transaction.
-     * @param serviceName the service to run
-     * @param input the service input <code>Map</code>
-     * @return the service results <code>Map</code>
+     * @param service the service to run
+     * @param user the <code>User</code> to run the service as
      * @throws ServiceException if an error occurs
      */
-    public Map<String, Object> runSync(String serviceName, Map<String, Object> input) throws ServiceException {
-        try {
-            // run the service without creating a new transaction
-            Map<String, Object> results = getInfrastructure().getDispatcher().runSync(serviceName, input, -1, false);
-            if (ServiceUtil.isError(results)) {
-                throw new ServiceException(ServiceUtil.getErrorMessage(results));
-            }
-            return results;
-        } catch (GenericServiceException e) {
-            throw new ServiceException(e);
+    public void runSync(ServiceWrapper service, User user) throws ServiceException {
+        // run the service without creating a new transaction
+        service.setUser(user);
+        service.runSyncNoNewTransaction(getInfrastructure());
+        if (service.isError()) {
+            throw new ServiceException(service.getErrorMessage());
         }
     }
 

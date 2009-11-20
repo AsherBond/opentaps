@@ -63,6 +63,7 @@ public class Infrastructure {
     protected GenericDelegator delegator = null;
     protected Security security = null;
     protected GenericValue systemUserLogin = null;  // Sometimes, the system user must be used by the Factory or Repository that use the ofbiz Infrastructure
+    protected User systemUser = null;
     // create this map for store all of session factory
     private static Map<String, SessionFactory> sessionFactories = FastMap.newInstance();
     // hibernate dialects maps
@@ -226,6 +227,7 @@ public class Infrastructure {
     private void loadSystemUserLogin() throws InfrastructureException {
         try {
             this.systemUserLogin = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "system"));
+            this.systemUser = new User(this.systemUserLogin, delegator);
         } catch (GenericEntityException e) {
             throw new InfrastructureException(e);
         }
@@ -237,6 +239,14 @@ public class Infrastructure {
      */
     public GenericValue getSystemUserLogin() {
         return this.systemUserLogin;
+    }
+
+    /**
+     * Gets the system User for Factories and Repositories that need them.
+     * @return the system <code>User</code>
+     */
+    public User getSystemUser() {
+        return this.systemUser;
     }
 
     /**

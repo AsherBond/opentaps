@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Service designed to run after updatePostalAddress.  Its purpose is to copy any ProductStoreFacilityByAddress entries for the updated address..
@@ -354,6 +355,8 @@ public class OpentapsUpdatePostalAddressForProductStoreFacilityByAddressService 
         if (inParameters.contains("oldContactMechId")) mapValue.put("oldContactMechId", getInOldContactMechId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -418,6 +421,14 @@ public class OpentapsUpdatePostalAddressForProductStoreFacilityByAddressService 
     public static OpentapsUpdatePostalAddressForProductStoreFacilityByAddressService fromInput(Map<String, Object> mapValue) {
         OpentapsUpdatePostalAddressForProductStoreFacilityByAddressService service = new OpentapsUpdatePostalAddressForProductStoreFacilityByAddressService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

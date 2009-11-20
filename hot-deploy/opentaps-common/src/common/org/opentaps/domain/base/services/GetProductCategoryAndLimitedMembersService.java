@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Gets a productCategory and a Collection of associated productCategoryMembers and calculates limiting parameters.
@@ -648,6 +649,8 @@ public class GetProductCategoryAndLimitedMembersService extends ServiceWrapper {
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("viewIndexString")) mapValue.put("viewIndexString", getInViewIndexString());
         if (inParameters.contains("viewSizeString")) mapValue.put("viewSizeString", getInViewSizeString());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -734,6 +737,14 @@ public class GetProductCategoryAndLimitedMembersService extends ServiceWrapper {
     public static GetProductCategoryAndLimitedMembersService fromInput(Map<String, Object> mapValue) {
         GetProductCategoryAndLimitedMembersService service = new GetProductCategoryAndLimitedMembersService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

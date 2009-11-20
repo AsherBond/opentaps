@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Sets shipment currency. Defaults to the baseCurrencyUomId of the PartyAcctgPreference of the owner party of the shipment's origin facility.
@@ -354,6 +355,8 @@ public class SetShipmentCurrencyService extends ServiceWrapper {
         if (inParameters.contains("shipmentId")) mapValue.put("shipmentId", getInShipmentId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -418,6 +421,14 @@ public class SetShipmentCurrencyService extends ServiceWrapper {
     public static SetShipmentCurrencyService fromInput(Map<String, Object> mapValue) {
         SetShipmentCurrencyService service = new SetShipmentCurrencyService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

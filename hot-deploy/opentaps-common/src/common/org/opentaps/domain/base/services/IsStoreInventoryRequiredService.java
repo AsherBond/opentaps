@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Checks if Store Inventory is Required.
@@ -413,6 +414,8 @@ public class IsStoreInventoryRequiredService extends ServiceWrapper {
         if (inParameters.contains("productStoreId")) mapValue.put("productStoreId", getInProductStoreId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -481,6 +484,14 @@ public class IsStoreInventoryRequiredService extends ServiceWrapper {
     public static IsStoreInventoryRequiredService fromInput(Map<String, Object> mapValue) {
         IsStoreInventoryRequiredService service = new IsStoreInventoryRequiredService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

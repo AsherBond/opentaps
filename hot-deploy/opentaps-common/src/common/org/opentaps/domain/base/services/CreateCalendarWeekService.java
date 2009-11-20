@@ -33,6 +33,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Create a Calendar Week.
@@ -636,6 +637,8 @@ public class CreateCalendarWeekService extends ServiceWrapper {
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("wednesdayCapacity")) mapValue.put("wednesdayCapacity", getInWednesdayCapacity());
         if (inParameters.contains("wednesdayStartTime")) mapValue.put("wednesdayStartTime", getInWednesdayStartTime());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -714,6 +717,14 @@ public class CreateCalendarWeekService extends ServiceWrapper {
     public static CreateCalendarWeekService fromInput(Map<String, Object> mapValue) {
         CreateCalendarWeekService service = new CreateCalendarWeekService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

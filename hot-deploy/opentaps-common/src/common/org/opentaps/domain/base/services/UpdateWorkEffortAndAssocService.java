@@ -21,7 +21,7 @@ package org.opentaps.domain.base.services;
 // EXTEND THIS CLASS INSTEAD.
 
 import org.opentaps.foundation.infrastructure.InfrastructureException;
-import org.opentaps.foundation.service.ServiceWrapperWithAuth;
+import org.opentaps.foundation.service.ServiceWrapper;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -44,7 +44,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Invoke: 
  * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/workeffort/servicedef/services.xml
  */
-public class UpdateWorkEffortAndAssocService extends ServiceWrapperWithAuth {
+public class UpdateWorkEffortAndAssocService extends ServiceWrapper {
 
     /** The service name as used by the service engine. */
     public static final String NAME = "updateWorkEffortAndAssoc";
@@ -68,7 +68,6 @@ public class UpdateWorkEffortAndAssocService extends ServiceWrapperWithAuth {
         createdDate("createdDate"),
         currentStatusId("currentStatusId"),
         description("description"),
-        emailDeleted("emailDeleted"),
         estimateCalcMethod("estimateCalcMethod"),
         estimatedCompletionDate("estimatedCompletionDate"),
         estimatedMilliSeconds("estimatedMilliSeconds"),
@@ -170,7 +169,6 @@ public class UpdateWorkEffortAndAssocService extends ServiceWrapperWithAuth {
     private Timestamp inCreatedDate;
     private String inCurrentStatusId;
     private String inDescription;
-    private String inEmailDeleted;
     private String inEstimateCalcMethod;
     private Timestamp inEstimatedCompletionDate;
     private Double inEstimatedMilliSeconds;
@@ -326,14 +324,6 @@ public class UpdateWorkEffortAndAssocService extends ServiceWrapperWithAuth {
      */
     public String getInDescription() {
         return this.inDescription;
-    }
-    /**
-     * Auto generated value accessor.
-     * This parameter is optional.
-     * @return <code>String</code>
-     */
-    public String getInEmailDeleted() {
-        return this.inEmailDeleted;
     }
     /**
      * Auto generated value accessor.
@@ -950,15 +940,6 @@ public class UpdateWorkEffortAndAssocService extends ServiceWrapperWithAuth {
     /**
      * Auto generated value setter.
      * This parameter is optional.
-     * @param inEmailDeleted the inEmailDeleted to set
-    */
-    public void setInEmailDeleted(String inEmailDeleted) {
-        this.inParameters.add("emailDeleted");
-        this.inEmailDeleted = inEmailDeleted;
-    }
-    /**
-     * Auto generated value setter.
-     * This parameter is optional.
      * @param inEstimateCalcMethod the inEstimateCalcMethod to set
     */
     public void setInEstimateCalcMethod(String inEstimateCalcMethod) {
@@ -1567,7 +1548,6 @@ public class UpdateWorkEffortAndAssocService extends ServiceWrapperWithAuth {
         if (inParameters.contains("createdDate")) mapValue.put("createdDate", getInCreatedDate());
         if (inParameters.contains("currentStatusId")) mapValue.put("currentStatusId", getInCurrentStatusId());
         if (inParameters.contains("description")) mapValue.put("description", getInDescription());
-        if (inParameters.contains("emailDeleted")) mapValue.put("emailDeleted", getInEmailDeleted());
         if (inParameters.contains("estimateCalcMethod")) mapValue.put("estimateCalcMethod", getInEstimateCalcMethod());
         if (inParameters.contains("estimatedCompletionDate")) mapValue.put("estimatedCompletionDate", getInEstimatedCompletionDate());
         if (inParameters.contains("estimatedMilliSeconds")) mapValue.put("estimatedMilliSeconds", getInEstimatedMilliSeconds());
@@ -1619,8 +1599,8 @@ public class UpdateWorkEffortAndAssocService extends ServiceWrapperWithAuth {
         if (inParameters.contains("workEffortParentId")) mapValue.put("workEffortParentId", getInWorkEffortParentId());
         if (inParameters.contains("workEffortPurposeTypeId")) mapValue.put("workEffortPurposeTypeId", getInWorkEffortPurposeTypeId());
         if (inParameters.contains("workEffortTypeId")) mapValue.put("workEffortTypeId", getInWorkEffortTypeId());
-          // allow the User set to override the userLogin
-          if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -1656,7 +1636,6 @@ public class UpdateWorkEffortAndAssocService extends ServiceWrapperWithAuth {
         if (mapValue.containsKey("createdDate")) setInCreatedDate((Timestamp) mapValue.get("createdDate"));
         if (mapValue.containsKey("currentStatusId")) setInCurrentStatusId((String) mapValue.get("currentStatusId"));
         if (mapValue.containsKey("description")) setInDescription((String) mapValue.get("description"));
-        if (mapValue.containsKey("emailDeleted")) setInEmailDeleted((String) mapValue.get("emailDeleted"));
         if (mapValue.containsKey("estimateCalcMethod")) setInEstimateCalcMethod((String) mapValue.get("estimateCalcMethod"));
         if (mapValue.containsKey("estimatedCompletionDate")) setInEstimatedCompletionDate((Timestamp) mapValue.get("estimatedCompletionDate"));
         if (mapValue.containsKey("estimatedMilliSeconds")) setInEstimatedMilliSeconds((Double) mapValue.get("estimatedMilliSeconds"));
@@ -1755,10 +1734,10 @@ public class UpdateWorkEffortAndAssocService extends ServiceWrapperWithAuth {
         service.putAllInput(mapValue);
         if (mapValue.containsKey("userLogin")) {
             GenericValue userGv = (GenericValue) mapValue.get("userLogin");
-            try {
-                service.setUser(new User(userGv, userGv.getDelegator()));
-            } catch (InfrastructureException e) {
-                // this may happen if the user login is null
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
             }
         }
         return service;

@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Create postal address, purposes and set them defaults.
@@ -914,6 +915,8 @@ public class CreatePostalAddressAndPurposesService extends ServiceWrapper {
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("verified")) mapValue.put("verified", getInVerified());
         if (inParameters.contains("yearsWithContactMech")) mapValue.put("yearsWithContactMech", getInYearsWithContactMech());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -1007,6 +1010,14 @@ public class CreatePostalAddressAndPurposesService extends ServiceWrapper {
     public static CreatePostalAddressAndPurposesService fromInput(Map<String, Object> mapValue) {
         CreatePostalAddressAndPurposesService service = new CreatePostalAddressAndPurposesService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Splits the specified ShipmentItem creating a new ShipmentItem with the given newItemQuantity.
@@ -396,6 +397,8 @@ public class SplitShipmentItemByQuantityService extends ServiceWrapper {
         if (inParameters.contains("shipmentItemSeqId")) mapValue.put("shipmentItemSeqId", getInShipmentItemSeqId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -463,6 +466,14 @@ public class SplitShipmentItemByQuantityService extends ServiceWrapper {
     public static SplitShipmentItemByQuantityService fromInput(Map<String, Object> mapValue) {
         SplitShipmentItemByQuantityService service = new SplitShipmentItemByQuantityService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

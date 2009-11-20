@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Batch service for checking and sending backorder notifications.  Will also set an autoCancelDate for sales orders to 30 days (hard coded)
@@ -315,6 +316,8 @@ public class CheckInventoryAvailabilityService extends ServiceWrapper {
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -377,6 +380,14 @@ public class CheckInventoryAvailabilityService extends ServiceWrapper {
     public static CheckInventoryAvailabilityService fromInput(Map<String, Object> mapValue) {
         CheckInventoryAvailabilityService service = new CheckInventoryAvailabilityService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

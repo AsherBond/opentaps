@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Remove an email attachment by removing CommEventContentAssoc, Content and DataResource.
@@ -514,6 +515,8 @@ public class CrmsfaRemoveEmailAttachmentService extends ServiceWrapper {
         if (inParameters.contains("targetOperationList")) mapValue.put("targetOperationList", getInTargetOperationList());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -587,6 +590,14 @@ public class CrmsfaRemoveEmailAttachmentService extends ServiceWrapper {
     public static CrmsfaRemoveEmailAttachmentService fromInput(Map<String, Object> mapValue) {
         CrmsfaRemoveEmailAttachmentService service = new CrmsfaRemoveEmailAttachmentService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

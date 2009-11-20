@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Assigns a team to an account. The userLogin must have CRMSFA_TEAM_ASSIGN permission on this account..
@@ -354,6 +355,8 @@ public class CrmsfaAssignTeamToAccountService extends ServiceWrapper {
         if (inParameters.contains("teamPartyId")) mapValue.put("teamPartyId", getInTeamPartyId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -418,6 +421,14 @@ public class CrmsfaAssignTeamToAccountService extends ServiceWrapper {
     public static CrmsfaAssignTeamToAccountService fromInput(Map<String, Object> mapValue) {
         CrmsfaAssignTeamToAccountService service = new CrmsfaAssignTeamToAccountService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

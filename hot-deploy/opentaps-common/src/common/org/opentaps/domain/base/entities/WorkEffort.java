@@ -110,7 +110,6 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
-        fields.put("emailDeleted", "EMAIL_DELETED");
 fieldMapColumns.put("WorkEffort", fields);
 }
   public static enum Fields implements EntityFieldInterface<WorkEffort> {
@@ -168,8 +167,7 @@ fieldMapColumns.put("WorkEffort", fields);
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
-    createdTxStamp("createdTxStamp"),
-    emailDeleted("emailDeleted");
+    createdTxStamp("createdTxStamp");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -293,8 +291,6 @@ fieldMapColumns.put("WorkEffort", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
-   @Column(name="EMAIL_DELETED")
-   private String emailDeleted;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -596,7 +592,7 @@ fieldMapColumns.put("WorkEffort", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("workEffortId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("workEffortTypeId");this.allFieldsNames.add("currentStatusId");this.allFieldsNames.add("lastStatusUpdate");this.allFieldsNames.add("workEffortPurposeTypeId");this.allFieldsNames.add("workEffortParentId");this.allFieldsNames.add("scopeEnumId");this.allFieldsNames.add("priority");this.allFieldsNames.add("percentComplete");this.allFieldsNames.add("workEffortName");this.allFieldsNames.add("showAsEnumId");this.allFieldsNames.add("sendNotificationEmail");this.allFieldsNames.add("description");this.allFieldsNames.add("locationDesc");this.allFieldsNames.add("estimatedStartDate");this.allFieldsNames.add("estimatedCompletionDate");this.allFieldsNames.add("actualStartDate");this.allFieldsNames.add("actualCompletionDate");this.allFieldsNames.add("estimatedMilliSeconds");this.allFieldsNames.add("estimatedSetupMillis");this.allFieldsNames.add("estimateCalcMethod");this.allFieldsNames.add("actualMilliSeconds");this.allFieldsNames.add("actualSetupMillis");this.allFieldsNames.add("totalMilliSecondsAllowed");this.allFieldsNames.add("totalMoneyAllowed");this.allFieldsNames.add("moneyUomId");this.allFieldsNames.add("specialTerms");this.allFieldsNames.add("timeTransparency");this.allFieldsNames.add("universalId");this.allFieldsNames.add("sourceReferenceId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("infoUrl");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("tempExprId");this.allFieldsNames.add("runtimeDataId");this.allFieldsNames.add("noteId");this.allFieldsNames.add("serviceLoaderName");this.allFieldsNames.add("quantityToProduce");this.allFieldsNames.add("quantityProduced");this.allFieldsNames.add("quantityRejected");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("accommodationMapId");this.allFieldsNames.add("accommodationSpotId");this.allFieldsNames.add("revisionNumber");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("emailDeleted");
+      this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("workEffortTypeId");this.allFieldsNames.add("currentStatusId");this.allFieldsNames.add("lastStatusUpdate");this.allFieldsNames.add("workEffortPurposeTypeId");this.allFieldsNames.add("workEffortParentId");this.allFieldsNames.add("scopeEnumId");this.allFieldsNames.add("priority");this.allFieldsNames.add("percentComplete");this.allFieldsNames.add("workEffortName");this.allFieldsNames.add("showAsEnumId");this.allFieldsNames.add("sendNotificationEmail");this.allFieldsNames.add("description");this.allFieldsNames.add("locationDesc");this.allFieldsNames.add("estimatedStartDate");this.allFieldsNames.add("estimatedCompletionDate");this.allFieldsNames.add("actualStartDate");this.allFieldsNames.add("actualCompletionDate");this.allFieldsNames.add("estimatedMilliSeconds");this.allFieldsNames.add("estimatedSetupMillis");this.allFieldsNames.add("estimateCalcMethod");this.allFieldsNames.add("actualMilliSeconds");this.allFieldsNames.add("actualSetupMillis");this.allFieldsNames.add("totalMilliSecondsAllowed");this.allFieldsNames.add("totalMoneyAllowed");this.allFieldsNames.add("moneyUomId");this.allFieldsNames.add("specialTerms");this.allFieldsNames.add("timeTransparency");this.allFieldsNames.add("universalId");this.allFieldsNames.add("sourceReferenceId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("infoUrl");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("tempExprId");this.allFieldsNames.add("runtimeDataId");this.allFieldsNames.add("noteId");this.allFieldsNames.add("serviceLoaderName");this.allFieldsNames.add("quantityToProduce");this.allFieldsNames.add("quantityProduced");this.allFieldsNames.add("quantityRejected");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("accommodationMapId");this.allFieldsNames.add("accommodationSpotId");this.allFieldsNames.add("revisionNumber");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -996,13 +992,6 @@ fieldMapColumns.put("WorkEffort", fields);
     public void setCreatedTxStamp(Timestamp createdTxStamp) {
         this.createdTxStamp = createdTxStamp;
     }
-    /**
-     * Auto generated value setter.
-     * @param emailDeleted the emailDeleted to set
-     */
-    public void setEmailDeleted(String emailDeleted) {
-        this.emailDeleted = emailDeleted;
-    }
 
     /**
      * Auto generated value accessor.
@@ -1388,13 +1377,6 @@ fieldMapColumns.put("WorkEffort", fields);
      */
     public Timestamp getCreatedTxStamp() {
         return this.createdTxStamp;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getEmailDeleted() {
-        return this.emailDeleted;
     }
 
     /**
@@ -3448,7 +3430,6 @@ fieldMapColumns.put("WorkEffort", fields);
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
         setCreatedTxStamp((Timestamp) mapValue.get("createdTxStamp"));
-        setEmailDeleted((String) mapValue.get("emailDeleted"));
         postInit();
     }
 
@@ -3511,7 +3492,6 @@ fieldMapColumns.put("WorkEffort", fields);
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());
         mapValue.put("createdTxStamp", getCreatedTxStamp());
-        mapValue.put("emailDeleted", getEmailDeleted());
         return mapValue;
     }
 

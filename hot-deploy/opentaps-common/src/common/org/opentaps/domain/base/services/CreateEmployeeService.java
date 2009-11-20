@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Create an Employee its role and contact details.
@@ -1314,6 +1315,8 @@ public class CreateEmployeeService extends ServiceWrapper {
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("weight")) mapValue.put("weight", getInWeight());
         if (inParameters.contains("yearsWithEmployer")) mapValue.put("yearsWithEmployer", getInYearsWithEmployer());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -1427,6 +1430,14 @@ public class CreateEmployeeService extends ServiceWrapper {
     public static CreateEmployeeService fromInput(Map<String, Object> mapValue) {
         CreateEmployeeService service = new CreateEmployeeService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

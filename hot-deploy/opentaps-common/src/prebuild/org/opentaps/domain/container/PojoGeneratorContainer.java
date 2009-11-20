@@ -300,9 +300,7 @@ public class PojoGeneratorContainer implements Container {
                 types.add("java.util.Set");
                 types.add("javolution.util.FastMap");
                 types.add("javolution.util.FastSet");
-                if (modelService.auth) {
-                    types.add("org.opentaps.foundation.infrastructure.User");
-                }
+                types.add("org.opentaps.foundation.infrastructure.User");
                 // a type for each field during declarations
                 Map<String, String> fieldTypes = new TreeMap<String, String>();
                 Map<String, String> fieldRealTypes = new TreeMap<String, String>();

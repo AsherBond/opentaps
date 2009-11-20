@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Interface for the accounting tags..
@@ -514,6 +515,8 @@ public class AccountingTagsInterfaceService extends ServiceWrapper {
         if (inParameters.contains("tag9")) mapValue.put("tag9", getInTag9());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -586,6 +589,14 @@ public class AccountingTagsInterfaceService extends ServiceWrapper {
     public static AccountingTagsInterfaceService fromInput(Map<String, Object> mapValue) {
         AccountingTagsInterfaceService service = new AccountingTagsInterfaceService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

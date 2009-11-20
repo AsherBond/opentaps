@@ -20,19 +20,17 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-
-import javolution.util.FastMap;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Transaction;
 import org.ofbiz.base.util.UtilDateTime;
-import org.ofbiz.base.util.UtilMisc;
 import org.opentaps.domain.base.entities.AcctgTransAndEntries;
 import org.opentaps.domain.base.entities.DataWarehouseTransform;
 import org.opentaps.domain.base.entities.EncumbranceDetail;
 import org.opentaps.domain.base.entities.GlAccountTransEntryFact;
+import org.opentaps.domain.base.services.CreateEncumbranceSnapshotAndDetailService;
+import org.opentaps.domain.base.services.FinancialsCreateGlAccountTransEntryFactService;
 import org.opentaps.domain.ledger.AccountingTransaction;
 import org.opentaps.domain.ledger.EncumbranceRepositoryInterface;
 import org.opentaps.domain.ledger.FinancialReportServicesInterface;
@@ -218,28 +216,18 @@ public class FinancialReportServices extends Service implements FinancialReportS
     /** {@inheritDoc} */
     public void collectEncumbranceAndTransEntryFacts() throws ServiceException {
         // create encumbrance snapshot
-        Map<String, Object> context = FastMap.<String, Object>newInstance();
-        context.put("userLogin", getUser().getOfbizUserLogin());
-        context.putAll(
-                UtilMisc.toMap(
-                        "organizationPartyId", organizationPartyId,
-                        "startDatetime", startDatetime,
-                        "snapshotDatetime", snapshotDatetime,
-                        "comments", comments,
-                        "description", description
-                )
-        );
+        CreateEncumbranceSnapshotAndDetailService service = new CreateEncumbranceSnapshotAndDetailService();
+        service.setInOrganizationPartyId(organizationPartyId);
+        service.setInStartDatetime(startDatetime);
+        service.setInSnapshotDatetime(snapshotDatetime);
+        service.setInComments(comments);
+        service.setInDescription(description);
+        runSync(service);
 
-        runSync("createEncumbranceSnapshotAndDetail", context);
-
-        // analyze transaction entries & encumbrance snapshot, collect summary data 
-        context.clear();
-        context = UtilMisc.toMap(
-                "organizationPartyId", organizationPartyId,
-                "userLogin", getUser().getOfbizUserLogin()
-        );
-
-        runSync("financials.createGlAccountTransEntryFact", context);
+        // analyze transaction entries & encumbrance snapshot, collect summary data
+        FinancialsCreateGlAccountTransEntryFactService service2 = new FinancialsCreateGlAccountTransEntryFactService();
+        service2.setInOrganizationPartyId(organizationPartyId);
+        runSync(service2);
 
         Session session = null;
         Transaction tx = null;

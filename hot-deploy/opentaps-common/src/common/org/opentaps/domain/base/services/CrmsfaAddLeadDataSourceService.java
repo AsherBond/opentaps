@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Adds a DataSource to the Lead. The userLogin is required to have CRMSFA_LEAD_UPDATE permission on this lead..
@@ -354,6 +355,8 @@ public class CrmsfaAddLeadDataSourceService extends ServiceWrapper {
         if (inParameters.contains("partyId")) mapValue.put("partyId", getInPartyId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -418,6 +421,14 @@ public class CrmsfaAddLeadDataSourceService extends ServiceWrapper {
     public static CrmsfaAddLeadDataSourceService fromInput(Map<String, Object> mapValue) {
         CrmsfaAddLeadDataSourceService service = new CrmsfaAddLeadDataSourceService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

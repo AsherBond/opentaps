@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Updates an exiting gl account. It delegates work to the ofbiz updateGlAccount service..
@@ -414,6 +415,8 @@ public class UpdateExistingGlAccountService extends ServiceWrapper {
         if (inParameters.contains("parentGlAccountId")) mapValue.put("parentGlAccountId", getInParentGlAccountId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -481,6 +484,14 @@ public class UpdateExistingGlAccountService extends ServiceWrapper {
     public static UpdateExistingGlAccountService fromInput(Map<String, Object> mapValue) {
         UpdateExistingGlAccountService service = new UpdateExistingGlAccountService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

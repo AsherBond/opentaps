@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Updates average cost for every product item on a purchase invoice.  Only works for purchase invoices.  No longer in use - now
@@ -335,6 +336,8 @@ public class UpdateInvoiceAverageCostsService extends ServiceWrapper {
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -398,6 +401,14 @@ public class UpdateInvoiceAverageCostsService extends ServiceWrapper {
     public static UpdateInvoiceAverageCostsService fromInput(Map<String, Object> mapValue) {
         UpdateInvoiceAverageCostsService service = new UpdateInvoiceAverageCostsService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

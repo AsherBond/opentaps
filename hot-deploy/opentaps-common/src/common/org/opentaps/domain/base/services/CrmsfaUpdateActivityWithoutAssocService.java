@@ -33,6 +33,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Updates an Event or Task without modifying any associations. The userLogin must still have _UPDATE permissions for the associated parties,
@@ -67,7 +68,6 @@ public class CrmsfaUpdateActivityWithoutAssocService extends ServiceWrapper {
         createdDate("createdDate"),
         currentStatusId("currentStatusId"),
         description("description"),
-        emailDeleted("emailDeleted"),
         estimateCalcMethod("estimateCalcMethod"),
         estimatedCompletionDate("estimatedCompletionDate"),
         estimatedMilliSeconds("estimatedMilliSeconds"),
@@ -149,7 +149,6 @@ public class CrmsfaUpdateActivityWithoutAssocService extends ServiceWrapper {
     private Timestamp inCreatedDate;
     private String inCurrentStatusId;
     private String inDescription;
-    private String inEmailDeleted;
     private String inEstimateCalcMethod;
     private Timestamp inEstimatedCompletionDate;
     private Double inEstimatedMilliSeconds;
@@ -285,14 +284,6 @@ public class CrmsfaUpdateActivityWithoutAssocService extends ServiceWrapper {
      */
     public String getInDescription() {
         return this.inDescription;
-    }
-    /**
-     * Auto generated value accessor.
-     * This parameter is optional.
-     * @return <code>String</code>
-     */
-    public String getInEmailDeleted() {
-        return this.inEmailDeleted;
     }
     /**
      * Auto generated value accessor.
@@ -804,15 +795,6 @@ public class CrmsfaUpdateActivityWithoutAssocService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
-     * @param inEmailDeleted the inEmailDeleted to set
-    */
-    public void setInEmailDeleted(String inEmailDeleted) {
-        this.inParameters.add("emailDeleted");
-        this.inEmailDeleted = inEmailDeleted;
-    }
-    /**
-     * Auto generated value setter.
-     * This parameter is optional.
      * @param inEstimateCalcMethod the inEstimateCalcMethod to set
     */
     public void setInEstimateCalcMethod(String inEstimateCalcMethod) {
@@ -1312,7 +1294,6 @@ public class CrmsfaUpdateActivityWithoutAssocService extends ServiceWrapper {
         if (inParameters.contains("createdDate")) mapValue.put("createdDate", getInCreatedDate());
         if (inParameters.contains("currentStatusId")) mapValue.put("currentStatusId", getInCurrentStatusId());
         if (inParameters.contains("description")) mapValue.put("description", getInDescription());
-        if (inParameters.contains("emailDeleted")) mapValue.put("emailDeleted", getInEmailDeleted());
         if (inParameters.contains("estimateCalcMethod")) mapValue.put("estimateCalcMethod", getInEstimateCalcMethod());
         if (inParameters.contains("estimatedCompletionDate")) mapValue.put("estimatedCompletionDate", getInEstimatedCompletionDate());
         if (inParameters.contains("estimatedMilliSeconds")) mapValue.put("estimatedMilliSeconds", getInEstimatedMilliSeconds());
@@ -1357,6 +1338,8 @@ public class CrmsfaUpdateActivityWithoutAssocService extends ServiceWrapper {
         if (inParameters.contains("workEffortParentId")) mapValue.put("workEffortParentId", getInWorkEffortParentId());
         if (inParameters.contains("workEffortPurposeTypeId")) mapValue.put("workEffortPurposeTypeId", getInWorkEffortPurposeTypeId());
         if (inParameters.contains("workEffortTypeId")) mapValue.put("workEffortTypeId", getInWorkEffortTypeId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -1386,7 +1369,6 @@ public class CrmsfaUpdateActivityWithoutAssocService extends ServiceWrapper {
         if (mapValue.containsKey("createdDate")) setInCreatedDate((Timestamp) mapValue.get("createdDate"));
         if (mapValue.containsKey("currentStatusId")) setInCurrentStatusId((String) mapValue.get("currentStatusId"));
         if (mapValue.containsKey("description")) setInDescription((String) mapValue.get("description"));
-        if (mapValue.containsKey("emailDeleted")) setInEmailDeleted((String) mapValue.get("emailDeleted"));
         if (mapValue.containsKey("estimateCalcMethod")) setInEstimateCalcMethod((String) mapValue.get("estimateCalcMethod"));
         if (mapValue.containsKey("estimatedCompletionDate")) setInEstimatedCompletionDate((Timestamp) mapValue.get("estimatedCompletionDate"));
         if (mapValue.containsKey("estimatedMilliSeconds")) setInEstimatedMilliSeconds((Double) mapValue.get("estimatedMilliSeconds"));
@@ -1471,6 +1453,14 @@ public class CrmsfaUpdateActivityWithoutAssocService extends ServiceWrapper {
     public static CrmsfaUpdateActivityWithoutAssocService fromInput(Map<String, Object> mapValue) {
         CrmsfaUpdateActivityWithoutAssocService service = new CrmsfaUpdateActivityWithoutAssocService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

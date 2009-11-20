@@ -21,7 +21,7 @@ package org.opentaps.domain.base.services;
 // EXTEND THIS CLASS INSTEAD.
 
 import org.opentaps.foundation.infrastructure.InfrastructureException;
-import org.opentaps.foundation.service.ServiceWrapperWithAuth;
+import org.opentaps.foundation.service.ServiceWrapper;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -43,7 +43,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Invoke: updateAcctgTrans
  * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_ledger.xml
  */
-public class UpdateAcctgTransService extends ServiceWrapperWithAuth {
+public class UpdateAcctgTransService extends ServiceWrapper {
 
     /** The service name as used by the service engine. */
     public static final String NAME = "updateAcctgTrans";
@@ -883,8 +883,8 @@ public class UpdateAcctgTransService extends ServiceWrapperWithAuth {
         if (inParameters.contains("voucherDate")) mapValue.put("voucherDate", getInVoucherDate());
         if (inParameters.contains("voucherRef")) mapValue.put("voucherRef", getInVoucherRef());
         if (inParameters.contains("workEffortId")) mapValue.put("workEffortId", getInWorkEffortId());
-          // allow the User set to override the userLogin
-          if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -977,10 +977,10 @@ public class UpdateAcctgTransService extends ServiceWrapperWithAuth {
         service.putAllInput(mapValue);
         if (mapValue.containsKey("userLogin")) {
             GenericValue userGv = (GenericValue) mapValue.get("userLogin");
-            try {
-                service.setUser(new User(userGv, userGv.getDelegator()));
-            } catch (InfrastructureException e) {
-                // this may happen if the user login is null
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
             }
         }
         return service;

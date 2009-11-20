@@ -104,12 +104,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 
 /**
  * Activities services. The service documentation is in services_activities.xml.
- *
- * @author     <a href="mailto:leon@opensourcestrategies.com">Leon Torres</a>
- * @version    $Rev: 622 $
  */
-
-@SuppressWarnings("deprecation")
 public final class ActivitiesServices {
 
     private ActivitiesServices() { }
@@ -2021,7 +2016,7 @@ public final class ActivitiesServices {
             return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
 
-        
+
         try {
 
             // Call the deleteCommunicationEventWorkEff service
@@ -2035,7 +2030,7 @@ public final class ActivitiesServices {
             if (ServiceUtil.isError(deleteCommunicationEventResult)) {
                 return deleteCommunicationEventResult;
             }
-            
+
             // Call the deleteWorkEffort service
             Map<String, Object> deleteWorkEffortResult = dispatcher.runSync("deleteWorkEffort", UtilMisc.toMap("workEffortId", workEffortId, "userLogin", userLogin));
             if (ServiceUtil.isError(deleteWorkEffortResult)) {

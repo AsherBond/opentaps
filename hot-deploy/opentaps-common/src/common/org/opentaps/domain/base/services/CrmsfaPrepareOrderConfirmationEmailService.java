@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Send an email to someone in the system. Associate a completed Order and a completed CommunicationEvent. 
@@ -414,6 +415,8 @@ public class CrmsfaPrepareOrderConfirmationEmailService extends ServiceWrapper {
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("webSiteId")) mapValue.put("webSiteId", getInWebSiteId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -483,6 +486,14 @@ public class CrmsfaPrepareOrderConfirmationEmailService extends ServiceWrapper {
     public static CrmsfaPrepareOrderConfirmationEmailService fromInput(Map<String, Object> mapValue) {
         CrmsfaPrepareOrderConfirmationEmailService service = new CrmsfaPrepareOrderConfirmationEmailService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

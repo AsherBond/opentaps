@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Create a new return item billing record.
@@ -455,6 +456,8 @@ public class CreateReturnItemBillingService extends ServiceWrapper {
         if (inParameters.contains("shipmentReceiptId")) mapValue.put("shipmentReceiptId", getInShipmentReceiptId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -524,6 +527,14 @@ public class CreateReturnItemBillingService extends ServiceWrapper {
     public static CreateReturnItemBillingService fromInput(Map<String, Object> mapValue) {
         CreateReturnItemBillingService service = new CreateReturnItemBillingService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

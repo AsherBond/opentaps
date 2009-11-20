@@ -33,6 +33,7 @@ import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Assign a ShoppingCartItem -> Quantity to a ship group.
@@ -436,6 +437,8 @@ public class AssignItemShipGroupService extends ServiceWrapper {
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("toGroupIndex")) mapValue.put("toGroupIndex", getInToGroupIndex());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -504,6 +507,14 @@ public class AssignItemShipGroupService extends ServiceWrapper {
     public static AssignItemShipGroupService fromInput(Map<String, Object> mapValue) {
         AssignItemShipGroupService service = new AssignItemShipGroupService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

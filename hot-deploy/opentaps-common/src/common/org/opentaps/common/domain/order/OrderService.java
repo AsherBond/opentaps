@@ -28,7 +28,6 @@ import java.util.TreeSet;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
-import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -38,6 +37,11 @@ import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 import org.opentaps.domain.base.entities.OrderItemShipGroupAssoc;
 import org.opentaps.domain.base.entities.PostalAddress;
+import org.opentaps.domain.base.services.CalcTaxService;
+import org.opentaps.domain.base.services.CancelOrderItemNoActionsService;
+import org.opentaps.domain.base.services.CreateOrderAdjustmentService;
+import org.opentaps.domain.base.services.CreateOrderNoteService;
+import org.opentaps.domain.base.services.LoadCartFromOrderService;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderAdjustment;
 import org.opentaps.domain.order.OrderDomainInterface;
@@ -89,10 +93,10 @@ public class OrderService extends Service implements OrderServiceInterface {
             for (OrderItem item : order.getPromotionItems()) {
                 if (!item.isCancelled()) {
                     if (!orderIsBilled) {
-                        Map<String, Object> input = createInputMap();
-                        input.put("orderId", orderId);
-                        input.put("orderItemSeqId", item.getOrderItemSeqId());
-                        runSync("cancelOrderItemNoActions", input);
+                        CancelOrderItemNoActionsService service = new CancelOrderItemNoActionsService();
+                        service.setInOrderId(orderId);
+                        service.setInOrderItemSeqId(item.getOrderItemSeqId());
+                        runSync(service);
                     } else {
                         Debug.logInfo("Found existingPromoItem: " + item, MODULE);
                         existingPromoItems.add(item.getOrderItemSeqId());
@@ -140,11 +144,12 @@ public class OrderService extends Service implements OrderServiceInterface {
             repository.remove(promoAdjustmentsToRemove);
 
             // use the loadCartFromOrder service to re calculate the promotions for the order
-            Map<String, Object> input = createInputMap();
-            input.put("orderId", orderId);
-            input.put("skipInventoryChecks", true);
-            input.put("skipProductChecks", true);
-            ShoppingCart cart = (ShoppingCart) runSync("loadCartFromOrder", input).get("shoppingCart");
+            LoadCartFromOrderService service = new LoadCartFromOrderService();
+            service.setInOrderId(orderId);
+            service.setInSkipInventoryChecks(true);
+            service.setInSkipProductChecks(true);
+            runSync(service);
+            ShoppingCart cart = service.getOutShoppingCart();
 
             // to match only one cart item to one existing promo item
             Set<String> existingPromoItemsPotentials = new HashSet<String>(existingPromoItems);
@@ -246,10 +251,10 @@ public class OrderService extends Service implements OrderServiceInterface {
 
                     // do not cancel if the item is billed
                     if (item.getOrderItemBillings().isEmpty()) {
-                        input = createInputMap();
-                        input.put("orderId", orderId);
-                        input.put("orderItemSeqId", item.getOrderItemSeqId());
-                        runSync("cancelOrderItemNoActions", input);
+                        CancelOrderItemNoActionsService service2 = new CancelOrderItemNoActionsService();
+                        service2.setInOrderId(orderId);
+                        service2.setInOrderItemSeqId(item.getOrderItemSeqId());
+                        runSync(service2);
                     }
                 }
             }
@@ -471,22 +476,22 @@ public class OrderService extends Service implements OrderServiceInterface {
                 }
 
                 // call the calcTax service
-                Map<String, Object> input = createInputMap();
-                input.put("productStoreId", order.getProductStoreId());
-                input.put("itemProductList", products);
-                input.put("itemAmountList", amounts);
-                input.put("itemShippingList", shippingAmounts);
-                input.put("itemPriceList", itemPrices);
-                input.put("orderShippingAmount", order.getShippingAmount());
-                input.put("billToPartyId", order.getBillToPartyId());
-                input.put("shippingAddress", Repository.genericValueFromEntity(shippingAddress));
+                CalcTaxService service = new CalcTaxService();
+                service.setInProductStoreId(order.getProductStoreId());
+                service.setInItemProductList(products);
+                service.setInItemAmountList(amounts);
+                service.setInItemShippingList(shippingAmounts);
+                service.setInItemPriceList(itemPrices);
+                service.setInOrderShippingAmount(order.getShippingAmount());
+                service.setInBillToPartyId(order.getBillToPartyId());
+                service.setInShippingAddress(Repository.genericValueFromEntity(shippingAddress));
                 // for tax authorities that have taxPromotions="Y", sends the sum promotions and this deduct the tax at the global level
                 // note: this only includes the order level adjustments
-                input.put("orderPromotionsAmount", order.getOtherAdjustmentsAmount());
-                Map<String, Object> result = runSync("calcTax", input);
+                service.setInOrderPromotionsAmount(order.getOtherAdjustmentsAmount());
+                runSync(service);
 
-                List<GenericValue> orderAdjustments = (List<GenericValue>) result.get("orderAdjustments");
-                List<List<GenericValue>> itemAdjustments = (List<List<GenericValue>>) result.get("itemAdjustments");
+                List<GenericValue> orderAdjustments = service.getOutOrderAdjustments();
+                List<List<GenericValue>> itemAdjustments = service.getOutItemAdjustments();
                 // get the global tax adjustments
                 if (orderAdjustments != null) {
                     for (GenericValue adj : orderAdjustments) {
@@ -559,14 +564,14 @@ public class OrderService extends Service implements OrderServiceInterface {
             BigDecimal orderTaxDifference = totalNewOrderTax.subtract(totalExistingOrderTax);
             Debug.logInfo("totalNewOrderTax = " + totalNewOrderTax + ", totalExistingOrderTax = " + totalExistingOrderTax + " ==> orderTaxDifference = " + orderTaxDifference , MODULE);
             if (orderTaxDifference.signum() != 0) {
-                Map<String, Object> input = createInputMap();
-                input.put("orderId", orderId);
-                input.put("orderItemSeqId", "_NA_");
-                input.put("shipGroupSeqId", "_NA_");
-                input.put("orderAdjustmentTypeId", "SALES_TAX");
-                input.put("description", "Existing tax was = " + totalExistingOrderTax + ", new tax amount = " + totalNewOrderTax + " (Tax adjustment due to order change)");
-                input.put("amount", orderTaxDifference);
-                runSync("createOrderAdjustment", input);
+                CreateOrderAdjustmentService service = new CreateOrderAdjustmentService();
+                service.setInOrderId(orderId);
+                service.setInOrderItemSeqId("_NA_");
+                service.setInShipGroupSeqId("_NA_");
+                service.setInOrderAdjustmentTypeId("SALES_TAX");
+                service.setInDescription("Existing tax was = " + totalExistingOrderTax + ", new tax amount = " + totalNewOrderTax + " (Tax adjustment due to order change)");
+                service.setInAmount(orderTaxDifference);
+                runSync(service);
             }
 
         } catch (GeneralException ex) {
@@ -608,16 +613,17 @@ public class OrderService extends Service implements OrderServiceInterface {
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public void addNote(String noteText, boolean isInternal) throws ServiceException {
         try {
-            Map params = UtilMisc.toMap("orderId", orderId, "note", noteText, "userLogin", user.getOfbizUserLogin());
+            CreateOrderNoteService service = new CreateOrderNoteService();
+            service.setInOrderId(orderId);
+            service.setInNote(noteText);
             if (isInternal) {
-                params.put("internalNote", "Y");
+                service.setInInternalNote("Y");
             } else {
-                params.put("internalNote", "N");
+                service.setInInternalNote("N");
             }
-            runSync("createOrderNote", params);
+            runSync(service);
         } catch (Exception e) {
             throw new ServiceException(e);
         }

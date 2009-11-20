@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * .
@@ -393,6 +394,8 @@ public class OpentapsCalcOutSourcedTaskCostService extends ServiceWrapper {
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("workEffort")) mapValue.put("workEffort", getInWorkEffort());
         if (inParameters.contains("workEffortCostCalc")) mapValue.put("workEffortCostCalc", getInWorkEffortCostCalc());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -460,6 +463,14 @@ public class OpentapsCalcOutSourcedTaskCostService extends ServiceWrapper {
     public static OpentapsCalcOutSourcedTaskCostService fromInput(Map<String, Object> mapValue) {
         OpentapsCalcOutSourcedTaskCostService service = new OpentapsCalcOutSourcedTaskCostService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

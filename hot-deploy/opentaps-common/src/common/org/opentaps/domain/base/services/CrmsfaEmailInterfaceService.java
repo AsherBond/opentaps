@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * .
@@ -595,6 +596,8 @@ public class CrmsfaEmailInterfaceService extends ServiceWrapper {
         if (inParameters.contains("toEmail")) mapValue.put("toEmail", getInToEmail());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("workEffortId")) mapValue.put("workEffortId", getInWorkEffortId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -671,6 +674,14 @@ public class CrmsfaEmailInterfaceService extends ServiceWrapper {
     public static CrmsfaEmailInterfaceService fromInput(Map<String, Object> mapValue) {
         CrmsfaEmailInterfaceService service = new CrmsfaEmailInterfaceService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

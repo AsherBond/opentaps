@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Update a Product Store.
@@ -1914,6 +1915,8 @@ public class UpdateProductStoreService extends ServiceWrapper {
         if (inParameters.contains("vatTaxAuthPartyId")) mapValue.put("vatTaxAuthPartyId", getInVatTaxAuthPartyId());
         if (inParameters.contains("viewCartOnAdd")) mapValue.put("viewCartOnAdd", getInViewCartOnAdd());
         if (inParameters.contains("visualThemeId")) mapValue.put("visualThemeId", getInVisualThemeId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -2056,6 +2059,14 @@ public class UpdateProductStoreService extends ServiceWrapper {
     public static UpdateProductStoreService fromInput(Map<String, Object> mapValue) {
         UpdateProductStoreService service = new UpdateProductStoreService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

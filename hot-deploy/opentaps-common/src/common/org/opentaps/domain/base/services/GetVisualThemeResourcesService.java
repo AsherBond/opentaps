@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Get a visual theme resources Map. Call with visualThemeId String,
@@ -377,6 +378,8 @@ public class GetVisualThemeResourcesService extends ServiceWrapper {
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("visualThemeId")) mapValue.put("visualThemeId", getInVisualThemeId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -443,6 +446,14 @@ public class GetVisualThemeResourcesService extends ServiceWrapper {
     public static GetVisualThemeResourcesService fromInput(Map<String, Object> mapValue) {
         GetVisualThemeResourcesService service = new GetVisualThemeResourcesService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

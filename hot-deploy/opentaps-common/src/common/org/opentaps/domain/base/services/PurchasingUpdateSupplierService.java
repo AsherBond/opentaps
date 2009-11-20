@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * updates a Supplier, which is a combination of Party, PartyGroup, and PartySupplementalData.  The userLogin will need PRCH_SPLR_UPDATE permission on this account..
@@ -414,6 +415,8 @@ public class PurchasingUpdateSupplierService extends ServiceWrapper {
         if (inParameters.contains("requires1099")) mapValue.put("requires1099", getInRequires1099());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -481,6 +484,14 @@ public class PurchasingUpdateSupplierService extends ServiceWrapper {
     public static PurchasingUpdateSupplierService fromInput(Map<String, Object> mapValue) {
         PurchasingUpdateSupplierService service = new PurchasingUpdateSupplierService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Adds the given partyId as a team member of the given facility with the given security group..
@@ -374,6 +375,8 @@ public class AddFacilityTeamMemberService extends ServiceWrapper {
         if (inParameters.contains("securityGroupId")) mapValue.put("securityGroupId", getInSecurityGroupId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -439,6 +442,14 @@ public class AddFacilityTeamMemberService extends ServiceWrapper {
     public static AddFacilityTeamMemberService fromInput(Map<String, Object> mapValue) {
         AddFacilityTeamMemberService service = new AddFacilityTeamMemberService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

@@ -22,6 +22,7 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * This is the base class for the pojo service wrappers.
@@ -30,10 +31,37 @@ import org.opentaps.foundation.infrastructure.Infrastructure;
  */
 public abstract class ServiceWrapper {
 
+    private User user;
+
     /**
      * Creates a new <code>ServiceWrapper</code> instance.
      */
     public ServiceWrapper() { }
+
+    /**
+     * Creates a new <code>ServiceWrapper</code> instance with the given <code>User</code>.
+     * @param user an <code>User</code> value
+     */
+    public ServiceWrapper(User user) {
+        super();
+        this.setUser(user);
+    }
+
+    /**
+     * Gets the <code>User</code> instance of this service.
+     * @return an <code>User</code> value
+     */
+    public User getUser() {
+        return this.user;
+    }
+
+    /**
+     * Sets the <code>User</code> instance that can be used when running the service.
+     * @param user an <code>User</code> value
+     */
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     /**
      * Gets the service name as used by the service engine.

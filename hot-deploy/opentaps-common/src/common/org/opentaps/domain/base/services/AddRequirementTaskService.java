@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Associate an existing task w/ a requirement.
@@ -374,6 +375,8 @@ public class AddRequirementTaskService extends ServiceWrapper {
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
         if (inParameters.contains("workEffortId")) mapValue.put("workEffortId", getInWorkEffortId());
         if (inParameters.contains("workReqFulfTypeId")) mapValue.put("workReqFulfTypeId", getInWorkReqFulfTypeId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -439,6 +442,14 @@ public class AddRequirementTaskService extends ServiceWrapper {
     public static AddRequirementTaskService fromInput(Map<String, Object> mapValue) {
         AddRequirementTaskService service = new AddRequirementTaskService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 

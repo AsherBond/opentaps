@@ -21,7 +21,7 @@ package org.opentaps.domain.base.services;
 // EXTEND THIS CLASS INSTEAD.
 
 import org.opentaps.foundation.infrastructure.InfrastructureException;
-import org.opentaps.foundation.service.ServiceWrapperWithAuth;
+import org.opentaps.foundation.service.ServiceWrapper;
 
 import java.nio.ByteBuffer;
 import java.sql.Timestamp;
@@ -44,7 +44,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Invoke: importPromoCodesFromFile
  * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_pricepromo.xml
  */
-public class CreateBulkProductPromoCodeService extends ServiceWrapperWithAuth {
+public class CreateBulkProductPromoCodeService extends ServiceWrapper {
 
     /** The service name as used by the service engine. */
     public static final String NAME = "createBulkProductPromoCode";
@@ -604,8 +604,8 @@ public class CreateBulkProductPromoCodeService extends ServiceWrapperWithAuth {
         if (inParameters.contains("useLimitPerCustomer")) mapValue.put("useLimitPerCustomer", getInUseLimitPerCustomer());
         if (inParameters.contains("userEntered")) mapValue.put("userEntered", getInUserEntered());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
-          // allow the User set to override the userLogin
-          if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -684,10 +684,10 @@ public class CreateBulkProductPromoCodeService extends ServiceWrapperWithAuth {
         service.putAllInput(mapValue);
         if (mapValue.containsKey("userLogin")) {
             GenericValue userGv = (GenericValue) mapValue.get("userLogin");
-            try {
-                service.setUser(new User(userGv, userGv.getDelegator()));
-            } catch (InfrastructureException e) {
-                // this may happen if the user login is null
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
             }
         }
         return service;

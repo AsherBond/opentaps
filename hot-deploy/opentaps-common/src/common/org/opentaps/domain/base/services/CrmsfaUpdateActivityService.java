@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
+import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Updates an Event or Task. Will create associations between the WorkEffort and the party, case and opportunity specified and erase any old
@@ -637,6 +638,8 @@ public class CrmsfaUpdateActivityService extends ServiceWrapper {
         if (inParameters.contains("workEffortName")) mapValue.put("workEffortName", getInWorkEffortName());
         if (inParameters.contains("workEffortPurposeTypeId")) mapValue.put("workEffortPurposeTypeId", getInWorkEffortPurposeTypeId());
         if (inParameters.contains("workEffortTypeId")) mapValue.put("workEffortTypeId", getInWorkEffortTypeId());
+        // allow the User set to override the userLogin
+        if (getUser() != null) mapValue.put("userLogin", getUser().getOfbizUserLogin());
         return mapValue;
     }
 
@@ -715,6 +718,14 @@ public class CrmsfaUpdateActivityService extends ServiceWrapper {
     public static CrmsfaUpdateActivityService fromInput(Map<String, Object> mapValue) {
         CrmsfaUpdateActivityService service = new CrmsfaUpdateActivityService();
         service.putAllInput(mapValue);
+        if (mapValue.containsKey("userLogin")) {
+            GenericValue userGv = (GenericValue) mapValue.get("userLogin");
+            if (userGv != null) {
+                try {
+                    service.setUser(new User(userGv, userGv.getDelegator()));
+                } catch (InfrastructureException e) { }
+            }
+        }
         return service;
     }
 
