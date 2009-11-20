@@ -22,7 +22,6 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntity;
-import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericPK;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -33,11 +32,10 @@ import org.ofbiz.service.LocalDispatcher;
 /**
  * The Aspects for clear hibernate 2nd cache on ofbiz's engine CURD.
  */
-public class EvdictHibernateCacheAspects {
+public class EvictHibernateCacheAspects {
 
-    private static final String MODULE = EvdictHibernateCacheAspects.class.getName();
+    private static final String MODULE = EvictHibernateCacheAspects.class.getName();
     private static String DELEGATOR_NAME = "default";
-    private static String runAsUser = "system";
 
     /**
      * @Expression execution(* org.ofbiz.entity.GenericDelegator.clearAllCaches(..)) && args(distribute)
@@ -50,21 +48,7 @@ public class EvdictHibernateCacheAspects {
     public void clearAllCaches(boolean distribute) {
         Debug.logVerbose("run clearAllCaches(boolean distribute)", MODULE);
         // clear hibernate cache
-        Map<String, Object> inputParams = UtilMisc.<String, Object>toMap();
-        try {
-            GenericValue userLoginToRunAs = getDelegator().findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", runAsUser));
-            if (userLoginToRunAs != null) {
-                inputParams.put("userLogin", userLoginToRunAs);
-            } else {
-                return;
-            }
-            LocalDispatcher dispatcher = getDispatcher();
-            dispatcher.runSync("opentaps.evictHibernateCache", inputParams, -1, true);
-        } catch (GenericServiceException e) {
-            Debug.logError(e, MODULE);
-        } catch (GenericEntityException e) {
-            Debug.logError(e, MODULE);
-        }
+        evictHibernateCache(UtilMisc.<String, Object>toMap());
     }
 
     /**
@@ -78,21 +62,7 @@ public class EvdictHibernateCacheAspects {
     public void clearCacheLine(String entityName) {
         Debug.logVerbose("run clearCacheLine(entityName), entityName = " + entityName, MODULE);
         // clear hibernate cache
-        Map<String, Object> inputParams = UtilMisc.<String, Object>toMap("entityName", entityName);
-        try {
-            GenericValue userLoginToRunAs = getDelegator().findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", runAsUser));
-            if (userLoginToRunAs != null) {
-                inputParams.put("userLogin", userLoginToRunAs);
-            } else {
-                return;
-            }
-            LocalDispatcher dispatcher = getDispatcher();
-            dispatcher.runSync("opentaps.evictHibernateCache", inputParams, -1, true);
-        } catch (GenericServiceException e) {
-            Debug.logError(e, MODULE);
-        } catch (GenericEntityException e) {
-            Debug.logError(e, MODULE);
-        }
+        evictHibernateCache(UtilMisc.<String, Object>toMap("entityName", entityName));
     }
 
 
@@ -107,21 +77,7 @@ public class EvdictHibernateCacheAspects {
     public void clearCacheLine(String entityName, Map fields) {
         Debug.logVerbose("run clearCacheLine(entityName, Map<String, ? extends Object> fields), entityName = " + entityName + ", fields = " + fields, MODULE);
         // clear hibernate cache
-        Map<String, Object> inputParams = UtilMisc.<String, Object>toMap("entityName", entityName);
-        try {
-            GenericValue userLoginToRunAs = getDelegator().findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", runAsUser));
-            if (userLoginToRunAs != null) {
-                inputParams.put("userLogin", userLoginToRunAs);
-            } else {
-                return;
-            }
-            LocalDispatcher dispatcher = getDispatcher();
-            dispatcher.runSync("opentaps.evictHibernateCache", inputParams, -1, true);
-        } catch (GenericServiceException e) {
-            Debug.logError(e, MODULE);
-        } catch (GenericEntityException e) {
-            Debug.logError(e, MODULE);
-        }
+        evictHibernateCache(UtilMisc.<String, Object>toMap("entityName", entityName));
     }
 
     /**
@@ -136,21 +92,7 @@ public class EvdictHibernateCacheAspects {
     public void clearCacheLineFlexible(GenericEntity dummyPK, boolean distribute) {
         Debug.logVerbose("run clearCacheLineFlexible(GenericEntity dummyPK, boolean distribute), dummyPK = " + dummyPK , MODULE);
         // clear hibernate cache
-        Map<String, Object> inputParams = UtilMisc.<String, Object>toMap("entityName", dummyPK.getEntityName(), "pk", dummyPK);
-        try {
-            GenericValue userLoginToRunAs = getDelegator().findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", runAsUser));
-            if (userLoginToRunAs != null) {
-                inputParams.put("userLogin", userLoginToRunAs);
-            } else {
-                return;
-            }
-            LocalDispatcher dispatcher = getDispatcher();
-            dispatcher.runSync("opentaps.evictHibernateCache", inputParams, -1, true);
-        } catch (GenericServiceException e) {
-            Debug.logError(e, MODULE);
-        } catch (GenericEntityException e) {
-            Debug.logError(e, MODULE);
-        }
+        evictHibernateCache(UtilMisc.<String, Object>toMap("entityName", dummyPK.getEntityName(), "pk", dummyPK));
 
     }
 
@@ -166,21 +108,7 @@ public class EvdictHibernateCacheAspects {
     public void clearCacheLineByCondition(String entityName, EntityCondition condition, boolean distribute) {
         Debug.logVerbose("run clearCacheLineByCondition(String entityName, EntityCondition condition, boolean distribute), entityName = " + entityName + ", condition = " + condition , MODULE);
         // clear hibernate cache
-        Map<String, Object> inputParams = UtilMisc.<String, Object>toMap("entityName", entityName, "condition", condition);
-        try {
-            GenericValue userLoginToRunAs = getDelegator().findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", runAsUser));
-            if (userLoginToRunAs != null) {
-                inputParams.put("userLogin", userLoginToRunAs);
-            } else {
-                return;
-            }
-            LocalDispatcher dispatcher = getDispatcher();
-            dispatcher.runSync("opentaps.evictHibernateCache", inputParams, -1, true);
-        } catch (GenericServiceException e) {
-            Debug.logError(e, MODULE);
-        } catch (GenericEntityException e) {
-            Debug.logError(e, MODULE);
-        }
+        evictHibernateCache(UtilMisc.<String, Object>toMap("entityName", entityName, "condition", condition));
     }
 
     /**
@@ -194,21 +122,7 @@ public class EvdictHibernateCacheAspects {
     public void clearCacheLine(GenericPK primaryKey, boolean distribute) {
         Debug.logVerbose("run clearCacheLine(GenericPK primaryKey, boolean distribute), primaryKey = " + primaryKey , MODULE);
         // clear hibernate cache
-        Map<String, Object> inputParams = UtilMisc.<String, Object>toMap("entityName", primaryKey.getEntityName(), "pk", primaryKey);
-        try {
-            GenericValue userLoginToRunAs = getDelegator().findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", runAsUser));
-            if (userLoginToRunAs != null) {
-                inputParams.put("userLogin", userLoginToRunAs);
-            } else {
-                return;
-            }
-            LocalDispatcher dispatcher = getDispatcher();
-            dispatcher.runSync("opentaps.evictHibernateCache", inputParams, -1, true);
-        } catch (GenericServiceException e) {
-            Debug.logError(e, MODULE);
-        } catch (GenericEntityException e) {
-            Debug.logError(e, MODULE);
-        }
+        evictHibernateCache(UtilMisc.<String, Object>toMap("entityName", primaryKey.getEntityName(), "pk", primaryKey));
     }
 
     /**
@@ -222,19 +136,14 @@ public class EvdictHibernateCacheAspects {
     public void clearCacheLine(GenericValue value, boolean distribute) {
         Debug.logVerbose("run clearCacheLine(GenericValue value, boolean distribute), value = " + value , MODULE);
         // clear hibernate cache
-        Map<String, Object> inputParams = UtilMisc.<String, Object>toMap("entityName", value.getEntityName(), "pk", value.getPrimaryKey());
+        evictHibernateCache(UtilMisc.<String, Object>toMap("entityName", value.getEntityName(), "pk", value.getPrimaryKey()));
+    }
+
+    private void evictHibernateCache(Map<String, Object> inputParams) {
         try {
-            GenericValue userLoginToRunAs = getDelegator().findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", runAsUser));
-            if (userLoginToRunAs != null) {
-                inputParams.put("userLogin", userLoginToRunAs);
-            } else {
-                return;
-            }
             LocalDispatcher dispatcher = getDispatcher();
-            dispatcher.runSync("opentaps.evictHibernateCache", inputParams, -1, true);
+            dispatcher.runSync("opentaps.evictHibernateCache", inputParams, 7200, true);
         } catch (GenericServiceException e) {
-            Debug.logError(e, MODULE);
-        } catch (GenericEntityException e) {
             Debug.logError(e, MODULE);
         }
     }

@@ -4,9 +4,9 @@
 
 <hibernate-configuration>
   <session-factory>
-  <property name="hibernate.connection.provider_class">org.opentaps.foundation.entity.hibernate.OpentapsConnectionProvider</property>  
+  <property name="hibernate.connection.provider_class">org.opentaps.foundation.entity.hibernate.OpentapsConnectionProvider</property>
   <property name="hibernate.transaction.factory_class">org.opentaps.foundation.entity.hibernate.OpentapsTransactionFactory</property>
-  <property name="hibernate.transaction.manager_lookup_class">org.opentaps.foundation.entity.hibernate.OpentapsTransactionManagerLookup</property>  
+  <property name="hibernate.transaction.manager_lookup_class">org.opentaps.foundation.entity.hibernate.OpentapsTransactionManagerLookup</property>
   <property name="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</property>
   <mapping class="org.opentaps.domain.base.entities.EntityAuditLog"/>
   <mapping class="org.opentaps.domain.base.entities.EntityKeyStore"/>

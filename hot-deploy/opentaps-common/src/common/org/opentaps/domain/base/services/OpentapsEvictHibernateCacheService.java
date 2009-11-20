@@ -49,7 +49,7 @@ public class OpentapsEvictHibernateCacheService extends ServiceWrapper {
     /** The service name as used by the service engine. */
     public static final String NAME = "opentaps.evictHibernateCache";
     /** If the service requires authentication. */
-    public static final Boolean REQUIRES_AUTHENTICATION = Boolean.TRUE;
+    public static final Boolean REQUIRES_AUTHENTICATION = Boolean.FALSE;
     /** If the service requires a new transaction. */
     public static final Boolean REQUIRES_NEW_TRANSACTION = Boolean.FALSE;
     /** If the service uses a transaction. */
@@ -89,13 +89,6 @@ public class OpentapsEvictHibernateCacheService extends ServiceWrapper {
         super();
     }
 
-    /**
-     * Creates a new <code>OpentapsEvictHibernateCacheService</code> instance.
-     * @param user an <code>User</code> value
-     */
-    public OpentapsEvictHibernateCacheService(User user) {
-        super(user);
-    }
 
     private EntityCondition inCondition;
     private String inEntityName;

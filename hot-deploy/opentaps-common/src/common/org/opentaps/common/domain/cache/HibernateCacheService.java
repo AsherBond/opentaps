@@ -35,7 +35,7 @@ public class HibernateCacheService extends Service implements HibernateCacheServ
     private String entityName;
     private GenericEntity pk;
     private EntityCondition condition;
-    
+
     /**
      * Default constructor.
      */
@@ -73,7 +73,7 @@ public class HibernateCacheService extends Service implements HibernateCacheServ
         } catch (InvocationTargetException e) {
             throw new ServiceException(e);
         }
-       
+
     }
 
     /** {@inheritDoc} */
