@@ -54,12 +54,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
-import com.opensourcestrategies.financials.accounts.AccountsHelper;
-import com.opensourcestrategies.financials.security.FinancialsSecurity;
-import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
+
 import org.ofbiz.accounting.invoice.InvoiceWorker;
 import org.ofbiz.accounting.payment.PaymentWorker;
 import org.ofbiz.base.util.Debug;
@@ -107,6 +105,10 @@ import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
+
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
+import com.opensourcestrategies.financials.security.FinancialsSecurity;
+import com.opensourcestrategies.financials.util.UtilFinancial;
 
 /**
  * InvoiceServices - Services for creating invoices.
@@ -333,8 +335,7 @@ public final class InvoiceServices {
      * @param context the service parameters <code>Map</code>
      * @return the service response <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map updateInvoiceAndBillingAddress(DispatchContext dctx, Map context) {
+    public static Map<String, Object> updateInvoiceAndBillingAddress(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -349,13 +350,22 @@ public final class InvoiceServices {
         String invoiceId = (String) context.get("invoiceId");
         try {
             ModelService service = dctx.getModelService("updateInvoice");
-            Map input = service.makeValid(context, "IN");
-            Map results = dispatcher.runSync("updateInvoice", input);
+            Map<String, Object> input = service.makeValid(context, "IN");
+            Map<String, Object> results = dispatcher.runSync("updateInvoice", input);
             if (ServiceUtil.isError(results)) {
                 return results;
             }
 
             if (UtilValidate.isNotEmpty(contactMechId)) {
+                // ensure only billing and payment address exist
+                delegator.removeByCondition("InvoiceContactMech",
+                        EntityCondition.makeCondition(Arrays.asList(
+                                EntityCondition.makeCondition("invoiceId", invoiceId), 
+                                EntityCondition.makeCondition(Arrays.asList(
+                                        EntityCondition.makeCondition("contactMechPurposeTypeId", "BILLING_LOCATION"), 
+                                        EntityCondition.makeCondition("contactMechPurposeTypeId", "PAYMENT_LOCATION")), 
+                                        EntityOperator.OR)), EntityOperator.AND));
+
                 input = UtilMisc.toMap("invoiceId", invoiceId, "contactMechId", contactMechId);
                 delegator.removeByAnd("InvoiceContactMech", input);
 
