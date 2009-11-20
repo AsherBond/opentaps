@@ -93,7 +93,6 @@ import org.opentaps.common.domain.party.PartyRepository;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.domain.base.services.DeleteWorkEffort;
 import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.PartyDomainInterface;
@@ -110,6 +109,7 @@ import org.opentaps.foundation.repository.RepositoryException;
  * @version    $Rev: 622 $
  */
 
+@SuppressWarnings("deprecation")
 public final class ActivitiesServices {
 
     private ActivitiesServices() { }
