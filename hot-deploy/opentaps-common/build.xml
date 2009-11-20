@@ -145,7 +145,7 @@
     <!-- ================================================================== -->
 
     <target name="classes" depends="prepare,classpath">
-        <javac debug="on" deprecation="on" destdir="${build.dir}/classes/common" fork="yes" memoryMaximumSize="1024M">
+        <javac debug="on" deprecation="on" destdir="${build.dir}/classes/common" fork="yes" memoryMaximumSize="2048M">
             <classpath>
                 <path refid="local.class.path"/>
             </classpath>
