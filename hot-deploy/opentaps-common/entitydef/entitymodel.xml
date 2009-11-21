@@ -2155,6 +2155,8 @@ under the License.
       <field name="externalUserTypeId" type="id" />
       <field name="externalUserId" type="short-varchar" />
       <field name="externalPassword" type="short-varchar" encrypt="true"/>
+      <field name="fromDate" type="date-time" />
+      <field name="thruDate" type="date-time" /> 
       <prim-key field="autoId"/>
       <relation type="one" fk-name="EXTERNALUSER_USERTYPE" rel-entity-name="ExternalUserType">
         <key-map field-name="externalUserTypeId"/>

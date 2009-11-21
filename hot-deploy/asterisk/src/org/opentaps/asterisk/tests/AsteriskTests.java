@@ -69,5 +69,18 @@ public class AsteriskTests  extends OpentapsTestCase {
         ExternalUser externalUser = repo.getExternalUserForUser(ASTERISK_USERTYPE_ID, new User(purchentry));
         assertNull("There should be no any ExternalUser matched.", externalUser);
     }
+    
+    /**
+     * Tests getExternalUserForUser for lookup the user who not have expired asterisk extension.
+     * @throws Exception if an error occurs
+     */
+    public void testGetExternalUserForUserForExpiredNumber() throws Exception { 
+       DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(admin)); 
+       PartyDomainInterface partyDomain = domainLoader.loadDomainsDirectory().getPartyDomain(); 
+       PartyRepositoryInterface repo = partyDomain.getPartyRepository();
+       GenericValue demoSalesRep3 = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "DemoSalesRep3"));
+       ExternalUser externalUser = repo.getExternalUserForUser(ASTERISK_USERTYPE_ID, new User(demoSalesRep3));
+       assertNull("There should be no any ExternalUser matched.", externalUser);
+   } 
 
 }

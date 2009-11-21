@@ -20,31 +20,31 @@
 
 <entity-engine-xml>
     <!-- demo asterisk external user -->
-    <ExternalUser autoId="9000" externalUserTypeId="ASTERISK" partyId="DemoSalesManager" externalUserId="800"/>   
-    <ExternalUser autoId="9001" externalUserTypeId="ASTERISK" partyId="DemoSalesRep1" externalUserId="801"/>   
-    <ExternalUser autoId="9002" externalUserTypeId="ASTERISK" partyId="DemoSalesRep2" externalUserId="802"/>   
-    <ExternalUser autoId="9003" externalUserTypeId="ASTERISK" partyId="DemoSalesRep3" externalUserId="803"/>   
-    <ExternalUser autoId="9004" externalUserTypeId="ASTERISK" partyId="DemoSalesRep4" externalUserId="804"/>   
-    <ExternalUser autoId="9005" externalUserTypeId="ASTERISK" partyId="DemoCSR" externalUserId="805"/>   
-    <ExternalUser autoId="9006" externalUserTypeId="ASTERISK" partyId="DemoCSR2" externalUserId="806"/>   
-    <ExternalUser autoId="9007" externalUserTypeId="ASTERISK" partyId="DemoCalUser" externalUserId="807"/>   
-    <ExternalUser autoId="9008" externalUserTypeId="ASTERISK" partyId="DemoCalContact" externalUserId="808"/>   
+    <ExternalUser autoId="9000" externalUserTypeId="ASTERISK" partyId="DemoSalesManager" externalUserId="800" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9001" externalUserTypeId="ASTERISK" partyId="DemoSalesRep1" externalUserId="801" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9002" externalUserTypeId="ASTERISK" partyId="DemoSalesRep2" externalUserId="802" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9003" externalUserTypeId="ASTERISK" partyId="DemoSalesRep3" externalUserId="803" fromDate="2005-12-01 00:00:00" thruDate="2008-01-01 00:00:00"/>   
+    <ExternalUser autoId="9004" externalUserTypeId="ASTERISK" partyId="DemoSalesRep4" externalUserId="804" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9005" externalUserTypeId="ASTERISK" partyId="DemoCSR" externalUserId="805" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9006" externalUserTypeId="ASTERISK" partyId="DemoCSR2" externalUserId="806" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9007" externalUserTypeId="ASTERISK" partyId="DemoCalUser" externalUserId="807" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9008" externalUserTypeId="ASTERISK" partyId="DemoCalContact" externalUserId="808" fromDate="2005-12-01 00:00:00"/>   
     
-    <ExternalUser autoId="9100" externalUserTypeId="ASTERISK" partyId="demofinadmin" externalUserId="810"/>   
-    <ExternalUser autoId="9101" externalUserTypeId="ASTERISK" partyId="DemoARSpecialist" externalUserId="811"/>   
-    <ExternalUser autoId="9102" externalUserTypeId="ASTERISK" partyId="DemoAPSpecialist" externalUserId="812"/>   
-    <ExternalUser autoId="9103" externalUserTypeId="ASTERISK" partyId="DemoARSpecialist2" externalUserId="813"/>   
-    <ExternalUser autoId="9104" externalUserTypeId="ASTERISK" partyId="DemoAPSpecialist2" externalUserId="814"/>   
-    <ExternalUser autoId="9105" externalUserTypeId="ASTERISK" partyId="DemoARSpecialist3" externalUserId="815"/>   
-    <ExternalUser autoId="9106" externalUserTypeId="ASTERISK" partyId="DemoAPSpecialist3" externalUserId="816"/>   
-    <ExternalUser autoId="9107" externalUserTypeId="ASTERISK" partyId="DemoTxSpecialist" externalUserId="817"/> 
+    <ExternalUser autoId="9100" externalUserTypeId="ASTERISK" partyId="demofinadmin" externalUserId="810" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9101" externalUserTypeId="ASTERISK" partyId="DemoARSpecialist" externalUserId="811" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9102" externalUserTypeId="ASTERISK" partyId="DemoAPSpecialist" externalUserId="812" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9103" externalUserTypeId="ASTERISK" partyId="DemoARSpecialist2" externalUserId="813" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9104" externalUserTypeId="ASTERISK" partyId="DemoAPSpecialist2" externalUserId="814" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9105" externalUserTypeId="ASTERISK" partyId="DemoARSpecialist3" externalUserId="815" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9106" externalUserTypeId="ASTERISK" partyId="DemoAPSpecialist3" externalUserId="816" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9107" externalUserTypeId="ASTERISK" partyId="DemoTxSpecialist" externalUserId="817" fromDate="2005-12-01 00:00:00"/> 
 
-    <ExternalUser autoId="9200" externalUserTypeId="ASTERISK" partyId="DemoEmployeeA" externalUserId="810"/>   
-    <ExternalUser autoId="9201" externalUserTypeId="ASTERISK" partyId="DemoEmployeeB" externalUserId="811"/>   
+    <ExternalUser autoId="9200" externalUserTypeId="ASTERISK" partyId="DemoEmployeeA" externalUserId="810" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9201" externalUserTypeId="ASTERISK" partyId="DemoEmployeeB" externalUserId="811" fromDate="2005-12-01 00:00:00"/>   
 
-    <ExternalUser autoId="9300" externalUserTypeId="ASTERISK" partyId="DemoEmployee1" externalUserId="810"/>   
-    <ExternalUser autoId="9301" externalUserTypeId="ASTERISK" partyId="DemoEmployee2" externalUserId="811"/>   
-    <ExternalUser autoId="9302" externalUserTypeId="ASTERISK" partyId="DemoShipper1" externalUserId="812"/>   
-    <ExternalUser autoId="9303" externalUserTypeId="ASTERISK" partyId="DemoEmployee3" externalUserId="813"/>  
+    <ExternalUser autoId="9300" externalUserTypeId="ASTERISK" partyId="DemoEmployee1" externalUserId="810" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9301" externalUserTypeId="ASTERISK" partyId="DemoEmployee2" externalUserId="811" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9302" externalUserTypeId="ASTERISK" partyId="DemoShipper1" externalUserId="812" fromDate="2005-12-01 00:00:00"/>   
+    <ExternalUser autoId="9303" externalUserTypeId="ASTERISK" partyId="DemoEmployee3" externalUserId="813" fromDate="2005-12-01 00:00:00"/>  
 
 </entity-engine-xml>

@@ -332,9 +332,10 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
 
     /** {@inheritDoc} */
     public ExternalUser getExternalUserForUser(String externalUserTypeId, User user) throws RepositoryException, InfrastructureException {
-        EntityConditionList<EntityExpr> conditions = EntityCondition.makeCondition(EntityOperator.AND,
+        EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 EntityCondition.makeCondition(ExternalUser.Fields.partyId.name(), EntityOperator.EQUALS, user.getOfbizUserLogin().getString("partyId")),
-                EntityCondition.makeCondition(ExternalUser.Fields.externalUserTypeId.name(), EntityOperator.EQUALS, externalUserTypeId));
+                EntityCondition.makeCondition(ExternalUser.Fields.externalUserTypeId.name(), EntityOperator.EQUALS, externalUserTypeId),
+                EntityUtil.getFilterByDateExpr());
         List<ExternalUser> externalUsers = findList(ExternalUser.class, conditions);
 
         // if not found, return null
