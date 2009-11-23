@@ -25,6 +25,7 @@ import org.hibernate.search.FullTextQuery;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.domain.base.constants.RoleTypeConstants;
 import org.opentaps.domain.base.entities.PartyGroup;
 import org.opentaps.domain.base.entities.PartyRole;
 import org.opentaps.domain.base.entities.PartyRolePk;
@@ -48,7 +49,7 @@ public class SupplierSearchService extends SearchService implements SupplierSear
 
     /** {@inheritDoc} */
     public void makeQuery(StringBuilder sb) {
-        PartySearch.makePartyGroupQuery(sb, "SUPPLIER");
+        PartySearch.makePartyGroupQuery(sb, RoleTypeConstants.SUPPLIER);
     }
 
     /** {@inheritDoc} */
@@ -87,7 +88,7 @@ public class SupplierSearchService extends SearchService implements SupplierSear
             Class c = (Class) o[classIndex];
             if (c.equals(PartyRole.class)) {
                 PartyRolePk pk = (PartyRolePk) o[idIndex];
-                if ("SUPPLIER".equals(pk.getRoleTypeId())) {
+                if (RoleTypeConstants.SUPPLIER.equals(pk.getRoleTypeId())) {
                     supplierIds.add(pk.getPartyId());
                 }
             }

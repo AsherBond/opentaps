@@ -26,6 +26,7 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.domain.base.constants.ProductAssocTypeConstants;
 import org.opentaps.domain.base.entities.GoodIdentification;
 import org.opentaps.domain.base.entities.ProductAssoc;
 import org.opentaps.domain.base.services.CalculateProductPriceService;
@@ -106,7 +107,7 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
     public List<Product> getVariants(Product product) throws RepositoryException {
         EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 EntityCondition.makeCondition(ProductAssoc.Fields.productId.name(), product.getProductId()),
-                EntityCondition.makeCondition(ProductAssoc.Fields.productAssocTypeId.name(), "PRODUCT_VARIANT"),
+                EntityCondition.makeCondition(ProductAssoc.Fields.productAssocTypeId.name(), ProductAssocTypeConstants.PRODUCT_VARIANT),
                 EntityUtil.getFilterByDateExpr());
 
         List<ProductAssoc> variants = findList(ProductAssoc.class, conditions);

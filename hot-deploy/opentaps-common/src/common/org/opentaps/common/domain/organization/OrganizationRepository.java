@@ -35,6 +35,9 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.domain.party.PartyRepository;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilDate;
+import org.opentaps.domain.base.constants.GlAccountTypeConstants;
+import org.opentaps.domain.base.constants.PeriodTypeConstants;
+import org.opentaps.domain.base.constants.RoleTypeConstants;
 import org.opentaps.domain.base.entities.AcctgTagEnumType;
 import org.opentaps.domain.base.entities.AgreementTermTypesByDocumentType;
 import org.opentaps.domain.base.entities.CustomTimePeriod;
@@ -67,7 +70,7 @@ public class OrganizationRepository extends PartyRepository implements Organizat
     private static final String MODULE = OrganizationRepositoryInterface.class.getName();
 
     /** List the available fiscal period types. */
-    public static List<String> FISCAL_PERIOD_TYPES = Arrays.asList("FISCAL_YEAR", "FISCAL_QUARTER", "FISCAL_MONTH", "FISCAL_WEEK", "FISCAL_BYWEEK");
+    public static List<String> FISCAL_PERIOD_TYPES = Arrays.asList(PeriodTypeConstants.FISCAL_YEAR, PeriodTypeConstants.FISCAL_QUARTER, PeriodTypeConstants.FISCAL_MONTH, PeriodTypeConstants.FISCAL_WEEK, PeriodTypeConstants.FISCAL_BIWEEK);
 
     /**
      * Default constructor.
@@ -92,7 +95,7 @@ public class OrganizationRepository extends PartyRepository implements Organizat
             return null;
         }
 
-        PartyRole role = findOneNotNull(PartyRole.class, map(PartyRole.Fields.partyId, organizationPartyId, PartyRole.Fields.roleTypeId, "INTERNAL_ORGANIZATIO"), "Organization [" + organizationPartyId + "] not found with role INTERNAL_ORGANIZATIO");
+        PartyRole role = findOneNotNull(PartyRole.class, map(PartyRole.Fields.partyId, organizationPartyId, PartyRole.Fields.roleTypeId, RoleTypeConstants.INTERNAL_ORGANIZATIO), "Organization [" + organizationPartyId + "] not found with role INTERNAL_ORGANIZATIO");
         return role.getRelatedOne(Organization.class, "Party");
     }
 
@@ -127,7 +130,7 @@ public class OrganizationRepository extends PartyRepository implements Organizat
     /** {@inheritDoc} */
     public PaymentMethod getDefaultPaymentMethod(String organizationPartyId) throws RepositoryException {
         PaymentMethod defaultPaymentMethod = null;
-        GlAccountTypeDefault glAccountTypeDefault = findOne(GlAccountTypeDefault.class, map(GlAccountTypeDefault.Fields.organizationPartyId, organizationPartyId, GlAccountTypeDefault.Fields.glAccountTypeId, "BANK_STLMNT_ACCOUNT"));
+        GlAccountTypeDefault glAccountTypeDefault = findOne(GlAccountTypeDefault.class, map(GlAccountTypeDefault.Fields.organizationPartyId, organizationPartyId, GlAccountTypeDefault.Fields.glAccountTypeId, GlAccountTypeConstants.BANK_STLMNT_ACCOUNT));
         if (glAccountTypeDefault != null) {
             defaultPaymentMethod = getFirst(findList(PaymentMethod.class, map(PaymentMethod.Fields.partyId, organizationPartyId, PaymentMethod.Fields.glAccountId, glAccountTypeDefault.getGlAccountId())));
         }

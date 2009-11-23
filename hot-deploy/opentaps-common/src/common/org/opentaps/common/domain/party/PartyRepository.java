@@ -32,10 +32,12 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.party.PartyContactHelper;
+import org.opentaps.domain.base.constants.ContactMechTypeConstants;
+import org.opentaps.domain.base.constants.RoleTypeConstants;
+import org.opentaps.domain.base.entities.ContactMech;
 import org.opentaps.domain.base.entities.ExternalUser;
 import org.opentaps.domain.base.entities.PartyContactDetailByPurpose;
 import org.opentaps.domain.base.entities.PartyFromSummaryByRelationship;
@@ -59,6 +61,7 @@ import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.foundation.service.ServiceException;
+import org.opentaps.domain.base.constants.ContactMechPurposeTypeConstants;
 
 /** {@inheritDoc} */
 public class PartyRepository extends Repository implements PartyRepositoryInterface {
@@ -132,8 +135,8 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
         Set<Account> resultSet = new FastSet<Account>();
 
         EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                  EntityCondition.makeCondition(PartyFromSummaryByRelationship.Fields.roleTypeIdFrom.name(), "CONTACT"),
-                  EntityCondition.makeCondition(PartyFromSummaryByRelationship.Fields.roleTypeIdTo.name(), "ACCOUNT"),
+                  EntityCondition.makeCondition(PartyFromSummaryByRelationship.Fields.roleTypeIdFrom.name(), RoleTypeConstants.CONTACT),
+                  EntityCondition.makeCondition(PartyFromSummaryByRelationship.Fields.roleTypeIdTo.name(), RoleTypeConstants.ACCOUNT),
                   EntityCondition.makeCondition(PartyFromSummaryByRelationship.Fields.partyIdFrom.name(), contact.getPartyId()),
             EntityUtil.getFilterByDateExpr());
 
@@ -169,8 +172,8 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
         }
 
         EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                       EntityCondition.makeCondition(PartyFromSummaryByRelationship.Fields.roleTypeIdFrom.name(), "CONTACT"),
-                       EntityCondition.makeCondition(PartyFromSummaryByRelationship.Fields.roleTypeIdTo.name(), "ACCOUNT"),
+                       EntityCondition.makeCondition(PartyFromSummaryByRelationship.Fields.roleTypeIdFrom.name(), RoleTypeConstants.CONTACT),
+                       EntityCondition.makeCondition(PartyFromSummaryByRelationship.Fields.roleTypeIdTo.name(), RoleTypeConstants.ACCOUNT),
                        EntityCondition.makeCondition(PartyFromSummaryByRelationship.Fields.partyIdTo.name(), parentAccount.getPartyId()),
                        EntityUtil.getFilterByDateExpr());
 
@@ -179,7 +182,7 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
             return null;
         }
 
-        resultSet.addAll(findList(Contact.class, EntityCondition.makeCondition("partyId", EntityOperator.IN, Entity.getDistinctFieldValues(contactValues, PartyFromSummaryByRelationship.Fields.partyIdFrom))));
+        resultSet.addAll(findList(Contact.class, EntityCondition.makeCondition(Contact.Fields.partyId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(contactValues, PartyFromSummaryByRelationship.Fields.partyIdFrom))));
 
         if (resultSet.size() > 0) {
             return resultSet;
@@ -197,7 +200,6 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public List<PostalAddress> getPostalAddresses(Party party, Party.ContactPurpose purpose) throws RepositoryException {
         String purposeId = getOpentapsContactPurpose(purpose);
 
@@ -206,9 +208,9 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
         }
 
         try {
-            List<GenericValue> purposes = PartyContactHelper.getContactMechsByPurpose(party.getPartyId(), "POSTAL_ADDRESS", purposeId, true, getDelegator());
-            List contactList = EntityUtil.getFieldListFromEntityList(purposes, "contactMechId", true);
-            return findList(PostalAddress.class, Arrays.asList(EntityCondition.makeCondition("contactMechId", EntityOperator.IN, contactList)));
+            List<GenericValue> purposes = PartyContactHelper.getContactMechsByPurpose(party.getPartyId(), ContactMechTypeConstants.POSTAL_ADDRESS, purposeId, true, getDelegator());
+            List<String> contactList = EntityUtil.getFieldListFromEntityList(purposes, ContactMech.Fields.contactMechId.name(), true);
+            return findList(PostalAddress.class, Arrays.asList(EntityCondition.makeCondition(PostalAddress.Fields.contactMechId.name(), EntityOperator.IN, contactList)));
         } catch (GenericEntityException e) {
             throw new RepositoryException(e);
         }
@@ -218,16 +220,15 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
     public List<TelecomNumber>  getPhoneNumbers(Party party) throws RepositoryException {
         EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
                         EntityCondition.makeCondition(PartyContactDetailByPurpose.Fields.partyId.name(), party.getPartyId()),
-                        EntityCondition.makeCondition(PartyContactDetailByPurpose.Fields.contactMechTypeId.name(), "TELECOM_NUMBER"),
+                        EntityCondition.makeCondition(PartyContactDetailByPurpose.Fields.contactMechTypeId.name(), ContactMechTypeConstants.TELECOM_NUMBER),
                         EntityUtil.getFilterByDateExpr(),
                         EntityUtil.getFilterByDateExpr(PartyContactDetailByPurpose.Fields.purposeFromDate.name(), PartyContactDetailByPurpose.Fields.purposeThruDate.name()));
 
         List<PartyContactDetailByPurpose> partyContactPurposes = findList(PartyContactDetailByPurpose.class, conditions);
-        return findList(TelecomNumber.class, Arrays.asList(EntityCondition.makeCondition("contactMechId", EntityOperator.IN, Entity.getDistinctFieldValues(partyContactPurposes, PartyContactDetailByPurpose.Fields.contactMechId))));
+        return findList(TelecomNumber.class, Arrays.asList(EntityCondition.makeCondition(TelecomNumber.Fields.contactMechId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(partyContactPurposes, PartyContactDetailByPurpose.Fields.contactMechId))));
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public List<TelecomNumber> getPhoneNumbers(Party party, Party.ContactPurpose purpose) throws RepositoryException {
         String purposeId = getOpentapsContactPurpose(purpose);
 
@@ -236,9 +237,9 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
         }
 
         try {
-            List<GenericValue> purposes = PartyContactHelper.getContactMechsByPurpose(party.getPartyId(), "TELECOM_NUMBER", purposeId, true, getDelegator());
-            List contactList = EntityUtil.getFieldListFromEntityList(purposes, "contactMechId", true);
-            return findList(TelecomNumber.class, Arrays.asList(EntityCondition.makeCondition("contactMechId", EntityOperator.IN, contactList)));
+            List<GenericValue> purposes = PartyContactHelper.getContactMechsByPurpose(party.getPartyId(), ContactMechTypeConstants.TELECOM_NUMBER, purposeId, true, getDelegator());
+            List<String> contactList = EntityUtil.getFieldListFromEntityList(purposes, ContactMech.Fields.contactMechId.name(), true);
+            return findList(TelecomNumber.class, Arrays.asList(EntityCondition.makeCondition(TelecomNumber.Fields.contactMechId.name(), EntityOperator.IN, contactList)));
         } catch (GenericEntityException e) {
             throw new RepositoryException(e);
         }
@@ -264,14 +265,14 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
      */
     public String getOpentapsContactPurpose(Party.ContactPurpose purpose) {
         switch (purpose) {
-            case PRIMARY_ADDRESS: return "PRIMARY_LOCATION";
-            case BILLING_ADDRESS: return "BILLING_LOCATION";
-            case GENERAL_ADDRESS: return "GENERAL_LOCATION";
-            case SHIPPING_ADDRESS: return "SHIPPING_LOCATION";
-            case PRIMARY_PHONE: return "PRIMARY_PHONE";
-            case FAX_NUMBER: return "FAX_NUMBER";
-            case BILLING_PHONE: return "PHONE_BILLING";
-            case PRIMARY_EMAIL: return "PRIMARY_EMAIL";
+            case PRIMARY_ADDRESS: return ContactMechPurposeTypeConstants.PRIMARY_LOCATION;
+            case BILLING_ADDRESS: return ContactMechPurposeTypeConstants.BILLING_LOCATION;
+            case GENERAL_ADDRESS: return ContactMechPurposeTypeConstants.GENERAL_LOCATION;
+            case SHIPPING_ADDRESS: return ContactMechPurposeTypeConstants.SHIPPING_LOCATION;
+            case PRIMARY_PHONE: return ContactMechPurposeTypeConstants.PRIMARY_PHONE;
+            case FAX_NUMBER: return ContactMechPurposeTypeConstants.FAX_NUMBER;
+            case BILLING_PHONE: return ContactMechPurposeTypeConstants.PHONE_BILLING;
+            case PRIMARY_EMAIL: return ContactMechPurposeTypeConstants.PRIMARY_EMAIL;
             default: return null;
         }
     }
@@ -367,15 +368,15 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
     /** {@inheritDoc} */
     public PostalAddress getSupplierPostalAddress(Party party) throws RepositoryException, EntityNotFoundException {
         try {
-            GenericValue supplierAddress = PartyContactHelper.getPostalAddressValueByPurpose(party.getPartyId(), "GENERAL_LOCATION", true, getDelegator());
+            GenericValue supplierAddress = PartyContactHelper.getPostalAddressValueByPurpose(party.getPartyId(), ContactMechPurposeTypeConstants.GENERAL_LOCATION, true, getDelegator());
             if (supplierAddress == null) {
-                supplierAddress = PartyContactHelper.getPostalAddressValueByPurpose(party.getPartyId(), "BILLING_LOCATION", true, getDelegator());
+                supplierAddress = PartyContactHelper.getPostalAddressValueByPurpose(party.getPartyId(), ContactMechPurposeTypeConstants.BILLING_LOCATION, true, getDelegator());
             }
             if (supplierAddress == null) {
-                supplierAddress = PartyContactHelper.getPostalAddressValueByPurpose(party.getPartyId(), "PAYMENT_LOCATION", true, getDelegator());
+                supplierAddress = PartyContactHelper.getPostalAddressValueByPurpose(party.getPartyId(), ContactMechPurposeTypeConstants.PAYMENT_LOCATION, true, getDelegator());
             }
             if (supplierAddress != null) {
-                String contactMechId = supplierAddress.getString("contactMechId");
+                String contactMechId = supplierAddress.getString(PostalAddress.Fields.contactMechId.name());
                 return findOneNotNull(PostalAddress.class, map(PostalAddress.Fields.contactMechId, contactMechId), "PostalAddress [" + contactMechId + "] not found");
             }
         } catch (GenericEntityException e) {

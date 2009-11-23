@@ -25,6 +25,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Transaction;
 import org.ofbiz.base.util.UtilDateTime;
+import org.opentaps.domain.base.constants.EncumbranceDetailTypeConstants;
+import org.opentaps.domain.base.constants.GlFiscalTypeConstants;
 import org.opentaps.domain.base.entities.AcctgTransAndEntries;
 import org.opentaps.domain.base.entities.DataWarehouseTransform;
 import org.opentaps.domain.base.entities.EncumbranceDetail;
@@ -69,7 +71,7 @@ public class FinancialReportServices extends Service implements FinancialReportS
 
             LedgerRepositoryInterface ledgerRepository = getDomainsDirectory().getLedgerDomain().getLedgerRepository();
             OrderRepositoryInterface orderRepository = getDomainsDirectory().getOrderDomain().getOrderRepository();
-            List<AcctgTransAndEntries> transactions = ledgerRepository.getPostedTransactionsAndEntries(organizationPartyId, Arrays.asList("ACTUAL", "BUDGET"), null, null);
+            List<AcctgTransAndEntries> transactions = ledgerRepository.getPostedTransactionsAndEntries(organizationPartyId, Arrays.asList(GlFiscalTypeConstants.ACTUAL, GlFiscalTypeConstants.BUDGET), null, null);
 
             session = infrastructure.getSession();
             tx = session.beginTransaction();
@@ -169,7 +171,7 @@ public class FinancialReportServices extends Service implements FinancialReportS
                 fact.setAcctgTagEnumId10(encumb.getAcctgTagEnumId10());
 
                 // transactions with fiscal type ENCUMBRANCE
-                if ("ENCUMB_MANUAL".equals(encumb.getEncumbranceDetailTypeId())) {
+                if (EncumbranceDetailTypeConstants.ENCUMB_MANUAL.equals(encumb.getEncumbranceDetailTypeId())) {
                     fact.setAcctgTransId(encumb.getAcctgTransId());
                     fact.setAcctgTransEntrySeqId(encumb.getAcctgTransEntryId());
                     AccountingTransaction transEntry = ledgerRepository.getAccountingTransaction(encumb.getAcctgTransId());
@@ -179,7 +181,7 @@ public class FinancialReportServices extends Service implements FinancialReportS
                 }
 
                 // purchasing orders
-                if ("ENCUMB_PURCHASING".equals(encumb.getEncumbranceDetailTypeId())) {
+                if (EncumbranceDetailTypeConstants.ENCUMB_PURCHASING.equals(encumb.getEncumbranceDetailTypeId())) {
                     fact.setOrderId(encumb.getOrderId());
                     fact.setOrderItemSeqId(encumb.getOrderItemSeqId());
                     Order order = orderRepository.getOrderById(encumb.getOrderId());

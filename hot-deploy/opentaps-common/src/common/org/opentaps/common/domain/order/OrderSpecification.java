@@ -17,12 +17,17 @@
 
 package org.opentaps.common.domain.order;
 
-import org.ofbiz.base.util.UtilNumber;
-import org.opentaps.domain.order.*;
-
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+
+import org.ofbiz.base.util.UtilNumber;
+import org.opentaps.domain.base.constants.OrderAdjustmentTypeConstants;
+import org.opentaps.domain.base.constants.OrderTypeConstants;
+import org.opentaps.domain.base.constants.PaymentMethodTypeConstants;
+import org.opentaps.domain.base.constants.RoleTypeConstants;
+import org.opentaps.domain.base.constants.StatusItemConstants;
+import org.opentaps.domain.order.*;
 
 /**
  * Common specifications for the Order domain.
@@ -99,15 +104,15 @@ public final class OrderSpecification implements OrderSpecificationInterface {
      */
     public static enum OrderStatusEnum {
 
-        CREATED("ORDER_CREATED"),
-        APPROVED("ORDER_APPROVED"),
-        PROCESSING("ORDER_PROCESSING"),
-        HOLD("ORDER_HOLD"),
-        SENT("ORDER_SENT"),
-        COMPLETED("ORDER_COMPLETED"),
-        CANCELLED("ORDER_CANCELLED"),
-        REJECTED("ORDER_REJECTED"),
-        UNDELIVERABLE("ORDER_UNDELIVERABLE");
+        CREATED(StatusItemConstants.OrderStatus.ORDER_CREATED),
+        APPROVED(StatusItemConstants.OrderStatus.ORDER_APPROVED),
+        PROCESSING(StatusItemConstants.OrderStatus.ORDER_PROCESSING),
+        HOLD(StatusItemConstants.OrderStatus.ORDER_HOLD),
+        SENT(StatusItemConstants.OrderStatus.ORDER_SENT),
+        COMPLETED(StatusItemConstants.OrderStatus.ORDER_COMPLETED),
+        CANCELLED(StatusItemConstants.OrderStatus.ORDER_CANCELLED),
+        REJECTED(StatusItemConstants.OrderStatus.ORDER_REJECTED),
+        UNDELIVERABLE(StatusItemConstants.OrderStatus.ORDER_UNDELIVERABLE);
 
         private final String statusId;
         private OrderStatusEnum(String statusId) {
@@ -187,8 +192,8 @@ public final class OrderSpecification implements OrderSpecificationInterface {
      */
     public static enum OrderTypeEnum {
 
-        SALES("SALES_ORDER"),
-        PURCHASE("PURCHASE_ORDER");
+        SALES(OrderTypeConstants.SALES_ORDER),
+        PURCHASE(OrderTypeConstants.PURCHASE_ORDER);
 
         private final String orderTypeId;
         private OrderTypeEnum(String orderTypeId) {
@@ -279,12 +284,12 @@ public final class OrderSpecification implements OrderSpecificationInterface {
      */
     public static enum ReturnStatusEnum {
 
-        ACCEPTED("RETURN_ACCEPTED"),
-        COMPLETED("RETURN_COMPLETED"),
-        CANCELLED("RETURN_CANCELLED"),
-        RECEIVED("RETURN_RECEIVED"),
-        REQUESTED("RETURN_REQUESTED"),
-        MANUAL_REFUND_REQUIRED("RETURN_MAN_REFUND");
+        ACCEPTED(StatusItemConstants.OrderReturnStts.RETURN_ACCEPTED),
+        COMPLETED(StatusItemConstants.OrderReturnStts.RETURN_COMPLETED),
+        CANCELLED(StatusItemConstants.OrderReturnStts.RETURN_CANCELLED),
+        RECEIVED(StatusItemConstants.OrderReturnStts.RETURN_RECEIVED),
+        REQUESTED(StatusItemConstants.OrderReturnStts.RETURN_REQUESTED),
+        MANUAL_REFUND_REQUIRED(StatusItemConstants.OrderReturnStts.RETURN_MAN_REFUND);
 
         private final String statusId;
         private ReturnStatusEnum(String statusId) {
@@ -349,12 +354,12 @@ public final class OrderSpecification implements OrderSpecificationInterface {
      */
     public static enum OrderItemStatusEnum {
 
-        CREATED("ITEM_CREATED"),
-        APPROVED("ITEM_APPROVED"),
-        PERFORMED("ITEM_PERFORMED"),
-        COMPLETED("ITEM_COMPLETED"),
-        CANCELLED("ITEM_CANCELLED"),
-        REJECTED("ITEM_REJECTED");
+        CREATED(StatusItemConstants.OrderItemStatus.ITEM_CREATED),
+        APPROVED(StatusItemConstants.OrderItemStatus.ITEM_APPROVED),
+        PERFORMED(StatusItemConstants.OrderItemStatus.ITEM_PERFORMED),
+        COMPLETED(StatusItemConstants.OrderItemStatus.ITEM_COMPLETED),
+        CANCELLED(StatusItemConstants.OrderItemStatus.ITEM_CANCELLED),
+        REJECTED(StatusItemConstants.OrderItemStatus.ITEM_REJECTED);
 
         private final String statusId;
         private OrderItemStatusEnum(String statusId) {
@@ -424,8 +429,8 @@ public final class OrderSpecification implements OrderSpecificationInterface {
      */
     public static enum OrderAdjustmentTypeEnum {
 
-        SALES_TAX("SALES_TAX"),
-        SHIPPING_CHARGES("SHIPPING_CHARGES");
+        SALES_TAX(OrderAdjustmentTypeConstants.SALES_TAX),
+        SHIPPING_CHARGES(OrderAdjustmentTypeConstants.SHIPPING_CHARGES);
 
         private final String typeId;
         private OrderAdjustmentTypeEnum(String typeId) {
@@ -470,14 +475,14 @@ public final class OrderSpecification implements OrderSpecificationInterface {
      */
     public static enum PaymentPreferenceStatusEnum {
 
-        CANCELLED("PAYMENT_CANCELLED"),
-        AUTHORIZED("PAYMENT_AUTHORIZED"),
-        NOT_AUTHORIZED("PAYMENT_NOT_AUTH"),
-        DECLINED("PAYMENT_DECLINED"),
-        RECEIVED("PAYMENT_RECEIVED"),
-        NOT_RECEIVED("PAYMENT_NOT_RECEIVED"),
-        REFUNDED("PAYMENT_REFUNDED"),
-        SETTLED("PAYMENT_SETTLED");
+        CANCELLED(StatusItemConstants.PaymentPrefStatus.PAYMENT_CANCELLED),
+        AUTHORIZED(StatusItemConstants.PaymentPrefStatus.PAYMENT_AUTHORIZED),
+        NOT_AUTHORIZED(StatusItemConstants.PaymentPrefStatus.PAYMENT_NOT_AUTH),
+        DECLINED(StatusItemConstants.PaymentPrefStatus.PAYMENT_DECLINED),
+        RECEIVED(StatusItemConstants.PaymentPrefStatus.PAYMENT_RECEIVED),
+        NOT_RECEIVED(StatusItemConstants.PaymentPrefStatus.PAYMENT_NOT_RECEIVED),
+        REFUNDED(StatusItemConstants.PaymentPrefStatus.PAYMENT_REFUNDED),
+        SETTLED(StatusItemConstants.PaymentPrefStatus.PAYMENT_SETTLED);
 
         private final String statusId;
         private PaymentPreferenceStatusEnum(String statusId) {
@@ -552,13 +557,13 @@ public final class OrderSpecification implements OrderSpecificationInterface {
      */
     public static enum ShipmentStatusEnum {
 
-        INPUT("SHIPMENT_INPUT"),
-        SCHEDULED("SHIPMENT_SCHEDULED"),
-        PICKED("SHIPMENT_PICKED"),
-        PACKED("SHIPMENT_PACKED"),
-        SHIPPED("SHIPMENT_SHIPPED"),
-        DELIVERED("SHIPMENT_DELIVERED"),
-        CANCELLED("SHIPMENT_CANCELLED");
+        INPUT(StatusItemConstants.ShipmentStatus.SHIPMENT_INPUT),
+        SCHEDULED(StatusItemConstants.ShipmentStatus.SHIPMENT_SCHEDULED),
+        PICKED(StatusItemConstants.ShipmentStatus.SHIPMENT_PICKED),
+        PACKED(StatusItemConstants.ShipmentStatus.SHIPMENT_PACKED),
+        SHIPPED(StatusItemConstants.ShipmentStatus.SHIPMENT_SHIPPED),
+        DELIVERED(StatusItemConstants.ShipmentStatus.SHIPMENT_DELIVERED),
+        CANCELLED(StatusItemConstants.ShipmentStatus.SHIPMENT_CANCELLED);
 
         private final String statusId;
         private ShipmentStatusEnum(String statusId) {
@@ -620,42 +625,42 @@ public final class OrderSpecification implements OrderSpecificationInterface {
 
     /** {@inheritDoc} */
     public List<String> commissionAgentRoleTypeIds() {
-        return Arrays.asList("COMMISSION_AGENT");
+        return Arrays.asList(RoleTypeConstants.COMMISSION_AGENT);
     }
 
     /** {@inheritDoc} */
     public List<String> placingCustomerRoleTypeIds() {
-        return Arrays.asList("PLACING_CUSTOMER");
+        return Arrays.asList(RoleTypeConstants.PLACING_CUSTOMER);
     }
 
     /** {@inheritDoc} */
     public List<String> billToCustomerRoleTypeIds() {
-        return Arrays.asList("BILL_TO_CUSTOMER");
+        return Arrays.asList(RoleTypeConstants.BILL_TO_CUSTOMER);
     }
 
     /** {@inheritDoc} */
     public List<String> billFromVendorRoleTypeIds() {
-        return Arrays.asList("BILL_FROM_VENDOR");
+        return Arrays.asList(RoleTypeConstants.BILL_FROM_VENDOR);
     }
 
     /** {@inheritDoc} */
     public List<String> supplierAgentRoleTypeIds() {
-        return Arrays.asList("SUPPLIER_AGENT");
+        return Arrays.asList(RoleTypeConstants.SUPPLIER_AGENT);
     }
 
     /** {@inheritDoc} */
     public List<String> shipToCustomerRoleTypeIds() {
-        return Arrays.asList("SHIP_TO_CUSTOMER");
+        return Arrays.asList(RoleTypeConstants.SHIP_TO_CUSTOMER);
     }
 
     /** {@inheritDoc} */
     public List<String> distributorRoleTypeIds() {
-        return Arrays.asList("DISTRIBUTOR");
+        return Arrays.asList(RoleTypeConstants.DISTRIBUTOR);
     }
 
     /** {@inheritDoc} */
     public List<String> affiliateRoleTypeIds() {
-        return Arrays.asList("AFFILIATE");
+        return Arrays.asList(RoleTypeConstants.AFFILIATE);
     }
 
     /** {@inheritDoc} */
@@ -678,13 +683,13 @@ public final class OrderSpecification implements OrderSpecificationInterface {
      */
     public static enum PaymentMethodTypeEnum {
 
-        BILLING_ACCOUNT("EXT_BILLACT"),
-        CASH_ON_DELIVERY("EXT_COD"),
-        CREDIT_CARD("CREDIT_CARD"),
-        ELECTRONIC_FUND_TRANSFER("EFT_ACCOUNT"),
-        OFFLINE("EXT_OFFLINE"),
-        PAYPAL("EXT_PAYPAL"),
-        GIFT_CARD("GIFT_CARD");
+        BILLING_ACCOUNT(PaymentMethodTypeConstants.EXT_BILLACT),
+        CASH_ON_DELIVERY(PaymentMethodTypeConstants.EXT_COD),
+        CREDIT_CARD(PaymentMethodTypeConstants.CREDIT_CARD),
+        ELECTRONIC_FUND_TRANSFER(PaymentMethodTypeConstants.EFT_ACCOUNT),
+        OFFLINE(PaymentMethodTypeConstants.EXT_OFFLINE),
+        PAYPAL(PaymentMethodTypeConstants.EXT_PAYPAL),
+        GIFT_CARD(PaymentMethodTypeConstants.GIFT_CARD);
 
         private final String typeId;
         private PaymentMethodTypeEnum(String typeId) {

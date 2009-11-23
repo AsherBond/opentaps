@@ -17,12 +17,10 @@
 package org.opentaps.financials.domain.ledger;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
 import javolution.util.FastList;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 import org.ofbiz.accounting.util.UtilAccounting;
@@ -31,6 +29,8 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericEntityException;
 import org.opentaps.common.domain.order.OrderSpecification;
+import org.opentaps.domain.base.constants.EncumbranceDetailTypeConstants;
+import org.opentaps.domain.base.constants.InvoiceTypeConstants;
 import org.opentaps.domain.base.entities.AcctgTransEntry;
 import org.opentaps.domain.base.entities.EncumbranceDetail;
 import org.opentaps.domain.base.entities.EncumbranceSnapshot;
@@ -86,9 +86,9 @@ public class EncumbranceServices extends Service implements EncumbranceServiceIn
                 }
 
                 for (OrderItem item : orderItems) {
-                    
+
                     EncumbranceDetail encumbrance = new EncumbranceDetail();
-                    encumbrance.setEncumbranceDetailTypeId("ENCUMB_PURCHASING");
+                    encumbrance.setEncumbranceDetailTypeId(EncumbranceDetailTypeConstants.ENCUMB_PURCHASING);
                     encumbrance.setPartyId(order.getBillFromPartyId());
                     encumbrance.setOrderId(item.getOrderId());
                     encumbrance.setOrderItemSeqId(item.getOrderItemSeqId());
@@ -117,10 +117,10 @@ public class EncumbranceServices extends Service implements EncumbranceServiceIn
                     encumbrance.setAcctgTagEnumId9(item.getAcctgTagEnumId9());
                     encumbrance.setAcctgTagEnumId10(item.getAcctgTagEnumId10());
 
-                    // find corresponding GL account by means of establishing relation between 
+                    // find corresponding GL account by means of establishing relation between
                     // order item type and invoice item type and its gl account for organization.
                     String glAccountId = null;
-                    InvoiceItemType invoiceItemType = invoiceRepository.getInvoiceItemType(item, "PURCHASE_INVOICE");
+                    InvoiceItemType invoiceItemType = invoiceRepository.getInvoiceItemType(item, InvoiceTypeConstants.PURCHASE_INVOICE);
                     List<? extends InvoiceItemTypeGlAccount> invItemTypeGlAccts = invoiceItemType.getInvoiceItemTypeGlAccounts();
                     if (UtilValidate.isNotEmpty(invItemTypeGlAccts)) {
                         for (InvoiceItemTypeGlAccount acct : invItemTypeGlAccts) {
@@ -129,7 +129,7 @@ public class EncumbranceServices extends Service implements EncumbranceServiceIn
                                 break;
                             }
                         }
-                    };
+                    }
 
                     // default if not found
                     if (glAccountId == null) {
@@ -144,7 +144,7 @@ public class EncumbranceServices extends Service implements EncumbranceServiceIn
                 BigDecimal adjAmount = order.getUninvoicedNonItemAdjustmentValue();
                 if (adjAmount != null && adjAmount.compareTo(BigDecimal.ZERO) != 0) {
                     EncumbranceDetail encumbrance = new EncumbranceDetail();
-                    encumbrance.setEncumbranceDetailTypeId("ENCUMB_PURCHASING");
+                    encumbrance.setEncumbranceDetailTypeId(EncumbranceDetailTypeConstants.ENCUMB_PURCHASING);
                     encumbrance.setPartyId(order.getBillFromPartyId());
                     encumbrance.setOrderId(order.getOrderId());
                     encumbrance.setEncumberedAmount(adjAmount);
@@ -166,7 +166,7 @@ public class EncumbranceServices extends Service implements EncumbranceServiceIn
                     if (UtilAccounting.isExpenseAccount(Repository.genericValueFromEntity(account))) {
                         // an expense GL account on ENCUMBRANCE transaction has to be recorded as encumbrance.
                         EncumbranceDetail encumbrance = new EncumbranceDetail();
-                        encumbrance.setEncumbranceDetailTypeId("ENCUMB_MANUAL");
+                        encumbrance.setEncumbranceDetailTypeId(EncumbranceDetailTypeConstants.ENCUMB_MANUAL);
                         encumbrance.setPartyId(acctgTrans.getPartyId());
                         encumbrance.setAcctgTransId(entry.getAcctgTransId());
                         encumbrance.setAcctgTransEntryId(entry.getAcctgTransEntrySeqId());
@@ -190,7 +190,7 @@ public class EncumbranceServices extends Service implements EncumbranceServiceIn
             }
 
             if (UtilValidate.isNotEmpty(encumbranceDetails)) {
-                // create parent EncumbranceSnapshot entity 
+                // create parent EncumbranceSnapshot entity
                 EncumbranceSnapshot snapshot = new EncumbranceSnapshot();
                 snapshot.setSnapshotDatetime(moment);
                 snapshot.setCreatedByUserLoginId(getUser().getUserId());

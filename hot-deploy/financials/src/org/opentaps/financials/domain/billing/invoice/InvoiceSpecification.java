@@ -16,6 +16,8 @@
  */
 package org.opentaps.financials.domain.billing.invoice;
 
+import org.opentaps.domain.base.constants.InvoiceTypeConstants;
+import org.opentaps.domain.base.constants.StatusItemConstants;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceSpecificationInterface;
 
@@ -38,12 +40,12 @@ public class InvoiceSpecification implements InvoiceSpecificationInterface {
      */
     public static enum InvoiceTypeEnum {
 
-        SALES("SALES_INVOICE"),
-        PURCHASE("PURCHASE_INVOICE"),
-        COMMISSION("COMMISSION_INVOICE"),
-        INTEREST("INTEREST_INVOICE"),
-        RETURN("CUST_RTN_INVOICE"),
-        PARTNER("PARTNER_INVOICE");
+        SALES(InvoiceTypeConstants.SALES_INVOICE),
+        PURCHASE(InvoiceTypeConstants.PURCHASE_INVOICE),
+        COMMISSION(InvoiceTypeConstants.COMMISSION_INVOICE),
+        INTEREST(InvoiceTypeConstants.INTEREST_INVOICE),
+        RETURN(InvoiceTypeConstants.CUST_RTN_INVOICE),
+        PARTNER(InvoiceTypeConstants.PARTNER_INVOICE);
 
         private final String typeId;
         private InvoiceTypeEnum(String typeId) {
@@ -139,14 +141,14 @@ public class InvoiceSpecification implements InvoiceSpecificationInterface {
      */
     public static enum InvoiceStatusEnum {
 
-        CANCELLED("INVOICE_CANCELLED"),
-        TO_PARTNER("INVOICE_INV_PTNR"),
-        IN_PROCESS("INVOICE_IN_PROCESS"),
-        PAID("INVOICE_PAID"),
-        READY("INVOICE_READY"),
-        RECEIVED("INVOICE_RECEIVED"),
-        VOIDED("INVOICE_VOIDED"),
-        WRITE_OFF("INVOICE_WRITEOFF");
+        CANCELLED(StatusItemConstants.InvoiceStatus.INVOICE_CANCELLED),
+        TO_PARTNER(StatusItemConstants.InvoiceStatus.INVOICE_INV_PTNR),
+        IN_PROCESS(StatusItemConstants.InvoiceStatus.INVOICE_IN_PROCESS),
+        PAID(StatusItemConstants.InvoiceStatus.INVOICE_PAID),
+        READY(StatusItemConstants.InvoiceStatus.INVOICE_READY),
+        RECEIVED(StatusItemConstants.InvoiceStatus.INVOICE_RECEIVED),
+        VOIDED(StatusItemConstants.InvoiceStatus.INVOICE_VOIDED),
+        WRITE_OFF(StatusItemConstants.InvoiceStatus.INVOICE_WRITEOFF);
 
         private final String statusId;
         private InvoiceStatusEnum(String statusId) {

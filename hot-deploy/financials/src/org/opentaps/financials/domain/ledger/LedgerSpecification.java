@@ -16,11 +16,14 @@
  */
 package org.opentaps.financials.domain.ledger;
 
-import org.opentaps.domain.ledger.LedgerSpecificationInterface;
-import org.opentaps.domain.ledger.AccountingTransaction;
-import org.opentaps.domain.base.entities.CustomTimePeriod;
+import org.opentaps.domain.base.constants.GlFiscalTypeConstants;
+import org.opentaps.domain.base.constants.InvoiceAdjustmentTypeConstants;
+import org.opentaps.domain.base.constants.StatusItemConstants;
 import org.opentaps.domain.base.entities.AcctgTransEntry;
+import org.opentaps.domain.base.entities.CustomTimePeriod;
 import org.opentaps.domain.billing.invoice.Invoice;
+import org.opentaps.domain.ledger.AccountingTransaction;
+import org.opentaps.domain.ledger.LedgerSpecificationInterface;
 
 /** {@inheritDoc} */
 public class LedgerSpecification implements LedgerSpecificationInterface {
@@ -37,17 +40,17 @@ public class LedgerSpecification implements LedgerSpecificationInterface {
 
     /** {@inheritDoc} */
     public String getAdjustmentTypeIdForWriteOff() {
-        return "WRITEOFF";
+        return InvoiceAdjustmentTypeConstants.WRITEOFF;
     }
 
     /** {@inheritDoc} */
     public String getAdjustmentTypeIdForCashDiscount() {
-        return "CASH_DISCOUNT";
+        return InvoiceAdjustmentTypeConstants.CASH_DISCOUNT;
     }
 
     /** {@inheritDoc} */
     public String getAdjustmentTypeIdForEarlyPayDiscount() {
-        return "EARLY_PAY_DISCT";
+        return InvoiceAdjustmentTypeConstants.EARLY_PAY_DISCT;
     }
 
     /** {@inheritDoc} */
@@ -77,12 +80,12 @@ public class LedgerSpecification implements LedgerSpecificationInterface {
 
     /** {@inheritDoc} */
     public String getFiscalTypeIdForActual() {
-        return "ACTUAL";
+        return GlFiscalTypeConstants.ACTUAL;
     }
 
     /** {@inheritDoc} */
     public String getStatusNotReconciled() {
-        return "AES_NOT_RECONCILED";
+        return StatusItemConstants.AcctgEnrecStatus.AES_NOT_RECONCILED;
     }
 
     /** {@inheritDoc} */

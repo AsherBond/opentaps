@@ -24,7 +24,6 @@ import java.util.Set;
 
 import javolution.util.FastList;
 import javolution.util.FastSet;
-
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
@@ -32,6 +31,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.domain.base.constants.StatusItemConstants;
 import org.opentaps.domain.base.entities.AcctgTagPostingCheck;
 import org.opentaps.domain.base.entities.AcctgTransAndEntries;
 import org.opentaps.domain.base.entities.AcctgTransEntry;
@@ -240,7 +240,7 @@ public class LedgerRepository extends Repository implements LedgerRepositoryInte
                 entry.setAcctgTransEntrySeqId(new Integer(i).toString());
             }
             // status should be not reconciled
-            entry.setReconcileStatusId("AES_NOT_RECONCILED");
+            entry.setReconcileStatusId(StatusItemConstants.AcctgEnrecStatus.AES_NOT_RECONCILED);
             createOrUpdate(entry);  // persist it
             i++;    // increase counter regardless of it was used, so it's correct relative to real sequence of entries
         }
@@ -326,7 +326,6 @@ public class LedgerRepository extends Repository implements LedgerRepositoryInte
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public List<AcctgTransAndEntries> getPostedTransactionsAndEntries(String organizationPartyId, List<String> glFiscalTypeId, Timestamp fromDate, Timestamp thruDate) throws RepositoryException {
         List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
                 EntityCondition.makeCondition(AcctgTransAndEntries.Fields.isPosted.getName(), EntityOperator.EQUALS, "Y"),

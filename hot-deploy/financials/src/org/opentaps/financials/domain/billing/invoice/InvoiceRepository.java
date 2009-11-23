@@ -32,6 +32,11 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.domain.DomainsDirectory;
+import org.opentaps.domain.base.constants.AgreementTypeConstants;
+import org.opentaps.domain.base.constants.ContactMechPurposeTypeConstants;
+import org.opentaps.domain.base.constants.InvoiceItemTypeConstants;
+import org.opentaps.domain.base.constants.InvoiceTypeConstants;
+import org.opentaps.domain.base.constants.StatusItemConstants;
 import org.opentaps.domain.base.entities.AgreementInvoiceItemType;
 import org.opentaps.domain.base.entities.InvoiceAdjustment;
 import org.opentaps.domain.base.entities.InvoiceAdjustmentType;
@@ -40,7 +45,6 @@ import org.opentaps.domain.base.entities.InvoiceContactMech;
 import org.opentaps.domain.base.entities.InvoiceItem;
 import org.opentaps.domain.base.entities.InvoiceItemType;
 import org.opentaps.domain.base.entities.InvoiceItemTypeAndOrgGlAccount;
-import org.opentaps.domain.base.entities.InvoiceItemTypeMap;
 import org.opentaps.domain.base.entities.OrderItem;
 import org.opentaps.domain.base.entities.PaymentAndApplication;
 import org.opentaps.domain.base.entities.PostalAddress;
@@ -110,8 +114,8 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
     public List<InvoiceAndInvoiceItem> getRelatedInterestInvoiceItems(Invoice invoice) throws RepositoryException {
         return findList(InvoiceAndInvoiceItem.class, Arrays.asList(
                     EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.itemParentInvoiceId.getName(), EntityOperator.EQUALS, invoice.getInvoiceId()),
-                    EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.itemInvoiceItemTypeId.getName(), EntityOperator.EQUALS, "INV_INTRST_CHRG"),
-                    EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.statusId.getName(), EntityOperator.NOT_IN, UtilMisc.toList("INVOICE_CANCELLED", "INVOICE_WRITEOFF", "INVOICE_VOIDED"))));
+                    EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.itemInvoiceItemTypeId.getName(), EntityOperator.EQUALS, InvoiceItemTypeConstants.INV_INTRST_CHRG),
+                    EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.statusId.getName(), EntityOperator.NOT_IN, UtilMisc.toList(StatusItemConstants.InvoiceStatus.INVOICE_CANCELLED, StatusItemConstants.InvoiceStatus.INVOICE_WRITEOFF, StatusItemConstants.InvoiceStatus.INVOICE_VOIDED))));
     }
 
     /** {@inheritDoc} */
@@ -123,7 +127,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 dateCondition,
                 EntityCondition.makeCondition(PaymentAndApplication.Fields.invoiceId.getName(), EntityOperator.EQUALS, invoice.getInvoiceId()),
-                EntityCondition.makeCondition(PaymentAndApplication.Fields.statusId.getName(), EntityOperator.IN, UtilMisc.toList("PMNT_RECEIVED", "PMNT_SENT", "PMNT_CONFIRMED")));
+                EntityCondition.makeCondition(PaymentAndApplication.Fields.statusId.getName(), EntityOperator.IN, UtilMisc.toList(StatusItemConstants.PmntStatus.PMNT_RECEIVED, StatusItemConstants.PmntStatus.PMNT_SENT, StatusItemConstants.PmntStatus.PMNT_CONFIRMED)));
 
         return findList(PaymentAndApplication.class, conditions, Arrays.asList(PaymentAndApplication.Fields.effectiveDate.getName()));
     }
@@ -137,7 +141,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 dateCondition,
                 EntityCondition.makeCondition(PaymentAndApplication.Fields.invoiceId.getName(), EntityOperator.EQUALS, invoice.getInvoiceId()),
-                EntityCondition.makeCondition(PaymentAndApplication.Fields.statusId.getName(), EntityOperator.EQUALS, "PMNT_NOT_PAID"));
+                EntityCondition.makeCondition(PaymentAndApplication.Fields.statusId.getName(), EntityOperator.EQUALS, StatusItemConstants.PmntStatus.PMNT_NOT_PAID));
 
         return findList(PaymentAndApplication.class, conditions, Arrays.asList(PaymentAndApplication.Fields.effectiveDate.getName()));
     }
@@ -165,7 +169,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
         Set<String> typeIds;
         // partner invoices are treated in a special way
         if (InvoiceSpecification.InvoiceTypeEnum.PARTNER.equals(invoiceTypeId)) {
-            List<AgreementInvoiceItemType> agreements = findListCache(AgreementInvoiceItemType.class, map(AgreementInvoiceItemType.Fields.agreementTypeId, "PARTNER_AGREEMENT"), Arrays.asList(AgreementInvoiceItemType.Fields.sequenceNum.desc()));
+            List<AgreementInvoiceItemType> agreements = findListCache(AgreementInvoiceItemType.class, map(AgreementInvoiceItemType.Fields.agreementTypeId, AgreementTypeConstants.PARTNER_AGREEMENT), Arrays.asList(AgreementInvoiceItemType.Fields.sequenceNum.desc()));
             typeIds = Entity.getDistinctFieldValues(String.class, agreements, AgreementInvoiceItemType.Fields.invoiceItemTypeIdFrom);
         } else {
             // for other invoice types, get invoice item types which have a GL account configured for them, either in InvoiceItemType.defaultGlAccountId or InvoiceItemTypeGlAccount entity.
@@ -191,7 +195,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
     /** {@inheritDoc} */
     public PostalAddress getShippingAddress(Invoice invoice) throws RepositoryException {
         // if more than one defined, then return a "random" one
-        InvoiceContactMech mech = getFirst(findList(InvoiceContactMech.class, map(InvoiceContactMech.Fields.invoiceId, invoice.getInvoiceId(), InvoiceContactMech.Fields.contactMechPurposeTypeId, "SHIPPING_LOCATION")));
+        InvoiceContactMech mech = getFirst(findList(InvoiceContactMech.class, map(InvoiceContactMech.Fields.invoiceId, invoice.getInvoiceId(), InvoiceContactMech.Fields.contactMechPurposeTypeId, ContactMechPurposeTypeConstants.SHIPPING_LOCATION)));
         if (mech == null) {
             return null;
         }
@@ -211,7 +215,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
     public PostalAddress getBillingAddress(Invoice invoice) throws RepositoryException {
         String billingPartyId = invoice.isReceivable() ? invoice.getPartyId() : invoice.getPartyIdFrom();
 
-        InvoiceContactMech mech = getFirst(findList(InvoiceContactMech.class, map(InvoiceContactMech.Fields.invoiceId, invoice.getInvoiceId(), InvoiceContactMech.Fields.contactMechPurposeTypeId, "BILLING_LOCATION")));
+        InvoiceContactMech mech = getFirst(findList(InvoiceContactMech.class, map(InvoiceContactMech.Fields.invoiceId, invoice.getInvoiceId(), InvoiceContactMech.Fields.contactMechPurposeTypeId, ContactMechPurposeTypeConstants.BILLING_LOCATION)));
         if (mech != null) {
             return findOne(PostalAddress.class, map(PostalAddress.Fields.contactMechId, mech.getContactMechId()));
         }
@@ -246,7 +250,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
             // TODO: this needs a solution to the Party.ContactPurpose issue
             List<InvoiceContactMech> addresses = invoice.getRelated(InvoiceContactMech.class);
             for (InvoiceContactMech address : addresses) {
-                if ("BILLING_LOCATION".equals(address.getContactMechPurposeTypeId())) {
+                if (ContactMechPurposeTypeConstants.BILLING_LOCATION.equals(address.getContactMechPurposeTypeId())) {
                     remove(address);
                 }
             }
@@ -254,7 +258,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
             // create the billing address
             InvoiceContactMech contactMech = new InvoiceContactMech();
             contactMech.setInvoiceId(invoice.getInvoiceId());
-            contactMech.setContactMechPurposeTypeId("BILLING_LOCATION");
+            contactMech.setContactMechPurposeTypeId(ContactMechPurposeTypeConstants.BILLING_LOCATION);
             contactMech.setContactMechId(billingAddress.getContactMechId());
             createOrUpdate(contactMech);
 
@@ -277,13 +281,13 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
     public List<AccountingTagConfigurationForOrganizationAndUsage> validateTagParameters(Invoice invoice, InvoiceItem item) throws RepositoryException {
         String organizationPartyId = null;
         String accountingTagUsageTypeId = null;
-        if (invoice.getInvoiceTypeId().equals("SALES_INVOICE")) {
+        if (invoice.getInvoiceTypeId().equals(InvoiceTypeConstants.SALES_INVOICE)) {
             accountingTagUsageTypeId = UtilAccountingTags.SALES_INVOICES_TAG;
             organizationPartyId = invoice.getPartyIdFrom();
-        } else if (invoice.getInvoiceTypeId().equals("PURCHASE_INVOICE")) {
+        } else if (invoice.getInvoiceTypeId().equals(InvoiceTypeConstants.PURCHASE_INVOICE)) {
             accountingTagUsageTypeId = UtilAccountingTags.SALES_INVOICES_TAG;
             organizationPartyId = invoice.getPartyId();
-        } else if (invoice.getInvoiceTypeId().equals("COMMISSION_INVOICE")) {
+        } else if (invoice.getInvoiceTypeId().equals(InvoiceTypeConstants.COMMISSION_INVOICE)) {
             accountingTagUsageTypeId = UtilAccountingTags.COMMISSION_INVOICES_TAG;
             organizationPartyId = invoice.getPartyId();
         } else {
@@ -296,7 +300,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
     @SuppressWarnings("deprecation")
     public InvoiceItemType getInvoiceItemType(OrderItem orderItem, String invoiceTypeId) throws RepositoryException {
         org.opentaps.domain.base.entities.Product itemProduct = orderItem.getProduct();
-        String invoiceItemTypeId = InvoiceServices.getInvoiceItemType(getDelegator(), orderItem.getOrderItemTypeId(), itemProduct.getProductTypeId(), invoiceTypeId, "INV_FPROD_ITEM");
+        String invoiceItemTypeId = InvoiceServices.getInvoiceItemType(getDelegator(), orderItem.getOrderItemTypeId(), itemProduct.getProductTypeId(), invoiceTypeId, InvoiceItemTypeConstants.INV_FPROD_ITEM);
         return findOneCache(InvoiceItemType.class, map(InvoiceItemType.Fields.invoiceItemTypeId, invoiceItemTypeId));
     }
 

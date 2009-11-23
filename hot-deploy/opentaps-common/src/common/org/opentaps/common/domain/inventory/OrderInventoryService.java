@@ -35,6 +35,10 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.GenericServiceException;
+import org.opentaps.domain.base.constants.EnumerationConstants;
+import org.opentaps.domain.base.constants.InventoryItemTypeConstants;
+import org.opentaps.domain.base.constants.ProductTypeConstants;
+import org.opentaps.domain.base.constants.StatusItemConstants;
 import org.opentaps.domain.base.entities.Facility;
 import org.opentaps.domain.base.entities.InventoryTransfer;
 import org.opentaps.domain.base.entities.OrderItemShipGrpInvRes;
@@ -366,7 +370,7 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
             if (inventoryItem.isSerialized()) {
                 if (inventoryItem.isAvailableToPromise()) {
                     // change status on inventoryItem
-                    inventoryItem.setStatusId("INV_PROMISED");
+                    inventoryItem.setStatusId(StatusItemConstants.InvSerializedStts.INV_PROMISED);
                     GenericValue invItemValue = Repository.genericValueFromEntity(getInfrastructure().getDelegator(), inventoryItem);
                     invItemValue.store();
 
@@ -489,20 +493,20 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
              * is specified.
              */
             InventoryReservationOrder reservationOrder = null;
-            if ("INVRO_FIFO_REC".equals(reserveOrderEnumId)) {
+            if (EnumerationConstants.InvResOrder.INVRO_FIFO_REC.equals(reserveOrderEnumId)) {
                 reservationOrder = InventoryReservationOrder.FIFO_RECEIVED;
-            } else if ("INVRO_GUNIT_COST".equals(reserveOrderEnumId)) {
+            } else if (EnumerationConstants.InvResOrder.INVRO_GUNIT_COST.equals(reserveOrderEnumId)) {
                 reservationOrder = InventoryReservationOrder.GREATER_UNIT_COST;
-            } else if ("INVRO_LUNIT_COST".equals(reserveOrderEnumId)) {
+            } else if (EnumerationConstants.InvResOrder.INVRO_LUNIT_COST.equals(reserveOrderEnumId)) {
                 reservationOrder = InventoryReservationOrder.LESS_UNIT_COST;
-            } else if ("INVRO_FIFO_EXP".equals(reserveOrderEnumId)) {
+            } else if (EnumerationConstants.InvResOrder.INVRO_FIFO_EXP.equals(reserveOrderEnumId)) {
                 reservationOrder = InventoryReservationOrder.FIFO_EXPIRE;
-            } else if ("INVRO_LIFO_EXP".equals(reserveOrderEnumId)) {
+            } else if (EnumerationConstants.InvResOrder.INVRO_LIFO_EXP.equals(reserveOrderEnumId)) {
                 reservationOrder = InventoryReservationOrder.LIFO_EXPIRE;
-            } else if ("INVRO_LIFO_REC".equals(reserveOrderEnumId)) {
+            } else if (EnumerationConstants.InvResOrder.INVRO_LIFO_REC.equals(reserveOrderEnumId)) {
                 reservationOrder = InventoryReservationOrder.LIFO_RECEIVED;
             } else {
-                reserveOrderEnumId = "INVRO_FIFO_REC";
+                reserveOrderEnumId = EnumerationConstants.InvResOrder.INVRO_FIFO_REC;
                 reservationOrder = InventoryReservationOrder.FIFO_RECEIVED;
             }
 
@@ -618,7 +622,7 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                     if (UtilValidate.isNotEmpty(facilityId)) {
                         service.setInFacilityId(facilityId);
                     }
-                    service.setInInventoryItemTypeId("NON_SERIAL_INV_ITEM");
+                    service.setInInventoryItemTypeId(InventoryItemTypeConstants.NON_SERIAL_INV_ITEM);
                     runSync(service, getInfrastructure().getSystemUser());
 
                     String inventoryItemOutId = service.getOutInventoryItemId();
@@ -762,14 +766,14 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
             InventoryRepositoryInterface inventoryRepository = inventoryDomain.getInventoryRepository();
             InventoryTransfer transfer = inventoryRepository.getInventoryTransferById(inventoryTransferId);
 
-            if (transfer.getStatusId().equals("IXF_COMPLETE")) {
+            if (transfer.getStatusId().equals(StatusItemConstants.InventoryXferStts.IXF_COMPLETE)) {
                 CompleteInventoryTransferOldService service = new CompleteInventoryTransferOldService(getUser());
                 service.setInInventoryTransferId(inventoryTransferId);
                 service.runSync(getInfrastructure());
             } else {
                 UpdateInventoryTransferService service = new UpdateInventoryTransferService(getUser());
                 service.setInInventoryTransferId(inventoryTransferId);
-                service.setInStatusId("IXF_COMPLETE");
+                service.setInStatusId(StatusItemConstants.InventoryXferStts.IXF_COMPLETE);
                 service.setInInventoryItemId(transfer.getInventoryItemId());
                 service.runSync(getInfrastructure());
             }
@@ -786,7 +790,7 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
             InventoryRepositoryInterface inventoryRepository = inventoryDomain.getInventoryRepository();
             InventoryItem item = inventoryRepository.getInventoryItemById(this.inventoryItemId);
             // if received PURCH_PKG_AUTO product into invertorym, then split it to components
-            if ("PURCH_PKG_AUTO".equals(item.getProduct().getProductTypeId())) {
+            if (ProductTypeConstants.Good.PURCH_PKG_AUTO.equals(item.getProduct().getProductTypeId())) {
                 DecomposeInventoryItemService service = new DecomposeInventoryItemService(getUser());
                 service.setInInventoryItemId(this.inventoryItemId);
                 service.runSync(getInfrastructure());

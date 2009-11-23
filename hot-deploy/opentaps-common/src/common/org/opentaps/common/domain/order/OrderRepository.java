@@ -34,6 +34,8 @@ import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 import org.opentaps.common.domain.order.OrderSpecification.OrderTypeEnum;
 import org.opentaps.common.order.shoppingcart.OpentapsShoppingCart;
 import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.domain.base.constants.ContactMechPurposeTypeConstants;
+import org.opentaps.domain.base.constants.StatusItemConstants;
 import org.opentaps.domain.base.entities.ContactMech;
 import org.opentaps.domain.base.entities.ContactMechPurposeType;
 import org.opentaps.domain.base.entities.Enumeration;
@@ -338,7 +340,7 @@ public class OrderRepository extends Repository implements OrderRepositoryInterf
         if (originFacility != null) {
             List<FacilityContactMechPurpose> facilityContactMechs = findList(FacilityContactMechPurpose.class, Arrays.asList(
                                          EntityCondition.makeCondition(FacilityContactMechPurpose.Fields.facilityId.name(), originFacility.getFacilityId()),
-                                         EntityCondition.makeCondition(FacilityContactMechPurpose.Fields.contactMechPurposeTypeId.name(), "SHIP_ORIG_LOCATION"),
+                                         EntityCondition.makeCondition(FacilityContactMechPurpose.Fields.contactMechPurposeTypeId.name(), ContactMechPurposeTypeConstants.SHIP_ORIG_LOCATION),
                                          EntityUtil.getFilterByDateExpr()));
             return findList(PostalAddress.class, EntityCondition.makeCondition(PostalAddress.Fields.contactMechId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(facilityContactMechs, FacilityContactMechPurpose.Fields.contactMechId)));
         } else {
@@ -348,14 +350,14 @@ public class OrderRepository extends Repository implements OrderRepositoryInterf
 
     /** {@inheritDoc} */
     public List<PostalAddress> getRelatedShippingAddresses(Order order) throws RepositoryException  {
-        List<OrderContactMech> orderContactMechs = getOrderContactMechs(order, "SHIPPING_LOCATION");
-        return findList(PostalAddress.class, EntityCondition.makeCondition("contactMechId", EntityOperator.IN, Entity.getDistinctFieldValues(orderContactMechs, OrderContactMech.Fields.contactMechId)));
+        List<OrderContactMech> orderContactMechs = getOrderContactMechs(order, ContactMechPurposeTypeConstants.SHIPPING_LOCATION);
+        return findList(PostalAddress.class, EntityCondition.makeCondition(PostalAddress.Fields.contactMechId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(orderContactMechs, OrderContactMech.Fields.contactMechId)));
     }
 
     /** {@inheritDoc} */
     public List<PostalAddress> getRelatedBillingAddresses(Order order) throws RepositoryException {
-        List<OrderContactMech> orderContactMechs = getOrderContactMechs(order, "BILLING_LOCATION");
-        return findList(PostalAddress.class, EntityCondition.makeCondition("contactMechId", EntityOperator.IN, Entity.getDistinctFieldValues(orderContactMechs, OrderContactMech.Fields.contactMechId)));
+        List<OrderContactMech> orderContactMechs = getOrderContactMechs(order, ContactMechPurposeTypeConstants.BILLING_LOCATION);
+        return findList(PostalAddress.class, EntityCondition.makeCondition(PostalAddress.Fields.contactMechId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(orderContactMechs, OrderContactMech.Fields.contactMechId)));
     }
 
     /** {@inheritDoc} */
@@ -365,13 +367,8 @@ public class OrderRepository extends Repository implements OrderRepositoryInterf
 
     /** {@inheritDoc} */
     public List<PaymentMethod> getRelatedPaymentMethods(Party party) throws RepositoryException {
-        try {
-            List<GenericValue> paymentMethods = getDelegator().findByAnd("PaymentMethod", UtilMisc.toMap("partyId", party.getPartyId()));
-            paymentMethods = EntityUtil.filterByDate(paymentMethods, true);
-            return Repository.loadFromGeneric(PaymentMethod.class, paymentMethods, this);
-        } catch (GenericEntityException e) {
-            throw new RepositoryException(e);
-        }
+        return findList(PaymentMethod.class, Arrays.asList(EntityCondition.makeCondition(PaymentMethod.Fields.partyId.name(), party.getPartyId()),
+                                                           EntityUtil.getFilterByDateExpr()));
     }
 
     /** {@inheritDoc} */
@@ -387,7 +384,7 @@ public class OrderRepository extends Repository implements OrderRepositoryInterf
     /** {@inheritDoc} */
     public List<ProdCatalog> getRelatedProdCatalogs(ProductStore productStore) throws RepositoryException {
         List<ProductStoreCatalog> productStoreCatalogs = findList(ProductStoreCatalog.class, map(ProductStoreCatalog.Fields.productStoreId, productStore.getProductStoreId()), Arrays.asList("sequenceNum"));
-        return findList(ProdCatalog.class, EntityCondition.makeCondition("prodCatalogId", EntityOperator.IN, Entity.getDistinctFieldValues(productStoreCatalogs, ProductStoreCatalog.Fields.prodCatalogId)), Arrays.asList("catalogName"));
+        return findList(ProdCatalog.class, EntityCondition.makeCondition(ProdCatalog.Fields.prodCatalogId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(productStoreCatalogs, ProductStoreCatalog.Fields.prodCatalogId)), Arrays.asList(ProdCatalog.Fields.catalogName.name()));
     }
 
     /** {@inheritDoc} */
@@ -462,7 +459,7 @@ public class OrderRepository extends Repository implements OrderRepositoryInterf
         EntityConditionList<EntityExpr> conditionList =
             EntityCondition.makeCondition(EntityOperator.AND,
                             EntityCondition.makeCondition(OrderItem.Fields.statusId.getName(), EntityOperator.NOT_IN,
-                                    Arrays.asList("ITEM_CANCELLED", "ITEM_COMPLETED")
+                                    Arrays.asList(StatusItemConstants.OrderItemStatus.ITEM_CANCELLED, StatusItemConstants.OrderItemStatus.ITEM_COMPLETED)
                             ),
                             EntityCondition.makeCondition(OrderItem.Fields.orderId.getName(), order.getOrderId())
                     );
@@ -476,7 +473,7 @@ public class OrderRepository extends Repository implements OrderRepositoryInterf
         }
 
         EntityConditionList<EntityExpr> conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                EntityCondition.makeCondition(OrderHeader.Fields.statusId.getName(), EntityOperator.NOT_IN, Arrays.asList("ORDER_COMPLETED ", "ORDER_CANCELLED", "ORDER_UNDELIVERABLE")),
+                EntityCondition.makeCondition(OrderHeader.Fields.statusId.getName(), EntityOperator.NOT_IN, Arrays.asList(StatusItemConstants.OrderStatus.ORDER_COMPLETED, StatusItemConstants.OrderStatus.ORDER_CANCELLED, StatusItemConstants.OrderStatus.ORDER_UNDELIVERABLE)),
                 EntityCondition.makeCondition(OrderHeader.Fields.orderTypeId.getName(), orderType.getOrderTypeId()),
                 EntityCondition.makeCondition((orderType == OrderTypeEnum.SALES ? OrderHeader.Fields.billFromPartyId.getName() : OrderHeader.Fields.billToPartyId.getName()), organizationPartyId)
         );

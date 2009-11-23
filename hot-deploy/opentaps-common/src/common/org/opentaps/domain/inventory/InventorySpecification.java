@@ -1,11 +1,6 @@
-package org.opentaps.domain.inventory;
-
-import java.util.Arrays;
-import java.util.List;
-
 /*
-* Copyright (c) 2008 - 2009 Open Source Strategies, Inc.
-* 
+ * Copyright (c) 2008 - 2009 Open Source Strategies, Inc.
+ *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -18,11 +13,17 @@ import java.util.List;
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
-import org.ofbiz.base.util.UtilNumber;
-import java.math.BigDecimal;
+package org.opentaps.domain.inventory;
 
+
+import java.util.Arrays;
+import java.util.List;
+
+
+import org.opentaps.domain.base.constants.InventoryItemTypeConstants;
+import org.opentaps.domain.base.constants.StatusItemConstants;
 
 /**
  * Common specifications for the Inventory domain.
@@ -36,11 +37,11 @@ public final class InventorySpecification {
     private InventorySpecification() { }
 
     /** Serialized inventory items are stored separately, each unit having its own <code>InventoryItem</code>. */
-    public static final String INVENTORY_ITEM_TYPE_SERIALIZED = "SERIALIZED_INV_ITEM";
+    public static final String INVENTORY_ITEM_TYPE_SERIALIZED = InventoryItemTypeConstants.SERIALIZED_INV_ITEM;
 
-    public static final String INVENTORY_ITEM_STATUS_AVAILABLE = "INV_AVAILABLE";
-    public static final String INVENTORY_ITEM_STATUS_PROMISED = "INV_PROMISED";
-    public static final String INVENTORY_ITEM_STATUS_BEING_TRANSFERED = "INV_BEING_TRANSFERED";
+    public static final String INVENTORY_ITEM_STATUS_AVAILABLE = StatusItemConstants.InvSerializedStts.INV_AVAILABLE;
+    public static final String INVENTORY_ITEM_STATUS_PROMISED = StatusItemConstants.InvSerializedStts.INV_PROMISED;
+    public static final String INVENTORY_ITEM_STATUS_BEING_TRANSFERED = StatusItemConstants.InvSerializedStts.INV_BEING_TRANSFERED;
     public static final List<String> INVENTORY_ITEM_STATUSES_ON_HAND = Arrays.asList(INVENTORY_ITEM_STATUS_AVAILABLE, INVENTORY_ITEM_STATUS_PROMISED, INVENTORY_ITEM_STATUS_BEING_TRANSFERED);
 
 }

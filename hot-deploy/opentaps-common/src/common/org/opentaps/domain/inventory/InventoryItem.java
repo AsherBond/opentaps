@@ -16,17 +16,9 @@
  */
 package org.opentaps.domain.inventory;
 
-import java.util.List;
 import java.math.BigDecimal;
+import java.util.List;
 
-import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
-import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.entity.util.EntityFindOptions;
-import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.domain.base.entities.InventoryItemValueHistory;
 import org.opentaps.domain.base.entities.InventoryTransfer;
 import org.opentaps.domain.base.entities.OrderItemShipGrpInvRes;

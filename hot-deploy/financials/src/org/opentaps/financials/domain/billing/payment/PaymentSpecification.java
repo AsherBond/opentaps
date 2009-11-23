@@ -16,6 +16,9 @@
  */
 package org.opentaps.financials.domain.billing.payment;
 
+import org.opentaps.domain.base.constants.PaymentMethodTypeConstants;
+import org.opentaps.domain.base.constants.PaymentTypeConstants;
+import org.opentaps.domain.base.constants.StatusItemConstants;
 import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.billing.payment.PaymentMethod;
 import org.opentaps.domain.billing.payment.PaymentSpecificationInterface;
@@ -41,12 +44,12 @@ public class PaymentSpecification implements PaymentSpecificationInterface {
      */
     public static enum PaymentStatusEnum {
 
-        CANCELLED("PMNT_CANCELLED"),
-        SENT("PMNT_SENT"),
-        RECEIVED("PMNT_RECEIVED"),
-        CONFIRMED("PMNT_CONFIRMED"),
-        NOT_PAID("PMNT_NOT_PAID"),
-        VOIDED("PMNT_VOID");
+        CANCELLED(StatusItemConstants.PmntStatus.PMNT_CANCELLED),
+        SENT(StatusItemConstants.PmntStatus.PMNT_SENT),
+        RECEIVED(StatusItemConstants.PmntStatus.PMNT_RECEIVED),
+        CONFIRMED(StatusItemConstants.PmntStatus.PMNT_CONFIRMED),
+        NOT_PAID(StatusItemConstants.PmntStatus.PMNT_NOT_PAID),
+        VOIDED(StatusItemConstants.PmntStatus.PMNT_VOID);
 
         private final String statusId;
         private PaymentStatusEnum(String statusId) {
@@ -113,11 +116,11 @@ public class PaymentSpecification implements PaymentSpecificationInterface {
      */
     public static enum PaymentTypeEnum implements PaymentTypeInterface {
 
-        DISBURSEMENT("DISBURSEMENT"),
-        RECEIPT("RECEIPT"),
-        CUSTOMER_REFUND("CUSTOMER_REFUND"),
-        TAX_PAYMENT("TAX_PAYMENT"),
-        PAY_CHECK("PAY_CHECK");
+        DISBURSEMENT(PaymentTypeConstants.Disbursement.DISBURSEMENT),
+        RECEIPT(PaymentTypeConstants.Receipt.RECEIPT),
+        CUSTOMER_REFUND(PaymentTypeConstants.Disbursement.CUSTOMER_REFUND),
+        TAX_PAYMENT(PaymentTypeConstants.Disbursement.TAX_PAYMENT),
+        PAY_CHECK(PaymentTypeConstants.Disbursement.PAY_CHECK);
 
         private final String typeId;
         private PaymentTypeEnum(String typeId) {
@@ -147,13 +150,13 @@ public class PaymentSpecification implements PaymentSpecificationInterface {
      */
     public static enum PaymentMethodTypeEnum {
 
-        BILLING_ACCOUNT("EXT_BILLACT"),
-        CASH_ON_DELIVERY("EXT_COD"),
-        CREDIT_CARD("CREDIT_CARD"),
-        ELECTRONIC_FUND_TRANSFER("EFT_ACCOUNT"),
-        OFFLINE("EXT_OFFLINE"),
-        PAYPAL("EXT_PAYPAL"),
-        GIFT_CARD("GIFT_CARD");
+        BILLING_ACCOUNT(PaymentMethodTypeConstants.EXT_BILLACT),
+        CASH_ON_DELIVERY(PaymentMethodTypeConstants.EXT_COD),
+        CREDIT_CARD(PaymentMethodTypeConstants.CREDIT_CARD),
+        ELECTRONIC_FUND_TRANSFER(PaymentMethodTypeConstants.EFT_ACCOUNT),
+        OFFLINE(PaymentMethodTypeConstants.EXT_OFFLINE),
+        PAYPAL(PaymentMethodTypeConstants.EXT_PAYPAL),
+        GIFT_CARD(PaymentMethodTypeConstants.GIFT_CARD);
 
         private final String typeId;
         private PaymentMethodTypeEnum(String typeId) {

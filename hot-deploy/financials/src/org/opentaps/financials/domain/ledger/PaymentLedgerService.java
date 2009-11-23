@@ -16,33 +16,32 @@
  */
 package org.opentaps.financials.domain.ledger;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-import org.opentaps.domain.ledger.*;
-import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
+import org.opentaps.domain.base.constants.AcctgTransTypeConstants;
+import org.opentaps.domain.base.constants.GlAccountTypeConstants;
+import org.opentaps.domain.base.entities.InvoiceGlAccountType;
+import org.opentaps.domain.base.entities.PaymentApplication;
 import org.opentaps.domain.billing.invoice.Invoice;
+import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.billing.invoice.InvoiceServiceInterface;
 import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
-import org.opentaps.domain.organization.OrganizationRepositoryInterface;
+import org.opentaps.domain.ledger.*;
 import org.opentaps.domain.organization.Organization;
+import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Party;
 import org.opentaps.domain.party.PartyRepositoryInterface;
-
-import org.opentaps.domain.base.entities.PaymentApplication;
-import org.opentaps.domain.base.entities.InvoiceAdjustmentGlAccount;
-import org.opentaps.domain.base.entities.InvoiceGlAccountType;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
-import java.math.BigDecimal;
-
 /** {@inheritDoc} */
 public class PaymentLedgerService extends Service implements PaymentLedgerServiceInterface {
 
-    protected String paymentId; 
+    protected String paymentId;
 
     protected PaymentRepositoryInterface paymentRepository;
     protected PartyRepositoryInterface partyRepository;
@@ -74,27 +73,27 @@ public class PaymentLedgerService extends Service implements PaymentLedgerServic
             ledgerRepository = getLedgerRepository();
             organizationRepository = getOrganizationRepository();
             ledgerSpecification = getLedgerSpecification();
- 
+
             // get the payment and its applications, the parties of the transaction
             Payment payment = paymentRepository.getPaymentById(paymentId);
-            List<? extends PaymentApplication> paymentApplications = payment.getPaymentApplications(); 
+            List<? extends PaymentApplication> paymentApplications = payment.getPaymentApplications();
             String organizationPartyId = payment.getOrganizationPartyId();
             String transactionPartyId = payment.getTransactionPartyId();
             Organization organization = organizationRepository.getOrganizationById(organizationPartyId);
 
             // check that the transaction party of this payment is actually an Account, so that it could have sub accounts
-            // if not, then this service can just end 
+            // if not, then this service can just end
             Account transactionAccount = partyRepository.getAccountById(transactionPartyId);
             if ((transactionAccount == null) || (!transactionAccount.isAccount())) {
                 setSuccessMessage("FinancialsPaymentNotFromAccount");
                 return;
             }
-          
-            // get the account for the balancing entry of the transaction 
-            GeneralLedgerAccount balancingGlAccount = ledgerRepository.getDefaultLedgerAccount("PARENT_SUB_BAL_ACCT", organizationPartyId);
-            
+
+            // get the account for the balancing entry of the transaction
+            GeneralLedgerAccount balancingGlAccount = ledgerRepository.getDefaultLedgerAccount(GlAccountTypeConstants.PARENT_SUB_BAL_ACCT, organizationPartyId);
+
             // loop through all the payment applications, and see if the invoice transaction party is a sub account of the payment transaction party
-            for (PaymentApplication paymentApplication:paymentApplications) {
+            for (PaymentApplication paymentApplication : paymentApplications) {
                  if (paymentApplication.getInvoiceId() != null) {
                      Invoice invoice = invoiceRepository.getInvoiceById(paymentApplication.getInvoiceId());
                      Party invoiceTransactionParty = partyRepository.getPartyById(invoice.getTransactionPartyId());
@@ -108,25 +107,25 @@ public class PaymentLedgerService extends Service implements PaymentLedgerServic
 
                          // create a transaction which offsets the parent account's accounts
                          // for example, it would DR Accounts Receivable, CR Balancing Account for the parent (payment transaction party)
-                         String acctgTransactionPartyId = payment.getTransactionPartyId();// this is the party of the payment, or the parent account
+                         String acctgTransactionPartyId = payment.getTransactionPartyId(); // this is the party of the payment, or the parent account
                          AccountingTransaction acctgTrans = new AccountingTransaction();
                          acctgTrans.setInvoiceId(paymentApplication.getInvoiceId());
                          acctgTrans.setPaymentId(paymentId);
-                         acctgTrans.setPartyId(acctgTransactionPartyId); 
-                         acctgTrans.setAcctgTransTypeId("ACCOUNT_BALANCING");
+                         acctgTrans.setPartyId(acctgTransactionPartyId);
+                         acctgTrans.setAcctgTransTypeId(AcctgTransTypeConstants.ACCOUNT_BALANCING);
 
                          // first one is the debit, second one is the credit
                          acctgTrans = ledgerRepository.createSimpleTransaction(acctgTrans, invoiceGlAccount, balancingGlAccount, organizationPartyId, transactionAmount, acctgTransactionPartyId);
-                     
+
                          // now create a transaction which offsets the child account's accounts
                          // for example, it would DR Balancing Account, CR Accounts Receivable for the child account (invoice transaction party)
-                         acctgTransactionPartyId = invoiceTransactionParty.getPartyId();// this is the party of the invoice, or the child account
+                         acctgTransactionPartyId = invoiceTransactionParty.getPartyId(); // this is the party of the invoice, or the child account
                          acctgTrans = new AccountingTransaction();
                          acctgTrans.setInvoiceId(paymentApplication.getInvoiceId());
                          acctgTrans.setPaymentId(paymentId);
-                         acctgTrans.setPartyId(acctgTransactionPartyId); 
-                         acctgTrans.setAcctgTransTypeId("ACCOUNT_BALANCING");
-                         
+                         acctgTrans.setPartyId(acctgTransactionPartyId);
+                         acctgTrans.setAcctgTransTypeId(AcctgTransTypeConstants.ACCOUNT_BALANCING);
+
                          acctgTrans = ledgerRepository.createSimpleTransaction(acctgTrans, balancingGlAccount, invoiceGlAccount, organizationPartyId, transactionAmount, acctgTransactionPartyId);
                      }
                  }
@@ -159,9 +158,5 @@ public class PaymentLedgerService extends Service implements PaymentLedgerServic
 
     private PaymentRepositoryInterface getPaymentRepository() throws RepositoryException  {
         return getDomainsDirectory().getBillingDomain().getPaymentRepository();
-    }
-
-    private InvoiceServiceInterface getInvoiceService() throws ServiceException {
-        return getDomainsDirectory().getBillingDomain().getInvoiceService();
     }
 }

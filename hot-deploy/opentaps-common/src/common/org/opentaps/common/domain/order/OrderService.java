@@ -35,6 +35,8 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
+import org.opentaps.domain.base.constants.OrderAdjustmentTypeConstants;
+import org.opentaps.domain.base.constants.StatusItemConstants;
 import org.opentaps.domain.base.entities.OrderItemShipGroupAssoc;
 import org.opentaps.domain.base.entities.PostalAddress;
 import org.opentaps.domain.base.services.CalcTaxService;
@@ -107,7 +109,7 @@ public class OrderService extends Service implements OrderServiceInterface {
             // remove all adjustments related to promotions that are not billed yet
             List<OrderAdjustment> promoAdjustments = repository.findList(OrderAdjustment.class, Arrays.asList(
                 EntityCondition.makeCondition(OrderAdjustment.Fields.orderId.name(), EntityOperator.EQUALS, orderId),
-                EntityCondition.makeCondition(OrderAdjustment.Fields.orderAdjustmentTypeId.name(), EntityOperator.EQUALS, "PROMOTION_ADJUSTMENT"),
+                EntityCondition.makeCondition(OrderAdjustment.Fields.orderAdjustmentTypeId.name(), EntityOperator.EQUALS, OrderAdjustmentTypeConstants.PROMOTION_ADJUSTMENT),
                 EntityCondition.makeCondition(OrderAdjustment.Fields.productPromoId.name(), EntityOperator.NOT_EQUAL, null)));
             List<OrderAdjustment> promoAdjustmentsToRemove = new ArrayList();
 
@@ -211,7 +213,7 @@ public class OrderService extends Service implements OrderServiceInterface {
                 orderItem.setIsModifiedPrice("N");
                 orderItem.setIsPromo("Y");
                 if (UtilValidate.isEmpty(orderItem.getStatusId())) {
-                    orderItem.setStatusId("ITEM_CREATED");
+                    orderItem.setStatusId(StatusItemConstants.OrderItemStatus.ITEM_CREATED);
                 }
                 orderItem.setNextSubSeqId(OrderItem.Fields.orderItemSeqId.name());
                 item.setOrderItemSeqId(orderItem.getOrderItemSeqId());
@@ -334,7 +336,7 @@ public class OrderService extends Service implements OrderServiceInterface {
                             adj.setOrderId(orderId);
                             adj.setOrderItemSeqId(itemId);
                             adj.setProductPromoId(promoId);
-                            adj.setOrderAdjustmentTypeId("PROMOTION_ADJUSTMENT");
+                            adj.setOrderAdjustmentTypeId(OrderAdjustmentTypeConstants.PROMOTION_ADJUSTMENT);
                             adj.setAmount(newAmount);
                             adj.setDescription("Existing promotion was = " + newAmount.negate() + ", new promotion amount = " + BigDecimal.ZERO);
                             toCreate.add(adj);
@@ -350,7 +352,7 @@ public class OrderService extends Service implements OrderServiceInterface {
                             adj.setOrderId(orderId);
                             adj.setOrderItemSeqId(itemId);
                             adj.setProductPromoId(promoId);
-                            adj.setOrderAdjustmentTypeId("PROMOTION_ADJUSTMENT");
+                            adj.setOrderAdjustmentTypeId(OrderAdjustmentTypeConstants.PROMOTION_ADJUSTMENT);
                             // check the existing amount
                             Map<String, BigDecimal> existingAdjustments = orderItemAdjustmentExistingAmounts.get(itemId);
                             BigDecimal existingAmount = null;
@@ -376,7 +378,7 @@ public class OrderService extends Service implements OrderServiceInterface {
                     adj.setOrderAdjustmentId(adj.getNextSeqId());
                     adj.setOrderId(orderId);
                     adj.setProductPromoId(promoId);
-                    adj.setOrderAdjustmentTypeId("PROMOTION_ADJUSTMENT");
+                    adj.setOrderAdjustmentTypeId(OrderAdjustmentTypeConstants.PROMOTION_ADJUSTMENT);
                     // check the existing amount
                     BigDecimal existingAmount = orderAdjustmentExistingAmounts.get(promoId);
                     if (existingAmount != null) {
@@ -532,7 +534,7 @@ public class OrderService extends Service implements OrderServiceInterface {
                                    OrderAdjustment.Fields.orderId, orderAdjustment.getOrderId(),
                                    OrderAdjustment.Fields.orderItemSeqId, orderAdjustment.getOrderItemSeqId(),
                                    OrderAdjustment.Fields.shipGroupSeqId, orderAdjustment.getShipGroupSeqId(),
-                                   OrderAdjustment.Fields.orderAdjustmentTypeId, "SALES_TAX",
+                                   OrderAdjustment.Fields.orderAdjustmentTypeId, OrderAdjustmentTypeConstants.SALES_TAX,
                                    OrderAdjustment.Fields.taxAuthGeoId, orderAdjustment.getTaxAuthGeoId(),
                                    OrderAdjustment.Fields.taxAuthPartyId, orderAdjustment.getTaxAuthPartyId()));
                             BigDecimal existingItemTax = Entity.sumFieldValues(existingAdjs, OrderAdjustment.Fields.amount);
@@ -568,7 +570,7 @@ public class OrderService extends Service implements OrderServiceInterface {
                 service.setInOrderId(orderId);
                 service.setInOrderItemSeqId("_NA_");
                 service.setInShipGroupSeqId("_NA_");
-                service.setInOrderAdjustmentTypeId("SALES_TAX");
+                service.setInOrderAdjustmentTypeId(OrderAdjustmentTypeConstants.SALES_TAX);
                 service.setInDescription("Existing tax was = " + totalExistingOrderTax + ", new tax amount = " + totalNewOrderTax + " (Tax adjustment due to order change)");
                 service.setInAmount(orderTaxDifference);
                 runSync(service);

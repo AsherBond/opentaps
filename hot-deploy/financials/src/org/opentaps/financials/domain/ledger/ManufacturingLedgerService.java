@@ -21,19 +21,22 @@ import java.math.BigDecimal;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilNumber;
+import org.opentaps.domain.base.constants.AcctgTransTypeConstants;
+import org.opentaps.domain.base.constants.GlAccountTypeConstants;
+import org.opentaps.domain.base.constants.WorkEffortTypeConstants;
 import org.opentaps.domain.base.entities.Facility;
-import org.opentaps.domain.organization.OrganizationDomainInterface;
-import org.opentaps.domain.organization.OrganizationRepositoryInterface;
-import org.opentaps.domain.organization.Organization;
-import org.opentaps.domain.manufacturing.ManufacturingDomainInterface;
-import org.opentaps.domain.manufacturing.ManufacturingRepositoryInterface;
-import org.opentaps.domain.manufacturing.ProductionRun;
 import org.opentaps.domain.ledger.AccountingTransaction;
 import org.opentaps.domain.ledger.GeneralLedgerAccount;
 import org.opentaps.domain.ledger.LedgerDomainInterface;
 import org.opentaps.domain.ledger.LedgerException;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.domain.ledger.ManufacturingLedgerServiceInterface;
+import org.opentaps.domain.manufacturing.ManufacturingDomainInterface;
+import org.opentaps.domain.manufacturing.ManufacturingRepositoryInterface;
+import org.opentaps.domain.manufacturing.ProductionRun;
+import org.opentaps.domain.organization.Organization;
+import org.opentaps.domain.organization.OrganizationDomainInterface;
+import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
@@ -89,7 +92,7 @@ public class ManufacturingLedgerService extends Service implements Manufacturing
 
             // 1. verifies that the workEffortId is a production run (workEffortTypeId = PROD_ORDER_HEADER)
             ProductionRun productionRun = manufacturingRepository.getProductionRun(productionRunId);
-            if (!"PROD_ORDER_HEADER".equals(productionRun.getWorkEffortTypeId())) {
+            if (!WorkEffortTypeConstants.PROD_ORDER_HEADER.equals(productionRun.getWorkEffortTypeId())) {
                 throw new LedgerException("Work effort [" + productionRunId + "] is not a Production Run header (PROD_ORDER_HEADER)");
             }
 
@@ -114,11 +117,11 @@ public class ManufacturingLedgerService extends Service implements Manufacturing
             // and create and post acctg trans which Debit MFG EXPENSE VARIANCE, Credit WIP INVENTORY for this production run variance
             BigDecimal variance = productionRunCost.subtract(itemsProducedValue).setScale(decimals, rounding);
 
-            GeneralLedgerAccount creditAccount = ledgerRepository.getDefaultLedgerAccount("WIP_INVENTORY", ownerPartyId);
-            GeneralLedgerAccount debitAccount = ledgerRepository.getDefaultLedgerAccount("MFG_EXPENSE_VARIANCE", ownerPartyId);
+            GeneralLedgerAccount creditAccount = ledgerRepository.getDefaultLedgerAccount(GlAccountTypeConstants.WIP_INVENTORY, ownerPartyId);
+            GeneralLedgerAccount debitAccount = ledgerRepository.getDefaultLedgerAccount(GlAccountTypeConstants.MfgExpense.MFG_EXPENSE_VARIANCE, ownerPartyId);
 
             AccountingTransaction acctgTrans = new AccountingTransaction();
-            acctgTrans.setAcctgTransTypeId("MANUFACTURING_ATX");
+            acctgTrans.setAcctgTransTypeId(AcctgTransTypeConstants.MANUFACTURING_ATX);
             acctgTrans.setWorkEffortId(productionRun.getWorkEffortId());
             acctgTrans = ledgerRepository.createSimpleTransaction(acctgTrans, debitAccount, creditAccount, ownerPartyId, variance, null);
 
