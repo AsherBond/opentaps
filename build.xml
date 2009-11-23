@@ -174,7 +174,8 @@ under the License.
         <echo message="[gwt code] ========== Done Building GWT Code (Compile) =========="/>
     </target>
 
-    <target name="gwt-labels" depends="prebuild">
+    <target name="gwt-labels" depends="prebuild"
+            description="Generate the GWT labels.">
         <echo message="[gwt-labels] ========== Start Building GWT Labels (Compile) =========="/>
         <delete verbose="on">
             <fileset dir="./hot-deploy/opentaps-common/src/common/org/opentaps/gwt/common/client/messages/" includes="CommonMessages*.*"/>
@@ -636,7 +637,22 @@ under the License.
         </echo>
     </target>
 
-    <target name="make-base-entities" depends="prebuild">
+    <target name="make-constants" depends="prebuild"
+            description="Generate the constants from the database.">
+        <mkdir dir="./hot-deploy/opentaps-common/src/common/org/opentaps/domain/base/constants/"/>
+        <delete verbose="on">
+            <fileset dir="./hot-deploy/opentaps-common/src/common/org/opentaps/domain/base/constants/" includes="**/*.java"/>
+        </delete>
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${permmemory.max.param}"/>
+            <arg value="constantsgeneration"/>
+        </java>
+    </target>
+    <target name="make-base-entities" depends="prebuild"
+            description="Generate the POJO base entities from the entity and service model.">
+        <mkdir dir="./hot-deploy/opentaps-common/src/common/org/opentaps/domain/base/entities/"/>
+        <mkdir dir="./hot-deploy/opentaps-common/src/common/org/opentaps/domain/base/services/"/>
         <delete verbose="on">
             <fileset dir="./hot-deploy/opentaps-common/src/common/org/opentaps/domain/base/entities/" includes="**/*.java"/>
             <fileset dir="./hot-deploy/opentaps-common/src/common/org/opentaps/domain/base/services/" includes="**/*.java"/>
