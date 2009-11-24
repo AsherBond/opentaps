@@ -31,7 +31,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{organizationCompanyName}]]></textFieldExpression>
 			</textField>
@@ -44,7 +44,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="8" isBold="false" pdfFontName="Helvetica"/>
+					<font size="8" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[((Map)$P{organizationPostalAddress}).get("address1")]]></textFieldExpression>
 			</textField>
@@ -59,7 +59,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="8" isBold="false" pdfFontName="Helvetica"/>
+					<font size="8" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[((Map)$P{organizationPostalAddress}).get("address2")]]></textFieldExpression>
 			</textField>
@@ -72,7 +72,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="8" isBold="false" pdfFontName="Helvetica"/>
+					<font size="8" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[(((Map)$P{organizationPostalAddress}).get("city")) + ", " + $P{stateProvinceAbbrv} + " " + (((Map)$P{organizationPostalAddress}).get("postalCode")) + ", " + $P{countryName}]]></textFieldExpression>
 			</textField>
@@ -87,7 +87,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="8" isBold="false" pdfFontName="Helvetica"/>
+					<font size="8" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{website}]]></textFieldExpression>
 			</textField>
@@ -102,7 +102,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="8" isBold="false" pdfFontName="Helvetica"/>
+					<font size="8" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{primaryPhone} != null ? ($R{CrmPrimaryPhone} + ": " + $P{primaryPhone}) : null]]></textFieldExpression>
 			</textField>
@@ -117,7 +117,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="8" isBold="false" pdfFontName="Helvetica"/>
+					<font size="8" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{primaryFax} != null ? ($R{PartyContactFaxPhoneNumber} + ": " + $P{primaryFax}) : null]]></textFieldExpression>
 			</textField>

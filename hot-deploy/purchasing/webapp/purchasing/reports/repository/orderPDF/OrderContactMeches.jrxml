@@ -38,7 +38,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{attnName}]]></textFieldExpression>
 			</textField>
@@ -51,7 +51,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{address1}]]></textFieldExpression>
 			</textField>
@@ -64,7 +64,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{toName}]]></textFieldExpression>
 			</textField>
@@ -79,7 +79,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{address2}]]></textFieldExpression>
 			</textField>
@@ -92,7 +92,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{city} + ($F{stateProvinceGeoId}==null ? "" : " " + $F{stateProvinceGeoId}) + " " + $F{postalCode}]]></textFieldExpression>
 			</textField>
@@ -107,7 +107,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{countryGeoId}]]></textFieldExpression>
 			</textField>
@@ -120,7 +120,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="9" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{contactMechPurposeType} + ":"]]></textFieldExpression>
 			</textField>

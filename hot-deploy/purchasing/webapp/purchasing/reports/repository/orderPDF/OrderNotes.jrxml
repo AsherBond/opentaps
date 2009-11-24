@@ -28,7 +28,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="9" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OrderNotes}]]></textFieldExpression>
 			</textField>
@@ -41,7 +41,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="9" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsNotes}]]></textFieldExpression>
 			</textField>
@@ -54,7 +54,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="9" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonBy}]]></textFieldExpression>
 			</textField>
@@ -67,7 +67,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="9" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonAt}]]></textFieldExpression>
 			</textField>
@@ -84,7 +84,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{noteInfo}]]></textFieldExpression>
 			</textField>
@@ -97,7 +97,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{fullName}==null ? $R{OrderPartyNameNotFound} : $F{fullName}]]></textFieldExpression>
 			</textField>
@@ -110,7 +110,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right">
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{noteDateTime}]]></textFieldExpression>
 			</textField>
