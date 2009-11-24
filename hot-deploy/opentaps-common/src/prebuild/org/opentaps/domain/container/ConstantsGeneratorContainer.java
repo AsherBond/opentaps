@@ -44,6 +44,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -289,7 +290,9 @@ public class ConstantsGeneratorContainer implements Container {
     private TreeMap<String, ConstantModel> readConstantConfiguration(Properties config) throws ContainerException {
         TreeMap<String, ConstantModel> models = new TreeMap<String, ConstantModel>();
         // first collect the entity names
-        for (String key : config.stringPropertyNames()) {
+        Enumeration<?> propertyNames = config.propertyNames();
+        while (propertyNames.hasMoreElements()) {
+            String key = (String) propertyNames.nextElement();
             if (GENERATE_VALUE.equals(config.getProperty(key))) {
                 if (models.containsKey(key)) {
                     throw new ContainerException("Entity: [" + key + "] already defined in the configuration.");
