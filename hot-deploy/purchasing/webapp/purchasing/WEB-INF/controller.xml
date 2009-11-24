@@ -162,7 +162,10 @@
     <request-map uri="UpdateProductBom">
         <security https="true" auth="true"/>
         <event type="simple" path="org/ofbiz/manufacturing/bom/BomSimpleMethods.xml" invoke="eventEditBOM"/>
-        <response name="success" type="request-redirect-filterparam" value="EditProductBom" allowed-params="productId,productAssocTypeId"/>
+        <response name="success" type="request-redirect" value="EditProductBom">
+            <redirect-parameter name="productId"/>
+            <redirect-parameter name="productAssocTypeId"/>
+        </response>
         <response name="error" type="view" value="editBom"/>
     </request-map>
     <request-map uri="BomSimulation">
@@ -191,13 +194,17 @@
     <request-map uri="CreateRouting">
         <security https="true" auth="true"/>
         <event type="service" invoke="createWorkEffort"/>
-        <response name="success" type="request-redirect-filterparam" value="EditRouting" allowed-params="workEffortId" allowed-attributes="workEffortId"/>
+        <response name="success" type="request-redirect" value="EditRouting">
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="editRouting"/>
     </request-map>
     <request-map uri="UpdateRouting">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateWorkEffort"/>
-        <response name="success" type="request-redirect-filterparam" value="EditRouting" allowed-params="workEffortId"/>
+        <response name="success" type="request-redirect" value="EditRouting">
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="editRouting"/>
     </request-map>
 
@@ -230,13 +237,17 @@
     <request-map uri="AddRoutingTaskAssoc">
         <security https="true" auth="true"/>
         <event type="simple" path="org/ofbiz/manufacturing/techdata/RoutingSimpleEvents.xml" invoke="addRoutingTaskAssoc"/>
-        <response name="success" type="request-redirect-filterparam" value="EditRouting" allowed-params="workEffortId"/>
+        <response name="success" type="request-redirect" value="EditRouting">
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="editRouting"/>
     </request-map>
     <request-map uri="RemoveRoutingTaskAssoc">
         <security https="true" auth="true"/>
         <event type="service" invoke="removeWorkEffortAssoc"/>
-        <response name="success" type="request-redirect-filterparam" value="EditRouting" allowed-params="workEffortId"/>
+        <response name="success" type="request-redirect" value="EditRouting">
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="editRouting"/>
     </request-map>
 
@@ -247,19 +258,25 @@
     <request-map uri="AddRoutingProductLink">
         <security https="true" auth="true"/>
         <event type="service" invoke="createWorkEffortGoodStandard"/>
-        <response name="success" type="request-redirect-filterparam" value="EditRouting" allowed-params="workEffortId"/>
+        <response name="success" type="request-redirect" value="EditRouting">
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="editRouting"/>
     </request-map>
     <request-map uri="UpdateRoutingProductLink">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateWorkEffortGoodStandard"/>
-        <response name="success" type="request-redirect-filterparam" value="EditRouting" allowed-params="workEffortId"/>
+        <response name="success" type="request-redirect" value="EditRouting">
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="editRouting"/>
     </request-map>
     <request-map uri="removeRoutingProductLink">
         <security https="true" auth="true"/>
         <event type="service" invoke="removeWorkEffortGoodStandard"/>
-        <response name="success" type="request-redirect-filterparam" value="EditRouting" allowed-params="workEffortId"/>
+        <response name="success" type="request-redirect" value="EditRouting">
+            <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="editRouting"/>
     </request-map>
 
@@ -691,7 +708,9 @@
     <request-map uri="createSupplierParty">
         <security https="true" auth="true"/>
         <event type="service" invoke="purchasing.createSupplier"/>
-        <response name="success" type="request-redirect-filterparam" value="viewSupplier" allowed-attributes="partyId" allowed-params="partyId"/>
+        <response name="success" type="request-redirect" value="viewSupplier">
+            <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="createSupplier"/>
     </request-map>
     <request-map uri="supplierEditContactMech">
@@ -705,7 +724,9 @@
     <request-map uri="createSupplierNote">
         <security https="true" auth="true"/>
         <event type="service" invoke="purchasing.createSupplierNote"/>
-        <response name="success" type="request-redirect-filterparam" value="viewSupplier" allowed-params="partyId"/>
+        <response name="success" type="request-redirect" value="viewSupplier">
+            <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="createSupplierNoteForm"/>
     </request-map>
     <request-map uri="updateSupplierForm">
@@ -715,7 +736,9 @@
     <request-map uri="updateSupplier">
         <security https="true" auth="true"/>
         <event type="service" invoke="purchasing.updateSupplier"/>
-        <response name="success" type="request-redirect-filterparam" value="viewSupplier" allowed-params="partyId"/>
+        <response name="success" type="request-redirect" value="viewSupplier">
+            <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="updateSupplierForm"/>
     </request-map>
     <request-map uri="viewAgreement">
@@ -817,13 +840,17 @@
     <request-map uri="createSupplierTaxAuthInfo">
         <security https="true" auth="true"/>
         <event type="service" invoke="createPartyTaxAuthInfo"/>
-        <response name="success" type="request-redirect-filterparam" value="viewSupplier" allowed-params="partyId"/>
+        <response name="success" type="request-redirect" value="viewSupplier">
+            <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="request-redirect" value="viewSupplier"/>
     </request-map>
     <request-map uri="updateSupplierTaxAuthInfo">
         <security https="true" auth="true"/>
         <event type="service" invoke="updatePartyTaxAuthInfo"/>
-        <response name="success" type="request-redirect-filterparam" value="viewSupplier" allowed-params="partyId"/>
+        <response name="success" type="request-redirect" value="viewSupplier">
+            <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="request-redirect" value="viewSupplier"/>
     </request-map>
     <request-map uri="outsourceRoutingTaskForm">
