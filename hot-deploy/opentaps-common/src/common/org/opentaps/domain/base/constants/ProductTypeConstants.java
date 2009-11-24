@@ -37,35 +37,35 @@ public final class ProductTypeConstants {
     public static final String FIXED_ASSET = "FIXED_ASSET";
     public static final class Good {
         private Good() { }
-        /** Good. */
-        public static final String GOOD = "GOOD";
-        /** Raw Material. */
-        public static final String RAW_MATERIAL = "RAW_MATERIAL";
-        /** Subassembly. */
-        public static final String SUBASSEMBLY = "SUBASSEMBLY";
-        /** Finished Good. */
-        public static final String FINISHED_GOOD = "FINISHED_GOOD";
+        /** Configurable Good. */
+        public static final String AGGREGATED = "AGGREGATED";
         /** Digital Good. */
         public static final String DIGITAL_GOOD = "DIGITAL_GOOD";
         /** Finished/Digital Good. */
         public static final String FINDIG_GOOD = "FINDIG_GOOD";
-        /** Configurable Good. */
-        public static final String AGGREGATED = "AGGREGATED";
+        /** Finished Good. */
+        public static final String FINISHED_GOOD = "FINISHED_GOOD";
         /** Marketing Package: Auto Manufactured. */
         public static final String MARKETING_PKG_AUTO = "MARKETING_PKG_AUTO";
         /** Marketing Package: Pick Assembly. */
         public static final String MARKETING_PKG_PICK = "MARKETING_PKG_PICK";
-        /** Work In Process. */
-        public static final String WIP = "WIP";
         /** Purchasing Package. */
         public static final String PURCH_PKG_AUTO = "PURCH_PKG_AUTO";
+        /** Raw Material. */
+        public static final String RAW_MATERIAL = "RAW_MATERIAL";
+        /** Subassembly. */
+        public static final String SUBASSEMBLY = "SUBASSEMBLY";
+        /** Work In Process. */
+        public static final String WIP = "WIP";
+        /** Good. */
+        public static final String GOOD = "GOOD";
     }
     public static final class Service {
         private Service() { }
-        /** Service. */
-        public static final String SERVICE = "SERVICE";
         /** Contracted Manufacturing Service. */
         public static final String SERVICE_CONTRACT_MFG = "SERVICE_CONTRACT_MFG";
+        /** Service. */
+        public static final String SERVICE = "SERVICE";
     }
     /** Supplies. */
     public static final String SUPPLIES = "SUPPLIES";

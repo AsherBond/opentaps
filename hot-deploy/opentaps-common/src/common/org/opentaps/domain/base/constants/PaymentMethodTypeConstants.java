@@ -26,43 +26,43 @@ public final class PaymentMethodTypeConstants {
 
     private PaymentMethodTypeConstants() { }
 
-    /** Credit Card. */
-    public static final String CREDIT_CARD = "CREDIT_CARD";
-    /** Gift Card. */
-    public static final String GIFT_CARD = "GIFT_CARD";
-    /** Gift Certificate. */
-    public static final String GIFT_CERTIFICATE = "GIFT_CERTIFICATE";
     /** Cash. */
     public static final String CASH = "CASH";
-    /** Electronic Funds Transfer. */
-    public static final String EFT_ACCOUNT = "EFT_ACCOUNT";
-    /** Financial Account. */
-    public static final String FIN_ACCOUNT = "FIN_ACCOUNT";
-    /** Personal Check. */
-    public static final String PERSONAL_CHECK = "PERSONAL_CHECK";
     /** Certified Check. */
     public static final String CERTIFIED_CHECK = "CERTIFIED_CHECK";
-    /** Money Order. */
-    public static final String MONEY_ORDER = "MONEY_ORDER";
     /** Company Account. */
     public static final String COMPANY_ACCOUNT = "COMPANY_ACCOUNT";
+    /** Company Check. */
+    public static final String COMPANY_CHECK = "COMPANY_CHECK";
+    /** Credit Card. */
+    public static final String CREDIT_CARD = "CREDIT_CARD";
+    /** Electronic Funds Transfer. */
+    public static final String EFT_ACCOUNT = "EFT_ACCOUNT";
     /** Billing Account. */
     public static final String EXT_BILLACT = "EXT_BILLACT";
+    /** Bill to Third Party. */
+    public static final String EXT_BILL_3RDPTY = "EXT_BILL_3RDPTY";
+    /** Paid via COD. */
+    public static final String EXT_BILL_3RDPTY_COD = "EXT_BILL_3RDPTY_COD";
     /** Cash On Delivery. */
     public static final String EXT_COD = "EXT_COD";
     /** eBay. */
     public static final String EXT_EBAY = "EXT_EBAY";
+    /** Offline Payment. */
+    public static final String EXT_OFFLINE = "EXT_OFFLINE";
     /** PayPal. */
     public static final String EXT_PAYPAL = "EXT_PAYPAL";
     /** WorldPay. */
     public static final String EXT_WORLDPAY = "EXT_WORLDPAY";
-    /** Offline Payment. */
-    public static final String EXT_OFFLINE = "EXT_OFFLINE";
-    /** Bill to Third Party. */
-    public static final String EXT_BILL_3RDPTY = "EXT_BILL_3RDPTY";
-    /** Company Check. */
-    public static final String COMPANY_CHECK = "COMPANY_CHECK";
-    /** Paid via COD. */
-    public static final String EXT_BILL_3RDPTY_COD = "EXT_BILL_3RDPTY_COD";
+    /** Financial Account. */
+    public static final String FIN_ACCOUNT = "FIN_ACCOUNT";
+    /** Gift Card. */
+    public static final String GIFT_CARD = "GIFT_CARD";
+    /** Gift Certificate. */
+    public static final String GIFT_CERTIFICATE = "GIFT_CERTIFICATE";
+    /** Money Order. */
+    public static final String MONEY_ORDER = "MONEY_ORDER";
+    /** Personal Check. */
+    public static final String PERSONAL_CHECK = "PERSONAL_CHECK";
 
 }

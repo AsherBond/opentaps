@@ -28,39 +28,39 @@ public final class CostComponentTypeConstants {
 
     public static final class LaborCost {
         private LaborCost() { }
-        /** Labor Cost. */
-        public static final String LABOR_COST = "LABOR_COST";
-        /** Estimated Standard Labor Cost. */
-        public static final String EST_STD_LABOR_COST = "EST_STD_LABOR_COST";
         /** Actual Labor Cost. */
         public static final String ACTUAL_LABOR_COST = "ACTUAL_LABOR_COST";
+        /** Estimated Standard Labor Cost. */
+        public static final String EST_STD_LABOR_COST = "EST_STD_LABOR_COST";
+        /** Labor Cost. */
+        public static final String LABOR_COST = "LABOR_COST";
     }
     public static final class MatCost {
         private MatCost() { }
-        /** Materials Cost. */
-        public static final String MAT_COST = "MAT_COST";
-        /** Estimated Standard Materials Cost. */
-        public static final String EST_STD_MAT_COST = "EST_STD_MAT_COST";
         /** Actual Materials Cost. */
         public static final String ACTUAL_MAT_COST = "ACTUAL_MAT_COST";
+        /** Estimated Standard Materials Cost. */
+        public static final String EST_STD_MAT_COST = "EST_STD_MAT_COST";
+        /** Materials Cost. */
+        public static final String MAT_COST = "MAT_COST";
     }
     public static final class OtherCost {
         private OtherCost() { }
-        /** Other Cost. */
-        public static final String OTHER_COST = "OTHER_COST";
-        /** Estimated Standard Other Cost. */
-        public static final String EST_STD_OTHER_COST = "EST_STD_OTHER_COST";
         /** Actual Other Cost. */
         public static final String ACTUAL_OTHER_COST = "ACTUAL_OTHER_COST";
+        /** Estimated Standard Other Cost. */
+        public static final String EST_STD_OTHER_COST = "EST_STD_OTHER_COST";
+        /** Other Cost. */
+        public static final String OTHER_COST = "OTHER_COST";
     }
     public static final class RouteCost {
         private RouteCost() { }
-        /** Route (fixed asset usage) Cost. */
-        public static final String ROUTE_COST = "ROUTE_COST";
-        /** Estimated Standard Route (fixed asset usage) Cost. */
-        public static final String EST_STD_ROUTE_COST = "EST_STD_ROUTE_COST";
         /** Actual Route (fixed asset usage) Cost. */
         public static final String ACTUAL_ROUTE_COST = "ACTUAL_ROUTE_COST";
+        /** Estimated Standard Route (fixed asset usage) Cost. */
+        public static final String EST_STD_ROUTE_COST = "EST_STD_ROUTE_COST";
+        /** Route (fixed asset usage) Cost. */
+        public static final String ROUTE_COST = "ROUTE_COST";
     }
 
 }

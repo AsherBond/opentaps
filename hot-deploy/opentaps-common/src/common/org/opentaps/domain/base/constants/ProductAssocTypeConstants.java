@@ -28,39 +28,39 @@ public final class ProductAssocTypeConstants {
 
     /** Also Bought. */
     public static final String ALSO_BOUGHT = "ALSO_BOUGHT";
-    /** Upgrade or Up-Sell. */
-    public static final String PRODUCT_UPGRADE = "PRODUCT_UPGRADE";
-    /** Complementary or Cross-Sell. */
-    public static final String PRODUCT_COMPLEMENT = "PRODUCT_COMPLEMENT";
-    /** Incompatable. */
-    public static final String PRODUCT_INCOMPATABLE = "PRODUCT_INCOMPATABLE";
-    /** New Version, Replacement. */
-    public static final String PRODUCT_OBSOLESCENCE = "PRODUCT_OBSOLESCENCE";
-    /** Actual Product Component. */
-    public static final String PRODUCT_COMPONENT = "PRODUCT_COMPONENT";
-    /** Equivalent or Substitute. */
-    public static final String PRODUCT_SUBSTITUTE = "PRODUCT_SUBSTITUTE";
-    /** Product Variant. */
-    public static final String PRODUCT_VARIANT = "PRODUCT_VARIANT";
-    /** Unique Item. */
-    public static final String UNIQUE_ITEM = "UNIQUE_ITEM";
+    /** Engineering Bill of Materials. */
+    public static final String ENGINEER_COMPONENT = "ENGINEER_COMPONENT";
+    /** Manufacturing Bill of Materials. */
+    public static final String MANUF_COMPONENT = "MANUF_COMPONENT";
     /** Accessory. */
     public static final String PRODUCT_ACCESSORY = "PRODUCT_ACCESSORY";
+    /** Auto Reorder (needs recurrenceInfoId). */
+    public static final String PRODUCT_AUTORO = "PRODUCT_AUTORO";
+    /** Complementary or Cross-Sell. */
+    public static final String PRODUCT_COMPLEMENT = "PRODUCT_COMPLEMENT";
+    /** Actual Product Component. */
+    public static final String PRODUCT_COMPONENT = "PRODUCT_COMPONENT";
+    /** Configurable product instance. */
+    public static final String PRODUCT_CONF = "PRODUCT_CONF";
+    /** Incompatable. */
+    public static final String PRODUCT_INCOMPATABLE = "PRODUCT_INCOMPATABLE";
+    /** Product Manufactured As. */
+    public static final String PRODUCT_MANUFACTURED = "PRODUCT_MANUFACTURED";
+    /** New Version, Replacement. */
+    public static final String PRODUCT_OBSOLESCENCE = "PRODUCT_OBSOLESCENCE";
     /** Refurbished Equivalent. */
     public static final String PRODUCT_REFURB = "PRODUCT_REFURB";
     /** Repair Service. */
     public static final String PRODUCT_REPAIR_SRV = "PRODUCT_REPAIR_SRV";
-    /** Auto Reorder (needs recurrenceInfoId). */
-    public static final String PRODUCT_AUTORO = "PRODUCT_AUTORO";
     /** Revision. */
     public static final String PRODUCT_REVISION = "PRODUCT_REVISION";
-    /** Manufacturing Bill of Materials. */
-    public static final String MANUF_COMPONENT = "MANUF_COMPONENT";
-    /** Engineering Bill of Materials. */
-    public static final String ENGINEER_COMPONENT = "ENGINEER_COMPONENT";
-    /** Product Manufactured As. */
-    public static final String PRODUCT_MANUFACTURED = "PRODUCT_MANUFACTURED";
-    /** Configurable product instance. */
-    public static final String PRODUCT_CONF = "PRODUCT_CONF";
+    /** Equivalent or Substitute. */
+    public static final String PRODUCT_SUBSTITUTE = "PRODUCT_SUBSTITUTE";
+    /** Upgrade or Up-Sell. */
+    public static final String PRODUCT_UPGRADE = "PRODUCT_UPGRADE";
+    /** Product Variant. */
+    public static final String PRODUCT_VARIANT = "PRODUCT_VARIANT";
+    /** Unique Item. */
+    public static final String UNIQUE_ITEM = "UNIQUE_ITEM";
 
 }

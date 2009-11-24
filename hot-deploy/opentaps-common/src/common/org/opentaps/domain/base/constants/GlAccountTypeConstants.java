@@ -30,21 +30,21 @@ public final class GlAccountTypeConstants {
     public static final String ACCOUNTS_PAYABLE = "ACCOUNTS_PAYABLE";
     public static final class AccountsReceivable {
         private AccountsReceivable() { }
-        /** Accounts Receivable. */
-        public static final String ACCOUNTS_RECEIVABLE = "ACCOUNTS_RECEIVABLE";
-        /** Merchant Account Settlement. */
-        public static final String MRCH_STLMNT_ACCOUNT = "MRCH_STLMNT_ACCOUNT";
         /** Interest Income Receivables. */
         public static final String INTRSTINC_RECEIVABLE = "INTRSTINC_RECEIVABLE";
+        /** Merchant Account Settlement. */
+        public static final String MRCH_STLMNT_ACCOUNT = "MRCH_STLMNT_ACCOUNT";
+        /** Accounts Receivable. */
+        public static final String ACCOUNTS_RECEIVABLE = "ACCOUNTS_RECEIVABLE";
     }
     public static final class Adjustment {
         private Adjustment() { }
-        /** Revenue. */
-        public static final String ADJUSTMENT = "ADJUSTMENT";
-        /** Accounts Receivable Adjustment. */
-        public static final String ACCTRECV_ADJUST = "ACCTRECV_ADJUST";
         /** Accounts Payable Adjustment. */
         public static final String ACCTPAY_ADJUST = "ACCTPAY_ADJUST";
+        /** Accounts Receivable Adjustment. */
+        public static final String ACCTRECV_ADJUST = "ACCTRECV_ADJUST";
+        /** Revenue. */
+        public static final String ADJUSTMENT = "ADJUSTMENT";
     }
     /** Asset. */
     public static final String ASSET = "ASSET";
@@ -63,29 +63,29 @@ public final class GlAccountTypeConstants {
     public static final String CREDIT_CARD = "CREDIT_CARD";
     public static final class CurrentAsset {
         private CurrentAsset() { }
-        /** Current Asset. */
-        public static final String CURRENT_ASSET = "CURRENT_ASSET";
-        /** Prepaid Expenses. */
-        public static final String PREPAID_EXPENSES = "PREPAID_EXPENSES";
         /** Receivable from Inventory Transferred Out. */
         public static final String INVENTORY_XFER_OUT = "INVENTORY_XFER_OUT";
+        /** Prepaid Expenses. */
+        public static final String PREPAID_EXPENSES = "PREPAID_EXPENSES";
+        /** Current Asset. */
+        public static final String CURRENT_ASSET = "CURRENT_ASSET";
     }
     public static final class CurrentLiability {
         private CurrentLiability() { }
-        /** Current Liability. */
-        public static final String CURRENT_LIABILITY = "CURRENT_LIABILITY";
-        /** Customer Deposits. */
-        public static final String CUSTOMER_DEPOSIT = "CUSTOMER_DEPOSIT";
-        /** Customer Credits. */
-        public static final String CUSTOMER_CREDIT = "CUSTOMER_CREDIT";
-        /** Customer Gift Certificate Balances. */
-        public static final String CUSTOMER_GC_DEPOSIT = "CUSTOMER_GC_DEPOSIT";
-        /** Uninvoiced Shipment Receipts. */
-        public static final String UNINVOICED_SHIP_RCPT = "UNINVOICED_SHIP_RCPT";
-        /** Payable from Inventory Transferred In. */
-        public static final String INVENTORY_XFER_IN = "INVENTORY_XFER_IN";
         /** Commissions Payables. */
         public static final String COMMISSIONS_PAYABLE = "COMMISSIONS_PAYABLE";
+        /** Customer Credits. */
+        public static final String CUSTOMER_CREDIT = "CUSTOMER_CREDIT";
+        /** Customer Deposits. */
+        public static final String CUSTOMER_DEPOSIT = "CUSTOMER_DEPOSIT";
+        /** Customer Gift Certificate Balances. */
+        public static final String CUSTOMER_GC_DEPOSIT = "CUSTOMER_GC_DEPOSIT";
+        /** Payable from Inventory Transferred In. */
+        public static final String INVENTORY_XFER_IN = "INVENTORY_XFER_IN";
+        /** Uninvoiced Shipment Receipts. */
+        public static final String UNINVOICED_SHIP_RCPT = "UNINVOICED_SHIP_RCPT";
+        /** Current Liability. */
+        public static final String CURRENT_LIABILITY = "CURRENT_LIABILITY";
     }
     /** Customer. */
     public static final String CUSTOMER_ACCOUNT = "CUSTOMER_ACCOUNT";
@@ -97,16 +97,16 @@ public final class GlAccountTypeConstants {
     public static final String EQUITY = "EQUITY";
     public static final class Expense {
         private Expense() { }
-        /** Expense. */
-        public static final String EXPENSE = "EXPENSE";
+        /** Cost of Goods Sold. */
+        public static final String COGS = "COGS";
         /** Operating Expense. */
         public static final String OPERATING_EXPENSE = "OPERATING_EXPENSE";
         /** Other Expense. */
         public static final String OTHER_EXPENSE = "OTHER_EXPENSE";
-        /** Cost of Goods Sold. */
-        public static final String COGS = "COGS";
         /** Tax Expense. */
         public static final String TAX_EXPENSE = "TAX_EXPENSE";
+        /** Expense. */
+        public static final String EXPENSE = "EXPENSE";
     }
     /** Fixed Asset. */
     public static final String FIXED_ASSET = "FIXED_ASSET";
@@ -121,12 +121,12 @@ public final class GlAccountTypeConstants {
     }
     public static final class Income {
         private Income() { }
-        /** Income. */
-        public static final String INCOME = "INCOME";
         /** Other Income. */
         public static final String OTHER_INCOME = "OTHER_INCOME";
         /** Revenue. */
         public static final String REVENUE = "REVENUE";
+        /** Income. */
+        public static final String INCOME = "INCOME";
     }
     /** Inventory Item Value Adjustment. */
     public static final String INV_ADJ_VAL = "INV_ADJ_VAL";
@@ -134,10 +134,10 @@ public final class GlAccountTypeConstants {
     public static final String INV_CHANGE_ACCOUNT = "INV_CHANGE_ACCOUNT";
     public static final class InventoryAccount {
         private InventoryAccount() { }
-        /** Inventory. */
-        public static final String INVENTORY_ACCOUNT = "INVENTORY_ACCOUNT";
         /** Inventory Adjustment from Average Cost. */
         public static final String INV_ADJ_AVG_COST = "INV_ADJ_AVG_COST";
+        /** Inventory. */
+        public static final String INVENTORY_ACCOUNT = "INVENTORY_ACCOUNT";
     }
     /** Inventory Valuation Adjustment. */
     public static final String INVENTORY_VAL_ADJ = "INVENTORY_VAL_ADJ";
@@ -153,21 +153,21 @@ public final class GlAccountTypeConstants {
         public static final String MFG_EXPENSE_CONTRACT = "MFG_EXPENSE_CONTRACT";
         /** Internal Manufacturing Expense. */
         public static final String MFG_EXPENSE_INTERNAL = "MFG_EXPENSE_INTERNAL";
-        /** Manufacturing Expense Variance. */
-        public static final String MFG_EXPENSE_VARIANCE = "MFG_EXPENSE_VARIANCE";
-        /** Scrapped Raw Materials Expense. */
-        public static final String MFG_EXPENSE_SCRAP = "MFG_EXPENSE_SCRAP";
         /** Expense for Reverted Production Runs. */
         public static final String MFG_EXPENSE_REVPRUN = "MFG_EXPENSE_REVPRUN";
+        /** Scrapped Raw Materials Expense. */
+        public static final String MFG_EXPENSE_SCRAP = "MFG_EXPENSE_SCRAP";
+        /** Manufacturing Expense Variance. */
+        public static final String MFG_EXPENSE_VARIANCE = "MFG_EXPENSE_VARIANCE";
     }
     public static final class OperatingExpense {
         private OperatingExpense() { }
         /** Commission Expense. */
         public static final String COMMISSION_EXPENSE = "COMMISSION_EXPENSE";
-        /** Tax Expense. */
-        public static final String PURCHASE_PRICE_VAR = "PURCHASE_PRICE_VAR";
         /** Manufacturing Expense. */
         public static final String MFG_EXPENSE = "MFG_EXPENSE";
+        /** Tax Expense. */
+        public static final String PURCHASE_PRICE_VAR = "PURCHASE_PRICE_VAR";
         /** Salary Expenses. */
         public static final String SALARY_EXPENSES = "SALARY_EXPENSES";
     }
@@ -175,10 +175,10 @@ public final class GlAccountTypeConstants {
     public static final String OTHER_ASSET = "OTHER_ASSET";
     public static final class OtherExpense {
         private OtherExpense() { }
-        /** Write Off. */
-        public static final String WRITEOFF = "WRITEOFF";
         /** Foreign Exchange Gain/Loss. */
         public static final String FX_GAIN_LOSS_ACCT = "FX_GAIN_LOSS_ACCT";
+        /** Write Off. */
+        public static final String WRITEOFF = "WRITEOFF";
     }
     public static final class OtherIncome {
         private OtherIncome() { }
@@ -213,10 +213,10 @@ public final class GlAccountTypeConstants {
     public static final String WIP_INVENTORY = "WIP_INVENTORY";
     public static final class Writeoff {
         private Writeoff() { }
-        /** Accounts Receivables Write Off. */
-        public static final String ACCTRECV_WRITEOFF = "ACCTRECV_WRITEOFF";
         /** Accounts Payables Write Off. */
         public static final String ACCTPAY_WRITEOFF = "ACCTPAY_WRITEOFF";
+        /** Accounts Receivables Write Off. */
+        public static final String ACCTRECV_WRITEOFF = "ACCTRECV_WRITEOFF";
         /** Commissions Payables Write Off. */
         public static final String COMMISSIONS_WRITEOFF = "COMMISSIONS_WRITEOFF";
         /** Interest Income Write Off. */

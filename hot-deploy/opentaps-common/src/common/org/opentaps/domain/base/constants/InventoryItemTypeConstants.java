@@ -26,9 +26,9 @@ public final class InventoryItemTypeConstants {
 
     private InventoryItemTypeConstants() { }
 
-    /** Serialized. */
-    public static final String SERIALIZED_INV_ITEM = "SERIALIZED_INV_ITEM";
     /** Non-Serialized. */
     public static final String NON_SERIAL_INV_ITEM = "NON_SERIAL_INV_ITEM";
+    /** Serialized. */
+    public static final String SERIALIZED_INV_ITEM = "SERIALIZED_INV_ITEM";
 
 }

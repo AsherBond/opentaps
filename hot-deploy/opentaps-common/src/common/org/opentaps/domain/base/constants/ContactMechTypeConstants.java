@@ -28,18 +28,18 @@ public final class ContactMechTypeConstants {
 
     public static final class ElectronicAddress {
         private ElectronicAddress() { }
-        /** Electronic Address. */
-        public static final String ELECTRONIC_ADDRESS = "ELECTRONIC_ADDRESS";
+        /** Internet Domain Name. */
+        public static final String DOMAIN_NAME = "DOMAIN_NAME";
         /** Email Address. */
         public static final String EMAIL_ADDRESS = "EMAIL_ADDRESS";
         /** Internet IP Address. */
         public static final String IP_ADDRESS = "IP_ADDRESS";
-        /** Internet Domain Name. */
-        public static final String DOMAIN_NAME = "DOMAIN_NAME";
-        /** Web URL/Address. */
-        public static final String WEB_ADDRESS = "WEB_ADDRESS";
         /** Skype. */
         public static final String SKYPE = "SKYPE";
+        /** Web URL/Address. */
+        public static final String WEB_ADDRESS = "WEB_ADDRESS";
+        /** Electronic Address. */
+        public static final String ELECTRONIC_ADDRESS = "ELECTRONIC_ADDRESS";
     }
     /** Postal Address. */
     public static final String POSTAL_ADDRESS = "POSTAL_ADDRESS";

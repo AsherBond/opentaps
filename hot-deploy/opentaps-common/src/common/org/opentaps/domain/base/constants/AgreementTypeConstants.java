@@ -26,23 +26,23 @@ public final class AgreementTypeConstants {
 
     private AgreementTypeConstants() { }
 
+    /** Commission. */
+    public static final String COMMISSION_AGREEMENT = "COMMISSION_AGREEMENT";
+    /** Employment. */
+    public static final String EMPLOYMENT_AGREEMENT = "EMPLOYMENT_AGREEMENT";
+    /** End User License Agreement. */
+    public static final String EULA = "EULA";
+    /** Other. */
+    public static final String OTHER_AGREEMENT = "OTHER_AGREEMENT";
+    /** Partner. */
+    public static final String PARTNER_AGREEMENT = "PARTNER_AGREEMENT";
+    /** Partner Sales. */
+    public static final String PARTNER_SALES_AGR = "PARTNER_SALES_AGR";
     /** Product. */
     public static final String PRODUCT_AGREEMENT = "PRODUCT_AGREEMENT";
     /** Purchase. */
     public static final String PURCHASE_AGREEMENT = "PURCHASE_AGREEMENT";
-    /** Employment. */
-    public static final String EMPLOYMENT_AGREEMENT = "EMPLOYMENT_AGREEMENT";
-    /** Other. */
-    public static final String OTHER_AGREEMENT = "OTHER_AGREEMENT";
-    /** Commission. */
-    public static final String COMMISSION_AGREEMENT = "COMMISSION_AGREEMENT";
-    /** End User License Agreement. */
-    public static final String EULA = "EULA";
     /** Customer. */
     public static final String SALES_AGREEMENT = "SALES_AGREEMENT";
-    /** Partner Sales. */
-    public static final String PARTNER_SALES_AGR = "PARTNER_SALES_AGR";
-    /** Partner. */
-    public static final String PARTNER_AGREEMENT = "PARTNER_AGREEMENT";
 
 }

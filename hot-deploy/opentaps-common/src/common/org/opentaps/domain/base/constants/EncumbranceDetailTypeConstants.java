@@ -26,9 +26,9 @@ public final class EncumbranceDetailTypeConstants {
 
     private EncumbranceDetailTypeConstants() { }
 
-    /** Purchasing. */
-    public static final String ENCUMB_PURCHASING = "ENCUMB_PURCHASING";
     /** Manual transaction. */
     public static final String ENCUMB_MANUAL = "ENCUMB_MANUAL";
+    /** Purchasing. */
+    public static final String ENCUMB_PURCHASING = "ENCUMB_PURCHASING";
 
 }

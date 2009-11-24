@@ -28,13 +28,13 @@ public final class ReturnTypeConstants {
 
     /** Store Credit. */
     public static final String RTN_CREDIT = "RTN_CREDIT";
-    /** Refund. */
-    public static final String RTN_REFUND = "RTN_REFUND";
-    /** Wait Replacement. */
-    public static final String RTN_REPLACE = "RTN_REPLACE";
     /** Cross-Ship Replacement. */
     public static final String RTN_CSREPLACE = "RTN_CSREPLACE";
+    /** Refund. */
+    public static final String RTN_REFUND = "RTN_REFUND";
     /** Repair Replacement. */
     public static final String RTN_REPAIR_REPLACE = "RTN_REPAIR_REPLACE";
+    /** Wait Replacement. */
+    public static final String RTN_REPLACE = "RTN_REPLACE";
 
 }

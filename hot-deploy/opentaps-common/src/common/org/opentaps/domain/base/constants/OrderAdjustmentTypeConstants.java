@@ -26,27 +26,27 @@ public final class OrderAdjustmentTypeConstants {
 
     private OrderAdjustmentTypeConstants() { }
 
-    /** Promotion. */
-    public static final String PROMOTION_ADJUSTMENT = "PROMOTION_ADJUSTMENT";
-    /** Replacement. */
-    public static final String REPLACE_ADJUSTMENT = "REPLACE_ADJUSTMENT";
+    /** Additional Feature. */
+    public static final String ADDITIONAL_FEATURE = "ADDITIONAL_FEATURE";
     /** Discount. */
     public static final String DISCOUNT_ADJUSTMENT = "DISCOUNT_ADJUSTMENT";
     /** Fee. */
     public static final String FEE = "FEE";
     /** Miscellaneous Charges. */
     public static final String MISCELLANEOUS_CHARGE = "MISCELLANEOUS_CHARGE";
+    /** Marketing Package Adjustment. */
+    public static final String MKTG_PKG_AUTO_ADJUST = "MKTG_PKG_AUTO_ADJUST";
+    /** Promotion. */
+    public static final String PROMOTION_ADJUSTMENT = "PROMOTION_ADJUSTMENT";
+    /** Replacement. */
+    public static final String REPLACE_ADJUSTMENT = "REPLACE_ADJUSTMENT";
     /** Sales Tax. */
     public static final String SALES_TAX = "SALES_TAX";
     /** Shipping and Handling. */
     public static final String SHIPPING_CHARGES = "SHIPPING_CHARGES";
     /** Surcharge. */
     public static final String SURCHARGE_ADJUSTMENT = "SURCHARGE_ADJUSTMENT";
-    /** Additional Feature. */
-    public static final String ADDITIONAL_FEATURE = "ADDITIONAL_FEATURE";
     /** Warranty. */
     public static final String WARRANTY_ADJUSTMENT = "WARRANTY_ADJUSTMENT";
-    /** Marketing Package Adjustment. */
-    public static final String MKTG_PKG_AUTO_ADJUST = "MKTG_PKG_AUTO_ADJUST";
 
 }

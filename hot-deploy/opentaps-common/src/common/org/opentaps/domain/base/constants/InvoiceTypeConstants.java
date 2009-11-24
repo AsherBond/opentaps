@@ -26,29 +26,29 @@ public final class InvoiceTypeConstants {
 
     private InvoiceTypeConstants() { }
 
-    /** Sales Invoice. */
-    public static final String SALES_INVOICE = "SALES_INVOICE";
-    /** Customer Return. */
-    public static final String CUST_RTN_INVOICE = "CUST_RTN_INVOICE";
-    /** Purchase Return. */
-    public static final String PURC_RTN_INVOICE = "PURC_RTN_INVOICE";
     /** Commission. */
     public static final String COMMISSION_INVOICE = "COMMISSION_INVOICE";
-    /** Invoice Template. */
-    public static final String TEMPLATE = "TEMPLATE";
-    /** Sales Invoice Template. */
-    public static final String SALES_INV_TEMPLATE = "SALES_INV_TEMPLATE";
-    /** Purchase Invoice Template. */
-    public static final String PUR_INV_TEMPLATE = "PUR_INV_TEMPLATE";
-    /** Payrol. */
-    public static final String PAYROL_INVOICE = "PAYROL_INVOICE";
-    /** Partner Invoice. */
-    public static final String PARTNER_INVOICE = "PARTNER_INVOICE";
+    /** Customer Return. */
+    public static final String CUST_RTN_INVOICE = "CUST_RTN_INVOICE";
     /** Finance Charge. */
     public static final String INTEREST_INVOICE = "INTEREST_INVOICE";
+    /** Partner Invoice. */
+    public static final String PARTNER_INVOICE = "PARTNER_INVOICE";
+    /** Payrol. */
+    public static final String PAYROL_INVOICE = "PAYROL_INVOICE";
     /** Vendor Invoice. */
     public static final String PURCHASE_INVOICE = "PURCHASE_INVOICE";
+    /** Purchase Return. */
+    public static final String PURC_RTN_INVOICE = "PURC_RTN_INVOICE";
+    /** Purchase Invoice Template. */
+    public static final String PUR_INV_TEMPLATE = "PUR_INV_TEMPLATE";
     /** Credit Memo. */
     public static final String RETURN_INVOICE = "RETURN_INVOICE";
+    /** Sales Invoice. */
+    public static final String SALES_INVOICE = "SALES_INVOICE";
+    /** Sales Invoice Template. */
+    public static final String SALES_INV_TEMPLATE = "SALES_INV_TEMPLATE";
+    /** Invoice Template. */
+    public static final String TEMPLATE = "TEMPLATE";
 
 }

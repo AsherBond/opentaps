@@ -30,15 +30,15 @@ public final class GlFiscalTypeConstants {
     public static final String ACTUAL = "ACTUAL";
     /** Budget. */
     public static final String BUDGET = "BUDGET";
+    /** Encumbrance. */
+    public static final String ENCUMBRANCE = "ENCUMBRANCE";
     /** Forecast. */
     public static final String FORECAST = "FORECAST";
     /** Plan. */
     public static final String PLAN = "PLAN";
-    /** Scenario. */
-    public static final String SCENARIO = "SCENARIO";
     /** Reference or Testing. */
     public static final String REFERENCE = "REFERENCE";
-    /** Encumbrance. */
-    public static final String ENCUMBRANCE = "ENCUMBRANCE";
+    /** Scenario. */
+    public static final String SCENARIO = "SCENARIO";
 
 }

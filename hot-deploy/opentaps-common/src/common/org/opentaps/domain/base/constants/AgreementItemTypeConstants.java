@@ -26,33 +26,33 @@ public final class AgreementItemTypeConstants {
 
     private AgreementItemTypeConstants() { }
 
-    /** Sub-Agreement. */
-    public static final String SUBAGREEMENT = "SUBAGREEMENT";
+    /** Commission Rate. */
+    public static final String AGREEMENT_COMMISSION = "AGREEMENT_COMMISSION";
+    /** Credit Terms. */
+    public static final String AGREEMENT_CREDIT = "AGREEMENT_CREDIT";
     /** Exhibit. */
     public static final String AGREEMENT_EXHIBIT = "AGREEMENT_EXHIBIT";
+    /** Payment Terms. */
+    public static final String AGREEMENT_PAYMENT = "AGREEMENT_PAYMENT";
     /** Pricing. */
     public static final String AGREEMENT_PRICING_PR = "AGREEMENT_PRICING_PR";
     /** Section. */
     public static final String AGREEMENT_SECTION = "AGREEMENT_SECTION";
-    /** Commission Rate. */
-    public static final String AGREEMENT_COMMISSION = "AGREEMENT_COMMISSION";
-    /** Payment Terms. */
-    public static final String AGREEMENT_PAYMENT = "AGREEMENT_PAYMENT";
     /** Supplier Descriptive Terms. */
     public static final String AGREEMENT_SUPPLIER = "AGREEMENT_SUPPLIER";
-    /** Credit Terms. */
-    public static final String AGREEMENT_CREDIT = "AGREEMENT_CREDIT";
-    /** Payment terms. */
-    public static final String COMM_PAYMENT = "COMM_PAYMENT";
-    /** Timing of Commissions. */
-    public static final String COMM_TIMING = "COMM_TIMING";
     /** Commission Customers. */
     public static final String COMM_CUSTOMERS = "COMM_CUSTOMERS";
+    /** Payment terms. */
+    public static final String COMM_PAYMENT = "COMM_PAYMENT";
     /** Commission Rate Schedule. */
     public static final String COMM_RATES = "COMM_RATES";
+    /** Timing of Commissions. */
+    public static final String COMM_TIMING = "COMM_TIMING";
     /** Partner-Customer Payment Terms. */
     public static final String PARTNER_CUST_PAY = "PARTNER_CUST_PAY";
     /** Partner Terms Of Service. */
     public static final String PARTNER_TOS = "PARTNER_TOS";
+    /** Sub-Agreement. */
+    public static final String SUBAGREEMENT = "SUBAGREEMENT";
 
 }

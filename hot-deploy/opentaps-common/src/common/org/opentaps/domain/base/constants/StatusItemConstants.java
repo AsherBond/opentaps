@@ -37,372 +37,372 @@ public final class StatusItemConstants {
     }
     public static final class Agreement {
         private Agreement() { }
-        /** Created. */
-        public static final String AGR_CREATED = "AGR_CREATED";
         /** Active. */
         public static final String AGR_ACTIVE = "AGR_ACTIVE";
-        /** Completed. */
-        public static final String AGR_COMPLETED = "AGR_COMPLETED";
-        /** Rejected. */
-        public static final String AGR_REJECTED = "AGR_REJECTED";
         /** Cancelled. */
         public static final String AGR_CANCELLED = "AGR_CANCELLED";
+        /** Completed. */
+        public static final String AGR_COMPLETED = "AGR_COMPLETED";
+        /** Created. */
+        public static final String AGR_CREATED = "AGR_CREATED";
+        /** Rejected. */
+        public static final String AGR_REJECTED = "AGR_REJECTED";
     }
     public static final class AmznDoc {
         private AmznDoc() { }
-        /** Document downloaded. */
-        public static final String AMZN_DOC_DLED = "AMZN_DOC_DLED";
-        /** Error in document download. */
-        public static final String AMZN_DOC_DL_ERR = "AMZN_DOC_DL_ERR";
-        /** Orders extracted from document. */
-        public static final String AMZN_DOC_XTRED = "AMZN_DOC_XTRED";
-        /** Error in order extraction. */
-        public static final String AMZN_DOC_XTRED_ERR = "AMZN_DOC_XTRED_ERR";
-        /** Download not acknowledged. */
-        public static final String AMZN_DOC_NOT_ACKED = "AMZN_DOC_NOT_ACKED";
         /** Download acknowledged. */
         public static final String AMZN_DOC_ACKED = "AMZN_DOC_ACKED";
         /** Error acknowledging download. */
         public static final String AMZN_DOC_ACK_ERR = "AMZN_DOC_ACK_ERR";
+        /** Document downloaded. */
+        public static final String AMZN_DOC_DLED = "AMZN_DOC_DLED";
+        /** Error in document download. */
+        public static final String AMZN_DOC_DL_ERR = "AMZN_DOC_DL_ERR";
+        /** Download not acknowledged. */
+        public static final String AMZN_DOC_NOT_ACKED = "AMZN_DOC_NOT_ACKED";
+        /** Orders extracted from document. */
+        public static final String AMZN_DOC_XTRED = "AMZN_DOC_XTRED";
+        /** Error in order extraction. */
+        public static final String AMZN_DOC_XTRED_ERR = "AMZN_DOC_XTRED_ERR";
     }
     public static final class AmznOrder {
         private AmznOrder() { }
+        /** Import failure acknowledgement sent. */
+        public static final String AMZN_ORDR_ACK_FL_ST = "AMZN_ORDR_ACK_FL_ST";
+        /** Import acknowledgement sent. */
+        public static final String AMZN_ORDR_ACK_SENT = "AMZN_ORDR_ACK_SENT";
+        /** Cancelled. */
+        public static final String AMZN_ORDR_CANCELLED = "AMZN_ORDR_CANCELLED";
         /** Created. */
         public static final String AMZN_ORDR_CREATED = "AMZN_ORDR_CREATED";
+        /** Import failure acknowledged. */
+        public static final String AMZN_ORDR_FAIL_ACKED = "AMZN_ORDR_FAIL_ACKED";
+        /** Error acknowledging import failure. */
+        public static final String AMZN_ORDR_FL_ACK_ERR = "AMZN_ORDR_FL_ACK_ERR";
         /** Imported. */
         public static final String AMZN_ORDR_IMPTD = "AMZN_ORDR_IMPTD";
         /** Error in order import. */
         public static final String AMZN_ORDR_IMPTD_ERR = "AMZN_ORDR_IMPTD_ERR";
-        /** Cancelled. */
-        public static final String AMZN_ORDR_CANCELLED = "AMZN_ORDR_CANCELLED";
-        /** Import acknowledgement sent. */
-        public static final String AMZN_ORDR_ACK_SENT = "AMZN_ORDR_ACK_SENT";
         /** Import not acknowledged. */
         public static final String AMZN_ORDR_NOT_ACKED = "AMZN_ORDR_NOT_ACKED";
         /** Successful import acknowledged. */
         public static final String AMZN_ORDR_SCSS_ACKED = "AMZN_ORDR_SCSS_ACKED";
-        /** Import failure acknowledged. */
-        public static final String AMZN_ORDR_FAIL_ACKED = "AMZN_ORDR_FAIL_ACKED";
         /** Error acknowledging import success. */
         public static final String AMZN_ORDR_SC_ACK_ERR = "AMZN_ORDR_SC_ACK_ERR";
-        /** Error acknowledging import failure. */
-        public static final String AMZN_ORDR_FL_ACK_ERR = "AMZN_ORDR_FL_ACK_ERR";
-        /** Import failure acknowledgement sent. */
-        public static final String AMZN_ORDR_ACK_FL_ST = "AMZN_ORDR_ACK_FL_ST";
     }
     public static final class AmznProduct {
         private AmznProduct() { }
-        /** New product. */
-        public static final String AMZN_PROD_CREATED = "AMZN_PROD_CREATED";
-        /** Product date are changed. */
-        public static final String AMZN_PROD_CHANGED = "AMZN_PROD_CHANGED";
-        /** Product is posted to store. */
-        public static final String AMZN_PROD_POSTED = "AMZN_PROD_POSTED";
-        /** Successful post acknowledged. */
-        public static final String AMZN_PROD_SUCCESS = "AMZN_PROD_SUCCESS";
-        /** Product isn't accepted. */
-        public static final String AMZN_PROD_ERROR = "AMZN_PROD_ERROR";
-        /** Product is acknowledged. */
-        public static final String AMZN_PROD_ACK_RECV = "AMZN_PROD_ACK_RECV";
         /** Product isn't acknowledged in an error issue. */
         public static final String AMZN_PROD_ACK_ERR = "AMZN_PROD_ACK_ERR";
-        /** Product isn't acknowledged. */
-        public static final String AMZN_PROD_NOT_ACKED = "AMZN_PROD_NOT_ACKED";
+        /** Product is acknowledged. */
+        public static final String AMZN_PROD_ACK_RECV = "AMZN_PROD_ACK_RECV";
+        /** Product date are changed. */
+        public static final String AMZN_PROD_CHANGED = "AMZN_PROD_CHANGED";
+        /** New product. */
+        public static final String AMZN_PROD_CREATED = "AMZN_PROD_CREATED";
         /** Product is planned for deletion. */
         public static final String AMZN_PROD_DELETED = "AMZN_PROD_DELETED";
         /** Error deleting product. */
         public static final String AMZN_PROD_DEL_ERR = "AMZN_PROD_DEL_ERR";
+        /** Product isn't accepted. */
+        public static final String AMZN_PROD_ERROR = "AMZN_PROD_ERROR";
+        /** Product isn't acknowledged. */
+        public static final String AMZN_PROD_NOT_ACKED = "AMZN_PROD_NOT_ACKED";
+        /** Product is posted to store. */
+        public static final String AMZN_PROD_POSTED = "AMZN_PROD_POSTED";
+        /** Successful post acknowledged. */
+        public static final String AMZN_PROD_SUCCESS = "AMZN_PROD_SUCCESS";
     }
     public static final class AmznShip {
         private AmznShip() { }
-        /** Fulfillment not acknowledged. */
-        public static final String AMZN_SHIP_NOT_ACKED = "AMZN_SHIP_NOT_ACKED";
-        /** Fulfillment acknowledgement sent. */
-        public static final String AMZN_SHIP_ACK_SENT = "AMZN_SHIP_ACK_SENT";
         /** Fulfillment acknowledged. */
         public static final String AMZN_SHIP_ACKED = "AMZN_SHIP_ACKED";
         /** Error acknowledging fulfillment. */
         public static final String AMZN_SHIP_ACK_ERR = "AMZN_SHIP_ACK_ERR";
+        /** Fulfillment acknowledgement sent. */
+        public static final String AMZN_SHIP_ACK_SENT = "AMZN_SHIP_ACK_SENT";
+        /** Fulfillment not acknowledged. */
+        public static final String AMZN_SHIP_NOT_ACKED = "AMZN_SHIP_NOT_ACKED";
     }
     public static final class CalendarStatus {
         private CalendarStatus() { }
-        /** In Planning. */
-        public static final String CAL_IN_PLANNING = "CAL_IN_PLANNING";
-        /** Planned. */
-        public static final String CAL_PLANNED = "CAL_PLANNED";
-        /** Needs Action (Approved). */
-        public static final String CAL_NEEDS_ACTION = "CAL_NEEDS_ACTION";
-        /** Sent. */
-        public static final String CAL_SENT = "CAL_SENT";
+        /** Cancelled. */
+        public static final String CAL_CANCELLED = "CAL_CANCELLED";
         /** Declined. */
         public static final String CAL_DECLINED = "CAL_DECLINED";
         /** Delegated. */
         public static final String CAL_DELEGATED = "CAL_DELEGATED";
-        /** Cancelled. */
-        public static final String CAL_CANCELLED = "CAL_CANCELLED";
+        /** In Planning. */
+        public static final String CAL_IN_PLANNING = "CAL_IN_PLANNING";
+        /** Needs Action (Approved). */
+        public static final String CAL_NEEDS_ACTION = "CAL_NEEDS_ACTION";
+        /** Planned. */
+        public static final String CAL_PLANNED = "CAL_PLANNED";
+        /** Sent. */
+        public static final String CAL_SENT = "CAL_SENT";
     }
     public static final class CntntapprStatus {
         private CntntapprStatus() { }
+        /** Approved. */
+        public static final String CNTAP_APPROVED = "CNTAP_APPROVED";
+        /** Approval In Process. */
+        public static final String CNTAP_IN_PROCESS = "CNTAP_IN_PROCESS";
         /** Not Ready for Approval. */
         public static final String CNTAP_NOT_READY = "CNTAP_NOT_READY";
         /** Ready for Approval. */
         public static final String CNTAP_READY = "CNTAP_READY";
-        /** Approval In Process. */
-        public static final String CNTAP_IN_PROCESS = "CNTAP_IN_PROCESS";
-        /** Soft Rejected. */
-        public static final String CNTAP_SOFT_REJ = "CNTAP_SOFT_REJ";
         /** Rejected. */
         public static final String CNTAP_REJECTED = "CNTAP_REJECTED";
-        /** Approved. */
-        public static final String CNTAP_APPROVED = "CNTAP_APPROVED";
+        /** Soft Rejected. */
+        public static final String CNTAP_SOFT_REJ = "CNTAP_SOFT_REJ";
     }
     public static final class ComEventRolStatus {
         private ComEventRolStatus() { }
+        /** Closed. */
+        public static final String COM_ROLE_COMPLETED = "COM_ROLE_COMPLETED";
         /** Created. */
         public static final String COM_ROLE_CREATED = "COM_ROLE_CREATED";
         /** Read. */
         public static final String COM_ROLE_READ = "COM_ROLE_READ";
-        /** Closed. */
-        public static final String COM_ROLE_COMPLETED = "COM_ROLE_COMPLETED";
     }
     public static final class ComEventStatus {
         private ComEventStatus() { }
-        /** Entered. */
-        public static final String COM_ENTERED = "COM_ENTERED";
-        /** Pending. */
-        public static final String COM_PENDING = "COM_PENDING";
-        /** Read. */
-        public static final String COM_READ = "COM_READ";
-        /** In-Progress. */
-        public static final String COM_IN_PROGRESS = "COM_IN_PROGRESS";
-        /** Unknown Party. */
-        public static final String COM_UNKNOWN_PARTY = "COM_UNKNOWN_PARTY";
-        /** Closed. */
-        public static final String COM_COMPLETE = "COM_COMPLETE";
-        /** Resolved. */
-        public static final String COM_RESOLVED = "COM_RESOLVED";
-        /** Referred. */
-        public static final String COM_REFERRED = "COM_REFERRED";
         /** Bounced. */
         public static final String COM_BOUNCED = "COM_BOUNCED";
         /** Cancelled. */
         public static final String COM_CANCELLED = "COM_CANCELLED";
+        /** Closed. */
+        public static final String COM_COMPLETE = "COM_COMPLETE";
+        /** Entered. */
+        public static final String COM_ENTERED = "COM_ENTERED";
+        /** In-Progress. */
+        public static final String COM_IN_PROGRESS = "COM_IN_PROGRESS";
+        /** Pending. */
+        public static final String COM_PENDING = "COM_PENDING";
+        /** Read. */
+        public static final String COM_READ = "COM_READ";
+        /** Referred. */
+        public static final String COM_REFERRED = "COM_REFERRED";
+        /** Resolved. */
+        public static final String COM_RESOLVED = "COM_RESOLVED";
+        /** Unknown Party. */
+        public static final String COM_UNKNOWN_PARTY = "COM_UNKNOWN_PARTY";
     }
     public static final class ContactlstParty {
         private ContactlstParty() { }
-        /** Pending Acceptance. */
-        public static final String CLPT_PENDING = "CLPT_PENDING";
         /** Accepted. */
         public static final String CLPT_ACCEPTED = "CLPT_ACCEPTED";
-        /** Rejected. */
-        public static final String CLPT_REJECTED = "CLPT_REJECTED";
-        /** In Use. */
-        public static final String CLPT_IN_USE = "CLPT_IN_USE";
         /** Invalid. */
         public static final String CLPT_INVALID = "CLPT_INVALID";
+        /** In Use. */
+        public static final String CLPT_IN_USE = "CLPT_IN_USE";
+        /** Pending Acceptance. */
+        public static final String CLPT_PENDING = "CLPT_PENDING";
+        /** Rejected. */
+        public static final String CLPT_REJECTED = "CLPT_REJECTED";
     }
     public static final class ContentStatus {
         private ContentStatus() { }
-        /** In Progress. */
-        public static final String CTNT_IN_PROGRESS = "CTNT_IN_PROGRESS";
-        /** Initial Draft. */
-        public static final String CTNT_INITIAL_DRAFT = "CTNT_INITIAL_DRAFT";
-        /** Revised Draft. */
-        public static final String CTNT_REVISED_DRAFT = "CTNT_REVISED_DRAFT";
-        /** Final Draft. */
-        public static final String CTNT_FINAL_DRAFT = "CTNT_FINAL_DRAFT";
-        /** Published. */
-        public static final String CTNT_PUBLISHED = "CTNT_PUBLISHED";
-        /** Deactivated. */
-        public static final String CTNT_DEACTIVATED = "CTNT_DEACTIVATED";
         /** Available. */
         public static final String CTNT_AVAILABLE = "CTNT_AVAILABLE";
+        /** Deactivated. */
+        public static final String CTNT_DEACTIVATED = "CTNT_DEACTIVATED";
+        /** Final Draft. */
+        public static final String CTNT_FINAL_DRAFT = "CTNT_FINAL_DRAFT";
+        /** Initial Draft. */
+        public static final String CTNT_INITIAL_DRAFT = "CTNT_INITIAL_DRAFT";
+        /** In Progress. */
+        public static final String CTNT_IN_PROGRESS = "CTNT_IN_PROGRESS";
+        /** Published. */
+        public static final String CTNT_PUBLISHED = "CTNT_PUBLISHED";
+        /** Revised Draft. */
+        public static final String CTNT_REVISED_DRAFT = "CTNT_REVISED_DRAFT";
     }
     public static final class CustreqStts {
         private CustreqStts() { }
-        /** Submitted. */
-        public static final String CRQ_SUBMITTED = "CRQ_SUBMITTED";
         /** Accepted. */
         public static final String CRQ_ACCEPTED = "CRQ_ACCEPTED";
-        /** Reviewed. */
-        public static final String CRQ_REVIEWED = "CRQ_REVIEWED";
+        /** Cancelled. */
+        public static final String CRQ_CANCELLED = "CRQ_CANCELLED";
         /** Completed. */
         public static final String CRQ_COMPLETED = "CRQ_COMPLETED";
         /** Rejected. */
         public static final String CRQ_REJECTED = "CRQ_REJECTED";
-        /** Cancelled. */
-        public static final String CRQ_CANCELLED = "CRQ_CANCELLED";
         /** Reopened. */
         public static final String CRQ_REOPENED = "CRQ_REOPENED";
+        /** Reviewed. */
+        public static final String CRQ_REVIEWED = "CRQ_REVIEWED";
+        /** Submitted. */
+        public static final String CRQ_SUBMITTED = "CRQ_SUBMITTED";
     }
     public static final class Dataimport {
         private Dataimport() { }
-        /** Not processed. */
-        public static final String DATAIMP_NOT_PROC = "DATAIMP_NOT_PROC";
-        /** Imported. */
-        public static final String DATAIMP_IMPORTED = "DATAIMP_IMPORTED";
         /** Failed. */
         public static final String DATAIMP_FAILED = "DATAIMP_FAILED";
+        /** Imported. */
+        public static final String DATAIMP_IMPORTED = "DATAIMP_IMPORTED";
+        /** Not processed. */
+        public static final String DATAIMP_NOT_PROC = "DATAIMP_NOT_PROC";
     }
     public static final class EmplPositionStatus {
         private EmplPositionStatus() { }
-        /** Planned For. */
-        public static final String EMPL_POS_PLANNEDFOR = "EMPL_POS_PLANNEDFOR";
         /** Active/Open. */
         public static final String EMPL_POS_ACTIVE = "EMPL_POS_ACTIVE";
         /** Inactive/Closed. */
         public static final String EMPL_POS_INACTIVE = "EMPL_POS_INACTIVE";
+        /** Planned For. */
+        public static final String EMPL_POS_PLANNEDFOR = "EMPL_POS_PLANNEDFOR";
     }
     public static final class EntsyncRun {
         private EntsyncRun() { }
-        /** Not Started. */
-        public static final String ESR_NOT_STARTED = "ESR_NOT_STARTED";
-        /** Running. */
-        public static final String ESR_RUNNING = "ESR_RUNNING";
-        /** Offline Pending. */
-        public static final String ESR_PENDING = "ESR_PENDING";
         /** Complete. */
         public static final String ESR_COMPLETE = "ESR_COMPLETE";
-        /** Other Error. */
-        public static final String ESR_OTHER_ERROR = "ESR_OTHER_ERROR";
-        /** Service Call Error. */
-        public static final String ESR_SERVICE_ERROR = "ESR_SERVICE_ERROR";
         /** Data Error. */
         public static final String ESR_DATA_ERROR = "ESR_DATA_ERROR";
+        /** Not Started. */
+        public static final String ESR_NOT_STARTED = "ESR_NOT_STARTED";
+        /** Other Error. */
+        public static final String ESR_OTHER_ERROR = "ESR_OTHER_ERROR";
+        /** Offline Pending. */
+        public static final String ESR_PENDING = "ESR_PENDING";
+        /** Running. */
+        public static final String ESR_RUNNING = "ESR_RUNNING";
+        /** Service Call Error. */
+        public static final String ESR_SERVICE_ERROR = "ESR_SERVICE_ERROR";
     }
     public static final class EventStatus {
         private EventStatus() { }
-        /** Tentative. */
-        public static final String CAL_TENTATIVE = "CAL_TENTATIVE";
         /** Confirmed. */
         public static final String CAL_CONFIRMED = "CAL_CONFIRMED";
-        /** Scheduled. */
-        public static final String EVENT_SCHEDULED = "EVENT_SCHEDULED";
-        /** Confirmed. */
-        public static final String EVENT_CONFIRMED = "EVENT_CONFIRMED";
-        /** Started. */
-        public static final String EVENT_STARTED = "EVENT_STARTED";
+        /** Tentative. */
+        public static final String CAL_TENTATIVE = "CAL_TENTATIVE";
+        /** Cancelled. */
+        public static final String EVENT_CANCELLED = "EVENT_CANCELLED";
         /** Completed. */
         public static final String EVENT_COMPLETED = "EVENT_COMPLETED";
+        /** Confirmed. */
+        public static final String EVENT_CONFIRMED = "EVENT_CONFIRMED";
         /** On Hold. */
         public static final String EVENT_ON_HOLD = "EVENT_ON_HOLD";
         /** Rejected. */
         public static final String EVENT_REJECTED = "EVENT_REJECTED";
-        /** Cancelled. */
-        public static final String EVENT_CANCELLED = "EVENT_CANCELLED";
+        /** Scheduled. */
+        public static final String EVENT_SCHEDULED = "EVENT_SCHEDULED";
+        /** Started. */
+        public static final String EVENT_STARTED = "EVENT_STARTED";
     }
     public static final class ExampleStatus {
         private ExampleStatus() { }
-        /** In Design. */
-        public static final String EXST_IN_DESIGN = "EXST_IN_DESIGN";
-        /** Defined. */
-        public static final String EXST_DEFINED = "EXST_DEFINED";
         /** Approved. */
         public static final String EXST_APPROVED = "EXST_APPROVED";
-        /** Implemented. */
-        public static final String EXST_IMPLEMENTED = "EXST_IMPLEMENTED";
-        /** Tested. */
-        public static final String EXST_TESTED = "EXST_TESTED";
-        /** Complete. */
-        public static final String EXST_COMPLETE = "EXST_COMPLETE";
         /** Cancelled. */
         public static final String EXST_CANCELLED = "EXST_CANCELLED";
+        /** Complete. */
+        public static final String EXST_COMPLETE = "EXST_COMPLETE";
+        /** Defined. */
+        public static final String EXST_DEFINED = "EXST_DEFINED";
+        /** Implemented. */
+        public static final String EXST_IMPLEMENTED = "EXST_IMPLEMENTED";
+        /** In Design. */
+        public static final String EXST_IN_DESIGN = "EXST_IN_DESIGN";
+        /** Tested. */
+        public static final String EXST_TESTED = "EXST_TESTED";
     }
     public static final class FaAsgnStatus {
         private FaAsgnStatus() { }
-        /** Requested. */
-        public static final String FA_ASGN_REQUESTED = "FA_ASGN_REQUESTED";
         /** Assigned. */
         public static final String FA_ASGN_ASSIGNED = "FA_ASGN_ASSIGNED";
         /** Request Denied. */
         public static final String FA_ASGN_DENIED = "FA_ASGN_DENIED";
+        /** Requested. */
+        public static final String FA_ASGN_REQUESTED = "FA_ASGN_REQUESTED";
     }
     public static final class FinacctStatus {
         private FinacctStatus() { }
         /** Active. */
         public static final String FNACT_ACTIVE = "FNACT_ACTIVE";
-        /** Negative Pending Replenishment. */
-        public static final String FNACT_NEGPENDREPL = "FNACT_NEGPENDREPL";
-        /** Manually Frozen. */
-        public static final String FNACT_MANFROZEN = "FNACT_MANFROZEN";
         /** Cancelled. */
         public static final String FNACT_CANCELLED = "FNACT_CANCELLED";
+        /** Manually Frozen. */
+        public static final String FNACT_MANFROZEN = "FNACT_MANFROZEN";
+        /** Negative Pending Replenishment. */
+        public static final String FNACT_NEGPENDREPL = "FNACT_NEGPENDREPL";
     }
     public static final class FixedastMntStatus {
         private FixedastMntStatus() { }
-        /** Created. */
-        public static final String FAM_CREATED = "FAM_CREATED";
-        /** Scheduled. */
-        public static final String FAM_SCHEDULED = "FAM_SCHEDULED";
-        /** In Process. */
-        public static final String FAM_IN_PROCESS = "FAM_IN_PROCESS";
-        /** Completed. */
-        public static final String FAM_COMPLETED = "FAM_COMPLETED";
         /** Cancelled. */
         public static final String FAM_CANCELLED = "FAM_CANCELLED";
+        /** Completed. */
+        public static final String FAM_COMPLETED = "FAM_COMPLETED";
+        /** Created. */
+        public static final String FAM_CREATED = "FAM_CREATED";
+        /** In Process. */
+        public static final String FAM_IN_PROCESS = "FAM_IN_PROCESS";
+        /** Scheduled. */
+        public static final String FAM_SCHEDULED = "FAM_SCHEDULED";
     }
     public static final class HrDegreeStatus {
         private HrDegreeStatus() { }
         /** Completed. */
         public static final String HR_DS_COMPLETE = "HR_DS_COMPLETE";
-        /** Incomplete. */
-        public static final String HR_DS_INCOMPLETE = "HR_DS_INCOMPLETE";
         /** Deferred. */
         public static final String HR_DS_DEFERRED = "HR_DS_DEFERRED";
+        /** Incomplete. */
+        public static final String HR_DS_INCOMPLETE = "HR_DS_INCOMPLETE";
     }
     public static final class HrJobStatus {
         private HrJobStatus() { }
+        /** Contractor. */
+        public static final String HR_JS_CONTRACTOR = "HR_JS_CONTRACTOR";
         /** Full time. */
         public static final String HR_JS_FULLTIME = "HR_JS_FULLTIME";
         /** Part time. */
         public static final String HR_JS_PARTTIME = "HR_JS_PARTTIME";
-        /** Contractor. */
-        public static final String HR_JS_CONTRACTOR = "HR_JS_CONTRACTOR";
     }
     public static final class InvNonSerStts {
         private InvNonSerStts() { }
-        /** On Hold (Non-Serialized). */
-        public static final String INV_NS_ON_HOLD = "INV_NS_ON_HOLD";
         /** Defective (Non-Serialized). */
         public static final String INV_NS_DEFECTIVE = "INV_NS_DEFECTIVE";
+        /** On Hold (Non-Serialized). */
+        public static final String INV_NS_ON_HOLD = "INV_NS_ON_HOLD";
     }
     public static final class InvSerializedStts {
         private InvSerializedStts() { }
-        /** On Order. */
-        public static final String INV_ON_ORDER = "INV_ON_ORDER";
-        /** Available. */
-        public static final String INV_AVAILABLE = "INV_AVAILABLE";
-        /** Promised. */
-        public static final String INV_PROMISED = "INV_PROMISED";
-        /** Delivered. */
-        public static final String INV_DELIVERED = "INV_DELIVERED";
         /** Activated. */
         public static final String INV_ACTIVATED = "INV_ACTIVATED";
-        /** Deactivated. */
-        public static final String INV_DEACTIVATED = "INV_DEACTIVATED";
-        /** On Hold. */
-        public static final String INV_ON_HOLD = "INV_ON_HOLD";
+        /** Available. */
+        public static final String INV_AVAILABLE = "INV_AVAILABLE";
         /** Being Transfered. */
         public static final String INV_BEING_TRANSFERED = "INV_BEING_TRANSFERED";
         /** Being Transfered (Promised). */
         public static final String INV_BEING_TRANS_PRM = "INV_BEING_TRANS_PRM";
-        /** Returned. */
-        public static final String INV_RETURNED = "INV_RETURNED";
+        /** Deactivated. */
+        public static final String INV_DEACTIVATED = "INV_DEACTIVATED";
         /** Defective. */
         public static final String INV_DEFECTIVE = "INV_DEFECTIVE";
+        /** Delivered. */
+        public static final String INV_DELIVERED = "INV_DELIVERED";
+        /** On Hold. */
+        public static final String INV_ON_HOLD = "INV_ON_HOLD";
+        /** On Order. */
+        public static final String INV_ON_ORDER = "INV_ON_ORDER";
+        /** Promised. */
+        public static final String INV_PROMISED = "INV_PROMISED";
+        /** Returned. */
+        public static final String INV_RETURNED = "INV_RETURNED";
     }
     public static final class InventoryXferStts {
         private InventoryXferStts() { }
+        /** Cancelled. */
+        public static final String IXF_CANCELLED = "IXF_CANCELLED";
+        /** Complete. */
+        public static final String IXF_COMPLETE = "IXF_COMPLETE";
+        /** En-Route. */
+        public static final String IXF_EN_ROUTE = "IXF_EN_ROUTE";
         /** Requested. */
         public static final String IXF_REQUESTED = "IXF_REQUESTED";
         /** Scheduled. */
         public static final String IXF_SCHEDULED = "IXF_SCHEDULED";
-        /** En-Route. */
-        public static final String IXF_EN_ROUTE = "IXF_EN_ROUTE";
-        /** Complete. */
-        public static final String IXF_COMPLETE = "IXF_COMPLETE";
-        /** Cancelled. */
-        public static final String IXF_CANCELLED = "IXF_CANCELLED";
     }
     public static final class InvoiceProcessStts {
         private InvoiceProcessStts() { }
@@ -413,24 +413,24 @@ public final class StatusItemConstants {
         private InvoiceStatus() { }
         /** Approved. */
         public static final String INVOICE_APPROVED = "INVOICE_APPROVED";
-        /** Sent. */
-        public static final String INVOICE_SENT = "INVOICE_SENT";
-        /** Received. */
-        public static final String INVOICE_RECEIVED = "INVOICE_RECEIVED";
-        /** Paid. */
-        public static final String INVOICE_PAID = "INVOICE_PAID";
-        /** Write Off. */
-        public static final String INVOICE_WRITEOFF = "INVOICE_WRITEOFF";
         /** Cancelled. */
         public static final String INVOICE_CANCELLED = "INVOICE_CANCELLED";
         /** Invoiced to Partner. */
         public static final String INVOICE_INV_PTNR = "INVOICE_INV_PTNR";
-        /** Voided. */
-        public static final String INVOICE_VOIDED = "INVOICE_VOIDED";
         /** Pending. */
         public static final String INVOICE_IN_PROCESS = "INVOICE_IN_PROCESS";
+        /** Paid. */
+        public static final String INVOICE_PAID = "INVOICE_PAID";
         /** Ready. */
         public static final String INVOICE_READY = "INVOICE_READY";
+        /** Received. */
+        public static final String INVOICE_RECEIVED = "INVOICE_RECEIVED";
+        /** Sent. */
+        public static final String INVOICE_SENT = "INVOICE_SENT";
+        /** Voided. */
+        public static final String INVOICE_VOIDED = "INVOICE_VOIDED";
+        /** Write Off. */
+        public static final String INVOICE_WRITEOFF = "INVOICE_WRITEOFF";
     }
     public static final class LeadStatus {
         private LeadStatus() { }
@@ -443,16 +443,16 @@ public final class StatusItemConstants {
     }
     public static final class MktgCampStatus {
         private MktgCampStatus() { }
-        /** Planned. */
-        public static final String MKTG_CAMP_PLANNED = "MKTG_CAMP_PLANNED";
         /** Approved. */
         public static final String MKTG_CAMP_APPROVED = "MKTG_CAMP_APPROVED";
-        /** In Progress. */
-        public static final String MKTG_CAMP_INPROGRESS = "MKTG_CAMP_INPROGRESS";
-        /** Completed. */
-        public static final String MKTG_CAMP_COMPLETED = "MKTG_CAMP_COMPLETED";
         /** Cancelled. */
         public static final String MKTG_CAMP_CANCELLED = "MKTG_CAMP_CANCELLED";
+        /** Completed. */
+        public static final String MKTG_CAMP_COMPLETED = "MKTG_CAMP_COMPLETED";
+        /** In Progress. */
+        public static final String MKTG_CAMP_INPROGRESS = "MKTG_CAMP_INPROGRESS";
+        /** Planned. */
+        public static final String MKTG_CAMP_PLANNED = "MKTG_CAMP_PLANNED";
     }
     public static final class Na {
         private Na() { }
@@ -461,46 +461,44 @@ public final class StatusItemConstants {
     }
     public static final class OagisMpStatus {
         private OagisMpStatus() { }
-        /** System Error. */
-        public static final String OAGMP_SYS_ERROR = "OAGMP_SYS_ERROR";
-        /** In Message Received. */
-        public static final String OAGMP_RECEIVED = "OAGMP_RECEIVED";
-        /** In Processed - Success. */
-        public static final String OAGMP_PROC_SUCCESS = "OAGMP_PROC_SUCCESS";
-        /** In Processed - Error. */
-        public static final String OAGMP_PROC_ERROR = "OAGMP_PROC_ERROR";
         /** Error Confirm Sent. */
         public static final String OAGMP_ERRCONFSENT = "OAGMP_ERRCONFSENT";
-        /** Out Message Triggered. */
-        public static final String OAGMP_TRIGGERED = "OAGMP_TRIGGERED";
-        /** Out Generated - Success. */
-        public static final String OAGMP_OGEN_SUCCESS = "OAGMP_OGEN_SUCCESS";
         /** Out Generated - Error. */
         public static final String OAGMP_OGEN_ERROR = "OAGMP_OGEN_ERROR";
-        /** Out Message Sent. */
-        public static final String OAGMP_SENT = "OAGMP_SENT";
-        /** Out Message Send Error. */
-        public static final String OAGMP_SEND_ERROR = "OAGMP_SEND_ERROR";
-        /** Received Success Confirm. */
-        public static final String OAGMP_REC_SUC_CON = "OAGMP_REC_SUC_CON";
+        /** Out Generated - Success. */
+        public static final String OAGMP_OGEN_SUCCESS = "OAGMP_OGEN_SUCCESS";
+        /** In Processed - Error. */
+        public static final String OAGMP_PROC_ERROR = "OAGMP_PROC_ERROR";
+        /** In Processed - Success. */
+        public static final String OAGMP_PROC_SUCCESS = "OAGMP_PROC_SUCCESS";
+        /** In Message Received. */
+        public static final String OAGMP_RECEIVED = "OAGMP_RECEIVED";
         /** Received Error Confirm. */
         public static final String OAGMP_REC_ERR_CON = "OAGMP_REC_ERR_CON";
+        /** Received Success Confirm. */
+        public static final String OAGMP_REC_SUC_CON = "OAGMP_REC_SUC_CON";
+        /** Out Message Send Error. */
+        public static final String OAGMP_SEND_ERROR = "OAGMP_SEND_ERROR";
+        /** Out Message Sent. */
+        public static final String OAGMP_SENT = "OAGMP_SENT";
+        /** System Error. */
+        public static final String OAGMP_SYS_ERROR = "OAGMP_SYS_ERROR";
+        /** Out Message Triggered. */
+        public static final String OAGMP_TRIGGERED = "OAGMP_TRIGGERED";
     }
     public static final class OisgStatus {
         private OisgStatus() { }
+        /** Cancelled. */
+        public static final String OISG_CANCELLED = "OISG_CANCELLED";
+        /** Completed. */
+        public static final String OISG_COMPLETED = "OISG_COMPLETED";
         /** Created. */
         public static final String OISG_CREATED = "OISG_CREATED";
         /** Packed. */
         public static final String OISG_PACKED = "OISG_PACKED";
-        /** Completed. */
-        public static final String OISG_COMPLETED = "OISG_COMPLETED";
-        /** Cancelled. */
-        public static final String OISG_CANCELLED = "OISG_CANCELLED";
     }
     public static final class OrderDelSch {
         private OrderDelSch() { }
-        /** Supplier Submitted. */
-        public static final String ODS_SUBMITTED = "ODS_SUBMITTED";
         /** Accepted. */
         public static final String ODS_ACCEPTED = "ODS_ACCEPTED";
         /** Schedule Approved. */
@@ -509,94 +507,96 @@ public final class StatusItemConstants {
         public static final String ODS_ARRANGED = "ODS_ARRANGED";
         /** Delivery Cancelled. */
         public static final String ODS_CANCELLED = "ODS_CANCELLED";
+        /** Supplier Submitted. */
+        public static final String ODS_SUBMITTED = "ODS_SUBMITTED";
     }
     public static final class OrderItemStatus {
         private OrderItemStatus() { }
-        /** Created. */
-        public static final String ITEM_CREATED = "ITEM_CREATED";
         /** Approved. */
         public static final String ITEM_APPROVED = "ITEM_APPROVED";
-        /** Completed. */
-        public static final String ITEM_COMPLETED = "ITEM_COMPLETED";
-        /** Rejected. */
-        public static final String ITEM_REJECTED = "ITEM_REJECTED";
         /** Cancelled. */
         public static final String ITEM_CANCELLED = "ITEM_CANCELLED";
+        /** Completed. */
+        public static final String ITEM_COMPLETED = "ITEM_COMPLETED";
+        /** Created. */
+        public static final String ITEM_CREATED = "ITEM_CREATED";
         /** Performed. */
         public static final String ITEM_PERFORMED = "ITEM_PERFORMED";
+        /** Rejected. */
+        public static final String ITEM_REJECTED = "ITEM_REJECTED";
         /** Undeliverable. */
         public static final String ITEM_UNDELIVERABLE = "ITEM_UNDELIVERABLE";
     }
     public static final class OrderReturnStts {
         private OrderReturnStts() { }
-        /** Requested. */
-        public static final String RETURN_REQUESTED = "RETURN_REQUESTED";
         /** Accepted. */
         public static final String RETURN_ACCEPTED = "RETURN_ACCEPTED";
-        /** Received. */
-        public static final String RETURN_RECEIVED = "RETURN_RECEIVED";
+        /** Cancelled. */
+        public static final String RETURN_CANCELLED = "RETURN_CANCELLED";
         /** Completed. */
         public static final String RETURN_COMPLETED = "RETURN_COMPLETED";
         /** Manual Refund Required. */
         public static final String RETURN_MAN_REFUND = "RETURN_MAN_REFUND";
-        /** Cancelled. */
-        public static final String RETURN_CANCELLED = "RETURN_CANCELLED";
+        /** Received. */
+        public static final String RETURN_RECEIVED = "RETURN_RECEIVED";
+        /** Requested. */
+        public static final String RETURN_REQUESTED = "RETURN_REQUESTED";
     }
     public static final class OrderStatus {
         private OrderStatus() { }
-        /** Created. */
-        public static final String ORDER_CREATED = "ORDER_CREATED";
-        /** Processing. */
-        public static final String ORDER_PROCESSING = "ORDER_PROCESSING";
         /** Approved. */
         public static final String ORDER_APPROVED = "ORDER_APPROVED";
-        /** Sent. */
-        public static final String ORDER_SENT = "ORDER_SENT";
-        /** Held. */
-        public static final String ORDER_HOLD = "ORDER_HOLD";
-        /** Completed. */
-        public static final String ORDER_COMPLETED = "ORDER_COMPLETED";
-        /** Rejected. */
-        public static final String ORDER_REJECTED = "ORDER_REJECTED";
         /** Cancelled. */
         public static final String ORDER_CANCELLED = "ORDER_CANCELLED";
+        /** Completed. */
+        public static final String ORDER_COMPLETED = "ORDER_COMPLETED";
+        /** Created. */
+        public static final String ORDER_CREATED = "ORDER_CREATED";
+        /** Held. */
+        public static final String ORDER_HOLD = "ORDER_HOLD";
+        /** Processing. */
+        public static final String ORDER_PROCESSING = "ORDER_PROCESSING";
+        /** Rejected. */
+        public static final String ORDER_REJECTED = "ORDER_REJECTED";
+        /** Sent. */
+        public static final String ORDER_SENT = "ORDER_SENT";
         /** Undeliverable. */
         public static final String ORDER_UNDELIVERABLE = "ORDER_UNDELIVERABLE";
     }
     public static final class PartyInvStatus {
         private PartyInvStatus() { }
-        /** Invitation Sent. */
-        public static final String PARTYINV_SENT = "PARTYINV_SENT";
-        /** Invitation Pending. */
-        public static final String PARTYINV_PENDING = "PARTYINV_PENDING";
         /** Invitation Accepted. */
         public static final String PARTYINV_ACCEPTED = "PARTYINV_ACCEPTED";
-        /** Invitation Declined. */
-        public static final String PARTYINV_DECLINED = "PARTYINV_DECLINED";
         /** Invitation Cancelled. */
         public static final String PARTYINV_CANCELLED = "PARTYINV_CANCELLED";
+        /** Invitation Declined. */
+        public static final String PARTYINV_DECLINED = "PARTYINV_DECLINED";
+        /** Invitation Pending. */
+        public static final String PARTYINV_PENDING = "PARTYINV_PENDING";
+        /** Invitation Sent. */
+        public static final String PARTYINV_SENT = "PARTYINV_SENT";
     }
     public static final class PartyLeadStatus {
         private PartyLeadStatus() { }
-        /** New. */
-        public static final String PTYLEAD_NEW = "PTYLEAD_NEW";
         /** Assigned. */
         public static final String PTYLEAD_ASSIGNED = "PTYLEAD_ASSIGNED";
-        /** Qualified. */
-        public static final String PTYLEAD_QUALIFIED = "PTYLEAD_QUALIFIED";
         /** Converted. */
         public static final String PTYLEAD_CONVERTED = "PTYLEAD_CONVERTED";
-        /** Recycled. */
-        public static final String PTYLEAD_RECYCLED = "PTYLEAD_RECYCLED";
         /** Dead. */
         public static final String PTYLEAD_DEAD = "PTYLEAD_DEAD";
+        /** New. */
+        public static final String PTYLEAD_NEW = "PTYLEAD_NEW";
+        /** Qualified. */
+        public static final String PTYLEAD_QUALIFIED = "PTYLEAD_QUALIFIED";
+        /** Recycled. */
+        public static final String PTYLEAD_RECYCLED = "PTYLEAD_RECYCLED";
     }
     public static final class PartyStatus {
         private PartyStatus() { }
-        /** Enabled. */
-        public static final String PARTY_ENABLED = "PARTY_ENABLED";
         /** Disabled. */
         public static final String PARTY_DISABLED = "PARTY_DISABLED";
+        /** Enabled. */
+        public static final String PARTY_ENABLED = "PARTY_ENABLED";
     }
     public static final class PartyqualVerify {
         private PartyqualVerify() { }
@@ -607,123 +607,123 @@ public final class StatusItemConstants {
     }
     public static final class PaymentPrefStatus {
         private PaymentPrefStatus() { }
+        /** Authorized. */
+        public static final String PAYMENT_AUTHORIZED = "PAYMENT_AUTHORIZED";
+        /** Cancelled. */
+        public static final String PAYMENT_CANCELLED = "PAYMENT_CANCELLED";
+        /** Declined. */
+        public static final String PAYMENT_DECLINED = "PAYMENT_DECLINED";
+        /** Not-Authorized. */
+        public static final String PAYMENT_NOT_AUTH = "PAYMENT_NOT_AUTH";
         /** Not-Received. */
         public static final String PAYMENT_NOT_RECEIVED = "PAYMENT_NOT_RECEIVED";
         /** Received. */
         public static final String PAYMENT_RECEIVED = "PAYMENT_RECEIVED";
-        /** Not-Authorized. */
-        public static final String PAYMENT_NOT_AUTH = "PAYMENT_NOT_AUTH";
-        /** Authorized. */
-        public static final String PAYMENT_AUTHORIZED = "PAYMENT_AUTHORIZED";
-        /** Settled. */
-        public static final String PAYMENT_SETTLED = "PAYMENT_SETTLED";
-        /** Declined. */
-        public static final String PAYMENT_DECLINED = "PAYMENT_DECLINED";
         /** Refunded. */
         public static final String PAYMENT_REFUNDED = "PAYMENT_REFUNDED";
-        /** Cancelled. */
-        public static final String PAYMENT_CANCELLED = "PAYMENT_CANCELLED";
+        /** Settled. */
+        public static final String PAYMENT_SETTLED = "PAYMENT_SETTLED";
     }
     public static final class PickitemStatus {
         private PickitemStatus() { }
-        /** Pending. */
-        public static final String PICKITEM_PENDING = "PICKITEM_PENDING";
-        /** Completed. */
-        public static final String PICKITEM_COMPLETED = "PICKITEM_COMPLETED";
         /** Cancelled. */
         public static final String PICKITEM_CANCELLED = "PICKITEM_CANCELLED";
+        /** Completed. */
+        public static final String PICKITEM_COMPLETED = "PICKITEM_COMPLETED";
+        /** Pending. */
+        public static final String PICKITEM_PENDING = "PICKITEM_PENDING";
     }
     public static final class PicklistStatus {
         private PicklistStatus() { }
-        /** Input. */
-        public static final String PICKLIST_INPUT = "PICKLIST_INPUT";
         /** Assigned. */
         public static final String PICKLIST_ASSIGNED = "PICKLIST_ASSIGNED";
-        /** Printed. */
-        public static final String PICKLIST_PRINTED = "PICKLIST_PRINTED";
-        /** Picked. */
-        public static final String PICKLIST_PICKED = "PICKLIST_PICKED";
         /** Cancelled. */
         public static final String PICKLIST_CANCELLED = "PICKLIST_CANCELLED";
         /** Completed. */
         public static final String PICKLIST_COMPLETED = "PICKLIST_COMPLETED";
+        /** Input. */
+        public static final String PICKLIST_INPUT = "PICKLIST_INPUT";
+        /** Picked. */
+        public static final String PICKLIST_PICKED = "PICKLIST_PICKED";
+        /** Printed. */
+        public static final String PICKLIST_PRINTED = "PICKLIST_PRINTED";
     }
     public static final class PmntStatus {
         private PmntStatus() { }
-        /** Not Paid. */
-        public static final String PMNT_NOT_PAID = "PMNT_NOT_PAID";
-        /** Sent. */
-        public static final String PMNT_SENT = "PMNT_SENT";
-        /** Received. */
-        public static final String PMNT_RECEIVED = "PMNT_RECEIVED";
-        /** Confirmed. */
-        public static final String PMNT_CONFIRMED = "PMNT_CONFIRMED";
         /** Cancelled. */
         public static final String PMNT_CANCELLED = "PMNT_CANCELLED";
+        /** Confirmed. */
+        public static final String PMNT_CONFIRMED = "PMNT_CONFIRMED";
+        /** Not Paid. */
+        public static final String PMNT_NOT_PAID = "PMNT_NOT_PAID";
+        /** Received. */
+        public static final String PMNT_RECEIVED = "PMNT_RECEIVED";
+        /** Sent. */
+        public static final String PMNT_SENT = "PMNT_SENT";
         /** Voided. */
         public static final String PMNT_VOID = "PMNT_VOID";
     }
     public static final class PorderReturnStts {
         private PorderReturnStts() { }
-        /** Requested. */
-        public static final String SUP_RETURN_REQUESTED = "SUP_RETURN_REQUESTED";
         /** Accepted. */
         public static final String SUP_RETURN_ACCEPTED = "SUP_RETURN_ACCEPTED";
-        /** Shipped. */
-        public static final String SUP_RETURN_SHIPPED = "SUP_RETURN_SHIPPED";
-        /** Completed. */
-        public static final String SUP_RETURN_COMPLETED = "SUP_RETURN_COMPLETED";
         /** Cancelled. */
         public static final String SUP_RETURN_CANCELLED = "SUP_RETURN_CANCELLED";
+        /** Completed. */
+        public static final String SUP_RETURN_COMPLETED = "SUP_RETURN_COMPLETED";
+        /** Requested. */
+        public static final String SUP_RETURN_REQUESTED = "SUP_RETURN_REQUESTED";
+        /** Shipped. */
+        public static final String SUP_RETURN_SHIPPED = "SUP_RETURN_SHIPPED";
     }
     public static final class PostxStatus {
         private PostxStatus() { }
         /** Active. */
         public static final String POSTX_ACTIVE = "POSTX_ACTIVE";
-        /** Sold. */
-        public static final String POSTX_SOLD = "POSTX_SOLD";
-        /** Returned. */
-        public static final String POSTX_RETURNED = "POSTX_RETURNED";
-        /** Voided. */
-        public static final String POSTX_VOIDED = "POSTX_VOIDED";
+        /** Closed. */
+        public static final String POSTX_CLOSED = "POSTX_CLOSED";
         /** PaidIn. */
         public static final String POSTX_PAID_IN = "POSTX_PAID_IN";
         /** PaidOut. */
         public static final String POSTX_PAID_OUT = "POSTX_PAID_OUT";
-        /** Closed. */
-        public static final String POSTX_CLOSED = "POSTX_CLOSED";
+        /** Returned. */
+        public static final String POSTX_RETURNED = "POSTX_RETURNED";
+        /** Sold. */
+        public static final String POSTX_SOLD = "POSTX_SOLD";
+        /** Voided. */
+        public static final String POSTX_VOIDED = "POSTX_VOIDED";
     }
     public static final class ProductReviewStts {
         private ProductReviewStts() { }
-        /** Pending. */
-        public static final String PRR_PENDING = "PRR_PENDING";
         /** Approved. */
         public static final String PRR_APPROVED = "PRR_APPROVED";
         /** Deleted. */
         public static final String PRR_DELETED = "PRR_DELETED";
+        /** Pending. */
+        public static final String PRR_PENDING = "PRR_PENDING";
     }
     public static final class ProductionRun {
         private ProductionRun() { }
-        /** Created. */
-        public static final String PRUN_CREATED = "PRUN_CREATED";
-        /** Scheduled. */
-        public static final String PRUN_SCHEDULED = "PRUN_SCHEDULED";
-        /** Confirmed. */
-        public static final String PRUN_DOC_PRINTED = "PRUN_DOC_PRINTED";
-        /** Running. */
-        public static final String PRUN_RUNNING = "PRUN_RUNNING";
-        /** Completed. */
-        public static final String PRUN_COMPLETED = "PRUN_COMPLETED";
-        /** Closed. */
-        public static final String PRUN_CLOSED = "PRUN_CLOSED";
         /** Cancelled. */
         public static final String PRUN_CANCELLED = "PRUN_CANCELLED";
-        /** PO Pending. */
-        public static final String PRUN_OUTSRC_PEND = "PRUN_OUTSRC_PEND";
+        /** Closed. */
+        public static final String PRUN_CLOSED = "PRUN_CLOSED";
+        /** Completed. */
+        public static final String PRUN_COMPLETED = "PRUN_COMPLETED";
+        /** Created. */
+        public static final String PRUN_CREATED = "PRUN_CREATED";
+        /** Confirmed. */
+        public static final String PRUN_DOC_PRINTED = "PRUN_DOC_PRINTED";
         /** Outsourced. */
         public static final String PRUN_OUTSRCD = "PRUN_OUTSRCD";
+        /** PO Pending. */
+        public static final String PRUN_OUTSRC_PEND = "PRUN_OUTSRC_PEND";
         /** Reverted. */
         public static final String PRUN_REVERTED = "PRUN_REVERTED";
+        /** Running. */
+        public static final String PRUN_RUNNING = "PRUN_RUNNING";
+        /** Scheduled. */
+        public static final String PRUN_SCHEDULED = "PRUN_SCHEDULED";
     }
     public static final class ProjectAssgnStatus {
         private ProjectAssgnStatus() { }
@@ -741,27 +741,27 @@ public final class StatusItemConstants {
     }
     public static final class ProjectTaskStatus {
         private ProjectTaskStatus() { }
+        /** Cancelled. */
+        public static final String PTS_CANCELLED = "PTS_CANCELLED";
+        /** Completed. */
+        public static final String PTS_COMPLETED = "PTS_COMPLETED";
         /** Created. */
         public static final String PTS_CREATED = "PTS_CREATED";
-        /** Unassigned. */
-        public static final String PTS_CREATED_UA = "PTS_CREATED_UA";
         /** Assigned. */
         public static final String PTS_CREATED_AS = "PTS_CREATED_AS";
         /** In Progress. */
         public static final String PTS_CREATED_IP = "PTS_CREATED_IP";
-        /** Completed. */
-        public static final String PTS_COMPLETED = "PTS_COMPLETED";
+        /** Unassigned. */
+        public static final String PTS_CREATED_UA = "PTS_CREATED_UA";
         /** On Hold. */
         public static final String PTS_ON_HOLD = "PTS_ON_HOLD";
-        /** Cancelled. */
-        public static final String PTS_CANCELLED = "PTS_CANCELLED";
     }
     public static final class PrtyasgnStatus {
         private PrtyasgnStatus() { }
-        /** Offered. */
-        public static final String PRTYASGN_OFFERED = "PRTYASGN_OFFERED";
         /** Assigned. */
         public static final String PRTYASGN_ASSIGNED = "PRTYASGN_ASSIGNED";
+        /** Offered. */
+        public static final String PRTYASGN_OFFERED = "PRTYASGN_OFFERED";
         /** Unassigned. */
         public static final String PRTYASGN_UNASSIGNED = "PRTYASGN_UNASSIGNED";
     }
@@ -769,42 +769,42 @@ public final class StatusItemConstants {
         private PurchShipStatus() { }
         /** Created. */
         public static final String PURCH_SHIP_CREATED = "PURCH_SHIP_CREATED";
-        /** Shipped. */
-        public static final String PURCH_SHIP_SHIPPED = "PURCH_SHIP_SHIPPED";
         /** Received. */
         public static final String PURCH_SHIP_RECEIVED = "PURCH_SHIP_RECEIVED";
+        /** Shipped. */
+        public static final String PURCH_SHIP_SHIPPED = "PURCH_SHIP_SHIPPED";
     }
     public static final class QuoteStatus {
         private QuoteStatus() { }
-        /** Created. */
-        public static final String QUO_CREATED = "QUO_CREATED";
         /** Approved. */
         public static final String QUO_APPROVED = "QUO_APPROVED";
-        /** Sent. */
-        public static final String QUO_SENT = "QUO_SENT";
+        /** Cancelled. */
+        public static final String QUO_CANCELLED = "QUO_CANCELLED";
+        /** Created. */
+        public static final String QUO_CREATED = "QUO_CREATED";
         /** Finalized. */
         public static final String QUO_FINALIZED = "QUO_FINALIZED";
         /** Ordered. */
         public static final String QUO_ORDERED = "QUO_ORDERED";
-        /** Cancelled. */
-        public static final String QUO_CANCELLED = "QUO_CANCELLED";
         /** Rejected. */
         public static final String QUO_REJECTED = "QUO_REJECTED";
+        /** Sent. */
+        public static final String QUO_SENT = "QUO_SENT";
     }
     public static final class RequirementStatus {
         private RequirementStatus() { }
-        /** Proposed. */
-        public static final String REQ_PROPOSED = "REQ_PROPOSED";
-        /** Created. */
-        public static final String REQ_CREATED = "REQ_CREATED";
         /** Approved. */
         public static final String REQ_APPROVED = "REQ_APPROVED";
-        /** Ordered. */
-        public static final String REQ_ORDERED = "REQ_ORDERED";
-        /** Rejected. */
-        public static final String REQ_REJECTED = "REQ_REJECTED";
         /** Closed. */
         public static final String REQ_CLOSED = "REQ_CLOSED";
+        /** Created. */
+        public static final String REQ_CREATED = "REQ_CREATED";
+        /** Ordered. */
+        public static final String REQ_ORDERED = "REQ_ORDERED";
+        /** Proposed. */
+        public static final String REQ_PROPOSED = "REQ_PROPOSED";
+        /** Rejected. */
+        public static final String REQ_REJECTED = "REQ_REJECTED";
     }
     public static final class RoutingStatus {
         private RoutingStatus() { }
@@ -813,50 +813,50 @@ public final class StatusItemConstants {
     }
     public static final class ServiceStatus {
         private ServiceStatus() { }
+        /** Cancelled. */
+        public static final String SERVICE_CANCELLED = "SERVICE_CANCELLED";
+        /** Crashed. */
+        public static final String SERVICE_CRASHED = "SERVICE_CRASHED";
+        /** Failed. */
+        public static final String SERVICE_FAILED = "SERVICE_FAILED";
+        /** Finished. */
+        public static final String SERVICE_FINISHED = "SERVICE_FINISHED";
         /** Pending. */
         public static final String SERVICE_PENDING = "SERVICE_PENDING";
         /** Queued. */
         public static final String SERVICE_QUEUED = "SERVICE_QUEUED";
         /** Running. */
         public static final String SERVICE_RUNNING = "SERVICE_RUNNING";
-        /** Finished. */
-        public static final String SERVICE_FINISHED = "SERVICE_FINISHED";
-        /** Failed. */
-        public static final String SERVICE_FAILED = "SERVICE_FAILED";
-        /** Crashed. */
-        public static final String SERVICE_CRASHED = "SERVICE_CRASHED";
-        /** Cancelled. */
-        public static final String SERVICE_CANCELLED = "SERVICE_CANCELLED";
     }
     public static final class ShipmentStatus {
         private ShipmentStatus() { }
-        /** Input. */
-        public static final String SHIPMENT_INPUT = "SHIPMENT_INPUT";
-        /** Scheduled. */
-        public static final String SHIPMENT_SCHEDULED = "SHIPMENT_SCHEDULED";
-        /** Picked. */
-        public static final String SHIPMENT_PICKED = "SHIPMENT_PICKED";
-        /** Packed. */
-        public static final String SHIPMENT_PACKED = "SHIPMENT_PACKED";
-        /** Shipped. */
-        public static final String SHIPMENT_SHIPPED = "SHIPMENT_SHIPPED";
-        /** Delivered. */
-        public static final String SHIPMENT_DELIVERED = "SHIPMENT_DELIVERED";
         /** Cancelled. */
         public static final String SHIPMENT_CANCELLED = "SHIPMENT_CANCELLED";
+        /** Delivered. */
+        public static final String SHIPMENT_DELIVERED = "SHIPMENT_DELIVERED";
+        /** Input. */
+        public static final String SHIPMENT_INPUT = "SHIPMENT_INPUT";
+        /** Packed. */
+        public static final String SHIPMENT_PACKED = "SHIPMENT_PACKED";
+        /** Picked. */
+        public static final String SHIPMENT_PICKED = "SHIPMENT_PICKED";
+        /** Scheduled. */
+        public static final String SHIPMENT_SCHEDULED = "SHIPMENT_SCHEDULED";
+        /** Shipped. */
+        public static final String SHIPMENT_SHIPPED = "SHIPMENT_SHIPPED";
     }
     public static final class ShprtsgCsStatus {
         private ShprtsgCsStatus() { }
-        /** Not Started. */
-        public static final String SHRSCS_NOT_STARTED = "SHRSCS_NOT_STARTED";
-        /** Confirmed. */
-        public static final String SHRSCS_CONFIRMED = "SHRSCS_CONFIRMED";
         /** Accepted. */
         public static final String SHRSCS_ACCEPTED = "SHRSCS_ACCEPTED";
-        /** Voided. */
-        public static final String SHRSCS_VOIDED = "SHRSCS_VOIDED";
+        /** Confirmed. */
+        public static final String SHRSCS_CONFIRMED = "SHRSCS_CONFIRMED";
+        /** Not Started. */
+        public static final String SHRSCS_NOT_STARTED = "SHRSCS_NOT_STARTED";
         /** Shipped. */
         public static final String SHRSCS_SHIPPED = "SHRSCS_SHIPPED";
+        /** Voided. */
+        public static final String SHRSCS_VOIDED = "SHRSCS_VOIDED";
     }
     public static final class SynchronizeStatus {
         private SynchronizeStatus() { }
@@ -871,42 +871,42 @@ public final class StatusItemConstants {
         public static final String CAL_ACCEPTED = "CAL_ACCEPTED";
         /** Completed. */
         public static final String CAL_COMPLETED = "CAL_COMPLETED";
-        /** Scheduled. */
-        public static final String TASK_SCHEDULED = "TASK_SCHEDULED";
-        /** Confirmed. */
-        public static final String TASK_CONFIRMED = "TASK_CONFIRMED";
-        /** Started. */
-        public static final String TASK_STARTED = "TASK_STARTED";
+        /** Cancelled. */
+        public static final String TASK_CANCELLED = "TASK_CANCELLED";
         /** Completed. */
         public static final String TASK_COMPLETED = "TASK_COMPLETED";
+        /** Confirmed. */
+        public static final String TASK_CONFIRMED = "TASK_CONFIRMED";
         /** On Hold. */
         public static final String TASK_ON_HOLD = "TASK_ON_HOLD";
         /** Rejected. */
         public static final String TASK_REJECTED = "TASK_REJECTED";
-        /** Cancelled. */
-        public static final String TASK_CANCELLED = "TASK_CANCELLED";
+        /** Scheduled. */
+        public static final String TASK_SCHEDULED = "TASK_SCHEDULED";
+        /** Started. */
+        public static final String TASK_STARTED = "TASK_STARTED";
     }
     public static final class TimesheetStatus {
         private TimesheetStatus() { }
-        /** In-Process. */
-        public static final String TIMESHEET_IN_PROCESS = "TIMESHEET_IN_PROCESS";
-        /** Completed. */
-        public static final String TIMESHEET_COMPLETED = "TIMESHEET_COMPLETED";
         /** Approved. */
         public static final String TIMESHEET_APPROVED = "TIMESHEET_APPROVED";
+        /** Completed. */
+        public static final String TIMESHEET_COMPLETED = "TIMESHEET_COMPLETED";
+        /** In-Process. */
+        public static final String TIMESHEET_IN_PROCESS = "TIMESHEET_IN_PROCESS";
     }
     public static final class WeProjectStatus {
         private WeProjectStatus() { }
-        /** Planning. */
-        public static final String WEPR_PLANNING = "WEPR_PLANNING";
-        /** In Progress. */
-        public static final String WEPR_IN_PROGRESS = "WEPR_IN_PROGRESS";
-        /** Complete. */
-        public static final String WEPR_COMPLETE = "WEPR_COMPLETE";
-        /** On Hold. */
-        public static final String WEPR_ON_HOLD = "WEPR_ON_HOLD";
         /** Cancelled. */
         public static final String WEPR_CANCELLED = "WEPR_CANCELLED";
+        /** Complete. */
+        public static final String WEPR_COMPLETE = "WEPR_COMPLETE";
+        /** In Progress. */
+        public static final String WEPR_IN_PROGRESS = "WEPR_IN_PROGRESS";
+        /** On Hold. */
+        public static final String WEPR_ON_HOLD = "WEPR_ON_HOLD";
+        /** Planning. */
+        public static final String WEPR_PLANNING = "WEPR_PLANNING";
     }
     public static final class WefaAvailability {
         private WefaAvailability() { }
@@ -917,30 +917,30 @@ public final class StatusItemConstants {
     }
     public static final class WeffReviewStts {
         private WeffReviewStts() { }
-        /** Pending. */
-        public static final String WERV_PENDING = "WERV_PENDING";
         /** Approved. */
         public static final String WERV_APPROVED = "WERV_APPROVED";
         /** Deleted. */
         public static final String WERV_DELETED = "WERV_DELETED";
+        /** Pending. */
+        public static final String WERV_PENDING = "WERV_PENDING";
     }
     public static final class WefgStatus {
         private WefgStatus() { }
-        /** Created. */
-        public static final String WEGS_CREATED = "WEGS_CREATED";
-        /** Completed. */
-        public static final String WEGS_COMPLETED = "WEGS_COMPLETED";
         /** Cancelled. */
         public static final String WEGS_CANCELLED = "WEGS_CANCELLED";
+        /** Completed. */
+        public static final String WEGS_COMPLETED = "WEGS_COMPLETED";
+        /** Created. */
+        public static final String WEGS_CREATED = "WEGS_CREATED";
     }
     public static final class WepaAvailability {
         private WepaAvailability() { }
         /** Available. */
         public static final String WEPA_AV_AVAILABLE = "WEPA_AV_AVAILABLE";
-        /** Busy. */
-        public static final String WEPA_AV_BUSY = "WEPA_AV_BUSY";
         /** Away. */
         public static final String WEPA_AV_AWAY = "WEPA_AV_AWAY";
+        /** Busy. */
+        public static final String WEPA_AV_BUSY = "WEPA_AV_BUSY";
     }
 
 }

@@ -28,26 +28,26 @@ public final class PaymentTypeConstants {
 
     public static final class Disbursement {
         private Disbursement() { }
-        /** Payrol Payment. */
-        public static final String PAYROL_PAYMENT = "PAYROL_PAYMENT";
-        /** Disbursement. */
-        public static final String DISBURSEMENT = "DISBURSEMENT";
+        /** Commission Payment. */
+        public static final String COMMISSION_PAYMENT = "COMMISSION_PAYMENT";
         /** Customer Refund. */
         public static final String CUSTOMER_REFUND = "CUSTOMER_REFUND";
+        /** Gift Certificate Withdrawal. */
+        public static final String GC_WITHDRAWAL = "GC_WITHDRAWAL";
+        /** Payrol Payment. */
+        public static final String PAYROL_PAYMENT = "PAYROL_PAYMENT";
+        /** Pay Check. */
+        public static final String PAY_CHECK = "PAY_CHECK";
+        /** POS Paid Out. */
+        public static final String POS_PAID_OUT = "POS_PAID_OUT";
+        /** Tax Payment. */
+        public static final String TAX_PAYMENT = "TAX_PAYMENT";
         /** Vendor Payment. */
         public static final String VENDOR_PAYMENT = "VENDOR_PAYMENT";
         /** Vendor Prepayment. */
         public static final String VENDOR_PREPAY = "VENDOR_PREPAY";
-        /** Commission Payment. */
-        public static final String COMMISSION_PAYMENT = "COMMISSION_PAYMENT";
-        /** Pay Check. */
-        public static final String PAY_CHECK = "PAY_CHECK";
-        /** Tax Payment. */
-        public static final String TAX_PAYMENT = "TAX_PAYMENT";
-        /** Gift Certificate Withdrawal. */
-        public static final String GC_WITHDRAWAL = "GC_WITHDRAWAL";
-        /** POS Paid Out. */
-        public static final String POS_PAID_OUT = "POS_PAID_OUT";
+        /** Disbursement. */
+        public static final String DISBURSEMENT = "DISBURSEMENT";
     }
     public static final class PayCheck {
         private PayCheck() { }
@@ -60,31 +60,31 @@ public final class PaymentTypeConstants {
     }
     public static final class Receipt {
         private Receipt() { }
-        /** Receipt. */
-        public static final String RECEIPT = "RECEIPT";
-        /** Customer Payment. */
-        public static final String CUSTOMER_PAYMENT = "CUSTOMER_PAYMENT";
         /** Customer Deposit. */
         public static final String CUSTOMER_DEPOSIT = "CUSTOMER_DEPOSIT";
+        /** Customer Payment. */
+        public static final String CUSTOMER_PAYMENT = "CUSTOMER_PAYMENT";
         /** Gift Certificate Deposit. */
         public static final String GC_DEPOSIT = "GC_DEPOSIT";
-        /** POS Paid In. */
-        public static final String POS_PAID_IN = "POS_PAID_IN";
-        /** Partner Receipt. */
-        public static final String PARTNER_RECEIPT = "PARTNER_RECEIPT";
         /** Finance Charge Payment. */
         public static final String INTEREST_RECEIPT = "INTEREST_RECEIPT";
+        /** Partner Receipt. */
+        public static final String PARTNER_RECEIPT = "PARTNER_RECEIPT";
+        /** POS Paid In. */
+        public static final String POS_PAID_IN = "POS_PAID_IN";
         /** Vendor Credit. */
         public static final String VENDOR_CREDIT_RCPT = "VENDOR_CREDIT_RCPT";
+        /** Receipt. */
+        public static final String RECEIPT = "RECEIPT";
     }
     public static final class TaxPayment {
         private TaxPayment() { }
-        /** Sales Tax Payment. */
-        public static final String SALES_TAX_PAYMENT = "SALES_TAX_PAYMENT";
-        /** Payroll Tax Payment. */
-        public static final String PAYROLL_TAX_PAYMENT = "PAYROLL_TAX_PAYMENT";
         /** Income Tax Payment. */
         public static final String INCOME_TAX_PAYMENT = "INCOME_TAX_PAYMENT";
+        /** Payroll Tax Payment. */
+        public static final String PAYROLL_TAX_PAYMENT = "PAYROLL_TAX_PAYMENT";
+        /** Sales Tax Payment. */
+        public static final String SALES_TAX_PAYMENT = "SALES_TAX_PAYMENT";
     }
 
 }

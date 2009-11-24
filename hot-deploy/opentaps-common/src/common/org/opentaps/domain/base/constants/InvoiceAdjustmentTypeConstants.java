@@ -26,11 +26,11 @@ public final class InvoiceAdjustmentTypeConstants {
 
     private InvoiceAdjustmentTypeConstants() { }
 
-    /** Write Off. */
-    public static final String WRITEOFF = "WRITEOFF";
     /** Cash Discount. */
     public static final String CASH_DISCOUNT = "CASH_DISCOUNT";
     /** Early Payment Discount. */
     public static final String EARLY_PAY_DISCT = "EARLY_PAY_DISCT";
+    /** Write Off. */
+    public static final String WRITEOFF = "WRITEOFF";
 
 }

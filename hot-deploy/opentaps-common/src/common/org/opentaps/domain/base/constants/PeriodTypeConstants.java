@@ -26,27 +26,27 @@ public final class PeriodTypeConstants {
 
     private PeriodTypeConstants() { }
 
-    /** Fiscal Year. */
-    public static final String FISCAL_YEAR = "FISCAL_YEAR";
-    /** Fiscal Quarter. */
-    public static final String FISCAL_QUARTER = "FISCAL_QUARTER";
-    /** Fiscal Month. */
-    public static final String FISCAL_MONTH = "FISCAL_MONTH";
-    /** Fiscal Week. */
-    public static final String FISCAL_WEEK = "FISCAL_WEEK";
     /** Fiscal Bi-Week. */
     public static final String FISCAL_BIWEEK = "FISCAL_BIWEEK";
-    /** Sales Quarter. */
-    public static final String SALES_QUARTER = "SALES_QUARTER";
-    /** Sales Month. */
-    public static final String SALES_MONTH = "SALES_MONTH";
+    /** Fiscal Month. */
+    public static final String FISCAL_MONTH = "FISCAL_MONTH";
+    /** Fiscal Quarter. */
+    public static final String FISCAL_QUARTER = "FISCAL_QUARTER";
+    /** Fiscal Week. */
+    public static final String FISCAL_WEEK = "FISCAL_WEEK";
+    /** Fiscal Year. */
+    public static final String FISCAL_YEAR = "FISCAL_YEAR";
     /** Rate amount per Hour. */
     public static final String RATE_HOUR = "RATE_HOUR";
-    /** Rate amount per Week. */
-    public static final String RATE_WEEK = "RATE_WEEK";
     /** Rate amount per month. */
     public static final String RATE_MONTH = "RATE_MONTH";
     /** Rate amount per Quarter. */
     public static final String RATE_QUARTER = "RATE_QUARTER";
+    /** Rate amount per Week. */
+    public static final String RATE_WEEK = "RATE_WEEK";
+    /** Sales Month. */
+    public static final String SALES_MONTH = "SALES_MONTH";
+    /** Sales Quarter. */
+    public static final String SALES_QUARTER = "SALES_QUARTER";
 
 }
