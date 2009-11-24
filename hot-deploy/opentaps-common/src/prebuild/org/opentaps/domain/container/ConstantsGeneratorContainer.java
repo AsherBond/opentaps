@@ -408,7 +408,7 @@ public class ConstantsGeneratorContainer implements Container {
 
             List<GenericValue> entities;
             try {
-                entities = delegator.findList(getEntityName(), getWhereCondition(), fields, null, null, false);
+                entities = delegator.findList(getEntityName(), getWhereCondition(), fields, orderBy, null, false);
             } catch (GenericEntityException e) {
                 throw new ConstantException("GenericEntityException: " + e.getMessage());
             }
