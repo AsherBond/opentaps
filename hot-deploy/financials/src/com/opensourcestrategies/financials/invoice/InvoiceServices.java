@@ -97,6 +97,7 @@ import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.base.constants.ContactMechPurposeTypeConstants;
 import org.opentaps.domain.base.entities.InvoiceRole;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.foundation.entity.EntityNotFoundException;
@@ -361,22 +362,22 @@ public final class InvoiceServices {
                         EntityCondition.makeCondition(Arrays.asList(
                                 EntityCondition.makeCondition("invoiceId", invoiceId), 
                                 EntityCondition.makeCondition(Arrays.asList(
-                                        EntityCondition.makeCondition("contactMechPurposeTypeId", "BILLING_LOCATION"), 
-                                        EntityCondition.makeCondition("contactMechPurposeTypeId", "PAYMENT_LOCATION")), 
+                                        EntityCondition.makeCondition("contactMechPurposeTypeId", ContactMechPurposeTypeConstants.BILLING_LOCATION), 
+                                        EntityCondition.makeCondition("contactMechPurposeTypeId", ContactMechPurposeTypeConstants.PAYMENT_LOCATION)), 
                                         EntityOperator.OR)), EntityOperator.AND));
 
                 input = UtilMisc.<String, Object>toMap(
                         "invoiceId", invoiceId,
                         "contactMechId", contactMechId,
                         "userLogin", userLogin,
-                        "contactMechPurposeTypeId", "BILLING_LOCATION"
+                        "contactMechPurposeTypeId", ContactMechPurposeTypeConstants.BILLING_LOCATION
                 );
                 results = dispatcher.runSync("createInvoiceContactMech", input);
                 if (ServiceUtil.isError(results)) {
                     return results;
                 }
 
-                input.put("contactMechPurposeTypeId", "PAYMENT_LOCATION");
+                input.put("contactMechPurposeTypeId", ContactMechPurposeTypeConstants.PAYMENT_LOCATION);
                 results = dispatcher.runSync("createInvoiceContactMech", input);
                 if (ServiceUtil.isError(results)) {
                     return results;
