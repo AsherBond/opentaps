@@ -28,6 +28,7 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.order.OrderReadHelper;
+import org.ofbiz.party.contact.ContactMechWorker;
 
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.order.Order;
@@ -104,3 +105,16 @@ if (UtilValidate.isNotEmpty(cmvm)) {
 }
 
 context{"hasPhoneNumbers"} = hasPhoneNumbers;
+
+//find list of shipping addresses
+facilityMaps = FastList.newInstance();
+facilities = UtilCommon.getOrganizationReceivingFacilities(order.getBillToCustomerPartyId(), delegator);
+if (UtilValidate.isNotEmpty(facilities)) {
+    for (facility : facilities) {
+        facilityMaps.add(UtilMisc.toMap(
+           "facility", facility,
+           "facilityContactMechList", ContactMechWorker.getFacilityContactMechValueMaps(delegator, facility.get("facilityId"), false, null)
+        ));
+    }
+    context{"facilityMaps"} = facilityMaps;
+}

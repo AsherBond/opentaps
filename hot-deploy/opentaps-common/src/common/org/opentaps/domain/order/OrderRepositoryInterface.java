@@ -417,4 +417,14 @@ public interface OrderRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException
      */
     public List<OrderItemShipGrpInvRes> getBackOrderedInventoryReservations(String productId, String facilityId) throws RepositoryException;
+
+    /**
+     * Remove all <code>OrderConatctMech</code> with given purpose and order identifier and add new entity.
+     * @param orderId an order identifier
+     * @param contactMechId a contact mech id that should be postal address or null
+     * @param purposeTypeId contact mech purpose type
+     * @throws RepositoryException
+     */
+    public void updateOrderAddress(String orderId, String contactMechId, String purposeTypeId) throws RepositoryException;
+
 }

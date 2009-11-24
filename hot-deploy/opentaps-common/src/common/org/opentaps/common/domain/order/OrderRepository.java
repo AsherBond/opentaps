@@ -18,12 +18,16 @@ package org.opentaps.common.domain.order;
 
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.common.DataModelConstants;
-import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
@@ -526,6 +530,7 @@ public class OrderRepository extends Repository implements OrderRepositoryInterf
     }
 
     /** {@inheritDoc} */
+    @SuppressWarnings("unchecked")
     public List<OrderItemShipGrpInvRes> getBackOrderedInventoryReservations(String productId, String facilityId) throws RepositoryException {
         String hql = "from OrderItemShipGrpInvRes eo where eo.inventoryItem.productId = :productId and eo.inventoryItem.facilityId = :facilityId and eo.quantityNotAvailable is not null order by eo.reservedDatetime, eo.sequenceId";
         try {
@@ -545,6 +550,25 @@ public class OrderRepository extends Repository implements OrderRepositoryInterf
             return resultSet;
         } catch (InfrastructureException e) {
             throw new RepositoryException(e);
+        }
+    }
+
+    /** {@inheritDoc} */
+    public void updateOrderAddress(String orderId, String contactMechId, String purposeTypeId) throws RepositoryException {
+        // remove all contact mechs with given purpose for order
+        List<OrderContactMech> contactMechs = findList(OrderContactMech.class,
+                map(OrderContactMech.Fields.orderId, orderId, OrderContactMech.Fields.contactMechPurposeTypeId, purposeTypeId));
+        for (OrderContactMech contactMech : contactMechs) {
+            remove(contactMech);
+        }
+
+        if (UtilValidate.isNotEmpty(contactMechId)) {
+            // add new one
+            OrderContactMech orderContactMech = new OrderContactMech();
+            orderContactMech.setOrderId(orderId);
+            orderContactMech.setContactMechId(contactMechId);
+            orderContactMech.setContactMechPurposeTypeId(purposeTypeId);
+            createOrUpdate(orderContactMech);
         }
     }
 

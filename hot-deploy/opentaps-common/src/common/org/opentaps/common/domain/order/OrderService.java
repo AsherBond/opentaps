@@ -35,6 +35,8 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.base.constants.ContactMechPurposeTypeConstants;
 import org.opentaps.domain.base.constants.OrderAdjustmentTypeConstants;
 import org.opentaps.domain.base.constants.StatusItemConstants;
 import org.opentaps.domain.base.entities.OrderItemShipGroupAssoc;
@@ -53,6 +55,7 @@ import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.order.OrderServiceInterface;
 import org.opentaps.domain.order.OrderSpecificationInterface;
 import org.opentaps.foundation.entity.Entity;
+import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
@@ -64,6 +67,7 @@ public class OrderService extends Service implements OrderServiceInterface {
 
     protected String orderId;
     protected String noteText;
+    protected String newOrderContactMechId;
 
     /** {@inheritDoc} */
     public void setOrderId(String orderId) {
@@ -630,4 +634,54 @@ public class OrderService extends Service implements OrderServiceInterface {
             throw new ServiceException(e);
         }
     }
+
+    /** {@inheritDoc} */
+    public void setNewOrderContactMechId(String newOrderContactMechId) {
+        this.newOrderContactMechId = newOrderContactMechId;
+    }
+
+    /** {@inheritDoc} */
+    public void updateOrderShippingAddress() throws ServiceException {
+
+        if ("_NA_".equals(newOrderContactMechId)) {
+            return;
+        }
+
+        try {
+
+            DomainsLoader dl = new DomainsLoader(getInfrastructure(), getUser());
+            OrderRepositoryInterface repository = dl.loadDomainsDirectory().getOrderDomain().getOrderRepository();
+            repository.setInfrastructure(getInfrastructure());
+            repository.setUser(getUser());
+
+            repository.updateOrderAddress(orderId, newOrderContactMechId, ContactMechPurposeTypeConstants.SHIPPING_LOCATION);
+
+        } catch (RepositoryException e) {
+            throw new ServiceException(e);
+        }
+
+    }
+
+    /** {@inheritDoc} */
+    public void updateOrderBillingAddress() throws ServiceException {
+
+        if ("_NA_".equals(newOrderContactMechId)) {
+            return;
+        }
+
+        try {
+
+            DomainsLoader dl = new DomainsLoader(getInfrastructure(), getUser());
+            OrderRepositoryInterface repository = dl.loadDomainsDirectory().getOrderDomain().getOrderRepository();
+            repository.setInfrastructure(getInfrastructure());
+            repository.setUser(getUser());
+
+            repository.updateOrderAddress(orderId, newOrderContactMechId, ContactMechPurposeTypeConstants.BILLING_LOCATION);
+
+        } catch (RepositoryException e) {
+            throw new ServiceException(e);
+        }
+
+    }
+
 }

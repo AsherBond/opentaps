@@ -663,6 +663,12 @@
         <response name="error" type="request" value="createOrderMainScreen"/>
     </request-map>
 
+    <request-map uri="setPurchOrderShippingAddress">
+        <security https="true" auth="true" />
+        <event type="service" invoke="updateOrderShippingAddress" />
+        <response name="success" type="request-redirect" value="orderview" />
+        <response name="error" type="view" value="orderview"/>
+    </request-map>
 
     <!-- ===================== -->
     <!-- Supplier Tab Mappings -->

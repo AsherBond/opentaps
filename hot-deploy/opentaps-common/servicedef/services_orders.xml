@@ -311,4 +311,26 @@ under the License.
         <attribute name="roleTypeId" type="String" mode="IN" optional="false"/>
     </service>
 
+    <service name="updateOrderShippingAddress" engine="pojo" auth="true"
+        invoke="updateOrderShippingAddress" location="org.opentaps.common.domain.order.OrderService">
+        <description>Change shipping address for a purchase order, including blank</description>
+        <required-permissions join-type="AND">
+            <check-permission permission="ORDERMGR" action="CREATE"/>
+            <check-permission permission="ORDERMGR" action="DELETE"/>
+        </required-permissions>
+        <attribute name="orderId" mode="IN" type="String" />
+        <attribute name="newOrderContactMechId" mode="IN" type="String" optional="true" />
+    </service>
+
+    <service name="updateOrderBillingAddress" engine="pojo" auth="true"
+        invoke="updateOrderBillingAddress" location="org.opentaps.common.domain.order.OrderService">
+        <description>Change shipping address for a purchase order, including blank</description>
+        <required-permissions join-type="AND">
+            <check-permission permission="ORDERMGR" action="CREATE"/>
+            <check-permission permission="ORDERMGR" action="DELETE"/>
+        </required-permissions>
+        <attribute name="orderId" mode="IN" type="String" />
+        <attribute name="newOrderContactMechId" mode="IN" type="String" optional="true" />
+    </service>
+
 </services>

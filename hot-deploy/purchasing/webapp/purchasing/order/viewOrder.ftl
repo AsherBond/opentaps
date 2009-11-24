@@ -38,7 +38,7 @@ The whole idea is to keep things simple and not use the screen widget where unne
     </td>
     <td width="10" nowrap="nowrap">&nbsp;</td>
     <td width="50%" valign="top">
-      <@include location="component://opentaps-common/webapp/common/order/orderContactInfo.ftl"/>
+      <@include location="component://purchasing/webapp/purchasing/order/orderview/orderContactInfo.ftl"/>
     </td>
   </tr>
 </table>

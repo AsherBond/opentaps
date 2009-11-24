@@ -29,6 +29,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.domain.base.constants.StatusItemConstants;
 
 
 public class PurchasingOrderServices {
@@ -59,9 +60,9 @@ public class PurchasingOrderServices {
         // Check the Order Status
         GenericValue order = delegator.findByPrimaryKey("OrderHeader", UtilMisc.toMap("orderId", orderId));
         if (UtilValidate.isEmpty(order) ||
-                !( "ORDER_APPROVED".equals(order.get("statusId")) ||
-                        "ORDER_HOLD".equals(order.get("statusId")) ||
-                        "ORDER_CREATED".equals(order.get("statusId")))) {
+                !( StatusItemConstants.OrderStatus.ORDER_APPROVED.equals(order.get("statusId")) ||
+                        StatusItemConstants.OrderStatus.ORDER_HOLD.equals(order.get("statusId")) ||
+                        StatusItemConstants.OrderStatus.ORDER_CREATED.equals(order.get("statusId")))) {
             return UtilMessage.createAndLogServiceFailure("PurchError_UpdateOrderItemEstimatedDeliveryDateFail", locale, MODULE);
         }
 
