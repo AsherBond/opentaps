@@ -23,20 +23,37 @@
   <!-- several arrival phases can be set: for each phase, you can set
   the mean inter-arrival time between new clients and the phase
   duration -->
+   <!-- very low load: add 2 users in 1 minute -->
    <arrivalphase phase="1" duration="1" unit="minute">
      <users interarrival="25" unit="second"/>
    </arrivalphase>
+   <!-- low load: add 8 users in 2 minutes  -->
    <arrivalphase phase="2" duration="2" unit="minute">
      <users interarrival="15" unit="second"/>
    </arrivalphase>
+   <!-- slowing down: add 2 users in 2 minutes -->
    <arrivalphase phase="3" duration="2" unit="minute">
-     <users interarrival="45" unit="second"/>
+     <users interarrival="60" unit="second"/>
    </arrivalphase>
+   <!-- medium load: add 12 users in 2 minutes  -->
    <arrivalphase phase="4" duration="2" unit="minute">
-     <users interarrival="15" unit="second"/>
+     <users interarrival="10" unit="second"/>
    </arrivalphase>
+   <!-- slowing down: add 2 users in 1 minutes -->
    <arrivalphase phase="5" duration="1" unit="minute">
-     <users interarrival="25" unit="second"/>
+     <users interarrival="30" unit="second"/>
+   </arrivalphase>
+   <!-- medium load: 18 users in 3 minutes -->
+   <arrivalphase phase="6" duration="3" unit="minute">
+     <users interarrival="10" unit="second"/>
+   </arrivalphase>
+   <!-- heavy load, add up to 600 users -->
+   <arrivalphase phase="7" duration="10" unit="minute">
+     <users interarrival="1" unit="second"/>
+   </arrivalphase>
+   <!-- slowing down: add 8 users in 2 minutes -->
+   <arrivalphase phase="8" duration="2" unit="minute">
+     <users interarrival="15" unit="second"/>
    </arrivalphase>
   </load>
 
@@ -81,7 +98,6 @@
          <match do="abort" when="match">The Following Errors Occurred</match>
          <http url="/crmsfa/control/ordersMain" method="GET" version="1.1"/>
        </request>
-
      </transaction>
 
      <transaction name="createSalesOrder">
@@ -126,12 +142,14 @@
 
        <request>
          <match do="abort" when="match">The Following Errors Occurred</match>
-         <http url="/crmsfa/control/updateCheckoutPayment?checkOutPaymentId=EXT_OFFLINE&amp;finalizeMode=payment" method="GET" version="1.1"/>
+         <http url="/crmsfa/control/updateCheckoutPayment" method="POST" version="1.1"
+               contents="checkOutPaymentId=EXT_OFFLINE&amp;finalizeMode=payment"/>
        </request>
 
        <request>
          <match do="abort" when="match">The Following Errors Occurred</match>
-         <http url="/crmsfa/control/updateShipGroup?shipGroupSeqId=0&amp;maySplit=N&amp;isGift=N&amp;isCOD=N&amp;contactMechId=9015&amp;carrierPartyId=UPS&amp;shipmentMethodTypeId=AIR&amp;thirdPartyAccountNumber=&amp;thirdPartyPostalCode=&amp;thirdPartyCountryCode=" method="GET" version="1.1"/>
+         <http url="/crmsfa/control/updateShipGroup" method="POST" version="1.1"
+               contents="shipGroupSeqId=0&amp;maySplit=N&amp;isGift=N&amp;isCOD=N&amp;contactMechId=9015&amp;carrierPartyId=UPS&amp;shipmentMethodTypeId=AIR&amp;thirdPartyAccountNumber=&amp;thirdPartyPostalCode=&amp;thirdPartyCountryCode="/>
        </request>
 
        <request>
@@ -157,7 +175,8 @@
 
        <request subst="true">
          <match do="abort" when="match">The Following Errors Occurred</match>
-         <http url="/crmsfa/control/changeOrderItemStatus?statusId=ITEM_APPROVED&amp;orderId=%%_orderId%%" method="GET" version="1.1"/>
+         <http url="/crmsfa/control/changeOrderItemStatus" method="POST" version="1.1"
+               contents="statusId=ITEM_APPROVED&amp;orderId=%%_orderId%%"/>
        </request>
      </transaction>
 
@@ -231,12 +250,14 @@
 
        <request>
          <match do="abort" when="match">The Following Errors Occurred</match>
-         <http url="/crmsfa/control/updateCheckoutPayment?checkOutPaymentId=EXT_OFFLINE&amp;finalizeMode=payment" method="GET" version="1.1"/>
+         <http url="/crmsfa/control/updateCheckoutPayment" method="POST" version="1.1"
+               contents="checkOutPaymentId=EXT_OFFLINE&amp;finalizeMode=payment"/>
        </request>
 
        <request>
          <match do="abort" when="match">The Following Errors Occurred</match>
-         <http url="/crmsfa/control/updateShipGroup?shipGroupSeqId=0&amp;maySplit=N&amp;isGift=N&amp;isCOD=N&amp;contactMechId=9015&amp;carrierPartyId=UPS&amp;shipmentMethodTypeId=AIR&amp;thirdPartyAccountNumber=&amp;thirdPartyPostalCode=&amp;thirdPartyCountryCode=" method="GET" version="1.1"/>
+         <http url="/crmsfa/control/updateShipGroup" method="POST" version="1.1"
+               contents="shipGroupSeqId=0&amp;maySplit=N&amp;isGift=N&amp;isCOD=N&amp;contactMechId=9015&amp;carrierPartyId=UPS&amp;shipmentMethodTypeId=AIR&amp;thirdPartyAccountNumber=&amp;thirdPartyPostalCode=&amp;thirdPartyCountryCode="/>
        </request>
 
        <request>
@@ -263,14 +284,16 @@
 
        <request subst="true">
          <match do="abort" when="match">The Following Errors Occurred</match>
-         <http url="/crmsfa/control/changeOrderItemStatus?statusId=ITEM_APPROVED&amp;orderId=%%_orderId%%" method="GET" version="1.1"/>
+         <http url="/crmsfa/control/changeOrderItemStatus" method="POST" version="1.1"
+               contents="statusId=ITEM_APPROVED&amp;orderId=%%_orderId%%"/>
        </request>
      </transaction>
 
      <transaction name="cancelSalesOrder">
        <request subst="true">
          <match do="abort" when="match">The Following Errors Occurred</match>
-         <http url="/crmsfa/control/changeOrderItemStatus?statusId=ORDER_HOLD&amp;orderId=%%_orderId%%" method="GET" version="1.1"/>
+         <http url="/crmsfa/control/changeOrderItemStatus" method="POST" version="1.1"
+                contents="statusId=ORDER_HOLD&amp;orderId=%%_orderId%%"/>
        </request>
      </transaction>
 
@@ -372,7 +395,8 @@
      <transaction name="approvePurchaseOrder">
        <request subst="true">
          <match do="abort" when="match">The Following Errors Occurred</match>
-         <http url="/purchasing/control/changeOrderItemStatus?statusId=ITEM_APPROVED&amp;orderId=%%_orderId%%" method="GET" version="1.1"/>
+         <http url="/purchasing/control/changeOrderItemStatus" method="POST" version="1.1"
+               contents="statusId=ITEM_APPROVED&amp;orderId=%%_orderId%%"/>
        </request>
      </transaction>
 
@@ -474,12 +498,16 @@
      <transaction name="approvePurchaseOrder">
        <request subst="true">
          <match do="abort" when="match">The Following Errors Occurred</match>
-         <http url="/purchasing/control/changeOrderItemStatus?statusId=ITEM_APPROVED&amp;orderId=%%_orderId%%" method="GET" version="1.1"/>
+         <http url="/purchasing/control/changeOrderItemStatus" method="POST" version="1.1"
+               contents="statusId=ITEM_APPROVED&amp;orderId=%%_orderId%%"/>
        </request>
      </transaction>
 
      <transaction name="cancelPurchaseOrder">
-       <request subst="true"><http url="/purchasing/control/changeOrderStatus/orderview?statusId=ORDER_HOLD&amp;orderId=%%_orderId%%" method="GET" version="1.1"/></request>
+       <request subst="true">
+         <http url="/purchasing/control/changeOrderStatus/orderview" method="POST" version="1.1"
+               contents="statusId=ORDER_HOLD&amp;orderId=%%_orderId%%"/>
+       </request>
      </transaction>
    </session>
 
