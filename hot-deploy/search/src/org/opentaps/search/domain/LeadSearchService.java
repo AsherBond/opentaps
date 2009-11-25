@@ -25,6 +25,7 @@ import org.hibernate.search.FullTextQuery;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.domain.base.constants.RoleTypeConstants;
 import org.opentaps.domain.base.entities.PartyRole;
 import org.opentaps.domain.base.entities.PartyRolePk;
 import org.opentaps.domain.party.Lead;
@@ -47,7 +48,7 @@ public class LeadSearchService extends SearchService implements LeadSearchServic
 
     /** {@inheritDoc} */
     public void makeQuery(StringBuilder sb) {
-        PartySearch.makePersonQuery(sb, "PROSPECT");
+        PartySearch.makePersonQuery(sb, RoleTypeConstants.PROSPECT);
     }
 
     /** {@inheritDoc} */
@@ -86,7 +87,7 @@ public class LeadSearchService extends SearchService implements LeadSearchServic
             Class c = (Class) o[classIndex];
             if (c.equals(PartyRole.class)) {
                 PartyRolePk pk = (PartyRolePk) o[idIndex];
-                if ("PROSPECT".equals(pk.getRoleTypeId())) {
+                if (RoleTypeConstants.PROSPECT.equals(pk.getRoleTypeId())) {
                     leadIds.add(pk.getPartyId());
                 }
             }
