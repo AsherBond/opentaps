@@ -67,6 +67,8 @@ public abstract class PartyLookupConfiguration {
     public static final String OUT_PHONE_ID = "primaryTelecomNumberId";
     public static final String OUT_EMAIL = "primaryEmail";
     public static final String OUT_EMAIL_ID = "primaryEmailId";
+    public static final String IN_PARTY_ID_TO = "partyIdTo";
+    public static final String IN_ROLE_TO = "roleTypeIdTo";
 
     public static final List<String> LIST_OUT_FIELDS = Arrays.asList(
         INOUT_PARTY_ID,

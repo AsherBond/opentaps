@@ -16,6 +16,13 @@
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<div class="subSectionBlock">
+<@displayLink href="createContactForm?accountPartyId=${partySummary.partyId}" text="${uiLabelMap.CrmCreateNew}" class="buttontext"/>
+<@gwtWidget id="contactsSubListView" partyId="${partySummary.partyId}"/>
+</div>
+
 <a name="ListContacts"></a>
 <div class="subSectionHeader">
     <div class="subSectionTitle">${uiLabelMap.CrmContacts}</div>

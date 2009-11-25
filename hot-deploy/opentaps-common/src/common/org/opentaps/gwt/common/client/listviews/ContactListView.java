@@ -69,4 +69,7 @@ public class ContactListView extends PartyListView {
         setFilter(PartyLookupConfiguration.INOUT_LAST_NAME, lastName);
     }
 
+    public void filterByAccount(String accountPartyId) {
+        setFilter("partyIdTo", accountPartyId);
+    }
 }

@@ -17,10 +17,14 @@
 
 package org.opentaps.gwt.crmsfa.accounts.client;
 
-import com.google.gwt.user.client.ui.RootPanel;
 import org.opentaps.gwt.common.client.BaseEntry;
+import org.opentaps.gwt.common.client.UtilUi;
+import org.opentaps.gwt.common.client.listviews.ContactListView;
+import org.opentaps.gwt.crmsfa.accounts.client.form.AccountContactsSubview;
 import org.opentaps.gwt.crmsfa.accounts.client.form.FindAccountsForm;
 import org.opentaps.gwt.crmsfa.accounts.client.form.QuickNewAccountForm;
+
+import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -30,11 +34,13 @@ public class Entry extends BaseEntry {
     private FindAccountsForm findAccountsForm;
     private FindAccountsForm myAccountsForm;
     private QuickNewAccountForm quickNewAccountForm;
+    private AccountContactsSubview accountContacts; 
 
     private static final String MY_ACCOUNTS_ID = "myAccounts";
     private static final String FIND_ACCOUNTS_ID = "findAccounts";
     private static final String LOOKUP_ACCOUNTS_ID = "lookupAccounts";
     private static final String QUICK_CREATE_ACCOUNT_ID = "quickNewAccount";
+    private static final String CONTACTS_SUB_LISTVIEW = "contactsSubListView";
 
     /**
      * This is the entry point method.
@@ -64,7 +70,13 @@ public class Entry extends BaseEntry {
         if (RootPanel.get(LOOKUP_ACCOUNTS_ID) != null) {
             loadLookupAccounts();
         }
+
+        if (RootPanel.get(CONTACTS_SUB_LISTVIEW) != null) {
+            loadAccountContacts();
+        }
+ 
     }
+
 
     private void loadFindAccounts() {
         findAccountsForm = new FindAccountsForm();
@@ -90,6 +102,16 @@ public class Entry extends BaseEntry {
         RootPanel.get(MY_ACCOUNTS_ID).add(myAccountsForm.getMainPanel());
     }
 
+    private void loadAccountContacts() {
+        accountContacts = new AccountContactsSubview(false);
+        accountContacts.hideFilters();
+        accountContacts.getListView().setTitle(UtilUi.MSG.crmContacts());
+        ((ContactListView) accountContacts.getListView()).filterByAccount(getAccountPartyId());
+        accountContacts.getListView().applyFilters();
+
+        RootPanel.get(CONTACTS_SUB_LISTVIEW).add(accountContacts.getMainPanel());
+    }
+
     /**
      * Retrieve GWT parameter viewPref. Parameter is optional.
      * @return
@@ -100,4 +122,7 @@ public class Entry extends BaseEntry {
         return $wnd.viewPref;
     }-*/;
 
+    private static native String getAccountPartyId()/*-{
+        return $wnd.partyId;
+    }-*/;
 }

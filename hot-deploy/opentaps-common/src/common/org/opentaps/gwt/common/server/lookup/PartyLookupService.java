@@ -87,6 +87,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                                                                       PartyLookupConfiguration.INOUT_STATE,
                                                                       PartyLookupConfiguration.INOUT_CITY,
                                                                       PartyLookupConfiguration.INOUT_POSTAL_CODE);
+    private static List<String> ACCOUNT_CONTACTS_FILTERS = Arrays.asList(PartyLookupConfiguration.IN_PARTY_ID_TO);
 
     private boolean activeOnly = false;
 
@@ -483,6 +484,9 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
             return findPartiesBy(entity, condition, BY_ADVANCED_FILTERS);
         }
 
+        if (getProvider().parameterIsPresent(PartyLookupConfiguration.IN_PARTY_ID_TO)) {
+            return findPartiesBy(entity, EntityCondition.makeCondition(condition, EntityCondition.makeCondition(PartyLookupConfiguration.IN_ROLE_TO, "ACCOUNT")), ACCOUNT_CONTACTS_FILTERS);
+        }
         return findAllParties(entity, condition);
     }
 
