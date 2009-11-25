@@ -18,7 +18,6 @@ package org.opentaps.domain.party;
 
 import org.opentaps.foundation.domain.DomainInterface;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.foundation.service.ServiceException;
 
 /**
  * This is the interface of the Party domain.
@@ -32,31 +31,5 @@ public interface PartyDomainInterface extends DomainInterface {
      */
     public PartyRepositoryInterface getPartyRepository() throws RepositoryException;
 
-    /**
-     * Returns the account search service.
-     * @return a <code>AccountSearchServiceInterface</code> value
-     * @throws ServiceException if an error occurs
-     */
-    public AccountSearchServiceInterface getAccountSearchService() throws ServiceException;
 
-    /**
-     * Returns the contact search service.
-     * @return a <code>ContactSearchServiceInterface</code> value
-     * @throws ServiceException if an error occurs
-     */
-    public ContactSearchServiceInterface getContactSearchService() throws ServiceException;
-
-    /**
-     * Returns the lead search service.
-     * @return a <code>LeadSearchServiceInterface</code> value
-     * @throws ServiceException if an error occurs
-     */
-    public LeadSearchServiceInterface getLeadSearchService() throws ServiceException;
-
-    /**
-     * Returns the supplier search service.
-     * @return a <code>SupplierSearchServiceInterface</code> value
-     * @throws ServiceException if an error occurs
-     */
-    public SupplierSearchServiceInterface getSupplierSearchService() throws ServiceException;
 }

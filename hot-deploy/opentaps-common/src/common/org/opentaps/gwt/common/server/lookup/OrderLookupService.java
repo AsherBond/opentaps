@@ -28,7 +28,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.domain.base.entities.OrderHeaderItemAndRolesAndInvPending;
-import org.opentaps.domain.order.SalesOrderSearchRepositoryInterface;
+import org.opentaps.domain.search.SalesOrderSearchRepositoryInterface;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
@@ -75,7 +75,7 @@ public class OrderLookupService extends EntityLookupAndSuggestService {
      */
     public List<OrderHeaderItemAndRolesAndInvPending> findOrders(Locale locale, TimeZone timeZone) {
         try {
-            SalesOrderSearchRepositoryInterface salesOrderSearchRepository = getRepository().getDomainsDirectory().getOrderDomain().getSalesOrderSearchRepository();
+            SalesOrderSearchRepositoryInterface salesOrderSearchRepository = getRepository().getDomainsDirectory().getSearchDomain().getSalesOrderSearchRepository();
             String organizationPartyId = UtilProperties.getPropertyValue("opentaps", "organizationPartyId");
             String userLoginId = null;
             if (getProvider().getUser().getOfbizUserLogin() != null) {

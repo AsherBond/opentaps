@@ -21,11 +21,11 @@
     <vendor>Open Source Strategies, Inc.</vendor>
 
     <service name="opentaps.createHibernateSearchIndex" engine="pojo"
-        location="org.opentaps.common.domain.search.IndexingService" invoke="createHibernateSearchIndex" auth="true" transaction-timeout="7200">
+        location="org.opentaps.search.domain.IndexingService" invoke="createHibernateSearchIndex" auth="true" transaction-timeout="7200">
         <description>create index for hibernate search </description>
     </service>
 
-    <service name="opentaps.createIndexForGenericEntity" engine="pojo" transaction-timeout="600" location="org.opentaps.common.domain.search.IndexingService" invoke="createIndexForGenericEntity" auth="true">
+    <service name="opentaps.createIndexForGenericEntity" engine="pojo" transaction-timeout="600" location="org.opentaps.search.domain.IndexingService" invoke="createIndexForGenericEntity" auth="true">
         <description>the service that create index for entities</description>
         <attribute name="value" type="Object" mode="IN" optional="false"/>
     </service>    

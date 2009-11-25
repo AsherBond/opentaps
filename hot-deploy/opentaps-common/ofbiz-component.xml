@@ -75,7 +75,6 @@
     <service-resource type="model" loader="main" location="servicedef/services_workeffort.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_custrequest.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_party.xml"/>
-    <service-resource type="model" loader="main" location="servicedef/services_search.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_orders.xml"/> 
     <service-resource type="model" loader="main" location="servicedef/services_email.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_cache.xml"/>

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.common.domain.party;
+package org.opentaps.search.domain;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,31 +25,29 @@ import org.hibernate.search.FullTextQuery;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.opentaps.domain.base.constants.RoleTypeConstants;
 import org.opentaps.domain.base.entities.PartyRole;
 import org.opentaps.domain.base.entities.PartyRolePk;
-import org.opentaps.domain.party.Lead;
-import org.opentaps.domain.party.LeadSearchServiceInterface;
+import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.PartyRepositoryInterface;
-import org.opentaps.domain.search.SearchService;
+import org.opentaps.domain.search.ContactSearchServiceInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
 /**
- * The implementation of the Lead search service.
+ * The implementation of the Contact search service.
  */
-public class LeadSearchService extends SearchService implements LeadSearchServiceInterface {
+public class ContactSearchService extends SearchService implements ContactSearchServiceInterface {
 
-    private List<Lead> leads = null;
+    private List<Contact> contacts = null;
 
     /** {@inheritDoc} */
-    public List<Lead> getLeads() {
-        return leads;
+    public List<Contact> getContacts() {
+        return contacts;
     }
 
     /** {@inheritDoc} */
     public void makeQuery(StringBuilder sb) {
-        PartySearch.makePersonQuery(sb, RoleTypeConstants.PROSPECT);
+        PartySearch.makePersonQuery(sb, "CONTACT");
     }
 
     /** {@inheritDoc} */
@@ -66,7 +64,7 @@ public class LeadSearchService extends SearchService implements LeadSearchServic
 
         try {
             PartyRepositoryInterface partyRepository = getDomainsDirectory().getPartyDomain().getPartyRepository();
-            leads = filterSearchResults(getResults(), partyRepository);
+            contacts = filterSearchResults(getResults(), partyRepository);
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }
@@ -74,10 +72,10 @@ public class LeadSearchService extends SearchService implements LeadSearchServic
 
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
-    public List<Lead> filterSearchResults(List<Object[]> results, PartyRepositoryInterface repository) throws ServiceException {
+    public List<Contact> filterSearchResults(List<Object[]> results, PartyRepositoryInterface repository) throws ServiceException {
 
         // get the entities from the search results
-        Set<String> leadIds = new HashSet<String>();
+        Set<String> contactIds = new HashSet<String>();
         int classIndex = getQueryProjectedFieldIndex(FullTextQuery.OBJECT_CLASS);
         int idIndex = getQueryProjectedFieldIndex(FullTextQuery.ID);
         if (classIndex < 0 || idIndex < 0) {
@@ -88,17 +86,17 @@ public class LeadSearchService extends SearchService implements LeadSearchServic
             Class c = (Class) o[classIndex];
             if (c.equals(PartyRole.class)) {
                 PartyRolePk pk = (PartyRolePk) o[idIndex];
-                if (RoleTypeConstants.PROSPECT.equals(pk.getRoleTypeId())) {
-                    leadIds.add(pk.getPartyId());
+                if ("CONTACT".equals(pk.getRoleTypeId())) {
+                    contactIds.add(pk.getPartyId());
                 }
             }
         }
 
         try {
-            if (!leadIds.isEmpty()) {
-                return repository.findList(Lead.class, EntityCondition.makeCondition(Lead.Fields.partyId.name(), EntityOperator.IN, leadIds));
+            if (!contactIds.isEmpty()) {
+                return repository.findList(Contact.class, EntityCondition.makeCondition(Contact.Fields.partyId.name(), EntityOperator.IN, contactIds));
             } else {
-                return new ArrayList<Lead>();
+                return new ArrayList<Contact>();
             }
         } catch (GeneralException ex) {
             throw new ServiceException(ex);

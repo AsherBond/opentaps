@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.common.domain.party;
+package org.opentaps.search.domain;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,31 +25,29 @@ import org.hibernate.search.FullTextQuery;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.opentaps.domain.base.constants.RoleTypeConstants;
+import org.opentaps.domain.base.entities.PartyGroup;
 import org.opentaps.domain.base.entities.PartyRole;
 import org.opentaps.domain.base.entities.PartyRolePk;
-import org.opentaps.domain.party.Account;
-import org.opentaps.domain.party.AccountSearchServiceInterface;
 import org.opentaps.domain.party.PartyRepositoryInterface;
-import org.opentaps.domain.search.SearchService;
+import org.opentaps.domain.search.SupplierSearchServiceInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
 /**
  * The implementation of the Account search service.
  */
-public class AccountSearchService extends SearchService implements AccountSearchServiceInterface {
+public class SupplierSearchService extends SearchService implements SupplierSearchServiceInterface {
 
-    private List<Account> accounts = null;
+    private List<PartyGroup> suppliers = null;
 
     /** {@inheritDoc} */
-    public List<Account> getAccounts() {
-        return accounts;
+    public List<PartyGroup> getSuppliers() {
+        return suppliers;
     }
 
     /** {@inheritDoc} */
     public void makeQuery(StringBuilder sb) {
-        PartySearch.makePartyGroupQuery(sb, RoleTypeConstants.ACCOUNT);
+        PartySearch.makePartyGroupQuery(sb, "SUPPLIER");
     }
 
     /** {@inheritDoc} */
@@ -66,7 +64,7 @@ public class AccountSearchService extends SearchService implements AccountSearch
 
         try {
             PartyRepositoryInterface partyRepository = getDomainsDirectory().getPartyDomain().getPartyRepository();
-            accounts = filterSearchResults(getResults(), partyRepository);
+            suppliers = filterSearchResults(getResults(), partyRepository);
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }
@@ -74,10 +72,10 @@ public class AccountSearchService extends SearchService implements AccountSearch
 
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
-    public List<Account> filterSearchResults(List<Object[]> results, PartyRepositoryInterface repository) throws ServiceException {
+    public List<PartyGroup> filterSearchResults(List<Object[]> results, PartyRepositoryInterface repository) throws ServiceException {
 
         // get the entities from the search results
-        Set<String> accountIds = new HashSet<String>();
+        Set<String> supplierIds = new HashSet<String>();
         int classIndex = getQueryProjectedFieldIndex(FullTextQuery.OBJECT_CLASS);
         int idIndex = getQueryProjectedFieldIndex(FullTextQuery.ID);
         if (classIndex < 0 || idIndex < 0) {
@@ -88,17 +86,17 @@ public class AccountSearchService extends SearchService implements AccountSearch
             Class c = (Class) o[classIndex];
             if (c.equals(PartyRole.class)) {
                 PartyRolePk pk = (PartyRolePk) o[idIndex];
-                if (RoleTypeConstants.ACCOUNT.equals(pk.getRoleTypeId())) {
-                    accountIds.add(pk.getPartyId());
+                if ("SUPPLIER".equals(pk.getRoleTypeId())) {
+                    supplierIds.add(pk.getPartyId());
                 }
             }
         }
 
         try {
-            if (!accountIds.isEmpty()) {
-                return repository.findList(Account.class, EntityCondition.makeCondition(Account.Fields.partyId.name(), EntityOperator.IN, accountIds));
+            if (!supplierIds.isEmpty()) {
+                return repository.findList(PartyGroup.class, EntityCondition.makeCondition(PartyGroup.Fields.partyId.name(), EntityOperator.IN, supplierIds));
             } else {
-                return new ArrayList<Account>();
+                return new ArrayList<PartyGroup>();
             }
         } catch (GeneralException ex) {
             throw new ServiceException(ex);

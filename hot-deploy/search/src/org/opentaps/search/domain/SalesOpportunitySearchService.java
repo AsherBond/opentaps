@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.common.domain.order;
+package org.opentaps.search.domain;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,11 +26,10 @@ import org.hibernate.search.FullTextQuery;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.opentaps.common.domain.party.PartySearch;
 import org.opentaps.domain.base.entities.SalesOpportunity;
 import org.opentaps.domain.order.OrderRepositoryInterface;
-import org.opentaps.domain.order.SalesOpportunitySearchServiceInterface;
-import org.opentaps.domain.search.SearchService;
+import org.opentaps.domain.search.SalesOpportunitySearchServiceInterface;
+import org.opentaps.domain.search.SearchRepositoryInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
@@ -68,7 +67,7 @@ public class SalesOpportunitySearchService extends SearchService implements Sale
      */
     public static void makeSalesOpportunityQuery(StringBuilder sb) {
         for (String f : Arrays.asList("salesOpportunityId", "opportunityName", "description")) {
-            sb.append(f).append(":").append(SearchService.DEFAULT_PLACEHOLDER).append(" ");
+            sb.append(f).append(":").append(SearchRepositoryInterface.DEFAULT_PLACEHOLDER).append(" ");
         }
     }
 

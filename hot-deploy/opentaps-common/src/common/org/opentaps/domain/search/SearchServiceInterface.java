@@ -26,7 +26,7 @@ import org.opentaps.foundation.service.ServiceInterface;
  * Interface for search services.
  */
 public interface SearchServiceInterface extends ServiceInterface {
-
+    
     /**
      * Sets the keywords to search for.
      * @param keywords a <code>String</code> value
@@ -93,5 +93,7 @@ public interface SearchServiceInterface extends ServiceInterface {
      * @return the list of projected fields this search service is using
      */
     public Set<String> getQueryProjectedFields();
+    
+    
 
 }

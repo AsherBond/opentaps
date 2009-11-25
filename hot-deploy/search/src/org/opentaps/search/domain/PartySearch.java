@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.common.domain.party;
+package org.opentaps.search.domain;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import org.opentaps.domain.base.entities.PartyRole;
-import org.opentaps.domain.search.SearchService;
+import org.opentaps.domain.search.SearchRepositoryInterface;
 
 
 /**
@@ -68,7 +68,7 @@ public final class PartySearch {
     public static void makePersonFieldsQuery(StringBuilder sb) {
         sb.append("(");
         for (String f : Arrays.asList("partyId", "firstName", "lastName", "middleName", "firstNameLocal", "lastNameLocal", "nickname")) {
-            sb.append("party.person.").append(f).append(":").append(SearchService.DEFAULT_PLACEHOLDER).append(" ");
+            sb.append("party.person.").append(f).append(":").append(SearchRepositoryInterface.DEFAULT_PLACEHOLDER).append(" ");
         }
         sb.append(")");
     }
@@ -81,7 +81,7 @@ public final class PartySearch {
     public static void makePartyGroupFieldsQuery(StringBuilder sb) {
         sb.append("(");
         for (String f : Arrays.asList("partyId", "groupName")) {
-            sb.append("party.partyGroup.").append(f).append(":").append(SearchService.DEFAULT_PLACEHOLDER).append(" ");
+            sb.append("party.partyGroup.").append(f).append(":").append(SearchRepositoryInterface.DEFAULT_PLACEHOLDER).append(" ");
         }
         sb.append(")");
     }

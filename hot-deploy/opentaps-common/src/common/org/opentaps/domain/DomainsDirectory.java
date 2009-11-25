@@ -25,6 +25,7 @@ import org.opentaps.domain.party.PartyDomainInterface;
 import org.opentaps.domain.product.ProductDomainInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.domain.search.SearchDomainInterface;
 import org.opentaps.domain.shipping.ShippingDomainInterface;
 import org.opentaps.domain.voip.VoipDomainInterface;
 import org.opentaps.domain.manufacturing.ManufacturingDomainInterface;
@@ -44,6 +45,7 @@ public class DomainsDirectory {
     private ManufacturingDomainInterface manufacturingDomain;
     private PurchasingDomainInterface purchasingDomain;
     private VoipDomainInterface voipDomain;
+    private SearchDomainInterface searchDomain;
 
     private Infrastructure infrastructure;
     private User user;
@@ -175,4 +177,16 @@ public class DomainsDirectory {
     public void setVoipDomain(VoipDomainInterface voipDomain) {
         this.voipDomain = voipDomain;
     }
+    
+
+    public SearchDomainInterface getSearchDomain() {
+        searchDomain.setInfrastructure(infrastructure);
+        searchDomain.setUser(user);
+        return searchDomain;
+    }
+
+    public void setSearchDomain(SearchDomainInterface searchDomain) {
+        this.searchDomain = searchDomain;
+    }
+
 }

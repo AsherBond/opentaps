@@ -19,21 +19,25 @@ package org.opentaps.crmsfa.search;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.opentaps.domain.base.entities.SalesOpportunity;
 import org.opentaps.domain.order.OrderDomainInterface;
 import org.opentaps.domain.order.OrderRepositoryInterface;
-import org.opentaps.domain.order.SalesOpportunitySearchServiceInterface;
 import org.opentaps.domain.party.Account;
-import org.opentaps.domain.party.AccountSearchServiceInterface;
 import org.opentaps.domain.party.Contact;
-import org.opentaps.domain.party.ContactSearchServiceInterface;
 import org.opentaps.domain.party.Lead;
-import org.opentaps.domain.party.LeadSearchServiceInterface;
 import org.opentaps.domain.party.PartyDomainInterface;
 import org.opentaps.domain.party.PartyRepositoryInterface;
-import org.opentaps.domain.search.SearchService;
+import org.opentaps.domain.search.AccountSearchServiceInterface;
+import org.opentaps.domain.search.CommonSearchService;
+import org.opentaps.domain.search.ContactSearchServiceInterface;
+import org.opentaps.domain.search.LeadSearchServiceInterface;
+import org.opentaps.domain.search.SalesOpportunitySearchServiceInterface;
+import org.opentaps.domain.search.SearchDomainInterface;
+import org.opentaps.domain.search.SearchRepositoryInterface;
+import org.opentaps.domain.search.SearchServiceInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
@@ -42,7 +46,7 @@ import org.opentaps.foundation.service.ServiceException;
  * This class does not actually implement any of the search logic, those are implemented in the specific domain
  *  search service eg: <code>AccountSearchService</code>, ...
  */
-public class CrmsfaSearchService extends SearchService {
+public class CrmsfaSearchService extends CommonSearchService implements SearchServiceInterface {
 
     private boolean searchAccounts = false;
     private boolean searchContacts = false;
@@ -60,6 +64,8 @@ public class CrmsfaSearchService extends SearchService {
     private ContactSearchServiceInterface contactSearch;
     private LeadSearchServiceInterface leadSearch;
     private SalesOpportunitySearchServiceInterface salesOpportunitySearch;
+    
+    private SearchRepositoryInterface searchRepository;
 
     /**
      * Option to return Accounts from a search.
@@ -100,12 +106,18 @@ public class CrmsfaSearchService extends SearchService {
             PartyDomainInterface partyDomain = getDomainsDirectory().getPartyDomain();
             orderRepository = orderDomain.getOrderRepository();
             partyRepository = partyDomain.getPartyRepository();
-            accountSearch = partyDomain.getAccountSearchService();
-            contactSearch = partyDomain.getContactSearchService();
-            leadSearch = partyDomain.getLeadSearchService();
-            salesOpportunitySearch = orderDomain.getSalesOpportunitySearchService();
+            SearchDomainInterface searchDomain = getDomainsDirectory().getSearchDomain();
+          
+            accountSearch = searchDomain.getAccountSearchService();
+            contactSearch = searchDomain.getContactSearchService();
+            leadSearch = searchDomain.getLeadSearchService();
+            salesOpportunitySearch = searchDomain.getSalesOpportunitySearchService();
+            
+            searchRepository = searchDomain.getSearchRepository();
             // make query
-            searchInEntities(makeEntityClassList(), makeQuery());
+            Map output = searchRepository.searchInEntities(makeEntityClassList(), getQueryProjectedFields(), makeQuery(), getPageStart(), getPageSize());
+            setResults((List<Object[]>) output.get(SearchRepositoryInterface.RETURN_RESULTS));
+            setResultSize((Integer) output.get(SearchRepositoryInterface.RETURN_RESULT_SIZE));
             // note: the filterSearchResults methods expect getResults to return a list of Object[] where the first two fields are {OBJECT_CLASS, ID}
             accounts = accountSearch.filterSearchResults(getResults(), partyRepository);
             contacts = contactSearch.filterSearchResults(getResults(), partyRepository);
@@ -117,7 +129,7 @@ public class CrmsfaSearchService extends SearchService {
     }
 
     /** {@inheritDoc} */
-    @Override public Set<String> getQueryProjectedFields() {
+    public Set<String> getQueryProjectedFields() {
         Set<String> fields = new LinkedHashSet<String>();
         fields.addAll(accountSearch.getQueryProjectedFields());
         fields.addAll(contactSearch.getQueryProjectedFields());
@@ -185,7 +197,7 @@ public class CrmsfaSearchService extends SearchService {
             throw new ServiceException("Cannot perform search, no search option was set");
         }
 
-        return makeQueryString(sb.toString(), getKeywords());
+        return searchRepository.makeQueryString(sb.toString(), getKeywords());
     }
 
     /**
@@ -215,4 +227,5 @@ public class CrmsfaSearchService extends SearchService {
 
         return classes;
     }
+ 
 }

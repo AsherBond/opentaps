@@ -19,8 +19,6 @@ package org.opentaps.common.domain.order;
 import org.opentaps.common.domain.inventory.OrderInventoryService;
 import org.opentaps.domain.order.OrderDomainInterface;
 import org.opentaps.domain.order.OrderServiceInterface;
-import org.opentaps.domain.order.SalesOpportunitySearchServiceInterface;
-import org.opentaps.domain.order.SalesOrderSearchRepositoryInterface;
 import org.opentaps.foundation.domain.Domain;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
@@ -45,13 +43,4 @@ public class OrderDomain extends Domain implements OrderDomainInterface {
         return instantiateService(OrderInventoryService.class);
     }
 
-    /** {@inheritDoc} */
-    public SalesOpportunitySearchServiceInterface getSalesOpportunitySearchService() throws ServiceException {
-        return instantiateService(SalesOpportunitySearchService.class);
-    }
-
-    /** {@inheritDoc} */
-    public SalesOrderSearchRepositoryInterface getSalesOrderSearchRepository() throws RepositoryException {
-        return instantiateRepository(SalesOrderSearchRepository.class);
-    }
 }

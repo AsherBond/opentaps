@@ -19,26 +19,37 @@ package org.opentaps.purchasing.search;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.opentaps.domain.base.entities.PartyGroup;
 import org.opentaps.domain.party.PartyDomainInterface;
 import org.opentaps.domain.party.PartyRepositoryInterface;
-import org.opentaps.domain.party.SupplierSearchServiceInterface;
-import org.opentaps.domain.search.SearchService;
+import org.opentaps.domain.search.CommonSearchService;
+import org.opentaps.domain.search.SearchDomainInterface;
+import org.opentaps.domain.search.SearchRepositoryInterface;
+import org.opentaps.domain.search.SearchServiceInterface;
+import org.opentaps.domain.search.SupplierSearchServiceInterface;
 import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
 /**
  * The implementation of the Purchasing search service.
  */
-public class PurchasingSearchService extends SearchService {
+public class PurchasingSearchService extends CommonSearchService {
 
     private boolean searchSuppliers = false;
     private List<PartyGroup> suppliers = null;
 
     private PartyRepositoryInterface partyRepository;
     private SupplierSearchServiceInterface supplierSearch;
+    private SearchRepositoryInterface searchRepository;
+    private int pageSize = SearchRepositoryInterface.DEFAULT_PAGE_SIZE;
+    private int pageStart = 0;
+    private String keywords;
+    private List<Object[]> results;
+    private int resultSize = 0;
 
     /**
      * Option to return Suppliers from a search.
@@ -53,9 +64,14 @@ public class PurchasingSearchService extends SearchService {
         try {
             PartyDomainInterface partyDomain = getDomainsDirectory().getPartyDomain();
             partyRepository = partyDomain.getPartyRepository();
-            supplierSearch = partyDomain.getSupplierSearchService();
+            
+            SearchDomainInterface searchDomain = getDomainsDirectory().getSearchDomain();
+            supplierSearch = searchDomain.getSupplierSearchService();
             // make the query
-            searchInEntities(makeEntityClassList(), makeQuery());
+            searchRepository = searchDomain.getSearchRepository();
+            Map output = searchRepository.searchInEntities(makeEntityClassList(), getQueryProjectedFields(), makeQuery(), getPageStart(), getPageSize());
+            this.results = (List<Object[]>) output.get(SearchRepositoryInterface.RETURN_RESULTS);
+            this.resultSize =  (Integer) output.get(SearchRepositoryInterface.RETURN_RESULT_SIZE);
             // note: the filterSearchResults methods expect getResults to return a list of EntityInterface, which means
             //  a non projected search result, so do not override setQueryProjection unless you also override this method
             suppliers = supplierSearch.filterSearchResults(getResults(), partyRepository);
@@ -65,7 +81,7 @@ public class PurchasingSearchService extends SearchService {
     }
 
     /** {@inheritDoc} */
-    @Override public Set<String> getQueryProjectedFields() {
+    public Set<String> getQueryProjectedFields() {
         Set<String> fields = new LinkedHashSet<String>();
         fields.addAll(supplierSearch.getQueryProjectedFields());
         return fields;
@@ -96,7 +112,7 @@ public class PurchasingSearchService extends SearchService {
             throw new ServiceException("Cannot perform search, no search option was set");
         }
 
-        return makeQueryString(sb.toString(), getKeywords());
+        return searchRepository.makeQueryString(sb.toString(), getKeywords());
     }
 
     /**
@@ -116,5 +132,50 @@ public class PurchasingSearchService extends SearchService {
         }
 
         return classes;
+    }
+    
+    /** {@inheritDoc} */
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
+    }
+
+    /** {@inheritDoc} */
+    public String getKeywords() {
+        return keywords;
+    }
+
+    /** {@inheritDoc} */
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    /** {@inheritDoc} */
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    /** {@inheritDoc} */
+    public void setPageStart(int pageStart) {
+        this.pageStart = pageStart;
+    }
+
+    /** {@inheritDoc} */
+    public int getPageStart() {
+        return pageStart;
+    }
+
+    /** {@inheritDoc} */
+    public int getPageEnd() {
+        return pageStart + pageSize;
+    }
+
+    /** {@inheritDoc} */
+    public List<Object[]> getResults() {
+        return results;
+    }
+
+    /** {@inheritDoc} */
+    public int getResultSize() {
+        return resultSize;
     }
 }
