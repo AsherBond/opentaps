@@ -73,8 +73,10 @@ public abstract class PartyListView extends EntityListView {
         StringFieldDef idDefinition = new StringFieldDef(PartyLookupConfiguration.INOUT_PARTY_ID);
         if (entityViewUrl != null) {
             makeLinkColumn(partyIdLabel, idDefinition, entityViewUrl, true);
+            makeLinkColumn(UtilUi.MSG.crmContactName(), idDefinition, new StringFieldDef(PartyLookupConfiguration.INOUT_FRIENDLY_PARTY_NAME), entityViewUrl, true);
         } else {
             makeColumn(partyIdLabel, idDefinition);
+            makeColumn(UtilUi.MSG.crmContactName(), new StringFieldDef(PartyLookupConfiguration.INOUT_FRIENDLY_PARTY_NAME));
         }
 
         // add custom name fields
@@ -103,6 +105,7 @@ public abstract class PartyListView extends EntityListView {
         configure(entityFindUrl, PartyLookupConfiguration.INOUT_PARTY_ID, SortDir.ASC);
 
         // by default, hide non essential columns
+        setColumnHidden(PartyLookupConfiguration.INOUT_FRIENDLY_PARTY_NAME, true);
         setColumnHidden(PartyLookupConfiguration.INOUT_COUNTRY, true);
         setColumnHidden(PartyLookupConfiguration.OUT_TO_NAME, true);
         setColumnHidden(PartyLookupConfiguration.OUT_ATTENTION_NAME, true);

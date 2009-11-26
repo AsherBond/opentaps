@@ -59,10 +59,10 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     private static final EntityCondition PARTNER_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", "PARTNER");
     private static final EntityCondition SUPPLIER_CONDITIONS = EntityCondition.makeCondition("roleTypeId", "SUPPLIER");
     private static final EntityCondition CUSTOMER_CONDITIONS = EntityCondition.makeCondition(EntityOperator.OR,
-                                                                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT"),
-                                                                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "CONTACT"),
-                                                                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "PROSPECT"),
-                                                                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "PARTNER"));
+                                                                    EntityCondition.makeCondition("roleTypeIdFrom", "ACCOUNT"),
+                                                                    EntityCondition.makeCondition("roleTypeIdFrom", "CONTACT"),
+                                                                    EntityCondition.makeCondition("roleTypeIdFrom", "PROSPECT"),
+                                                                    EntityCondition.makeCondition("roleTypeIdFrom", "PARTNER"));
     private static final EntityCondition ACCOUNT_OR_LEAD_CONDITIONS = EntityCondition.makeCondition(EntityOperator.OR,
                                                                                       EntityCondition.makeCondition("roleTypeIdFrom", "ACCOUNT"),
                                                                                       EntityCondition.makeCondition("roleTypeIdFrom", "PROSPECT"));
@@ -390,12 +390,11 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     }
 
     private <T extends EntityInterface> List<T> findParties(Class<T> entity, EntityCondition roleCondition) {
-        // add rule that causes formated primary phone to be added to result
+
+        /** Phone number custom formatter. */
         class PhoneNumberSortable extends ConvertMapToString implements ICompositeValue {
 
-            /* (non-Javadoc)
-             * @see org.opentaps.common.util.ConvertMapToString#convert(java.util.Map)
-             */
+            /** {@inheritDoc} */
             @Override
             public String convert(Map<String, ?> value) {
                 StringBuilder sb = new StringBuilder();
@@ -419,9 +418,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                 }
             }
 
-            /* (non-Javadoc)
-             * @see org.opentaps.common.util.ICompositeValue#getFields()
-             */
+            /** {@inheritDoc} */
             public LinkedHashSet<String> getFields() {
                 LinkedHashSet<String> s = new LinkedHashSet<String>(3);
                 s.add(PartyLookupConfiguration.INOUT_PHONE_COUNTRY_CODE);
@@ -431,8 +428,45 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
             }
         }
 
-        Map<String, ConvertMapToString> calcField = FastMap.newInstance();
-        calcField.put("formatedPrimaryPhone", new PhoneNumberSortable());
+        /** Party name custom formatter.<br>
+         * Format party name as <code>${firstName} ${lastName} (${partyId})</code> for a person and
+         * <code>${groupName} (${partyId})</code> for a party group.
+         */
+        class FriendlyPartyNameSortable extends ConvertMapToString implements ICompositeValue {
+
+            @Override
+            public String convert(Map<String, ?> value) {
+                if (value == null) {
+                    return null;
+                }
+                StringBuilder name = new StringBuilder();
+                if (value.get("groupName") != null) {
+                    name.append(value.get("groupName")).append(" ");
+                }
+                if (value.get("firstName") != null) {
+                    name.append(value.get("firstName")).append(" ");
+                }
+                if (value.get("lastName") != null) {
+                    name.append(value.get("lastName")).append(" ");
+                }
+                name.append("(").append(value.get("partyId")).append(")");
+                return name.toString();
+            }
+
+            public LinkedHashSet<String> getFields() {
+                LinkedHashSet<String> s = new LinkedHashSet<String>(3);
+                s.add(PartyLookupConfiguration.INOUT_GROUP_NAME);
+                s.add(PartyLookupConfiguration.INOUT_FIRST_NAME);
+                s.add(PartyLookupConfiguration.INOUT_LAST_NAME);
+                return s;
+            }
+
+        }
+
+        // keep rules for calculated fields
+        Map<String, ConvertMapToString> calcField = FastMap.<String, ConvertMapToString>newInstance();
+        calcField.put(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER, new PhoneNumberSortable());
+        calcField.put(PartyLookupConfiguration.INOUT_FRIENDLY_PARTY_NAME, new FriendlyPartyNameSortable());
         makeCalculatedField(calcField);
 
         EntityCondition condition = roleCondition;

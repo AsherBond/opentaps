@@ -58,6 +58,7 @@ public abstract class PartyLookupConfiguration {
     public static final String INOUT_PHONE_AREA_CODE = "primaryAreaCode";
     public static final String INOUT_PHONE_NUMBER = "primaryContactNumber";
     public static final String INOUT_FORMATED_PHONE_NUMBER = "formatedPrimaryPhone";
+    public static final String INOUT_FRIENDLY_PARTY_NAME = "friendlyPartyName";
     public static final String IN_CLASSIFICATION = "partyClassificationGroupId";
     public static final String OUT_TO_NAME = "primaryToName";
     public static final String OUT_ADDRESS_ID = "primaryPostalAddressId";

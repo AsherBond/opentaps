@@ -23,6 +23,9 @@ import org.opentaps.gwt.common.client.form.base.SubFormPanel;
 import org.opentaps.gwt.common.client.listviews.ContactListView;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 
+import com.gwtext.client.core.SortDir;
+import com.gwtext.client.data.StringFieldDef;
+
 /**
  * A combination of a contacts list view and a tabbed form used to filter that list view.
  */
@@ -48,12 +51,36 @@ public class AccountContactsSubview extends FindPartyForm {
             /** {@inheritDoc} */
             @Override
             public void init() {
-                super.init(PartyLookupConfiguration.URL_FIND_CONTACTS, "/crmsfa/control/viewContact?partyId={0}", UtilUi.MSG.contactId(), new String[]{
-                    PartyLookupConfiguration.INOUT_FIRST_NAME, UtilUi.MSG.firstName(),
-                    PartyLookupConfiguration.INOUT_LAST_NAME, UtilUi.MSG.lastName()
-                });
+
+                String entityViewUrl = "/crmsfa/control/viewContact?partyId={0}";
+                StringFieldDef idDefinition = new StringFieldDef(PartyLookupConfiguration.INOUT_PARTY_ID);
+
+                makeLinkColumn(UtilUi.MSG.contactId(), idDefinition, entityViewUrl, true);
+                makeLinkColumn(UtilUi.MSG.crmContactName(), idDefinition, new StringFieldDef(PartyLookupConfiguration.INOUT_FRIENDLY_PARTY_NAME), entityViewUrl, true);
+                makeColumn(UtilUi.MSG.city(), new StringFieldDef(PartyLookupConfiguration.INOUT_CITY));
+                makeColumn(UtilUi.MSG.crmPrimaryEmail(), new StringFieldDef(PartyLookupConfiguration.OUT_EMAIL));
+                makeColumn(UtilUi.MSG.crmPrimaryPhone(), new StringFieldDef(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER));
+                makeColumn(UtilUi.MSG.toName(), new StringFieldDef(PartyLookupConfiguration.OUT_TO_NAME));
+                makeColumn(UtilUi.MSG.attnName(), new StringFieldDef(PartyLookupConfiguration.OUT_ATTENTION_NAME));
+                makeColumn(UtilUi.MSG.address(), new StringFieldDef(PartyLookupConfiguration.INOUT_ADDRESS));
+                makeColumn(UtilUi.MSG.address2(), new StringFieldDef(PartyLookupConfiguration.OUT_ADDRESS_2));
+                makeColumn(UtilUi.MSG.stateOrProvince(), new StringFieldDef(PartyLookupConfiguration.INOUT_STATE));
+                makeColumn(UtilUi.MSG.country(), new StringFieldDef(PartyLookupConfiguration.INOUT_COUNTRY));
+                makeColumn(UtilUi.MSG.postalCode(), new StringFieldDef(PartyLookupConfiguration.INOUT_POSTAL_CODE));
+                makeColumn(UtilUi.MSG.postalCodeExt(), new StringFieldDef(PartyLookupConfiguration.OUT_POSTAL_CODE_EXT));
+
+                configure(PartyLookupConfiguration.URL_FIND_CONTACTS, PartyLookupConfiguration.INOUT_PARTY_ID, SortDir.ASC);
+
+                // by default, hide non essential columns
+                setColumnHidden(PartyLookupConfiguration.INOUT_PARTY_ID, true);
                 setColumnHidden(PartyLookupConfiguration.INOUT_STATE, true);
+                setColumnHidden(PartyLookupConfiguration.INOUT_COUNTRY, true);
+                setColumnHidden(PartyLookupConfiguration.OUT_TO_NAME, true);
+                setColumnHidden(PartyLookupConfiguration.OUT_ATTENTION_NAME, true);
                 setColumnHidden(PartyLookupConfiguration.INOUT_ADDRESS, true);
+                setColumnHidden(PartyLookupConfiguration.OUT_ADDRESS_2, true);
+                setColumnHidden(PartyLookupConfiguration.INOUT_POSTAL_CODE, true);
+                setColumnHidden(PartyLookupConfiguration.OUT_POSTAL_CODE_EXT, true);
             }
 
         };
