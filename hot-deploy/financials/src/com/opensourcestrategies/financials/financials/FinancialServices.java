@@ -1308,8 +1308,6 @@ public final class FinancialServices {
             return ServiceUtil.returnError(ex.getMessage());
         } catch (RepositoryException ex) {
             return ServiceUtil.returnError(ex.getMessage());
-        } catch (InfrastructureException ex) {
-            return ServiceUtil.returnError(ex.getMessage());
         }
     }
 

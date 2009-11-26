@@ -183,16 +183,15 @@ public class Infrastructure {
     /**
      * Constructor.
      * @param dispatcher a <code>LocalDispatcher</code> value
-     * @exception InfrastructureException if an error occurs
+     * @exception IllegalArgumentException if the given dispatcher is <code>null</code>
      */
-    public Infrastructure(LocalDispatcher dispatcher) throws InfrastructureException {
+    public Infrastructure(LocalDispatcher dispatcher) throws IllegalArgumentException {
         if (dispatcher == null) {
-            throw new InfrastructureException("Cannot instantiate Infrastructure from null dispatcher");
+            throw new IllegalArgumentException("Cannot instantiate Infrastructure from null dispatcher");
         }
         this.dispatcher = dispatcher;
         this.delegator = dispatcher.getDelegator();
         this.security = dispatcher.getSecurity();
-        this.loadSystemUserLogin();
     }
 
     /**
@@ -221,14 +220,16 @@ public class Infrastructure {
 
     /**
      * Loads the system user login for Repositories and Factories that use this Infrastructure, plus all their sub-classes.
-     * @throws InfrastructureException if an error occurs
      */
-    private void loadSystemUserLogin() throws InfrastructureException {
+    private void loadSystemUserLogin() {
         try {
             this.systemUserLogin = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "system"));
+            if (this.systemUserLogin == null) {
+                throw new IllegalStateException("Could not find the [system] UserLogin, it was either not loaded yet or missing.");
+            }
             this.systemUser = new User(this.systemUserLogin, delegator);
         } catch (GenericEntityException e) {
-            throw new InfrastructureException(e);
+            throw new IllegalStateException(e);
         }
     }
 
@@ -237,7 +238,10 @@ public class Infrastructure {
      * @return the system <code>UserLogin</code> <code>GenericValue</code>
      */
     public GenericValue getSystemUserLogin() {
-        return this.systemUserLogin;
+        if (systemUserLogin == null) {
+            loadSystemUserLogin();
+        }
+        return systemUserLogin;
     }
 
     /**
@@ -245,7 +249,10 @@ public class Infrastructure {
      * @return the system <code>User</code>
      */
     public User getSystemUser() {
-        return this.systemUser;
+        if (systemUser == null) {
+            loadSystemUserLogin();
+        }
+        return systemUser;
     }
 
     /**

@@ -39,7 +39,6 @@ import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.DomainContextInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
@@ -82,9 +81,8 @@ public class Repository implements RepositoryInterface  {
     /**
      * Use this for domain Repositories.
      * @param infrastructure the domain infrastructure
-     * @throws RepositoryException if an error occurs
      */
-    public Repository(Infrastructure infrastructure) throws RepositoryException {
+    public Repository(Infrastructure infrastructure) {
         setInfrastructure(infrastructure);
     }
 
@@ -92,9 +90,8 @@ public class Repository implements RepositoryInterface  {
      * If you want the full infrastructure including the dispatcher, then you must have the User.
      * @param infrastructure the domain infrastructure
      * @param user the domain user
-     * @throws RepositoryException if an error occurs
      */
-    public Repository(Infrastructure infrastructure, User user) throws RepositoryException {
+    public Repository(Infrastructure infrastructure, User user) {
         this(infrastructure);
         setUser(user);
     }
@@ -103,15 +100,10 @@ public class Repository implements RepositoryInterface  {
      * If you want the full infrastructure including the dispatcher, then you must have the User.
      * @param infrastructure the domain infrastructure
      * @param userLogin the Ofbiz <code>UserLogin</code> generic value
-     * @throws RepositoryException if an error occurs
      */
-    public Repository(Infrastructure infrastructure, GenericValue userLogin) throws RepositoryException {
+    public Repository(Infrastructure infrastructure, GenericValue userLogin) {
         this(infrastructure);
-        try {
-            this.user = new User(userLogin);
-        } catch (InfrastructureException ex) {
-            throw new RepositoryException(ex);
-        }
+        this.user = new User(userLogin);
     }
 
     /**

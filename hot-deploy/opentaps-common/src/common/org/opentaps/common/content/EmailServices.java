@@ -256,28 +256,13 @@ public final class EmailServices {
             Map result = ServiceUtil.returnSuccess();
             result.putAll(parameters);
             return result;
-        } catch (GenericServiceException e) {
-            Debug.logError(e, MODULE);
-            return UtilMessage.createAndLogServiceError(e, INVOICE_ERROR_LABEL, locale, MODULE);
-        } catch (GenericEntityException e) {
+        } catch (GeneralException e) {
             Debug.logError(e, MODULE);
             return UtilMessage.createAndLogServiceError(e, INVOICE_ERROR_LABEL, locale, MODULE);
         } catch (IOException e) {
             Debug.logError(e, MODULE);
             return UtilMessage.createAndLogServiceError(e, INVOICE_ERROR_LABEL, locale, MODULE);
         } catch (JRException e) {
-            Debug.logError(e, MODULE);
-            return UtilMessage.createAndLogServiceError(e, INVOICE_ERROR_LABEL, locale, MODULE);
-        } catch (PartyNotFoundException e) {
-            Debug.logError(e, MODULE);
-            return UtilMessage.createAndLogServiceError(e, INVOICE_ERROR_LABEL, locale, MODULE);
-        } catch (InfrastructureException e) {
-            Debug.logError(e, MODULE);
-            return UtilMessage.createAndLogServiceError(e, INVOICE_ERROR_LABEL, locale, MODULE);
-        } catch (RepositoryException e) {
-            Debug.logError(e, MODULE);
-            return UtilMessage.createAndLogServiceError(e, INVOICE_ERROR_LABEL, locale, MODULE);
-        } catch (EntityNotFoundException e) {
             Debug.logError(e, MODULE);
             return UtilMessage.createAndLogServiceError(e, INVOICE_ERROR_LABEL, locale, MODULE);
         }
@@ -338,28 +323,13 @@ public final class EmailServices {
             Map result = ServiceUtil.returnSuccess();
             result.putAll(parameters);
             return result;
-        } catch (GenericServiceException e) {
-            Debug.logError(e, MODULE);
-            return UtilMessage.createAndLogServiceError(e, SALES_ORDER_ERROR_LABEL, locale, MODULE);
-        } catch (GenericEntityException e) {
+        } catch (GeneralException e) {
             Debug.logError(e, MODULE);
             return UtilMessage.createAndLogServiceError(e, SALES_ORDER_ERROR_LABEL, locale, MODULE);
         } catch (IOException e) {
             Debug.logError(e, MODULE);
             return UtilMessage.createAndLogServiceError(e, SALES_ORDER_ERROR_LABEL, locale, MODULE);
         } catch (JRException e) {
-            Debug.logError(e, MODULE);
-            return UtilMessage.createAndLogServiceError(e, SALES_ORDER_ERROR_LABEL, locale, MODULE);
-        } catch (PartyNotFoundException e) {
-            Debug.logError(e, MODULE);
-            return UtilMessage.createAndLogServiceError(e, SALES_ORDER_ERROR_LABEL, locale, MODULE);
-        } catch (InfrastructureException e) {
-            Debug.logError(e, MODULE);
-            return UtilMessage.createAndLogServiceError(e, SALES_ORDER_ERROR_LABEL, locale, MODULE);
-        } catch (EntityNotFoundException e) {
-            Debug.logError(e, MODULE);
-            return UtilMessage.createAndLogServiceError(e, SALES_ORDER_ERROR_LABEL, locale, MODULE);
-        } catch (RepositoryException e) {
             Debug.logError(e, MODULE);
             return UtilMessage.createAndLogServiceError(e, SALES_ORDER_ERROR_LABEL, locale, MODULE);
         }
@@ -421,28 +391,13 @@ public final class EmailServices {
             Map result = ServiceUtil.returnSuccess();
             result.putAll(parameters);
             return result;
-        } catch (GenericServiceException e) {
-            Debug.logError(e, MODULE);
-            return UtilMessage.createAndLogServiceError(e, PURCHASING_ORDER_ERROR_LABEL, locale, MODULE);
-        } catch (GenericEntityException e) {
+        } catch (GeneralException e) {
             Debug.logError(e, MODULE);
             return UtilMessage.createAndLogServiceError(e, PURCHASING_ORDER_ERROR_LABEL, locale, MODULE);
         } catch (IOException e) {
             Debug.logError(e, MODULE);
             return UtilMessage.createAndLogServiceError(e, PURCHASING_ORDER_ERROR_LABEL, locale, MODULE);
         } catch (JRException e) {
-            Debug.logError(e, MODULE);
-            return UtilMessage.createAndLogServiceError(e, PURCHASING_ORDER_ERROR_LABEL, locale, MODULE);
-        } catch (PartyNotFoundException e) {
-            Debug.logError(e, MODULE);
-            return UtilMessage.createAndLogServiceError(e, PURCHASING_ORDER_ERROR_LABEL, locale, MODULE);
-        } catch (InfrastructureException e) {
-            Debug.logError(e, MODULE);
-            return UtilMessage.createAndLogServiceError(e, PURCHASING_ORDER_ERROR_LABEL, locale, MODULE);
-        } catch (EntityNotFoundException e) {
-            Debug.logError(e, MODULE);
-            return UtilMessage.createAndLogServiceError(e, PURCHASING_ORDER_ERROR_LABEL, locale, MODULE);
-        } catch (RepositoryException e) {
             Debug.logError(e, MODULE);
             return UtilMessage.createAndLogServiceError(e, PURCHASING_ORDER_ERROR_LABEL, locale, MODULE);
         }

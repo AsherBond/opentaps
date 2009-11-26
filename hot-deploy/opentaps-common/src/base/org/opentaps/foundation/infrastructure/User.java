@@ -46,9 +46,8 @@ public class User {
     /**
      * Creates a new <code>User</code> instance.
      * @param userLogin a <code>GenericValue</code> value
-     * @exception InfrastructureException if an error occurs
      */
-    public User(GenericValue userLogin) throws InfrastructureException {
+    public User(GenericValue userLogin) {
         this();
         setOfbizUserLogin(userLogin);
     }
@@ -57,9 +56,8 @@ public class User {
      * Creates a new <code>User</code> instance.
      * @param userLogin a <code>GenericValue</code> value
      * @param delegator a <code>GenericDelegator</code> value
-     * @exception InfrastructureException if an error occurs
      */
-    public User(GenericValue userLogin, GenericDelegator delegator) throws InfrastructureException {
+    public User(GenericValue userLogin, GenericDelegator delegator) {
         this();
         setOfbizUserLogin(userLogin);
         setDelegator(delegator);
@@ -85,17 +83,17 @@ public class User {
     /**
      * Sets the ofbiz userlogin, as long as it is a "UserLogin" GenericValue object.
      * @param ofbizUserLogin the ofbiz <code>UserLogin</code>
-     * @throws InfrastructureException if an error occurs
+     * @throws IllegalArgumentException if the given value is null or not a UserLogin
      */
-    public void setOfbizUserLogin(GenericValue ofbizUserLogin) throws InfrastructureException {
+    public void setOfbizUserLogin(GenericValue ofbizUserLogin) throws IllegalArgumentException {
         if (ofbizUserLogin == null) {
-            throw new InfrastructureException("Cannot create User from null ofbiz UserLogin");
+            throw new IllegalArgumentException("Cannot create User from null ofbiz UserLogin");
         }
         ModelEntity model = ofbizUserLogin.getModelEntity();
         if ("UserLogin".equals(model.getEntityName())) {
             this.ofbizUserLogin = ofbizUserLogin;
         } else {
-            throw new InfrastructureException("Cannot create User from [" + ofbizUserLogin + "]");
+            throw new IllegalArgumentException("Cannot create User from [" + ofbizUserLogin + "] which is not a UserLogin value.");
         }
     }
 

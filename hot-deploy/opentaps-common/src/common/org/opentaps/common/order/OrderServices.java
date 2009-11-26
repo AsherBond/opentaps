@@ -745,8 +745,6 @@ public final class OrderServices {
             return ServiceUtil.returnError(e.getMessage());
         } catch (EntityNotFoundException e) {
             return ServiceUtil.returnError(e.getMessage());
-        } catch (InfrastructureException e) {
-            return ServiceUtil.returnError(e.getMessage());
         }
 
         // go through the item map and filter those which qty is set to 0, we will cancel them
@@ -1944,8 +1942,6 @@ public final class OrderServices {
         } catch (RepositoryException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         } catch (EntityNotFoundException e) {
-            return UtilMessage.createAndLogServiceError(e, MODULE);
-        } catch (InfrastructureException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
 

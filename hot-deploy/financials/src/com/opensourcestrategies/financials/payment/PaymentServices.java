@@ -147,8 +147,6 @@ public final class PaymentServices {
             return ServiceUtil.returnError(e.getMessage());
         } catch (RepositoryException e) {
             return ServiceUtil.returnError(e.getMessage());
-        } catch (InfrastructureException e) {
-            return ServiceUtil.returnError(e.getMessage());
         } catch (EntityNotFoundException e) {
             return ServiceUtil.returnError(e.getMessage());
         }
@@ -297,8 +295,6 @@ public final class PaymentServices {
             return ServiceUtil.returnError(e.getMessage());
         } catch (RepositoryException e) {
             return ServiceUtil.returnError(e.getMessage());
-        } catch (InfrastructureException e) {
-            return ServiceUtil.returnError(e.getMessage());
         } catch (EntityNotFoundException e) {
             return ServiceUtil.returnError(e.getMessage());
         }
@@ -436,8 +432,6 @@ public final class PaymentServices {
             }
         } catch (GenericEntityException e) {
             return UtilMessage.createAndLogServiceError(e, locale, MODULE);
-        } catch (InfrastructureException e) {
-            return UtilMessage.createAndLogServiceError(e, locale, MODULE);
         } catch (RepositoryException e) {
             return UtilMessage.createAndLogServiceError(e, locale, MODULE);
         } catch (EntityNotFoundException e) {
@@ -568,8 +562,6 @@ public final class PaymentServices {
                 }
             }
         } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, locale, MODULE);
-        } catch (InfrastructureException e) {
             return UtilMessage.createAndLogServiceError(e, locale, MODULE);
         } catch (RepositoryException e) {
             return UtilMessage.createAndLogServiceError(e, locale, MODULE);
@@ -1971,8 +1963,6 @@ public final class PaymentServices {
         } catch (GenericEntityException e) {
             Debug.logError(e, MODULE);
         } catch (EntityNotFoundException e) {
-            Debug.logError(e, MODULE);
-        } catch (InfrastructureException e) {
             Debug.logError(e, MODULE);
         }
 

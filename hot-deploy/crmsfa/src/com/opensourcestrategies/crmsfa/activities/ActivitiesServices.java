@@ -777,7 +777,9 @@ public final class ActivitiesServices {
 
                     // Associate the case with the activity via CustRequestWorkEffort, if it isn't already
                     GenericValue custRequestWorkEffort = delegator.findByPrimaryKey("CustRequestWorkEffort", UtilMisc.toMap("custRequestId", custRequestId, "workEffortId", workEffortId));
-                    if (! UtilValidate.isEmpty(custRequestWorkEffort)) continue;
+                    if (UtilValidate.isNotEmpty(custRequestWorkEffort)) {
+                        continue;
+                    }
                     Map createWorkEffortRequestResult = dispatcher.runSync("createWorkEffortRequest", UtilMisc.toMap("custRequestId", custRequestId, "workEffortId", workEffortId, "userLogin", userLogin));
                     if (ServiceUtil.isError(createWorkEffortRequestResult)) {
                         return createWorkEffortRequestResult;
@@ -787,17 +789,19 @@ public final class ActivitiesServices {
 
                 for (String orderId : orderIds) {
                     GenericValue orderHeaderWorkEffort = delegator.findByPrimaryKey("OrderHeaderWorkEffort", UtilMisc.toMap("orderId", orderId, "workEffortId", workEffortId));
-                    if (UtilValidate.isNotEmpty(orderHeaderWorkEffort)) continue;
+                    if (UtilValidate.isNotEmpty(orderHeaderWorkEffort)) {
+                        continue;
+                    }
                     Map createOrderHeaderWEResult = dispatcher.runSync("createOrderHeaderWorkEffort", UtilMisc.toMap("orderId", orderId, "workEffortId", workEffortId, "userLogin", userLogin));
-                    if (ServiceUtil.isError(createOrderHeaderWEResult)) return createOrderHeaderWEResult;
+                    if (ServiceUtil.isError(createOrderHeaderWEResult)) {
+                        return createOrderHeaderWEResult;
+                    }
                 }
             }
 
         } catch (GenericEntityException e) {
             return UtilMessage.createAndLogServiceError(e, "CrmErrorProcessIncomingEmailFail", locale, MODULE);
         } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorProcessIncomingEmailFail", locale, MODULE);
-        } catch (InfrastructureException e) {
             return UtilMessage.createAndLogServiceError(e, "CrmErrorProcessIncomingEmailFail", locale, MODULE);
         } catch (RepositoryException e) {
             return UtilMessage.createAndLogServiceError(e, "CrmErrorProcessIncomingEmailFail", locale, MODULE);

@@ -53,7 +53,6 @@ import org.opentaps.domain.product.Product;
 import org.opentaps.domain.product.ProductRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 
@@ -64,23 +63,23 @@ public final class AjaxEvents {
     private AjaxEvents() { }
 
     private static final String MODULE = AjaxEvents.class.getName();
-    
-    /** 
+
+    /**
      * Using common method to return json response.
      */
     private static String doJSONResponse(HttpServletResponse response, Collection<?> collection) {
         return org.opentaps.common.event.AjaxEvents.doJSONResponse(response, JSONArray.fromObject(collection).toString());
     }
-    
-    /** 
+
+    /**
      * Using common method to return json response.
      */
     private static String doJSONResponse(HttpServletResponse response, Map map) {
         return org.opentaps.common.event.AjaxEvents.doJSONResponse(response, JSONObject.fromObject(map));
     }
-    
+
     /** Return the objects which related with product in receive inventory form.
-     * @throws GenericEntityException 
+     * @throws GenericEntityException
      */
     @SuppressWarnings("unchecked")
     public static String getReceiveInventoryProductRelatedsJSON(HttpServletRequest request, HttpServletResponse response) throws GenericEntityException {
@@ -90,7 +89,7 @@ public final class AjaxEvents {
         String facilityId = UtilCommon.getParameter(request, "facilityId");
         TimeZone timeZone = UtilCommon.getTimeZone(request);
         Locale locale = UtilHttp.getLocale(request);
-        
+
         Map<String, Object> resp = new HashMap<String, Object>();
         try {
             // initial domain objects
@@ -140,8 +139,8 @@ public final class AjaxEvents {
                     values.add(value);
                 }
                 resp.put("goodIdentifications", values);
-                
-                
+
+
                 // find back ordered items
                 // use product.productId in case the productId passed in parameters was a goodId which was used to look up the product
                 List<OrderItemShipGrpInvRes> backOrderedItems = orderRepository.getBackOrderedInventoryReservations(product.getProductId(), facilityId);
@@ -158,9 +157,6 @@ public final class AjaxEvents {
                 }
                 resp.put("backOrderedItems", values);
             }
-        } catch (InfrastructureException e) {
-            Debug.logError(e.getMessage(), MODULE);
-            return doJSONResponse(response, FastList.newInstance());
         } catch (RepositoryException e) {
             Debug.logError(e.getMessage(), MODULE);
             return doJSONResponse(response, FastList.newInstance());
@@ -170,6 +166,6 @@ public final class AjaxEvents {
         }
         return doJSONResponse(response, resp);
     }
-    
+
 
 }

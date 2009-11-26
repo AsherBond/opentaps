@@ -33,7 +33,6 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.foundation.infrastructure.DomainContextInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 
 /**
@@ -150,11 +149,7 @@ public class ActionContext implements DomainContextInterface {
         if (user == null) {
             GenericValue ul = getUserLogin();
             if (ul != null) {
-            try {
                 user = new User(getUserLogin());
-            } catch (InfrastructureException e) {
-                Debug.logError(e, MODULE);
-            }
             }
         }
         return user;
@@ -171,11 +166,10 @@ public class ActionContext implements DomainContextInterface {
      */
     public Infrastructure getInfrastructure() {
         if (infrastructure == null) {
-            try {
-                infrastructure = new Infrastructure(getDispatcher());
-            } catch (InfrastructureException e) {
-                Debug.logError(e, MODULE);
+            if (getDispatcher() == null) {
+                Debug.logError("No dispatcher set in the context, cannot build an Infrastructure instance.", MODULE);
             }
+            infrastructure = new Infrastructure(getDispatcher());
         }
         return infrastructure;
     }

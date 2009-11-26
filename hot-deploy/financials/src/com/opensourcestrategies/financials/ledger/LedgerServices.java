@@ -340,8 +340,6 @@ public final class LedgerServices {
             return ServiceUtil.returnError(ee.getMessage());
         } catch (GenericServiceException se) {
             return ServiceUtil.returnError(se.getMessage());
-        } catch (InfrastructureException e) {
-            return ServiceUtil.returnError(e.getMessage());
         } catch (RepositoryException e) {
             return ServiceUtil.returnError(e.getMessage());
         } catch (EntityNotFoundException e) {
@@ -1028,8 +1026,6 @@ public final class LedgerServices {
         } catch (GenericServiceException ex) {
             return ServiceUtil.returnError(ex.getMessage());
         } catch (RepositoryException ex) {
-            return ServiceUtil.returnError(ex.getMessage());
-        } catch (InfrastructureException ex) {
             return ServiceUtil.returnError(ex.getMessage());
         } catch (EntityNotFoundException ex) {
             return ServiceUtil.returnError(ex.getMessage());
@@ -2480,8 +2476,6 @@ public final class LedgerServices {
         } catch (GenericEntityException ex) {
             return ServiceUtil.returnError(ex.getMessage());
         } catch (GenericServiceException ex) {
-            return ServiceUtil.returnError(ex.getMessage());
-        } catch (InfrastructureException ex) {
             return ServiceUtil.returnError(ex.getMessage());
         } catch (RepositoryException ex) {
             return ServiceUtil.returnError(ex.getMessage());
