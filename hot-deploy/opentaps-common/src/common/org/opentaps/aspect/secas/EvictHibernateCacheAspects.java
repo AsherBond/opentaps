@@ -20,10 +20,8 @@ import java.util.Map;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntity;
-import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericPK;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -143,15 +141,9 @@ public class EvictHibernateCacheAspects {
 
     private void evictHibernateCache(Map<String, Object> inputParams) {
         try {
-            GenericValue systemUser = getDelegator().findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "system"));
-            // run it just on existing system UserLogin, else will get InfrastructureException on pojo service engine
-            if (UtilValidate.isNotEmpty(systemUser)) {
-                LocalDispatcher dispatcher = getDispatcher();
-                dispatcher.runSync("opentaps.evictHibernateCache", inputParams, 7200, true);
-            }
+            LocalDispatcher dispatcher = getDispatcher();
+            dispatcher.runSync("opentaps.evictHibernateCache", inputParams, 7200, true);
         } catch (GenericServiceException e) {
-            Debug.logError(e, MODULE);
-        } catch (GenericEntityException e) {
             Debug.logError(e, MODULE);
         }
     }
