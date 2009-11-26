@@ -540,6 +540,7 @@ public class HibernateTests extends OpentapsTestCase {
         reOpenSession();
         Transaction tx = session.beginTransaction();
         TestEntity loadEntity = (TestEntity) session.get(TestEntity.class, testEntityId1);
+        assertNotNull("Cannot find the test entity [" + testEntityId1 + "]", loadEntity);
         assertEquals("Correct value should is old string value", loadEntity.getTestStringField(), "old value");
         loadEntity.setTestStringField("new value");
         session.update(loadEntity);
@@ -547,6 +548,7 @@ public class HibernateTests extends OpentapsTestCase {
         tx.commit();
 
         loadEntity = (TestEntity) session.get(TestEntity.class, testEntityId1);
+        assertNotNull("Cannot find the test entity [" + testEntityId1 + "]", loadEntity);
         assertEquals("Correct value should is new string value", loadEntity.getTestStringField(), "new value");
     }
 
@@ -561,6 +563,7 @@ public class HibernateTests extends OpentapsTestCase {
         reOpenSession();
         Transaction tx = session.beginTransaction();
         TestEntity demoTestEntity2 = (TestEntity) session.get(TestEntity.class, testEntityId2);
+        assertNotNull("Cannot find the test entity [" + testEntityId2 + "]", demoTestEntity2);
         assertNotNull("TestEntity with Id " + testEntityId2 + " should can retrieve by hibernate", demoTestEntity2);
         session.delete(demoTestEntity2);
         session.flush();
