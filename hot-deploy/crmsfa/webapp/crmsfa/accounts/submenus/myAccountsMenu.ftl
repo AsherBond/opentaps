@@ -16,16 +16,21 @@
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
-<#assign prefParams = "donePage=myAccounts&viewPrefTypeId=MY_OR_TEAM_ACCOUNTS" />
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
 <#if viewPreferences.get("MY_OR_TEAM_ACCOUNTS")?default("TEAM_VALUES") == "MY_VALUES">
   <#assign title = uiLabelMap.CrmMyAccounts />
-  <#assign prefChange = "<a class='subMenuButton' href='setViewPreference?viewPrefValue=TEAM_VALUES&"+prefParams+"'>" + uiLabelMap.CrmTeamAccounts + "</a>" />
+  <#assign prefValue = "TEAM_VALUES" />
+  <#assign prefButtonLabel = uiLabelMap.CrmTeamAccounts />
 <#else> 
   <#assign title = uiLabelMap.CrmTeamAccounts />
-  <#assign prefChange = "<a class='subMenuButton' href='setViewPreference?viewPrefValue=MY_VALUES&"+prefParams+"'>" + uiLabelMap.CrmMyAccounts + "</a>" />
+  <#assign prefValue = "MY_VALUES"/>
+  <#assign prefButtonLabel = uiLabelMap.CrmMyAccounts />
 </#if>
+
+<@form name="MyAccountsPrefChangeForm" url="setViewPreference" viewPrefValue="${prefValue}" viewPrefTypeId="MY_OR_TEAM_ACCOUNTS" donePage="myAccounts"/>
 
 <div class="subSectionHeader  sectionHeaderTitle" id="sectionHeaderTitle_accounts" style="font: bold 14pt Verdana, Arial, Helvetica, sans-serif; padding-top: 5px; padding-bottom: 0px; height: 1.3em; border-bottom: 1px solid #AAAAAA;">
     <div class="subSectionTitle">${title?if_exists}</div>
-    <div class="subMenuBar">${prefChange?if_exists}</div>
+    <div class="subMenuBar"><@submitFormLink form="MyAccountsPrefChangeForm" text="${prefButtonLabel}" /></div>
 </div>

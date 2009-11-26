@@ -16,16 +16,21 @@
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
-<#assign prefParams = "donePage=myOpportunities&viewPrefTypeId=MY_OR_TEAM_OPPS" />
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
 <#if viewPreferences.get("MY_OR_TEAM_OPPS")?default("TEAM_VALUES") == "MY_VALUES">
   <#assign title = uiLabelMap.CrmMyOpportunities />
-  <#assign prefChange = "<a class='subMenuButton' href='setViewPreference?viewPrefValue=TEAM_VALUES&"+prefParams+"'>" + uiLabelMap.CrmTeamOpportunities + "</a>" />
+  <#assign prefValue = "TEAM_VALUES"/>
+  <#assign prefButtonLabel = uiLabelMap.CrmTeamOpportunities />
 <#else> 
   <#assign title = uiLabelMap.CrmTeamOpportunities />
-  <#assign prefChange = "<a class='subMenuButton' href='setViewPreference?viewPrefValue=MY_VALUES&"+prefParams+"'>" + uiLabelMap.CrmMyOpportunities + "</a>" />
+  <#assign prefValue = "MY_VALUES"/>
+  <#assign prefButtonLabel = uiLabelMap.CrmMyOpportunities />
 </#if>
+
+<@form name="PrefChangeForm" url="setViewPreference" viewPrefValue="${prefValue}" donePage="myOpportunities" viewPrefTypeId="MY_OR_TEAM_OPPS"/>
 
 <div class="subSectionHeader">
     <div class="subSectionTitle">${title?if_exists}</div>
-    <div class="subMenuBar">${prefChange?if_exists}</div>
+    <div class="subMenuBar"><@submitFormLink form="PrefChangeForm" text="${prefButtonLabel}" /></div>
 </div>
