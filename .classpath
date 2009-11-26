@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="framework/appserver/src"/>
-	<classpathentry kind="src" path="hot-deploy/asterisk/src"/>
 	<classpathentry kind="src" path="framework/base/src"/>
 	<classpathentry kind="src" path="framework/bi/src"/>
 	<classpathentry kind="src" path="framework/catalina/src"/>
@@ -43,10 +42,13 @@
 	<classpathentry kind="src" path="specialpurpose/projectmgr/src"/>
 	<classpathentry excluding="org/enhydra/|org/ofbiz/" kind="src" path="specialpurpose/shark/src"/>
 	<classpathentry kind="src" path="specialpurpose/workflow/src"/>
+    <classpathentry kind="src" path="hot-deploy/opentaps-common/src/base"/>
 	<classpathentry kind="src" path="hot-deploy/opentaps-common/src/common"/>
+    <classpathentry kind="src" path="hot-deploy/opentaps-common/src/entities"/>
 	<classpathentry kind="src" path="hot-deploy/opentaps-common/src/prebuild"/>
 	<classpathentry kind="src" path="hot-deploy/amazon/src"/>
 	<classpathentry kind="src" path="hot-deploy/analytics/src"/>
+    <classpathentry kind="src" path="hot-deploy/asterisk/src"/>
 	<classpathentry kind="src" path="hot-deploy/crmsfa/src"/>
 	<classpathentry kind="src" path="hot-deploy/dataimport/src"/>
 	<classpathentry kind="src" path="hot-deploy/financials/src"/>
