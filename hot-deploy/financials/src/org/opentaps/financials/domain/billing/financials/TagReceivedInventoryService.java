@@ -17,20 +17,20 @@
 package org.opentaps.financials.domain.billing.financials;
 
 import org.ofbiz.base.util.Debug;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.billing.financials.TagReceivedInventoryServiceInterface;
+import org.opentaps.domain.inventory.InventoryItem;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderItem;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.foundation.exception.FoundationException;
-import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
-import org.opentaps.domain.inventory.InventoryItem;
 
 /**
  * Service to tag a inventory received from a PO.
  */
-public class TagReceivedInventoryService extends Service implements TagReceivedInventoryServiceInterface {
+public class TagReceivedInventoryService extends DomainService implements TagReceivedInventoryServiceInterface {
 
     private static final String MODULE = TagReceivedInventoryService.class.getName();
 
@@ -41,8 +41,8 @@ public class TagReceivedInventoryService extends Service implements TagReceivedI
     /** {@inheritDoc} */
     public void tagReceivedInventoryFromOrder() throws ServiceException {
         try {
-            OrderRepositoryInterface orderRepository = domains.getOrderDomain().getOrderRepository();
-            InventoryRepositoryInterface inventoryRepository = domains.getInventoryDomain().getInventoryRepository();
+            OrderRepositoryInterface orderRepository = getDomainsDirectory().getOrderDomain().getOrderRepository();
+            InventoryRepositoryInterface inventoryRepository = getDomainsDirectory().getInventoryDomain().getInventoryRepository();
             Order order = orderRepository.getOrderById(orderId);
             if (!order.isPurchaseOrder()) {
                 Debug.logWarning("Received inventory from an order that is not a purchase order [" + orderId + "]", MODULE);

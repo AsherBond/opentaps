@@ -23,6 +23,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.domain.order.OrderSpecification;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.base.services.CreateInvoiceForOrderService;
 import org.opentaps.domain.billing.invoice.OrderInvoicingServiceInterface;
 import org.opentaps.domain.order.Order;
@@ -32,14 +33,13 @@ import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.ofbiz.Repository;
-import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
 
 /**
  * POJO implementation of services which create invoices from orders using the opentaps Service foundation class.
  */
-public class OrderInvoicingService extends Service implements OrderInvoicingServiceInterface {
+public class OrderInvoicingService extends DomainService implements OrderInvoicingServiceInterface {
 
     private static final String MODULE = OrderInvoicingService.class.getName();
 

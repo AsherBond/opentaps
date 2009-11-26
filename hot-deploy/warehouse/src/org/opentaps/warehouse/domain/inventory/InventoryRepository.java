@@ -33,6 +33,7 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.base.entities.Facility;
 import org.opentaps.domain.base.entities.InventoryItemAndLocation;
 import org.opentaps.domain.base.entities.InventoryItemDetail;
@@ -256,7 +257,7 @@ public class InventoryRepository extends Repository implements InventoryReposito
 
     protected ProductRepositoryInterface getProductRepository() throws RepositoryException {
         if (productRepository == null) {
-            productRepository = getDomainsDirectory().getProductDomain().getProductRepository();
+            productRepository = DomainsDirectory.getDomainsDirectory(this).getProductDomain().getProductRepository();
         }
         return productRepository;
     }

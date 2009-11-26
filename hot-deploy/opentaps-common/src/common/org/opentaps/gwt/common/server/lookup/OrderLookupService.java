@@ -75,7 +75,7 @@ public class OrderLookupService extends EntityLookupAndSuggestService {
      */
     public List<OrderHeaderItemAndRolesAndInvPending> findOrders(Locale locale, TimeZone timeZone) {
         try {
-            SalesOrderSearchRepositoryInterface salesOrderSearchRepository = getRepository().getDomainsDirectory().getSearchDomain().getSalesOrderSearchRepository();
+            SalesOrderSearchRepositoryInterface salesOrderSearchRepository = getDomainsDirectory().getSearchDomain().getSalesOrderSearchRepository();
             String organizationPartyId = UtilProperties.getPropertyValue("opentaps", "organizationPartyId");
             String userLoginId = null;
             if (getProvider().getUser().getOfbizUserLogin() != null) {

@@ -16,6 +16,7 @@
  */
 package org.opentaps.domain.billing.payment;
 
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.foundation.repository.RepositoryException;
 
 /**
@@ -135,7 +136,7 @@ public class PaymentMethod extends org.opentaps.domain.base.entities.PaymentMeth
         try {
             return PaymentRepositoryInterface.class.cast(repository);
         } catch (ClassCastException e) {
-            repository = repository.getDomainsDirectory().getBillingDomain().getPaymentRepository();
+            repository = DomainsDirectory.getDomainsDirectory(repository).getBillingDomain().getPaymentRepository();
             return PaymentRepositoryInterface.class.cast(repository);
         }
     }

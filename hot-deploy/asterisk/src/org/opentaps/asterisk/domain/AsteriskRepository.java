@@ -24,6 +24,7 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.asterisk.AsteriskUtil;
 import org.opentaps.common.party.PartyHelper;
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.base.entities.ExternalUser;
 import org.opentaps.domain.base.entities.TelecomNumber;
 import org.opentaps.domain.party.Party;
@@ -62,7 +63,7 @@ public class AsteriskRepository extends Repository implements VoipRepositoryInte
 
     /** {@inheritDoc} */
     public ExternalUser getVoipExtensionForUser(User user) throws RepositoryException {
-        PartyDomainInterface partyDomain = getDomainsDirectory().getPartyDomain();
+        PartyDomainInterface partyDomain = DomainsDirectory.getDomainsDirectory(this).getPartyDomain();
         PartyRepositoryInterface repository = partyDomain.getPartyRepository();
         ExternalUser externalUser;
         try {
@@ -75,7 +76,7 @@ public class AsteriskRepository extends Repository implements VoipRepositoryInte
 
     /** {@inheritDoc} */
     public String getCallInPartyLink(User user) throws RepositoryException {
-        PartyDomainInterface partyDomain = getDomainsDirectory().getPartyDomain();
+        PartyDomainInterface partyDomain = DomainsDirectory.getDomainsDirectory(this).getPartyDomain();
         PartyRepositoryInterface repository = partyDomain.getPartyRepository();
         // retrieve login user's extension phone number
         try {
@@ -114,7 +115,7 @@ public class AsteriskRepository extends Repository implements VoipRepositoryInte
     /** {@inheritDoc} */
     public void makeOutgoingCall(User user, String countryCode, String areaCode, String phoneNumber) throws RepositoryException {
         try {
-            PartyDomainInterface partyDomain = getDomainsDirectory().getPartyDomain();
+            PartyDomainInterface partyDomain = DomainsDirectory.getDomainsDirectory(this).getPartyDomain();
             PartyRepositoryInterface repository = partyDomain.getPartyRepository();
             ExternalUser externalUser = repository.getExternalUserForUser(ASTERISK_USERTYPE_ID, user);
             String dialNo = AsteriskUtil.getInstance().getDialOutNumber(countryCode, areaCode, phoneNumber);
@@ -133,7 +134,7 @@ public class AsteriskRepository extends Repository implements VoipRepositoryInte
     /** {@inheritDoc} */
     public void makeOutgoingCall(User user, TelecomNumber telecomNumber) throws RepositoryException {
         try {
-            PartyDomainInterface partyDomain = getDomainsDirectory().getPartyDomain();
+            PartyDomainInterface partyDomain = DomainsDirectory.getDomainsDirectory(this).getPartyDomain();
             PartyRepositoryInterface repository = partyDomain.getPartyRepository();
             ExternalUser externalUser = repository.getExternalUserForUser(ASTERISK_USERTYPE_ID, user);
             String dialNo = AsteriskUtil.getInstance().getDialOutNumber(telecomNumber);

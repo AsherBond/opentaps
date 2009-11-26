@@ -27,19 +27,19 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.base.entities.*;
 import org.opentaps.domain.ledger.*;
 import org.opentaps.domain.ledger.AccountingTransaction.TagBalance;
 import org.opentaps.domain.organization.OrganizationDomainInterface;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
 /**
  * POJO Service class for services that interact with the ledger.
  */
-public class LedgerService extends Service implements LedgerServiceInterface {
+public class LedgerService extends DomainService implements LedgerServiceInterface {
 
     private static final String MODULE = LedgerService.class.getName();
 

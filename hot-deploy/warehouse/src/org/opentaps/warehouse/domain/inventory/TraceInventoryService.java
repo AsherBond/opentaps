@@ -24,7 +24,6 @@ import java.util.Set;
 
 import javolution.util.FastList;
 import javolution.util.FastSet;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -32,6 +31,7 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.base.entities.InventoryItem;
 import org.opentaps.domain.base.entities.InventoryItemTraceDetail;
 import org.opentaps.domain.base.entities.InventoryTransfer;
@@ -47,13 +47,12 @@ import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
-import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
 /**
  * Inventory tracing service(s) implemented with POJO Java engine using the opentaps Service foundation class.
  */
-public class TraceInventoryService extends Service implements TraceInventoryServiceInterface {
+public class TraceInventoryService extends DomainService implements TraceInventoryServiceInterface {
 
     private static final String MODULE = TraceInventoryService.class.getName();
 
@@ -218,7 +217,7 @@ public class TraceInventoryService extends Service implements TraceInventoryServ
         Set<InventoryItem> rootItems = FastSet.newInstance();
 
         try {
-            InventoryRepositoryInterface invRepository = domains.getInventoryDomain().getInventoryRepository();
+            InventoryRepositoryInterface invRepository = getDomainsDirectory().getInventoryDomain().getInventoryRepository();
 
             // build initial list of inventory items for tracing
             if (UtilValidate.isNotEmpty(inventoryItemId)) { // given inventory item ID
@@ -322,7 +321,7 @@ public class TraceInventoryService extends Service implements TraceInventoryServ
         List<List<InventoryItemTraceDetail>> usageCollection = FastList.newInstance();
 
         try {
-            InventoryRepositoryInterface invRpst = domains.getInventoryDomain().getInventoryRepository();
+            InventoryRepositoryInterface invRpst = getDomainsDirectory().getInventoryDomain().getInventoryRepository();
 
             // build initial list of inventory items for tracing
             if (UtilValidate.isNotEmpty(inventoryItemId)) { // given inventory item ID
@@ -380,7 +379,7 @@ public class TraceInventoryService extends Service implements TraceInventoryServ
         List<List<InventoryItemTraceDetail>> usageCollection = FastList.newInstance();
 
         try {
-            InventoryRepositoryInterface invRpst = domains.getInventoryDomain().getInventoryRepository();
+            InventoryRepositoryInterface invRpst = getDomainsDirectory().getInventoryDomain().getInventoryRepository();
 
             // build initial list of inventory items for tracing
             if (UtilValidate.isNotEmpty(inventoryItemId)) { // given inventory item ID

@@ -18,6 +18,7 @@ package org.opentaps.financials.domain.ledger;
 
 import java.math.BigDecimal;
 
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.base.entities.InvoiceAdjustment;
 import org.opentaps.domain.base.entities.InvoiceAdjustmentGlAccount;
 import org.opentaps.domain.base.entities.InvoiceGlAccountType;
@@ -28,11 +29,10 @@ import org.opentaps.domain.ledger.*;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
 /** {@inheritDoc} */
-public class InvoiceLedgerService extends Service implements InvoiceLedgerServiceInterface {
+public class InvoiceLedgerService extends DomainService implements InvoiceLedgerServiceInterface {
 
     protected String invoiceId;
     protected String invoiceAdjustmentId;

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.ofbiz.base.util.UtilDateTime;
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.base.entities.PartyAcctgPreference;
 import org.opentaps.domain.base.entities.PaymentMethod;
 import org.opentaps.domain.party.Party;
@@ -153,7 +154,7 @@ public class Organization extends Party {
         try {
             return OrganizationRepositoryInterface.class.cast(repository);
         } catch (ClassCastException e) {
-            repository = repository.getDomainsDirectory().getPartyDomain().getPartyRepository();
+            repository = DomainsDirectory.getDomainsDirectory(repository).getPartyDomain().getPartyRepository();
             return OrganizationRepositoryInterface.class.cast(repository);
         }
     }

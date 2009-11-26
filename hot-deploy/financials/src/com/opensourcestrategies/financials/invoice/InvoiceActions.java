@@ -46,6 +46,7 @@ import org.opentaps.common.builder.PageBuilder;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.base.entities.BillingAccountAndRole;
 import org.opentaps.domain.base.entities.GlAccountOrganizationAndClass;
 import org.opentaps.domain.base.entities.InvoiceAdjustmentType;
@@ -125,9 +126,10 @@ public final class InvoiceActions {
 
         // get the invoice from the domain
         String invoiceId = (String) ac.get("invoiceId");
-        BillingDomainInterface billingDomain = ac.getDomainsDirectory().getBillingDomain();
+        DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
+        BillingDomainInterface billingDomain = dd.getBillingDomain();
         InvoiceRepositoryInterface invoiceRepository = billingDomain.getInvoiceRepository();
-        OrganizationRepositoryInterface organizationRepository = ac.getDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
+        OrganizationRepositoryInterface organizationRepository = dd.getOrganizationDomain().getOrganizationRepository();
 
         Invoice invoice = null;
         try {
@@ -227,7 +229,7 @@ public final class InvoiceActions {
         // update permissions
         boolean hasDescriptiveUpdatePermission = false;
         boolean allowDescriptiveEditOnly = false;
-        
+
         boolean hasUpdatePermission = false;
         boolean hasAdjustmentPermission = false;
         if ((invoice.isReceivable() && ac.hasEntityPermission("FINANCIALS", "_AR_INUPDT")) || (invoice.isPayable() && ac.hasEntityPermission("FINANCIALS", "_AP_INUPDT"))) {
@@ -388,7 +390,8 @@ public final class InvoiceActions {
         ac.put("isPartner", isPartner);
         ac.put("enableFindByOrder", enableFindByOrder);
 
-        BillingDomainInterface billingDomain = ac.getDomainsDirectory().getBillingDomain();
+        DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
+        BillingDomainInterface billingDomain = dd.getBillingDomain();
         InvoiceRepositoryInterface repository = billingDomain.getInvoiceRepository();
 
         // get the list of statuses for the parametrized form ftl

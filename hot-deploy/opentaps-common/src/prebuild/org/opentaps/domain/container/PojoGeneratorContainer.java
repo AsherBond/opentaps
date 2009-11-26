@@ -108,7 +108,10 @@ public class PojoGeneratorContainer implements Container {
 
     /** The path of output. */
     private String entityOutputPath;
+    private String baseEntityOutputPath;
     private String serviceOutputPath;
+
+    private Set<String> baseEntities;
 
     /** Java service class FTL Template. */
     private String serviceTemplate;
@@ -153,7 +156,9 @@ public class PojoGeneratorContainer implements Container {
     public boolean start() throws ContainerException {
         ContainerConfig.Container cfg = ContainerConfig.getContainer(containerName, configFile);
         ContainerConfig.Container.Property delegatorNameProp = cfg.getProperty("delegator-name");
+        ContainerConfig.Container.Property baseEntitiesProp = cfg.getProperty("baseEntities");
         ContainerConfig.Container.Property entityOutputPathProp = cfg.getProperty("entityOutputPath");
+        ContainerConfig.Container.Property baseEntityOutputPathProp = cfg.getProperty("baseEntityOutputPath");
         ContainerConfig.Container.Property serviceOutputPathProp = cfg.getProperty("serviceOutputPath");
         ContainerConfig.Container.Property entityTemplateProp = cfg.getProperty("entityTemplate");
         ContainerConfig.Container.Property serviceTemplateProp = cfg.getProperty("serviceTemplate");
@@ -176,22 +181,45 @@ public class PojoGeneratorContainer implements Container {
             throw new ContainerException("Invalid delegator name: " + delegatorNameToUse);
         }
 
+        // get the list of entities to use as base entities
+        if (baseEntitiesProp != null && baseEntitiesProp.value != null && baseEntitiesProp.value.length() > 0) {
+            String[] fes = baseEntitiesProp.value.split(",");
+            baseEntities = new TreeSet<String>();
+            for (int i = 0; i < fes.length; i++) {
+                baseEntities.add(fes[i]);
+            }
+            Debug.logInfo("Entities configured to be generated as base entities: " + baseEntities, MODULE);
+        }
+
+        // get output path to use from the container configuration
+        if (baseEntityOutputPathProp == null || baseEntityOutputPathProp.value == null || baseEntityOutputPathProp.value.length() == 0) {
+            throw new ContainerException("Invalid baseEntityOutputPath defined in container configuration");
+        } else {
+            baseEntityOutputPath = baseEntityOutputPathProp.value;
+        }
+
+        // check the output path
+        File outputDir = new File(baseEntityOutputPath);
+        if (!outputDir.canWrite()) {
+            throw new ContainerException("Unable to use base entity output path: [" + baseEntityOutputPath + "], it is not writable");
+        }
+
         // get output path to use from the container configuration
         if (entityOutputPathProp == null || entityOutputPathProp.value == null || entityOutputPathProp.value.length() == 0) {
-            throw new ContainerException("Invalid output-name defined in container configuration");
+            throw new ContainerException("Invalid entityOutputPath defined in container configuration");
         } else {
             entityOutputPath = entityOutputPathProp.value;
         }
 
         // check the output path
-        File outputDir = new File(entityOutputPath);
+        outputDir = new File(entityOutputPath);
         if (!outputDir.canWrite()) {
             throw new ContainerException("Unable to use entity output path: [" + entityOutputPath + "], it is not writable");
         }
 
         // get output path to use from the container configuration
         if (serviceOutputPathProp == null || serviceOutputPathProp.value == null || serviceOutputPathProp.value.length() == 0) {
-            throw new ContainerException("Invalid output-name defined in container configuration");
+            throw new ContainerException("Invalid serviceOutputPath defined in container configuration");
         } else {
             serviceOutputPath = serviceOutputPathProp.value;
         }
@@ -948,11 +976,18 @@ public class PojoGeneratorContainer implements Container {
                 }
 
                 // write it as a Java file
-                File file = new File(entityOutputPath + entityName + fileExtension);
+                String path = entityOutputPath;
+                if (baseEntities.contains(entityName)) {
+                    Debug.logInfo("Entity [" + entityName + "] is configured as a base entity.", MODULE);
+                    path = baseEntityOutputPath;
+                }
+                String fileName = path + entityName + fileExtension;
+
+                File file = new File(fileName);
                 try {
                     FileUtils.writeStringToFile(file, writer.toString(), "UTF-8");
                 } catch (IOException e) {
-                    Debug.logError(e, "Aborting, error writing file " + entityOutputPath + entityName + fileExtension, MODULE);
+                    Debug.logError(e, "Aborting, error writing file " + fileName, MODULE);
                     errorEntities.add(entityName);
                     break;
                 }

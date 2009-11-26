@@ -38,6 +38,7 @@ import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 import org.opentaps.common.domain.order.OrderSpecification.OrderTypeEnum;
 import org.opentaps.common.order.shoppingcart.OpentapsShoppingCart;
 import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.domain.DomainRepository;
 import org.opentaps.domain.base.constants.ContactMechPurposeTypeConstants;
 import org.opentaps.domain.base.constants.StatusItemConstants;
 import org.opentaps.domain.base.entities.ContactMech;
@@ -98,7 +99,7 @@ import org.opentaps.foundation.service.ServiceException;
 
 
 /** {@inheritDoc}. */
-public class OrderRepository extends Repository implements OrderRepositoryInterface {
+public class OrderRepository extends DomainRepository implements OrderRepositoryInterface {
 
     private PartyRepositoryInterface partyRepository;
     private ProductRepositoryInterface productRepository;

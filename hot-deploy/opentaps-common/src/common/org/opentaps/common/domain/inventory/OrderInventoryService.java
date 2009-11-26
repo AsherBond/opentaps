@@ -30,11 +30,11 @@ import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
-import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.GenericServiceException;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.base.constants.EnumerationConstants;
 import org.opentaps.domain.base.constants.InventoryItemTypeConstants;
 import org.opentaps.domain.base.constants.ProductTypeConstants;
@@ -70,12 +70,11 @@ import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
-import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
 
 /** {@inheritDoc} */
-public class OrderInventoryService extends Service implements OrderInventoryServiceInterface {
+public class OrderInventoryService extends DomainService implements OrderInventoryServiceInterface {
 
     private static final String MODULE = OrderInventoryServiceInterface.class.getName();
 

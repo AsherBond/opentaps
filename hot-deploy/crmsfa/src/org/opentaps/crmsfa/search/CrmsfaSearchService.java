@@ -64,7 +64,7 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
     private ContactSearchServiceInterface contactSearch;
     private LeadSearchServiceInterface leadSearch;
     private SalesOpportunitySearchServiceInterface salesOpportunitySearch;
-    
+
     private SearchRepositoryInterface searchRepository;
 
     /**
@@ -107,12 +107,12 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
             orderRepository = orderDomain.getOrderRepository();
             partyRepository = partyDomain.getPartyRepository();
             SearchDomainInterface searchDomain = getDomainsDirectory().getSearchDomain();
-          
+
             accountSearch = searchDomain.getAccountSearchService();
             contactSearch = searchDomain.getContactSearchService();
             leadSearch = searchDomain.getLeadSearchService();
             salesOpportunitySearch = searchDomain.getSalesOpportunitySearchService();
-            
+
             searchRepository = searchDomain.getSearchRepository();
             // make query
             Map output = searchRepository.searchInEntities(makeEntityClassList(), getQueryProjectedFields(), makeQuery(), getPageStart(), getPageSize());
@@ -227,5 +227,5 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
 
         return classes;
     }
- 
+
 }

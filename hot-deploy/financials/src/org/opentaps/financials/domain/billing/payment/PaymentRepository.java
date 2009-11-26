@@ -18,6 +18,7 @@ package org.opentaps.financials.domain.billing.payment;
 
 import org.ofbiz.accounting.util.UtilAccounting;
 import org.ofbiz.entity.GenericEntityException;
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.party.Party;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.domain.billing.payment.Payment;
@@ -94,7 +95,7 @@ public class PaymentRepository extends Repository implements PaymentRepositoryIn
 
     protected PartyRepositoryInterface getPartyRepository() throws RepositoryException {
         if (partyRepository == null) {
-            partyRepository = getDomainsDirectory().getPartyDomain().getPartyRepository();
+            partyRepository = DomainsDirectory.getDomainsDirectory(this).getPartyDomain().getPartyRepository();
         }
         return partyRepository;
     }

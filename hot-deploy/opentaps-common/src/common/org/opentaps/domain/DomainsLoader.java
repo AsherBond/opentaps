@@ -16,8 +16,12 @@
  */
 package org.opentaps.domain;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.LocalDispatcher;
+import org.opentaps.foundation.infrastructure.DomainContextInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
@@ -26,14 +30,11 @@ import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 
 /**
  * This class helps with loading of domains using the Spring framework.
  */
-public class DomainsLoader {
+public class DomainsLoader implements DomainContextInterface {
 
     private static String DOMAINS_DIRECTORY_FILE = "domains-directory.xml";
     private static String DOMAINS_DIRECTORY_BEAN_ID = "domainsDirectory";
@@ -81,36 +82,35 @@ public class DomainsLoader {
         }
     }
 
-    /**
-     * Sets the <code>User</code>.
-     * @param user an <code>User</code> value
-     */
+    /** {@inheritDoc} */
     public void setUser(User user) {
         this.user = user;
     }
 
-    /**
-     * Sets the <code>Infrastructure</code>.
-     * @param infrastructure an <code>Infrastructure</code> value
-     */
+    /** {@inheritDoc} */
     public void setInfrastructure(Infrastructure infrastructure) {
         this.infrastructure = infrastructure;
     }
 
-    /**
-     * Gets the <code>User</code>.
-     * @return an <code>User</code> value
-     */
+    /** {@inheritDoc} */
     public User getUser() {
         return this.user;
     }
 
-    /**
-     * Gets the <code>Infrastructure</code>.
-     * @return an <code>Infrastructure</code> value
-     */
+    /** {@inheritDoc} */
     public Infrastructure getInfrastructure() {
         return this.infrastructure;
+    }
+
+    /** {@inheritDoc} */
+    public void setDomainContext(DomainContextInterface context) {
+        this.setDomainContext(context.getInfrastructure(), context.getUser());
+    }
+
+    /** {@inheritDoc} */
+    public void setDomainContext(Infrastructure infrastructure, User user) {
+        this.setInfrastructure(infrastructure);
+        this.setUser(user);
     }
 
     private static synchronized ListableBeanFactory getListableBeanFactory() {

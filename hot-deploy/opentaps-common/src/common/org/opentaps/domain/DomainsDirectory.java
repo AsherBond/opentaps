@@ -19,20 +19,20 @@ package org.opentaps.domain;
 import org.opentaps.domain.billing.BillingDomainInterface;
 import org.opentaps.domain.inventory.InventoryDomainInterface;
 import org.opentaps.domain.ledger.LedgerDomainInterface;
+import org.opentaps.domain.manufacturing.ManufacturingDomainInterface;
 import org.opentaps.domain.order.OrderDomainInterface;
 import org.opentaps.domain.organization.OrganizationDomainInterface;
 import org.opentaps.domain.party.PartyDomainInterface;
 import org.opentaps.domain.product.ProductDomainInterface;
-import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.domain.purchasing.PurchasingDomainInterface;
 import org.opentaps.domain.search.SearchDomainInterface;
 import org.opentaps.domain.shipping.ShippingDomainInterface;
 import org.opentaps.domain.voip.VoipDomainInterface;
-import org.opentaps.domain.manufacturing.ManufacturingDomainInterface;
-import org.opentaps.domain.purchasing.PurchasingDomainInterface;
+import org.opentaps.foundation.infrastructure.DomainContextInterface;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
 
-
-public class DomainsDirectory {
+public class DomainsDirectory implements DomainContextInterface {
 
     private BillingDomainInterface billingDomain;
     private OrderDomainInterface orderDomain;
@@ -50,20 +50,45 @@ public class DomainsDirectory {
     private Infrastructure infrastructure;
     private User user;
 
+    /** {@inheritDoc} */
     public Infrastructure getInfrastructure() {
         return infrastructure;
     }
 
+    /** {@inheritDoc} */
     public void setInfrastructure(Infrastructure infrastructure) {
         this.infrastructure = infrastructure;
     }
 
+    /** {@inheritDoc} */
     public User getUser() {
         return user;
     }
 
+    /** {@inheritDoc} */
     public void setUser(User user) {
         this.user = user;
+    }
+
+    /** {@inheritDoc} */
+    public void setDomainContext(DomainContextInterface context) {
+        this.setDomainContext(context.getInfrastructure(), context.getUser());
+    }
+
+    /** {@inheritDoc} */
+    public void setDomainContext(Infrastructure infrastructure, User user) {
+        this.setInfrastructure(infrastructure);
+        this.setUser(user);
+    }
+
+
+    /**
+     * Builds a <code>DomainsDirectory</code> instance from a <code>DomainContextInterface</code>.
+     * @param object a <code>DomainContextInterface</code> instance
+     * @return the domain directory
+     */
+    public static DomainsDirectory getDomainsDirectory(DomainContextInterface object) {
+        return new DomainsLoader(object.getInfrastructure(), object.getUser()).loadDomainsDirectory();
     }
 
     public void setBillingDomain(BillingDomainInterface domain) {
@@ -167,7 +192,7 @@ public class DomainsDirectory {
     public void setPurchasingDomain(PurchasingDomainInterface purchasingDomain) {
         this.purchasingDomain = purchasingDomain;
     }
-    
+
     public VoipDomainInterface getVoipDomain() {
         voipDomain.setInfrastructure(infrastructure);
         voipDomain.setUser(user);
@@ -177,7 +202,6 @@ public class DomainsDirectory {
     public void setVoipDomain(VoipDomainInterface voipDomain) {
         this.voipDomain = voipDomain;
     }
-    
 
     public SearchDomainInterface getSearchDomain() {
         searchDomain.setInfrastructure(infrastructure);

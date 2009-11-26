@@ -22,6 +22,7 @@ import java.util.Map;
 import java.sql.Timestamp;
 
 import org.ofbiz.base.util.Debug;
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.base.entities.PartyClassification;
 import org.opentaps.domain.base.entities.PartyContactMech;
 import org.opentaps.domain.base.entities.PartyContactMechPurpose;
@@ -482,7 +483,7 @@ public class Party extends org.opentaps.domain.base.entities.Party {
         try {
             return PartyRepositoryInterface.class.cast(repository);
         } catch (ClassCastException e) {
-            repository = repository.getDomainsDirectory().getPartyDomain().getPartyRepository();
+            repository = DomainsDirectory.getDomainsDirectory(repository).getPartyDomain().getPartyRepository();
             return PartyRepositoryInterface.class.cast(repository);
         }
     }

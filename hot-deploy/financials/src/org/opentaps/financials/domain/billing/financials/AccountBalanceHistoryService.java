@@ -23,14 +23,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
 import javolution.util.FastList;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericEntityException;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.base.entities.AccountBalanceHistory;
 import org.opentaps.domain.billing.financials.AccountBalanceHistoryServiceInterface;
 import org.opentaps.domain.organization.Organization;
@@ -38,16 +39,13 @@ import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
-
-import com.opensourcestrategies.financials.accounts.AccountsHelper;
 
 /**
  * POJO implementation of services which create snapshot of customer/vendor/commission balances.
  * opentaps Service foundation class.
  */
-public class AccountBalanceHistoryService extends Service implements AccountBalanceHistoryServiceInterface {
+public class AccountBalanceHistoryService extends DomainService implements AccountBalanceHistoryServiceInterface {
 
     private static final String MODULE = AccountBalanceHistoryService.class.getName();
     // session object, using to store/search pojos.
@@ -59,7 +57,7 @@ public class AccountBalanceHistoryService extends Service implements AccountBala
     public void captureAccountBalancesSnapshot() throws ServiceException {
         Transaction tx = null;
         try {
-            OrganizationRepositoryInterface organizationRepositoryInterface = domains.getOrganizationDomain().getOrganizationRepository();
+            OrganizationRepositoryInterface organizationRepositoryInterface = getDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
             session = getInfrastructure().getSession();
             List<Organization> allValidOrganizations = organizationRepositoryInterface.getAllValidOrganizations();
             List<Map<String, Object>> allBalances = FastList.newInstance();

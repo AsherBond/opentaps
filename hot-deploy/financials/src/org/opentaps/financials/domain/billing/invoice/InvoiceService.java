@@ -16,26 +16,26 @@
  */
 package org.opentaps.financials.domain.billing.invoice;
 
-import org.opentaps.foundation.service.Service;
-import org.opentaps.foundation.service.ServiceException;
-import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.domain.billing.invoice.InvoiceServiceInterface;
-import org.opentaps.domain.billing.invoice.Invoice;
-import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilDateTime;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.base.entities.InvoiceAdjustment;
 import org.opentaps.domain.base.entities.InvoiceItem;
 import org.opentaps.domain.base.entities.OrderItem;
 import org.opentaps.domain.base.entities.OrderItemBilling;
+import org.opentaps.domain.billing.invoice.Invoice;
+import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
+import org.opentaps.domain.billing.invoice.InvoiceServiceInterface;
 import org.opentaps.domain.ledger.InvoiceLedgerServiceInterface;
 import org.opentaps.domain.ledger.LedgerSpecificationInterface;
-import org.ofbiz.base.util.UtilDateTime;
-import org.ofbiz.base.util.Debug;
-
-import java.math.BigDecimal;
-import java.util.List;
+import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.foundation.service.ServiceException;
 
 /** {@inheritDoc} */
-public class InvoiceService extends Service implements InvoiceServiceInterface {
+public class InvoiceService extends DomainService implements InvoiceServiceInterface {
 
     private String invoiceId = null;
     protected String paymentId;

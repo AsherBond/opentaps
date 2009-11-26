@@ -23,6 +23,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.base.entities.EftAccount;
 import org.opentaps.domain.base.entities.PaymentMethodAndEftAccount;
 import org.opentaps.domain.billing.invoice.Invoice;
@@ -126,14 +127,14 @@ public class LockboxRepository extends Repository implements LockboxRepositoryIn
 
     protected InvoiceRepositoryInterface getInvoiceRepository() throws RepositoryException {
         if (invoiceRepository == null) {
-            invoiceRepository = getDomainsDirectory().getBillingDomain().getInvoiceRepository();
+            invoiceRepository = DomainsDirectory.getDomainsDirectory(this).getBillingDomain().getInvoiceRepository();
         }
         return invoiceRepository;
     }
 
     protected PartyRepositoryInterface getPartyRepository() throws RepositoryException {
         if (partyRepository == null) {
-            partyRepository = getDomainsDirectory().getPartyDomain().getPartyRepository();
+            partyRepository = DomainsDirectory.getDomainsDirectory(this).getPartyDomain().getPartyRepository();
         }
         return partyRepository;
     }

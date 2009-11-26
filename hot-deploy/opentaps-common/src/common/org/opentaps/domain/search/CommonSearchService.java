@@ -18,11 +18,14 @@ package org.opentaps.domain.search;
 
 import java.util.List;
 
+import org.opentaps.domain.DomainService;
 import org.opentaps.foundation.service.Service;
+
 /**
  * Base class for the Search Service implementations.
  */
-public abstract class CommonSearchService extends Service implements SearchServiceInterface {
+public abstract class CommonSearchService extends DomainService implements SearchServiceInterface {
+
     private int pageSize = SearchRepositoryInterface.DEFAULT_PAGE_SIZE;
     private int pageStart = 0;
     private String keywords;
@@ -83,7 +86,6 @@ public abstract class CommonSearchService extends Service implements SearchServi
         return resultSize;
     }
 
-    
     public void setResults(List<Object[]> results) {
         this.results = results;
     }

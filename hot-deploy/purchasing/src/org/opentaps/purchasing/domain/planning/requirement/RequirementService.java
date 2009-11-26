@@ -24,6 +24,7 @@ import java.util.List;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.base.entities.Requirement;
 import org.opentaps.domain.base.entities.RequirementRole;
 import org.opentaps.domain.base.entities.SupplierProduct;
@@ -33,11 +34,10 @@ import org.opentaps.domain.purchasing.PurchasingDomainInterface;
 import org.opentaps.domain.purchasing.planning.PlanningRepositoryInterface;
 import org.opentaps.domain.purchasing.planning.requirement.RequirementServiceInterface;
 import org.opentaps.foundation.exception.FoundationException;
-import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
 /** {@inheritDoc} */
-public class RequirementService extends Service implements RequirementServiceInterface {
+public class RequirementService extends DomainService implements RequirementServiceInterface {
 
     private static final String MODULE = RequirementService.class.getName();
 

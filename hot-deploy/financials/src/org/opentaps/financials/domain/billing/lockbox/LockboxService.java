@@ -27,6 +27,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.base.entities.PaymentMethodAndEftAccount;
 import org.opentaps.domain.base.services.CreatePaymentApplicationService;
 import org.opentaps.domain.base.services.FinancialsCreatePaymentService;
@@ -44,11 +45,10 @@ import org.opentaps.domain.ledger.GeneralLedgerAccount;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.domain.party.Party;
 import org.opentaps.domain.party.PartyRepositoryInterface;
-import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
 /** {@inheritDoc} */
-public class LockboxService extends Service implements LockboxServiceInterface {
+public class LockboxService extends DomainService implements LockboxServiceInterface {
 
     private static final String MODULE = LockboxService.class.getName();
 

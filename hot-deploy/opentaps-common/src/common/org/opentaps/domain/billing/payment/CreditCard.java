@@ -16,6 +16,7 @@
  */
 package org.opentaps.domain.billing.payment;
 
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.order.OrderSpecificationInterface;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.foundation.repository.RepositoryException;
@@ -59,7 +60,7 @@ public class CreditCard extends org.opentaps.domain.base.entities.CreditCard {
         try {
             return OrderRepositoryInterface.class.cast(repository);
         } catch (ClassCastException e) {
-            repository = repository.getDomainsDirectory().getOrderDomain().getOrderRepository();
+            repository = DomainsDirectory.getDomainsDirectory(repository).getOrderDomain().getOrderRepository();
             return OrderRepositoryInterface.class.cast(repository);
         }
     }

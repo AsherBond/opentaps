@@ -73,7 +73,6 @@ public class SearchTests extends OpentapsTestCase {
         CrmsfaSearchService crmSearch = new CrmsfaSearchService();
         crmSearch.setInfrastructure(new Infrastructure(dispatcher));
         crmSearch.setUser(new User(admin));
-        crmSearch.loadDomainsDirectory();
         crmSearch.setKeywords(keyWord);
         crmSearch.setSearchAccounts(true);
         crmSearch.search();
@@ -87,7 +86,6 @@ public class SearchTests extends OpentapsTestCase {
         PurchasingSearchService purchasingSearch = new PurchasingSearchService();
         purchasingSearch.setInfrastructure(new Infrastructure(dispatcher));
         purchasingSearch.setUser(new User(admin));
-        purchasingSearch.loadDomainsDirectory();
         purchasingSearch.setKeywords(keyWord);
         purchasingSearch.setSearchSuppliers(true);
         purchasingSearch.search();
@@ -375,7 +373,6 @@ public class SearchTests extends OpentapsTestCase {
         CrmsfaSearchService crmSearch = new CrmsfaSearchService();
         crmSearch.setInfrastructure(new Infrastructure(dispatcher));
         crmSearch.setUser(new User(admin));
-        crmSearch.loadDomainsDirectory();
         crmSearch.setKeywords(keywords);
         crmSearch.setSearchAccounts(true);
         crmSearch.setSearchContacts(true);
@@ -388,7 +385,6 @@ public class SearchTests extends OpentapsTestCase {
         CrmsfaSearchService crmSearch = new CrmsfaSearchService();
         crmSearch.setInfrastructure(new Infrastructure(dispatcher));
         crmSearch.setUser(new User(admin));
-        crmSearch.loadDomainsDirectory();
         crmSearch.setKeywords(keywords);
         crmSearch.setSearchSalesOpportunities(true);
         crmSearch.search();
@@ -399,7 +395,6 @@ public class SearchTests extends OpentapsTestCase {
         PurchasingSearchService purchasingSearch = new PurchasingSearchService();
         purchasingSearch.setInfrastructure(new Infrastructure(dispatcher));
         purchasingSearch.setUser(new User(admin));
-        purchasingSearch.loadDomainsDirectory();
         purchasingSearch.setKeywords(keywords);
         purchasingSearch.setSearchSuppliers(true);
         purchasingSearch.search();

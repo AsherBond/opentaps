@@ -31,6 +31,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.base.constants.StatusItemConstants;
 import org.opentaps.domain.base.entities.AcctgTagPostingCheck;
 import org.opentaps.domain.base.entities.AcctgTransAndEntries;
@@ -247,7 +248,7 @@ public class LedgerRepository extends Repository implements LedgerRepositoryInte
 
         // post to ledger if configured to
         if (getSpecification().isAutoPostToLedger(acctgTrans)) {
-            LedgerServiceInterface ledgerService = getDomainsDirectory().getLedgerDomain().getLedgerService();
+            LedgerServiceInterface ledgerService = DomainsDirectory.getDomainsDirectory(this).getLedgerDomain().getLedgerService();
             ledgerService.setAcctgTransId(acctgTrans.getAcctgTransId());
             ledgerService.postAcctgTrans();
         }
@@ -351,7 +352,7 @@ public class LedgerRepository extends Repository implements LedgerRepositoryInte
 
     protected OrganizationRepositoryInterface getOrganizationRepository() throws RepositoryException {
         if (organizationRepository == null) {
-            organizationRepository = getDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
+            organizationRepository = DomainsDirectory.getDomainsDirectory(this).getOrganizationDomain().getOrganizationRepository();
         }
         return organizationRepository;
     }

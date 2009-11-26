@@ -35,7 +35,7 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
-import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.base.constants.ContactMechPurposeTypeConstants;
 import org.opentaps.domain.base.constants.OrderAdjustmentTypeConstants;
 import org.opentaps.domain.base.constants.StatusItemConstants;
@@ -61,7 +61,7 @@ import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
 /** {@inheritDoc} */
-public class OrderService extends Service implements OrderServiceInterface {
+public class OrderService extends DomainService implements OrderServiceInterface {
 
     private static final String MODULE = OrderService.class.getName();
 
@@ -649,8 +649,7 @@ public class OrderService extends Service implements OrderServiceInterface {
 
         try {
 
-            DomainsLoader dl = new DomainsLoader(getInfrastructure(), getUser());
-            OrderRepositoryInterface repository = dl.loadDomainsDirectory().getOrderDomain().getOrderRepository();
+            OrderRepositoryInterface repository = getDomainsDirectory().getOrderDomain().getOrderRepository();
             repository.setInfrastructure(getInfrastructure());
             repository.setUser(getUser());
 
@@ -671,8 +670,7 @@ public class OrderService extends Service implements OrderServiceInterface {
 
         try {
 
-            DomainsLoader dl = new DomainsLoader(getInfrastructure(), getUser());
-            OrderRepositoryInterface repository = dl.loadDomainsDirectory().getOrderDomain().getOrderRepository();
+            OrderRepositoryInterface repository = getDomainsDirectory().getOrderDomain().getOrderRepository();
             repository.setInfrastructure(getInfrastructure());
             repository.setUser(getUser());
 

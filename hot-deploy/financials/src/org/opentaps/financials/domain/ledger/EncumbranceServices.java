@@ -29,6 +29,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericEntityException;
 import org.opentaps.common.domain.order.OrderSpecification;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.base.constants.EncumbranceDetailTypeConstants;
 import org.opentaps.domain.base.constants.InvoiceTypeConstants;
 import org.opentaps.domain.base.entities.AcctgTransEntry;
@@ -49,10 +50,9 @@ import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
-import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
-public class EncumbranceServices extends Service implements EncumbranceServiceInterface {
+public class EncumbranceServices extends DomainService implements EncumbranceServiceInterface {
 
     private String organizationPartyId;
     private Timestamp startDatetime = null;

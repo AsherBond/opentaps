@@ -221,7 +221,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
         }
 
         // if the address is not in InvoiceContactMech, use the billing address of the party
-        DomainsDirectory dd = this.getDomainsDirectory();
+        DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(this);
         PartyRepositoryInterface partyRepository = dd.getPartyDomain().getPartyRepository();
         PostalAddress billingAddress = null;
 
@@ -306,7 +306,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
 
     protected OrganizationRepositoryInterface getOrganizationRepository() throws RepositoryException {
         if (organizationRepository == null) {
-            organizationRepository = getDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
+            organizationRepository = DomainsDirectory.getDomainsDirectory(this).getOrganizationDomain().getOrganizationRepository();
         }
         return organizationRepository;
     }

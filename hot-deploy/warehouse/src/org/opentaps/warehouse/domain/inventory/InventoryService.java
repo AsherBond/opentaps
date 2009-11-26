@@ -22,8 +22,7 @@ import java.util.Map;
 
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
-import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.service.ServiceUtil;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.base.entities.InventoryTransfer;
 import org.opentaps.domain.base.services.CreateInventoryItemDetailService;
 import org.opentaps.domain.base.services.CreateInventoryItemService;
@@ -34,13 +33,12 @@ import org.opentaps.domain.inventory.InventoryServiceInterface;
 import org.opentaps.domain.inventory.InventorySpecification;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
 /**
  * Inventory management services implemented with POJO Java engine using the opentaps Service foundation class.
  */
-public class InventoryService extends Service implements InventoryServiceInterface {
+public class InventoryService extends DomainService implements InventoryServiceInterface {
 
     @SuppressWarnings("unused")
     private static final String MODULE = InventoryService.class.getName();
@@ -72,12 +70,12 @@ public class InventoryService extends Service implements InventoryServiceInterfa
     public void setStatusId(String statusId) {
         this.statusId = statusId;
     }
-    
+
     /** {@inheritDoc} */
     public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
-    }    
-    
+    }
+
     /** {@inheritDoc} */
     public void setUseCache(Boolean useCache) {
     }
@@ -109,7 +107,7 @@ public class InventoryService extends Service implements InventoryServiceInterfa
                 if (statusId != null && !item.getStatusId().equals(statusId)) {
                     continue;
                 }
-                // filter other facilityId item 
+                // filter other facilityId item
                 if (facilityId != null && !item.getFacilityId().equals(facilityId)) {
                     continue;
                 }
@@ -130,7 +128,7 @@ public class InventoryService extends Service implements InventoryServiceInterfa
         InventoryTransfer transfer = null;
 
         try {
-            inventoryRepository = domains.getInventoryDomain().getInventoryRepository();
+            inventoryRepository = getDomainsDirectory().getInventoryDomain().getInventoryRepository();
 
             transfer = inventoryRepository.getInventoryTransferById(inventoryTransferId);
             // the transfer destination InventoryItem

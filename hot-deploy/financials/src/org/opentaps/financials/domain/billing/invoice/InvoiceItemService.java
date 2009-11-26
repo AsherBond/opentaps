@@ -25,6 +25,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilObject;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericEntityException;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.base.entities.InvoiceItem;
 import org.opentaps.domain.base.entities.SupplierProduct;
 import org.opentaps.domain.billing.invoice.Invoice;
@@ -36,14 +37,13 @@ import org.opentaps.domain.product.ProductRepositoryInterface;
 import org.opentaps.domain.purchasing.PurchasingRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
 /**
  * POJO implementation of services which create/update invoice item using the
  * opentaps Service foundation class.
  */
-public class InvoiceItemService extends Service implements InvoiceItemServiceInterface {
+public class InvoiceItemService extends DomainService implements InvoiceItemServiceInterface {
 
     private static final String MODULE = InvoiceItemService.class.getName();
     private static int INVOICE_ITEM_PADDING = 4;

@@ -35,6 +35,7 @@ import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.party.PartyContactHelper;
+import org.opentaps.domain.DomainRepository;
 import org.opentaps.domain.base.constants.ContactMechTypeConstants;
 import org.opentaps.domain.base.constants.RoleTypeConstants;
 import org.opentaps.domain.base.entities.ContactMech;
@@ -64,7 +65,7 @@ import org.opentaps.foundation.service.ServiceException;
 import org.opentaps.domain.base.constants.ContactMechPurposeTypeConstants;
 
 /** {@inheritDoc} */
-public class PartyRepository extends Repository implements PartyRepositoryInterface {
+public class PartyRepository extends DomainRepository implements PartyRepositoryInterface {
 
     private static final String MODULE = PartyRepository.class.getName();
 

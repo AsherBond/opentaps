@@ -16,19 +16,20 @@
  */
 package org.opentaps.domain.billing.payment;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.ofbiz.base.util.UtilNumber;
+import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.base.entities.PaymentApplication;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.domain.party.Party;
-import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.entity.EntityNotFoundException;
-import org.ofbiz.base.util.UtilNumber;
-import org.ofbiz.base.util.UtilValidate;
-
-import java.math.BigDecimal;
-import java.util.List;
+import org.opentaps.foundation.repository.RepositoryException;
 
 /**
  * Order Payment Preference entity.
@@ -256,7 +257,7 @@ public class Payment extends org.opentaps.domain.base.entities.Payment {
         try {
             return PaymentRepositoryInterface.class.cast(repository);
         } catch (ClassCastException e) {
-            repository = repository.getDomainsDirectory().getBillingDomain().getPaymentRepository();
+            repository = DomainsDirectory.getDomainsDirectory(repository).getBillingDomain().getPaymentRepository();
             return PaymentRepositoryInterface.class.cast(repository);
         }
     }
@@ -273,7 +274,7 @@ public class Payment extends org.opentaps.domain.base.entities.Payment {
      * @throws RepositoryException if an error occurs
      */
     public Boolean isReadyToPost() throws RepositoryException {
-        OrganizationRepositoryInterface ori =  repository.getDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
+        OrganizationRepositoryInterface ori =  DomainsDirectory.getDomainsDirectory(repository).getOrganizationDomain().getOrganizationRepository();
         try {
             Organization organization = ori.getOrganizationById(getOrganizationPartyId());
             if (!organization.allocatePaymentTagsToApplications()) {

@@ -127,6 +127,8 @@
 
     <target name="prepare" depends="clean-lib">
         <mkdir dir="${build.dir}/classes"/>
+        <mkdir dir="${build.dir}/classes/base"/>
+        <mkdir dir="${build.dir}/classes/entities"/>
         <mkdir dir="${build.dir}/classes/common"/>
         <mkdir dir="${build.dir}/classes/prebuild"/>
         <mkdir dir="${build.dir}/lib"/>
@@ -144,10 +146,32 @@
     <!-- Compilation of the source files                                    -->
     <!-- ================================================================== -->
 
-    <target name="classes" depends="prepare,classpath">
-        <javac debug="on" deprecation="on" destdir="${build.dir}/classes/common" fork="yes" memoryMaximumSize="2048M">
+    <target name="base-classes" depends="prepare,classpath">
+        <javac debug="on" deprecation="on" destdir="${build.dir}/classes/base" fork="yes" memoryMaximumSize="1524M">
             <classpath>
                 <path refid="local.class.path"/>
+            </classpath>
+            <src path="${src.dir}/base/"/>
+        </javac>
+    </target>
+
+    <target name="entities-classes" depends="base-classes">
+        <javac debug="on" deprecation="on" destdir="${build.dir}/classes/entities" fork="yes" memoryMaximumSize="1524M">
+            <classpath>
+                <path refid="local.class.path"/>
+                <pathelement location="${build.dir}/classes/base"/>
+            </classpath>
+            <src path="${src.dir}/entities/"/>
+        </javac>
+    </target>
+
+    <target name="classes" depends="base-classes,entities-classes,prepare,classpath">
+
+        <javac debug="on" deprecation="on" destdir="${build.dir}/classes/common" fork="yes" memoryMaximumSize="1524M">
+            <classpath>
+                <path refid="local.class.path"/>
+                <pathelement location="${build.dir}/classes/base"/>
+                <pathelement location="${build.dir}/classes/entities"/>
             </classpath>
             <src path="${src.dir}/common"/>
             <exclude name="org/opentaps/aspect/**"/>
@@ -165,7 +189,11 @@
     </target>
 
     <target name="jar" depends="classes">
-        <jar jarfile="${build.dir}/lib/${name}.jar" basedir="${build.dir}/classes/common" excludes="org/opentaps/aspect/**"/>
+        <jar jarfile="${build.dir}/lib/${name}.jar">
+           <fileset dir="${build.dir}/classes/base"/>
+           <fileset dir="${build.dir}/classes/entities"/>
+           <fileset dir="${build.dir}/classes/common" excludes="org/opentaps/aspect/**"/>
+        </jar>
     </target>
 
     <!-- ================================================================== -->

@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilNumber;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.base.constants.AcctgTransTypeConstants;
 import org.opentaps.domain.base.constants.GlAccountTypeConstants;
 import org.opentaps.domain.base.constants.WorkEffortTypeConstants;
@@ -37,13 +38,12 @@ import org.opentaps.domain.manufacturing.ProductionRun;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationDomainInterface;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
-import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
 /**
  * POJO Service class for services that interact with the ledger.
  */
-public class ManufacturingLedgerService extends Service implements ManufacturingLedgerServiceInterface {
+public class ManufacturingLedgerService extends DomainService implements ManufacturingLedgerServiceInterface {
 
     private static String module = ManufacturingLedgerService.class.getName();
 

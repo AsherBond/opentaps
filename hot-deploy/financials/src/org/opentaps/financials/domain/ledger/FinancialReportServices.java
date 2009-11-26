@@ -25,6 +25,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Transaction;
 import org.ofbiz.base.util.UtilDateTime;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.base.constants.EncumbranceDetailTypeConstants;
 import org.opentaps.domain.base.constants.GlFiscalTypeConstants;
 import org.opentaps.domain.base.entities.AcctgTransAndEntries;
@@ -46,10 +47,9 @@ import org.opentaps.foundation.entity.hibernate.HibernateUtil;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
-public class FinancialReportServices extends Service implements FinancialReportServicesInterface {
+public class FinancialReportServices extends DomainService implements FinancialReportServicesInterface {
 
     private String organizationPartyId;
     private Timestamp startDatetime;
