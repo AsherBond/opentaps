@@ -91,17 +91,17 @@ public class OpportunityLookupService extends EntityLookupAndSuggestService {
 
         // select parties assigned to current user or his team according to view preferences.
         if (getProvider().parameterIsPresent(OpportunityLookupConfiguration.IN_RESPONSIBILTY)) {
+            additionalConditions = EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition("opportunityStageId", EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition(EntityOperator.AND,
+                            EntityCondition.makeCondition("opportunityStageId", EntityOperator.NOT_EQUAL, null),
+                            EntityCondition.makeCondition("opportunityStageId", EntityOperator.NOT_EQUAL, "SOSTG_CLOSED"),
+                            EntityCondition.makeCondition("opportunityStageId", EntityOperator.NOT_EQUAL, "SOSTG_LOST"))
+                    );
                 String viewPref = getProvider().getParameter(OpportunityLookupConfiguration.IN_RESPONSIBILTY);
                 // condition to find all cases where userLogin is the request taker
                 // decide which condition to use based on preferences (default is team)
                 if (OpportunityLookupConfiguration.MY_VALUES.equals(viewPref)) {
-                    additionalConditions = EntityCondition.makeCondition(EntityOperator.OR,
-                            EntityCondition.makeCondition("opportunityStageId", EntityOperator.EQUALS, null),
-                            EntityCondition.makeCondition(EntityOperator.AND,
-                                    EntityCondition.makeCondition("opportunityStageId", EntityOperator.NOT_EQUAL, null),
-                                    EntityCondition.makeCondition("opportunityStageId", EntityOperator.NOT_EQUAL, "SOSTG_CLOSED"),
-                                    EntityCondition.makeCondition("opportunityStageId", EntityOperator.NOT_EQUAL, "SOSTG_LOST"))
-                            );
                     combinedConditions = UtilMisc.toList(
                             EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyId),
                             EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, "RESPONSIBLE_FOR"),

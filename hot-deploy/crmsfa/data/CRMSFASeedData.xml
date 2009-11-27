@@ -145,6 +145,7 @@
     <ViewPrefType viewPrefTypeId="MY_OR_TEAM_CONTACTS" application="crmsfa" applicationSection="contacts" description="View my contacts or my team's contacts" />
     <ViewPrefType viewPrefTypeId="MY_OR_TEAM_CASES" application="crmsfa" applicationSection="cases" description="View my cases or team's cases" />
     <ViewPrefType viewPrefTypeId="MY_OR_TEAM_OPPS" application="crmsfa" applicationSection="opportunities" description="View my opportunities or team's opportunities" />
+    <ViewPrefType viewPrefTypeId="MY_OR_TEAM_ORDERS" application="crmsfa" applicationSection="orders" description="View my orders" />
     <ViewPrefType viewPrefTypeId="MY_OR_TEAM_CALENDAR" application="crmsfa" applicationSection="myHome" description="View my events or my team's events" />
 
     <EnumerationType description="Priority level" enumTypeId="PRIORITY_LEV" hasTable="N"/>
