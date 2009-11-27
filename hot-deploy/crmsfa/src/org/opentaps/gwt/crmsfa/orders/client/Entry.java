@@ -171,8 +171,8 @@ public class Entry extends BaseEntry {
     /**
      * Retrieve GWT parameter viewPref. Parameter is optional.
      * @return
-     *     Possible values are <code>MY_VALUES</code> (or <code>CaseLookupConfiguration.MY_VALUES</code>) and
-     *     <code>TEAM_VALUES</code> (or <code>CaseLookupConfiguration.TEAM_VALUES</code>)
+     *     Possible values are <code>MY_VALUES</code> (or <code>OrderLookupConfiguration.MY_VALUES</code>) and
+     *     <code>TEAM_VALUES</code> (or <code>OrderLookupConfiguration.TEAM_VALUES</code>)
      */
     private static native String getViewPref()/*-{
         return $wnd.viewPref;
