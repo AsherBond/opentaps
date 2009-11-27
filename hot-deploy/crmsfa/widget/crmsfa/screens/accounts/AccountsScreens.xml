@@ -260,7 +260,6 @@
                             <platform-specific><html>
                                 <html-template location="component://crmsfa/webapp/crmsfa/accounts/submenus/viewAccountContacts.ftl"/>
                             </html></platform-specific>
-                            <include-form name="ListContacts" location="component://crmsfa/widget/crmsfa/forms/contacts/ContactsForms.xml"/>
                             <!-- If the user can update accounts, include this form -->
                             <section>
                                 <condition><if-compare field="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
