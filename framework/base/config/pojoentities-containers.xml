@@ -55,7 +55,7 @@ under the License.
         <property name="baseEntityOutputPath" value="hot-deploy/opentaps-common/src/base/org/opentaps/domain/base/entities/"/>
         <property name="baseEntities" value="SequenceValueItem"/>
         <property name="entityOutputPath" value="hot-deploy/opentaps-common/src/entities/org/opentaps/domain/base/entities/"/>
-        <property name="serviceOutputPath" value="hot-deploy/opentaps-common/src/common/org/opentaps/domain/base/services/"/>
+        <property name="serviceOutputPath" value="hot-deploy/opentaps-common/src/services/org/opentaps/domain/base/services/"/>
         <property name="hibernateCfgTemplate" value="hot-deploy/opentaps-common/templates/HibernateCfg.ftl"/>
         <property name="hibernateCfgPath" value="hot-deploy/opentaps-common/config/hibernate.cfg.xml"/>
     </container>

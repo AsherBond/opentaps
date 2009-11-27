@@ -58,7 +58,7 @@ import org.ofbiz.service.LocalDispatcher;
  * It represents an (in-memory) bill of materials (in which each component is an BomNode)
  * Useful for tree traversal (breakdown, explosion, implosion).
  */
-public class BomTree {
+public class BomTree implements BomTreeInterface {
 
     /** Builds the BOM from the input product and each of its component, a downward visit is performed (explosion). */
     public static final int EXPLOSION = 0;
@@ -74,7 +74,7 @@ public class BomTree {
     private GenericValue userLogin;
 
     // same as BOMTree, need to redefine
-    private BomNode root;
+    private BomNodeInterface root;
     private BigDecimal rootQuantity;
     private BigDecimal rootAmount;
     private Date inDate;
@@ -187,7 +187,7 @@ public class BomTree {
         if (product == null) {
             return;
         }
-        BomNode originalNode = new BomNode(product, dispatcher, userLogin);
+        BomNodeInterface originalNode = new BomNode(product, dispatcher, userLogin);
         originalNode.setTree(this);
 
         // If the product hasn't a bill of materials we try to retrieve
@@ -328,7 +328,7 @@ public class BomTree {
      * @return true if no virtual nodes (products) are present in the tree
      */
     public boolean isConfigured() {
-        List<BomNode> notConfiguredParts = new ArrayList<BomNode>();
+        List<BomNodeInterface> notConfiguredParts = new ArrayList<BomNodeInterface>();
         root.isConfigured(notConfiguredParts);
         return (notConfiguredParts.size() == 0);
     }
@@ -348,7 +348,7 @@ public class BomTree {
     public void setRootQuantity(BigDecimal rootQuantity) {
         this.rootQuantity = rootQuantity;
         // cascade the quantity to the nodes according to the BOM
-        print(new ArrayList<BomNode>());
+        print(new ArrayList<BomNodeInterface>());
     }
 
     /**
@@ -371,7 +371,7 @@ public class BomTree {
      * Gets the root Node for this BOM Tree.
      * @return  the root Node for this BOM Tree
      */
-    public BomNode getRoot() {
+    public BomNodeInterface getRoot() {
         return root;
     }
 
@@ -417,7 +417,7 @@ public class BomTree {
      * @param arr the <code>List</code> used to collect tree info
      * @param initialDepth the depth of the root node
      */
-    public void print(List<BomNode> arr, int initialDepth) {
+    public void print(List<BomNodeInterface> arr, int initialDepth) {
         print(arr, initialDepth, true);
     }
 
@@ -428,7 +428,7 @@ public class BomTree {
      * @param initialDepth the depth of the root node
      * @param excludeWIPs if set to true will ignore WIP Nodes
      */
-    public void print(List<BomNode> arr, int initialDepth, boolean excludeWIPs) {
+    public void print(List<BomNodeInterface> arr, int initialDepth, boolean excludeWIPs) {
         if (root != null) {
             root.print(arr, getRootQuantity(), initialDepth, excludeWIPs);
         }
@@ -439,7 +439,7 @@ public class BomTree {
      * Method used for bom breakdown (explosion/implosion).
      * @param arr the <code>List</code> used to collect tree info
      */
-    public void print(List<BomNode> arr) {
+    public void print(List<BomNodeInterface> arr) {
         print(arr, 0, false);
     }
 
@@ -449,7 +449,7 @@ public class BomTree {
      * @param arr the <code>List</code> used to collect tree info
      * @param excludeWIPs if set to true will ignore WIP Nodes
      */
-    public void print(List<BomNode> arr, boolean excludeWIPs) {
+    public void print(List<BomNodeInterface> arr, boolean excludeWIPs) {
         print(arr, 0, excludeWIPs);
     }
 
@@ -458,7 +458,7 @@ public class BomTree {
      * Method used for bom summarized explosion.
      * @param quantityPerNode The <code>Map</code> that will contain the summarized quantities per productId.
      */
-    public void sumQuantities(Map<String, BomNode> quantityPerNode) {
+    public void sumQuantities(Map<String, BomNodeInterface> quantityPerNode) {
         if (root != null) {
             root.sumQuantity(quantityPerNode);
         }
@@ -469,11 +469,11 @@ public class BomTree {
      * @return the <code>List</code> of productId contained in this Bill of Materials
      */
     public List<String> getAllProductsId() {
-        List<BomNode> nodes = new ArrayList<BomNode>();
+        List<BomNodeInterface> nodes = new ArrayList<BomNodeInterface>();
         List<String> productsId = new ArrayList<String>();
         // collect nodes in a List
         print(nodes);
-        for (BomNode node : nodes) {
+        for (BomNodeInterface node : nodes) {
             productsId.add(node.getProduct().getString("productId"));
         }
         return productsId;
@@ -523,7 +523,7 @@ public class BomTree {
      * Collects Nodes in the given <code>List</code> for which the product has a <code>shipmentBoxTypeId</code>.
      * @param nodes the <code>List</code> where to collect the Nodes
      */
-    public void getProductsInPackages(List<BomNode> nodes) {
+    public void getProductsInPackages(List<BomNodeInterface> nodes) {
         if (root != null) {
             root.getProductsInPackages(nodes, getRootQuantity(), 0, false);
         }

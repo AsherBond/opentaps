@@ -54,8 +54,8 @@ import org.ofbiz.service.GenericDispatcher;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
-import org.opentaps.common.manufacturing.bom.BomNode;
-import org.opentaps.common.manufacturing.bom.BomTree;
+import org.opentaps.common.manufacturing.bom.BomNodeInterface;
+import org.opentaps.common.manufacturing.bom.BomTreeInterface;
 import org.opentaps.common.order.PurchaseOrderFactory;
 import org.opentaps.common.order.SalesOrderFactory;
 import org.opentaps.common.product.UtilProduct;
@@ -907,13 +907,13 @@ public class OpentapsTestCase extends TestCase {
     }
 
     /**
-     * Asserts the given <code>BomTree</code> matches the expected component quantities.
+     * Asserts the given <code>BomTreeInterface</code> matches the expected component quantities.
      *
-     * @param tree a <code>BomTree</code> value
+     * @param tree a <code>BomTreeInterface</code> value
      * @param expectedComponents the <code>Map</code> of expected components Id => quantities
      */
-    protected void assertBomTreeCorrect(BomTree tree, Map<String, BigDecimal> expectedComponents) {
-        Map<String, BomNode> treeQty = new HashMap<String, BomNode>();
+    protected void assertBomTreeCorrect(BomTreeInterface tree, Map<String, BigDecimal> expectedComponents) {
+        Map<String, BomNodeInterface> treeQty = new HashMap<String, BomNodeInterface>();
         tree.sumQuantities(treeQty);
         for (String productId : expectedComponents.keySet()) {
             assertNotNull("Missing product [" + productId + "] (qty = " + expectedComponents.get(productId) + " ) node.", treeQty.get(productId));

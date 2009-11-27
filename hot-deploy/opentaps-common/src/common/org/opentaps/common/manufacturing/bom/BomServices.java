@@ -220,7 +220,7 @@ public final class BomServices {
         // Components
         //
         BomTree tree = null;
-        List<BomNode> components = new ArrayList<BomNode>();
+        List<BomNodeInterface> components = new ArrayList<BomNodeInterface>();
         try {
             tree = new BomTree(productId, "MANUF_COMPONENT", fromDate, BomTree.EXPLOSION_SINGLE_LEVEL, bomRoutingId, delegator, dispatcher, userLogin);
             tree.setRootQuantity(quantity);
@@ -240,7 +240,7 @@ public final class BomServices {
 
         // also return a componentMap (useful in scripts and simple language code)
         List componentsMap = new ArrayList();
-        for (BomNode node : components) {
+        for (BomNodeInterface node : components) {
             Map componentMap = new HashMap();
             componentMap.put("product", node.getProduct());
             componentMap.put("quantity", node.getQuantity());

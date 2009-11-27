@@ -653,11 +653,11 @@ under the License.
             description="Generate the POJO base entities from the entity and service model.">
         <mkdir dir="./hot-deploy/opentaps-common/src/base/org/opentaps/domain/base/entities/"/>
         <mkdir dir="./hot-deploy/opentaps-common/src/entities/org/opentaps/domain/base/entities/"/>
-        <mkdir dir="./hot-deploy/opentaps-common/src/common/org/opentaps/domain/base/services/"/>
+        <mkdir dir="./hot-deploy/opentaps-common/src/services/org/opentaps/domain/base/services/"/>
         <delete verbose="on">
             <fileset dir="./hot-deploy/opentaps-common/src/base/org/opentaps/domain/base/entities/" includes="**/*.java"/>
             <fileset dir="./hot-deploy/opentaps-common/src/entities/org/opentaps/domain/base/entities/" includes="**/*.java"/>
-            <fileset dir="./hot-deploy/opentaps-common/src/common/org/opentaps/domain/base/services/" includes="**/*.java"/>
+            <fileset dir="./hot-deploy/opentaps-common/src/services/org/opentaps/domain/base/services/" includes="**/*.java"/>
         </delete>
         <java jar="ofbiz.jar" fork="true">
             <jvmarg value="${memory.max.param}"/>

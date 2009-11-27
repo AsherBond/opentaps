@@ -51,7 +51,7 @@ under the License.
         <attribute mode="IN" name="quantity" optional="true" type="BigDecimal"/>
         <attribute mode="IN" name="amount" optional="true" type="BigDecimal"/>
         <attribute mode="IN" name="routingId" optional="true" type="String"/>
-        <attribute mode="OUT" name="tree" optional="true" type="org.opentaps.common.manufacturing.bom.BomTree"/>
+        <attribute mode="OUT" name="tree" optional="true" type="org.opentaps.common.manufacturing.bom.BomTreeInterface"/>
     </service>
 
     <service name="getManufacturingComponents" engine="java"

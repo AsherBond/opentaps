@@ -62,7 +62,7 @@ import org.ofbiz.service.LocalDispatcher;
  * A custom BOM node to support multiple BOM.
  * It represents an (in-memory) component of a bill of materials.
  */
-public class BomNode {
+public class BomNode implements BomNodeInterface {
 
     private static final String MODULE = BomNode.class.getName();
 
@@ -70,15 +70,15 @@ public class BomNode {
     private GenericDelegator delegator;
     private GenericValue userLogin;
 
-    private BomTree tree; // the tree to which this node belongs
-    private BomNode parentNode; // the parent node (null if it's not present)
-    private BomNode substitutedNode; // The virtual node (if any) that this instance substitutes
+    private BomTreeInterface tree; // the tree to which this node belongs
+    private BomNodeInterface parentNode; // the parent node (null if it's not present)
+    private BomNodeInterface substitutedNode; // The virtual node (if any) that this instance substitutes
     private GenericValue ruleApplied; // The rule (if any) that that has been applied to configure the current node
     private String productForRules;
     private GenericValue product; // the current product (from Product entity)
     private GenericValue productAssoc; // the product assoc record (from ProductAssoc entity) in which the current product is in productIdTo
     private List<GenericValue> children = new ArrayList<GenericValue>(); // current node's children (ProductAssocs)
-    private List<BomNode> childrenNodes = new ArrayList<BomNode>(); // current node's children nodes (BomNode)
+    private List<BomNodeInterface> childrenNodes = new ArrayList<BomNodeInterface>(); // current node's children nodes (BomNode)
     private BigDecimal quantityMultiplier = BigDecimal.ONE; // the necessary quantity as declared in the bom (from ProductAssocs or ProductManufacturingRule)
     private BigDecimal scrapFactor = BigDecimal.ONE; // the scrap factor as declared in the bom (from ProductAssocs)
     private int depth = 0; // the depth of this node in the current tree
@@ -147,8 +147,7 @@ public class BomNode {
      * @param type an <code>int</code> value
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
-    protected void loadChildren(String routingId, String partBomTypeId, Date inDate, List productFeatures, int type) throws GenericEntityException {
+    public void loadChildren(String routingId, String partBomTypeId, Date inDate, List<GenericValue> productFeatures, int type) throws GenericEntityException {
         if (product == null) {
             throw new GenericEntityException("product is null");
         }
@@ -184,7 +183,7 @@ public class BomNode {
 
         // reload children Nodes
         childrenNodes.clear();
-        BomNode node = null;
+        BomNodeInterface node = null;
         for (GenericValue child : children) {
             // Configurator
             node = configurator(child, productFeatures, getRootNode().getProductForRules(), inDate);
@@ -213,13 +212,13 @@ public class BomNode {
     /**
      * Substitutes this Node with the given Node.
      *
-     * @param oneChildNode the <code>BomNode</code> to use for substitution
+     * @param oneChildNode the <code>BomNodeInterface</code> to use for substitution
      * @param productFeatures a <code>List</code> value
      * @param productPartRules a <code>List</code> value
-     * @return the new <code>BomNode</code>
+     * @return the new <code>BomNodeInterface</code>
      * @exception GenericEntityException if an error occurs
      */
-    private BomNode substituteNode(BomNode oneChildNode, List<GenericValue> productFeatures, List<GenericValue> productPartRules) throws GenericEntityException {
+    public BomNodeInterface substituteNode(BomNodeInterface oneChildNode, List<GenericValue> productFeatures, List<GenericValue> productPartRules) throws GenericEntityException {
         if (productPartRules != null) {
             for (GenericValue rule : productPartRules) {
                 String ruleCondition = rule.getString("productFeature");
@@ -246,11 +245,11 @@ public class BomNode {
                     }
                 }
                 if (ruleSatisfied && ruleOperator.equals("OR")) {
-                    BomNode tmpNode = oneChildNode;
+                    BomNodeInterface tmpNode = oneChildNode;
                     if (newPart == null || newPart.equals("")) {
                         oneChildNode = null;
                     } else {
-                        BomNode origNode = oneChildNode;
+                        BomNodeInterface origNode = oneChildNode;
                         oneChildNode = new BomNode(newPart, delegator, dispatcher, userLogin);
                         oneChildNode.setTree(tree);
                         oneChildNode.setSubstitutedNode(tmpNode);
@@ -272,9 +271,8 @@ public class BomNode {
         return oneChildNode;
     }
 
-    @SuppressWarnings("unchecked")
-    private BomNode configurator(GenericValue node, List productFeatures, String productIdForRules, Date inDate) throws GenericEntityException {
-        BomNode oneChildNode = new BomNode((String) node.get("productIdTo"), delegator, dispatcher, userLogin);
+    public BomNodeInterface configurator(GenericValue node, List<GenericValue> productFeatures, String productIdForRules, Date inDate) throws GenericEntityException {
+        BomNodeInterface oneChildNode = new BomNode((String) node.get("productIdTo"), delegator, dispatcher, userLogin);
         oneChildNode.setTree(tree);
         oneChildNode.setProductAssoc(node);
         try {
@@ -296,7 +294,7 @@ public class BomNode {
         } catch (Exception nfe) {
             oneChildNode.setScrapFactor(BigDecimal.ONE);
         }
-        BomNode newNode = oneChildNode;
+        BomNodeInterface newNode = oneChildNode;
         // CONFIGURATOR
         if (oneChildNode.isVirtual()) {
             // If the part is VIRTUAL and
@@ -391,7 +389,7 @@ public class BomNode {
     }
 
     @SuppressWarnings("unchecked")
-    protected void loadParents(String partBomTypeId, Date inDate, List productFeatures) throws GenericEntityException {
+    public void loadParents(String partBomTypeId, Date inDate, List productFeatures) throws GenericEntityException {
         if (product == null) {
             throw new GenericEntityException("product is null");
         }
@@ -417,9 +415,9 @@ public class BomNode {
             rows = EntityUtil.filterByDate(rows, inDate);
         }
         children = new ArrayList<GenericValue>(rows);
-        childrenNodes = new ArrayList<BomNode>();
+        childrenNodes = new ArrayList<BomNodeInterface>();
         // build the children Nodes from the found ProductAssoc
-        BomNode childNode = null;
+        BomNodeInterface childNode = null;
         for (GenericValue child : children) {
             childNode = new BomNode(child.getString("productId"), delegator, dispatcher, userLogin);
             // Configurator
@@ -438,15 +436,15 @@ public class BomNode {
      * Gets this Node parent Node in the BOM tree.
      * @return the parent Node in the BOM tree
      */
-    public BomNode getParentNode() {
+    public BomNodeInterface getParentNode() {
         return parentNode;
     }
 
     /**
      * Gets the root Node.
-     * @return an <code>BomNode</code> value
+     * @return a <code>BomNodeInterface</code> value
      */
-    public BomNode getRootNode() {
+    public BomNodeInterface getRootNode() {
         if (parentNode != null) {
             // TODO: this seems not correct
             return getParentNode();
@@ -459,7 +457,7 @@ public class BomNode {
      * Sets this Node parent Node.
      * @param parentNode the parent Node
      */
-    public void setParentNode(BomNode parentNode) {
+    public void setParentNode(BomNodeInterface parentNode) {
         this.parentNode = parentNode;
     }
 
@@ -479,7 +477,7 @@ public class BomNode {
         Debug.logInfo(sb.toString(), MODULE);
 
         GenericValue oneChild = null;
-        BomNode oneChildNode = null;
+        BomNodeInterface oneChildNode = null;
         depth++;
         for (int i = 0; i < children.size(); i++) {
             oneChild = children.get(i);
@@ -511,7 +509,7 @@ public class BomNode {
         sb.append(" - ");
         sb.append("" + quantity);
         GenericValue oneChild = null;
-        BomNode oneChildNode = null;
+        BomNodeInterface oneChildNode = null;
         depth++;
         for (int i = 0; i < children.size(); i++) {
             oneChild = children.get(i);
@@ -538,7 +536,7 @@ public class BomNode {
      * @param excludeWIPs a <code>boolean</code> value
      */
     @SuppressWarnings("unchecked")
-    public void print(List<BomNode> arr, BigDecimal quantity, int depth, boolean excludeWIPs) {
+    public void print(List<BomNodeInterface> arr, BigDecimal quantity, int depth, boolean excludeWIPs) {
         // Now we set the depth and quantity of the current node
         // in this breakdown.
         this.depth = depth;
@@ -580,7 +578,7 @@ public class BomNode {
         arr.add(this);
         // Now (recursively) we visit the children.
         depth++;
-        for (BomNode node : childrenNodes) {
+        for (BomNodeInterface node : childrenNodes) {
             if (excludeWIPs && "WIP".equals(node.getProduct().getString("productTypeId"))) {
                 continue;
             }
@@ -597,7 +595,7 @@ public class BomNode {
      * @param depth an <code>int</code> value
      * @param excludeWIPs a <code>boolean</code> value
      */
-    public void getProductsInPackages(List<BomNode> nodes, BigDecimal quantity, int depth, boolean excludeWIPs) {
+    public void getProductsInPackages(List<BomNodeInterface> nodes, BigDecimal quantity, int depth, boolean excludeWIPs) {
         // Now we set the depth and quantity of the current node
         // in this breakdown.
         this.depth = depth;
@@ -607,7 +605,7 @@ public class BomNode {
             nodes.add(this);
         } else {
             depth++;
-            for (BomNode node : childrenNodes) {
+            for (BomNodeInterface node : childrenNodes) {
                 if (excludeWIPs && "WIP".equals(node.getProduct().getString("productTypeId"))) {
                     continue;
                 }
@@ -622,9 +620,9 @@ public class BomNode {
      * Collects the Nodes info in the given <code>Map</code> as productId => node.
      * @param nodes a <code>Map</code> value
      */
-    public void sumQuantity(Map<String, BomNode> nodes) {
+    public void sumQuantity(Map<String, BomNodeInterface> nodes) {
         // First of all, we try to fetch a node with the same partId
-        BomNode sameNode = nodes.get(product.getString("productId"));
+        BomNodeInterface sameNode = nodes.get(product.getString("productId"));
         // If the node is not found we create a new node for the current product
         if (sameNode == null) {
             sameNode = new BomNode(product, dispatcher, userLogin);
@@ -635,7 +633,7 @@ public class BomNode {
         sameNode.setQuantity(sameNode.getQuantity().add(quantity));
 
         // Now (recursively) we visit the children.
-        for (BomNode node : childrenNodes) {
+        for (BomNodeInterface node : childrenNodes) {
             if (node != null) {
                 node.sumQuantity(nodes);
             }
@@ -665,7 +663,7 @@ public class BomNode {
         if (isManufactured(ignoreSupplierProducts)) {
             List<String> childProductionRuns = new ArrayList<String>();
             Timestamp maxEndDate = null;
-            for (BomNode node : childrenNodes) {
+            for (BomNodeInterface node : childrenNodes) {
                 if (node != null) {
                     Map tmpResult = node.createManufacturingOrder(facilityId, date, null, null, routingId, null, null, shipmentId, false, false);
                     String childProductionRunId = (String) tmpResult.get("productionRunId");
@@ -757,7 +755,7 @@ public class BomNode {
             proposedOrder.calculateStartDate(0, null, delegator, dispatcher, userLogin);
             Timestamp startDate = proposedOrder.getRequirementStartDate();
             minStartDate = startDate;
-            for (BomNode node : childrenNodes) {
+            for (BomNodeInterface node : childrenNodes) {
                 if (node != null) {
                     Timestamp childStartDate = node.getStartDate(facilityId, startDate, false);
                     if (childStartDate.compareTo(minStartDate) < 0) {
@@ -836,13 +834,13 @@ public class BomNode {
      * then recursively checking each children Node.
      * @param arr the not configured Nodes are added to this List
      */
-    public void isConfigured(List<BomNode> arr) {
+    public void isConfigured(List<BomNodeInterface> arr) {
         // First of all we visit the current node.
         if (isVirtual()) {
             arr.add(this);
         }
         // Now (recursively) we visit the children.
-        for (BomNode node : childrenNodes) {
+        for (BomNodeInterface node : childrenNodes) {
             if (node != null) {
                 node.isConfigured(arr);
             }
@@ -893,7 +891,7 @@ public class BomNode {
      * Gets this Node substitutedNode if any.
      * @return this Node substitutedNode or <code>null</code>
      */
-    public BomNode getSubstitutedNode() {
+    public BomNodeInterface getSubstitutedNode() {
         return substitutedNode;
     }
 
@@ -901,7 +899,7 @@ public class BomNode {
      * Sets this Node substitutedNode.
      * @param substitutedNode this Node substitutedNode
      */
-    public void setSubstitutedNode(BomNode substitutedNode) {
+    public void setSubstitutedNode(BomNodeInterface substitutedNode) {
         this.substitutedNode = substitutedNode;
     }
 
@@ -989,7 +987,7 @@ public class BomNode {
      * Gets the <code>List</code> of children Nodes for this Node.
      * @return the <code>List</code> of children Nodes for this Node
      */
-    public List<BomNode> getChildrenNodes() {
+    public List<BomNodeInterface> getChildrenNodes() {
         return childrenNodes;
     }
 
@@ -997,7 +995,7 @@ public class BomNode {
      * Sets the <code>List</code> of children Nodes for this Node.
      * @param childrenNodes <code>List</code> of children Nodes
      */
-    public void setChildrenNodes(List<BomNode> childrenNodes) {
+    public void setChildrenNodes(List<BomNodeInterface> childrenNodes) {
         this.childrenNodes = childrenNodes;
     }
 
@@ -1021,7 +1019,7 @@ public class BomNode {
      * Sets this Node related BOM Tree.
      * @param tree an <code>BomTree</code> value
      */
-    public void setTree(BomTree tree) {
+    public void setTree(BomTreeInterface tree) {
         this.tree = tree;
     }
 
@@ -1029,7 +1027,7 @@ public class BomNode {
      * Gets this Node related BOM Tree.
      * @return an <code>BomTree</code> value
      */
-    public BomTree getTree() {
+    public BomTreeInterface getTree() {
         return tree;
     }
 

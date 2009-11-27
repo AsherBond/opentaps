@@ -75,7 +75,7 @@ import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.manufacturing.OpentapsProductionRun;
-import org.opentaps.common.manufacturing.bom.BomNode;
+import org.opentaps.common.manufacturing.bom.BomNodeInterface;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
@@ -580,9 +580,9 @@ public final class OpentapsMrpServices {
                 Debug.logInfo("initInventoryEventPlanForApprovedRequirements: found internal requirement", MODULE);
                 // get the components
                 Map<String, Object> serviceResponse = dispatcher.runSync("getManufacturingComponents", UtilMisc.toMap("productId", productId, "quantity", eventQuantityTmp, "excludeWIPs", Boolean.FALSE, "userLogin", userLogin));
-                List<BomNode> components = (List<BomNode>) serviceResponse.get("components");
+                List<BomNodeInterface> components = (List<BomNodeInterface>) serviceResponse.get("components");
                 Debug.logInfo("initInventoryEventPlanForApprovedRequirements: adding events for components: " + components, MODULE);
-                for (BomNode node : components) {
+                for (BomNodeInterface node : components) {
                     // add events for each component, the event date begin the same as the internal requirement date
                     parameters = UtilMisc.toMap("productId", node.getProductId(), "eventDate", inventoryEventTimestamp, "inventoryEventPlanTypeId", "MANUF_ORDER_REQ", "facilityId", genericResult.getString("facilityId"));
                     MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(parameters, node.getQuantity().negate(), null, genericResult.getString("requirementId"), requiredByDate.before(now), null, delegator);
@@ -831,7 +831,7 @@ public final class OpentapsMrpServices {
         if (listComponent != null && listComponent.size() > 0) {
             Iterator listComponentIter = listComponent.iterator();
             while (listComponentIter.hasNext()) {
-                BomNode node = (BomNode) listComponentIter.next();
+                BomNodeInterface node = (BomNodeInterface) listComponentIter.next();
                 GenericValue productComponent = node.getProductAssoc();
                 // read the startDate for the component
                 String routingTask = node.getProductAssoc().getString("routingWorkEffortId");
@@ -1141,7 +1141,7 @@ public final class OpentapsMrpServices {
 
                             components = (List) serviceResponse.get("components");
                             if (components != null && components.size() > 0) {
-                                BomNode node = ((BomNode) components.get(0)).getParentNode();
+                                BomNodeInterface node = ((BomNodeInterface) components.get(0)).getParentNode();
                                 isBuilt = node.isManufactured();
                             } else {
                                 isBuilt = false;
@@ -1210,7 +1210,7 @@ public final class OpentapsMrpServices {
                                     routing = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", "DEFAULT_ROUTING"));
                                 }
                                 if (components != null && components.size() > 0) {
-                                    BomNode node = ((BomNode) components.get(0)).getParentNode();
+                                    BomNodeInterface node = ((BomNodeInterface) components.get(0)).getParentNode();
                                     isBuilt = node.isManufactured();
                                 } else {
                                     isBuilt = false;

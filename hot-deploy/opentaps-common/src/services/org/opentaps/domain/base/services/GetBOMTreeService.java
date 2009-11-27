@@ -31,7 +31,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
-import org.opentaps.common.manufacturing.bom.BomTree;
+import org.opentaps.common.manufacturing.bom.BomTreeInterface;
 import org.opentaps.foundation.infrastructure.User;
 
 /**
@@ -111,7 +111,7 @@ public class GetBOMTreeService extends ServiceWrapper {
     private String outSuccessMessage;
     private List outSuccessMessageList;
     private TimeZone outTimeZone;
-    private BomTree outTree;
+    private BomTreeInterface outTree;
     private GenericValue outUserLogin;
 
     private Set<String> inParameters = FastSet.newInstance();
@@ -256,9 +256,9 @@ public class GetBOMTreeService extends ServiceWrapper {
     /**
      * Auto generated value accessor.
      * This parameter is optional.
-     * @return <code>BomTree</code>
+     * @return <code>BomTreeInterface</code>
      */
-    public BomTree getOutTree() {
+    public BomTreeInterface getOutTree() {
         return this.outTree;
     }
     /**
@@ -428,7 +428,7 @@ public class GetBOMTreeService extends ServiceWrapper {
      * This parameter is optional.
      * @param outTree the outTree to set
     */
-    public void setOutTree(BomTree outTree) {
+    public void setOutTree(BomTreeInterface outTree) {
         this.outParameters.add("tree");
         this.outTree = outTree;
     }
@@ -518,7 +518,7 @@ public class GetBOMTreeService extends ServiceWrapper {
         if (mapValue.containsKey("successMessage")) setOutSuccessMessage((String) mapValue.get("successMessage"));
         if (mapValue.containsKey("successMessageList")) setOutSuccessMessageList((List) mapValue.get("successMessageList"));
         if (mapValue.containsKey("timeZone")) setOutTimeZone((TimeZone) mapValue.get("timeZone"));
-        if (mapValue.containsKey("tree")) setOutTree((BomTree) mapValue.get("tree"));
+        if (mapValue.containsKey("tree")) setOutTree((BomTreeInterface) mapValue.get("tree"));
         if (mapValue.containsKey("userLogin")) setOutUserLogin((GenericValue) mapValue.get("userLogin"));
     }
 
