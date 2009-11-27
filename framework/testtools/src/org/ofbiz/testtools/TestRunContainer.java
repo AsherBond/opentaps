@@ -34,6 +34,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.text.DecimalFormat;
 
 /**
  * A Container implementation to run the tests configured through this testtools stuff.
@@ -113,6 +114,16 @@ public class TestRunContainer implements Container {
             throw new ContainerException("No tests found (" + component + " / " + suiteName + " / " + testCase + ")");
         }
 
+        long suiteCount = jsWrapper.getModelTestSuites().size();
+        long testCount = 0;
+        for (ModelTestSuite modelSuite: jsWrapper.getModelTestSuites()) {
+            TestSuite suite = modelSuite.makeTestSuite();
+            testCount += suite.countTestCases();
+        }
+
+        long suiteIdx = 1;
+        long testIdx = 1;
+
         for (ModelTestSuite modelSuite: jsWrapper.getModelTestSuites()) {
             GenericDelegator testDelegator = modelSuite.getDelegator();
             TestSuite suite = modelSuite.makeTestSuite();
@@ -129,11 +140,11 @@ public class TestRunContainer implements Container {
 
             // per-suite results
             TestResult results = new TestResult();
-            results.addListener(new JunitListener());
+            results.addListener(new JunitListener(testCount, testIdx));
             results.addListener(xml);
 
             // add the suite to the xml listener
-            Debug.log("[JUNIT:Suite:Start] Starting test suite: " + suite.getName(), module);
+            Debug.log("[JUNIT:Suite:Start] Starting test suite: [" + suiteIdx + "/" + suiteCount + "] " + suite.getName(), module);
             xml.startTestSuite(test);
             // run the tests
             suite.run(results);
@@ -141,7 +152,7 @@ public class TestRunContainer implements Container {
             // rollback all entity operations performed by the delegator
             testDelegator.rollback();
             xml.endTestSuite(test);
-            Debug.log("[JUNIT:Suite:End] Ending test suite: " + suite.getName(), module);
+            Debug.log("[JUNIT:Suite:End] Ending test suite: [" + suiteIdx + "/" + suiteCount + "] " + suite.getName(), module);
 
             // display the results
             Debug.log("[JUNIT] Pass: " + results.wasSuccessful() + " | # Tests: " + results.runCount() + " | # Failed: " +
@@ -176,12 +187,23 @@ public class TestRunContainer implements Container {
                 }
                 Debug.log("[JUNIT] ------------------------------------------------------------------ [JUNIT]", module);
             }
+            suiteIdx++;
+            testIdx += results.runCount();
         }
 
         return true;
     }
 
     public void stop() throws ContainerException {
+    }
+
+    public static String getProgress(long total, long idx) {
+        if (total == 0) {
+            return "NA";
+        }
+        double p = 100.0 * idx / total;
+        DecimalFormat fmt = new DecimalFormat("0.00");
+        return fmt.format(p) + "%";
     }
 
     class JunitXmlListener extends XMLJUnitResultFormatter {
@@ -206,6 +228,14 @@ public class TestRunContainer implements Container {
 
     class JunitListener implements TestListener {
 
+        public JunitListener(long count, long startIdx) {
+            super();
+            this.testCount = count;
+            this.testIdx = startIdx;
+        }
+
+        private long testCount;
+        private long testIdx;
         private long startTime;
 
         public void addError(Test test, Throwable throwable) {
@@ -217,12 +247,13 @@ public class TestRunContainer implements Container {
         }
 
         public void endTest(Test test) {
-            Debug.logInfo("[JUNIT (end)] : " + test + " finished. (in " + (System.currentTimeMillis() - startTime) + " ms)", module);
+            Debug.logInfo("[JUNIT (end)] : [" + testIdx + "/" + testCount + "][" + getProgress(testCount, testIdx) + "] " + test + " finished. (in " + (System.currentTimeMillis() - startTime) + " ms)", module);
+            testIdx++;
         }
 
         public void startTest(Test test) {
-           Debug.logInfo("[JUNIT (start)] : " + test + " starting...", module);
-           startTime = System.currentTimeMillis();
+            Debug.logInfo("[JUNIT (start)] : [" + testIdx + "/" + testCount + "][" + getProgress(testCount, testIdx) + "] " + test + " starting...", module);
+            startTime = System.currentTimeMillis();
         }
     }
 }
