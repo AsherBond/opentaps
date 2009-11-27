@@ -58,14 +58,15 @@ public class Infrastructure {
 
     private static final String MODULE = Infrastructure.class.getName();
 
-    protected LocalDispatcher dispatcher = null;
-    protected GenericDelegator delegator = null;
-    protected Security security = null;
-    protected GenericValue systemUserLogin = null;  // Sometimes, the system user must be used by the Factory or Repository that use the ofbiz Infrastructure
-    protected User systemUser = null;
+    private LocalDispatcher dispatcher = null;
+    private GenericDelegator delegator = null;
+    private Security security = null;
+    private GenericValue systemUserLogin = null;  // Sometimes, the system user must be used by the Factory or Repository that use the ofbiz Infrastructure
+    private User systemUser = null;
+
     // create this map for store all of session factory
     private static Map<String, SessionFactory> sessionFactories = FastMap.newInstance();
-    // hibernate dialects maps
+    /** Hibernate dialects maps. */
     public static final HashMap<String, String> DIALECTS = new HashMap<String, String>();
     private static final String HELPER_NAME = "org.ofbiz";
     static {
@@ -86,15 +87,15 @@ public class Infrastructure {
         DIALECTS.put("advantage", "");  //not exist mapping Dialect
     }
     /** Hibernate configuration file store path. */
-    public final static String HIBERNATE_CFG_PATH = "hot-deploy/opentaps-common/config/";
+    public static final String HIBERNATE_CFG_PATH = "hot-deploy/opentaps-common/config/";
     /** Hibernate configuration template path. */
-    public final static String HIBERNATE_COMMON_PATH = "hot-deploy/opentaps-common/config/hibernate.cfg.xml";
+    public static final String HIBERNATE_COMMON_PATH = "hot-deploy/opentaps-common/config/hibernate.cfg.xml";
     /** Hibernate configuration template path. */
-    public final static String HIBERNATE_SEARCH_INDEX_PATH = "runtime/lucene/indexes";
+    public static final String HIBERNATE_SEARCH_INDEX_PATH = "runtime/lucene/indexes";
     /** Hibernate configuration file ext. */
-    public final static String HIBERNATE_CFG_EXT = ".cfg.xml";
-    /** Hibernate entity package name */
-    public final static String ENTITY_PACKAGE = "org.opentaps.domain.base.entities";
+    public static final String HIBERNATE_CFG_EXT = ".cfg.xml";
+    /** Hibernate entity package name. */
+    public static final String ENTITY_PACKAGE = "org.opentaps.domain.base.entities";
 
     /**
      * Gets the Hibernate <code>SessionFactory</code> object for the corresponding delegator.
@@ -134,7 +135,7 @@ public class Infrastructure {
             annotationConfiguration.getEventListeners().setSaveEventListeners(saveEventListeners);
             annotationConfiguration.getEventListeners().setUpdateEventListeners(saveOrUpdateEventListeners);
             //get groupHelpName for retrieve database connection information.
-            String groupHelperName = (String) EntityConfigUtil.getDelegatorInfo(delegatorName).groupMap.get(getHelperName());
+            String groupHelperName = EntityConfigUtil.getDelegatorInfo(delegatorName).groupMap.get(getHelperName());
             Debug.logVerbose("groupHelperName : " + groupHelperName, MODULE);
             //get database source information
             DatasourceInfo datasourceInfo = EntityConfigUtil.getDatasourceInfo(groupHelperName);
@@ -143,7 +144,7 @@ public class Infrastructure {
             annotationConfiguration.setProperty("hibernate.dialect", DIALECTS.get(datasourceInfo.fieldTypeName));
             Debug.logVerbose("configuring SessionFactory ...", MODULE);
             //build a sessionFactory
-            String datasourceName = (String) EntityConfigUtil.getDelegatorInfo(delegatorName).groupMap.get(getHelperName());
+            String datasourceName = EntityConfigUtil.getDelegatorInfo(delegatorName).groupMap.get(getHelperName());
             Debug.logVerbose("init sessionFactory by datasoure " + datasourceName, MODULE);
             sessionFactory = annotationConfiguration.configure(HIBERNATE_CFG_PATH + datasourceName + HIBERNATE_CFG_EXT).buildSessionFactory();
             Debug.logVerbose("listing loaded entities ...", MODULE);
@@ -274,7 +275,7 @@ public class Infrastructure {
             entityName = ENTITY_PACKAGE + "." + entityName;
         }
         try {
-            Class persistentClass = Class.forName(entityName);
+            Class<?> persistentClass = Class.forName(entityName);
             evictHibernateCache(persistentClass, id);
         } catch (ClassNotFoundException e) {
             Debug.logError(e, MODULE);
@@ -285,7 +286,7 @@ public class Infrastructure {
      * Evict all entries of persistentClass from the second-level cache.
      * @param persistentClass a <code>Class</code> instance
      */
-    public void evictHibernateCache(Class persistentClass) {
+    public void evictHibernateCache(Class<?> persistentClass) {
         evictHibernateCache(persistentClass, null);
     }
 
@@ -294,7 +295,7 @@ public class Infrastructure {
      * @param persistentClass a <code>Class</code> instance
      * @param id a <code>Serializable</code> instance
      */
-    public void evictHibernateCache(Class persistentClass, Serializable id) {
+    public void evictHibernateCache(Class<?> persistentClass, Serializable id) {
         SessionFactory sessionFactory = sessionFactories.get(delegator.getDelegatorName());
         evictHibernateCache(sessionFactory, persistentClass, id);
     }
@@ -305,7 +306,7 @@ public class Infrastructure {
      * @param persistentClass a <code>Class</code> instance
      * @param id a <code>Serializable</code> instance
      */
-    public void evictHibernateCache(SessionFactory sessionFactory, Class persistentClass, Serializable id) {
+    public void evictHibernateCache(SessionFactory sessionFactory, Class<?> persistentClass, Serializable id) {
         if (sessionFactory != null) {
             if (id == null) {
                 sessionFactory.evict(persistentClass);
@@ -327,6 +328,7 @@ public class Infrastructure {
      * Clear hibernate second-level cache.
      * @param sessionFactory a <code>SessionFactory</code> instance
      */
+    @SuppressWarnings("unchecked")
     public void evictHibernateCache(SessionFactory sessionFactory) {
         if (sessionFactory != null) {
             Map<String, CollectionMetadata> roleMap = sessionFactory.getAllCollectionMetadata();
