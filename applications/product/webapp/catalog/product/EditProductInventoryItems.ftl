@@ -112,4 +112,7 @@ under the License.
           </table>
         </#if>
     </div>
+  <#else>
+    <h2>${uiLabelMap.ProductProductNotFound} ${productId?if_exists}!</h2>
+  </#if>
 </div>

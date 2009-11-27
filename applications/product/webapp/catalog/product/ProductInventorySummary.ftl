@@ -23,6 +23,7 @@ under the License.
 <a href="EditProductInventoryItems?productId=${productId}&amp;showAllFacilities=Y" class="buttontext">${uiLabelMap.ProductShowAllFacilities}</a>
 </#if>
 <div class="screenlet">
+  <#if product?exists>
     <div class="screenlet-title-bar">
         <h3>${uiLabelMap.ProductInventorySummary}</h3>
     </div>
@@ -101,4 +102,7 @@ under the License.
             </#list>
         </table>
     </div>
+  <#else>
+    <h2>${uiLabelMap.ProductProductNotFound} ${productId?if_exists}!</h2>
+  </#if>
 </div>
