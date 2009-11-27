@@ -59,6 +59,7 @@
       <filelist dir="." files="crmsfa/build.xml"/>
       <filelist dir="." files="financials/build.xml"/>
       <filelist dir="." files="warehouse/build.xml"/>
+      <filelist dir="." files="analytics/build.xml"/>
     </subant>
   </target>
 
@@ -69,7 +70,7 @@
       <filelist dir="." files="purchasing/build.xml"/>
       <filelist dir="." files="financials/build.xml"/>
       <filelist dir="." files="warehouse/build.xml"/>
-      <!--filelist dir="." files="hot-deploy/analytics/build.xml"/-->
+      <filelist dir="." files="analytics/build.xml"/>
     </subant>
   </target>
 
