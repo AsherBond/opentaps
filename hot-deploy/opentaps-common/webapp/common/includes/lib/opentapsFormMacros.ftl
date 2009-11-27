@@ -542,8 +542,8 @@ For more information, please see documentation/opentapsFormMacros.html
 </#macro>
 
 <#-- auto complete any Party -->
-<#macro inputAutoCompleteParty name id="" url="getAutoCompletePartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
-  <@inputAutoComplete name=name url=url id=id lookup="LookupPartyName" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+<#macro inputAutoCompleteParty name id="" url="getAutoCompletePartyIds" styleClass="inputAutoCompleteQuick" form="" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+  <@inputAutoComplete name=name form=form url=url id=id lookup="LookupPartyName" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
 </#macro>
 
 <#macro inputAutoCompletePartyCell name id="" url="getAutoCompletePartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
