@@ -379,8 +379,7 @@ public class HibernateTests extends OpentapsTestCase {
      * Test Our ID generator and the ofbiz entity engine getNextSeqId work well
      * together.
      *
-     * @throws Exception
-     *             if an error occurs
+     * @throws Exception if an error occurs
      */
     public void testIdentifierGeneratorWorkWithGetNextSeqId() throws Exception {
         // open a new session, if session has opened, then close it first
@@ -1310,148 +1309,146 @@ public class HibernateTests extends OpentapsTestCase {
     }
 
     /**
-     * Tests that after hibernate is used to create a value, ofbiz entity engine's find from cache method can retrieve the value
-     * @throws Exception
+     * Tests that after hibernate is used to create a value, ofbiz entity engine's find from cache method can retrieve the value.
+     * @throws Exception if an error occurs
      */
     public void testHibernateCreateRefreshesOfbizCache() throws Exception {
         reOpenSession();
-    	String originalDescription = "Original description for TestEntity.testStringField";
-    	TestEntity originalTestEntity = createAndSaveTestEntity(originalDescription);
-    	GenericValue originalTestEntityGV = delegator.findByPrimaryKeyCache("TestEntity", UtilMisc.toMap("testId", originalTestEntity.getTestId()));
-    	assertEquals("Test string field from generic value retrieved after TestEntity is created is not correct", originalTestEntityGV.getString("testStringField"), originalDescription);
+        String originalDescription = "Original description for TestEntity.testStringField";
+        TestEntity originalTestEntity = createAndSaveTestEntity(originalDescription);
+        GenericValue originalTestEntityGV = delegator.findByPrimaryKeyCache("TestEntity", UtilMisc.toMap("testId", originalTestEntity.getTestId()));
+        assertEquals("Test string field from generic value retrieved after TestEntity is created is not correct", originalTestEntityGV.getString("testStringField"), originalDescription);
     }
-    
+
     /**
      * Tests that after hibernate updates a value, ofbiz entity engine's find from cache method will retrieve the updated value: ie, it has been
-     * updated in the ofbiz entity engine cache
-     * @throws Exception
+     * updated in the ofbiz entity engine cache.
+     * @throws Exception if an error occurs
      */
     public void testHibernateUpdateRefreshesOfbizCache() throws Exception {
         reOpenSession();
-    	// create the original entity
-    	String originalDescription = "Original test entity description";
-    	TestEntity originalTestEntity = createAndSaveTestEntity(originalDescription);
-    	// this is important: the first load puts it into the ofbiz entity engine cache
-    	GenericValue originalTestEntityGV = delegator.findByPrimaryKeyCache("TestEntity", UtilMisc.toMap("testId", originalTestEntity.getTestId()));
-    	
-    	// now update the description field
-    	String newDescription = "New test entity description";
-    	Transaction tx = session.beginTransaction();
-    	TestEntity reloadedTestEntity = (TestEntity) session.get(TestEntity.class, originalTestEntity.getTestId());
-    	reloadedTestEntity.setTestStringField(newDescription);
-    	session.update(reloadedTestEntity);
-    	session.flush();
-    	tx.commit();
+        // create the original entity
+        String originalDescription = "Original test entity description";
+        TestEntity originalTestEntity = createAndSaveTestEntity(originalDescription);
+        // this is important: the first load puts it into the ofbiz entity engine cache
+        GenericValue originalTestEntityGV = delegator.findByPrimaryKeyCache("TestEntity", UtilMisc.toMap("testId", originalTestEntity.getTestId()));
 
-    	// load it again, this time it should come into the cache
-    	GenericValue reloadedTestEntityGV = delegator.findByPrimaryKeyCache("TestEntity", UtilMisc.toMap("testId", originalTestEntity.getTestId()));
+        // now update the description field
+        String newDescription = "New test entity description";
+        Transaction tx = session.beginTransaction();
+        TestEntity reloadedTestEntity = (TestEntity) session.get(TestEntity.class, originalTestEntity.getTestId());
+        reloadedTestEntity.setTestStringField(newDescription);
+        session.update(reloadedTestEntity);
+        session.flush();
+        tx.commit();
 
-    	assertEquals("Test string field from original and reloaded TestEntity do not equal", reloadedTestEntity.getTestStringField(), originalTestEntity.getTestStringField());
-    	assertEquals("Test string field from reloaded TestEntity and generic value retrieved after TestEntity is updated do not equal", reloadedTestEntityGV.getString("testStringField"), reloadedTestEntity.getTestStringField());
+        // load it again, this time it should come into the cache
+        GenericValue reloadedTestEntityGV = delegator.findByPrimaryKeyCache("TestEntity", UtilMisc.toMap("testId", originalTestEntity.getTestId()));
+
+        assertEquals("Test string field from original and reloaded TestEntity do not equal", reloadedTestEntity.getTestStringField(), originalTestEntity.getTestStringField());
+        assertEquals("Test string field from reloaded TestEntity and generic value retrieved after TestEntity is updated do not equal", reloadedTestEntityGV.getString("testStringField"), reloadedTestEntity.getTestStringField());
     }
-    
+
     /**
      * Tests that after hibernate removes a value, ofbiz entity engine's find from cache method will also no longer have it: ie, it has been
-     * removed from the ofbiz entity engine cache
-     * @throws Exception
+     * removed from the ofbiz entity engine cache.
+     * @throws Exception if an error occurs
      */
     public void testHibernateRemoveRefreshesOfbizCache() throws Exception {
         reOpenSession();
-    	// create the original entity
-    	String originalDescription = "Original test entity description";
-    	TestEntity originalTestEntity = createAndSaveTestEntity(originalDescription);
-    	// this is important: the first load puts it into the ofbiz entity engine cache
-    	GenericValue originalTestEntityGV = delegator.findByPrimaryKeyCache("TestEntity", UtilMisc.toMap("testId", originalTestEntity.getTestId()));
-    	
-    	// now delete the test entity using hibernate
-    	Transaction tx = session.beginTransaction();
-    	session.delete(originalTestEntity);
-    	session.flush();
-    	tx.commit();
+        // create the original entity
+        String originalDescription = "Original test entity description";
+        TestEntity originalTestEntity = createAndSaveTestEntity(originalDescription);
+        // this is important: the first load puts it into the ofbiz entity engine cache
+        GenericValue originalTestEntityGV = delegator.findByPrimaryKeyCache("TestEntity", UtilMisc.toMap("testId", originalTestEntity.getTestId()));
 
-    	// check if the ofbiz entity engine's cache method still has this value around
-    	GenericValue reloadedTestEntityGV = delegator.findByPrimaryKeyCache("TestEntity", UtilMisc.toMap("testId", originalTestEntity.getTestId()));
-    	assertNull(reloadedTestEntityGV);
+        // now delete the test entity using hibernate
+        Transaction tx = session.beginTransaction();
+        session.delete(originalTestEntity);
+        session.flush();
+        tx.commit();
+
+        // check if the ofbiz entity engine's cache method still has this value around
+        GenericValue reloadedTestEntityGV = delegator.findByPrimaryKeyCache("TestEntity", UtilMisc.toMap("testId", originalTestEntity.getTestId()));
+        assertNull(reloadedTestEntityGV);
 
     }
 
-    // comment these codes temporary for create opentaps 1.4 preview release
-    
-//    /**
-//     * Tests that after ofbiz delegator is used to create a value, hibernate find from cache method can retrieve the value
-//     * @throws Exception
-//     */
-//    public void testOfbizCreateRefreshesHibernateCache() throws Exception {
-//        reOpenSession();
-//        String originalDescription = "Original description for TestEntity.testStringField";
-//        String testId = delegator.getNextSeqId("TestEntity");
-//        GenericValue testEntityGV = delegator.create("TestEntity", UtilMisc.toMap("testId", testId, "testStringField", originalDescription));
-//
-//        TestEntity testEntity = (TestEntity) session.get(TestEntity.class, testId);
-//        assertEquals("Test string field from generic value retrieved after TestEntity is created is not correct", testEntity.getTestStringField(), testEntityGV.getString("testStringField"));
-//    }    
-//    
-//    /**
-//     * Tests that after ofbiz updates a value, hibernate load method will retrieve the updated value: ie, it has been
-//     * updated in the hibernate cache
-//     * @throws Exception
-//     */
-//    public void testOfbizUpdateRefreshHibernateCache() throws Exception {
-//        reOpenSession();
-//        // create the original entity
-//        String originalDescription = "Original test entity description";
-//        String testId = delegator.getNextSeqId("TestEntity");
-//        GenericValue testEntityGV = delegator.create("TestEntity", UtilMisc.toMap("testId", testId, "testStringField", originalDescription));
-//        
-//        // this is important: the first load puts it into the hibernate cache
-//        TestEntity testEntity = (TestEntity) session.get(TestEntity.class, testId);
-//        // now update the description field by ofbiz
-//        String newDescription = "New test entity description";
-//        testEntityGV.setString("testStringField", newDescription);
-//        testEntityGV.store();
-//        
-//        // this is important: We need reopen hibernate session for load the change come from ofbiz's engine
-//        // create new hibernate session is not expensive, if we keep a long session and try to update the 1st level cache, it will be more expensive than re-open it.
-//        reOpenSession();
-//        // reload it again by hibernate new session
-//        TestEntity reloadedTestEntity = (TestEntity) session.get(TestEntity.class, testId);
-//        
-//        // re-load it again by ofbiz entity engine
-//        GenericValue reloadedTestEntityGV = delegator.findByPrimaryKey("TestEntity", UtilMisc.toMap("testId", testId));
-//        assertEquals("Test string field from reloaded TestEntity and generic value retrieved after TestEntity is updated do not equal", reloadedTestEntityGV.getString("testStringField"), reloadedTestEntity.getTestStringField());
-//        assertEquals("Test string field from reloaded TestEntity not equals " + newDescription, newDescription, reloadedTestEntity.getTestStringField());
-//    }
-//    
-//    /**
-//     * Tests that after ofbiz delegator removes a value, hibernate retrieve method will also no longer have it: ie, it has been
-//     * removed from the hibernate 2nd cache
-//     * @throws Exception
-//     */
-//    public void testOfbizRemoveRefreshesHibernateCache() throws Exception {
-//        reOpenSession();
-//        // create the original entity
-//        String originalDescription = "Original test entity description";
-//        String testId = delegator.getNextSeqId("TestEntity");
-//        GenericValue testEntityGV = delegator.create("TestEntity", UtilMisc.toMap("testId", testId, "testStringField", originalDescription));
-//        
-//        // this is important: the first load puts it into the hibernate cache
-//        TestEntity testEntity = (TestEntity) session.get(TestEntity.class, testId);
-//        // check we can get the TestEntity by hibernate
-//        assertNotNull(testEntity);
-//        
-//         // now delete the test entity using delegator
-//        delegator.removeByPrimaryKey(testEntityGV.getPrimaryKey());
-//        
-//        // check if the hibernate load still has this value around
-//        // this is important: We need reopen hibernate session for load the change come from ofbiz's engine
-//        // create new hibernate session is not expensive, if we keep a long session and try to update the 1st level cache, it will be more expensive than re-open it.
-//        reOpenSession();
-//        TestEntity reloadedTestEntity = (TestEntity) session.get(TestEntity.class, testId);
-//        assertNull(reloadedTestEntity);
-//        
-//
-//    }
-    
+   /**
+    * Tests that after ofbiz delegator is used to create a value, hibernate find from cache method can retrieve the value.
+    * @throws Exception if an error occurs
+    */
+   public void testOfbizCreateRefreshesHibernateCache() throws Exception {
+       reOpenSession();
+       String originalDescription = "Original description for TestEntity.testStringField";
+       String testId = delegator.getNextSeqId("TestEntity");
+       GenericValue testEntityGV = delegator.create("TestEntity", UtilMisc.toMap("testId", testId, "testStringField", originalDescription));
+
+       TestEntity testEntity = (TestEntity) session.get(TestEntity.class, testId);
+       assertEquals("Test string field from generic value retrieved after TestEntity is created is not correct", testEntity.getTestStringField(), testEntityGV.getString("testStringField"));
+   }
+
+   /**
+    * Tests that after ofbiz updates a value, hibernate load method will retrieve the updated value: ie, it has been
+    * updated in the hibernate cache.
+    * @throws Exception if an error occurs
+    */
+   public void testOfbizUpdateRefreshHibernateCache() throws Exception {
+       reOpenSession();
+       // create the original entity
+       String originalDescription = "Original test entity description";
+       String testId = delegator.getNextSeqId("TestEntity");
+       GenericValue testEntityGV = delegator.create("TestEntity", UtilMisc.toMap("testId", testId, "testStringField", originalDescription));
+
+       // this is important: the first load puts it into the hibernate cache
+       TestEntity testEntity = (TestEntity) session.get(TestEntity.class, testId);
+       // now update the description field by ofbiz
+       String newDescription = "New test entity description";
+       testEntityGV.setString("testStringField", newDescription);
+       testEntityGV.store();
+
+       // this is important: We need reopen hibernate session for load the change come from ofbiz's engine
+       // create new hibernate session is not expensive, if we keep a long session and try to update the 1st level cache, it will be more expensive than re-open it.
+       reOpenSession();
+       // reload it again by hibernate new session
+       TestEntity reloadedTestEntity = (TestEntity) session.get(TestEntity.class, testId);
+
+       // re-load it again by ofbiz entity engine
+       GenericValue reloadedTestEntityGV = delegator.findByPrimaryKey("TestEntity", UtilMisc.toMap("testId", testId));
+       assertEquals("Test string field from reloaded TestEntity and generic value retrieved after TestEntity is updated do not equal", reloadedTestEntityGV.getString("testStringField"), reloadedTestEntity.getTestStringField());
+       assertEquals("Test string field from reloaded TestEntity not equals " + newDescription, newDescription, reloadedTestEntity.getTestStringField());
+   }
+
+   /**
+    * Tests that after ofbiz delegator removes a value, hibernate retrieve method will also no longer have it: ie, it has been
+    * removed from the hibernate 2nd cache.
+    * @throws Exception if an error occurs
+    */
+   public void testOfbizRemoveRefreshesHibernateCache() throws Exception {
+       reOpenSession();
+       // create the original entity
+       String originalDescription = "Original test entity description";
+       String testId = delegator.getNextSeqId("TestEntity");
+       GenericValue testEntityGV = delegator.create("TestEntity", UtilMisc.toMap("testId", testId, "testStringField", originalDescription));
+
+       // this is important: the first load puts it into the hibernate cache
+       TestEntity testEntity = (TestEntity) session.get(TestEntity.class, testId);
+       // check we can get the TestEntity by hibernate
+       assertNotNull(testEntity);
+
+        // now delete the test entity using delegator
+       delegator.removeByPrimaryKey(testEntityGV.getPrimaryKey());
+
+       // check if the hibernate load still has this value around
+       // this is important: We need reopen hibernate session for load the change come from ofbiz's engine
+       // create new hibernate session is not expensive, if we keep a long session and try to update the 1st level cache, it will be more expensive than re-open it.
+       reOpenSession();
+       TestEntity reloadedTestEntity = (TestEntity) session.get(TestEntity.class, testId);
+       assertNull(reloadedTestEntity);
+
+
+   }
+
     /**
      * Remove all test data from TestEntityItem and TestEntity.
      * @throws Exception if an error occurs
@@ -1487,5 +1484,5 @@ public class HibernateTests extends OpentapsTestCase {
         testEntityId2 = newTestEntity2.getTestId();
         session.flush();
     }
-    
+
 }
