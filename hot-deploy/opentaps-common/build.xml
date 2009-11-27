@@ -194,11 +194,6 @@
         <copy todir="${build.dir}/classes/common">
             <fileset dir="${src.dir}/common" includes="**/*.properties,**/*.xml,**/*.bsh,**/*.logic,**/*.js,**/*.jacl,**/*.py"/>
         </copy>
-
-        <!-- Copy the Axis-generated code to build/lib -->
-        <copy todir="${build.dir}/lib">
-            <fileset dir="${lib.dir}" includes="opentaps*_Axis-*.jar"/>
-        </copy>
     </target>
 
     <target name="jar" depends="classes">
