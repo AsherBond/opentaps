@@ -87,12 +87,30 @@ public class HibernateTests extends OpentapsTestCase {
         // when we close the session, the connection won't close exactly. so we
         // need close it manually.
         if (session != null && session.isOpen()) {
+            Transaction tx = session.getTransaction();
+            if (tx != null && tx.isActive()) {
+                Debug.logError("Found active transaction, rolling back.", MODULE);
+                try {
+                    tx.rollback();
+                } catch (Exception e) {
+                    Debug.logError(e, MODULE);
+                }
+            }
             session.close();
         }
     }
 
     private void reOpenSession() throws Exception {
         if (session != null && session.isOpen()) {
+            Transaction tx = session.getTransaction();
+            if (tx != null && tx.isActive()) {
+                Debug.logError("Found active transaction, rolling back.", MODULE);
+                try {
+                    tx.rollback();
+                } catch (Exception e) {
+                    Debug.logError(e, MODULE);
+                }
+            }
             session.close();
         }
         session = infrastructure.getSession();
