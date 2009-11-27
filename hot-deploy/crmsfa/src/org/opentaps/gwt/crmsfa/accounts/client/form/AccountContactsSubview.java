@@ -99,4 +99,10 @@ public class AccountContactsSubview extends FindPartyForm {
         // do nothing
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Integer getListAndFormSpacing() {
+        return 2;
+    }
+
 }
