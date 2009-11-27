@@ -15,11 +15,13 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
-
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 <#if hasUpdatePermission?exists>
 <#assign updateLink = "<a class='subMenuButton' href='updateCaseForm?custRequestId=" + case.custRequestId + "'>" + uiLabelMap.CommonEdit + "</a>">
 <#if hasClosePermission?exists>
-<#assign closeLink = "<a class='subMenuButtonDangerous' href='closeCase?custRequestId=" + case.custRequestId + "'>" + uiLabelMap.CrmCloseCase + "</a>">
+    <@form name="closeActionForm" url="closeCase" custRequestId=case.custRequestId />
+    <#assign closeLink><@submitFormLinkConfirm form="closeActionForm" text=uiLabelMap.CrmCloseCase class="subMenuButtonDangerous" /></#assign>
+   
 </#if>
 </#if>
 
