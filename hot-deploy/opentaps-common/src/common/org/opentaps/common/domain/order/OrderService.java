@@ -57,7 +57,6 @@ import org.opentaps.domain.order.OrderSpecificationInterface;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
-import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
 /** {@inheritDoc} */
