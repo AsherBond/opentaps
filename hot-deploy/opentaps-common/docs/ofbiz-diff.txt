@@ -162,6 +162,10 @@ r14022 Disable cache (that used for keep font triplet info) because it doesn't w
        Also add references to fonts that are in opentaps-common/lib/DejaVu by default
 r13024 Set up font base URL
 
+framework/testtools/src/org/ofbiz/testtools/TestRunContainer.java
+r13832 r14077 Fix test html report, and add extra logging of Test progress.
+
+
 Applications changes
 --------------------
 
