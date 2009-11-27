@@ -16,18 +16,19 @@
  */
 package org.opentaps.aspect.secas;
 
+import java.util.List;
 import java.util.Map;
 
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericPK;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.service.GenericDispatcher;
-import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
+import org.opentaps.foundation.entity.hibernate.HibernateUtil;
+import org.opentaps.foundation.infrastructure.Infrastructure;
 
 /**
  * The Aspects for clear hibernate 2nd cache on ofbiz's engine CURD.
@@ -48,7 +49,7 @@ public class EvictHibernateCacheAspects {
     public void clearAllCaches(boolean distribute) {
         Debug.logVerbose("run clearAllCaches(boolean distribute)", MODULE);
         // clear hibernate cache
-        evictHibernateCache(UtilMisc.<String, Object>toMap());
+        evictHibernateCache(null, null, null);
     }
 
     /**
@@ -62,7 +63,7 @@ public class EvictHibernateCacheAspects {
     public void clearCacheLine(String entityName) {
         Debug.logVerbose("run clearCacheLine(entityName), entityName = " + entityName, MODULE);
         // clear hibernate cache
-        evictHibernateCache(UtilMisc.<String, Object>toMap("entityName", entityName));
+        evictHibernateCache(entityName, null, null);
     }
 
 
@@ -77,7 +78,7 @@ public class EvictHibernateCacheAspects {
     public void clearCacheLine(String entityName, Map fields) {
         Debug.logVerbose("run clearCacheLine(entityName, Map<String, ? extends Object> fields), entityName = " + entityName + ", fields = " + fields, MODULE);
         // clear hibernate cache
-        evictHibernateCache(UtilMisc.<String, Object>toMap("entityName", entityName));
+        evictHibernateCache(entityName, null, null);
     }
 
     /**
@@ -92,7 +93,7 @@ public class EvictHibernateCacheAspects {
     public void clearCacheLineFlexible(GenericEntity dummyPK, boolean distribute) {
         Debug.logVerbose("run clearCacheLineFlexible(GenericEntity dummyPK, boolean distribute), dummyPK = " + dummyPK , MODULE);
         // clear hibernate cache
-        evictHibernateCache(UtilMisc.<String, Object>toMap("entityName", dummyPK.getEntityName(), "pk", dummyPK));
+        evictHibernateCache(dummyPK.getEntityName(), dummyPK, null);
 
     }
 
@@ -108,7 +109,7 @@ public class EvictHibernateCacheAspects {
     public void clearCacheLineByCondition(String entityName, EntityCondition condition, boolean distribute) {
         Debug.logVerbose("run clearCacheLineByCondition(String entityName, EntityCondition condition, boolean distribute), entityName = " + entityName + ", condition = " + condition , MODULE);
         // clear hibernate cache
-        evictHibernateCache(UtilMisc.<String, Object>toMap("entityName", entityName, "condition", condition));
+        evictHibernateCache(entityName, null, condition);
     }
 
     /**
@@ -122,7 +123,7 @@ public class EvictHibernateCacheAspects {
     public void clearCacheLine(GenericPK primaryKey, boolean distribute) {
         Debug.logVerbose("run clearCacheLine(GenericPK primaryKey, boolean distribute), primaryKey = " + primaryKey , MODULE);
         // clear hibernate cache
-        evictHibernateCache(UtilMisc.<String, Object>toMap("entityName", primaryKey.getEntityName(), "pk", primaryKey));
+        evictHibernateCache(primaryKey.getEntityName(), primaryKey, null);
     }
 
     /**
@@ -136,14 +137,27 @@ public class EvictHibernateCacheAspects {
     public void clearCacheLine(GenericValue value, boolean distribute) {
         Debug.logVerbose("run clearCacheLine(GenericValue value, boolean distribute), value = " + value , MODULE);
         // clear hibernate cache
-        evictHibernateCache(UtilMisc.<String, Object>toMap("entityName", value.getEntityName(), "pk", value.getPrimaryKey()));
+        evictHibernateCache(value.getEntityName(), value.getPrimaryKey(), null);
     }
 
-    private void evictHibernateCache(Map<String, Object> inputParams) {
+    // Note: transaction isolation is not needed as ''evict'' occurs outside of any transaction
+    private void evictHibernateCache(String entityName, GenericEntity pk, EntityCondition condition) {
         try {
-            LocalDispatcher dispatcher = getDispatcher();
-            dispatcher.runSync("opentaps.evictHibernateCache", inputParams, 7200, true);
-        } catch (GenericServiceException e) {
+            // perform the cache clearing
+            Infrastructure infrastructure = new Infrastructure(getDispatcher());
+            if (entityName == null) {
+                infrastructure.evictHibernateCache();
+            } else if (condition != null) {
+                List<GenericValue> removedEntities = getDelegator().findList(entityName, condition, null, null, null, false);
+                for (GenericValue entity : removedEntities) {
+                    infrastructure.evictHibernateCache(entityName, HibernateUtil.genericPkToEntityPk(entity.getPrimaryKey()));
+                }
+            } else if (pk != null) {
+                infrastructure.evictHibernateCache(pk.getEntityName(), HibernateUtil.genericPkToEntityPk(pk));
+            } else {
+                infrastructure.evictHibernateCache(entityName);
+            }
+        } catch (Exception e) {
             Debug.logError(e, MODULE);
         }
     }
