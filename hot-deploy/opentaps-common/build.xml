@@ -196,11 +196,26 @@
         </copy>
     </target>
 
-    <target name="jar" depends="classes">
-        <jar jarfile="${build.dir}/lib/${name}.jar">
+    <target name="base-jar" depends="base-classes">
+        <jar jarfile="${build.dir}/lib/${name}-base.jar">
            <fileset dir="${build.dir}/classes/base"/>
+        </jar>
+    </target>
+
+    <target name="entities-jar" depends="entities-classes">
+        <jar jarfile="${build.dir}/lib/${name}-entities.jar">
            <fileset dir="${build.dir}/classes/entities"/>
+        </jar>
+    </target>
+
+    <target name="services-jar" depends="services-classes">
+        <jar jarfile="${build.dir}/lib/${name}-services.jar">
            <fileset dir="${build.dir}/classes/services"/>
+        </jar>
+    </target>
+
+    <target name="jar" depends="base-jar,entities-jar,services-jar,classes">
+        <jar jarfile="${build.dir}/lib/${name}.jar">
            <fileset dir="${build.dir}/classes/common" excludes="org/opentaps/aspect/**"/>
         </jar>
     </target>
