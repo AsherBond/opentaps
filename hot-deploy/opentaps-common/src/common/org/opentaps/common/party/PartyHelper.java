@@ -200,20 +200,17 @@ public final class PartyHelper {
      * @param userLogin a <code>GenericValue</code> value
      * @exception GenericServiceException if an error occurs
      */
-    @SuppressWarnings("unchecked")
-    public static void expirePartyRelationships(List partyRelationships, Timestamp expireDate, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericServiceException {
-        List relationsActiveOnFromDate = EntityUtil.filterByDate(partyRelationships, expireDate);
+    public static void expirePartyRelationships(List<GenericValue> partyRelationships, Timestamp expireDate, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericServiceException {
+        List<GenericValue> relationsActiveOnFromDate = EntityUtil.filterByDate(partyRelationships, expireDate);
 
         // to expire on expireDate, set the thruDate to the expireDate in the parameter and call updatePartyRelationship service
-        Iterator iter = relationsActiveOnFromDate.iterator();
-        while (iter.hasNext()) {
-            GenericValue partyRelationship = (GenericValue) iter.next();
-            Map input = UtilMisc.toMap("partyIdTo", partyRelationship.getString("partyIdTo"), "roleTypeIdTo", partyRelationship.getString("roleTypeIdTo"),
+        for (GenericValue partyRelationship : relationsActiveOnFromDate) {
+            Map<String, Object> input = UtilMisc.<String, Object>toMap("partyIdTo", partyRelationship.getString("partyIdTo"), "roleTypeIdTo", partyRelationship.getString("roleTypeIdTo"),
                     "partyIdFrom", partyRelationship.getString("partyIdFrom"), "roleTypeIdFrom", partyRelationship.getString("roleTypeIdFrom"));
             input.put("fromDate", partyRelationship.getTimestamp("fromDate"));
             input.put("userLogin", userLogin);
             input.put("thruDate", expireDate);
-            Map serviceResult = dispatcher.runSync("updatePartyRelationship", input);
+            Map<String, Object> serviceResult = dispatcher.runSync("updatePartyRelationship", input);
             if (ServiceUtil.isError(serviceResult)) {
                 throw new GenericServiceException("Failed to expire PartyRelationship with values: " + input.toString());
             }

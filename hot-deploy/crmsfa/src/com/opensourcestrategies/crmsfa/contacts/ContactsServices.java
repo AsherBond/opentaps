@@ -63,6 +63,7 @@ import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.domain.base.constants.PartyRelationshipTypeConstants;
 
 /**
  * Contacts services. The service documentation is in services_contacts.xml.
@@ -306,7 +307,7 @@ public final class ContactsServices {
         try {
             // find and expire all contact relationships between the contact and account
             List<GenericValue> relations = delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdTo", accountPartyId,
-                        "partyIdFrom", contactPartyId, "partyRelationshipTypeId", "CONTACT_REL_INV"));
+                        "partyIdFrom", contactPartyId, "partyRelationshipTypeId", PartyRelationshipTypeConstants.CONTACT_REL_INV));
             PartyHelper.expirePartyRelationships(relations, UtilDateTime.nowTimestamp(), dispatcher, userLogin);
         } catch (GenericServiceException e) {
             return UtilMessage.createAndLogServiceError(e, "CrmErrorRemoveContactFail", locale, MODULE);
