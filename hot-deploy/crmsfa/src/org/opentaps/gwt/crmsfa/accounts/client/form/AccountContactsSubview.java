@@ -19,19 +19,16 @@ package org.opentaps.gwt.crmsfa.accounts.client.form;
 
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.FindPartyForm;
-import org.opentaps.gwt.common.client.form.ServiceErrorReader;
 import org.opentaps.gwt.common.client.form.base.SubFormPanel;
 import org.opentaps.gwt.common.client.listviews.ContactListView;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
-import com.google.gwt.user.client.Window;
 import com.gwtext.client.core.EventObject;
 import com.gwtext.client.core.SortDir;
 import com.gwtext.client.data.Record;
@@ -43,7 +40,6 @@ import com.gwtext.client.widgets.grid.ColumnConfig;
 import com.gwtext.client.widgets.grid.GridPanel;
 import com.gwtext.client.widgets.grid.Renderer;
 import com.gwtext.client.widgets.grid.event.GridCellListenerAdapter;
-import com.gwtext.client.widgets.grid.event.GridRowListenerAdapter;
 
 /**
  * A combination of a contacts list view and a tabbed form used to filter that list view.
@@ -92,7 +88,7 @@ public class AccountContactsSubview extends FindPartyForm {
                         return Format.format("<img width=\"15\" height=\"15\" class=\"checkbox\" src=\"{0}\"/>", UtilUi.ICON_DELETE);
                     }
                 });
-                config.setWidth(20);
+                config.setWidth(22);
                 config.setResizable(false);
                 config.setFixed(true);
                 config.setSortable(false);
@@ -104,7 +100,9 @@ public class AccountContactsSubview extends FindPartyForm {
                     public void onCellClick(GridPanel grid, int rowIndex, int colindex, EventObject e) {
                         if (colindex == AccountContactsSubview.this.deleteColumnIndex) {
                             String contactPartyId = getStore().getRecordAt(rowIndex).getAsString("partyId");
-                            RequestBuilder request = new RequestBuilder(RequestBuilder.POST, URL.encode(Format.format("/crmsfa/control/removeContactFromAccount?partyId={0}&accountPartyId={0}&contactPartyId={1}", AccountContactsSubview.this.accountPartyId, contactPartyId)));
+                            RequestBuilder request = new RequestBuilder(RequestBuilder.POST, URL.encode(Format.format("/crmsfa/control/removeContactFromAccount", AccountContactsSubview.this.accountPartyId, contactPartyId)));
+                            request.setHeader("Content-type", "application/x-www-form-urlencoded");
+                            request.setRequestData(Format.format("partyId={0}&accountPartyId={0}&contactPartyId={1}", AccountContactsSubview.this.accountPartyId, contactPartyId));
                             request.setCallback(new RequestCallback() {
                                     public void onError(Request request, Throwable exception) {
                                         // display error message
