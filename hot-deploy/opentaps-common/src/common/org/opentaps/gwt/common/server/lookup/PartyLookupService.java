@@ -36,6 +36,7 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.util.ConvertMapToString;
 import org.opentaps.common.util.ICompositeValue;
+import org.opentaps.domain.base.constants.PartyRelationshipTypeConstants;
 import org.opentaps.domain.base.entities.PartyFromByRelnAndContactInfoAndPartyClassification;
 import org.opentaps.domain.base.entities.PartyRoleNameDetailSupplementalData;
 import org.opentaps.foundation.entity.EntityInterface;
@@ -519,7 +520,14 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         }
 
         if (getProvider().parameterIsPresent(PartyLookupConfiguration.IN_PARTY_ID_TO)) {
-            return findPartiesBy(entity, EntityCondition.makeCondition(condition, EntityCondition.makeCondition(PartyLookupConfiguration.IN_ROLE_TO, "ACCOUNT")), ACCOUNT_CONTACTS_FILTERS);
+            return findPartiesBy(entity, 
+                    EntityCondition.makeCondition(
+                            condition,
+                            EntityCondition.makeCondition(PartyLookupConfiguration.IN_ROLE_TO, "ACCOUNT"),
+                            EntityCondition.makeCondition(PartyLookupConfiguration.IN_RELATIONSHIP_TYPE_ID, PartyRelationshipTypeConstants.CONTACT_REL_INV),
+                            EntityUtil.getFilterByDateExpr()
+                    ),
+                    ACCOUNT_CONTACTS_FILTERS);
         }
         return findAllParties(entity, condition);
     }
