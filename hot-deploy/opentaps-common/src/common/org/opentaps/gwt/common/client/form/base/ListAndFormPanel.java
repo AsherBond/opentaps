@@ -42,7 +42,7 @@ public abstract class ListAndFormPanel<TFORM extends BaseFormPanel, TLIST extend
     private Integer inputLength = UtilUi.INPUT_LENGTH;
     private Integer formWidth = UtilUi.FORM_CONTAINER_WIDTH;
     private Integer listWidth = UtilUi.LIST_CONTAINER_WIDTH;
-    private Integer listAndFormSpacing = UtilUi.CONTAINERS_VERTICAL_SPACING;
+    public Integer listAndFormSpacing = UtilUi.CONTAINERS_VERTICAL_SPACING;
     private Integer minHeight = 0;
 
     private final Panel mainPanel;

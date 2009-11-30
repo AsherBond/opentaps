@@ -19,33 +19,51 @@ package org.opentaps.gwt.crmsfa.accounts.client.form;
 
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.FindPartyForm;
+import org.opentaps.gwt.common.client.form.ServiceErrorReader;
 import org.opentaps.gwt.common.client.form.base.SubFormPanel;
 import org.opentaps.gwt.common.client.listviews.ContactListView;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
+import com.google.gwt.http.client.URL;
+import com.google.gwt.user.client.Window;
+import com.gwtext.client.core.EventObject;
 import com.gwtext.client.core.SortDir;
+import com.gwtext.client.data.Record;
+import com.gwtext.client.data.Store;
 import com.gwtext.client.data.StringFieldDef;
+import com.gwtext.client.util.Format;
+import com.gwtext.client.widgets.grid.CellMetadata;
+import com.gwtext.client.widgets.grid.ColumnConfig;
+import com.gwtext.client.widgets.grid.GridPanel;
+import com.gwtext.client.widgets.grid.Renderer;
+import com.gwtext.client.widgets.grid.event.GridCellListenerAdapter;
+import com.gwtext.client.widgets.grid.event.GridRowListenerAdapter;
 
 /**
  * A combination of a contacts list view and a tabbed form used to filter that list view.
  */
 public class AccountContactsSubview extends FindPartyForm {
 
+    public static final String MODULE = AccountContactsSubview.class.getName();
+
     private final ContactListView contactListView;
 
-    /**
-     * Default constructor.
-     */
-    public AccountContactsSubview() {
-        this(true);
-    }
+    public final String accountPartyId;
+    private Integer deleteColumnIndex;
 
     /**
      * Constructor with autoLoad parameter, use this constructor if some filters need to be set prior to loading the grid data.
      * @param autoLoad sets the grid autoLoad parameter, set to <code>false</code> if some filters need to be set prior to loading the grid data
      */
-    public AccountContactsSubview(boolean autoLoad) {
+    public AccountContactsSubview(String accountPartyId, boolean autoLoad) {
         super(UtilUi.MSG.contactId(), UtilUi.MSG.findContacts());
+        this.accountPartyId = accountPartyId;
         contactListView = new ContactListView() {
 
             /** {@inheritDoc} */
@@ -68,6 +86,56 @@ public class AccountContactsSubview extends FindPartyForm {
                 makeColumn(UtilUi.MSG.country(), new StringFieldDef(PartyLookupConfiguration.INOUT_COUNTRY));
                 makeColumn(UtilUi.MSG.postalCode(), new StringFieldDef(PartyLookupConfiguration.INOUT_POSTAL_CODE));
                 makeColumn(UtilUi.MSG.postalCodeExt(), new StringFieldDef(PartyLookupConfiguration.OUT_POSTAL_CODE_EXT));
+                deleteColumnIndex = getCurrentColumnIndex();
+                ColumnConfig config = makeColumn("", new Renderer() {
+                    public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
+                        return Format.format("<img width=\"15\" height=\"15\" class=\"checkbox\" src=\"{0}\"/>", UtilUi.ICON_DELETE);
+                    }
+                });
+                config.setWidth(20);
+                config.setResizable(false);
+                config.setFixed(true);
+                config.setSortable(false);
+
+                addGridCellListener(new GridCellListenerAdapter() {
+
+                    /** {@inheritDoc} */
+                    @Override
+                    public void onCellClick(GridPanel grid, int rowIndex, int colindex, EventObject e) {
+                        if (colindex == AccountContactsSubview.this.deleteColumnIndex) {
+                            String contactPartyId = getStore().getRecordAt(rowIndex).getAsString("partyId");
+                            RequestBuilder request = new RequestBuilder(RequestBuilder.POST, URL.encode(Format.format("/crmsfa/control/removeContactFromAccount?partyId={0}&accountPartyId={0}&contactPartyId={1}", AccountContactsSubview.this.accountPartyId, contactPartyId)));
+                            request.setCallback(new RequestCallback() {
+                                    public void onError(Request request, Throwable exception) {
+                                        // display error message
+                                        markGridNotBusy();
+                                        UtilUi.errorMessage(exception.toString());
+                                    }
+                                    public void onResponseReceived(Request request, Response response) {
+                                        // if it is a correct response, reload the grid
+                                        markGridNotBusy();
+                                        UtilUi.logInfo("onResponseReceived, response = " + response, MODULE, "ContactListView.init()");
+                                        //if (!ServiceErrorReader.showErrorMessageIfAny(response, saveAllUrl)) {
+                                            // commit store changes
+                                            getStore().reload();
+                                            loadFirstPage();
+                                        //}
+                                    }
+                                });
+
+                            try {
+                                markGridBusy();
+                                UtilUi.logInfo("posting batch", MODULE, "ContactListView.init()");
+                                request.send();
+                            } catch (RequestException re) {
+                                // display error message
+                                UtilUi.errorMessage(e.toString(), MODULE, "ContactListView.init()");
+                            }
+                    
+                        }
+                    }
+
+                });
 
                 configure(PartyLookupConfiguration.URL_FIND_CONTACTS, PartyLookupConfiguration.INOUT_PARTY_ID, SortDir.ASC);
 

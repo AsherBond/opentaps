@@ -1719,4 +1719,7 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
         }
     }
 
+    protected int getCurrentColumnIndex() {
+        return columnConfigs.size();
+    }
 }

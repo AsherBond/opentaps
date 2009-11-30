@@ -103,7 +103,7 @@ public class Entry extends BaseEntry {
     }
 
     private void loadAccountContacts() {
-        accountContacts = new AccountContactsSubview(false);
+        accountContacts = new AccountContactsSubview(getAccountPartyId(), false);
         accountContacts.hideFilters();
         accountContacts.getListView().setTitle(UtilUi.MSG.crmContacts());
         ((ContactListView) accountContacts.getListView()).filterByAccount(getAccountPartyId());
