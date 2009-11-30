@@ -68,6 +68,8 @@
     <StatusValidChange statusId="PTYLEAD_DEAD" statusIdTo="PTYLEAD_RECYCLED" transitionName="Recycled"/>
     <StatusValidChange statusId="PTYLEAD_RECYCLED" statusIdTo="PTYLEAD_ASSIGNED" transitionName="Assigned"/>
     <StatusValidChange statusId="PTYLEAD_RECYCLED" statusIdTo="PTYLEAD_DEAD" transitionName="Dead"/>
+    
+    <StatusValidChange condition="" statusId="CRQ_SUBMITTED" statusIdTo="CRQ_COMPLETED" transitionName="Complete Request"/>
 
     <!-- Task statuses and valid changes. 
         Note that these are meant to override those defined in applications/workeffort/data/WorkEffortTypeData.xml -->
