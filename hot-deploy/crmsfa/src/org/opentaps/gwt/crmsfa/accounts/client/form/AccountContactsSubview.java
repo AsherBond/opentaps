@@ -88,7 +88,7 @@ public class AccountContactsSubview extends FindPartyForm {
                         return Format.format("<img width=\"15\" height=\"15\" class=\"checkbox\" src=\"{0}\"/>", UtilUi.ICON_DELETE);
                     }
                 });
-                config.setWidth(22);
+                config.setWidth(26);
                 config.setResizable(false);
                 config.setFixed(true);
                 config.setSortable(false);

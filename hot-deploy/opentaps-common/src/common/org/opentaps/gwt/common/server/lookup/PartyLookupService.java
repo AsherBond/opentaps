@@ -467,6 +467,8 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         // keep rules for calculated fields
         Map<String, ConvertMapToString> calcField = FastMap.<String, ConvertMapToString>newInstance();
         calcField.put(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER, new PhoneNumberSortable());
+        makeCalculatedField(calcField);
+        calcField.clear();
         calcField.put(PartyLookupConfiguration.INOUT_FRIENDLY_PARTY_NAME, new FriendlyPartyNameSortable());
         makeCalculatedField(calcField);
 
