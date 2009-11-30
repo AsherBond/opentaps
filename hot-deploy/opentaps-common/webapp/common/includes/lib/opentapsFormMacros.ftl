@@ -1104,9 +1104,9 @@ For more information, please see documentation/opentapsFormMacros.html
 
 
 <#-- This macro is squished because of the way the menu buttons work.  -->
-<#macro inputConfirm title href="" form="" confirmText=uiLabelMap.OpentapsAreYouSure class="buttonDangerous" onClick=""><a class="${class}" href="javascript:<#if onClick!="">${onClick}; </#if>opentaps.confirmAction('${confirmText}', '${href}', '${form}')">${title}</a></#macro>
+<#macro inputConfirm title href="" form="" confirmText=uiLabelMap.OpentapsAreYouSure class="buttonDangerous" onClick=""><a class="${class}" href="javascript:<#if onClick!="">${onClick}; </#if>opentaps.confirmAction('${StringUtil.wrapString(confirmText)}', '${href}', '${form}')">${title}</a></#macro>
 
-<#macro inputConfirmImage title src href="" form="" confirmText=uiLabelMap.OpentapsAreYouSure class="" border="0"><a class="${class}" href="javascript:opentaps.confirmAction('${confirmText}', '${href}', '${form}')"><img src="${src}" alt="${title}" title="${title}" border="${border}" /></a></#macro>
+<#macro inputConfirmImage title src href="" form="" confirmText=uiLabelMap.OpentapsAreYouSure class="" border="0"><a class="${class}" href="javascript:opentaps.confirmAction('${StringUtil.wrapString(confirmText)}', '${href}', '${form}')"><img src="${src}" alt="${title}" title="${title}" border="${border}" /></a></#macro>
 
 <#macro inputConfirmCell title href="" form="" confirmText=uiLabelMap.OpentapsAreYouSure class="buttonDangerous">
   <td><@inputConfirm title=title href=href form=form confirmText=confirmText /></td>

@@ -133,7 +133,7 @@
     }
 
     function deleteNotes(i, noteId) {
-      var answer = confirm('${uiLabelMap.OpentapsAreYouSure}');
+      var answer = confirm('${StringUtil.wrapString(uiLabelMap.OpentapsAreYouSure)}');
       if (answer) {
         var requestData = {'counter' : i, 'modulePermission' : '${hasModulePermission?default("")}', 'noteId' : noteId, '${paramName}' : '${targetId?default("")}'};
         opentaps.sendRequest('deleteNotesJSON', requestData, deleteNotesCallBack);
