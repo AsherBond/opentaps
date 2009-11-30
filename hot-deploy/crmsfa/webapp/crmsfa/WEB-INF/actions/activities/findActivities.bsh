@@ -52,8 +52,8 @@ if (validView != null && validView) {
     if (completedActivitiesOrderBy == null) {
         completedActivitiesOrderBy = "actualCompletionDate DESC";
     }
-    serviceParams = UtilMisc.toMap(findActivitiesKey, findActivitiesValue, "pendingOrderByFields", UtilMisc.toList(pendingActivitiesOrderBy),
-            "completedOrderByFields", UtilMisc.toList(completedActivitiesOrderBy), "userLogin", userLogin);
+    serviceParams = UtilMisc.toMap(findActivitiesKey, findActivitiesValue, "pendingOrderByFields", UtilMisc.toList(pendingActivitiesOrderBy, "workEffortId"),
+                                   "completedOrderByFields", UtilMisc.toList(completedActivitiesOrderBy, "workEffortId"), "userLogin", userLogin);
     if (UtilValidate.isNotEmpty(context.get("pendingActsAddConditions"))) {
         serviceParams.put("pendingActsAddConditions", context.get("pendingActsAddConditions"));
     }
