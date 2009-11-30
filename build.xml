@@ -381,6 +381,7 @@ under the License.
             <jvmarg value="${memory.max.param}"/>
             <jvmarg value="${permmemory.max.param}"/>
             <arg value="install"/>
+            <arg value="failonerror"/>
         </java>
     </target>
     <target name="run-install-seed" depends="refresh-hibernatecfg,server"
@@ -391,6 +392,7 @@ under the License.
             <jvmarg value="${permmemory.max.param}"/>
             <arg value="install"/>
             <arg value="readers=seed"/>
+            <arg value="failonerror"/>
         </java>
     </target>
     <target name="run-install-extseed" depends="refresh-hibernatecfg,server"
@@ -401,6 +403,7 @@ under the License.
             <jvmarg value="${permmemory.max.param}"/>
             <arg value="install"/>
             <arg value="readers=seed,seed-initial,ext"/>
+            <arg value="failonerror"/>
         </java>
     </target>
     <target name="run-install-exttest" depends="refresh-hibernatecfg,server"
@@ -411,6 +414,7 @@ under the License.
             <jvmarg value="${permmemory.max.param}"/>
             <arg value="install"/>
             <arg value="readers=seed,seed-initial,ext,ext-test"/>
+            <arg value="failonerror"/>
         </java>
     </target>
     <target name="run-install-readers" depends="refresh-hibernatecfg,server"
@@ -421,6 +425,7 @@ under the License.
             <jvmarg value="${permmemory.max.param}"/>
             <arg value="install"/>
             <arg value="readers=${data-readers}"/>
+            <arg value="failonerror"/>
         </java>
     </target>
     <target name="run-install-file" depends="refresh-hibernatecfg,server"
@@ -432,6 +437,7 @@ under the License.
             <arg value="install"/>
             <arg value="delegator=default"/>
             <arg value="file=${data-file}"/>
+            <arg value="failonerror"/>
         </java>
     </target>
     <target name="load-admin-user-login"

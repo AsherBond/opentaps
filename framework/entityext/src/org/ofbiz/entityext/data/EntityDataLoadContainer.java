@@ -57,6 +57,7 @@ public class EntityDataLoadContainer implements Container {
     protected boolean useDummyFks = false;
     protected boolean maintainTxs = false;
     protected boolean tryInserts = false;
+    protected boolean failOnError = false;
     protected int txTimeout = -1;
 
     public EntityDataLoadContainer() {
@@ -81,6 +82,7 @@ public class EntityDataLoadContainer implements Container {
            group (overrides the entity group name configured for the container)
            dir (imports all XML files in a directory)
            file (import a specific XML file)
+           failonerror (throw an exception on a load error, defaults to false: errors are only reported but the loader goes on)
 
            Example:
            $ java -jar ofbiz.jar -install -readers=seed,demo,ext -timeout=7200 -delegator=default -group=org.ofbiz
@@ -133,6 +135,8 @@ public class EntityDataLoadContainer implements Container {
                     this.maintainTxs = "true".equalsIgnoreCase(argumentVal);
                 } else if ("inserts".equalsIgnoreCase(argumentName)) {
                     this.tryInserts = "true".equalsIgnoreCase(argumentVal);
+                } else if ("failonerror".equalsIgnoreCase(argumentName)) {
+                    this.failOnError = !"false".equalsIgnoreCase(argumentVal);
                 } else if ("help".equalsIgnoreCase(argumentName)) {
                     Debug.log("--------------------------------------", module);
                     Debug.log("java -jar ofbiz.jar -install [options]", module);
@@ -143,6 +147,7 @@ public class EntityDataLoadContainer implements Container {
                     Debug.log("-createfks ........... create dummy (placeholder) FKs", module);
                     Debug.log("-maintainTxs ......... maintain timestamps in data file", module);
                     Debug.log("-inserts ............. use mostly inserts option", module);
+                    Debug.log("-failonerror ..........stop the load immediately on error", module);
                     Debug.log("-help ................ display this information", module);
                     System.exit(1);
                 }
@@ -264,6 +269,9 @@ public class EntityDataLoadContainer implements Container {
                     infoMessages.add(changedFormat.format(rowsChanged) + " of " + changedFormat.format(totalRowsChanged) + " from " + dataUrl.toExternalForm());
                 } catch (GenericEntityException e) {
                     Debug.logError(e, "Error loading data file: " + dataUrl.toExternalForm(), module);
+                    if (this.failOnError) {
+                        throw new ContainerException(e);
+                    }
                 }
             }
         } else {
@@ -285,6 +293,10 @@ public class EntityDataLoadContainer implements Container {
         }
 
         Debug.logImportant("=-=-=-=-=-=-= Finished the data load with " + totalRowsChanged + " rows changed.", module);
+
+        if (errorMessages.size() > 0 && this.failOnError) {
+            throw new ContainerException("Errors occurred during the data load.");
+        }
 
         return true;
     }
