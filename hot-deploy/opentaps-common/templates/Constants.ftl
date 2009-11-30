@@ -40,7 +40,9 @@ encapsulate simple constants (where the list only contains one constant).
         private ${innerClass}() { }
   </#if>
   <#list valuesByInnerClass.get(innerClass) as value>
+  <#if value.constantDescription?has_content>
 <#if inner>    </#if>    /** ${value.constantDescription}. */
+  </#if>
 <#if inner>    </#if>    public static final String ${value.constantName} = "${value.constantValue}";
   </#list>
   <#if inner>
