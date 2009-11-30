@@ -273,7 +273,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     }
 
     /**
-     * Sets if the lookup methods should filter active parties only, defaults to <code>true</code>.
+     * Sets if the lookup methods should filter active parties only, defaults to <code>false</code>.
      * @param bool a <code>boolean</code> value
      */
     public void setActiveOnly(boolean bool) {
@@ -521,13 +521,14 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
             return findPartiesBy(entity, condition, BY_ADVANCED_FILTERS);
         }
 
+        /** find contacts which are assigned to an account */
         if (getProvider().parameterIsPresent(PartyLookupConfiguration.IN_PARTY_ID_TO)) {
+            setActiveOnly(true);
             return findPartiesBy(entity, 
                     EntityCondition.makeCondition(
                             condition,
                             EntityCondition.makeCondition(PartyLookupConfiguration.IN_ROLE_TO, "ACCOUNT"),
-                            EntityCondition.makeCondition(PartyLookupConfiguration.IN_RELATIONSHIP_TYPE_ID, PartyRelationshipTypeConstants.CONTACT_REL_INV),
-                            EntityUtil.getFilterByDateExpr()
+                            EntityCondition.makeCondition(PartyLookupConfiguration.IN_RELATIONSHIP_TYPE_ID, PartyRelationshipTypeConstants.CONTACT_REL_INV)
                     ),
                     ACCOUNT_CONTACTS_FILTERS);
         }
