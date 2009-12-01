@@ -57,7 +57,7 @@ import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.shipment.packing.PackingEvent;
 import org.ofbiz.shipment.packing.PackingSessionLine;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.domain.base.entities.CarrierShipmentBoxType;
+import org.opentaps.base.entities.CarrierShipmentBoxType;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderItem;
 import org.opentaps.domain.order.OrderRepositoryInterface;

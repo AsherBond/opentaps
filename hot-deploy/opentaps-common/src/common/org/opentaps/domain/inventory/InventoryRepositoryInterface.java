@@ -18,12 +18,12 @@ package org.opentaps.domain.inventory;
 
 import java.util.List;
 
-import org.opentaps.domain.base.entities.Facility;
-import org.opentaps.domain.base.entities.InventoryItemTraceDetail;
-import org.opentaps.domain.base.entities.InventoryItemValueHistory;
-import org.opentaps.domain.base.entities.InventoryTransfer;
-import org.opentaps.domain.base.entities.Lot;
-import org.opentaps.domain.base.entities.OrderItemShipGrpInvRes;
+import org.opentaps.base.entities.Facility;
+import org.opentaps.base.entities.InventoryItemTraceDetail;
+import org.opentaps.base.entities.InventoryItemValueHistory;
+import org.opentaps.base.entities.InventoryTransfer;
+import org.opentaps.base.entities.Lot;
+import org.opentaps.base.entities.OrderItemShipGrpInvRes;
 import org.opentaps.domain.product.Product;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
@@ -72,7 +72,7 @@ public interface InventoryRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      * @throws EntityNotFoundException no <code>InventoryItem</code> is found for the given id
      */
-    public org.opentaps.domain.base.entities.InventoryItem getInventoryItemById(String inventoryItemId, Class<? extends org.opentaps.domain.base.entities.InventoryItem> clazz) throws RepositoryException, EntityNotFoundException;
+    public org.opentaps.base.entities.InventoryItem getInventoryItemById(String inventoryItemId, Class<? extends org.opentaps.base.entities.InventoryItem> clazz) throws RepositoryException, EntityNotFoundException;
 
     /**
      * Finds the <code>Facility</code> for to the given facility ID.
@@ -196,7 +196,7 @@ public interface InventoryRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException
      * @throws InfrastructureException
      */
-    public InventoryItemTrace createInventoryTrace(org.opentaps.domain.base.entities.InventoryItem inventoryItem) throws RepositoryException, InfrastructureException;
+    public InventoryItemTrace createInventoryTrace(org.opentaps.base.entities.InventoryItem inventoryItem) throws RepositoryException, InfrastructureException;
 
     /**
      * Persist in database given <code>InventoryItemTraceDetail</code> object.
@@ -214,7 +214,7 @@ public interface InventoryRepositoryInterface extends RepositoryInterface {
      * @return List of <code>InventoryItemTraceDetail</code>
      * @throws RepositoryException
      */
-    public List<InventoryItemTraceDetail> getDerivativeInventoryTraceEvents(org.opentaps.domain.base.entities.InventoryItem inventoryItem) throws RepositoryException;
+    public List<InventoryItemTraceDetail> getDerivativeInventoryTraceEvents(org.opentaps.base.entities.InventoryItem inventoryItem) throws RepositoryException;
 
     /**
      * Finds and returns respective <code>InventoryItemTraceDetail</code> for given inventory item id. 

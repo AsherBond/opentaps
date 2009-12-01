@@ -22,7 +22,7 @@
 	<import value="java.util.*" />
 	<import value="net.sf.jasperreports.engine.*" />
 	<import value="net.sf.jasperreports.engine.data.*" />
-	<import value="org.opentaps.domain.base.entities.*" />
+	<import value="org.opentaps.base.entities.*" />
 	<import value="org.opentaps.domain.order.Order" />
 	<import value="org.opentaps.common.reporting.UtilReports" />
 

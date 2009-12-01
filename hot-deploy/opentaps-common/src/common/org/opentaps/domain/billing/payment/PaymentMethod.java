@@ -22,7 +22,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 /**
  * Payment Method entity.
  */
-public class PaymentMethod extends org.opentaps.domain.base.entities.PaymentMethod {
+public class PaymentMethod extends org.opentaps.base.entities.PaymentMethod {
 
     private CreditCard creditCard;
     private GiftCard giftCard;

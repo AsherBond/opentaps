@@ -95,7 +95,7 @@ public class Infrastructure {
     /** Hibernate configuration file ext. */
     public static final String HIBERNATE_CFG_EXT = ".cfg.xml";
     /** Hibernate entity package name. */
-    public static final String ENTITY_PACKAGE = "org.opentaps.domain.base.entities";
+    public static final String ENTITY_PACKAGE = "org.opentaps.base.entities";
 
     /**
      * Gets the Hibernate <code>SessionFactory</code> object for the corresponding delegator.

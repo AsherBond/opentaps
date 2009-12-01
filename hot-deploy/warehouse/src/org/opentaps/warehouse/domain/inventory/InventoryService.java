@@ -23,9 +23,9 @@ import java.util.Map;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.opentaps.domain.DomainService;
-import org.opentaps.domain.base.entities.InventoryTransfer;
-import org.opentaps.domain.base.services.CreateInventoryItemDetailService;
-import org.opentaps.domain.base.services.CreateInventoryItemService;
+import org.opentaps.base.entities.InventoryTransfer;
+import org.opentaps.base.services.CreateInventoryItemDetailService;
+import org.opentaps.base.services.CreateInventoryItemService;
 import org.opentaps.domain.inventory.InventoryDomainInterface;
 import org.opentaps.domain.inventory.InventoryItem;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
@@ -123,8 +123,8 @@ public class InventoryService extends DomainService implements InventoryServiceI
     /** {@inheritDoc} */
     public void cancelInventoryTransfer() throws ServiceException {
         InventoryRepositoryInterface inventoryRepository = null;
-        org.opentaps.domain.base.entities.InventoryItem originInventoryItem = null;
-        org.opentaps.domain.base.entities.InventoryItem destinationInventoryItem = null;
+        org.opentaps.base.entities.InventoryItem originInventoryItem = null;
+        org.opentaps.base.entities.InventoryItem destinationInventoryItem = null;
         InventoryTransfer transfer = null;
 
         try {
@@ -134,7 +134,7 @@ public class InventoryService extends DomainService implements InventoryServiceI
             // the transfer destination InventoryItem
             destinationInventoryItem = transfer.getInventoryItem();
             // the transfer origin InventoryItem
-            originInventoryItem = inventoryRepository.getInventoryItemById(destinationInventoryItem.getParentInventoryItemId(), org.opentaps.domain.base.entities.InventoryItem.class);
+            originInventoryItem = inventoryRepository.getInventoryItemById(destinationInventoryItem.getParentInventoryItemId(), org.opentaps.base.entities.InventoryItem.class);
 
             String inventoryType = destinationInventoryItem.getInventoryItemTypeId();
 

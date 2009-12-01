@@ -24,7 +24,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 /**
  * Gift Card entity.
  */
-public class GiftCard extends org.opentaps.domain.base.entities.GiftCard {
+public class GiftCard extends org.opentaps.base.entities.GiftCard {
 
     /**
      * Default constructor.

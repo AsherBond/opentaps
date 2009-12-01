@@ -30,7 +30,7 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.util.UtilView;
-import org.opentaps.domain.base.entities.CustRequestAndPartyRelationshipAndRole;
+import org.opentaps.base.entities.CustRequestAndPartyRelationshipAndRole;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.gwt.common.client.lookup.configuration.CaseLookupConfiguration;

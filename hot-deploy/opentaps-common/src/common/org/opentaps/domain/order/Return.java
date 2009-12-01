@@ -23,7 +23,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 /**
  * Return entity.
  */
-public class Return extends org.opentaps.domain.base.entities.ReturnHeader {
+public class Return extends org.opentaps.base.entities.ReturnHeader {
 
     private List<ReturnItem> items;
 

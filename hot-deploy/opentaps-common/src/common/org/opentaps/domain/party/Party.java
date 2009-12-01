@@ -23,22 +23,22 @@ import java.sql.Timestamp;
 
 import org.ofbiz.base.util.Debug;
 import org.opentaps.domain.DomainsDirectory;
-import org.opentaps.domain.base.entities.PartyClassification;
-import org.opentaps.domain.base.entities.PartyContactMech;
-import org.opentaps.domain.base.entities.PartyContactMechPurpose;
-import org.opentaps.domain.base.entities.PartySummaryCRMView;
-import org.opentaps.domain.base.entities.PostalAddress;
-import org.opentaps.domain.base.entities.PartyRole;
-import org.opentaps.domain.base.entities.TelecomNumber;
+import org.opentaps.base.entities.PartyClassification;
+import org.opentaps.base.entities.PartyContactMech;
+import org.opentaps.base.entities.PartyContactMechPurpose;
+import org.opentaps.base.entities.PartySummaryCRMView;
+import org.opentaps.base.entities.PostalAddress;
+import org.opentaps.base.entities.PartyRole;
+import org.opentaps.base.entities.TelecomNumber;
 import org.opentaps.domain.billing.payment.PaymentMethod;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.entity.EntityNotFoundException;
-import org.opentaps.domain.base.entities.PartyNoteView;
+import org.opentaps.base.entities.PartyNoteView;
 
 /**
  * Party entity and domain.
  */
-public class Party extends org.opentaps.domain.base.entities.Party {
+public class Party extends org.opentaps.base.entities.Party {
 
     private PartySummaryCRMView completeView;
     private List<PaymentMethod> paymentMethods;
@@ -387,7 +387,7 @@ public class Party extends org.opentaps.domain.base.entities.Party {
 
     /**
      * Get the list of <code>PartyClassification</code> of this party.
-     * This is an alias for {@link org.opentaps.domain.base.entities.Party#getPartyClassifications}.
+     * This is an alias for {@link org.opentaps.base.entities.Party#getPartyClassifications}.
      * @return the list of <code>PartyClassification</code>
      * @throws RepositoryException if an error occurs
      */

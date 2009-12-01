@@ -16,7 +16,7 @@
   <property name="hibernate.search.worker.buffer_queue.max">5</property>
   <property name="hibernate.search.worker.thread_pool.size">5</property>
 <#list entities as entity>
-  <mapping class="org.opentaps.domain.base.entities.${entity}"/>
+  <mapping class="org.opentaps.base.entities.${entity}"/>
 </#list>
   </session-factory>
 </hibernate-configuration>

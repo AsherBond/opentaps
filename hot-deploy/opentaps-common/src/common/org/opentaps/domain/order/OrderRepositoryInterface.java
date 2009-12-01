@@ -23,7 +23,7 @@ import java.util.Set;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 import org.opentaps.common.domain.order.OrderSpecification;
 import org.opentaps.common.order.shoppingcart.OpentapsShoppingCart;
-import org.opentaps.domain.base.entities.*;
+import org.opentaps.base.entities.*;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.billing.payment.PaymentGatewayResponse;

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.opentaps.domain.base.entities.SalesOpportunity;
+import org.opentaps.base.entities.SalesOpportunity;
 import org.opentaps.domain.order.OrderDomainInterface;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.party.Account;

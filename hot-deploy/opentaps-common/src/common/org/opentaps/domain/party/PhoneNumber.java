@@ -1,6 +1,6 @@
 package org.opentaps.domain.party;
 
-import org.opentaps.domain.base.entities.TelecomNumber;
+import org.opentaps.base.entities.TelecomNumber;
 
 /**
  * Phone number object.

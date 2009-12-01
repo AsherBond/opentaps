@@ -22,7 +22,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.opentaps.domain.base.entities.CustRequestType;
+import org.opentaps.base.entities.CustRequestType;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.gwt.common.client.lookup.configuration.CustRequestTypeLookupConfiguration;

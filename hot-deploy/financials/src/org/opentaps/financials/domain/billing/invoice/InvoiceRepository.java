@@ -32,23 +32,23 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.domain.DomainsDirectory;
-import org.opentaps.domain.base.constants.AgreementTypeConstants;
-import org.opentaps.domain.base.constants.ContactMechPurposeTypeConstants;
-import org.opentaps.domain.base.constants.InvoiceItemTypeConstants;
-import org.opentaps.domain.base.constants.InvoiceTypeConstants;
-import org.opentaps.domain.base.constants.StatusItemConstants;
-import org.opentaps.domain.base.entities.AgreementInvoiceItemType;
-import org.opentaps.domain.base.entities.InvoiceAdjustment;
-import org.opentaps.domain.base.entities.InvoiceAdjustmentType;
-import org.opentaps.domain.base.entities.InvoiceAndInvoiceItem;
-import org.opentaps.domain.base.entities.InvoiceContactMech;
-import org.opentaps.domain.base.entities.InvoiceItem;
-import org.opentaps.domain.base.entities.InvoiceItemType;
-import org.opentaps.domain.base.entities.InvoiceItemTypeAndOrgGlAccount;
-import org.opentaps.domain.base.entities.OrderItem;
-import org.opentaps.domain.base.entities.PaymentAndApplication;
-import org.opentaps.domain.base.entities.PostalAddress;
-import org.opentaps.domain.base.entities.ProductInvoiceItemType;
+import org.opentaps.base.constants.AgreementTypeConstants;
+import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
+import org.opentaps.base.constants.InvoiceItemTypeConstants;
+import org.opentaps.base.constants.InvoiceTypeConstants;
+import org.opentaps.base.constants.StatusItemConstants;
+import org.opentaps.base.entities.AgreementInvoiceItemType;
+import org.opentaps.base.entities.InvoiceAdjustment;
+import org.opentaps.base.entities.InvoiceAdjustmentType;
+import org.opentaps.base.entities.InvoiceAndInvoiceItem;
+import org.opentaps.base.entities.InvoiceContactMech;
+import org.opentaps.base.entities.InvoiceItem;
+import org.opentaps.base.entities.InvoiceItemType;
+import org.opentaps.base.entities.InvoiceItemTypeAndOrgGlAccount;
+import org.opentaps.base.entities.OrderItem;
+import org.opentaps.base.entities.PaymentAndApplication;
+import org.opentaps.base.entities.PostalAddress;
+import org.opentaps.base.entities.ProductInvoiceItemType;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.billing.invoice.InvoiceSpecificationInterface;
@@ -299,7 +299,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
     /** {@inheritDoc} */
     @SuppressWarnings("deprecation")
     public InvoiceItemType getInvoiceItemType(OrderItem orderItem, String invoiceTypeId) throws RepositoryException {
-        org.opentaps.domain.base.entities.Product itemProduct = orderItem.getProduct();
+        org.opentaps.base.entities.Product itemProduct = orderItem.getProduct();
         String invoiceItemTypeId = InvoiceServices.getInvoiceItemType(getDelegator(), orderItem.getOrderItemTypeId(), itemProduct.getProductTypeId(), invoiceTypeId, InvoiceItemTypeConstants.INV_FPROD_ITEM);
         return findOneCache(InvoiceItemType.class, map(InvoiceItemType.Fields.invoiceItemTypeId, invoiceItemTypeId));
     }

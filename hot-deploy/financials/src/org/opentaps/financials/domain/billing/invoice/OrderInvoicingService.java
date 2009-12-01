@@ -24,7 +24,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.domain.order.OrderSpecification;
 import org.opentaps.domain.DomainService;
-import org.opentaps.domain.base.services.CreateInvoiceForOrderService;
+import org.opentaps.base.services.CreateInvoiceForOrderService;
 import org.opentaps.domain.billing.invoice.OrderInvoicingServiceInterface;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderDomainInterface;

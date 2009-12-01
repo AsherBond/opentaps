@@ -1,4 +1,4 @@
-package org.opentaps.domain.base.entities;
+package org.opentaps.base.entities;
 
 /*
 * Copyright (c) 2008 - 2009 Open Source Strategies, Inc.

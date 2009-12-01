@@ -16,11 +16,11 @@
  */
 package org.opentaps.financials.domain.ledger;
 
-import org.opentaps.domain.base.constants.GlFiscalTypeConstants;
-import org.opentaps.domain.base.constants.InvoiceAdjustmentTypeConstants;
-import org.opentaps.domain.base.constants.StatusItemConstants;
-import org.opentaps.domain.base.entities.AcctgTransEntry;
-import org.opentaps.domain.base.entities.CustomTimePeriod;
+import org.opentaps.base.constants.GlFiscalTypeConstants;
+import org.opentaps.base.constants.InvoiceAdjustmentTypeConstants;
+import org.opentaps.base.constants.StatusItemConstants;
+import org.opentaps.base.entities.AcctgTransEntry;
+import org.opentaps.base.entities.CustomTimePeriod;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.ledger.AccountingTransaction;
 import org.opentaps.domain.ledger.LedgerSpecificationInterface;

@@ -16,8 +16,8 @@
  */
 package org.opentaps.domain.ledger;
 
-import org.opentaps.domain.base.entities.CustomTimePeriod;
-import org.opentaps.domain.base.entities.AcctgTransEntry;
+import org.opentaps.base.entities.CustomTimePeriod;
+import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.domain.billing.invoice.Invoice;
 
 /**

@@ -19,8 +19,8 @@ package org.opentaps.amazon.tests;
 
 import java.util.List;
 
-import org.opentaps.domain.base.entities.AmazonOrder;
-import org.opentaps.domain.base.entities.AmazonProduct;
+import org.opentaps.base.entities.AmazonOrder;
+import org.opentaps.base.entities.AmazonProduct;
 
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderRepositoryInterface;

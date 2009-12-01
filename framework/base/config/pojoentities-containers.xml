@@ -52,10 +52,10 @@ under the License.
         <property name="entityTemplate" value="hot-deploy/opentaps-common/templates/BaseEntity.ftl"/>
         <property name="pkTemplate" value="hot-deploy/opentaps-common/templates/BaseEntityPk.ftl"/>
         <property name="pkBridgeTemplate" value="hot-deploy/opentaps-common/templates/BaseEntityPkBridge.ftl"/>
-        <property name="baseEntityOutputPath" value="hot-deploy/opentaps-common/src/base/org/opentaps/domain/base/entities/"/>
+        <property name="baseEntityOutputPath" value="hot-deploy/opentaps-common/src/base/org/opentaps/base/entities/"/>
         <property name="baseEntities" value="SequenceValueItem"/>
-        <property name="entityOutputPath" value="hot-deploy/opentaps-common/src/entities/org/opentaps/domain/base/entities/"/>
-        <property name="serviceOutputPath" value="hot-deploy/opentaps-common/src/services/org/opentaps/domain/base/services/"/>
+        <property name="entityOutputPath" value="hot-deploy/opentaps-common/src/entities/org/opentaps/base/entities/"/>
+        <property name="serviceOutputPath" value="hot-deploy/opentaps-common/src/services/org/opentaps/base/services/"/>
         <property name="hibernateCfgTemplate" value="hot-deploy/opentaps-common/templates/HibernateCfg.ftl"/>
         <property name="hibernateCfgPath" value="hot-deploy/opentaps-common/config/hibernate.cfg.xml"/>
     </container>

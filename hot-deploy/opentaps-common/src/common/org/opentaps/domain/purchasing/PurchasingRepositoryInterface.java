@@ -18,7 +18,7 @@ package org.opentaps.domain.purchasing;
 
 import java.math.BigDecimal;
 
-import org.opentaps.domain.base.entities.SupplierProduct;
+import org.opentaps.base.entities.SupplierProduct;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 

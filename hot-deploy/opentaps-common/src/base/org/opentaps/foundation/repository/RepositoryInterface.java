@@ -118,7 +118,7 @@ public interface RepositoryInterface extends DomainContextInterface {
 
     /**
      * Find related entity.
-     * This method tries to load a base entity which Class matches the relation name in the org.opentaps.domain.base.entities package.
+     * This method tries to load a base entity which Class matches the relation name in the org.opentaps.base.entities package.
      * If no valid class is found for the relation, it raises a <code>RepositoryException</code>.
      * This method is provided for backward compatibility, it is recommended use the type safe versions.
      * @param <T> the entity class to return
@@ -154,7 +154,7 @@ public interface RepositoryInterface extends DomainContextInterface {
 
     /**
      * Find related entity using the cache.
-     * This method tries to load a base entity which Class matches the relation name in the org.opentaps.domain.base.entities package.
+     * This method tries to load a base entity which Class matches the relation name in the org.opentaps.base.entities package.
      * If no valid class is found for the relation, it raises a <code>RepositoryException</code>.
      * This method is provided for backward compatibility, it is recommended use the type safe versions.
      * @param <T> the entity class to return
@@ -190,7 +190,7 @@ public interface RepositoryInterface extends DomainContextInterface {
 
     /**
      * Find related entities.
-     * This method tries to load base entities which Class matches the relation name in the org.opentaps.domain.base.entities package.
+     * This method tries to load base entities which Class matches the relation name in the org.opentaps.base.entities package.
      * If no valid class is found for the relation, it raises a <code>RepositoryException</code>.
      * This method is provided for backward compatibility, it is recommended use the type safe versions.
      * @param <T> the entity class to return
@@ -203,7 +203,7 @@ public interface RepositoryInterface extends DomainContextInterface {
 
     /**
      * Find related entities.
-     * This method tries to load base entities which Class matches the relation name in the org.opentaps.domain.base.entities package.
+     * This method tries to load base entities which Class matches the relation name in the org.opentaps.base.entities package.
      * If no valid class is found for the relation, it raises a <code>RepositoryException</code>.
      * This method is provided for backward compatibility, it is recommended use the type safe versions.
      * @param <T> the entity class to return
@@ -265,7 +265,7 @@ public interface RepositoryInterface extends DomainContextInterface {
 
     /**
      * Find related entities using the cache.
-     * This method tries to load base entities which Class matches the relation name in the org.opentaps.domain.base.entities package.
+     * This method tries to load base entities which Class matches the relation name in the org.opentaps.base.entities package.
      * If no valid class is found for the relation, it raises a <code>RepositoryException</code>.
      * This method is provided for backward compatibility, it is recommended use the type safe versions.
      * @param <T> the entity class to return

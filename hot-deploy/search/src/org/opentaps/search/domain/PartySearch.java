@@ -19,7 +19,7 @@ package org.opentaps.search.domain;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import org.opentaps.domain.base.entities.PartyRole;
+import org.opentaps.base.entities.PartyRole;
 import org.opentaps.domain.search.SearchRepositoryInterface;
 
 

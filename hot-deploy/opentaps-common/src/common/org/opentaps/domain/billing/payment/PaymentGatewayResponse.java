@@ -17,13 +17,13 @@
 package org.opentaps.domain.billing.payment;
 
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.domain.base.entities.Enumeration;
+import org.opentaps.base.entities.Enumeration;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 
 /**
  * Payment Gateway Response entity.
  */
-public class PaymentGatewayResponse extends org.opentaps.domain.base.entities.PaymentGatewayResponse {
+public class PaymentGatewayResponse extends org.opentaps.base.entities.PaymentGatewayResponse {
 
     private Enumeration transactionCode;
 

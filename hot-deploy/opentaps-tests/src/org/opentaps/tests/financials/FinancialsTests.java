@@ -42,14 +42,14 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.order.PurchaseOrderFactory;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.domain.base.entities.AccountBalanceHistory;
-import org.opentaps.domain.base.entities.AcctgTransEntry;
-import org.opentaps.domain.base.entities.CustomTimePeriod;
-import org.opentaps.domain.base.entities.GlAccountHistory;
-import org.opentaps.domain.base.entities.InventoryItemValueHistory;
-import org.opentaps.domain.base.entities.InvoiceAdjustmentGlAccount;
-import org.opentaps.domain.base.entities.InvoiceAdjustmentType;
-import org.opentaps.domain.base.entities.SupplierProduct;
+import org.opentaps.base.entities.AccountBalanceHistory;
+import org.opentaps.base.entities.AcctgTransEntry;
+import org.opentaps.base.entities.CustomTimePeriod;
+import org.opentaps.base.entities.GlAccountHistory;
+import org.opentaps.base.entities.InventoryItemValueHistory;
+import org.opentaps.base.entities.InvoiceAdjustmentGlAccount;
+import org.opentaps.base.entities.InvoiceAdjustmentType;
+import org.opentaps.base.entities.SupplierProduct;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.billing.payment.Payment;
@@ -636,7 +636,7 @@ public class FinancialsTests extends FinancialsTestCase {
 
         // check that the accounting transaction's transactionDate is the same as the invoice's invoiceDate
         LedgerRepositoryInterface ledgerRepository = ledgerDomain.getLedgerRepository();
-        List<AccountingTransaction> invoiceAcctgTransList = ledgerRepository.findList(AccountingTransaction.class, ledgerRepository.map(org.opentaps.domain.base.entities.AcctgTrans.Fields.invoiceId, invoiceId));
+        List<AccountingTransaction> invoiceAcctgTransList = ledgerRepository.findList(AccountingTransaction.class, ledgerRepository.map(org.opentaps.base.entities.AcctgTrans.Fields.invoiceId, invoiceId));
         assertNotNull("An accounting transaction was not found for invoice [" + invoiceId + "]", invoiceAcctgTransList);
         AccountingTransaction acctgTrans = invoiceAcctgTransList.get(0);
 
@@ -665,7 +665,7 @@ public class FinancialsTests extends FinancialsTestCase {
         financialAsserts.updatePaymentStatus(paymentId, "PMNT_RECEIVED");
 
         LedgerRepositoryInterface ledgerRepository = ledgerDomain.getLedgerRepository();
-        List<AccountingTransaction> paymentAcctgTransList = ledgerRepository.findList(AccountingTransaction.class, ledgerRepository.map(org.opentaps.domain.base.entities.AcctgTrans.Fields.paymentId, paymentId));
+        List<AccountingTransaction> paymentAcctgTransList = ledgerRepository.findList(AccountingTransaction.class, ledgerRepository.map(org.opentaps.base.entities.AcctgTrans.Fields.paymentId, paymentId));
         assertNotNull("An accounting transaction was not found for payment [" + paymentId + "]", paymentAcctgTransList);
         AccountingTransaction acctgTrans = paymentAcctgTransList.get(0);
 

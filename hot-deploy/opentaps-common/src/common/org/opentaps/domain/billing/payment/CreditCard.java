@@ -24,7 +24,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 /**
  * Credit Card entity.
  */
-public class CreditCard extends org.opentaps.domain.base.entities.CreditCard {
+public class CreditCard extends org.opentaps.base.entities.CreditCard {
 
     /**
      * Default constructor.

@@ -26,14 +26,14 @@ import java.util.Set;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.util.UtilAccountingTags;
-import org.opentaps.domain.base.entities.AcctgTagPostingCheck;
-import org.opentaps.domain.base.entities.AcctgTransEntry;
+import org.opentaps.base.entities.AcctgTagPostingCheck;
+import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.foundation.repository.RepositoryException;
 
 /**
  * Accounting Transaction Entry.
  */
-public class AccountingTransaction extends org.opentaps.domain.base.entities.AcctgTrans {
+public class AccountingTransaction extends org.opentaps.base.entities.AcctgTrans {
 
     private int roundingMode = -1;
     private int decimals = -1;

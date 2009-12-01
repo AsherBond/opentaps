@@ -18,7 +18,7 @@ package org.opentaps.domain.billing.lockbox;
 
 import java.util.List;
 
-import org.opentaps.domain.base.entities.PaymentMethodAndEftAccount;
+import org.opentaps.base.entities.PaymentMethodAndEftAccount;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.party.Party;
 import org.opentaps.foundation.entity.EntityNotFoundException;

@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.opentaps.domain.base.entities.Enumeration;
+import org.opentaps.base.entities.Enumeration;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.gwt.common.client.lookup.configuration.CasePriorityLookupConfiguration;

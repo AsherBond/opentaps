@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.opentaps.domain.base.entities.OrderHeaderItemAndRolesAndInvPending;
+import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 

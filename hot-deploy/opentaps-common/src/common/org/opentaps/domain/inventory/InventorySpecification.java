@@ -22,8 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 
 
-import org.opentaps.domain.base.constants.InventoryItemTypeConstants;
-import org.opentaps.domain.base.constants.StatusItemConstants;
+import org.opentaps.base.constants.InventoryItemTypeConstants;
+import org.opentaps.base.constants.StatusItemConstants;
 
 /**
  * Common specifications for the Inventory domain.

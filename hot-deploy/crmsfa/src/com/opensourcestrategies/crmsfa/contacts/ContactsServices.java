@@ -63,7 +63,7 @@ import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
-import org.opentaps.domain.base.constants.PartyRelationshipTypeConstants;
+import org.opentaps.base.constants.PartyRelationshipTypeConstants;
 
 /**
  * Contacts services. The service documentation is in services_contacts.xml.

@@ -99,7 +99,7 @@ public class OpentapsIdentifierGenerator extends TransactionHelper implements Pe
      */
     public void configure(Type type, Properties params, Dialect dialect) throws MappingException {
         identifierType = type;
-        // retrieve entity name, like org.opentaps.domain.base.entities.TestEntity
+        // retrieve entity name, like org.opentaps.base.entities.TestEntity
         String entityName = params.getProperty("entity_name");
         // get entity short name, like TestEntity
         sequenceType = entityName.substring(entityName.lastIndexOf(".") + 1);

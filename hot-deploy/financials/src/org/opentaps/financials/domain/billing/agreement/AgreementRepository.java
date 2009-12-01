@@ -21,7 +21,7 @@ import java.util.List;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
-import org.opentaps.domain.base.entities.Agreement;
+import org.opentaps.base.entities.Agreement;
 import org.opentaps.domain.billing.agreement.AgreementRepositoryInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;

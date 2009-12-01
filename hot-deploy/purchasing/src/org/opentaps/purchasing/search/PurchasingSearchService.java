@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.opentaps.domain.base.entities.PartyGroup;
+import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.domain.party.PartyDomainInterface;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.domain.search.CommonSearchService;

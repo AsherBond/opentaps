@@ -17,12 +17,12 @@
 package org.opentaps.domain.order;
 
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.domain.base.entities.StatusItem;
+import org.opentaps.base.entities.StatusItem;
 
 /**
  * Shipment entity.
  */
-public class Shipment extends org.opentaps.domain.base.entities.Shipment {
+public class Shipment extends org.opentaps.base.entities.Shipment {
 
     /**
      * Default constructor.
@@ -41,7 +41,7 @@ public class Shipment extends org.opentaps.domain.base.entities.Shipment {
 
     /**
      * Gets this shipment current <code>StatusItem</code>.
-     * This is an alias for {@link org.opentaps.domain.base.entities.Shipment#getStatusItem}.
+     * This is an alias for {@link org.opentaps.base.entities.Shipment#getStatusItem}.
      * @return the current <code>StatusItem</code>
      * @throws RepositoryException if an error occurs
      */

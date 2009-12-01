@@ -34,20 +34,20 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.opentaps.domain.DomainsDirectory;
-import org.opentaps.domain.base.entities.Facility;
-import org.opentaps.domain.base.entities.InventoryItemAndLocation;
-import org.opentaps.domain.base.entities.InventoryItemDetail;
-import org.opentaps.domain.base.entities.InventoryItemTraceDetail;
-import org.opentaps.domain.base.entities.InventoryItemValueHistory;
-import org.opentaps.domain.base.entities.InventoryItemVariance;
-import org.opentaps.domain.base.entities.InventoryTransfer;
-import org.opentaps.domain.base.entities.ItemIssuance;
-import org.opentaps.domain.base.entities.Lot;
-import org.opentaps.domain.base.entities.OrderItemShipGrpInvRes;
-import org.opentaps.domain.base.entities.PhysicalInventory;
-import org.opentaps.domain.base.entities.WorkEffort;
-import org.opentaps.domain.base.entities.WorkEffortInventoryAssign;
-import org.opentaps.domain.base.entities.WorkEffortInventoryProduced;
+import org.opentaps.base.entities.Facility;
+import org.opentaps.base.entities.InventoryItemAndLocation;
+import org.opentaps.base.entities.InventoryItemDetail;
+import org.opentaps.base.entities.InventoryItemTraceDetail;
+import org.opentaps.base.entities.InventoryItemValueHistory;
+import org.opentaps.base.entities.InventoryItemVariance;
+import org.opentaps.base.entities.InventoryTransfer;
+import org.opentaps.base.entities.ItemIssuance;
+import org.opentaps.base.entities.Lot;
+import org.opentaps.base.entities.OrderItemShipGrpInvRes;
+import org.opentaps.base.entities.PhysicalInventory;
+import org.opentaps.base.entities.WorkEffort;
+import org.opentaps.base.entities.WorkEffortInventoryAssign;
+import org.opentaps.base.entities.WorkEffortInventoryProduced;
 import org.opentaps.domain.inventory.InventoryItem;
 import org.opentaps.domain.inventory.InventoryItemTrace;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
@@ -101,12 +101,12 @@ public class InventoryRepository extends Repository implements InventoryReposito
     }
 
     /** {@inheritDoc} */
-    public org.opentaps.domain.base.entities.InventoryItem getInventoryItemById(
+    public org.opentaps.base.entities.InventoryItem getInventoryItemById(
             String inventoryItemId,
-            Class<? extends org.opentaps.domain.base.entities.InventoryItem> clazz)
+            Class<? extends org.opentaps.base.entities.InventoryItem> clazz)
             throws RepositoryException, EntityNotFoundException {
 
-        return findOneNotNull(clazz, map(org.opentaps.domain.base.entities.InventoryItem.Fields.inventoryItemId, inventoryItemId), "InventoryItem [" + inventoryItemId + "] not found");
+        return findOneNotNull(clazz, map(org.opentaps.base.entities.InventoryItem.Fields.inventoryItemId, inventoryItemId), "InventoryItem [" + inventoryItemId + "] not found");
     }
 
     /** {@inheritDoc} */
@@ -268,7 +268,7 @@ public class InventoryRepository extends Repository implements InventoryReposito
     }
 
     /** {@inheritDoc} */
-    public InventoryItemTrace createInventoryTrace(org.opentaps.domain.base.entities.InventoryItem inventoryItem)  throws RepositoryException, InfrastructureException {
+    public InventoryItemTrace createInventoryTrace(org.opentaps.base.entities.InventoryItem inventoryItem)  throws RepositoryException, InfrastructureException {
 
         InventoryItemTrace inventoryItemTrace = new InventoryItemTrace();
         inventoryItemTrace.setInventoryItemTraceId(getNextSeqId("InventoryItemTrace"));
@@ -363,7 +363,7 @@ public class InventoryRepository extends Repository implements InventoryReposito
     }
 
     /** {@inheritDoc} */
-    public List<InventoryItemTraceDetail> getDerivativeInventoryTraceEvents(org.opentaps.domain.base.entities.InventoryItem inventoryItem) throws RepositoryException {
+    public List<InventoryItemTraceDetail> getDerivativeInventoryTraceEvents(org.opentaps.base.entities.InventoryItem inventoryItem) throws RepositoryException {
         List<InventoryItemTraceDetail> details = FastList.newInstance();
 
         String currentInventoryItemId = inventoryItem.getInventoryItemId();

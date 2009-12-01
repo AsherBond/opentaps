@@ -19,7 +19,7 @@ package org.opentaps.warehouse.domain.manufacturing;
 import java.math.BigDecimal;
 
 import org.ofbiz.entity.GenericDelegator;
-import org.opentaps.domain.base.services.GetProductionRunCostService;
+import org.opentaps.base.services.GetProductionRunCostService;
 import org.opentaps.domain.manufacturing.ManufacturingRepositoryInterface;
 import org.opentaps.domain.manufacturing.ProductionRun;
 import org.opentaps.foundation.entity.EntityNotFoundException;

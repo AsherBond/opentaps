@@ -29,7 +29,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
-import org.opentaps.domain.base.constants.StatusItemConstants;
+import org.opentaps.base.constants.StatusItemConstants;
 
 
 public class PurchasingOrderServices {

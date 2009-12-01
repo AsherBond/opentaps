@@ -23,8 +23,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.opentaps.crmsfa.search.CrmsfaSearchService;
-import org.opentaps.domain.base.entities.PartyGroup;
-import org.opentaps.domain.base.entities.SalesOpportunity;
+import org.opentaps.base.entities.PartyGroup;
+import org.opentaps.base.entities.SalesOpportunity;
 import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.Lead;

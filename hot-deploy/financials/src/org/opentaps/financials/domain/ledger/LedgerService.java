@@ -28,7 +28,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.opentaps.domain.DomainService;
-import org.opentaps.domain.base.entities.*;
+import org.opentaps.base.entities.*;
 import org.opentaps.domain.ledger.*;
 import org.opentaps.domain.ledger.AccountingTransaction.TagBalance;
 import org.opentaps.domain.organization.OrganizationDomainInterface;

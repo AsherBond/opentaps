@@ -127,6 +127,7 @@
 
     <target name="prepare" depends="clean-lib">
         <mkdir dir="${build.dir}/classes"/>
+        <mkdir dir="${build.dir}/classes/constants"/>
         <mkdir dir="${build.dir}/classes/base"/>
         <mkdir dir="${build.dir}/classes/entities"/>
         <mkdir dir="${build.dir}/classes/services"/>
@@ -147,10 +148,20 @@
     <!-- Compilation of the source files                                    -->
     <!-- ================================================================== -->
 
-    <target name="base-classes" depends="prepare,classpath">
+    <target name="constants-classes" depends="prepare,classpath">
+        <javac debug="on" deprecation="on" destdir="${build.dir}/classes/constants" fork="yes">
+            <classpath>
+                <path refid="local.class.path"/>
+            </classpath>
+            <src path="${src.dir}/constants/"/>
+        </javac>
+    </target>
+
+    <target name="base-classes" depends="constants-classes">
         <javac debug="on" deprecation="on" destdir="${build.dir}/classes/base" fork="yes" memoryMaximumSize="1024M">
             <classpath>
                 <path refid="local.class.path"/>
+                <pathelement location="${build.dir}/classes/constants"/>
             </classpath>
             <src path="${src.dir}/base/"/>
         </javac>
@@ -160,6 +171,7 @@
         <javac debug="on" deprecation="on" destdir="${build.dir}/classes/entities" fork="yes" memoryMaximumSize="1024M">
             <classpath>
                 <path refid="local.class.path"/>
+                <pathelement location="${build.dir}/classes/constants"/>
                 <pathelement location="${build.dir}/classes/base"/>
             </classpath>
             <src path="${src.dir}/entities/"/>
@@ -170,6 +182,7 @@
         <javac debug="on" deprecation="on" destdir="${build.dir}/classes/services" fork="yes" memoryMaximumSize="1024M">
             <classpath>
                 <path refid="local.class.path"/>
+                <pathelement location="${build.dir}/classes/constants"/>
                 <pathelement location="${build.dir}/classes/base"/>
                 <pathelement location="${build.dir}/classes/entities"/>
             </classpath>
@@ -182,6 +195,7 @@
         <javac debug="on" deprecation="on" destdir="${build.dir}/classes/common" fork="yes" memoryMaximumSize="1024M">
             <classpath>
                 <path refid="local.class.path"/>
+                <pathelement location="${build.dir}/classes/constants"/>
                 <pathelement location="${build.dir}/classes/base"/>
                 <pathelement location="${build.dir}/classes/entities"/>
                 <pathelement location="${build.dir}/classes/services"/>
@@ -196,25 +210,31 @@
         </copy>
     </target>
 
-    <target name="base-jar" depends="base-classes">
+    <target name="constants-jar" depends="constants-classes">
+        <jar jarfile="${build.dir}/lib/${name}-constants.jar">
+           <fileset dir="${build.dir}/classes/constants"/>
+        </jar>
+    </target>
+
+    <target name="base-jar" depends="constants-jar,base-classes">
         <jar jarfile="${build.dir}/lib/${name}-base.jar">
            <fileset dir="${build.dir}/classes/base"/>
         </jar>
     </target>
 
-    <target name="entities-jar" depends="entities-classes">
+    <target name="entities-jar" depends="base-jar,entities-classes">
         <jar jarfile="${build.dir}/lib/${name}-entities.jar">
            <fileset dir="${build.dir}/classes/entities"/>
         </jar>
     </target>
 
-    <target name="services-jar" depends="services-classes">
+    <target name="services-jar" depends="entities-jar,services-classes">
         <jar jarfile="${build.dir}/lib/${name}-services.jar">
            <fileset dir="${build.dir}/classes/services"/>
         </jar>
     </target>
 
-    <target name="jar" depends="base-jar,entities-jar,services-jar,classes">
+    <target name="jar" depends="constants-jar,base-jar,entities-jar,services-jar,classes">
         <jar jarfile="${build.dir}/lib/${name}.jar">
            <fileset dir="${build.dir}/classes/common" excludes="org/opentaps/aspect/**"/>
         </jar>

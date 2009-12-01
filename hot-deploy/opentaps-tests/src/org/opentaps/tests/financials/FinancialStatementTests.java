@@ -31,7 +31,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.opentaps.domain.base.entities.CustomTimePeriod;
+import org.opentaps.base.entities.CustomTimePeriod;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 
 /**

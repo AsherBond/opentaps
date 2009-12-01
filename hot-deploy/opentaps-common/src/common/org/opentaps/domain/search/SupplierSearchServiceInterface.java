@@ -19,7 +19,7 @@ package org.opentaps.domain.search;
 import java.util.List;
 import java.util.Set;
 
-import org.opentaps.domain.base.entities.PartyGroup;
+import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.service.ServiceException;
 

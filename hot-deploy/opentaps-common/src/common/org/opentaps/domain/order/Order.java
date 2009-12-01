@@ -30,17 +30,17 @@ import java.util.TimeZone;
 import javolution.util.FastList;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
-import org.opentaps.domain.base.entities.ContactMech;
-import org.opentaps.domain.base.entities.ContactMechPurposeType;
-import org.opentaps.domain.base.entities.Enumeration;
-import org.opentaps.domain.base.entities.OrderAdjustmentBilling;
-import org.opentaps.domain.base.entities.OrderHeaderNoteView;
-import org.opentaps.domain.base.entities.OrderStatus;
-import org.opentaps.domain.base.entities.OrderTerm;
-import org.opentaps.domain.base.entities.OrderType;
-import org.opentaps.domain.base.entities.PostalAddress;
-import org.opentaps.domain.base.entities.StatusItem;
-import org.opentaps.domain.base.entities.TelecomNumber;
+import org.opentaps.base.entities.ContactMech;
+import org.opentaps.base.entities.ContactMechPurposeType;
+import org.opentaps.base.entities.Enumeration;
+import org.opentaps.base.entities.OrderAdjustmentBilling;
+import org.opentaps.base.entities.OrderHeaderNoteView;
+import org.opentaps.base.entities.OrderStatus;
+import org.opentaps.base.entities.OrderTerm;
+import org.opentaps.base.entities.OrderType;
+import org.opentaps.base.entities.PostalAddress;
+import org.opentaps.base.entities.StatusItem;
+import org.opentaps.base.entities.TelecomNumber;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.billing.payment.PaymentGatewayResponse;
@@ -51,7 +51,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 /**
  * Order entity and domain.
  */
-public class Order extends org.opentaps.domain.base.entities.OrderHeader {
+public class Order extends org.opentaps.base.entities.OrderHeader {
 
     private static final String MODULE = Order.class.getName();
 
@@ -204,7 +204,7 @@ public class Order extends org.opentaps.domain.base.entities.OrderHeader {
 
     /**
      * Gets this order <code>OrderType</code>.
-     * This is an alias for {@link org.opentaps.domain.base.entities.OrderHeader#getOrderType}.
+     * This is an alias for {@link org.opentaps.base.entities.OrderHeader#getOrderType}.
      * @return the <code>OrderType</code>
      * @throws RepositoryException if an error occurs
      */
@@ -223,7 +223,7 @@ public class Order extends org.opentaps.domain.base.entities.OrderHeader {
 
     /**
      * Gets the sales channel for this order.
-     * This is an alias for {@link org.opentaps.domain.base.entities.OrderHeader#getSalesChannelEnumeration}.
+     * This is an alias for {@link org.opentaps.base.entities.OrderHeader#getSalesChannelEnumeration}.
      * @return the sales channel <code>Enumeration</code>
      * @throws RepositoryException if an error occurs
      */
@@ -693,7 +693,7 @@ public class Order extends org.opentaps.domain.base.entities.OrderHeader {
      * Gets the order statuses for this order.
      * This list describe the history of status this order went through, with
      *  the current status being the first of the list.
-     * This overrides {@link org.opentaps.domain.base.entities.OrderHeader#getOrderStatuses} to specify the ordering.
+     * This overrides {@link org.opentaps.base.entities.OrderHeader#getOrderStatuses} to specify the ordering.
      * @return list of <code>OrderStatus</code> from current to oldest, that relate this order to a <code>StatusItem</code>
      * @throws RepositoryException if an error occurs
      */
@@ -707,7 +707,7 @@ public class Order extends org.opentaps.domain.base.entities.OrderHeader {
 
     /**
      * Gets this order current <code>StatusItem</code>.
-     * This is an alias for {@link org.opentaps.domain.base.entities.OrderHeader#getStatusItem}.
+     * This is an alias for {@link org.opentaps.base.entities.OrderHeader#getStatusItem}.
      * @return the current <code>StatusItem</code>
      * @throws RepositoryException if an error occurs
      * @see #getOrderStatuses
@@ -731,7 +731,7 @@ public class Order extends org.opentaps.domain.base.entities.OrderHeader {
 
     /**
      * Gets the terms for this order.
-     * This is an alias for {@link org.opentaps.domain.base.entities.OrderHeader#getOrderTerms}.
+     * This is an alias for {@link org.opentaps.base.entities.OrderHeader#getOrderTerms}.
      * @return list of <code>OrderTerm</code>
      * @throws RepositoryException if an error occurs
      */

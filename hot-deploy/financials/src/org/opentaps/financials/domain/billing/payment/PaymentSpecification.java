@@ -16,9 +16,9 @@
  */
 package org.opentaps.financials.domain.billing.payment;
 
-import org.opentaps.domain.base.constants.PaymentMethodTypeConstants;
-import org.opentaps.domain.base.constants.PaymentTypeConstants;
-import org.opentaps.domain.base.constants.StatusItemConstants;
+import org.opentaps.base.constants.PaymentMethodTypeConstants;
+import org.opentaps.base.constants.PaymentTypeConstants;
+import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.billing.payment.PaymentMethod;
 import org.opentaps.domain.billing.payment.PaymentSpecificationInterface;

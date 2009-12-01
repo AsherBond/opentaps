@@ -28,7 +28,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.domain.base.entities.PaymentMethod;
+import org.opentaps.base.entities.PaymentMethod;
 import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
 import org.opentaps.domain.organization.Organization;

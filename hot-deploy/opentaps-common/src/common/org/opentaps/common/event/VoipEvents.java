@@ -27,7 +27,7 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.domain.base.entities.TelecomNumber;
+import org.opentaps.base.entities.TelecomNumber;
 import org.opentaps.domain.party.Party;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.domain.voip.VoipRepositoryInterface;

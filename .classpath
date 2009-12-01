@@ -43,6 +43,7 @@
 	<classpathentry excluding="org/enhydra/|org/ofbiz/" kind="src" path="specialpurpose/shark/src"/>
 	<classpathentry kind="src" path="specialpurpose/workflow/src"/>
 	<classpathentry kind="src" path="hot-deploy/opentaps-common/src/base"/>
+	<classpathentry kind="src" path="hot-deploy/opentaps-common/src/constants"/>
 	<classpathentry kind="src" path="hot-deploy/opentaps-common/src/common"/>
 	<classpathentry kind="src" path="hot-deploy/opentaps-common/src/entities"/>
 	<classpathentry kind="src" path="hot-deploy/opentaps-common/src/prebuild"/>

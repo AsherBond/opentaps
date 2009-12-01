@@ -19,7 +19,7 @@ package org.opentaps.asterisk.tests;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.domain.base.entities.ExternalUser;
+import org.opentaps.base.entities.ExternalUser;
 import org.opentaps.domain.party.PartyDomainInterface;
 import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;

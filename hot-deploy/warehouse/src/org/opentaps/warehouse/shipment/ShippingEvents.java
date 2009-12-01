@@ -28,7 +28,7 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.domain.base.entities.Facility;
+import org.opentaps.base.entities.Facility;
 import org.opentaps.domain.billing.BillingDomainInterface;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.inventory.InventoryDomainInterface;

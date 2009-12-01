@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
-import org.opentaps.domain.base.entities.SupplierProduct;
+import org.opentaps.base.entities.SupplierProduct;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.product.Product;

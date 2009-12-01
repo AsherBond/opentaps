@@ -27,7 +27,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 /**
  * Object representing an Lockbox Batch.
  */
-public class LockboxBatch extends org.opentaps.domain.base.entities.LockboxBatch {
+public class LockboxBatch extends org.opentaps.base.entities.LockboxBatch {
 
     private List<LockboxBatchItem> lockboxBatchItems;
     private List<LockboxBatchItem> readyLockboxBatchItems;

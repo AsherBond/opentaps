@@ -23,7 +23,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 /**
  * Return Item entity.
  */
-public class ReturnItem extends org.opentaps.domain.base.entities.ReturnItem {
+public class ReturnItem extends org.opentaps.base.entities.ReturnItem {
 
     private Return ret;
     private BigDecimal returnQuantity;

@@ -32,7 +32,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericEntityException;
 import org.opentaps.domain.DomainService;
-import org.opentaps.domain.base.entities.AccountBalanceHistory;
+import org.opentaps.base.entities.AccountBalanceHistory;
 import org.opentaps.domain.billing.financials.AccountBalanceHistoryServiceInterface;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;

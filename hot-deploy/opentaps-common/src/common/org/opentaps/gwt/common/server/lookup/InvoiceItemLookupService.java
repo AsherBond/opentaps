@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.opentaps.domain.base.entities.InvoiceItemAndDescriptions;
+import org.opentaps.base.entities.InvoiceItemAndDescriptions;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.foundation.exception.FoundationException;

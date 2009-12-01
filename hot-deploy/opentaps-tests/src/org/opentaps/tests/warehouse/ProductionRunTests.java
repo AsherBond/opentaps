@@ -40,7 +40,7 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.manufacturing.OpentapsProductionRun;
 import org.opentaps.common.manufacturing.bom.BomTree;
 import org.opentaps.common.order.SalesOrderFactory;
-import org.opentaps.domain.base.entities.InventoryItemTraceDetail;
+import org.opentaps.base.entities.InventoryItemTraceDetail;
 import org.opentaps.domain.inventory.InventoryItem;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
 import org.opentaps.tests.financials.FinancialAsserts;

@@ -25,7 +25,7 @@ import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.gwt.common.client.lookup.configuration.TaxAuthorityLookupConfiguration;
 import org.opentaps.gwt.common.server.HttpInputProvider;
 import org.opentaps.gwt.common.server.InputProviderInterface;
-import org.opentaps.domain.base.entities.TaxAuthorityAndDetail;
+import org.opentaps.base.entities.TaxAuthorityAndDetail;
 import org.opentaps.foundation.entity.EntityInterface;
 
 /**

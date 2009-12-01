@@ -27,7 +27,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 /**
  * Object representing an Lockbox Batch Item, which is an imported Payment (check) from a Lockbox Batch.
  */
-public class LockboxBatchItem extends org.opentaps.domain.base.entities.LockboxBatchItem {
+public class LockboxBatchItem extends org.opentaps.base.entities.LockboxBatchItem {
 
     private LockboxBatch lockboxBatch;
     private List<LockboxBatchItemDetail> lockboxBatchItemDetails;

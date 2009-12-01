@@ -1099,7 +1099,7 @@ public class Repository implements RepositoryInterface  {
     /** {@inheritDoc} */
     public <T extends EntityInterface> EntityInterface getRelatedOne(String relation, T entity) throws RepositoryException {
         try {
-            Class<?> relatedEntityClass = Class.forName("org.opentaps.domain.base.entities." + relation);
+            Class<?> relatedEntityClass = Class.forName("org.opentaps.base.entities." + relation);
             return getRelatedOne(relatedEntityClass.asSubclass(EntityInterface.class), relation, entity);
         } catch (ClassNotFoundException e) {
             throw new RepositoryException(e);
@@ -1127,7 +1127,7 @@ public class Repository implements RepositoryInterface  {
     /** {@inheritDoc} */
     public <T extends EntityInterface> EntityInterface getRelatedOneCache(String relation, T entity) throws RepositoryException {
         try {
-            Class<?> relatedEntityClass = Class.forName("org.opentaps.domain.base.entities." + relation);
+            Class<?> relatedEntityClass = Class.forName("org.opentaps.base.entities." + relation);
             return getRelatedOneCache(relatedEntityClass.asSubclass(EntityInterface.class), relation, entity);
         } catch (ClassNotFoundException e) {
             throw new RepositoryException(e);
@@ -1155,7 +1155,7 @@ public class Repository implements RepositoryInterface  {
     /** {@inheritDoc} */
     public <T extends EntityInterface> List<? extends EntityInterface> getRelated(String relation, T entity) throws RepositoryException {
         try {
-            Class<?> relatedEntityClass = Class.forName("org.opentaps.domain.base.entities." + relation);
+            Class<?> relatedEntityClass = Class.forName("org.opentaps.base.entities." + relation);
             return getRelated(relatedEntityClass.asSubclass(EntityInterface.class), relation, entity);
         } catch (ClassNotFoundException e) {
             throw new RepositoryException(e);
@@ -1165,7 +1165,7 @@ public class Repository implements RepositoryInterface  {
     /** {@inheritDoc} */
     public <T extends EntityInterface> List<? extends EntityInterface> getRelated(String relation, T entity, List<String> orderBy) throws RepositoryException {
         try {
-            Class<?> relatedEntityClass = Class.forName("org.opentaps.domain.base.entities." + relation);
+            Class<?> relatedEntityClass = Class.forName("org.opentaps.base.entities." + relation);
             return getRelated(relatedEntityClass.asSubclass(EntityInterface.class), relation, entity, orderBy);
         } catch (ClassNotFoundException e) {
             throw new RepositoryException(e);
@@ -1209,7 +1209,7 @@ public class Repository implements RepositoryInterface  {
     /** {@inheritDoc} */
     public <T extends EntityInterface> List<? extends EntityInterface> getRelatedCache(String relation, T entity) throws RepositoryException {
         try {
-            Class<?> relatedEntityClass = Class.forName("org.opentaps.domain.base.entities." + relation);
+            Class<?> relatedEntityClass = Class.forName("org.opentaps.base.entities." + relation);
             return getRelatedCache(relatedEntityClass.asSubclass(EntityInterface.class), relation, entity);
         } catch (ClassNotFoundException e) {
             throw new RepositoryException(e);

@@ -22,11 +22,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.ofbiz.base.util.UtilNumber;
-import org.opentaps.domain.base.constants.OrderAdjustmentTypeConstants;
-import org.opentaps.domain.base.constants.OrderTypeConstants;
-import org.opentaps.domain.base.constants.PaymentMethodTypeConstants;
-import org.opentaps.domain.base.constants.RoleTypeConstants;
-import org.opentaps.domain.base.constants.StatusItemConstants;
+import org.opentaps.base.constants.OrderAdjustmentTypeConstants;
+import org.opentaps.base.constants.OrderTypeConstants;
+import org.opentaps.base.constants.PaymentMethodTypeConstants;
+import org.opentaps.base.constants.RoleTypeConstants;
+import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.domain.order.*;
 
 /**

@@ -16,7 +16,7 @@
  */
 package org.opentaps.domain.product;
 
-import org.opentaps.domain.base.entities.ProductType;
+import org.opentaps.base.entities.ProductType;
 import org.opentaps.foundation.repository.RepositoryException;
 
 import java.math.BigDecimal;
@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * Product entity, encapsulate product specific functionality.
  */
-public class Product extends org.opentaps.domain.base.entities.Product {
+public class Product extends org.opentaps.base.entities.Product {
 
     /**
      * Default public constructor.

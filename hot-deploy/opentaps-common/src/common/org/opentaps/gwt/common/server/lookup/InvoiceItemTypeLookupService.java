@@ -28,7 +28,7 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.opentaps.domain.base.entities.InvoiceItemTypeAndOrgGlAccount;
+import org.opentaps.base.entities.InvoiceItemTypeAndOrgGlAccount;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.exception.FoundationException;
@@ -36,7 +36,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.gwt.common.client.lookup.configuration.InvoiceItemTypeLookupConfiguration;
 import org.opentaps.gwt.common.server.HttpInputProvider;
 import org.opentaps.gwt.common.server.InputProviderInterface;
-import org.opentaps.domain.base.entities.InvoiceItemType;
+import org.opentaps.base.entities.InvoiceItemType;
 
 /**
  * The RPC service used to populate the Invoice Item Type autocompleters widgets.

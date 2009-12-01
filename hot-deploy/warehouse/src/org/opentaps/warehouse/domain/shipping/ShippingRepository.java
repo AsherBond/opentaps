@@ -21,10 +21,10 @@ import java.util.List;
 
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
-import org.opentaps.domain.base.entities.CarrierShipmentBoxType;
-import org.opentaps.domain.base.entities.Facility;
-import org.opentaps.domain.base.entities.Party;
-import org.opentaps.domain.base.entities.WarehouseDefaultBoxType;
+import org.opentaps.base.entities.CarrierShipmentBoxType;
+import org.opentaps.base.entities.Facility;
+import org.opentaps.base.entities.Party;
+import org.opentaps.base.entities.WarehouseDefaultBoxType;
 import org.opentaps.domain.order.OrderItem;
 import org.opentaps.domain.shipping.ShippingRepositoryInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;

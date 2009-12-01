@@ -20,7 +20,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 
 import java.util.List;
 
-public class PicklistAndBinAndItem extends org.opentaps.domain.base.entities.PicklistAndBinAndItem {
+public class PicklistAndBinAndItem extends org.opentaps.base.entities.PicklistAndBinAndItem {
 
     public static final String STATUS_CANCELLED = "PICKLIST_CANCELLED";
     public static final String STATUS_PICKED = "PICKLIST_PICKED";

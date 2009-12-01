@@ -23,7 +23,7 @@ import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.domain.DomainsDirectory;
-import org.opentaps.domain.base.entities.PaymentApplication;
+import org.opentaps.base.entities.PaymentApplication;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
@@ -34,7 +34,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 /**
  * Order Payment Preference entity.
  */
-public class Payment extends org.opentaps.domain.base.entities.Payment {
+public class Payment extends org.opentaps.base.entities.Payment {
 
     private static int DECIMALS = UtilNumber.getBigDecimalScale("invoice.decimals");
     private static int ROUNDING = UtilNumber.getBigDecimalRoundingMode("invoice.rounding");

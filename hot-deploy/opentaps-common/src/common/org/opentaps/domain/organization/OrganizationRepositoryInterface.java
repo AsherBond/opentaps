@@ -21,9 +21,9 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
-import org.opentaps.domain.base.entities.CustomTimePeriod;
-import org.opentaps.domain.base.entities.PaymentMethod;
-import org.opentaps.domain.base.entities.TermType;
+import org.opentaps.base.entities.CustomTimePeriod;
+import org.opentaps.base.entities.PaymentMethod;
+import org.opentaps.base.entities.TermType;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;

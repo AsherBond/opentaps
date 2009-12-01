@@ -18,7 +18,7 @@ package org.opentaps.domain.billing.agreement;
 
 import java.util.List;
 
-import org.opentaps.domain.base.entities.Agreement;
+import org.opentaps.base.entities.Agreement;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 

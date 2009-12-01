@@ -20,15 +20,15 @@ import java.util.List;
 
 import org.opentaps.foundation.repository.RepositoryException;
 
-import org.opentaps.domain.base.entities.ProdCatalog;
-import org.opentaps.domain.base.entities.ProductStoreCatalog;
-import org.opentaps.domain.base.entities.ProductStoreShipmentMeth;
-import org.opentaps.domain.base.entities.ProductStoreShipmentMethView;
+import org.opentaps.base.entities.ProdCatalog;
+import org.opentaps.base.entities.ProductStoreCatalog;
+import org.opentaps.base.entities.ProductStoreShipmentMeth;
+import org.opentaps.base.entities.ProductStoreShipmentMethView;
 
 /**
  * Product Store entity.
  */
-public class ProductStore extends org.opentaps.domain.base.entities.ProductStore {
+public class ProductStore extends org.opentaps.base.entities.ProductStore {
 
     private List<ProdCatalog> prodCatalogs;
     private List<ProductStoreCatalog> productStoreCatalogs;

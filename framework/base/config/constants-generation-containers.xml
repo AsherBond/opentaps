@@ -49,7 +49,7 @@ under the License.
     <container name="constants-generation-container" class="org.opentaps.domain.container.ConstantsGeneratorContainer">
         <property name="delegator-name" value="default"/>
         <property name="template" value="hot-deploy/opentaps-common/templates/Constants.ftl"/>
-        <property name="outputPath" value="hot-deploy/opentaps-common/src/base/org/opentaps/domain/base/constants/"/>
+        <property name="outputPath" value="hot-deploy/opentaps-common/src/constants/org/opentaps/base/constants/"/>
         <!-- no extension needed here, .properties is assumed by the loader -->
         <property name="configProperties" value="constantsGenerationConfig" />
     </container>

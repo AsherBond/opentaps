@@ -19,7 +19,7 @@ package org.opentaps.domain.inventory;
 import org.ofbiz.base.util.StringUtil;
 
 public class InventoryItemTrace extends
-        org.opentaps.domain.base.entities.InventoryItemTrace {
+        org.opentaps.base.entities.InventoryItemTrace {
 
     private long detailsSeqNumber = 0;
     private final int SEQ_NUM_MIN_LEN = 5;

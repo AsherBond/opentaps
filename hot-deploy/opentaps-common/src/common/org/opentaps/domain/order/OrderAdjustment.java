@@ -20,12 +20,12 @@ import java.math.BigDecimal;
 
 import org.opentaps.foundation.repository.RepositoryException;
 
-import org.opentaps.domain.base.entities.OrderAdjustmentType;
+import org.opentaps.base.entities.OrderAdjustmentType;
 
 /**
  * Order Adjustment entity.
  */
-public class OrderAdjustment extends org.opentaps.domain.base.entities.OrderAdjustment {
+public class OrderAdjustment extends org.opentaps.base.entities.OrderAdjustment {
 
     protected static final BigDecimal PERCENT = new BigDecimal(0.01);
 
@@ -62,7 +62,7 @@ public class OrderAdjustment extends org.opentaps.domain.base.entities.OrderAdju
 
     /**
      * Gets the <code>OrderAdjustmentType</code> for this order item.
-     * This is an alias for {@link org.opentaps.domain.base.entities.OrderAdjustment#getOrderAdjustmentType}.
+     * This is an alias for {@link org.opentaps.base.entities.OrderAdjustment#getOrderAdjustmentType}.
      * @return the <code>OrderAdjustmentType</code>
      * @throws RepositoryException if an error occurs
      */

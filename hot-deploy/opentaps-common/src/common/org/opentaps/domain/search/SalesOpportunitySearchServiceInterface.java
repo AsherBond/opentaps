@@ -19,7 +19,7 @@ package org.opentaps.domain.search;
 import java.util.List;
 import java.util.Set;
 
-import org.opentaps.domain.base.entities.SalesOpportunity;
+import org.opentaps.base.entities.SalesOpportunity;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.foundation.service.ServiceException;
 

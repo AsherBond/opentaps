@@ -21,9 +21,9 @@ import java.util.List;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.GenericValue;
-import org.opentaps.domain.base.entities.SupplierProduct;
-import org.opentaps.domain.base.services.CreateSupplierProductService;
-import org.opentaps.domain.base.services.GetSuppliersForProductService;
+import org.opentaps.base.entities.SupplierProduct;
+import org.opentaps.base.services.CreateSupplierProductService;
+import org.opentaps.base.services.GetSuppliersForProductService;
 import org.opentaps.domain.purchasing.PurchasingRepositoryInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;

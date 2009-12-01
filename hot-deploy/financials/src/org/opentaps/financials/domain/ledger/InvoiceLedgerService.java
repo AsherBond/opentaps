@@ -19,9 +19,9 @@ package org.opentaps.financials.domain.ledger;
 import java.math.BigDecimal;
 
 import org.opentaps.domain.DomainService;
-import org.opentaps.domain.base.entities.InvoiceAdjustment;
-import org.opentaps.domain.base.entities.InvoiceAdjustmentGlAccount;
-import org.opentaps.domain.base.entities.InvoiceGlAccountType;
+import org.opentaps.base.entities.InvoiceAdjustment;
+import org.opentaps.base.entities.InvoiceAdjustmentGlAccount;
+import org.opentaps.base.entities.InvoiceGlAccountType;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.billing.invoice.InvoiceServiceInterface;

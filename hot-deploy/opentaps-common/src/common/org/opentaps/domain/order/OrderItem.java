@@ -20,15 +20,15 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.ofbiz.base.util.Debug;
-import org.opentaps.domain.base.entities.ItemIssuance;
-import org.opentaps.domain.base.entities.OrderAdjustmentBilling;
-import org.opentaps.domain.base.entities.OrderItemAssoc;
-import org.opentaps.domain.base.entities.OrderItemBilling;
-import org.opentaps.domain.base.entities.OrderItemPriceInfo;
-import org.opentaps.domain.base.entities.OrderItemType;
-import org.opentaps.domain.base.entities.OrderRequirementCommitment;
-import org.opentaps.domain.base.entities.OrderStatus;
-import org.opentaps.domain.base.entities.StatusItem;
+import org.opentaps.base.entities.ItemIssuance;
+import org.opentaps.base.entities.OrderAdjustmentBilling;
+import org.opentaps.base.entities.OrderItemAssoc;
+import org.opentaps.base.entities.OrderItemBilling;
+import org.opentaps.base.entities.OrderItemPriceInfo;
+import org.opentaps.base.entities.OrderItemType;
+import org.opentaps.base.entities.OrderRequirementCommitment;
+import org.opentaps.base.entities.OrderStatus;
+import org.opentaps.base.entities.StatusItem;
 import org.opentaps.domain.product.Product;
 import org.opentaps.foundation.repository.RepositoryException;
 
@@ -37,7 +37,7 @@ import org.opentaps.foundation.repository.RepositoryException;
  * An order item is an item of an <code>Order</code>.
  * @see Order
  */
-public class OrderItem extends org.opentaps.domain.base.entities.OrderItem {
+public class OrderItem extends org.opentaps.base.entities.OrderItem {
 
     private static final String MODULE = OrderItem.class.getName();
 
@@ -79,7 +79,7 @@ public class OrderItem extends org.opentaps.domain.base.entities.OrderItem {
 
     /**
      * Gets the <code>OrderRequirementCommitments</code> for this order item.
-     * This is an alias for {@link org.opentaps.domain.base.entities.OrderItem#getOrderRequirementCommitments}.
+     * This is an alias for {@link org.opentaps.base.entities.OrderItem#getOrderRequirementCommitments}.
      * @return the list of <code>OrderRequirementCommitments</code>
      * @throws RepositoryException if an error occurs
      */
@@ -113,7 +113,7 @@ public class OrderItem extends org.opentaps.domain.base.entities.OrderItem {
 
     /**
      * Gets the <code>OrderItemBillings</code> for this order item.
-     * This is an alias for {@link org.opentaps.domain.base.entities.OrderItem#getOrderItemBillings}.
+     * This is an alias for {@link org.opentaps.base.entities.OrderItem#getOrderItemBillings}.
      * @return the list of <code>OrderItemBilling</code>
      * @throws RepositoryException if an error occurs
      */
@@ -147,7 +147,7 @@ public class OrderItem extends org.opentaps.domain.base.entities.OrderItem {
 
     /**
      * Gets the list of <code>OrderItemPriceInfo</code> for this order item.
-     * This is an alias for {@link org.opentaps.domain.base.entities.OrderItem#getOrderItemPriceInfoes}.
+     * This is an alias for {@link org.opentaps.base.entities.OrderItem#getOrderItemPriceInfoes}.
      * @return the list of <code>OrderItemPriceInfo</code>
      * @throws RepositoryException if an error occurs
      */
@@ -196,7 +196,7 @@ public class OrderItem extends org.opentaps.domain.base.entities.OrderItem {
 
     /**
      * Gets the <code>OrderItemType</code> for this order item.
-     * This is an alias for {@link org.opentaps.domain.base.entities.OrderItem#getOrderItemType}.
+     * This is an alias for {@link org.opentaps.base.entities.OrderItem#getOrderItemType}.
      * @return the <code>OrderItemType</code>
      * @throws RepositoryException if an error occurs
      */
@@ -206,7 +206,7 @@ public class OrderItem extends org.opentaps.domain.base.entities.OrderItem {
 
     /**
      * Gets this order item current <code>StatusItem</code>.
-     * This is an alias for {@link org.opentaps.domain.base.entities.OrderItem#getStatusItem}.
+     * This is an alias for {@link org.opentaps.base.entities.OrderItem#getStatusItem}.
      * @return the current <code>StatusItem</code>
      * @throws RepositoryException if an error occurs
      * @see #getOrderStatuses
@@ -219,7 +219,7 @@ public class OrderItem extends org.opentaps.domain.base.entities.OrderItem {
      * Gets the order statuses for this order item.
      * This list describe the history of status this order item went through, with
      *  the current status being the first of the list.
-     * This overrides {@link org.opentaps.domain.base.entities.OrderHeader#getOrderStatuses} to specify the ordering.
+     * This overrides {@link org.opentaps.base.entities.OrderHeader#getOrderStatuses} to specify the ordering.
      * @return list of <code>OrderStatus</code> from current to oldest, that relate this order item to a <code>StatusItem</code>
      * @throws RepositoryException if an error occurs
      */

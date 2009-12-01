@@ -27,7 +27,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.opentaps.domain.base.entities.OrderHeaderItemAndRolesAndInvPending;
+import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
 import org.opentaps.domain.search.SalesOrderSearchRepositoryInterface;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;

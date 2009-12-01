@@ -1,4 +1,4 @@
-package org.opentaps.domain.base.entities;
+package org.opentaps.base.entities;
 
 /*
  * Copyright (c) 2008 - 2009 Open Source Strategies, Inc.
@@ -105,7 +105,7 @@ fieldMapColumns.put("${name}", fields);
    @EmbeddedId
 <#if isNeedIndex>   @DocumentId</#if>
    <#-- define field bridge for IdClass -->
-   @FieldBridge(impl = org.opentaps.domain.base.entities.bridge.${name}PkBridge.class)
+   @FieldBridge(impl = org.opentaps.base.entities.bridge.${name}PkBridge.class)
      private ${name}Pk id = new ${name}Pk();
    
     /**

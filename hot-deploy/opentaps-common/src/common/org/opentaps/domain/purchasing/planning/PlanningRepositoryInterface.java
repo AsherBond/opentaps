@@ -18,8 +18,8 @@ package org.opentaps.domain.purchasing.planning;
 
 import java.util.List;
 
-import org.opentaps.domain.base.entities.Requirement;
-import org.opentaps.domain.base.entities.RequirementRole;
+import org.opentaps.base.entities.Requirement;
+import org.opentaps.base.entities.RequirementRole;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;

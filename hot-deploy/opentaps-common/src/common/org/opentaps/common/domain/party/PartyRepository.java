@@ -36,17 +36,17 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.party.PartyContactHelper;
 import org.opentaps.domain.DomainRepository;
-import org.opentaps.domain.base.constants.ContactMechTypeConstants;
-import org.opentaps.domain.base.constants.RoleTypeConstants;
-import org.opentaps.domain.base.entities.ContactMech;
-import org.opentaps.domain.base.entities.ExternalUser;
-import org.opentaps.domain.base.entities.PartyContactDetailByPurpose;
-import org.opentaps.domain.base.entities.PartyFromSummaryByRelationship;
-import org.opentaps.domain.base.entities.PartyNoteView;
-import org.opentaps.domain.base.entities.PartySummaryCRMView;
-import org.opentaps.domain.base.entities.PostalAddress;
-import org.opentaps.domain.base.entities.TelecomNumber;
-import org.opentaps.domain.base.services.GetPartyNameForDateService;
+import org.opentaps.base.constants.ContactMechTypeConstants;
+import org.opentaps.base.constants.RoleTypeConstants;
+import org.opentaps.base.entities.ContactMech;
+import org.opentaps.base.entities.ExternalUser;
+import org.opentaps.base.entities.PartyContactDetailByPurpose;
+import org.opentaps.base.entities.PartyFromSummaryByRelationship;
+import org.opentaps.base.entities.PartyNoteView;
+import org.opentaps.base.entities.PartySummaryCRMView;
+import org.opentaps.base.entities.PostalAddress;
+import org.opentaps.base.entities.TelecomNumber;
+import org.opentaps.base.services.GetPartyNameForDateService;
 import org.opentaps.domain.billing.payment.PaymentMethod;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.party.Account;
@@ -62,7 +62,7 @@ import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.foundation.service.ServiceException;
-import org.opentaps.domain.base.constants.ContactMechPurposeTypeConstants;
+import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
 
 /** {@inheritDoc} */
 public class PartyRepository extends DomainRepository implements PartyRepositoryInterface {
@@ -308,9 +308,9 @@ public class PartyRepository extends DomainRepository implements PartyRepository
             org.hibernate.Query query = session.createQuery(hql);
             query.setString("phoneNumber1", "%" + phoneNumber);
             query.setString("phoneNumber2", phoneNumber);
-            List<org.opentaps.domain.base.entities.Party> parties = query.list();
+            List<org.opentaps.base.entities.Party> parties = query.list();
             List<String> partyIds = new ArrayList<String>();
-            for (org.opentaps.domain.base.entities.Party party : parties) {
+            for (org.opentaps.base.entities.Party party : parties) {
                 partyIds.add(party.getPartyId());
             }
             if (partyIds.size() > 0) {
@@ -399,9 +399,9 @@ public class PartyRepository extends DomainRepository implements PartyRepository
                 + " and (pcm.party.statusId is null or 'PARTY_DISABLED' <> pcm.party.statusId)";
             org.hibernate.Query query = session.createQuery(hql);
             query.setString("email", email.trim().toLowerCase());
-            List<org.opentaps.domain.base.entities.Party> parties = query.list();
+            List<org.opentaps.base.entities.Party> parties = query.list();
             List<String> partyIds = new ArrayList<String>();
-            for (org.opentaps.domain.base.entities.Party party : parties) {
+            for (org.opentaps.base.entities.Party party : parties) {
                 partyIds.add(party.getPartyId());
             }
             if (partyIds.size() > 0) {
@@ -425,9 +425,9 @@ public class PartyRepository extends DomainRepository implements PartyRepository
             org.hibernate.Query query = session.createQuery(hql);
             query.setString("firstName", firstName.trim().toLowerCase());
             query.setString("lastName", lastName.trim().toLowerCase());
-            List<org.opentaps.domain.base.entities.Party> parties = query.list();
+            List<org.opentaps.base.entities.Party> parties = query.list();
             List<String> partyIds = new ArrayList<String>();
-            for (org.opentaps.domain.base.entities.Party party : parties) {
+            for (org.opentaps.base.entities.Party party : parties) {
                 partyIds.add(party.getPartyId());
             }
             if (partyIds.size() > 0) {

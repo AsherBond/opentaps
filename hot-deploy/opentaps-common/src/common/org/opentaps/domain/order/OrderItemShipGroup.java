@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.ofbiz.base.util.Debug;
-import org.opentaps.domain.base.entities.OrderShipmentInfoSummary;
+import org.opentaps.base.entities.OrderShipmentInfoSummary;
 import org.opentaps.domain.party.Party;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityNotFoundException;
@@ -32,7 +32,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 /**
  * Order Item Ship Group entity.
  */
-public class OrderItemShipGroup extends org.opentaps.domain.base.entities.OrderItemShipGroup {
+public class OrderItemShipGroup extends org.opentaps.base.entities.OrderItemShipGroup {
 
     private static final String MODULE = OrderItemShipGroup.class.getName();
 

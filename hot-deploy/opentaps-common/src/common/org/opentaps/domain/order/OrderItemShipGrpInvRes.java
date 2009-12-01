@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 /**
  * Order Item Ship Group Inventory Reservation entity.
  */
-public class OrderItemShipGrpInvRes extends org.opentaps.domain.base.entities.OrderItemShipGrpInvRes {
+public class OrderItemShipGrpInvRes extends org.opentaps.base.entities.OrderItemShipGrpInvRes {
 
     private BigDecimal quantityNotAvailable;
 

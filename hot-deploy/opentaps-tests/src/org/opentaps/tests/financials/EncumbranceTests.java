@@ -34,7 +34,7 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.order.PurchaseOrderFactory;
 import org.opentaps.common.order.SalesOrderFactory;
 import org.opentaps.common.util.UtilAccountingTags;
-import org.opentaps.domain.base.entities.AcctgTransEntry;
+import org.opentaps.base.entities.AcctgTransEntry;
 import org.opentaps.domain.ledger.AccountingTransaction;
 import org.opentaps.domain.ledger.EncumbranceRepositoryInterface;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;

@@ -43,7 +43,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.opentaps.domain.base.entities.TelecomNumber;
+import org.opentaps.base.entities.TelecomNumber;
 
 /**
  * Integrates with an Asterisk server.

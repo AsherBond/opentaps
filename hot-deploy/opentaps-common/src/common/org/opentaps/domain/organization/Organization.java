@@ -23,8 +23,8 @@ import java.util.Map;
 
 import org.ofbiz.base.util.UtilDateTime;
 import org.opentaps.domain.DomainsDirectory;
-import org.opentaps.domain.base.entities.PartyAcctgPreference;
-import org.opentaps.domain.base.entities.PaymentMethod;
+import org.opentaps.base.entities.PartyAcctgPreference;
+import org.opentaps.base.entities.PaymentMethod;
 import org.opentaps.domain.party.Party;
 import org.opentaps.foundation.repository.RepositoryException;
 

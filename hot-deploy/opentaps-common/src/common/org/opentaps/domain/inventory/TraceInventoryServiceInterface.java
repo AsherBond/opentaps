@@ -18,7 +18,7 @@ package org.opentaps.domain.inventory;
 
 import java.util.List;
 
-import org.opentaps.domain.base.entities.InventoryItemTraceDetail;
+import org.opentaps.base.entities.InventoryItemTraceDetail;
 import org.opentaps.foundation.service.ServiceException;
 import org.opentaps.foundation.service.ServiceInterface;
 
@@ -62,7 +62,7 @@ public interface TraceInventoryServiceInterface extends ServiceInterface {
      * {@link #traceInventoryUsageForward()}<br/>
      * {@link #traceInventoryUsageBackward()}.
      * @return Every item is instance of <code>InventoryItemTraceDetail</code> entity.
-     * @see org.opentaps.domain.base.entities.InventoryItemTraceDetail
+     * @see org.opentaps.base.entities.InventoryItemTraceDetail
      */
     public List<List<InventoryItemTraceDetail>> getUsageLog();
 

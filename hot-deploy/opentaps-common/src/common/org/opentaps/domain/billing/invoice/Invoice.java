@@ -24,7 +24,7 @@ import java.util.List;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilNumber;
 import org.opentaps.common.util.UtilDate;
-import org.opentaps.domain.base.entities.*;
+import org.opentaps.base.entities.*;
 import org.opentaps.foundation.repository.RepositoryException;
 
 /**
@@ -35,7 +35,7 @@ import org.opentaps.foundation.repository.RepositoryException;
  * node for all Invoice-related Entities.  In other words, instead of accessing a particular InvoiceItem or InvoiceContactMech, etc., you
  * should go through Invoice and get its items, contact mechs, attributes, etc.
  */
-public class Invoice extends org.opentaps.domain.base.entities.Invoice {
+public class Invoice extends org.opentaps.base.entities.Invoice {
 
     // this is actually the logical place for these constants.  if we add get methods for them, then we are good
     private static final int DECIMALS = UtilNumber.getBigDecimalScale("invoice.decimals");

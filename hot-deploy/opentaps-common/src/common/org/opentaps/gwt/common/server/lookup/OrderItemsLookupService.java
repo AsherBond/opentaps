@@ -32,7 +32,7 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 import org.opentaps.common.order.OrderEvents;
 import org.opentaps.common.order.shoppingcart.OpentapsShoppingCart;
-import org.opentaps.domain.base.entities.SupplierProduct;
+import org.opentaps.base.entities.SupplierProduct;
 import org.opentaps.domain.product.Product;
 import org.opentaps.domain.product.ProductRepositoryInterface;
 import org.opentaps.domain.purchasing.PurchasingRepositoryInterface;

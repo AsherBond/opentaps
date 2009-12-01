@@ -81,7 +81,7 @@ public class IndexingService extends Service implements IndexingServiceInterface
                 // find and create index for each entity define in entitysearch.properties
                 if ("index".equals(value)) {
                     if (!key.contains(".")) {
-                        key = "org.opentaps.domain.base.entities." + key;
+                        key = "org.opentaps.base.entities." + key;
                     }
                     Debug.logInfo("creating index for entity [" + key + "]", MODULE);
                     Class cls = Class.forName(key);
@@ -216,12 +216,12 @@ public class IndexingService extends Service implements IndexingServiceInterface
             ModelEntity modelEntity = value.getModelEntity();
             List<String> pkFieldNames = modelEntity.getPkFieldNames();
 
-            Class cls = Class.forName("org.opentaps.domain.base.entities." + entityName);
+            Class cls = Class.forName("org.opentaps.base.entities." + entityName);
             Serializable id = null;
 
             if (pkFieldNames.size() > 1) {
                 // multi fields pk
-                Class pkCls = Class.forName("org.opentaps.domain.base.entities." + entityName + "Pk");
+                Class pkCls = Class.forName("org.opentaps.base.entities." + entityName + "Pk");
                 id = (Serializable) pkCls.newInstance();
                 for (String pkFieldName : pkFieldNames) {
                     HibernateUtil.setFieldValue(id, pkFieldName, value.get(pkFieldName));

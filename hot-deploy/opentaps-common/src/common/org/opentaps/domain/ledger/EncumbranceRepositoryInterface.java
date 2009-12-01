@@ -21,8 +21,8 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
-import org.opentaps.domain.base.entities.EncumbranceDetail;
-import org.opentaps.domain.base.entities.EncumbranceSnapshot;
+import org.opentaps.base.entities.EncumbranceDetail;
+import org.opentaps.base.entities.EncumbranceSnapshot;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;

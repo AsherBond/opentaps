@@ -16,7 +16,7 @@
  */
 package org.opentaps.domain.product;
 
-import org.opentaps.domain.base.entities.GoodIdentification;
+import org.opentaps.base.entities.GoodIdentification;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;

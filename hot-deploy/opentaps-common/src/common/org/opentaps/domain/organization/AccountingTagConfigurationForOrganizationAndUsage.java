@@ -22,7 +22,7 @@ import java.util.Map;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.util.UtilAccountingTags;
-import org.opentaps.domain.base.entities.Enumeration;
+import org.opentaps.base.entities.Enumeration;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityFieldInterface;
 import org.opentaps.foundation.repository.RepositoryInterface;

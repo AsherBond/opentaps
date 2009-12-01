@@ -43,7 +43,7 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.model.ModelField;
 import org.ofbiz.entity.util.EntityCrypto;
-import org.opentaps.domain.base.entities.SequenceValueItem;
+import org.opentaps.base.entities.SequenceValueItem;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 

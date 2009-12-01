@@ -43,31 +43,31 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
 import org.ofbiz.security.SecurityFactory;
 import org.opentaps.common.order.SalesOrderFactory;
-import org.opentaps.domain.base.entities.InvoiceItem;
-import org.opentaps.domain.base.services.CancelOrderItemService;
-import org.opentaps.domain.base.services.CancelOrderItemInvResQtyService;
-import org.opentaps.domain.base.services.ChangeOrderItemStatusService;
-import org.opentaps.domain.base.services.CompleteInventoryTransferService;
-import org.opentaps.domain.base.services.CreateInventoryTransferService;
-import org.opentaps.domain.base.services.CreatePartyPostalAddressService;
-import org.opentaps.domain.base.services.CreatePaymentFromPreferenceService;
-import org.opentaps.domain.base.services.CreatePhysicalInventoryAndVarianceService;
-import org.opentaps.domain.base.services.CreatePicklistFromOrdersService;
-import org.opentaps.domain.base.services.FindOrdersToPickMoveService;
-import org.opentaps.domain.base.services.GetInventoryAvailableByFacilityService;
-import org.opentaps.domain.base.services.GetProductService;
-import org.opentaps.domain.base.services.OpentapsAppendOrderItemService;
-import org.opentaps.domain.base.services.OpentapsInvoiceNonPhysicalOrderItemsService;
-import org.opentaps.domain.base.services.OpentapsUpdateOrderItemsService;
-import org.opentaps.domain.base.services.QuickShipOrderByItemService;
-import org.opentaps.domain.base.services.ReserveProductInventoryByFacilityService;
-import org.opentaps.domain.base.services.ReserveStoreInventoryService;
-import org.opentaps.domain.base.services.SetInvoiceReadyAndCheckIfPaidService;
-import org.opentaps.domain.base.services.TestShipOrderService;
-import org.opentaps.domain.base.services.TestShipOrderManualService;
-import org.opentaps.domain.base.services.UpdateInventoryItemService;
-import org.opentaps.domain.base.services.UpdatePostalAddressService;
-import org.opentaps.domain.base.services.UpdateProductStoreService;
+import org.opentaps.base.entities.InvoiceItem;
+import org.opentaps.base.services.CancelOrderItemService;
+import org.opentaps.base.services.CancelOrderItemInvResQtyService;
+import org.opentaps.base.services.ChangeOrderItemStatusService;
+import org.opentaps.base.services.CompleteInventoryTransferService;
+import org.opentaps.base.services.CreateInventoryTransferService;
+import org.opentaps.base.services.CreatePartyPostalAddressService;
+import org.opentaps.base.services.CreatePaymentFromPreferenceService;
+import org.opentaps.base.services.CreatePhysicalInventoryAndVarianceService;
+import org.opentaps.base.services.CreatePicklistFromOrdersService;
+import org.opentaps.base.services.FindOrdersToPickMoveService;
+import org.opentaps.base.services.GetInventoryAvailableByFacilityService;
+import org.opentaps.base.services.GetProductService;
+import org.opentaps.base.services.OpentapsAppendOrderItemService;
+import org.opentaps.base.services.OpentapsInvoiceNonPhysicalOrderItemsService;
+import org.opentaps.base.services.OpentapsUpdateOrderItemsService;
+import org.opentaps.base.services.QuickShipOrderByItemService;
+import org.opentaps.base.services.ReserveProductInventoryByFacilityService;
+import org.opentaps.base.services.ReserveStoreInventoryService;
+import org.opentaps.base.services.SetInvoiceReadyAndCheckIfPaidService;
+import org.opentaps.base.services.TestShipOrderService;
+import org.opentaps.base.services.TestShipOrderManualService;
+import org.opentaps.base.services.UpdateInventoryItemService;
+import org.opentaps.base.services.UpdatePostalAddressService;
+import org.opentaps.base.services.UpdateProductStoreService;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
@@ -2615,7 +2615,7 @@ public class OrderTests extends OrderTestCase {
 
         // re-reserve 5 of productB in My Retail Store
         //reReserveOrderItemInventory(order.getOrderId(), orderItemProductB.getOrderItemSeqId(), facilityId1, 5.0);
-        List<org.opentaps.domain.base.entities.OrderItemShipGrpInvRes> orderItemReservations = inventoryRepository.getOrderItemShipGroupInventoryReservations(order.getOrderId(), orderItemProductB.getOrderItemSeqId(), null, "00001");
+        List<org.opentaps.base.entities.OrderItemShipGrpInvRes> orderItemReservations = inventoryRepository.getOrderItemShipGroupInventoryReservations(order.getOrderId(), orderItemProductB.getOrderItemSeqId(), null, "00001");
         assertEquals("Should have only one reservation of productC in the second ship group.", orderItemReservations.size(), 1);
         reReserveOrderItemInventory(order.getOrderId(), orderItemProductB.getOrderItemSeqId(), orderItemReservations.get(0).getInventoryItemId(), shipGroupSeqId, facilityId1, new BigDecimal("5.0"));
         // split 7 x productC in a second ship group
@@ -2779,7 +2779,7 @@ public class OrderTests extends OrderTestCase {
 
         // re-reserve 3 of productC of the second ship group in My Retail Store
         // - find the reservation in the second ship group
-        List<org.opentaps.domain.base.entities.OrderItemShipGrpInvRes> res = inventoryRepository.getOrderItemShipGroupInventoryReservations(order.getOrderId(), orderItemProductC.getOrderItemSeqId(), null, "00002");
+        List<org.opentaps.base.entities.OrderItemShipGrpInvRes> res = inventoryRepository.getOrderItemShipGroupInventoryReservations(order.getOrderId(), orderItemProductC.getOrderItemSeqId(), null, "00002");
         assertEquals("Should have only one reservation of productC in the second ship group.", res.size(), 1);
         reReserveOrderItemInventory(order.getOrderId(), orderItemProductC.getOrderItemSeqId(), res.get(0).getString("inventoryItemId"), "00002", facilityId1, new BigDecimal("3.0"));
 

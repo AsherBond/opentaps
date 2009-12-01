@@ -18,7 +18,7 @@ package org.opentaps.domain.shipping;
 
 import java.util.List;
 
-import org.opentaps.domain.base.entities.CarrierShipmentBoxType;
+import org.opentaps.base.entities.CarrierShipmentBoxType;
 import org.opentaps.domain.order.OrderItem;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;

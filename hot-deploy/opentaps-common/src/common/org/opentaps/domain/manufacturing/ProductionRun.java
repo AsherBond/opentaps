@@ -17,14 +17,14 @@
 package org.opentaps.domain.manufacturing;
 
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.domain.base.entities.InventoryItemDetail;
+import org.opentaps.base.entities.InventoryItemDetail;
 
 import java.math.BigDecimal;
 
 /**
  * Production Run entity.
  */
-public class ProductionRun extends org.opentaps.domain.base.entities.WorkEffort {
+public class ProductionRun extends org.opentaps.base.entities.WorkEffort {
 
     private BigDecimal totalCost;
     private BigDecimal itemsProducedTotalValue;

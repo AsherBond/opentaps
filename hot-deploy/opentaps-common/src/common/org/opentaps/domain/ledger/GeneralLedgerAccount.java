@@ -17,7 +17,7 @@
 package org.opentaps.domain.ledger;
 
 import org.ofbiz.base.util.UtilMisc;
-import org.opentaps.domain.base.entities.*;
+import org.opentaps.base.entities.*;
 import org.opentaps.domain.ledger.LedgerException;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.foundation.repository.RepositoryException;
@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * General Ledger Account
  */
-public class GeneralLedgerAccount extends org.opentaps.domain.base.entities.GlAccount {
+public class GeneralLedgerAccount extends org.opentaps.base.entities.GlAccount {
 
     protected Boolean isDebitAccount = null;
     protected List<GlAccountClass> accountClasses = null;

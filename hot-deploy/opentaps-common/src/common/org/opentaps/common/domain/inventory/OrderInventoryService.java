@@ -35,22 +35,22 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.GenericServiceException;
 import org.opentaps.domain.DomainService;
-import org.opentaps.domain.base.constants.EnumerationConstants;
-import org.opentaps.domain.base.constants.InventoryItemTypeConstants;
-import org.opentaps.domain.base.constants.ProductTypeConstants;
-import org.opentaps.domain.base.constants.StatusItemConstants;
-import org.opentaps.domain.base.entities.Facility;
-import org.opentaps.domain.base.entities.InventoryTransfer;
-import org.opentaps.domain.base.entities.OrderItemShipGrpInvRes;
-import org.opentaps.domain.base.entities.ProductFacility;
-import org.opentaps.domain.base.services.CancelOrderItemShipGrpInvResService;
-import org.opentaps.domain.base.services.CompleteInventoryTransferOldService;
-import org.opentaps.domain.base.services.CreateInventoryItemDetailService;
-import org.opentaps.domain.base.services.CreateInventoryItemService;
-import org.opentaps.domain.base.services.DecomposeInventoryItemService;
-import org.opentaps.domain.base.services.GetOrderItemShipGroupEstimatedShipDateService;
-import org.opentaps.domain.base.services.ReserveOrderItemInventoryService;
-import org.opentaps.domain.base.services.UpdateInventoryTransferService;
+import org.opentaps.base.constants.EnumerationConstants;
+import org.opentaps.base.constants.InventoryItemTypeConstants;
+import org.opentaps.base.constants.ProductTypeConstants;
+import org.opentaps.base.constants.StatusItemConstants;
+import org.opentaps.base.entities.Facility;
+import org.opentaps.base.entities.InventoryTransfer;
+import org.opentaps.base.entities.OrderItemShipGrpInvRes;
+import org.opentaps.base.entities.ProductFacility;
+import org.opentaps.base.services.CancelOrderItemShipGrpInvResService;
+import org.opentaps.base.services.CompleteInventoryTransferOldService;
+import org.opentaps.base.services.CreateInventoryItemDetailService;
+import org.opentaps.base.services.CreateInventoryItemService;
+import org.opentaps.base.services.DecomposeInventoryItemService;
+import org.opentaps.base.services.GetOrderItemShipGroupEstimatedShipDateService;
+import org.opentaps.base.services.ReserveOrderItemInventoryService;
+import org.opentaps.base.services.UpdateInventoryTransferService;
 import org.opentaps.domain.inventory.InventoryDomainInterface;
 import org.opentaps.domain.inventory.InventoryItem;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
@@ -701,7 +701,7 @@ public class OrderInventoryService extends DomainService implements OrderInvento
             for (OrderItemShipGrpInvRes reservItem : reservations) {
                 BigDecimal quantityFromNewFacility = BigDecimal.ZERO;
                 BigDecimal quantityFromOldFacility = null;
-                org.opentaps.domain.base.entities.InventoryItem inventory = reservItem.getInventoryItem();
+                org.opentaps.base.entities.InventoryItem inventory = reservItem.getInventoryItem();
 
                 if (remainderQty.compareTo(reservItem.getQuantity()) < 0) {
                     // specified quantity less than reserved earlier, we have to reserve

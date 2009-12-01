@@ -20,10 +20,10 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.opentaps.domain.DomainService;
-import org.opentaps.domain.base.constants.AcctgTransTypeConstants;
-import org.opentaps.domain.base.constants.GlAccountTypeConstants;
-import org.opentaps.domain.base.entities.InvoiceGlAccountType;
-import org.opentaps.domain.base.entities.PaymentApplication;
+import org.opentaps.base.constants.AcctgTransTypeConstants;
+import org.opentaps.base.constants.GlAccountTypeConstants;
+import org.opentaps.base.entities.InvoiceGlAccountType;
+import org.opentaps.base.entities.PaymentApplication;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.billing.invoice.InvoiceServiceInterface;

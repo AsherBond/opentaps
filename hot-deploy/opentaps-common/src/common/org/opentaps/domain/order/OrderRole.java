@@ -22,7 +22,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 
 import org.opentaps.domain.party.Party;
 
-public class OrderRole extends org.opentaps.domain.base.entities.OrderRole {
+public class OrderRole extends org.opentaps.base.entities.OrderRole {
 
     protected Party party = null;
 

@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.opentaps.domain.base.entities.ProductStore;
+import org.opentaps.base.entities.ProductStore;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.gwt.common.client.lookup.configuration.ProductStoreLookupConfiguration;

@@ -29,7 +29,7 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.order.SalesOrderFactory;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.domain.base.entities.PostalAddress;
+import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.domain.billing.BillingDomainInterface;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;

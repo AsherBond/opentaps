@@ -23,7 +23,7 @@ import java.util.Map;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.opentaps.domain.base.entities.TaxAuthorityDim;
+import org.opentaps.base.entities.TaxAuthorityDim;
 import org.opentaps.foundation.entity.hibernate.Query;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;

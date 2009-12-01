@@ -64,7 +64,7 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilConfig;
-import org.opentaps.domain.base.entities.Party;
+import org.opentaps.base.entities.Party;
 import org.opentaps.foundation.repository.RepositoryException;
 
 /**

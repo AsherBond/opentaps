@@ -1,4 +1,4 @@
-package org.opentaps.domain.base.services;
+package org.opentaps.base.services;
 
 /*
  * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.

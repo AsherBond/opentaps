@@ -1,4 +1,4 @@
-package org.opentaps.domain.base.constants;
+package org.opentaps.base.constants;
 
 /*
  * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.

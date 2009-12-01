@@ -16,8 +16,8 @@
  */
 package org.opentaps.financials.domain.billing.invoice;
 
-import org.opentaps.domain.base.constants.InvoiceTypeConstants;
-import org.opentaps.domain.base.constants.StatusItemConstants;
+import org.opentaps.base.constants.InvoiceTypeConstants;
+import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceSpecificationInterface;
 

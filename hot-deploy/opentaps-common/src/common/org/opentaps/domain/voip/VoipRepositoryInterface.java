@@ -16,8 +16,8 @@
  */
 package org.opentaps.domain.voip;
 
-import org.opentaps.domain.base.entities.ExternalUser;
-import org.opentaps.domain.base.entities.TelecomNumber;
+import org.opentaps.base.entities.ExternalUser;
+import org.opentaps.base.entities.TelecomNumber;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;

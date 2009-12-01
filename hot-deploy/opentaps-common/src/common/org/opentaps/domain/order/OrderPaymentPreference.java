@@ -19,7 +19,7 @@ package org.opentaps.domain.order;
 import java.util.List;
 
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.domain.base.entities.StatusItem;
+import org.opentaps.base.entities.StatusItem;
 import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.billing.payment.PaymentGatewayResponse;
 import org.opentaps.domain.billing.payment.PaymentMethod;
@@ -27,7 +27,7 @@ import org.opentaps.domain.billing.payment.PaymentMethod;
 /**
  * Order Payment Preference entity.
  */
-public class OrderPaymentPreference extends org.opentaps.domain.base.entities.OrderPaymentPreference {
+public class OrderPaymentPreference extends org.opentaps.base.entities.OrderPaymentPreference {
 
     private PaymentMethod paymentMethod;
     private List<PaymentGatewayResponse> responses;
@@ -146,7 +146,7 @@ public class OrderPaymentPreference extends org.opentaps.domain.base.entities.Or
 
     /**
      * Gets this order payment preference current <code>StatusItem</code>.
-     * This is an alias for {@link org.opentaps.domain.base.entities.OrderPaymentPreference#getStatusItem}.
+     * This is an alias for {@link org.opentaps.base.entities.OrderPaymentPreference#getStatusItem}.
      * @return the current <code>StatusItem</code>
      * @throws RepositoryException if an error occurs
      */

@@ -26,7 +26,7 @@ import org.hibernate.search.FullTextQuery;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.opentaps.domain.base.entities.SalesOpportunity;
+import org.opentaps.base.entities.SalesOpportunity;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.search.SalesOpportunitySearchServiceInterface;
 import org.opentaps.domain.search.SearchRepositoryInterface;

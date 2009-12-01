@@ -19,16 +19,16 @@ package org.opentaps.domain.inventory;
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.opentaps.domain.base.entities.InventoryItemValueHistory;
-import org.opentaps.domain.base.entities.InventoryTransfer;
-import org.opentaps.domain.base.entities.OrderItemShipGrpInvRes;
+import org.opentaps.base.entities.InventoryItemValueHistory;
+import org.opentaps.base.entities.InventoryTransfer;
+import org.opentaps.base.entities.OrderItemShipGrpInvRes;
 import org.opentaps.domain.product.Product;
 import org.opentaps.foundation.repository.RepositoryException;
 
 /**
  * Inventory Item entity and domain.
  */
-public class InventoryItem extends org.opentaps.domain.base.entities.InventoryItem {
+public class InventoryItem extends org.opentaps.base.entities.InventoryItem {
 
     private List<InventoryTransfer> pendingInventoryTransfers;
     private List<InventoryItem> inventoryItemsWithNegativeATP;

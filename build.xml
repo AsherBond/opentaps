@@ -645,9 +645,9 @@ under the License.
 
     <target name="make-constants" depends="prebuild"
             description="Generate the constants from the database.">
-        <mkdir dir="./hot-deploy/opentaps-common/src/base/org/opentaps/domain/base/constants/"/>
+        <mkdir dir="./hot-deploy/opentaps-common/src/constants/org/opentaps/base/constants/"/>
         <delete verbose="on">
-            <fileset dir="./hot-deploy/opentaps-common/src/base/org/opentaps/domain/base/constants/" includes="**/*.java"/>
+            <fileset dir="./hot-deploy/opentaps-common/src/constants/org/opentaps/base/constants/" includes="**/*.java"/>
         </delete>
         <java jar="ofbiz.jar" fork="true">
             <jvmarg value="${memory.max.param}"/>
@@ -657,13 +657,13 @@ under the License.
     </target>
     <target name="make-base-entities" depends="prebuild"
             description="Generate the POJO base entities from the entity and service model.">
-        <mkdir dir="./hot-deploy/opentaps-common/src/base/org/opentaps/domain/base/entities/"/>
-        <mkdir dir="./hot-deploy/opentaps-common/src/entities/org/opentaps/domain/base/entities/"/>
-        <mkdir dir="./hot-deploy/opentaps-common/src/services/org/opentaps/domain/base/services/"/>
+        <mkdir dir="./hot-deploy/opentaps-common/src/base/org/opentaps/base/entities/"/>
+        <mkdir dir="./hot-deploy/opentaps-common/src/entities/org/opentaps/base/entities/"/>
+        <mkdir dir="./hot-deploy/opentaps-common/src/services/org/opentaps/base/services/"/>
         <delete verbose="on">
-            <fileset dir="./hot-deploy/opentaps-common/src/base/org/opentaps/domain/base/entities/" includes="**/*.java"/>
-            <fileset dir="./hot-deploy/opentaps-common/src/entities/org/opentaps/domain/base/entities/" includes="**/*.java"/>
-            <fileset dir="./hot-deploy/opentaps-common/src/services/org/opentaps/domain/base/services/" includes="**/*.java"/>
+            <fileset dir="./hot-deploy/opentaps-common/src/base/org/opentaps/base/entities/" includes="**/*.java"/>
+            <fileset dir="./hot-deploy/opentaps-common/src/entities/org/opentaps/base/entities/" includes="**/*.java"/>
+            <fileset dir="./hot-deploy/opentaps-common/src/services/org/opentaps/base/services/" includes="**/*.java"/>
         </delete>
         <java jar="ofbiz.jar" fork="true">
             <jvmarg value="${memory.max.param}"/>

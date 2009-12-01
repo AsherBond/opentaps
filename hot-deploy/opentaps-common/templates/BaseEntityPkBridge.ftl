@@ -1,4 +1,4 @@
-package org.opentaps.domain.base.entities.bridge;
+package org.opentaps.base.entities.bridge;
 
 /*
 * Copyright (c) 2008 - 2009 Open Source Strategies, Inc.
@@ -32,7 +32,7 @@ import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.Field.TermVector;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.hibernate.search.bridge.TwoWayFieldBridge;
-import org.opentaps.domain.base.entities.${pkName};
+import org.opentaps.base.entities.${pkName};
 
 /**
  * A FieldBridge for ${pkName}.

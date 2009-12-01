@@ -24,7 +24,7 @@ import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.domain.base.entities.ExternalUser;
+import org.opentaps.base.entities.ExternalUser;
 import org.opentaps.foundation.action.ActionContext;
 import org.opentaps.foundation.infrastructure.User;
 

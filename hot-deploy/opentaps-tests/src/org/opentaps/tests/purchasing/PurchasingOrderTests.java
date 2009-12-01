@@ -37,8 +37,8 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.opentaps.common.order.PurchaseOrderFactory;
-import org.opentaps.domain.base.entities.OrderItemShipGroupAssoc;
-import org.opentaps.domain.base.entities.SupplierProduct;
+import org.opentaps.base.entities.OrderItemShipGroupAssoc;
+import org.opentaps.base.entities.SupplierProduct;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.order.Order;
@@ -1308,7 +1308,7 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         // we can test the purchase price variance for supplies
         InvoiceRepositoryInterface invoiceRepository = getInvoiceRepository(admin);
         Invoice invoice = invoiceRepository.getInvoiceById(invoiceId1);
-        org.opentaps.domain.base.entities.InvoiceItem invoiceItem1 = invoice.getInvoiceItems().get(0);
+        org.opentaps.base.entities.InvoiceItem invoiceItem1 = invoice.getInvoiceItems().get(0);
         invoiceItem1.setAmount(new BigDecimal("1.10"));
         invoiceRepository.createOrUpdate(invoiceItem1);
         runAndAssertServiceSuccess("setInvoiceReadyAndCheckIfPaid", UtilMisc.toMap("invoiceId", invoiceId1, "userLogin", demofinadmin));
