@@ -104,22 +104,22 @@ public class AccountContactsSubview extends FindPartyForm {
                             request.setHeader("Content-type", "application/x-www-form-urlencoded");
                             request.setRequestData(Format.format("partyId={0}&accountPartyId={0}&contactPartyId={1}", AccountContactsSubview.this.accountPartyId, contactPartyId));
                             request.setCallback(new RequestCallback() {
-                                    public void onError(Request request, Throwable exception) {
-                                        // display error message
-                                        markGridNotBusy();
-                                        UtilUi.errorMessage(exception.toString());
-                                    }
-                                    public void onResponseReceived(Request request, Response response) {
-                                        // if it is a correct response, reload the grid
-                                        markGridNotBusy();
-                                        UtilUi.logInfo("onResponseReceived, response = " + response, MODULE, "ContactListView.init()");
-                                        //if (!ServiceErrorReader.showErrorMessageIfAny(response, saveAllUrl)) {
-                                            // commit store changes
-                                            getStore().reload();
-                                            loadFirstPage();
-                                        //}
-                                    }
-                                });
+                                public void onError(Request request, Throwable exception) {
+                                    // display error message
+                                    markGridNotBusy();
+                                    UtilUi.errorMessage(exception.toString());
+                                }
+                                public void onResponseReceived(Request request, Response response) {
+                                    // if it is a correct response, reload the grid
+                                    markGridNotBusy();
+                                    UtilUi.logInfo("onResponseReceived, response = " + response, MODULE, "ContactListView.init()");
+                                    //if (!ServiceErrorReader.showErrorMessageIfAny(response, saveAllUrl)) {
+                                    // commit store changes
+                                    getStore().reload();
+                                    loadFirstPage();
+                                    //}
+                                }
+                            });
 
                             try {
                                 markGridBusy();
@@ -129,7 +129,7 @@ public class AccountContactsSubview extends FindPartyForm {
                                 // display error message
                                 UtilUi.errorMessage(e.toString(), MODULE, "ContactListView.init()");
                             }
-                    
+
                         }
                     }
 
@@ -150,6 +150,7 @@ public class AccountContactsSubview extends FindPartyForm {
             }
 
         };
+        contactListView.setHeader(false);
         contactListView.setAutoLoad(autoLoad);
         contactListView.init();
         addListView(contactListView);
@@ -168,7 +169,7 @@ public class AccountContactsSubview extends FindPartyForm {
     /** {@inheritDoc} */
     @Override
     public Integer getListAndFormSpacing() {
-        return 2;
+        return 0;
     }
 
 }
