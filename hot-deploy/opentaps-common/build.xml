@@ -148,7 +148,7 @@
     <!-- ================================================================== -->
 
     <target name="base-classes" depends="prepare,classpath">
-        <javac debug="on" deprecation="on" destdir="${build.dir}/classes/base" fork="yes" memoryMaximumSize="1524M">
+        <javac debug="on" deprecation="on" destdir="${build.dir}/classes/base" fork="yes" memoryMaximumSize="1024M">
             <classpath>
                 <path refid="local.class.path"/>
             </classpath>
@@ -157,7 +157,7 @@
     </target>
 
     <target name="entities-classes" depends="base-classes">
-        <javac debug="on" deprecation="on" destdir="${build.dir}/classes/entities" fork="yes" memoryMaximumSize="1524M">
+        <javac debug="on" deprecation="on" destdir="${build.dir}/classes/entities" fork="yes" memoryMaximumSize="1024M">
             <classpath>
                 <path refid="local.class.path"/>
                 <pathelement location="${build.dir}/classes/base"/>
@@ -167,7 +167,7 @@
     </target>
 
     <target name="services-classes" depends="entities-classes">
-        <javac debug="on" deprecation="on" destdir="${build.dir}/classes/services" fork="yes" memoryMaximumSize="1524M">
+        <javac debug="on" deprecation="on" destdir="${build.dir}/classes/services" fork="yes" memoryMaximumSize="1024M">
             <classpath>
                 <path refid="local.class.path"/>
                 <pathelement location="${build.dir}/classes/base"/>
@@ -179,7 +179,7 @@
 
     <target name="classes" depends="base-classes,services-classes,entities-classes,prepare,classpath">
 
-        <javac debug="on" deprecation="on" destdir="${build.dir}/classes/common" fork="yes" memoryMaximumSize="1524M">
+        <javac debug="on" deprecation="on" destdir="${build.dir}/classes/common" fork="yes" memoryMaximumSize="1024M">
             <classpath>
                 <path refid="local.class.path"/>
                 <pathelement location="${build.dir}/classes/base"/>
