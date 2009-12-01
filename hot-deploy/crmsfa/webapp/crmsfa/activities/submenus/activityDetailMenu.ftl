@@ -60,7 +60,7 @@ opentaps.addOnLoad(setInterval('updateTime()', 1000*60 /*1 min*/));
 <#assign updateTarget = "updateTaskForm"/>
 </#if>
 
-<@form name="cancelActivityForm" url="updateActivityWithoutAssoc" workEffortId=workEffort.workEffortId currentStatusId="TASK_CANCELLED"/>
+<@form name="cancelActivityForm" url="updateActivityWithoutAssoc" workEffortId=workEffort.workEffortId currentStatusId="${workEffort.workEffortTypeId}_CANCELLED"/>
 
 <div class="subSectionHeader">
     <div class="subSectionTitle">${activityTypeLabel}</div>
