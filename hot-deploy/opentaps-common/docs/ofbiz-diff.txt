@@ -289,6 +289,9 @@ r13928 orderId on UPS label
 applications/order/src/org/ofbiz/order/order/OrderServices.java
 r13899 Fix reservation and cancelOrderItem did not account for already issued quantity
 
+applications/workeffort/src/org/ofbiz/workeffort/workeffort/WorkEffortServices.java
+r14110 exclude cancelled task on filter out cancel event is true
+
 Other API Changes
 -----------------
 
