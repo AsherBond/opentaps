@@ -214,6 +214,11 @@ public final class OrderEvents {
             return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
         }
 
+        // if it's a variant product, send to virtualProduct request
+        if (product != null && "Y".equals(product.get("isVirtual"))) {
+            return "virtualProduct";
+        }
+        
         // still no product, send to lookup request
         if (product == null) {
             return "findMatchingProducts";
