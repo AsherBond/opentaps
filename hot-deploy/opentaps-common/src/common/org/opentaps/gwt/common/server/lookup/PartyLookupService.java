@@ -521,7 +521,14 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
             return findPartiesBy(entity, condition, BY_ADVANCED_FILTERS);
         }
 
-        /** find contacts which are assigned to an account */
+        /**
+         * Find contacts which are assigned to an account.
+         * Usually we use Account.getContacts() to retrieve related contacts but
+         * here we query PartyFromByRelnAndContactInfoAndPartyClassification entity
+         * to minimize database operations and provide to user full set of possible
+         * columns. Otherwise we have to retrieve Account, contacts and their contact
+         * mech and all these will have a negative impact on performance.
+         */
         if (getProvider().parameterIsPresent(PartyLookupConfiguration.IN_PARTY_ID_TO)) {
             setActiveOnly(true);
             return findPartiesBy(entity, 
