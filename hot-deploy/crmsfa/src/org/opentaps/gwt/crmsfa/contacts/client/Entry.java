@@ -19,8 +19,8 @@ package org.opentaps.gwt.crmsfa.contacts.client;
 
 import com.google.gwt.user.client.ui.RootPanel;
 import org.opentaps.gwt.common.client.BaseEntry;
+import org.opentaps.gwt.common.client.form.FindContactsForm;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
-import org.opentaps.gwt.crmsfa.contacts.client.form.FindContactsForm;
 import org.opentaps.gwt.crmsfa.contacts.client.form.QuickNewContactForm;
 
 /**

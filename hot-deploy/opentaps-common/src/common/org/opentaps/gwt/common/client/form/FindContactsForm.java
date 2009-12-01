@@ -15,11 +15,10 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.opentaps.gwt.crmsfa.contacts.client.form;
+package org.opentaps.gwt.common.client.form;
 
 import com.gwtext.client.widgets.form.TextField;
 import org.opentaps.gwt.common.client.UtilUi;
-import org.opentaps.gwt.common.client.form.FindPartyForm;
 import org.opentaps.gwt.common.client.form.base.SubFormPanel;
 import org.opentaps.gwt.common.client.listviews.ContactListView;
 

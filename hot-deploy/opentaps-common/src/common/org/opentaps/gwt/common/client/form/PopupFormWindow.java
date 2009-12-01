@@ -22,8 +22,10 @@ import org.opentaps.gwt.common.client.form.base.BaseFormPanel;
 import com.gwtext.client.core.EventObject;
 import com.gwtext.client.core.Position;
 import com.gwtext.client.widgets.Button;
+import com.gwtext.client.widgets.Panel;
 import com.gwtext.client.widgets.Window;
 import com.gwtext.client.widgets.event.ButtonListenerAdapter;
+import com.gwtext.client.widgets.form.FormPanel;
 import com.gwtext.client.widgets.layout.FitLayout;
 
 
@@ -40,8 +42,8 @@ import com.gwtext.client.widgets.layout.FitLayout;
  * @see org.opentaps.gwt.common.client.form.base.BaseFormPanel
  */
 public abstract class PopupFormWindow extends Window {
-
-    protected final BaseFormPanel innerPanel = new BaseFormPanel(Position.LEFT) {
+    
+    protected final BaseFormPanel defaultInnerPanel = new BaseFormPanel(Position.LEFT) {
 
             @Override
             public void onSuccess() {
@@ -102,41 +104,44 @@ public abstract class PopupFormWindow extends Window {
         setCloseAction(Window.HIDE);
         setPlain(false);
 
-        setDefaultButton(0);
+        final Panel innerPanel = getInnerPanel();
+        if (innerPanel instanceof FormPanel) {
+            setDefaultButton(0);
 
-        // add action handler to buttons
-        Button okButton = new Button(UtilUi.MSG.opentapsOk());
-        okButton.addListener(new ButtonListenerAdapter() {
-            @Override
-            public void onClick(Button button, EventObject e) {
-                super.onClick(button, e);
-                innerPanel.getForm().submit();
+            // add action handler to buttons
+            Button okButton = new Button(UtilUi.MSG.opentapsOk());
+            okButton.addListener(new ButtonListenerAdapter() {
+                @Override
+                public void onClick(Button button, EventObject e) {
+                    super.onClick(button, e);
+                    ((FormPanel) innerPanel).getForm().submit();
+                }
+            });
+            addButton(okButton);
+
+            Button cancelButton = new Button(UtilUi.MSG.opentapsCancel());
+            cancelButton.addListener(new ButtonListenerAdapter() {
+                @Override
+                public void onClick(Button button, EventObject e) {
+                    super.onClick(button, e);
+                    hide();
+                }
+            });
+            addButton(cancelButton);
+
+            // setup inner form
+            innerPanel.setPaddings(15);
+            innerPanel.setBaseCls("x-plain");
+            if (width > 0) {
+                innerPanel.setWidth(width);
             }
-        });
-        addButton(okButton);
-
-        Button cancelButton = new Button(UtilUi.MSG.opentapsCancel());
-        cancelButton.addListener(new ButtonListenerAdapter() {
-            @Override
-            public void onClick(Button button, EventObject e) {
-                super.onClick(button, e);
-                hide();
+            if (height > 0) {
+                innerPanel.setHeight(height);
             }
-        });
-        addButton(cancelButton);
 
-        // setup inner form
-        innerPanel.setPaddings(15);
-        innerPanel.setBaseCls("x-plain");
-        if (width > 0) {
-            innerPanel.setWidth(width);
+            // pass control to subclass to add functional code and widgets.
+            initFields((FormPanel) innerPanel);
         }
-        if (height > 0) {
-            innerPanel.setHeight(height);
-        }
-
-        // pass control to subclass to add functional code and widgets.
-        initFields(innerPanel);
 
     }
 
@@ -146,7 +151,7 @@ public abstract class PopupFormWindow extends Window {
      *
      * @param container instance of <code>BaseFormPanel</code> where you can add the fields.
      */
-    protected abstract void initFields(BaseFormPanel container);
+    protected abstract void initFields(FormPanel container);
 
     /**
      * Instance of any PopupFormWindow subclass has to be created in two steps.
@@ -156,7 +161,7 @@ public abstract class PopupFormWindow extends Window {
      * </code>
      */
     public void create() {
-        add(innerPanel);
+        add(getInnerPanel());
     }
 
     /**
@@ -178,7 +183,10 @@ public abstract class PopupFormWindow extends Window {
      * @param widget a <code>FormNotificationInterface</code>
      */
     public void register(FormNotificationInterface widget) {
-        innerPanel.register(widget);
+        //innerPanel.register(widget);
     }
 
+    protected Panel getInnerPanel() {
+        return defaultInnerPanel;
+    }
 }

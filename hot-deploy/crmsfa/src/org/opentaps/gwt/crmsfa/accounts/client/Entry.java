@@ -19,11 +19,16 @@ package org.opentaps.gwt.crmsfa.accounts.client;
 
 import org.opentaps.gwt.common.client.BaseEntry;
 import org.opentaps.gwt.common.client.UtilUi;
+import org.opentaps.gwt.common.client.form.LookupContactsWindow;
 import org.opentaps.gwt.common.client.listviews.ContactListView;
 import org.opentaps.gwt.crmsfa.accounts.client.form.AccountContactsSubview;
 import org.opentaps.gwt.crmsfa.accounts.client.form.FindAccountsForm;
 import org.opentaps.gwt.crmsfa.accounts.client.form.QuickNewAccountForm;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -41,6 +46,7 @@ public class Entry extends BaseEntry {
     private static final String LOOKUP_ACCOUNTS_ID = "lookupAccounts";
     private static final String QUICK_CREATE_ACCOUNT_ID = "quickNewAccount";
     private static final String CONTACTS_SUB_LISTVIEW = "contactsSubListView";
+    private static final String ASSIGN_CONTACT_WIDGET = "assignContactToAccount";
 
     /**
      * This is the entry point method.
@@ -75,6 +81,29 @@ public class Entry extends BaseEntry {
             loadAccountContacts();
         }
  
+        RootPanel assignContactButton = null; 
+        if ((assignContactButton = RootPanel.get(ASSIGN_CONTACT_WIDGET)) != null) {
+            loadAssignContactToAccountWidget(assignContactButton);
+        }
+    }
+
+    private void loadAssignContactToAccountWidget(RootPanel container) {
+ 
+        final LookupContactsWindow window = new LookupContactsWindow("Lookup Contacts", 200, 400, true, true);
+        window.create();
+
+        Hyperlink embedLink = new Hyperlink("Assign Contact", true, null);
+        embedLink.setStyleName("subMenuButton");
+ 
+        embedLink.addClickHandler(new ClickHandler() {
+
+            public void onClick(ClickEvent event) {
+                window.show();
+            }
+            
+        });
+
+        container.add(embedLink);
     }
 
 

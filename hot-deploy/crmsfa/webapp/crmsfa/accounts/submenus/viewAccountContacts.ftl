@@ -21,7 +21,7 @@
 <a name="ListContacts"></a>
 <@sectionHeader title=uiLabelMap.CrmContacts>
 <#if hasUpdatePermission?exists>
-<div class="subMenuBar">
+<div class="subMenuBar" id="assignContactToAccount">
   <@displayLink href="createContactForm?accountPartyId=${partySummary.partyId}" text="${uiLabelMap.CrmCreateNew}" class="subMenuButton"/>
 </div>
 </#if>
