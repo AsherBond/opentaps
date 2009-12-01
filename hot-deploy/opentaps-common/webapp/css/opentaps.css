@@ -194,6 +194,22 @@ div.sectionHeaderTitle span {
     border: 1px solid #AAAAAA;
     white-space: nowrap;
 }
+
+/* fix submenu button if i's added as GWT widget Hyperlink
+   (where anchor in own <div/>) */
+div.subMenuButton {
+    display: inline;
+}
+.subMenuButton a {
+    font: bold 8pt Verdana, Arial, Helvetica, sans-serif;
+    color: #000099;
+    white-space: nowrap;
+}
+.subMenuButton a:hover {
+    color: red;
+    text-decoration: none;
+}
+
 /* some buttons should be highlighted differently to set them apart as dangerous operations */
 .subMenuButtonDangerous {
     margin-left: 8px;
