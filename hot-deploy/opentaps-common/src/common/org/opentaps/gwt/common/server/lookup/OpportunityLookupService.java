@@ -82,22 +82,25 @@ public class OpportunityLookupService extends EntityLookupAndSuggestService {
         List<SalesOpportunityAndPartyRelationshipAndStage> opportunities;
         String partyId = null;
         List<EntityCondition> combinedConditions = null;
-        EntityCondition additionalConditions = null;
         if (getProvider().getUser().getOfbizUserLogin() != null) {
             partyId = getProvider().getUser().getOfbizUserLogin().getString("partyId");
         } else {
             Debug.logError("Current session do not have any UserLogin set.", MODULE);
         }
 
+        EntityCondition filterStageConditions = null;
+        String findAll = getProvider().getParameter(OpportunityLookupConfiguration.IN_FIND_ALL);
+        if (UtilValidate.isEmpty(findAll) || "N".equals(findAll)) {
+            filterStageConditions = EntityCondition.makeCondition(EntityOperator.OR,
+                EntityCondition.makeCondition("opportunityStageId", EntityOperator.EQUALS, null),
+                EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("opportunityStageId", EntityOperator.NOT_EQUAL, null),
+                        EntityCondition.makeCondition("opportunityStageId", EntityOperator.NOT_EQUAL, "SOSTG_CLOSED"),
+                        EntityCondition.makeCondition("opportunityStageId", EntityOperator.NOT_EQUAL, "SOSTG_LOST"))
+                );
+        }
         // select parties assigned to current user or his team according to view preferences.
         if (getProvider().parameterIsPresent(OpportunityLookupConfiguration.IN_RESPONSIBILTY)) {
-            additionalConditions = EntityCondition.makeCondition(EntityOperator.OR,
-                    EntityCondition.makeCondition("opportunityStageId", EntityOperator.EQUALS, null),
-                    EntityCondition.makeCondition(EntityOperator.AND,
-                            EntityCondition.makeCondition("opportunityStageId", EntityOperator.NOT_EQUAL, null),
-                            EntityCondition.makeCondition("opportunityStageId", EntityOperator.NOT_EQUAL, "SOSTG_CLOSED"),
-                            EntityCondition.makeCondition("opportunityStageId", EntityOperator.NOT_EQUAL, "SOSTG_LOST"))
-                    );
                 String viewPref = getProvider().getParameter(OpportunityLookupConfiguration.IN_RESPONSIBILTY);
                 // condition to find all cases where userLogin is the request taker
                 // decide which condition to use based on preferences (default is team)
@@ -144,9 +147,10 @@ public class OpportunityLookupService extends EntityLookupAndSuggestService {
                             EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT")),
                     EntityUtil.getFilterByDateExpr()); // filter out expired accounts
         }
+
         // if additional conditions are passed in, add them as well
-        if (additionalConditions != null) {
-            combinedConditions.add(additionalConditions);
+        if (filterStageConditions != null) {
+            combinedConditions.add(filterStageConditions);
         }
         EntityCondition condition = EntityCondition.makeCondition(combinedConditions, EntityOperator.AND);
         if (getProvider().oneParameterIsPresent(BY_ADVANCED_FILTERS)) {

@@ -112,6 +112,12 @@ public interface SalesOrderSearchRepositoryInterface extends RepositoryInterface
      * @param viewPref a <code>String</code> value
      */
     public void setViewPref(String viewPref);
+    
+    /**
+     * Sets the find all option to search for.
+     * @param findAll a <code>String</code> value
+     */
+    public void setFindAll(String findAll);
 
     /**
      * Sets the userLoginId of current login to search for.

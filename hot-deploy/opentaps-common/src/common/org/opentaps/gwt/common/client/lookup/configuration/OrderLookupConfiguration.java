@@ -33,6 +33,8 @@ public abstract class OrderLookupConfiguration {
     public static final String MY_VALUES = "MY_VALUES";
 
 
+    public static final String IN_FIND_ALL = "findAll";
+    
     public static final String INOUT_ORDER_ID = "orderId";
     public static final String IN_EXTERNAL_ID = "externalId";
     public static final String INOUT_ORDER_NAME = "orderName";

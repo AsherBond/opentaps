@@ -192,4 +192,11 @@ public class OrderListView extends EntityListView {
         setFilter(OrderLookupConfiguration.IN_SERIAL_NUMBER, serialNumber);
     }
 
+    /**
+     * Filters the records of the list if include the inactive orders.
+     * @param findAll a <code>boolean</code> value
+     */
+    public void filterHasIncludeInactiveOrders(boolean findAll) {
+        setFilter(OrderLookupConfiguration.IN_FIND_ALL, findAll ? "Y" : "N");
+    }
 }

@@ -19,6 +19,7 @@ package org.opentaps.gwt.crmsfa.opportunities.client.form;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.FindEntityForm;
 import org.opentaps.gwt.common.client.form.base.SubFormPanel;
+import org.opentaps.gwt.common.client.form.field.CheckboxField;
 import org.opentaps.gwt.common.client.listviews.SalesOpportunityListView;
 import org.opentaps.gwt.common.client.suggest.SalesOpportunityStageAutocomplete;
 import org.opentaps.gwt.common.client.suggest.SalesOpportunityTypeAutocomplete;
@@ -34,6 +35,8 @@ public class FindOpportunitiesForm extends FindEntityForm<SalesOpportunityListVi
     protected final SalesOpportunityStageAutocomplete opportunityStageInput;
     protected final SalesOpportunityTypeAutocomplete typeEnumInput;
     protected final TextField opportunityNameInput;
+ // find all option
+    private final CheckboxField findAllInput;
     private final SalesOpportunityListView salesOpportunityListView;
 
     /**
@@ -52,12 +55,14 @@ public class FindOpportunitiesForm extends FindEntityForm<SalesOpportunityListVi
         opportunityStageInput = new SalesOpportunityStageAutocomplete(UtilUi.MSG.crmStage(), "opportunityStageId", getInputLength());
         typeEnumInput = new SalesOpportunityTypeAutocomplete(UtilUi.MSG.commonType(), "typeEnumId", getInputLength());
         opportunityNameInput = new TextField(UtilUi.MSG.commonName(), "opportunityName", getInputLength());
+        findAllInput = new CheckboxField(UtilUi.MSG.commonFindAll(), "findAll");
 
         // Build the filter by advanced tab
         filterByAdvancedTab = getMainForm().addTab(UtilUi.MSG.findByAdvanced());
         filterByAdvancedTab.addField(opportunityNameInput);
         filterByAdvancedTab.addField(opportunityStageInput);
         filterByAdvancedTab.addField(typeEnumInput);
+        filterByAdvancedTab.addField(findAllInput);
         salesOpportunityListView = new SalesOpportunityListView();
         salesOpportunityListView.setAutoLoad(autoLoad);
         salesOpportunityListView.init();
@@ -68,6 +73,11 @@ public class FindOpportunitiesForm extends FindEntityForm<SalesOpportunityListVi
         getListView().filterByOpportunityName(opportunityNameInput.getText());
         getListView().filterByOpportunityStageId(opportunityStageInput.getText());
         getListView().filterByTypeEnumId(typeEnumInput.getText());
+        if (opportunityStageInput.getText() == null || "".equals(opportunityStageInput.getText())) {
+            getListView().filterHasIncludeInactiveOpportunities(findAllInput.getValue());
+        } else {
+            getListView().filterHasIncludeInactiveOpportunities(true);
+        }
     }
 
     @Override protected void filter() {

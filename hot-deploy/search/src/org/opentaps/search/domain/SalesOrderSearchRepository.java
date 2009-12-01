@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import javolution.util.FastList;
+
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -42,7 +43,6 @@ import org.opentaps.domain.search.SalesOrderSearchRepositoryInterface;
 import org.opentaps.foundation.entity.util.EntityComparator;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
-import org.opentaps.gwt.common.client.lookup.configuration.OrderLookupConfiguration;
 
 /**
  * {@inheritDoc}.
@@ -66,6 +66,7 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
     private String thruDate;
     private String userLoginId;
     private String viewPref;
+    private String findAll;
     private Locale locale;
     private TimeZone timeZone;
     private List<String> orderBy;
@@ -110,9 +111,11 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
                     EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.orderTypeId.name(), EntityOperator.EQUALS, "SALES_ORDER"),
                     EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.createdBy.name(), EntityOperator.EQUALS, userLoginId),
                     EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.roleTypeId.name(), EntityOperator.EQUALS, "BILL_TO_CUSTOMER"),
-                    EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name(), EntityOperator.IN, UtilMisc.toList("ORDER_APPROVED", "ORDER_CREATED", "ORDER_HOLD", "ORDER_PROCESSING")),
                     EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.billFromPartyId.name(), EntityOperator.EQUALS, organizationPartyId));
             searchConditions.add(additionalConditions);
+        }
+        if (UtilValidate.isEmpty(findAll) || "N".equals(findAll)) {
+            searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name(), EntityOperator.IN, UtilMisc.toList("ORDER_APPROVED", "ORDER_CREATED", "ORDER_HOLD", "ORDER_PROCESSING")));
         }
         EntityCondition searchConditionList = EntityCondition.makeCondition(searchConditions, EntityOperator.AND);
         List<EntityCondition> conds = new ArrayList<EntityCondition>();
@@ -334,6 +337,11 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
     /** {@inheritDoc} */
     public void setViewPref(String viewPref) {
         this.viewPref = viewPref;
+    }
+    
+    /** {@inheritDoc} */
+    public void setFindAll(String findAll) {
+        this.findAll = findAll;
     }
 
     /** {@inheritDoc} */

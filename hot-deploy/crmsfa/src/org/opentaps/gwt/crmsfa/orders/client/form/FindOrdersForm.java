@@ -16,22 +16,21 @@
  */
 package org.opentaps.gwt.crmsfa.orders.client.form;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.gwtext.client.widgets.Panel;
-import com.gwtext.client.widgets.form.Label;
-import com.gwtext.client.widgets.form.TextField;
-import com.gwtext.client.widgets.layout.ColumnLayout;
-import com.gwtext.client.widgets.layout.ColumnLayoutData;
-import com.gwtext.client.widgets.layout.FormLayout;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.FindEntityForm;
 import org.opentaps.gwt.common.client.form.base.SubFormPanel;
+import org.opentaps.gwt.common.client.form.field.CheckboxField;
 import org.opentaps.gwt.common.client.form.field.DateField;
 import org.opentaps.gwt.common.client.listviews.OrderListView;
 import org.opentaps.gwt.common.client.suggest.CustomerAutocomplete;
 import org.opentaps.gwt.common.client.suggest.LotAutocomplete;
 import org.opentaps.gwt.common.client.suggest.OrderStatusAutocomplete;
 import org.opentaps.gwt.common.client.suggest.ProductStoreAutocomplete;
+
+import com.gwtext.client.widgets.Panel;
+import com.gwtext.client.widgets.form.TextField;
+import com.gwtext.client.widgets.layout.ColumnLayout;
+import com.gwtext.client.widgets.layout.ColumnLayoutData;
 
 /**
  * Form class for find order in crmsfa.
@@ -63,7 +62,8 @@ public class FindOrdersForm extends FindEntityForm<OrderListView> {
     private final LotAutocomplete lotInput;
     // Serial Number
     private final TextField serialNumberInput;
-
+    // find all option
+    private final CheckboxField findAllInput;
 
     private final OrderListView orderListView;
 
@@ -98,6 +98,7 @@ public class FindOrdersForm extends FindEntityForm<OrderListView> {
         createdByInput = new TextField(UtilUi.MSG.commonCreatedBy(), "createdBy", getInputLength());
         lotInput = new LotAutocomplete(UtilUi.MSG.productLotId(), "lotId", getInputLength());
         serialNumberInput = new TextField(UtilUi.MSG.productSerialNumber(), "serialNumber", getInputLength());
+        findAllInput = new CheckboxField(UtilUi.MSG.commonFindAll(), "findAll");
 
         // Build the filter tab
         filterPanel = getMainForm().addTab(UtilUi.MSG.crmFindOrders());
@@ -136,6 +137,9 @@ public class FindOrdersForm extends FindEntityForm<OrderListView> {
 
         columnOnePanel.addField(lotInput);
         columnTwoPanel.addField(serialNumberInput);
+        
+        columnOnePanel.addField(findAllInput);
+        columnTwoPanel.add(UtilUi.makeBlankFormCell());
 
         filterPanel.add(mainPanel);
 
@@ -159,6 +163,11 @@ public class FindOrdersForm extends FindEntityForm<OrderListView> {
         getListView().filterByCreatedBy(createdByInput.getText());
         getListView().filterByLotId(lotInput.getText());
         getListView().filterBySerialNumber(serialNumberInput.getText());
+        if (orderStatusInput.getText() == null || "".equals(orderStatusInput.getText())) {
+            getListView().filterHasIncludeInactiveOrders(findAllInput.getValue());
+        } else {
+            getListView().filterHasIncludeInactiveOrders(true);
+        }
         getListView().applyFilters();
     }
 

@@ -34,6 +34,8 @@ public abstract class OpportunityLookupConfiguration {
     public static final String MY_VALUES = "MY_VALUES";
     public static final String TEAM_VALUES = "TEAM_VALUES";
 
+    public static final String IN_FIND_ALL = "findAll";
+    
     public static final String INOUT_OPPORTUNITY_NAME = "opportunityName";
     public static final String INOUT_SALES_OPPORTUNITY_ID = "salesOpportunityId";
     public static final String INOUT_OPPORTUNITY_STAGE_ID = "opportunityStageId";

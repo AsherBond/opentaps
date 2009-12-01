@@ -103,6 +103,14 @@ public class SalesOpportunityListView  extends EntityListView {
     public void filterMyOrTeamParties(String viewPref) {
         setFilter(OpportunityLookupConfiguration.IN_RESPONSIBILTY, viewPref);
     }
+    
+    /**
+     * Filters the records of the list if include the inactive opportunities.
+     * @param findAll a <code>boolean</code> value
+     */
+    public void filterHasIncludeInactiveOpportunities(boolean findAll) {
+        setFilter(OpportunityLookupConfiguration.IN_FIND_ALL, findAll ? "Y" : "N");
+    }
 
     /**
      * Filters the records of the list by opportunity name matching the given opportunity name.
