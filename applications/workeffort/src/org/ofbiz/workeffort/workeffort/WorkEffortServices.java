@@ -488,6 +488,7 @@ public class WorkEffortServices {
         entityExprList.add(EntityCondition.makeCondition(completionExprList, EntityJoinOperator.OR));
         if (filterOutCanceledEvents.booleanValue()) {
             entityExprList.add(EntityCondition.makeCondition("currentStatusId", EntityOperator.NOT_EQUAL, "EVENT_CANCELLED"));
+            entityExprList.add(EntityCondition.makeCondition("currentStatusId", EntityOperator.NOT_EQUAL, "TASK_CANCELLED"));
         }
         EntityConditionList<EntityCondition> ecl = EntityCondition.makeCondition(entityExprList);
         List<String> orderByList = UtilMisc.toList("estimatedStartDate");
