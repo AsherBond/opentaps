@@ -20,18 +20,20 @@
 <#if shoppingCart.size() == 0>
   <#assign hideButtons = "style='visibility:hidden'" />
 </#if>
-
+<#if shoppingCart.size() == 0 || !hasParty>
+  <#assign hideFinalizeOrderButton = "style='visibility:hidden'" />
+</#if>
 <#if hasParty>
   <#assign quoteLink = "<a id='quoteButton' class='subMenuButton' ${hideButtons?if_exists} href='createQuoteFromCart'>${uiLabelMap.CrmSaveAsQuote}</a>" />
 </#if>
 <#assign newCustomerLink = "<a id='newCustomerButton' class='subMenuButton' ${hideButtons?if_exists} href='createOrderPartyForm'>${uiLabelMap.CrmCreateNewCustomer}</a>" />
-<#assign finalizeLink = "<a id='finalizeOrderButton' class='subMenuButton' ${hideButtons?if_exists} href='finalizeOrder?finalizeMode=init'>${uiLabelMap.OpentapsFinalizeOrder}</a>" />
+<#assign finalizeLink = "<a id='finalizeOrderButton' class='subMenuButton' ${hideFinalizeOrderButton?if_exists} href='finalizeOrder?finalizeMode=init'>${uiLabelMap.OpentapsFinalizeOrder}</a>" />
 
 <script type="text/javascript">
 /*<![CDATA[*/
 function notifyOrderItemsCount(n) {
   var button = document.getElementById('finalizeOrderButton');
-  if (n > 0) {
+  if (n > 0 && ${hasParty?string}) {
     button.style.visibility = 'visible';
   } else {
     button.style.visibility = 'hidden';
