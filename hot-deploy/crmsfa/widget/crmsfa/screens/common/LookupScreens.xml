@@ -109,7 +109,7 @@
     <screen name="LookupAccounts">
         <section>
             <actions>
-                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.accounts.accounts" global="true"/>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.crmsfa" global="true"/>
                 <set field="pageTitleLabel" value="CrmFindAccounts"/>
                 <set field="findPartyWidget" value="lookupAccounts"/>
             </actions>
@@ -132,7 +132,7 @@
     <screen name="LookupContacts">
         <section>
             <actions>
-                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.contacts.contacts" global="true"/>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.crmsfa" global="true"/>
                 <set field="pageTitleLabel" value="CrmFindContacts"/>
                 <set field="findPartyWidget" value="lookupContacts"/>
             </actions>
@@ -155,7 +155,7 @@
     <screen name="LookupLeads">
         <section>
             <actions>
-                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.leads.leads" global="true"/>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.crmsfa" global="true"/>
                 <set field="pageTitleLabel" value="CrmFindLeads"/>
                 <set field="findPartyWidget" value="lookupLeads"/>
             </actions>

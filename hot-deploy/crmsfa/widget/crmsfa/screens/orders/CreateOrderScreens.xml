@@ -52,7 +52,7 @@ under the License.
             <actions>
                 <set field="sectionName" value="orders" global="true"/>
                 <set field="requiredPermission" value="CRMSFA_ORDERS"/>
-                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.orders.orders" global="true"/>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.crmsfa" global="true"/>
             </actions>
             <widgets>
                 <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>

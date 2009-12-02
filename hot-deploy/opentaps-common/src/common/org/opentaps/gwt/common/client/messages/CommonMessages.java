@@ -9398,6 +9398,8 @@ public interface CommonMessages extends Messages {
     String opentapsQtyToPurchase();
     @DefaultMessage("Qty to Receive")
     String opentapsQtyToReceive();
+    @DefaultMessage("Quick Create")
+    String opentapsQuickCreate();
     @DefaultMessage("Quote {0}")
     String opentapsQuoteEmailSubject(String quoteId);
     @DefaultMessage("Quote Type")

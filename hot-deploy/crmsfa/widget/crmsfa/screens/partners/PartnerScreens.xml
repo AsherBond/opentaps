@@ -23,7 +23,7 @@
    <screen name="main-section-decorator">
         <section>
             <actions>
-                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.partners.partners" global="true"/>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.crmsfa" global="true"/>
                 <set field="sectionName" value="partners" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/partners/shortcuts.bsh"/>

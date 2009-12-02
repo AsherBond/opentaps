@@ -68,7 +68,6 @@ public class LookupContactsWindow extends Window {
             public void onRowClick(GridPanel grid, int rowIndex, EventObject e) {
                 com.google.gwt.user.client.Window.alert(findContactsForm.getListView().getStore().getRecordAt(rowIndex).getAsString("partyId"));
             }
-            
         });
     }
 

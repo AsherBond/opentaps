@@ -48,7 +48,7 @@
    <screen name="main-section-decorator">
         <section>
             <actions>
-                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.opportunities.opportunities" global="true"/>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.crmsfa" global="true"/>
                 <set field="sectionName" value="opportunities" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <set field="requiredPermission" value="CRMSFA_OPPS"/>

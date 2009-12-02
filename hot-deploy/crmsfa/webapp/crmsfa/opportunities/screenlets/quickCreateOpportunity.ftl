@@ -17,8 +17,5 @@
 <#-- Copyright (c) 2009 Open Source Strategies, Inc. -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
-
-<#if (security.hasEntityPermission("CRMSFA_OPP", "_CREATE", session))>
-  <@gwtWidget id="quickNewOpportunity"/>
-</#if>
+<@gwtWidget id="quickCreateForms"/>
 

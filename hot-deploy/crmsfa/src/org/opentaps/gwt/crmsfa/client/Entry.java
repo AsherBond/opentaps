@@ -1,0 +1,588 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package org.opentaps.gwt.crmsfa.client;
+
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.Dictionary;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.gwtext.client.widgets.Panel;
+import org.opentaps.gwt.common.client.BaseEntry;
+import org.opentaps.gwt.common.client.UtilUi;
+import org.opentaps.gwt.common.client.form.FindContactsForm;
+import org.opentaps.gwt.common.client.form.FormNotificationInterface;
+import org.opentaps.gwt.common.client.form.LookupContactsWindow;
+import org.opentaps.gwt.common.client.form.OrderItemsEditable;
+import org.opentaps.gwt.common.client.listviews.ContactListView;
+import org.opentaps.gwt.common.client.listviews.OrderItemsEditableListView.OrderType;
+import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
+import org.opentaps.gwt.crmsfa.client.form.QuickCreateForms;
+import org.opentaps.gwt.crmsfa.client.accounts.form.AccountContactsSubview;
+import org.opentaps.gwt.crmsfa.client.accounts.form.FindAccountsForm;
+import org.opentaps.gwt.crmsfa.client.accounts.form.QuickNewAccountForm;
+import org.opentaps.gwt.crmsfa.client.cases.form.FindCasesForm;
+import org.opentaps.gwt.crmsfa.client.cases.form.QuickNewCaseForm;
+import org.opentaps.gwt.crmsfa.client.contacts.form.QuickNewContactForm;
+import org.opentaps.gwt.crmsfa.client.leads.form.FindLeadsForm;
+import org.opentaps.gwt.crmsfa.client.leads.form.QuickNewLeadForm;
+import org.opentaps.gwt.crmsfa.client.opportunities.form.FindOpportunitiesForm;
+import org.opentaps.gwt.crmsfa.client.opportunities.form.QuickNewOpportunityForm;
+import org.opentaps.gwt.crmsfa.client.orders.form.FindOrdersForm;
+import org.opentaps.gwt.crmsfa.client.orders.form.ProductReReservationForm;
+import org.opentaps.gwt.crmsfa.client.partners.form.FindPartnersForm;
+
+/**
+ * Entry point classes define <code>onModuleLoad()</code>.
+ */
+public class Entry extends BaseEntry {
+
+    private FindContactsForm findContactsForm;
+    private FindContactsForm myContactsForm;
+    private QuickNewContactForm quickNewContactForm;
+
+    private FindLeadsForm findLeadsForm;
+    private FindLeadsForm myLeadsForm;
+    private QuickNewLeadForm quickNewLeadForm;
+
+    private QuickNewOpportunityForm quickNewOpportunityForm;
+    private FindOpportunitiesForm findOpportunitiesForm;
+    private FindOpportunitiesForm myOpportunitiesForm;
+
+    private FindOrdersForm findOrdersForm;
+    private FindOrdersForm myOrdersForm;
+
+    private FindPartnersForm findPartnersForm;
+
+    private FindAccountsForm findAccountsForm;
+    private FindAccountsForm myAccountsForm;
+    private QuickNewAccountForm quickNewAccountForm;
+    private AccountContactsSubview accountContacts;
+
+    private QuickNewCaseForm quickNewCaseForm;
+    private FindCasesForm findCasesForm;
+    private FindCasesForm myCasesForm;
+
+    private QuickCreateForms quickCreateForms;
+
+    private static final String MY_CONTACTS_ID = "myContacts";
+    private static final String FIND_CONTACTS_ID = "findContacts";
+    private static final String LOOKUP_CONTACTS_ID = "lookupContacts";
+    private static final String QUICK_CREATE_CONTACT_ID = "quickNewContact";
+
+    private static final String FIND_LEADS_ID = "findLeads";
+    private static final String MY_LEADS_ID = "myLeads";
+    private static final String LOOKUP_LEADS_ID = "lookupLeads";
+    private static final String QUICK_CREATE_LEAD_ID = "quickNewLead";
+
+    private static final String QUICK_CREATE_OPPORTUNITY_ID = "quickNewOpportunity";
+    private static final String MY_OPPORTUNITIES_ID = "myOpportunities";
+    private static final String FIND_OPPORTUNITIES_ID = "findOpportunities";
+
+    private static final String MY_ORDERS_ID = "myOrders";
+    private static final String FIND_ORDERS_ID = "findOrders";
+    private static final String RE_RESERVE_DIALOG = "reReserveItemDialog";
+    private static final String ORDER_ITEMS_ID = "orderItemsEntryGrid";
+
+    private static final String FIND_PARTNERS_ID = "findPartners";
+
+    private static final String MY_ACCOUNTS_ID = "myAccounts";
+    private static final String FIND_ACCOUNTS_ID = "findAccounts";
+    private static final String LOOKUP_ACCOUNTS_ID = "lookupAccounts";
+    private static final String QUICK_CREATE_ACCOUNT_ID = "quickNewAccount";
+    private static final String CONTACTS_SUB_LISTVIEW = "contactsSubListView";
+    private static final String ASSIGN_CONTACT_WIDGET = "assignContactToAccount";
+
+    private static final String QUICK_CREATE_CASE_ID = "quickNewCase";
+    private static final String MY_CASES_ID = "myCases";
+    private static final String FIND_CASES_ID = "findCases";
+
+    private static final String QUICK_CREATE_FORMS_ID = "quickCreateForms";
+
+    /**
+     * This is the entry point method.
+     * It is loaded for page where the meta tag is found.
+     */
+    public void onModuleLoad() {
+
+        loadAccountsWidgets();
+        loadContactsWidgets();
+        loadLeadsWidgets();
+        loadOpportunitiesWidgets();
+        loadOrdersWidgets();
+        loadPartnersWidgets();
+        loadCasesWidgets();
+
+        if (RootPanel.get(QUICK_CREATE_FORMS_ID) != null) {
+            loadQuickCreateForms();
+            if (myAccountsForm != null) {
+                quickCreateForms.registerAccountList(myAccountsForm.getListView());
+            }
+            if (findAccountsForm != null) {
+                quickCreateForms.registerAccountList(findAccountsForm.getListView());
+            }
+
+            if (myContactsForm != null) {
+                quickCreateForms.registerContactList(myContactsForm.getListView());
+            }
+            if (findContactsForm != null) {
+                quickCreateForms.registerContactList(findContactsForm.getListView());
+            }
+
+            if (findLeadsForm != null) {
+                quickCreateForms.registerLeadList(findLeadsForm.getListView());
+            }
+            if (myLeadsForm != null) {
+                quickCreateForms.registerLeadList(myLeadsForm.getListView());
+            }
+
+            if (findOpportunitiesForm != null) {
+                quickCreateForms.registerOpportunityList(findOpportunitiesForm.getListView());
+            }
+            if (myOpportunitiesForm != null) {
+                quickCreateForms.registerOpportunityList(myOpportunitiesForm.getListView());
+            }
+
+            if (findCasesForm != null) {
+                quickCreateForms.registerCaseList(findCasesForm.getListView());
+            }
+            if (myCasesForm != null) {
+                quickCreateForms.registerCaseList(myCasesForm.getListView());
+            }
+        }
+    }
+
+    private void loadQuickCreateForms() {
+        quickCreateForms = new QuickCreateForms();
+        RootPanel.get(QUICK_CREATE_FORMS_ID).add(quickCreateForms);
+    }
+
+    private void loadAccountsWidgets() {
+        if (RootPanel.get(FIND_ACCOUNTS_ID) != null) {
+            loadFindAccounts();
+        }
+
+        if (RootPanel.get(MY_ACCOUNTS_ID) != null) {
+            loadMyAccounts();
+        }
+
+        if (RootPanel.get(QUICK_CREATE_ACCOUNT_ID) != null) {
+            loadQuickNewAccount();
+            if (myAccountsForm != null) {
+                quickNewAccountForm.register(myAccountsForm.getListView());
+            }
+            // for handling refresh of lists on contact creation
+            if (findAccountsForm != null) {
+                quickNewAccountForm.register(findAccountsForm.getListView());
+            }
+        }
+
+        if (RootPanel.get(LOOKUP_ACCOUNTS_ID) != null) {
+            loadLookupAccounts();
+        }
+
+        if (RootPanel.get(CONTACTS_SUB_LISTVIEW) != null) {
+            loadAccountContacts();
+        }
+
+        RootPanel assignContactButton = null; 
+        if ((assignContactButton = RootPanel.get(ASSIGN_CONTACT_WIDGET)) != null) {
+            loadAssignContactToAccountWidget(assignContactButton);
+        }
+    }
+
+    private void loadContactsWidgets() {
+        if (RootPanel.get(FIND_CONTACTS_ID) != null) {
+            loadFindContacts();
+        }
+
+        if (RootPanel.get(MY_CONTACTS_ID) != null) {
+            loadMyContacts();
+        }
+
+        if (RootPanel.get(QUICK_CREATE_CONTACT_ID) != null) {
+            loadQuickNewContact();
+            // for handling refresh of lists on contact creation
+            if (myContactsForm != null) {
+                quickNewContactForm.register(myContactsForm.getListView());
+            }
+            if (findContactsForm != null) {
+                quickNewContactForm.register(findContactsForm.getListView());
+            }
+        }
+
+        if (RootPanel.get(LOOKUP_CONTACTS_ID) != null) {
+            loadLookupContacts();
+        }
+    }
+
+    private void loadLeadsWidgets() {
+        if (RootPanel.get(MY_LEADS_ID) != null) {
+            loadMyLeads();
+        }
+
+        if (RootPanel.get(FIND_LEADS_ID) != null) {
+            loadFindLeads();
+        }
+
+        if (RootPanel.get(QUICK_CREATE_LEAD_ID) != null) {
+            loadQuickNewLead();
+            // for handling refresh of lists on contact creation
+            if (findLeadsForm != null) {
+                quickNewLeadForm.register(findLeadsForm.getListView());
+            }
+            if (myLeadsForm != null) {
+                quickNewLeadForm.register(myLeadsForm.getListView());
+            }
+        }
+
+        if (RootPanel.get(LOOKUP_LEADS_ID) != null) {
+            loadLookupLeads();
+        }
+    }
+
+    private void loadOpportunitiesWidgets() {
+        if (RootPanel.get(MY_OPPORTUNITIES_ID) != null) {
+            loadMyOpportunities();
+        }
+
+        if (RootPanel.get(FIND_OPPORTUNITIES_ID) != null) {
+            loadFindOpportunities();
+        }
+        if (RootPanel.get(QUICK_CREATE_OPPORTUNITY_ID) != null) {
+            loadQuickNewOpportunity();
+            if (findOpportunitiesForm != null) {
+                quickNewOpportunityForm.register(findOpportunitiesForm.getListView());
+            }
+            if (myOpportunitiesForm != null) {
+                quickNewOpportunityForm.register(myOpportunitiesForm.getListView());
+            }
+        }
+    }
+
+    private void loadOrdersWidgets() {
+
+        /*
+         * Order view page may contains number of <div/> with id in form reReserveItemDialog_0_1
+         * where first digit is order item index and second one is inventory index for that order
+         * item index.
+         *
+         *  Try to get elements with all reasonable identifiers and install link widgets into them.
+         */
+        RootPanel currentPanel;
+        Integer orderItemIndex = 0;
+        Integer inventoryItemIndex = 0;
+
+        while (true) {
+            String indexedId = RE_RESERVE_DIALOG + "_" + orderItemIndex.toString() + "_" + inventoryItemIndex.toString();
+
+            // try to find the indexed div in the page
+            currentPanel = RootPanel.get(indexedId);
+
+            if (currentPanel != null) {
+                // insert the button to re-reserve inventory
+                loadReReserveDialog(currentPanel, orderItemIndex, inventoryItemIndex);
+                // go to next inventory item
+                inventoryItemIndex++;
+            } else {
+                // if the inventory item index is zero, it means we have no more div to find
+                if (inventoryItemIndex == 0) {
+                    break;
+                } else {
+                    // else go to next order item
+                    inventoryItemIndex = 0;
+                    orderItemIndex++;
+                }
+            }
+        }
+
+        if (RootPanel.get(ORDER_ITEMS_ID) != null) {
+            loadOrderItems();
+        }
+        if (RootPanel.get(MY_ORDERS_ID) != null) {
+            loadMyOrders();
+        }
+        if (RootPanel.get(FIND_ORDERS_ID) != null) {
+            loadFindOrders();
+        }
+    }
+
+    private void loadPartnersWidgets() {
+        if (RootPanel.get(FIND_PARTNERS_ID) != null) {
+            loadFindPartners();
+        }
+    }
+
+    private void loadCasesWidgets() {
+        if (RootPanel.get(FIND_CASES_ID) != null) {
+            loadFindCases();
+        }
+        if (RootPanel.get(MY_CASES_ID) != null) {
+            loadMyCases();
+        }
+        if (RootPanel.get(QUICK_CREATE_CASE_ID) != null) {
+            loadQuickNewCase();
+            if (findCasesForm != null) {
+                quickNewCaseForm.register(findCasesForm.getListView());
+            }
+            if (myCasesForm != null) {
+                quickNewCaseForm.register(myCasesForm.getListView());
+            }
+        }
+    }
+
+    private void loadQuickNewCase() {
+        quickNewCaseForm = new QuickNewCaseForm();
+        RootPanel.get(QUICK_CREATE_CASE_ID).add(quickNewCaseForm);
+    }
+
+    private void loadFindCases() {
+        findCasesForm = new FindCasesForm(true);
+        RootPanel.get(FIND_CASES_ID).add(findCasesForm.getMainPanel());
+    }
+
+
+    private void loadMyCases() {
+        myCasesForm = new FindCasesForm(false);
+        myCasesForm.hideFilters();
+        myCasesForm.getListView().filterMyOrTeamParties(getViewPref());
+        myCasesForm.getListView().applyFilters();
+        RootPanel.get(MY_CASES_ID).add(myCasesForm.getMainPanel());
+    }
+
+    private void loadFindLeads() {
+        findLeadsForm = new FindLeadsForm();
+        RootPanel.get(FIND_LEADS_ID).add(findLeadsForm.getMainPanel());
+    }
+
+    private void loadLookupLeads() {
+        findLeadsForm = new FindLeadsForm();
+        findLeadsForm.getListView().setLookupMode();
+        RootPanel.get(LOOKUP_LEADS_ID).add(findLeadsForm.getMainPanel());
+    }
+
+    private void loadQuickNewLead() {
+        quickNewLeadForm = new QuickNewLeadForm();
+        RootPanel.get(QUICK_CREATE_LEAD_ID).add(quickNewLeadForm);
+    }
+
+    private void loadMyLeads() {
+        myLeadsForm = new FindLeadsForm();
+        myLeadsForm.hideFilters();
+        myLeadsForm.getListView().filterMyOrTeamParties(PartyLookupConfiguration.MY_VALUES);
+        myLeadsForm.getListView().applyFilters();
+        RootPanel.get(MY_LEADS_ID).add(myLeadsForm.getMainPanel());
+    }
+
+    private void loadFindContacts() {
+        findContactsForm = new FindContactsForm();
+        RootPanel.get(FIND_CONTACTS_ID).add(findContactsForm.getMainPanel());
+    }
+
+    private void loadLookupContacts() {
+        findContactsForm = new FindContactsForm();
+        findContactsForm.getListView().setLookupMode();
+        RootPanel.get(LOOKUP_CONTACTS_ID).add(findContactsForm.getMainPanel());
+    }
+
+    private void loadMyContacts() {
+        myContactsForm = new FindContactsForm(false);
+        myContactsForm.hideFilters();
+        myContactsForm.getListView().filterMyOrTeamParties(PartyLookupConfiguration.MY_VALUES);
+        myContactsForm.getListView().applyFilters();
+        RootPanel.get(MY_CONTACTS_ID).add(myContactsForm.getMainPanel());
+    }
+
+    private void loadQuickNewContact() {
+        quickNewContactForm = new QuickNewContactForm();
+        RootPanel.get(QUICK_CREATE_CONTACT_ID).add(quickNewContactForm);
+    }
+
+    private void loadQuickNewOpportunity() {
+        quickNewOpportunityForm = new QuickNewOpportunityForm();
+        RootPanel.get(QUICK_CREATE_OPPORTUNITY_ID).add(quickNewOpportunityForm);
+    }
+
+    private void loadFindOpportunities() {
+        findOpportunitiesForm = new FindOpportunitiesForm(true);
+        RootPanel.get(FIND_OPPORTUNITIES_ID).add(findOpportunitiesForm.getMainPanel());
+    }
+
+
+    private void loadMyOpportunities() {
+        myOpportunitiesForm = new FindOpportunitiesForm(false);
+        myOpportunitiesForm.hideFilters();
+        myOpportunitiesForm.getListView().filterMyOrTeamParties(getViewPref());
+        myOpportunitiesForm.getListView().applyFilters();
+        RootPanel.get(MY_OPPORTUNITIES_ID).add(myOpportunitiesForm.getMainPanel());
+    }
+
+    private void loadAssignContactToAccountWidget(RootPanel container) {
+
+        final LookupContactsWindow window = new LookupContactsWindow(true, true);
+        window.create();
+
+        Hyperlink embedLink = new Hyperlink("Assign Contact", true, null);
+        embedLink.setStyleName("subMenuButton");
+
+        embedLink.addClickHandler(new ClickHandler() {
+
+            public void onClick(ClickEvent event) {
+                window.show();
+            }
+
+        });
+
+        container.add(embedLink);
+    }
+
+    private void loadFindAccounts() {
+        findAccountsForm = new FindAccountsForm();
+        RootPanel.get(FIND_ACCOUNTS_ID).add(findAccountsForm.getMainPanel());
+    }
+
+    private void loadLookupAccounts() {
+        findAccountsForm = new FindAccountsForm();
+        findAccountsForm.getListView().setLookupMode();
+        RootPanel.get(LOOKUP_ACCOUNTS_ID).add(findAccountsForm.getMainPanel());
+    }
+
+    private void loadQuickNewAccount() {
+        quickNewAccountForm = new QuickNewAccountForm();
+        RootPanel.get(QUICK_CREATE_ACCOUNT_ID).add(quickNewAccountForm);
+    }
+
+    private void loadMyAccounts() {
+        myAccountsForm = new FindAccountsForm();
+        myAccountsForm.hideFilters();
+        myAccountsForm.getListView().filterMyOrTeamParties(getViewPref());
+        myAccountsForm.getListView().applyFilters();
+        RootPanel.get(MY_ACCOUNTS_ID).add(myAccountsForm.getMainPanel());
+    }
+
+    private void loadAccountContacts() {
+        accountContacts = new AccountContactsSubview(getAccountPartyId(), false);
+        accountContacts.hideFilters();
+        accountContacts.getListView().setTitle(UtilUi.MSG.crmContacts());
+        ((ContactListView) accountContacts.getListView()).filterByAccount(getAccountPartyId());
+        accountContacts.getListView().applyFilters();
+
+        RootPanel.get(CONTACTS_SUB_LISTVIEW).add(accountContacts.getMainPanel());
+    }
+
+    private void loadMyOrders() {
+        myOrdersForm = new FindOrdersForm(false);
+        myOrdersForm.hideFilters();
+        myOrdersForm.getListView().filterMyOrTeamParties(getViewPref());
+        myOrdersForm.getListView().applyFilters();
+        RootPanel.get(MY_ORDERS_ID).add(myOrdersForm.getMainPanel());
+    }
+
+    private void loadFindOrders() {
+        findOrdersForm = new FindOrdersForm(true);
+        RootPanel.get(FIND_ORDERS_ID).add(findOrdersForm.getMainPanel());
+    }
+
+
+    private void loadOrderItems() {
+        OrderItemsEditable orderItemsEditable = new OrderItemsEditable(OrderType.SALES);
+        RootPanel.get(ORDER_ITEMS_ID).add(orderItemsEditable.getMainPanel());
+    }
+
+    /**
+     * Add link beside inventory item and open form for re-reservation on click.
+     * @param container the container <code>RootPanel</code>
+     * @param orderItemIndex an <code>Integer</code> value
+     * @param oisgrIndex an <code>Integer</code> value
+     */
+    private void loadReReserveDialog(RootPanel container, Integer orderItemIndex, Integer oisgrIndex) {
+        Panel panel = new Panel();
+        panel.setBorder(false);
+
+        Dictionary facilities = Dictionary.getDictionary("facilityList");
+        Dictionary widgetParameters = Dictionary.getDictionary("reReservationWidgetParameters");
+
+        final ProductReReservationForm window = new ProductReReservationForm(
+                UtilUi.MSG.opentapsReReserveProduct(),
+                facilities,
+                getOrderId(),
+                widgetParameters.get("orderItemSeqId_" + orderItemIndex.toString()),
+                widgetParameters.get("inventoryItemId_" + orderItemIndex.toString() + "_" + oisgrIndex.toString()),
+                widgetParameters.get("shipGroupSeqId_" + orderItemIndex.toString() + "_" + oisgrIndex.toString()),
+                widgetParameters.get("quantity_" + orderItemIndex.toString() + "_" + oisgrIndex.toString())
+        );
+        window.create();
+
+        window.register(new FormNotificationInterface() {
+            public void notifySuccess(Object obj) {
+                Window.Location.replace(Window.Location.getHref());
+            }
+        });
+
+        Hyperlink embedLink = new Hyperlink(UtilUi.MSG.opentapsReReserve(), null);
+        embedLink.setStyleName("buttontext");
+        embedLink.addClickListener(new ClickListener() {
+
+            public void onClick(Widget sender) {
+                window.show();
+            }
+        });
+
+        panel.add(embedLink);
+        container.add(panel);
+    }
+
+    RootPanel getNextRootPanel(int lastOrderItemIndex, int lastInventoryItemIndex) {
+        return null;
+    }
+
+    private void loadFindPartners() {
+        findPartnersForm = new FindPartnersForm();
+        RootPanel.get(FIND_PARTNERS_ID).add(findPartnersForm.getMainPanel());
+    }
+
+    /**
+     * Retrieve JS variable <code>partyId</code>.
+     * @return the <code>partyId</code>
+     */
+    private static native String getAccountPartyId()/*-{
+        return $wnd.partyId;
+    }-*/;
+
+    /**
+     * Retrieve JS variable <code>orderId</code>.
+     * @return the <code>orderId</code>
+     */
+    private static native String getOrderId() /*-{
+        return $wnd.orderId;
+    }-*/;
+
+    /**
+     * Retrieve GWT parameter viewPref. Parameter is optional.
+     * @return
+     *     Possible values are <code>MY_VALUES</code> (or <code>OrderLookupConfiguration.MY_VALUES</code>) and
+     *     <code>TEAM_VALUES</code> (or <code>OrderLookupConfiguration.TEAM_VALUES</code>)
+     */
+    private static native String getViewPref()/*-{
+        return $wnd.viewPref;
+    }-*/;
+
+}
