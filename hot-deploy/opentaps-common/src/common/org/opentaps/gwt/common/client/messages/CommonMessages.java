@@ -2732,6 +2732,8 @@ public interface CommonMessages extends Messages {
     String crmApprovedOrdersOnly();
     @DefaultMessage("Assign")
     String crmAssign();
+    @DefaultMessage("Assign Contact")
+    String crmAssignContact();
     @DefaultMessage("Assign Team")
     String crmAssignTeam();
     @DefaultMessage("Availability")
@@ -9268,7 +9270,7 @@ public interface CommonMessages extends Messages {
     String opentapsNavHistoryAgreement(String agreementTypeName, String agreementId, String partyNameTo);
     @DefaultMessage("Last Viewed")
     String opentapsNavHistoryTitle();
-    @DefaultMessage("")
+    @DefaultMessage("…")
     String opentapsNavHistoryTruncMark();
     @DefaultMessage("Needed")
     String opentapsNeeded();
@@ -16598,6 +16600,8 @@ public interface CommonMessages extends Messages {
     String purchNoAgreements();
     @DefaultMessage("No open purchase orders found.")
     String purchNoOrdersFound();
+    @DefaultMessage("No shipping address")
+    String purchNoShippingAddress();
     @DefaultMessage("Number of Approved Production Requirements")
     String purchNumInternalRequirementsApproved();
     @DefaultMessage("Number of New Transfer Requirements")
@@ -16680,6 +16684,8 @@ public interface CommonMessages extends Messages {
     String purchSetAllRowsToThisDate();
     @DefaultMessage("Shipping Destination")
     String purchShipToSettings();
+    @DefaultMessage("Shipping Information")
+    String purchShippingInformation();
     @DefaultMessage("Supplier \"{0}\": {1} requirements have been canceled successfully.")
     String purchSuccess_CreatedProductionRunsFromPendingRequirementsSuccess(String supplierName, String numberOfRequirements);
     @DefaultMessage("Supplier \"{0}\": {1} requirements have been canceled successfully.")
