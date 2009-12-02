@@ -42,7 +42,7 @@ import com.gwtext.client.widgets.layout.FitLayout;
  * @see org.opentaps.gwt.common.client.form.base.BaseFormPanel
  */
 public abstract class PopupFormWindow extends Window {
-    
+
     protected final BaseFormPanel defaultInnerPanel = new BaseFormPanel(Position.LEFT) {
 
             @Override
