@@ -2375,9 +2375,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         <response name="configureProduct" type="view" value="configureProduct"/>
         <!-- if the productId does not match any Product, perform a lookup -->
         <response name="findMatchingProducts" type="request" value="countMatchingProducts"/>
-        <response name="virtualProduct" type="request-redirect" value="product">
-          <redirect-parameter name="product_id"/>
-        </response>        
+        <response name="virtualProduct" type="request" value="product" />        
         <response name="chooseVariantProduct" type="request" value="chooseVariantProduct"/>
     </request-map>
     <request-map uri="additem">
@@ -2397,6 +2395,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         <!-- if the productId does not match any Product, perform a lookup -->
         <response name="findMatchingProducts" type="request" value="countMatchingProducts"/>
         <response name="chooseVariantProduct" type="request" value="chooseVariantProduct"/>
+        <response name="virtualProduct" type="request" value="product" />        
     </request-map>
     <request-map uri="updateOrderItems">
         <security https="true" auth="true"/>

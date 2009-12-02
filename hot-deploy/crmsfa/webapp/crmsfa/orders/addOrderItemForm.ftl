@@ -36,7 +36,6 @@
 </div>
 
 <form name="addOrderItemForm" method="POST" action="<@ofbizUrl>addOrderItem</@ofbizUrl>" onsubmit="return addOrderItemFormSubmitHandler(document.addOrderItemForm.productId)">
-  <@inputHidden name="product_id" value=""/>
   <table class="fourColumnForm">
     <tr>
       <@displayTitleCell title=uiLabelMap.ProductProductId titleClass="requiredField"/>
@@ -62,7 +61,6 @@
 
     // check if product to add has warning and if it has asks user for confirmation
     addOrderItemFormSubmitHandler = function(productIdElement) {
-        document.addOrderItemForm.product_id.value = document.addOrderItemForm.productId.value;
         if ((productIdElement) && (productIdElement.value != "")) {
             productId = productIdElement.value;
             // use AJAX request to get the data

@@ -216,6 +216,7 @@ public final class OrderEvents {
 
         // if it's a variant product, send to virtualProduct request
         if (product != null && "Y".equals(product.get("isVirtual"))) {
+            request.setAttribute("product_id", productId);
             return "virtualProduct";
         }
         
