@@ -362,7 +362,7 @@ public class BaseFormPanel extends FormPanel implements FormListener {
      */
     public void notifySuccess() {
         for (FormNotificationInterface widget : registeredWidgets) {
-            widget.notifySuccess();
+            widget.notifySuccess(null);
         }
     }
 

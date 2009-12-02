@@ -138,7 +138,7 @@ public class Entry extends BaseEntry {
         window.create();
 
         window.register(new FormNotificationInterface() {
-            public void notifySuccess() {
+            public void notifySuccess(Object obj) {
                 Window.Location.replace(Window.Location.getHref());
             }
         });

@@ -1049,7 +1049,7 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
     }
 
     /** {@inheritDoc} */
-    public void notifySuccess() {
+    public void notifySuccess(Object obj) {
         loadFirstPage();
     }
 
