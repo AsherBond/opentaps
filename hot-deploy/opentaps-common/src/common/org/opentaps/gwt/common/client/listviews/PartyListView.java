@@ -27,6 +27,8 @@ import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfigurat
  */
 public abstract class PartyListView extends EntityListView {
 
+    boolean ignoreLinkColumn = false;
+
     /**
      * Default constructor.
      */
@@ -71,7 +73,7 @@ public abstract class PartyListView extends EntityListView {
 
         // add party id as the first column
         StringFieldDef idDefinition = new StringFieldDef(PartyLookupConfiguration.INOUT_PARTY_ID);
-        if (entityViewUrl != null) {
+        if (entityViewUrl != null && !ignoreLinkColumn) {
             makeLinkColumn(partyIdLabel, idDefinition, entityViewUrl, true);
             makeLinkColumn(UtilUi.MSG.crmContactName(), idDefinition, new StringFieldDef(PartyLookupConfiguration.INOUT_FRIENDLY_PARTY_NAME), entityViewUrl, true);
         } else {
@@ -81,7 +83,7 @@ public abstract class PartyListView extends EntityListView {
 
         // add custom name fields
         for (int i = 0; i < nameColumnsCount; i++) {
-            if (entityViewUrl != null) {
+            if (entityViewUrl != null && !ignoreLinkColumn) {
                 // make them clickable
                 makeLinkColumn(nameColumns[2 * i + 1] , idDefinition, new StringFieldDef(nameColumns[2 * i]), entityViewUrl, true);
             } else {
@@ -112,6 +114,16 @@ public abstract class PartyListView extends EntityListView {
         setColumnHidden(PartyLookupConfiguration.OUT_ADDRESS_2, true);
         setColumnHidden(PartyLookupConfiguration.INOUT_POSTAL_CODE, true);
         setColumnHidden(PartyLookupConfiguration.OUT_POSTAL_CODE_EXT, true);
+    }
+
+    /**
+     * Set <code>ignoreLinkColumn</code> value.
+     * Use when we don't need hyperlinks in ID or name columns, e.g. the list view is
+     * embed in another GWT window and you want to handle selection in listener.  
+     * @param flag new value
+     */
+    public void setIgnoreLinkColumn(boolean flag) {
+        ignoreLinkColumn = flag;
     }
 
     /**

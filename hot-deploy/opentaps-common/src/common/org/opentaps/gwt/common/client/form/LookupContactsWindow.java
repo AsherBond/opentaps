@@ -16,10 +16,16 @@
  */
 package org.opentaps.gwt.common.client.form;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.listviews.PartyListView;
+import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 
 import com.gwtext.client.core.EventObject;
 import com.gwtext.client.core.Position;
+import com.gwtext.client.data.Record;
 import com.gwtext.client.widgets.Panel;
 import com.gwtext.client.widgets.Window;
 import com.gwtext.client.widgets.grid.GridPanel;
@@ -29,13 +35,15 @@ import com.gwtext.client.widgets.layout.FitLayout;
 public class LookupContactsWindow extends Window {
 
     private static final int FORM_WIDTH  = 800;
-    private static final int FORM_HEIGHT = 700;
+    private static final int FORM_HEIGHT = 680;
 
-    private final FindContactsForm findContactsForm = new FindContactsForm();
+    private final FindContactsForm findContactsForm = new FindContactsForm(true, true);
     private final PartyListView listView;
 
+    private List<FormNotificationInterface> formNotificationListeners = new ArrayList<FormNotificationInterface>(); 
+
     public LookupContactsWindow(boolean modal, boolean resizable) {
-        super("Lookup Contacts", FORM_WIDTH, FORM_HEIGHT, modal, resizable);
+        super(UtilUi.MSG.crmFindContacts(), FORM_WIDTH, FORM_HEIGHT, modal, resizable);
         listView = findContactsForm.getListView();
         listView.setLookupMode();
     }
@@ -66,13 +74,42 @@ public class LookupContactsWindow extends Window {
             /** {@inheritDoc} */
             @Override
             public void onRowClick(GridPanel grid, int rowIndex, EventObject e) {
-                com.google.gwt.user.client.Window.alert(findContactsForm.getListView().getStore().getRecordAt(rowIndex).getAsString("partyId"));
+                Record record = findContactsForm.getListView().getStore().getRecordAt(rowIndex);
+                if (record != null) {
+                    // retrieve selected record and call event handler
+                    LookupContactsWindow.this.onSelection(record.getAsString(PartyLookupConfiguration.INOUT_PARTY_ID));
+                }
             }
         });
     }
 
+    /**
+     * Insert inner panel into frame window
+     */
     public void create() {
         add(findContactsForm.getMainPanel());
     }
 
+    /**
+     * Setup listener that will be used later to fire selection
+     * @param listener An instance of the FormNotificationInterface
+     */
+    public void register(FormNotificationInterface listener) {
+        if (listener != null) {
+            formNotificationListeners.add(listener);
+        }
+    }
+
+    /**
+     * Handle user's selection.
+     * The method close lookup window, look over registered listeners and notify each about
+     * user's selection.
+     * @param partyId selected contact party identifier
+     */
+    private void onSelection(String partyId) {
+        for (FormNotificationInterface listener : formNotificationListeners) {
+            listener.notifySuccess(partyId);
+        }
+        hide();
+    }
 }

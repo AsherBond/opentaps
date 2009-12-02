@@ -260,13 +260,6 @@
                             <platform-specific><html>
                                 <html-template location="component://crmsfa/webapp/crmsfa/accounts/submenus/viewAccountContacts.ftl"/>
                             </html></platform-specific>
-                            <!-- If the user can update accounts, include this form -->
-                            <section>
-                                <condition><if-compare field="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
-                                <widgets>
-                                    <include-form name="assignContactToAccountForm" location="component://crmsfa/widget/crmsfa/forms/accounts/AccountsForms.xml"/>
-                                </widgets>
-                            </section>
                         </container>
 
                         <!-- payment methods -->
