@@ -58,7 +58,7 @@ import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.workeffort.workeffort.WorkEffortSearch;
-import org.opentaps.common.manufacturing.OpentapsProductionRun;
+import org.opentaps.domain.manufacturing.OpentapsProductionRun;
 import org.opentaps.common.party.PartyHelper;
 import org.opentaps.common.product.UtilProduct;
 import org.opentaps.common.util.UtilAccountingTags;

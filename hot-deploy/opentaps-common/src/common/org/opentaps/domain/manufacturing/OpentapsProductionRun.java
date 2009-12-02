@@ -15,7 +15,7 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.opentaps.common.manufacturing;
+package org.opentaps.domain.manufacturing;
 
 import java.math.BigDecimal;
 import java.util.List;

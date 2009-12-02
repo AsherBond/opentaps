@@ -58,6 +58,10 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.domain.manufacturing.bom.BomNode;
+import org.opentaps.domain.manufacturing.bom.BomNodeInterface;
+import org.opentaps.domain.manufacturing.bom.BomTree;
+import org.opentaps.domain.manufacturing.bom.BomTreeInterface;
 
 /**
  * BOM related services.

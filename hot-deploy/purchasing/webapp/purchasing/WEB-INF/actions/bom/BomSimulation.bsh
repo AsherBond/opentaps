@@ -42,7 +42,7 @@ import java.util.Iterator;
 
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.opentaps.common.manufacturing.bom.BomNode;
+import org.opentaps.domain.manufacturing.bom.BomNode;
 import org.ofbiz.service.GenericServiceException;
 
 // populate options for the productAssocTypeId select, ie: MANUF_COMPONENT, ENGINEER_COMPONENT ...

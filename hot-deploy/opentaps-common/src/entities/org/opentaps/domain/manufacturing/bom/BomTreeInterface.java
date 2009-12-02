@@ -36,7 +36,7 @@
 
 /* This file has been modified by Open Source Strategies, Inc. */
 
-package org.opentaps.common.manufacturing.bom;
+package org.opentaps.domain.manufacturing.bom;
 
 import java.math.BigDecimal;
 import java.util.Date;

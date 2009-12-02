@@ -31,7 +31,6 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.ofbiz.entity.GenericValue;
-import org.opentaps.common.manufacturing.bom.BomTreeInterface;
 import org.opentaps.foundation.infrastructure.User;
 
 /**
@@ -111,7 +110,7 @@ public class GetBOMTreeService extends ServiceWrapper {
     private String outSuccessMessage;
     private List outSuccessMessageList;
     private TimeZone outTimeZone;
-    private BomTreeInterface outTree;
+    private Object outTree;
     private GenericValue outUserLogin;
 
     private Set<String> inParameters = FastSet.newInstance();
@@ -256,9 +255,10 @@ public class GetBOMTreeService extends ServiceWrapper {
     /**
      * Auto generated value accessor.
      * This parameter is optional.
-     * @return <code>BomTreeInterface</code>
+     * The real type is: <code>org.opentaps.domain.manufacturing.bom.BomTreeInterface</code>.
+     * @return <code>Object</code>
      */
-    public BomTreeInterface getOutTree() {
+    public Object getOutTree() {
         return this.outTree;
     }
     /**
@@ -426,9 +426,10 @@ public class GetBOMTreeService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * The real type is: <code>org.opentaps.domain.manufacturing.bom.BomTreeInterface</code>.
      * @param outTree the outTree to set
     */
-    public void setOutTree(BomTreeInterface outTree) {
+    public void setOutTree(Object outTree) {
         this.outParameters.add("tree");
         this.outTree = outTree;
     }
@@ -518,7 +519,7 @@ public class GetBOMTreeService extends ServiceWrapper {
         if (mapValue.containsKey("successMessage")) setOutSuccessMessage((String) mapValue.get("successMessage"));
         if (mapValue.containsKey("successMessageList")) setOutSuccessMessageList((List) mapValue.get("successMessageList"));
         if (mapValue.containsKey("timeZone")) setOutTimeZone((TimeZone) mapValue.get("timeZone"));
-        if (mapValue.containsKey("tree")) setOutTree((BomTreeInterface) mapValue.get("tree"));
+        if (mapValue.containsKey("tree")) setOutTree((Object) mapValue.get("tree"));
         if (mapValue.containsKey("userLogin")) setOutUserLogin((GenericValue) mapValue.get("userLogin"));
     }
 
