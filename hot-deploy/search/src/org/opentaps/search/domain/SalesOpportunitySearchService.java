@@ -82,41 +82,38 @@ public class SalesOpportunitySearchService extends SearchService implements Sale
         StringBuilder sb = new StringBuilder();
         makeQuery(sb);
         searchInEntities(getClassesToQuery(), sb.toString());
-
-        try {
-            OrderRepositoryInterface orderRepository = getDomainsDirectory().getOrderDomain().getOrderRepository();
-            salesOpportunities = filterSearchResults(getResults(), orderRepository);
-        } catch (RepositoryException e) {
-            throw new ServiceException(e);
-        }
+        salesOpportunities = filterSearchResults(getResults());
     }
 
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
-    public List<SalesOpportunity> filterSearchResults(List<Object[]> results, OrderRepositoryInterface repository) throws ServiceException {
-
-        // get the entities from the search results
-        Set<String> salesOpportunityIds = new HashSet<String>();
-        int classIndex = getQueryProjectedFieldIndex(FullTextQuery.OBJECT_CLASS);
-        int idIndex = getQueryProjectedFieldIndex(FullTextQuery.ID);
-        if (classIndex < 0 || idIndex < 0) {
-            throw new ServiceException("Incompatible result projection, classIndex = " + classIndex + ", idIndex = " + idIndex);
-        }
-
-        for (Object[] o : results) {
-            Class c = (Class) o[classIndex];
-            if (c.equals(SalesOpportunity.class)) {
-                String pk = (String) o[idIndex];
-                salesOpportunityIds.add(pk);
-            }
-        }
+    public List<SalesOpportunity> filterSearchResults(List<Object[]> results) throws ServiceException {
 
         try {
+            OrderRepositoryInterface orderRepository = getDomainsDirectory().getOrderDomain().getOrderRepository();
+            // get the entities from the search results
+            Set<String> salesOpportunityIds = new HashSet<String>();
+            int classIndex = getQueryProjectedFieldIndex(FullTextQuery.OBJECT_CLASS);
+            int idIndex = getQueryProjectedFieldIndex(FullTextQuery.ID);
+            if (classIndex < 0 || idIndex < 0) {
+                throw new ServiceException("Incompatible result projection, classIndex = " + classIndex + ", idIndex = " + idIndex);
+            }
+    
+            for (Object[] o : results) {
+                Class c = (Class) o[classIndex];
+                if (c.equals(SalesOpportunity.class)) {
+                    String pk = (String) o[idIndex];
+                    salesOpportunityIds.add(pk);
+                }
+            }
+
             if (!salesOpportunityIds.isEmpty()) {
-                return repository.findList(SalesOpportunity.class, EntityCondition.makeCondition(SalesOpportunity.Fields.salesOpportunityId.name(), EntityOperator.IN, salesOpportunityIds));
+                return orderRepository.findList(SalesOpportunity.class, EntityCondition.makeCondition(SalesOpportunity.Fields.salesOpportunityId.name(), EntityOperator.IN, salesOpportunityIds));
             } else {
                 return new ArrayList<SalesOpportunity>();
             }
+        } catch (RepositoryException e) {
+            throw new ServiceException(e);
         } catch (GeneralException ex) {
             throw new ServiceException(ex);
         }

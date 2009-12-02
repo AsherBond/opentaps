@@ -62,43 +62,39 @@ public class SupplierSearchService extends SearchService implements SupplierSear
         StringBuilder sb = new StringBuilder();
         makeQuery(sb);
         searchInEntities(getClassesToQuery(), sb.toString());
-
-        try {
-            PartyRepositoryInterface partyRepository = getDomainsDirectory().getPartyDomain().getPartyRepository();
-            suppliers = filterSearchResults(getResults(), partyRepository);
-        } catch (RepositoryException e) {
-            throw new ServiceException(e);
-        }
+        suppliers = filterSearchResults(getResults());
     }
 
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
-    public List<PartyGroup> filterSearchResults(List<Object[]> results, PartyRepositoryInterface repository) throws ServiceException {
-
-        // get the entities from the search results
-        Set<String> supplierIds = new HashSet<String>();
-        int classIndex = getQueryProjectedFieldIndex(FullTextQuery.OBJECT_CLASS);
-        int idIndex = getQueryProjectedFieldIndex(FullTextQuery.ID);
-        if (classIndex < 0 || idIndex < 0) {
-            throw new ServiceException("Incompatible result projection, classIndex = " + classIndex + ", idIndex = " + idIndex);
-        }
-
-        for (Object[] o : results) {
-            Class c = (Class) o[classIndex];
-            if (c.equals(PartyRole.class)) {
-                PartyRolePk pk = (PartyRolePk) o[idIndex];
-                if (RoleTypeConstants.SUPPLIER.equals(pk.getRoleTypeId())) {
-                    supplierIds.add(pk.getPartyId());
+    public List<PartyGroup> filterSearchResults(List<Object[]> results) throws ServiceException {
+        try {
+            PartyRepositoryInterface partyRepository = getDomainsDirectory().getPartyDomain().getPartyRepository();
+            // get the entities from the search results
+            Set<String> supplierIds = new HashSet<String>();
+            int classIndex = getQueryProjectedFieldIndex(FullTextQuery.OBJECT_CLASS);
+            int idIndex = getQueryProjectedFieldIndex(FullTextQuery.ID);
+            if (classIndex < 0 || idIndex < 0) {
+                throw new ServiceException("Incompatible result projection, classIndex = " + classIndex + ", idIndex = " + idIndex);
+            }
+    
+            for (Object[] o : results) {
+                Class c = (Class) o[classIndex];
+                if (c.equals(PartyRole.class)) {
+                    PartyRolePk pk = (PartyRolePk) o[idIndex];
+                    if (RoleTypeConstants.SUPPLIER.equals(pk.getRoleTypeId())) {
+                        supplierIds.add(pk.getPartyId());
+                    }
                 }
             }
-        }
 
-        try {
             if (!supplierIds.isEmpty()) {
-                return repository.findList(PartyGroup.class, EntityCondition.makeCondition(PartyGroup.Fields.partyId.name(), EntityOperator.IN, supplierIds));
+                return partyRepository.findList(PartyGroup.class, EntityCondition.makeCondition(PartyGroup.Fields.partyId.name(), EntityOperator.IN, supplierIds));
             } else {
                 return new ArrayList<PartyGroup>();
             }
+        } catch (RepositoryException e) {
+            throw new ServiceException(e);
         } catch (GeneralException ex) {
             throw new ServiceException(ex);
         }

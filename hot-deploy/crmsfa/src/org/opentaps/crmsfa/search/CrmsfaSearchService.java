@@ -57,9 +57,6 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
     private List<Account> accounts = null;
     private List<Lead> leads = null;
     private List<SalesOpportunity> salesOpportunities = null;
-
-    private OrderRepositoryInterface orderRepository;
-    private PartyRepositoryInterface partyRepository;
     private AccountSearchServiceInterface accountSearch;
     private ContactSearchServiceInterface contactSearch;
     private LeadSearchServiceInterface leadSearch;
@@ -102,10 +99,6 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
     /** {@inheritDoc} */
     public void search() throws ServiceException {
         try {
-            OrderDomainInterface orderDomain = getDomainsDirectory().getOrderDomain();
-            PartyDomainInterface partyDomain = getDomainsDirectory().getPartyDomain();
-            orderRepository = orderDomain.getOrderRepository();
-            partyRepository = partyDomain.getPartyRepository();
             SearchDomainInterface searchDomain = getDomainsDirectory().getSearchDomain();
 
             accountSearch = searchDomain.getAccountSearchService();
@@ -119,10 +112,10 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
             setResults((List<Object[]>) output.get(SearchRepositoryInterface.RETURN_RESULTS));
             setResultSize((Integer) output.get(SearchRepositoryInterface.RETURN_RESULT_SIZE));
             // note: the filterSearchResults methods expect getResults to return a list of Object[] where the first two fields are {OBJECT_CLASS, ID}
-            accounts = accountSearch.filterSearchResults(getResults(), partyRepository);
-            contacts = contactSearch.filterSearchResults(getResults(), partyRepository);
-            leads = leadSearch.filterSearchResults(getResults(), partyRepository);
-            salesOpportunities = salesOpportunitySearch.filterSearchResults(getResults(), orderRepository);
+            accounts = accountSearch.filterSearchResults(getResults());
+            contacts = contactSearch.filterSearchResults(getResults());
+            leads = leadSearch.filterSearchResults(getResults());
+            salesOpportunities = salesOpportunitySearch.filterSearchResults(getResults());
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }

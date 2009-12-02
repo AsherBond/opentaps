@@ -23,15 +23,11 @@ import java.util.Map;
 import java.util.Set;
 
 import org.opentaps.base.entities.PartyGroup;
-import org.opentaps.domain.party.PartyDomainInterface;
-import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.domain.search.CommonSearchService;
 import org.opentaps.domain.search.SearchDomainInterface;
 import org.opentaps.domain.search.SearchRepositoryInterface;
-import org.opentaps.domain.search.SearchServiceInterface;
 import org.opentaps.domain.search.SupplierSearchServiceInterface;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
 /**
@@ -42,7 +38,6 @@ public class PurchasingSearchService extends CommonSearchService {
     private boolean searchSuppliers = false;
     private List<PartyGroup> suppliers = null;
 
-    private PartyRepositoryInterface partyRepository;
     private SupplierSearchServiceInterface supplierSearch;
     private SearchRepositoryInterface searchRepository;
     private int pageSize = SearchRepositoryInterface.DEFAULT_PAGE_SIZE;
@@ -62,9 +57,6 @@ public class PurchasingSearchService extends CommonSearchService {
     /** {@inheritDoc} */
     public void search() throws ServiceException {
         try {
-            PartyDomainInterface partyDomain = getDomainsDirectory().getPartyDomain();
-            partyRepository = partyDomain.getPartyRepository();
-            
             SearchDomainInterface searchDomain = getDomainsDirectory().getSearchDomain();
             supplierSearch = searchDomain.getSupplierSearchService();
             // make the query
@@ -74,7 +66,7 @@ public class PurchasingSearchService extends CommonSearchService {
             this.resultSize =  (Integer) output.get(SearchRepositoryInterface.RETURN_RESULT_SIZE);
             // note: the filterSearchResults methods expect getResults to return a list of EntityInterface, which means
             //  a non projected search result, so do not override setQueryProjection unless you also override this method
-            suppliers = supplierSearch.filterSearchResults(getResults(), partyRepository);
+            suppliers = supplierSearch.filterSearchResults(getResults());
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }

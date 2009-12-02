@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.opentaps.domain.party.Account;
-import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.foundation.service.ServiceException;
 
 /**
@@ -43,11 +42,10 @@ public interface AccountSearchServiceInterface extends SearchServiceInterface {
     /**
      * Filters the results of the search service to get the list of matching <code>Account</code>.
      * @param results the list of results from the search service, it must be a list of <code>Object[]</code>, from the projection <code>{OBJECT_CLASS, ID}</code>
-     * @param repository a <code>PartyRepositoryInterface</code> instance
      * @return the list of <code>Account</code> found from the results
      * @throws ServiceException if an error occurs
      */
-    public List<Account> filterSearchResults(List<Object[]> results, PartyRepositoryInterface repository) throws ServiceException;
+    public List<Account> filterSearchResults(List<Object[]> results) throws ServiceException;
 
     /**
      * Gets the <code>Set</code> of <code>Class</code> to query.

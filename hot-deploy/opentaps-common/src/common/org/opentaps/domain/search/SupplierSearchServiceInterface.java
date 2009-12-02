@@ -43,11 +43,10 @@ public interface SupplierSearchServiceInterface extends SearchServiceInterface {
     /**
      * Filters the results of the search service to get the list of matching <code>PartyGroup</code>.
      * @param results the list of results from the search service, it must be a list of <code>Object[]</code>, from the projection <code>{OBJECT_CLASS, ID}</code>
-     * @param repository a <code>PartyRepositoryInterface</code> instance
      * @return the list of <code>PartyGroup</code> found from the results
      * @throws ServiceException if an error occurs
      */
-    public List<PartyGroup> filterSearchResults(List<Object[]> results, PartyRepositoryInterface repository) throws ServiceException;
+    public List<PartyGroup> filterSearchResults(List<Object[]> results) throws ServiceException;
 
     /**
      * Gets the <code>Set</code> of <code>Class</code> to query.

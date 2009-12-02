@@ -19,7 +19,6 @@ package org.opentaps.domain.search;
 import java.util.List;
 
 import org.opentaps.domain.DomainService;
-import org.opentaps.foundation.service.Service;
 
 /**
  * Base class for the Search Service implementations.

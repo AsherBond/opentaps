@@ -47,7 +47,7 @@ public interface ContactSearchServiceInterface extends SearchServiceInterface {
      * @return the list of <code>Contact</code> found from the results
      * @throws ServiceException if an error occurs
      */
-    public List<Contact> filterSearchResults(List<Object[]> results, PartyRepositoryInterface repository) throws ServiceException;
+    public List<Contact> filterSearchResults(List<Object[]> results) throws ServiceException;
 
     /**
      * Gets the <code>Set</code> of <code>Class</code> to query.

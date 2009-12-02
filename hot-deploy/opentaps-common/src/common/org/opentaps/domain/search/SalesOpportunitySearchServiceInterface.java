@@ -43,11 +43,10 @@ public interface SalesOpportunitySearchServiceInterface extends SearchServiceInt
     /**
      * Filters the results of the search service to get the list of matching <code>SalesOpportunity</code>.
      * @param results the list of results from the search service, it must be a list of <code>Object[]</code>, from the projection <code>{OBJECT_CLASS, ID}</code>
-     * @param repository a <code>OrderRepositoryInterface</code> instance
      * @return the list of <code>SalesOpportunity</code> found from the results
      * @throws ServiceException if an error occurs
      */
-    public List<SalesOpportunity> filterSearchResults(List<Object[]> results, OrderRepositoryInterface repository) throws ServiceException;
+    public List<SalesOpportunity> filterSearchResults(List<Object[]> results) throws ServiceException;
 
     /**
      * Gets the <code>Set</code> of <code>Class</code> to query.
