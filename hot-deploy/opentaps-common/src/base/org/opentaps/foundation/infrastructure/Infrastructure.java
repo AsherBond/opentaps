@@ -308,10 +308,14 @@ public class Infrastructure {
      */
     public void evictHibernateCache(SessionFactory sessionFactory, Class<?> persistentClass, Serializable id) {
         if (sessionFactory != null) {
-            if (id == null) {
-                sessionFactory.evict(persistentClass);
-            } else {
-                sessionFactory.evict(persistentClass, id);
+            ClassMetadata classMetadata = sessionFactory.getClassMetadata(persistentClass);
+            // ensure the persistentClass is an entity class
+            if (classMetadata != null) {
+                if (id == null) {
+                    sessionFactory.evict(persistentClass);
+                } else {
+                    sessionFactory.evict(persistentClass, id);
+                }
             }
         }
     }
