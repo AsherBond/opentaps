@@ -89,7 +89,7 @@ public class Entry extends BaseEntry {
 
     private void loadAssignContactToAccountWidget(RootPanel container) {
  
-        final LookupContactsWindow window = new LookupContactsWindow("Lookup Contacts", 200, 400, true, true);
+        final LookupContactsWindow window = new LookupContactsWindow(true, true);
         window.create();
 
         Hyperlink embedLink = new Hyperlink("Assign Contact", true, null);
@@ -100,7 +100,7 @@ public class Entry extends BaseEntry {
             public void onClick(ClickEvent event) {
                 window.show();
             }
-            
+
         });
 
         container.add(embedLink);

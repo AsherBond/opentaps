@@ -22,7 +22,6 @@ import com.google.gwt.i18n.client.Dictionary;
 import com.gwtext.client.data.SimpleStore;
 import com.gwtext.client.data.Store;
 import com.gwtext.client.widgets.form.ComboBox;
-import com.gwtext.client.widgets.form.FormPanel;
 import com.gwtext.client.widgets.form.Hidden;
 import com.gwtext.client.widgets.form.TextField;
 import com.gwtext.client.widgets.layout.AnchorLayoutData;
@@ -75,8 +74,11 @@ public class ProductReReservationForm extends PopupFormWindow {
         this.quantity = quantity;
     }
 
+    /* (non-Javadoc)
+     * @see org.opentaps.gwt.common.client.form.PopupFormWindow#initFields(org.opentaps.gwt.common.client.form.base.BaseFormPanel)
+     */
     @Override
-    protected void initFields(FormPanel container) {
+    protected void initFields(BaseFormPanel container) {
         // creates store for drop-down where user can select target facility
         Store facilityStore = new SimpleStore(new String[] {"facilityId", "facilityName"}, facilityList);
         facilityStore.load();
@@ -91,20 +93,20 @@ public class ProductReReservationForm extends PopupFormWindow {
         cb.setMode(ComboBox.LOCAL);
         cb.setTriggerAction(ComboBox.ALL);
         cb.setSelectOnFocus(true);
-        ((BaseFormPanel) container).addField(cb, new AnchorLayoutData("100%"));
+        container.addField(cb, new AnchorLayoutData("100%"));
 
         // add field for product quantity
         TextField quantityCtrl = new TextField(UtilUi.MSG.orderQuantity(), "quantity");
         if (quantity != null) {
             quantityCtrl.setValue(quantity.toString());
         }
-        ((BaseFormPanel) container).addField(quantityCtrl);
+        container.addField(quantityCtrl);
 
         // store order and its item ids in hidden fields
-        ((BaseFormPanel) container).addField(new Hidden("orderId", orderId));
-        ((BaseFormPanel) container).addField(new Hidden("orderItemSeqId", orderItemSeqId));
-        ((BaseFormPanel) container).addField(new Hidden("inventoryItemId", inventoryItemId));
-        ((BaseFormPanel) container).addField(new Hidden("shipGroupSeqId", shipGroupSeqId));
+        container.addField(new Hidden("orderId", orderId));
+        container.addField(new Hidden("orderItemSeqId", orderItemSeqId));
+        container.addField(new Hidden("inventoryItemId", inventoryItemId));
+        container.addField(new Hidden("shipGroupSeqId", shipGroupSeqId));
     }
 
     /* (non-Javadoc)
@@ -113,9 +115,9 @@ public class ProductReReservationForm extends PopupFormWindow {
     @Override
     protected void initComponent() {
 
-        defaultInnerPanel.setLabelWidth(LABEL_WIDTH);
+        innerPanel.setLabelWidth(LABEL_WIDTH);
         // form action
-        defaultInnerPanel.setUrl("gwtReReserveProduct");
+        innerPanel.setUrl("gwtReReserveProduct");
 
         super.initComponent();
     }
