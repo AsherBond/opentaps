@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.search.domain;
+package org.opentaps.search.party;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,27 +28,28 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.entities.PartyRole;
 import org.opentaps.base.entities.PartyRolePk;
-import org.opentaps.domain.party.Contact;
+import org.opentaps.domain.party.Lead;
 import org.opentaps.domain.party.PartyRepositoryInterface;
-import org.opentaps.domain.search.ContactSearchServiceInterface;
+import org.opentaps.domain.search.LeadSearchServiceInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
+import org.opentaps.search.SearchService;
 
 /**
- * The implementation of the Contact search service.
+ * The implementation of the Lead search service.
  */
-public class ContactSearchService extends SearchService implements ContactSearchServiceInterface {
+public class LeadSearchService extends SearchService implements LeadSearchServiceInterface {
 
-    private List<Contact> contacts = null;
+    private List<Lead> leads = null;
 
     /** {@inheritDoc} */
-    public List<Contact> getContacts() {
-        return contacts;
+    public List<Lead> getLeads() {
+        return leads;
     }
 
     /** {@inheritDoc} */
     public void makeQuery(StringBuilder sb) {
-        PartySearch.makePersonQuery(sb, RoleTypeConstants.CONTACT);
+        PartySearch.makePersonQuery(sb, RoleTypeConstants.PROSPECT);
     }
 
     /** {@inheritDoc} */
@@ -62,16 +63,16 @@ public class ContactSearchService extends SearchService implements ContactSearch
         StringBuilder sb = new StringBuilder();
         makeQuery(sb);
         searchInEntities(getClassesToQuery(), sb.toString());
-        contacts = filterSearchResults(getResults());
+        leads = filterSearchResults(getResults());
     }
 
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
-    public List<Contact> filterSearchResults(List<Object[]> results) throws ServiceException {
+    public List<Lead> filterSearchResults(List<Object[]> results) throws ServiceException {
         try {
             PartyRepositoryInterface partyRepository = getDomainsDirectory().getPartyDomain().getPartyRepository();
             // get the entities from the search results
-            Set<String> contactIds = new HashSet<String>();
+            Set<String> leadIds = new HashSet<String>();
             int classIndex = getQueryProjectedFieldIndex(FullTextQuery.OBJECT_CLASS);
             int idIndex = getQueryProjectedFieldIndex(FullTextQuery.ID);
             if (classIndex < 0 || idIndex < 0) {
@@ -82,21 +83,21 @@ public class ContactSearchService extends SearchService implements ContactSearch
                 Class c = (Class) o[classIndex];
                 if (c.equals(PartyRole.class)) {
                     PartyRolePk pk = (PartyRolePk) o[idIndex];
-                    if (RoleTypeConstants.CONTACT.equals(pk.getRoleTypeId())) {
-                        contactIds.add(pk.getPartyId());
+                    if (RoleTypeConstants.PROSPECT.equals(pk.getRoleTypeId())) {
+                        leadIds.add(pk.getPartyId());
                     }
                 }
             }
 
-            if (!contactIds.isEmpty()) {
-                return partyRepository.findList(Contact.class, EntityCondition.makeCondition(Contact.Fields.partyId.name(), EntityOperator.IN, contactIds));
+            if (!leadIds.isEmpty()) {
+                return partyRepository.findList(Lead.class, EntityCondition.makeCondition(Lead.Fields.partyId.name(), EntityOperator.IN, leadIds));
             } else {
-                return new ArrayList<Contact>();
+                return new ArrayList<Lead>();
             }
         } catch (RepositoryException e) {
             throw new ServiceException(e);
-        }  catch (GeneralException ex) {
+        } catch (GeneralException ex) {
             throw new ServiceException(ex);
-        } 
+        }
     }
 }

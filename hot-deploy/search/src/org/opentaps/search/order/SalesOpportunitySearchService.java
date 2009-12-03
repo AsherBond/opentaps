@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.search.domain;
+package org.opentaps.search.order;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +32,8 @@ import org.opentaps.domain.search.SalesOpportunitySearchServiceInterface;
 import org.opentaps.domain.search.SearchRepositoryInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
+import org.opentaps.search.SearchService;
+import org.opentaps.search.party.PartySearch;
 
 /**
  * The implementation of the Sales Opportunity search service.

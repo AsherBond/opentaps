@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.search.domain;
+package org.opentaps.search;
 
 import java.io.Serializable;
 import java.util.Enumeration;

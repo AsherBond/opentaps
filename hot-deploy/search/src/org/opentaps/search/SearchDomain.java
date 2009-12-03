@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.search.domain;
+package org.opentaps.search;
 
 import org.opentaps.domain.search.AccountSearchServiceInterface;
 import org.opentaps.domain.search.ContactSearchServiceInterface;
@@ -27,6 +27,12 @@ import org.opentaps.domain.search.SupplierSearchServiceInterface;
 import org.opentaps.foundation.domain.Domain;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
+import org.opentaps.search.order.SalesOpportunitySearchService;
+import org.opentaps.search.order.SalesOrderSearchRepository;
+import org.opentaps.search.party.AccountSearchService;
+import org.opentaps.search.party.ContactSearchService;
+import org.opentaps.search.party.LeadSearchService;
+import org.opentaps.search.party.SupplierSearchService;
 /**
  * This is an hibernate implementation of the Search domain.
  */

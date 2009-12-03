@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.search.domain;
+package org.opentaps.search.party;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,6 +33,7 @@ import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.domain.search.AccountSearchServiceInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
+import org.opentaps.search.SearchService;
 
 /**
  * The implementation of the Account search service.
