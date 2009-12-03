@@ -38,6 +38,7 @@ public class ScreenletFormPanel extends BaseFormPanel {
         setTabCls(UtilUi.SCREENLET_HEADER_STYLE);
         setBodyStyle(UtilUi.SCREENLET_BODY_STYLE);
         setCollapsible(true);
+        setTitleCollapse(true);
     }
 
     /**
