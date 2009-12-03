@@ -246,6 +246,33 @@ public class ServiceErrorReader {
      * @return <code>true</code> if an error was present
      */
     public static boolean showErrorMessageIfAny(int httpStatus, String responseText, String url) {
+        String err = getErrorMessageIfAny(httpStatus, responseText, url);
+        if (err != null) {
+            UtilUi.errorMessage(err);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Parse an HTTP response and check for errors.
+     * @param response a <code>Response</code> value
+     * @param url the requested URL, used to specify it in the error message
+     * @return <code>true</code> if an error was present
+     */
+    public static String getErrorMessageIfAny(Response response, String url) {
+        return getErrorMessageIfAny(response.getStatusCode(), response.getText(), url);
+
+    }
+
+    /**
+     * Parse an HTTP response and check for errors.
+     * @param httpStatus an <code>int</code> value
+     * @param responseText a <code>String</code> value
+     * @param url the requested URL, used to specify it in the error message
+     * @return <code>true</code> if an error was present
+     */
+    public static String getErrorMessageIfAny(int httpStatus, String responseText, String url) {
         final ServiceErrorReader errorReader = new ServiceErrorReader();
         // HTTP status code 2XX represent success responses from the server
         // note that normal error messages are returned with 2XX as well as most Ofbiz framework error responses
@@ -253,17 +280,15 @@ public class ServiceErrorReader {
             errorReader.readResponse(responseText);
             if (errorReader.isError()) {
                 if (errorReader.isEmptyResponse()) {
-                    UtilUi.errorMessage(UtilUi.MSG.serverEmptyResponseError(url));
+                    return UtilUi.MSG.serverEmptyResponseError(url);
                 } else {
-                    UtilUi.errorMessage(errorReader.getAsString());
+                    return errorReader.getAsString();
                 }
-                return true;
             } else {
-                return false;
+                return null;
             }
         } else {
-            UtilUi.errorMessage(UtilUi.MSG.serverHttpError(String.valueOf(httpStatus), url));
-            return true;
+            return UtilUi.MSG.serverHttpError(String.valueOf(httpStatus), url);
         }
     }
 
