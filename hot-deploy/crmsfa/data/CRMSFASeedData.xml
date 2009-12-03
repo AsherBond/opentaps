@@ -150,6 +150,15 @@
     <ViewPrefType viewPrefTypeId="MY_OR_TEAM_ORDERS" application="crmsfa" applicationSection="orders" description="View my orders" />
     <ViewPrefType viewPrefTypeId="MY_OR_TEAM_CALENDAR" application="crmsfa" applicationSection="myHome" description="View my events or my team's events" />
 
+    <EnumerationType description="GWT Widget ToggleView Preferences" enumTypeId="GWT_TGL_PREFERENCE" hasTable="N" parentTypeId="VIEW_PREFERENCE"/>
+    <Enumeration description="Expanded" enumCode="EXPANDED" enumId="GWT_EXPANDED" sequenceId="01" enumTypeId="GWT_TGL_PREFERENCE"/>
+    <Enumeration description="Collapsed" enumCode="COLLAPSED" enumId="GWT_COLLAPSED" sequenceId="02" enumTypeId="GWT_TGL_PREFERENCE"/>
+    <ViewPrefType viewPrefTypeId="GWT_QK_ACCOUNT" application="crmsfa" applicationSection="gwt" description="Toggle state of quick create account widget" />
+    <ViewPrefType viewPrefTypeId="GWT_QK_CONTACT" application="crmsfa" applicationSection="gwt" description="Toggle state of quick create contact widget" />
+    <ViewPrefType viewPrefTypeId="GWT_QK_LEAD" application="crmsfa" applicationSection="gwt" description="Toggle state of quick create lead widget" />
+    <ViewPrefType viewPrefTypeId="GWT_QK_CASE" application="crmsfa" applicationSection="gwt" description="Toggle state of quick create case widget" />
+    <ViewPrefType viewPrefTypeId="GWT_QK_OPPORTUNITY" application="crmsfa" applicationSection="gwt" description="Toggle state of quick create opportunity widget" />
+
     <EnumerationType description="Priority level" enumTypeId="PRIORITY_LEV" hasTable="N"/>
     <Enumeration description="Critical (1)" enumCode="1" enumId="PRIORITY_LEV1" sequenceId="01" enumTypeId="PRIORITY_LEV"/>
     <Enumeration description="High (3)" enumCode="3" enumId="PRIORITY_LEV3" sequenceId="03" enumTypeId="PRIORITY_LEV"/>
