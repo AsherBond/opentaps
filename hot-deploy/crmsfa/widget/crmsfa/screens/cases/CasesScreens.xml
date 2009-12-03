@@ -66,7 +66,7 @@
                     <html><html-template location="component://crmsfa/webapp/crmsfa/cases/screenlets/shortcuts.ftl"/></html>
                 </platform-specific>
                 <platform-specific>
-                    <html><html-template location="component://crmsfa/webapp/crmsfa/cases/screenlets/quickCreateCase.ftl"/></html>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/common/screenlets/quickCreateForms.ftl"/></html>
                 </platform-specific>
             </widgets>
         </section>

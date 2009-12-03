@@ -36,7 +36,7 @@ public class QuickNewCaseForm extends ScreenletFormPanel {
      * Constructor.
      */
     public QuickNewCaseForm() {
-        this(INPUT_LENGTH, UtilUi.MSG.crmNewCase());
+        this(INPUT_LENGTH, UtilUi.MSG.crmCreateCase());
     }
 
     public QuickNewCaseForm(Integer length, String title) {

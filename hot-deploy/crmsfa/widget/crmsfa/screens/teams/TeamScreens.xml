@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+\<?xml version="1.0" encoding="UTF-8"?>
 <!--
  * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
  * 
@@ -23,6 +23,7 @@
    <screen name="main-section-decorator">
         <section>
             <actions>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.crmsfa" global="true"/>
                 <set field="sectionName" value="teams" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/teams/TeamScreens.xml#leftBarScreen"/>
@@ -41,6 +42,9 @@
                 </platform-specific>
                 <platform-specific>
                     <html><html-template location="component://crmsfa/webapp/crmsfa/teams/screenlets/quickCreateTeam.ftl"/></html>
+                </platform-specific>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/common/screenlets/quickCreateForms.ftl"/></html>
                 </platform-specific>
             </widgets>
         </section>

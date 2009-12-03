@@ -76,6 +76,9 @@ under the License.
                 <platform-specific>
                     <html><html-template location="component://crmsfa/webapp/crmsfa/orders/screenlets/quickCreateOrder.ftl"/></html>
                 </platform-specific>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/common/screenlets/quickCreateForms.ftl"/></html>
+                </platform-specific>
             </widgets>
         </section>
     </screen>

@@ -70,7 +70,7 @@
                     <html><html-template location="component://crmsfa/webapp/crmsfa/contacts/screenlets/contactShortcuts.ftl"/></html>
                 </platform-specific>
                 <platform-specific>
-                    <html><html-template location="component://crmsfa/webapp/crmsfa/contacts/screenlets/quickCreateContact.ftl"/></html>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/common/screenlets/quickCreateForms.ftl"/></html>
                 </platform-specific>
                 <platform-specific>
                     <html><html-template location="component://crmsfa/webapp/crmsfa/common/quickFormLetter.ftl"/></html>

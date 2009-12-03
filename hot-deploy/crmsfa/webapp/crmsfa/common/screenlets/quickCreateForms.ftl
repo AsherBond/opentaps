@@ -17,4 +17,19 @@
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
-<@gwtWidget id="quickCreateForms"/>
+
+<#if (security.hasEntityPermission("CRMSFA_ACCOUNT", "_CREATE", session))>
+  <@gwtWidget id="quickNewAccount"/>
+</#if>
+<#if (security.hasEntityPermission("CRMSFA_CONTACT", "_CREATE", session))>
+  <@gwtWidget id="quickNewContact"/>
+</#if>
+<#if (security.hasEntityPermission("CRMSFA_CASE", "_CREATE", session))>
+  <@gwtWidget id="quickNewCase"/>
+</#if>
+<#if (security.hasEntityPermission("CRMSFA_LEAD", "_CREATE", session))>
+  <@gwtWidget id="quickNewLead"/>
+</#if>
+<#if (security.hasEntityPermission("CRMSFA_OPP", "_CREATE", session))>
+  <@gwtWidget id="quickNewOpportunity"/>
+</#if>

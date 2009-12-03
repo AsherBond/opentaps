@@ -49,6 +49,7 @@
     <screen name="main-section-decorator">
         <section>
             <actions>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.crmsfa" global="true"/>
                 <set field="sectionName" value="activities" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml#leftBarScreen"/>
@@ -67,6 +68,9 @@
             <widgets>
                 <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/screenlets/shortcuts.ftl"/></html></platform-specific>
                 <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/screenlets/activityAssoc.ftl"/></html></platform-specific>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/common/screenlets/quickCreateForms.ftl"/></html>
+                </platform-specific>
             </widgets>
         </section>
     </screen>

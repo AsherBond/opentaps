@@ -26,6 +26,7 @@
     <screen name="main-section-decorator">
         <section>
             <actions>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.crmsfa" global="true"/>
                 <set field="sectionName" value="quotes" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <set field="requiredPermission" value="CRMSFA_QUOTES"/>
@@ -41,6 +42,9 @@
     <screen name="leftBarScreen">
         <section>
             <widgets>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/common/screenlets/quickCreateForms.ftl"/></html>
+                </platform-specific>
             </widgets>
         </section>
     </screen>

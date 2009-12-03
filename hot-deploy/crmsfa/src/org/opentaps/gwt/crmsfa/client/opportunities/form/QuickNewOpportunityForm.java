@@ -42,7 +42,7 @@ public class QuickNewOpportunityForm extends ScreenletFormPanel {
      * Creates a new <code>QuickNewOpportunityForm</code> instance.
      */
     public QuickNewOpportunityForm() {
-        this(INPUT_LENGTH, UtilUi.MSG.crmNewOpportunity());
+        this(INPUT_LENGTH, UtilUi.MSG.crmCreateOpportunity());
     }
 
     public QuickNewOpportunityForm(Integer length, String title) {
