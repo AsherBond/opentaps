@@ -18,10 +18,10 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#if shoppingCart.size() == 0>
-  <#assign hideButtons = "style='visibility:hidden'" />
+  <#assign hideButtons = "style='display:none'" />
 </#if>
 <#if shoppingCart.size() == 0 || !hasParty>
-  <#assign hideFinalizeOrderButton = "style='visibility:hidden'" />
+  <#assign hideFinalizeOrderButton = "style='display:none'" />
 </#if>
 <#if hasParty>
   <#assign quoteLink = "<a id='quoteButton' class='subMenuButton' ${hideButtons?if_exists} href='createQuoteFromCart'>${uiLabelMap.CrmSaveAsQuote}</a>" />
@@ -34,24 +34,24 @@
 function notifyOrderItemsCount(n) {
   var button = document.getElementById('finalizeOrderButton');
   if (n > 0 && ${hasParty?string}) {
-    button.style.visibility = 'visible';
+    button.style.display = '';
   } else {
-    button.style.visibility = 'hidden';
+    button.style.display = 'none';
   }
   button = document.getElementById('quoteButton');
   if (button) {
     if (n > 0) {
-      button.style.visibility = 'visible';
+      button.style.display = '';
     } else {
-      button.style.visibility = 'hidden';
+      button.style.display = 'none';
     }
   }
   button = document.getElementById('newCustomerButton');
   if (button) {
     if (n > 0) {
-      button.style.visibility = 'visible';
+      button.style.display = '';
     } else {
-      button.style.visibility = 'hidden';
+      button.style.display = 'none';
     }
   }
 }
