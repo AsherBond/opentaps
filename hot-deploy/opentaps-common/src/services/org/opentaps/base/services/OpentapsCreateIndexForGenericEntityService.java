@@ -37,7 +37,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Auto generated base service entity opentaps.createIndexForGenericEntity.
  *
  * Engine: pojo
- * Location: org.opentaps.search.domain.IndexingService
+ * Location: org.opentaps.search.IndexingService
  * Invoke: createIndexForGenericEntity
  * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/search/servicedef/services_search.xml
  */
