@@ -21,7 +21,7 @@ hasDashViewPermissions = false;
 
 // Get permissions
 security = request.getAttribute("security");
-hasDashViewPermissions = security.hasEntityPermission("CRMSFA_DASH", "_VIEW", session);
+hasDashViewPermissions = security.hasEntityPermission("CRMSFA_RPT", "_VIEW", session);
 context.put("hasDashViewPermissions", hasDashViewPermissions);
 
 if (!hasDashViewPermissions) return;

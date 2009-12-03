@@ -111,27 +111,6 @@
         </section>
     </screen>
 
-    <screen name="viewDashboard">
-        <section>
-            <actions>
-                <set field="pageTitleLabel" value="CrmDashboard"/>  
-                <set field="sectionHeaderUiLabel" value="CrmDashboard"/>
-                <set field="currentPage" value="viewDashboard"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/myhome/dashboard.bsh"/>
-            </actions>
-            <widgets>
-                <decorator-screen name="main-section-decorator">
-                    <decorator-section name="section-body">
-                        <container style="subSectionBlock">
-                            <!-- dashboard -->
-                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/myhome/dashboard.ftl"/></html></platform-specific>
-                        </container>
-                    </decorator-section>
-                </decorator-screen>
-            </widgets>
-        </section>
-    </screen>
-
     <!-- include this screen to use the calendars -->
     <screen name="Calendar">
         <section>

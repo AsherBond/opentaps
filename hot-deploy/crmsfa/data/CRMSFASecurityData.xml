@@ -109,8 +109,6 @@
 
     <SecurityPermission description="Access to the CRM/SFA Application" permissionId="CRMSFA_VIEW"/>
     
-    <SecurityPermission description="Access to the dashboard Application." permissionId="CRMSFA_DASH_VIEW"/>
-    
     <SecurityPermission description="View operations in the  [Reports] tab and all of the reports inside it." permissionId="CRMSFA_RPT_VIEW"/>    
     
 
@@ -229,8 +227,6 @@
     <!-- Required to update/delete shopping list item -->
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_UPDATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_DELETE"/>
-    <!-- Required to see the dashboard application -->
-    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_DASH_VIEW"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_RPT_VIEW"/>
 
     <!-- A sales rep has the ability to view and update accounts, contacts, and leads but does not have the ability

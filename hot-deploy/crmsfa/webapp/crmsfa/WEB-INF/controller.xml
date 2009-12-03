@@ -2938,7 +2938,6 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
 
     <!-- myHome screens -->
     <view-map name="myHome" type="screen" page="component://crmsfa/widget/crmsfa/screens/myhome/MyHomeScreens.xml#myHome"/>
-    <view-map name="viewDashboard" type="screen" page="component://crmsfa/widget/crmsfa/screens/myhome/MyHomeScreens.xml#viewDashboard"/>
 
     <!-- accounts screens -->
     <view-map name="myAccounts" type="screen" page="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml#myAccounts"/>
@@ -3123,6 +3122,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
 
     <!-- reports screens -->
     <view-map name="manageReports" type="screen" page="component://crmsfa/widget/crmsfa/screens/reports/ReportScreens.xml#manageReports"/>
+    <view-map name="viewDashboard" type="screen" page="component://crmsfa/widget/crmsfa/screens/reports/ReportScreens.xml#viewDashboard"/>
 
     <!-- lookup screens -->
     <view-map name="LookupClients" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/LookupScreens.xml#LookupClients"/>

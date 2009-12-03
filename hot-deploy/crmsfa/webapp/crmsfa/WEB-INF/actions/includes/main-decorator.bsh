@@ -139,7 +139,7 @@ sections.add(UtilMisc.toMap("uiLabel", "CrmForecasts", "uri", "/forecastsMain", 
 sections.add(UtilMisc.toMap("uiLabel", "CrmMarketing", "uri", "/marketingMain", "sectionName", "marketing", "hasPermission", marketingView));
 sections.add(UtilMisc.toMap("uiLabel", "OpentapsPartners", "uri", "/partnersMain", "sectionName", "partners", "hasPermission", partnersView));
 sections.add(UtilMisc.toMap("uiLabel", "CrmTeams", "uri", "/teamsMain", "sectionName", "teams", "hasPermission", teamsView));
-sections.add(UtilMisc.toMap("uiLabel", "OpentapsReports", "uri", "/manageReports", "sectionName", "reports", "hasPermission", reportsView));
+sections.add(UtilMisc.toMap("uiLabel", "OpentapsReports", "uri", "/viewDashboard", "sectionName", "reports", "hasPermission", reportsView));
 
 // show the ofbiz tab last if so desired
 showOfbizTab = UtilConfig.getPropertyBoolean("crmsfa", "crmsfa.tab.ofbiz.show", false);

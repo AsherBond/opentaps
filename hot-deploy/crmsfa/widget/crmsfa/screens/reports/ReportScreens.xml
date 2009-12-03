@@ -27,12 +27,25 @@
         <section>
             <actions>
                 <set field="sectionName" value="reports" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/reports/ReportScreens.xml#leftBarScreen"/>
             </actions>
             <widgets>
                 <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
             </widgets>
         </section>
     </screen>
+
+    <screen name="leftBarScreen">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/reports/screenlets/shortcuts.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
 
     <screen name="manageReports">
         <section>
@@ -52,5 +65,25 @@
             </widgets>
         </section>
     </screen>
- 
+
+    <screen name="viewDashboard">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmDashboard"/>  
+                <set field="sectionHeaderUiLabel" value="CrmDashboard"/>
+                <set field="currentPage" value="viewDashboard"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/reports/dashboard.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <!-- dashboard -->
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/reports/dashboard.ftl"/></html></platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen> 
 </screens>

@@ -26,9 +26,6 @@
     <div class="screenlet-header"><div class="boxhead">${uiLabelMap.CrmShortcuts}</div></div>
     <div class="screenlet-body">
       <ul class="shortcuts">
-        <#if (security.hasEntityPermission("CRMSFA_DASH", "_VIEW", session))>
-        <li><a href="<@ofbizUrl>viewDashboard</@ofbizUrl>">${uiLabelMap.CrmDashboard}</a></li>
-        </#if>
         <li><a href="<@ofbizUrl>myHomeMain</@ofbizUrl>">${uiLabelMap.CrmMyCalendar}</a></li>
         <#if (security.hasEntityPermission("CRMSFA_LEAD", "_CREATE", session))>
         <li><a href="<@ofbizUrl>createLeadForm</@ofbizUrl>">${uiLabelMap.CrmCreateLead}</a></li>
