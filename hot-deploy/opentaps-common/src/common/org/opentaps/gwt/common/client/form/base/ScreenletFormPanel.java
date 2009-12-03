@@ -17,14 +17,24 @@
 
 package org.opentaps.gwt.common.client.form.base;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtext.client.core.Position;
-
+import com.gwtext.client.widgets.Panel;
+import com.gwtext.client.widgets.event.PanelListenerAdapter;
 import org.opentaps.gwt.common.client.UtilUi;
+import org.opentaps.gwt.common.client.services.ViewPreferenceService;
 
 /**
  * Provides utility methods to build a <code>FormPanel</code> to be presented as a screenlet.
  */
 public class ScreenletFormPanel extends BaseFormPanel {
+
+    private static final String MODULE = ScreenletFormPanel.class.getName();
+
+    private static final String EXPANDED_STATE = "GWT_EXPANDED";
+    private static final String COLLAPSED_STATE = "GWT_COLLAPSED";
+
+    private String lastSyncedState = null;
 
     /**
      * Constructor giving the <code>FormPanel</code> label position.
@@ -39,6 +49,40 @@ public class ScreenletFormPanel extends BaseFormPanel {
         setBodyStyle(UtilUi.SCREENLET_BODY_STYLE);
         setCollapsible(true);
         setTitleCollapse(true);
+
+        UtilUi.logInfo("has pref type id?", MODULE, "before ViewPreferenceService::get");
+        if (getPreferenceTypeId() != null) {
+            UtilUi.logInfo("has pref type id: " + getPreferenceTypeId(), MODULE, "before ViewPreferenceService::get");
+            setCollapsed(true);
+            ViewPreferenceService.get(getPreferenceTypeId(), new AsyncCallback<String>() {
+                    public void onSuccess(String result) {
+                        UtilUi.logInfo("got result: " + result, MODULE, "ViewPreferenceService::get");
+                        if (EXPANDED_STATE.equals(result)) {
+                            UtilUi.logInfo("expanding...", MODULE, "ViewPreferenceService::get");
+                            lastSyncedState = result;
+                            expand();
+                        } else {
+                            lastSyncedState = COLLAPSED_STATE;
+                            collapse();
+                        }
+                        UtilUi.logInfo("lastSyncedState = " + lastSyncedState, MODULE, "ViewPreferenceService::get");
+                    }
+
+                    // assume collapsed
+                    public void onFailure(Throwable caught) {
+                        UtilUi.logError(caught.toString(), MODULE, "ViewPreferenceService::onFailure");
+                    }
+                });
+
+            addListener(new PanelListenerAdapter() {
+                    @Override public void onCollapse(Panel panel) {
+                        saveState(COLLAPSED_STATE);
+                    }
+                    @Override public void onExpand(Panel panel) {
+                        saveState(EXPANDED_STATE);
+                    }
+                });
+        }
     }
 
     /**
@@ -47,5 +91,32 @@ public class ScreenletFormPanel extends BaseFormPanel {
      */
     public ScreenletFormPanel(final String title) {
         this(Position.RIGHT, title);
+    }
+
+    private void saveState(String state) {
+        if (lastSyncedState != null) {
+            final String newState = state;
+            UtilUi.logInfo("setting new state : " + newState, MODULE, "ViewPreferenceService::set");
+            ViewPreferenceService.set(getPreferenceTypeId(), newState, new AsyncCallback<Void>() {
+                    public void onSuccess(Void v) {
+                        UtilUi.logInfo("finished successfully", MODULE, "ViewPreferenceService::set");
+                        lastSyncedState = newState;
+                    }
+
+                    public void onFailure(Throwable caught) {
+                        UtilUi.logError(caught.toString(), MODULE, "ViewPreferenceService::onFailure");
+                    }
+                });
+        }
+    }
+
+
+    /**
+     * Gets the View preference type for this screenelt, used for synchronizing the toggle state of the screenlet if not <code>null.</code>
+     * Reimplement to return non <code>null</code> values.
+     * @return the ViewPreference viewPrefTypeId
+     */
+    public String getPreferenceTypeId() {
+        return null;
     }
 }

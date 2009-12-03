@@ -64,4 +64,8 @@ public class QuickNewCaseForm extends ScreenletFormPanel {
         addStandardSubmitButton(UtilUi.MSG.crmCreateCase());
     }
 
+    @Override public String getPreferenceTypeId() {
+        return "GWT_QK_CASE";
+    }
+
 }

@@ -66,4 +66,8 @@ public class QuickNewAccountForm extends ScreenletFormPanel {
         addStandardSubmitButton(UtilUi.MSG.createAccount());
     }
 
+    @Override public String getPreferenceTypeId() {
+        return "GWT_QK_ACCOUNT";
+    }
+
 }

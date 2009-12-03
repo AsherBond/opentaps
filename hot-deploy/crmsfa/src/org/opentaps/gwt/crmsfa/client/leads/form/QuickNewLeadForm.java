@@ -74,4 +74,8 @@ public class QuickNewLeadForm extends ScreenletFormPanel {
         addStandardSubmitButton(UtilUi.MSG.createLead());
     }
 
+    @Override public String getPreferenceTypeId() {
+        return "GWT_QK_LEAD";
+    }
+
 }

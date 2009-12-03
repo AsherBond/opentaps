@@ -35,7 +35,7 @@ public final class ViewPreferenceService extends Service {
     private static final JsonReader GET_READER;
     static {
         GET_READER = new JsonReader(new RecordDef(new FieldDef[]{new StringFieldDef(GET_FIELD)}));
-        GET_READER.setRoot(UtilLookup.JSON_ERROR_EXCEPTION);
+        GET_READER.setRoot(UtilLookup.JSON_SUCCESS_RESPONSE);
         GET_READER.setTotalProperty(UtilLookup.JSON_TOTAL);
     }
 

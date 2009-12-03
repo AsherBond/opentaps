@@ -78,4 +78,8 @@ public class QuickNewOpportunityForm extends ScreenletFormPanel {
         // add the button with ui label
         addStandardSubmitButton(UtilUi.MSG.commonCreate());
     }
+
+    @Override public String getPreferenceTypeId() {
+        return "GWT_QK_OPPORTUNITY";
+    }
 }

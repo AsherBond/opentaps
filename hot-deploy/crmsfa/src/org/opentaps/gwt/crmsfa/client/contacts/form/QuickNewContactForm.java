@@ -75,4 +75,8 @@ public class QuickNewContactForm extends ScreenletFormPanel {
         addStandardSubmitButton(UtilUi.MSG.createContact());
     }
 
+    @Override public String getPreferenceTypeId() {
+        return "GWT_QK_CONTACT";
+    }
+
 }

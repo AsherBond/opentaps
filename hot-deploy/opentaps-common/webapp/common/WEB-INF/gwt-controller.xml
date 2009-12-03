@@ -332,5 +332,19 @@
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>
+
+    <request-map uri="gwtGetViewPreference">
+        <security https="true" auth="true"/>
+        <event type="gwtservice" invoke="opentaps.getViewPreference"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <request-map uri="gwtSetViewPreference">
+        <security https="true" auth="true"/>
+        <event type="gwtservice" invoke="opentaps.setViewPreference"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
                   
 </site-conf>
