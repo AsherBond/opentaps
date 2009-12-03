@@ -31,6 +31,11 @@
         <auto-attributes mode="IN" include="pk" optional="false"/>
         <auto-attributes mode="IN" include="nonpk" optional="true"/>
     </service>
+    <service name="opentaps.getViewPreference" engine="java" default-entity-name="ViewPreference"
+        location="org.opentaps.common.party.PartyServices" invoke="getViewPreference" auth="true">
+        <attribute name="viewPrefTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="viewPrefValue" type="String" mode="OUT" optional="true"/>
+    </service>
     <service name="opentaps.setViewPreference" engine="java"
          location="org.opentaps.common.party.PartyServices" invoke="setViewPreference" auth="true">
          <description>

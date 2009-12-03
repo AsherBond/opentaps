@@ -70,6 +70,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.services.OpentapsGetViewPreferenceService;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
@@ -129,6 +130,34 @@ public final class PartyServices {
             UtilMessage.createAndLogServiceError(e, MODULE);
         }
         return ServiceUtil.returnSuccess();
+    }
+
+    public static Map<String, Object> getViewPreference(DispatchContext dctx, Map<String, Object> context) {
+        GenericDelegator delegator = dctx.getDelegator();
+        Security security = dctx.getSecurity();
+        Locale locale = UtilCommon.getLocale(context);
+
+        OpentapsGetViewPreferenceService service = OpentapsGetViewPreferenceService.fromInput(context);
+        GenericValue userLogin = service.getInUserLogin();
+
+        try {
+            Map<String, Object> input = UtilMisc.<String, Object>toMap("userLoginId", userLogin.get("userLoginId"), "viewPrefTypeId", service.getInViewPrefTypeId());
+            GenericValue pref = delegator.findByPrimaryKey("ViewPreference", input);
+            if (pref != null) {
+                String prefString = pref.getString("viewPrefString");
+                if (UtilValidate.isNotEmpty(prefString)) {
+                    service.setOutViewPrefValue(prefString);
+                } else {
+                    service.setOutViewPrefValue(pref.getString("viewPrefEnumId"));
+                }
+            }
+        } catch (GenericEntityException e) {
+            UtilMessage.createAndLogServiceError(e, MODULE);
+        }
+
+        Map<String, Object> results = ServiceUtil.returnSuccess();
+        results.putAll(service.outputMap());
+        return results;
     }
 
     public static Map<String, Object> setViewPreference(DispatchContext dctx, Map<String, Object> context) {
