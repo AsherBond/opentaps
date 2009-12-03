@@ -42,7 +42,6 @@ import org.opentaps.gwt.common.client.form.OrderItemsEditable;
 import org.opentaps.gwt.common.client.listviews.ContactListView;
 import org.opentaps.gwt.common.client.listviews.OrderItemsEditableListView.OrderType;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
-import org.opentaps.gwt.crmsfa.client.form.QuickCreateForms;
 import org.opentaps.gwt.crmsfa.client.accounts.form.AccountContactsSubview;
 import org.opentaps.gwt.crmsfa.client.accounts.form.FindAccountsForm;
 import org.opentaps.gwt.crmsfa.client.accounts.form.QuickNewAccountForm;
@@ -90,8 +89,6 @@ public class Entry extends BaseEntry {
     private FindCasesForm findCasesForm;
     private FindCasesForm myCasesForm;
 
-    private QuickCreateForms quickCreateForms;
-
     private static final String MY_CONTACTS_ID = "myContacts";
     private static final String FIND_CONTACTS_ID = "findContacts";
     private static final String LOOKUP_CONTACTS_ID = "lookupContacts";
@@ -127,8 +124,6 @@ public class Entry extends BaseEntry {
     private static final String MY_CASES_ID = "myCases";
     private static final String FIND_CASES_ID = "findCases";
 
-    private static final String QUICK_CREATE_FORMS_ID = "quickCreateForms";
-
     /**
      * This is the entry point method.
      * It is loaded for page where the meta tag is found.
@@ -142,49 +137,6 @@ public class Entry extends BaseEntry {
         loadOrdersWidgets();
         loadPartnersWidgets();
         loadCasesWidgets();
-
-        if (RootPanel.get(QUICK_CREATE_FORMS_ID) != null) {
-            loadQuickCreateForms();
-            if (myAccountsForm != null) {
-                quickCreateForms.registerAccountList(myAccountsForm.getListView());
-            }
-            if (findAccountsForm != null) {
-                quickCreateForms.registerAccountList(findAccountsForm.getListView());
-            }
-
-            if (myContactsForm != null) {
-                quickCreateForms.registerContactList(myContactsForm.getListView());
-            }
-            if (findContactsForm != null) {
-                quickCreateForms.registerContactList(findContactsForm.getListView());
-            }
-
-            if (findLeadsForm != null) {
-                quickCreateForms.registerLeadList(findLeadsForm.getListView());
-            }
-            if (myLeadsForm != null) {
-                quickCreateForms.registerLeadList(myLeadsForm.getListView());
-            }
-
-            if (findOpportunitiesForm != null) {
-                quickCreateForms.registerOpportunityList(findOpportunitiesForm.getListView());
-            }
-            if (myOpportunitiesForm != null) {
-                quickCreateForms.registerOpportunityList(myOpportunitiesForm.getListView());
-            }
-
-            if (findCasesForm != null) {
-                quickCreateForms.registerCaseList(findCasesForm.getListView());
-            }
-            if (myCasesForm != null) {
-                quickCreateForms.registerCaseList(myCasesForm.getListView());
-            }
-        }
-    }
-
-    private void loadQuickCreateForms() {
-        quickCreateForms = new QuickCreateForms();
-        RootPanel.get(QUICK_CREATE_FORMS_ID).add(quickCreateForms);
     }
 
     private void loadAccountsWidgets() {
