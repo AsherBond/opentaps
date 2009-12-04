@@ -54,7 +54,8 @@
         <property name="build.dir" value="build"/>      
         <property name="gwt.deploy.dir" value="./webapp/commongwt"/>
         <property name="gwt.module.base" value="org.opentaps.gwt.common"/>
-        <property name="gwt.src.common" value="../opentaps-common/src/common/org/opentaps/gwt"/>
+        <property name="gwt.src.common" value="./src/common/org/opentaps/gwt"/>
+        <property name="gwt.src.constants" value="./src/constants/org/opentaps/base"/>
         <property name="gwt.src.base" value="./src/common/org/opentaps/gwt/common"/>
         <property name="gwt.module.list" value="voip"/>
         <!-- This parameter must point to your ofbiz/ directory or the libraries for the financials app would not be found.
@@ -101,6 +102,7 @@
             <fileset dir="${ofbiz.dir}/framework/base/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib" includes="gwt*.jar"/>
             <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib/gwt-dev" includes="gwt*.jar"/>
+            <pathelement location="${ofbiz.dir}/hot-deploy/opentaps-common/src/constants"/>
             <pathelement location="${ofbiz.dir}/hot-deploy/opentaps-common/src/common"/>
         </path>
     </target>
@@ -274,6 +276,7 @@
         <srcfiles dir="${gwt.src.common}" includes="**/public/**/*.*"/>
         <srcfiles dir="${gwt.src.common}" includes="**/client/**/*.*"/>
         <srcfiles dir="${gwt.src.common}" includes="**/*.gwt.xml"/>
+        <srcfiles dir="${gwt.src.constants}" includes="**/*.*"/>
       	<srcfiles dir="${gwt.src.base}/${module}" includes="**/public/**/*.*"/>
         <srcfiles dir="${gwt.src.base}/${module}" includes="**/client/**/*.*"/>
         <srcfiles dir="${gwt.src.base}/${module}" includes="**/*.gwt.xml"/>

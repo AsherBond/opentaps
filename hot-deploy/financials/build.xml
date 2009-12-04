@@ -76,6 +76,7 @@
         <path id="gwt.class.path">
             <fileset dir="${ofbiz.dir}/framework/base/lib" includes="*.jar"/>
             <pathelement location="${ofbiz.dir}/hot-deploy/financials/src"/>
+            <pathelement location="${ofbiz.dir}/hot-deploy/opentaps-common/src/constants"/>
             <pathelement location="${ofbiz.dir}/hot-deploy/opentaps-common/src/common"/>
             <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib" includes="gwt*.jar"/>
             <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib/gwt-dev" includes="gwt*.jar"/>

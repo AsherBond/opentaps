@@ -54,6 +54,7 @@
         <property name="gwt.deploy.dir" value="./webapp/purchasinggwt"/>
         <property name="gwt.module.base" value="org.opentaps.gwt.purchasing"/>
         <property name="gwt.src.common" value="../opentaps-common/src/common/org/opentaps/gwt"/>
+        <property name="gwt.src.constants" value="../opentaps-common/src/constants/org/opentaps/base"/>
         <property name="gwt.src.base" value="./src/org/opentaps/gwt/purchasing"/>
         <property name="gwt.module.list" value="suppliers,orders"/>
         <!-- This parameter must point to your ofbiz/ directory or the libraries for the financials app would not be found.
@@ -99,6 +100,7 @@
             <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib" includes="gwt*.jar"/>
             <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib/gwt-dev" includes="gwt*.jar"/>
             <pathelement location="${ofbiz.dir}/hot-deploy/purchasing/src"/>
+            <pathelement location="${ofbiz.dir}/hot-deploy/opentaps-common/src/constants"/>
             <pathelement location="${ofbiz.dir}/hot-deploy/opentaps-common/src/common"/>
         </path>
     </target>
