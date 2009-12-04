@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.search.order;
+package org.opentaps.common.domain.order;
 
 
 import java.sql.Timestamp;

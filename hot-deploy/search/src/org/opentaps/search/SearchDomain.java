@@ -16,6 +16,7 @@
  */
 package org.opentaps.search;
 
+import org.opentaps.common.domain.order.SalesOrderSearchRepository;
 import org.opentaps.domain.search.AccountSearchServiceInterface;
 import org.opentaps.domain.search.ContactSearchServiceInterface;
 import org.opentaps.domain.search.LeadSearchServiceInterface;
@@ -28,7 +29,6 @@ import org.opentaps.foundation.domain.Domain;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 import org.opentaps.search.order.SalesOpportunitySearchService;
-import org.opentaps.search.order.SalesOrderSearchRepository;
 import org.opentaps.search.party.AccountSearchService;
 import org.opentaps.search.party.ContactSearchService;
 import org.opentaps.search.party.LeadSearchService;
