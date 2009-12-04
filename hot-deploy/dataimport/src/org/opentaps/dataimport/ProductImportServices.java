@@ -546,6 +546,7 @@ public final class ProductImportServices {
         input.put("fromDate", now);
         input.put("averageCost", new Double(averageCost.doubleValue()));
         input.put("productId", productId);
+        input.put("productAverageCostId", delegator.getNextSeqId("ProductAverageCost"));
         GenericValue productAverageCost = delegator.makeValue("ProductAverageCost", input);
         toStore.add(productAverageCost);
 
