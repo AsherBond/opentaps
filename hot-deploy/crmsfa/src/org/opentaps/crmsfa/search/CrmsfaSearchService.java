@@ -23,13 +23,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.opentaps.base.entities.SalesOpportunity;
-import org.opentaps.domain.order.OrderDomainInterface;
-import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.Lead;
-import org.opentaps.domain.party.PartyDomainInterface;
-import org.opentaps.domain.party.PartyRepositoryInterface;
 import org.opentaps.domain.search.AccountSearchServiceInterface;
 import org.opentaps.domain.search.CommonSearchService;
 import org.opentaps.domain.search.ContactSearchServiceInterface;
@@ -108,7 +104,7 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
 
             searchRepository = searchDomain.getSearchRepository();
             // make query
-            Map output = searchRepository.searchInEntities(makeEntityClassList(), getQueryProjectedFields(), makeQuery(), getPageStart(), getPageSize());
+            Map<String, Object> output = searchRepository.searchInEntities(makeEntityClassList(), getQueryProjectedFields(), makeQuery(), getPageStart(), getPageSize());
             setResults((List<Object[]>) output.get(SearchRepositoryInterface.RETURN_RESULTS));
             setResultSize((Integer) output.get(SearchRepositoryInterface.RETURN_RESULT_SIZE));
             // note: the filterSearchResults methods expect getResults to return a list of Object[] where the first two fields are {OBJECT_CLASS, ID}

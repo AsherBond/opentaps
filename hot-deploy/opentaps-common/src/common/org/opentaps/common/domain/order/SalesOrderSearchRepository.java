@@ -338,7 +338,7 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
     public void setViewPref(String viewPref) {
         this.viewPref = viewPref;
     }
-    
+
     /** {@inheritDoc} */
     public void setFindAll(String findAll) {
         this.findAll = findAll;
@@ -353,6 +353,5 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
     public void setTimeZone(TimeZone timeZone) {
         this.timeZone = timeZone;
     }
-
 
 }

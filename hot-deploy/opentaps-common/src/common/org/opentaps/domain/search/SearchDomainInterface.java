@@ -51,7 +51,7 @@ public interface SearchDomainInterface extends DomainInterface {
      * @throws ServiceException if an error occurs
      */
     public SupplierSearchServiceInterface getSupplierSearchService() throws ServiceException;
-    
+
     /**
      * Returns the sales opportunity search service.
      * @return a <code>SalesOpportunitySearchServiceInterface</code> value
@@ -59,11 +59,11 @@ public interface SearchDomainInterface extends DomainInterface {
      */
     public SalesOpportunitySearchServiceInterface getSalesOpportunitySearchService() throws ServiceException;
 
- 
+
     /**
      * Returns the common search repository.
      * @return a <code>SearchRepositoryInterface</code> value
-     * @throws ServiceException if an error occurs
+     * @throws RepositoryException if an error occurs
      */
     public SearchRepositoryInterface getSearchRepository() throws RepositoryException;
 }
