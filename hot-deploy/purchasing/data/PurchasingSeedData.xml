@@ -40,4 +40,8 @@
         subtitle="This store is a hack.  Although purchase orders do not require a product store, the cart must have one"
         prorateShipping="N"/>
 
+    <!-- A new type for Purchase Order Delivery Address -->
+    <ContactMechPurposeType contactMechPurposeTypeId="PO_DELIV_ADDRESS" description="Purchase Order Delivery Address"/>
+    <ContactMechTypePurpose contactMechPurposeTypeId="PO_DELIV_ADDRESS" contactMechTypeId="POSTAL_ADDRESS"/>
+
 </entity-engine-xml>

@@ -185,7 +185,7 @@ under the License.
                     <#assign address = facilityContactMech.postalAddress>
                     <#assign contactMech = facilityContactMech.contactMech>
                     <option value="${contactMech.contactMechId}"  <#if contactMech.contactMechId==shippingContactMechId?default("_NA_")> selected</#if>>
-                      <#if facility?has_content>${facility.facilityName?if_exists}<#else>${uiLabelMap.PurchOrderSingleUseAddress}</#if> ${uiLabelMap.CommonAt} ${address.address1} - ${address.city?if_exists} ${address.countryGeoId?if_exists}
+                      <#if facility?has_content>${facility.facilityName?if_exists}<#else>${address.toName?if_exists}</#if> ${uiLabelMap.CommonAt} ${address.address1} - ${address.city?if_exists} ${address.countryGeoId?if_exists}
                     </option>
                   </#if>
                 </#list> 

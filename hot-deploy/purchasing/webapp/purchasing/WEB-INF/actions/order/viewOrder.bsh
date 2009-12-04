@@ -37,6 +37,7 @@ import org.opentaps.foundation.exception.FoundationException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.common.party.PartyContactHelper;
 
 
 domainsLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
@@ -116,5 +117,25 @@ if (UtilValidate.isNotEmpty(facilities)) {
            "facilityContactMechList", ContactMechWorker.getFacilityContactMechValueMaps(delegator, facility.get("facilityId"), false, null)
         ));
     }
-    context{"facilityMaps"} = facilityMaps;
 }
+// add Purchase Order Delivery Address to choices map
+if (UtilValidate.isNotEmpty(billFromPartyId)) {
+	         facilityContactMechValueMap = new HashMap();
+	         // PO_DELIV_ADDRESS postal address
+	         purchaseOrderDeliveryAddresses = PartyContactHelper.getContactMechsByPurpose(billFromPartyId, "POSTAL_ADDRESS", "PO_DELIV_ADDRESS", true, delegator);
+	         if ((purchaseOrderDeliveryAddresses != null) && (purchaseOrderDeliveryAddresses.size() > 0)) {
+	            contactMech = purchaseOrderDeliveryAddresses.get(0).getRelatedOne("ContactMech");
+	            facilityContactMechValueMap.put("contactMech", contactMech);
+	            if (contactMech != null) {
+	                facilityContactMechValueMap.put("postalAddress", contactMech.getRelatedOne("PostalAddress"));
+	            }
+	            facilityContactMechValueMaps = new LinkedList();
+	            facilityContactMechValueMaps.add(facilityContactMechValueMap);
+	            // add it to choices map
+	            facilityMaps.add(UtilMisc.toMap(
+	               "facility", null,
+	               "facilityContactMechList", facilityContactMechValueMaps
+	            ));
+	         } 
+}
+context{"facilityMaps"} = facilityMaps;

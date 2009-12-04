@@ -1,18 +1,17 @@
 /*
  * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
  *
- * Opentaps is free software: you can redistribute it and/or modify it
- * under the terms of the GNU Affero General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
  *
- * Opentaps is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ * Honest Public License for more details.
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
  */
 
 import org.ofbiz.base.util.*;
@@ -21,6 +20,10 @@ import org.opentaps.common.util.UtilCommon;
 import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.party.PartyContactHelper;
+
+
+delegator = request.getAttribute("delegator");
 
 // this routine will get all Facilities which have a FacilityRole of RECV_INV_FOR to the list of facilities for the internal
 // organization during purchase order creation
@@ -39,6 +42,32 @@ if ((UtilValidate.isNotEmpty(cart)) && ("PURCHASE_ORDER".equals(cart.getOrderTyp
     
     //add current selection
     usingSingleAddress = true;
+    // add Purchase Order Delivery Address to choices map
+	if (UtilValidate.isNotEmpty(cart.getOrderPartyId())) {
+	         facilityContactMechValueMap = new HashMap();
+	         // PO_DELIV_ADDRESS postal address
+	         purchaseOrderDeliveryAddresses = PartyContactHelper.getContactMechsByPurpose(cart.getOrderPartyId(), "POSTAL_ADDRESS", "PO_DELIV_ADDRESS", true, delegator);
+	         if ((purchaseOrderDeliveryAddresses != null) && (purchaseOrderDeliveryAddresses.size() > 0)) {
+	            contactMech = purchaseOrderDeliveryAddresses.get(0).getRelatedOne("ContactMech");
+	            facilityContactMechValueMap.put("contactMech", contactMech);
+	            if (contactMech != null) {
+	                facilityContactMechValueMap.put("postalAddress", contactMech.getRelatedOne("PostalAddress"));
+	            }
+	            facilityContactMechValueMaps = new LinkedList();
+	            facilityContactMechValueMaps.add(facilityContactMechValueMap);
+	            // add it to choices map
+	            facilityMaps.add(UtilMisc.toMap(
+	               "facility", null,
+	               "facilityContactMechList", facilityContactMechValueMaps
+	            ));
+	            
+	            if (cart.getShippingContactMechId() != null && contactMech.get("contactMechId").equals(cart.getShippingContactMechId())) {
+                	//check the shippingContactMechId of cart if equals in the contactMech, if found, then means not using single address
+                    usingSingleAddress = false;
+                }
+	         } 
+	
+	}
     if (UtilValidate.isNotEmpty(cart.getShippingContactMechId())) {
         for (int i=0; i < facilityMaps.size(); i++) {
          facilityMap = facilityMaps.get(i);
@@ -59,7 +88,6 @@ if ((UtilValidate.isNotEmpty(cart)) && ("PURCHASE_ORDER".equals(cart.getOrderTyp
         // then we need add it to choices map
         if (usingSingleAddress) {
          facilityContactMechValueMap = new HashMap();
-         delegator = request.getAttribute("delegator");
          // find ContactMech by cart.getShippingContactMechId()
          contactMechs = delegator.findByAnd("ContactMech", UtilMisc.toList(new EntityExpr("contactMechId", EntityOperator.EQUALS, cart.getShippingContactMechId())));
          if (contactMechs.size() > 0) {
@@ -80,6 +108,13 @@ if ((UtilValidate.isNotEmpty(cart)) && ("PURCHASE_ORDER".equals(cart.getOrderTyp
                "facilityContactMechList", facilityContactMechValueMaps
             ));
         }
+        
     }
+
+	if (cart.getShippingContactMechId() != null && usingSingleAddress) {
+	  context.put("usingSingleAddress", true);
+	} else {
+	  context.put("usingSingleAddress", false);
+	}
     context.put("facilityMaps", facilityMaps);
 }

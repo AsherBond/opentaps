@@ -205,7 +205,7 @@
                <#assign address = facilityContactMech.postalAddress>
                <#assign contactMech = facilityContactMech.contactMech>
                <option value="${contactMech.contactMechId}"  <#if contactMech.contactMechId==shipGroupContactMechId> selected</#if>>
-                 <#if facility?has_content>${facility.facilityName?if_exists}<#else>${uiLabelMap.PurchOrderSingleUseAddress}</#if> ${uiLabelMap.CommonAt} ${address.address1} - ${address.city?if_exists} ${address.countryGeoId?if_exists}
+                 <#if facility?has_content>${facility.facilityName?if_exists}<#else><#if usingSingleAddress>${uiLabelMap.PurchOrderSingleUseAddress}<#else>${address.toName?if_exists}</#if></#if> ${uiLabelMap.CommonAt} ${address.address1} - ${address.city?if_exists} ${address.countryGeoId?if_exists}
                </option>
              </#if>
            </#list> 
