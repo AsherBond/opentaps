@@ -290,16 +290,6 @@ public class LeadsServices {
                 }  
                 accountPartyId = (String) serviceResults.get("partyId");
 
-                // copy all the datasources over to the new account
-                List<GenericValue> dataSources = delegator.findByAnd("PartyDataSource", UtilMisc.toMap("partyId", leadPartyId));
-                for (GenericValue dataSource : dataSources) {
-                    serviceResults = dispatcher.runSync("crmsfa.addAccountDataSource", UtilMisc.toMap("partyId", accountPartyId, 
-                            "dataSourceId", dataSource.getString("dataSourceId"), "userLogin", userLogin));
-                    if (ServiceUtil.isError(serviceResults)) {
-                        return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorConvertLeadFail", locale, module);
-                    }
-                }
-
                 // copy all the marketing campaigns over to the new account
                 List<GenericValue> marketingCampaigns = delegator.findByAnd("MarketingCampaignRole", UtilMisc.toMap("partyId", leadPartyId, "roleTypeId", "PROSPECT"));
                 for (GenericValue marketingCampaign : marketingCampaigns) {
@@ -310,12 +300,35 @@ public class LeadsServices {
                     }
                 }
 
+                
                 // copy all the contact mechs to the account
                 serviceResults = dispatcher.runSync("copyPartyContactMechs", UtilMisc.toMap("partyIdFrom", leadPartyId, "partyIdTo", accountPartyId, "userLogin", userLogin));
                 if (ServiceUtil.isError(serviceResults)) {
                     return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorConvertLeadFail", locale, module);
                 }
+                
             }
+            // copy all the datasources over to account
+            List<GenericValue> dataSources = delegator.findByAnd("PartyDataSource", UtilMisc.toMap("partyId", leadPartyId));
+            for (GenericValue dataSource : dataSources) {
+                serviceResults = dispatcher.runSync("crmsfa.addAccountDataSource", UtilMisc.toMap("partyId", accountPartyId, 
+                        "dataSourceId", dataSource.getString("dataSourceId"), "userLogin", userLogin));
+                if (ServiceUtil.isError(serviceResults)) {
+                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorConvertLeadFail", locale, module);
+                }
+            }
+
+            // copy all the notes to account
+            List<GenericValue> notes = delegator.findByAnd("PartyNoteView", UtilMisc.toMap("targetPartyId", leadPartyId));
+            for (GenericValue note : notes) {
+                serviceResults = dispatcher.runSync("crmsfa.createAccountNote", UtilMisc.toMap("partyId", accountPartyId, 
+                        "note", note.getString("noteInfo"), "userLogin", userLogin));
+                if (ServiceUtil.isError(serviceResults)) {
+                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorConvertLeadFail", locale, module);
+                }
+            }
+            
+
 
             // erase (null out) the PartySupplementalData fields from the lead
             GenericValue leadSupplementalData = delegator.findByPrimaryKey("PartySupplementalData", UtilMisc.toMap("partyId", leadPartyId));
