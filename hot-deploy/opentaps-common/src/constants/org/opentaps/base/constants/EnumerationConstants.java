@@ -405,6 +405,13 @@ public final class EnumerationConstants {
         /** Visual Theme. */
         public static final String VISUAL_THEME = "VISUAL_THEME";
     }
+    public static final class GwtTglPreference {
+        private GwtTglPreference() { }
+        /** Collapsed. */
+        public static final String GWT_COLLAPSED = "GWT_COLLAPSED";
+        /** Expanded. */
+        public static final String GWT_EXPANDED = "GWT_EXPANDED";
+    }
     public static final class IidReason {
         private IidReason() { }
         /** Issued as part of BOM. */
