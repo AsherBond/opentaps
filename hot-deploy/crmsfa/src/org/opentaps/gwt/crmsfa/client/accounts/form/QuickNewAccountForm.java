@@ -20,6 +20,7 @@ package org.opentaps.gwt.crmsfa.client.accounts.form;
 import com.gwtext.client.core.Position;
 import com.gwtext.client.widgets.form.TextField;
 import com.gwtext.client.widgets.form.VType;
+import org.opentaps.base.constants.ViewPrefTypeConstants;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.base.ScreenletFormPanel;
 import org.opentaps.gwt.common.client.form.field.PhoneNumberField;
@@ -67,7 +68,7 @@ public class QuickNewAccountForm extends ScreenletFormPanel {
     }
 
     @Override public String getPreferenceTypeId() {
-        return "GWT_QK_ACCOUNT";
+        return ViewPrefTypeConstants.GWT_QK_ACCOUNT;
     }
 
 }

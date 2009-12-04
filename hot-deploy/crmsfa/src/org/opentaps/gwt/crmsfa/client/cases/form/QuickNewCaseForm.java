@@ -17,14 +17,14 @@
 
 package org.opentaps.gwt.crmsfa.client.cases.form;
 
+import com.gwtext.client.core.Position;
+import com.gwtext.client.widgets.form.Hidden;
+import com.gwtext.client.widgets.form.TextField;
+import org.opentaps.base.constants.ViewPrefTypeConstants;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.base.ScreenletFormPanel;
 import org.opentaps.gwt.common.client.suggest.AccountAutocomplete;
 import org.opentaps.gwt.crmsfa.client.cases.form.configuration.QuickNewCaseConfiguration;
-
-import com.gwtext.client.core.Position;
-import com.gwtext.client.widgets.form.TextField;
-import com.gwtext.client.widgets.form.Hidden;
 
 public class QuickNewCaseForm extends ScreenletFormPanel {
 
@@ -65,7 +65,7 @@ public class QuickNewCaseForm extends ScreenletFormPanel {
     }
 
     @Override public String getPreferenceTypeId() {
-        return "GWT_QK_CASE";
+        return ViewPrefTypeConstants.GWT_QK_CASE;
     }
 
 }

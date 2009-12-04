@@ -21,6 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.gwtext.client.core.Position;
 import com.gwtext.client.widgets.Panel;
 import com.gwtext.client.widgets.event.PanelListenerAdapter;
+import org.opentaps.base.constants.EnumerationConstants;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.services.ViewPreferenceService;
 
@@ -30,9 +31,6 @@ import org.opentaps.gwt.common.client.services.ViewPreferenceService;
 public class ScreenletFormPanel extends BaseFormPanel {
 
     private static final String MODULE = ScreenletFormPanel.class.getName();
-
-    private static final String EXPANDED_STATE = "GWT_EXPANDED";
-    private static final String COLLAPSED_STATE = "GWT_COLLAPSED";
 
     private String lastSyncedState = null;
 
@@ -57,12 +55,12 @@ public class ScreenletFormPanel extends BaseFormPanel {
             ViewPreferenceService.get(getPreferenceTypeId(), new AsyncCallback<String>() {
                     public void onSuccess(String result) {
                         UtilUi.logInfo("got result: " + result, MODULE, "ViewPreferenceService::get");
-                        if (EXPANDED_STATE.equals(result)) {
+                        if (EnumerationConstants.GwtTglPreference.GWT_EXPANDED.equals(result)) {
                             UtilUi.logInfo("expanding...", MODULE, "ViewPreferenceService::get");
                             lastSyncedState = result;
                             expand();
                         } else {
-                            lastSyncedState = COLLAPSED_STATE;
+                            lastSyncedState = EnumerationConstants.GwtTglPreference.GWT_COLLAPSED;
                             collapse();
                         }
                         UtilUi.logInfo("lastSyncedState = " + lastSyncedState, MODULE, "ViewPreferenceService::get");
@@ -76,10 +74,10 @@ public class ScreenletFormPanel extends BaseFormPanel {
 
             addListener(new PanelListenerAdapter() {
                     @Override public void onCollapse(Panel panel) {
-                        saveState(COLLAPSED_STATE);
+                        saveState(EnumerationConstants.GwtTglPreference.GWT_COLLAPSED);
                     }
                     @Override public void onExpand(Panel panel) {
-                        saveState(EXPANDED_STATE);
+                        saveState(EnumerationConstants.GwtTglPreference.GWT_EXPANDED);
                     }
                 });
         }

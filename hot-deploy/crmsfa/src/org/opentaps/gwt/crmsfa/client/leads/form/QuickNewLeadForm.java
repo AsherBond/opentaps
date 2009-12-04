@@ -20,6 +20,7 @@ package org.opentaps.gwt.crmsfa.client.leads.form;
 import com.gwtext.client.core.Position;
 import com.gwtext.client.widgets.form.TextField;
 import com.gwtext.client.widgets.form.VType;
+import org.opentaps.base.constants.ViewPrefTypeConstants;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.base.ScreenletFormPanel;
 import org.opentaps.gwt.common.client.form.field.PhoneNumberField;
@@ -75,7 +76,7 @@ public class QuickNewLeadForm extends ScreenletFormPanel {
     }
 
     @Override public String getPreferenceTypeId() {
-        return "GWT_QK_LEAD";
+        return ViewPrefTypeConstants.GWT_QK_LEAD;
     }
 
 }
