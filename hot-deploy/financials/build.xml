@@ -33,6 +33,7 @@
         <property name="gwt.deploy.dir" value="./webapp/financialsgwt"/>
         <property name="gwt.module.base" value="org.opentaps.gwt.financials"/>
         <property name="gwt.src.common" value="../opentaps-common/src/common/org/opentaps/gwt"/>
+        <property name="gwt.src.constants" value="../opentaps-common/src/constants/org/opentaps/base"/>
         <property name="gwt.src.base" value="./src/org/opentaps/gwt/financials"/>   
         <property name="gwt.module.list" value="invoices"/>
         <!-- This parameter must point to your ofbiz/ directory or the libraries for the financials app would not be found.

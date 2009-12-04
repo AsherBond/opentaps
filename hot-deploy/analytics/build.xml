@@ -35,6 +35,7 @@
         <property name="gwt.deploy.dir" value="./webapp/analyticsgwt"/>
         <property name="gwt.module.base" value="org.opentaps.analytics.gwt"/>
         <property name="gwt.src.common" value="../opentaps-common/src/common/org/opentaps/gwt"/>
+        <property name="gwt.src.constants" value="../opentaps-common/src/constants/org/opentaps/base"/>
         <property name="gwt.src.base" value="./src/org/opentaps/analytics/gwt"/>
         <property name="gwt.module.list" value="query"/>
         <property name="ofbiz.dir" value="../../"/> 
