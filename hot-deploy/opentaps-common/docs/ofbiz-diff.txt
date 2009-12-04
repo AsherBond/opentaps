@@ -102,6 +102,9 @@ The reason: some common entity labels (example CommonEntityLabels.xml DataSource
 framework/service/config/serviceengine.xml
 r12978 Added the POJOJavaEngine as a service engine. This is a needed part of opentaps.
 
+framework/service/src/org/ofbiz/service/ModelService.java
+r14149 Fix invalid WSDL (OFBIZ-3300)
+
 framework/webapp/dtd/site-conf.xsd
 framework/webapp/src/org/ofbiz/webapp/control/ConfigXMLReader.java
 framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
