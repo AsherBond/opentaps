@@ -101,7 +101,6 @@ public class SearchTests extends OpentapsTestCase {
      * Test that an account will show up in the list of search results for accounts, but not for other party types.
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testAccountSearch() throws Exception {
         //  create a new account
         Map<String, Object> callCtxt = new HashMap<String, Object>();
@@ -141,7 +140,6 @@ public class SearchTests extends OpentapsTestCase {
      * Test that a contact will show up in the list of search results for contacts, but not for other party types.
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testContactSearch() throws Exception {
         //  create a new contact
         Map<String, Object> callCtxt = new HashMap<String, Object>();
@@ -182,7 +180,6 @@ public class SearchTests extends OpentapsTestCase {
      * Test that a lead will show up in the list of search results for leads, but not for other party types.
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testLeadSearch() throws Exception {
         //  create a new lead
         Map<String, Object> callCtxt = new HashMap<String, Object>();
@@ -224,7 +221,6 @@ public class SearchTests extends OpentapsTestCase {
      * Test that a supplier  will show up in the list of search results for suppliers, but not for other party types.
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testSupplierSearch() throws Exception {
         //  create a new supplier
         Map<String, Object> callCtxt = new HashMap<String, Object>();
@@ -263,7 +259,6 @@ public class SearchTests extends OpentapsTestCase {
      * Tests that a sales opportunity can be found by name or description, but once it is canceled, it will no longer be found.
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testBasicSalesOpportunitySearch() throws Exception {
         //  create a sales opportunity with a name, description
         Map<String, Object> callCtxt = new HashMap<String, Object>();
@@ -321,7 +316,6 @@ public class SearchTests extends OpentapsTestCase {
      * Tests that sales opportunities search results will rank results based on weights configured in <code>entitysearch.properties</code>.
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testRankedSalesOpportunitySearch() throws Exception {
         //  create a sales opportunity #1 with a name, description
         Map<String, Object> callCtxt = new HashMap<String, Object>();
