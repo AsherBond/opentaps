@@ -29,7 +29,8 @@
   <form name="createAccountForm" method="post" action="<@ofbizUrl>createAccount</@ofbizUrl>" id="createAccountForm">
     <@inputHidden name="created" value="true" />
 <#else>
-  <form name="createAccountForm" method="post" action="<@ofbizUrl>updateAccount?partyId=${partySummary.partyId}</@ofbizUrl>" id="createAccountForm">
+  <form name="createAccountForm" method="post" action="<@ofbizUrl>updateAccount</@ofbizUrl>" id="createAccountForm">
+    <@inputHidden name="partyId" value=partySummary.partyId />
 </#if>
 
 <table class="fourColumnForm">
