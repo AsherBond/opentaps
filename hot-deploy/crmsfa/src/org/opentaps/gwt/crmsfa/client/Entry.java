@@ -400,28 +400,26 @@ public class Entry extends BaseEntry {
      * Designed to use on view account page.
      */
     private void loadAccountContacts() {
-        // setup contacts list view as subsection 
+        // setup contacts list view as subsection
         accountContacts = new AccountContactsSubview(getAccountPartyId(), false);
-        accountContacts.hideFilters();
-        accountContacts.getListView().setTitle(UtilUi.MSG.crmContacts());
-        // limit displayed contacts to the account 
-        ((ContactListView) accountContacts.getListView()).filterByAccount(getAccountPartyId());
-        accountContacts.getListView().applyFilters();
+        // limit displayed contacts to the account
+        accountContacts.filterByAccount(getAccountPartyId());
+        accountContacts.applyFilters();
 
         // add widget to page
-        RootPanel.get(CONTACTS_SUB_LISTVIEW).add(accountContacts.getMainPanel());
+        RootPanel.get(CONTACTS_SUB_LISTVIEW).add(accountContacts);
 
         // if required ID is found setup button [Assign Contact] in subsection title
-        RootPanel assignContactButton = null; 
-        if ((assignContactButton = RootPanel.get(ASSIGN_CONTACT_WIDGET)) != null) {
+        RootPanel assignContactButton = RootPanel.get(ASSIGN_CONTACT_WIDGET);
+        if (assignContactButton != null) {
             loadAssignContactToAccountWidget(assignContactButton,  accountContacts);
         }
 
     }
 
     /**
-     * This method setup a button into subsection title at right-hand position 
-     * and allow to assign a new contact using lookup contacts window.   
+     * This method setup a button into subsection title at right-hand position
+     * and allow to assign a new contact using lookup contacts window.
      * @param container <code>RootPanel</code> that is root container for button
      * @param accountContacts parent contacts list view.
      */
@@ -456,14 +454,14 @@ public class Entry extends BaseEntry {
                     public void onResponseReceived(Request request, Response response) {
                         // we don't expect anything from server, just reload the list of contacts
                         UtilUi.logInfo("onResponseReceived, response = " + response, "", "loadAssignContactToAccountWidget");
-                        accountContacts.getListView().getStore().reload();
-                        accountContacts.getListView().loadFirstPage();
-                        accountContacts.getListView().markGridNotBusy();
+                        accountContacts.getStore().reload();
+                        accountContacts.loadFirstPage();
+                        accountContacts.markGridNotBusy();
                     }
                 });
 
                 try {
-                    accountContacts.getListView().markGridBusy();
+                    accountContacts.markGridBusy();
                     UtilUi.logInfo("Run service crmsfa.assignContactToAccount", MODULE, "loadAssignContactToAccountWidget");
                     request.send();
                 } catch (RequestException re) {
@@ -471,13 +469,13 @@ public class Entry extends BaseEntry {
                     UtilUi.errorMessage(re.toString(), MODULE, "loadAssignContactToAccountWidget");
                 }
             }
-            
+
         });
 
         // create hyperlink as submenu button
         Hyperlink embedLink = new Hyperlink(UtilUi.MSG.crmAssignContact(), true, null);
         embedLink.setStyleName("subMenuButton");
- 
+
         // show lookup window on click
         embedLink.addClickHandler(new ClickHandler() {
 
