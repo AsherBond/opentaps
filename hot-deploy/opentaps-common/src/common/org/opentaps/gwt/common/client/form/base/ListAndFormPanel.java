@@ -117,6 +117,7 @@ public abstract class ListAndFormPanel<TFORM extends BaseFormPanel, TLIST extend
         final Panel spacingPanel = new Panel();
         spacingPanel.setBorder(false);
         spacingPanel.setHeight(size);
+        spacingPanel.setBodyStyle("background:inherit");
         return spacingPanel;
     }
 
