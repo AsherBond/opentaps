@@ -37,7 +37,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -1156,12 +1155,12 @@ public final class FinancialReports {
 
     /**
      * <p>Load data to TaxInvoiceItemFact entity.</p>
-     * 
+     *
      * <p>TODO: It would be great to rework this service and use Hibernate API. This might make
      * code more understandable and independent of underlying database.<br>
      * Make sense also rid of sales invoice item fact Kettle transformation and fill out both fact tables
      * in one procedure as they very similar.</p>
-     * 
+     *
      * @param dctx a <code>DispatchContext</code> instance
      * @param context the service context <code>Map</code>
      * @return the service response <code>Map</code>
@@ -1184,7 +1183,7 @@ public final class FinancialReports {
 
         try {
 
-            // find all invoice items (as join Invoice and InvoiceItem) from involved invoices 
+            // find all invoice items (as join Invoice and InvoiceItem) from involved invoices
             // and which aren't sales tax, promotion or shipping charges
             DynamicViewEntity salesInvoiceItems = new DynamicViewEntity();
             salesInvoiceItems.addMemberEntity("I", "Invoice");
@@ -1555,7 +1554,7 @@ public final class FinancialReports {
             return BigDecimal.ZERO;
         }
 
-        // find all return invoice items related to given invoice item looking through 
+        // find all return invoice items related to given invoice item looking through
         // OrderItemBilling -> ReturnItem -> ReturnItemBilling
         // add up product of quantity and amount of each item to calculate returns amount
         for (GenericValue orderBillingItem : orderItemBillings) {
@@ -1597,7 +1596,7 @@ public final class FinancialReports {
     private static BigDecimal getTotalPromoAmount(String invoiceId, String invoiceItemSeqId, GenericDelegator delegator) throws GenericEntityException {
         BigDecimal totalPromotions = BigDecimal.ZERO;
 
-        // find promotion/discount invoice items which have given invoice item as a parent 
+        // find promotion/discount invoice items which have given invoice item as a parent
         EntityCondition promoConditions = EntityCondition.makeCondition(EntityOperator.AND,
                 EntityCondition.makeCondition("parentInvoiceId", EntityOperator.EQUALS, invoiceId),
                 EntityCondition.makeCondition("parentInvoiceItemSeqId", EntityOperator.EQUALS, invoiceItemSeqId),
@@ -1634,7 +1633,7 @@ public final class FinancialReports {
             return notfound;
         }
 
-        // in order to get product store id for an invoice item we have to find OrderItemBilling 
+        // in order to get product store id for an invoice item we have to find OrderItemBilling
         // entity for the invoice item and further corresponding OrderHeader.productStoreId
         DynamicViewEntity dv = new DynamicViewEntity();
         dv.addMemberEntity("OIB", "OrderItemBilling");
@@ -1684,7 +1683,7 @@ public final class FinancialReports {
      * currency column affected.</p>
      *
      * @param session Hibernate session
-     * @throws GenericEntityException  
+     * @throws GenericEntityException
      */
     public static void loadInvoiceAdjustments(Session session, GenericDelegator delegator) throws GenericEntityException {
 
@@ -1724,12 +1723,12 @@ public final class FinancialReports {
 
             // lookup currency dimension
             Long currencyDimId = UtilEtl.lookupDimension("CurrencyDim", "currencyDimId", EntityCondition.makeCondition("uomId", currencyUomId), delegator);
- 
+
             // lookup organization dimension
             Long organizationDimId = UtilEtl.lookupDimension("OrganizationDim", "organizationDimId", EntityCondition.makeCondition("organizationPartyId", organizationPartyId), delegator);
 
             // creates rows for both fact tables
-            TaxInvoiceItemFact taxFact= new TaxInvoiceItemFact();
+            TaxInvoiceItemFact taxFact = new TaxInvoiceItemFact();
             taxFact.setDateDimId(dateDimId);
             taxFact.setStoreDimId(0L);
             taxFact.setTaxAuthorityDimId(0L);
@@ -1766,7 +1765,7 @@ public final class FinancialReports {
     /**
      * Wrapper service that prepare fact tables on behalf of sales tax report
      * running Kettle sales tax transformations and loadTaxInvoiceItemFact service.
-     * 
+     *
      * @param dctx a <code>DispatchContext</code> instance
      * @param context the service context <code>Map</code>
      * @return the service response <code>Map</code>
@@ -1786,7 +1785,7 @@ public final class FinancialReports {
 
         String organizationPartyId = (String) context.get("organizationPartyId");
         // since organization party id attribute is optional we use special value
-        // in case no id is provided, in order to keep this fact in runtime data 
+        // in case no id is provided, in order to keep this fact in runtime data
         if (UtilValidate.isEmpty(organizationPartyId)) {
             organizationPartyId = "ALL";
         }
@@ -1814,7 +1813,7 @@ public final class FinancialReports {
             // We have to put proper data source into naming context before run transformations.
             String dataSourceName = delegator.getGroupHelperName("org.ofbiz");
             DataSourceImpl datasource = new DataSourceImpl(dataSourceName);
-            new InitialContext().rebind("java:comp/env/jdbc/default_delegator", (DataSource) datasource);
+            new InitialContext().rebind("java:comp/env/jdbc/default_delegator", datasource);
 
             // run the ETL transformations to load the datamarts
             UtilEtl.runTrans("component://financials/script/etl/load_product_store_dimension.ktr", null);
