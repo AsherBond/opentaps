@@ -56,7 +56,7 @@ public class LookupContactsWindow extends Window {
 
         // setup window properties
         setModal(true);
-        setResizable(false);
+        setResizable(true);
         setLayout(new FitLayout());
         setPaddings(5);
         setButtonAlign(Position.RIGHT);
