@@ -49,7 +49,7 @@ public class BaseFormPanel extends FormPanel implements FormListener {
 
     private final FieldListenerAdapter submitOnEnterKey;
     private final FieldListenerAdapter fieldChangedListener;
-    private List<FormNotificationInterface> registeredWidgets;
+    private List<FormNotificationInterface<?>> registeredWidgets;
 
     // should the loaded recorded be updated every time a field changes
     private EntityEditableListView syncWithList;
@@ -70,7 +70,7 @@ public class BaseFormPanel extends FormPanel implements FormListener {
     public BaseFormPanel(final Position formPosition) {
         super(formPosition);
 
-        registeredWidgets = new ArrayList<FormNotificationInterface>();
+        registeredWidgets = new ArrayList<FormNotificationInterface<?>>();
 
         // this is used to submit when the user press the enter key
         // instead of having to manually click the button
@@ -361,7 +361,7 @@ public class BaseFormPanel extends FormPanel implements FormListener {
      * @see #onActionComplete
      */
     public void notifySuccess() {
-        for (FormNotificationInterface widget : registeredWidgets) {
+        for (FormNotificationInterface<?> widget : registeredWidgets) {
             widget.notifySuccess(null);
         }
     }
@@ -384,7 +384,7 @@ public class BaseFormPanel extends FormPanel implements FormListener {
      * Register a widget that should be notified once the form has been successfully submitted.
      * @param widget a <code>FormNotificationInterface</code>
      */
-    public void register(FormNotificationInterface widget) {
+    public void register(FormNotificationInterface<?> widget) {
         registeredWidgets.add(widget);
     }
 

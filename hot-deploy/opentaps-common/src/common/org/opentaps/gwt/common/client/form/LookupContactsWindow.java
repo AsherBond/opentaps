@@ -40,7 +40,7 @@ public class LookupContactsWindow extends Window {
     private final FindContactsForm findContactsForm = new FindContactsForm(true, true);
     private final PartyListView listView;
 
-    private List<FormNotificationInterface> formNotificationListeners = new ArrayList<FormNotificationInterface>(); 
+    private List<FormNotificationInterface<String>> formNotificationListeners = new ArrayList<FormNotificationInterface<String>>();
 
     public LookupContactsWindow(boolean modal, boolean resizable) {
         super(UtilUi.MSG.crmFindContacts(), FORM_WIDTH, FORM_HEIGHT, modal, resizable);
@@ -84,17 +84,17 @@ public class LookupContactsWindow extends Window {
     }
 
     /**
-     * Insert inner panel into frame window
+     * Insert inner panel into frame window.
      */
     public void create() {
         add(findContactsForm.getMainPanel());
     }
 
     /**
-     * Setup listener that will be used later to fire selection
+     * Setup listener that will be used later to fire selection.
      * @param listener An instance of the FormNotificationInterface
      */
-    public void register(FormNotificationInterface listener) {
+    public void register(FormNotificationInterface<String> listener) {
         if (listener != null) {
             formNotificationListeners.add(listener);
         }
@@ -107,7 +107,7 @@ public class LookupContactsWindow extends Window {
      * @param partyId selected contact party identifier
      */
     private void onSelection(String partyId) {
-        for (FormNotificationInterface listener : formNotificationListeners) {
+        for (FormNotificationInterface<String> listener : formNotificationListeners) {
             listener.notifySuccess(partyId);
         }
         hide();

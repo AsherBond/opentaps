@@ -81,7 +81,7 @@ import org.opentaps.gwt.common.client.suggest.EntityStaticAutocomplete;
  * The base class for tables that list entities and that support AJAX
  * sorting, pagination, filtering, and in-place edition.
  */
-public abstract class EntityEditableListView extends EditorGridPanel implements FormNotificationInterface, StoreListener {
+public abstract class EntityEditableListView extends EditorGridPanel implements FormNotificationInterface<Object>, StoreListener {
 
     private static final String MODULE = EntityEditableListView.class.getName();
 

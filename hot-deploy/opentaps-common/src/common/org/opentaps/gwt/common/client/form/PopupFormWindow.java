@@ -177,7 +177,7 @@ public abstract class PopupFormWindow extends Window {
      * Register a widget that should be notified once the form has been successfully submitted.
      * @param widget a <code>FormNotificationInterface</code>
      */
-    public void register(FormNotificationInterface widget) {
+    public void register(FormNotificationInterface<Void> widget) {
         innerPanel.register(widget);
     }
 

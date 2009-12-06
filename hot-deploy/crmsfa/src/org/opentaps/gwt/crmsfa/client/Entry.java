@@ -39,7 +39,6 @@ import org.opentaps.gwt.common.client.form.FindContactsForm;
 import org.opentaps.gwt.common.client.form.FormNotificationInterface;
 import org.opentaps.gwt.common.client.form.LookupContactsWindow;
 import org.opentaps.gwt.common.client.form.OrderItemsEditable;
-import org.opentaps.gwt.common.client.listviews.ContactListView;
 import org.opentaps.gwt.common.client.listviews.OrderItemsEditableListView.OrderType;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 import org.opentaps.gwt.crmsfa.client.accounts.form.AccountContactsSubview;
@@ -430,16 +429,16 @@ public class Entry extends BaseEntry {
         window.create();
 
         // register listener to be notified when user selects a contact
-        window.register(new FormNotificationInterface() {
+        window.register(new FormNotificationInterface<String>() {
 
             /** {@inheritDoc} */
-            public void notifySuccess(Object obj) {
+            public void notifySuccess(String obj) {
                 if (obj == null) {
                     return;
                 }
 
                 // keep user's selection
-                String contactPartyId = (String) obj;
+                String contactPartyId = obj;
 
                 // nothing special, just send HTTP POST request
                 // and run crmsfa.assignContactToAccount service
@@ -556,8 +555,8 @@ public class Entry extends BaseEntry {
         );
         window.create();
 
-        window.register(new FormNotificationInterface() {
-            public void notifySuccess(Object obj) {
+        window.register(new FormNotificationInterface<Void>() {
+            public void notifySuccess(Void v) {
                 Window.Location.replace(Window.Location.getHref());
             }
         });
