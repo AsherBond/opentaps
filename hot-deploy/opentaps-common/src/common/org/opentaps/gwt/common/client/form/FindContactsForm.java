@@ -50,8 +50,8 @@ public class FindContactsForm extends FindPartyForm {
      * Constructor with autoLoad and ingoreLinkColumn parameters. First one is useful if need to apply some filters
      * prior to loading the grid data. And use ignoreLinkColumn to rid of hyperlinks in partyId column. We should use
      * grid without links when it embed into another GWT window and selection is handled internally, in some listener,
-     * without redirecting browser to new URL. 
-     *  
+     * without redirecting browser to new URL.
+     *
      * @param autoLoad sets the grid autoLoad parameter, set to <code>false</code> if some filters need to be set prior to loading the grid data
      * @param ignoreLinkColumn creates id column as plain column w/o hypelinks if true.
      */
