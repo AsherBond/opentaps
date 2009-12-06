@@ -331,10 +331,10 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         assertEquals("Wrong count of comission invoices", 2, invoices.size());
 
         BigDecimal commInv1Total = InvoiceWorker.getInvoiceTotal(invoices.get(0));
-        assertEquals("Wrong commission amount", commInv1Total, BigDecimal.valueOf(2.5));
-
         BigDecimal commInv2Total = InvoiceWorker.getInvoiceTotal(invoices.get(1));
-        assertEquals("Wrong commission amount", commInv2Total, BigDecimal.valueOf(1.5));
+
+        assertEquals("Wrong commission amount", commInv1Total.max(commInv2Total), new BigDecimal("2.5"));
+        assertEquals("Wrong commission amount", commInv1Total.min(commInv2Total), new BigDecimal("1.5"));
 
         now = UtilDateTime.nowTimestamp();
         pause("Mysql timestamp workaround pause");
