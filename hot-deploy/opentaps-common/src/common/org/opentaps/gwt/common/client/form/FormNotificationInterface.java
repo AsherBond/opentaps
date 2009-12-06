@@ -19,14 +19,15 @@ package org.opentaps.gwt.common.client.form;
 
 /**
  * Interface for registering objects to a Form.
+ * @param <T> the type to return in the notification
  */
-public interface FormNotificationInterface {
+public interface FormNotificationInterface<T> {
 
     /**
      * Callback method called after a Form has been successfully submitted.
      * Notification provider may pass to receiver an object that has no particular meaning and should be handled according to execution context.
-     * @param obj An object of any type, may be <code>null</code>.
+     * @param obj An object of type T, may be <code>null</code>.
      */
-    public void notifySuccess(Object obj);
+    public void notifySuccess(T obj);
 
 }
