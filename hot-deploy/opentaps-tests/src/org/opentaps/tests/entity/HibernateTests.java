@@ -82,8 +82,7 @@ public class HibernateTests extends OpentapsTestCase {
 
     @Override
     public void tearDown() throws Exception {
-        super.tearDown();
-        // Because hibernate session use JDBC connection where from paramter,
+        // Because hibernate session use JDBC connection where from parameter,
         // when we close the session, the connection won't close exactly. so we
         // need close it manually.
         if (session != null && session.isOpen()) {
@@ -98,6 +97,7 @@ public class HibernateTests extends OpentapsTestCase {
             }
             session.close();
         }
+        super.tearDown();
     }
 
     private void reOpenSession() throws Exception {
@@ -1445,8 +1445,6 @@ public class HibernateTests extends OpentapsTestCase {
        reOpenSession();
        TestEntity reloadedTestEntity = (TestEntity) session.get(TestEntity.class, testId);
        assertNull(reloadedTestEntity);
-
-
    }
 
     /**
@@ -1463,6 +1461,7 @@ public class HibernateTests extends OpentapsTestCase {
             session.delete(testEntity);
         }
         session.flush();
+        Debug.logInfo("removeTestData: deleted [" + list + "]", MODULE);
     }
 
     /**
@@ -1471,6 +1470,7 @@ public class HibernateTests extends OpentapsTestCase {
      * @throws Exception if an error occurs
      */
     private void createTestData() throws Exception {
+        Debug.logInfo("createTestData", MODULE);
         // open a new session, if session has opened, then close it first
         reOpenSession();
         TestEntity newTestEntity1 = new TestEntity();
@@ -1483,6 +1483,7 @@ public class HibernateTests extends OpentapsTestCase {
         session.save(newTestEntity2);
         testEntityId2 = newTestEntity2.getTestId();
         session.flush();
+        Debug.logInfo("createTestData: created [" + testEntityId1 + "] and [" + testEntityId2 + "]", MODULE);
     }
 
 }
