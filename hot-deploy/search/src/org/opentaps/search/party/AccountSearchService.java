@@ -78,7 +78,7 @@ public class AccountSearchService extends SearchService implements AccountSearch
             if (classIndex < 0 || idIndex < 0) {
                 throw new ServiceException("Incompatible result projection, classIndex = " + classIndex + ", idIndex = " + idIndex);
             }
-    
+
             for (Object[] o : results) {
                 Class c = (Class) o[classIndex];
                 if (c.equals(PartyRole.class)) {
@@ -88,7 +88,7 @@ public class AccountSearchService extends SearchService implements AccountSearch
                     }
                 }
             }
-    
+
             if (!accountIds.isEmpty()) {
                 return partyRepository.findList(Account.class, EntityCondition.makeCondition(Account.Fields.partyId.name(), EntityOperator.IN, accountIds));
             } else {
