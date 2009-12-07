@@ -55,6 +55,7 @@ public class SearchForm extends BaseFormPanel {
 
         searchInput = new TextField();
         searchInput.setName(UtilLookup.PARAM_SUGGEST_QUERY);
+        searchInput.setWidth(200);  // width of search input box
         setFieldListeners(searchInput);
         innerPanel.add(searchInput);
 
