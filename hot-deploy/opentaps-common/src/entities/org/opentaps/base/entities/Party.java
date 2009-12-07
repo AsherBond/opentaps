@@ -550,11 +550,11 @@ fieldMapColumns.put("Party", fields);
    private List<OldWorkEffortAssignmentRate> oldWorkEffortAssignmentRates = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BILL_FROM_PARTY_ID")
-   
+   @ContainedIn
    private List<OrderHeader> billFromVendorOrderHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BILL_TO_PARTY_ID")
-   
+   @ContainedIn
    private List<OrderHeader> billToCustomerOrderHeaders = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
@@ -574,7 +574,7 @@ fieldMapColumns.put("Party", fields);
    private List<OrderItemShipGroup> carrierOrderItemShipGroups = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
-   
+   @ContainedIn
    private List<OrderRole> orderRoles = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
