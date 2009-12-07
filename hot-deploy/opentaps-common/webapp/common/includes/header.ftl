@@ -166,13 +166,16 @@ div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${f
       </div>
     </#if>
   
-    <#-- search.  need a little space to the right for the help link -->
-    <div style="padding:5px;position:absolute;right:35px" class="applicationSearch" id="gwtSearch"></div>
-    
-      <#-- live help link -->
+      <#-- live help link and search link.  -->
       <#assign helpUrl = Static["org.opentaps.common.util.UtilCommon"].getUrlContextHelpResource(delegator, appName, parameters._CURRENT_VIEW_, screenState?default(""))!/>
       <div class="liveHelp">
-        <#if helpUrl?exists && helpUrl?has_content><a class="liveHelp" href="${helpUrl}" target="_blank" title="${uiLabelMap.OpentapsHelp}"><img src="/opentaps_images/buttons/help_ofbiz_svn.gif" width="20" height="20"/></a>
+        <#if helpUrl?exists && helpUrl?has_content>
+           <#-- search button needs a little space to the right for help button -->
+           <div style="padding:5px;position:absolute;right:35px" class="applicationSearch" id="gwtSearch"></div>
+           <a class="liveHelp" href="${helpUrl}" target="_blank" title="${uiLabelMap.OpentapsHelp}"><img src="/opentaps_images/buttons/help_ofbiz_svn.gif" width="20" height="20"/></a>
+         <#else>  
+           <#-- just search button, right aligned -->
+           <div style="padding:5px;position:absolute;right:0px" class="applicationSearch" id="gwtSearch"></div>
         </#if>
       </div>   
       
