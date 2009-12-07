@@ -191,17 +191,28 @@ public class BaseFormPanel extends FormPanel implements FormListener {
     }
 
     /**
-     * Creates and adds a button with the given label with its default handler set tosubmit the form.
+     * Creates a button with the given label with its default handler set to submit the form without adding it to the form.
      * @param label the button label
-     * @return the added <code>Button</code>, for further configuration if needed
+     * @return the added <code>Button</code>, for further configuration
+     * @see #addStandardSubmitButton
      */
-    public Button addStandardSubmitButton(String label) {
+    public Button makeStandardSubmitButton(String label) {
         Button createButton = new Button(label, new ButtonListenerAdapter() {
                 @Override public void onClick(Button button, EventObject e) {
                     submit();
                 }
             });
+        return createButton;
+    }
 
+    /**
+     * Creates and adds a button with the given label with its default handler set to submit the form.
+     * @param label the button label
+     * @return the added <code>Button</code>, for further configuration if needed
+     * @see #makeStandardSubmitButton
+     */
+    public Button addStandardSubmitButton(String label) {
+        Button createButton = makeStandardSubmitButton(label);
         addButton(createButton);
         return createButton;
     }
