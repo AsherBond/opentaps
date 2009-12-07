@@ -211,7 +211,6 @@ public class HibernateTests extends OpentapsTestCase {
         Debug.logInfo("found " + listItem.size() + " TestEntityItem by itemValue=" + description, MODULE);
         // verify we can find 20 TestEntityItem by search description
         assertEquals("We should found 20 TestEntityItem by itemValue=" + description + ".", 20, listItem.size());
-        session.close();
     }
 
     /**
@@ -229,7 +228,6 @@ public class HibernateTests extends OpentapsTestCase {
         TestEntity testEntity = (TestEntity) session.get(TestEntity.class, testId);
         // verify delegator can decrypt the encrypt field which save by hibernate
         assertEquals("The testEncrypt field value of TestEnity that load by hiberate should equals " + beforeEncryptValue + ".", beforeEncryptValue, testEntity.getTestEncrypt());
-        session.close();
     }
 
     /**
@@ -252,7 +250,6 @@ public class HibernateTests extends OpentapsTestCase {
         GenericValue testEntityValue = delegator.findByPrimaryKey("TestEntity", UtilMisc.toMap("testId", testEntity.getTestId()));
         // verify delegator can decrypt the encrypt field which save by hibernate
         assertEquals("The testEncrypt field value of TestEnity that load by delegator should equals " + beforeEncryptValue + ".", beforeEncryptValue, testEntityValue.getString("testEncrypt"));
-        session.close();
     }
 
     /**
@@ -304,7 +301,6 @@ public class HibernateTests extends OpentapsTestCase {
         list = query.list();
         assertEquals("Should found 1 TestEntity by " + hql, 1, list.size());
         assertEquals("We should find " + testEntity.getTestId() + " in this list.", testEntity.getTestId(), list.get(0).getTestId());
-        session.close();
     }
 
     /**
@@ -337,7 +333,6 @@ public class HibernateTests extends OpentapsTestCase {
         assertNotNull("LastUpdatedStamp of TestEntity shouldn't be null.", testEntity.getLastUpdatedStamp());
         //verify lastUpdatedStamp >= createStamp + 1min
         assertTrue("lastUpdatedStamp should >= createStamp + 1min", testEntity.getLastUpdatedStamp().getTime() - testEntity.getCreatedStamp().getTime() >= minute);
-        session.close();
     }
 
     /**
@@ -403,7 +398,6 @@ public class HibernateTests extends OpentapsTestCase {
         assertNotEquals("The ID generator and the ofbiz entity engine getNextSeqId shouldn't generate same Id for entity.", useGetNextSeqIdTestEntity.getString("testId"), useIdentifierTestEntity.getTestId());
         session.flush();
         tx.commit();
-        session.close();
     }
 
     /**
@@ -424,7 +418,6 @@ public class HibernateTests extends OpentapsTestCase {
 
         TestEntity loadEntity = (TestEntity) session.get(TestEntity.class, newTestEntity.getTestId());
         assertNotNull("Cannot find TestEntity with Id " + newTestEntity.getTestId() + " in hibernate", loadEntity);
-        session.close();
     }
 
     /**
@@ -448,7 +441,6 @@ public class HibernateTests extends OpentapsTestCase {
         tx.commit();
         loadEntity = (TestEntity) session.get(TestEntity.class, testEntity.getTestId());
         assertEquals("Correct value should is new string value", loadEntity.getTestStringField(), "new value");
-        session.close();
     }
 
     /**
@@ -473,7 +465,6 @@ public class HibernateTests extends OpentapsTestCase {
         Query query = session.createQuery(hql);
         List<TestEntity> list = query.list();
         assertEquals("Should have found 1 TestEntityModifyHistory values with testId [" + testEntity.getTestId() + "]", 1, list.size());
-        session.close();
     }
 
     /**
@@ -515,7 +506,6 @@ public class HibernateTests extends OpentapsTestCase {
         Query query = session.createQuery(hql);
         List<TestEntity> list = query.list();
         assertEquals("Should not have found any TestEntityModifyHistory values with testId [" + testId + "]", 0, list.size());
-        session.close();
     }
 
     /**
@@ -554,7 +544,6 @@ public class HibernateTests extends OpentapsTestCase {
 
         TestEntity loadEntity = (TestEntity) session.get(TestEntity.class, newTestEntity.getTestId());
         assertNotNull("Cannot find TestEntity with Id " + newTestEntity.getTestId() + " in hibernate", loadEntity);
-        session.close();
     }
 
     /**
@@ -578,7 +567,6 @@ public class HibernateTests extends OpentapsTestCase {
         loadEntity = (TestEntity) session.get(TestEntity.class, testEntityId1);
         assertNotNull("Cannot find the test entity [" + testEntityId1 + "]", loadEntity);
         assertEquals("Correct value should is new string value", loadEntity.getTestStringField(), "new value");
-        session.close();
     }
 
     /**
@@ -602,7 +590,6 @@ public class HibernateTests extends OpentapsTestCase {
         Query query = session.createQuery(hql);
         List<TestEntity> list = query.list();
         assertEquals("TestEntity with Id " + testEntityId2 + " should not exist", 0, list.size());
-        session.close();
     }
 
     /**
@@ -641,7 +628,6 @@ public class HibernateTests extends OpentapsTestCase {
         Query query = session.createQuery(hql);
         List<TestEntity> list = query.list();
         assertEquals("TestEntity with enumId=\"NO_SUCH_VALUE\" should not exist", 0, list.size());
-        session.close();
     }
 
     /**
@@ -673,7 +659,6 @@ public class HibernateTests extends OpentapsTestCase {
         Query query = session.createQuery(hql);
         List<TestEntity> list = query.list();
         assertEquals("Should have found 10 TestEntity values with query [" + hql + "]", 10, list.size());
-        session.close();
     }
 
     /**
@@ -704,7 +689,6 @@ public class HibernateTests extends OpentapsTestCase {
         Query query = session.createQuery(hql);
         List<TestEntity> list = query.list();
         assertEquals("Shouldn't have found any TestEntity with query [" + hql + "]", 0, list.size());
-        session.close();
     }
 
     /**
@@ -760,7 +744,6 @@ public class HibernateTests extends OpentapsTestCase {
         Query query = session.createQuery(hql);
         List<TestEntity> list = query.list();
         assertEquals("Shouldn't found any TestEntity with search by " + hql, 0, list.size());
-        session.close();
     }
 
     /**
@@ -811,7 +794,6 @@ public class HibernateTests extends OpentapsTestCase {
         Query query = session.createQuery(hql);
         List<TestEntity> list = query.list();
         assertEquals("Shouldn't have found any TestEntity with query [" + hql + "]", 0, list.size());
-        session.close();
     }
 
     /**
@@ -860,7 +842,6 @@ public class HibernateTests extends OpentapsTestCase {
         Query query = session.createQuery(hql);
         List<TestEntity> list = query.list();
         assertEquals("Should have found 10 TestEntity with [" + hql + "]", 10, list.size());
-        session.close();
     }
 
     /**
@@ -932,7 +913,6 @@ public class HibernateTests extends OpentapsTestCase {
         query = session.createQuery(hql);
         list = query.list();
         assertEquals("Shouldn't have found any TestEntity with [" + hql + "]", 0, list.size());
-        session.close();
     }
 
     /**
@@ -977,7 +957,6 @@ public class HibernateTests extends OpentapsTestCase {
         // updated
         secondTestEntity = (TestEntity) session.get(TestEntity.class, secondTestEntity.getTestId());
         assertEquals("secondTestEntity.getTestStringField() should be new value", "new value", secondTestEntity.getTestStringField());
-        session.close();
     }
 
     /**
@@ -1065,7 +1044,6 @@ public class HibernateTests extends OpentapsTestCase {
         // verify hibernate can retrieve blob field from entity
         currentCRCCode = getCRCCode(testEntity.getTestBlobField());
         assertEquals("testBlobField should change to " + fileCRCCode2 + ".", fileCRCCode2, currentCRCCode);
-        session.close();
 
     }
 
@@ -1141,7 +1119,6 @@ public class HibernateTests extends OpentapsTestCase {
         assertEquals("hibernate should retrieve same telphone field value from entity.", testTelphoneField, testEntity.getTestTelphoneField());
         // verify hibernate can retrieve url field from entity
         assertEquals("hibernate should retrieve same url field value from entity.", testUrlField, testEntity.getTestUrlField());
-        session.close();
     }
 
     /**
@@ -1186,7 +1163,6 @@ public class HibernateTests extends OpentapsTestCase {
         List<TestEntityItem> list = query.list();
         // verify that TestEntity.delete has cascade delete all of testEntityItem
         assertEquals("Shouldn't found any TestEntityItem with search by " + hql, 0, list.size());
-        session.close();
     }
 
     /**
@@ -1236,7 +1212,6 @@ public class HibernateTests extends OpentapsTestCase {
         // verify that you cannot found any TestEntityItem from
         // TestEntity.getTestEntityItem()
         assertEquals("Shouldn't found any TestEntityItem values from TestEntity.getTestEntityItem()", 0, testEntity.getTestEntityItems().size());
-        session.close();
     }
 
     /**
@@ -1299,7 +1274,6 @@ public class HibernateTests extends OpentapsTestCase {
             TestEntityAndItem testEntityAndItem = list.get(i);
             assertEquals("the TestEntityAndItem.getValue() should be 'value " + i + "'", "value " + i, testEntityAndItem.getItemValue());
         }
-        session.close();
     }
 
     /**
@@ -1332,7 +1306,6 @@ public class HibernateTests extends OpentapsTestCase {
         // Verify that allSize > hasPartyClassificationSize
         Debug.logInfo("count of PartyContactInfo is " + allSize + ", count of has PartyClassification is " + hasPartyClassificationSize, MODULE);
         assertTrue("Because PartyClassification is rel-optional=\"true\", so allSize[" + allSize + "] should large than hasPartyClassificationSize[" + hasPartyClassificationSize + "]", allSize > hasPartyClassificationSize);
-        session.close();
     }
 
     /**
@@ -1345,7 +1318,6 @@ public class HibernateTests extends OpentapsTestCase {
         TestEntity originalTestEntity = createAndSaveTestEntity(originalDescription);
         GenericValue originalTestEntityGV = delegator.findByPrimaryKeyCache("TestEntity", UtilMisc.toMap("testId", originalTestEntity.getTestId()));
         assertEquals("Test string field from generic value retrieved after TestEntity is created is not correct", originalTestEntityGV.getString("testStringField"), originalDescription);
-        session.close();
     }
 
     /**
@@ -1375,7 +1347,6 @@ public class HibernateTests extends OpentapsTestCase {
 
         assertEquals("Test string field from original and reloaded TestEntity do not equal", reloadedTestEntity.getTestStringField(), originalTestEntity.getTestStringField());
         assertEquals("Test string field from reloaded TestEntity and generic value retrieved after TestEntity is updated do not equal", reloadedTestEntityGV.getString("testStringField"), reloadedTestEntity.getTestStringField());
-        session.close();
     }
 
     /**
@@ -1400,7 +1371,6 @@ public class HibernateTests extends OpentapsTestCase {
         // check if the ofbiz entity engine's cache method still has this value around
         GenericValue reloadedTestEntityGV = delegator.findByPrimaryKeyCache("TestEntity", UtilMisc.toMap("testId", originalTestEntity.getTestId()));
         assertNull(reloadedTestEntityGV);
-        session.close();
 
     }
 
@@ -1416,7 +1386,6 @@ public class HibernateTests extends OpentapsTestCase {
 
        TestEntity testEntity = (TestEntity) session.get(TestEntity.class, testId);
        assertEquals("Test string field from generic value retrieved after TestEntity is created is not correct", testEntity.getTestStringField(), testEntityGV.getString("testStringField"));
-       session.close();
    }
 
    /**
@@ -1448,7 +1417,6 @@ public class HibernateTests extends OpentapsTestCase {
        GenericValue reloadedTestEntityGV = delegator.findByPrimaryKey("TestEntity", UtilMisc.toMap("testId", testId));
        assertEquals("Test string field from reloaded TestEntity and generic value retrieved after TestEntity is updated do not equal", reloadedTestEntityGV.getString("testStringField"), reloadedTestEntity.getTestStringField());
        assertEquals("Test string field from reloaded TestEntity not equals " + newDescription, newDescription, reloadedTestEntity.getTestStringField());
-       session.close();
    }
 
    /**
@@ -1477,7 +1445,6 @@ public class HibernateTests extends OpentapsTestCase {
        reOpenSession();
        TestEntity reloadedTestEntity = (TestEntity) session.get(TestEntity.class, testId);
        assertNull(reloadedTestEntity);
-       session.close();
    }
 
     /**
@@ -1495,7 +1462,6 @@ public class HibernateTests extends OpentapsTestCase {
         }
         session.flush();
         Debug.logInfo("removeTestData: deleted [" + list + "]", MODULE);
-        session.close();
     }
 
     /**
@@ -1518,7 +1484,6 @@ public class HibernateTests extends OpentapsTestCase {
         testEntityId2 = newTestEntity2.getTestId();
         session.flush();
         Debug.logInfo("createTestData: created [" + testEntityId1 + "] and [" + testEntityId2 + "]", MODULE);
-        session.close();
     }
 
 }
