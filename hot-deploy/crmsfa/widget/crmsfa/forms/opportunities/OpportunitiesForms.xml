@@ -208,7 +208,7 @@
         <field name="accountPartyId" widget-style="tabletext" title="${uiLabelMap.CrmAccountName}" widget-area-style="fieldWidth300" 
             use-when="opportunityAndParty!=null&amp;&amp;opportunityAndParty.get(&quot;accountPartyId&quot;)!=null">
             <display-entity entity-name="PartySummaryCRMView" description="${groupName}" key-field-name="partyId">
-                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewAccount">
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewAccount" link-type="anchor">
                     <parameter param-name="partyId" from-field="opportunityAndParty.accountPartyId"/>
                 </sub-hyperlink>
             </display-entity>
