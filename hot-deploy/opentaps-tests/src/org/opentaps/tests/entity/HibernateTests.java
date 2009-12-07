@@ -1454,6 +1454,7 @@ public class HibernateTests extends OpentapsTestCase {
     private void removeTestData() throws Exception {
         // open a new session, if session has opened, then close it first
         reOpenSession();
+        UserTransaction tx = session.beginUserTransaction();
         String hql = "from TestEntity";
         Query query = session.createQuery(hql);
         List<TestEntity> list = query.list();
@@ -1461,6 +1462,7 @@ public class HibernateTests extends OpentapsTestCase {
             session.delete(testEntity);
         }
         session.flush();
+        tx.commit();
         Debug.logInfo("removeTestData: deleted [" + list + "]", MODULE);
     }
 
@@ -1473,6 +1475,7 @@ public class HibernateTests extends OpentapsTestCase {
         Debug.logInfo("createTestData", MODULE);
         // open a new session, if session has opened, then close it first
         reOpenSession();
+        UserTransaction tx = session.beginUserTransaction();
         TestEntity newTestEntity1 = new TestEntity();
         newTestEntity1.setTestStringField("old value");
         session.save(newTestEntity1);
@@ -1483,6 +1486,7 @@ public class HibernateTests extends OpentapsTestCase {
         session.save(newTestEntity2);
         testEntityId2 = newTestEntity2.getTestId();
         session.flush();
+        tx.commit();
         Debug.logInfo("createTestData: created [" + testEntityId1 + "] and [" + testEntityId2 + "]", MODULE);
     }
 
