@@ -137,17 +137,24 @@ div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${f
 
     <div class="insideHeaderText">
       <#if person?has_content>
-        ${uiLabelMap.CommonWelcome}&nbsp;${person.firstName?if_exists}&nbsp;${person.lastName?if_exists}
+        ${uiLabelMap.CommonWelcome}&nbsp;${person.firstName?if_exists}&nbsp;${person.lastName?if_exists} |
       <#elseif partyGroup?has_content>
-        ${uiLabelMap.CommonWelcome}&nbsp;${partyGroup.groupName?if_exists}
+        ${uiLabelMap.CommonWelcome}&nbsp;${partyGroup.groupName?if_exists} |
       <#else>
       </#if>
+      <#-- user, profile, shortcuts, logout buttons -->
       <#if requestAttributes.userLogin?has_content>
         <#if enableInternalMessaging?default(false)>${screens.render("component://opentaps-common/widget/screens/common/CommonScreens.xml#newMessageSummary")}</#if>
-        <a href="<@ofbizUrl>myProfile</@ofbizUrl>" class="buttontext">${uiLabelMap.PartyProfile}</a>
-        <a href="<@ofbizUrl>logout</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonLogout}</a>
+        <a href="<@ofbizUrl>myProfile</@ofbizUrl>" class="linktext">${uiLabelMap.PartyProfile}</a> |
       </#if>
-    </div>
+        <#if keyboardShortcuts?has_content>
+          <a class="linktext" style="vertical-align:text-top;" href="javascript:showKeyboardShortcutsHelp();" title="${uiLabelMap.OpentapsHelpShortcuts}">${uiLabelMap.OpentapsHelpShortcuts}</a> |
+        </#if>
+      <#if requestAttributes.userLogin?has_content>
+        <a href="<@ofbizUrl>logout</@ofbizUrl>" class="linktext">${uiLabelMap.CommonLogout}</a>
+      </#if> 
+     </div>
+    <#-- change facility or organization -->
     <#if applicationSetupFacility?has_content>
       <div class="insideHeaderSubtext">
         <b>${uiLabelMap.OpentapsWarehouse}</b>:&nbsp;${applicationSetupFacility.facilityName}&nbsp; (<@displayLink text="${uiLabelMap.CommonChange}" href="selectFacilityForm"/>)
@@ -158,16 +165,20 @@ div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${f
         <b>${uiLabelMap.ProductOrganization}</b>:&nbsp;${applicationSetupOrganization.groupName}&nbsp; (<@displayLink text="${uiLabelMap.CommonChange}" href="selectOrganizationForm"/>)
       </div>
     </#if>
-    <div class="gwtVoipNotification" id="gwtVoipNotification"></div>
-    <#assign helpUrl = Static["org.opentaps.common.util.UtilCommon"].getUrlContextHelpResource(delegator, appName, parameters._CURRENT_VIEW_, screenState?default(""))!/>
+  
+    <#-- search.  need a little space to the right for the help link -->
+    <div style="padding:5px;position:absolute;right:35px" class="applicationSearch" id="gwtSearch"></div>
+    
+      <#-- live help link -->
+      <#assign helpUrl = Static["org.opentaps.common.util.UtilCommon"].getUrlContextHelpResource(delegator, appName, parameters._CURRENT_VIEW_, screenState?default(""))!/>
       <div class="liveHelp">
-        <#if keyboardShortcuts?has_content>
-          <a class="buttontext" style="vertical-align:text-top;" href="javascript:showKeyboardShortcutsHelp();" title="${uiLabelMap.OpentapsHelpShortcuts}">${uiLabelMap.OpentapsHelpShortcuts}</a>
-        </#if>
         <#if helpUrl?exists && helpUrl?has_content><a class="liveHelp" href="${helpUrl}" target="_blank" title="${uiLabelMap.OpentapsHelp}"><img src="/opentaps_images/buttons/help_ofbiz_svn.gif" width="20" height="20"/></a>
         </#if>
-      </div>
+      </div>   
+      
+    <#-- voip notification -->
+    <div class="gwtVoipNotification" id="gwtVoipNotification"></div>
+
   </div>
-  <div style="padding:5px;position:absolute;right:0px" class="applicationSearch" id="gwtSearch"></div>
   <div class="spacer"></div>
 
