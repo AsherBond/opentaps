@@ -276,10 +276,12 @@
                                 </widgets>
                             </section>
                         </container>
+
                         <!-- Opportunities section -->
                         <container style="subSectionBlock">
-                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/contacts/submenus/contactOpportunities.ftl"/></html></platform-specific>
-                            <include-form name="ListOpportunities" location="component://crmsfa/widget/crmsfa/forms/opportunities/OpportunitiesForms.xml"/>
+                            <platform-specific>
+                                <html><html-template location="component://crmsfa/webapp/crmsfa/contacts/contactOpportunities.ftl"/></html>
+                            </platform-specific>
                         </container>
 
                         <!-- payment methods -->

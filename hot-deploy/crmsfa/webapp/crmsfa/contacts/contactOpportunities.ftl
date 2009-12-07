@@ -14,17 +14,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<a name="ListContacts"></a>
-<@sectionHeader title=uiLabelMap.CrmContacts>
+<@sectionHeader title=uiLabelMap.CrmOpportunities>
 <#if hasUpdatePermission?exists>
-<div class="subMenuBar" id="assignContactToAccount">
-  <@displayLink href="createContactForm?accountPartyId=${partySummary.partyId}" text="${uiLabelMap.CrmCreateNew}" class="subMenuButton"/>
-</div>
+    <div class="subMenuBar">
+        <@displayLink href="createOpportunityForm?contactPartyId=${partySummary.partyId}" text="${uiLabelMap.CrmCreateNew}" class="subMenuButton" />
+    </div>
 </#if>
 </@sectionHeader>
 
-<@gwtWidget id="contactsSubListView" partyId="${partySummary.partyId}"/>
+<@gwtWidget id="contactOpportunitiesSubListView" partyId="${partySummary.partyId}"/>

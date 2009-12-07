@@ -113,15 +113,6 @@ if (contactActive) {
     context.put("ordersListIt", myOrders);
     //  *************** order data ********************
     
-    // opportunities related to contact
-    opportunitiesOrderBy = parameters.get("opportunitiesOrderBy");
-    if (opportunitiesOrderBy == null) opportunitiesOrderBy = "estimatedCloseDate";
-    findParams = UtilMisc.toMap("entityName", "SalesOpportunityAndRole",
-            "inputFields", UtilMisc.toMap("partyId", partyId, "roleTypeId", "CONTACT"),
-            "orderBy", opportunitiesOrderBy);
-    results = dispatcher.runSync("performFind", findParams);
-    context.put("opportunitiesListIt", results.get("listIt"));
-
     casesOrderBy = parameters.get("casesOrderBy");
 
     // prepare conditions to the case page builder in listCases.bsh

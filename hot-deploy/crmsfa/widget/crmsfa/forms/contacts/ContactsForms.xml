@@ -141,41 +141,6 @@
         <field name="submitButton" title="${uiLabelMap.CrmReassign}" widget-style="smallSubmit"><submit button-type="button"/></field>
     </form>
 
-    <form name="ListContacts" type="list" separate-columns="true" 
-        title="Contacts"  default-title-style="tableheadtext" target=""
-        default-widget-style="tabletext" default-tooltip-style="tabletext"
-        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
-        paginate-target="${listSortTarget}" paginate-target-anchor="ListContacts" paginate-size-field="contactsSize" paginate-index-field="contactsIndex"
-        list-name="contactsListIt">
-        <field name="name" widget-style="linktext" title="${uiLabelMap.CrmContactName}" widget-area-style="fieldWidth50pct"
-            use-when="(isLookup!=void)&amp;&amp;(isLookup!=null)&amp;&amp;(isLookup.equals(&quot;true&quot;))">
-            <hyperlink also-hidden="false" target-type="plain" description="${groupName} ${firstName} ${lastName} (${partyId})" target="javascript:set_value('${partyId}')"/>
-        </field>
-        <field name="name" widget-style="linktext" title="${uiLabelMap.CrmContactName}" widget-area-style="fieldWidth50pct"
-            use-when="(isLookup==void) || (isLookup==null) || !(isLookup.equals(&quot;true&quot;))">
-            <hyperlink description="${groupName} ${firstName} ${lastName} (${partyId})" target="viewContact">
-                <parameter param-name="partyId" from-field="partyId"/>
-            </hyperlink>
-        </field>
-        <field name="primaryPostalAddressId" title="${uiLabelMap.CommonCity}">
-          <display description="${primaryCity} ${primaryStateProvinceGeoId}" />
-        </field>
-        <field name="primaryEmailId" title="${uiLabelMap.CrmPrimaryEmail}">
-          <display description="${primaryEmail}" />
-        </field>
-        <field name="primaryTelecomNumberId" title="${uiLabelMap.CrmPrimaryPhone}">
-          <display description="${primaryCountryCode} ${primaryAreaCode} ${primaryContactNumber}" />
-        </field>
-        <!-- since this form is re-usable, define hasContactRemoveAbility when the Remove option should be visible -->
-        <field name="Remove" title="" use-when="hasContactRemoveAbility==true" widget-style="buttontext">
-            <hyperlink description="${uiLabelMap.CommonRemove}" target="removeContactFromAccount">
-                <parameter param-name="partyId" value="${parameters.partyId}"/>
-                <parameter param-name="contactPartyId" from-field="partyId"/>
-                <parameter param-name="accountPartyId" value="${parameters.partyId}"/>
-            </hyperlink>
-        </field>
-    </form>   
-
     <!-- form to assign a contact to an account -->
     <form name="assignAccountToContactForm" type="single" target="assignAccountToContact"
         default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">

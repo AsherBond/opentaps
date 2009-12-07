@@ -91,16 +91,6 @@ context.put("isQualified", false);
 if ("PTYLEAD_QUALIFIED".equals(partySummary.getString("statusId"))) {
     context.put("isQualified", true);
 
-    // lead opportunities (only if qualified)
-    // TODO: this may have to be enhanced to exclude some types of opportunities (ie, closed ones)?
-    opportunitiesOrderBy = parameters.get("opportunitiesOrderBy");
-    if (opportunitiesOrderBy == null) opportunitiesOrderBy = "estimatedCloseDate";
-    findParams = UtilMisc.toMap("entityName", "SalesOpportunityAndRole",
-            "inputFields", UtilMisc.toMap("partyId", partyId, "roleTypeId", "PROSPECT"),
-            "orderBy", opportunitiesOrderBy);
-    results = dispatcher.runSync("performFind", findParams);
-    context.put("opportunitiesListIt", results.get("listIt"));
-
     // permission to create opportunities for lead
     if (CrmsfaSecurity.hasPartyRelationSecurity(request.getAttribute("security"), "CRMSFA_OPP", "_CREATE", request.getAttribute("userLogin"), partyId)) {
         context.put("hasCreateOppPermission", true);

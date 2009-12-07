@@ -353,9 +353,8 @@
             <widgets>
                 <container style="subSectionBlock">
                     <platform-specific><html>
-                        <html-template location="component://crmsfa/webapp/crmsfa/leads/submenus/leadOpportunitiesMenu.ftl"/>
+                        <html-template location="component://crmsfa/webapp/crmsfa/leads/leadOpportunities.ftl"/>
                     </html></platform-specific>
-                    <include-form name="ListOpportunities" location="component://crmsfa/widget/crmsfa/forms/opportunities/OpportunitiesForms.xml"/>
                 </container>
             </widgets>
         </section>

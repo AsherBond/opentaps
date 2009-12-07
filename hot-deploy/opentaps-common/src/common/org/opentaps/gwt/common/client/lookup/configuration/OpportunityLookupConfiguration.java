@@ -35,13 +35,15 @@ public abstract class OpportunityLookupConfiguration {
     public static final String TEAM_VALUES = "TEAM_VALUES";
 
     public static final String IN_FIND_ALL = "findAll";
+    public static final String IN_ROLE_TYPE_FROM = "roleTypeIdFrom";
     
     public static final String INOUT_OPPORTUNITY_NAME = "opportunityName";
     public static final String INOUT_SALES_OPPORTUNITY_ID = "salesOpportunityId";
+    public static final String INOUT_COMPOSITE_OPPORTUNITY_NAME = "opportunityNameAndId";
     public static final String INOUT_OPPORTUNITY_STAGE_ID = "opportunityStageId";
     public static final String INOUT_TYPE_ENUM_ID = "typeEnumId";
     public static final String INOUT_DESCRIPTION = "description";
-    public static final String OUT_PARTY_ID_FROM_ID = "partyIdFrom";
+    public static final String INOUT_PARTY_ID_FROM_ID = "partyIdFrom";
     public static final String OUT_ESTIMATED_AMOUNT = "estimatedAmount";
     public static final String OUT_PARTY_FROM_LINK = "partyFromLink";
     public static final String OUT_ESTIMATED_CLOSE_DATE = "estimatedCloseDate";
@@ -57,7 +59,7 @@ public abstract class OpportunityLookupConfiguration {
             INOUT_TYPE_ENUM_ID,
             INOUT_DESCRIPTION,
             OUT_OPPORTUNITY_STAGE,
-            OUT_PARTY_ID_FROM_ID,
+            INOUT_PARTY_ID_FROM_ID,
             OUT_ESTIMATED_AMOUNT,
             OUT_PARTY_FROM_LINK,
             OUT_ESTIMATED_CLOSE_DATE,

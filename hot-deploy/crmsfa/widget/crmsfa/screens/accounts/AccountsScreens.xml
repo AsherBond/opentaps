@@ -258,7 +258,7 @@
                         <!-- Contacts section -->
                         <container style="subSectionBlock">
                             <platform-specific><html>
-                                <html-template location="component://crmsfa/webapp/crmsfa/accounts/submenus/viewAccountContacts.ftl"/>
+                                <html-template location="component://crmsfa/webapp/crmsfa/accounts/viewAccountContacts.ftl"/>
                             </html></platform-specific>
                         </container>
 
@@ -282,8 +282,9 @@
 
                         <!-- Opportunities section -->
                         <container style="subSectionBlock">
-                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/accounts/submenus/viewAccountOpportunities.ftl"/></html></platform-specific>
-                            <include-form name="ListOpportunities" location="component://crmsfa/widget/crmsfa/forms/opportunities/OpportunitiesForms.xml"/>
+                            <platform-specific>
+                                <html><html-template location="component://crmsfa/webapp/crmsfa/accounts/viewAccountOpportunities.ftl"/></html>
+                            </platform-specific>
                         </container>
 
                         <!-- cases section -->

@@ -14,12 +14,18 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
+<#-- Copyright (c) 2005-2009 Open Source Strategies, Inc. -->
 
-<a name="ListOpportunities"></a>
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmOpportunities}</div>
-    <#if hasCreateOppPermission?exists>
-    <div class="subMenuBar"><a class="subMenuButton" href="createOpportunityForm?accountPartyId=${partySummary.partyId}">${uiLabelMap.CrmCreateNew}</a></div>
-    </#if>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<div class="subSectionBlock">
+<@sectionHeader title=uiLabelMap.CrmContacts>
+<#if hasUpdatePermission?exists>
+    <div class="subMenuBar" id="assignContactToOpportunity">
+        <#-- Empty on purpose. GWT widget adds a button later. -->
+    </div>
+</#if>
+</@sectionHeader>
+
+<@gwtWidget id="opportunityContactsSubListView" partyId="${opportunityAndParty.accountPartyId}"/>
 </div>

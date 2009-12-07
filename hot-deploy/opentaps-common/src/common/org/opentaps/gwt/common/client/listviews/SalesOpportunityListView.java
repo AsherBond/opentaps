@@ -16,25 +16,20 @@
  */
 package org.opentaps.gwt.common.client.listviews;
 
-import java.math.BigDecimal;
-
+import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.lookup.configuration.OpportunityLookupConfiguration;
 
-import com.google.gwt.i18n.client.NumberFormat;
 import com.gwtext.client.core.SortDir;
-import com.gwtext.client.data.Record;
-import com.gwtext.client.data.Store;
 import com.gwtext.client.data.StringFieldDef;
-import com.gwtext.client.widgets.grid.CellMetadata;
 import com.gwtext.client.widgets.grid.ColumnConfig;
-import com.gwtext.client.widgets.grid.Renderer;
 
 /**
  * Class for the Find opportunity form + list view pattern.
  */
 public class SalesOpportunityListView  extends EntityListView {
 
+    @SuppressWarnings("unused")
     private static final String MODULE = SalesOpportunityListView.class.getName();
 
     /**
@@ -136,5 +131,31 @@ public class SalesOpportunityListView  extends EntityListView {
         setFilter(OpportunityLookupConfiguration.INOUT_TYPE_ENUM_ID, typeEnumId);
     }
 
+    /**
+     * Filter the records of the list by parent account. 
+     * @param accountPartyId a <code>String</code> value that is related partyId with ACCOUNT role.
+     */
+    public void filterByAccount(String partyId) {
+        setFilter(OpportunityLookupConfiguration.INOUT_PARTY_ID_FROM_ID, partyId);
+        setFilter(OpportunityLookupConfiguration.IN_ROLE_TYPE_FROM, RoleTypeConstants.ACCOUNT);
+    }
+
+    /**
+     * Filter the records of the list by parent contact. 
+     * @param accountPartyId a <code>String</code> value that is related partyId with CONTACT role.
+     */
+    public void filterByContact(String partyId) {
+        setFilter(OpportunityLookupConfiguration.INOUT_PARTY_ID_FROM_ID, partyId);
+        setFilter(OpportunityLookupConfiguration.IN_ROLE_TYPE_FROM, RoleTypeConstants.CONTACT);
+    }
+
+    /**
+     * Filter the records of the list by parent lead. 
+     * @param accountPartyId a <code>String</code> value that is related partyId with PROSPECT role.
+     */
+    public void filterByLead(String partyId) {
+        setFilter(OpportunityLookupConfiguration.INOUT_PARTY_ID_FROM_ID, partyId);
+        setFilter(OpportunityLookupConfiguration.IN_ROLE_TYPE_FROM, RoleTypeConstants.PROSPECT);
+    }
 
 }

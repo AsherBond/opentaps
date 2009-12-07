@@ -18,10 +18,14 @@ package org.opentaps.gwt.common.server.lookup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
@@ -31,9 +35,12 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
-import org.opentaps.common.party.PartyHelper;
+import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.entities.PartyRelationship;
 import org.opentaps.base.entities.SalesOpportunityAndPartyRelationshipAndStage;
+import org.opentaps.common.party.PartyHelper;
+import org.opentaps.common.util.ConvertMapToString;
+import org.opentaps.common.util.ICompositeValue;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
@@ -47,10 +54,14 @@ import org.opentaps.gwt.common.server.InputProviderInterface;
 public class OpportunityLookupService extends EntityLookupAndSuggestService {
 
     private static final String MODULE = OpportunityLookupService.class.getName();
-    private static List<String> BY_ADVANCED_FILTERS = Arrays.asList(OpportunityLookupConfiguration.INOUT_OPPORTUNITY_NAME,
+    private static List<String> BY_ADVANCED_FILTERS = Arrays.asList(
+            OpportunityLookupConfiguration.INOUT_OPPORTUNITY_NAME,
             OpportunityLookupConfiguration.INOUT_OPPORTUNITY_STAGE_ID,
-            OpportunityLookupConfiguration.INOUT_TYPE_ENUM_ID
-        );
+            OpportunityLookupConfiguration.INOUT_TYPE_ENUM_ID,
+            OpportunityLookupConfiguration.INOUT_PARTY_ID_FROM_ID,
+            OpportunityLookupConfiguration.IN_ROLE_TYPE_FROM
+    );
+
     /**
      * Creates a new <code>CaseLookupService</code> instance.
      * @param provider an <code>InputProviderInterface</code> value
@@ -79,6 +90,32 @@ public class OpportunityLookupService extends EntityLookupAndSuggestService {
      * @return the list of <code>Account</code>, or <code>null</code> if an error occurred
      */
     public List<SalesOpportunityAndPartyRelationshipAndStage> findOpportunities() {
+
+        /**
+         * Sales opportunity name formatter.<br>
+         * Format opportunity name as <code>${opportunityName} (${salesOpportunityId})</code>.</br>
+         * Field may be sorted by opportunity name.
+         */
+        class OpportunityNameAndIdSortable extends ConvertMapToString implements ICompositeValue {
+
+            @Override
+            public String convert(Map<String, ?> value) {
+                return UtilValidate.isNotEmpty(value) ? String.format("%1$s (%2$s)", value.get("opportunityName"), value.get("salesOpportunityId")) : null;
+            }
+
+            public LinkedHashSet<String> getFields() {
+                LinkedHashSet<String> sortableFields = new LinkedHashSet<String>(3);
+                sortableFields.add(OpportunityLookupConfiguration.INOUT_OPPORTUNITY_NAME);
+                return sortableFields;
+            }
+            
+        }
+
+        // keep rules for calculated fields
+        Map<String, ConvertMapToString> calcField = FastMap.<String, ConvertMapToString>newInstance();
+        calcField.put(OpportunityLookupConfiguration.INOUT_COMPOSITE_OPPORTUNITY_NAME, new OpportunityNameAndIdSortable());
+        makeCalculatedField(calcField);
+
         List<SalesOpportunityAndPartyRelationshipAndStage> opportunities;
         String partyId = null;
         List<EntityCondition> combinedConditions = null;
@@ -143,8 +180,9 @@ public class OpportunityLookupService extends EntityLookupAndSuggestService {
         } else {
             combinedConditions = UtilMisc.toList(
                     EntityCondition.makeCondition(EntityOperator.OR,
-                            EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "PROSPECT"),
-                            EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT")),
+                            EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, RoleTypeConstants.PROSPECT),
+                            EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, RoleTypeConstants.ACCOUNT),
+                            EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, RoleTypeConstants.CONTACT)),
                     EntityUtil.getFilterByDateExpr()); // filter out expired accounts
         }
 
@@ -158,11 +196,17 @@ public class OpportunityLookupService extends EntityLookupAndSuggestService {
         } else {
             opportunities = findAllOpportunities(SalesOpportunityAndPartyRelationshipAndStage.class, condition);
         }
+
         // make custom field
         try {
             String externalLoginKey = getProvider().getParameter("externalLoginKey");
             for (SalesOpportunityAndPartyRelationshipAndStage opportunity : opportunities) {
-                opportunity.setPartyFromLink(PartyHelper.createViewPageLink(opportunity.getPartyIdFrom(), getProvider().getInfrastructure().getDelegator(), externalLoginKey));
+                // make "Opportunity For" column a link if there is no partyIdFrom in input.
+                // Otherwise this isn't make sense because we are on view account page.
+                if (getProvider().parameterIsPresent(OpportunityLookupConfiguration.INOUT_PARTY_ID_FROM_ID)) {
+                    opportunity.setPartyFromLink(PartyHelper.createViewPageLink(opportunity.getPartyIdFrom(), getProvider().getInfrastructure().getDelegator(), externalLoginKey));
+                }
+                // prepare date in localized format
                 String estimatedCloseDateString = opportunity.getEstimatedCloseDate() == null ? "" : UtilDateTime.toDateString(opportunity.getEstimatedCloseDate());
                 opportunity.setEstimatedCloseDateString(estimatedCloseDateString);
             }

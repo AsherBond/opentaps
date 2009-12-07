@@ -116,16 +116,6 @@ if (accountActive) {
     context.put("ordersListIt", myOrders);
     //  *************** order data ********************
     
-     // account opportunities
-    // this may have to be enhanced to exclude some types of opportunities (ie, closed ones)?
-    opportunitiesOrderBy = parameters.get("opportunitiesOrderBy");
-    if (opportunitiesOrderBy == null) opportunitiesOrderBy = "estimatedCloseDate";
-    findParams = UtilMisc.toMap("entityName", "SalesOpportunityAndRole",
-            "inputFields", UtilMisc.toMap("partyId", partyId, "roleTypeId", "ACCOUNT"),
-            "orderBy", opportunitiesOrderBy);
-    results = dispatcher.runSync("performFind", findParams);
-    context.put("opportunitiesListIt", results.get("listIt"));
-
     // account data sources
     sources = delegator.findByAnd("PartyDataSource", UtilMisc.toMap("partyId", partyId), UtilMisc.toList("fromDate DESC"));
     context.put("dataSources", sources);
