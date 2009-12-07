@@ -158,8 +158,7 @@ div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${f
         <b>${uiLabelMap.ProductOrganization}</b>:&nbsp;${applicationSetupOrganization.groupName}&nbsp; (<@displayLink text="${uiLabelMap.CommonChange}" href="selectOrganizationForm"/>)
       </div>
     </#if>
-    <div class="gwtVoipNotification" id="gwtVoipNotification">
-    </div>
+    <div class="gwtVoipNotification" id="gwtVoipNotification"></div>
     <#assign helpUrl = Static["org.opentaps.common.util.UtilCommon"].getUrlContextHelpResource(delegator, appName, parameters._CURRENT_VIEW_, screenState?default(""))!/>
       <div class="liveHelp">
         <#if keyboardShortcuts?has_content>
@@ -169,5 +168,6 @@ div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${f
         </#if>
       </div>
   </div>
+  <div style="padding:5px;position:absolute;right:0px" class="applicationSearch" id="gwtSearch"></div>
   <div class="spacer"></div>
 

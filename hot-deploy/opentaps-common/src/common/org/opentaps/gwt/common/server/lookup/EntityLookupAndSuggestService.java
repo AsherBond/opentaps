@@ -19,14 +19,15 @@ package org.opentaps.gwt.common.server.lookup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.gwt.common.client.lookup.UtilLookup;
 import org.opentaps.gwt.common.server.InputProviderInterface;
-import org.ofbiz.base.util.Debug;
 
 /**
  * The base service to perform entity lookups and / or suggest.
@@ -103,4 +104,13 @@ public abstract class EntityLookupAndSuggestService extends EntityLookupService 
      * @return the display string that should be displayed in the auto-completer
      */
     public abstract String makeSuggestDisplayedText(EntityInterface value);
+
+    /**
+     * Makes extra values to be returned in the response.
+     * @param value the entity value
+     * @return the Map of field -> value that should be set
+     */
+    public Map<String, String> makeExtraSuggestValues(EntityInterface value) {
+        return null;
+    }
 }

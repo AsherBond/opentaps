@@ -180,6 +180,12 @@ public class JsonResponse {
                 jsonObject = new JSONObject();
                 jsonObject.put(UtilLookup.SUGGEST_ID, e.get(entityIdFieldName));
                 jsonObject.put(UtilLookup.SUGGEST_TEXT, format.makeSuggestDisplayedText(e));
+                Map<String, String> extraSuggestFields = format.makeExtraSuggestValues(e);
+                if (extraSuggestFields != null) {
+                    for (String extra : extraSuggestFields.keySet()) {
+                        jsonObject.put(extra, extraSuggestFields.get(extra));
+                    }
+                }
                 jsonArray.element(jsonObject.toString());
             }
         }

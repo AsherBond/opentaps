@@ -39,6 +39,7 @@ import org.opentaps.gwt.common.client.form.FindContactsForm;
 import org.opentaps.gwt.common.client.form.FormNotificationInterface;
 import org.opentaps.gwt.common.client.form.LookupContactsWindow;
 import org.opentaps.gwt.common.client.form.OrderItemsEditable;
+import org.opentaps.gwt.common.client.form.SearchForm;
 import org.opentaps.gwt.common.client.listviews.OrderItemsEditableListView.OrderType;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 import org.opentaps.gwt.crmsfa.client.accounts.form.AccountContactsSubview;
@@ -54,13 +55,14 @@ import org.opentaps.gwt.crmsfa.client.opportunities.form.QuickNewOpportunityForm
 import org.opentaps.gwt.crmsfa.client.orders.form.FindOrdersForm;
 import org.opentaps.gwt.crmsfa.client.orders.form.ProductReReservationForm;
 import org.opentaps.gwt.crmsfa.client.partners.form.FindPartnersForm;
+import org.opentaps.gwt.crmsfa.client.search.form.CrmsfaSearchResultsListView;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class Entry extends BaseEntry {
 
-    public static final String MODULE = Entry.class.getName();
+    private static final String MODULE = Entry.class.getName();
 
     private FindContactsForm findContactsForm;
     private FindContactsForm myContactsForm;
@@ -87,6 +89,8 @@ public class Entry extends BaseEntry {
     private QuickNewCaseForm quickNewCaseForm;
     private FindCasesForm findCasesForm;
     private FindCasesForm myCasesForm;
+
+    private SearchForm crmsfaSearch;
 
     private static final String MY_CONTACTS_ID = "myContacts";
     private static final String FIND_CONTACTS_ID = "findContacts";
@@ -123,6 +127,8 @@ public class Entry extends BaseEntry {
     private static final String MY_CASES_ID = "myCases";
     private static final String FIND_CASES_ID = "findCases";
 
+    private static final String CRMSFA_SEARCH_ID = "gwtSearch";
+
     /**
      * This is the entry point method.
      * It is loaded for page where the meta tag is found.
@@ -136,6 +142,11 @@ public class Entry extends BaseEntry {
         loadOrdersWidgets();
         loadPartnersWidgets();
         loadCasesWidgets();
+
+        if (RootPanel.get(CRMSFA_SEARCH_ID) != null) {
+            crmsfaSearch = new SearchForm(new CrmsfaSearchResultsListView());
+            RootPanel.get(CRMSFA_SEARCH_ID).add(crmsfaSearch);
+        }
     }
 
     private void loadAccountsWidgets() {
