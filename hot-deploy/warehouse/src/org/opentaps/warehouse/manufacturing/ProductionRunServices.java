@@ -104,7 +104,7 @@ public final class ProductionRunServices {
 
     private static final String MODULE = ProductionRunServices.class.getName();
 
-    private static BigDecimal ZERO = new BigDecimal("0");
+    private static BigDecimal ZERO = BigDecimal.ZERO;
     public static int decimals = UtilNumber.getBigDecimalScale("arithmetic.properties", "order.decimals");
     public static int rounding = UtilNumber.getBigDecimalRoundingMode("arithmetic.properties", "order.rounding");
 
@@ -133,7 +133,7 @@ public final class ProductionRunServices {
         String productId = (String) context.get("productId");
         Timestamp sendDate = (Timestamp) context.get("sendDate");
         BigDecimal transferQuantity = (BigDecimal) context.get("transferQuantity");
-        BigDecimal quantityTransferred = new BigDecimal("0.0");
+        BigDecimal quantityTransferred = BigDecimal.ZERO;
         List<String> inventoryTransferIds = new LinkedList<String>();
 
         if (transferQuantity.compareTo(BigDecimal.ZERO) < 0) {
@@ -142,7 +142,7 @@ public final class ProductionRunServices {
 
         try {
             EntityCondition inventoryItemConds = EntityCondition.makeCondition(
-                    EntityCondition.makeCondition("availableToPromiseTotal", EntityOperator.GREATER_THAN, new BigDecimal("0.0")),
+                    EntityCondition.makeCondition("availableToPromiseTotal", EntityOperator.GREATER_THAN, BigDecimal.ZERO),
                     EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityIdFrom),
                     EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId));
             //The last parameter is very important -- it is the sequence of inventory items to be used.  See service definition for details.
@@ -240,11 +240,11 @@ public final class ProductionRunServices {
                 GenericValue genericResult = iteratorResult.next();
                 BigDecimal estimatedQuantity = genericResult.getBigDecimal("estimatedQuantity");
                 if (estimatedQuantity == null) {
-                    estimatedQuantity = new BigDecimal("0");
+                    estimatedQuantity = BigDecimal.ZERO;
                 }
                 String productId =  genericResult.getString("productId");
                 if (!products.containsKey(productId)) {
-                    products.put(productId, new BigDecimal("0.0"));
+                    products.put(productId, BigDecimal.ZERO);
                 }
                 BigDecimal totalQuantity = (BigDecimal) products.get(productId);
                 totalQuantity = totalQuantity.add(estimatedQuantity);
@@ -969,7 +969,7 @@ public final class ProductionRunServices {
             // We can track this by creating a completed WEGS for estimated quantity 0.
             if (wegsList.size() == 0) {
                 GenericValue wegs = delegator.makeValue("WorkEffortGoodStandard", input);
-                wegs.set("estimatedQuantity", new BigDecimal("0"));
+                wegs.set("estimatedQuantity", BigDecimal.ZERO);
                 wegs.set("fromDate", UtilDateTime.nowTimestamp());
                 wegs.set("statusId", "WEGS_COMPLETED");
                 wegs.create();
@@ -2291,7 +2291,7 @@ public final class ProductionRunServices {
             Map<String, Object> tmpResults = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("productId", orderItem.getString("productId"), "facilityId", facilityId, "userLogin", userLogin));
             BigDecimal existingAtp = (BigDecimal) tmpResults.get("availableToPromiseTotal");
             if (existingAtp == null) {
-                existingAtp = new BigDecimal("0.0");
+                existingAtp = BigDecimal.ZERO;
             }
 
             if (Debug.verboseOn()) {

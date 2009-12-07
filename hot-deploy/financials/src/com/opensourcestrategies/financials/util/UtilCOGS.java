@@ -59,7 +59,7 @@ public final class UtilCOGS {
 
     public static int decimals = UtilNumber.getBigDecimalScale("fin_arithmetic.properties", "financial.statements.decimals");
     public static int rounding = UtilNumber.getBigDecimalRoundingMode("fin_arithmetic.properties", "financial.statements.rounding");
-    public static final BigDecimal ZERO = new BigDecimal("0");
+    public static final BigDecimal ZERO = BigDecimal.ZERO;
 
     /**
      * Attempts to find the average cost of a given product.  First it will look in ProductAverageCost.  If a non-zero ProductAverageCost is found, it wil return it.

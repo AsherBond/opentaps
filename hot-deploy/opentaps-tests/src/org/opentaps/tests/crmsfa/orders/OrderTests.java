@@ -1263,7 +1263,7 @@ public class OrderTests extends OrderTestCase {
         reserveProductInventoryByFacility = ReserveProductInventoryByFacilityService.fromInput(commonInput);
         reserveProductInventoryByFacility.setInFacilityId(facilityId);
         reserveProductInventoryByFacility.setInRequireInventory("N");
-        reserveProductInventoryByFacility.setInQuantity(new BigDecimal("1"));
+        reserveProductInventoryByFacility.setInQuantity(BigDecimal.ONE);
         runAndAssertServiceError(reserveProductInventoryByFacility);
     }
 

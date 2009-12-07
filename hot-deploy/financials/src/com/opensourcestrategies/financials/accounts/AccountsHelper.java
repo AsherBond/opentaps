@@ -54,7 +54,7 @@ public class AccountsHelper {
 
     public static int decimals = UtilNumber.getBigDecimalScale("fin_arithmetic.properties", "financial.statements.decimals");
     public static int rounding = UtilNumber.getBigDecimalRoundingMode("fin_arithmetic.properties", "financial.statements.rounding");
-    protected static final BigDecimal ZERO = new BigDecimal("0"); // TODO: this will soon be UtilNumber.BD_ZERO
+    protected static final BigDecimal ZERO = BigDecimal.ZERO;
 
     // what gl accounts to use for the customer, vendor and commission statements and balances reports
     public static final List<String> CUSTOMER_RECEIVABLE_ACCTS = UtilMisc.toList("ACCOUNTS_RECEIVABLE", "CUSTOMER_CREDIT", "CUSTOMER_DEPOSIT", "INTRSTINC_RECEIVABLE");

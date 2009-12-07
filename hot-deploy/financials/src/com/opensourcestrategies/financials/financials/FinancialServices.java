@@ -80,7 +80,7 @@ public final class FinancialServices {
 
     public static int decimals = UtilNumber.getBigDecimalScale("fin_arithmetic.properties", "financial.statements.decimals");
     public static int rounding = UtilNumber.getBigDecimalRoundingMode("fin_arithmetic.properties", "financial.statements.rounding");
-    public static final BigDecimal ZERO = (new BigDecimal("0")).setScale(decimals, rounding);
+    public static final BigDecimal ZERO = BigDecimal.ZERO.setScale(decimals, rounding);
 
     /** Default toplevel income statement glAccountTypeIds to group by. */
     public static final List<String> INCOME_STATEMENT_TYPES = Arrays.asList("REVENUE", "COGS", "OPERATING_EXPENSE", "OTHER_EXPENSE", "OTHER_INCOME", "TAX_EXPENSE");

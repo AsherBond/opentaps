@@ -1301,7 +1301,7 @@ public class MrpTests extends MrpTestCase {
         ctxt.put("currencyUomId", "USD");
         ctxt.put("datetimeReceived", UtilDateTime.nowTimestamp());
         ctxt.put("quantityAccepted", new BigDecimal("9.0"));
-        ctxt.put("quantityRejected", new BigDecimal("0"));
+        ctxt.put("quantityRejected", BigDecimal.ZERO);
         ctxt.put("userLogin", demowarehouse1);
         runAndAssertServiceSuccess("receiveInventoryProduct", ctxt);
 

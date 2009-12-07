@@ -670,7 +670,7 @@ public final class CrmsfaOrderEvents {
     @SuppressWarnings("unchecked")
     public static void clearCheckoutInfo(ShoppingCart cart, LocalDispatcher dispatcher) {
         cart.clearPayments();
-        cart.setBillingAccount(null, new BigDecimal(0));
+        cart.setBillingAccount(null, BigDecimal.ZERO);
         for (Iterator iter = cart.items().iterator(); iter.hasNext();) {
             ShoppingCartItem item = (ShoppingCartItem) iter.next();
             cart.clearItemShipInfo(item);

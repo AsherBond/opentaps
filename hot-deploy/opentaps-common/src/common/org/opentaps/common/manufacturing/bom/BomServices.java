@@ -152,10 +152,10 @@ public final class BomServices {
         String routingId = (String) context.get("routingId");
 
         if (quantity == null) {
-            quantity = new BigDecimal("1");
+            quantity = BigDecimal.ONE;
         }
         if (amount == null) {
-            amount = new BigDecimal("0");
+            amount = BigDecimal.ZERO;
         }
 
         Date fromDate = null;

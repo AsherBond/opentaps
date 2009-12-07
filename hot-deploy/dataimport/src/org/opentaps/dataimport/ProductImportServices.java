@@ -52,7 +52,7 @@ public final class ProductImportServices {
     private static String MODULE = ProductImportServices.class.getName();
     private static final int decimals = UtilNumber.getBigDecimalScale("order.decimals");
     private static final int rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
-    private static final BigDecimal ZERO = (new BigDecimal("0")).setScale(decimals, rounding);
+    private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(decimals, rounding);
     private static int acctgTransSeqNum = 1;
 
     /**

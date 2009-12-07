@@ -365,7 +365,7 @@ public class FinancialsTests extends FinancialsTestCase {
          */
         input = new HashMap<String, Object>();
         input.putAll(commonParameters);
-        input.putAll(UtilMisc.toMap("inventoryItemTypeId", "SERIALIZED_INV_ITEM", "unitCost", new BigDecimal("10"), "quantityAccepted", new BigDecimal("1")));
+        input.putAll(UtilMisc.toMap("inventoryItemTypeId", "SERIALIZED_INV_ITEM", "unitCost", new BigDecimal("10"), "quantityAccepted", BigDecimal.ONE));
         runAndAssertServiceSuccess("receiveInventoryProduct", input);
 
         calculatedAvgCost = UtilCOGS.getProductAverageCost(productId, organizationPartyId, demowarehouse1, delegator, dispatcher);
@@ -383,7 +383,7 @@ public class FinancialsTests extends FinancialsTestCase {
          */
         input = new HashMap<String, Object>();
         input.putAll(commonParameters);
-        input.putAll(UtilMisc.toMap("inventoryItemTypeId", "SERIALIZED_INV_ITEM", "unitCost", new BigDecimal("12"), "quantityAccepted", new BigDecimal("1")));
+        input.putAll(UtilMisc.toMap("inventoryItemTypeId", "SERIALIZED_INV_ITEM", "unitCost", new BigDecimal("12"), "quantityAccepted", BigDecimal.ONE));
         runAndAssertServiceSuccess("receiveInventoryProduct", input);
 
         calculatedAvgCost = UtilCOGS.getProductAverageCost(productId, organizationPartyId, demowarehouse1, delegator, dispatcher);

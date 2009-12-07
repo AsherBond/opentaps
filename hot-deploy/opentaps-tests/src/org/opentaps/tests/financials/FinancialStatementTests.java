@@ -136,9 +136,9 @@ public class FinancialStatementTests extends FinancialsTestCase {
         Map expectedEquityAccountBalances = UtilMisc.toMap("340000", new BigDecimal("10000.00"), "341000", new BigDecimal("300000.00"), "336000", new BigDecimal("0.0"));
         assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("equityAccountBalances")), expectedEquityAccountBalances);
 
-        assertEquals("There should be no revenue account balances", new BigDecimal(((Map) results.get("revenueAccountBalances")).keySet().size()), new BigDecimal(0));
-        assertEquals("There should be no expense account balances", new BigDecimal(((Map) results.get("expenseAccountBalances")).keySet().size()), new BigDecimal(0));
-        assertEquals("There should be no income account balances", new BigDecimal(((Map) results.get("incomeAccountBalances")).keySet().size()), new BigDecimal(0));
+        assertEquals("There should be no revenue account balances", new BigDecimal(((Map) results.get("revenueAccountBalances")).keySet().size()), BigDecimal.ZERO);
+        assertEquals("There should be no expense account balances", new BigDecimal(((Map) results.get("expenseAccountBalances")).keySet().size()), BigDecimal.ZERO);
+        assertEquals("There should be no income account balances", new BigDecimal(((Map) results.get("incomeAccountBalances")).keySet().size()), BigDecimal.ZERO);
 
         Map expectedOtherAccountBalances = UtilMisc.toMap("890000", new BigDecimal("0.0"));
         assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("otherAccountBalances")), expectedOtherAccountBalances);
@@ -226,12 +226,12 @@ public class FinancialStatementTests extends FinancialsTestCase {
 
         // Because assertMapCorrect  will only check the values for the keys in the expected Map,  if we pass an empty map,  it will not check anything.
         //  So, to check that there are no accounts, we need to check the size of the key set
-        assertEquals("There should be no asset account balances", new BigDecimal(((Map) results.get("equityAccountBalances")).keySet().size()), new BigDecimal(0));
-        assertEquals("There should be no liability account balances", new BigDecimal(((Map) results.get("liabilityAccountBalances")).keySet().size()), new BigDecimal(0));
-        assertEquals("There should be no equity account balances", new BigDecimal(((Map) results.get("equityAccountBalances")).keySet().size()), new BigDecimal(0));
-        assertEquals("There should be no revenue account balances", new BigDecimal(((Map) results.get("revenueAccountBalances")).keySet().size()), new BigDecimal(0));
-        assertEquals("There should be no income account balances", new BigDecimal(((Map) results.get("incomeAccountBalances")).keySet().size()), new BigDecimal(0));
-        assertEquals("There should be no other account balances", new BigDecimal(((Map) results.get("otherAccountBalances")).keySet().size()), new BigDecimal(0));
+        assertEquals("There should be no asset account balances", new BigDecimal(((Map) results.get("equityAccountBalances")).keySet().size()), BigDecimal.ZERO);
+        assertEquals("There should be no liability account balances", new BigDecimal(((Map) results.get("liabilityAccountBalances")).keySet().size()), BigDecimal.ZERO);
+        assertEquals("There should be no equity account balances", new BigDecimal(((Map) results.get("equityAccountBalances")).keySet().size()), BigDecimal.ZERO);
+        assertEquals("There should be no revenue account balances", new BigDecimal(((Map) results.get("revenueAccountBalances")).keySet().size()), BigDecimal.ZERO);
+        assertEquals("There should be no income account balances", new BigDecimal(((Map) results.get("incomeAccountBalances")).keySet().size()), BigDecimal.ZERO);
+        assertEquals("There should be no other account balances", new BigDecimal(((Map) results.get("otherAccountBalances")).keySet().size()), BigDecimal.ZERO);
         Map<String, BigDecimal> expectedExpenseAccountBalances = UtilMisc.toMap("601000", new BigDecimal("50000.00"), "604100", new BigDecimal("3000.00"), "605100", new BigDecimal("5000.00"), "608000", new BigDecimal("1200.0"), "680000", new BigDecimal("290.00"));
         assertMapCorrect(UtilFinancial.getBalancesByGlAccountId((Map<GenericValue, BigDecimal>) results.get("expenseAccountBalances")), expectedExpenseAccountBalances);
 
@@ -301,31 +301,31 @@ public class FinancialStatementTests extends FinancialsTestCase {
     public void testDetailedCashFlowStatements() throws Exception {
         // Verify cashflow statement for STATEMENT-DETAILS and tag1 = TEST_STDTL_TAG1_A during time period STD2007:
         // Beginning = 0 Ending = 300000 Operating = 0 Investing = 0 Financing = 300000
-        verifyCashflowStatement("With tag1 = TEST_STDTL_TAG1_A ", STATEMENT_DETAILS_TEST_ORG, "STD2007", new BigDecimal("0"), new BigDecimal("300000"), new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("300000"), new BigDecimal("300000"), UtilMisc.toMap("tag1", "TEST_STDTL_TAG1_A"));
+        verifyCashflowStatement("With tag1 = TEST_STDTL_TAG1_A ", STATEMENT_DETAILS_TEST_ORG, "STD2007", BigDecimal.ZERO, new BigDecimal("300000"), BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("300000"), new BigDecimal("300000"), UtilMisc.toMap("tag1", "TEST_STDTL_TAG1_A"));
 
         // Verify cashflow statement for STATEMENT-DETAILS and tag1 = TEST_STDTL_TAG1_A during time period STD2008:
         // Beginning = 300000  Ending = 274900 Operating = -25100 Investing = 0 Financing = 0
-        verifyCashflowStatement("With tag1 = TEST_STDTL_TAG1_A ", STATEMENT_DETAILS_TEST_ORG, "STD2008", new BigDecimal("300000"), new BigDecimal("274900"), new BigDecimal("-25100"), new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("-25100"), UtilMisc.toMap("tag1", "TEST_STDTL_TAG1_A"));
+        verifyCashflowStatement("With tag1 = TEST_STDTL_TAG1_A ", STATEMENT_DETAILS_TEST_ORG, "STD2008", new BigDecimal("300000"), new BigDecimal("274900"), new BigDecimal("-25100"), BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("-25100"), UtilMisc.toMap("tag1", "TEST_STDTL_TAG1_A"));
 
         // Verify cashflow statement for STATEMENT-DETAILS and tag1 = TEST_STDTL_TAG1_B during time period STD2007:
         // Beginning = 0 Ending = 200000 Operating = 0 Investing = 0 Financing = 200000
-        verifyCashflowStatement("With tag1 = TEST_STDTL_TAG1_B ", STATEMENT_DETAILS_TEST_ORG, "STD2007", new BigDecimal("0"), new BigDecimal("200000"), new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("200000"), new BigDecimal("200000"), UtilMisc.toMap("tag1", "TEST_STDTL_TAG1_B"));
+        verifyCashflowStatement("With tag1 = TEST_STDTL_TAG1_B ", STATEMENT_DETAILS_TEST_ORG, "STD2007", BigDecimal.ZERO, new BigDecimal("200000"), BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("200000"), new BigDecimal("200000"), UtilMisc.toMap("tag1", "TEST_STDTL_TAG1_B"));
 
         // Verify cashflow statement for STATEMENT-DETAILS and tag1 = TEST_STDTL_TAG1_B during time period STD2008:
         // Beginning = 200000  Ending = 174900 Operating = -25100 Investing = 0 Financing = 0
-        verifyCashflowStatement("With tag1 = TEST_STDTL_TAG1_B ", STATEMENT_DETAILS_TEST_ORG, "STD2008", new BigDecimal("200000"), new BigDecimal("174900"), new BigDecimal("-25100"), new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("-25100"), UtilMisc.toMap("tag1", "TEST_STDTL_TAG1_B"));
+        verifyCashflowStatement("With tag1 = TEST_STDTL_TAG1_B ", STATEMENT_DETAILS_TEST_ORG, "STD2008", new BigDecimal("200000"), new BigDecimal("174900"), new BigDecimal("-25100"), BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("-25100"), UtilMisc.toMap("tag1", "TEST_STDTL_TAG1_B"));
 
         // Verify cashflow statement for STATEMENT-DETAILS and tag1 = TEST_STDTL_TAG1_C during time period STD2007:
         // Beginning = 0 Ending = 100000 Operating = 0 Investing = 0 Financing = 100000
-        verifyCashflowStatement("With tag1 = TEST_STDTL_TAG1_C ", STATEMENT_DETAILS_TEST_ORG, "STD2007", new BigDecimal("0"), new BigDecimal("100000"), new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("100000"), new BigDecimal("100000"), UtilMisc.toMap("tag1", "TEST_STDTL_TAG1_C"));
+        verifyCashflowStatement("With tag1 = TEST_STDTL_TAG1_C ", STATEMENT_DETAILS_TEST_ORG, "STD2007", BigDecimal.ZERO, new BigDecimal("100000"), BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("100000"), new BigDecimal("100000"), UtilMisc.toMap("tag1", "TEST_STDTL_TAG1_C"));
 
         // Verify cashflow statement for STATEMENT-DETAILS and tag1 = TEST_STDTL_TAG1_C during time period STD2008:
         // Beginning = 100000  Ending = 49800 Operating = -50200 Investing = 0 Financing = 0
-        verifyCashflowStatement("With tag1 = TEST_STDTL_TAG1_C ", STATEMENT_DETAILS_TEST_ORG, "STD2008", new BigDecimal("100000"), new BigDecimal("49800"), new BigDecimal("-50200"), new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("-50200"), UtilMisc.toMap("tag1", "TEST_STDTL_TAG1_C"));
+        verifyCashflowStatement("With tag1 = TEST_STDTL_TAG1_C ", STATEMENT_DETAILS_TEST_ORG, "STD2008", new BigDecimal("100000"), new BigDecimal("49800"), new BigDecimal("-50200"), BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("-50200"), UtilMisc.toMap("tag1", "TEST_STDTL_TAG1_C"));
 
         // Verify cashflow statement for STATEMENT-DETAILS and tags None during time period STD2008:
         // Beginning = 500000  Ending = 500000 Operating = 0 Investing = 0 Financing = 0
-        verifyCashflowStatement("With all tags set to none", STATEMENT_DETAILS_TEST_ORG, "STD2008", new BigDecimal("500000"), new BigDecimal("500000"), new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), UtilMisc.toMap("tag1", "NONE", "tag2", "NONE", "tag3", "NONE"));
+        verifyCashflowStatement("With all tags set to none", STATEMENT_DETAILS_TEST_ORG, "STD2008", new BigDecimal("500000"), new BigDecimal("500000"), BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, UtilMisc.toMap("tag1", "NONE", "tag2", "NONE", "tag3", "NONE"));
     }
 
     /**
@@ -350,7 +350,7 @@ public class FinancialStatementTests extends FinancialsTestCase {
 
         // verify cash flow statements
         verifyCashflowStatement(messagePrefix, organizationPartyId, QUARTER1, new BigDecimal("200000.00"), new BigDecimal("74243.22"), new BigDecimal("-104756.78"), new BigDecimal("-50000.00"), new BigDecimal("29000"), new BigDecimal("-125756.78"));
-        verifyCashflowStatement(messagePrefix, organizationPartyId, QUARTER2, new BigDecimal("74243.22"), new BigDecimal("136743.22"), new BigDecimal("62500"), new BigDecimal("0.00"), new BigDecimal("0"), new BigDecimal("62500"));
+        verifyCashflowStatement(messagePrefix, organizationPartyId, QUARTER2, new BigDecimal("74243.22"), new BigDecimal("136743.22"), new BigDecimal("62500"), new BigDecimal("0.00"), BigDecimal.ZERO, new BigDecimal("62500"));
         verifyCashflowStatement(messagePrefix, organizationPartyId, YEAR1, new BigDecimal("200000"), new BigDecimal("136743.22"), new BigDecimal("-42256.78"), new BigDecimal("-50000"), new BigDecimal("29000"), new BigDecimal("-63256.78"));
 
     }

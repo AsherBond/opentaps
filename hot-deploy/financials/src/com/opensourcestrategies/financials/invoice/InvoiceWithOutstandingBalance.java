@@ -42,7 +42,7 @@ public @Deprecated class InvoiceWithOutstandingBalance {
     public GenericValue invoice;
     public BigDecimal amount;
     public boolean isPastDue;
-    public BigDecimal interestCharged = new BigDecimal("0").setScale(decimals, rounding);
+    public BigDecimal interestCharged = BigDecimal.ZERO.setScale(decimals, rounding);
     
     public InvoiceWithOutstandingBalance(GenericValue invoice, BigDecimal amount, boolean isPastDue, BigDecimal interestCharged) {
         // tbd: check that invoice is an "Invoice" object and throw an IllegalArgumentException if not

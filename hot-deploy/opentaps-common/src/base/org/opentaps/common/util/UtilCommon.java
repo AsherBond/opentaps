@@ -288,7 +288,7 @@ public abstract class UtilCommon {
      */
     public static Timestamp beforeMillisecs(Timestamp ts, BigDecimal milliseconds) {
         if (milliseconds == null) {
-            milliseconds = new BigDecimal("0");
+            milliseconds = BigDecimal.ZERO;
         }
         return beforeMillisecs(ts, milliseconds.longValue());
     }

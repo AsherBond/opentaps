@@ -123,7 +123,7 @@ public final class InvoiceServices {
 
     private static final String MODULE = InvoiceServices.class.getName();
 
-    private static BigDecimal ZERO = new BigDecimal("0");
+    private static BigDecimal ZERO = BigDecimal.ZERO;
     private static int decimals = UtilNumber.getBigDecimalScale("invoice.decimals");
     private static int rounding = UtilNumber.getBigDecimalRoundingMode("invoice.rounding");
     private static int taxDecimals = UtilNumber.getBigDecimalScale("salestax.calc.decimals");
@@ -303,7 +303,7 @@ public final class InvoiceServices {
             createInvoiceItemServiceMap.put("description", description);
             createInvoiceItemServiceMap.put("invoiceItemTypeId", "INV_INTRST_CHRG");
             createInvoiceItemServiceMap.put("amount", amount);
-            createInvoiceItemServiceMap.put("quantity", new BigDecimal(1));
+            createInvoiceItemServiceMap.put("quantity", BigDecimal.ONE);
             createInvoiceItemServiceMap.put("userLogin", userLogin);
 
             // Create a single InvoiceItem for the finance charge
@@ -2931,8 +2931,8 @@ public final class InvoiceServices {
                 if ("N".equalsIgnoreCase(prorateShipping)) {
 
                     // Set the divisor and multiplier to 1 to avoid prorating
-                    BigDecimal divisor = new BigDecimal("1");
-                    BigDecimal multiplier = new BigDecimal("1");
+                    BigDecimal divisor = BigDecimal.ONE;
+                    BigDecimal multiplier = BigDecimal.ONE;
 
                     // The base amount in this case is the adjustment amount minus the total already invoiced for that adjustment, since
                     //  it won't be prorated
@@ -2970,8 +2970,8 @@ public final class InvoiceServices {
                 if ("N".equalsIgnoreCase(prorateTaxes)) {
 
                     // Set the divisor and multiplier to 1 to avoid prorating
-                    BigDecimal divisor = new BigDecimal("1");
-                    BigDecimal multiplier = new BigDecimal("1");
+                    BigDecimal divisor = BigDecimal.ONE;
+                    BigDecimal multiplier = BigDecimal.ONE;
 
                     // The base amount in this case is the adjustment amount minus the total already invoiced for that adjustment, since
                     //  it won't be prorated
@@ -3108,7 +3108,7 @@ public final class InvoiceServices {
                 createInvoiceItemContext.put("invoiceItemSeqId", invoiceItemSeqId);
                 createInvoiceItemContext.put("invoiceItemTypeId", getInvoiceItemType(delegator, adj.getString("orderAdjustmentTypeId"), null, invoiceTypeId, "INVOICE_ADJ"));
                 createInvoiceItemContext.put("description", adj.get("description"));
-                createInvoiceItemContext.put("quantity", new BigDecimal("1"));
+                createInvoiceItemContext.put("quantity", BigDecimal.ONE);
                 createInvoiceItemContext.put("amount", amount);
                 createInvoiceItemContext.put("overrideGlAccountId", adj.get("overrideGlAccountId"));
                 //createInvoiceItemContext.put("productId", orderItem.get("productId"));
@@ -3163,7 +3163,7 @@ public final class InvoiceServices {
                 createInvoiceItemContext.put("invoiceItemSeqId", invoiceItemSeqId);
                 createInvoiceItemContext.put("invoiceItemTypeId", getInvoiceItemType(delegator, adj.getString("orderAdjustmentTypeId"), null, invoiceTypeId, "INVOICE_ADJ"));
                 createInvoiceItemContext.put("description", adj.get("description"));
-                createInvoiceItemContext.put("quantity", new BigDecimal(1));
+                createInvoiceItemContext.put("quantity", BigDecimal.ONE);
                 createInvoiceItemContext.put("amount", amount);
                 createInvoiceItemContext.put("overrideGlAccountId", adj.get("overrideGlAccountId"));
                 //createInvoiceItemContext.put("productId", orderItem.get("productId"));

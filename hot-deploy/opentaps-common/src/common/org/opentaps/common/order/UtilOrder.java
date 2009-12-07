@@ -61,7 +61,7 @@ public final class UtilOrder {
     private static final String MODULE = UtilOrder.class.getName();
     private static int decimals = UtilNumber.getBigDecimalScale("order.decimals");
     private static int rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
-    private static final BigDecimal ZERO = (new BigDecimal("0")).setScale(decimals, rounding);
+    private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(decimals, rounding);
 
     /**
      * Helper method to obtain the earliest ship by date for an order, so it may be invoked within a form widget or ftl.

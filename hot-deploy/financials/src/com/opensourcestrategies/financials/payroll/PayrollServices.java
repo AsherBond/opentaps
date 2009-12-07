@@ -40,16 +40,13 @@
 
 package com.opensourcestrategies.financials.payroll;
 
-import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.opensourcestrategies.financials.payroll.PaycheckReader;
 import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
@@ -68,10 +65,6 @@ import org.opentaps.common.util.UtilMessage;
 public class PayrollServices {
 
     public static String module = PayrollServices.class.getName();
-    
-    private static int decimals = UtilNumber.getBigDecimalScale("fin_arithmetic.properties", "payroll.paycheck.decimals");
-    private static int rounding = UtilNumber.getBigDecimalRoundingMode("fin_arithmetic.properties", "payroll.paycheck.rounding");
-    private static final BigDecimal ZERO = (new BigDecimal("0")).setScale(decimals, rounding);    
     
     private static final int PAYCHECK_ITEM_SEQUENCE_ID_DIGITS = 5; // this is the number of digits used for paycheckItemSeqId: 00001, 00002...    
     

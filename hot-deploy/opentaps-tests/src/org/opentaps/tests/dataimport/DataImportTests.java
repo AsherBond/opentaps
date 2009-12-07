@@ -161,7 +161,7 @@ public class DataImportTests extends OpentapsTestCase {
         // here, we just check that non-zero records were imported, so we don't have to keep modifying this test as the data changes
         Map<String, Object> results = dispatcher.runSync("importCustomersCommissions", UtilMisc.toMap("userLogin", demofinadmin, "organizationPartyId", organizationPartyId));
         assertTrue("importCustomersCommissions did not run successfully", UtilCommon.isSuccess(results));
-        assertNotEquals("importCustomersCommissions did not import any records", new BigDecimal((Integer) results.get("importedRecords")), new BigDecimal("0"));
+        assertNotEquals("importCustomersCommissions did not import any records", new BigDecimal((Integer) results.get("importedRecords")), BigDecimal.ZERO);
 
         // 3.  For each primaryPartyId of customerIds 9005, 9006, 9007
         FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, demofinadmin);

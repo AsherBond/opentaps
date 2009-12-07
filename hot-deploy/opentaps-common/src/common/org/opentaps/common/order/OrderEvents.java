@@ -1359,7 +1359,7 @@ public final class OrderEvents {
         List<Map<String, Object>> reportData = new FastList<Map<String, Object>>();
         // retrieve order item info and pass it to JR, add as report data
         for (org.opentaps.domain.order.OrderItem orderItem : order.getOrderItems()) {
-            BigDecimal orderSubTotal = orderItem.isCancelled() ? new BigDecimal("0.0") : orderItem.getSubTotal();
+            BigDecimal orderSubTotal = orderItem.isCancelled() ? BigDecimal.ZERO : orderItem.getSubTotal();
             Map<String, Object> reportLine = new FastMap<String, Object>();
             if (orderItem.getProductId() != null) {
                 reportLine.put("productId", orderItem.getProductId());

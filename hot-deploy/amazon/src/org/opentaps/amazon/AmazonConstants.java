@@ -107,7 +107,7 @@ public final class AmazonConstants {
     // Precision and rounding
     public static final int decimals = UtilNumber.getBigDecimalScale(configResource, "opentaps.amazon.import.decimalPrecision");
     public static final int rounding = UtilNumber.getBigDecimalRoundingMode(configResource, "opentaps.amazon.import.decimalRounding");
-    public static final BigDecimal ZERO = (new BigDecimal("0")).setScale(decimals, rounding);
+    public static final BigDecimal ZERO = BigDecimal.ZERO.setScale(decimals, rounding);
 
     // Shipping
     public static final Map<String, String> shipmentMethodTypeIds = new HashMap<String, String>();

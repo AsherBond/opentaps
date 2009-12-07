@@ -58,8 +58,8 @@ public class CommonTests extends OpentapsTestCase {
     public void testListEquivalenceMethod() {
         assertTrue(UtilCommon.isEquivalent(UtilMisc.toList("A", "B", "C", "D"), UtilMisc.toList("A", "B", "C", "D")));
         assertFalse(UtilCommon.isEquivalent(UtilMisc.toList("A", "B", "C", "D"), UtilMisc.toList("A", "B", "C")));
-        assertFalse(UtilCommon.isEquivalent(UtilMisc.toList("A", "B", "C", "D"), UtilMisc.toList(new BigDecimal("1"), new BigDecimal("2"), new BigDecimal("3"), new BigDecimal("4"))));
-        assertTrue(UtilCommon.isEquivalent(UtilMisc.toList(new BigDecimal("1"), new BigDecimal("2"), new BigDecimal("3"), new BigDecimal("4")), UtilMisc.toList(new BigDecimal("1"), new BigDecimal("2"), new BigDecimal("3"), new BigDecimal("4"))));
+        assertFalse(UtilCommon.isEquivalent(UtilMisc.toList("A", "B", "C", "D"), UtilMisc.toList(BigDecimal.ONE, new BigDecimal("2"), new BigDecimal("3"), new BigDecimal("4"))));
+        assertTrue(UtilCommon.isEquivalent(UtilMisc.toList(BigDecimal.ONE, new BigDecimal("2"), new BigDecimal("3"), new BigDecimal("4")), UtilMisc.toList(new BigDecimal("1"), new BigDecimal("2"), new BigDecimal("3"), new BigDecimal("4"))));
 
         // the combinations can go on and on but this is enough for me for now
     }

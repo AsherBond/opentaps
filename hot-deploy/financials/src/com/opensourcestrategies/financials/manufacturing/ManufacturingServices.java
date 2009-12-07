@@ -40,8 +40,8 @@ public class ManufacturingServices {
 
     public static final String module = ManufacturingServices.class.getName();
     
-    private static BigDecimal ZERO = new BigDecimal("0");
-    private static BigDecimal ONE = new BigDecimal("1");
+    private static BigDecimal ZERO = BigDecimal.ZERO;
+    private static BigDecimal ONE = BigDecimal.ONE;
     private static int decimals = -1;
     private static int rounding = -1;
     static {

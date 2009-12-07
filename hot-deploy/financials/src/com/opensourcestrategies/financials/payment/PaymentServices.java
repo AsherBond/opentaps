@@ -79,7 +79,6 @@ import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.exception.FoundationException;
 import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
 
@@ -946,7 +945,7 @@ public final class PaymentServices {
                     // get the invoice item applied value
                     BigDecimal quantity = null;
                     if (invoiceItem.get("quantity") == null) {
-                        quantity = new BigDecimal("1");
+                        quantity = BigDecimal.ONE;
                     } else {
                         quantity = invoiceItem.getBigDecimal("quantity").setScale(DECIMALS, ROUNDING);
                     }
@@ -1221,7 +1220,7 @@ public final class PaymentServices {
                         if (debug) {
                             Debug.logInfo("Start processing item: " + invoiceItem.getString("invoiceItemSeqId"), MODULE);
                         }
-                        BigDecimal itemQuantity = new BigDecimal("1");
+                        BigDecimal itemQuantity = BigDecimal.ONE;
                         if (invoiceItem.get("quantity") != null && invoiceItem.getBigDecimal("quantity").signum() != 0) {
                             itemQuantity = invoiceItem.getBigDecimal("quantity").setScale(DECIMALS, ROUNDING);
                         }
@@ -1747,7 +1746,7 @@ public final class PaymentServices {
                     // get the invoice item applied value
                     BigDecimal quantity = null;
                     if (invoiceItem.get("quantity") == null) {
-                        quantity = new BigDecimal("1");
+                        quantity = BigDecimal.ONE;
                     } else {
                         quantity = invoiceItem.getBigDecimal("quantity").setScale(DECIMALS, ROUNDING);
                     }
@@ -2029,7 +2028,7 @@ public final class PaymentServices {
                         // get the invoiceItem
                         invoiceItem = (GenericValue) i.next();
                         if (debug) Debug.logInfo("Start processing item: " + invoiceItem.getString("invoiceItemSeqId"), MODULE);
-                        BigDecimal itemQuantity = new BigDecimal("1");
+                        BigDecimal itemQuantity = BigDecimal.ONE;
                         if (invoiceItem.get("quantity") != null && invoiceItem.getBigDecimal("quantity").signum() != 0) {
                             itemQuantity = new BigDecimal(invoiceItem.getString("quantity")).setScale(DECIMALS, ROUNDING);
                         }
@@ -2250,17 +2249,15 @@ public final class PaymentServices {
     }
     
     private static BigDecimal getPaymentAppliedBd(GenericValue payment) {
-        BigDecimal paymentApplied = new BigDecimal("0");
-        List paymentApplications = null;
+        BigDecimal paymentApplied = BigDecimal.ZERO;
+        List<GenericValue> paymentApplications = null;
         try {
             paymentApplications = payment.getRelated("PaymentApplication");
         } catch (GenericEntityException e) {
             Debug.logError(e, "Trouble getting paymentApplicationlist", MODULE);            
         }
         if (paymentApplications != null && paymentApplications.size() > 0) {
-            Iterator p = paymentApplications.iterator();
-            while (p.hasNext()) {
-                GenericValue paymentApplication = (GenericValue) p.next();
+            for (GenericValue paymentApplication : paymentApplications) {
                 paymentApplied = paymentApplied.add(paymentApplication.getBigDecimal("amountApplied")).setScale(DECIMALS, ROUNDING);
             }
         }
@@ -2272,9 +2269,7 @@ public final class PaymentServices {
             Debug.logError(e, "Trouble getting the 'to' paymentApplicationlist", MODULE);            
         }
         if (paymentApplications != null && paymentApplications.size() > 0) {
-            Iterator p = paymentApplications.iterator();
-            while (p.hasNext()) {
-                GenericValue paymentApplication = (GenericValue) p.next();
+            for (GenericValue paymentApplication : paymentApplications) {
                 paymentApplied = paymentApplied.add(paymentApplication.getBigDecimal("amountApplied")).setScale(DECIMALS, ROUNDING);
             }
         }
@@ -2299,7 +2294,7 @@ public final class PaymentServices {
                 if (amount == null)
                     amount = BigDecimal.ZERO;
                 if (quantity == null)
-                    quantity = new BigDecimal("1");
+                    quantity = BigDecimal.ONE;
                 if ("ITM_SALES_TAX".equals(invoiceItem.get("invoiceItemTypeId"))) {
                     invoiceTaxTotal = invoiceTaxTotal.add( amount.multiply(quantity)).setScale(TAX_DECIMALS, TAX_ROUNDING);
                 } else {

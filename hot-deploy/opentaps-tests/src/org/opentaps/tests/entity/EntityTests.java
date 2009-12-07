@@ -140,7 +140,7 @@ public class EntityTests extends OpentapsTestCase {
         assertEquals("Invoice.invoiceTypeId is correct", invoiceValue.getString("invoiceTypeId"), invoice.getInvoiceTypeId());
         assertEquals("Invoice.invoiceDate is correct", invoiceValue.getTimestamp("invoiceDate"), invoice.getInvoiceDate());
 
-        assertEquals("There is one invoice item for invoice in testInvoiceRepository", new BigDecimal("1"), new BigDecimal(invoice.getInvoiceItems().size()));
+        assertEquals("There is one invoice item for invoice in testInvoiceRepository", BigDecimal.ONE, new BigDecimal(invoice.getInvoiceItems().size()));
         for (InvoiceItem item : invoice.getInvoiceItems()) {
             GenericValue itemValue = delegator.findByPrimaryKey("InvoiceItem", UtilMisc.toMap("invoiceId", item.getInvoiceId(), "invoiceItemSeqId", item.getInvoiceItemSeqId()));
             assertEquals("InvoiceItem.invoiceId is correct", itemValue.getString("invoiceId"), item.getInvoiceId());
@@ -180,7 +180,7 @@ public class EntityTests extends OpentapsTestCase {
         InvoiceRepositoryInterface repository = getInvoiceRepository();
         Invoice invoice = repository.getInvoiceById(INVOICE_ID);
         List<PaymentAndApplication> paymentAndApplications = repository.getPaymentsApplied(invoice, UtilDateTime.nowTimestamp());
-        assertEquals("There is one paymentAndApplications for invoice in testInvoiceRepository", new BigDecimal("1"), new BigDecimal(paymentAndApplications.size()));
+        assertEquals("There is one paymentAndApplications for invoice in testInvoiceRepository", BigDecimal.ONE, new BigDecimal(paymentAndApplications.size()));
         for (PaymentAndApplication paymentAndApplication : paymentAndApplications) {
             GenericValue paValue = EntityUtil.getFirst(delegator.findByAnd("PaymentAndApplication", UtilMisc.toMap("paymentApplicationId", paymentAndApplication.getPaymentApplicationId())));
             assertEquals("PaymentAndApplication.paymentTypeId is correct", paValue.getString("paymentTypeId"), paymentAndApplication.getPaymentTypeId());

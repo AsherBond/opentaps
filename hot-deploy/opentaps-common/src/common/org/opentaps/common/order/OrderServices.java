@@ -1311,7 +1311,7 @@ public final class OrderServices {
             if (basePrice != null && overridePrice != null) {
                 item.setBasePrice(basePrice);
                 // special hack to make sure we re-calc the promos after a price change
-                item.setQuantity(quantity.add(new BigDecimal("1")), dispatcher, cart, false);
+                item.setQuantity(quantity.add(BigDecimal.ONE), dispatcher, cart, false);
                 item.setQuantity(quantity, dispatcher, cart, false);
                 item.setBasePrice(basePrice);
                 item.setIsModifiedPrice(true);

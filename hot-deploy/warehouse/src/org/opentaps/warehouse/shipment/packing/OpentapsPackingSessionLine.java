@@ -36,7 +36,7 @@ import java.math.BigDecimal;
 public class OpentapsPackingSessionLine extends PackingSessionLine {
 
     // for BigDecimal arithmetic, we'll just re-use the invoice settings
-    public static final BigDecimal ZERO = new BigDecimal("0");
+    public static final BigDecimal ZERO = BigDecimal.ZERO;
     private static int decimals = UtilNumber.getBigDecimalScale("invoice.decimals");
     private static int rounding = UtilNumber.getBigDecimalRoundingMode("invoice.rounding");
 

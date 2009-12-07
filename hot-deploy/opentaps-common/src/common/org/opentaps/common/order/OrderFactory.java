@@ -72,7 +72,7 @@ public abstract class OrderFactory {
             this.itemAmountList.add(amount);
             this.itemPriceList.add(price);
             this.itemSeqIdList.add(itemSeqId);
-            this.itemShippingList.add(new BigDecimal(0));
+            this.itemShippingList.add(BigDecimal.ZERO);
         }
     }
 

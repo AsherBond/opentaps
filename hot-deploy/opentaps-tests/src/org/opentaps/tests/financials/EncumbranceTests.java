@@ -544,34 +544,34 @@ public class EncumbranceTests extends FinancialsTestCase {
 
         // now verify that the GlAccountTransEntryFact transformations are correct
         // first verify the BUDGET accounting transactions
-        verifyAcctgTransEntryFact(b1c1, organizationPartyId, "401000", new BigDecimal("100000.0"), new BigDecimal("0"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(b1d1, organizationPartyId, "500000", new BigDecimal("50000"), new BigDecimal("0"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(b1d2, organizationPartyId, "601000", new BigDecimal("15000"), new BigDecimal("0"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(b1d3, organizationPartyId, "610000", new BigDecimal("5000"), new BigDecimal("0"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(b1d4, organizationPartyId, "680000", new BigDecimal("5000"), new BigDecimal("0"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(b1d5, organizationPartyId, "900000", new BigDecimal("10000"), new BigDecimal("0"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(b1d6, organizationPartyId, "890000", new BigDecimal("15000"), new BigDecimal("0"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(b1c1, organizationPartyId, "401000", new BigDecimal("100000.0"), BigDecimal.ZERO, BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(b1d1, organizationPartyId, "500000", new BigDecimal("50000"), BigDecimal.ZERO, BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(b1d2, organizationPartyId, "601000", new BigDecimal("15000"), BigDecimal.ZERO, BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(b1d3, organizationPartyId, "610000", new BigDecimal("5000"), BigDecimal.ZERO, BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(b1d4, organizationPartyId, "680000", new BigDecimal("5000"), BigDecimal.ZERO, BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(b1d5, organizationPartyId, "900000", new BigDecimal("10000"), BigDecimal.ZERO, BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(b1d6, organizationPartyId, "890000", new BigDecimal("15000"), BigDecimal.ZERO, BigDecimal.ZERO);
 
-        verifyAcctgTransEntryFact(b2c1, organizationPartyId, "401000", new BigDecimal("200000"), new BigDecimal("0"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(b2d1, organizationPartyId, "500000", new BigDecimal("70000"), new BigDecimal("0"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(b2d2, organizationPartyId, "601000", new BigDecimal("60000"), new BigDecimal("0"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(b2d3, organizationPartyId, "610000", new BigDecimal("20000"), new BigDecimal("0"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(b2d4, organizationPartyId, "680000", new BigDecimal("10000"), new BigDecimal("0"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(b2d5, organizationPartyId, "900000", new BigDecimal("16000"), new BigDecimal("0"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(b2d6, organizationPartyId, "890000", new BigDecimal("24000"), new BigDecimal("0"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(b2c1, organizationPartyId, "401000", new BigDecimal("200000"), BigDecimal.ZERO, BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(b2d1, organizationPartyId, "500000", new BigDecimal("70000"), BigDecimal.ZERO, BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(b2d2, organizationPartyId, "601000", new BigDecimal("60000"), BigDecimal.ZERO, BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(b2d3, organizationPartyId, "610000", new BigDecimal("20000"), BigDecimal.ZERO, BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(b2d4, organizationPartyId, "680000", new BigDecimal("10000"), BigDecimal.ZERO, BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(b2d5, organizationPartyId, "900000", new BigDecimal("16000"), BigDecimal.ZERO, BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(b2d6, organizationPartyId, "890000", new BigDecimal("24000"), BigDecimal.ZERO, BigDecimal.ZERO);
 
         // now verify the ACTUAL accounting transactions
-        verifyAcctgTransEntryFact(e1c1, organizationPartyId, "210000", new BigDecimal("0"), new BigDecimal("27600"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(e1d1, organizationPartyId, "601000", new BigDecimal("0"), new BigDecimal("12000"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(e1d2, organizationPartyId, "610000", new BigDecimal("0"), new BigDecimal("6000"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(e1d3, organizationPartyId, "680000", new BigDecimal("0"), new BigDecimal("3000"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(e1d4, organizationPartyId, "900000", new BigDecimal("0"), new BigDecimal("6600"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(e1c1, organizationPartyId, "210000", BigDecimal.ZERO, new BigDecimal("27600"), BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(e1d1, organizationPartyId, "601000", BigDecimal.ZERO, new BigDecimal("12000"), BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(e1d2, organizationPartyId, "610000", BigDecimal.ZERO, new BigDecimal("6000"), BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(e1d3, organizationPartyId, "680000", BigDecimal.ZERO, new BigDecimal("3000"), BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(e1d4, organizationPartyId, "900000", BigDecimal.ZERO, new BigDecimal("6600"), BigDecimal.ZERO);
 
-        verifyAcctgTransEntryFact(e2c1, organizationPartyId, "900000", new BigDecimal("0"), new BigDecimal("-2000"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(e2c2, organizationPartyId, "210000", new BigDecimal("0"), new BigDecimal("63000"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(e2d1, organizationPartyId, "601000", new BigDecimal("0"), new BigDecimal("50000"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(e2d2, organizationPartyId, "610000", new BigDecimal("0"), new BigDecimal("10000"), new BigDecimal("0"));
-        verifyAcctgTransEntryFact(e2d3, organizationPartyId, "680000", new BigDecimal("0"), new BigDecimal("5000"), new BigDecimal("0"));
+        verifyAcctgTransEntryFact(e2c1, organizationPartyId, "900000", BigDecimal.ZERO, new BigDecimal("-2000"), BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(e2c2, organizationPartyId, "210000", BigDecimal.ZERO, new BigDecimal("63000"), BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(e2d1, organizationPartyId, "601000", BigDecimal.ZERO, new BigDecimal("50000"), BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(e2d2, organizationPartyId, "610000", BigDecimal.ZERO, new BigDecimal("10000"), BigDecimal.ZERO);
+        verifyAcctgTransEntryFact(e2d3, organizationPartyId, "680000", BigDecimal.ZERO, new BigDecimal("5000"), BigDecimal.ZERO);
 
         OrderRepositoryInterface orderRepository = getOrderRepository(demopurch1);
         // verify the POs
@@ -579,38 +579,38 @@ public class EncumbranceTests extends FinancialsTestCase {
         Order purchOrder1 = orderRepository.getOrderById(po.getOrderId());
         OrderItem orderItemPo1_1 = orderRepository.getOrderItem(purchOrder1, "00001");
         OrderItem orderItemPo1_2 = orderRepository.getOrderItem(purchOrder1, "00002");
-        verifyOrderItemEntryFact(orderItemPo1_1, organizationPartyId, "140000", new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("100000"));
-        verifyOrderItemEntryFact(orderItemPo1_2, organizationPartyId, "140000", new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("50000"));
+        verifyOrderItemEntryFact(orderItemPo1_1, organizationPartyId, "140000", BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("100000"));
+        verifyOrderItemEntryFact(orderItemPo1_2, organizationPartyId, "140000", BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("50000"));
         // find po2 order item1.  this is a supplies item and should point to 650000
         Order purchOrder2 = orderRepository.getOrderById(po2.getOrderId());
         OrderItem orderItemPo2_1 = orderRepository.getOrderItem(purchOrder2, "00001");
-        verifyOrderItemEntryFact(orderItemPo2_1, organizationPartyId, "650000", new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("50000"));
+        verifyOrderItemEntryFact(orderItemPo2_1, organizationPartyId, "650000", BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("50000"));
 
         // we use the sums to check the above accounting transactions and PO encumbrances
         // then we use the sums to check the results of receiving inventory and shipping products
         // we verify both aggregated and by accounting tag values
 
         // revenue
-        verifyGlAcctTransEntryFactSums(organizationPartyId, "401000", null, new BigDecimal("300000"), new BigDecimal("0"), new BigDecimal("0"));
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "401000", null, new BigDecimal("300000"), BigDecimal.ZERO, BigDecimal.ZERO);
 
         // inventory
-        verifyGlAcctTransEntryFactSums(organizationPartyId, "140000", null, new BigDecimal("0"), new BigDecimal("72500"), new BigDecimal("150000"));
-        verifyGlAcctTransEntryFactSums(organizationPartyId, "140000", UtilMisc.toMap("acctgTagEnumId1", "DIV_ENTERPRISE"), new BigDecimal("0"), new BigDecimal("62500"), new BigDecimal("100000"));
-        verifyGlAcctTransEntryFactSums(organizationPartyId, "140000", UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"), new BigDecimal("0"), new BigDecimal("10000"), new BigDecimal("50000"));
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "140000", null, BigDecimal.ZERO, new BigDecimal("72500"), new BigDecimal("150000"));
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "140000", UtilMisc.toMap("acctgTagEnumId1", "DIV_ENTERPRISE"), BigDecimal.ZERO, new BigDecimal("62500"), new BigDecimal("100000"));
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "140000", UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"), BigDecimal.ZERO, new BigDecimal("10000"), new BigDecimal("50000"));
 
         // wages
-        verifyGlAcctTransEntryFactSums(organizationPartyId, "601000", null, new BigDecimal("75000"), new BigDecimal("62000"), new BigDecimal("0"));
-        verifyGlAcctTransEntryFactSums(organizationPartyId, "601000", UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"), new BigDecimal("60000"), new BigDecimal("50000"), new BigDecimal("0"));
-        verifyGlAcctTransEntryFactSums(organizationPartyId, "601000", UtilMisc.toMap("acctgTagEnumId1", "DIV_ENTERPRISE"), new BigDecimal("15000"), new BigDecimal("12000"), new BigDecimal("0"));
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "601000", null, new BigDecimal("75000"), new BigDecimal("62000"), BigDecimal.ZERO);
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "601000", UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"), new BigDecimal("60000"), new BigDecimal("50000"), BigDecimal.ZERO);
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "601000", UtilMisc.toMap("acctgTagEnumId1", "DIV_ENTERPRISE"), new BigDecimal("15000"), new BigDecimal("12000"), BigDecimal.ZERO);
 
         // cogs
-        verifyGlAcctTransEntryFactSums(organizationPartyId, "500000", null, new BigDecimal("120000"), new BigDecimal("77500"), new BigDecimal("0"));
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "500000", null, new BigDecimal("120000"), new BigDecimal("77500"), BigDecimal.ZERO);
 
         // tax expense
-        verifyGlAcctTransEntryFactSums(organizationPartyId, "900000", null, new BigDecimal("26000"), new BigDecimal("4600"), new BigDecimal("0"));
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "900000", null, new BigDecimal("26000"), new BigDecimal("4600"), BigDecimal.ZERO);
         // budget net amount is temporary changed from 100000.0 to 10000.0
-        verifyGlAcctTransEntryFactSums(organizationPartyId, "900000", UtilMisc.toMap("acctgTagEnumId1", "DIV_ENTERPRISE"), new BigDecimal("10000"), new BigDecimal("6600"), new BigDecimal("0"));
-        verifyGlAcctTransEntryFactSums(organizationPartyId, "900000", UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"), new BigDecimal("16000"), new BigDecimal("-2000"), new BigDecimal("0"));
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "900000", UtilMisc.toMap("acctgTagEnumId1", "DIV_ENTERPRISE"), new BigDecimal("10000"), new BigDecimal("6600"), BigDecimal.ZERO);
+        verifyGlAcctTransEntryFactSums(organizationPartyId, "900000", UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"), new BigDecimal("16000"), new BigDecimal("-2000"), BigDecimal.ZERO);
 
     }
 

@@ -57,7 +57,7 @@ public final class InvoiceHelper {
 
     private static final String MODULE = InvoiceHelper.class.getName();
 
-    private static BigDecimal ZERO = new BigDecimal("0");
+    private static BigDecimal ZERO = BigDecimal.ZERO;
     private static int decimals = UtilNumber.getBigDecimalScale("invoice.decimals");
     private static int rounding = UtilNumber.getBigDecimalRoundingMode("invoice.rounding");
     public static final List<String> invoiceDueDateAgreementTermTypeIds = Arrays.asList("FIN_PAYMENT_TERM", "FIN_PAYMENT_FIXDAY");

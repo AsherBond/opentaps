@@ -107,7 +107,7 @@ public final class LedgerServices {
     // TODO: replace code that uses epsilon with BigDecimal and also set BigDecimal config in some common class/properties file
     private static final BigDecimal EPSILON = new BigDecimal("0.000001");   // smallest allowable rounding error in accounting transactions
 
-    private static BigDecimal ZERO = new BigDecimal("0");
+    private static BigDecimal ZERO = BigDecimal.ZERO;
     private static int decimals = -1;
     private static int rounding = -1;
     static {
@@ -391,7 +391,7 @@ public final class LedgerServices {
 
         // loop variables
         List acctgTransEntries = new ArrayList();    // a List of AcctgTransEntry entities to be posted to
-        BigDecimal postingTotal = new BigDecimal("0.00");
+        BigDecimal postingTotal = BigDecimal.ZERO;
         List invoiceItems = invoice.getRelatedCache("InvoiceItem", UtilMisc.toList("invoiceItemSeqId"));
 
         // Now, for each line item of the invoice, figure out which account on GL to post to and add it to a List
@@ -527,7 +527,7 @@ public final class LedgerServices {
 
         // Next, determine the amount which has already been debit to uninvoiced receipts, so we can reconcile the difference
         // between invoice amounts and original order amounts in Uninvoiced Item Receipt
-        BigDecimal orderAmount = new BigDecimal("0.00");
+        BigDecimal orderAmount = BigDecimal.ZERO;
         List orderItemBillings = invoiceItem.getRelated("OrderItemBilling");
         for (Iterator iter = orderItemBillings.iterator(); iter.hasNext();) {
             GenericValue orderItemBilling = (GenericValue) iter.next();

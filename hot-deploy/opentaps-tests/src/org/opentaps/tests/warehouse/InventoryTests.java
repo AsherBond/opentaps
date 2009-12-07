@@ -136,7 +136,7 @@ public class InventoryTests extends FinancialsTestCase {
         input.put("currencyUomId", NonSerializedTestSpecs.currencyUomId);
         input.put("datetimeReceived", now);
         input.put("quantityAccepted", NonSerializedTestSpecs.quantity);
-        input.put("quantityRejected", new BigDecimal("0"));
+        input.put("quantityRejected", BigDecimal.ZERO);
         input.put("userLogin", demowarehouse1);
         Map output = runAndAssertServiceSuccess("receiveInventoryProduct", input);
 
@@ -194,7 +194,7 @@ public class InventoryTests extends FinancialsTestCase {
         template.put("facilityId", facilityId);
         template.put("currencyUomId", SerializedTestSpecs.currencyUomId);
         template.put("datetimeReceived", now);
-        template.put("quantityRejected", new BigDecimal("0"));
+        template.put("quantityRejected", BigDecimal.ZERO);
         template.put("quantityAccepted", SerializedTestSpecs.quantity);
         template.put("userLogin", demowarehouse1);
 
@@ -1838,7 +1838,7 @@ public class InventoryTests extends FinancialsTestCase {
 
         Map input = UtilMisc.toMap("userLogin", demowarehouse1);
         input.put("productId", manufacturedProduct.get("productId"));
-        input.put("quantity", new BigDecimal("1"));
+        input.put("quantity", BigDecimal.ONE);
         input.put("startDate", UtilDateTime.nowTimestamp());
         input.put("facilityId", facilityId);
         input.put("workEffortName", "testTraceComplexInventoryUsage Production Run");
@@ -2002,7 +2002,7 @@ public class InventoryTests extends FinancialsTestCase {
         input.put("currencyUomId", NonSerializedTestSpecs.currencyUomId);
         input.put("datetimeReceived", now);
         input.put("quantityAccepted", new BigDecimal("10.0"));
-        input.put("quantityRejected", new BigDecimal("0"));
+        input.put("quantityRejected", BigDecimal.ZERO);
         input.put("userLogin", demowarehouse1);
         runAndAssertServiceSuccess("receiveInventoryProduct", input);
         // check inventory

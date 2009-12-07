@@ -21,9 +21,8 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import javolution.util.FastSet;
+import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
@@ -36,7 +35,6 @@ import org.opentaps.common.order.SalesOrderFactory;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderItem;
 import org.opentaps.domain.order.OrderRepositoryInterface;
-import javolution.util.FastMap;
 import org.opentaps.tests.financials.FinancialAsserts;
 
 /**
@@ -255,7 +253,7 @@ public class SalesTaxTests extends OrderTestCase {
          * 2.  Verify each order item from #1 has a tax of 6.25% of order total for taxAuthGeoId=CA and 1% of order item for taxAuthGeoId=CA-LA
          */
         assertTaxOrder(salesOrder1.getOrderId(), "CA", new BigDecimal("6.25"));
-        assertTaxOrder(salesOrder1.getOrderId(), "CA-LA", new BigDecimal("1"));
+        assertTaxOrder(salesOrder1.getOrderId(), "CA-LA", BigDecimal.ONE);
 
         /*
          * 3.  Create a sales order for productStoreId=9000, partyId=customer1, address=customer1add2
@@ -684,7 +682,7 @@ public class SalesTaxTests extends OrderTestCase {
         //  1 x 75.77 = 75.77
         //  = 155.17
         assertEquals("Order [" + orderId + "] item 1 sub total incorrect.", orderItem1.getSubTotal(), new BigDecimal("79.40"));
-        assertEquals("Order [" + orderId + "] item 2 sub total incorrect.", orderItem2.getSubTotal(), new BigDecimal("0"));
+        assertEquals("Order [" + orderId + "] item 2 sub total incorrect.", orderItem2.getSubTotal(), BigDecimal.ZERO);
         assertEquals("Order [" + orderId + "] item 3 sub total incorrect.", orderItem3.getSubTotal(), new BigDecimal("75.77"));
         assertEquals("Order [" + orderId + "] items sub total incorrect.", order.getItemsSubTotal(), new BigDecimal("155.17"));
         // Shipping amount for the STANDARD _NA_ shipping method is 20% of the order
@@ -699,7 +697,7 @@ public class SalesTaxTests extends OrderTestCase {
         //  1 % of -15.52 promotion = -0.1552 ~ -0.15 (note: only the CA-LA CA_BOE tax authority taxes promotion)
         // = 12.17
         assertEquals("Order [" + orderId + "] item 1 taxes incorrect.", orderItem1.getTaxAmount(), new BigDecimal("5.76"));
-        assertEquals("Order [" + orderId + "] item 2 taxes incorrect.", orderItem2.getTaxAmount(), new BigDecimal("0"));
+        assertEquals("Order [" + orderId + "] item 2 taxes incorrect.", orderItem2.getTaxAmount(), BigDecimal.ZERO);
         assertEquals("Order [" + orderId + "] item 3 taxes incorrect.", orderItem3.getTaxAmount(), new BigDecimal("6.25"));
         assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("12.17"));
 

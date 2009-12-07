@@ -56,7 +56,7 @@ public class OrderImportServices {
     private static String MODULE = OrderImportServices.class.getName();
     public static final int decimals = UtilNumber.getBigDecimalScale("order.decimals");
     public static final int rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
-    public static final BigDecimal ZERO = (new BigDecimal("0")).setScale(decimals, rounding);
+    public static final BigDecimal ZERO = BigDecimal.ZERO.setScale(decimals, rounding);
 
     // this constant value is used in various places
     protected static final String defaultShipGroupSeqId = "00001";

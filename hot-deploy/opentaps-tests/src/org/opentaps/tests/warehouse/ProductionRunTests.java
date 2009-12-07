@@ -548,7 +548,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         Map input = UtilMisc.toMap("userLogin", demowarehouse1);
         input.put("workEffortId", productionRunId);
         input.put("productId", "PRUNTEST_PROD1");
-        input.put("quantity", new BigDecimal("1"));
+        input.put("quantity", BigDecimal.ONE);
         Map result = runAndAssertServiceSuccess("opentaps.productionRunProduce", input);
         assertAllInventoryValuesEqual(inventoryAsserts);
 
