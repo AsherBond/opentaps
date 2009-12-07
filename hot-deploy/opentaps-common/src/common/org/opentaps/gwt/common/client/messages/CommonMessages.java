@@ -16752,6 +16752,12 @@ public interface CommonMessages extends Messages {
     String sFA();
     @DefaultMessage("Save All")
     String saveAll();
+    @DefaultMessage("Search")
+    String search();
+    @DefaultMessage("No results found for the keyword: \"{0}\"")
+    String searchNoResults(String query);
+    @DefaultMessage("Search Results")
+    String searchResults();
     @DefaultMessage("The server return Unknown request while accessing the {0}")
     String serverEmptyResponseError(String resource);
     @DefaultMessage("The server returned error {0} while accessing the {1}")
