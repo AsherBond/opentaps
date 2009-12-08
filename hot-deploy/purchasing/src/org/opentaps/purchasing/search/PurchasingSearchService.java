@@ -17,34 +17,36 @@
 package org.opentaps.purchasing.search;
 
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.opentaps.base.entities.PartyGroup;
+import org.opentaps.domain.order.Order;
 import org.opentaps.domain.search.CommonSearchService;
 import org.opentaps.domain.search.SearchDomainInterface;
 import org.opentaps.domain.search.SearchRepositoryInterface;
-import org.opentaps.domain.search.SupplierSearchServiceInterface;
+import org.opentaps.domain.search.SearchResult;
+import org.opentaps.domain.search.SearchServiceInterface;
+import org.opentaps.domain.search.order.PurchaseOrderSearchServiceInterface;
+import org.opentaps.domain.search.party.SupplierSearchServiceInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
 /**
  * The implementation of the Purchasing search service.
  */
-public class PurchasingSearchService extends CommonSearchService {
+public class PurchasingSearchService extends CommonSearchService implements SearchServiceInterface  {
 
     private boolean searchSuppliers = false;
-    private List<PartyGroup> suppliers = null;
+    private boolean searchPurchaseOrders = false;
 
+    private List<PartyGroup> suppliers = null;
+    private List<Order> orders = null;
+
+    private PurchaseOrderSearchServiceInterface purchaseOrderSearch;
     private SupplierSearchServiceInterface supplierSearch;
+
     private SearchRepositoryInterface searchRepository;
-    private int pageSize = SearchRepositoryInterface.DEFAULT_PAGE_SIZE;
-    private int pageStart = 0;
-    private String keywords;
-    private List<Object[]> results;
-    private int resultSize = 0;
 
     /**
      * Option to return Suppliers from a search.
@@ -54,29 +56,37 @@ public class PurchasingSearchService extends CommonSearchService {
         this.searchSuppliers = option;
     }
 
+    /**
+     * Option to return Purchase Orders from a search.
+     * @param option a <code>boolean</code> value
+     */
+    public void setSearchPurchaseOrders(boolean option) {
+        this.searchPurchaseOrders = option;
+    }
+
     /** {@inheritDoc} */
     public void search() throws ServiceException {
         try {
             SearchDomainInterface searchDomain = getDomainsDirectory().getSearchDomain();
             supplierSearch = searchDomain.getSupplierSearchService();
-            // make the query
+            purchaseOrderSearch = searchDomain.getPurchaseOrderSearchService();
+
             searchRepository = searchDomain.getSearchRepository();
-            Map output = searchRepository.searchInEntities(makeEntityClassList(), getQueryProjectedFields(), makeQuery(), getPageStart(), getPageSize());
-            this.results = (List<Object[]>) output.get(SearchRepositoryInterface.RETURN_RESULTS);
-            this.resultSize =  (Integer) output.get(SearchRepositoryInterface.RETURN_RESULT_SIZE);
-            // note: the filterSearchResults methods expect getResults to return a list of EntityInterface, which means
-            //  a non projected search result, so do not override setQueryProjection unless you also override this method
-            suppliers = supplierSearch.filterSearchResults(getResults());
+
+            search(searchRepository);
+
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }
     }
 
     /** {@inheritDoc} */
-    public Set<String> getQueryProjectedFields() {
-        Set<String> fields = new LinkedHashSet<String>();
-        fields.addAll(supplierSearch.getQueryProjectedFields());
-        return fields;
+    public void readSearchResults(List<SearchResult> results) throws ServiceException {
+        purchaseOrderSearch.readSearchResults(results);
+        supplierSearch.readSearchResults(results);
+
+        orders = purchaseOrderSearch.getOrders();
+        suppliers = supplierSearch.getSuppliers();
     }
 
     /**
@@ -88,86 +98,38 @@ public class PurchasingSearchService extends CommonSearchService {
     }
 
     /**
-     * Builds the Lucene query according to the options set and the user given keywords.
-     * @return a Lucene query string
-     * @throws ServiceException if no search option is set
+     * Gets the pruchase orders results.
+     * @return the <code>List</code> of <code>Order</code>
      */
-    private String makeQuery() throws ServiceException {
+    public List<Order> getPurchaseOrders() {
+        return orders;
+    }
+
+    /** {@inheritDoc} */
+    public String getQueryString() {
 
         StringBuilder sb = new StringBuilder();
 
         if (searchSuppliers) {
-            supplierSearch.makeQuery(sb);
+            sb.append(supplierSearch.getQueryString());
+        }
+        if (searchPurchaseOrders) {
+            sb.append(purchaseOrderSearch.getQueryString());
         }
 
-        if (sb.length() == 0) {
-            throw new ServiceException("Cannot perform search, no search option was set");
-        }
-
-        return searchRepository.makeQueryString(sb.toString(), getKeywords());
+        return sb.toString();
     }
 
-    /**
-     * Builds the list of entity classes that should be searched according to the options set.
-     * @return a <code>List</code> of entity classes
-     * @throws ServiceException if no search option is set
-     */
-    @SuppressWarnings("unchecked")
-    private Set<Class> makeEntityClassList() throws ServiceException {
-        Set<Class> classes = new HashSet<Class>();
+    /** {@inheritDoc} */
+    public Set<Class<?>> getClassesToQuery() {
+        Set<Class<?>> classes = new HashSet<Class<?>>();
         if (searchSuppliers) {
             classes.addAll(supplierSearch.getClassesToQuery());
         }
-
-        if (classes.isEmpty()) {
-            throw new ServiceException("Cannot perform search, no search option was set");
+        if (searchPurchaseOrders) {
+            classes.addAll(purchaseOrderSearch.getClassesToQuery());
         }
 
         return classes;
-    }
-    
-    /** {@inheritDoc} */
-    public void setKeywords(String keywords) {
-        this.keywords = keywords;
-    }
-
-    /** {@inheritDoc} */
-    public String getKeywords() {
-        return keywords;
-    }
-
-    /** {@inheritDoc} */
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    /** {@inheritDoc} */
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    /** {@inheritDoc} */
-    public void setPageStart(int pageStart) {
-        this.pageStart = pageStart;
-    }
-
-    /** {@inheritDoc} */
-    public int getPageStart() {
-        return pageStart;
-    }
-
-    /** {@inheritDoc} */
-    public int getPageEnd() {
-        return pageStart + pageSize;
-    }
-
-    /** {@inheritDoc} */
-    public List<Object[]> getResults() {
-        return results;
-    }
-
-    /** {@inheritDoc} */
-    public int getResultSize() {
-        return resultSize;
     }
 }

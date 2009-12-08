@@ -24,6 +24,10 @@ import org.opentaps.foundation.service.ServiceInterface;
 
 /**
  * Interface for search services.
+ * A search is defined by a <code>keywords</code> string to search for
+ *  and the pagination settings.
+ * Once those are set, the {@link #search} method performs the search
+ *  and the client can use {@link #getResults} and {@link #getResultSize}.
  */
 public interface SearchServiceInterface extends ServiceInterface {
 
@@ -76,24 +80,39 @@ public interface SearchServiceInterface extends ServiceInterface {
     public void search() throws ServiceException;
 
     /**
-     * Gets the search results.
-     * @return the results of the search, which is a <code>List<Object[]></code> where the first two fields are <code>{OBJECT_CLASS, ID}</code>
-     */
-    public List<Object[]> getResults();
-
-    /**
      * Gets the total number of results for the search.
      * @return an <code>int</code> value
      */
     public int getResultSize();
 
     /**
-     * Gets the list of projected fields this search service is using.
-     * This implementation use the default fields <code>{OBJECT_CLASS, ID}</code>, override in sub classes to use additional fields
-     * @return the list of projected fields this search service is using
+     * Gets the search results.
+     * Because a search service is not bound to one particular object type
+     *  the results are encapsulated as <code>SearchResult</code>.
+     * @return the results of the search as a list of <code>SearchResult</code>
      */
-    public Set<String> getQueryProjectedFields();
+    public List<SearchResult> getResults();
 
+    /**
+     * Reads a search result list and process it.
+     * Normally the service will use this to process its own results from {@link #getResults} and
+     *  load domain objects to be returned to the end user via additional getters.
+     * @param results the list of results from the search service, it can be {@link #getResults} from this or another service
+     * @throws ServiceException if an error occurs
+     */
+    public void readSearchResults(List<SearchResult> results) throws ServiceException;
 
+    /**
+     * Gets the <code>Set</code> of <code>Class</code> to query.
+     * Those classes will be in the {@link #getResults} <code>SearchResult</code>.
+     * @return the <code>Set</code> of <code>Class</code> to query
+     */
+    public Set<Class<?>> getClassesToQuery();
+
+    /**
+     * Gets the query string to as it would be passed to a {@link org.opentaps.domain.search.SearchRepositoryInterface}.
+     * @return a <code>String</code> value
+     */
+    public String getQueryString();
 
 }

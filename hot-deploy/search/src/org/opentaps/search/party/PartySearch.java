@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import org.opentaps.base.entities.PartyRole;
-import org.opentaps.domain.search.SearchRepositoryInterface;
+import org.opentaps.search.HibernateSearchService;
 
 
 /**
@@ -31,8 +31,7 @@ public final class PartySearch {
     private PartySearch() { }
 
     /** Common set of class to query for Party related search. */
-    @SuppressWarnings("unchecked")
-    public static final Set<Class> PARTY_CLASSES = new HashSet<Class>(Arrays.asList(
+    public static final Set<Class<?>> PARTY_CLASSES = new HashSet<Class<?>>(Arrays.asList(
             PartyRole.class
         ));
 
@@ -68,7 +67,7 @@ public final class PartySearch {
     public static void makePersonFieldsQuery(StringBuilder sb) {
         sb.append("(");
         for (String f : Arrays.asList("partyId", "firstName", "lastName", "middleName", "firstNameLocal", "lastNameLocal", "nickname")) {
-            sb.append("party.person.").append(f).append(":").append(SearchRepositoryInterface.DEFAULT_PLACEHOLDER).append(" ");
+            sb.append("party.person.").append(f).append(":").append(HibernateSearchService.DEFAULT_PLACEHOLDER).append(" ");
         }
         sb.append(")");
     }
@@ -81,7 +80,7 @@ public final class PartySearch {
     public static void makePartyGroupFieldsQuery(StringBuilder sb) {
         sb.append("(");
         for (String f : Arrays.asList("partyId", "groupName")) {
-            sb.append("party.partyGroup.").append(f).append(":").append(SearchRepositoryInterface.DEFAULT_PLACEHOLDER).append(" ");
+            sb.append("party.partyGroup.").append(f).append(":").append(HibernateSearchService.DEFAULT_PLACEHOLDER).append(" ");
         }
         sb.append(")");
     }

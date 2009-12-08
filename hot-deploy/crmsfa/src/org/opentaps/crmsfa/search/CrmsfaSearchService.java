@@ -17,30 +17,31 @@
 package org.opentaps.crmsfa.search;
 
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.opentaps.base.entities.SalesOpportunity;
+import org.opentaps.domain.order.Order;
 import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.Lead;
-import org.opentaps.domain.search.AccountSearchServiceInterface;
 import org.opentaps.domain.search.CommonSearchService;
-import org.opentaps.domain.search.ContactSearchServiceInterface;
-import org.opentaps.domain.search.LeadSearchServiceInterface;
-import org.opentaps.domain.search.SalesOpportunitySearchServiceInterface;
 import org.opentaps.domain.search.SearchDomainInterface;
 import org.opentaps.domain.search.SearchRepositoryInterface;
+import org.opentaps.domain.search.SearchResult;
 import org.opentaps.domain.search.SearchServiceInterface;
+import org.opentaps.domain.search.order.SalesOpportunitySearchServiceInterface;
+import org.opentaps.domain.search.order.SalesOrderSearchServiceInterface;
+import org.opentaps.domain.search.party.AccountSearchServiceInterface;
+import org.opentaps.domain.search.party.ContactSearchServiceInterface;
+import org.opentaps.domain.search.party.LeadSearchServiceInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 
 /**
  * The implementation of the Crmsfa search service.
  * This class does not actually implement any of the search logic, those are implemented in the specific domain
- *  search service eg: <code>AccountSearchService</code>, ...
+ *  search services eg: <code>AccountSearchService</code>, ...
  */
 public class CrmsfaSearchService extends CommonSearchService implements SearchServiceInterface {
 
@@ -48,15 +49,19 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
     private boolean searchContacts = false;
     private boolean searchLeads = false;
     private boolean searchSalesOpportunities = false;
+    private boolean searchSalesOrders = false;
 
     private List<Contact> contacts = null;
     private List<Account> accounts = null;
     private List<Lead> leads = null;
     private List<SalesOpportunity> salesOpportunities = null;
+    private List<Order> salesOrders = null;
+
     private AccountSearchServiceInterface accountSearch;
     private ContactSearchServiceInterface contactSearch;
     private LeadSearchServiceInterface leadSearch;
     private SalesOpportunitySearchServiceInterface salesOpportunitySearch;
+    private SalesOrderSearchServiceInterface salesOrderSearch;
 
     private SearchRepositoryInterface searchRepository;
 
@@ -92,6 +97,14 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
         this.searchSalesOpportunities = option;
     }
 
+    /**
+     * Option to return Sales Orders from a search.
+     * @param option a <code>boolean</code> value
+     */
+    public void setSearchSalesOrders(boolean option) {
+        this.searchSalesOrders = option;
+    }
+
     /** {@inheritDoc} */
     public void search() throws ServiceException {
         try {
@@ -101,30 +114,30 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
             contactSearch = searchDomain.getContactSearchService();
             leadSearch = searchDomain.getLeadSearchService();
             salesOpportunitySearch = searchDomain.getSalesOpportunitySearchService();
+            salesOrderSearch = searchDomain.getSalesOrderSearchService();
 
             searchRepository = searchDomain.getSearchRepository();
-            // make query
-            Map<String, Object> output = searchRepository.searchInEntities(makeEntityClassList(), getQueryProjectedFields(), makeQuery(), getPageStart(), getPageSize());
-            setResults((List<Object[]>) output.get(SearchRepositoryInterface.RETURN_RESULTS));
-            setResultSize((Integer) output.get(SearchRepositoryInterface.RETURN_RESULT_SIZE));
-            // note: the filterSearchResults methods expect getResults to return a list of Object[] where the first two fields are {OBJECT_CLASS, ID}
-            accounts = accountSearch.filterSearchResults(getResults());
-            contacts = contactSearch.filterSearchResults(getResults());
-            leads = leadSearch.filterSearchResults(getResults());
-            salesOpportunities = salesOpportunitySearch.filterSearchResults(getResults());
+
+            search(searchRepository);
+
         } catch (RepositoryException e) {
             throw new ServiceException(e);
         }
     }
 
     /** {@inheritDoc} */
-    public Set<String> getQueryProjectedFields() {
-        Set<String> fields = new LinkedHashSet<String>();
-        fields.addAll(accountSearch.getQueryProjectedFields());
-        fields.addAll(contactSearch.getQueryProjectedFields());
-        fields.addAll(leadSearch.getQueryProjectedFields());
-        fields.addAll(salesOpportunitySearch.getQueryProjectedFields());
-        return fields;
+    public void readSearchResults(List<SearchResult> results) throws ServiceException {
+        accountSearch.readSearchResults(results);
+        contactSearch.readSearchResults(results);
+        leadSearch.readSearchResults(results);
+        salesOpportunitySearch.readSearchResults(results);
+        salesOrderSearch.readSearchResults(results);
+
+        accounts = accountSearch.getAccounts();
+        contacts = contactSearch.getContacts();
+        leads = leadSearch.getLeads();
+        salesOpportunities = salesOpportunitySearch.getSalesOpportunities();
+        salesOrders = salesOrderSearch.getOrders();
     }
 
     /**
@@ -160,43 +173,42 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
     }
 
     /**
-     * Builds the Lucene query according to the options set and the user given keywords.
-     * @return a Lucene query string
-     * @throws ServiceException if no search option is set
+     * Gets the sales orders results.
+     * @return the <code>List</code> of <code>Order</code>
      */
-    private String makeQuery() throws ServiceException {
+    public List<Order> getSalesOrders() {
+        return salesOrders;
+    }
+
+    /** {@inheritDoc} */
+    public String getQueryString() {
 
         StringBuilder sb = new StringBuilder();
 
         if (searchAccounts) {
-            accountSearch.makeQuery(sb);
+            sb.append(accountSearch.getQueryString());
         }
         if (searchContacts) {
-            contactSearch.makeQuery(sb);
+            sb.append(contactSearch.getQueryString());
         }
         if (searchLeads) {
-            leadSearch.makeQuery(sb);
+            sb.append(leadSearch.getQueryString());
         }
 
         if (searchSalesOpportunities) {
-            salesOpportunitySearch.makeQuery(sb);
+            sb.append(salesOpportunitySearch.getQueryString());
         }
 
-        if (sb.length() == 0) {
-            throw new ServiceException("Cannot perform search, no search option was set");
+        if (searchSalesOrders) {
+            sb.append(salesOrderSearch.getQueryString());
         }
 
-        return searchRepository.makeQueryString(sb.toString(), getKeywords());
+        return sb.toString();
     }
 
-    /**
-     * Builds the list of entity classes that should be searched according to the options set.
-     * @return a <code>List</code> of entity classes
-     * @throws ServiceException if no search option is set
-     */
-    @SuppressWarnings("unchecked")
-    private Set<Class> makeEntityClassList() throws ServiceException {
-        Set<Class> classes = new HashSet<Class>();
+    /** {@inheritDoc} */
+    public Set<Class<?>> getClassesToQuery() {
+        Set<Class<?>> classes = new HashSet<Class<?>>();
         if (searchAccounts) {
             classes.addAll(accountSearch.getClassesToQuery());
         }
@@ -209,9 +221,8 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
         if (searchSalesOpportunities) {
             classes.addAll(salesOpportunitySearch.getClassesToQuery());
         }
-
-        if (classes.isEmpty()) {
-            throw new ServiceException("Cannot perform search, no search option was set");
+        if (searchSalesOrders) {
+            classes.addAll(salesOrderSearch.getClassesToQuery());
         }
 
         return classes;

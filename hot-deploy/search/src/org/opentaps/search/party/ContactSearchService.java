@@ -21,8 +21,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.search.FullTextQuery;
-import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.constants.RoleTypeConstants;
@@ -30,15 +28,18 @@ import org.opentaps.base.entities.PartyRole;
 import org.opentaps.base.entities.PartyRolePk;
 import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.PartyRepositoryInterface;
-import org.opentaps.domain.search.ContactSearchServiceInterface;
+import org.opentaps.domain.search.SearchDomainInterface;
+import org.opentaps.domain.search.SearchRepositoryInterface;
+import org.opentaps.domain.search.SearchResult;
+import org.opentaps.domain.search.party.ContactSearchServiceInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
-import org.opentaps.search.SearchService;
+import org.opentaps.search.HibernateSearchService;
 
 /**
  * The implementation of the Contact search service.
  */
-public class ContactSearchService extends SearchService implements ContactSearchServiceInterface {
+public class ContactSearchService extends HibernateSearchService implements ContactSearchServiceInterface {
 
     private List<Contact> contacts = null;
 
@@ -48,41 +49,38 @@ public class ContactSearchService extends SearchService implements ContactSearch
     }
 
     /** {@inheritDoc} */
-    public void makeQuery(StringBuilder sb) {
+    public String getQueryString() {
+        StringBuilder sb = new StringBuilder();
         PartySearch.makePersonQuery(sb, RoleTypeConstants.CONTACT);
+        return sb.toString();
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
-    public Set<Class> getClassesToQuery() {
+    public Set<Class<?>> getClassesToQuery() {
         return PartySearch.PARTY_CLASSES;
     }
 
     /** {@inheritDoc} */
     public void search() throws ServiceException {
-        StringBuilder sb = new StringBuilder();
-        makeQuery(sb);
-        searchInEntities(getClassesToQuery(), sb.toString());
-        contacts = filterSearchResults(getResults());
+        try {
+            SearchDomainInterface searchDomain = getDomainsDirectory().getSearchDomain();
+            SearchRepositoryInterface searchRepository = searchDomain.getSearchRepository();
+            search(searchRepository);
+        } catch (RepositoryException e) {
+            throw new ServiceException(e);
+        }
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
-    public List<Contact> filterSearchResults(List<Object[]> results) throws ServiceException {
+    public void readSearchResults(List<SearchResult> results) throws ServiceException {
         try {
             PartyRepositoryInterface partyRepository = getDomainsDirectory().getPartyDomain().getPartyRepository();
             // get the entities from the search results
             Set<String> contactIds = new HashSet<String>();
-            int classIndex = getQueryProjectedFieldIndex(FullTextQuery.OBJECT_CLASS);
-            int idIndex = getQueryProjectedFieldIndex(FullTextQuery.ID);
-            if (classIndex < 0 || idIndex < 0) {
-                throw new ServiceException("Incompatible result projection, classIndex = " + classIndex + ", idIndex = " + idIndex);
-            }
-    
-            for (Object[] o : results) {
-                Class c = (Class) o[classIndex];
+            for (SearchResult o : results) {
+                Class<?> c = o.getResultClass();
                 if (c.equals(PartyRole.class)) {
-                    PartyRolePk pk = (PartyRolePk) o[idIndex];
+                    PartyRolePk pk = (PartyRolePk) o.getResultPk();
                     if (RoleTypeConstants.CONTACT.equals(pk.getRoleTypeId())) {
                         contactIds.add(pk.getPartyId());
                     }
@@ -90,14 +88,12 @@ public class ContactSearchService extends SearchService implements ContactSearch
             }
 
             if (!contactIds.isEmpty()) {
-                return partyRepository.findList(Contact.class, EntityCondition.makeCondition(Contact.Fields.partyId.name(), EntityOperator.IN, contactIds));
+                contacts = partyRepository.findList(Contact.class, EntityCondition.makeCondition(Contact.Fields.partyId.name(), EntityOperator.IN, contactIds));
             } else {
-                return new ArrayList<Contact>();
+                contacts = new ArrayList<Contact>();
             }
         } catch (RepositoryException e) {
             throw new ServiceException(e);
-        }  catch (GeneralException ex) {
-            throw new ServiceException(ex);
-        } 
+        }
     }
 }

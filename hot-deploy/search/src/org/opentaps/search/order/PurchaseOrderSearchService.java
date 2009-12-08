@@ -24,42 +24,46 @@ import java.util.Set;
 
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.opentaps.base.constants.SalesOpportunityStageConstants;
-import org.opentaps.base.entities.SalesOpportunity;
+import org.opentaps.base.constants.OrderTypeConstants;
+import org.opentaps.base.constants.StatusItemConstants;
+import org.opentaps.base.entities.OrderHeader;
+import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.search.SearchDomainInterface;
 import org.opentaps.domain.search.SearchRepositoryInterface;
 import org.opentaps.domain.search.SearchResult;
-import org.opentaps.domain.search.order.SalesOpportunitySearchServiceInterface;
+import org.opentaps.domain.search.order.PurchaseOrderSearchServiceInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
-import org.opentaps.search.HibernateSearchService;
 import org.opentaps.search.HibernateSearchRepository;
+import org.opentaps.search.HibernateSearchService;
 import org.opentaps.search.party.PartySearch;
 
 /**
- * The implementation of the Sales Opportunity search service.
+ * The implementation of the Purchase Order search service.
  */
-public class SalesOpportunitySearchService extends HibernateSearchService implements SalesOpportunitySearchServiceInterface {
+public class PurchaseOrderSearchService extends HibernateSearchService implements PurchaseOrderSearchServiceInterface {
 
     /** Common set of class to query for Party related search. */
-    public static final Set<Class<?>> SALES_OPPORTUNITY_CLASSES = new HashSet<Class<?>>(Arrays.asList(
-            SalesOpportunity.class
+    public static final Set<Class<?>> ORDER_CLASSES = new HashSet<Class<?>>(Arrays.asList(
+            OrderHeader.class
         ));
 
-    private List<SalesOpportunity> salesOpportunities = null;
+    private List<Order> orders = null;
 
     /** {@inheritDoc} */
-    public List<SalesOpportunity> getSalesOpportunities() {
-        return salesOpportunities;
+    public List<Order> getOrders() {
+        return orders;
     }
 
     /** {@inheritDoc} */
     public String getQueryString() {
         StringBuilder sb = new StringBuilder();
-        // filter canceled (lost) Sales Opportunities
-        sb.append("( -").append(SalesOpportunity.Fields.opportunityStageId.name()).append(":\"").append(SalesOpportunityStageConstants.SOSTG_LOST).append("\" +(");
-        makeSalesOpportunityQuery(sb);
+        // only find purchase order
+        sb.append("( +").append(OrderHeader.Fields.orderTypeId.name()).append(":\"").append(OrderTypeConstants.PURCHASE_ORDER).append("\"");
+        // filter canceled orders
+        sb.append(" -statusId:\"").append(StatusItemConstants.OrderStatus.ORDER_CANCELLED).append("\" +(");
+        makePurchaseOrderQuery(sb);
         PartySearch.makePartyGroupFieldsQuery(sb);
         PartySearch.makePersonFieldsQuery(sb);
         sb.append("))");
@@ -67,18 +71,18 @@ public class SalesOpportunitySearchService extends HibernateSearchService implem
     }
 
     /**
-     * Builds the Lucene query for a SalesOpportunity related search.
+     * Builds the Lucene query for a PurchaseOrder related search.
      * @param sb the string builder instance currently building the query
      */
-    public static void makeSalesOpportunityQuery(StringBuilder sb) {
-        for (String f : Arrays.asList(SalesOpportunity.Fields.salesOpportunityId.name(), SalesOpportunity.Fields.opportunityName.name(), SalesOpportunity.Fields.description.name())) {
+    public static void makePurchaseOrderQuery(StringBuilder sb) {
+        for (String f : Arrays.asList(OrderHeader.Fields.orderId.name(), OrderHeader.Fields.orderName.name())) {
             sb.append(f).append(":").append(HibernateSearchRepository.DEFAULT_PLACEHOLDER).append(" ");
         }
     }
 
     /** {@inheritDoc} */
     public Set<Class<?>> getClassesToQuery() {
-        return SALES_OPPORTUNITY_CLASSES;
+        return ORDER_CLASSES;
     }
 
     /** {@inheritDoc} */
@@ -98,19 +102,19 @@ public class SalesOpportunitySearchService extends HibernateSearchService implem
         try {
             OrderRepositoryInterface orderRepository = getDomainsDirectory().getOrderDomain().getOrderRepository();
             // get the entities from the search results
-            Set<String> salesOpportunityIds = new HashSet<String>();
+            Set<String> orderIds = new HashSet<String>();
             for (SearchResult o : results) {
                 Class<?> c = o.getResultClass();
-                if (c.equals(SalesOpportunity.class)) {
+                if (c.equals(OrderHeader.class)) {
                     String pk = (String) o.getResultPk();
-                    salesOpportunityIds.add(pk);
+                    orderIds.add(pk);
                 }
             }
 
-            if (!salesOpportunityIds.isEmpty()) {
-                salesOpportunities = orderRepository.findList(SalesOpportunity.class, EntityCondition.makeCondition(SalesOpportunity.Fields.salesOpportunityId.name(), EntityOperator.IN, salesOpportunityIds));
+            if (!orderIds.isEmpty()) {
+                orders = orderRepository.findList(Order.class, EntityCondition.makeCondition(Order.Fields.orderId.name(), EntityOperator.IN, orderIds));
             } else {
-                salesOpportunities = new ArrayList<SalesOpportunity>();
+                orders = new ArrayList<Order>();
             }
         } catch (RepositoryException e) {
             throw new ServiceException(e);

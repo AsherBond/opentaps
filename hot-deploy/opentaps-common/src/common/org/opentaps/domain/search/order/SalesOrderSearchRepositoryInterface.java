@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.domain.search;
+package org.opentaps.domain.search.order;
 
 import java.util.List;
 import java.util.Locale;

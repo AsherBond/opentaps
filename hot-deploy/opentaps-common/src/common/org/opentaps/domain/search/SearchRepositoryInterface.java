@@ -16,35 +16,46 @@
  */
 package org.opentaps.domain.search;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
-import org.opentaps.foundation.service.ServiceException;
+import org.opentaps.foundation.repository.RepositoryException;
+
 /**
- * Interface for search reposity.
+ * Interface for search repository.
+ * A search repository contains the implementation of the base search logic.
  */
 public interface SearchRepositoryInterface {
-    public final static String RETURN_RESULTS = "results";
-    public final static String RETURN_RESULT_SIZE = "resultSize";
+
     /** The default max number of result per page. */
     public static final int DEFAULT_PAGE_SIZE = 50;
-    /** The default placeholder in Lucene queries. */
-    public static final String DEFAULT_PLACEHOLDER = "?";
-    /** The regular expression recognizing the default placeholder in Lucene queries. */
-    public static final String DEFAULT_PLACEHOLDER_REGEX = "\\?";
-    
+
     /**
      * Search custom query and return the result/resultSize map.
-     * @param entityClasses a <code>Set</code> instance
-     * @param projectedFields a <code>Set</code> instance
-     * @param queryString a <code>String</code> value
+     * @param entityClasses the <code>Set</code> of classes to query
+     * @param queryString the search query <code>String</code> value
      * @param pageStart the page start index
      * @param pageSize the page size
-     * @throws ServiceException if an error occurs
+     * @throws RepositoryException if an error occurs
      */
-    public Map searchInEntities(Set<Class> entityClasses, Set<String> projectedFields, String queryString, int pageStart, int pageSize) throws ServiceException;
+    public void searchInEntities(Set<Class<?>> entityClasses, String queryString, int pageStart, int pageSize) throws RepositoryException;
+
     /**
-     * make a query string by user given keyword.
+     * Gets the total number of results for the search.
+     * @return an <code>int</code> value
+     */
+    public int getResultSize();
+
+    /**
+     * Gets the search results.
+     * Because a search service is not bound to one particular object type
+     *  the results are encapsulated as <code>SearchResult</code>.
+     * @return the results of the search as a list of <code>SearchResult</code>
+     */
+    public List<SearchResult> getResults();
+
+    /**
+     * Makes a query string from the user given keywords.
      * @param queryString a custom query
      * @param keywords a user given string of the keywords he is looking for
      * @return the custom query string

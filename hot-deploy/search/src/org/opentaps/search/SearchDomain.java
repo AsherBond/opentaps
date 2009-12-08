@@ -16,21 +16,26 @@
  */
 package org.opentaps.search;
 
-import org.opentaps.domain.search.AccountSearchServiceInterface;
-import org.opentaps.domain.search.ContactSearchServiceInterface;
-import org.opentaps.domain.search.LeadSearchServiceInterface;
-import org.opentaps.domain.search.SalesOpportunitySearchServiceInterface;
 import org.opentaps.domain.search.SearchDomainInterface;
 import org.opentaps.domain.search.SearchRepositoryInterface;
-import org.opentaps.domain.search.SupplierSearchServiceInterface;
+import org.opentaps.domain.search.order.PurchaseOrderSearchServiceInterface;
+import org.opentaps.domain.search.order.SalesOpportunitySearchServiceInterface;
+import org.opentaps.domain.search.order.SalesOrderSearchServiceInterface;
+import org.opentaps.domain.search.party.AccountSearchServiceInterface;
+import org.opentaps.domain.search.party.ContactSearchServiceInterface;
+import org.opentaps.domain.search.party.LeadSearchServiceInterface;
+import org.opentaps.domain.search.party.SupplierSearchServiceInterface;
 import org.opentaps.foundation.domain.Domain;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
+import org.opentaps.search.order.PurchaseOrderSearchService;
 import org.opentaps.search.order.SalesOpportunitySearchService;
+import org.opentaps.search.order.SalesOrderSearchService;
 import org.opentaps.search.party.AccountSearchService;
 import org.opentaps.search.party.ContactSearchService;
 import org.opentaps.search.party.LeadSearchService;
 import org.opentaps.search.party.SupplierSearchService;
+
 /**
  * This is an hibernate implementation of the Search domain.
  */
@@ -57,13 +62,23 @@ public class SearchDomain extends Domain implements SearchDomainInterface {
     }
 
     /** {@inheritDoc} */
+    public SalesOrderSearchServiceInterface getSalesOrderSearchService() throws ServiceException {
+        return instantiateService(SalesOrderSearchService.class);
+    }
+
+    /** {@inheritDoc} */
+    public PurchaseOrderSearchServiceInterface getPurchaseOrderSearchService() throws ServiceException {
+        return instantiateService(PurchaseOrderSearchService.class);
+    }
+
+    /** {@inheritDoc} */
     public SupplierSearchServiceInterface getSupplierSearchService() throws ServiceException {
         return instantiateService(SupplierSearchService.class);
     }
 
     /** {@inheritDoc} */
     public SearchRepositoryInterface getSearchRepository() throws RepositoryException {
-        return instantiateRepository(SearchRepository.class);
+        return instantiateRepository(HibernateSearchRepository.class);
     }
 
 

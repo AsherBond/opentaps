@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.domain.search;
+package org.opentaps.domain.search.order;
 
 import java.util.List;
 import java.util.Locale;
@@ -23,6 +23,7 @@ import java.util.TimeZone;
 import org.opentaps.base.entities.OrderHeaderAndRoles;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
+
 /**
  * Repository for Purchase Orders to handle interaction of Search orders domain with the entity engine (database) and the service engine.
  */
@@ -46,20 +47,18 @@ public interface PurchaseOrderSearchRepositoryInterface  extends RepositoryInter
      * @param orderName a <code>String</code> value
      */
     public void setOrderName(String orderName);
-    
+
     /**
      * Sets the product pattern to search for.
      * @param productPattern a <code>String</code> value
      */
     public void setProductPattern(String productPattern);
 
-
     /**
      * Sets the supplier party Id to search for.
-     * @param customerPartyId a <code>String</code> value
+     * @param supplierPartyId a <code>String</code> value
      */
     public void setSupplierPartyId(String supplierPartyId);
-
 
     /**
      * Sets the from date string to search for.
@@ -85,7 +84,7 @@ public interface PurchaseOrderSearchRepositoryInterface  extends RepositoryInter
      */
     public void setOrganizationPartyId(String organizationPartyId);
 
-    
+
     /**
      * Sets the find all option to search for.
      * @param findAll a <code>String</code> value

@@ -16,6 +16,13 @@
  */
 package org.opentaps.domain.search;
 
+import org.opentaps.domain.search.order.PurchaseOrderSearchServiceInterface;
+import org.opentaps.domain.search.order.SalesOpportunitySearchServiceInterface;
+import org.opentaps.domain.search.order.SalesOrderSearchServiceInterface;
+import org.opentaps.domain.search.party.AccountSearchServiceInterface;
+import org.opentaps.domain.search.party.ContactSearchServiceInterface;
+import org.opentaps.domain.search.party.LeadSearchServiceInterface;
+import org.opentaps.domain.search.party.SupplierSearchServiceInterface;
 import org.opentaps.foundation.domain.DomainInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
@@ -58,6 +65,20 @@ public interface SearchDomainInterface extends DomainInterface {
      * @throws ServiceException if an error occurs
      */
     public SalesOpportunitySearchServiceInterface getSalesOpportunitySearchService() throws ServiceException;
+
+    /**
+     * Returns the sales order search service.
+     * @return a <code>SalesOrderSearchServiceInterface</code> value
+     * @throws ServiceException if an error occurs
+     */
+    public SalesOrderSearchServiceInterface getSalesOrderSearchService() throws ServiceException;
+
+    /**
+     * Returns the purchase order search service.
+     * @return a <code>PurchaseOrderSearchServiceInterface</code> value
+     * @throws ServiceException if an error occurs
+     */
+    public PurchaseOrderSearchServiceInterface getPurchaseOrderSearchService() throws ServiceException;
 
 
     /**

@@ -28,7 +28,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.base.entities.OrderHeaderAndRoles;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
-import org.opentaps.domain.search.PurchaseOrderSearchRepositoryInterface;
+import org.opentaps.domain.search.order.PurchaseOrderSearchRepositoryInterface;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.InfrastructureException;

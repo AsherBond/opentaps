@@ -24,7 +24,6 @@ import java.util.TimeZone;
 
 import javolution.util.FastList;
 
-import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -40,11 +39,12 @@ import org.opentaps.common.util.UtilDate;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.product.Product;
 import org.opentaps.domain.product.ProductRepositoryInterface;
-import org.opentaps.domain.search.PurchaseOrderSearchRepositoryInterface;
+import org.opentaps.domain.search.order.PurchaseOrderSearchRepositoryInterface;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
+
 /**
  * This is the implement of the Purchase Order search interface.
  */
@@ -93,15 +93,15 @@ public class PurchaseOrderSearchRepository  extends Repository implements Purcha
                 searchConditions.add(EntityCondition.makeCondition(OrderHeaderAndRoles.Fields.orderDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, thruDateTimestamp));
             }
         }
-        
+
         if (UtilValidate.isNotEmpty(orderId)) {
             searchConditions.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderAndRoles.Fields.orderId.name()), EntityOperator.LIKE, EntityFunction.UPPER(orderId + "%")));
         }
-        
+
         if (UtilValidate.isNotEmpty(orderName)) {
             searchConditions.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderAndRoles.Fields.orderName.name()), EntityOperator.LIKE, EntityFunction.UPPER(orderName + "%")));
         }
-        
+
         if (UtilValidate.isNotEmpty(supplierPartyId)) {
             searchConditions.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderAndRoles.Fields.partyId.name()), EntityOperator.LIKE, EntityFunction.UPPER(supplierPartyId + "%")));
         }
@@ -109,19 +109,19 @@ public class PurchaseOrderSearchRepository  extends Repository implements Purcha
         if (UtilValidate.isNotEmpty(statusId)) {
             searchConditions.add(EntityCondition.makeCondition(OrderHeaderAndRoles.Fields.statusId.name(), EntityOperator.EQUALS, statusId));
         }
-        
+
         if (UtilValidate.isNotEmpty(createdBy)) {
             searchConditions.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderAndRoles.Fields.createdBy.name()), EntityOperator.EQUALS, EntityFunction.UPPER(createdBy)));
         }
-        
+
         if (UtilValidate.isNotEmpty(productPattern)) {
             addProductPatternSearchCondition(searchConditions);
         }
-        
+
         // restrict search results to the company set up for PURCHASING
         searchConditions.add(EntityCondition.makeCondition(OrderHeaderAndRoles.Fields.billToPartyId.name(), EntityOperator.EQUALS, organizationPartyId));
 
-        
+
         // other conditions to limit the list
         searchConditions.add(EntityCondition.makeCondition(OrderHeaderAndRoles.Fields.orderTypeId.name(), EntityOperator.EQUALS, "PURCHASE_ORDER"));
         searchConditions.add(EntityCondition.makeCondition(OrderHeaderAndRoles.Fields.roleTypeId.name(), EntityOperator.EQUALS, "BILL_FROM_VENDOR"));
@@ -145,7 +145,7 @@ public class PurchaseOrderSearchRepository  extends Repository implements Purcha
             orderBy = Arrays.asList(OrderHeaderAndRoles.Fields.orderDate.desc());
         }
         List<OrderHeaderAndRoles> orders = findList(OrderHeaderAndRoles.class, searchConditionList, fieldsToSelect, orderBy);
-        
+
         // add value for extra fields
         for (OrderHeaderAndRoles order : orders) {
             order.setSupplierName(PartyHelper.getPartyName(getDelegator(), order.getPartyId(), false));
@@ -235,8 +235,8 @@ public class PurchaseOrderSearchRepository  extends Repository implements Purcha
         }
         return productRepository;
     }
-    
-    
+
+
     /**
      * Add product pattern search condition to searchConditions.
      * @param searchConditions a <code>List<EntityCondition> searchConditions</code> value

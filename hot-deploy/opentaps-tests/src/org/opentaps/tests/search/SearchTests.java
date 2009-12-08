@@ -17,11 +17,17 @@
 
 package org.opentaps.tests.search;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.entity.GenericValue;
 import org.opentaps.base.constants.SalesOpportunityStageConstants;
 import org.opentaps.base.entities.PartyGroup;
+import org.opentaps.base.entities.Product;
 import org.opentaps.base.entities.SalesOpportunity;
 import org.opentaps.base.services.CrmsfaCreateAccountService;
 import org.opentaps.base.services.CrmsfaCreateContactService;
@@ -29,7 +35,11 @@ import org.opentaps.base.services.CrmsfaCreateLeadService;
 import org.opentaps.base.services.CrmsfaCreateOpportunityService;
 import org.opentaps.base.services.CrmsfaUpdateOpportunityService;
 import org.opentaps.base.services.PurchasingCreateSupplierService;
+import org.opentaps.common.order.PurchaseOrderFactory;
+import org.opentaps.common.order.SalesOrderFactory;
 import org.opentaps.crmsfa.search.CrmsfaSearchService;
+import org.opentaps.domain.order.Order;
+import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.Lead;
@@ -37,6 +47,7 @@ import org.opentaps.domain.party.Party;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.purchasing.search.PurchasingSearchService;
 import org.opentaps.tests.OpentapsTestCase;
 
@@ -100,6 +111,98 @@ public class SearchTests extends OpentapsTestCase {
             // assert we find the supplier one
             assertIsSupplierNotCustomer(party);
         }
+    }
+
+    /**
+     * Test sales order search.
+     * - create a Sales Order
+     * - check the CrmsfaSearchService can find it
+     * - check the PurchasingSearchService cannot find it
+     * @throws Exception if an error occurs
+     */
+    public void testSalesOrderSearch() throws Exception {
+        OrderRepositoryInterface repository = orderDomain.getOrderRepository();
+
+        Product product = repository.findOneNotNull(Product.class, repository.map(Product.Fields.productId, "GZ-1005"));
+        Party demoAccount1 = repository.findOneNotNull(Party.class, repository.map(Party.Fields.partyId, "DemoAccount1"));
+
+        // create a test order
+        Map<GenericValue, BigDecimal> orderProducts = new HashMap<GenericValue, BigDecimal>();
+        orderProducts.put(Repository.genericValueFromEntity(product), new BigDecimal("1.0"));
+        User = admin;
+        SalesOrderFactory salesOrder = testCreatesSalesOrder(orderProducts, Repository.genericValueFromEntity(demoAccount1), "9000", "EXT_OFFLINE", "DemoAddress2");
+        Debug.logInfo("testSalesOrderSearch created order [" + salesOrder.getOrderId() + "]", MODULE);
+        // set the order name
+        Order order = repository.getOrderById(salesOrder.getOrderId());
+        assertNotNull("Could not find the created test order [" + salesOrder.getOrderId() + "].", order);
+        order.setOrderName("searchsordername");
+        repository.update(order);
+
+        pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
+
+        // verify it shows in the search results by ID
+        CrmsfaSearchService crmSearch = crmsfaSearchOrders(order.getOrderId());
+        List<Order> orders = crmSearch.getSalesOrders();
+        Set<String> orderIds = Entity.getDistinctFieldValues(String.class, orders, Order.Fields.orderId);
+        assertTrue("Should have found the new order [" + order.getOrderId() + "] in the Sales Orders by ID results", orderIds.contains(order.getOrderId()));
+
+        // verify it shows in the search results by Name
+        crmSearch = crmsfaSearchOrders("searchsordername");
+        orders = crmSearch.getSalesOrders();
+        orderIds = Entity.getDistinctFieldValues(String.class, orders, Order.Fields.orderId);
+        assertTrue("Should have found the new order [" + order.getOrderId() + "] in the Sales Orders by Name results", orderIds.contains(order.getOrderId()));
+
+        // verify it does not show in the purchasing search results
+        PurchasingSearchService purchasingSearch = purchasingSearchOrders(order.getOrderId());
+        orders = purchasingSearch.getPurchaseOrders();
+        orderIds = Entity.getDistinctFieldValues(String.class, orders, Order.Fields.orderId);
+        assertFalse("Should not have found the new order [" + order.getOrderId() + "] in the Purchase Orders results", orderIds.contains(order.getOrderId()));
+    }
+
+    /**
+     * Test purchase order search.
+     * - create a Purchase Order
+     * - check the PurchasingSearchService can find it
+     * - check the CrmsfaSearchService cannot find it
+     * @throws Exception if an error occurs
+     */
+    public void testPurchaseOrderSearch() throws Exception {
+        OrderRepositoryInterface repository = orderDomain.getOrderRepository();
+
+        Product product = repository.findOneNotNull(Product.class, repository.map(Product.Fields.productId, "GZ-1005"));
+        Party supplier = repository.findOneNotNull(Party.class, repository.map(Party.Fields.partyId, "DemoSupplier"));
+
+        // create a test order
+        Map<GenericValue, BigDecimal> orderProducts = new HashMap<GenericValue, BigDecimal>();
+        orderProducts.put(Repository.genericValueFromEntity(product), new BigDecimal("1.0"));
+        User = admin;
+        PurchaseOrderFactory pof = testCreatesPurchaseOrder(orderProducts, Repository.genericValueFromEntity(supplier), "9200");
+        Debug.logInfo("testPurchaseOrderSearch created order [" + pof.getOrderId() + "]", MODULE);
+        // set the order name
+        Order order = repository.getOrderById(pof.getOrderId());
+        assertNotNull("Could not find the created test order [" + pof.getOrderId() + "].", order);
+        order.setOrderName("searchpordername");
+        repository.update(order);
+
+        pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
+
+        // verify it shows in the search results by ID
+        PurchasingSearchService purchasingSearch = purchasingSearchOrders(order.getOrderId());
+        List<Order> orders = purchasingSearch.getPurchaseOrders();
+        Set<String> orderIds = Entity.getDistinctFieldValues(String.class, orders, Order.Fields.orderId);
+        assertTrue("Should have found the new order [" + order.getOrderId() + "] in the Purchase Orders by ID results", orderIds.contains(order.getOrderId()));
+
+        // verify it shows in the search results by Name
+        purchasingSearch = purchasingSearchOrders("searchpordername");
+        orders = purchasingSearch.getPurchaseOrders();
+        orderIds = Entity.getDistinctFieldValues(String.class, orders, Order.Fields.orderId);
+        assertTrue("Should have found the new order [" + order.getOrderId() + "] in the Purchase Orders by Name results", orderIds.contains(order.getOrderId()));
+
+        // verify it does not show in the crmsfa search results
+        CrmsfaSearchService crmSearch = crmsfaSearchOrders(order.getOrderId());
+        orders = crmSearch.getSalesOrders();
+        orderIds = Entity.getDistinctFieldValues(String.class, orders, Order.Fields.orderId);
+        assertFalse("Should not have found the new order [" + order.getOrderId() + "] in the Sales Orders results", orderIds.contains(order.getOrderId()));
     }
 
     /**
@@ -368,6 +471,16 @@ public class SearchTests extends OpentapsTestCase {
 
     }
 
+    protected CrmsfaSearchService crmsfaSearchOrders(String keywords) throws Exception {
+        CrmsfaSearchService crmSearch = new CrmsfaSearchService();
+        crmSearch.setInfrastructure(new Infrastructure(dispatcher));
+        crmSearch.setUser(new User(admin));
+        crmSearch.setKeywords(keywords);
+        crmSearch.setSearchSalesOrders(true);
+        crmSearch.search();
+        return crmSearch;
+    }
+
     protected CrmsfaSearchService crmsfaSearchParties(String keywords) throws Exception {
         CrmsfaSearchService crmSearch = new CrmsfaSearchService();
         crmSearch.setInfrastructure(new Infrastructure(dispatcher));
@@ -396,6 +509,16 @@ public class SearchTests extends OpentapsTestCase {
         purchasingSearch.setUser(new User(admin));
         purchasingSearch.setKeywords(keywords);
         purchasingSearch.setSearchSuppliers(true);
+        purchasingSearch.search();
+        return purchasingSearch;
+    }
+
+    protected PurchasingSearchService purchasingSearchOrders(String keywords) throws Exception {
+        PurchasingSearchService purchasingSearch = new PurchasingSearchService();
+        purchasingSearch.setInfrastructure(new Infrastructure(dispatcher));
+        purchasingSearch.setUser(new User(admin));
+        purchasingSearch.setKeywords(keywords);
+        purchasingSearch.setSearchPurchaseOrders(true);
         purchasingSearch.search();
         return purchasingSearch;
     }

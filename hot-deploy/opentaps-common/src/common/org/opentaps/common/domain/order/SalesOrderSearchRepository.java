@@ -26,7 +26,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import javolution.util.FastList;
-
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -34,12 +33,12 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.party.party.PartyHelper;
-import org.opentaps.common.order.UtilOrder;
-import org.opentaps.common.util.UtilDate;
 import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvCompleted;
 import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
 import org.opentaps.base.entities.StatusItem;
-import org.opentaps.domain.search.SalesOrderSearchRepositoryInterface;
+import org.opentaps.common.order.UtilOrder;
+import org.opentaps.common.util.UtilDate;
+import org.opentaps.domain.search.order.SalesOrderSearchRepositoryInterface;
 import org.opentaps.foundation.entity.util.EntityComparator;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
