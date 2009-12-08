@@ -140,6 +140,8 @@ fieldMapColumns.put("OrderHeader", fields);
    @Boost(10f)
    @Column(name="ORDER_ID")
    private String orderId;
+   @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   @Boost(1f)
    @Column(name="ORDER_TYPE_ID")
    private String orderTypeId;
    @Field(index=Index.TOKENIZED, store=Store.YES)
