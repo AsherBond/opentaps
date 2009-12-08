@@ -123,7 +123,7 @@ public class CrmsfaSearchLookupService extends EntityLookupAndSuggestService {
 
     private List<EntityInterface> search() {
 
-        if (getSuggestQuery() == null || getSuggestQuery().trim().isEmpty()) {
+        if (getSuggestQuery() == null || getSuggestQuery().trim().equals("")) {
             return new ArrayList<EntityInterface>();
         }
 
