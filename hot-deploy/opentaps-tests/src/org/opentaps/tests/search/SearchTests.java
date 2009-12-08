@@ -17,14 +17,19 @@
 
 package org.opentaps.tests.search;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import org.opentaps.crmsfa.search.CrmsfaSearchService;
+import org.opentaps.base.constants.SalesOpportunityStageConstants;
 import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.SalesOpportunity;
+import org.opentaps.base.services.CrmsfaCreateAccountService;
+import org.opentaps.base.services.CrmsfaCreateContactService;
+import org.opentaps.base.services.CrmsfaCreateLeadService;
+import org.opentaps.base.services.CrmsfaCreateOpportunityService;
+import org.opentaps.base.services.CrmsfaUpdateOpportunityService;
+import org.opentaps.base.services.PurchasingCreateSupplierService;
+import org.opentaps.crmsfa.search.CrmsfaSearchService;
 import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.Lead;
@@ -54,17 +59,17 @@ public class SearchTests extends OpentapsTestCase {
         String partyGroupName = "Sangfroid Paper Ltd.";
 
         // create a supplier by service purchasing.createSupplier
-        Map<String, Object> callCtxt = new HashMap<String, Object>();
-        callCtxt.put("userLogin", admin);
-        callCtxt.put("groupName", partyGroupName);
-        callCtxt.put("requires1099", "Y");
-        runAndAssertServiceSuccess("purchasing.createSupplier", callCtxt);
+        PurchasingCreateSupplierService createSupplier = new PurchasingCreateSupplierService();
+        createSupplier.setInUserLogin(admin);
+        createSupplier.setInGroupName(partyGroupName);
+        createSupplier.setInRequires1099("Y");
+        runAndAssertServiceSuccess(createSupplier);
 
         // create a account by service crmsfa.createAccount
-        callCtxt = new HashMap<String, Object>();
-        callCtxt.put("userLogin", admin);
-        callCtxt.put("accountName", partyGroupName);
-        runAndAssertServiceSuccess("crmsfa.createAccount", callCtxt);
+        CrmsfaCreateAccountService createAccount = new CrmsfaCreateAccountService();
+        createAccount.setInUserLogin(admin);
+        createAccount.setInAccountName(partyGroupName);
+        runAndAssertServiceSuccess(createAccount);
 
         // note: the indexing is async, so need to wait a little for the index to be in sync
         pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
@@ -103,11 +108,11 @@ public class SearchTests extends OpentapsTestCase {
      */
     public void testAccountSearch() throws Exception {
         //  create a new account
-        Map<String, Object> callCtxt = new HashMap<String, Object>();
-        callCtxt.put("userLogin", admin);
-        callCtxt.put("accountName", "searchaccount");
-        Map<String, Object> results = runAndAssertServiceSuccess("crmsfa.createAccount", callCtxt);
-        String partyId = (String) results.get("partyId");
+        CrmsfaCreateAccountService createAccount = new CrmsfaCreateAccountService();
+        createAccount.setInUserLogin(admin);
+        createAccount.setInAccountName("searchaccount");
+        runAndAssertServiceSuccess(createAccount);
+        String partyId = createAccount.getOutPartyId();
 
         pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
 
@@ -142,12 +147,12 @@ public class SearchTests extends OpentapsTestCase {
      */
     public void testContactSearch() throws Exception {
         //  create a new contact
-        Map<String, Object> callCtxt = new HashMap<String, Object>();
-        callCtxt.put("userLogin", admin);
-        callCtxt.put("firstName", "Test");
-        callCtxt.put("lastName", "searchcontact");
-        Map<String, Object> results = runAndAssertServiceSuccess("crmsfa.createContact", callCtxt);
-        String partyId = (String) results.get("partyId");
+        CrmsfaCreateContactService createContact = new CrmsfaCreateContactService();
+        createContact.setInUserLogin(admin);
+        createContact.setInFirstName("Test");
+        createContact.setInLastName("searchcontact");
+        runAndAssertServiceSuccess(createContact);
+        String partyId = createContact.getOutPartyId();
 
         pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
 
@@ -182,13 +187,13 @@ public class SearchTests extends OpentapsTestCase {
      */
     public void testLeadSearch() throws Exception {
         //  create a new lead
-        Map<String, Object> callCtxt = new HashMap<String, Object>();
-        callCtxt.put("userLogin", admin);
-        callCtxt.put("firstName", "Test");
-        callCtxt.put("lastName", "searchlead");
-        callCtxt.put("companyName", "searchleadcompany");
-        Map<String, Object> results = runAndAssertServiceSuccess("crmsfa.createLead", callCtxt);
-        String partyId = (String) results.get("partyId");
+        CrmsfaCreateLeadService createLead = new CrmsfaCreateLeadService();
+        createLead.setInUserLogin(admin);
+        createLead.setInFirstName("Test");
+        createLead.setInLastName("searchlead");
+        createLead.setInCompanyName("searchleadcompany");
+        runAndAssertServiceSuccess(createLead);
+        String partyId = createLead.getOutPartyId();
 
         pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
 
@@ -223,12 +228,12 @@ public class SearchTests extends OpentapsTestCase {
      */
     public void testSupplierSearch() throws Exception {
         //  create a new supplier
-        Map<String, Object> callCtxt = new HashMap<String, Object>();
-        callCtxt.put("userLogin", admin);
-        callCtxt.put("groupName", "searchsupplier");
-        callCtxt.put("requires1099", "Y");
-        Map<String, Object> results = runAndAssertServiceSuccess("purchasing.createSupplier", callCtxt);
-        String partyId = (String) results.get("partyId");
+        PurchasingCreateSupplierService createSupplier = new PurchasingCreateSupplierService();
+        createSupplier.setInUserLogin(admin);
+        createSupplier.setInGroupName("searchsupplier");
+        createSupplier.setInRequires1099("Y");
+        runAndAssertServiceSuccess(createSupplier);
+        String partyId = createSupplier.getOutPartyId();
 
         pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
 
@@ -261,14 +266,14 @@ public class SearchTests extends OpentapsTestCase {
      */
     public void testBasicSalesOpportunitySearch() throws Exception {
         //  create a sales opportunity with a name, description
-        Map<String, Object> callCtxt = new HashMap<String, Object>();
-        callCtxt.put("userLogin", admin);
-        callCtxt.put("opportunityName", "searchsalesopportunity");
-        callCtxt.put("description", "a test search opportunity searchsalesopportunity1 searchsalesopportunity2");
-        callCtxt.put("accountPartyId", "DemoCustCompany");
-        callCtxt.put("estimatedCloseDate", dateStringToShortLocaleString("10/10/10"));
-        Map<String, Object> results = runAndAssertServiceSuccess("crmsfa.createOpportunity", callCtxt);
-        String salesOpportunityId = (String) results.get("salesOpportunityId");
+        CrmsfaCreateOpportunityService createOpportunity = new CrmsfaCreateOpportunityService();
+        createOpportunity.setInUserLogin(admin);
+        createOpportunity.setInOpportunityName("searchsalesopportunity");
+        createOpportunity.setInDescription("a test search opportunity searchsalesopportunity1 searchsalesopportunity2");
+        createOpportunity.setInAccountPartyId("DemoCustCompany");
+        createOpportunity.setInEstimatedCloseDate(dateStringToShortLocaleString("10/10/10"));
+        runAndAssertServiceSuccess(createOpportunity);
+        String salesOpportunityId = createOpportunity.getOutSalesOpportunityId();
 
         pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
 
@@ -288,15 +293,15 @@ public class SearchTests extends OpentapsTestCase {
         assertTrue("Should have found the new sales opportunity [" + salesOpportunityId + "] in the results", salesOpportunityIds.contains(salesOpportunityId));
 
         //  set the sales opportunity to canceled (lost)
-        callCtxt = new HashMap<String, Object>();
-        callCtxt.put("userLogin", admin);
-        callCtxt.put("salesOpportunityId", salesOpportunityId);
-        callCtxt.put("opportunityName", "searchsalesopportunity");
-        callCtxt.put("description", "a test search opportunity searchsalesopportunity1 searchsalesopportunity2");
-        callCtxt.put("changeNote", "Cancel the Sales Opportunity");
-        callCtxt.put("opportunityStageId", "SOSTG_LOST");
-        callCtxt.put("estimatedCloseDate", dateStringToShortLocaleString("10/10/10"));
-        runAndAssertServiceSuccess("crmsfa.updateOpportunity", callCtxt);
+        CrmsfaUpdateOpportunityService updateOpportunity = new CrmsfaUpdateOpportunityService();
+        updateOpportunity.setInUserLogin(admin);
+        updateOpportunity.setInSalesOpportunityId(salesOpportunityId);
+        updateOpportunity.setInOpportunityName("searchsalesopportunity");
+        updateOpportunity.setInDescription("a test search opportunity searchsalesopportunity1 searchsalesopportunity2");
+        updateOpportunity.setInChangeNote("Cancel the Sales Opportunity");
+        updateOpportunity.setInOpportunityStageId(SalesOpportunityStageConstants.SOSTG_LOST);
+        updateOpportunity.setInEstimatedCloseDate(dateStringToShortLocaleString("10/10/10"));
+        runAndAssertServiceSuccess(updateOpportunity);
 
         pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
 
@@ -318,22 +323,22 @@ public class SearchTests extends OpentapsTestCase {
      */
     public void testRankedSalesOpportunitySearch() throws Exception {
         //  create a sales opportunity #1 with a name, description
-        Map<String, Object> callCtxt = new HashMap<String, Object>();
-        callCtxt.put("userLogin", admin);
-        callCtxt.put("opportunityName", "testRankedSOSearch");
-        callCtxt.put("accountPartyId", "DemoCustCompany");
-        callCtxt.put("estimatedCloseDate", dateStringToShortLocaleString("10/10/10"));
-        Map<String, Object> results = runAndAssertServiceSuccess("crmsfa.createOpportunity", callCtxt);
-        String salesOpportunityId1 = (String) results.get("salesOpportunityId");
+        CrmsfaCreateOpportunityService createOpportunity = new CrmsfaCreateOpportunityService();
+        createOpportunity.setInUserLogin(admin);
+        createOpportunity.setInOpportunityName("testRankedSOSearch");
+        createOpportunity.setInAccountPartyId("DemoCustCompany");
+        createOpportunity.setInEstimatedCloseDate(dateStringToShortLocaleString("10/10/10"));
+        runAndAssertServiceSuccess(createOpportunity);
+        String salesOpportunityId1 = createOpportunity.getOutSalesOpportunityId();
 
-        //   create sales opportunity #2  with sales opportunity #1's salesOpportunityId  in its name
-        callCtxt = new HashMap<String, Object>();
-        callCtxt.put("userLogin", admin);
-        callCtxt.put("opportunityName", salesOpportunityId1);
-        callCtxt.put("accountPartyId", "DemoCustCompany");
-        callCtxt.put("estimatedCloseDate", dateStringToShortLocaleString("10/10/10"));
-        results = runAndAssertServiceSuccess("crmsfa.createOpportunity", callCtxt);
-        String salesOpportunityId2 = (String) results.get("salesOpportunityId");
+        //  create sales opportunity #2  with sales opportunity #1's salesOpportunityId  in its name
+        createOpportunity = new CrmsfaCreateOpportunityService();
+        createOpportunity.setInUserLogin(admin);
+        createOpportunity.setInOpportunityName(salesOpportunityId1);
+        createOpportunity.setInAccountPartyId("DemoCustCompany");
+        createOpportunity.setInEstimatedCloseDate(dateStringToShortLocaleString("10/10/10"));
+        runAndAssertServiceSuccess(createOpportunity);
+        String salesOpportunityId2 = createOpportunity.getOutSalesOpportunityId();
 
         pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
 
