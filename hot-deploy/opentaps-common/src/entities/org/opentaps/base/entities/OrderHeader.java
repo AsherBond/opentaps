@@ -160,6 +160,8 @@ fieldMapColumns.put("OrderHeader", fields);
    private Timestamp entryDate;
    @Column(name="VISIT_ID")
    private String visitId;
+   @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   @Boost(1f)
    @Column(name="STATUS_ID")
    private String statusId;
    @Column(name="CREATED_BY")
