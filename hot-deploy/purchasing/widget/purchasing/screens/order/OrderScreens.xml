@@ -21,7 +21,7 @@
     <screen name="main-section-decorator">
         <section>
             <actions>
-                <set field="gwtScripts[]" value="purchasinggwt/org.opentaps.gwt.purchasing.order.order" global="true"/>
+                <set field="gwtScripts[]" value="purchasinggwt/org.opentaps.gwt.purchasing.orders.orders" global="true"/>
                 <set field="sectionName" value="order" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/shortcuts.bsh"/>
@@ -40,17 +40,13 @@
                 <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="1"/>
                 <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/>
                 <set field="onlyOpenOrders" value="true"/>
-                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/order/findPurchaseOrders.bsh"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
                         <container style="subSectionBlock">
                             <platform-specific>
-                                <html><html-template location="component://opentaps-common/webapp/common/includes/javascriptRefresh.ftl"/></html>
-                            </platform-specific>
-                            <platform-specific>
-                                <html><html-template location="component://opentaps-common/webapp/common/order/findPurchaseOrders.ftl"/></html>
+                                <html><html-template location="component://purchasing/webapp/purchasing/common/FindPurchaseOrders.ftl"/></html>
                             </platform-specific>
                         </container>
                     </decorator-section>
@@ -66,20 +62,13 @@
                 <set field="sectionHeaderUiLabel" value="OpentapsFindOrders"/>
                 <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="1"/>
                 <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/>
-                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/order/findPurchaseOrdersForm.bsh"/>
-                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/order/findPurchaseOrders.bsh"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
                         <container style="subSectionBlock">
                             <platform-specific>
-                                <html><html-template location="component://purchasing/webapp/purchasing/order/findOrdersForm.ftl"/></html>
-                            </platform-specific>
-                        </container>
-                        <container style="subSectionBlock">
-                            <platform-specific>
-                                <html><html-template location="component://opentaps-common/webapp/common/order/findPurchaseOrders.ftl"/></html>
+                                <html><html-template location="component://purchasing/webapp/purchasing/common/FindPurchaseOrders.ftl"/></html>
                             </platform-specific>
                         </container>
                     </decorator-section>

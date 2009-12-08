@@ -17,6 +17,7 @@
 package org.opentaps.domain.order;
 
 import org.opentaps.domain.inventory.OrderInventoryServiceInterface;
+import org.opentaps.domain.search.PurchaseOrderSearchRepositoryInterface;
 import org.opentaps.domain.search.SalesOrderSearchRepositoryInterface;
 import org.opentaps.foundation.domain.DomainInterface;
 import org.opentaps.foundation.repository.RepositoryException;
@@ -54,6 +55,13 @@ public interface OrderDomainInterface extends DomainInterface {
      * @throws ServiceException if an error occurs
      */
     public SalesOrderSearchRepositoryInterface getSalesOrderSearchRepository() throws RepositoryException;
+    
+    /**
+     * Returns the sales order search repository.
+     * @return a <code>SalesOrderSearchRepositoryInterface</code> value
+     * @throws ServiceException if an error occurs
+     */
+    public PurchaseOrderSearchRepositoryInterface getPurchaseOrderSearchRepository() throws RepositoryException;
    
 
 }

@@ -20,6 +20,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 import org.opentaps.gwt.common.client.BaseEntry;
 import org.opentaps.gwt.common.client.form.OrderItemsEditable;
 import org.opentaps.gwt.common.client.listviews.OrderItemsEditableListView.OrderType;
+import org.opentaps.gwt.purchasing.orders.client.form.FindOrdersForm;
+
 
 /**
  * GWT Entry Point for opentaps suppliers module.
@@ -27,20 +29,48 @@ import org.opentaps.gwt.common.client.listviews.OrderItemsEditableListView.Order
 public class Entry extends BaseEntry {
 
     private static final String ORDER_ITEMS_ID = "orderItemsEntryGrid";
+    private static final String OPEN_ORDERS_ID = "openOrders";
+    private static final String FIND_ORDERS_ID = "findOrders";
 
+    private FindOrdersForm findOrdersForm;
+    private FindOrdersForm openOrdersForm;
     /**
      * This is the entry point method.
      * It is loaded for page where the meta tag is found
      */
     public void onModuleLoad() {
-
-        if (RootPanel.get(ORDER_ITEMS_ID) != null) {
-            loadOrderItems();
-        }
+        loadOrdersWidgets();
+        
     }
 
     private void loadOrderItems() {
         OrderItemsEditable orderItemsEditable = new OrderItemsEditable(OrderType.PURCHASE);
         RootPanel.get(ORDER_ITEMS_ID).add(orderItemsEditable.getMainPanel());
     }
+    
+    private void loadOrdersWidgets() {
+        if (RootPanel.get(OPEN_ORDERS_ID) != null) {
+            loadOpenOrders();
+        }
+        if (RootPanel.get(FIND_ORDERS_ID) != null) {
+            loadFindOrders();
+        }
+        if (RootPanel.get(ORDER_ITEMS_ID) != null) {
+            loadOrderItems();
+        }
+    }
+    
+    private void loadFindOrders() {
+        findOrdersForm = new FindOrdersForm(true);
+        RootPanel.get(FIND_ORDERS_ID).add(findOrdersForm.getMainPanel());
+    }
+    
+    private void loadOpenOrders() {
+        openOrdersForm = new FindOrdersForm(false);
+        openOrdersForm.hideFilters();
+        openOrdersForm.getListView().applyFilters();
+        RootPanel.get(OPEN_ORDERS_ID).add(openOrdersForm.getMainPanel());
+    }
+    
+    
 }

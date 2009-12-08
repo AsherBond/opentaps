@@ -284,9 +284,9 @@
     </request-map>
                   
     <!-- Order lookup requests -->
-    <request-map uri="gwtFindOrders">
+    <request-map uri="gwtFindSalesOrders">
         <security https="true" auth="true"/>
-        <event type="java" path="org.opentaps.gwt.common.server.lookup.OrderLookupService" invoke="findOrders"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.SalesOrderLookupService" invoke="findOrders"/>
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>    
@@ -346,5 +346,19 @@
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>
-                  
+
+    <request-map uri="gwtSuggestSuppliers">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.PartyLookupService" invoke="suggestSuppliers"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>                  
+
+    <!-- Order lookup requests -->
+    <request-map uri="gwtFindPurchasingOrders">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.PurchaseOrderLookupService" invoke="findOrders"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>  
 </site-conf>

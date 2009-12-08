@@ -17,23 +17,23 @@
 package org.opentaps.gwt.common.client.listviews;
 
 import org.opentaps.gwt.common.client.UtilUi;
-import org.opentaps.gwt.common.client.lookup.configuration.OrderLookupConfiguration;
+import org.opentaps.gwt.common.client.lookup.configuration.SalesOrderLookupConfiguration;
 
 import com.gwtext.client.core.SortDir;
 import com.gwtext.client.data.StringFieldDef;
 import com.gwtext.client.widgets.grid.ColumnConfig;
 
 /**
- * Class for the Find order form + list view pattern.
+ * Class for the Find sales order form + list view pattern.
  */
-public class OrderListView extends EntityListView {
+public class SalesOrderListView extends EntityListView {
 
-    private static final String MODULE = OrderListView.class.getName();
+    private static final String MODULE = SalesOrderListView.class.getName();
  
     /**
      * Default constructor.
      */
-    public OrderListView() {
+    public SalesOrderListView() {
         super();
     }
 
@@ -41,7 +41,7 @@ public class OrderListView extends EntityListView {
      * Constructor giving a title for this list view, which is displayed in the UI.
      * @param title the title label for this list view.
      */
-    public OrderListView(String title) {
+    public SalesOrderListView(String title) {
         super(title);
     }
 
@@ -49,7 +49,7 @@ public class OrderListView extends EntityListView {
      * Placeholder to remind extended classes that on of the init methods must be called.
      */
     public void init() {
-        init(OrderLookupConfiguration.URL_FIND_ORDERS, "/crmsfa/control/orderview?orderId={0}", UtilUi.MSG.orderOrderId());
+        init(SalesOrderLookupConfiguration.URL_FIND_ORDERS, "/crmsfa/control/orderview?orderId={0}", UtilUi.MSG.orderOrderId());
     }
 
     /**
@@ -60,30 +60,30 @@ public class OrderListView extends EntityListView {
      * @param idLabel the label of the ID column, which depends of the entity that is listed
      */
     protected void init(String entityFindUrl, String entityViewUrl, String idLabel) {
-        StringFieldDef idDefinition = new StringFieldDef(OrderLookupConfiguration.INOUT_ORDER_ID);
+        StringFieldDef idDefinition = new StringFieldDef(SalesOrderLookupConfiguration.INOUT_ORDER_ID);
 
-        ColumnConfig columnOrderDate = makeColumn(UtilUi.MSG.orderOrderDate(), new StringFieldDef(OrderLookupConfiguration.OUT_ORDER_DATE_STRING));
+        ColumnConfig columnOrderDate = makeColumn(UtilUi.MSG.orderOrderDate(), new StringFieldDef(SalesOrderLookupConfiguration.OUT_ORDER_DATE_STRING));
         columnOrderDate.setWidth(100);
 
-        ColumnConfig columnOrderNameId = makeLinkColumn(UtilUi.MSG.crmOrderNameID(), idDefinition, new StringFieldDef(OrderLookupConfiguration.OUT_ORDER_NAME_ID), entityViewUrl, true);
+        ColumnConfig columnOrderNameId = makeLinkColumn(UtilUi.MSG.crmOrderNameID(), idDefinition, new StringFieldDef(SalesOrderLookupConfiguration.OUT_ORDER_NAME_ID), entityViewUrl, true);
         columnOrderNameId.setWidth(150);
 
-        ColumnConfig columnCorrespondingPoId = makeColumn(UtilUi.MSG.opentapsPONumber(), new StringFieldDef(OrderLookupConfiguration.INOUT_CORRESPONDING_PO_ID));
+        ColumnConfig columnCorrespondingPoId = makeColumn(UtilUi.MSG.opentapsPONumber(), new StringFieldDef(SalesOrderLookupConfiguration.INOUT_CORRESPONDING_PO_ID));
         columnCorrespondingPoId.setWidth(80);
 
-        ColumnConfig columnCustomer = makeColumn(UtilUi.MSG.crmCustomer(), new StringFieldDef(OrderLookupConfiguration.OUT_CUSTOMER_NAME));
+        ColumnConfig columnCustomer = makeColumn(UtilUi.MSG.crmCustomer(), new StringFieldDef(SalesOrderLookupConfiguration.OUT_CUSTOMER_NAME));
         columnCustomer.setWidth(120);
 
-        ColumnConfig columnStatus = makeColumn(UtilUi.MSG.commonStatus(), new StringFieldDef(OrderLookupConfiguration.OUT_STATUS_DESCRIPTION));
+        ColumnConfig columnStatus = makeColumn(UtilUi.MSG.commonStatus(), new StringFieldDef(SalesOrderLookupConfiguration.OUT_STATUS_DESCRIPTION));
         columnStatus.setWidth(100);
 
-        ColumnConfig columnShipByDate = makeColumn(UtilUi.MSG.orderShipBeforeDate(), new StringFieldDef(OrderLookupConfiguration.OUT_SHIP_BY_DATE_STRING));
+        ColumnConfig columnShipByDate = makeColumn(UtilUi.MSG.orderShipBeforeDate(), new StringFieldDef(SalesOrderLookupConfiguration.OUT_SHIP_BY_DATE_STRING));
         columnShipByDate.setWidth(100);
 
-        ColumnConfig columnAmount = makeCurrencyColumn(UtilUi.MSG.orderAmount(), new StringFieldDef(OrderLookupConfiguration.OUT_CURRENCY_UOM), new StringFieldDef(OrderLookupConfiguration.OUT_GRAND_TOTAL));
+        ColumnConfig columnAmount = makeCurrencyColumn(UtilUi.MSG.orderAmount(), new StringFieldDef(SalesOrderLookupConfiguration.OUT_CURRENCY_UOM), new StringFieldDef(SalesOrderLookupConfiguration.OUT_GRAND_TOTAL));
         columnAmount.setWidth(100);
 
-        configure(entityFindUrl, OrderLookupConfiguration.INOUT_ORDER_DATE, SortDir.DESC);
+        configure(entityFindUrl, SalesOrderLookupConfiguration.INOUT_ORDER_DATE, SortDir.DESC);
     }
 
 
@@ -92,7 +92,7 @@ public class OrderListView extends EntityListView {
      * @param viewPref a <code>Boolean</code> value
      */
     public void filterMyOrTeamParties(String viewPref) {
-        setFilter(OrderLookupConfiguration.IN_RESPONSIBILTY, viewPref);
+        setFilter(SalesOrderLookupConfiguration.IN_RESPONSIBILTY, viewPref);
     }
 
     /**
@@ -100,7 +100,7 @@ public class OrderListView extends EntityListView {
      * @param orderName a <code>String</code> value
      */
     public void filterByOrderName(String orderName) {
-        setFilter(OrderLookupConfiguration.INOUT_ORDER_NAME, orderName);
+        setFilter(SalesOrderLookupConfiguration.INOUT_ORDER_NAME, orderName);
     }
 
     /**
@@ -108,7 +108,7 @@ public class OrderListView extends EntityListView {
      * @param orderId a <code>String</code> value
      */
     public void filterByOrderId(String orderId) {
-        setFilter(OrderLookupConfiguration.INOUT_ORDER_ID, orderId);
+        setFilter(SalesOrderLookupConfiguration.INOUT_ORDER_ID, orderId);
     }
 
     /**
@@ -116,7 +116,7 @@ public class OrderListView extends EntityListView {
      * @param externalId a <code>String</code> value
      */
     public void filterByExternalId(String externalId) {
-        setFilter(OrderLookupConfiguration.IN_EXTERNAL_ID, externalId);
+        setFilter(SalesOrderLookupConfiguration.IN_EXTERNAL_ID, externalId);
     }
 
     /**
@@ -124,7 +124,7 @@ public class OrderListView extends EntityListView {
      * @param customerId a <code>String</code> value
      */
     public void filterByCustomerId(String customerId) {
-        setFilter(OrderLookupConfiguration.INOUT_PARTY_ID, customerId);
+        setFilter(SalesOrderLookupConfiguration.INOUT_PARTY_ID, customerId);
     }
 
     /**
@@ -132,7 +132,7 @@ public class OrderListView extends EntityListView {
      * @param productStoreId a <code>String</code> value
      */
     public void filterByProductStoreId(String productStoreId) {
-        setFilter(OrderLookupConfiguration.IN_PRDOUCT_STORE_ID, productStoreId);
+        setFilter(SalesOrderLookupConfiguration.IN_PRDOUCT_STORE_ID, productStoreId);
     }
 
     /**
@@ -140,7 +140,7 @@ public class OrderListView extends EntityListView {
      * @param statusId a <code>String</code> value
      */
     public void filterByStatusId(String statusId) {
-        setFilter(OrderLookupConfiguration.INOUT_STATUS_ID, statusId);
+        setFilter(SalesOrderLookupConfiguration.INOUT_STATUS_ID, statusId);
     }
 
     /**
@@ -148,7 +148,7 @@ public class OrderListView extends EntityListView {
      * @param correspondingPoId a <code>String</code> value
      */
     public void filterByCorrespondingPoId(String correspondingPoId) {
-        setFilter(OrderLookupConfiguration.INOUT_CORRESPONDING_PO_ID, correspondingPoId);
+        setFilter(SalesOrderLookupConfiguration.INOUT_CORRESPONDING_PO_ID, correspondingPoId);
     }
 
     /**
@@ -156,7 +156,7 @@ public class OrderListView extends EntityListView {
      * @param fromDate a <code>String</code> value
      */
     public void filterByFromDate(String fromDate) {
-        setFilter(OrderLookupConfiguration.IN_FROM_DATE, fromDate);
+        setFilter(SalesOrderLookupConfiguration.IN_FROM_DATE, fromDate);
     }
 
 
@@ -165,7 +165,7 @@ public class OrderListView extends EntityListView {
      * @param thruDate a <code>String</code> value
      */
     public void filterByThruDate(String thruDate) {
-        setFilter(OrderLookupConfiguration.IN_THRU_DATE, thruDate);
+        setFilter(SalesOrderLookupConfiguration.IN_THRU_DATE, thruDate);
     }
 
     /**
@@ -173,7 +173,7 @@ public class OrderListView extends EntityListView {
      * @param createdBy a <code>String</code> value
      */
     public void filterByCreatedBy(String createdBy) {
-        setFilter(OrderLookupConfiguration.IN_CREATED_BY, createdBy);
+        setFilter(SalesOrderLookupConfiguration.IN_CREATED_BY, createdBy);
     }
 
     /**
@@ -181,7 +181,7 @@ public class OrderListView extends EntityListView {
      * @param lotId a <code>String</code> value
      */
     public void filterByLotId(String lotId) {
-        setFilter(OrderLookupConfiguration.IN_LOT_ID, lotId);
+        setFilter(SalesOrderLookupConfiguration.IN_LOT_ID, lotId);
     }
 
     /**
@@ -189,7 +189,7 @@ public class OrderListView extends EntityListView {
      * @param serialNumber a <code>String</code> value
      */
     public void filterBySerialNumber(String serialNumber) {
-        setFilter(OrderLookupConfiguration.IN_SERIAL_NUMBER, serialNumber);
+        setFilter(SalesOrderLookupConfiguration.IN_SERIAL_NUMBER, serialNumber);
     }
 
     /**
@@ -197,6 +197,6 @@ public class OrderListView extends EntityListView {
      * @param findAll a <code>boolean</code> value
      */
     public void filterHasIncludeInactiveOrders(boolean findAll) {
-        setFilter(OrderLookupConfiguration.IN_FIND_ALL, findAll ? "Y" : "N");
+        setFilter(SalesOrderLookupConfiguration.IN_FIND_ALL, findAll ? "Y" : "N");
     }
 }

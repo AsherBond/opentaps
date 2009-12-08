@@ -21,7 +21,7 @@ import org.opentaps.gwt.common.client.form.FindEntityForm;
 import org.opentaps.gwt.common.client.form.base.SubFormPanel;
 import org.opentaps.gwt.common.client.form.field.CheckboxField;
 import org.opentaps.gwt.common.client.form.field.DateField;
-import org.opentaps.gwt.common.client.listviews.OrderListView;
+import org.opentaps.gwt.common.client.listviews.SalesOrderListView;
 import org.opentaps.gwt.common.client.suggest.CustomerAutocomplete;
 import org.opentaps.gwt.common.client.suggest.LotAutocomplete;
 import org.opentaps.gwt.common.client.suggest.OrderStatusAutocomplete;
@@ -35,7 +35,7 @@ import com.gwtext.client.widgets.layout.ColumnLayoutData;
 /**
  * Form class for find order in crmsfa.
  */
-public class FindOrdersForm extends FindEntityForm<OrderListView> {
+public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
 
     private final SubFormPanel filterPanel;
     // Order Id
@@ -65,7 +65,7 @@ public class FindOrdersForm extends FindEntityForm<OrderListView> {
     // find all option
     private final CheckboxField findAllInput;
 
-    private final OrderListView orderListView;
+    private final SalesOrderListView orderListView;
 
     /**
      * Default constructor.
@@ -143,7 +143,7 @@ public class FindOrdersForm extends FindEntityForm<OrderListView> {
 
         filterPanel.add(mainPanel);
 
-        orderListView = new OrderListView();
+        orderListView = new SalesOrderListView();
         orderListView.setAutoLoad(autoLoad);
         orderListView.init();
         addListView(orderListView);

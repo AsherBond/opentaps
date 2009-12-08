@@ -2422,4 +2422,99 @@ under the License.
         </relation>
     </entity>
 
+     <!--redefine OrderHeaderAndRoles to add some required fields for purchasing order gwt listview -->
+     <view-entity entity-name="OrderHeaderAndRoles"
+            package-name="org.ofbiz.order.order"
+            never-cache="true"
+            title="Order Header And Roles View Entity">
+      <member-entity entity-alias="ORLE" entity-name="OrderRole"/>
+      <member-entity entity-alias="OH" entity-name="OrderHeader"/>
+      <alias-all entity-alias="ORLE"/>
+      <alias-all entity-alias="OH"/>
+      <!-- these fields value will replaced in findOrder method of PurchaseOrderSearchRepository, I define them here just for have these fields -->
+      <!-- this field use for display orderName + orderId in gwt listview -->
+      <alias entity-alias="OH" name="orderNameId" field="orderName"/>
+      <!-- this field use for display formatted order date in gwt listview -->
+      <alias entity-alias="OH" name="orderDateString" field="orderName"/>
+      <!-- this field use for display supplier name in gwt listview -->
+      <alias entity-alias="OH" name="supplierName" field="orderName"/>
+      <!-- this field use for display status description in gwt listview -->
+      <alias entity-alias="OH" name="statusDescription" field="orderName"/>
+      <view-link entity-alias="ORLE" rel-entity-alias="OH">
+        <key-map field-name="orderId"/>
+      </view-link>
+      <relation type="one-nofk" rel-entity-name="OrderType">
+        <key-map field-name="orderTypeId"/>
+      </relation>
+      <relation type="one-nofk" title="Origin" rel-entity-name="Facility">
+        <key-map field-name="originFacilityId" rel-field-name="facilityId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderTypeAttr">
+        <key-map field-name="orderTypeId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderAttribute">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderAdjustment">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderItem">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderContactMech">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderItemBilling">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderItemContactMech">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderItemRole">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderRole">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderShipment">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderStatus">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderTerm">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="WorkOrderItemFulfillment">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="ProductOrderItem">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="BillingAccount">
+        <key-map field-name="billingAccountId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderPaymentPreference">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderHeaderNoteView">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="UserLogin">
+        <key-map field-name="createdBy" rel-field-name="userLoginId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="StatusItem">
+        <key-map field-name="statusId"/>
+      </relation>
+      <relation type="one-nofk" title="Sync" rel-entity-name="StatusItem">
+        <key-map field-name="syncStatusId" rel-field-name="statusId"/>
+      </relation>
+      <relation type="many" rel-entity-name="OrderRequirementCommitment">
+        <key-map field-name="orderId"/>
+      </relation>
+      <relation type="many" rel-entity-name="ShipmentReceipt">
+        <key-map field-name="orderId"/>
+      </relation>
+    </view-entity>
+   
 </entitymodel>

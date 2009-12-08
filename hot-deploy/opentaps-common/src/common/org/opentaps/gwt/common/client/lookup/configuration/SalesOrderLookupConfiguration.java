@@ -20,15 +20,15 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Defines the interface between the server and client for the OrderLookupService
+ * Defines the interface between the server and client for the SalesOrderLookupService
  * Technically not a java interface, but it defines all the constants needed on both sides
  *  which makes the code more robust.
  */
-public abstract class OrderLookupConfiguration {
+public abstract class SalesOrderLookupConfiguration {
 
-    private OrderLookupConfiguration() { }
+    private SalesOrderLookupConfiguration() { }
 
-    public static final String URL_FIND_ORDERS = "gwtFindOrders";
+    public static final String URL_FIND_ORDERS = "gwtFindSalesOrders";
     public static final String IN_RESPONSIBILTY = "MyOrTeamResponsibility";
     public static final String MY_VALUES = "MY_VALUES";
 

@@ -107,7 +107,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
      * @return the resulting JSON response
      * @throws InfrastructureException if an error occurs
      */
-    public static String findContacts(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
+    public static String f(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
         InputProviderInterface provider = new HttpInputProvider(request);
         JsonResponse json = new JsonResponse(response);
         PartyLookupService service = new PartyLookupService(provider);
@@ -649,6 +649,30 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
      */
     public List<PartyFromByRelnAndContactInfoAndPartyClassification> suggestCustomers() {
         return suggestParties(CUSTOMER_CONDITIONS);
+    }
+    
+    
+    /**
+     * AJAX event to suggest Supplier.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the resulting JSON response
+     * @throws InfrastructureException if an error occurs
+     */
+    public static String suggestSuppliers(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
+        InputProviderInterface provider = new HttpInputProvider(request);
+        JsonResponse json = new JsonResponse(response);
+        PartyLookupService service = new PartyLookupService(provider);
+        service.suggestSuppliers();
+        return json.makeSuggestResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service);
+    }
+    
+    /**
+     * Suggests a list of customers.
+     * @return the list of <code>PartyRoleNameDetailSupplementalData</code>, or <code>null</code> if an error occurred
+     */
+    public List<PartyRoleNameDetailSupplementalData> suggestSuppliers() {
+        return findAllParties(PartyRoleNameDetailSupplementalData.class, SUPPLIER_CONDITIONS);
     }
 
 }

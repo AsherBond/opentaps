@@ -32,22 +32,22 @@ import org.opentaps.domain.search.SalesOrderSearchRepositoryInterface;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.gwt.common.client.lookup.configuration.OrderLookupConfiguration;
+import org.opentaps.gwt.common.client.lookup.configuration.SalesOrderLookupConfiguration;
 import org.opentaps.gwt.common.server.HttpInputProvider;
 import org.opentaps.gwt.common.server.InputProviderInterface;
 
 /**
  * The RPC service used to populate the OrderListView and Order autocompleters widgets.
  */
-public class OrderLookupService extends EntityLookupAndSuggestService {
-    private static final String MODULE = OrderLookupService.class.getName();
+public class SalesOrderLookupService extends EntityLookupAndSuggestService {
+    private static final String MODULE = SalesOrderLookupService.class.getName();
 
     /**
      * Creates a new <code>PartyLookupService</code> instance.
      * @param provider an <code>InputProviderInterface</code> value
      */
-    public OrderLookupService(InputProviderInterface provider) {
-        super(provider, OrderLookupConfiguration.LIST_OUT_FIELDS);
+    public SalesOrderLookupService(InputProviderInterface provider) {
+        super(provider, SalesOrderLookupConfiguration.LIST_OUT_FIELDS);
     }
 
     /**
@@ -60,11 +60,11 @@ public class OrderLookupService extends EntityLookupAndSuggestService {
     public static String findOrders(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
         InputProviderInterface provider = new HttpInputProvider(request);
         JsonResponse json = new JsonResponse(response);
-        OrderLookupService service = new OrderLookupService(provider);
+        SalesOrderLookupService service = new SalesOrderLookupService(provider);
         TimeZone timeZone = UtilHttp.getTimeZone(request);
         // use Locale.US for change gwt date input
         service.findOrders(Locale.US, timeZone);
-        return json.makeLookupResponse(OrderLookupConfiguration.INOUT_ORDER_ID, service, request.getSession(true).getServletContext());
+        return json.makeLookupResponse(SalesOrderLookupConfiguration.INOUT_ORDER_ID, service, request.getSession(true).getServletContext());
     }
 
     /**
@@ -89,47 +89,47 @@ public class OrderLookupService extends EntityLookupAndSuggestService {
             // pass parameters into repository
             salesOrderSearchRepository.setUserLoginId(userLoginId);
             salesOrderSearchRepository.setOrganizationPartyId(organizationPartyId);
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(OrderLookupConfiguration.IN_FROM_DATE))) {
-                salesOrderSearchRepository.setFromDate(getProvider().getParameter(OrderLookupConfiguration.IN_FROM_DATE));
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_FROM_DATE))) {
+                salesOrderSearchRepository.setFromDate(getProvider().getParameter(SalesOrderLookupConfiguration.IN_FROM_DATE));
             }
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(OrderLookupConfiguration.IN_THRU_DATE))) {
-                salesOrderSearchRepository.setThruDate(getProvider().getParameter(OrderLookupConfiguration.IN_THRU_DATE));
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_THRU_DATE))) {
+                salesOrderSearchRepository.setThruDate(getProvider().getParameter(SalesOrderLookupConfiguration.IN_THRU_DATE));
             }
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(OrderLookupConfiguration.IN_RESPONSIBILTY))) {
-                salesOrderSearchRepository.setViewPref(getProvider().getParameter(OrderLookupConfiguration.IN_RESPONSIBILTY));
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_RESPONSIBILTY))) {
+                salesOrderSearchRepository.setViewPref(getProvider().getParameter(SalesOrderLookupConfiguration.IN_RESPONSIBILTY));
             }
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(OrderLookupConfiguration.INOUT_ORDER_ID))) {
-                salesOrderSearchRepository.setOrderId(getProvider().getParameter(OrderLookupConfiguration.INOUT_ORDER_ID));
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_ORDER_ID))) {
+                salesOrderSearchRepository.setOrderId(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_ORDER_ID));
             }
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(OrderLookupConfiguration.IN_EXTERNAL_ID))) {
-                salesOrderSearchRepository.setExteralOrderId(getProvider().getParameter(OrderLookupConfiguration.IN_EXTERNAL_ID));
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_EXTERNAL_ID))) {
+                salesOrderSearchRepository.setExteralOrderId(getProvider().getParameter(SalesOrderLookupConfiguration.IN_EXTERNAL_ID));
             }
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(OrderLookupConfiguration.INOUT_ORDER_NAME))) {
-                salesOrderSearchRepository.setOrderName(getProvider().getParameter(OrderLookupConfiguration.INOUT_ORDER_NAME));
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_ORDER_NAME))) {
+                salesOrderSearchRepository.setOrderName(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_ORDER_NAME));
             }
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(OrderLookupConfiguration.INOUT_PARTY_ID))) {
-                salesOrderSearchRepository.setCustomerPartyId(getProvider().getParameter(OrderLookupConfiguration.INOUT_PARTY_ID));
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_PARTY_ID))) {
+                salesOrderSearchRepository.setCustomerPartyId(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_PARTY_ID));
             }
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(OrderLookupConfiguration.IN_PRDOUCT_STORE_ID))) {
-                salesOrderSearchRepository.setProductStoreId(getProvider().getParameter(OrderLookupConfiguration.IN_PRDOUCT_STORE_ID));
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_PRDOUCT_STORE_ID))) {
+                salesOrderSearchRepository.setProductStoreId(getProvider().getParameter(SalesOrderLookupConfiguration.IN_PRDOUCT_STORE_ID));
             }
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(OrderLookupConfiguration.INOUT_STATUS_ID))) {
-                salesOrderSearchRepository.setStatusId(getProvider().getParameter(OrderLookupConfiguration.INOUT_STATUS_ID));
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_STATUS_ID))) {
+                salesOrderSearchRepository.setStatusId(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_STATUS_ID));
             }
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(OrderLookupConfiguration.INOUT_CORRESPONDING_PO_ID))) {
-                salesOrderSearchRepository.setPurchaseOrderId(getProvider().getParameter(OrderLookupConfiguration.INOUT_CORRESPONDING_PO_ID));
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_CORRESPONDING_PO_ID))) {
+                salesOrderSearchRepository.setPurchaseOrderId(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_CORRESPONDING_PO_ID));
             }
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(OrderLookupConfiguration.IN_CREATED_BY))) {
-                salesOrderSearchRepository.setCreatedBy(getProvider().getParameter(OrderLookupConfiguration.IN_CREATED_BY));
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_CREATED_BY))) {
+                salesOrderSearchRepository.setCreatedBy(getProvider().getParameter(SalesOrderLookupConfiguration.IN_CREATED_BY));
             }
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(OrderLookupConfiguration.IN_LOT_ID))) {
-                salesOrderSearchRepository.setLotId(getProvider().getParameter(OrderLookupConfiguration.IN_LOT_ID));
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_LOT_ID))) {
+                salesOrderSearchRepository.setLotId(getProvider().getParameter(SalesOrderLookupConfiguration.IN_LOT_ID));
             }
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(OrderLookupConfiguration.IN_SERIAL_NUMBER))) {
-                salesOrderSearchRepository.setSerialNumber(getProvider().getParameter(OrderLookupConfiguration.IN_SERIAL_NUMBER));
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SERIAL_NUMBER))) {
+                salesOrderSearchRepository.setSerialNumber(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SERIAL_NUMBER));
             }
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(OrderLookupConfiguration.IN_FIND_ALL))) {
-                salesOrderSearchRepository.setFindAll(getProvider().getParameter(OrderLookupConfiguration.IN_FIND_ALL));
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_FIND_ALL))) {
+                salesOrderSearchRepository.setFindAll(getProvider().getParameter(SalesOrderLookupConfiguration.IN_FIND_ALL));
             }
 
             // set sort conditions

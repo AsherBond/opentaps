@@ -106,6 +106,7 @@ under the License.
     <entity-group group="org.ofbiz" entity="CashDrawerTransaction" />
     <entity-group group="org.ofbiz" entity="CashDrawerTransPaymentAndMType" />
     <entity-group group="org.ofbiz" entity="OrderHeaderItemAndRolesAndInvPending" />
+    <entity-group group="org.ofbiz" entity="OrderHeaderAndRoles" />
     <entity-group group="org.ofbiz" entity="OrderHeaderItemAndRolesAndInvCompleted" />
     <entity-group group="org.ofbiz" entity="OrderPaymentPrefAndPayment" />
     <entity-group group="org.ofbiz" entity="ProductOrderItemType" />

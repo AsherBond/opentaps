@@ -246,7 +246,7 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
             order.setOrderDateString(UtilDateTime.timeStampToString(order.getOrderDate(), UtilDateTime.getDateTimeFormat(locale), timeZone, locale));
             order.setShipByDateString(UtilOrder.getEarliestShipByDate(getDelegator(), order.getOrderId(), timeZone, locale));
             order.setCustomerName(PartyHelper.getPartyName(getDelegator(), order.getPartyId(), false));
-            order.setOrderNameId((order.getOrderName() == null ? "" : order.getOrderName()) + "(" + order.getOrderId() + ")");
+            order.setOrderNameId((order.getOrderName() == null ? "" : order.getOrderName()) + " (" + order.getOrderId() + ")");
             // set status description by find statusId in repository
             if (UtilValidate.isNotEmpty(order.getStatusId())) {
                 StatusItem statusItem = findOne(StatusItem.class, map(StatusItem.Fields.statusId, order.getStatusId()));
