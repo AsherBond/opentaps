@@ -34,6 +34,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 import org.opentaps.search.SearchService;
 import org.opentaps.search.party.PartySearch;
+import org.opentaps.base.constants.SalesOpportunityStageConstants;
 
 /**
  * The implementation of the Sales Opportunity search service.
@@ -56,7 +57,7 @@ public class SalesOpportunitySearchService extends SearchService implements Sale
     /** {@inheritDoc} */
     public void makeQuery(StringBuilder sb) {
         // filter canceled (lost) Sales Opportunities
-        sb.append("( -opportunityStageId:\"SOSTG_LOST\" +(");
+        sb.append("( -").append(SalesOpportunity.Fields.opportunityStageId.name()).append(":\"").append(SalesOpportunityStageConstants.SOSTG_LOST).append("\" +(");
         makeSalesOpportunityQuery(sb);
         PartySearch.makePartyGroupFieldsQuery(sb);
         PartySearch.makePersonFieldsQuery(sb);
@@ -68,7 +69,7 @@ public class SalesOpportunitySearchService extends SearchService implements Sale
      * @param sb the string builder instance currently building the query
      */
     public static void makeSalesOpportunityQuery(StringBuilder sb) {
-        for (String f : Arrays.asList("salesOpportunityId", "opportunityName", "description")) {
+        for (String f : Arrays.asList(SalesOpportunity.Fields.salesOpportunityId.name(), SalesOpportunity.Fields.opportunityName.name(), SalesOpportunity.Fields.description.name())) {
             sb.append(f).append(":").append(SearchRepositoryInterface.DEFAULT_PLACEHOLDER).append(" ");
         }
     }
@@ -100,7 +101,7 @@ public class SalesOpportunitySearchService extends SearchService implements Sale
             if (classIndex < 0 || idIndex < 0) {
                 throw new ServiceException("Incompatible result projection, classIndex = " + classIndex + ", idIndex = " + idIndex);
             }
-    
+
             for (Object[] o : results) {
                 Class c = (Class) o[classIndex];
                 if (c.equals(SalesOpportunity.class)) {
