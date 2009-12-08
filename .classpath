@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="framework/appserver/src"/>
-	<classpathentry kind="src" path="hot-deploy/search/src"/>
 	<classpathentry kind="src" path="framework/base/src"/>
 	<classpathentry kind="src" path="framework/bi/src"/>
 	<classpathentry kind="src" path="framework/catalina/src"/>
@@ -58,6 +57,7 @@
 	<classpathentry kind="src" path="hot-deploy/funambol/src"/>
 	<classpathentry kind="src" path="hot-deploy/opentaps-tests/src"/>
 	<classpathentry kind="src" path="hot-deploy/purchasing/src"/>
+	<classpathentry kind="src" path="hot-deploy/search/src"/>
 	<classpathentry kind="src" path="hot-deploy/warehouse/src"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/velocity-1.6.1.jar"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/DataVision-1.0.0.jar"/>
