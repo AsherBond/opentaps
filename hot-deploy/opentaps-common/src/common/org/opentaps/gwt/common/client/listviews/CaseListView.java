@@ -32,7 +32,7 @@ import com.gwtext.client.widgets.grid.Renderer;
  *
 */
 public class CaseListView  extends EntityListView {
-    private static final String MODULE = CaseListView.class.getName();
+
     /**
      * Default constructor.
      */
@@ -90,9 +90,9 @@ public class CaseListView  extends EntityListView {
                 String updated = record.getAsString(CaseLookupConfiguration.OUT_UPDATED);
                 String custRequestId = record.getAsString(CaseLookupConfiguration.INOUT_CUST_REQUEST_ID);
                 if ("Y".equals(updated)) {
-                    return "<b><a href='/crmsfa/control/viewCase?custRequestId=" + custRequestId + "'>" + custRequestId + "</a></b>";
+                    return "<b><a class=\"linktext\" href='/crmsfa/control/viewCase?custRequestId=" + custRequestId + "'>" + custRequestId + "</a></b>";
                 } else {
-                    return "<a href='/crmsfa/control/viewCase?custRequestId=" + custRequestId + "'>" + custRequestId + "</a>";
+                    return "<a class=\"linktext\" href='/crmsfa/control/viewCase?custRequestId=" + custRequestId + "'>" + custRequestId + "</a>";
                 }
             }
         });
@@ -106,9 +106,9 @@ public class CaseListView  extends EntityListView {
                 String custRequestId = record.getAsString(CaseLookupConfiguration.INOUT_CUST_REQUEST_ID);
                 String subject = record.getAsString(CaseLookupConfiguration.INOUT_CUST_REQUEST_NAME);
                 if ("Y".equals(updated)) {
-                    return "<b><a href='/crmsfa/control/viewCase?custRequestId=" + custRequestId + "'>" + subject + "</a></b>";
+                    return "<b><a class=\"linktext\" href='/crmsfa/control/viewCase?custRequestId=" + custRequestId + "'>" + subject + "</a></b>";
                 } else {
-                    return "<a href='/crmsfa/control/viewCase?custRequestId=" + custRequestId + "'>" + subject + "</a>";
+                    return "<a class=\"linktext\" href='/crmsfa/control/viewCase?custRequestId=" + custRequestId + "'>" + subject + "</a>";
                 }
             }
         });
