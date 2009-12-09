@@ -86,12 +86,12 @@ public class SearchForm extends BaseFormPanel {
     }
 
     private void search() {
-        results.search(searchInput.getText());
         if (win.getHeight() < 400) {
             win.setHeight(400);
         }
         win.show();
         win.center();
+        results.search(searchInput.getText());
     }
 
 }
