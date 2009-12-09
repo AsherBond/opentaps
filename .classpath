@@ -199,10 +199,10 @@
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/aspectwerkz/aspectwerkz-core-2.0.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/jetm.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/opentapsFedEx_RateService_Axis-1.0.jar"/>
-	<classpathentry kind="lib" path="applications/content/lib/lucene-core-2.4.0.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/spring-beans-2.0.8.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/spring-context-2.0.8.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/spring-core-2.0.8.jar"/>
+	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/hibernate/lucene-core-2.4.1.jar"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/iText-2.1.7.jar"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/jasperreports-3.5.2.jar"/>
 	<classpathentry kind="lib" path="framework/base/lib/etl/kettle-core.jar"/>
