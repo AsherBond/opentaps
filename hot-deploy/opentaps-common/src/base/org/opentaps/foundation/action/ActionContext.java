@@ -24,6 +24,7 @@ import java.util.TimeZone;
 import javax.servlet.http.HttpServletRequest;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericValue;
@@ -276,5 +277,14 @@ public class ActionContext implements DomainContextInterface {
      */
     public BigDecimal getBigDecimal(String key) {
         return (BigDecimal) get(key);
+    }
+    
+    /**
+     * Gets a composite parameter from the request using <code>UtilHttp.makeParamValueFromComposite</code>.
+     * @param parameterName a <code>String</code> value
+     * @return a <code>String</code> value or null if the parameter value is empty
+     */
+    public String getCompositeParameter(String parameterName) {
+        return UtilHttp.makeParamValueFromComposite(getRequest(), parameterName, getLocale());
     }
 }

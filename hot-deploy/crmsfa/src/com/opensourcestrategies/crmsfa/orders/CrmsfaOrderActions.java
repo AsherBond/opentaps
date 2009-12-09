@@ -21,18 +21,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import javax.servlet.http.HttpServletRequest;
-
 import javolution.util.FastList;
 
-import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
-import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
-import org.opentaps.common.util.UtilCommon;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.search.order.SalesOrderSearchRepositoryInterface;
 import org.opentaps.foundation.action.ActionContext;
@@ -52,10 +47,8 @@ public class CrmsfaOrderActions {
      */
     public static void findOrders(Map<String, Object> context) throws GeneralException {
         ActionContext ac = new ActionContext(context);
-        HttpServletRequest request = ac.getRequest();
         Locale locale = ac.getLocale();
-
-        TimeZone timeZone = UtilCommon.getTimeZone(request);
+        TimeZone timeZone = ac.getTimeZone() ;
 
         // order by
         String orderParam = ac.getParameter("ordersOrderBy");
@@ -63,21 +56,20 @@ public class CrmsfaOrderActions {
         List orderBy = UtilMisc.toList(orderParam);
 
         // possible fields we're searching by
-        String partyId = UtilCommon.getParameter(request, "partyIdSearch");
+        String partyId = ac.getParameter("partyIdSearch");
         // from URL GET request if form field wasn't set
         if (partyId == null) partyId = ac.getParameter("partyId");
-        String statusId = UtilCommon.getParameter(request, "statusId");
-        String correspondingPoId = UtilCommon.getParameter(request, "correspondingPoId");
-        String orderId = UtilCommon.getParameter(request, "orderId");
-        String orderName = UtilCommon.getParameter(request, "orderName");
-        String lotId = UtilCommon.getParameter(request, "lotId");
-        String serialNumber = UtilCommon.getParameter(request, "serialNumber");
-        String fromDate = UtilHttp.makeParamValueFromComposite(request, "fromDate", locale);
-        String thruDate = UtilHttp.makeParamValueFromComposite(request, "thruDate", locale);
-        Debug.logInfo("fromDate : " + fromDate + ", thruDate : " + thruDate, MODULE);
-        String createdBy = UtilCommon.getParameter(request, "createdBy");
-        String externalId = UtilCommon.getParameter(request, "externalId");
-        String  productStoreId = UtilCommon.getParameter(request, "productStoreId");
+        String statusId = ac.getParameter("statusId");
+        String correspondingPoId = ac.getParameter("correspondingPoId");
+        String orderId = ac.getParameter("orderId");
+        String orderName = ac.getParameter("orderName");
+        String lotId = ac.getParameter("lotId");
+        String serialNumber = ac.getParameter("serialNumber");
+        String fromDate = ac.getCompositeParameter("fromDate");
+        String thruDate = ac.getCompositeParameter("thruDate");
+        String createdBy = ac.getParameter("createdBy");
+        String externalId = ac.getParameter("externalId");
+        String  productStoreId = ac.getParameter("productStoreId");
         
         DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
         SalesOrderSearchRepositoryInterface salesOrderSearchRepository = dd.getOrderDomain().getSalesOrderSearchRepository();
@@ -127,9 +119,10 @@ public class CrmsfaOrderActions {
         salesOrderSearchRepository.setOrderBy(orderBy);
         List<OrderHeaderItemAndRolesAndInvPending> orders = salesOrderSearchRepository.findOrders();
         List<Map> orderMaps = FastList.newInstance();
+        // return the map collection for the screen render
         for (OrderHeaderItemAndRolesAndInvPending order : orders) {
             orderMaps.add(order.toMap());
         }
-        context.put("ordersListIt", orderMaps);
+        ac.put("ordersListIt", orderMaps);
     }
 }
