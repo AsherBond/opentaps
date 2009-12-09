@@ -19,13 +19,15 @@ package org.opentaps.tests.purchasing;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
-import com.opensourcestrategies.financials.util.UtilFinancial;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
@@ -36,17 +38,24 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.order.OrderReadHelper;
-import org.opentaps.common.order.PurchaseOrderFactory;
 import org.opentaps.base.entities.OrderItemShipGroupAssoc;
 import org.opentaps.base.entities.SupplierProduct;
+import org.opentaps.common.order.PurchaseOrderFactory;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderItem;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.purchasing.PurchasingRepositoryInterface;
+import org.opentaps.gwt.common.client.lookup.UtilLookup;
+import org.opentaps.gwt.common.client.lookup.configuration.PurchaseOrderLookupConfiguration;
+import org.opentaps.gwt.common.server.InputProviderInterface;
+import org.opentaps.gwt.common.server.lookup.PurchaseOrderLookupService;
 import org.opentaps.tests.OpentapsTestCase;
 import org.opentaps.tests.financials.FinancialAsserts;
+import org.opentaps.tests.gwt.TestInputProvider;
+
+import com.opensourcestrategies.financials.util.UtilFinancial;
 
 /**
  * Purchasing Order Tests.
@@ -1430,4 +1439,66 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         }
     }
 
+    /**
+     * Test the GWT order lookup.
+     * @throws Exception if an error occurs
+     */
+    public void testGwtOrderLookup() throws Exception {
+        TimeZone timeZone = TimeZone.getDefault();
+        Locale locale = Locale.getDefault();
+        InputProviderInterface provider = new TestInputProvider(admin, dispatcher);
+
+        // 1. test find order by orderId
+        provider.setParameter(PurchaseOrderLookupConfiguration.INOUT_ORDER_ID, "TEST9000");
+        PurchaseOrderLookupService lookup = new PurchaseOrderLookupService(provider);
+        lookup.findOrders(locale, timeZone, organizationPartyId, facilityId);
+        assertEquals("There should just found one record with order Id [TEST9000].", 1, lookup.getResultTotalCount());
+        assertGwtLookupFound(lookup, Arrays.asList("TEST9000"), PurchaseOrderLookupConfiguration.INOUT_ORDER_ID);
+
+        // 2. find purchase order by supplier
+        provider = new TestInputProvider(admin, dispatcher);
+        provider.setParameter(PurchaseOrderLookupConfiguration.INOUT_PARTY_ID, demoSupplierPartyId);
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999"); // set high pager limit so other test won't mask the expected results
+        lookup = new PurchaseOrderLookupService(provider);
+        lookup.findOrders(locale, timeZone, organizationPartyId, facilityId);
+        // test we found the demo data: TEST9000/TEST9001
+        assertGwtLookupFound(lookup, Arrays.asList("TEST9000", "TEST9001"), PurchaseOrderLookupConfiguration.INOUT_ORDER_ID);
+        assertGwtLookupNotFound(lookup, Arrays.asList("TEST9002"), PurchaseOrderLookupConfiguration.INOUT_ORDER_ID);
+
+        // 3. test find order by status
+        provider = new TestInputProvider(admin, dispatcher);
+        provider.setParameter(PurchaseOrderLookupConfiguration.INOUT_STATUS_ID, "ORDER_APPROVED");
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999"); // set high pager limit so other test won't mask the expected results
+        lookup = new PurchaseOrderLookupService(provider);
+        lookup.findOrders(locale, timeZone, organizationPartyId, facilityId);
+        // test we found the demo data: TEST9000/TEST9002, not found TEST9001
+        assertGwtLookupFound(lookup, Arrays.asList("TEST9000", "TEST9002"), PurchaseOrderLookupConfiguration.INOUT_ORDER_ID);
+        assertGwtLookupNotFound(lookup, Arrays.asList("TEST9001"), PurchaseOrderLookupConfiguration.INOUT_ORDER_ID);
+
+
+        provider = new TestInputProvider(admin, dispatcher);
+        provider.setParameter(PurchaseOrderLookupConfiguration.INOUT_STATUS_ID, "ORDER_CREATED");
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999"); // set high pager limit so other test won't mask the expected results
+        lookup = new PurchaseOrderLookupService(provider);
+        lookup.findOrders(locale, timeZone, organizationPartyId, facilityId);
+        // test we found the demo data: TEST9001, not found TEST9000/TEST9002
+        assertGwtLookupFound(lookup, Arrays.asList("TEST9001"), PurchaseOrderLookupConfiguration.INOUT_ORDER_ID);
+        assertGwtLookupNotFound(lookup, Arrays.asList("TEST9000"), PurchaseOrderLookupConfiguration.INOUT_ORDER_ID);
+        assertGwtLookupNotFound(lookup, Arrays.asList("TEST9002"), PurchaseOrderLookupConfiguration.INOUT_ORDER_ID);
+
+        // 4. test find order by date range
+        // search the orders between 09/12/09 00:00:00 and 09/12/09 23:59:59
+        provider = new TestInputProvider(admin, dispatcher);
+        String fromDate = dateStringToShortLocaleString("09/12/09 00:00:00", "yy/MM/dd HH:mm:ss");
+        String thruDate = dateStringToShortLocaleString("09/12/09 23:59:59", "yy/MM/dd HH:mm:ss");
+        provider.setParameter(PurchaseOrderLookupConfiguration.IN_FROM_DATE, fromDate);
+        provider.setParameter(PurchaseOrderLookupConfiguration.IN_THRU_DATE, thruDate);
+        provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999"); // set high pager limit so other test won't mask the expected results
+        lookup = new PurchaseOrderLookupService(provider);
+        lookup.findOrders(locale, timeZone, organizationPartyId, facilityId);
+        // test we found the demo data: TEST9000/TEST9002, not found TEST9001
+        assertGwtLookupFound(lookup, Arrays.asList("TEST9000", "TEST9002"), PurchaseOrderLookupConfiguration.INOUT_ORDER_ID);
+        assertGwtLookupNotFound(lookup, Arrays.asList("TEST9001"), PurchaseOrderLookupConfiguration.INOUT_ORDER_ID);
+
+    }
 }

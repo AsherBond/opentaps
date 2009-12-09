@@ -17,6 +17,7 @@
 package org.opentaps.common.domain.order;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -33,6 +34,7 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.party.party.PartyHelper;
 import org.opentaps.base.entities.OrderHeaderAndItems;
 import org.opentaps.base.entities.OrderHeaderAndRoles;
+import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
 import org.opentaps.base.entities.ProductAndGoodIdentification;
 import org.opentaps.base.entities.StatusItem;
 import org.opentaps.common.util.UtilDate;
@@ -141,10 +143,36 @@ public class PurchaseOrderSearchRepository  extends Repository implements Purcha
         fieldsToSelect.add(OrderHeaderAndRoles.Fields.statusId.name());
         fieldsToSelect.add(OrderHeaderAndRoles.Fields.grandTotal.name());
         fieldsToSelect.add(OrderHeaderAndRoles.Fields.currencyUom.name());
+        
+        List<String> queryOrderBy = new ArrayList<String>();
         if (orderBy == null) {
             orderBy = Arrays.asList(OrderHeaderAndRoles.Fields.orderDate.desc());
         }
-        List<OrderHeaderAndRoles> orders = findList(OrderHeaderAndRoles.class, searchConditionList, fieldsToSelect, orderBy);
+     // convert sort condition parameters for findList, for some field is composed fields, and some not in view entity really.
+        for (String ord : orderBy) {
+            if (OrderHeaderItemAndRolesAndInvPending.Fields.orderNameId.asc().equals(ord)) {
+                queryOrderBy.add(OrderHeaderAndRoles.Fields.orderName.asc());
+                queryOrderBy.add(OrderHeaderAndRoles.Fields.orderId.asc());
+            } else if (OrderHeaderAndRoles.Fields.orderNameId.desc().equals(ord)) {
+                queryOrderBy.add(OrderHeaderAndRoles.Fields.orderName.desc());
+                queryOrderBy.add(OrderHeaderAndRoles.Fields.orderId.desc());
+            } else if (OrderHeaderAndRoles.Fields.orderDateString.asc().equals(ord)) {
+                queryOrderBy.add(OrderHeaderAndRoles.Fields.orderDate.asc());
+            } else if (OrderHeaderAndRoles.Fields.orderDateString.desc().equals(ord)) {
+                queryOrderBy.add(OrderHeaderAndRoles.Fields.orderDate.desc());
+            } else if (OrderHeaderAndRoles.Fields.statusDescription.asc().equals(ord)) {
+                queryOrderBy.add(OrderHeaderAndRoles.Fields.statusId.asc());
+            } else if (OrderHeaderAndRoles.Fields.statusDescription.desc().equals(ord)) {
+                queryOrderBy.add(OrderHeaderAndRoles.Fields.statusId.desc());
+            } else if (OrderHeaderAndRoles.Fields.supplierName.asc().equals(ord)) {
+                queryOrderBy.add(OrderHeaderAndRoles.Fields.partyId.asc());
+            } else if (OrderHeaderAndRoles.Fields.supplierName.desc().equals(ord)) {
+                queryOrderBy.add(OrderHeaderAndRoles.Fields.partyId.desc());
+            } else {
+                queryOrderBy.add(ord);
+            }
+        }
+        List<OrderHeaderAndRoles> orders = findList(OrderHeaderAndRoles.class, searchConditionList, fieldsToSelect, queryOrderBy);
 
         // add value for extra fields
         for (OrderHeaderAndRoles order : orders) {

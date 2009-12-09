@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ *
+-->
+<entity-engine-xml>
+    <!-- Test data for test find order -->
+    <PartyRole partyId="DemoSupplier" roleTypeId="BILL_FROM_VENDOR"/>
+    <PartyRole partyId="DemoSupplier" roleTypeId="SHIP_FROM_VENDOR"/>
+    <PartyRole partyId="DemoSupplier" roleTypeId="SUPPLIER_AGENT"/>
+
+    <PartyRole partyId="BigSupplier" roleTypeId="BILL_FROM_VENDOR"/>
+    <PartyRole partyId="BigSupplier" roleTypeId="SHIP_FROM_VENDOR"/>
+    <PartyRole partyId="BigSupplier" roleTypeId="SUPPLIER_AGENT"/>
+
+    <OrderHeader orderId="TEST9000" orderTypeId="PURCHASE_ORDER" orderName="Test Order 9000" salesChannelEnumId="UNKNWN_SALES_CHANNEL" orderDate="2009-12-09 15:58:03.069" priority="2" entryDate="2009-12-09 15:58:03.069" visitId="10000" statusId="ORDER_APPROVED" createdBy="admin" currencyUom="USD" originFacilityId="WebStoreWarehouse" productStoreId="PURCHASING" remainingSubTotal="7.50" grandTotal="7.50" lastUpdatedStamp="2009-12-09 15:58:09.719" lastUpdatedTxStamp="2009-12-09 15:58:09.639" createdStamp="2009-12-09 15:58:03.649" createdTxStamp="2009-12-09 15:58:02.949" billFromPartyId="DemoSupplier" billToPartyId="Company"/>
+    <OrderItem orderId="TEST9000" orderItemSeqId="00001" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="GZ-1000" isPromo="N" quantity="1.000000" selectedAmount="0.000000" unitPrice="7.50" unitListPrice="0.00" isModifiedPrice="N" itemDescription="GZ-1000-0 Tiny Gizmo" statusId="ITEM_CREATED" lastUpdatedStamp="2009-12-09 15:58:10.439" lastUpdatedTxStamp="2009-12-09 15:58:10.439" createdStamp="2009-12-09 15:58:05.159" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderItemPriceInfo orderItemPriceInfoId="8210" orderId="TEST9000" orderItemSeqId="00001" description="SupplierProduct [minimumOrderQuantity:0.000000, lastPrice: 7.500]" lastUpdatedStamp="2009-12-09 15:58:06.544" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:06.544" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderRole orderId="TEST9000" partyId="Company" roleTypeId="BILL_TO_CUSTOMER" lastUpdatedStamp="2009-12-09 15:58:06.559" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:06.559" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderRole orderId="TEST9000" partyId="DemoSupplier" roleTypeId="BILL_FROM_VENDOR" lastUpdatedStamp="2009-12-09 15:58:06.794" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:06.794" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderRole orderId="TEST9000" partyId="DemoSupplier" roleTypeId="SHIP_FROM_VENDOR" lastUpdatedStamp="2009-12-09 15:58:06.869" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:06.869" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderRole orderId="TEST9000" partyId="DemoSupplier" roleTypeId="SUPPLIER_AGENT" lastUpdatedStamp="2009-12-09 15:58:06.919" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:06.919" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderItemShipGroup orderId="TEST9000" shipGroupSeqId="00001" shipmentMethodTypeId="NO_SHIPPING" carrierPartyId="_NA_" carrierRoleTypeId="CARRIER" contactMechId="9200" shippingInstructions="" maySplit="N" giftMessage="" isGift="N" lastUpdatedStamp="2009-12-09 15:58:05.694" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:05.694" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderItemShipGroupAssoc orderId="TEST9000" orderItemSeqId="00001" shipGroupSeqId="00001" quantity="1.000000" lastUpdatedStamp="2009-12-09 15:58:06.379" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:06.379" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderStatus orderStatusId="8210" statusId="ORDER_CREATED" orderId="TEST9000" statusDatetime="2009-12-09 15:58:03.069" statusUserLogin="admin" lastUpdatedStamp="2009-12-09 15:58:05.069" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:05.069" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderStatus orderStatusId="8211" statusId="ITEM_CREATED" orderId="TEST9000" orderItemSeqId="00001" statusDatetime="2009-12-09 15:58:03.069" statusUserLogin="admin" lastUpdatedStamp="2009-12-09 15:58:05.459" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:05.459" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderStatus orderStatusId="8212" statusId="ITEM_APPROVED" orderId="TEST9000" orderItemSeqId="00001" statusDatetime="2009-12-09 16:16:04.454" statusUserLogin="admin" lastUpdatedStamp="2009-12-09 16:16:04.494" lastUpdatedTxStamp="2009-12-09 16:16:04.369" createdStamp="2009-12-09 16:16:04.494" createdTxStamp="2009-12-09 16:16:04.369"/>
+    <OrderStatus orderStatusId="8213" statusId="ORDER_APPROVED" orderId="TEST9000" statusDatetime="2009-12-09 16:16:04.559" statusUserLogin="admin" lastUpdatedStamp="2009-12-09 16:16:04.649" lastUpdatedTxStamp="2009-12-09 16:16:04.369" createdStamp="2009-12-09 16:16:04.649" createdTxStamp="2009-12-09 16:16:04.369"/>
+    <OrderContactMech orderId="TEST9000" contactMechPurposeTypeId="ORDER_EMAIL" contactMechId="DEMOSUPPLEMAIL1" lastUpdatedStamp="2009-12-09 15:58:09.914" lastUpdatedTxStamp="2009-12-09 15:58:09.909" createdStamp="2009-12-09 15:58:09.914" createdTxStamp="2009-12-09 15:58:09.909"/>
+    <OrderContactMech orderId="TEST9000" contactMechPurposeTypeId="SHIPPING_LOCATION" contactMechId="9200" lastUpdatedStamp="2009-12-09 15:58:05.574" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:05.574" createdTxStamp="2009-12-09 15:58:02.949"/>
+
+
+    <OrderHeader orderId="TEST9001" orderTypeId="PURCHASE_ORDER" orderName="Test Order 9001" salesChannelEnumId="UNKNWN_SALES_CHANNEL" orderDate="2009-12-10 12:22:13.069" priority="2" entryDate="2009-12-10 12:22:13.069" visitId="10000" statusId="ORDER_CREATED" createdBy="admin" currencyUom="USD" originFacilityId="WebStoreWarehouse" productStoreId="PURCHASING" remainingSubTotal="7.50" grandTotal="7.50" lastUpdatedStamp="2009-12-10 12:22:13.069" lastUpdatedTxStamp="2009-12-10 12:22:13.069" createdStamp="2009-12-10 12:22:13.069" createdTxStamp="2009-12-10 12:22:13.069" billFromPartyId="DemoSupplier" billToPartyId="Company"/>
+    <OrderItem orderId="TEST9001" orderItemSeqId="00001" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="GZ-1000" isPromo="N" quantity="1.000000" selectedAmount="0.000000" unitPrice="7.50" unitListPrice="0.00" isModifiedPrice="N" itemDescription="GZ-1000-0 Tiny Gizmo" statusId="ITEM_CREATED" lastUpdatedStamp="2009-12-09 15:58:10.439" lastUpdatedTxStamp="2009-12-09 15:58:10.439" createdStamp="2009-12-09 15:58:05.159" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderItemPriceInfo orderItemPriceInfoId="8220" orderId="TEST9001" orderItemSeqId="00001" description="SupplierProduct [minimumOrderQuantity:0.000000, lastPrice: 7.500]" lastUpdatedStamp="2009-12-09 15:58:06.544" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:06.544" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderRole orderId="TEST9001" partyId="Company" roleTypeId="BILL_TO_CUSTOMER" lastUpdatedStamp="2009-12-09 15:58:06.559" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:06.559" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderRole orderId="TEST9001" partyId="DemoSupplier" roleTypeId="BILL_FROM_VENDOR" lastUpdatedStamp="2009-12-09 15:58:06.794" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:06.794" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderRole orderId="TEST9001" partyId="DemoSupplier" roleTypeId="SHIP_FROM_VENDOR" lastUpdatedStamp="2009-12-09 15:58:06.869" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:06.869" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderRole orderId="TEST9001" partyId="DemoSupplier" roleTypeId="SUPPLIER_AGENT" lastUpdatedStamp="2009-12-09 15:58:06.919" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:06.919" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderItemShipGroup orderId="TEST9001" shipGroupSeqId="00001" shipmentMethodTypeId="NO_SHIPPING" carrierPartyId="_NA_" carrierRoleTypeId="CARRIER" contactMechId="9200" shippingInstructions="" maySplit="N" giftMessage="" isGift="N" lastUpdatedStamp="2009-12-09 15:58:05.694" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:05.694" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderItemShipGroupAssoc orderId="TEST9001" orderItemSeqId="00001" shipGroupSeqId="00001" quantity="1.000000" lastUpdatedStamp="2009-12-09 15:58:06.379" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:06.379" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderStatus orderStatusId="8220" statusId="ORDER_CREATED" orderId="TEST9001" statusDatetime="2009-12-09 15:58:03.069" statusUserLogin="admin" lastUpdatedStamp="2009-12-09 15:58:05.069" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:05.069" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderStatus orderStatusId="8221" statusId="ITEM_CREATED" orderId="TEST9001" orderItemSeqId="00001" statusDatetime="2009-12-09 15:58:03.069" statusUserLogin="admin" lastUpdatedStamp="2009-12-09 15:58:05.459" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:05.459" createdTxStamp="2009-12-09 15:58:02.949"/>
+    <OrderContactMech orderId="TEST9001" contactMechPurposeTypeId="ORDER_EMAIL" contactMechId="DEMOSUPPLEMAIL1" lastUpdatedStamp="2009-12-09 15:58:09.914" lastUpdatedTxStamp="2009-12-09 15:58:09.909" createdStamp="2009-12-09 15:58:09.914" createdTxStamp="2009-12-09 15:58:09.909"/>
+    <OrderContactMech orderId="TEST9001" contactMechPurposeTypeId="SHIPPING_LOCATION" contactMechId="9200" lastUpdatedStamp="2009-12-09 15:58:05.574" lastUpdatedTxStamp="2009-12-09 15:58:02.949" createdStamp="2009-12-09 15:58:05.574" createdTxStamp="2009-12-09 15:58:02.949"/>
+
+
+    <OrderHeader orderId="TEST9002" orderTypeId="PURCHASE_ORDER" orderName="Test Order 9002" salesChannelEnumId="UNKNWN_SALES_CHANNEL" orderDate="2009-12-09 16:15:50.104" priority="2" entryDate="2009-12-09 16:15:50.104" visitId="10000" statusId="ORDER_APPROVED" createdBy="admin" currencyUom="USD" originFacilityId="WebStoreWarehouse" productStoreId="PURCHASING" remainingSubTotal="3750.00" grandTotal="3750.00" lastUpdatedStamp="2009-12-09 16:16:04.559" lastUpdatedTxStamp="2009-12-09 16:16:04.369" createdStamp="2009-12-09 16:15:50.454" createdTxStamp="2009-12-09 16:15:50.094" billFromPartyId="BigSupplier" billToPartyId="Company"/>
+    <OrderItem orderId="TEST9002" orderItemSeqId="00001" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="GZ-1000" isPromo="N" quantity="1000.000000" selectedAmount="0.000000" unitPrice="3.75" unitListPrice="0.00" isModifiedPrice="N" itemDescription="BKGZ-1000 Bulk Tiny Gizmo" statusId="ITEM_APPROVED" lastUpdatedStamp="2009-12-09 16:16:04.459" lastUpdatedTxStamp="2009-12-09 16:16:04.369" createdStamp="2009-12-09 16:15:50.649" createdTxStamp="2009-12-09 16:15:50.094"/>
+    <OrderItemPriceInfo orderItemPriceInfoId="10001" orderId="TEST9002" orderItemSeqId="00001" description="SupplierProduct [minimumOrderQuantity:500.000000, lastPrice: 3.750]" lastUpdatedStamp="2009-12-09 16:15:50.919" lastUpdatedTxStamp="2009-12-09 16:15:50.094" createdStamp="2009-12-09 13:03:35.071" createdTxStamp="2009-12-09 13:03:21.84"/>
+    <OrderRole orderId="TEST9002" partyId="BigSupplier" roleTypeId="BILL_FROM_VENDOR" lastUpdatedStamp="2009-12-09 16:15:51.444" lastUpdatedTxStamp="2009-12-09 16:15:50.094" createdStamp="2009-12-09 16:15:51.444" createdTxStamp="2009-12-09 16:15:50.094"/>
+    <OrderRole orderId="TEST9002" partyId="BigSupplier" roleTypeId="SHIP_FROM_VENDOR" lastUpdatedStamp="2009-12-09 16:15:51.544" lastUpdatedTxStamp="2009-12-09 16:15:50.094" createdStamp="2009-12-09 16:15:51.544" createdTxStamp="2009-12-09 16:15:50.094"/>
+    <OrderRole orderId="TEST9002" partyId="BigSupplier" roleTypeId="SUPPLIER_AGENT" lastUpdatedStamp="2009-12-09 16:15:51.629" lastUpdatedTxStamp="2009-12-09 16:15:50.094" createdStamp="2009-12-09 16:15:51.629" createdTxStamp="2009-12-09 16:15:50.094"/>
+    <OrderRole orderId="TEST9002" partyId="Company" roleTypeId="BILL_TO_CUSTOMER" lastUpdatedStamp="2009-12-09 16:15:50.929" lastUpdatedTxStamp="2009-12-09 16:15:50.094" createdStamp="2009-12-09 16:15:50.929" createdTxStamp="2009-12-09 16:15:50.094"/>
+    <OrderItemShipGroup orderId="TEST9002" shipGroupSeqId="00001" shipmentMethodTypeId="NO_SHIPPING" carrierPartyId="_NA_" carrierRoleTypeId="CARRIER" contactMechId="9200" shippingInstructions="" maySplit="N" giftMessage="" isGift="N" lastUpdatedStamp="2009-12-09 16:15:50.679" lastUpdatedTxStamp="2009-12-09 16:15:50.094" createdStamp="2009-12-09 16:15:50.679" createdTxStamp="2009-12-09 16:15:50.094"/>
+    <OrderItemShipGroupAssoc orderId="TEST9002" orderItemSeqId="00001" shipGroupSeqId="00001" quantity="1000.000000" lastUpdatedStamp="2009-12-09 16:15:50.829" lastUpdatedTxStamp="2009-12-09 16:15:50.094" createdStamp="2009-12-09 16:15:50.829" createdTxStamp="2009-12-09 16:15:50.094"/>
+    <OrderStatus orderStatusId="8230" statusId="ORDER_CREATED" orderId="TEST9002" statusDatetime="2009-12-09 16:15:50.104" statusUserLogin="admin" lastUpdatedStamp="2009-12-09 16:15:50.624" lastUpdatedTxStamp="2009-12-09 16:15:50.094" createdStamp="2009-12-09 16:15:50.624" createdTxStamp="2009-12-09 16:15:50.094"/>
+    <OrderStatus orderStatusId="8231" statusId="ITEM_CREATED" orderId="TEST9002" orderItemSeqId="00001" statusDatetime="2009-12-09 16:15:50.104" statusUserLogin="admin" lastUpdatedStamp="2009-12-09 16:15:50.664" lastUpdatedTxStamp="2009-12-09 16:15:50.094" createdStamp="2009-12-09 16:15:50.664" createdTxStamp="2009-12-09 16:15:50.094"/>
+    <OrderStatus orderStatusId="8232" statusId="ITEM_APPROVED" orderId="TEST9002" orderItemSeqId="00001" statusDatetime="2009-12-09 16:16:04.454" statusUserLogin="admin" lastUpdatedStamp="2009-12-09 16:16:04.494" lastUpdatedTxStamp="2009-12-09 16:16:04.369" createdStamp="2009-12-09 16:16:04.494" createdTxStamp="2009-12-09 16:16:04.369"/>
+    <OrderStatus orderStatusId="8233" statusId="ORDER_APPROVED" orderId="TEST9002" statusDatetime="2009-12-09 16:16:04.559" statusUserLogin="admin" lastUpdatedStamp="2009-12-09 16:16:04.649" lastUpdatedTxStamp="2009-12-09 16:16:04.369" createdStamp="2009-12-09 16:16:04.649" createdTxStamp="2009-12-09 16:16:04.369"/>
+    <OrderContactMech orderId="TEST9002" contactMechPurposeTypeId="ORDER_EMAIL" contactMechId="DEMOSUPPLEMAIL2" lastUpdatedStamp="2009-12-09 16:15:52.924" lastUpdatedTxStamp="2009-12-09 16:15:52.914" createdStamp="2009-12-09 16:15:52.924" createdTxStamp="2009-12-09 16:15:52.914"/>
+    <OrderContactMech orderId="TEST9002" contactMechPurposeTypeId="SHIPPING_LOCATION" contactMechId="9200" lastUpdatedStamp="2009-12-09 16:15:50.669" lastUpdatedTxStamp="2009-12-09 16:15:50.094" createdStamp="2009-12-09 16:15:50.669" createdTxStamp="2009-12-09 16:15:50.094"/>
+
+
+</entity-engine-xml>

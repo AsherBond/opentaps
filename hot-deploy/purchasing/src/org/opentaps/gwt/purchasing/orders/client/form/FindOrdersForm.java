@@ -26,7 +26,10 @@ import org.opentaps.gwt.common.client.suggest.OrderStatusAutocomplete;
 import org.opentaps.gwt.common.client.suggest.ProductAutocomplete;
 import org.opentaps.gwt.common.client.suggest.SupplierAutocomplete;
 
+import com.gwtext.client.widgets.Panel;
 import com.gwtext.client.widgets.form.TextField;
+import com.gwtext.client.widgets.layout.ColumnLayout;
+import com.gwtext.client.widgets.layout.ColumnLayoutData;
 
 /**
  * Form class for find order in purchasing.
@@ -89,16 +92,38 @@ public class FindOrdersForm extends FindEntityForm<PurchaseOrderListView> {
         filterPanel = getMainForm().addTab(UtilUi.MSG.crmFindOrders());
         // hide the tab bar since we only use one tab
         getMainForm().hideTabBar();
+        
+        Panel mainPanel = new Panel();
+        mainPanel.setLayout(new ColumnLayout());
 
-        filterPanel.addField(orderIdInput);
-        filterPanel.addField(orderNameInput);
-        filterPanel.addField(productPatternInput);
-        filterPanel.addField(supplierInput);
-        filterPanel.addField(orderStatusInput);
-        filterPanel.addField(fromDateInput);
-        filterPanel.addField(thruDateInput);
-        filterPanel.addField(createdByInput);
-        filterPanel.addField(findAllInput);
+        SubFormPanel columnOnePanel = new SubFormPanel(getMainForm());
+        SubFormPanel columnTwoPanel = new SubFormPanel(getMainForm());
+
+        mainPanel.add(columnOnePanel, new ColumnLayoutData(.5));
+        mainPanel.add(columnTwoPanel, new ColumnLayoutData(.5));
+
+        columnOnePanel.addField(orderIdInput);
+        columnTwoPanel.addField(orderNameInput);
+
+        columnOnePanel.addField(supplierInput);
+        columnTwoPanel.add(UtilUi.makeBlankFormCell());
+
+        columnOnePanel.addField(productPatternInput);
+        columnTwoPanel.add(UtilUi.makeBlankFormCell());
+        
+        columnOnePanel.addField(orderStatusInput);
+        columnTwoPanel.add(UtilUi.makeBlankFormCell());
+        
+        columnOnePanel.addField(fromDateInput);
+        columnTwoPanel.addField(thruDateInput);
+        
+        columnOnePanel.addField(createdByInput);
+        columnTwoPanel.add(UtilUi.makeBlankFormCell());
+        
+        columnOnePanel.addField(findAllInput);
+        columnTwoPanel.add(UtilUi.makeBlankFormCell());
+        
+        filterPanel.add(mainPanel);
 
         orderListView = new PurchaseOrderListView();
         orderListView.setAutoLoad(autoLoad);
