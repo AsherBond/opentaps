@@ -21,7 +21,9 @@ import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.listviews.SearchResultsListView;
 
 /**
- * .
+ * Presents the results from Crmsfa Search.
+ * Performs the translation of result type into localized labels,
+ *  and sets the view URL for each type.
  */
 public class CrmsfaSearchResultsListView extends SearchResultsListView {
 
@@ -40,8 +42,12 @@ public class CrmsfaSearchResultsListView extends SearchResultsListView {
             return UtilUi.MSG.crmAccount();
         } else if ("Contact".equals(type)) {
             return UtilUi.MSG.crmContact();
-        }  else if ("Lead".equals(type)) {
+        } else if ("Lead".equals(type)) {
             return UtilUi.MSG.crmLead();
+        } else if ("Order".equals(type)) {
+            return UtilUi.MSG.orderOrder();
+        } else if ("CustRequest".equals(type)) {
+            return UtilUi.MSG.crmCase();
         } else {
             return type;
         }
@@ -56,8 +62,12 @@ public class CrmsfaSearchResultsListView extends SearchResultsListView {
             return "viewAccount?partyId=" + id;
         } else if ("Contact".equals(type)) {
             return "viewContact?partyId=" + id;
-        }  else if ("Lead".equals(type)) {
+        } else if ("Lead".equals(type)) {
             return "viewLead?partyId=" + id;
+        } else if ("Order".equals(type)) {
+            return "orderview?orderId=" + id;
+        } else if ("CustRequest".equals(type)) {
+            return "viewCase?custRequestId=" + id;
         } else {
             return null;
         }
