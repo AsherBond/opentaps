@@ -66,7 +66,24 @@ public class HibernateSearchRepository extends Repository implements SearchRepos
      * @return the Lucene query string
      */
     private String makeQueryString(String queryString, String placeholderRegex, String keywords) {
-        return queryString.replaceAll(placeholderRegex, "(\"" + QueryParser.escape(keywords.toLowerCase()) + "\")");
+        // escape lucene special chars
+        String s = QueryParser.escape(keywords.toLowerCase());
+        // tokenized fields will never a match multiword string, join the results
+        String[] ss = s.split(" +");
+        // this ( groups one query
+        StringBuilder sb = new StringBuilder("(");
+        for (int i = 0; i < ss.length; i++) {
+            // group and quote the keywords
+            s = "(\"" + ss[i] + "\")";
+            sb.append(queryString.replaceAll(placeholderRegex, s));
+            if (i + 1 < ss.length) {
+                // join multiple word as multiple ANDed queries
+                sb.append(") AND (");
+            }
+        }
+        // close the last query
+        sb.append(")");
+        return sb.toString();
     }
 
     /** {@inheritDoc} */
