@@ -262,8 +262,7 @@
             <actions>
                 <set field="pageTitleLabel" value="CrmFindOrders"/>
                 <set field="sectionHeaderUiLabel" value="CrmFindOrders"/>
-                <set field="parameters.listIteratorNameToUse" value="ordersListIt"/> <!-- list of quotes -->
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/findOrders.bsh"/>
+                <java location="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderActions" invoke="findOrders"/>
                 <set field="findOrdersTarget" value="LookupSalesOrders"/>
             </actions>
             <widgets>
