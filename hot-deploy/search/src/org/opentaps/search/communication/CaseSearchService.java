@@ -60,11 +60,11 @@ public class CaseSearchService extends HibernateSearchService implements CaseSea
     public String getQueryString() {
         StringBuilder sb = new StringBuilder();
         // filter canceled (lost) Sales Opportunities
-        sb.append("+(");
+        sb.append("(+(");
         makeCaseQuery(sb);
         PartySearch.makePartyGroupFieldsQuery(sb);
         PartySearch.makePersonFieldsQuery(sb);
-        sb.append(")");
+        sb.append("))");
         return sb.toString();
     }
 
