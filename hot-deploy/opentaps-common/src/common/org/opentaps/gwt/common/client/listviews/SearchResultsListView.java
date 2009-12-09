@@ -40,6 +40,7 @@ public class SearchResultsListView extends EntityListView {
      */
     public SearchResultsListView(String url) {
         super(null);
+        setDefaultPageSize(50);
 
         Renderer renderer = new Renderer() {
                 public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
@@ -47,7 +48,13 @@ public class SearchResultsListView extends EntityListView {
                 }
             };
 
-        makeColumn("Type", new StringFieldDef(SearchLookupConfiguration.RESULT_TYPE));
+        Renderer typeRenderer = new Renderer() {
+                public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
+                    return getType(record);
+                }
+            };
+
+        makeColumn("Type", new StringFieldDef(SearchLookupConfiguration.RESULT_TYPE)).setRenderer(typeRenderer);
         addFieldDefinition(new StringFieldDef(SearchLookupConfiguration.RESULT_ID));
         addFieldDefinition(new StringFieldDef(SearchLookupConfiguration.RESULT_TITLE));
         addFieldDefinition(new StringFieldDef(SearchLookupConfiguration.RESULT_REAL_ID));

@@ -418,6 +418,14 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
     }
 
     /**
+     * Sets the default page size, need to be called before {@link #configure}.
+     * @param size the default page size for this list
+     */
+    public void setDefaultPageSize(int size) {
+        this.defaultPageSize = size;
+    }
+
+    /**
      * Clears the filters of this grid.
      */
     public void clearFilters() {
