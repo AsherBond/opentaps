@@ -2884,12 +2884,8 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="processInvoicePDF">
         <security https="true" auth="true"/>
         <event type="java" invoke="prepareInvoiceReport" path="org.opentaps.common.invoice.InvoiceEvents"/>
-        <response name="success" type="view" value="InvoiceJR"/>
+        <response name="success" type="request" value="runReport"/>
         <response name="error" type="view" value="myOrders"/>
-    </request-map>
-    <request-map uri="InvoiceJR">
-        <security https="true" auth="true"/>
-        <response name="success" type="view" value="InvoiceJR"/>
     </request-map>
     <request-map uri="order.pdf">
         <security https="true" auth="true"/>
@@ -3184,7 +3180,6 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <!-- PDFs  -->
     <view-map name="OrderJR" type="jasperreports" page="component://crmsfa/webapp/crmsfa/reports/repository/orderPDF/Order.jrxml" content-type="application/pdf" encoding="none"/>
     <view-map name="ReturnPDF" type="screenfop" page="component://crmsfa/widget/crmsfa/screens/orders/ReturnScreens.xml#ReturnPDF" content-type="application/pdf" encoding="none"/>
-    <view-map name="InvoiceJR" type="jasperreports" page="component://financials/webapp/financials/reports/repository/Invoice.jrxml" content-type="application/pdf" encoding="none"/>
     <view-map name="ShipGroupsPDF" type="screenfop" page="component://warehouse/widget/warehouse/screens/shipping/OrderPrintForms.xml#ShipGroupsPDF" content-type="application/pdf" encoding="none"/>
     <view-map name="PackingSlipPDF" type="screenfop" page="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#PackingSlip.fo" content-type="application/pdf" encoding="none"/>
     <view-map name="OrderPDF" type="screenfop" page="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#OrderPDF" content-type="application/pdf" encoding="none"/>

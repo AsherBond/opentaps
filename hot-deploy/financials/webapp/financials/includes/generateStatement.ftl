@@ -66,7 +66,7 @@
     <#if transaction.invoiceId?exists>
       <#-- display invoice type and invoice number with links -->
       ${transaction.getRelatedOne("Invoice").getRelatedOneCache("InvoiceType").description?default("")} #<a href="<@ofbizUrl>viewInvoice?invoiceId=${transaction.invoiceId}</@ofbizUrl>">${transaction.invoiceId}</a>
-       (<a href="<@ofbizUrl>invoice.pdf?invoiceId=${transaction.invoiceId}</@ofbizUrl>" class="linktext">PDF</a>)
+       (<a href="<@ofbizUrl>invoice.pdf?invoiceId=${transaction.invoiceId}&amp;reportId=FININVOICE&amp;reportType=application/pdf</@ofbizUrl>" class="linktext">PDF</a>)
        
     <#elseif transaction.paymentId?exists>
       <#-- display payment type and payment number -->
@@ -131,7 +131,7 @@
   
     <#if transaction.invoiceId?exists>
       <#-- display invoice type and invoice number with links -->
-      ${transaction.invoiceType?default("")} #<a href="<@ofbizUrl>viewInvoice?invoiceId=${transaction.invoiceId}</@ofbizUrl>">${transaction.invoiceId}</a>
+      ${transaction.invoiceType?default("")} #<a href="<@ofbizUrl>viewInvoice?invoiceId=${transaction.invoiceId}&amp;reportId=FININVOICE&amp;reportType=application/pdf</@ofbizUrl>">${transaction.invoiceId}</a>
        (<a href="<@ofbizUrl>invoice.pdf?invoiceId=${transaction.invoiceId}</@ofbizUrl>" class="linktext">PDF</a>)
     <#elseif transaction.paymentId?exists>
       <#-- display payment type and payment number -->

@@ -986,12 +986,8 @@ under the License.
     <request-map uri="processInvoicePDF">
         <security https="true" auth="true"/>
         <event type="java" invoke="prepareInvoiceReport" path="org.opentaps.common.invoice.InvoiceEvents"/>
-        <response name="success" type="view" value="InvoiceJR"/>
+        <response name="success" type="request" value="runReport"/>
         <response name="error" type="view" value="PackOrder"/>
-    </request-map>
-    <request-map uri="InvoiceJR">
-        <security https="true" auth="true"/>
-        <response name="success" type="view" value="InvoiceJR"/>
     </request-map>
 
 
@@ -1490,7 +1486,6 @@ under the License.
     <view-map name="PackOrder" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#PackOrder"/>
     <view-map name="PackingSlip.pdf" type="screenfop" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#PackingSlip.fo" content-type="application/pdf" encoding="none"/>
     <view-map name="ShipmentBarCode.pdf" type="screenfop" page="component://product/widget/facility/ShipmentScreens.xml#ShipmentBarCode.fo" content-type="application/pdf" encoding="none"/>
-    <view-map name="InvoiceJR" type="jasperreports" page="component://financials/webapp/financials/reports/repository/Invoice.jrxml" content-type="application/pdf" encoding="none"/>
 
     <!-- Print Labels -->
     <view-map name="Labels" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#Labels"/>

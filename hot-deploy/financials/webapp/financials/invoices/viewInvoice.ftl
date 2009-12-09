@@ -105,7 +105,7 @@ function notifyInvoiceItemsCount(n) {
 </#if>
 
 <#if ! invoice.isCancelled() && ! invoice.isWrittenOff() && ! invoice.isVoided()>
-  <#assign stateChangeLinks>${stateChangeLinks?default("")}<a href="<@ofbizUrl>invoice.pdf?invoiceId=${invoice.invoiceId}</@ofbizUrl>" class="subMenuButton">${uiLabelMap.AccountingInvoicePDF}</a></#assign>
+  <#assign stateChangeLinks>${stateChangeLinks?default("")}<a href="<@ofbizUrl>invoice.pdf?invoiceId=${invoice.invoiceId}&amp;reportId=FININVOICE&amp;reportType=application/pdf</@ofbizUrl>" class="subMenuButton">${uiLabelMap.AccountingInvoicePDF}</a></#assign>
 </#if>
 <#assign stateChangeLinks = stateChangeLinks?default("") + sampleInvoiceLink?default("") />
 <#if ! invoice.isCancelled() && ! invoice.isWrittenOff() && ! invoice.isVoided()>

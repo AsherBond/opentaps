@@ -1745,12 +1745,8 @@
     <request-map uri="invoice.pdf">
         <security https="true" auth="true"/>
         <event type="java" invoke="prepareInvoiceReport" path="org.opentaps.common.invoice.InvoiceEvents"/>
-        <response name="success" type="view" value="InvoiceJR"/>
+        <response name="success" type="request" value="runReport"/>
         <response name="error" type="view" value="viewInvoice"/>
-    </request-map>
-    <request-map uri="InvoiceJR">
-        <security https="true" auth="true"/>
-        <response name="success" type="view" value="InvoiceJR"/>
     </request-map>
     <request-map uri="sampleInvoice.pdf">
         <security https="true" auth="true"/>
@@ -2008,6 +2004,5 @@
     <view-map name="createInvoiceForm" type="screen" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#createInvoiceForm"/>
     <view-map name="updateInvoiceItemForm" type="screen" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#updateInvoiceItemForm"/>
     <view-map name="emailInvoice" type="screen" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#emailInvoice"/>
-    <view-map name="InvoiceJR" type="jasperreports" page="component://financials/webapp/financials/reports/repository/Invoice.jrxml" content-type="application/pdf" encoding="none"/>
     <view-map name="sampleInvoice.pdf" type="screenfop" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#SampleInvoicePDF" content-type="application/pdf" encoding="none"/>
 </site-conf>

@@ -53,6 +53,8 @@ function showButtons() {
 <@paginate name="listInvoices" list=invoiceListBuilder rememberPage=false>
     <#noparse>
     <form name="listInvoices" action="invoice.pdf" method="POST" target="_blank" class="basic-form">
+        <@inputHidden name="reportId" value="FININVOICE" />
+        <@inputHidden name="reportType" value="application/pdf" />
         <@navigationHeader/>
         <table class="listTable">
             <tr class="listTableHeader">

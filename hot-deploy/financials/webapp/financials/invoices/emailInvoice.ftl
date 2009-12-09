@@ -49,7 +49,7 @@
       <@inputTextRow name="sendCc" title="CC" size=60 />
       <@inputTextRow name="subject" title=uiLabelMap.PartySubject default="${uiLabelMap.AccountingInvoice} #${invoice.invoiceId}" size=60 />
       <@inputTextareaRow name="bodyText" title=uiLabelMap.CommonMessage />
-      <@displayLinkRow href="invoice.pdf?invoiceId=${invoice.invoiceId}" title="PDF" text="${uiLabelMap.AccountingInvoice} ${invoice.invoiceId}.pdf"/>
+      <@displayLinkRow href="invoice.pdf?invoiceId=${invoice.invoiceId}&amp;reportId=FININVOICE&amp;reportType=application/pdf" title="PDF" text="${uiLabelMap.AccountingInvoice} ${invoice.invoiceId}.pdf"/>
       <@inputSubmitRow title=uiLabelMap.CommonSend />
   </form>
   </table>

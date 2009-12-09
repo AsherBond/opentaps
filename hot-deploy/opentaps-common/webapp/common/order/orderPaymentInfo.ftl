@@ -275,7 +275,7 @@ under the License.
           <@infoRowNested title=uiLabelMap.OrderInvoices>
             <#list order.invoices as invoice>
               <div class="tabletext">${uiLabelMap.OrderNbr}
-              <a href="<@ofbizUrl>invoice.pdf?invoiceId=${invoice.invoiceId}</@ofbizUrl>" class="linktext" target="_blank">${invoice.invoiceId}</a> (PDF)</div>
+              <a href="<@ofbizUrl>invoice.pdf?invoiceId=${invoice.invoiceId}&amp;reportId=FININVOICE&amp;reportType=application/pdf</@ofbizUrl>" class="linktext" target="_blank">${invoice.invoiceId}</a> (PDF)</div>
             </#list>
           </@infoRowNested>
         </#if>

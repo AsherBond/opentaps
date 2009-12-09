@@ -62,7 +62,7 @@ under the License.
               <#list invoiceIds as invoiceId>
                <li>
                  ${uiLabelMap.AccountingInvoice} #
-                 <a href="<@ofbizUrl>invoice.pdf?invoiceId=${invoiceId}</@ofbizUrl>" target="_blank" class="linktext">${invoiceId}</a> (PDF)</li>
+                 <a href="<@ofbizUrl>invoice.pdf?invoiceId=${invoiceId}&amp;reportId=FININVOICE&amp;reportType=application/pdf</@ofbizUrl>" target="_blank" class="linktext">${invoiceId}</a> (PDF)</li>
                </li>
              </#list>
              </#if>

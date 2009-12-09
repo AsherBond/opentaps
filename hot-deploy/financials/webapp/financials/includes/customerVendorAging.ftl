@@ -33,7 +33,7 @@
        ${uiLabelMap.CommonFrom} ${Static["org.ofbiz.party.party.PartyHelper"].getPartyName(delegator, invoice.get("partyIdFrom"), false)}
      </#if>
      (<a href="<@ofbizUrl>writeInvoiceEmail?invoiceId=${invoice.invoiceId}</@ofbizUrl>" class="buttontext">Email</a>
-     <a href="<@ofbizUrl>invoice.pdf?invoiceId=${invoice.invoiceId}</@ofbizUrl>" class="buttontext">PDF</a>)
+     <a href="<@ofbizUrl>invoice.pdf?invoiceId=${invoice.invoiceId}&amp;reportId=FININVOICE&amp;reportType=application/pdf</@ofbizUrl>" class="buttontext">PDF</a>)
      </td>
      <td class="tabletext" align="right" width="10%"><#if isPastDue><font color="red"></#if><@ofbizCurrency amount=invoiceTotal isoCode=orgCurrencyUomId/><#if isPastDue></font></#if></td>
 
