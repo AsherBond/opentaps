@@ -16,6 +16,7 @@
  */
 package org.opentaps.domain.search;
 
+import org.opentaps.domain.search.communication.CaseSearchServiceInterface;
 import org.opentaps.domain.search.order.PurchaseOrderSearchServiceInterface;
 import org.opentaps.domain.search.order.SalesOpportunitySearchServiceInterface;
 import org.opentaps.domain.search.order.SalesOrderSearchServiceInterface;
@@ -79,6 +80,13 @@ public interface SearchDomainInterface extends DomainInterface {
      * @throws ServiceException if an error occurs
      */
     public PurchaseOrderSearchServiceInterface getPurchaseOrderSearchService() throws ServiceException;
+
+    /**
+     * Returns the case search service.
+     * @return a <code>CaseSearchServiceInterface</code> value
+     * @throws ServiceException if an error occurs
+     */
+    public CaseSearchServiceInterface getCaseSearchService() throws ServiceException;
 
 
     /**

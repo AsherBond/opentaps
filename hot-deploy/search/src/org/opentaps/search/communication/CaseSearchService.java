@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.search.order;
+package org.opentaps.search.communication;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,61 +24,61 @@ import java.util.Set;
 
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.opentaps.base.constants.SalesOpportunityStageConstants;
-import org.opentaps.base.entities.SalesOpportunity;
+import org.opentaps.base.entities.CustRequest;
+import org.opentaps.base.entities.CustRequestRole;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.search.SearchDomainInterface;
 import org.opentaps.domain.search.SearchRepositoryInterface;
 import org.opentaps.domain.search.SearchResult;
-import org.opentaps.domain.search.order.SalesOpportunitySearchServiceInterface;
+import org.opentaps.domain.search.communication.CaseSearchServiceInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
-import org.opentaps.search.HibernateSearchService;
 import org.opentaps.search.HibernateSearchRepository;
+import org.opentaps.search.HibernateSearchService;
 import org.opentaps.search.party.PartySearch;
 
 /**
- * The implementation of the Sales Opportunity search service.
+ * The implementation of the Case search service.
  */
-public class SalesOpportunitySearchService extends HibernateSearchService implements SalesOpportunitySearchServiceInterface {
+public class CaseSearchService extends HibernateSearchService implements CaseSearchServiceInterface {
 
-    /** Common set of class to query for Sales Opportunity related search. */
-    public static final Set<Class<?>> SALES_OPPORTUNITY_CLASSES = new HashSet<Class<?>>(Arrays.asList(
-            SalesOpportunity.class
+    /** Common set of class to query for Case related search. */
+    public static final Set<Class<?>> CASE_CLASSES = new HashSet<Class<?>>(Arrays.asList(
+            CustRequestRole.class
         ));
 
-    private List<SalesOpportunity> salesOpportunities = null;
+    private List<CustRequest> cases = null;
 
     /** {@inheritDoc} */
-    public List<SalesOpportunity> getSalesOpportunities() {
-        return salesOpportunities;
+    public List<CustRequest> getCases() {
+        return cases;
     }
 
     /** {@inheritDoc} */
     public String getQueryString() {
         StringBuilder sb = new StringBuilder();
         // filter canceled (lost) Sales Opportunities
-        sb.append("( -").append(SalesOpportunity.Fields.opportunityStageId.name()).append(":\"").append(SalesOpportunityStageConstants.SOSTG_LOST).append("\" +(");
-        makeSalesOpportunityQuery(sb);
+        sb.append("+(");
+        makeCaseQuery(sb);
         PartySearch.makePartyGroupFieldsQuery(sb);
         PartySearch.makePersonFieldsQuery(sb);
-        sb.append("))");
+        sb.append(")");
         return sb.toString();
     }
 
     /**
-     * Builds the Lucene query for a SalesOpportunity related search.
+     * Builds the Lucene query for a Case related search.
      * @param sb the string builder instance currently building the query
      */
-    public static void makeSalesOpportunityQuery(StringBuilder sb) {
-        for (String f : Arrays.asList(SalesOpportunity.Fields.salesOpportunityId.name(), SalesOpportunity.Fields.opportunityName.name(), SalesOpportunity.Fields.description.name())) {
+    public static void makeCaseQuery(StringBuilder sb) {
+        for (String f : Arrays.asList(CustRequest.Fields.custRequestId.name(), CustRequest.Fields.custRequestName.name(), CustRequest.Fields.description.name())) {
             sb.append(f).append(":").append(HibernateSearchRepository.DEFAULT_PLACEHOLDER).append(" ");
         }
     }
 
     /** {@inheritDoc} */
     public Set<Class<?>> getClassesToQuery() {
-        return SALES_OPPORTUNITY_CLASSES;
+        return CASE_CLASSES;
     }
 
     /** {@inheritDoc} */
@@ -96,21 +96,21 @@ public class SalesOpportunitySearchService extends HibernateSearchService implem
     public void readSearchResults(List<SearchResult> results) throws ServiceException {
 
         try {
-            OrderRepositoryInterface orderRepository = getDomainsDirectory().getOrderDomain().getOrderRepository();
+            OrderRepositoryInterface repository = getDomainsDirectory().getOrderDomain().getOrderRepository();
             // get the entities from the search results
-            Set<String> salesOpportunityIds = new HashSet<String>();
+            Set<String> caseIds = new HashSet<String>();
             for (SearchResult o : results) {
                 Class<?> c = o.getResultClass();
-                if (c.equals(SalesOpportunity.class)) {
+                if (c.equals(CustRequest.class)) {
                     String pk = (String) o.getResultPk();
-                    salesOpportunityIds.add(pk);
+                    caseIds.add(pk);
                 }
             }
 
-            if (!salesOpportunityIds.isEmpty()) {
-                salesOpportunities = orderRepository.findList(SalesOpportunity.class, EntityCondition.makeCondition(SalesOpportunity.Fields.salesOpportunityId.name(), EntityOperator.IN, salesOpportunityIds));
+            if (!caseIds.isEmpty()) {
+                cases = repository.findList(CustRequest.class, EntityCondition.makeCondition(CustRequest.Fields.custRequestId.name(), EntityOperator.IN, caseIds));
             } else {
-                salesOpportunities = new ArrayList<SalesOpportunity>();
+                cases = new ArrayList<CustRequest>();
             }
         } catch (RepositoryException e) {
             throw new ServiceException(e);

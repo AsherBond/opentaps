@@ -30,6 +30,7 @@ import org.opentaps.domain.search.SearchDomainInterface;
 import org.opentaps.domain.search.SearchRepositoryInterface;
 import org.opentaps.domain.search.SearchResult;
 import org.opentaps.domain.search.SearchServiceInterface;
+import org.opentaps.domain.search.communication.CaseSearchServiceInterface;
 import org.opentaps.domain.search.order.SalesOpportunitySearchServiceInterface;
 import org.opentaps.domain.search.order.SalesOrderSearchServiceInterface;
 import org.opentaps.domain.search.party.AccountSearchServiceInterface;
@@ -37,6 +38,7 @@ import org.opentaps.domain.search.party.ContactSearchServiceInterface;
 import org.opentaps.domain.search.party.LeadSearchServiceInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
+import org.opentaps.base.entities.CustRequest;
 
 /**
  * The implementation of the Crmsfa search service.
@@ -50,18 +52,21 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
     private boolean searchLeads = false;
     private boolean searchSalesOpportunities = false;
     private boolean searchSalesOrders = false;
+    private boolean searchCases = false;
 
     private List<Contact> contacts = null;
     private List<Account> accounts = null;
     private List<Lead> leads = null;
     private List<SalesOpportunity> salesOpportunities = null;
     private List<Order> salesOrders = null;
+    private List<CustRequest> cases = null;
 
     private AccountSearchServiceInterface accountSearch;
     private ContactSearchServiceInterface contactSearch;
     private LeadSearchServiceInterface leadSearch;
     private SalesOpportunitySearchServiceInterface salesOpportunitySearch;
     private SalesOrderSearchServiceInterface salesOrderSearch;
+    private CaseSearchServiceInterface caseSearch;
 
     private SearchRepositoryInterface searchRepository;
 
@@ -105,6 +110,14 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
         this.searchSalesOrders = option;
     }
 
+    /**
+     * Option to return Cases from a search.
+     * @param option a <code>boolean</code> value
+     */
+    public void setSearchCases(boolean option) {
+        this.searchCases = option;
+    }
+
     /** {@inheritDoc} */
     public void search() throws ServiceException {
         try {
@@ -115,6 +128,7 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
             leadSearch = searchDomain.getLeadSearchService();
             salesOpportunitySearch = searchDomain.getSalesOpportunitySearchService();
             salesOrderSearch = searchDomain.getSalesOrderSearchService();
+            caseSearch = searchDomain.getCaseSearchService();
 
             searchRepository = searchDomain.getSearchRepository();
 
@@ -132,12 +146,14 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
         leadSearch.readSearchResults(results);
         salesOpportunitySearch.readSearchResults(results);
         salesOrderSearch.readSearchResults(results);
+        caseSearch.readSearchResults(results);
 
         accounts = accountSearch.getAccounts();
         contacts = contactSearch.getContacts();
         leads = leadSearch.getLeads();
         salesOpportunities = salesOpportunitySearch.getSalesOpportunities();
         salesOrders = salesOrderSearch.getOrders();
+        cases = caseSearch.getCases();
     }
 
     /**
@@ -162,6 +178,14 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
      */
     public List<Lead> getLeads() {
         return leads;
+    }
+
+    /**
+     * Gets the cases results.
+     * @return the <code>List</code> of <code>CustRequest</code>
+     */
+    public List<CustRequest> getCases() {
+        return cases;
     }
 
     /**
@@ -203,6 +227,10 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
             sb.append(salesOrderSearch.getQueryString());
         }
 
+        if (searchCases) {
+            sb.append(caseSearch.getQueryString());
+        }
+
         return sb.toString();
     }
 
@@ -223,6 +251,9 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
         }
         if (searchSalesOrders) {
             classes.addAll(salesOrderSearch.getClassesToQuery());
+        }
+        if (searchCases) {
+            classes.addAll(caseSearch.getClassesToQuery());
         }
 
         return classes;

@@ -18,6 +18,7 @@ package org.opentaps.search;
 
 import org.opentaps.domain.search.SearchDomainInterface;
 import org.opentaps.domain.search.SearchRepositoryInterface;
+import org.opentaps.domain.search.communication.CaseSearchServiceInterface;
 import org.opentaps.domain.search.order.PurchaseOrderSearchServiceInterface;
 import org.opentaps.domain.search.order.SalesOpportunitySearchServiceInterface;
 import org.opentaps.domain.search.order.SalesOrderSearchServiceInterface;
@@ -28,6 +29,7 @@ import org.opentaps.domain.search.party.SupplierSearchServiceInterface;
 import org.opentaps.foundation.domain.Domain;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
+import org.opentaps.search.communication.CaseSearchService;
 import org.opentaps.search.order.PurchaseOrderSearchService;
 import org.opentaps.search.order.SalesOpportunitySearchService;
 import org.opentaps.search.order.SalesOrderSearchService;
@@ -74,6 +76,11 @@ public class SearchDomain extends Domain implements SearchDomainInterface {
     /** {@inheritDoc} */
     public SupplierSearchServiceInterface getSupplierSearchService() throws ServiceException {
         return instantiateService(SupplierSearchService.class);
+    }
+
+    /** {@inheritDoc} */
+    public CaseSearchServiceInterface getCaseSearchService() throws ServiceException {
+        return instantiateService(CaseSearchService.class);
     }
 
     /** {@inheritDoc} */
