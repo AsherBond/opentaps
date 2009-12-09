@@ -67,6 +67,7 @@ public class SearchForm extends BaseFormPanel {
         win = new Window(UtilUi.MSG.searchResults());
         win.setModal(false);
         win.setResizable(true);
+        win.setMinHeight(400);
         win.setLayout(new FitLayout());
         win.setCloseAction(Window.HIDE);
 
@@ -85,8 +86,10 @@ public class SearchForm extends BaseFormPanel {
     }
 
     private void search() {
-        results.setHeight(400);
         results.search(searchInput.getText());
+        if (win.getHeight() < 400) {
+            win.setHeight(400);
+        }
         win.show();
         win.center();
     }
