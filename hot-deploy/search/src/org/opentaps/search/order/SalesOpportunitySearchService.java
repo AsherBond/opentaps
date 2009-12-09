@@ -60,7 +60,7 @@ public class SalesOpportunitySearchService extends HibernateSearchService implem
     public String getQueryString() {
         StringBuilder sb = new StringBuilder();
         // filter canceled (lost) Sales Opportunities
-        sb.append("( -").append(SalesOpportunity.Fields.opportunityStageId.name()).append(":\"").append(SalesOpportunityStageConstants.SOSTG_LOST).append("\" +(");
+        sb.append("( -salesOpportunity.").append(SalesOpportunity.Fields.opportunityStageId.name()).append(":\"").append(SalesOpportunityStageConstants.SOSTG_LOST).append("\" +(");
         makeSalesOpportunityQuery(sb);
         PartySearch.makePartyGroupFieldsQuery(sb);
         PartySearch.makePersonFieldsQuery(sb);

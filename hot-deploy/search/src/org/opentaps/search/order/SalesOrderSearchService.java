@@ -63,9 +63,9 @@ public class SalesOrderSearchService extends HibernateSearchService implements S
     public String getQueryString() {
         StringBuilder sb = new StringBuilder();
         // only find sales order
-        sb.append("( +").append(OrderHeader.Fields.orderTypeId.name()).append(":\"").append(OrderTypeConstants.SALES_ORDER).append("\"");
+        sb.append("( +orderHeader.").append(OrderHeader.Fields.orderTypeId.name()).append(":\"").append(OrderTypeConstants.SALES_ORDER).append("\"");
         // filter canceled orders
-        sb.append(" -statusId:\"").append(StatusItemConstants.OrderStatus.ORDER_CANCELLED).append("\"");
+        sb.append(" -orderHeader.").append(OrderHeader.Fields.statusId.name()).append(":\"").append(StatusItemConstants.OrderStatus.ORDER_CANCELLED).append("\"");
         sb.append(" +(");
         makeSalesOrderQuery(sb);
         PartySearch.makePartyGroupFieldsQuery(sb);
