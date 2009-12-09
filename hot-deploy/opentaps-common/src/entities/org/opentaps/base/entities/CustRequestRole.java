@@ -49,6 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity CustRequestRole.
  */
 @javax.persistence.Entity
+@Indexed
 @Table(name="CUST_REQUEST_ROLE")
 public class CustRequestRole extends Entity {
 static {
@@ -81,7 +82,7 @@ fieldMapColumns.put("CustRequestRole", fields);
   }
 
    @EmbeddedId
-
+   @DocumentId
    @FieldBridge(impl = org.opentaps.base.entities.bridge.CustRequestRolePkBridge.class)
      private CustRequestRolePk id = new CustRequestRolePk();
    
@@ -112,14 +113,14 @@ fieldMapColumns.put("CustRequestRole", fields);
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
-   
+   @IndexedEmbedded(depth = 2)
    private CustRequest custRequest = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
-   
+   @IndexedEmbedded(depth = 2)
    private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)

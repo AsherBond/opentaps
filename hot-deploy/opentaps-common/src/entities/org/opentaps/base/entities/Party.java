@@ -311,7 +311,7 @@ fieldMapColumns.put("Party", fields);
    private List<CostComponent> costComponents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FROM_PARTY_ID")
-   
+   @ContainedIn
    private List<CustRequest> fromCustRequests = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
@@ -319,7 +319,7 @@ fieldMapColumns.put("Party", fields);
    private List<CustRequestParty> custRequestPartys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
-   
+   @ContainedIn
    private List<CustRequestRole> custRequestRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
