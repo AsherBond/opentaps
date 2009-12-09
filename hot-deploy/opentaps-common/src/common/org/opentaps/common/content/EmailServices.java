@@ -75,6 +75,7 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.entities.ReportRegistry;
 import org.opentaps.common.invoice.InvoiceEvents;
 import org.opentaps.common.order.OrderEvents;
 import org.opentaps.common.party.PartyHelper;
@@ -86,18 +87,15 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
-import org.opentaps.base.entities.ReportRegistry;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderRepositoryInterface;
-import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.entity.hibernate.Query;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
-import org.opentaps.foundation.repository.RepositoryException;
 
 
 /**

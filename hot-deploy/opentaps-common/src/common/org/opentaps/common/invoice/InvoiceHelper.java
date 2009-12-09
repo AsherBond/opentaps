@@ -32,7 +32,6 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 
-import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
@@ -55,6 +54,7 @@ public final class InvoiceHelper {
 
     private InvoiceHelper() { }
 
+    @SuppressWarnings("unused")
     private static final String MODULE = InvoiceHelper.class.getName();
 
     private static BigDecimal ZERO = BigDecimal.ZERO;
@@ -305,7 +305,11 @@ public final class InvoiceHelper {
         // add the remaining invoice items to the lines
         for (GenericValue invoiceItem  : invoiceItems) {
             Map<String, Object> invoiceLine = joinInvoiceItemForPresentation(invoiceItem);
-            BigDecimal amountTotal = invoiceItem.getBigDecimal("quantity").multiply(invoiceItem.getBigDecimal("amount")).setScale(decimals + 1, rounding);
+            BigDecimal quantity = invoiceItem.getBigDecimal("quantity");
+            if (quantity == null) {
+                quantity = BigDecimal.ONE;
+            }
+            BigDecimal amountTotal = quantity.multiply(invoiceItem.getBigDecimal("amount")).setScale(decimals + 1, rounding);
             invoiceLine.put("amountTotal", amountTotal);
             invoiceLines.add(invoiceLine);
         }
