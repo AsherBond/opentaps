@@ -37,6 +37,7 @@ import com.gwtext.client.core.SortDir;
 import com.gwtext.client.core.UrlParam;
 import com.gwtext.client.data.BooleanFieldDef;
 import com.gwtext.client.data.FieldDef;
+import com.gwtext.client.data.GroupingStore;
 import com.gwtext.client.data.HttpProxy;
 import com.gwtext.client.data.JsonReader;
 import com.gwtext.client.data.Record;
@@ -59,7 +60,7 @@ import com.gwtext.client.widgets.grid.ColumnModel;
 import com.gwtext.client.widgets.grid.EditorGridPanel;
 import com.gwtext.client.widgets.grid.GridEditor;
 import com.gwtext.client.widgets.grid.GridPanel;
-import com.gwtext.client.widgets.grid.GridView;
+import com.gwtext.client.widgets.grid.GroupingView;
 import com.gwtext.client.widgets.grid.Renderer;
 import com.gwtext.client.widgets.grid.RowParams;
 import com.gwtext.client.widgets.grid.RowSelectionModel;
@@ -92,7 +93,7 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
     private HttpProxy proxy;
     private JsonReader reader;
     private String queryUrl;
-    private Store store;
+    private GroupingStore store;
     private RecordDef recordDef;
     private RowSelectionModel selectionModel = new RowSelectionModel(true);
 
@@ -164,6 +165,10 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
 
     private boolean loaded = false;
     private boolean loadNow = false;
+
+    // if set the grid will use a GroupingStore and GroupingView
+    private String groupField = null;
+    private String groupTemplate = null;
 
     /** An internal class representing a Cell in the Grid. */
     public static class Cell {
@@ -269,8 +274,10 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
         reader.setTotalProperty(UtilLookup.JSON_TOTAL);
 
         proxy = new HttpProxy(queryUrl);
-
-        store = new Store(proxy, reader, true);
+        store = new GroupingStore(proxy, reader, true);
+        if (groupField != null) {
+            store.setGroupField(groupField);
+        }
         store.setDefaultSort(defaultSortField, defaultSortDirection);
 
         setStore(store);
@@ -342,34 +349,41 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
             UtilUi.logDebug("Auto loading data.", MODULE, "configure");
             loadFirstPage();
         }
-        GridView view = new GridView() {
+
+        GroupingView view = new GroupingView() {
                 @Override public String getRowClass(Record record, int index, RowParams rowParams, Store store) {
-                    String body = getRowBody(record, index);
-                    String extraClass = getRowExtraClass(record, index, body);
-                    String style = getRowBodyStyle(record, index, body);
-                    if (body != null && !"".equals(body.trim())) {
-                        body = "<span style=\"margin-left:15px\">" + body + "</span>";
-                        rowParams.setBody(body);
-                        if (extraClass != null) {
-                            extraClass = "x-grid3-row-expanded " + extraClass;
-                        } else {
-                            extraClass = "x-grid3-row-expanded";
-                        }
-                    } else {
-                        rowParams.setBody("");
-                    }
-
-                    if (style != null) {
-                        rowParams.setBodyStyle(style);
-                    }
-
-                    return extraClass;
+                    return getGridViewRowClass(record, index, rowParams, store);
                 }
             };
+        if (groupTemplate != null) {
+            view.setGroupTextTpl(groupTemplate);
+        }
+        view.setHideGroupedColumn(true);
         view.setEnableRowBody(true);
         view.setForceFit(true);
         view.setAutoFill(true);
         setView(view);
+    }
+
+    private String getGridViewRowClass(Record record, int index, RowParams rowParams, Store store) {
+        String body = getRowBody(record, index);
+        String extraClass = getRowExtraClass(record, index, body);
+        String style = getRowBodyStyle(record, index, body);
+        if (body != null && !"".equals(body.trim())) {
+            body = "<span style=\"margin-left:15px\">" + body + "</span>";
+            rowParams.setBody(body);
+            if (extraClass != null) {
+                extraClass = "x-grid3-row-expanded " + extraClass;
+            } else {
+                extraClass = "x-grid3-row-expanded";
+            }
+        } else {
+            rowParams.setBody("");
+        }
+        if (style != null) {
+                        rowParams.setBodyStyle(style);
+        }
+        return extraClass;
     }
 
     @Override
@@ -383,6 +397,24 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
      */
     public void reconfigure(Store store) {
         reconfigure(store, columnModel);
+    }
+
+    /**
+     * Set the grouping option.
+     * @param groupField the field to group the results by, must be one of the Column.
+     */
+    public void setGrouping(String groupField) {
+        this.groupField = groupField;
+    }
+
+    /**
+     * Set the grouping option.
+     * @param groupField the field to group the results by, must be one of the Column.
+     * @param groupTemplate the template used to format the groups header
+     */
+    public void setGrouping(String groupField, String groupTemplate) {
+        this.groupField = groupField;
+        this.groupTemplate = groupTemplate;
     }
 
     /**
