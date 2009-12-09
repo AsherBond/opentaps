@@ -353,9 +353,13 @@ public final class CommonEvents {
 
         try {
 
+            Map<String, Object> jrParameters = (Map<String, Object>) request.getAttribute("jrParameters");
+            if (jrParameters == null) {
+                jrParameters = FastMap.newInstance();
+            }
+
             Map<String, String> parametersType = UtilValidate.isNotEmpty(json) ? (Map) JSONObject.toBean(JSONObject.fromObject(json), Map.class) : FastMap.newInstance();
 
-            Map<String, Object> jrParameters = FastMap.newInstance();
             Map<String, Object> parameters = UtilHttp.getParameterMap(request);
             Set<String> keys = parameters.keySet();
             for (String key : keys) {
