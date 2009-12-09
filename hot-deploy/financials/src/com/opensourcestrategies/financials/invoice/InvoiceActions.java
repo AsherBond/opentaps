@@ -302,7 +302,14 @@ public final class InvoiceActions {
                 ordersList += (", " + id);
             }
             if (orderItems != null && orderItems.size() > 0) {
-                Set<String> orderCorrespondingPOs = Entity.getDistinctFieldValues(String.class, orderItems, OrderItem.Fields.correspondingPoId);
+                // collect unique PO id
+                Set<String> orderCorrespondingPOs = FastSet.<String>newInstance();
+                for (OrderItem orderItem : orderItems) {
+                    String correspondingPoId = orderItem.getCorrespondingPoId();
+                    if (UtilValidate.isNotEmpty(correspondingPoId)) {
+                        orderCorrespondingPOs.add(correspondingPoId);
+                    }
+                }
                 if (UtilValidate.isNotEmpty(orderCorrespondingPOs)) {
                     ordersList += "(";
                     boolean first = true;
