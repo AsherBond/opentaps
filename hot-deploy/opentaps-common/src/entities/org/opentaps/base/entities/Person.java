@@ -142,21 +142,30 @@ fieldMapColumns.put("Person", fields);
    @GeneratedValue(generator="Person_GEN")
    @Id
    @DocumentId
-   @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
    @Boost(10f)
    @Column(name="PARTY_ID")
    private String partyId;
    @Column(name="SALUTATION")
    private String salutation;
-   @Field(index=Index.TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
    @Boost(5f)
    @Column(name="FIRST_NAME")
    private String firstName;
-   @Field(index=Index.TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
    @Boost(5f)
    @Column(name="MIDDLE_NAME")
    private String middleName;
-   @Field(index=Index.TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
    @Boost(5f)
    @Column(name="LAST_NAME")
    private String lastName;
@@ -164,17 +173,23 @@ fieldMapColumns.put("Person", fields);
    private String personalTitle;
    @Column(name="SUFFIX")
    private String suffix;
-   @Field(index=Index.TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
    @Boost(1f)
    @Column(name="NICKNAME")
    private String nickname;
-   @Field(index=Index.TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
    @Boost(5f)
    @Column(name="FIRST_NAME_LOCAL")
    private String firstNameLocal;
    @Column(name="MIDDLE_NAME_LOCAL")
    private String middleNameLocal;
-   @Field(index=Index.TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
    @Boost(5f)
    @Column(name="LAST_NAME_LOCAL")
    private String lastNameLocal;

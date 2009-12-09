@@ -106,15 +106,22 @@ fieldMapColumns.put("SalesOpportunity", fields);
    @GeneratedValue(generator="SalesOpportunity_GEN")
    @Id
    @DocumentId
-   @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
    @Boost(10f)
    @Column(name="SALES_OPPORTUNITY_ID")
    private String salesOpportunityId;
-   @Field(index=Index.TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
    @Boost(5f)
    @Column(name="OPPORTUNITY_NAME")
    private String opportunityName;
-   @Field(index=Index.TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
    @Boost(1f)
    @Column(name="DESCRIPTION")
    private String description;
@@ -132,7 +139,10 @@ fieldMapColumns.put("SalesOpportunity", fields);
    private String dataSourceId;
    @Column(name="ESTIMATED_CLOSE_DATE")
    private Timestamp estimatedCloseDate;
-   @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
    @Boost(1f)
    @Column(name="OPPORTUNITY_STAGE_ID")
    private String opportunityStageId;

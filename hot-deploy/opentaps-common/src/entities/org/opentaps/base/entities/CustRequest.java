@@ -128,7 +128,10 @@ fieldMapColumns.put("CustRequest", fields);
    @GeneratedValue(generator="CustRequest_GEN")
    @Id
    @DocumentId
-   @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
    @Boost(10f)
    @Column(name="CUST_REQUEST_ID")
    private String custRequestId;
@@ -146,11 +149,15 @@ fieldMapColumns.put("CustRequest", fields);
    private Timestamp custRequestDate;
    @Column(name="RESPONSE_REQUIRED_DATE")
    private Timestamp responseRequiredDate;
-   @Field(index=Index.TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
    @Boost(5f)
    @Column(name="CUST_REQUEST_NAME")
    private String custRequestName;
-   @Field(index=Index.TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
    @Boost(1f)
    @Column(name="DESCRIPTION")
    private String description;

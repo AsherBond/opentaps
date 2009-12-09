@@ -146,7 +146,13 @@ fieldMapColumns.put("${name}", fields);
 </#if>        
     </#if>
 <#if !isView>
-<#if indexWeights.containsKey(field)>   @Field(index=Index.${tokenTypes.get(field)}, store=Store.YES)
+<#if indexWeights.containsKey(field)>   @org.hibernate.search.annotations.Fields( {
+     <#if "UN_TOKENIZED" == tokenTypes.get(field)>
+       <#-- if the field is set to UN_TOKENIZED also index as TOKENIZED to allow sort and lower case search -->
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     </#if>
+     @Field(index=Index.${tokenTypes.get(field)}, store=Store.YES)
+   } )
    @Boost(${indexWeights.get(field)}f)
 </#if>
    @Column(name="${columnNames.get(field)}")

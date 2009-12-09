@@ -66,15 +66,7 @@ public class HibernateSearchRepository extends Repository implements SearchRepos
      * @return the Lucene query string
      */
     private String makeQueryString(String queryString, String placeholderRegex, String keywords) {
-        // note: this supports both case sensitive and case insensitive fields
-        //  for example the UN_TOKENIZED fields may use Upper Case values and are indexed case sensitively
-        //  so we have a way to match them here
-        return
-            // to match UN_TOKENIZED fields
-            queryString.replaceAll(placeholderRegex, "(\"" + QueryParser.escape(keywords) + "\")")
-            + " "
-            // to match TOKENIZED fields
-            + queryString.replaceAll(placeholderRegex, "(\"" + QueryParser.escape(keywords.toLowerCase()) + "\")");
+        return queryString.replaceAll(placeholderRegex, "(\"" + QueryParser.escape(keywords.toLowerCase()) + "\")");
     }
 
     /** {@inheritDoc} */

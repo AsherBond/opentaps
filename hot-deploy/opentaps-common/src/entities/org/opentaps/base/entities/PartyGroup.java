@@ -105,11 +105,16 @@ fieldMapColumns.put("PartyGroup", fields);
    @GeneratedValue(generator="PartyGroup_GEN")
    @Id
    @DocumentId
-   @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
    @Boost(10f)
    @Column(name="PARTY_ID")
    private String partyId;
-   @Field(index=Index.TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
    @Boost(5f)
    @Column(name="GROUP_NAME")
    private String groupName;
@@ -123,7 +128,9 @@ fieldMapColumns.put("PartyGroup", fields);
    private Long numEmployees;
    @Column(name="TICKER_SYMBOL")
    private String tickerSymbol;
-   @Field(index=Index.TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
    @Boost(1f)
    @Column(name="COMMENTS")
    private String comments;

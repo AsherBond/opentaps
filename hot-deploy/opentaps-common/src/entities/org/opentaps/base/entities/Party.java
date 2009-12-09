@@ -103,11 +103,17 @@ fieldMapColumns.put("Party", fields);
    @GeneratedValue(generator="Party_GEN")
    @Id
    @DocumentId
-   @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
    @Boost(10f)
    @Column(name="PARTY_ID")
    private String partyId;
-   @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
    @Boost(1f)
    @Column(name="PARTY_TYPE_ID")
    private String partyTypeId;
@@ -115,7 +121,9 @@ fieldMapColumns.put("Party", fields);
    private String externalId;
    @Column(name="PREFERRED_CURRENCY_UOM_ID")
    private String preferredCurrencyUomId;
-   @Field(index=Index.TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
    @Boost(1f)
    @Column(name="DESCRIPTION")
    private String description;

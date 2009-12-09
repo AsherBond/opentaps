@@ -136,21 +136,32 @@ fieldMapColumns.put("OrderHeader", fields);
    @GeneratedValue(generator="OrderHeader_GEN")
    @Id
    @DocumentId
-   @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
    @Boost(10f)
    @Column(name="ORDER_ID")
    private String orderId;
-   @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
    @Boost(1f)
    @Column(name="ORDER_TYPE_ID")
    private String orderTypeId;
-   @Field(index=Index.TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
    @Boost(5f)
    @Column(name="ORDER_NAME")
    private String orderName;
    @Column(name="EXTERNAL_ID")
    private String externalId;
-   @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
    @Boost(1f)
    @Column(name="SALES_CHANNEL_ENUM_ID")
    private String salesChannelEnumId;
@@ -162,7 +173,10 @@ fieldMapColumns.put("OrderHeader", fields);
    private Timestamp entryDate;
    @Column(name="VISIT_ID")
    private String visitId;
-   @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
    @Boost(1f)
    @Column(name="STATUS_ID")
    private String statusId;
