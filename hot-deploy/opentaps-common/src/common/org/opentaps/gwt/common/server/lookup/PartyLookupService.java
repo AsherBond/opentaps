@@ -107,7 +107,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
      * @return the resulting JSON response
      * @throws InfrastructureException if an error occurs
      */
-    public static String f(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
+    public static String findContacts(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
         InputProviderInterface provider = new HttpInputProvider(request);
         JsonResponse json = new JsonResponse(response);
         PartyLookupService service = new PartyLookupService(provider);
