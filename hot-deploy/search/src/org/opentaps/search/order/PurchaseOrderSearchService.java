@@ -27,6 +27,8 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.constants.OrderTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.OrderHeader;
+import org.opentaps.base.entities.OrderRole;
+import org.opentaps.base.entities.OrderRolePk;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.search.SearchDomainInterface;
@@ -46,7 +48,7 @@ public class PurchaseOrderSearchService extends HibernateSearchService implement
 
     /** Common set of class to query for Party related search. */
     public static final Set<Class<?>> ORDER_CLASSES = new HashSet<Class<?>>(Arrays.asList(
-            OrderHeader.class
+            OrderRole.class
         ));
 
     private List<Order> orders = null;
@@ -76,7 +78,7 @@ public class PurchaseOrderSearchService extends HibernateSearchService implement
      */
     public static void makePurchaseOrderQuery(StringBuilder sb) {
         for (String f : Arrays.asList(OrderHeader.Fields.orderId.name(), OrderHeader.Fields.orderName.name())) {
-            sb.append(f).append(":").append(HibernateSearchRepository.DEFAULT_PLACEHOLDER).append(" ");
+            sb.append("orderHeader.").append(f).append(":").append(HibernateSearchRepository.DEFAULT_PLACEHOLDER).append(" ");
         }
     }
 
@@ -105,9 +107,9 @@ public class PurchaseOrderSearchService extends HibernateSearchService implement
             Set<String> orderIds = new HashSet<String>();
             for (SearchResult o : results) {
                 Class<?> c = o.getResultClass();
-                if (c.equals(OrderHeader.class)) {
-                    String pk = (String) o.getResultPk();
-                    orderIds.add(pk);
+                if (c.equals(OrderRole.class)) {
+                    OrderRolePk pk = (OrderRolePk) o.getResultPk();
+                    orderIds.add(pk.getOrderId());
                 }
             }
 

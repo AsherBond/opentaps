@@ -22,11 +22,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.constants.OrderTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.OrderHeader;
+import org.opentaps.base.entities.OrderRole;
+import org.opentaps.base.entities.OrderRolePk;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.search.SearchDomainInterface;
@@ -46,7 +49,7 @@ public class SalesOrderSearchService extends HibernateSearchService implements S
 
     /** Common set of class to query for Party related search. */
     public static final Set<Class<?>> ORDER_CLASSES = new HashSet<Class<?>>(Arrays.asList(
-            OrderHeader.class
+            OrderRole.class
         ));
 
     private List<Order> orders = null;
@@ -77,7 +80,7 @@ public class SalesOrderSearchService extends HibernateSearchService implements S
      */
     public static void makeSalesOrderQuery(StringBuilder sb) {
         for (String f : Arrays.asList(OrderHeader.Fields.orderId.name(), OrderHeader.Fields.orderName.name())) {
-            sb.append(f).append(":").append(HibernateSearchRepository.DEFAULT_PLACEHOLDER).append(" ");
+            sb.append("orderHeader.").append(f).append(":").append(HibernateSearchRepository.DEFAULT_PLACEHOLDER).append(" ");
         }
     }
 
@@ -106,13 +109,14 @@ public class SalesOrderSearchService extends HibernateSearchService implements S
             Set<String> orderIds = new HashSet<String>();
             for (SearchResult o : results) {
                 Class<?> c = o.getResultClass();
-                if (c.equals(OrderHeader.class)) {
-                    String pk = (String) o.getResultPk();
-                    orderIds.add(pk);
+                if (c.equals(OrderRole.class)) {
+                    OrderRolePk pk = (OrderRolePk) o.getResultPk();
+                    orderIds.add(pk.getOrderId());
                 }
             }
 
             if (!orderIds.isEmpty()) {
+                Debug.logInfo("Found sales orders [" + orderIds + "]", "");
                 orders = orderRepository.findList(Order.class, EntityCondition.makeCondition(Order.Fields.orderId.name(), EntityOperator.IN, orderIds));
             } else {
                 orders = new ArrayList<Order>();

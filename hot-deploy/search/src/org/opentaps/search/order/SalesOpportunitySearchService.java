@@ -26,6 +26,8 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.constants.SalesOpportunityStageConstants;
 import org.opentaps.base.entities.SalesOpportunity;
+import org.opentaps.base.entities.SalesOpportunityRole;
+import org.opentaps.base.entities.SalesOpportunityRolePk;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.search.SearchDomainInterface;
 import org.opentaps.domain.search.SearchRepositoryInterface;
@@ -33,8 +35,8 @@ import org.opentaps.domain.search.SearchResult;
 import org.opentaps.domain.search.order.SalesOpportunitySearchServiceInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
-import org.opentaps.search.HibernateSearchService;
 import org.opentaps.search.HibernateSearchRepository;
+import org.opentaps.search.HibernateSearchService;
 import org.opentaps.search.party.PartySearch;
 
 /**
@@ -44,7 +46,7 @@ public class SalesOpportunitySearchService extends HibernateSearchService implem
 
     /** Common set of class to query for Sales Opportunity related search. */
     public static final Set<Class<?>> SALES_OPPORTUNITY_CLASSES = new HashSet<Class<?>>(Arrays.asList(
-            SalesOpportunity.class
+            SalesOpportunityRole.class
         ));
 
     private List<SalesOpportunity> salesOpportunities = null;
@@ -72,7 +74,7 @@ public class SalesOpportunitySearchService extends HibernateSearchService implem
      */
     public static void makeSalesOpportunityQuery(StringBuilder sb) {
         for (String f : Arrays.asList(SalesOpportunity.Fields.salesOpportunityId.name(), SalesOpportunity.Fields.opportunityName.name(), SalesOpportunity.Fields.description.name())) {
-            sb.append(f).append(":").append(HibernateSearchRepository.DEFAULT_PLACEHOLDER).append(" ");
+            sb.append("salesOpportunity.").append(f).append(":").append(HibernateSearchRepository.DEFAULT_PLACEHOLDER).append(" ");
         }
     }
 
@@ -101,9 +103,9 @@ public class SalesOpportunitySearchService extends HibernateSearchService implem
             Set<String> salesOpportunityIds = new HashSet<String>();
             for (SearchResult o : results) {
                 Class<?> c = o.getResultClass();
-                if (c.equals(SalesOpportunity.class)) {
-                    String pk = (String) o.getResultPk();
-                    salesOpportunityIds.add(pk);
+                if (c.equals(SalesOpportunityRole.class)) {
+                    SalesOpportunityRolePk pk = (SalesOpportunityRolePk) o.getResultPk();
+                    salesOpportunityIds.add(pk.getSalesOpportunityId());
                 }
             }
 

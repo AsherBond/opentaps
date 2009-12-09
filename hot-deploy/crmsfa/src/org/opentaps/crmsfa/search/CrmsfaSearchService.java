@@ -218,15 +218,12 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
         if (searchLeads) {
             sb.append(leadSearch.getQueryString());
         }
-
         if (searchSalesOpportunities) {
             sb.append(salesOpportunitySearch.getQueryString());
         }
-
         if (searchSalesOrders) {
             sb.append(salesOrderSearch.getQueryString());
         }
-
         if (searchCases) {
             sb.append(caseSearch.getQueryString());
         }

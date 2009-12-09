@@ -26,6 +26,7 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.entities.CustRequest;
 import org.opentaps.base.entities.CustRequestRole;
+import org.opentaps.base.entities.CustRequestRolePk;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.domain.search.SearchDomainInterface;
 import org.opentaps.domain.search.SearchRepositoryInterface;
@@ -36,6 +37,7 @@ import org.opentaps.foundation.service.ServiceException;
 import org.opentaps.search.HibernateSearchRepository;
 import org.opentaps.search.HibernateSearchService;
 import org.opentaps.search.party.PartySearch;
+import org.ofbiz.base.util.Debug;
 
 /**
  * The implementation of the Case search service.
@@ -72,7 +74,7 @@ public class CaseSearchService extends HibernateSearchService implements CaseSea
      */
     public static void makeCaseQuery(StringBuilder sb) {
         for (String f : Arrays.asList(CustRequest.Fields.custRequestId.name(), CustRequest.Fields.custRequestName.name(), CustRequest.Fields.description.name())) {
-            sb.append(f).append(":").append(HibernateSearchRepository.DEFAULT_PLACEHOLDER).append(" ");
+            sb.append("custRequest.").append(f).append(":").append(HibernateSearchRepository.DEFAULT_PLACEHOLDER).append(" ");
         }
     }
 
@@ -101,13 +103,14 @@ public class CaseSearchService extends HibernateSearchService implements CaseSea
             Set<String> caseIds = new HashSet<String>();
             for (SearchResult o : results) {
                 Class<?> c = o.getResultClass();
-                if (c.equals(CustRequest.class)) {
-                    String pk = (String) o.getResultPk();
-                    caseIds.add(pk);
+                if (c.equals(CustRequestRole.class)) {
+                    CustRequestRolePk pk = (CustRequestRolePk) o.getResultPk();
+                    caseIds.add(pk.getCustRequestId());
                 }
             }
 
             if (!caseIds.isEmpty()) {
+                Debug.logInfo("Found cases [" + caseIds + "]", "");
                 cases = repository.findList(CustRequest.class, EntityCondition.makeCondition(CustRequest.Fields.custRequestId.name(), EntityOperator.IN, caseIds));
             } else {
                 cases = new ArrayList<CustRequest>();
