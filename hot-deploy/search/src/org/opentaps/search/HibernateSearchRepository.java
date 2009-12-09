@@ -80,7 +80,7 @@ public class HibernateSearchRepository extends Repository implements SearchRepos
     /** {@inheritDoc} */
     public void searchInEntities(Set<Class<?>> entityClasses, String queryString, int pageStart, int pageSize) throws RepositoryException {
 
-        Debug.logInfo("searchInEntities: [" + entityClasses + "] query [" + queryString + "]", MODULE);
+        Debug.logInfo("searchInEntities: [" + entityClasses + "] query [" + queryString + "] page start [" + pageStart + "] pageSize [" + pageSize + "]", MODULE);
         int pageEnd = pageStart + pageSize;
         Session session = null;
         FullTextSession fullTextSession = null;
@@ -118,7 +118,7 @@ public class HibernateSearchRepository extends Repository implements SearchRepos
                 Debug.logInfo(sb.toString(), MODULE);
                 i++;
 
-                results.add(new SearchResult((Class<?>) o[0], (Object) o[1]));
+                results.add(new SearchResult((Class<?>) o[0], o[1]));
 
             }
             Debug.logInfo("------- end of results from " + pageStart + " to " + pageEnd + " out of " + resultSize + " -------", MODULE);
