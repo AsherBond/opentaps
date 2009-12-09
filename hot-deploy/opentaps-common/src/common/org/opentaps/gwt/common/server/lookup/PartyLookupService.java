@@ -390,7 +390,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         return sb.toString();
     }
 
-    private <T extends EntityInterface> List<T> findParties(Class<T> entity, EntityCondition roleCondition) {
+    public static void prepareFindParties(EntityLookupAndSuggestService service) {
 
         /** Phone number custom formatter. */
         class PhoneNumberSortable extends ConvertMapToString implements ICompositeValue {
@@ -467,11 +467,15 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         // keep rules for calculated fields
         Map<String, ConvertMapToString> calcField = FastMap.<String, ConvertMapToString>newInstance();
         calcField.put(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER, new PhoneNumberSortable());
-        makeCalculatedField(calcField);
+        service.makeCalculatedField(calcField);
         calcField.clear();
         calcField.put(PartyLookupConfiguration.INOUT_FRIENDLY_PARTY_NAME, new FriendlyPartyNameSortable());
-        makeCalculatedField(calcField);
+        service.makeCalculatedField(calcField);
+    }
 
+    private <T extends EntityInterface> List<T> findParties(Class<T> entity, EntityCondition roleCondition) {
+
+        prepareFindParties(this);
         EntityCondition condition = roleCondition;
 
         // select parties assigned to current user or his team according to view preferences.

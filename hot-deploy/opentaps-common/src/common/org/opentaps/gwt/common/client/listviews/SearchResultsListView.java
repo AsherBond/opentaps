@@ -32,14 +32,14 @@ import org.opentaps.gwt.common.client.lookup.configuration.SearchLookupConfigura
  * Application specific search widgets should override <code>getType</code> for localization
  * and <code>getViewUrl</code> to provide links to the results view page.
  */
-public class SearchResultsListView extends EntityListView {
+public class SearchResultsListView extends BaseSearchResultsListView {
 
     /**
      * Default constructor.
      * @param url the URL of the search service
      */
     public SearchResultsListView(String url) {
-        super(null);
+        super();
         setDefaultPageSize(50);
 
         Renderer renderer = new Renderer() {
@@ -69,16 +69,6 @@ public class SearchResultsListView extends EntityListView {
 
         setColumnHidden(SearchLookupConfiguration.RESULT_TYPE, true);
         setHideColumnHeader(true);
-    }
-
-    /**
-     * Perform the search.
-     * @param query a <code>String</code> value
-     */
-    public void search(String query) {
-        setFilter(UtilLookup.PARAM_SUGGEST_QUERY, query);
-        applyFilters();
-        getView().setEmptyText(UtilUi.MSG.searchNoResults(query));
     }
 
     /**

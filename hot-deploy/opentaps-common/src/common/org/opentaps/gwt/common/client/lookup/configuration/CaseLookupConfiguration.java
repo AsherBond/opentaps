@@ -29,6 +29,7 @@ public abstract class CaseLookupConfiguration {
     private CaseLookupConfiguration() { }
 
     public static final String URL_FIND_CASES = "gwtFindCases";
+    public static final String URL_SEARCH_CASES = "gwtSearchCases";
 
     public static final String IN_RESPONSIBILTY = "MyOrTeamResponsibility";
     public static final String MY_VALUES = "MY_VALUES";

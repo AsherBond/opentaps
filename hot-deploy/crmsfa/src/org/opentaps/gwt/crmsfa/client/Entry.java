@@ -38,9 +38,14 @@ import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.FindContactsForm;
 import org.opentaps.gwt.common.client.form.FormNotificationInterface;
 import org.opentaps.gwt.common.client.form.LookupContactsWindow;
+import org.opentaps.gwt.common.client.form.MultiSearchForm;
 import org.opentaps.gwt.common.client.form.OrderItemsEditable;
 import org.opentaps.gwt.common.client.form.SearchForm;
+import org.opentaps.gwt.common.client.listviews.AccountSearchListView;
+import org.opentaps.gwt.common.client.listviews.CaseSearchListView;
 import org.opentaps.gwt.common.client.listviews.ContactListView;
+import org.opentaps.gwt.common.client.listviews.ContactSearchListView;
+import org.opentaps.gwt.common.client.listviews.LeadSearchListView;
 import org.opentaps.gwt.common.client.listviews.OrderItemsEditableListView.OrderType;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 import org.opentaps.gwt.crmsfa.client.accounts.form.AccountContactsSubview;
@@ -95,6 +100,7 @@ public class Entry extends BaseEntry {
     private FindCasesForm myCasesForm;
 
     private SearchForm crmsfaSearch;
+    private MultiSearchForm multiCrmsfaSearch;
 
     // CRMSFA/Contacts identifiers
     private static final String MY_CONTACTS_ID = "myContacts";
@@ -163,8 +169,15 @@ public class Entry extends BaseEntry {
         loadCasesWidgets();
 
         if (RootPanel.get(CRMSFA_SEARCH_ID) != null) {
-            crmsfaSearch = new SearchForm(new CrmsfaSearchResultsListView());
-            RootPanel.get(CRMSFA_SEARCH_ID).add(crmsfaSearch);
+            multiCrmsfaSearch = new MultiSearchForm();
+            multiCrmsfaSearch.addResultsGrid(new AccountSearchListView());
+            multiCrmsfaSearch.addResultsGrid(new ContactSearchListView());
+            multiCrmsfaSearch.addResultsGrid(new LeadSearchListView());
+            multiCrmsfaSearch.addResultsGrid(new CaseSearchListView());
+            // That's for a all in one simple search
+            //crmsfaSearch = new SearchForm(new CrmsfaSearchResultsListView());
+            //RootPanel.get(CRMSFA_SEARCH_ID).add(crmsfaSearch);
+            RootPanel.get(CRMSFA_SEARCH_ID).add(multiCrmsfaSearch);
         }
     }
 

@@ -24,7 +24,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.entities.CustRequest;
+import org.opentaps.base.entities.CustRequestAndPartyRelationshipAndRole;
+import org.opentaps.base.entities.PartyFromByRelnAndContactInfoAndPartyClassification;
 import org.opentaps.base.entities.SalesOpportunity;
 import org.opentaps.crmsfa.search.CrmsfaSearchService;
 import org.opentaps.domain.order.Order;
@@ -32,33 +36,56 @@ import org.opentaps.domain.party.Account;
 import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.Lead;
 import org.opentaps.domain.party.Party;
+import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
+import org.opentaps.gwt.common.client.lookup.configuration.CaseLookupConfiguration;
+import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 import org.opentaps.gwt.common.client.lookup.configuration.SearchLookupConfiguration;
 import org.opentaps.gwt.common.server.HttpInputProvider;
 import org.opentaps.gwt.common.server.InputProviderInterface;
 import org.opentaps.gwt.common.server.lookup.EntityLookupAndSuggestService;
 import org.opentaps.gwt.common.server.lookup.JsonResponse;
+import org.opentaps.gwt.common.server.lookup.PartyLookupService;
 
 /**
  * The RPC service used to CRMSFA search results.
  */
-public class CrmsfaSearchLookupService extends EntityLookupAndSuggestService {
+public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestService {
 
     private static final String MODULE = CrmsfaSearchLookupService.class.getName();
 
     /**
      * Creates a new <code>CrmsfaSearchService</code> instance.
      * @param provider an <code>InputProviderInterface</code> value
+     * @param fields the list of fields that will be in the response
      */
-    public CrmsfaSearchLookupService(InputProviderInterface provider) {
-        super(provider, null);
+    private CrmsfaSearchLookupService(InputProviderInterface provider, List<String> fields) {
+        super(provider, fields);
     }
 
     /**
-     * AJAX event to suggest Accounts.
+     * Creates a new <code>CrmsfaSearchService</code> instance for searching parties.
+     * @param provider an <code>InputProviderInterface</code> value
+     * @return a <code>CrmsfaSearchLookupService</code> value
+     */
+    public static CrmsfaSearchLookupService makePartySearchService(InputProviderInterface provider) {
+        return new CrmsfaSearchLookupService(provider, PartyLookupConfiguration.LIST_OUT_FIELDS);
+    }
+
+    /**
+     * Creates a new <code>CrmsfaSearchService</code> instance for searching cases.
+     * @param provider an <code>InputProviderInterface</code> value
+     * @return a <code>CrmsfaSearchLookupService</code> value
+     */
+    public static CrmsfaSearchLookupService makeCaseSearchService(InputProviderInterface provider) {
+        return new CrmsfaSearchLookupService(provider, CaseLookupConfiguration.LIST_OUT_FIELDS);
+    }
+
+    /**
+     * AJAX event to perform a global CRMSFA search.
      * @param request a <code>HttpServletRequest</code> value
      * @param response a <code>HttpServletResponse</code> value
      * @return the resulting JSON response
@@ -67,9 +94,177 @@ public class CrmsfaSearchLookupService extends EntityLookupAndSuggestService {
     public static String crmsfaSearch(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
         InputProviderInterface provider = new HttpInputProvider(request);
         JsonResponse json = new JsonResponse(response);
-        CrmsfaSearchLookupService service = new CrmsfaSearchLookupService(provider);
+        CrmsfaSearchLookupService service = CrmsfaSearchLookupService.makePartySearchService(provider);
         service.search();
         return json.makeSuggestResponse(SearchLookupConfiguration.RESULT_ID, service);
+    }
+
+    /**
+     * AJAX event to search Accounts.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the resulting JSON response
+     * @throws InfrastructureException if an error occurs
+     */
+    public static String crmsfaSearchAccounts(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
+        InputProviderInterface provider = new HttpInputProvider(request);
+        JsonResponse json = new JsonResponse(response);
+        CrmsfaSearchLookupService service = CrmsfaSearchLookupService.makePartySearchService(provider);
+        service.searchAccounts();
+        return json.makeLookupResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service, request.getSession(true).getServletContext());
+    }
+
+    /**
+     * AJAX event to search Contacts.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the resulting JSON response
+     * @throws InfrastructureException if an error occurs
+     */
+    public static String crmsfaSearchContacts(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
+        InputProviderInterface provider = new HttpInputProvider(request);
+        JsonResponse json = new JsonResponse(response);
+        CrmsfaSearchLookupService service = CrmsfaSearchLookupService.makePartySearchService(provider);
+        service.searchContacts();
+        return json.makeLookupResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service, request.getSession(true).getServletContext());
+    }
+
+    /**
+     * AJAX event to search Leads.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the resulting JSON response
+     * @throws InfrastructureException if an error occurs
+     */
+    public static String crmsfaSearchLeads(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
+        InputProviderInterface provider = new HttpInputProvider(request);
+        JsonResponse json = new JsonResponse(response);
+        CrmsfaSearchLookupService service = CrmsfaSearchLookupService.makePartySearchService(provider);
+        service.searchLeads();
+        return json.makeLookupResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service, request.getSession(true).getServletContext());
+    }
+
+    /**
+     * AJAX event to search Cases.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the resulting JSON response
+     * @throws InfrastructureException if an error occurs
+     */
+    public static String crmsfaSearchCases(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
+        InputProviderInterface provider = new HttpInputProvider(request);
+        JsonResponse json = new JsonResponse(response);
+        CrmsfaSearchLookupService service = CrmsfaSearchLookupService.makeCaseSearchService(provider);
+        service.searchCases();
+        return json.makeLookupResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service, request.getSession(true).getServletContext());
+    }
+
+    public List<CustRequestAndPartyRelationshipAndRole> searchCases() {
+
+        if (getSuggestQuery() == null || getSuggestQuery().trim().equals("")) {
+            List<CustRequestAndPartyRelationshipAndRole> res = new ArrayList<CustRequestAndPartyRelationshipAndRole>();
+            setResults(res);
+            return res;
+        }
+
+        try {
+            CrmsfaSearchService crmSearch = new CrmsfaSearchService();
+            // set options on what is searched
+            crmSearch.setSearchCases(true);
+            prepareSearchParties(crmSearch);
+            return findList(CustRequestAndPartyRelationshipAndRole.class,
+                        EntityCondition.makeCondition(CustRequestAndPartyRelationshipAndRole.Fields.custRequestId.name(),
+                                                      EntityOperator.IN,
+                                                      Entity.getDistinctFieldValues(String.class, crmSearch.getCases(), CustRequest.Fields.custRequestId)));
+        } catch (ServiceException e) {
+            storeException(e);
+            return null;
+        }
+    }
+
+    public List<PartyFromByRelnAndContactInfoAndPartyClassification> searchAccounts() {
+
+        if (getSuggestQuery() == null || getSuggestQuery().trim().equals("")) {
+            List<PartyFromByRelnAndContactInfoAndPartyClassification> res = new ArrayList<PartyFromByRelnAndContactInfoAndPartyClassification>();
+            setResults(res);
+            return res;
+        }
+
+        PartyLookupService.prepareFindParties(this);
+
+        try {
+            CrmsfaSearchService crmSearch = new CrmsfaSearchService();
+            // set options on what is searched
+            crmSearch.setSearchAccounts(true);
+            prepareSearchParties(crmSearch);
+            return extractPartiesResults(crmSearch.getAccounts());
+        } catch (ServiceException e) {
+            storeException(e);
+            return null;
+        }
+    }
+
+    public List<PartyFromByRelnAndContactInfoAndPartyClassification> searchContacts() {
+
+        if (getSuggestQuery() == null || getSuggestQuery().trim().equals("")) {
+            List<PartyFromByRelnAndContactInfoAndPartyClassification> res = new ArrayList<PartyFromByRelnAndContactInfoAndPartyClassification>();
+            setResults(res);
+            return res;
+        }
+
+        PartyLookupService.prepareFindParties(this);
+
+        try {
+            CrmsfaSearchService crmSearch = new CrmsfaSearchService();
+            // set options on what is searched
+            crmSearch.setSearchContacts(true);
+            prepareSearchParties(crmSearch);
+            return extractPartiesResults(crmSearch.getContacts());
+        } catch (ServiceException e) {
+            storeException(e);
+            return null;
+        }
+    }
+
+    public List<PartyFromByRelnAndContactInfoAndPartyClassification> searchLeads() {
+
+        if (getSuggestQuery() == null || getSuggestQuery().trim().equals("")) {
+            List<PartyFromByRelnAndContactInfoAndPartyClassification> res = new ArrayList<PartyFromByRelnAndContactInfoAndPartyClassification>();
+            setResults(res);
+            return res;
+        }
+
+        PartyLookupService.prepareFindParties(this);
+
+        try {
+            CrmsfaSearchService crmSearch = new CrmsfaSearchService();
+            // set options on what is searched
+            crmSearch.setSearchLeads(true);
+            prepareSearchParties(crmSearch);
+            return extractPartiesResults(crmSearch.getLeads());
+        } catch (ServiceException e) {
+            storeException(e);
+            return null;
+        }
+    }
+
+    private void prepareSearchParties(CrmsfaSearchService crmSearch) throws ServiceException {
+        // set the common parameters
+        crmSearch.setInfrastructure(getProvider().getInfrastructure());
+        crmSearch.setUser(getProvider().getUser());
+        crmSearch.setKeywords(getSuggestQuery());
+        // pass the pagination parameters to the service
+        crmSearch.setPageStart(getPager().getPageStart());
+        crmSearch.setPageSize(getPager().getPageSize());
+        crmSearch.search();
+    }
+
+    private List<PartyFromByRelnAndContactInfoAndPartyClassification> extractPartiesResults(List<? extends Party> parties) {
+        // convert the list of Parties to PartyFromByRelnAndContactInfoAndPartyClassification
+        return findList(PartyFromByRelnAndContactInfoAndPartyClassification.class,
+                        EntityCondition.makeCondition(PartyFromByRelnAndContactInfoAndPartyClassification.Fields.partyId.name(),
+                                                      EntityOperator.IN,
+                                                      Entity.getDistinctFieldValues(String.class, parties, Party.Fields.partyId)));
     }
 
     @Override

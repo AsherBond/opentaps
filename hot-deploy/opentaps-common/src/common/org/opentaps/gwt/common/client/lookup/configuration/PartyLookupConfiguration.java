@@ -39,6 +39,11 @@ public abstract class PartyLookupConfiguration {
     public static final String URL_SUGGEST_LEADS = "gwtSuggestLeads";
     public static final String URL_SUGGEST_ACCOUNTS_OR_LEADS = "gwtSuggestAccountsOrLeads";
     public static final String URL_SUGGEST_ACCOUNTS_OR_QUALIFIED_LEADS = "gwtSuggestAccountsOrQualifiedLeads";
+    public static final String URL_SEARCH_CONTACTS = "gwtSearchContacts";
+    public static final String URL_SEARCH_ACCOUNTS = "gwtSearchAccounts";
+    public static final String URL_SEARCH_LEADS = "gwtSearchLeads";
+    public static final String URL_SEARCH_PARTNERS = "gwtSearchPartners";
+    public static final String URL_SEARCH_SUPPLIERS = "gwtSearchSuppliers";
 
     public static final String IN_RESPONSIBILTY = "MyOrTeamResponsibility";
     public static final String MY_VALUES = "MY_VALUES";

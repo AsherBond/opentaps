@@ -16,37 +16,39 @@
  */
 package org.opentaps.gwt.common.client.form;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.gwtext.client.widgets.Button;
 import com.gwtext.client.widgets.Panel;
 import com.gwtext.client.widgets.Window;
 import com.gwtext.client.widgets.form.TextField;
-import com.gwtext.client.widgets.layout.FitLayout;
 import com.gwtext.client.widgets.layout.HorizontalLayout;
+import com.gwtext.client.widgets.layout.RowLayout;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.base.BaseFormPanel;
-import org.opentaps.gwt.common.client.listviews.SearchResultsListView;
+import org.opentaps.gwt.common.client.listviews.EntityListView;
+import org.opentaps.gwt.common.client.listviews.SearchResultsListViewInterface;
 import org.opentaps.gwt.common.client.lookup.configuration.SearchLookupConfiguration;
 
 /**
  * A generic search form.
- * This contains a simple text input and a search button.
- * Results are presented in a popup window using the given <code>SearchResultsListView</code>
- *  instance (which does the application specific formatting of the results).
+ * This contains a simple text input and a searchhbutton.
+ * Results are presented in a popup window with one result grid by search type.
  */
-public class SearchForm extends BaseFormPanel {
+public class MultiSearchForm extends BaseFormPanel {
 
     private final Window win;
     private final TextField searchInput;
-    private SearchResultsListView results;
+    private List<SearchResultsListViewInterface> resultGrids = new ArrayList<SearchResultsListViewInterface>();
 
-    private static final int RESULT_HEIGHT = 600;
-    private static final int RESULT_WIDTH = 800;
+    private static final int RESULT_HEIGHT = 700;
+    private static final int RESULT_WIDTH = 900;
 
     /**
      * Default constructor.
-     * @param resultsListView the instance of the results list view to use
      */
-    public SearchForm(SearchResultsListView resultsListView) {
+    public MultiSearchForm() {
         super();
         setBorder(false);
         setHideLabels(true);
@@ -71,17 +73,18 @@ public class SearchForm extends BaseFormPanel {
         win.setModal(false);
         win.setResizable(true);
         win.setMinHeight(RESULT_HEIGHT);
-        win.setLayout(new FitLayout());
+        win.setWidth(RESULT_WIDTH);
+        win.setLayout(new RowLayout());
         win.setCloseAction(Window.HIDE);
+    }
 
-        results = resultsListView;
-        results.setFrame(false);
-        results.setAutoHeight(false);
-        results.setCollapsible(false);
-        results.setHeader(false);
-        results.setBorder(false);
-        results.setWidth(RESULT_WIDTH);
-        win.add(results);
+    public <T extends EntityListView & SearchResultsListViewInterface> void addResultsGrid(T grid) {
+        resultGrids.add(grid);
+        grid.setFrame(false);
+        grid.setAutoHeight(false);
+        grid.setBorder(false);
+        grid.setWidth(RESULT_WIDTH);
+        win.add(grid);
     }
 
     @Override public void submit() {
@@ -94,7 +97,9 @@ public class SearchForm extends BaseFormPanel {
         }
         win.show();
         win.center();
-        results.search(searchInput.getText());
+        for (SearchResultsListViewInterface grid : resultGrids) {
+            grid.search(searchInput.getText());
+        }
     }
 
 }

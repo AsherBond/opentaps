@@ -710,6 +710,42 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>
+    <request-map uri="gwtSearchAccounts">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.crmsfa.server.search.CrmsfaSearchLookupService" invoke="crmsfaSearchAccounts"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtSearchContacts">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.crmsfa.server.search.CrmsfaSearchLookupService" invoke="crmsfaSearchContacts"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtSearchLeads">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.crmsfa.server.search.CrmsfaSearchLookupService" invoke="crmsfaSearchLeads"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtSearchCases">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.crmsfa.server.search.CrmsfaSearchLookupService" invoke="crmsfaSearchCases"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtSearchSalesOpportunities">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.crmsfa.server.search.CrmsfaSearchLookupService" invoke="crmsfaSearchSalesOpportunities"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtSearchSalesOrders">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.crmsfa.server.search.CrmsfaSearchLookupService" invoke="crmsfaSearchSalesOrders"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
     <!-- AJAX request for quick creation of Leads -->
     <request-map uri="createContactJSON">
         <security https="true" auth="true"/>

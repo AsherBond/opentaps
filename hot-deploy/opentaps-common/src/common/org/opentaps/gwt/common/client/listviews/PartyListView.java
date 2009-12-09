@@ -119,7 +119,7 @@ public abstract class PartyListView extends EntityListView {
     /**
      * Set <code>ignoreLinkColumn</code> value.
      * Use when we don't need hyperlinks in ID or name columns, e.g. the list view is
-     * embed in another GWT window and you want to handle selection in listener.  
+     * embed in another GWT window and you want to handle selection in listener.
      * @param flag new value
      */
     public void setIgnoreLinkColumn(boolean flag) {
