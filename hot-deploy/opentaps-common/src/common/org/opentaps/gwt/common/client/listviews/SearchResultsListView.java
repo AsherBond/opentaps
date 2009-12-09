@@ -40,7 +40,6 @@ public class SearchResultsListView extends EntityListView {
      */
     public SearchResultsListView(String url) {
         super(null);
-        setHideColumnHeader(true);
 
         Renderer renderer = new Renderer() {
                 public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
@@ -48,16 +47,21 @@ public class SearchResultsListView extends EntityListView {
                 }
             };
 
+        makeColumn("Type", new StringFieldDef(SearchLookupConfiguration.RESULT_TYPE));
         addFieldDefinition(new StringFieldDef(SearchLookupConfiguration.RESULT_ID));
         addFieldDefinition(new StringFieldDef(SearchLookupConfiguration.RESULT_TITLE));
-        addFieldDefinition(new StringFieldDef(SearchLookupConfiguration.RESULT_TYPE));
         addFieldDefinition(new StringFieldDef(SearchLookupConfiguration.RESULT_REAL_ID));
         addFieldDefinition(new StringFieldDef(SearchLookupConfiguration.RESULT_DESCRIPTION));
 
-        makeColumn("", renderer);
+        makeColumn("Text", renderer);
+
+        String groupTpl = "{text} ({[values.rs.length]} {[values.rs.length > 1 ?  \"Items\" : \"Item\"]})";
+        setGrouping(SearchLookupConfiguration.RESULT_TYPE, groupTpl);
 
         configure(url, UtilLookup.SUGGEST_ID, SortDir.ASC);
 
+        setColumnHidden(SearchLookupConfiguration.RESULT_TYPE, true);
+        setHideColumnHeader(true);
     }
 
     /**
