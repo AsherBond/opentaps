@@ -27,7 +27,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
+import org.opentaps.common.domain.order.OrderViewForListing;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.search.order.SalesOrderSearchRepositoryInterface;
 import org.opentaps.foundation.action.ActionContext;
@@ -35,11 +35,12 @@ import org.opentaps.foundation.action.ActionContext;
 /**
  * CrmsfaOrderActions - Java Actions for sales orders.
  */
-public class CrmsfaOrderActions {
+public final class CrmsfaOrderActions {
+
     private static final String MODULE = CrmsfaOrderActions.class.getName();
 
-    private CrmsfaOrderActions() {}
-    
+    private CrmsfaOrderActions() { }
+
     /**
      * Action for the lookup sales order screen.
      * @param context the screen context
@@ -48,17 +49,21 @@ public class CrmsfaOrderActions {
     public static void findOrders(Map<String, Object> context) throws GeneralException {
         ActionContext ac = new ActionContext(context);
         Locale locale = ac.getLocale();
-        TimeZone timeZone = ac.getTimeZone() ;
+        TimeZone timeZone = ac.getTimeZone();
 
         // order by
         String orderParam = ac.getParameter("ordersOrderBy");
-        if (UtilValidate.isEmpty(orderParam)) orderParam = "orderDate DESC";
-        List orderBy = UtilMisc.toList(orderParam);
+        if (UtilValidate.isEmpty(orderParam)) {
+            orderParam = "orderDate DESC";
+        }
+        List<String> orderBy = UtilMisc.toList(orderParam);
 
         // possible fields we're searching by
         String partyId = ac.getParameter("partyIdSearch");
         // from URL GET request if form field wasn't set
-        if (partyId == null) partyId = ac.getParameter("partyId");
+        if (partyId == null) {
+            partyId = ac.getParameter("partyId");
+        }
         String statusId = ac.getParameter("statusId");
         String correspondingPoId = ac.getParameter("correspondingPoId");
         String orderId = ac.getParameter("orderId");
@@ -70,7 +75,7 @@ public class CrmsfaOrderActions {
         String createdBy = ac.getParameter("createdBy");
         String externalId = ac.getParameter("externalId");
         String  productStoreId = ac.getParameter("productStoreId");
-        
+
         DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
         SalesOrderSearchRepositoryInterface salesOrderSearchRepository = dd.getOrderDomain().getSalesOrderSearchRepository();
         String organizationPartyId = UtilProperties.getPropertyValue("opentaps", "organizationPartyId");
@@ -117,10 +122,10 @@ public class CrmsfaOrderActions {
             salesOrderSearchRepository.setProductStoreId(productStoreId);
         }
         salesOrderSearchRepository.setOrderBy(orderBy);
-        List<OrderHeaderItemAndRolesAndInvPending> orders = salesOrderSearchRepository.findOrders();
+        List<OrderViewForListing> orders = salesOrderSearchRepository.findOrders();
         List<Map> orderMaps = FastList.newInstance();
         // return the map collection for the screen render
-        for (OrderHeaderItemAndRolesAndInvPending order : orders) {
+        for (OrderViewForListing order : orders) {
             orderMaps.add(order.toMap());
         }
         ac.put("ordersListIt", orderMaps);

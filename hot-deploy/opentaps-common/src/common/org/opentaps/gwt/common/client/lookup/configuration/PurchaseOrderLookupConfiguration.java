@@ -29,9 +29,10 @@ public abstract class PurchaseOrderLookupConfiguration {
     private PurchaseOrderLookupConfiguration() { }
 
     public static final String URL_FIND_ORDERS = "gwtFindPurchasingOrders";
-    
+    public static final String URL_SEARCH_ORDERS = "gwtSearchPurchasingOrders";
+
     public static final String IN_FIND_ALL = "findAll";
-    
+
     public static final String INOUT_ORDER_ID = "orderId";
     public static final String IN_PRODUCT_PARTTERN = "productPattern";
     public static final String INOUT_ORDER_NAME = "orderName";
@@ -45,7 +46,7 @@ public abstract class PurchaseOrderLookupConfiguration {
     public static final String OUT_GRAND_TOTAL = "grandTotal";
     public static final String OUT_CURRENCY_UOM = "currencyUom";
     public static final String OUT_ORDER_DATE_STRING = "orderDateString";
-    public static final String OUT_SUPPLIER_NAME = "supplierName";
+    public static final String OUT_SUPPLIER_NAME = "partyName";
     public static final String OUT_STATUS_DESCRIPTION = "statusDescription";
 
     public static final List<String> LIST_OUT_FIELDS = Arrays.asList(
@@ -60,6 +61,15 @@ public abstract class PurchaseOrderLookupConfiguration {
             OUT_ORDER_DATE_STRING,
             OUT_SUPPLIER_NAME,
             OUT_STATUS_DESCRIPTION
+    );
+    public static final List<String> LIST_QUERY_FIELDS = Arrays.asList(
+            INOUT_ORDER_ID,
+            INOUT_ORDER_NAME,
+            INOUT_PARTY_ID,
+            INOUT_STATUS_ID,
+            INOUT_ORDER_DATE,
+            OUT_GRAND_TOTAL,
+            OUT_CURRENCY_UOM
     );
 
 }

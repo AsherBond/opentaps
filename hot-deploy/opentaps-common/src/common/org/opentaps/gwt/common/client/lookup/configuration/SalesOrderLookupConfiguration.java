@@ -29,18 +29,19 @@ public abstract class SalesOrderLookupConfiguration {
     private SalesOrderLookupConfiguration() { }
 
     public static final String URL_FIND_ORDERS = "gwtFindSalesOrders";
+    public static final String URL_SEARCH_ORDERS = "gwtSearchSalesOrders";
+
     public static final String IN_RESPONSIBILTY = "MyOrTeamResponsibility";
     public static final String MY_VALUES = "MY_VALUES";
 
-
     public static final String IN_FIND_ALL = "findAll";
-    
+
     public static final String INOUT_ORDER_ID = "orderId";
     public static final String IN_EXTERNAL_ID = "externalId";
     public static final String INOUT_ORDER_NAME = "orderName";
     public static final String OUT_ORDER_NAME_ID = "orderNameId";
     public static final String INOUT_PARTY_ID = "partyId";
-    public static final String IN_PRDOUCT_STORE_ID = "productStoreId";
+    public static final String IN_PRODUCT_STORE_ID = "productStoreId";
     public static final String INOUT_STATUS_ID = "statusId";
     public static final String INOUT_CORRESPONDING_PO_ID = "correspondingPoId";
     public static final String INOUT_ORDER_DATE = "orderDate";
@@ -52,7 +53,7 @@ public abstract class SalesOrderLookupConfiguration {
     public static final String OUT_GRAND_TOTAL = "grandTotal";
     public static final String OUT_CURRENCY_UOM = "currencyUom";
     public static final String OUT_ORDER_DATE_STRING = "orderDateString";
-    public static final String OUT_CUSTOMER_NAME = "customerName";
+    public static final String OUT_CUSTOMER_NAME = "partyName";
     public static final String OUT_SHIP_BY_DATE_STRING = "shipByDateString";
     public static final String OUT_STATUS_DESCRIPTION = "statusDescription";
 
@@ -61,7 +62,6 @@ public abstract class SalesOrderLookupConfiguration {
             INOUT_ORDER_NAME,
             OUT_ORDER_NAME_ID,
             INOUT_PARTY_ID,
-            IN_PRDOUCT_STORE_ID,
             INOUT_STATUS_ID,
             INOUT_CORRESPONDING_PO_ID,
             INOUT_ORDER_DATE,
@@ -71,6 +71,16 @@ public abstract class SalesOrderLookupConfiguration {
             OUT_CUSTOMER_NAME,
             OUT_SHIP_BY_DATE_STRING,
             OUT_STATUS_DESCRIPTION
+    );
+    public static final List<String> LIST_QUERY_FIELDS = Arrays.asList(
+            INOUT_ORDER_ID,
+            INOUT_ORDER_NAME,
+            INOUT_PARTY_ID,
+            INOUT_STATUS_ID,
+            INOUT_CORRESPONDING_PO_ID,
+            INOUT_ORDER_DATE,
+            OUT_GRAND_TOTAL,
+            OUT_CURRENCY_UOM
     );
 
 }

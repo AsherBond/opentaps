@@ -18,16 +18,13 @@ package org.opentaps.gwt.common.server.lookup;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
+import org.opentaps.common.domain.order.OrderViewForListing;
 import org.opentaps.domain.search.order.SalesOrderSearchRepositoryInterface;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
@@ -38,6 +35,8 @@ import org.opentaps.gwt.common.server.InputProviderInterface;
 
 /**
  * The RPC service used to populate the OrderListView and Order autocompleters widgets.
+ * @author <a href="mailto:jeremy@iznogoud">Wickersheimer Jeremy</a>
+ * @version 1.0
  */
 public class SalesOrderLookupService extends EntityLookupAndSuggestService {
     private static final String MODULE = SalesOrderLookupService.class.getName();
@@ -61,19 +60,25 @@ public class SalesOrderLookupService extends EntityLookupAndSuggestService {
         InputProviderInterface provider = new HttpInputProvider(request);
         JsonResponse json = new JsonResponse(response);
         SalesOrderLookupService service = new SalesOrderLookupService(provider);
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
-        // use Locale.US for change gwt date input
-        service.findOrders(Locale.US, timeZone);
+        // The GWT date input is always using the US locale -- (it should be using the user locale though ...)
+        service.findOrders(Locale.US);
         return json.makeLookupResponse(SalesOrderLookupConfiguration.INOUT_ORDER_ID, service, request.getSession(true).getServletContext());
     }
 
     /**
      * Finds a list of <code>Order</code>.
-     * @param locale a <code>Locale</code> value
-     * @param timeZone a <code>TimeZone</code> value
      * @return the list of <code>Order</code>, or <code>null</code> if an error occurred
      */
-    public List<OrderHeaderItemAndRolesAndInvPending> findOrders(Locale locale, TimeZone timeZone) {
+    public List<OrderViewForListing> findOrders() {
+        return findOrders(getProvider().getLocale());
+    }
+
+    /**
+     * Finds a list of <code>Order</code>.
+     * @param locale force a <code>Locale</code> value
+     * @return the list of <code>Order</code>, or <code>null</code> if an error occurred
+     */
+    public List<OrderViewForListing> findOrders(Locale locale) {
         try {
             SalesOrderSearchRepositoryInterface salesOrderSearchRepository = getDomainsDirectory().getOrderDomain().getSalesOrderSearchRepository();
             String organizationPartyId = UtilProperties.getPropertyValue("opentaps", "organizationPartyId");
@@ -84,8 +89,9 @@ public class SalesOrderLookupService extends EntityLookupAndSuggestService {
                 Debug.logError("Current session do not have any UserLogin set.", MODULE);
             }
             // pass locale and timeZone instances for format the date string
+            // use Locale.US for change gwt date input -- is this required to be US ??
             salesOrderSearchRepository.setLocale(locale);
-            salesOrderSearchRepository.setTimeZone(timeZone);
+            salesOrderSearchRepository.setTimeZone(getProvider().getTimeZone());
             // pass parameters into repository
             salesOrderSearchRepository.setUserLoginId(userLoginId);
             salesOrderSearchRepository.setOrganizationPartyId(organizationPartyId);
@@ -110,8 +116,8 @@ public class SalesOrderLookupService extends EntityLookupAndSuggestService {
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_PARTY_ID))) {
                 salesOrderSearchRepository.setCustomerPartyId(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_PARTY_ID));
             }
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_PRDOUCT_STORE_ID))) {
-                salesOrderSearchRepository.setProductStoreId(getProvider().getParameter(SalesOrderLookupConfiguration.IN_PRDOUCT_STORE_ID));
+            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_PRODUCT_STORE_ID))) {
+                salesOrderSearchRepository.setProductStoreId(getProvider().getParameter(SalesOrderLookupConfiguration.IN_PRODUCT_STORE_ID));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_STATUS_ID))) {
                 salesOrderSearchRepository.setStatusId(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_STATUS_ID));
@@ -145,8 +151,8 @@ public class SalesOrderLookupService extends EntityLookupAndSuggestService {
     @Override
     public String makeSuggestDisplayedText(EntityInterface value) {
         StringBuffer sb = new StringBuffer();
-        String orderName = value.getString("orderName");
-        String orderId = value.getString("orderId");
+        String orderName = value.getString(OrderViewForListing.Fields.orderName.name());
+        String orderId = value.getString(OrderViewForListing.Fields.orderId.name());
         if (UtilValidate.isNotEmpty(orderName)) {
             sb.append(orderName);
         }

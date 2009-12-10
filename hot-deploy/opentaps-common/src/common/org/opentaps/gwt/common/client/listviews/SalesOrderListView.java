@@ -28,8 +28,6 @@ import com.gwtext.client.widgets.grid.ColumnConfig;
  */
 public class SalesOrderListView extends EntityListView {
 
-    private static final String MODULE = SalesOrderListView.class.getName();
- 
     /**
      * Default constructor.
      */
@@ -132,7 +130,7 @@ public class SalesOrderListView extends EntityListView {
      * @param productStoreId a <code>String</code> value
      */
     public void filterByProductStoreId(String productStoreId) {
-        setFilter(SalesOrderLookupConfiguration.IN_PRDOUCT_STORE_ID, productStoreId);
+        setFilter(SalesOrderLookupConfiguration.IN_PRODUCT_STORE_ID, productStoreId);
     }
 
     /**

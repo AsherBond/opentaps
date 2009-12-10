@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.base.entities.OrderHeaderAndRoles;
+import org.opentaps.common.domain.order.OrderViewForListing;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
 import org.opentaps.domain.search.order.PurchaseOrderSearchRepositoryInterface;
@@ -36,10 +37,12 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.gwt.common.client.lookup.configuration.PurchaseOrderLookupConfiguration;
 import org.opentaps.gwt.common.server.HttpInputProvider;
 import org.opentaps.gwt.common.server.InputProviderInterface;
+
 /**
  * The RPC service used to populate the PurchaseOrderListView and PurchaseOrder autocompleters widgets.
  */
 public class PurchaseOrderLookupService extends EntityLookupAndSuggestService {
+
     private static final String MODULE = PurchaseOrderLookupService.class.getName();
 
     /**
@@ -50,7 +53,6 @@ public class PurchaseOrderLookupService extends EntityLookupAndSuggestService {
         super(provider, PurchaseOrderLookupConfiguration.LIST_OUT_FIELDS);
     }
 
- 
     /**
      * AJAX event to perform lookups on purchasing Orders.
      * @param request a <code>HttpServletRequest</code> value
@@ -62,22 +64,32 @@ public class PurchaseOrderLookupService extends EntityLookupAndSuggestService {
         InputProviderInterface provider = new HttpInputProvider(request);
         JsonResponse json = new JsonResponse(response);
         PurchaseOrderLookupService service = new PurchaseOrderLookupService(provider);
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
         String organizationPartyId = UtilCommon.getOrganizationPartyId(request);
         String facilityId = (String) request.getSession().getAttribute("facilityId");
 
         // use Locale.US for change gwt date input
-        service.findOrders(Locale.US, timeZone, organizationPartyId, facilityId);
+        service.findOrders(Locale.US, organizationPartyId, facilityId);
         return json.makeLookupResponse(PurchaseOrderLookupConfiguration.INOUT_ORDER_ID, service, request.getSession(true).getServletContext());
     }
 
     /**
      * Finds a list of <code>Order</code>.
-     * @param locale a <code>Locale</code> value
-     * @param timeZone a <code>TimeZone</code> value
+     * @param organizationPartyId a <code>String</code> value
+     * @param facilityId a <code>String</code> value
      * @return the list of <code>Order</code>, or <code>null</code> if an error occurred
      */
-    public List<OrderHeaderAndRoles> findOrders(Locale locale, TimeZone timeZone, String organizationPartyId, String facilityId) {
+    public List<OrderViewForListing> findOrders(String organizationPartyId, String facilityId) {
+        return findOrders(getProvider().getLocale(), organizationPartyId, facilityId);
+    }
+
+    /**
+     * Finds a list of <code>Order</code>.
+     * @param locale a <code>Locale</code> value
+     * @param organizationPartyId a <code>String</code> value
+     * @param facilityId a <code>String</code> value
+     * @return the list of <code>Order</code>, or <code>null</code> if an error occurred
+     */
+    public List<OrderViewForListing> findOrders(Locale locale, String organizationPartyId, String facilityId) {
         try {
             PurchaseOrderSearchRepositoryInterface purchaseOrderSearchRepository = getDomainsDirectory().getOrderDomain().getPurchaseOrderSearchRepository();
             InventoryRepositoryInterface inventoryRepository = getDomainsDirectory().getInventoryDomain().getInventoryRepository();
@@ -86,7 +98,7 @@ public class PurchaseOrderLookupService extends EntityLookupAndSuggestService {
             }
             // pass locale and timeZone instances for format the date string
             purchaseOrderSearchRepository.setLocale(locale);
-            purchaseOrderSearchRepository.setTimeZone(timeZone);
+            purchaseOrderSearchRepository.setTimeZone(getProvider().getTimeZone());
             // pass parameters into repository
             purchaseOrderSearchRepository.setOrganizationPartyId(organizationPartyId);
 
@@ -130,7 +142,7 @@ public class PurchaseOrderLookupService extends EntityLookupAndSuggestService {
             return null;
         }
     }
-    
+
     @Override
     public String makeSuggestDisplayedText(EntityInterface value) {
         StringBuffer sb = new StringBuffer();
