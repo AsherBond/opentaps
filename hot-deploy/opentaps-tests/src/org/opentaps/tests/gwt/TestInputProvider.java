@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
@@ -38,6 +39,7 @@ import org.opentaps.gwt.common.server.InputProviderInterface;
 public class TestInputProvider implements InputProviderInterface {
 
     private Locale locale;
+    private TimeZone timeZone;
     private User user;
     private Infrastructure infrastructure;
     private DomainsDirectory domainsDirectory;
@@ -52,6 +54,7 @@ public class TestInputProvider implements InputProviderInterface {
     public TestInputProvider(GenericValue userLogin, LocalDispatcher dispatcher) throws InfrastructureException {
         this.user = new User(userLogin);
         this.locale = Locale.getDefault();
+        this.timeZone = TimeZone.getDefault();
         this.infrastructure = new Infrastructure(dispatcher);
         this.parameters = new HashMap<String, String>();
     }
@@ -73,6 +76,11 @@ public class TestInputProvider implements InputProviderInterface {
             domainsDirectory = domainsLoader.loadDomainsDirectory();
         }
         return domainsDirectory;
+    }
+
+    /** {@inheritDoc} */
+    public TimeZone getTimeZone() {
+        return timeZone;
     }
 
     /** {@inheritDoc} */

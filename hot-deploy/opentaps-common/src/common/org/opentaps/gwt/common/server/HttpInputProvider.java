@@ -34,6 +34,7 @@ import org.opentaps.domain.DomainsLoader;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
+import java.util.TimeZone;
 
 /**
  * The HTTP implementation of the <code>InputProviderInterface</code>.
@@ -45,6 +46,7 @@ public class HttpInputProvider implements InputProviderInterface {
     private HttpServletRequest request;
     private HttpSession session;
 
+    private TimeZone timeZone;
     private Locale locale;
     private User user;
     private Infrastructure infrastructure;
@@ -62,6 +64,7 @@ public class HttpInputProvider implements InputProviderInterface {
         this.session = request.getSession(true);
         this.user = new User((GenericValue) session.getAttribute("userLogin"));
         this.locale = UtilHttp.getLocale(request);
+        this.timeZone = UtilHttp.getTimeZone(request);
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         this.infrastructure = new Infrastructure(dispatcher);
         this.parameters = new HashMap<String, String>();
@@ -84,6 +87,11 @@ public class HttpInputProvider implements InputProviderInterface {
             domainsDirectory = domainsLoader.loadDomainsDirectory();
         }
         return domainsDirectory;
+    }
+
+    /** {@inheritDoc} */
+    public TimeZone getTimeZone() {
+        return timeZone;
     }
 
     /** {@inheritDoc} */

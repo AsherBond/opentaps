@@ -20,6 +20,7 @@ package org.opentaps.gwt.common.server;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.foundation.infrastructure.Infrastructure;
@@ -56,6 +57,12 @@ public interface InputProviderInterface {
      * @return the current <code>Locale</code>
      */
     public Locale getLocale();
+
+    /**
+     * Gets the current <code>TimeZone</code>.
+     * @return the current <code>TimeZone</code>
+     */
+    public TimeZone getTimeZone();
 
     /**
      * Gets the <code>Map</code> of all given parameters.
