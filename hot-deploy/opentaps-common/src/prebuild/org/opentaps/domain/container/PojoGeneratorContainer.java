@@ -578,7 +578,7 @@ public class PojoGeneratorContainer implements Container {
             List<String> needIndexEntities = new LinkedList<String>();
             for (String entityName : entities) {
                 //retrieve entityName
-                if (entitySearchProperties.containsKey(entityName)) {
+                if (entitySearchProperties != null && entitySearchProperties.containsKey(entityName)) {
                     if (entitySearchProperties.getProperty(entityName).equals("index")) {
                         needIndexEntities.add(entityName);
                     }
@@ -691,7 +691,7 @@ public class PojoGeneratorContainer implements Container {
                     fieldTypes.put(fieldName, shortType);
                     // if entitysearch.properties contain the field, then add boost annotation to set index weight
                     String indexFieldKey = entityName + "." + fieldName;
-                    if (entitySearchProperties.containsKey(indexFieldKey)) {
+                    if (entitySearchProperties != null && entitySearchProperties.containsKey(indexFieldKey)) {
                         String[] indexValue = entitySearchProperties.getProperty(indexFieldKey).split(",");
                         String weight = indexValue[0];
                         String tokenType = indexValue.length > 1 ? indexValue[1] : "TOKENIZED";

@@ -52,7 +52,7 @@ public class IndexForDelegatorAspects {
             entitySearchProperties = UtilProperties.getProperties("entitysearch.properties");
         }
         // if event = return and operation = create|store|remove
-        if (EntityEcaHandler.EV_RETURN.equals(event) && (EntityEcaHandler.OP_CREATE.equals(currentOperation) || EntityEcaHandler.OP_STORE.equals(currentOperation) || EntityEcaHandler.OP_REMOVE.equals(currentOperation))) {
+        if (entitySearchProperties != null && EntityEcaHandler.EV_RETURN.equals(event) && (EntityEcaHandler.OP_CREATE.equals(currentOperation) || EntityEcaHandler.OP_STORE.equals(currentOperation) || EntityEcaHandler.OP_REMOVE.equals(currentOperation))) {
             // if entitySearchProperties contain the entityName then create index for it
             if (entitySearchProperties.containsKey(value.getEntityName())) {
                 if (entitySearchProperties.getProperty(value.getEntityName()).equals("index")) {
