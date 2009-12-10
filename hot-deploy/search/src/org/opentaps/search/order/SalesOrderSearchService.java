@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.constants.OrderTypeConstants;
@@ -116,7 +115,6 @@ public class SalesOrderSearchService extends HibernateSearchService implements S
             }
 
             if (!orderIds.isEmpty()) {
-                Debug.logInfo("Found sales orders [" + orderIds + "]", "");
                 orders = orderRepository.findList(Order.class, EntityCondition.makeCondition(Order.Fields.orderId.name(), EntityOperator.IN, orderIds));
             } else {
                 orders = new ArrayList<Order>();

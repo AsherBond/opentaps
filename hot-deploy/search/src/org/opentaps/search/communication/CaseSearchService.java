@@ -37,7 +37,6 @@ import org.opentaps.foundation.service.ServiceException;
 import org.opentaps.search.HibernateSearchRepository;
 import org.opentaps.search.HibernateSearchService;
 import org.opentaps.search.party.PartySearch;
-import org.ofbiz.base.util.Debug;
 
 /**
  * The implementation of the Case search service.
@@ -110,7 +109,6 @@ public class CaseSearchService extends HibernateSearchService implements CaseSea
             }
 
             if (!caseIds.isEmpty()) {
-                Debug.logInfo("Found cases [" + caseIds + "]", "");
                 cases = repository.findList(CustRequest.class, EntityCondition.makeCondition(CustRequest.Fields.custRequestId.name(), EntityOperator.IN, caseIds));
             } else {
                 cases = new ArrayList<CustRequest>();
