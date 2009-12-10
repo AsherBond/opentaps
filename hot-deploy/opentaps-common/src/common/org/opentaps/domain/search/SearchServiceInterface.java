@@ -44,6 +44,12 @@ public interface SearchServiceInterface extends ServiceInterface {
     public String getKeywords();
 
     /**
+     * Copies the pagination settings (page start and page size) from the given service.
+     * @param service a <code>ServiceInterface</code> instanct
+     */
+    public void setPagination(SearchServiceInterface service);
+
+    /**
      * Sets the number of search results to return per page.
      * @param pageSize an <code>int</code> value
      */

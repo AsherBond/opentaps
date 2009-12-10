@@ -54,6 +54,12 @@ public abstract class CommonSearchService extends DomainService implements Searc
     }
 
     /** {@inheritDoc} */
+    public void setPagination(SearchServiceInterface service) {
+        setPageStart(service.getPageStart());
+        setPageSize(service.getPageSize());
+    }
+
+    /** {@inheritDoc} */
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
