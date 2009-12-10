@@ -47,6 +47,7 @@ import org.opentaps.gwt.common.client.listviews.ContactListView;
 import org.opentaps.gwt.common.client.listviews.ContactSearchListView;
 import org.opentaps.gwt.common.client.listviews.LeadSearchListView;
 import org.opentaps.gwt.common.client.listviews.OrderItemsEditableListView.OrderType;
+import org.opentaps.gwt.common.client.listviews.SalesOrderSearchListView;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 import org.opentaps.gwt.crmsfa.client.accounts.form.AccountContactsSubview;
 import org.opentaps.gwt.crmsfa.client.accounts.form.FindAccountsForm;
@@ -174,6 +175,7 @@ public class Entry extends BaseEntry {
             multiCrmsfaSearch.addResultsGrid(new ContactSearchListView());
             multiCrmsfaSearch.addResultsGrid(new LeadSearchListView());
             multiCrmsfaSearch.addResultsGrid(new CaseSearchListView());
+            multiCrmsfaSearch.addResultsGrid(new SalesOrderSearchListView());
             // That's for a all in one simple search
             //crmsfaSearch = new SearchForm(new CrmsfaSearchResultsListView());
             //RootPanel.get(CRMSFA_SEARCH_ID).add(crmsfaSearch);

@@ -18,18 +18,24 @@ package org.opentaps.gwt.crmsfa.server.search;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.entities.CustRequest;
 import org.opentaps.base.entities.CustRequestAndPartyRelationshipAndRole;
+import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
 import org.opentaps.base.entities.PartyFromByRelnAndContactInfoAndPartyClassification;
 import org.opentaps.base.entities.SalesOpportunity;
+import org.opentaps.common.domain.order.OrderViewForListing;
+import org.opentaps.common.util.ConvertMapToString;
+import org.opentaps.common.util.ICompositeValue;
 import org.opentaps.crmsfa.search.CrmsfaSearchService;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.party.Account;
@@ -43,6 +49,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 import org.opentaps.gwt.common.client.lookup.configuration.CaseLookupConfiguration;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
+import org.opentaps.gwt.common.client.lookup.configuration.SalesOrderLookupConfiguration;
 import org.opentaps.gwt.common.client.lookup.configuration.SearchLookupConfiguration;
 import org.opentaps.gwt.common.server.HttpInputProvider;
 import org.opentaps.gwt.common.server.InputProviderInterface;
@@ -73,6 +80,15 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
      */
     public static CrmsfaSearchLookupService makePartySearchService(InputProviderInterface provider) {
         return new CrmsfaSearchLookupService(provider, PartyLookupConfiguration.LIST_OUT_FIELDS);
+    }
+
+    /**
+     * Creates a new <code>CrmsfaSearchService</code> instance for searching sales orders.
+     * @param provider an <code>InputProviderInterface</code> value
+     * @return a <code>CrmsfaSearchLookupService</code> value
+     */
+    public static CrmsfaSearchLookupService makeSalesOrderSearchService(InputProviderInterface provider) {
+        return new CrmsfaSearchLookupService(provider, SalesOrderLookupConfiguration.LIST_OUT_FIELDS);
     }
 
     /**
@@ -156,9 +172,164 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
         JsonResponse json = new JsonResponse(response);
         CrmsfaSearchLookupService service = CrmsfaSearchLookupService.makeCaseSearchService(provider);
         service.searchCases();
-        return json.makeLookupResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service, request.getSession(true).getServletContext());
+        return json.makeLookupResponse(CaseLookupConfiguration.INOUT_CUST_REQUEST_ID, service, request.getSession(true).getServletContext());
     }
 
+    /**
+     * AJAX event to search Sales Orders.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the resulting JSON response
+     * @throws InfrastructureException if an error occurs
+     */
+    public static String crmsfaSearchSalesOrders(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
+        InputProviderInterface provider = new HttpInputProvider(request);
+        JsonResponse json = new JsonResponse(response);
+        CrmsfaSearchLookupService service = CrmsfaSearchLookupService.makeSalesOrderSearchService(provider);
+        service.searchSalesOrders();
+        return json.makeLookupResponse(SalesOrderLookupConfiguration.INOUT_ORDER_ID, service, request.getSession(true).getServletContext());
+    }
+
+    /**
+     * Searches a List of Sales Order.
+     * @return a list of <code>OrderViewForListing</code>
+     */
+    public List<OrderViewForListing> searchSalesOrders() {
+
+        if (getSuggestQuery() == null || getSuggestQuery().trim().equals("")) {
+            List<OrderViewForListing> res = new ArrayList<OrderViewForListing>();
+            setResults(res);
+            return res;
+        }
+
+        class OrderNameIdSortable extends ConvertMapToString implements ICompositeValue {
+            @Override
+            public String convert(Map<String, ?> value) {
+                if (value == null) {
+                    return null;
+                }
+                return (String) value.get(SalesOrderLookupConfiguration.OUT_ORDER_NAME_ID);
+            }
+            public LinkedHashSet<String> getFields() {
+                LinkedHashSet<String> s = new LinkedHashSet<String>(2);
+                s.add(SalesOrderLookupConfiguration.INOUT_ORDER_ID);
+                s.add(SalesOrderLookupConfiguration.INOUT_ORDER_NAME);
+                return s;
+            }
+        }
+
+        class StatusDecriptionSortable extends ConvertMapToString implements ICompositeValue {
+            @Override
+            public String convert(Map<String, ?> value) {
+                if (value == null) {
+                    return null;
+                }
+                return (String) value.get(SalesOrderLookupConfiguration.OUT_STATUS_DESCRIPTION);
+            }
+            public LinkedHashSet<String> getFields() {
+                LinkedHashSet<String> s = new LinkedHashSet<String>(1);
+                s.add(SalesOrderLookupConfiguration.INOUT_STATUS_ID);
+                return s;
+            }
+        }
+
+        class ShipByDateSortable extends ConvertMapToString implements ICompositeValue {
+            @Override
+            public String convert(Map<String, ?> value) {
+                if (value == null) {
+                    return null;
+                }
+                return (String) value.get(SalesOrderLookupConfiguration.OUT_SHIP_BY_DATE_STRING);
+            }
+            public LinkedHashSet<String> getFields() {
+                LinkedHashSet<String> s = new LinkedHashSet<String>(1);
+                // dummy field, this is really not sortable
+                s.add(SalesOrderLookupConfiguration.INOUT_ORDER_DATE);
+                return s;
+            }
+        }
+
+        class OrderDateSortable extends ConvertMapToString implements ICompositeValue {
+            @Override
+            public String convert(Map<String, ?> value) {
+                if (value == null) {
+                    return null;
+                }
+                return (String) value.get(SalesOrderLookupConfiguration.OUT_ORDER_DATE_STRING);
+            }
+            public LinkedHashSet<String> getFields() {
+                LinkedHashSet<String> s = new LinkedHashSet<String>(1);
+                s.add(SalesOrderLookupConfiguration.INOUT_ORDER_DATE);
+                return s;
+            }
+        }
+
+        class CustomerNameSortable extends ConvertMapToString implements ICompositeValue {
+            @Override
+            public String convert(Map<String, ?> value) {
+                if (value == null) {
+                    return null;
+                }
+                return (String) value.get(SalesOrderLookupConfiguration.OUT_CUSTOMER_NAME);
+            }
+            public LinkedHashSet<String> getFields() {
+                LinkedHashSet<String> s = new LinkedHashSet<String>(1);
+                s.add(SalesOrderLookupConfiguration.INOUT_PARTY_ID);
+                return s;
+            }
+        }
+
+        // some fields in the view are not in the DB, setup the mapping for the order by
+        Map<String, ConvertMapToString> calcField = FastMap.<String, ConvertMapToString>newInstance();
+        calcField.put(SalesOrderLookupConfiguration.OUT_ORDER_NAME_ID, new OrderNameIdSortable());
+        makeCalculatedField(calcField);
+
+        calcField = FastMap.<String, ConvertMapToString>newInstance();
+        calcField.put(SalesOrderLookupConfiguration.OUT_STATUS_DESCRIPTION, new StatusDecriptionSortable());
+        makeCalculatedField(calcField);
+
+        calcField = FastMap.<String, ConvertMapToString>newInstance();
+        calcField.put(SalesOrderLookupConfiguration.OUT_SHIP_BY_DATE_STRING, new ShipByDateSortable());
+        makeCalculatedField(calcField);
+
+        calcField = FastMap.<String, ConvertMapToString>newInstance();
+        calcField.put(SalesOrderLookupConfiguration.OUT_ORDER_DATE_STRING, new OrderDateSortable());
+        makeCalculatedField(calcField);
+
+        calcField = FastMap.<String, ConvertMapToString>newInstance();
+        calcField.put(SalesOrderLookupConfiguration.OUT_CUSTOMER_NAME, new CustomerNameSortable());
+        makeCalculatedField(calcField);
+
+        try {
+            CrmsfaSearchService crmSearch = new CrmsfaSearchService();
+            // set options on what is searched
+            crmSearch.setSearchSalesOrders(true);
+            prepareSearch(crmSearch);
+            // we need to lookup OrderHeaderItemAndRolesAndInvPending and convert those into OrderViewForListing
+            // to get the OrderHeaderItemAndRolesAndInvPending with the customer we filter by role
+            List<OrderHeaderItemAndRolesAndInvPending> res = getRepository().findList(OrderHeaderItemAndRolesAndInvPending.class,
+                            EntityCondition.makeCondition(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.roleTypeId.name(),
+                                                                                        EntityOperator.EQUALS,
+                                                                                        "BILL_TO_CUSTOMER"),
+                                                          EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.orderId.name(),
+                                                                                        EntityOperator.IN,
+                                                                                        Entity.getDistinctFieldValues(String.class, crmSearch.getSalesOrders(), Order.Fields.orderId))),
+                            SalesOrderLookupConfiguration.LIST_QUERY_FIELDS, getOrderBy());
+            // convert and paginate
+            return paginateResults(OrderViewForListing.makeOrderView(res, getProvider().getInfrastructure().getDelegator(), getProvider().getTimeZone(), getProvider().getLocale()));
+        } catch (ServiceException e) {
+            storeException(e);
+            return null;
+        } catch (RepositoryException e) {
+            storeException(e);
+            return null;
+        }
+    }
+
+    /**
+     * Searches a List of Cases.
+     * @return a list of <code>CustRequestAndPartyRelationshipAndRole</code>
+     */
     public List<CustRequestAndPartyRelationshipAndRole> searchCases() {
 
         if (getSuggestQuery() == null || getSuggestQuery().trim().equals("")) {
@@ -171,7 +342,7 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
             CrmsfaSearchService crmSearch = new CrmsfaSearchService();
             // set options on what is searched
             crmSearch.setSearchCases(true);
-            prepareSearchParties(crmSearch);
+            prepareSearch(crmSearch);
             return findList(CustRequestAndPartyRelationshipAndRole.class,
                         EntityCondition.makeCondition(CustRequestAndPartyRelationshipAndRole.Fields.custRequestId.name(),
                                                       EntityOperator.IN,
@@ -182,6 +353,10 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
         }
     }
 
+    /**
+     * Searches a List of Accounts.
+     * @return a list of <code>PartyFromByRelnAndContactInfoAndPartyClassification</code>
+     */
     public List<PartyFromByRelnAndContactInfoAndPartyClassification> searchAccounts() {
 
         if (getSuggestQuery() == null || getSuggestQuery().trim().equals("")) {
@@ -196,7 +371,7 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
             CrmsfaSearchService crmSearch = new CrmsfaSearchService();
             // set options on what is searched
             crmSearch.setSearchAccounts(true);
-            prepareSearchParties(crmSearch);
+            prepareSearch(crmSearch);
             return extractPartiesResults(crmSearch.getAccounts());
         } catch (ServiceException e) {
             storeException(e);
@@ -204,6 +379,10 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
         }
     }
 
+    /**
+     * Searches a List of Contacts.
+     * @return a list of <code>PartyFromByRelnAndContactInfoAndPartyClassification</code>
+     */
     public List<PartyFromByRelnAndContactInfoAndPartyClassification> searchContacts() {
 
         if (getSuggestQuery() == null || getSuggestQuery().trim().equals("")) {
@@ -218,7 +397,7 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
             CrmsfaSearchService crmSearch = new CrmsfaSearchService();
             // set options on what is searched
             crmSearch.setSearchContacts(true);
-            prepareSearchParties(crmSearch);
+            prepareSearch(crmSearch);
             return extractPartiesResults(crmSearch.getContacts());
         } catch (ServiceException e) {
             storeException(e);
@@ -226,6 +405,10 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
         }
     }
 
+    /**
+     * Searches a List of Leads.
+     * @return a list of <code>PartyFromByRelnAndContactInfoAndPartyClassification</code>
+     */
     public List<PartyFromByRelnAndContactInfoAndPartyClassification> searchLeads() {
 
         if (getSuggestQuery() == null || getSuggestQuery().trim().equals("")) {
@@ -240,7 +423,7 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
             CrmsfaSearchService crmSearch = new CrmsfaSearchService();
             // set options on what is searched
             crmSearch.setSearchLeads(true);
-            prepareSearchParties(crmSearch);
+            prepareSearch(crmSearch);
             return extractPartiesResults(crmSearch.getLeads());
         } catch (ServiceException e) {
             storeException(e);
@@ -248,7 +431,7 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
         }
     }
 
-    private void prepareSearchParties(CrmsfaSearchService crmSearch) throws ServiceException {
+    private void prepareSearch(CrmsfaSearchService crmSearch) throws ServiceException {
         // set the common parameters
         crmSearch.setInfrastructure(getProvider().getInfrastructure());
         crmSearch.setUser(getProvider().getUser());
