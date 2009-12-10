@@ -98,6 +98,9 @@ public class EntityComparator implements Comparator<EntityInterface> {
         if (o1 != null && o2 == null) {
             return sortType;
         }
+        if (o1.get(fieldName) == null && o2.get(fieldName) == null) {
+            return 0;
+        }
         if (o1.get(fieldName) == null && o2.get(fieldName) != null) {
             return -1 * sortType;
         }
