@@ -16,10 +16,10 @@
  */
 package org.opentaps.foundation.repository.ofbiz;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +30,9 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.model.ModelEntity;
+import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.LocalDispatcher;
 import org.opentaps.foundation.entity.EntityException;
@@ -61,7 +63,9 @@ public class Repository implements RepositoryInterface  {
     private User user; // a user associated with an instance of the infrastructure
 
     /** The options used when performing queries for a subset of fields and filtering duplicates. */
-    public static final EntityFindOptions DISTINCT_FIND_OPTIONS = new EntityFindOptions(true, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY, true);
+    public static final EntityFindOptions DISTINCT_FIND_OPTIONS = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
+    /** The options used when performing find page queries. */
+    public static final EntityFindOptions PAGE_FIND_OPTIONS = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, false);
 
     /**
      * Default constructor.
@@ -745,6 +749,100 @@ public class Repository implements RepositoryInterface  {
         }
     }
 
+    /* findPage */
+
+    // by Map
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, int pageStart, int pageSize) throws RepositoryException {
+        return findPage(entityName, conditions, null, pageStart, pageSize);
+    }
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
+        return findPage(entityName, getEntityBaseName(entityName), conditions, orderBy, pageStart, pageSize);
+    }
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> fields, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
+        return findPage(entityName, getEntityBaseName(entityName), conditions, fields, orderBy, pageStart, pageSize);
+    }
+
+    /**
+     * Find entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param conditions a Map of fields -> value that the entities must all match
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    @SuppressWarnings("unused")
+    private <T extends EntityInterface> List<T> findPage(Class<T> entityName, String genericValueName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, int pageStart, int pageSize) throws RepositoryException {
+        return findPage(entityName, genericValueName, conditions, null, pageStart, pageSize);
+    }
+
+    /**
+     * Find entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param conditions a Map of fields -> value that the entities must all match
+     * @param orderBy list of fields to order by
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    private <T extends EntityInterface> List<T> findPage(Class<T> entityName, String genericValueName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
+        try {
+            boolean t = TransactionUtil.begin();
+            EntityListIterator it = getDelegator().find(genericValueName, EntityCondition.makeCondition(toSimpleMap(conditions)), null, null, orderBy, PAGE_FIND_OPTIONS);
+            List<GenericValue> gv = null;
+            try {
+                gv = it.getPartialList(pageStart + 1, pageSize);
+            } finally {
+                it.close();
+            }
+            TransactionUtil.commit(t);
+            return Repository.loadFromGeneric(entityName, gv, this);
+        } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
+    /**
+     * Find entities by conditions. Only return a subset of the entity fields and filters out duplicates.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param conditions a Map of fields -> value that the entities must all match
+     * @param fields list of fields to select
+     * @param orderBy list of fields to order by
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    private <T extends EntityInterface> List<T> findPage(Class<T> entityName, String genericValueName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> fields, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
+        try {
+            boolean t = TransactionUtil.begin();
+            EntityListIterator it = getDelegator().find(genericValueName, EntityCondition.makeCondition(toSimpleMap(conditions)), null, new HashSet<String>(fields), orderBy, DISTINCT_FIND_OPTIONS);
+            List<GenericValue> gv = null;
+            try {
+                gv = it.getPartialList(pageStart + 1, pageSize);
+            } finally {
+                it.close();
+            }
+            TransactionUtil.commit(t);
+            return Repository.loadFromGeneric(entityName, gv, this);
+        } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
     /* findList */
 
     // by Map
@@ -862,6 +960,99 @@ public class Repository implements RepositoryInterface  {
         }
     }
 
+    // findPage by List<EntityExpr>
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, List<? extends EntityCondition> conditions, int pageStart, int pageSize) throws RepositoryException {
+        return findPage(entityName, conditions, null, pageStart, pageSize);
+    }
+
+    /**
+     * Find entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param conditions a List of EntityExpr the entities must all match
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    @SuppressWarnings("unused")
+    private <T extends EntityInterface> List<T> findPage(Class<T> entityName, String genericValueName, List<? extends EntityCondition> conditions, int pageStart, int pageSize) throws RepositoryException {
+        return findPage(entityName, genericValueName, conditions, null, pageStart, pageSize);
+    }
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, List<? extends EntityCondition> conditions, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
+        return findPage(entityName, getEntityBaseName(entityName), conditions, orderBy, pageStart, pageSize);
+    }
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, List<? extends EntityCondition> conditions, List<String> fields, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
+        return findPage(entityName, getEntityBaseName(entityName), conditions, fields, orderBy, pageStart, pageSize);
+    }
+
+    /**
+     * Find entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param conditions a List of EntityExpr the entities must all match
+     * @param orderBy list of fields to order by
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    private <T extends EntityInterface> List<T> findPage(Class<T> entityName, String genericValueName, List<? extends EntityCondition> conditions, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
+        try {
+            boolean t = TransactionUtil.begin();
+            EntityListIterator it = getDelegator().find(genericValueName, EntityCondition.makeCondition(conditions), null, null, orderBy, PAGE_FIND_OPTIONS);
+            List<GenericValue> gv = null;
+            try {
+                gv = it.getPartialList(pageStart + 1, pageSize);
+            } finally {
+                it.close();
+            }
+            TransactionUtil.commit(t);
+            return Repository.loadFromGeneric(entityName, gv, this);
+        } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
+    /**
+     * Find entities by conditions. Only return a subset of the entity fields and filters out duplicates.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param conditions a List of EntityExpr the entities must all match
+     * @param fields the list of field to select
+     * @param orderBy list of fields to order by
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    private <T extends EntityInterface> List<T> findPage(Class<T> entityName, String genericValueName, List<? extends EntityCondition> conditions, List<String> fields, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
+        try {
+            EntityConditionList<? extends EntityCondition> ecl = EntityCondition.makeCondition(conditions, EntityOperator.AND);
+            boolean t = TransactionUtil.begin();
+            EntityListIterator it = getDelegator().find(genericValueName, ecl, null, new HashSet<String>(fields), orderBy, DISTINCT_FIND_OPTIONS);
+            List<GenericValue> gv = null;
+            try {
+                gv = it.getPartialList(pageStart + 1, pageSize);
+            } finally {
+                it.close();
+            }
+            TransactionUtil.commit(t);
+            return Repository.loadFromGeneric(entityName, gv, this);
+        } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
     // by List<EntityExpr>
 
     /** {@inheritDoc} */
@@ -973,6 +1164,98 @@ public class Repository implements RepositoryInterface  {
         try {
             EntityConditionList<? extends EntityCondition> ecl = EntityCondition.makeCondition(conditions, EntityOperator.AND);
             List<GenericValue> gv = getDelegator().findByConditionCache(genericValueName, ecl, null, orderBy);
+            return Repository.loadFromGeneric(entityName, gv, this);
+        } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
+    // findPage by EntityCondition
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, EntityCondition condition, int pageStart, int pageSize) throws RepositoryException {
+        return findPage(entityName, condition, null, pageStart, pageSize);
+    }
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, EntityCondition condition, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
+        return findPage(entityName, getEntityBaseName(entityName), condition, orderBy, pageStart, pageSize);
+    }
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, EntityCondition condition, List<String> fields, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
+        return findPage(entityName, getEntityBaseName(entityName), condition, fields, orderBy, pageStart, pageSize);
+    }
+
+    /**
+     * Find entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param condition the EntityCondition used to find the entities
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    @SuppressWarnings("unused")
+    private <T extends EntityInterface> List<T> findPage(Class<T> entityName, String genericValueName, EntityCondition condition, int pageStart, int pageSize) throws RepositoryException {
+        return findPage(entityName, genericValueName, condition, null, pageStart, pageSize);
+    }
+
+    /**
+     * Find entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param condition the EntityCondition used to find the entities
+     * @param orderBy list of fields to order by
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    private <T extends EntityInterface> List<T> findPage(Class<T> entityName, String genericValueName, EntityCondition condition, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
+        try {
+            boolean t = TransactionUtil.begin();
+            EntityListIterator it = getDelegator().find(genericValueName, condition, null, null, orderBy, PAGE_FIND_OPTIONS);
+            List<GenericValue> gv = null;
+            try {
+                gv = it.getPartialList(pageStart + 1, pageSize);
+            } finally {
+                it.close();
+            }
+            TransactionUtil.commit(t);
+            return Repository.loadFromGeneric(entityName, gv, this);
+        } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
+    /**
+     * Find entities by conditions. Only return a subset of the entity fields and filters out duplicates.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param condition the EntityCondition used to find the entities
+     * @param fields the list of field to select
+     * @param orderBy list of fields to order by
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    private <T extends EntityInterface> List<T> findPage(Class<T> entityName, String genericValueName, EntityCondition condition, List<String> fields, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
+        try {
+            boolean t = TransactionUtil.begin();
+            EntityListIterator it = getDelegator().find(genericValueName, condition, null, new HashSet<String>(fields), orderBy, DISTINCT_FIND_OPTIONS);
+            List<GenericValue> gv = null;
+            try {
+                gv = it.getPartialList(pageStart + 1, pageSize);
+            } finally {
+                it.close();
+            }
+            TransactionUtil.commit(t);
             return Repository.loadFromGeneric(entityName, gv, this);
         } catch (GenericEntityException e) {
             throw new RepositoryException(e);

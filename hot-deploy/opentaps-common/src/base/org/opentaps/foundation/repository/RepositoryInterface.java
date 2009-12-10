@@ -25,8 +25,6 @@ import org.opentaps.foundation.entity.EntityFieldInterface;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.DomainContextInterface;
-import org.opentaps.foundation.infrastructure.Infrastructure;
-import org.opentaps.foundation.infrastructure.User;
 
 /**
  * Repository as defined in "Domain Driven Design" is used to encapsulate the retrieval and persistence of Entity objects.
@@ -446,6 +444,47 @@ public interface RepositoryInterface extends DomainContextInterface {
      */
     public <T extends EntityInterface> List<T> findAllCache(Class<T> entityName, List<String> orderBy) throws RepositoryException;
 
+    /* findPage by Map of Field: value */
+
+    /**
+     * Find a page of entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param conditions a Map of fields -> value that the entities must all match
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, int pageStart, int pageSize) throws RepositoryException;
+
+    /**
+     * Find a page of entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param conditions a Map of fields -> value that the entities must all match
+     * @param orderBy list of fields to order by
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException;
+
+    /**
+     * Find a page of entities by conditions. Only return a subset of the entity fields and filters out duplicates.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param conditions a Map of fields -> value that the entities must all match
+     * @param fields list of fields to select
+     * @param orderBy list of fields to order by
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> fields, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException;
+
     /* findList by Map of Field: value */
 
     /**
@@ -503,6 +542,86 @@ public interface RepositoryInterface extends DomainContextInterface {
      * @throws RepositoryException if an error occurs
      */
     public <T extends EntityInterface> List<T> findListCache(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> orderBy) throws RepositoryException;
+
+    /* findPage by list of Conditions */
+
+    /**
+     * Find a page of entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param conditions a List of EntityExpr the entities must all match
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, List<? extends EntityCondition> conditions, int pageStart, int pageSize) throws RepositoryException;
+
+    /**
+     * Find a page of entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param conditions a List of EntityExpr the entities must all match
+     * @param orderBy list of fields to order by
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, List<? extends EntityCondition> conditions, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException;
+
+    /**
+     * Find a page of entities by conditions. Only return a subset of the entity fields and filters out duplicates.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param conditions a List of EntityExpr the entities must all match
+     * @param fields list of fields to select
+     * @param orderBy list of fields to order by
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, List<? extends EntityCondition> conditions, List<String> fields, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException;
+
+    /**
+     * Find a page of entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param condition the EntityCondition used to find the entities
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, EntityCondition condition, int pageStart, int pageSize) throws RepositoryException;
+
+    /**
+     * Find a page of entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param condition the EntityCondition used to find the entities
+     * @param orderBy list of fields to order by
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, EntityCondition condition, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException;
+
+    /**
+     * Find a page of entities by conditions. Only return a subset of the entity fields and filters out duplicates.
+     * @param <T> the entity class
+     * @param entityName class to find
+     * @param condition the EntityCondition used to find the entities
+     * @param fields the list of field to select
+     * @param orderBy list of fields to order by
+     * @param pageStart the index of the first entity, starting at 0
+     * @param pageSize the number of entities to return at most
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> List<T> findPage(Class<T> entityName, EntityCondition condition, List<String> fields, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException;
 
     /* findList by list of Conditions */
 
