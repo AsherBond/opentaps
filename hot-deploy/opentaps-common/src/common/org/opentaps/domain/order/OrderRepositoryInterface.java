@@ -57,6 +57,24 @@ public interface OrderRepositoryInterface extends RepositoryInterface {
     public Order getOrderById(String orderId) throws RepositoryException, EntityNotFoundException;
 
     /**
+     * Find orders which have the specified external ID, which is usually an order Id from an external integration system.
+     * @param externalId
+     * @return
+     * @throws RepositoryException
+     * @throws EntityNotFoundException
+     */
+    public List<Order> getOrdersByExternalId(String externalId) throws RepositoryException;
+    
+    /**
+     * Finds and returns one Order matching the externalId.  If more than one is found, it will return an EntityNotFoundException.
+     * @param externalId
+     * @return
+     * @throws RepositoryException
+     * @throws EntityNotFoundException
+     */
+    public Order getOrderByExternalId(String externalId) throws RepositoryException, EntityNotFoundException;
+    
+    /**
      * Finds all the <code>OrderAdjustmentType</code> ordered by description.
      * @return the list of <code>OrderAdjustmentType</code>
      * @throws RepositoryException if an error occurs

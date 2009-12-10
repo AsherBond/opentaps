@@ -101,7 +101,7 @@ import org.opentaps.foundation.service.ServiceException;
 /** {@inheritDoc}. */
 public class OrderRepository extends DomainRepository implements OrderRepositoryInterface {
 
-    private PartyRepositoryInterface partyRepository;
+   private PartyRepositoryInterface partyRepository;
     private ProductRepositoryInterface productRepository;
     private OrganizationRepositoryInterface organizationRepository;
     private OrderSpecificationInterface orderSpecification = new OrderSpecification();
@@ -137,6 +137,23 @@ public class OrderRepository extends DomainRepository implements OrderRepository
     }
 
     /** {@inheritDoc} */
+	public List<Order> getOrdersByExternalId(String externalId) throws RepositoryException {
+		return findList(Order.class, map(Order.Fields.externalId, externalId));
+	}
+    
+	/** {@inheritDoc} */
+	public Order getOrderByExternalId(String externalId) throws RepositoryException, EntityNotFoundException {
+		List<Order> orders = getOrdersByExternalId(externalId);
+		// if no orders are found, the EntityNotFoundException should have already been thrown, so just check multiple orders case
+		if (UtilValidate.isEmpty(orders)) {
+			throw new EntityNotFoundException(Order.class, "No order found for external ID [" + externalId + "]");
+		} else if ((orders != null) && (orders.size() > 1)) {
+			throw new EntityNotFoundException(Order.class, "[" + orders.size() + "] orders found for reference ID [" + externalId + "]");
+		}
+		return orders.get(0);
+	}
+
+	/** {@inheritDoc} */
     public List<OrderAdjustmentType> getOrderAdjustmentTypes() throws RepositoryException {
         return findAll(OrderAdjustmentType.class, Arrays.asList("description"));
     }
