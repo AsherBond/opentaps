@@ -1122,17 +1122,6 @@ under the License.
       <alias entity-alias="OI" name="correspondingPoId"/>
       <alias entity-alias="II" name="serialNumber"/>
       <alias entity-alias="II" name="lotId"/>
-      <!-- these fields value will replaced in findOrder method of SalesOrderSearchRepository, I define them here just for have these fields -->
-      <!-- this field use for display orderName + orderId in gwt listview -->
-      <alias entity-alias="OH" name="orderNameId" field="orderName"/>
-      <!-- this field use for display formatted order date in gwt listview -->
-      <alias entity-alias="OH" name="orderDateString" field="orderName"/>
-      <!-- this field use for display formatted ship date in gwt listview -->
-      <alias entity-alias="OH" name="shipByDateString" field="orderName"/>
-      <!-- this field use for display customer name in gwt listview -->
-      <alias entity-alias="OH" name="customerName" field="orderName"/>
-      <!-- this field use for display status description in gwt listview -->
-      <alias entity-alias="OH" name="statusDescription" field="orderName"/>
 
       <view-link entity-alias="OT" rel-entity-alias="OH">
         <key-map field-name="orderId"/>
@@ -1268,14 +1257,14 @@ under the License.
           <view-link entity-alias="OH" rel-entity-alias="OI" rel-optional="true">
             <key-map field-name="orderId"/>
           </view-link>
-        <!-- OrderItem links to InventoryItem via ItemIssuance for completed orders -->
-      <view-link entity-alias="OI" rel-entity-alias="ISS" rel-optional="true">
-        <key-map field-name="orderId"/>
-        <key-map field-name="orderItemSeqId"/>
-      </view-link>
-      <view-link entity-alias="ISS" rel-entity-alias="II" rel-optional="true">
-        <key-map field-name="inventoryItemId"/>
-      </view-link>
+          <!-- OrderItem links to InventoryItem via ItemIssuance for completed orders -->
+          <view-link entity-alias="OI" rel-entity-alias="ISS" rel-optional="true">
+            <key-map field-name="orderId"/>
+            <key-map field-name="orderItemSeqId"/>
+          </view-link>
+          <view-link entity-alias="ISS" rel-entity-alias="II" rel-optional="true">
+            <key-map field-name="inventoryItemId"/>
+          </view-link>
           <relation type="one-nofk" rel-entity-name="OrderType">
             <key-map field-name="orderTypeId"/>
           </relation>
@@ -2431,15 +2420,7 @@ under the License.
       <member-entity entity-alias="OH" entity-name="OrderHeader"/>
       <alias-all entity-alias="ORLE"/>
       <alias-all entity-alias="OH"/>
-      <!-- these fields value will replaced in findOrder method of PurchaseOrderSearchRepository, I define them here just for have these fields -->
-      <!-- this field use for display orderName + orderId in gwt listview -->
-      <alias entity-alias="OH" name="orderNameId" field="orderName"/>
-      <!-- this field use for display formatted order date in gwt listview -->
-      <alias entity-alias="OH" name="orderDateString" field="orderName"/>
-      <!-- this field use for display supplier name in gwt listview -->
-      <alias entity-alias="OH" name="supplierName" field="orderName"/>
-      <!-- this field use for display status description in gwt listview -->
-      <alias entity-alias="OH" name="statusDescription" field="orderName"/>
+
       <view-link entity-alias="ORLE" rel-entity-alias="OH">
         <key-map field-name="orderId"/>
       </view-link>

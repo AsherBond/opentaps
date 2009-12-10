@@ -50,14 +50,10 @@ import java.sql.Timestamp;
  * Auto generated base entity OrderHeaderAndRoles.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectOrderHeaderAndRoless", query="SELECT OH.ORDER_NAME AS \"orderName\",OH.ORDER_NAME AS \"orderName\",OH.ORDER_NAME AS \"orderName\",OH.ORDER_NAME AS \"orderName\",ORLE.ORDER_ID AS \"orderId\",ORLE.PARTY_ID AS \"partyId\",ORLE.ROLE_TYPE_ID AS \"roleTypeId\",OH.ORDER_TYPE_ID AS \"orderTypeId\",OH.ORDER_NAME AS \"orderName\",OH.EXTERNAL_ID AS \"externalId\",OH.SALES_CHANNEL_ENUM_ID AS \"salesChannelEnumId\",OH.ORDER_DATE AS \"orderDate\",OH.PRIORITY AS \"priority\",OH.ENTRY_DATE AS \"entryDate\",OH.VISIT_ID AS \"visitId\",OH.STATUS_ID AS \"statusId\",OH.CREATED_BY AS \"createdBy\",OH.FIRST_ATTEMPT_ORDER_ID AS \"firstAttemptOrderId\",OH.CURRENCY_UOM AS \"currencyUom\",OH.SYNC_STATUS_ID AS \"syncStatusId\",OH.BILLING_ACCOUNT_ID AS \"billingAccountId\",OH.ORIGIN_FACILITY_ID AS \"originFacilityId\",OH.WEB_SITE_ID AS \"webSiteId\",OH.PRODUCT_STORE_ID AS \"productStoreId\",OH.TERMINAL_ID AS \"terminalId\",OH.TRANSACTION_ID AS \"transactionId\",OH.AUTO_ORDER_SHOPPING_LIST_ID AS \"autoOrderShoppingListId\",OH.NEEDS_INVENTORY_ISSUANCE AS \"needsInventoryIssuance\",OH.IS_RUSH_ORDER AS \"isRushOrder\",OH.INTERNAL_CODE AS \"internalCode\",OH.REMAINING_SUB_TOTAL AS \"remainingSubTotal\",OH.GRAND_TOTAL AS \"grandTotal\",OH.BILL_FROM_PARTY_ID AS \"billFromPartyId\",OH.BILL_TO_PARTY_ID AS \"billToPartyId\" FROM ORDER_ROLE ORLE INNER JOIN ORDER_HEADER OH ON ORLE.ORDER_ID = OH.ORDER_ID", resultSetMapping="OrderHeaderAndRolesMapping")
+@NamedNativeQuery(name="selectOrderHeaderAndRoless", query="SELECT ORLE.ORDER_ID AS \"orderId\",ORLE.PARTY_ID AS \"partyId\",ORLE.ROLE_TYPE_ID AS \"roleTypeId\",OH.ORDER_TYPE_ID AS \"orderTypeId\",OH.ORDER_NAME AS \"orderName\",OH.EXTERNAL_ID AS \"externalId\",OH.SALES_CHANNEL_ENUM_ID AS \"salesChannelEnumId\",OH.ORDER_DATE AS \"orderDate\",OH.PRIORITY AS \"priority\",OH.ENTRY_DATE AS \"entryDate\",OH.VISIT_ID AS \"visitId\",OH.STATUS_ID AS \"statusId\",OH.CREATED_BY AS \"createdBy\",OH.FIRST_ATTEMPT_ORDER_ID AS \"firstAttemptOrderId\",OH.CURRENCY_UOM AS \"currencyUom\",OH.SYNC_STATUS_ID AS \"syncStatusId\",OH.BILLING_ACCOUNT_ID AS \"billingAccountId\",OH.ORIGIN_FACILITY_ID AS \"originFacilityId\",OH.WEB_SITE_ID AS \"webSiteId\",OH.PRODUCT_STORE_ID AS \"productStoreId\",OH.TERMINAL_ID AS \"terminalId\",OH.TRANSACTION_ID AS \"transactionId\",OH.AUTO_ORDER_SHOPPING_LIST_ID AS \"autoOrderShoppingListId\",OH.NEEDS_INVENTORY_ISSUANCE AS \"needsInventoryIssuance\",OH.IS_RUSH_ORDER AS \"isRushOrder\",OH.INTERNAL_CODE AS \"internalCode\",OH.REMAINING_SUB_TOTAL AS \"remainingSubTotal\",OH.GRAND_TOTAL AS \"grandTotal\",OH.BILL_FROM_PARTY_ID AS \"billFromPartyId\",OH.BILL_TO_PARTY_ID AS \"billToPartyId\" FROM ORDER_ROLE ORLE INNER JOIN ORDER_HEADER OH ON ORLE.ORDER_ID = OH.ORDER_ID", resultSetMapping="OrderHeaderAndRolesMapping")
 @SqlResultSetMapping(name="OrderHeaderAndRolesMapping", entities={
 @EntityResult(entityClass=OrderHeaderAndRoles.class, fields = {
-@FieldResult(name="orderNameId", column="orderNameId")
-,@FieldResult(name="orderDateString", column="orderDateString")
-,@FieldResult(name="supplierName", column="supplierName")
-,@FieldResult(name="statusDescription", column="statusDescription")
-,@FieldResult(name="orderId", column="orderId")
+@FieldResult(name="orderId", column="orderId")
 ,@FieldResult(name="partyId", column="partyId")
 ,@FieldResult(name="roleTypeId", column="roleTypeId")
 ,@FieldResult(name="orderTypeId", column="orderTypeId")
@@ -93,10 +89,6 @@ import java.sql.Timestamp;
 public class OrderHeaderAndRoles extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
-        fields.put("orderNameId", "OH.ORDER_NAME");
-        fields.put("orderDateString", "OH.ORDER_NAME");
-        fields.put("supplierName", "OH.ORDER_NAME");
-        fields.put("statusDescription", "OH.ORDER_NAME");
         fields.put("orderId", "ORLE.ORDER_ID");
         fields.put("partyId", "ORLE.PARTY_ID");
         fields.put("roleTypeId", "ORLE.ROLE_TYPE_ID");
@@ -130,10 +122,6 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
 fieldMapColumns.put("OrderHeaderAndRoles", fields);
 }
   public static enum Fields implements EntityFieldInterface<OrderHeaderAndRoles> {
-    orderNameId("orderNameId"),
-    orderDateString("orderDateString"),
-    supplierName("supplierName"),
-    statusDescription("statusDescription"),
     orderId("orderId"),
     partyId("partyId"),
     roleTypeId("roleTypeId"),
@@ -174,14 +162,6 @@ fieldMapColumns.put("OrderHeaderAndRoles", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
-    
-   private String orderNameId;
-    
-   private String orderDateString;
-    
-   private String supplierName;
-    
-   private String statusDescription;
     @Id
    private String orderId;
     
@@ -314,7 +294,7 @@ fieldMapColumns.put("OrderHeaderAndRoles", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("roleTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderNameId");this.allFieldsNames.add("orderDateString");this.allFieldsNames.add("supplierName");this.allFieldsNames.add("statusDescription");this.allFieldsNames.add("orderId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("orderName");this.allFieldsNames.add("externalId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("priority");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("visitId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdBy");this.allFieldsNames.add("firstAttemptOrderId");this.allFieldsNames.add("currencyUom");this.allFieldsNames.add("syncStatusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("webSiteId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("terminalId");this.allFieldsNames.add("transactionId");this.allFieldsNames.add("autoOrderShoppingListId");this.allFieldsNames.add("needsInventoryIssuance");this.allFieldsNames.add("isRushOrder");this.allFieldsNames.add("internalCode");this.allFieldsNames.add("remainingSubTotal");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("billFromPartyId");this.allFieldsNames.add("billToPartyId");
+      this.allFieldsNames.add("orderId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("orderName");this.allFieldsNames.add("externalId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("priority");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("visitId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdBy");this.allFieldsNames.add("firstAttemptOrderId");this.allFieldsNames.add("currencyUom");this.allFieldsNames.add("syncStatusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("webSiteId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("terminalId");this.allFieldsNames.add("transactionId");this.allFieldsNames.add("autoOrderShoppingListId");this.allFieldsNames.add("needsInventoryIssuance");this.allFieldsNames.add("isRushOrder");this.allFieldsNames.add("internalCode");this.allFieldsNames.add("remainingSubTotal");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("billFromPartyId");this.allFieldsNames.add("billToPartyId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -332,34 +312,6 @@ fieldMapColumns.put("OrderHeaderAndRoles", fields);
     /**
      * This is a view-entity, so the setter methods will be private to this class and for use in its fromMap constructor only
      */
-    /**
-     * Auto generated value setter.
-     * @param orderNameId the orderNameId to set
-     */
-    public void setOrderNameId(String orderNameId) {
-        this.orderNameId = orderNameId;
-    }
-    /**
-     * Auto generated value setter.
-     * @param orderDateString the orderDateString to set
-     */
-    public void setOrderDateString(String orderDateString) {
-        this.orderDateString = orderDateString;
-    }
-    /**
-     * Auto generated value setter.
-     * @param supplierName the supplierName to set
-     */
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
-    }
-    /**
-     * Auto generated value setter.
-     * @param statusDescription the statusDescription to set
-     */
-    public void setStatusDescription(String statusDescription) {
-        this.statusDescription = statusDescription;
-    }
     /**
      * Auto generated value setter.
      * @param orderId the orderId to set
@@ -571,34 +523,6 @@ fieldMapColumns.put("OrderHeaderAndRoles", fields);
         this.billToPartyId = billToPartyId;
     }
 
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getOrderNameId() {
-        return this.orderNameId;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getOrderDateString() {
-        return this.orderDateString;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getSupplierName() {
-        return this.supplierName;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getStatusDescription() {
-        return this.statusDescription;
-    }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
@@ -1249,10 +1173,6 @@ fieldMapColumns.put("OrderHeaderAndRoles", fields);
     @Override
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
-        setOrderNameId((String) mapValue.get("orderNameId"));
-        setOrderDateString((String) mapValue.get("orderDateString"));
-        setSupplierName((String) mapValue.get("supplierName"));
-        setStatusDescription((String) mapValue.get("statusDescription"));
         setOrderId((String) mapValue.get("orderId"));
         setPartyId((String) mapValue.get("partyId"));
         setRoleTypeId((String) mapValue.get("roleTypeId"));
@@ -1290,10 +1210,6 @@ fieldMapColumns.put("OrderHeaderAndRoles", fields);
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
-        mapValue.put("orderNameId", getOrderNameId());
-        mapValue.put("orderDateString", getOrderDateString());
-        mapValue.put("supplierName", getSupplierName());
-        mapValue.put("statusDescription", getStatusDescription());
         mapValue.put("orderId", getOrderId());
         mapValue.put("partyId", getPartyId());
         mapValue.put("roleTypeId", getRoleTypeId());

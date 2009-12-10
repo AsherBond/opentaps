@@ -50,7 +50,7 @@ import java.sql.Timestamp;
  * Auto generated base entity OrderHeaderItemAndRolesAndInvPending.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectOrderHeaderItemAndRolesAndInvPendings", query="SELECT OH.ORDER_NAME AS \"orderName\",OH.ORDER_ID AS \"orderId\",OT.PARTY_ID AS \"partyId\",OT.ROLE_TYPE_ID AS \"roleTypeId\",OH.ORDER_TYPE_ID AS \"orderTypeId\",OH.ORDER_DATE AS \"orderDate\",OH.ENTRY_DATE AS \"entryDate\",OH.VISIT_ID AS \"visitId\",OH.STATUS_ID AS \"statusId\",OH.BILL_FROM_PARTY_ID AS \"billFromPartyId\",OH.BILL_TO_PARTY_ID AS \"billToPartyId\",OH.CREATED_BY AS \"createdBy\",OH.FIRST_ATTEMPT_ORDER_ID AS \"firstAttemptOrderId\",OH.CURRENCY_UOM AS \"currencyUom\",OH.SYNC_STATUS_ID AS \"syncStatusId\",OH.BILLING_ACCOUNT_ID AS \"billingAccountId\",OH.ORIGIN_FACILITY_ID AS \"originFacilityId\",OH.PRODUCT_STORE_ID AS \"productStoreId\",OH.WEB_SITE_ID AS \"webSiteId\",OH.GRAND_TOTAL AS \"grandTotal\",OH.REMAINING_SUB_TOTAL AS \"remainingSubTotal\",OH.EXTERNAL_ID AS \"externalId\",OI.PRODUCT_ID AS \"productId\",OI.QUANTITY AS \"quantity\",OI.UNIT_PRICE AS \"unitPrice\",OI.UNIT_LIST_PRICE AS \"unitListPrice\",OI.ESTIMATED_SHIP_DATE AS \"estimatedShipDate\",OI.AUTO_CANCEL_DATE AS \"autoCancelDate\",OI.CORRESPONDING_PO_ID AS \"correspondingPoId\",II.SERIAL_NUMBER AS \"serialNumber\",II.LOT_ID AS \"lotId\",OH.ORDER_NAME AS \"orderName\",OH.ORDER_NAME AS \"orderName\",OH.ORDER_NAME AS \"orderName\",OH.ORDER_NAME AS \"orderName\",OH.ORDER_NAME AS \"orderName\" FROM ORDER_ROLE OT INNER JOIN ORDER_HEADER OH ON OT.ORDER_ID = OH.ORDER_ID LEFT JOIN ORDER_ITEM OI ON OH.ORDER_ID = OI.ORDER_ID LEFT JOIN ORDER_ITEM_SHIP_GRP_INV_RES OISGIR ON OI.ORDER_ID = OISGIR.ORDER_ID AND OI.ORDER_ITEM_SEQ_ID = OISGIR.ORDER_ITEM_SEQ_ID LEFT JOIN INVENTORY_ITEM II ON OISGIR.INVENTORY_ITEM_ID = II.INVENTORY_ITEM_ID", resultSetMapping="OrderHeaderItemAndRolesAndInvPendingMapping")
+@NamedNativeQuery(name="selectOrderHeaderItemAndRolesAndInvPendings", query="SELECT OH.ORDER_NAME AS \"orderName\",OH.ORDER_ID AS \"orderId\",OT.PARTY_ID AS \"partyId\",OT.ROLE_TYPE_ID AS \"roleTypeId\",OH.ORDER_TYPE_ID AS \"orderTypeId\",OH.ORDER_DATE AS \"orderDate\",OH.ENTRY_DATE AS \"entryDate\",OH.VISIT_ID AS \"visitId\",OH.STATUS_ID AS \"statusId\",OH.BILL_FROM_PARTY_ID AS \"billFromPartyId\",OH.BILL_TO_PARTY_ID AS \"billToPartyId\",OH.CREATED_BY AS \"createdBy\",OH.FIRST_ATTEMPT_ORDER_ID AS \"firstAttemptOrderId\",OH.CURRENCY_UOM AS \"currencyUom\",OH.SYNC_STATUS_ID AS \"syncStatusId\",OH.BILLING_ACCOUNT_ID AS \"billingAccountId\",OH.ORIGIN_FACILITY_ID AS \"originFacilityId\",OH.PRODUCT_STORE_ID AS \"productStoreId\",OH.WEB_SITE_ID AS \"webSiteId\",OH.GRAND_TOTAL AS \"grandTotal\",OH.REMAINING_SUB_TOTAL AS \"remainingSubTotal\",OH.EXTERNAL_ID AS \"externalId\",OI.PRODUCT_ID AS \"productId\",OI.QUANTITY AS \"quantity\",OI.UNIT_PRICE AS \"unitPrice\",OI.UNIT_LIST_PRICE AS \"unitListPrice\",OI.ESTIMATED_SHIP_DATE AS \"estimatedShipDate\",OI.AUTO_CANCEL_DATE AS \"autoCancelDate\",OI.CORRESPONDING_PO_ID AS \"correspondingPoId\",II.SERIAL_NUMBER AS \"serialNumber\",II.LOT_ID AS \"lotId\" FROM ORDER_ROLE OT INNER JOIN ORDER_HEADER OH ON OT.ORDER_ID = OH.ORDER_ID LEFT JOIN ORDER_ITEM OI ON OH.ORDER_ID = OI.ORDER_ID LEFT JOIN ORDER_ITEM_SHIP_GRP_INV_RES OISGIR ON OI.ORDER_ID = OISGIR.ORDER_ID AND OI.ORDER_ITEM_SEQ_ID = OISGIR.ORDER_ITEM_SEQ_ID LEFT JOIN INVENTORY_ITEM II ON OISGIR.INVENTORY_ITEM_ID = II.INVENTORY_ITEM_ID", resultSetMapping="OrderHeaderItemAndRolesAndInvPendingMapping")
 @SqlResultSetMapping(name="OrderHeaderItemAndRolesAndInvPendingMapping", entities={
 @EntityResult(entityClass=OrderHeaderItemAndRolesAndInvPending.class, fields = {
 @FieldResult(name="orderName", column="orderName")
@@ -84,11 +84,6 @@ import java.sql.Timestamp;
 ,@FieldResult(name="correspondingPoId", column="correspondingPoId")
 ,@FieldResult(name="serialNumber", column="serialNumber")
 ,@FieldResult(name="lotId", column="lotId")
-,@FieldResult(name="orderNameId", column="orderNameId")
-,@FieldResult(name="orderDateString", column="orderDateString")
-,@FieldResult(name="shipByDateString", column="shipByDateString")
-,@FieldResult(name="customerName", column="customerName")
-,@FieldResult(name="statusDescription", column="statusDescription")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
 @org.hibernate.annotations.AccessType("field")
@@ -126,11 +121,6 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("correspondingPoId", "OI.CORRESPONDING_PO_ID");
         fields.put("serialNumber", "II.SERIAL_NUMBER");
         fields.put("lotId", "II.LOT_ID");
-        fields.put("orderNameId", "OH.ORDER_NAME");
-        fields.put("orderDateString", "OH.ORDER_NAME");
-        fields.put("shipByDateString", "OH.ORDER_NAME");
-        fields.put("customerName", "OH.ORDER_NAME");
-        fields.put("statusDescription", "OH.ORDER_NAME");
 fieldMapColumns.put("OrderHeaderItemAndRolesAndInvPending", fields);
 }
   public static enum Fields implements EntityFieldInterface<OrderHeaderItemAndRolesAndInvPending> {
@@ -164,12 +154,7 @@ fieldMapColumns.put("OrderHeaderItemAndRolesAndInvPending", fields);
     autoCancelDate("autoCancelDate"),
     correspondingPoId("correspondingPoId"),
     serialNumber("serialNumber"),
-    lotId("lotId"),
-    orderNameId("orderNameId"),
-    orderDateString("orderDateString"),
-    shipByDateString("shipByDateString"),
-    customerName("customerName"),
-    statusDescription("statusDescription");
+    lotId("lotId");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -242,16 +227,6 @@ fieldMapColumns.put("OrderHeaderItemAndRolesAndInvPending", fields);
    private String serialNumber;
     
    private String lotId;
-    
-   private String orderNameId;
-    
-   private String orderDateString;
-    
-   private String shipByDateString;
-    
-   private String customerName;
-    
-   private String statusDescription;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -324,7 +299,7 @@ fieldMapColumns.put("OrderHeaderItemAndRolesAndInvPending", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("roleTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderName");this.allFieldsNames.add("orderId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("visitId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("billFromPartyId");this.allFieldsNames.add("billToPartyId");this.allFieldsNames.add("createdBy");this.allFieldsNames.add("firstAttemptOrderId");this.allFieldsNames.add("currencyUom");this.allFieldsNames.add("syncStatusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("webSiteId");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("remainingSubTotal");this.allFieldsNames.add("externalId");this.allFieldsNames.add("productId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("unitPrice");this.allFieldsNames.add("unitListPrice");this.allFieldsNames.add("estimatedShipDate");this.allFieldsNames.add("autoCancelDate");this.allFieldsNames.add("correspondingPoId");this.allFieldsNames.add("serialNumber");this.allFieldsNames.add("lotId");this.allFieldsNames.add("orderNameId");this.allFieldsNames.add("orderDateString");this.allFieldsNames.add("shipByDateString");this.allFieldsNames.add("customerName");this.allFieldsNames.add("statusDescription");
+      this.allFieldsNames.add("orderName");this.allFieldsNames.add("orderId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("visitId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("billFromPartyId");this.allFieldsNames.add("billToPartyId");this.allFieldsNames.add("createdBy");this.allFieldsNames.add("firstAttemptOrderId");this.allFieldsNames.add("currencyUom");this.allFieldsNames.add("syncStatusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("webSiteId");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("remainingSubTotal");this.allFieldsNames.add("externalId");this.allFieldsNames.add("productId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("unitPrice");this.allFieldsNames.add("unitListPrice");this.allFieldsNames.add("estimatedShipDate");this.allFieldsNames.add("autoCancelDate");this.allFieldsNames.add("correspondingPoId");this.allFieldsNames.add("serialNumber");this.allFieldsNames.add("lotId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -559,41 +534,6 @@ fieldMapColumns.put("OrderHeaderItemAndRolesAndInvPending", fields);
     public void setLotId(String lotId) {
         this.lotId = lotId;
     }
-    /**
-     * Auto generated value setter.
-     * @param orderNameId the orderNameId to set
-     */
-    public void setOrderNameId(String orderNameId) {
-        this.orderNameId = orderNameId;
-    }
-    /**
-     * Auto generated value setter.
-     * @param orderDateString the orderDateString to set
-     */
-    public void setOrderDateString(String orderDateString) {
-        this.orderDateString = orderDateString;
-    }
-    /**
-     * Auto generated value setter.
-     * @param shipByDateString the shipByDateString to set
-     */
-    public void setShipByDateString(String shipByDateString) {
-        this.shipByDateString = shipByDateString;
-    }
-    /**
-     * Auto generated value setter.
-     * @param customerName the customerName to set
-     */
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-    /**
-     * Auto generated value setter.
-     * @param statusDescription the statusDescription to set
-     */
-    public void setStatusDescription(String statusDescription) {
-        this.statusDescription = statusDescription;
-    }
 
     /**
      * Auto generated value accessor.
@@ -811,41 +751,6 @@ fieldMapColumns.put("OrderHeaderItemAndRolesAndInvPending", fields);
      */
     public String getLotId() {
         return this.lotId;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getOrderNameId() {
-        return this.orderNameId;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getOrderDateString() {
-        return this.orderDateString;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getShipByDateString() {
-        return this.shipByDateString;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getCustomerName() {
-        return this.customerName;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getStatusDescription() {
-        return this.statusDescription;
     }
 
     /**
@@ -1318,11 +1223,6 @@ fieldMapColumns.put("OrderHeaderItemAndRolesAndInvPending", fields);
         setCorrespondingPoId((String) mapValue.get("correspondingPoId"));
         setSerialNumber((String) mapValue.get("serialNumber"));
         setLotId((String) mapValue.get("lotId"));
-        setOrderNameId((String) mapValue.get("orderNameId"));
-        setOrderDateString((String) mapValue.get("orderDateString"));
-        setShipByDateString((String) mapValue.get("shipByDateString"));
-        setCustomerName((String) mapValue.get("customerName"));
-        setStatusDescription((String) mapValue.get("statusDescription"));
         postInit();
     }
 
@@ -1361,11 +1261,6 @@ fieldMapColumns.put("OrderHeaderItemAndRolesAndInvPending", fields);
         mapValue.put("correspondingPoId", getCorrespondingPoId());
         mapValue.put("serialNumber", getSerialNumber());
         mapValue.put("lotId", getLotId());
-        mapValue.put("orderNameId", getOrderNameId());
-        mapValue.put("orderDateString", getOrderDateString());
-        mapValue.put("shipByDateString", getShipByDateString());
-        mapValue.put("customerName", getCustomerName());
-        mapValue.put("statusDescription", getStatusDescription());
         return mapValue;
     }
 
