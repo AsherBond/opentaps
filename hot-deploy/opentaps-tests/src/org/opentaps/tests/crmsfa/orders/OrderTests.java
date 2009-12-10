@@ -3606,14 +3606,12 @@ public class OrderTests extends OrderTestCase {
      * @throws Exception if an error occurs
      */
     public void testGwtOrderLookup() throws Exception {
-        TimeZone timeZone = TimeZone.getDefault();
-        Locale locale = Locale.getDefault();
         InputProviderInterface provider = new TestInputProvider(admin, dispatcher);
 
         // 1. test find order by orderId
         provider.setParameter(SalesOrderLookupConfiguration.INOUT_ORDER_ID, "TEST10000");
         SalesOrderLookupService lookup = new SalesOrderLookupService(provider);
-        lookup.findOrders(locale, timeZone);
+        lookup.findOrders();
         assertEquals("There should just found one record with order Id [TEST10000].", 1, lookup.getResultTotalCount());
         assertGwtLookupFound(lookup, Arrays.asList("TEST10000"), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
 
@@ -3622,7 +3620,7 @@ public class OrderTests extends OrderTestCase {
         provider.setParameter(SalesOrderLookupConfiguration.INOUT_PARTY_ID, "DemoAccount1");
         provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999"); // set high pager limit so other test won't mask the expected results
         lookup = new SalesOrderLookupService(provider);
-        lookup.findOrders(locale, timeZone);
+        lookup.findOrders();
         // test we found the demo data: TEST10000/TEST10001
         assertGwtLookupFound(lookup, Arrays.asList("TEST10000", "TEST10001"), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
         assertGwtLookupNotFound(lookup, Arrays.asList("TEST10002"), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
@@ -3632,7 +3630,7 @@ public class OrderTests extends OrderTestCase {
         provider.setParameter(SalesOrderLookupConfiguration.INOUT_CORRESPONDING_PO_ID, "PO10001");
         provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999"); // set high pager limit so other test won't mask the expected results
         lookup = new SalesOrderLookupService(provider);
-        lookup.findOrders(locale, timeZone);
+        lookup.findOrders();
         // test we found the demo data: TEST10002, not found TEST10000/TEST10001
         assertGwtLookupFound(lookup, Arrays.asList("TEST10002"), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
         assertGwtLookupNotFound(lookup, Arrays.asList("TEST10000"), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
@@ -3643,7 +3641,7 @@ public class OrderTests extends OrderTestCase {
         provider.setParameter(SalesOrderLookupConfiguration.INOUT_STATUS_ID, "ORDER_APPROVED");
         provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999"); // set high pager limit so other test won't mask the expected results
         lookup = new SalesOrderLookupService(provider);
-        lookup.findOrders(locale, timeZone);
+        lookup.findOrders();
         // test we found the demo data: TEST10000/TEST10002, not found TEST10001
         assertGwtLookupFound(lookup, Arrays.asList("TEST10000", "TEST10002"), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
         assertGwtLookupNotFound(lookup, Arrays.asList("TEST10001"), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
@@ -3653,7 +3651,7 @@ public class OrderTests extends OrderTestCase {
         provider.setParameter(SalesOrderLookupConfiguration.INOUT_STATUS_ID, "ORDER_CREATED");
         provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999"); // set high pager limit so other test won't mask the expected results
         lookup = new SalesOrderLookupService(provider);
-        lookup.findOrders(locale, timeZone);
+        lookup.findOrders();
         // test we found the demo data: TEST10001, not found TEST10000/TEST10002
         assertGwtLookupFound(lookup, Arrays.asList("TEST10001"), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
         assertGwtLookupNotFound(lookup, Arrays.asList("TEST10000"), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
@@ -3668,7 +3666,7 @@ public class OrderTests extends OrderTestCase {
         provider.setParameter(SalesOrderLookupConfiguration.IN_THRU_DATE, thruDate);
         provider.setParameter(UtilLookup.PARAM_PAGER_LIMIT, "999"); // set high pager limit so other test won't mask the expected results
         lookup = new SalesOrderLookupService(provider);
-        lookup.findOrders(locale, timeZone);
+        lookup.findOrders();
         // test we found the demo data: TEST10000/TEST10002, not found TEST10001
         assertGwtLookupFound(lookup, Arrays.asList("TEST10000", "TEST10002"), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
         assertGwtLookupNotFound(lookup, Arrays.asList("TEST10001"), SalesOrderLookupConfiguration.INOUT_ORDER_ID);
