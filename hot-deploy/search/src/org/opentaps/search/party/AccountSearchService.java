@@ -41,7 +41,7 @@ import org.opentaps.search.HibernateSearchService;
  */
 public class AccountSearchService extends HibernateSearchService implements AccountSearchServiceInterface {
 
-    private List<Account> accounts = null;
+    private List<Account> accounts = new ArrayList<Account>();
 
     /** {@inheritDoc} */
     public List<Account> getAccounts() {
@@ -87,8 +87,10 @@ public class AccountSearchService extends HibernateSearchService implements Acco
                 }
             }
 
-            if (!accountIds.isEmpty()) {
-                accounts = partyRepository.findList(Account.class, EntityCondition.makeCondition(Account.Fields.partyId.name(), EntityOperator.IN, accountIds));
+            // apply pagination here
+            setResultSize(accountIds.size());
+            if (!accountIds.isEmpty() && getPageStart() < accountIds.size() && getPageSize() > 0) {
+                accounts = partyRepository.findPage(Account.class, EntityCondition.makeCondition(Account.Fields.partyId.name(), EntityOperator.IN, accountIds), getPageStart(), getPageSize());
             } else {
                 accounts = new ArrayList<Account>();
             }

@@ -41,7 +41,7 @@ import org.opentaps.search.HibernateSearchService;
  */
 public class SupplierSearchService extends HibernateSearchService implements SupplierSearchServiceInterface {
 
-    private List<PartyGroup> suppliers = null;
+    private List<PartyGroup> suppliers = new ArrayList<PartyGroup>();
 
     /** {@inheritDoc} */
     public List<PartyGroup> getSuppliers() {
@@ -87,8 +87,10 @@ public class SupplierSearchService extends HibernateSearchService implements Sup
                 }
             }
 
-            if (!supplierIds.isEmpty()) {
-                suppliers = partyRepository.findList(PartyGroup.class, EntityCondition.makeCondition(PartyGroup.Fields.partyId.name(), EntityOperator.IN, supplierIds));
+            // apply pagination here
+            setResultSize(supplierIds.size());
+            if (!supplierIds.isEmpty() && getPageStart() < supplierIds.size() && getPageSize() > 0) {
+                suppliers = partyRepository.findPage(PartyGroup.class, EntityCondition.makeCondition(PartyGroup.Fields.partyId.name(), EntityOperator.IN, supplierIds), getPageStart(), getPageSize());
             } else {
                 suppliers = new ArrayList<PartyGroup>();
             }

@@ -48,7 +48,7 @@ public class CaseSearchService extends HibernateSearchService implements CaseSea
             CustRequestRole.class
         ));
 
-    private List<CustRequest> cases = null;
+    private List<CustRequest> cases = new ArrayList<CustRequest>();
 
     /** {@inheritDoc} */
     public List<CustRequest> getCases() {
@@ -108,8 +108,10 @@ public class CaseSearchService extends HibernateSearchService implements CaseSea
                 }
             }
 
-            if (!caseIds.isEmpty()) {
-                cases = repository.findList(CustRequest.class, EntityCondition.makeCondition(CustRequest.Fields.custRequestId.name(), EntityOperator.IN, caseIds));
+            // apply pagination here
+            setResultSize(caseIds.size());
+            if (!caseIds.isEmpty() && getPageStart() < caseIds.size() && getPageSize() > 0) {
+                cases = repository.findPage(CustRequest.class, EntityCondition.makeCondition(CustRequest.Fields.custRequestId.name(), EntityOperator.IN, caseIds), getPageStart(), getPageSize());
             } else {
                 cases = new ArrayList<CustRequest>();
             }

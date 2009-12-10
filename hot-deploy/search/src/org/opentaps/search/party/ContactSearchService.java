@@ -41,7 +41,7 @@ import org.opentaps.search.HibernateSearchService;
  */
 public class ContactSearchService extends HibernateSearchService implements ContactSearchServiceInterface {
 
-    private List<Contact> contacts = null;
+    private List<Contact> contacts = new ArrayList<Contact>();
 
     /** {@inheritDoc} */
     public List<Contact> getContacts() {
@@ -87,8 +87,10 @@ public class ContactSearchService extends HibernateSearchService implements Cont
                 }
             }
 
-            if (!contactIds.isEmpty()) {
-                contacts = partyRepository.findList(Contact.class, EntityCondition.makeCondition(Contact.Fields.partyId.name(), EntityOperator.IN, contactIds));
+            // apply pagination here
+            setResultSize(contactIds.size());
+            if (!contactIds.isEmpty() && getPageStart() < contactIds.size() && getPageSize() > 0) {
+                contacts = partyRepository.findPage(Contact.class, EntityCondition.makeCondition(Contact.Fields.partyId.name(), EntityOperator.IN, contactIds), getPageStart(), getPageSize());
             } else {
                 contacts = new ArrayList<Contact>();
             }

@@ -87,8 +87,10 @@ public class LeadSearchService extends HibernateSearchService implements LeadSea
                 }
             }
 
-            if (!leadIds.isEmpty()) {
-                leads = partyRepository.findList(Lead.class, EntityCondition.makeCondition(Lead.Fields.partyId.name(), EntityOperator.IN, leadIds));
+            // apply pagination here
+            setResultSize(leadIds.size());
+            if (!leadIds.isEmpty() && getPageStart() < leadIds.size() && getPageSize() > 0) {
+                leads = partyRepository.findPage(Lead.class, EntityCondition.makeCondition(Lead.Fields.partyId.name(), EntityOperator.IN, leadIds), getPageStart(), getPageSize());
             } else {
                 leads = new ArrayList<Lead>();
             }

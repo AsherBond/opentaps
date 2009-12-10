@@ -49,7 +49,7 @@ public class SalesOpportunitySearchService extends HibernateSearchService implem
             SalesOpportunityRole.class
         ));
 
-    private List<SalesOpportunity> salesOpportunities = null;
+    private List<SalesOpportunity> salesOpportunities = new ArrayList<SalesOpportunity>();
 
     /** {@inheritDoc} */
     public List<SalesOpportunity> getSalesOpportunities() {
@@ -109,8 +109,10 @@ public class SalesOpportunitySearchService extends HibernateSearchService implem
                 }
             }
 
-            if (!salesOpportunityIds.isEmpty()) {
-                salesOpportunities = orderRepository.findList(SalesOpportunity.class, EntityCondition.makeCondition(SalesOpportunity.Fields.salesOpportunityId.name(), EntityOperator.IN, salesOpportunityIds));
+            // apply pagination here
+            setResultSize(salesOpportunityIds.size());
+            if (!salesOpportunityIds.isEmpty() && getPageStart() < salesOpportunityIds.size() && getPageSize() > 0) {
+                salesOpportunities = orderRepository.findPage(SalesOpportunity.class, EntityCondition.makeCondition(SalesOpportunity.Fields.salesOpportunityId.name(), EntityOperator.IN, salesOpportunityIds), getPageStart(), getPageSize());
             } else {
                 salesOpportunities = new ArrayList<SalesOpportunity>();
             }

@@ -51,7 +51,7 @@ public class PurchaseOrderSearchService extends HibernateSearchService implement
             OrderRole.class
         ));
 
-    private List<Order> orders = null;
+    private List<Order> orders = new ArrayList<Order>();
 
     /** {@inheritDoc} */
     public List<Order> getOrders() {
@@ -113,8 +113,10 @@ public class PurchaseOrderSearchService extends HibernateSearchService implement
                 }
             }
 
-            if (!orderIds.isEmpty()) {
-                orders = orderRepository.findList(Order.class, EntityCondition.makeCondition(Order.Fields.orderId.name(), EntityOperator.IN, orderIds));
+            // apply pagination here
+            setResultSize(orderIds.size());
+            if (!orderIds.isEmpty() && getPageStart() < orderIds.size() && getPageSize() > 0) {
+                orders = orderRepository.findPage(Order.class, EntityCondition.makeCondition(Order.Fields.orderId.name(), EntityOperator.IN, orderIds), getPageStart(), getPageSize());
             } else {
                 orders = new ArrayList<Order>();
             }
