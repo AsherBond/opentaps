@@ -549,6 +549,7 @@ public final class InvoiceServices {
 
         Map paymentApplicationContext = FastMap.newInstance();
         paymentApplicationContext.put("userLogin", userLogin);
+        UtilAccountingTags.addTagParameters(context, paymentApplicationContext, "acctgTagEnumId", "acctgTagEnumId");
 
         try {
 
