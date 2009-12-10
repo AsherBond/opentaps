@@ -90,7 +90,6 @@ public class HibernateSearchRepository extends Repository implements SearchRepos
     public void searchInEntities(Set<Class<?>> entityClasses, String queryString, int pageStart, int pageSize) throws RepositoryException {
 
         Debug.logInfo("searchInEntities: [" + entityClasses + "] query [" + queryString + "] page start [" + pageStart + "] pageSize [" + pageSize + "]", MODULE);
-        int pageEnd = pageStart + pageSize;
         Session session = null;
         FullTextSession fullTextSession = null;
         Transaction tx = null;
@@ -105,9 +104,6 @@ public class HibernateSearchRepository extends Repository implements SearchRepos
             // create the full text query
             FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(luceneQuery, entityClasses.toArray(new Class[entityClasses.size()]));
             fullTextQuery.setProjection(new String[]{FullTextQuery.OBJECT_CLASS, FullTextQuery.ID});
-            // set pagination
-            fullTextQuery.setFirstResult(pageStart);
-            fullTextQuery.setMaxResults(pageSize);
             // perform the query
             List<Object[]> queryResults = fullTextQuery.list();
             resultSize = fullTextQuery.getResultSize();
@@ -117,7 +113,7 @@ public class HibernateSearchRepository extends Repository implements SearchRepos
             // a Verbose debug of all results (in current pagination range)
             // and map the query results into SearchResult objects
             results = new ArrayList<SearchResult>();
-            Debug.logInfo("------- results from " + pageStart + " to " + pageEnd + " out of " + resultSize + " -------", MODULE);
+            Debug.logInfo("------- end of results (total " + resultSize + ") -------", MODULE);
             int i = pageStart + 1;
             for (Object[] o : queryResults) {
                 StringBuilder sb = new StringBuilder(" ").append(i).append(" --> ");
@@ -130,7 +126,7 @@ public class HibernateSearchRepository extends Repository implements SearchRepos
                 results.add(new SearchResult((Class<?>) o[0], o[1]));
 
             }
-            Debug.logInfo("------- end of results from " + pageStart + " to " + pageEnd + " out of " + resultSize + " -------", MODULE);
+            Debug.logInfo("------- end of results (total " + resultSize + ") -------", MODULE);
 
             tx.commit();
         } catch (ParseException e) {
