@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.opentaps.base.entities.OrderHeaderAndRoles;
+import org.opentaps.common.domain.order.OrderViewForListing;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 
@@ -115,6 +115,6 @@ public interface PurchaseOrderSearchRepositoryInterface  extends RepositoryInter
      * @return list of orders
      * @throws RepositoryException if an error occurs
      */
-    public List<OrderHeaderAndRoles> findOrders() throws RepositoryException;
+    public List<OrderViewForListing> findOrders() throws RepositoryException;
 
 }

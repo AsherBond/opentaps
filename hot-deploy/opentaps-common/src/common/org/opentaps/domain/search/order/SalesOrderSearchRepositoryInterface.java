@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
+import org.opentaps.common.domain.order.OrderViewForListing;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 
@@ -112,7 +112,7 @@ public interface SalesOrderSearchRepositoryInterface extends RepositoryInterface
      * @param viewPref a <code>String</code> value
      */
     public void setViewPref(String viewPref);
-    
+
     /**
      * Sets the find all option to search for.
      * @param findAll a <code>String</code> value
@@ -148,6 +148,6 @@ public interface SalesOrderSearchRepositoryInterface extends RepositoryInterface
      * @return list of orders
      * @throws RepositoryException if an error occurs
      */
-    public List<OrderHeaderItemAndRolesAndInvPending> findOrders() throws RepositoryException;
+    public List<OrderViewForListing> findOrders() throws RepositoryException;
 
 }

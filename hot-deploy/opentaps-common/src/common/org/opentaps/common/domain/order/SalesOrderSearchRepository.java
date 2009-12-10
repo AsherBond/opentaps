@@ -26,17 +26,13 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import javolution.util.FastList;
-import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.party.party.PartyHelper;
 import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvCompleted;
 import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
-import org.opentaps.base.entities.StatusItem;
-import org.opentaps.common.order.UtilOrder;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.domain.search.order.SalesOrderSearchRepositoryInterface;
 import org.opentaps.foundation.entity.util.EntityComparator;
@@ -78,7 +74,7 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
     }
 
     /** {@inheritDoc} */
-    public List<OrderHeaderItemAndRolesAndInvPending> findOrders() throws RepositoryException {
+    public List<OrderViewForListing> findOrders() throws RepositoryException {
         List<EntityCondition> searchConditions = FastList.newInstance();
 
         // convert fromDate into Timestamp and construct EntityExpr for searching
@@ -130,7 +126,7 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
      * @return the list of entities found, or <code>null</code> if an error occurred
      * @throws RepositoryException if error occur
      */
-    private List<OrderHeaderItemAndRolesAndInvPending> findOrderListWithFilters(List<EntityCondition> conds) throws RepositoryException {
+    private List<OrderViewForListing> findOrderListWithFilters(List<EntityCondition> conds) throws RepositoryException {
         if (UtilValidate.isNotEmpty(orderId)) {
             conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.orderId.name()), EntityOperator.LIKE, EntityFunction.UPPER(orderId + "%")));
         }
@@ -174,7 +170,7 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
      * @return the list of entities found, or <code>null</code> if an error occurred
      * @throws RepositoryException if error occur
      */
-    private List<OrderHeaderItemAndRolesAndInvPending> findOrdersByCondition(List<EntityCondition> conds) throws RepositoryException {
+    private List<OrderViewForListing> findOrdersByCondition(List<EntityCondition> conds) throws RepositoryException {
 
         // Note: this code relies on the fact that OrderHeaderItemAndRolesAndInvPending and OrderHeaderItemAndRolesAndInvCompleted entities
         // share the same fields, so we can clone OrderHeaderItemAndRolesAndInvCompleted entity as OrderHeaderItemAndRolesAndInvPending entity
@@ -195,32 +191,6 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
             orderBy = Arrays.asList(OrderHeaderItemAndRolesAndInvPending.Fields.orderDate.desc());
         }
 
-        // convert sort condition parameters for findList, for some field is composed fields, and some not in view entity really.
-        for (String ord : orderBy) {
-            if (OrderHeaderItemAndRolesAndInvPending.Fields.orderNameId.asc().equals(ord)) {
-                queryOrderBy.add(OrderHeaderItemAndRolesAndInvPending.Fields.orderName.asc());
-                queryOrderBy.add(OrderHeaderItemAndRolesAndInvPending.Fields.orderId.asc());
-            } else if (OrderHeaderItemAndRolesAndInvPending.Fields.orderNameId.desc().equals(ord)) {
-                queryOrderBy.add(OrderHeaderItemAndRolesAndInvPending.Fields.orderName.desc());
-                queryOrderBy.add(OrderHeaderItemAndRolesAndInvPending.Fields.orderId.desc());
-            } else if (OrderHeaderItemAndRolesAndInvPending.Fields.orderDateString.asc().equals(ord)) {
-                queryOrderBy.add(OrderHeaderItemAndRolesAndInvPending.Fields.orderDate.asc());
-            } else if (OrderHeaderItemAndRolesAndInvPending.Fields.orderDateString.desc().equals(ord)) {
-                queryOrderBy.add(OrderHeaderItemAndRolesAndInvPending.Fields.orderDate.desc());
-            } else if (OrderHeaderItemAndRolesAndInvPending.Fields.statusDescription.asc().equals(ord)) {
-                queryOrderBy.add(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.asc());
-            } else if (OrderHeaderItemAndRolesAndInvPending.Fields.statusDescription.desc().equals(ord)) {
-                queryOrderBy.add(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.desc());
-            } else if (OrderHeaderItemAndRolesAndInvPending.Fields.customerName.asc().equals(ord)
-                    || OrderHeaderItemAndRolesAndInvPending.Fields.customerName.desc().equals(ord)
-                    || OrderHeaderItemAndRolesAndInvPending.Fields.shipByDateString.asc().equals(ord)
-                    || OrderHeaderItemAndRolesAndInvPending.Fields.shipByDateString.desc().equals(ord)
-                    ) {
-                // do nothing for not existing in customerName/shipByDateString fields in view entity really
-            } else {
-                queryOrderBy.add(ord);
-            }
-        }
         List<OrderHeaderItemAndRolesAndInvPending> orders = FastList.newInstance();
         List<OrderHeaderItemAndRolesAndInvCompleted> completedOrders = findList(OrderHeaderItemAndRolesAndInvCompleted.class, EntityCondition.makeCondition(conds, EntityOperator.AND), fieldsToSelect, queryOrderBy);
         for (OrderHeaderItemAndRolesAndInvCompleted order : completedOrders) {
@@ -241,21 +211,9 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
         orders.addAll(pendingOrderList);
 
         // add value for extra fields
-        for (OrderHeaderItemAndRolesAndInvPending order : orders) {
-            order.setOrderDateString(UtilDateTime.timeStampToString(order.getOrderDate(), UtilDateTime.getDateTimeFormat(locale), timeZone, locale));
-            order.setShipByDateString(UtilOrder.getEarliestShipByDate(getDelegator(), order.getOrderId(), timeZone, locale));
-            order.setCustomerName(PartyHelper.getPartyName(getDelegator(), order.getPartyId(), false));
-            order.setOrderNameId((order.getOrderName() == null ? "" : order.getOrderName()) + " (" + order.getOrderId() + ")");
-            // set status description by find statusId in repository
-            if (UtilValidate.isNotEmpty(order.getStatusId())) {
-                StatusItem statusItem = findOne(StatusItem.class, map(StatusItem.Fields.statusId, order.getStatusId()));
-                order.setStatusDescription(statusItem.getDescription());
-            }
-        }
-
-        // sort the orders collection by order date desc
-        Collections.sort(orders, new EntityComparator(orderBy));
-        return orders;
+        List<OrderViewForListing> results = OrderViewForListing.makeOrderView(orders, getDelegator(), timeZone, locale);
+        Collections.sort(results, new EntityComparator(orderBy));
+        return results;
     }
 
     /** {@inheritDoc} */

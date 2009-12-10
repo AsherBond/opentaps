@@ -19,24 +19,20 @@ package org.opentaps.common.domain.order;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import javolution.util.FastList;
-
-import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.party.party.PartyHelper;
 import org.opentaps.base.entities.OrderHeaderAndItems;
 import org.opentaps.base.entities.OrderHeaderAndRoles;
-import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
 import org.opentaps.base.entities.ProductAndGoodIdentification;
-import org.opentaps.base.entities.StatusItem;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.product.Product;
@@ -44,6 +40,7 @@ import org.opentaps.domain.product.ProductRepositoryInterface;
 import org.opentaps.domain.search.order.PurchaseOrderSearchRepositoryInterface;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityNotFoundException;
+import org.opentaps.foundation.entity.util.EntityComparator;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 
@@ -77,7 +74,7 @@ public class PurchaseOrderSearchRepository  extends Repository implements Purcha
     }
 
     /** {@inheritDoc} */
-    public List<OrderHeaderAndRoles> findOrders() throws RepositoryException {
+    public List<OrderViewForListing> findOrders() throws RepositoryException {
         List<EntityCondition> searchConditions = FastList.newInstance();
 
         // convert fromDate into Timestamp and construct EntityExpr for searching
@@ -143,52 +140,18 @@ public class PurchaseOrderSearchRepository  extends Repository implements Purcha
         fieldsToSelect.add(OrderHeaderAndRoles.Fields.statusId.name());
         fieldsToSelect.add(OrderHeaderAndRoles.Fields.grandTotal.name());
         fieldsToSelect.add(OrderHeaderAndRoles.Fields.currencyUom.name());
-        
+
         List<String> queryOrderBy = new ArrayList<String>();
         if (orderBy == null) {
             orderBy = Arrays.asList(OrderHeaderAndRoles.Fields.orderDate.desc());
         }
-     // convert sort condition parameters for findList, for some field is composed fields, and some not in view entity really.
-        for (String ord : orderBy) {
-            if (OrderHeaderItemAndRolesAndInvPending.Fields.orderNameId.asc().equals(ord)) {
-                queryOrderBy.add(OrderHeaderAndRoles.Fields.orderName.asc());
-                queryOrderBy.add(OrderHeaderAndRoles.Fields.orderId.asc());
-            } else if (OrderHeaderAndRoles.Fields.orderNameId.desc().equals(ord)) {
-                queryOrderBy.add(OrderHeaderAndRoles.Fields.orderName.desc());
-                queryOrderBy.add(OrderHeaderAndRoles.Fields.orderId.desc());
-            } else if (OrderHeaderAndRoles.Fields.orderDateString.asc().equals(ord)) {
-                queryOrderBy.add(OrderHeaderAndRoles.Fields.orderDate.asc());
-            } else if (OrderHeaderAndRoles.Fields.orderDateString.desc().equals(ord)) {
-                queryOrderBy.add(OrderHeaderAndRoles.Fields.orderDate.desc());
-            } else if (OrderHeaderAndRoles.Fields.statusDescription.asc().equals(ord)) {
-                queryOrderBy.add(OrderHeaderAndRoles.Fields.statusId.asc());
-            } else if (OrderHeaderAndRoles.Fields.statusDescription.desc().equals(ord)) {
-                queryOrderBy.add(OrderHeaderAndRoles.Fields.statusId.desc());
-            } else if (OrderHeaderAndRoles.Fields.supplierName.asc().equals(ord)) {
-                queryOrderBy.add(OrderHeaderAndRoles.Fields.partyId.asc());
-            } else if (OrderHeaderAndRoles.Fields.supplierName.desc().equals(ord)) {
-                queryOrderBy.add(OrderHeaderAndRoles.Fields.partyId.desc());
-            } else {
-                queryOrderBy.add(ord);
-            }
-        }
         List<OrderHeaderAndRoles> orders = findList(OrderHeaderAndRoles.class, searchConditionList, fieldsToSelect, queryOrderBy);
 
         // add value for extra fields
-        for (OrderHeaderAndRoles order : orders) {
-            order.setSupplierName(PartyHelper.getPartyName(getDelegator(), order.getPartyId(), false));
-            order.setOrderDateString(UtilDateTime.timeStampToString(order.getOrderDate(), UtilDateTime.getDateTimeFormat(locale), timeZone, locale));
-            order.setOrderNameId((order.getOrderName() == null ? "" : order.getOrderName()) + " (" + order.getOrderId() + ")");
-            // set status description by find statusId in repository
-            if (UtilValidate.isNotEmpty(order.getStatusId())) {
-                StatusItem statusItem = findOne(StatusItem.class, map(StatusItem.Fields.statusId, order.getStatusId()));
-                order.setStatusDescription(statusItem.getDescription());
-            }
-        }
-        return orders;
+        List<OrderViewForListing> results = OrderViewForListing.makeOrderView(orders, getDelegator(), timeZone, locale);
+        Collections.sort(results, new EntityComparator(orderBy));
+        return results;
     }
-
-
 
     /** {@inheritDoc} */
     public void setCreatedBy(String createdBy) {
@@ -209,7 +172,6 @@ public class PurchaseOrderSearchRepository  extends Repository implements Purcha
     public void setFromDate(String fromDate) {
         this.fromDate = fromDate;
     }
-
 
     /** {@inheritDoc} */
     public void setOrderId(String orderId) {
