@@ -124,11 +124,17 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
             SearchDomainInterface searchDomain = getDomainsDirectory().getSearchDomain();
 
             accountSearch = searchDomain.getAccountSearchService();
+            accountSearch.setPagination(this);
             contactSearch = searchDomain.getContactSearchService();
+            contactSearch.setPagination(this);
             leadSearch = searchDomain.getLeadSearchService();
+            leadSearch.setPagination(this);
             salesOpportunitySearch = searchDomain.getSalesOpportunitySearchService();
+            salesOpportunitySearch.setPagination(this);
             salesOrderSearch = searchDomain.getSalesOrderSearchService();
+            salesOrderSearch.setPagination(this);
             caseSearch = searchDomain.getCaseSearchService();
+            caseSearch.setPagination(this);
 
             searchRepository = searchDomain.getSearchRepository();
 
@@ -141,19 +147,56 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
 
     /** {@inheritDoc} */
     public void readSearchResults(List<SearchResult> results) throws ServiceException {
-        accountSearch.readSearchResults(results);
-        contactSearch.readSearchResults(results);
-        leadSearch.readSearchResults(results);
-        salesOpportunitySearch.readSearchResults(results);
-        salesOrderSearch.readSearchResults(results);
-        caseSearch.readSearchResults(results);
+        // scroll each sub services results
 
+        int s = getPageStart();
+        int ps = getPageSize();
+        int n = 0; // returned records
+        int t = 0; // total records
+        accountSearch.setPageStart(s);
+        accountSearch.setPageSize(ps);
+        accountSearch.readSearchResults(results);
         accounts = accountSearch.getAccounts();
+        t += accountSearch.getResultSize();
+        n += accounts.size();
+
+        contactSearch.setPageStart(Math.max(s - t, 0));
+        contactSearch.setPageSize(Math.max(ps - n, 0));
+        contactSearch.readSearchResults(results);
         contacts = contactSearch.getContacts();
+        t += contactSearch.getResultSize();
+        n += contacts.size();
+
+        leadSearch.setPageStart(Math.max(s - t, 0));
+        leadSearch.setPageSize(Math.max(ps - n, 0));
+        leadSearch.readSearchResults(results);
         leads = leadSearch.getLeads();
+        t += leadSearch.getResultSize();
+        n += leads.size();
+
+        salesOpportunitySearch.setPageStart(Math.max(s - t, 0));
+        salesOpportunitySearch.setPageSize(Math.max(ps - n, 0));
+        salesOpportunitySearch.readSearchResults(results);
         salesOpportunities = salesOpportunitySearch.getSalesOpportunities();
+        t += salesOpportunitySearch.getResultSize();
+        n += salesOpportunities.size();
+
+        salesOrderSearch.setPageStart(Math.max(s - t, 0));
+        salesOrderSearch.setPageSize(Math.max(ps - n, 0));
+        salesOrderSearch.readSearchResults(results);
         salesOrders = salesOrderSearch.getOrders();
+        t += salesOrderSearch.getResultSize();
+        n += salesOrders.size();
+
+        caseSearch.setPageStart(Math.max(s - t, 0));
+        caseSearch.setPageSize(Math.max(ps - n, 0));
+        caseSearch.readSearchResults(results);
         cases = caseSearch.getCases();
+        t += caseSearch.getResultSize();
+        n += cases.size();
+
+        // set the total number of results
+        setResultSize(t);
     }
 
     /**
