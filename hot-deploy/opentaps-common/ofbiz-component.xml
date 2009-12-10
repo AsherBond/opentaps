@@ -40,6 +40,7 @@
     <entity-resource type="data" reader-name="seed" loader="main" location="data/ShipmentTypeData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/AccountingTagsSeedData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/VisualThemeResources.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/OpentapsWebAppsSeedData.xml"/>
 
     <entity-resource type="data" reader-name="demo" loader="main" location="data/CommonDemoData.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/ProductDemoData.xml"/>

@@ -33,6 +33,7 @@
     <bean id="opentapsPurchasingDomain" class="org.opentaps.purchasing.domain.PurchasingDomain"/>
     <bean id="opentapsAsteriskVoipDomain" class="org.opentaps.asterisk.domain.AsteriskDomain"/>
     <bean id="opentapsSearchDomain" class="org.opentaps.search.SearchDomain"/>
+    <bean id="opentapsWebAppDomain" class="org.opentaps.webapp.WebAppDomain"/>
     <!-- The bean id "domainsDirectory" is used by DomainsLoader, so do not change this.-->
     <bean id="domainsDirectory" class="org.opentaps.domain.DomainsDirectory">
         <!-- the property names reference members of DomainsDirectory class and are set using setters by Spring -->
@@ -48,6 +49,7 @@
         <property name="purchasingDomain"><ref bean="opentapsPurchasingDomain"/></property>
         <property name="voipDomain"><ref bean="opentapsAsteriskVoipDomain"/></property>
         <property name="searchDomain"><ref bean="opentapsSearchDomain"/></property>
+        <property name="webAppDomain"><ref bean="opentapsWebAppDomain"/></property>
     </bean>
     
 </beans>

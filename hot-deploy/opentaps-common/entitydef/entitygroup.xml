@@ -199,5 +199,11 @@ under the License.
  
     <!-- Registers data transformations time -->
     <entity-group group="org.ofbiz" entity="DataWarehouseTransform"/>
+    
+    
+    <!-- =================== -->
+    <!-- org.opentaps.common.webapp -->
+    <!-- =================== -->
+    <entity-group group="org.ofbiz" entity="OpentapsWebApps"/>
  
 </entitygroup>  

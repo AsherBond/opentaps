@@ -28,6 +28,7 @@ import org.opentaps.domain.purchasing.PurchasingDomainInterface;
 import org.opentaps.domain.search.SearchDomainInterface;
 import org.opentaps.domain.shipping.ShippingDomainInterface;
 import org.opentaps.domain.voip.VoipDomainInterface;
+import org.opentaps.domain.webapp.WebAppDomainInterface;
 import org.opentaps.foundation.infrastructure.DomainContextInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
@@ -46,6 +47,7 @@ public class DomainsDirectory implements DomainContextInterface {
     private PurchasingDomainInterface purchasingDomain;
     private VoipDomainInterface voipDomain;
     private SearchDomainInterface searchDomain;
+    private WebAppDomainInterface webAppDomain;
 
     private Infrastructure infrastructure;
     private User user;
@@ -211,6 +213,16 @@ public class DomainsDirectory implements DomainContextInterface {
 
     public void setSearchDomain(SearchDomainInterface searchDomain) {
         this.searchDomain = searchDomain;
+    }
+    
+    public WebAppDomainInterface getWebAppDomain() {
+        webAppDomain.setInfrastructure(infrastructure);
+        webAppDomain.setUser(user);
+        return webAppDomain;
+    }
+
+    public void setWebAppDomain(WebAppDomainInterface webAppDomain) {
+        this.webAppDomain = webAppDomain;
     }
 
 }

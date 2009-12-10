@@ -22,26 +22,10 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
 
-
-
 	<!-- always required -->
 	<resource-loader name="main" type="component" />
 
-    <!--<classpath type="jar" location="build/lib/*"/>-->
-    <classpath type="dir" location="script"/>
-    <!--<classpath type="dir" location="config"/>-->
-
-	<entity-resource type="data" reader-name="seed" loader="main"
-		location="data/HomeAppsSeedData.xml" />
-
-	 <!-- this defines the data model specific to this application -->
-    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
-    <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup.xml"/>
-
-    <!-- service definitions
-    <service-resource type="model" loader="main" location="servicedef/services.xml"/>
-    -->
-      <webapp name="opentapsHome"
+    <webapp name="opentapsHome"
     	    title="opentaps"
     	    server="default-server" 
     	    location="webapp/homeapps"

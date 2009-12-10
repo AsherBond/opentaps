@@ -49,7 +49,6 @@ import java.sql.Timestamp;
  * Auto generated base entity SalesOpportunityRole.
  */
 @javax.persistence.Entity
-@Indexed
 @Table(name="SALES_OPPORTUNITY_ROLE")
 public class SalesOpportunityRole extends Entity {
 static {
@@ -82,7 +81,7 @@ fieldMapColumns.put("SalesOpportunityRole", fields);
   }
 
    @EmbeddedId
-   @DocumentId
+
    @FieldBridge(impl = org.opentaps.base.entities.bridge.SalesOpportunityRolePkBridge.class)
      private SalesOpportunityRolePk id = new SalesOpportunityRolePk();
    
@@ -113,14 +112,14 @@ fieldMapColumns.put("SalesOpportunityRole", fields);
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
-   @IndexedEmbedded(depth = 2)
+   
    private SalesOpportunity salesOpportunity = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
-   @IndexedEmbedded(depth = 2)
+   
    private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)

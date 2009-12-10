@@ -42,30 +42,39 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
+import java.lang.Long;
 import java.lang.String;
 import java.sql.Timestamp;
 
 /**
- * Auto generated base entity CustRequestRole.
+ * Auto generated base entity OpentapsWebApps.
  */
 @javax.persistence.Entity
-@Table(name="CUST_REQUEST_ROLE")
-public class CustRequestRole extends Entity {
+@Table(name="OPENTAPS_WEB_APPS")
+public class OpentapsWebApps extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
-        fields.put("custRequestId", "CUST_REQUEST_ID");
-        fields.put("partyId", "PARTY_ID");
-        fields.put("roleTypeId", "ROLE_TYPE_ID");
+        fields.put("applicationId", "APPLICATION_ID");
+        fields.put("applicationName", "APPLICATION_NAME");
+        fields.put("description", "DESCRIPTION");
+        fields.put("imageUrl", "IMAGE_URL");
+        fields.put("imageHoverUrl", "IMAGE_HOVER_URL");
+        fields.put("linkUrl", "LINK_URL");
+        fields.put("sequenceNum", "SEQUENCE_NUM");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
-fieldMapColumns.put("CustRequestRole", fields);
+fieldMapColumns.put("OpentapsWebApps", fields);
 }
-  public static enum Fields implements EntityFieldInterface<CustRequestRole> {
-    custRequestId("custRequestId"),
-    partyId("partyId"),
-    roleTypeId("roleTypeId"),
+  public static enum Fields implements EntityFieldInterface<OpentapsWebApps> {
+    applicationId("applicationId"),
+    applicationName("applicationName"),
+    description("description"),
+    imageUrl("imageUrl"),
+    imageHoverUrl("imageHoverUrl"),
+    linkUrl("linkUrl"),
+    sequenceNum("sequenceNum"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -80,25 +89,23 @@ fieldMapColumns.put("CustRequestRole", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
-   @EmbeddedId
-
-   @FieldBridge(impl = org.opentaps.base.entities.bridge.CustRequestRolePkBridge.class)
-     private CustRequestRolePk id = new CustRequestRolePk();
-   
-    /**
-     * Auto generated Id accessor.
-     * @return <code>CustRequestRolePk</code>
-     */
-      public CustRequestRolePk getId() {
-         return id;
-      }
-    /**
-     * Auto generated Id setter.
-     * @param id a <code>CustRequestRolePk</code> value to set
-    */   
-      public void setId(CustRequestRolePk id) {
-         this.id = id;
-      }
+   @org.hibernate.annotations.GenericGenerator(name="OpentapsWebApps_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
+   @GeneratedValue(generator="OpentapsWebApps_GEN")
+   @Id
+   @Column(name="APPLICATION_ID")
+   private String applicationId;
+   @Column(name="APPLICATION_NAME")
+   private String applicationName;
+   @Column(name="DESCRIPTION")
+   private String description;
+   @Column(name="IMAGE_URL")
+   private String imageUrl;
+   @Column(name="IMAGE_HOVER_URL")
+   private String imageHoverUrl;
+   @Column(name="LINK_URL")
+   private String linkUrl;
+   @Column(name="SEQUENCE_NUM")
+   private Long sequenceNum;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -107,41 +114,19 @@ fieldMapColumns.put("CustRequestRole", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
-   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
-   @JoinColumn(name="CUST_REQUEST_ID", insertable=false, updatable=false)
-   @org.hibernate.annotations.Generated(
-      org.hibernate.annotations.GenerationTime.ALWAYS
-   )
-   
-   private CustRequest custRequest = null;
-   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
-   @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
-   @org.hibernate.annotations.Generated(
-      org.hibernate.annotations.GenerationTime.ALWAYS
-   )
-   
-   private Party party = null;
-   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
-   @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)
-   @org.hibernate.annotations.Generated(
-      org.hibernate.annotations.GenerationTime.ALWAYS
-   )
-   
-   private RoleType roleType = null;
-   private transient PartyRole partyRole = null;
 
   /**
    * Default constructor.
    */
-  public CustRequestRole() {
+  public OpentapsWebApps() {
       super();
-      this.baseEntityName = "CustRequestRole";
+      this.baseEntityName = "OpentapsWebApps";
       this.isView = false;
       
       this.primaryKeyNames = new ArrayList<String>();
-      this.primaryKeyNames.add("custRequestId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("roleTypeId");
+      this.primaryKeyNames.add("applicationId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("applicationId");this.allFieldsNames.add("applicationName");this.allFieldsNames.add("description");this.allFieldsNames.add("imageUrl");this.allFieldsNames.add("imageHoverUrl");this.allFieldsNames.add("linkUrl");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -151,31 +136,59 @@ fieldMapColumns.put("CustRequestRole", fields);
    * Constructor with a repository.
    * @param repository a <code>RepositoryInterface</code> value
    */
-  public CustRequestRole(RepositoryInterface repository) {
+  public OpentapsWebApps(RepositoryInterface repository) {
       this();
       initRepository(repository);
   }
 
     /**
      * Auto generated value setter.
-     * @param custRequestId the custRequestId to set
+     * @param applicationId the applicationId to set
      */
-    public void setCustRequestId(String custRequestId) {
-        id.setCustRequestId(custRequestId);
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
     }
     /**
      * Auto generated value setter.
-     * @param partyId the partyId to set
+     * @param applicationName the applicationName to set
      */
-    public void setPartyId(String partyId) {
-        id.setPartyId(partyId);
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
     }
     /**
      * Auto generated value setter.
-     * @param roleTypeId the roleTypeId to set
+     * @param description the description to set
      */
-    public void setRoleTypeId(String roleTypeId) {
-        id.setRoleTypeId(roleTypeId);
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    /**
+     * Auto generated value setter.
+     * @param imageUrl the imageUrl to set
+     */
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+    /**
+     * Auto generated value setter.
+     * @param imageHoverUrl the imageHoverUrl to set
+     */
+    public void setImageHoverUrl(String imageHoverUrl) {
+        this.imageHoverUrl = imageHoverUrl;
+    }
+    /**
+     * Auto generated value setter.
+     * @param linkUrl the linkUrl to set
+     */
+    public void setLinkUrl(String linkUrl) {
+        this.linkUrl = linkUrl;
+    }
+    /**
+     * Auto generated value setter.
+     * @param sequenceNum the sequenceNum to set
+     */
+    public void setSequenceNum(Long sequenceNum) {
+        this.sequenceNum = sequenceNum;
     }
     /**
      * Auto generated value setter.
@@ -210,22 +223,50 @@ fieldMapColumns.put("CustRequestRole", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getCustRequestId() {
-        return this.id.getCustRequestId();
+    public String getApplicationId() {
+        return this.applicationId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getPartyId() {
-        return this.id.getPartyId();
+    public String getApplicationName() {
+        return this.applicationName;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getRoleTypeId() {
-        return this.id.getRoleTypeId();
+    public String getDescription() {
+        return this.description;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getImageUrl() {
+        return this.imageUrl;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getImageHoverUrl() {
+        return this.imageHoverUrl;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getLinkUrl() {
+        return this.linkUrl;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getSequenceNum() {
+        return this.sequenceNum;
     }
     /**
      * Auto generated value accessor.
@@ -256,88 +297,20 @@ fieldMapColumns.put("CustRequestRole", fields);
         return this.createdTxStamp;
     }
 
-    /**
-     * Auto generated method that gets the related <code>CustRequest</code> by the relation named <code>CustRequest</code>.
-     * @return the <code>CustRequest</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public CustRequest getCustRequest() throws RepositoryException {
-        if (this.custRequest == null) {
-            this.custRequest = getRelatedOne(CustRequest.class, "CustRequest");
-        }
-        return this.custRequest;
-    }
-    /**
-     * Auto generated method that gets the related <code>Party</code> by the relation named <code>Party</code>.
-     * @return the <code>Party</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public Party getParty() throws RepositoryException {
-        if (this.party == null) {
-            this.party = getRelatedOne(Party.class, "Party");
-        }
-        return this.party;
-    }
-    /**
-     * Auto generated method that gets the related <code>RoleType</code> by the relation named <code>RoleType</code>.
-     * @return the <code>RoleType</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public RoleType getRoleType() throws RepositoryException {
-        if (this.roleType == null) {
-            this.roleType = getRelatedOne(RoleType.class, "RoleType");
-        }
-        return this.roleType;
-    }
-    /**
-     * Auto generated method that gets the related <code>PartyRole</code> by the relation named <code>PartyRole</code>.
-     * @return the <code>PartyRole</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public PartyRole getPartyRole() throws RepositoryException {
-        if (this.partyRole == null) {
-            this.partyRole = getRelatedOne(PartyRole.class, "PartyRole");
-        }
-        return this.partyRole;
-    }
 
-    /**
-     * Auto generated value setter.
-     * @param custRequest the custRequest to set
-    */
-    public void setCustRequest(CustRequest custRequest) {
-        this.custRequest = custRequest;
-    }
-    /**
-     * Auto generated value setter.
-     * @param party the party to set
-    */
-    public void setParty(Party party) {
-        this.party = party;
-    }
-    /**
-     * Auto generated value setter.
-     * @param roleType the roleType to set
-    */
-    public void setRoleType(RoleType roleType) {
-        this.roleType = roleType;
-    }
-    /**
-     * Auto generated value setter.
-     * @param partyRole the partyRole to set
-    */
-    public void setPartyRole(PartyRole partyRole) {
-        this.partyRole = partyRole;
-    }
 
 
     /** {@inheritDoc} */
     @Override
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
-        setCustRequestId((String) mapValue.get("custRequestId"));
-        setPartyId((String) mapValue.get("partyId"));
-        setRoleTypeId((String) mapValue.get("roleTypeId"));
+        setApplicationId((String) mapValue.get("applicationId"));
+        setApplicationName((String) mapValue.get("applicationName"));
+        setDescription((String) mapValue.get("description"));
+        setImageUrl((String) mapValue.get("imageUrl"));
+        setImageHoverUrl((String) mapValue.get("imageHoverUrl"));
+        setLinkUrl((String) mapValue.get("linkUrl"));
+        setSequenceNum((Long) mapValue.get("sequenceNum"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -349,9 +322,13 @@ fieldMapColumns.put("CustRequestRole", fields);
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
-        mapValue.put("custRequestId", getCustRequestId());
-        mapValue.put("partyId", getPartyId());
-        mapValue.put("roleTypeId", getRoleTypeId());
+        mapValue.put("applicationId", getApplicationId());
+        mapValue.put("applicationName", getApplicationName());
+        mapValue.put("description", getDescription());
+        mapValue.put("imageUrl", getImageUrl());
+        mapValue.put("imageHoverUrl", getImageHoverUrl());
+        mapValue.put("linkUrl", getLinkUrl());
+        mapValue.put("sequenceNum", getSequenceNum());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

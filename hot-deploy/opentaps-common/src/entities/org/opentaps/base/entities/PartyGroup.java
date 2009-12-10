@@ -51,7 +51,6 @@ import java.sql.Timestamp;
  * Auto generated base entity PartyGroup.
  */
 @javax.persistence.Entity
-@Indexed
 @Table(name="PARTY_GROUP")
 public class PartyGroup extends Entity {
 static {
@@ -104,18 +103,8 @@ fieldMapColumns.put("PartyGroup", fields);
    @org.hibernate.annotations.GenericGenerator(name="PartyGroup_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
    @GeneratedValue(generator="PartyGroup_GEN")
    @Id
-   @DocumentId
-   @org.hibernate.search.annotations.Fields( {
-       @Field(index=Index.TOKENIZED, store=Store.YES),
-     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
-   } )
-   @Boost(10f)
    @Column(name="PARTY_ID")
    private String partyId;
-   @org.hibernate.search.annotations.Fields( {
-     @Field(index=Index.TOKENIZED, store=Store.YES)
-   } )
-   @Boost(5f)
    @Column(name="GROUP_NAME")
    private String groupName;
    @Column(name="GROUP_NAME_LOCAL")
@@ -128,10 +117,6 @@ fieldMapColumns.put("PartyGroup", fields);
    private Long numEmployees;
    @Column(name="TICKER_SYMBOL")
    private String tickerSymbol;
-   @org.hibernate.search.annotations.Fields( {
-     @Field(index=Index.TOKENIZED, store=Store.YES)
-   } )
-   @Boost(1f)
    @Column(name="COMMENTS")
    private String comments;
    @Column(name="LOGO_IMAGE_URL")
@@ -155,7 +140,7 @@ fieldMapColumns.put("PartyGroup", fields);
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
-   @IndexedEmbedded(depth = 2)
+   
    private Party party = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
