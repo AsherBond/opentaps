@@ -500,8 +500,8 @@ public class Entry extends BaseEntry {
         OpportunityContactsSubview opportunityContacts = new OpportunityContactsSubview(getPartyId(), false);
         opportunityContacts.hideFilters();
         opportunityContacts.getListView().setTitle(UtilUi.MSG.crmContacts());
-        // limit displayed contacts to the account
-        ((ContactListView) opportunityContacts.getListView()).filterByAccount(getPartyId());
+        // limit displayed contacts to the account and current opportunity
+        ((ContactListView) opportunityContacts.getListView()).filterByOpportunity(getSalesOpportunityId());
         opportunityContacts.getListView().applyFilters();
 
         // add widget to page
@@ -510,7 +510,7 @@ public class Entry extends BaseEntry {
         // if required ID is found setup button [Assign Contact] in subsection title
         RootPanel assignContactButton = RootPanel.get(ASSIGN_CONTACT_TO_OPPORTUNITY);
         if (assignContactButton != null) {
-            loadAssignContactToAccountWidget(assignContactButton,  opportunityContacts);
+            loadAssignContactToOpportunityWidget(assignContactButton,  opportunityContacts);
         }
     }
 
@@ -520,7 +520,7 @@ public class Entry extends BaseEntry {
      * @param container <code>RootPanel</code> that is root container for button
      * @param opportunityContacts parent contacts list view.
      */
-    private void loadAssignContactToAccountWidget(RootPanel container, final OpportunityContactsSubview opportunityContacts) {
+    private void loadAssignContactToOpportunityWidget(RootPanel container, final OpportunityContactsSubview opportunityContacts) {
 
         // create lookup window
         final LookupContactsWindow window = new LookupContactsWindow(true, true);
@@ -542,7 +542,7 @@ public class Entry extends BaseEntry {
                 // and run crmsfa.assignContactToAccount service
                 RequestBuilder request = new RequestBuilder(RequestBuilder.POST, URL.encode("/crmsfa/control/addContactToOpportunity"));
                 request.setHeader("Content-type", "application/x-www-form-urlencoded");
-                request.setRequestData(Format.format("salesOpportunityId={0}&contactPartyId={1}", null /*TODO*/, contactPartyId));
+                request.setRequestData(Format.format("salesOpportunityId={0}&contactPartyId={1}", getSalesOpportunityId(), contactPartyId));
                 request.setCallback(new RequestCallback() {
                     public void onError(Request request, Throwable exception) {
                         // display error message
@@ -798,6 +798,14 @@ public class Entry extends BaseEntry {
      */
     private static native String getPartyId()/*-{
         return $wnd.partyId;
+    }-*/;
+
+    /**
+     * Retrieve JS variable <code>salesopportunityId</code>.
+     * @return an opportunity identifier
+     */
+    private static native String getSalesOpportunityId()/*-{
+        return $wnd.salesOpportunityId;
     }-*/;
 
     /**

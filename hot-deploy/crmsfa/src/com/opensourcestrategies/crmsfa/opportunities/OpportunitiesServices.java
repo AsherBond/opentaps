@@ -299,9 +299,8 @@ public final class OpportunitiesServices {
         return ServiceUtil.returnSuccess();
     }
 
-    public static Map addContactToOpportunity(DispatchContext dctx, Map context) {
+    public static Map<String, Object> addContactToOpportunity(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
-        LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
@@ -334,7 +333,7 @@ public final class OpportunitiesServices {
             }
 
             // check first that this contact is associated with the account
-            List candidates = EntityUtil.filterByDate(delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdFrom", contactPartyId,
+            List<GenericValue> candidates = EntityUtil.filterByDate(delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdFrom", contactPartyId,
                             "partyIdTo", accountPartyId, "partyRelationshipTypeId", "CONTACT_REL_INV"), UtilMisc.toList("fromDate DESC")));
             if (candidates.size() == 0) {
                 return UtilMessage.createAndLogServiceError("Contact with ID [" + contactPartyId + "] is not associated with Account with ID [" +
@@ -342,7 +341,7 @@ public final class OpportunitiesServices {
             }
 
             // avoid duplicates
-            Map keys = UtilMisc.toMap("salesOpportunityId", salesOpportunityId, "partyId", contactPartyId, "roleTypeId", "CONTACT");
+            Map<String, String> keys = UtilMisc.toMap("salesOpportunityId", salesOpportunityId, "partyId", contactPartyId, "roleTypeId", "CONTACT");
             GenericValue role = delegator.findByPrimaryKey("SalesOpportunityRole", keys);
             if (role != null) {
                 return UtilMessage.createAndLogServiceError("Contact is already associated with this Opportunity.", "CrmErrorAddContactToOpportunity", locale, MODULE);
@@ -357,9 +356,8 @@ public final class OpportunitiesServices {
         return ServiceUtil.returnSuccess();
     }
 
-    public static Map removeContactFromOpportunity(DispatchContext dctx, Map context) {
+    public static Map<String, Object> removeContactFromOpportunity(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
-        LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);

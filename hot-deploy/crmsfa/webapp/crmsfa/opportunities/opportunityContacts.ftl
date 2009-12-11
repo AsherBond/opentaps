@@ -27,5 +27,5 @@
 </#if>
 </@sectionHeader>
 
-<@gwtWidget id="opportunityContactsSubListView" partyId="${opportunityAndParty.accountPartyId}"/>
+<@gwtWidget id="opportunityContactsSubListView" partyId="${opportunityAndParty.accountPartyId}" salesOpportunityId="${parameters.salesOpportunityId}"/>
 </div>

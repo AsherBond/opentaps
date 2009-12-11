@@ -72,4 +72,8 @@ public class ContactListView extends PartyListView {
     public void filterByAccount(String accountPartyId) {
         setFilter("partyIdTo", accountPartyId);
     }
+
+    public void filterByOpportunity(String salesOpportunityId) {
+        setFilter("salesOpportunityId", salesOpportunityId);
+    }
 }

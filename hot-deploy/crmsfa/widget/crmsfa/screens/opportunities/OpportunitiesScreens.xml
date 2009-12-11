@@ -224,26 +224,9 @@
         <section>
             <condition><if-compare field="isAccountOpportunity" operator="equals" value="true" type="Boolean"/></condition>
             <widgets>
-
                 <platform-specific>
                     <html><html-template location="component://crmsfa/webapp/crmsfa/opportunities/opportunityContacts.ftl"/></html>
                 </platform-specific>
-
-                <container style="subSectionBlock">
-                    <container style="subSectionHeader"><container style="subSectionTitle"><label>${uiLabelMap.CrmContacts}</label></container></container>
-
-
-                    <!-- this form is specific to opportunities because the data needs to be pulled with display-entity -->
-                    <include-form name="ListContacts" location="component://crmsfa/widget/crmsfa/forms/opportunities/OpportunitiesForms.xml"/>
-
-                    <!-- If the user can update opportunities, include the relevant form -->
-                    <section>
-                        <condition><if-compare field="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
-                        <widgets>
-                            <include-form name="addContactToOpportunityForm" location="component://crmsfa/widget/crmsfa/forms/opportunities/OpportunitiesForms.xml"/>
-                        </widgets>
-                    </section>
-                </container>
             </widgets>
         </section>
     </screen>

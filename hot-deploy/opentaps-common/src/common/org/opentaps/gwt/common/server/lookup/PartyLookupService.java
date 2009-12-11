@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,13 +33,18 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.util.ConvertMapToString;
 import org.opentaps.common.util.ICompositeValue;
 import org.opentaps.base.constants.PartyRelationshipTypeConstants;
+import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.entities.PartyFromByRelnAndContactInfoAndPartyClassification;
 import org.opentaps.base.entities.PartyRoleNameDetailSupplementalData;
+import org.opentaps.base.entities.SalesOpportunityRole;
+import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
@@ -526,7 +532,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
             return findPartiesBy(entity, condition, BY_ADVANCED_FILTERS);
         }
 
-        /**
+        /*
          * Find contacts which are assigned to an account.
          * Usually we use Account.getContacts() to retrieve related contacts but
          * here we query PartyFromByRelnAndContactInfoAndPartyClassification entity
@@ -544,6 +550,39 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                     ),
                     ACCOUNT_CONTACTS_FILTERS);
         }
+
+        /*
+         * 
+         */
+        if (getProvider().parameterIsPresent(PartyLookupConfiguration.IN_SALES_OPPORTUNITY_ID)) {
+            String opportunityId = getProvider().getParameter(PartyLookupConfiguration.IN_SALES_OPPORTUNITY_ID);
+            if (UtilValidate.isNotEmpty(opportunityId)) {
+                Set<String> contactIds = null;
+                try {
+                    contactIds = Entity.getDistinctFieldValues(
+                            String.class,
+                            getRepository().findList(
+                                    SalesOpportunityRole.class,
+                                    EntityCondition.makeCondition(
+                                            Arrays.asList(
+                                                    EntityCondition.makeCondition(SalesOpportunityRole.Fields.roleTypeId.getName(), RoleTypeConstants.CONTACT),
+                                                    EntityCondition.makeCondition(SalesOpportunityRole.Fields.salesOpportunityId.getName(), opportunityId)),
+                                                    EntityOperator.AND)
+                            ),
+                            SalesOpportunityRole.Fields.partyId
+                    );
+                } catch (RepositoryException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                return findAllParties(entity, 
+                        EntityCondition.makeCondition(
+                        condition,
+                        EntityCondition.makeCondition(PartyLookupConfiguration.INOUT_PARTY_ID, EntityOperator.IN, contactIds)
+                ));
+            }
+        }
+
         return findAllParties(entity, condition);
     }
 
