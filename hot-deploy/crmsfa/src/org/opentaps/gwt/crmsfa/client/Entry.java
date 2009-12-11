@@ -17,6 +17,36 @@
 
 package org.opentaps.gwt.crmsfa.client;
 
+import org.opentaps.gwt.common.client.BaseEntry;
+import org.opentaps.gwt.common.client.UtilUi;
+import org.opentaps.gwt.common.client.form.FindContactsForm;
+import org.opentaps.gwt.common.client.form.FormNotificationInterface;
+import org.opentaps.gwt.common.client.form.LookupContactsWindow;
+import org.opentaps.gwt.common.client.form.MultiSearchForm;
+import org.opentaps.gwt.common.client.form.OrderItemsEditable;
+import org.opentaps.gwt.common.client.form.SearchForm;
+import org.opentaps.gwt.common.client.listviews.AccountSearchListView;
+import org.opentaps.gwt.common.client.listviews.CaseSearchListView;
+import org.opentaps.gwt.common.client.listviews.ContactSearchListView;
+import org.opentaps.gwt.common.client.listviews.LeadSearchListView;
+import org.opentaps.gwt.common.client.listviews.SalesOrderSearchListView;
+import org.opentaps.gwt.common.client.listviews.OrderItemsEditableListView.OrderType;
+import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
+import org.opentaps.gwt.crmsfa.client.accounts.form.FindAccountsForm;
+import org.opentaps.gwt.crmsfa.client.accounts.form.QuickNewAccountForm;
+import org.opentaps.gwt.crmsfa.client.cases.form.FindCasesForm;
+import org.opentaps.gwt.crmsfa.client.cases.form.QuickNewCaseForm;
+import org.opentaps.gwt.crmsfa.client.contacts.form.ContactsSublistView;
+import org.opentaps.gwt.crmsfa.client.contacts.form.QuickNewContactForm;
+import org.opentaps.gwt.crmsfa.client.leads.form.FindLeadsForm;
+import org.opentaps.gwt.crmsfa.client.leads.form.QuickNewLeadForm;
+import org.opentaps.gwt.crmsfa.client.opportunities.form.FindOpportunitiesForm;
+import org.opentaps.gwt.crmsfa.client.opportunities.form.OpportunitiesSublistView;
+import org.opentaps.gwt.crmsfa.client.opportunities.form.QuickNewOpportunityForm;
+import org.opentaps.gwt.crmsfa.client.orders.form.FindOrdersForm;
+import org.opentaps.gwt.crmsfa.client.orders.form.ProductReReservationForm;
+import org.opentaps.gwt.crmsfa.client.partners.form.FindPartnersForm;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.Request;
@@ -33,38 +63,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtext.client.util.Format;
 import com.gwtext.client.widgets.Panel;
-import org.opentaps.gwt.common.client.BaseEntry;
-import org.opentaps.gwt.common.client.UtilUi;
-import org.opentaps.gwt.common.client.form.FindContactsForm;
-import org.opentaps.gwt.common.client.form.FormNotificationInterface;
-import org.opentaps.gwt.common.client.form.LookupContactsWindow;
-import org.opentaps.gwt.common.client.form.MultiSearchForm;
-import org.opentaps.gwt.common.client.form.OrderItemsEditable;
-import org.opentaps.gwt.common.client.form.SearchForm;
-import org.opentaps.gwt.common.client.listviews.AccountSearchListView;
-import org.opentaps.gwt.common.client.listviews.CaseSearchListView;
-import org.opentaps.gwt.common.client.listviews.ContactListView;
-import org.opentaps.gwt.common.client.listviews.ContactSearchListView;
-import org.opentaps.gwt.common.client.listviews.LeadSearchListView;
-import org.opentaps.gwt.common.client.listviews.OrderItemsEditableListView.OrderType;
-import org.opentaps.gwt.common.client.listviews.SalesOrderSearchListView;
-import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
-import org.opentaps.gwt.crmsfa.client.accounts.form.AccountContactsSubview;
-import org.opentaps.gwt.crmsfa.client.accounts.form.FindAccountsForm;
-import org.opentaps.gwt.crmsfa.client.accounts.form.OpportunitiesSubview;
-import org.opentaps.gwt.crmsfa.client.accounts.form.QuickNewAccountForm;
-import org.opentaps.gwt.crmsfa.client.cases.form.FindCasesForm;
-import org.opentaps.gwt.crmsfa.client.cases.form.QuickNewCaseForm;
-import org.opentaps.gwt.crmsfa.client.contacts.form.QuickNewContactForm;
-import org.opentaps.gwt.crmsfa.client.leads.form.FindLeadsForm;
-import org.opentaps.gwt.crmsfa.client.leads.form.QuickNewLeadForm;
-import org.opentaps.gwt.crmsfa.client.opportunities.form.FindOpportunitiesForm;
-import org.opentaps.gwt.crmsfa.client.opportunities.form.OpportunityContactsSubview;
-import org.opentaps.gwt.crmsfa.client.opportunities.form.QuickNewOpportunityForm;
-import org.opentaps.gwt.crmsfa.client.orders.form.FindOrdersForm;
-import org.opentaps.gwt.crmsfa.client.orders.form.ProductReReservationForm;
-import org.opentaps.gwt.crmsfa.client.partners.form.FindPartnersForm;
-import org.opentaps.gwt.crmsfa.client.search.form.CrmsfaSearchResultsListView;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -93,14 +91,11 @@ public class Entry extends BaseEntry {
     private FindAccountsForm findAccountsForm;
     private FindAccountsForm myAccountsForm;
     private QuickNewAccountForm quickNewAccountForm;
-    private AccountContactsSubview accountContacts;
-    private OpportunitiesSubview accountOpportunities;
 
     private QuickNewCaseForm quickNewCaseForm;
     private FindCasesForm findCasesForm;
     private FindCasesForm myCasesForm;
 
-    private SearchForm crmsfaSearch;
     private MultiSearchForm multiCrmsfaSearch;
 
     // CRMSFA/Contacts identifiers
@@ -142,7 +137,7 @@ public class Entry extends BaseEntry {
     private static final String LOOKUP_ACCOUNTS_ID = "lookupAccounts";
     private static final String QUICK_CREATE_ACCOUNT_ID = "quickNewAccount";
     /** List of assigned contacts on view account page. */
-    private static final String CONTACTS_SUB_LISTVIEW = "contactsSubListView";
+    private static final String ACCOUNT_CONTACTS = "contactsSubListView";
     /** An ID where CONTACTS_SUB_LISTVIEW may place "Assign Contact" button. */
     private static final String ASSIGN_CONTACT_WIDGET = "assignContactToAccount";
     /** List of related opportunities on view account page. */
@@ -207,7 +202,7 @@ public class Entry extends BaseEntry {
             loadLookupAccounts();
         }
 
-        if (RootPanel.get(CONTACTS_SUB_LISTVIEW) != null) {
+        if (RootPanel.get(ACCOUNT_CONTACTS) != null) {
             loadAccountContacts();
         }
 
@@ -418,16 +413,14 @@ public class Entry extends BaseEntry {
      */
     private void loadLeadOpportunities() {
         // setup opportunity list view as subsection
-        OpportunitiesSubview opportunities = new OpportunitiesSubview(getPartyId());
-        opportunities.hideFilters();
-        opportunities.getListView().setTitle(UtilUi.MSG.crmOpportunities());
+        OpportunitiesSublistView opportunities = new OpportunitiesSublistView(getPartyId());
         // limit displayed contacts to the account
-        opportunities.getListView().filterHasIncludeInactiveOpportunities(true);
-        opportunities.getListView().filterByLead(getPartyId());
-        opportunities.getListView().applyFilters();
+        opportunities.filterHasIncludeInactiveOpportunities(true);
+        opportunities.filterByLead(getPartyId());
+        opportunities.applyFilters();
 
         // add widget to page
-        RootPanel.get(LEAD_OPPORTUNITIES).add(opportunities.getMainPanel());
+        RootPanel.get(LEAD_OPPORTUNITIES).add(opportunities);
     }
 
     private void loadFindContacts() {
@@ -460,16 +453,14 @@ public class Entry extends BaseEntry {
      */
     private void loadContactOppotunities() {
         // setup opportunity list view as subsection
-        OpportunitiesSubview opportunities = new OpportunitiesSubview(getPartyId());
-        opportunities.hideFilters();
-        opportunities.getListView().setTitle(UtilUi.MSG.crmOpportunities());
+        OpportunitiesSublistView opportunities = new OpportunitiesSublistView(getPartyId());
         // limit displayed contacts to the account
-        opportunities.getListView().filterHasIncludeInactiveOpportunities(true);
-        opportunities.getListView().filterByContact(getPartyId());
-        opportunities.getListView().applyFilters();
+        opportunities.filterHasIncludeInactiveOpportunities(true);
+        opportunities.filterByContact(getPartyId());
+        opportunities.applyFilters();
 
         // add widget to page
-        RootPanel.get(CONTACT_OPPORTUNITIES).add(opportunities.getMainPanel());
+        RootPanel.get(CONTACT_OPPORTUNITIES).add(opportunities);
     }
 
     private void loadQuickNewOpportunity() {
@@ -497,15 +488,13 @@ public class Entry extends BaseEntry {
      */
     private void loadOpportunityContacts() {
         // setup contacts list view as subsection
-        OpportunityContactsSubview opportunityContacts = new OpportunityContactsSubview(getPartyId(), false);
-        opportunityContacts.hideFilters();
-        opportunityContacts.getListView().setTitle(UtilUi.MSG.crmContacts());
+        ContactsSublistView opportunityContacts = new ContactsSublistView(getPartyId(), false);
         // limit displayed contacts to the account and current opportunity
-        ((ContactListView) opportunityContacts.getListView()).filterByOpportunity(getSalesOpportunityId());
-        opportunityContacts.getListView().applyFilters();
+        opportunityContacts.filterByOpportunity(getSalesOpportunityId());
+        opportunityContacts.applyFilters();
 
         // add widget to page
-        RootPanel.get(OPPORTUNITY_CONTACTS).add(opportunityContacts.getMainPanel());
+        RootPanel.get(OPPORTUNITY_CONTACTS).add(opportunityContacts);
 
         // if required ID is found setup button [Assign Contact] in subsection title
         RootPanel assignContactButton = RootPanel.get(ASSIGN_CONTACT_TO_OPPORTUNITY);
@@ -520,7 +509,7 @@ public class Entry extends BaseEntry {
      * @param container <code>RootPanel</code> that is root container for button
      * @param opportunityContacts parent contacts list view.
      */
-    private void loadAssignContactToOpportunityWidget(RootPanel container, final OpportunityContactsSubview opportunityContacts) {
+    private void loadAssignContactToOpportunityWidget(RootPanel container, final ContactsSublistView opportunityContacts) {
 
         // create lookup window
         final LookupContactsWindow window = new LookupContactsWindow(true, true);
@@ -551,14 +540,14 @@ public class Entry extends BaseEntry {
                     public void onResponseReceived(Request request, Response response) {
                         // we don't expect anything from server, just reload the list of contacts
                         UtilUi.logInfo("onResponseReceived, response = " + response, "", "loadAssignContactToAccountWidget");
-                        opportunityContacts.getListView().getStore().reload();
-                        opportunityContacts.getListView().loadFirstPage();
-                        opportunityContacts.getListView().markGridNotBusy();
+                        opportunityContacts.getStore().reload();
+                        opportunityContacts.loadFirstPage();
+                        opportunityContacts.markGridNotBusy();
                     }
                 });
 
                 try {
-                    opportunityContacts.getListView().markGridBusy();
+                    opportunityContacts.markGridBusy();
                     UtilUi.logInfo("Run service crmsfa.assignContactToAccount", MODULE, "loadAssignContactToAccountWidget");
                     request.send();
                 } catch (RequestException re) {
@@ -592,13 +581,13 @@ public class Entry extends BaseEntry {
      */
     private void loadAccountContacts() {
         // setup contacts list view as subsection
-        accountContacts = new AccountContactsSubview(getPartyId(), false);
+        ContactsSublistView accountContacts = new ContactsSublistView(getPartyId(), false);
         // limit displayed contacts to the account
         accountContacts.filterByAccount(getPartyId());
         accountContacts.applyFilters();
 
         // add widget to page
-        RootPanel.get(CONTACTS_SUB_LISTVIEW).add(accountContacts);
+        RootPanel.get(ACCOUNT_CONTACTS).add(accountContacts);
 
         // if required ID is found setup button [Assign Contact] in subsection title
         RootPanel assignContactButton = null;
@@ -613,7 +602,7 @@ public class Entry extends BaseEntry {
      * @param container <code>RootPanel</code> that is root container for button
      * @param accountContacts parent contacts list view.
      */
-    private void loadAssignContactToAccountWidget(RootPanel container, final AccountContactsSubview accountContacts) {
+    private void loadAssignContactToAccountWidget(RootPanel container, final ContactsSublistView accountContacts) {
 
         // create lookup window
         final LookupContactsWindow window = new LookupContactsWindow(true, true);
@@ -685,16 +674,14 @@ public class Entry extends BaseEntry {
      */
     private void loadAccountOpportunities() {
         // setup opportunity list view as subsection
-        accountOpportunities = new OpportunitiesSubview(getPartyId());
-        accountOpportunities.hideFilters();
-        accountOpportunities.getListView().setTitle(UtilUi.MSG.crmOpportunities());
+        OpportunitiesSublistView accountOpportunities = new OpportunitiesSublistView(getPartyId());
         // limit displayed contacts to the account
-        accountOpportunities.getListView().filterHasIncludeInactiveOpportunities(true);
-        accountOpportunities.getListView().filterByAccount(getPartyId());
-        accountOpportunities.getListView().applyFilters();
+        accountOpportunities.filterHasIncludeInactiveOpportunities(true);
+        accountOpportunities.filterByAccount(getPartyId());
+        accountOpportunities.applyFilters();
 
         // add widget to page
-        RootPanel.get(ACCOUNT_OPPORTUNITIES).add(accountOpportunities.getMainPanel());
+        RootPanel.get(ACCOUNT_OPPORTUNITIES).add(accountOpportunities);
     }
 
     private void loadFindAccounts() {

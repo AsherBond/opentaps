@@ -15,7 +15,7 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.opentaps.gwt.crmsfa.client.accounts.form;
+package org.opentaps.gwt.crmsfa.client.contacts.form;
 
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.listviews.ContactListView;
@@ -42,9 +42,9 @@ import com.gwtext.client.widgets.grid.event.GridCellListenerAdapter;
 /**
  * A list of contacts for a given account.
  */
-public class AccountContactsSubview extends ContactListView {
+public class ContactsSublistView extends ContactListView {
 
-    private static final String MODULE = AccountContactsSubview.class.getName();
+    private static final String MODULE = ContactsSublistView.class.getName();
 
     private final String accountPartyId;
     private Integer deleteColumnIndex;
@@ -54,7 +54,7 @@ public class AccountContactsSubview extends ContactListView {
      * @param accountPartyId the Id of the Account to list the contacts for
      * @param autoLoad sets the grid autoLoad parameter, set to <code>false</code> if some filters need to be set prior to loading the grid data
      */
-    public AccountContactsSubview(String accountPartyId, boolean autoLoad) {
+    public ContactsSublistView(String accountPartyId, boolean autoLoad) {
         super();
         this.accountPartyId = accountPartyId;
         setHeader(false);
@@ -98,11 +98,11 @@ public class AccountContactsSubview extends ContactListView {
                 /** {@inheritDoc} */
                 @Override
                 public void onCellClick(GridPanel grid, int rowIndex, int colindex, EventObject e) {
-                    if (colindex == AccountContactsSubview.this.deleteColumnIndex) {
+                    if (colindex == ContactsSublistView.this.deleteColumnIndex) {
                         String contactPartyId = getStore().getRecordAt(rowIndex).getAsString("partyId");
-                        RequestBuilder request = new RequestBuilder(RequestBuilder.POST, URL.encode(Format.format("/crmsfa/control/removeContactFromAccount", AccountContactsSubview.this.accountPartyId, contactPartyId)));
+                        RequestBuilder request = new RequestBuilder(RequestBuilder.POST, URL.encode(Format.format("/crmsfa/control/removeContactFromAccount", ContactsSublistView.this.accountPartyId, contactPartyId)));
                         request.setHeader("Content-type", "application/x-www-form-urlencoded");
-                        request.setRequestData(Format.format("partyId={0}&accountPartyId={0}&contactPartyId={1}", AccountContactsSubview.this.accountPartyId, contactPartyId));
+                        request.setRequestData(Format.format("partyId={0}&accountPartyId={0}&contactPartyId={1}", ContactsSublistView.this.accountPartyId, contactPartyId));
                         request.setCallback(new RequestCallback() {
                                 public void onError(Request request, Throwable exception) {
                                     // display error message
