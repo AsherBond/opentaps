@@ -346,7 +346,9 @@ public abstract class EntityLookupService {
             if (fieldIdxStr != null) {
                 Integer fieldIdx = Integer.valueOf(fieldIdxStr);
                 fieldsAndIndexes.put(fieldIdx, fieldName);
-                maxFieldIndex = fieldIdx.intValue();
+                if (fieldIdx.intValue() > maxFieldIndex) {
+                    maxFieldIndex = fieldIdx.intValue();
+                }
             } else {
                 extraFields.add(fieldName);
             }
