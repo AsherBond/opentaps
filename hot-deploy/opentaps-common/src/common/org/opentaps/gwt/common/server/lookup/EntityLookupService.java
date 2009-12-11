@@ -339,12 +339,14 @@ public abstract class EntityLookupService {
         Map<Integer, String> fieldsAndIndexes = new HashMap<Integer, String>();
         List<String> extraFields = new ArrayList<String>();
         List<String> fieldsOrdered = new ArrayList<String>();
-
+        // the variant using for store the max index
+        int maxFieldIndex = 0;
         for (String fieldName : fields) {
             String fieldIdxStr = provider.getParameter("_" + fieldName + "_idx");
             if (fieldIdxStr != null) {
                 Integer fieldIdx = Integer.valueOf(fieldIdxStr);
                 fieldsAndIndexes.put(fieldIdx, fieldName);
+                maxFieldIndex = fieldIdx.intValue();
             } else {
                 extraFields.add(fieldName);
             }
@@ -352,8 +354,9 @@ public abstract class EntityLookupService {
 
         // add fields of entity that don't appear in client grid and
         // were not included to fieldsToExport on previous step
-        for (int i = fieldsAndIndexes.size(), n = 0; n < extraFields.size(); n++, i++) {
-            fieldsAndIndexes.put(i, extraFields.get(n));
+        for (int n = 0; n < extraFields.size(); n++) {
+            // add the extra fields after the indexed fields
+            fieldsAndIndexes.put(new Integer(maxFieldIndex + n + 1), extraFields.get(n));
         }
 
         if (!fieldsAndIndexes.isEmpty()) {
