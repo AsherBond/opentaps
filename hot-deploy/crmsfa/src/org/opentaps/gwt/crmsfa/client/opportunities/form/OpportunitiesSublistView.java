@@ -27,13 +27,13 @@ import com.gwtext.client.widgets.grid.ColumnConfig;
 
 public class OpportunitiesSublistView extends SalesOpportunityListView {
 
-    public final String partyId;
     private final String entityViewUrl = "/crmsfa/control/viewOpportunity?salesOpportunityId={0}";
     private final String entityFindUrl = OpportunityLookupConfiguration.URL_FIND_OPPORTUNITIES;
 
-    public OpportunitiesSublistView(String partyId) {
-        super(UtilUi.MSG.crmFindOpportunities());
-        this.partyId = partyId;
+    public OpportunitiesSublistView() {
+        super();
+        setAutoLoad(false);
+        init();
     }
 
     /** {@inheritDoc} */

@@ -413,7 +413,7 @@ public class Entry extends BaseEntry {
      */
     private void loadLeadOpportunities() {
         // setup opportunity list view as subsection
-        OpportunitiesSublistView opportunities = new OpportunitiesSublistView(getPartyId());
+        OpportunitiesSublistView opportunities = new OpportunitiesSublistView();
         // limit displayed contacts to the account
         opportunities.filterHasIncludeInactiveOpportunities(true);
         opportunities.filterByLead(getPartyId());
@@ -453,7 +453,7 @@ public class Entry extends BaseEntry {
      */
     private void loadContactOppotunities() {
         // setup opportunity list view as subsection
-        OpportunitiesSublistView opportunities = new OpportunitiesSublistView(getPartyId());
+        OpportunitiesSublistView opportunities = new OpportunitiesSublistView();
         // limit displayed contacts to the account
         opportunities.filterHasIncludeInactiveOpportunities(true);
         opportunities.filterByContact(getPartyId());
@@ -674,7 +674,7 @@ public class Entry extends BaseEntry {
      */
     private void loadAccountOpportunities() {
         // setup opportunity list view as subsection
-        OpportunitiesSublistView accountOpportunities = new OpportunitiesSublistView(getPartyId());
+        OpportunitiesSublistView accountOpportunities = new OpportunitiesSublistView();
         // limit displayed contacts to the account
         accountOpportunities.filterHasIncludeInactiveOpportunities(true);
         accountOpportunities.filterByAccount(getPartyId());
