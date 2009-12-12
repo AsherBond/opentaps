@@ -1055,6 +1055,7 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
                         for (int i = 0; i < m.getColumnCount(); i++) {
                             url += "&_" + m.getDataIndex(i) + "_idx=" + i;
                         }
+                        UtilUi.logInfo("url : " + url, MODULE, "exportToExcelButton.onClick");
                         UtilUi.redirect(url);
                     }
                 }, UtilUi.ICON_EXCEL);

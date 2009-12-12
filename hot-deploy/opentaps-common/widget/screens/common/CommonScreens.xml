@@ -50,6 +50,7 @@
         <section>
             <actions>
                 <java location="org.opentaps.domain.voip.VoipScreenActions" invoke="enableVoip"/>
+                <set field="gwtScripts[]" value="commongwt/org.opentaps.gwt.common.webapp.webapp" global="true"/>
             </actions>   
             <widgets>     
                <decorator-screen name="main-application-decorator" location="${parameters.mainApplicationDecoratorLocation}">

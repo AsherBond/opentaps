@@ -57,7 +57,7 @@
         <property name="gwt.src.common" value="./src/common/org/opentaps/gwt"/>
         <property name="gwt.src.constants" value="./src/constants/org/opentaps/base"/>
         <property name="gwt.src.base" value="./src/common/org/opentaps/gwt/common"/>
-        <property name="gwt.module.list" value="voip"/>
+        <property name="gwt.module.list" value="voip,webapp"/>
         <!-- This parameter must point to your ofbiz/ directory or the libraries for the financials app would not be found.
          The default setting would work if you have checked out the financials module into your ofbiz/hot-deploy/ directory.
          It would NOT work if you checked it out somewhere else and symlinked to it in your hot-deploy/ directory.

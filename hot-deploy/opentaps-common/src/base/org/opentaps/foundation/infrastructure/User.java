@@ -50,6 +50,7 @@ public class User {
     public User(GenericValue userLogin) {
         this();
         setOfbizUserLogin(userLogin);
+        setDelegator(userLogin.getDelegator());
     }
 
     /**

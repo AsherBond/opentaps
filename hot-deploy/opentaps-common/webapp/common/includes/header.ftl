@@ -123,7 +123,8 @@ div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${f
       };
     </script>
   </#if>
-
+  <!-- display webapps menu -->
+  <@gwtWidget id="webAppsMenu"/>
   <!-- got the url of link to ofbiz application -->
   <#assign ofbizTabTarget= Static["org.opentaps.common.util.UtilConfig"].getPropertyValue(appName, appName + ".tab.ofbiz.target")/>
   <#if ofbizTabTarget?exists>  
