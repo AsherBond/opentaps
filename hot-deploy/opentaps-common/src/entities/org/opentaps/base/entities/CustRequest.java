@@ -50,6 +50,7 @@ import java.sql.Timestamp;
  * Auto generated base entity CustRequest.
  */
 @javax.persistence.Entity
+@Indexed
 @Table(name="CUST_REQUEST")
 public class CustRequest extends Entity {
 static {
@@ -126,6 +127,12 @@ fieldMapColumns.put("CustRequest", fields);
    @org.hibernate.annotations.GenericGenerator(name="CustRequest_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
    @GeneratedValue(generator="CustRequest_GEN")
    @Id
+   @DocumentId
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
+   @Boost(10f)
    @Column(name="CUST_REQUEST_ID")
    private String custRequestId;
    @Column(name="CUST_REQUEST_TYPE_ID")
@@ -142,8 +149,16 @@ fieldMapColumns.put("CustRequest", fields);
    private Timestamp custRequestDate;
    @Column(name="RESPONSE_REQUIRED_DATE")
    private Timestamp responseRequiredDate;
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
+   @Boost(5f)
    @Column(name="CUST_REQUEST_NAME")
    private String custRequestName;
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
+   @Boost(1f)
    @Column(name="DESCRIPTION")
    private String description;
    @Column(name="MAXIMUM_AMOUNT_UOM_ID")
@@ -208,7 +223,7 @@ fieldMapColumns.put("CustRequest", fields);
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
-   
+   @IndexedEmbedded(depth = 2)
    private Party fromParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MAXIMUM_AMOUNT_UOM_ID", insertable=false, updatable=false)
@@ -275,7 +290,7 @@ fieldMapColumns.put("CustRequest", fields);
    private List<CustRequestParty> custRequestPartys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="custRequest", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CUST_REQUEST_ID")
-   
+   @ContainedIn
    private List<CustRequestRole> custRequestRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_ID")

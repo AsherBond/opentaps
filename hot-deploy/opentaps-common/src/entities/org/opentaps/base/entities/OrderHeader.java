@@ -50,6 +50,7 @@ import java.sql.Timestamp;
  * Auto generated base entity OrderHeader.
  */
 @javax.persistence.Entity
+@Indexed
 @Table(name="ORDER_HEADER")
 public class OrderHeader extends Entity {
 static {
@@ -134,14 +135,34 @@ fieldMapColumns.put("OrderHeader", fields);
    @org.hibernate.annotations.GenericGenerator(name="OrderHeader_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
    @GeneratedValue(generator="OrderHeader_GEN")
    @Id
+   @DocumentId
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
+   @Boost(10f)
    @Column(name="ORDER_ID")
    private String orderId;
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
+   @Boost(1f)
    @Column(name="ORDER_TYPE_ID")
    private String orderTypeId;
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
+   @Boost(5f)
    @Column(name="ORDER_NAME")
    private String orderName;
    @Column(name="EXTERNAL_ID")
    private String externalId;
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
+   @Boost(1f)
    @Column(name="SALES_CHANNEL_ENUM_ID")
    private String salesChannelEnumId;
    @Column(name="ORDER_DATE")
@@ -152,6 +173,11 @@ fieldMapColumns.put("OrderHeader", fields);
    private Timestamp entryDate;
    @Column(name="VISIT_ID")
    private String visitId;
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
+   @Boost(1f)
    @Column(name="STATUS_ID")
    private String statusId;
    @Column(name="CREATED_BY")
@@ -279,14 +305,14 @@ fieldMapColumns.put("OrderHeader", fields);
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
-   
+   @IndexedEmbedded(depth = 2)
    private Party billFromVendorParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BILL_TO_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
-   
+   @IndexedEmbedded(depth = 2)
    private Party billToCustomerParty = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
@@ -434,7 +460,7 @@ fieldMapColumns.put("OrderHeader", fields);
    private List<OrderRequirementCommitment> orderRequirementCommitments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
-   
+   @ContainedIn
    private List<OrderRole> orderRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")

@@ -49,6 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity PartyRole.
  */
 @javax.persistence.Entity
+@Indexed
 @Table(name="PARTY_ROLE")
 public class PartyRole extends Entity {
 static {
@@ -79,7 +80,7 @@ fieldMapColumns.put("PartyRole", fields);
   }
 
    @EmbeddedId
-
+   @DocumentId
    @FieldBridge(impl = org.opentaps.base.entities.bridge.PartyRolePkBridge.class)
      private PartyRolePk id = new PartyRolePk();
    
@@ -110,7 +111,7 @@ fieldMapColumns.put("PartyRole", fields);
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
-   
+   @IndexedEmbedded(depth = 2)
    private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)

@@ -50,6 +50,7 @@ import java.sql.Timestamp;
  * Auto generated base entity SalesOpportunity.
  */
 @javax.persistence.Entity
+@Indexed
 @Table(name="SALES_OPPORTUNITY")
 public class SalesOpportunity extends Entity {
 static {
@@ -104,10 +105,24 @@ fieldMapColumns.put("SalesOpportunity", fields);
    @org.hibernate.annotations.GenericGenerator(name="SalesOpportunity_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
    @GeneratedValue(generator="SalesOpportunity_GEN")
    @Id
+   @DocumentId
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
+   @Boost(10f)
    @Column(name="SALES_OPPORTUNITY_ID")
    private String salesOpportunityId;
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
+   @Boost(5f)
    @Column(name="OPPORTUNITY_NAME")
    private String opportunityName;
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
+   @Boost(1f)
    @Column(name="DESCRIPTION")
    private String description;
    @Column(name="NEXT_STEP")
@@ -124,6 +139,11 @@ fieldMapColumns.put("SalesOpportunity", fields);
    private String dataSourceId;
    @Column(name="ESTIMATED_CLOSE_DATE")
    private Timestamp estimatedCloseDate;
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
+   @Boost(1f)
    @Column(name="OPPORTUNITY_STAGE_ID")
    private String opportunityStageId;
    @Column(name="TYPE_ENUM_ID")
@@ -199,7 +219,7 @@ fieldMapColumns.put("SalesOpportunity", fields);
    private List<SalesOpportunityQuote> salesOpportunityQuotes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="salesOpportunity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SALES_OPPORTUNITY_ID")
-   
+   @ContainedIn
    private List<SalesOpportunityRole> salesOpportunityRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="salesOpportunity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SALES_OPPORTUNITY_ID")

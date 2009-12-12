@@ -1274,7 +1274,6 @@
   <mapping class="org.opentaps.base.entities.TestEntityItem"/>
   <mapping class="org.opentaps.base.entities.TestEntityModifyHistory"/>
   <mapping class="org.opentaps.base.entities.TestEntityAndItem"/>
-  <mapping class="org.opentaps.base.entities.HomeWebApps"/>
   <mapping class="org.opentaps.base.entities.AmazonOrderDocument"/>
   <mapping class="org.opentaps.base.entities.AmazonOrder"/>
   <mapping class="org.opentaps.base.entities.AmazonOrderItem"/>

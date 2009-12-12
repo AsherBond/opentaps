@@ -49,6 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity OrderRole.
  */
 @javax.persistence.Entity
+@Indexed
 @Table(name="ORDER_ROLE")
 public class OrderRole extends Entity {
 static {
@@ -81,7 +82,7 @@ fieldMapColumns.put("OrderRole", fields);
   }
 
    @EmbeddedId
-
+   @DocumentId
    @FieldBridge(impl = org.opentaps.base.entities.bridge.OrderRolePkBridge.class)
      private OrderRolePk id = new OrderRolePk();
    
@@ -112,14 +113,14 @@ fieldMapColumns.put("OrderRole", fields);
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
-   
+   @IndexedEmbedded(depth = 2)
    private OrderHeader orderHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
-   
+   @IndexedEmbedded(depth = 2)
    private Party party = null;
    private transient PartyRole partyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)

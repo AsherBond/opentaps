@@ -49,6 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity Party.
  */
 @javax.persistence.Entity
+@Indexed
 @Table(name="PARTY")
 public class Party extends Entity {
 static {
@@ -101,14 +102,29 @@ fieldMapColumns.put("Party", fields);
    @org.hibernate.annotations.GenericGenerator(name="Party_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
    @GeneratedValue(generator="Party_GEN")
    @Id
+   @DocumentId
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
+   @Boost(10f)
    @Column(name="PARTY_ID")
    private String partyId;
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
+   @Boost(1f)
    @Column(name="PARTY_TYPE_ID")
    private String partyTypeId;
    @Column(name="EXTERNAL_ID")
    private String externalId;
    @Column(name="PREFERRED_CURRENCY_UOM_ID")
    private String preferredCurrencyUomId;
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
+   @Boost(1f)
    @Column(name="DESCRIPTION")
    private String description;
    @Column(name="STATUS_ID")
@@ -303,7 +319,7 @@ fieldMapColumns.put("Party", fields);
    private List<CostComponent> costComponents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FROM_PARTY_ID")
-   
+   @ContainedIn
    private List<CustRequest> fromCustRequests = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
@@ -311,7 +327,7 @@ fieldMapColumns.put("Party", fields);
    private List<CustRequestParty> custRequestPartys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
-   
+   @ContainedIn
    private List<CustRequestRole> custRequestRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
@@ -542,11 +558,11 @@ fieldMapColumns.put("Party", fields);
    private List<OldWorkEffortAssignmentRate> oldWorkEffortAssignmentRates = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BILL_FROM_PARTY_ID")
-   
+   @ContainedIn
    private List<OrderHeader> billFromVendorOrderHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BILL_TO_PARTY_ID")
-   
+   @ContainedIn
    private List<OrderHeader> billToCustomerOrderHeaders = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
@@ -566,7 +582,7 @@ fieldMapColumns.put("Party", fields);
    private List<OrderItemShipGroup> carrierOrderItemShipGroups = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
-   
+   @ContainedIn
    private List<OrderRole> orderRoles = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
@@ -636,7 +652,7 @@ fieldMapColumns.put("Party", fields);
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
-   
+   @IndexedEmbedded(depth = 2)
    private PartyGroup partyGroup = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
@@ -691,7 +707,7 @@ fieldMapColumns.put("Party", fields);
    private List<PartyResume> partyResumes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
-   
+   @ContainedIn
    private List<PartyRole> partyRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
@@ -773,7 +789,7 @@ fieldMapColumns.put("Party", fields);
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
-   
+   @IndexedEmbedded(depth = 2)
    private Person person = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
@@ -917,7 +933,7 @@ fieldMapColumns.put("Party", fields);
    private List<SalesForecastItem> salesForecastItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
-   
+   @ContainedIn
    private List<SalesOpportunityRole> salesOpportunityRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")

@@ -52,6 +52,7 @@ import java.sql.Timestamp;
  * Auto generated base entity Person.
  */
 @javax.persistence.Entity
+@Indexed
 @Table(name="PERSON")
 public class Person extends Entity {
 static {
@@ -140,26 +141,56 @@ fieldMapColumns.put("Person", fields);
    @org.hibernate.annotations.GenericGenerator(name="Person_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
    @GeneratedValue(generator="Person_GEN")
    @Id
+   @DocumentId
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.YES),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
+   @Boost(10f)
    @Column(name="PARTY_ID")
    private String partyId;
    @Column(name="SALUTATION")
    private String salutation;
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
+   @Boost(5f)
    @Column(name="FIRST_NAME")
    private String firstName;
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
+   @Boost(5f)
    @Column(name="MIDDLE_NAME")
    private String middleName;
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
+   @Boost(5f)
    @Column(name="LAST_NAME")
    private String lastName;
    @Column(name="PERSONAL_TITLE")
    private String personalTitle;
    @Column(name="SUFFIX")
    private String suffix;
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
+   @Boost(1f)
    @Column(name="NICKNAME")
    private String nickname;
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
+   @Boost(5f)
    @Column(name="FIRST_NAME_LOCAL")
    private String firstNameLocal;
    @Column(name="MIDDLE_NAME_LOCAL")
    private String middleNameLocal;
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
+   @Boost(5f)
    @Column(name="LAST_NAME_LOCAL")
    private String lastNameLocal;
    @Column(name="OTHER_LOCAL")
@@ -213,7 +244,7 @@ fieldMapColumns.put("Person", fields);
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
-   
+   @IndexedEmbedded(depth = 2)
    private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EMPLOYMENT_STATUS_ENUM_ID", insertable=false, updatable=false)
