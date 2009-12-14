@@ -251,7 +251,6 @@ public class IndexingService extends Service implements IndexingServiceInterface
             }
 
         } catch (Exception e) {
-            
             Debug.logError(e, MODULE);
             // rollback the transaction
             if (tx != null) {

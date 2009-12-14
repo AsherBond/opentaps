@@ -16,8 +16,6 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <test-suite suite-name="Opentaps Unit Tests" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/test-suite.xsd">
-    <!-- opentaps general and meta tests: these verify the tools used for unit testing -->
-    <test-case case-name="opentaps-meta-tests"><junit-test-suite class-name="org.opentaps.tests.OpentapsTests"/></test-case>
 
     <!-- testing general util methods and such -->
     <test-case case-name="common-tests"><junit-test-suite class-name="org.opentaps.tests.common.CommonTests"/></test-case>
