@@ -56,7 +56,7 @@
         <attribute name="contactPartyId" type="String" mode="IN" optional="true"/>
         <attribute name="nextStep" type="String" mode="IN" optional="true"/>
         <attribute name="estimatedAmount" type="Double" mode="IN" optional="true"/>
-        <attribute name="opportunityStageId" type="String" mode="IN" optional="true"/>
+        <attribute name="opportunityStageId" type="String" mode="IN" optional="false"/>
         <attribute name="typeEnumId" type="String" mode="IN" optional="true"/>
         <attribute name="currencyUomId" type="String" mode="IN" optional="true"/>
         <attribute name="marketingCampaignId" type="String" mode="IN" optional="true"/>

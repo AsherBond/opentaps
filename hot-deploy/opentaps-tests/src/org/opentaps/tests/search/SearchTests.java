@@ -374,11 +374,16 @@ public class SearchTests extends OpentapsTestCase {
         createOpportunity.setInOpportunityName("searchsalesopportunity");
         createOpportunity.setInDescription("a test search opportunity searchsalesopportunity1 searchsalesopportunity2");
         createOpportunity.setInAccountPartyId("DemoCustCompany");
+        createOpportunity.setInOpportunityStageId(SalesOpportunityStageConstants.SOSTG_PROSPECT);
         createOpportunity.setInEstimatedCloseDate(dateStringToShortLocaleString("10/10/10"));
         runAndAssertServiceSuccess(createOpportunity);
         String salesOpportunityId = createOpportunity.getOutSalesOpportunityId();
 
         pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
+
+        OrderRepositoryInterface repository = orderDomain.getOrderRepository();
+        SalesOpportunity so = repository.findOneNotNull(SalesOpportunity.class, repository.map(SalesOpportunity.Fields.salesOpportunityId, salesOpportunityId));
+        Debug.logInfo("Create SalesOpportunity: " + so, MODULE);
 
         //  call the CRM search with key words from the name of sales opportunity
         CrmsfaSearchService crmSearch = crmsfaSearchSalesOpportunities("searchsalesopportunity");
@@ -395,8 +400,31 @@ public class SearchTests extends OpentapsTestCase {
         //  verify the sales opportunity shows up in the list of SalesOpportunity
         assertTrue("Should have found the new sales opportunity [" + salesOpportunityId + "] in the results", salesOpportunityIds.contains(salesOpportunityId));
 
-        //  set the sales opportunity to canceled (lost)
+        //  set the sales opportunity to proposal
         CrmsfaUpdateOpportunityService updateOpportunity = new CrmsfaUpdateOpportunityService();
+        updateOpportunity.setInUserLogin(admin);
+        updateOpportunity.setInSalesOpportunityId(salesOpportunityId);
+        updateOpportunity.setInOpportunityName("searchsalesopportunity");
+        updateOpportunity.setInDescription("a test search opportunity searchsalesopportunity1 searchsalesopportunity2");
+        updateOpportunity.setInChangeNote("Make proposal the Sales Opportunity");
+        updateOpportunity.setInOpportunityStageId(SalesOpportunityStageConstants.SOSTG_PROPOSAL);
+        updateOpportunity.setInEstimatedCloseDate(dateStringToShortLocaleString("10/10/10"));
+        runAndAssertServiceSuccess(updateOpportunity);
+
+        pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
+
+        so = repository.findOneNotNull(SalesOpportunity.class, repository.map(SalesOpportunity.Fields.salesOpportunityId, salesOpportunityId));
+        Debug.logInfo("Updated SalesOpportunity to: " + so, MODULE);
+
+        //  call the CRM search with key words from the name of sales opportunity
+        crmSearch = crmsfaSearchSalesOpportunities("searchsalesopportunity");
+        salesOpportunities = crmSearch.getSalesOpportunities();
+        salesOpportunityIds = Entity.getDistinctFieldValues(String.class, salesOpportunities, SalesOpportunity.Fields.salesOpportunityId);
+        //  verify the sales opportunity shows up in the list of SalesOpportunity
+        assertTrue("Should have found the new sales opportunity [" + salesOpportunityId + "] in the results", salesOpportunityIds.contains(salesOpportunityId));
+
+        //  set the sales opportunity to canceled (lost)
+        updateOpportunity = new CrmsfaUpdateOpportunityService();
         updateOpportunity.setInUserLogin(admin);
         updateOpportunity.setInSalesOpportunityId(salesOpportunityId);
         updateOpportunity.setInOpportunityName("searchsalesopportunity");
@@ -431,6 +459,7 @@ public class SearchTests extends OpentapsTestCase {
         createOpportunity.setInOpportunityName("testRankedSOSearch");
         createOpportunity.setInAccountPartyId("DemoCustCompany");
         createOpportunity.setInEstimatedCloseDate(dateStringToShortLocaleString("10/10/10"));
+        createOpportunity.setInOpportunityStageId(SalesOpportunityStageConstants.SOSTG_PROSPECT);
         runAndAssertServiceSuccess(createOpportunity);
         String salesOpportunityId1 = createOpportunity.getOutSalesOpportunityId();
 
@@ -440,6 +469,7 @@ public class SearchTests extends OpentapsTestCase {
         createOpportunity.setInOpportunityName(salesOpportunityId1);
         createOpportunity.setInAccountPartyId("DemoCustCompany");
         createOpportunity.setInEstimatedCloseDate(dateStringToShortLocaleString("10/10/10"));
+        createOpportunity.setInOpportunityStageId(SalesOpportunityStageConstants.SOSTG_PROSPECT);
         runAndAssertServiceSuccess(createOpportunity);
         String salesOpportunityId2 = createOpportunity.getOutSalesOpportunityId();
 
