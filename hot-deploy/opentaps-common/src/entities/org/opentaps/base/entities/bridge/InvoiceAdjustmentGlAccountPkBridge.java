@@ -64,12 +64,11 @@ public class InvoiceAdjustmentGlAccountPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         InvoiceAdjustmentGlAccountPk id = (InvoiceAdjustmentGlAccountPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getOrganizationPartyId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getInvoiceTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getInvoiceAdjustmentTypeId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class InvoiceAdjustmentGlAccountPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

@@ -62,10 +62,9 @@ public class EntitySyncIncludeGroupPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         EntitySyncIncludeGroupPk id = (EntitySyncIncludeGroupPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getEntitySyncId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getEntityGroupId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class EntitySyncIncludeGroupPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

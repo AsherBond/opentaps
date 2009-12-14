@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class ProductStoreVendorShipmentPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_STORE_ID")
     private String productStoreId;
     @Column(name="VENDOR_PARTY_ID")
@@ -35,7 +39,7 @@ public class ProductStoreVendorShipmentPk implements Serializable {
     private String shipmentMethodTypeId;
     @Column(name="CARRIER_PARTY_ID")
     private String carrierPartyId;
-    
+
     /**
      * Auto generated value setter.
      * @param productStoreId the productStoreId to set
@@ -68,29 +72,51 @@ public class ProductStoreVendorShipmentPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductStoreId() {
         return this.productStoreId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getVendorPartyId() {
         return this.vendorPartyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getShipmentMethodTypeId() {
         return this.shipmentMethodTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCarrierPartyId() {
         return this.carrierPartyId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productStoreId).append("*");
+            sb.append(vendorPartyId).append("*");
+            sb.append(shipmentMethodTypeId).append("*");
+            sb.append(carrierPartyId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductStoreVendorShipmentPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

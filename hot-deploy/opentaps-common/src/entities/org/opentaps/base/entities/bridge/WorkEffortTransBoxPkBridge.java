@@ -64,12 +64,11 @@ public class WorkEffortTransBoxPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         WorkEffortTransBoxPk id = (WorkEffortTransBoxPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getProcessWorkEffortId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getToActivityId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getTransitionId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class WorkEffortTransBoxPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

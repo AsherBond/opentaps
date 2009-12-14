@@ -64,12 +64,11 @@ public class PaymentBudgetAllocationPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         PaymentBudgetAllocationPk id = (PaymentBudgetAllocationPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getBudgetId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getBudgetItemSeqId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPaymentId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class PaymentBudgetAllocationPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

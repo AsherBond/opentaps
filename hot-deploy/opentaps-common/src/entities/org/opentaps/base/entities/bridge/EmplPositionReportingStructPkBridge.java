@@ -66,12 +66,11 @@ public class EmplPositionReportingStructPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         EmplPositionReportingStructPk id = (EmplPositionReportingStructPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getEmplPositionIdReportingTo());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getEmplPositionIdManagedBy());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -103,6 +102,7 @@ public class EmplPositionReportingStructPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

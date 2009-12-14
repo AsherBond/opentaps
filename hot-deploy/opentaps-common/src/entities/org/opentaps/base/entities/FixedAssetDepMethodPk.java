@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class FixedAssetDepMethodPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="DEPRECIATION_CUSTOM_METHOD_ID")
     private String depreciationCustomMethodId;
     @Column(name="FIXED_ASSET_ID")
     private String fixedAssetId;
-    
+
     /**
      * Auto generated value setter.
      * @param depreciationCustomMethodId the depreciationCustomMethodId to set
@@ -50,15 +54,35 @@ public class FixedAssetDepMethodPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getDepreciationCustomMethodId() {
         return this.depreciationCustomMethodId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFixedAssetId() {
         return this.fixedAssetId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(depreciationCustomMethodId).append("*");
+            sb.append(fixedAssetId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof FixedAssetDepMethodPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

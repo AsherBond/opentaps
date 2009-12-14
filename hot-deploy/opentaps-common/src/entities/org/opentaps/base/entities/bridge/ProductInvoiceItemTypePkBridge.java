@@ -62,10 +62,9 @@ public class ProductInvoiceItemTypePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ProductInvoiceItemTypePk id = (ProductInvoiceItemTypePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getProductTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getInvoiceTypeId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class ProductInvoiceItemTypePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

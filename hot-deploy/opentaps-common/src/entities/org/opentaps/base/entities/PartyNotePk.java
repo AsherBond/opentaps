@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class PartyNotePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PARTY_ID")
     private String partyId;
     @Column(name="NOTE_ID")
     private String noteId;
-    
+
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
@@ -50,15 +54,35 @@ public class PartyNotePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getNoteId() {
         return this.noteId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(partyId).append("*");
+            sb.append(noteId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PartyNotePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

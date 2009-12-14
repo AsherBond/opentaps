@@ -62,10 +62,9 @@ public class ExampleItemPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ExampleItemPk id = (ExampleItemPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getExampleId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getExampleItemSeqId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class ExampleItemPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

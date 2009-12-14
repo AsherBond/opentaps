@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class ProdConfItemContentPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="CONFIG_ITEM_ID")
     private String configItemId;
     @Column(name="CONTENT_ID")
@@ -36,7 +40,7 @@ public class ProdConfItemContentPk implements Serializable {
     private String confItemContentTypeId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param configItemId the configItemId to set
@@ -69,29 +73,51 @@ public class ProdConfItemContentPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getConfigItemId() {
         return this.configItemId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getContentId() {
         return this.contentId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getConfItemContentTypeId() {
         return this.confItemContentTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(configItemId).append("*");
+            sb.append(contentId).append("*");
+            sb.append(confItemContentTypeId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProdConfItemContentPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

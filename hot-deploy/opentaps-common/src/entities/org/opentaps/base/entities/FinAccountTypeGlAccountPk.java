@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class FinAccountTypeGlAccountPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="FIN_ACCOUNT_TYPE_ID")
     private String finAccountTypeId;
     @Column(name="ORGANIZATION_PARTY_ID")
     private String organizationPartyId;
-    
+
     /**
      * Auto generated value setter.
      * @param finAccountTypeId the finAccountTypeId to set
@@ -50,15 +54,35 @@ public class FinAccountTypeGlAccountPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFinAccountTypeId() {
         return this.finAccountTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrganizationPartyId() {
         return this.organizationPartyId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(finAccountTypeId).append("*");
+            sb.append(organizationPartyId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof FinAccountTypeGlAccountPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

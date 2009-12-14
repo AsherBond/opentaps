@@ -62,10 +62,9 @@ public class PortletPortletCategoryPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         PortletPortletCategoryPk id = (PortletPortletCategoryPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getPortalPortletId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPortletCategoryId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class PortletPortletCategoryPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

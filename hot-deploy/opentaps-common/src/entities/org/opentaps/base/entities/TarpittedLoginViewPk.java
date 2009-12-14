@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class TarpittedLoginViewPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="VIEW_NAME_ID")
     private String viewNameId;
     @Column(name="USER_LOGIN_ID")
     private String userLoginId;
-    
+
     /**
      * Auto generated value setter.
      * @param viewNameId the viewNameId to set
@@ -50,15 +54,35 @@ public class TarpittedLoginViewPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getViewNameId() {
         return this.viewNameId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getUserLoginId() {
         return this.userLoginId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(viewNameId).append("*");
+            sb.append(userLoginId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof TarpittedLoginViewPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

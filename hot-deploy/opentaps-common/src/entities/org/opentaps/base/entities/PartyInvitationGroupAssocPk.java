@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class PartyInvitationGroupAssocPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PARTY_INVITATION_ID")
     private String partyInvitationId;
     @Column(name="PARTY_ID_TO")
     private String partyIdTo;
-    
+
     /**
      * Auto generated value setter.
      * @param partyInvitationId the partyInvitationId to set
@@ -50,15 +54,35 @@ public class PartyInvitationGroupAssocPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyInvitationId() {
         return this.partyInvitationId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyIdTo() {
         return this.partyIdTo;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(partyInvitationId).append("*");
+            sb.append(partyIdTo).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PartyInvitationGroupAssocPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

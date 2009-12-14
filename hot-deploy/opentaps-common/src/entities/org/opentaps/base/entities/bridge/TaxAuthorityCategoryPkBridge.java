@@ -64,12 +64,11 @@ public class TaxAuthorityCategoryPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         TaxAuthorityCategoryPk id = (TaxAuthorityCategoryPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getTaxAuthGeoId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getTaxAuthPartyId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getProductCategoryId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class TaxAuthorityCategoryPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

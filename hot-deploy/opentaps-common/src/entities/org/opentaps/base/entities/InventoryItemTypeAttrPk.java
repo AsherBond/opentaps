@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class InventoryItemTypeAttrPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="INVENTORY_ITEM_TYPE_ID")
     private String inventoryItemTypeId;
     @Column(name="ATTR_NAME")
     private String attrName;
-    
+
     /**
      * Auto generated value setter.
      * @param inventoryItemTypeId the inventoryItemTypeId to set
@@ -50,15 +54,35 @@ public class InventoryItemTypeAttrPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInventoryItemTypeId() {
         return this.inventoryItemTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAttrName() {
         return this.attrName;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(inventoryItemTypeId).append("*");
+            sb.append(attrName).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof InventoryItemTypeAttrPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -62,10 +62,9 @@ public class WorkRequirementFulfillmentPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         WorkRequirementFulfillmentPk id = (WorkRequirementFulfillmentPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getRequirementId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getWorkEffortId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class WorkRequirementFulfillmentPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

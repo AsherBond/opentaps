@@ -246,7 +246,7 @@ public class CrmsfaCreateOpportunityService extends ServiceWrapper {
     }
     /**
      * Auto generated value accessor.
-     * This parameter is optional.
+     * This parameter is required.
      * @return <code>String</code>
      */
     public String getInOpportunityStageId() {
@@ -477,7 +477,7 @@ public class CrmsfaCreateOpportunityService extends ServiceWrapper {
     }
     /**
      * Auto generated value setter.
-     * This parameter is optional.
+     * This parameter is required.
      * @param inOpportunityStageId the inOpportunityStageId to set
     */
     public void setInOpportunityStageId(String inOpportunityStageId) {

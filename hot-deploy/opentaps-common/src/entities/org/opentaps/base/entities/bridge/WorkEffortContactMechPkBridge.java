@@ -62,10 +62,9 @@ public class WorkEffortContactMechPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         WorkEffortContactMechPk id = (WorkEffortContactMechPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getWorkEffortId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getContactMechId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class WorkEffortContactMechPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

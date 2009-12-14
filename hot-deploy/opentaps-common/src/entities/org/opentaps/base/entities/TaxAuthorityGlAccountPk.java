@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class TaxAuthorityGlAccountPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="TAX_AUTH_GEO_ID")
     private String taxAuthGeoId;
     @Column(name="TAX_AUTH_PARTY_ID")
     private String taxAuthPartyId;
     @Column(name="ORGANIZATION_PARTY_ID")
     private String organizationPartyId;
-    
+
     /**
      * Auto generated value setter.
      * @param taxAuthGeoId the taxAuthGeoId to set
@@ -59,22 +63,43 @@ public class TaxAuthorityGlAccountPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTaxAuthGeoId() {
         return this.taxAuthGeoId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTaxAuthPartyId() {
         return this.taxAuthPartyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrganizationPartyId() {
         return this.organizationPartyId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(taxAuthGeoId).append("*");
+            sb.append(taxAuthPartyId).append("*");
+            sb.append(organizationPartyId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof TaxAuthorityGlAccountPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -28,13 +28,17 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class SurveyQuestionApplPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="SURVEY_ID")
     private String surveyId;
     @Column(name="SURVEY_QUESTION_ID")
     private String surveyQuestionId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param surveyId the surveyId to set
@@ -60,22 +64,43 @@ public class SurveyQuestionApplPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSurveyId() {
         return this.surveyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSurveyQuestionId() {
         return this.surveyQuestionId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(surveyId).append("*");
+            sb.append(surveyQuestionId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof SurveyQuestionApplPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

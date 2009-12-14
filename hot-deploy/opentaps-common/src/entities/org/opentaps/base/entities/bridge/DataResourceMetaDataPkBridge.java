@@ -64,12 +64,11 @@ public class DataResourceMetaDataPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         DataResourceMetaDataPk id = (DataResourceMetaDataPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getDataResourceId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getMetaDataPredicateId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getMetaDataValue());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class DataResourceMetaDataPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

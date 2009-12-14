@@ -28,13 +28,17 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class ContainerGeoPointPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="CONTAINER_ID")
     private String containerId;
     @Column(name="GEO_POINT_ID")
     private String geoPointId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param containerId the containerId to set
@@ -60,22 +64,43 @@ public class ContainerGeoPointPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getContainerId() {
         return this.containerId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getGeoPointId() {
         return this.geoPointId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(containerId).append("*");
+            sb.append(geoPointId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ContainerGeoPointPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

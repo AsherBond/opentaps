@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class OrderItemAssocPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="ORDER_ID")
     private String orderId;
     @Column(name="ORDER_ITEM_SEQ_ID")
@@ -41,7 +45,7 @@ public class OrderItemAssocPk implements Serializable {
     private String toShipGroupSeqId;
     @Column(name="ORDER_ITEM_ASSOC_TYPE_ID")
     private String orderItemAssocTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param orderId the orderId to set
@@ -95,50 +99,75 @@ public class OrderItemAssocPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrderId() {
         return this.orderId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrderItemSeqId() {
         return this.orderItemSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getShipGroupSeqId() {
         return this.shipGroupSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getToOrderId() {
         return this.toOrderId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getToOrderItemSeqId() {
         return this.toOrderItemSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getToShipGroupSeqId() {
         return this.toShipGroupSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrderItemAssocTypeId() {
         return this.orderItemAssocTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(orderId).append("*");
+            sb.append(orderItemSeqId).append("*");
+            sb.append(shipGroupSeqId).append("*");
+            sb.append(toOrderId).append("*");
+            sb.append(toOrderItemSeqId).append("*");
+            sb.append(toShipGroupSeqId).append("*");
+            sb.append(orderItemAssocTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof OrderItemAssocPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

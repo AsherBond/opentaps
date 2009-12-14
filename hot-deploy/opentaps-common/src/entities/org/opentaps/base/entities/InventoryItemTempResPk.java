@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class InventoryItemTempResPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="VISIT_ID")
     private String visitId;
     @Column(name="PRODUCT_ID")
     private String productId;
     @Column(name="PRODUCT_STORE_ID")
     private String productStoreId;
-    
+
     /**
      * Auto generated value setter.
      * @param visitId the visitId to set
@@ -59,22 +63,43 @@ public class InventoryItemTempResPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getVisitId() {
         return this.visitId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductId() {
         return this.productId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductStoreId() {
         return this.productStoreId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(visitId).append("*");
+            sb.append(productId).append("*");
+            sb.append(productStoreId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof InventoryItemTempResPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

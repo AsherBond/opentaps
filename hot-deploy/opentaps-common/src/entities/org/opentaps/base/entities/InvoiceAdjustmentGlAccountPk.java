@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class InvoiceAdjustmentGlAccountPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="ORGANIZATION_PARTY_ID")
     private String organizationPartyId;
     @Column(name="INVOICE_TYPE_ID")
     private String invoiceTypeId;
     @Column(name="INVOICE_ADJUSTMENT_TYPE_ID")
     private String invoiceAdjustmentTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param organizationPartyId the organizationPartyId to set
@@ -59,22 +63,43 @@ public class InvoiceAdjustmentGlAccountPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrganizationPartyId() {
         return this.organizationPartyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInvoiceTypeId() {
         return this.invoiceTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInvoiceAdjustmentTypeId() {
         return this.invoiceAdjustmentTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(organizationPartyId).append("*");
+            sb.append(invoiceTypeId).append("*");
+            sb.append(invoiceAdjustmentTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof InvoiceAdjustmentGlAccountPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class BudgetRevisionImpactPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="BUDGET_ID")
     private String budgetId;
     @Column(name="BUDGET_ITEM_SEQ_ID")
     private String budgetItemSeqId;
     @Column(name="REVISION_SEQ_ID")
     private String revisionSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param budgetId the budgetId to set
@@ -59,22 +63,43 @@ public class BudgetRevisionImpactPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getBudgetId() {
         return this.budgetId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getBudgetItemSeqId() {
         return this.budgetItemSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRevisionSeqId() {
         return this.revisionSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(budgetId).append("*");
+            sb.append(budgetItemSeqId).append("*");
+            sb.append(revisionSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof BudgetRevisionImpactPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

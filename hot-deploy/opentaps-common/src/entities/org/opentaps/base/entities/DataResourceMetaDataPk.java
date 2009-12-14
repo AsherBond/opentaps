@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class DataResourceMetaDataPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="DATA_RESOURCE_ID")
     private String dataResourceId;
     @Column(name="META_DATA_PREDICATE_ID")
     private String metaDataPredicateId;
     @Column(name="META_DATA_VALUE")
     private String metaDataValue;
-    
+
     /**
      * Auto generated value setter.
      * @param dataResourceId the dataResourceId to set
@@ -59,22 +63,43 @@ public class DataResourceMetaDataPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getDataResourceId() {
         return this.dataResourceId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getMetaDataPredicateId() {
         return this.metaDataPredicateId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getMetaDataValue() {
         return this.metaDataValue;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(dataResourceId).append("*");
+            sb.append(metaDataPredicateId).append("*");
+            sb.append(metaDataValue).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof DataResourceMetaDataPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

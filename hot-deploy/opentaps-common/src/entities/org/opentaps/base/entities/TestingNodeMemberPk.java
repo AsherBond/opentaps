@@ -28,13 +28,17 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class TestingNodeMemberPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="TESTING_NODE_ID")
     private String testingNodeId;
     @Column(name="TESTING_ID")
     private String testingId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param testingNodeId the testingNodeId to set
@@ -60,22 +64,43 @@ public class TestingNodeMemberPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTestingNodeId() {
         return this.testingNodeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTestingId() {
         return this.testingId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(testingNodeId).append("*");
+            sb.append(testingId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof TestingNodeMemberPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

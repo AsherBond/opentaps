@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class PortalPagePortletPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PORTAL_PAGE_ID")
     private String portalPageId;
     @Column(name="PORTAL_PORTLET_ID")
     private String portalPortletId;
     @Column(name="PORTLET_SEQ_ID")
     private String portletSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param portalPageId the portalPageId to set
@@ -59,22 +63,43 @@ public class PortalPagePortletPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPortalPageId() {
         return this.portalPageId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPortalPortletId() {
         return this.portalPortletId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPortletSeqId() {
         return this.portletSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(portalPageId).append("*");
+            sb.append(portalPortletId).append("*");
+            sb.append(portletSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PortalPagePortletPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

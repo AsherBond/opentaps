@@ -62,10 +62,9 @@ public class OrderShipGroupPriorityPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         OrderShipGroupPriorityPk id = (OrderShipGroupPriorityPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getOrderId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getShipGroupSeqId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class OrderShipGroupPriorityPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

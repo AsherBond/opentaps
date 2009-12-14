@@ -64,10 +64,9 @@ public class EntitySyncHistoryPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         EntitySyncHistoryPk id = (EntitySyncHistoryPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getEntitySyncId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getStartDate());
         return sb.toString();
     }
@@ -96,6 +95,7 @@ public class EntitySyncHistoryPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

@@ -72,18 +72,17 @@ public class PartyBenefitPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         PartyBenefitPk id = (PartyBenefitPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getRoleTypeIdFrom());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getRoleTypeIdTo());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPartyIdFrom());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPartyIdTo());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getBenefitTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -124,6 +123,7 @@ public class PartyBenefitPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

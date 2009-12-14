@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class GlAccountTypeDefaultPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="GL_ACCOUNT_TYPE_ID")
     private String glAccountTypeId;
     @Column(name="ORGANIZATION_PARTY_ID")
     private String organizationPartyId;
-    
+
     /**
      * Auto generated value setter.
      * @param glAccountTypeId the glAccountTypeId to set
@@ -50,15 +54,35 @@ public class GlAccountTypeDefaultPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getGlAccountTypeId() {
         return this.glAccountTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrganizationPartyId() {
         return this.organizationPartyId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(glAccountTypeId).append("*");
+            sb.append(organizationPartyId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof GlAccountTypeDefaultPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

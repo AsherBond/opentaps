@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class UserLoginViewPreferencePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="USER_LOGIN_ID")
     private String userLoginId;
     @Column(name="APPLICATION_NAME")
@@ -35,7 +39,7 @@ public class UserLoginViewPreferencePk implements Serializable {
     private String screenName;
     @Column(name="PREFERENCE_NAME")
     private String preferenceName;
-    
+
     /**
      * Auto generated value setter.
      * @param userLoginId the userLoginId to set
@@ -68,29 +72,51 @@ public class UserLoginViewPreferencePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getUserLoginId() {
         return this.userLoginId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getApplicationName() {
         return this.applicationName;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getScreenName() {
         return this.screenName;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPreferenceName() {
         return this.preferenceName;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(userLoginId).append("*");
+            sb.append(applicationName).append("*");
+            sb.append(screenName).append("*");
+            sb.append(preferenceName).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof UserLoginViewPreferencePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

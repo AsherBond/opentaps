@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class ReturnItemTypeMapPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="RETURN_ITEM_MAP_KEY")
     private String returnItemMapKey;
     @Column(name="RETURN_HEADER_TYPE_ID")
     private String returnHeaderTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param returnItemMapKey the returnItemMapKey to set
@@ -50,15 +54,35 @@ public class ReturnItemTypeMapPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getReturnItemMapKey() {
         return this.returnItemMapKey;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getReturnHeaderTypeId() {
         return this.returnHeaderTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(returnItemMapKey).append("*");
+            sb.append(returnHeaderTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ReturnItemTypeMapPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

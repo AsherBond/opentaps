@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class AmazonProductBulletPointPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="BULLET_POINT_ID")
     private String bulletPointId;
     @Column(name="PRODUCT_ID")
     private String productId;
-    
+
     /**
      * Auto generated value setter.
      * @param bulletPointId the bulletPointId to set
@@ -50,15 +54,35 @@ public class AmazonProductBulletPointPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getBulletPointId() {
         return this.bulletPointId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductId() {
         return this.productId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(bulletPointId).append("*");
+            sb.append(productId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof AmazonProductBulletPointPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class OldPartyRatePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PARTY_ID")
     private String partyId;
     @Column(name="RATE_TYPE_ID")
@@ -36,7 +40,7 @@ public class OldPartyRatePk implements Serializable {
     private String currencyUomId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
@@ -69,29 +73,51 @@ public class OldPartyRatePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRateTypeId() {
         return this.rateTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCurrencyUomId() {
         return this.currencyUomId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(partyId).append("*");
+            sb.append(rateTypeId).append("*");
+            sb.append(currencyUomId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof OldPartyRatePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class DocumentAttributePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="DOCUMENT_ID")
     private String documentId;
     @Column(name="ATTR_NAME")
     private String attrName;
-    
+
     /**
      * Auto generated value setter.
      * @param documentId the documentId to set
@@ -50,15 +54,35 @@ public class DocumentAttributePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getDocumentId() {
         return this.documentId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAttrName() {
         return this.attrName;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(documentId).append("*");
+            sb.append(attrName).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof DocumentAttributePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

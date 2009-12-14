@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class QuoteWorkEffortPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="QUOTE_ID")
     private String quoteId;
     @Column(name="WORK_EFFORT_ID")
     private String workEffortId;
-    
+
     /**
      * Auto generated value setter.
      * @param quoteId the quoteId to set
@@ -50,15 +54,35 @@ public class QuoteWorkEffortPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getQuoteId() {
         return this.quoteId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getWorkEffortId() {
         return this.workEffortId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(quoteId).append("*");
+            sb.append(workEffortId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof QuoteWorkEffortPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

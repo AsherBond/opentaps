@@ -66,14 +66,13 @@ public class ShipmentItemBillingPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ShipmentItemBillingPk id = (ShipmentItemBillingPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getShipmentId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getShipmentItemSeqId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getInvoiceId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getInvoiceItemSeqId());
         return sb.toString();
     }
@@ -108,6 +107,7 @@ public class ShipmentItemBillingPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

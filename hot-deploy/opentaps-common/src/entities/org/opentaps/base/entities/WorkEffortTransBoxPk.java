@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class WorkEffortTransBoxPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PROCESS_WORK_EFFORT_ID")
     private String processWorkEffortId;
     @Column(name="TO_ACTIVITY_ID")
     private String toActivityId;
     @Column(name="TRANSITION_ID")
     private String transitionId;
-    
+
     /**
      * Auto generated value setter.
      * @param processWorkEffortId the processWorkEffortId to set
@@ -59,22 +63,43 @@ public class WorkEffortTransBoxPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProcessWorkEffortId() {
         return this.processWorkEffortId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getToActivityId() {
         return this.toActivityId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTransitionId() {
         return this.transitionId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(processWorkEffortId).append("*");
+            sb.append(toActivityId).append("*");
+            sb.append(transitionId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof WorkEffortTransBoxPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

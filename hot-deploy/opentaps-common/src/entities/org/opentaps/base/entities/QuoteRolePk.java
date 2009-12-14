@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class QuoteRolePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="QUOTE_ID")
     private String quoteId;
     @Column(name="PARTY_ID")
     private String partyId;
     @Column(name="ROLE_TYPE_ID")
     private String roleTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param quoteId the quoteId to set
@@ -59,22 +63,43 @@ public class QuoteRolePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getQuoteId() {
         return this.quoteId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRoleTypeId() {
         return this.roleTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(quoteId).append("*");
+            sb.append(partyId).append("*");
+            sb.append(roleTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof QuoteRolePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

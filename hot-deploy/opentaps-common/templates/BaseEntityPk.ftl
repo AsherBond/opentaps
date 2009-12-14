@@ -30,13 +30,17 @@ import ${pkFieldType};
 
 @Embeddable
 public class ${pkName} implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     <#list primaryKeys as primaryKey>
     <#if (pkTypes.size() > 0) && pkTypes.get(primaryKey)?has_content>
     @Column(name="${columnNames.get(primaryKey)}")
     private ${pkTypes.get(primaryKey)} ${primaryKey};
     </#if>
     </#list>
-    
+
 <#-- set methods -->
   <#list primaryKeys as primaryKey>
   <#if (pkTypes.size() > 0) && pkTypes.get(primaryKey)?has_content>
@@ -56,10 +60,31 @@ public class ${pkName} implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>${pkTypes.get(primaryKey)}</code>
-     */  
+     */
     public ${pkTypes.get(primaryKey)} ${getPkMethodNames.get(primaryKey)}() {
         return this.${primaryKey};
     }
   </#if>
-  </#list>  
+  </#list>
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+          <#list primaryKeys as primaryKey>
+            sb.append(${primaryKey}).append("*");
+          </#list>
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ${pkName}) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
+    }
 }

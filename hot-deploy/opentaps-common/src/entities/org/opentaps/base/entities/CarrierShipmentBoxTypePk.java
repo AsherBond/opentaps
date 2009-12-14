@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class CarrierShipmentBoxTypePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="SHIPMENT_BOX_TYPE_ID")
     private String shipmentBoxTypeId;
     @Column(name="PARTY_ID")
     private String partyId;
-    
+
     /**
      * Auto generated value setter.
      * @param shipmentBoxTypeId the shipmentBoxTypeId to set
@@ -50,15 +54,35 @@ public class CarrierShipmentBoxTypePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getShipmentBoxTypeId() {
         return this.shipmentBoxTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(shipmentBoxTypeId).append("*");
+            sb.append(partyId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof CarrierShipmentBoxTypePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

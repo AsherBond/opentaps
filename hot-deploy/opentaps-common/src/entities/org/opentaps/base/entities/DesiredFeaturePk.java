@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class DesiredFeaturePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="DESIRED_FEATURE_ID")
     private String desiredFeatureId;
     @Column(name="REQUIREMENT_ID")
     private String requirementId;
-    
+
     /**
      * Auto generated value setter.
      * @param desiredFeatureId the desiredFeatureId to set
@@ -50,15 +54,35 @@ public class DesiredFeaturePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getDesiredFeatureId() {
         return this.desiredFeatureId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRequirementId() {
         return this.requirementId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(desiredFeatureId).append("*");
+            sb.append(requirementId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof DesiredFeaturePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

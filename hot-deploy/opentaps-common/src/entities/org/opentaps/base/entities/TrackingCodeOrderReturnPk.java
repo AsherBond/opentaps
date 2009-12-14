@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class TrackingCodeOrderReturnPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="RETURN_ID")
     private String returnId;
     @Column(name="ORDER_ID")
     private String orderId;
     @Column(name="TRACKING_CODE_TYPE_ID")
     private String trackingCodeTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param returnId the returnId to set
@@ -59,22 +63,43 @@ public class TrackingCodeOrderReturnPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getReturnId() {
         return this.returnId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrderId() {
         return this.orderId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTrackingCodeTypeId() {
         return this.trackingCodeTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(returnId).append("*");
+            sb.append(orderId).append("*");
+            sb.append(trackingCodeTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof TrackingCodeOrderReturnPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

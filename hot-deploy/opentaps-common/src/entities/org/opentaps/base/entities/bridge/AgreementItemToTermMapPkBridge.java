@@ -62,10 +62,9 @@ public class AgreementItemToTermMapPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         AgreementItemToTermMapPk id = (AgreementItemToTermMapPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getAgreementItemTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getTermTypeId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class AgreementItemToTermMapPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

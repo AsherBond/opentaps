@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class PaycheckItemPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PAYMENT_ID")
     private String paymentId;
     @Column(name="PAYCHECK_ITEM_SEQ_ID")
     private String paycheckItemSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param paymentId the paymentId to set
@@ -50,15 +54,35 @@ public class PaycheckItemPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPaymentId() {
         return this.paymentId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPaycheckItemSeqId() {
         return this.paycheckItemSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(paymentId).append("*");
+            sb.append(paycheckItemSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PaycheckItemPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

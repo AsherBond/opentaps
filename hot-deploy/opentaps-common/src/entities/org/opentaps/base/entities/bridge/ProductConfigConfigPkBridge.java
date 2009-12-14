@@ -66,14 +66,13 @@ public class ProductConfigConfigPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ProductConfigConfigPk id = (ProductConfigConfigPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getConfigId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getConfigItemId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getConfigOptionId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getSequenceNum());
         return sb.toString();
     }
@@ -108,6 +107,7 @@ public class ProductConfigConfigPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

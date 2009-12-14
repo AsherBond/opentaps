@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class BudgetScenarioApplicationPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="BUDGET_SCENARIO_APPLIC_ID")
     private String budgetScenarioApplicId;
     @Column(name="BUDGET_SCENARIO_ID")
     private String budgetScenarioId;
-    
+
     /**
      * Auto generated value setter.
      * @param budgetScenarioApplicId the budgetScenarioApplicId to set
@@ -50,15 +54,35 @@ public class BudgetScenarioApplicationPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getBudgetScenarioApplicId() {
         return this.budgetScenarioApplicId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getBudgetScenarioId() {
         return this.budgetScenarioId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(budgetScenarioApplicId).append("*");
+            sb.append(budgetScenarioId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof BudgetScenarioApplicationPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class SalaryStepPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="SALARY_STEP_SEQ_ID")
     private String salaryStepSeqId;
     @Column(name="PAY_GRADE_ID")
     private String payGradeId;
-    
+
     /**
      * Auto generated value setter.
      * @param salaryStepSeqId the salaryStepSeqId to set
@@ -50,15 +54,35 @@ public class SalaryStepPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSalaryStepSeqId() {
         return this.salaryStepSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPayGradeId() {
         return this.payGradeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(salaryStepSeqId).append("*");
+            sb.append(payGradeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof SalaryStepPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

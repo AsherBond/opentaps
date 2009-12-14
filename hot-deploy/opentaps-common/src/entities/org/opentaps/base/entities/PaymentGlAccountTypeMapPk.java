@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class PaymentGlAccountTypeMapPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PAYMENT_TYPE_ID")
     private String paymentTypeId;
     @Column(name="ORGANIZATION_PARTY_ID")
     private String organizationPartyId;
-    
+
     /**
      * Auto generated value setter.
      * @param paymentTypeId the paymentTypeId to set
@@ -50,15 +54,35 @@ public class PaymentGlAccountTypeMapPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPaymentTypeId() {
         return this.paymentTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrganizationPartyId() {
         return this.organizationPartyId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(paymentTypeId).append("*");
+            sb.append(organizationPartyId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PaymentGlAccountTypeMapPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

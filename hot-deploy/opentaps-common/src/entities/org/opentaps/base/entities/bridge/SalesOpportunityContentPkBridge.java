@@ -66,12 +66,11 @@ public class SalesOpportunityContentPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         SalesOpportunityContentPk id = (SalesOpportunityContentPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getContentId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getSalesOpportunityId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -103,6 +102,7 @@ public class SalesOpportunityContentPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

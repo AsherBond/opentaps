@@ -66,12 +66,11 @@ public class WorkEffortReviewPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         WorkEffortReviewPk id = (WorkEffortReviewPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getWorkEffortId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getUserLoginId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getReviewDate());
         return sb.toString();
     }
@@ -103,6 +102,7 @@ public class WorkEffortReviewPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

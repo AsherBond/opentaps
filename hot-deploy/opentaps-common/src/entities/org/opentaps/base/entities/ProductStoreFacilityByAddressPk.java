@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class ProductStoreFacilityByAddressPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_STORE_ID")
     private String productStoreId;
     @Column(name="CONTACT_MECH_ID")
     private String contactMechId;
-    
+
     /**
      * Auto generated value setter.
      * @param productStoreId the productStoreId to set
@@ -50,15 +54,35 @@ public class ProductStoreFacilityByAddressPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductStoreId() {
         return this.productStoreId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getContactMechId() {
         return this.contactMechId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productStoreId).append("*");
+            sb.append(contactMechId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductStoreFacilityByAddressPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

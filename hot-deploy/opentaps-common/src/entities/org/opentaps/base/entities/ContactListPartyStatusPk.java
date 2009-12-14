@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class ContactListPartyStatusPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="CONTACT_LIST_ID")
     private String contactListId;
     @Column(name="PARTY_ID")
@@ -36,7 +40,7 @@ public class ContactListPartyStatusPk implements Serializable {
     private Timestamp fromDate;
     @Column(name="STATUS_DATE")
     private Timestamp statusDate;
-    
+
     /**
      * Auto generated value setter.
      * @param contactListId the contactListId to set
@@ -69,29 +73,51 @@ public class ContactListPartyStatusPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getContactListId() {
         return this.contactListId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getStatusDate() {
         return this.statusDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(contactListId).append("*");
+            sb.append(partyId).append("*");
+            sb.append(fromDate).append("*");
+            sb.append(statusDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ContactListPartyStatusPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

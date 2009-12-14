@@ -28,13 +28,17 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class WorkEffortReviewPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="WORK_EFFORT_ID")
     private String workEffortId;
     @Column(name="USER_LOGIN_ID")
     private String userLoginId;
     @Column(name="REVIEW_DATE")
     private Timestamp reviewDate;
-    
+
     /**
      * Auto generated value setter.
      * @param workEffortId the workEffortId to set
@@ -60,22 +64,43 @@ public class WorkEffortReviewPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getWorkEffortId() {
         return this.workEffortId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getUserLoginId() {
         return this.userLoginId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getReviewDate() {
         return this.reviewDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(workEffortId).append("*");
+            sb.append(userLoginId).append("*");
+            sb.append(reviewDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof WorkEffortReviewPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

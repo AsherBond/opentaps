@@ -62,10 +62,9 @@ public class ProductPromoCodeEmailPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ProductPromoCodeEmailPk id = (ProductPromoCodeEmailPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getProductPromoCodeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getEmailAddress());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class ProductPromoCodeEmailPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

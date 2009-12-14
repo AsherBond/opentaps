@@ -28,11 +28,15 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class PartyDeactivationPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PARTY_ID")
     private String partyId;
     @Column(name="DEACTIVATION_TIMESTAMP")
     private Timestamp deactivationTimestamp;
-    
+
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
@@ -51,15 +55,35 @@ public class PartyDeactivationPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getDeactivationTimestamp() {
         return this.deactivationTimestamp;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(partyId).append("*");
+            sb.append(deactivationTimestamp).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PartyDeactivationPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

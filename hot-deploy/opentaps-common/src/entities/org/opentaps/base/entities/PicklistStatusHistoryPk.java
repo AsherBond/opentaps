@@ -28,11 +28,15 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class PicklistStatusHistoryPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PICKLIST_ID")
     private String picklistId;
     @Column(name="CHANGE_DATE")
     private Timestamp changeDate;
-    
+
     /**
      * Auto generated value setter.
      * @param picklistId the picklistId to set
@@ -51,15 +55,35 @@ public class PicklistStatusHistoryPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPicklistId() {
         return this.picklistId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getChangeDate() {
         return this.changeDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(picklistId).append("*");
+            sb.append(changeDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PicklistStatusHistoryPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

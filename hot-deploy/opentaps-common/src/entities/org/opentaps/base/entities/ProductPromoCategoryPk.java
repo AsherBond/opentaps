@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class ProductPromoCategoryPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_PROMO_ID")
     private String productPromoId;
     @Column(name="PRODUCT_PROMO_RULE_ID")
@@ -39,7 +43,7 @@ public class ProductPromoCategoryPk implements Serializable {
     private String productCategoryId;
     @Column(name="AND_GROUP_ID")
     private String andGroupId;
-    
+
     /**
      * Auto generated value setter.
      * @param productPromoId the productPromoId to set
@@ -86,43 +90,67 @@ public class ProductPromoCategoryPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductPromoId() {
         return this.productPromoId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductPromoRuleId() {
         return this.productPromoRuleId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductPromoActionSeqId() {
         return this.productPromoActionSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductPromoCondSeqId() {
         return this.productPromoCondSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductCategoryId() {
         return this.productCategoryId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAndGroupId() {
         return this.andGroupId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productPromoId).append("*");
+            sb.append(productPromoRuleId).append("*");
+            sb.append(productPromoActionSeqId).append("*");
+            sb.append(productPromoCondSeqId).append("*");
+            sb.append(productCategoryId).append("*");
+            sb.append(andGroupId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductPromoCategoryPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class PortletPortletCategoryPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PORTAL_PORTLET_ID")
     private String portalPortletId;
     @Column(name="PORTLET_CATEGORY_ID")
     private String portletCategoryId;
-    
+
     /**
      * Auto generated value setter.
      * @param portalPortletId the portalPortletId to set
@@ -50,15 +54,35 @@ public class PortletPortletCategoryPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPortalPortletId() {
         return this.portalPortletId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPortletCategoryId() {
         return this.portletCategoryId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(portalPortletId).append("*");
+            sb.append(portletCategoryId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PortletPortletCategoryPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

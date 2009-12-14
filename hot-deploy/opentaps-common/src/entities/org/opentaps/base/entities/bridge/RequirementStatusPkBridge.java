@@ -62,10 +62,9 @@ public class RequirementStatusPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         RequirementStatusPk id = (RequirementStatusPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getRequirementId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getStatusId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class RequirementStatusPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

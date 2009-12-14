@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class WorkEffortSkillStandardPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="WORK_EFFORT_ID")
     private String workEffortId;
     @Column(name="SKILL_TYPE_ID")
     private String skillTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param workEffortId the workEffortId to set
@@ -50,15 +54,35 @@ public class WorkEffortSkillStandardPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getWorkEffortId() {
         return this.workEffortId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSkillTypeId() {
         return this.skillTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(workEffortId).append("*");
+            sb.append(skillTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof WorkEffortSkillStandardPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

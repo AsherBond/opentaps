@@ -70,16 +70,15 @@ public class TaxAuthorityAssocPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         TaxAuthorityAssocPk id = (TaxAuthorityAssocPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getTaxAuthGeoId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getTaxAuthPartyId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getToTaxAuthGeoId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getToTaxAuthPartyId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -117,6 +116,7 @@ public class TaxAuthorityAssocPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

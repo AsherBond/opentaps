@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class UserPreferencePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="USER_LOGIN_ID")
     private String userLoginId;
     @Column(name="USER_PREF_TYPE_ID")
     private String userPrefTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param userLoginId the userLoginId to set
@@ -50,15 +54,35 @@ public class UserPreferencePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getUserLoginId() {
         return this.userLoginId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getUserPrefTypeId() {
         return this.userPrefTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(userLoginId).append("*");
+            sb.append(userPrefTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof UserPreferencePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

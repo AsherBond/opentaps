@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class AgreementItemToTermMapPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="AGREEMENT_ITEM_TYPE_ID")
     private String agreementItemTypeId;
     @Column(name="TERM_TYPE_ID")
     private String termTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param agreementItemTypeId the agreementItemTypeId to set
@@ -50,15 +54,35 @@ public class AgreementItemToTermMapPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAgreementItemTypeId() {
         return this.agreementItemTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTermTypeId() {
         return this.termTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(agreementItemTypeId).append("*");
+            sb.append(termTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof AgreementItemToTermMapPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

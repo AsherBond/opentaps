@@ -68,16 +68,15 @@ public class DataImportOrderItemPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         DataImportOrderItemPk id = (DataImportOrderItemPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getOrderId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getProductId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getQuantity());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPrice());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getItemAdjustmentsTotal());
         return sb.toString();
     }
@@ -115,6 +114,7 @@ public class DataImportOrderItemPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

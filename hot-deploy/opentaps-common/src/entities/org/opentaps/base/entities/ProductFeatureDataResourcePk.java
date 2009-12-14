@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class ProductFeatureDataResourcePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="DATA_RESOURCE_ID")
     private String dataResourceId;
     @Column(name="PRODUCT_FEATURE_ID")
     private String productFeatureId;
-    
+
     /**
      * Auto generated value setter.
      * @param dataResourceId the dataResourceId to set
@@ -50,15 +54,35 @@ public class ProductFeatureDataResourcePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getDataResourceId() {
         return this.dataResourceId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductFeatureId() {
         return this.productFeatureId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(dataResourceId).append("*");
+            sb.append(productFeatureId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductFeatureDataResourcePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

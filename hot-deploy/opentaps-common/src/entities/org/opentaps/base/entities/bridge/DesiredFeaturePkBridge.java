@@ -62,10 +62,9 @@ public class DesiredFeaturePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         DesiredFeaturePk id = (DesiredFeaturePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getDesiredFeatureId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getRequirementId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class DesiredFeaturePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

@@ -64,12 +64,11 @@ public class BudgetItemAttributePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         BudgetItemAttributePk id = (BudgetItemAttributePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getBudgetId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getBudgetItemSeqId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getAttrName());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class BudgetItemAttributePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class FinAccountRolePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="FIN_ACCOUNT_ID")
     private String finAccountId;
     @Column(name="PARTY_ID")
@@ -36,7 +40,7 @@ public class FinAccountRolePk implements Serializable {
     private String roleTypeId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param finAccountId the finAccountId to set
@@ -69,29 +73,51 @@ public class FinAccountRolePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFinAccountId() {
         return this.finAccountId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRoleTypeId() {
         return this.roleTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(finAccountId).append("*");
+            sb.append(partyId).append("*");
+            sb.append(roleTypeId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof FinAccountRolePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

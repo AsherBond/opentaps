@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class RespondingPartyPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="RESPONDING_PARTY_SEQ_ID")
     private String respondingPartySeqId;
     @Column(name="CUST_REQUEST_ID")
     private String custRequestId;
     @Column(name="PARTY_ID")
     private String partyId;
-    
+
     /**
      * Auto generated value setter.
      * @param respondingPartySeqId the respondingPartySeqId to set
@@ -59,22 +63,43 @@ public class RespondingPartyPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRespondingPartySeqId() {
         return this.respondingPartySeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCustRequestId() {
         return this.custRequestId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(respondingPartySeqId).append("*");
+            sb.append(custRequestId).append("*");
+            sb.append(partyId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof RespondingPartyPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

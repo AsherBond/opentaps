@@ -28,13 +28,17 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class ProdCatalogInvFacilityPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PROD_CATALOG_ID")
     private String prodCatalogId;
     @Column(name="FACILITY_ID")
     private String facilityId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param prodCatalogId the prodCatalogId to set
@@ -60,22 +64,43 @@ public class ProdCatalogInvFacilityPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProdCatalogId() {
         return this.prodCatalogId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFacilityId() {
         return this.facilityId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(prodCatalogId).append("*");
+            sb.append(facilityId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProdCatalogInvFacilityPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

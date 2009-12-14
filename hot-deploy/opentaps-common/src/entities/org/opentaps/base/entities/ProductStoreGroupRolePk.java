@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class ProductStoreGroupRolePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_STORE_GROUP_ID")
     private String productStoreGroupId;
     @Column(name="PARTY_ID")
     private String partyId;
     @Column(name="ROLE_TYPE_ID")
     private String roleTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param productStoreGroupId the productStoreGroupId to set
@@ -59,22 +63,43 @@ public class ProductStoreGroupRolePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductStoreGroupId() {
         return this.productStoreGroupId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRoleTypeId() {
         return this.roleTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productStoreGroupId).append("*");
+            sb.append(partyId).append("*");
+            sb.append(roleTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductStoreGroupRolePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

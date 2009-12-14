@@ -64,12 +64,11 @@ public class ProductStorePaymentSettingPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ProductStorePaymentSettingPk id = (ProductStorePaymentSettingPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getProductStoreId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPaymentMethodTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPaymentServiceTypeEnumId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class ProductStorePaymentSettingPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

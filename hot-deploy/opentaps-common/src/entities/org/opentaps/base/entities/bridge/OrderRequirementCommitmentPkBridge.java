@@ -64,12 +64,11 @@ public class OrderRequirementCommitmentPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         OrderRequirementCommitmentPk id = (OrderRequirementCommitmentPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getOrderId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getOrderItemSeqId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getRequirementId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class OrderRequirementCommitmentPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class DataImportCommissionCustomersPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="CUSTOMER_ID")
     private String customerId;
     @Column(name="TO_CUSTOMER_ID")
     private String toCustomerId;
-    
+
     /**
      * Auto generated value setter.
      * @param customerId the customerId to set
@@ -50,15 +54,35 @@ public class DataImportCommissionCustomersPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCustomerId() {
         return this.customerId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getToCustomerId() {
         return this.toCustomerId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(customerId).append("*");
+            sb.append(toCustomerId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof DataImportCommissionCustomersPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -68,16 +68,15 @@ public class PicklistItemPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         PicklistItemPk id = (PicklistItemPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getPicklistBinId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getOrderId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getOrderItemSeqId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getShipGroupSeqId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getInventoryItemId());
         return sb.toString();
     }
@@ -115,6 +114,7 @@ public class PicklistItemPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

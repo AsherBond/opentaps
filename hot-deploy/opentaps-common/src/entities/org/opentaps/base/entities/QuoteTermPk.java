@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class QuoteTermPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="TERM_TYPE_ID")
     private String termTypeId;
     @Column(name="QUOTE_ID")
     private String quoteId;
     @Column(name="QUOTE_ITEM_SEQ_ID")
     private String quoteItemSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param termTypeId the termTypeId to set
@@ -59,22 +63,43 @@ public class QuoteTermPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTermTypeId() {
         return this.termTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getQuoteId() {
         return this.quoteId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getQuoteItemSeqId() {
         return this.quoteItemSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(termTypeId).append("*");
+            sb.append(quoteId).append("*");
+            sb.append(quoteItemSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof QuoteTermPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

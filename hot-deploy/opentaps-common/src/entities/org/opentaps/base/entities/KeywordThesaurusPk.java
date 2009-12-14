@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class KeywordThesaurusPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="ENTERED_KEYWORD")
     private String enteredKeyword;
     @Column(name="ALTERNATE_KEYWORD")
     private String alternateKeyword;
-    
+
     /**
      * Auto generated value setter.
      * @param enteredKeyword the enteredKeyword to set
@@ -50,15 +54,35 @@ public class KeywordThesaurusPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getEnteredKeyword() {
         return this.enteredKeyword;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAlternateKeyword() {
         return this.alternateKeyword;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(enteredKeyword).append("*");
+            sb.append(alternateKeyword).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof KeywordThesaurusPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

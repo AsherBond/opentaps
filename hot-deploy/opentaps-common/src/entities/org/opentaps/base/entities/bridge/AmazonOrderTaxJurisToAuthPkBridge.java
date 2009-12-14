@@ -66,14 +66,13 @@ public class AmazonOrderTaxJurisToAuthPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         AmazonOrderTaxJurisToAuthPk id = (AmazonOrderTaxJurisToAuthPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getTaxJurisDistrict());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getTaxJurisCity());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getTaxJurisCounty());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getTaxJurisState());
         return sb.toString();
     }
@@ -108,6 +107,7 @@ public class AmazonOrderTaxJurisToAuthPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

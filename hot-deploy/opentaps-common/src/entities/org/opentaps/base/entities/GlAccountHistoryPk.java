@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class GlAccountHistoryPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="GL_ACCOUNT_ID")
     private String glAccountId;
     @Column(name="ORGANIZATION_PARTY_ID")
     private String organizationPartyId;
     @Column(name="CUSTOM_TIME_PERIOD_ID")
     private String customTimePeriodId;
-    
+
     /**
      * Auto generated value setter.
      * @param glAccountId the glAccountId to set
@@ -59,22 +63,43 @@ public class GlAccountHistoryPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getGlAccountId() {
         return this.glAccountId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrganizationPartyId() {
         return this.organizationPartyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCustomTimePeriodId() {
         return this.customTimePeriodId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(glAccountId).append("*");
+            sb.append(organizationPartyId).append("*");
+            sb.append(customTimePeriodId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof GlAccountHistoryPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

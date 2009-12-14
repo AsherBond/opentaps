@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class FacilityLocationPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="FACILITY_ID")
     private String facilityId;
     @Column(name="LOCATION_SEQ_ID")
     private String locationSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
@@ -50,15 +54,35 @@ public class FacilityLocationPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFacilityId() {
         return this.facilityId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getLocationSeqId() {
         return this.locationSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(facilityId).append("*");
+            sb.append(locationSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof FacilityLocationPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

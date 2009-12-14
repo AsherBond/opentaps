@@ -66,14 +66,13 @@ public class PerfReviewItemPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         PerfReviewItemPk id = (PerfReviewItemPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getEmployeePartyId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getEmployeeRoleTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPerfReviewId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPerfReviewItemSeqId());
         return sb.toString();
     }
@@ -108,6 +107,7 @@ public class PerfReviewItemPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

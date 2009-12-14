@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class OrderBlacklistPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="BLACKLIST_STRING")
     private String blacklistString;
     @Column(name="ORDER_BLACKLIST_TYPE_ID")
     private String orderBlacklistTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param blacklistString the blacklistString to set
@@ -50,15 +54,35 @@ public class OrderBlacklistPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getBlacklistString() {
         return this.blacklistString;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrderBlacklistTypeId() {
         return this.orderBlacklistTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(blacklistString).append("*");
+            sb.append(orderBlacklistTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof OrderBlacklistPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

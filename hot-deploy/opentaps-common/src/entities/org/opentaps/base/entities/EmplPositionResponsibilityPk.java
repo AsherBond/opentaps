@@ -28,13 +28,17 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class EmplPositionResponsibilityPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="EMPL_POSITION_ID")
     private String emplPositionId;
     @Column(name="RESPONSIBILITY_TYPE_ID")
     private String responsibilityTypeId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param emplPositionId the emplPositionId to set
@@ -60,22 +64,43 @@ public class EmplPositionResponsibilityPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getEmplPositionId() {
         return this.emplPositionId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getResponsibilityTypeId() {
         return this.responsibilityTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(emplPositionId).append("*");
+            sb.append(responsibilityTypeId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof EmplPositionResponsibilityPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

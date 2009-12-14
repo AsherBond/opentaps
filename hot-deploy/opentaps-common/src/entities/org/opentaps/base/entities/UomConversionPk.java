@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class UomConversionPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="UOM_ID")
     private String uomId;
     @Column(name="UOM_ID_TO")
     private String uomIdTo;
-    
+
     /**
      * Auto generated value setter.
      * @param uomId the uomId to set
@@ -50,15 +54,35 @@ public class UomConversionPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getUomId() {
         return this.uomId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getUomIdTo() {
         return this.uomIdTo;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(uomId).append("*");
+            sb.append(uomIdTo).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof UomConversionPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

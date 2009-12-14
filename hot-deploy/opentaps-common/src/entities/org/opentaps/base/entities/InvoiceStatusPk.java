@@ -28,13 +28,17 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class InvoiceStatusPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="STATUS_ID")
     private String statusId;
     @Column(name="INVOICE_ID")
     private String invoiceId;
     @Column(name="STATUS_DATE")
     private Timestamp statusDate;
-    
+
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
@@ -60,22 +64,43 @@ public class InvoiceStatusPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getStatusId() {
         return this.statusId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInvoiceId() {
         return this.invoiceId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getStatusDate() {
         return this.statusDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(statusId).append("*");
+            sb.append(invoiceId).append("*");
+            sb.append(statusDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof InvoiceStatusPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

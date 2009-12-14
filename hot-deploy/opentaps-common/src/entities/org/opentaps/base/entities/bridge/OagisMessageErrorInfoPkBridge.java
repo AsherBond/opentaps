@@ -68,16 +68,15 @@ public class OagisMessageErrorInfoPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         OagisMessageErrorInfoPk id = (OagisMessageErrorInfoPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getLogicalId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getComponent());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getTask());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getReferenceId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getErrorSeqId());
         return sb.toString();
     }
@@ -115,6 +114,7 @@ public class OagisMessageErrorInfoPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

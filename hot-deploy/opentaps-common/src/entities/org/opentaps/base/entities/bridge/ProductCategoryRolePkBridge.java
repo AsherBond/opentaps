@@ -68,14 +68,13 @@ public class ProductCategoryRolePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ProductCategoryRolePk id = (ProductCategoryRolePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getProductCategoryId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPartyId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getRoleTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -110,6 +109,7 @@ public class ProductCategoryRolePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

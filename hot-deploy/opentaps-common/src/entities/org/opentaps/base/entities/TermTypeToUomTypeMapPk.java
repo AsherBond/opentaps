@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class TermTypeToUomTypeMapPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="TERM_TYPE_ID")
     private String termTypeId;
     @Column(name="UOM_TYPE_ID")
     private String uomTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param termTypeId the termTypeId to set
@@ -50,15 +54,35 @@ public class TermTypeToUomTypeMapPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTermTypeId() {
         return this.termTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getUomTypeId() {
         return this.uomTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(termTypeId).append("*");
+            sb.append(uomTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof TermTypeToUomTypeMapPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

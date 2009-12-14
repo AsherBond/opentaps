@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class CashDrawerTransactionPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="CASH_DRAWER_ID")
     private String cashDrawerId;
     @Column(name="CASH_DRAWER_ITEM_SEQ_ID")
     private String cashDrawerItemSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param cashDrawerId the cashDrawerId to set
@@ -50,15 +54,35 @@ public class CashDrawerTransactionPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCashDrawerId() {
         return this.cashDrawerId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCashDrawerItemSeqId() {
         return this.cashDrawerItemSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(cashDrawerId).append("*");
+            sb.append(cashDrawerItemSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof CashDrawerTransactionPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

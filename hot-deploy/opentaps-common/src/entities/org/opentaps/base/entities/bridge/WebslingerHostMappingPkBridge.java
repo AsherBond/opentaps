@@ -62,10 +62,9 @@ public class WebslingerHostMappingPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         WebslingerHostMappingPk id = (WebslingerHostMappingPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getHostName());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getContextPath());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class WebslingerHostMappingPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

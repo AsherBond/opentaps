@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class ProductConfigProductPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="CONFIG_ITEM_ID")
     private String configItemId;
     @Column(name="CONFIG_OPTION_ID")
     private String configOptionId;
     @Column(name="PRODUCT_ID")
     private String productId;
-    
+
     /**
      * Auto generated value setter.
      * @param configItemId the configItemId to set
@@ -59,22 +63,43 @@ public class ProductConfigProductPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getConfigItemId() {
         return this.configItemId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getConfigOptionId() {
         return this.configOptionId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductId() {
         return this.productId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(configItemId).append("*");
+            sb.append(configOptionId).append("*");
+            sb.append(productId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductConfigProductPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

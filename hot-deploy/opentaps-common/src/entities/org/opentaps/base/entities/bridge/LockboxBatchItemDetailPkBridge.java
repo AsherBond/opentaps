@@ -64,12 +64,11 @@ public class LockboxBatchItemDetailPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         LockboxBatchItemDetailPk id = (LockboxBatchItemDetailPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getLockboxBatchId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getItemSeqId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getDetailSeqId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class LockboxBatchItemDetailPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

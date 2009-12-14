@@ -106,7 +106,7 @@ fieldMapColumns.put("PartyGroup", fields);
    @Id
    @DocumentId
    @org.hibernate.search.annotations.Fields( {
-       @Field(index=Index.TOKENIZED, store=Store.YES),
+       @Field(index=Index.TOKENIZED, store=Store.NO),
      @Field(index=Index.UN_TOKENIZED, store=Store.YES)
    } )
    @Boost(10f)

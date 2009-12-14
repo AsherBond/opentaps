@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class ProductPromoCondPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_PROMO_ID")
     private String productPromoId;
     @Column(name="PRODUCT_PROMO_RULE_ID")
     private String productPromoRuleId;
     @Column(name="PRODUCT_PROMO_COND_SEQ_ID")
     private String productPromoCondSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param productPromoId the productPromoId to set
@@ -59,22 +63,43 @@ public class ProductPromoCondPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductPromoId() {
         return this.productPromoId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductPromoRuleId() {
         return this.productPromoRuleId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductPromoCondSeqId() {
         return this.productPromoCondSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productPromoId).append("*");
+            sb.append(productPromoRuleId).append("*");
+            sb.append(productPromoCondSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductPromoCondPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

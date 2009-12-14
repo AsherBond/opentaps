@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class AmazonNodeValidAttributePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="NODE_VALID_ATTR_ID")
     private String nodeValidAttrId;
     @Column(name="NODE_ID")
     private String nodeId;
     @Column(name="ITEM_TYPE_ID")
     private String itemTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param nodeValidAttrId the nodeValidAttrId to set
@@ -59,22 +63,43 @@ public class AmazonNodeValidAttributePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getNodeValidAttrId() {
         return this.nodeValidAttrId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getNodeId() {
         return this.nodeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getItemTypeId() {
         return this.itemTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(nodeValidAttrId).append("*");
+            sb.append(nodeId).append("*");
+            sb.append(itemTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof AmazonNodeValidAttributePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

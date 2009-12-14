@@ -66,12 +66,11 @@ public class GlBudgetXrefPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         GlBudgetXrefPk id = (GlBudgetXrefPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getGlAccountId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getBudgetItemTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -103,6 +102,7 @@ public class GlBudgetXrefPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

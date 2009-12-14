@@ -62,10 +62,9 @@ public class CashDrawerTransactionPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         CashDrawerTransactionPk id = (CashDrawerTransactionPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getCashDrawerId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getCashDrawerItemSeqId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class CashDrawerTransactionPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class WebslingerServerBasePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="WEBSLINGER_SERVER_ID")
     private String webslingerServerId;
     @Column(name="BASE_NAME")
     private String baseName;
-    
+
     /**
      * Auto generated value setter.
      * @param webslingerServerId the webslingerServerId to set
@@ -50,15 +54,35 @@ public class WebslingerServerBasePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getWebslingerServerId() {
         return this.webslingerServerId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getBaseName() {
         return this.baseName;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(webslingerServerId).append("*");
+            sb.append(baseName).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof WebslingerServerBasePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

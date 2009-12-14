@@ -64,12 +64,11 @@ public class InventoryItemTempResPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         InventoryItemTempResPk id = (InventoryItemTempResPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getVisitId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getProductId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getProductStoreId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class InventoryItemTempResPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

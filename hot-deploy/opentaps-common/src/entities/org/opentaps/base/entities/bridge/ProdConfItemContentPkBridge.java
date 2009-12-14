@@ -68,14 +68,13 @@ public class ProdConfItemContentPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ProdConfItemContentPk id = (ProdConfItemContentPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getConfigItemId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getContentId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getConfItemContentTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -110,6 +109,7 @@ public class ProdConfItemContentPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

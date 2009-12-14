@@ -28,13 +28,17 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class PartyQualPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PARTY_ID")
     private String partyId;
     @Column(name="PARTY_QUAL_TYPE_ID")
     private String partyQualTypeId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
@@ -60,22 +64,43 @@ public class PartyQualPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyQualTypeId() {
         return this.partyQualTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(partyId).append("*");
+            sb.append(partyQualTypeId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PartyQualPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

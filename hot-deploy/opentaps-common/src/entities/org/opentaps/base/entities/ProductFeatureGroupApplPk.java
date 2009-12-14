@@ -28,13 +28,17 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class ProductFeatureGroupApplPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_FEATURE_GROUP_ID")
     private String productFeatureGroupId;
     @Column(name="PRODUCT_FEATURE_ID")
     private String productFeatureId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param productFeatureGroupId the productFeatureGroupId to set
@@ -60,22 +64,43 @@ public class ProductFeatureGroupApplPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductFeatureGroupId() {
         return this.productFeatureGroupId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductFeatureId() {
         return this.productFeatureId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productFeatureGroupId).append("*");
+            sb.append(productFeatureId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductFeatureGroupApplPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

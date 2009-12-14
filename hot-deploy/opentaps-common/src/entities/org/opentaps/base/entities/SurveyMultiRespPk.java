@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class SurveyMultiRespPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="SURVEY_ID")
     private String surveyId;
     @Column(name="SURVEY_MULTI_RESP_ID")
     private String surveyMultiRespId;
-    
+
     /**
      * Auto generated value setter.
      * @param surveyId the surveyId to set
@@ -50,15 +54,35 @@ public class SurveyMultiRespPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSurveyId() {
         return this.surveyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSurveyMultiRespId() {
         return this.surveyMultiRespId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(surveyId).append("*");
+            sb.append(surveyMultiRespId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof SurveyMultiRespPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

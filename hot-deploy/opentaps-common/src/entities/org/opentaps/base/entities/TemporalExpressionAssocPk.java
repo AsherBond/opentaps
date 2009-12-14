@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class TemporalExpressionAssocPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="FROM_TEMP_EXPR_ID")
     private String fromTempExprId;
     @Column(name="TO_TEMP_EXPR_ID")
     private String toTempExprId;
-    
+
     /**
      * Auto generated value setter.
      * @param fromTempExprId the fromTempExprId to set
@@ -50,15 +54,35 @@ public class TemporalExpressionAssocPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFromTempExprId() {
         return this.fromTempExprId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getToTempExprId() {
         return this.toTempExprId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(fromTempExprId).append("*");
+            sb.append(toTempExprId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof TemporalExpressionAssocPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

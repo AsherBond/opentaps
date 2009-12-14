@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class StatusValidChangePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="STATUS_ID")
     private String statusId;
     @Column(name="STATUS_ID_TO")
     private String statusIdTo;
-    
+
     /**
      * Auto generated value setter.
      * @param statusId the statusId to set
@@ -50,15 +54,35 @@ public class StatusValidChangePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getStatusId() {
         return this.statusId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getStatusIdTo() {
         return this.statusIdTo;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(statusId).append("*");
+            sb.append(statusIdTo).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof StatusValidChangePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

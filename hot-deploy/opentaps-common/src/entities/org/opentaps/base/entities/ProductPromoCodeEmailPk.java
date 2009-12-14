@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class ProductPromoCodeEmailPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_PROMO_CODE_ID")
     private String productPromoCodeId;
     @Column(name="EMAIL_ADDRESS")
     private String emailAddress;
-    
+
     /**
      * Auto generated value setter.
      * @param productPromoCodeId the productPromoCodeId to set
@@ -50,15 +54,35 @@ public class ProductPromoCodeEmailPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductPromoCodeId() {
         return this.productPromoCodeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getEmailAddress() {
         return this.emailAddress;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productPromoCodeId).append("*");
+            sb.append(emailAddress).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductPromoCodeEmailPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -62,10 +62,9 @@ public class GlAccountGroupMemberPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         GlAccountGroupMemberPk id = (GlAccountGroupMemberPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getGlAccountId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getGlAccountGroupTypeId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class GlAccountGroupMemberPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

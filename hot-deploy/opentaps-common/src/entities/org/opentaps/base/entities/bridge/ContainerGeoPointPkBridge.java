@@ -66,12 +66,11 @@ public class ContainerGeoPointPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ContainerGeoPointPk id = (ContainerGeoPointPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getContainerId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getGeoPointId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -103,6 +102,7 @@ public class ContainerGeoPointPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

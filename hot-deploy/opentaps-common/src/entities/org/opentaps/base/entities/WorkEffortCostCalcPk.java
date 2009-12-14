@@ -28,13 +28,17 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class WorkEffortCostCalcPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="WORK_EFFORT_ID")
     private String workEffortId;
     @Column(name="COST_COMPONENT_TYPE_ID")
     private String costComponentTypeId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param workEffortId the workEffortId to set
@@ -60,22 +64,43 @@ public class WorkEffortCostCalcPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getWorkEffortId() {
         return this.workEffortId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCostComponentTypeId() {
         return this.costComponentTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(workEffortId).append("*");
+            sb.append(costComponentTypeId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof WorkEffortCostCalcPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

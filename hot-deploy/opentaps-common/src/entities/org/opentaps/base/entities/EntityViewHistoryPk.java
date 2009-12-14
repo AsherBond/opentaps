@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class EntityViewHistoryPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="ENTITY_NAME")
     private String entityName;
     @Column(name="USER_LOGIN_ID")
     private String userLoginId;
     @Column(name="PRIMARY_KEY_ID")
     private String primaryKeyId;
-    
+
     /**
      * Auto generated value setter.
      * @param entityName the entityName to set
@@ -59,22 +63,43 @@ public class EntityViewHistoryPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getEntityName() {
         return this.entityName;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getUserLoginId() {
         return this.userLoginId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPrimaryKeyId() {
         return this.primaryKeyId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(entityName).append("*");
+            sb.append(userLoginId).append("*");
+            sb.append(primaryKeyId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof EntityViewHistoryPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

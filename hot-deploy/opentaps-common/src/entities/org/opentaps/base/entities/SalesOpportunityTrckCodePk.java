@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class SalesOpportunityTrckCodePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="SALES_OPPORTUNITY_ID")
     private String salesOpportunityId;
     @Column(name="TRACKING_CODE_ID")
     private String trackingCodeId;
-    
+
     /**
      * Auto generated value setter.
      * @param salesOpportunityId the salesOpportunityId to set
@@ -50,15 +54,35 @@ public class SalesOpportunityTrckCodePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSalesOpportunityId() {
         return this.salesOpportunityId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTrackingCodeId() {
         return this.trackingCodeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(salesOpportunityId).append("*");
+            sb.append(trackingCodeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof SalesOpportunityTrckCodePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -62,10 +62,9 @@ public class DataImportUSCountyTaxPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         DataImportUSCountyTaxPk id = (DataImportUSCountyTaxPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getCounty());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getStateCode());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class DataImportUSCountyTaxPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

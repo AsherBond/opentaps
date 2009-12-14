@@ -62,10 +62,9 @@ public class WebslingerServerBasePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         WebslingerServerBasePk id = (WebslingerServerBasePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getWebslingerServerId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getBaseName());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class WebslingerServerBasePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

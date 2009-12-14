@@ -68,16 +68,15 @@ public class ContentPurposeOperationPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ContentPurposeOperationPk id = (ContentPurposeOperationPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getContentPurposeTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getContentOperationId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getRoleTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getStatusId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPrivilegeEnumId());
         return sb.toString();
     }
@@ -115,6 +114,7 @@ public class ContentPurposeOperationPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

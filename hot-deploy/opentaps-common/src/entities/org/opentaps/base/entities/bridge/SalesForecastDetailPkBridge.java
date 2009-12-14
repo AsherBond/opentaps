@@ -62,10 +62,9 @@ public class SalesForecastDetailPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         SalesForecastDetailPk id = (SalesForecastDetailPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getSalesForecastId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getSalesForecastDetailId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class SalesForecastDetailPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

@@ -28,6 +28,10 @@ import java.lang.String;
 
 @Embeddable
 public class ConfigOptionProductOptionPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="CONFIG_ID")
     private String configId;
     @Column(name="CONFIG_ITEM_ID")
@@ -38,7 +42,7 @@ public class ConfigOptionProductOptionPk implements Serializable {
     private Long sequenceNum;
     @Column(name="PRODUCT_ID")
     private String productId;
-    
+
     /**
      * Auto generated value setter.
      * @param configId the configId to set
@@ -78,36 +82,59 @@ public class ConfigOptionProductOptionPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getConfigId() {
         return this.configId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getConfigItemId() {
         return this.configItemId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getConfigOptionId() {
         return this.configOptionId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Long</code>
-     */  
+     */
     public Long getSequenceNum() {
         return this.sequenceNum;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductId() {
         return this.productId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(configId).append("*");
+            sb.append(configItemId).append("*");
+            sb.append(configOptionId).append("*");
+            sb.append(sequenceNum).append("*");
+            sb.append(productId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ConfigOptionProductOptionPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

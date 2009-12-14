@@ -66,12 +66,11 @@ public class ProductSubscriptionResourcePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ProductSubscriptionResourcePk id = (ProductSubscriptionResourcePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getProductId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getSubscriptionResourceId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -103,6 +102,7 @@ public class ProductSubscriptionResourcePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

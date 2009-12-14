@@ -68,14 +68,13 @@ public class EmployeePaycheckTypePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         EmployeePaycheckTypePk id = (EmployeePaycheckTypePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getOrganizationPartyId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getEmployeePartyId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPaymentTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -110,6 +109,7 @@ public class EmployeePaycheckTypePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

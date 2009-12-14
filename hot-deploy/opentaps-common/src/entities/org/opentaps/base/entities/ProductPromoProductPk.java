@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class ProductPromoProductPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_PROMO_ID")
     private String productPromoId;
     @Column(name="PRODUCT_PROMO_RULE_ID")
@@ -37,7 +41,7 @@ public class ProductPromoProductPk implements Serializable {
     private String productPromoCondSeqId;
     @Column(name="PRODUCT_ID")
     private String productId;
-    
+
     /**
      * Auto generated value setter.
      * @param productPromoId the productPromoId to set
@@ -77,36 +81,59 @@ public class ProductPromoProductPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductPromoId() {
         return this.productPromoId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductPromoRuleId() {
         return this.productPromoRuleId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductPromoActionSeqId() {
         return this.productPromoActionSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductPromoCondSeqId() {
         return this.productPromoCondSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductId() {
         return this.productId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productPromoId).append("*");
+            sb.append(productPromoRuleId).append("*");
+            sb.append(productPromoActionSeqId).append("*");
+            sb.append(productPromoCondSeqId).append("*");
+            sb.append(productId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductPromoProductPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

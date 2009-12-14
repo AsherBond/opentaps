@@ -62,10 +62,9 @@ public class KeywordThesaurusPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         KeywordThesaurusPk id = (KeywordThesaurusPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getEnteredKeyword());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getAlternateKeyword());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class KeywordThesaurusPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

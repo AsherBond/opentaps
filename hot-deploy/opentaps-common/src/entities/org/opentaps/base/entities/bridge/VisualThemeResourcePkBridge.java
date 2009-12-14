@@ -64,12 +64,11 @@ public class VisualThemeResourcePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         VisualThemeResourcePk id = (VisualThemeResourcePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getVisualThemeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getResourceTypeEnumId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getSequenceId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class VisualThemeResourcePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

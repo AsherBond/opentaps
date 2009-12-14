@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class SalesForecastDetailPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="SALES_FORECAST_ID")
     private String salesForecastId;
     @Column(name="SALES_FORECAST_DETAIL_ID")
     private String salesForecastDetailId;
-    
+
     /**
      * Auto generated value setter.
      * @param salesForecastId the salesForecastId to set
@@ -50,15 +54,35 @@ public class SalesForecastDetailPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSalesForecastId() {
         return this.salesForecastId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSalesForecastDetailId() {
         return this.salesForecastDetailId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(salesForecastId).append("*");
+            sb.append(salesForecastDetailId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof SalesForecastDetailPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

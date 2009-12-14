@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class RequirementRolePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="REQUIREMENT_ID")
     private String requirementId;
     @Column(name="PARTY_ID")
@@ -36,7 +40,7 @@ public class RequirementRolePk implements Serializable {
     private String roleTypeId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param requirementId the requirementId to set
@@ -69,29 +73,51 @@ public class RequirementRolePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRequirementId() {
         return this.requirementId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRoleTypeId() {
         return this.roleTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(requirementId).append("*");
+            sb.append(partyId).append("*");
+            sb.append(roleTypeId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof RequirementRolePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

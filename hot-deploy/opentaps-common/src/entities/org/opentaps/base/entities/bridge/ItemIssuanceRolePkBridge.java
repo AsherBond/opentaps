@@ -64,12 +64,11 @@ public class ItemIssuanceRolePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ItemIssuanceRolePk id = (ItemIssuanceRolePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getItemIssuanceId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPartyId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getRoleTypeId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class ItemIssuanceRolePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

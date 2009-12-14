@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class WorkEffortAssocAttributePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="WORK_EFFORT_ID_FROM")
     private String workEffortIdFrom;
     @Column(name="WORK_EFFORT_ID_TO")
@@ -35,7 +39,7 @@ public class WorkEffortAssocAttributePk implements Serializable {
     private String workEffortAssocTypeId;
     @Column(name="ATTR_NAME")
     private String attrName;
-    
+
     /**
      * Auto generated value setter.
      * @param workEffortIdFrom the workEffortIdFrom to set
@@ -68,29 +72,51 @@ public class WorkEffortAssocAttributePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getWorkEffortIdFrom() {
         return this.workEffortIdFrom;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getWorkEffortIdTo() {
         return this.workEffortIdTo;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getWorkEffortAssocTypeId() {
         return this.workEffortAssocTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAttrName() {
         return this.attrName;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(workEffortIdFrom).append("*");
+            sb.append(workEffortIdTo).append("*");
+            sb.append(workEffortAssocTypeId).append("*");
+            sb.append(attrName).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof WorkEffortAssocAttributePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

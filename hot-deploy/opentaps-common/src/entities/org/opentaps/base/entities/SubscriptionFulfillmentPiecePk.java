@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class SubscriptionFulfillmentPiecePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="SUBSCRIPTION_ACTIVITY_ID")
     private String subscriptionActivityId;
     @Column(name="SUBSCRIPTION_ID")
     private String subscriptionId;
-    
+
     /**
      * Auto generated value setter.
      * @param subscriptionActivityId the subscriptionActivityId to set
@@ -50,15 +54,35 @@ public class SubscriptionFulfillmentPiecePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSubscriptionActivityId() {
         return this.subscriptionActivityId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSubscriptionId() {
         return this.subscriptionId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(subscriptionActivityId).append("*");
+            sb.append(subscriptionId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof SubscriptionFulfillmentPiecePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

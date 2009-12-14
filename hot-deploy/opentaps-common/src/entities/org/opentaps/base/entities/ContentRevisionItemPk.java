@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class ContentRevisionItemPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="CONTENT_ID")
     private String contentId;
     @Column(name="CONTENT_REVISION_SEQ_ID")
     private String contentRevisionSeqId;
     @Column(name="ITEM_CONTENT_ID")
     private String itemContentId;
-    
+
     /**
      * Auto generated value setter.
      * @param contentId the contentId to set
@@ -59,22 +63,43 @@ public class ContentRevisionItemPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getContentId() {
         return this.contentId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getContentRevisionSeqId() {
         return this.contentRevisionSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getItemContentId() {
         return this.itemContentId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(contentId).append("*");
+            sb.append(contentRevisionSeqId).append("*");
+            sb.append(itemContentId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ContentRevisionItemPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

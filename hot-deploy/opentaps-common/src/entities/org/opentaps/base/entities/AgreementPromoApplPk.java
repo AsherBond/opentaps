@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class AgreementPromoApplPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="AGREEMENT_ID")
     private String agreementId;
     @Column(name="AGREEMENT_ITEM_SEQ_ID")
@@ -36,7 +40,7 @@ public class AgreementPromoApplPk implements Serializable {
     private String productPromoId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param agreementId the agreementId to set
@@ -69,29 +73,51 @@ public class AgreementPromoApplPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAgreementId() {
         return this.agreementId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAgreementItemSeqId() {
         return this.agreementItemSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductPromoId() {
         return this.productPromoId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(agreementId).append("*");
+            sb.append(agreementItemSeqId).append("*");
+            sb.append(productPromoId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof AgreementPromoApplPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

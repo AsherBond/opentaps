@@ -66,12 +66,11 @@ public class PartyClassificationPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         PartyClassificationPk id = (PartyClassificationPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getPartyId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPartyClassificationGroupId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -103,6 +102,7 @@ public class PartyClassificationPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

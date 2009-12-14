@@ -64,12 +64,11 @@ public class WorkOrderItemFulfillmentPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         WorkOrderItemFulfillmentPk id = (WorkOrderItemFulfillmentPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getWorkEffortId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getOrderId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getOrderItemSeqId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class WorkOrderItemFulfillmentPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

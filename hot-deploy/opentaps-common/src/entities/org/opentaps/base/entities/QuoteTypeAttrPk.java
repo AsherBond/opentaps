@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class QuoteTypeAttrPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="QUOTE_TYPE_ID")
     private String quoteTypeId;
     @Column(name="ATTR_NAME")
     private String attrName;
-    
+
     /**
      * Auto generated value setter.
      * @param quoteTypeId the quoteTypeId to set
@@ -50,15 +54,35 @@ public class QuoteTypeAttrPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getQuoteTypeId() {
         return this.quoteTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAttrName() {
         return this.attrName;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(quoteTypeId).append("*");
+            sb.append(attrName).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof QuoteTypeAttrPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

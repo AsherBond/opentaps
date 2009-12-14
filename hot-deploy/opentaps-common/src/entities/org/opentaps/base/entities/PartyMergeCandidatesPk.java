@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class PartyMergeCandidatesPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PARTY_ID_FROM")
     private String partyIdFrom;
     @Column(name="PARTY_ID_TO")
     private String partyIdTo;
-    
+
     /**
      * Auto generated value setter.
      * @param partyIdFrom the partyIdFrom to set
@@ -50,15 +54,35 @@ public class PartyMergeCandidatesPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyIdFrom() {
         return this.partyIdFrom;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyIdTo() {
         return this.partyIdTo;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(partyIdFrom).append("*");
+            sb.append(partyIdTo).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PartyMergeCandidatesPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

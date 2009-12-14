@@ -66,14 +66,13 @@ public class OldOrderItemAssociationPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         OldOrderItemAssociationPk id = (OldOrderItemAssociationPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getSalesOrderId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getSoItemSeqId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPurchaseOrderId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPoItemSeqId());
         return sb.toString();
     }
@@ -108,6 +107,7 @@ public class OldOrderItemAssociationPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

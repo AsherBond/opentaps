@@ -62,10 +62,9 @@ public class GoodIdentificationPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         GoodIdentificationPk id = (GoodIdentificationPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getGoodIdentificationTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getProductId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class GoodIdentificationPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

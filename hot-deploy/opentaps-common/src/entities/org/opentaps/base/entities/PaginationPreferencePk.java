@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class PaginationPreferencePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="USER_LOGIN_ID")
     private String userLoginId;
     @Column(name="PAGINATOR_NAME")
     private String paginatorName;
-    
+
     /**
      * Auto generated value setter.
      * @param userLoginId the userLoginId to set
@@ -50,15 +54,35 @@ public class PaginationPreferencePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getUserLoginId() {
         return this.userLoginId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPaginatorName() {
         return this.paginatorName;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(userLoginId).append("*");
+            sb.append(paginatorName).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PaginationPreferencePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

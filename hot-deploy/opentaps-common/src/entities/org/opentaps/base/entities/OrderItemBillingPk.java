@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class OrderItemBillingPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="ORDER_ID")
     private String orderId;
     @Column(name="ORDER_ITEM_SEQ_ID")
@@ -35,7 +39,7 @@ public class OrderItemBillingPk implements Serializable {
     private String invoiceId;
     @Column(name="INVOICE_ITEM_SEQ_ID")
     private String invoiceItemSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param orderId the orderId to set
@@ -68,29 +72,51 @@ public class OrderItemBillingPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrderId() {
         return this.orderId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrderItemSeqId() {
         return this.orderItemSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInvoiceId() {
         return this.invoiceId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInvoiceItemSeqId() {
         return this.invoiceItemSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(orderId).append("*");
+            sb.append(orderItemSeqId).append("*");
+            sb.append(invoiceId).append("*");
+            sb.append(invoiceItemSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof OrderItemBillingPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

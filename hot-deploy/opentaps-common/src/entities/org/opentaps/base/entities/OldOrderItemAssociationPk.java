@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class OldOrderItemAssociationPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="SALES_ORDER_ID")
     private String salesOrderId;
     @Column(name="SO_ITEM_SEQ_ID")
@@ -35,7 +39,7 @@ public class OldOrderItemAssociationPk implements Serializable {
     private String purchaseOrderId;
     @Column(name="PO_ITEM_SEQ_ID")
     private String poItemSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param salesOrderId the salesOrderId to set
@@ -68,29 +72,51 @@ public class OldOrderItemAssociationPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSalesOrderId() {
         return this.salesOrderId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSoItemSeqId() {
         return this.soItemSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPurchaseOrderId() {
         return this.purchaseOrderId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPoItemSeqId() {
         return this.poItemSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(salesOrderId).append("*");
+            sb.append(soItemSeqId).append("*");
+            sb.append(purchaseOrderId).append("*");
+            sb.append(poItemSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof OldOrderItemAssociationPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

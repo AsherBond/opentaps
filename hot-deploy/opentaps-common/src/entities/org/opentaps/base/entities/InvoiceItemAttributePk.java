@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class InvoiceItemAttributePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="INVOICE_ID")
     private String invoiceId;
     @Column(name="INVOICE_ITEM_SEQ_ID")
     private String invoiceItemSeqId;
     @Column(name="ATTR_NAME")
     private String attrName;
-    
+
     /**
      * Auto generated value setter.
      * @param invoiceId the invoiceId to set
@@ -59,22 +63,43 @@ public class InvoiceItemAttributePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInvoiceId() {
         return this.invoiceId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInvoiceItemSeqId() {
         return this.invoiceItemSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAttrName() {
         return this.attrName;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(invoiceId).append("*");
+            sb.append(invoiceItemSeqId).append("*");
+            sb.append(attrName).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof InvoiceItemAttributePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class ExampleItemPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="EXAMPLE_ID")
     private String exampleId;
     @Column(name="EXAMPLE_ITEM_SEQ_ID")
     private String exampleItemSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param exampleId the exampleId to set
@@ -50,15 +54,35 @@ public class ExampleItemPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getExampleId() {
         return this.exampleId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getExampleItemSeqId() {
         return this.exampleItemSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(exampleId).append("*");
+            sb.append(exampleItemSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ExampleItemPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class AmazonOrderItemFeePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="AMAZON_ORDER_ID")
     private String amazonOrderId;
     @Column(name="AMAZON_ORDER_ITEM_CODE")
     private String amazonOrderItemCode;
     @Column(name="FEE_TYPE")
     private String feeType;
-    
+
     /**
      * Auto generated value setter.
      * @param amazonOrderId the amazonOrderId to set
@@ -59,22 +63,43 @@ public class AmazonOrderItemFeePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAmazonOrderId() {
         return this.amazonOrderId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAmazonOrderItemCode() {
         return this.amazonOrderItemCode;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFeeType() {
         return this.feeType;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(amazonOrderId).append("*");
+            sb.append(amazonOrderItemCode).append("*");
+            sb.append(feeType).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof AmazonOrderItemFeePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

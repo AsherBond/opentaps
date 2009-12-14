@@ -29,6 +29,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class SupplierProductPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_ID")
     private String productId;
     @Column(name="PARTY_ID")
@@ -39,7 +43,7 @@ public class SupplierProductPk implements Serializable {
     private BigDecimal minimumOrderQuantity;
     @Column(name="AVAILABLE_FROM_DATE")
     private Timestamp availableFromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param productId the productId to set
@@ -79,36 +83,59 @@ public class SupplierProductPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductId() {
         return this.productId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCurrencyUomId() {
         return this.currencyUomId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>BigDecimal</code>
-     */  
+     */
     public BigDecimal getMinimumOrderQuantity() {
         return this.minimumOrderQuantity;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getAvailableFromDate() {
         return this.availableFromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productId).append("*");
+            sb.append(partyId).append("*");
+            sb.append(currencyUomId).append("*");
+            sb.append(minimumOrderQuantity).append("*");
+            sb.append(availableFromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof SupplierProductPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

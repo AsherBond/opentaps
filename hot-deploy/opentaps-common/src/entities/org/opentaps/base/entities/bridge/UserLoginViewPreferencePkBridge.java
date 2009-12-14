@@ -66,14 +66,13 @@ public class UserLoginViewPreferencePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         UserLoginViewPreferencePk id = (UserLoginViewPreferencePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getUserLoginId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getApplicationName());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getScreenName());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPreferenceName());
         return sb.toString();
     }
@@ -108,6 +107,7 @@ public class UserLoginViewPreferencePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class PayrollPreferencePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PARTY_ID")
     private String partyId;
     @Column(name="ROLE_TYPE_ID")
     private String roleTypeId;
     @Column(name="PAYROLL_PREFERENCE_SEQ_ID")
     private String payrollPreferenceSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
@@ -59,22 +63,43 @@ public class PayrollPreferencePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRoleTypeId() {
         return this.roleTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPayrollPreferenceSeqId() {
         return this.payrollPreferenceSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(partyId).append("*");
+            sb.append(roleTypeId).append("*");
+            sb.append(payrollPreferenceSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PayrollPreferencePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

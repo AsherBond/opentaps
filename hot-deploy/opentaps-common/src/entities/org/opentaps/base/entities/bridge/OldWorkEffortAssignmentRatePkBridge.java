@@ -68,14 +68,13 @@ public class OldWorkEffortAssignmentRatePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         OldWorkEffortAssignmentRatePk id = (OldWorkEffortAssignmentRatePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getWorkEffortId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getRateTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPartyId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -110,6 +109,7 @@ public class OldWorkEffortAssignmentRatePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

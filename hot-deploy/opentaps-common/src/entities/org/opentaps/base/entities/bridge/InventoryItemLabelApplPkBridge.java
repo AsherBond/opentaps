@@ -62,10 +62,9 @@ public class InventoryItemLabelApplPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         InventoryItemLabelApplPk id = (InventoryItemLabelApplPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getInventoryItemId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getInventoryItemLabelTypeId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class InventoryItemLabelApplPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

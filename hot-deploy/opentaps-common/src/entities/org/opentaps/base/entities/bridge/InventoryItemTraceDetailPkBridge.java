@@ -62,10 +62,9 @@ public class InventoryItemTraceDetailPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         InventoryItemTraceDetailPk id = (InventoryItemTraceDetailPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getInventoryItemTraceId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getInventoryItemTraceSeqId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class InventoryItemTraceDetailPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

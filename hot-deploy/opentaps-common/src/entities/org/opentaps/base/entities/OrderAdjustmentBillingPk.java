@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class OrderAdjustmentBillingPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="ORDER_ADJUSTMENT_ID")
     private String orderAdjustmentId;
     @Column(name="INVOICE_ID")
     private String invoiceId;
     @Column(name="INVOICE_ITEM_SEQ_ID")
     private String invoiceItemSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param orderAdjustmentId the orderAdjustmentId to set
@@ -59,22 +63,43 @@ public class OrderAdjustmentBillingPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrderAdjustmentId() {
         return this.orderAdjustmentId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInvoiceId() {
         return this.invoiceId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInvoiceItemSeqId() {
         return this.invoiceItemSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(orderAdjustmentId).append("*");
+            sb.append(invoiceId).append("*");
+            sb.append(invoiceItemSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof OrderAdjustmentBillingPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

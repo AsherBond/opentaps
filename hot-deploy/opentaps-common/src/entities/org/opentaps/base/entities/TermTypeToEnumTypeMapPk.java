@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class TermTypeToEnumTypeMapPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="TERM_TYPE_ID")
     private String termTypeId;
     @Column(name="ENUM_TYPE_ID")
     private String enumTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param termTypeId the termTypeId to set
@@ -50,15 +54,35 @@ public class TermTypeToEnumTypeMapPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTermTypeId() {
         return this.termTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getEnumTypeId() {
         return this.enumTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(termTypeId).append("*");
+            sb.append(enumTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof TermTypeToEnumTypeMapPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

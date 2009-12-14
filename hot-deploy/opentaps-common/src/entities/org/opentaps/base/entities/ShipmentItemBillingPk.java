@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class ShipmentItemBillingPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="SHIPMENT_ID")
     private String shipmentId;
     @Column(name="SHIPMENT_ITEM_SEQ_ID")
@@ -35,7 +39,7 @@ public class ShipmentItemBillingPk implements Serializable {
     private String invoiceId;
     @Column(name="INVOICE_ITEM_SEQ_ID")
     private String invoiceItemSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param shipmentId the shipmentId to set
@@ -68,29 +72,51 @@ public class ShipmentItemBillingPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getShipmentId() {
         return this.shipmentId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getShipmentItemSeqId() {
         return this.shipmentItemSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInvoiceId() {
         return this.invoiceId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInvoiceItemSeqId() {
         return this.invoiceItemSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(shipmentId).append("*");
+            sb.append(shipmentItemSeqId).append("*");
+            sb.append(invoiceId).append("*");
+            sb.append(invoiceItemSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ShipmentItemBillingPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

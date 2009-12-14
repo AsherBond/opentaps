@@ -62,10 +62,9 @@ public class ContactMechLinkPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ContactMechLinkPk id = (ContactMechLinkPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getContactMechIdFrom());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getContactMechIdTo());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class ContactMechLinkPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

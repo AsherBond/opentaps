@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class FixedAssetProductPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="FIXED_ASSET_ID")
     private String fixedAssetId;
     @Column(name="PRODUCT_ID")
@@ -36,7 +40,7 @@ public class FixedAssetProductPk implements Serializable {
     private String fixedAssetProductTypeId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param fixedAssetId the fixedAssetId to set
@@ -69,29 +73,51 @@ public class FixedAssetProductPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFixedAssetId() {
         return this.fixedAssetId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductId() {
         return this.productId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFixedAssetProductTypeId() {
         return this.fixedAssetProductTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(fixedAssetId).append("*");
+            sb.append(productId).append("*");
+            sb.append(fixedAssetProductTypeId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof FixedAssetProductPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

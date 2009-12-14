@@ -66,12 +66,11 @@ public class QuoteContentPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         QuoteContentPk id = (QuoteContentPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getContentId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getQuoteId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -103,6 +102,7 @@ public class QuoteContentPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

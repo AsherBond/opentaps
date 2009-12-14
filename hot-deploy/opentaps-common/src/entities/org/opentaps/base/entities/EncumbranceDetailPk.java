@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class EncumbranceDetailPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="ENCUMBRANCE_SNAPSHOT_ID")
     private String encumbranceSnapshotId;
     @Column(name="ENCUMBRANCE_DETAIL_SEQ_ID")
     private String encumbranceDetailSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param encumbranceSnapshotId the encumbranceSnapshotId to set
@@ -50,15 +54,35 @@ public class EncumbranceDetailPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getEncumbranceSnapshotId() {
         return this.encumbranceSnapshotId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getEncumbranceDetailSeqId() {
         return this.encumbranceDetailSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(encumbranceSnapshotId).append("*");
+            sb.append(encumbranceDetailSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof EncumbranceDetailPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

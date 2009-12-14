@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class ZipSalesRuleLookupPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="STATE_CODE")
     private String stateCode;
     @Column(name="CITY")
@@ -36,7 +40,7 @@ public class ZipSalesRuleLookupPk implements Serializable {
     private String county;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param stateCode the stateCode to set
@@ -69,29 +73,51 @@ public class ZipSalesRuleLookupPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getStateCode() {
         return this.stateCode;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCity() {
         return this.city;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCounty() {
         return this.county;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(stateCode).append("*");
+            sb.append(city).append("*");
+            sb.append(county).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ZipSalesRuleLookupPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

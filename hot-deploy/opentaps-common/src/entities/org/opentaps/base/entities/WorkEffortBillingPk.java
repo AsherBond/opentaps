@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class WorkEffortBillingPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="WORK_EFFORT_ID")
     private String workEffortId;
     @Column(name="INVOICE_ID")
     private String invoiceId;
     @Column(name="INVOICE_ITEM_SEQ_ID")
     private String invoiceItemSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param workEffortId the workEffortId to set
@@ -59,22 +63,43 @@ public class WorkEffortBillingPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getWorkEffortId() {
         return this.workEffortId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInvoiceId() {
         return this.invoiceId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInvoiceItemSeqId() {
         return this.invoiceItemSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(workEffortId).append("*");
+            sb.append(invoiceId).append("*");
+            sb.append(invoiceItemSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof WorkEffortBillingPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

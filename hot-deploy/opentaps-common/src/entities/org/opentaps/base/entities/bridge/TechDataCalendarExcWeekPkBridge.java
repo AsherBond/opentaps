@@ -64,10 +64,9 @@ public class TechDataCalendarExcWeekPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         TechDataCalendarExcWeekPk id = (TechDataCalendarExcWeekPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getCalendarId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getExceptionDateStart());
         return sb.toString();
     }
@@ -96,6 +95,7 @@ public class TechDataCalendarExcWeekPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

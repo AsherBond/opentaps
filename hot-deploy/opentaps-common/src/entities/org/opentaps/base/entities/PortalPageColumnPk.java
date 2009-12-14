@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class PortalPageColumnPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PORTAL_PAGE_ID")
     private String portalPageId;
     @Column(name="COLUMN_SEQ_ID")
     private String columnSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param portalPageId the portalPageId to set
@@ -50,15 +54,35 @@ public class PortalPageColumnPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPortalPageId() {
         return this.portalPageId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getColumnSeqId() {
         return this.columnSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(portalPageId).append("*");
+            sb.append(columnSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PortalPageColumnPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

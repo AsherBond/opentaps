@@ -64,12 +64,11 @@ public class AgreementPartyApplicPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         AgreementPartyApplicPk id = (AgreementPartyApplicPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getAgreementId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getAgreementItemSeqId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPartyId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class AgreementPartyApplicPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

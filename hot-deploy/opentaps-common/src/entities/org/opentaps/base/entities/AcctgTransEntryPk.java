@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class AcctgTransEntryPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="ACCTG_TRANS_ID")
     private String acctgTransId;
     @Column(name="ACCTG_TRANS_ENTRY_SEQ_ID")
     private String acctgTransEntrySeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param acctgTransId the acctgTransId to set
@@ -50,15 +54,35 @@ public class AcctgTransEntryPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAcctgTransId() {
         return this.acctgTransId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAcctgTransEntrySeqId() {
         return this.acctgTransEntrySeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(acctgTransId).append("*");
+            sb.append(acctgTransEntrySeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof AcctgTransEntryPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

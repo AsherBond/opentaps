@@ -62,10 +62,9 @@ public class PaymentGlAccountTypeMapPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         PaymentGlAccountTypeMapPk id = (PaymentGlAccountTypeMapPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getPaymentTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getOrganizationPartyId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class PaymentGlAccountTypeMapPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

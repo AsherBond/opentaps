@@ -68,14 +68,13 @@ public class WebSiteContentPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         WebSiteContentPk id = (WebSiteContentPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getWebSiteId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getContentId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getWebSiteContentTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -110,6 +109,7 @@ public class WebSiteContentPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

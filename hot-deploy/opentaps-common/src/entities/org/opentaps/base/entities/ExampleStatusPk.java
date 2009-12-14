@@ -28,11 +28,15 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class ExampleStatusPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="EXAMPLE_ID")
     private String exampleId;
     @Column(name="STATUS_DATE")
     private Timestamp statusDate;
-    
+
     /**
      * Auto generated value setter.
      * @param exampleId the exampleId to set
@@ -51,15 +55,35 @@ public class ExampleStatusPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getExampleId() {
         return this.exampleId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getStatusDate() {
         return this.statusDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(exampleId).append("*");
+            sb.append(statusDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ExampleStatusPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

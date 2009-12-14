@@ -66,14 +66,13 @@ public class WebUserPreferencePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         WebUserPreferencePk id = (WebUserPreferencePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getUserLoginId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPartyId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getVisitId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getWebPreferenceTypeId());
         return sb.toString();
     }
@@ -108,6 +107,7 @@ public class WebUserPreferencePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

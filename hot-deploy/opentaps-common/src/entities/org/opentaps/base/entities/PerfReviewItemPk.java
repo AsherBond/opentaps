@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class PerfReviewItemPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="EMPLOYEE_PARTY_ID")
     private String employeePartyId;
     @Column(name="EMPLOYEE_ROLE_TYPE_ID")
@@ -35,7 +39,7 @@ public class PerfReviewItemPk implements Serializable {
     private String perfReviewId;
     @Column(name="PERF_REVIEW_ITEM_SEQ_ID")
     private String perfReviewItemSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param employeePartyId the employeePartyId to set
@@ -68,29 +72,51 @@ public class PerfReviewItemPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getEmployeePartyId() {
         return this.employeePartyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getEmployeeRoleTypeId() {
         return this.employeeRoleTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPerfReviewId() {
         return this.perfReviewId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPerfReviewItemSeqId() {
         return this.perfReviewItemSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(employeePartyId).append("*");
+            sb.append(employeeRoleTypeId).append("*");
+            sb.append(perfReviewId).append("*");
+            sb.append(perfReviewItemSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PerfReviewItemPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

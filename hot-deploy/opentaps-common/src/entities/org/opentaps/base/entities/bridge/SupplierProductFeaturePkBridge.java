@@ -62,10 +62,9 @@ public class SupplierProductFeaturePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         SupplierProductFeaturePk id = (SupplierProductFeaturePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getPartyId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getProductFeatureId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class SupplierProductFeaturePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

@@ -28,13 +28,17 @@ import java.sql.Date;
 
 @Embeddable
 public class OrderSummaryEntryPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="ENTRY_DATE")
     private Date entryDate;
     @Column(name="PRODUCT_ID")
     private String productId;
     @Column(name="FACILITY_ID")
     private String facilityId;
-    
+
     /**
      * Auto generated value setter.
      * @param entryDate the entryDate to set
@@ -60,22 +64,43 @@ public class OrderSummaryEntryPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>Date</code>
-     */  
+     */
     public Date getEntryDate() {
         return this.entryDate;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductId() {
         return this.productId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFacilityId() {
         return this.facilityId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(entryDate).append("*");
+            sb.append(productId).append("*");
+            sb.append(facilityId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof OrderSummaryEntryPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

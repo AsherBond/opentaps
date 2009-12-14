@@ -64,12 +64,11 @@ public class AmazonOrderItemPriceCompPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         AmazonOrderItemPriceCompPk id = (AmazonOrderItemPriceCompPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getAmazonOrderId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getAmazonOrderItemCode());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getComponentType());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class AmazonOrderItemPriceCompPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

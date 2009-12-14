@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class GeoAssocPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="GEO_ID")
     private String geoId;
     @Column(name="GEO_ID_TO")
     private String geoIdTo;
-    
+
     /**
      * Auto generated value setter.
      * @param geoId the geoId to set
@@ -50,15 +54,35 @@ public class GeoAssocPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getGeoId() {
         return this.geoId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getGeoIdTo() {
         return this.geoIdTo;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(geoId).append("*");
+            sb.append(geoIdTo).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof GeoAssocPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

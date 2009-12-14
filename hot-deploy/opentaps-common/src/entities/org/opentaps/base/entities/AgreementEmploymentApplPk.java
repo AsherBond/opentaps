@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class AgreementEmploymentApplPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="AGREEMENT_ID")
     private String agreementId;
     @Column(name="AGREEMENT_ITEM_SEQ_ID")
@@ -42,7 +46,7 @@ public class AgreementEmploymentApplPk implements Serializable {
     private String roleTypeIdFrom;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param agreementId the agreementId to set
@@ -96,50 +100,75 @@ public class AgreementEmploymentApplPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAgreementId() {
         return this.agreementId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAgreementItemSeqId() {
         return this.agreementItemSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyIdTo() {
         return this.partyIdTo;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyIdFrom() {
         return this.partyIdFrom;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRoleTypeIdTo() {
         return this.roleTypeIdTo;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRoleTypeIdFrom() {
         return this.roleTypeIdFrom;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(agreementId).append("*");
+            sb.append(agreementItemSeqId).append("*");
+            sb.append(partyIdTo).append("*");
+            sb.append(partyIdFrom).append("*");
+            sb.append(roleTypeIdTo).append("*");
+            sb.append(roleTypeIdFrom).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof AgreementEmploymentApplPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

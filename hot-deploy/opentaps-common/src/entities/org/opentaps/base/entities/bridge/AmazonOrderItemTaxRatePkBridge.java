@@ -66,14 +66,13 @@ public class AmazonOrderItemTaxRatePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         AmazonOrderItemTaxRatePk id = (AmazonOrderItemTaxRatePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getAmazonOrderId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getAmazonOrderItemCode());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getItemTaxJurisTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getTaxJurisdictionType());
         return sb.toString();
     }
@@ -108,6 +107,7 @@ public class AmazonOrderItemTaxRatePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

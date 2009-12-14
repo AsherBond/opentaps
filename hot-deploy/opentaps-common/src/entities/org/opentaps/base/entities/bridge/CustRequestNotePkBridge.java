@@ -62,10 +62,9 @@ public class CustRequestNotePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         CustRequestNotePk id = (CustRequestNotePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getCustRequestId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getNoteId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class CustRequestNotePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

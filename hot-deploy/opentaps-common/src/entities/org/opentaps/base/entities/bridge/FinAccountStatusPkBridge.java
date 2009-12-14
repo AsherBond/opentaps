@@ -66,12 +66,11 @@ public class FinAccountStatusPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         FinAccountStatusPk id = (FinAccountStatusPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getFinAccountId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getStatusId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getStatusDate());
         return sb.toString();
     }
@@ -103,6 +102,7 @@ public class FinAccountStatusPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

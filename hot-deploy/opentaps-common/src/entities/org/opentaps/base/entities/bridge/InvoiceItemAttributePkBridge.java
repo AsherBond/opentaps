@@ -64,12 +64,11 @@ public class InvoiceItemAttributePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         InvoiceItemAttributePk id = (InvoiceItemAttributePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getInvoiceId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getInvoiceItemSeqId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getAttrName());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class InvoiceItemAttributePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class ProtectedViewPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="GROUP_ID")
     private String groupId;
     @Column(name="VIEW_NAME_ID")
     private String viewNameId;
-    
+
     /**
      * Auto generated value setter.
      * @param groupId the groupId to set
@@ -50,15 +54,35 @@ public class ProtectedViewPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getGroupId() {
         return this.groupId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getViewNameId() {
         return this.viewNameId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(groupId).append("*");
+            sb.append(viewNameId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProtectedViewPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

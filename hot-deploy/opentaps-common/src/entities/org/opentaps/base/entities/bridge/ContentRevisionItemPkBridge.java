@@ -64,12 +64,11 @@ public class ContentRevisionItemPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ContentRevisionItemPk id = (ContentRevisionItemPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getContentId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getContentRevisionSeqId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getItemContentId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class ContentRevisionItemPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

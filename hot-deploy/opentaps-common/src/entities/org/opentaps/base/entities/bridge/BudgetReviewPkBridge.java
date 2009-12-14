@@ -66,14 +66,13 @@ public class BudgetReviewPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         BudgetReviewPk id = (BudgetReviewPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getBudgetId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getBudgetReviewId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPartyId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getBudgetReviewResultTypeId());
         return sb.toString();
     }
@@ -108,6 +107,7 @@ public class BudgetReviewPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

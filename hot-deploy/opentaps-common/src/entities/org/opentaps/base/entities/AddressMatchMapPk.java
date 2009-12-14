@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class AddressMatchMapPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="MAP_KEY")
     private String mapKey;
     @Column(name="MAP_VALUE")
     private String mapValue;
-    
+
     /**
      * Auto generated value setter.
      * @param mapKey the mapKey to set
@@ -50,15 +54,35 @@ public class AddressMatchMapPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getMapKey() {
         return this.mapKey;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getMapValue() {
         return this.mapValue;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(mapKey).append("*");
+            sb.append(mapValue).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof AddressMatchMapPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

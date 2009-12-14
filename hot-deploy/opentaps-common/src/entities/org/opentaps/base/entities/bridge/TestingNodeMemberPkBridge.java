@@ -66,12 +66,11 @@ public class TestingNodeMemberPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         TestingNodeMemberPk id = (TestingNodeMemberPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getTestingNodeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getTestingId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -103,6 +102,7 @@ public class TestingNodeMemberPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

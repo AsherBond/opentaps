@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class ProductFeaturePricePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_FEATURE_ID")
     private String productFeatureId;
     @Column(name="PRODUCT_PRICE_TYPE_ID")
@@ -36,7 +40,7 @@ public class ProductFeaturePricePk implements Serializable {
     private String currencyUomId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param productFeatureId the productFeatureId to set
@@ -69,29 +73,51 @@ public class ProductFeaturePricePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductFeatureId() {
         return this.productFeatureId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductPriceTypeId() {
         return this.productPriceTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCurrencyUomId() {
         return this.currencyUomId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productFeatureId).append("*");
+            sb.append(productPriceTypeId).append("*");
+            sb.append(currencyUomId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductFeaturePricePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

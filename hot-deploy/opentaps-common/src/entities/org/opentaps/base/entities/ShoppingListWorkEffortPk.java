@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class ShoppingListWorkEffortPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="SHOPPING_LIST_ID")
     private String shoppingListId;
     @Column(name="WORK_EFFORT_ID")
     private String workEffortId;
-    
+
     /**
      * Auto generated value setter.
      * @param shoppingListId the shoppingListId to set
@@ -50,15 +54,35 @@ public class ShoppingListWorkEffortPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getShoppingListId() {
         return this.shoppingListId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getWorkEffortId() {
         return this.workEffortId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(shoppingListId).append("*");
+            sb.append(workEffortId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ShoppingListWorkEffortPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

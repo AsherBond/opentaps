@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class ContentPurposeOperationPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="CONTENT_PURPOSE_TYPE_ID")
     private String contentPurposeTypeId;
     @Column(name="CONTENT_OPERATION_ID")
@@ -37,7 +41,7 @@ public class ContentPurposeOperationPk implements Serializable {
     private String statusId;
     @Column(name="PRIVILEGE_ENUM_ID")
     private String privilegeEnumId;
-    
+
     /**
      * Auto generated value setter.
      * @param contentPurposeTypeId the contentPurposeTypeId to set
@@ -77,36 +81,59 @@ public class ContentPurposeOperationPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getContentPurposeTypeId() {
         return this.contentPurposeTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getContentOperationId() {
         return this.contentOperationId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRoleTypeId() {
         return this.roleTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getStatusId() {
         return this.statusId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPrivilegeEnumId() {
         return this.privilegeEnumId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(contentPurposeTypeId).append("*");
+            sb.append(contentOperationId).append("*");
+            sb.append(roleTypeId).append("*");
+            sb.append(statusId).append("*");
+            sb.append(privilegeEnumId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ContentPurposeOperationPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

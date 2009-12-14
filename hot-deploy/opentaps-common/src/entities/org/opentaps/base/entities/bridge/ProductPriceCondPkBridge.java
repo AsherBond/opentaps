@@ -62,10 +62,9 @@ public class ProductPriceCondPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ProductPriceCondPk id = (ProductPriceCondPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getProductPriceRuleId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getProductPriceCondSeqId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class ProductPriceCondPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

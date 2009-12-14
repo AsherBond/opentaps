@@ -28,13 +28,17 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class FinAccountStatusPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="FIN_ACCOUNT_ID")
     private String finAccountId;
     @Column(name="STATUS_ID")
     private String statusId;
     @Column(name="STATUS_DATE")
     private Timestamp statusDate;
-    
+
     /**
      * Auto generated value setter.
      * @param finAccountId the finAccountId to set
@@ -60,22 +64,43 @@ public class FinAccountStatusPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFinAccountId() {
         return this.finAccountId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getStatusId() {
         return this.statusId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getStatusDate() {
         return this.statusDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(finAccountId).append("*");
+            sb.append(statusId).append("*");
+            sb.append(statusDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof FinAccountStatusPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

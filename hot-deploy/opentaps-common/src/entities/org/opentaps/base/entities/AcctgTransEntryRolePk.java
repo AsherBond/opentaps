@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class AcctgTransEntryRolePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="ACCTG_TRANS_ID")
     private String acctgTransId;
     @Column(name="ACCTG_TRANS_ENTRY_SEQ_ID")
@@ -35,7 +39,7 @@ public class AcctgTransEntryRolePk implements Serializable {
     private String partyId;
     @Column(name="ROLE_TYPE_ID")
     private String roleTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param acctgTransId the acctgTransId to set
@@ -68,29 +72,51 @@ public class AcctgTransEntryRolePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAcctgTransId() {
         return this.acctgTransId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAcctgTransEntrySeqId() {
         return this.acctgTransEntrySeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRoleTypeId() {
         return this.roleTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(acctgTransId).append("*");
+            sb.append(acctgTransEntrySeqId).append("*");
+            sb.append(partyId).append("*");
+            sb.append(roleTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof AcctgTransEntryRolePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

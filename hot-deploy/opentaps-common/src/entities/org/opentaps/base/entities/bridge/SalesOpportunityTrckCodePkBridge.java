@@ -62,10 +62,9 @@ public class SalesOpportunityTrckCodePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         SalesOpportunityTrckCodePk id = (SalesOpportunityTrckCodePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getSalesOpportunityId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getTrackingCodeId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class SalesOpportunityTrckCodePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

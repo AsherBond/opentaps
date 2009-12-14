@@ -66,12 +66,11 @@ public class OrderSummaryEntryPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         OrderSummaryEntryPk id = (OrderSummaryEntryPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getEntryDate());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getProductId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFacilityId());
         return sb.toString();
     }
@@ -103,6 +102,7 @@ public class OrderSummaryEntryPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

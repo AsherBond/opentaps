@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class RequirementStatusPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="REQUIREMENT_ID")
     private String requirementId;
     @Column(name="STATUS_ID")
     private String statusId;
-    
+
     /**
      * Auto generated value setter.
      * @param requirementId the requirementId to set
@@ -50,15 +54,35 @@ public class RequirementStatusPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRequirementId() {
         return this.requirementId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getStatusId() {
         return this.statusId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(requirementId).append("*");
+            sb.append(statusId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof RequirementStatusPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

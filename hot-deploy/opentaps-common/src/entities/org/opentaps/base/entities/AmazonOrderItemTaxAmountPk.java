@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class AmazonOrderItemTaxAmountPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="AMAZON_ORDER_ID")
     private String amazonOrderId;
     @Column(name="AMAZON_ORDER_ITEM_CODE")
@@ -37,7 +41,7 @@ public class AmazonOrderItemTaxAmountPk implements Serializable {
     private String taxAmountType;
     @Column(name="TAX_JURISDICTION_TYPE")
     private String taxJurisdictionType;
-    
+
     /**
      * Auto generated value setter.
      * @param amazonOrderId the amazonOrderId to set
@@ -77,36 +81,59 @@ public class AmazonOrderItemTaxAmountPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAmazonOrderId() {
         return this.amazonOrderId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAmazonOrderItemCode() {
         return this.amazonOrderItemCode;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getItemTaxJurisTypeId() {
         return this.itemTaxJurisTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTaxAmountType() {
         return this.taxAmountType;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTaxJurisdictionType() {
         return this.taxJurisdictionType;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(amazonOrderId).append("*");
+            sb.append(amazonOrderItemCode).append("*");
+            sb.append(itemTaxJurisTypeId).append("*");
+            sb.append(taxAmountType).append("*");
+            sb.append(taxJurisdictionType).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof AmazonOrderItemTaxAmountPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

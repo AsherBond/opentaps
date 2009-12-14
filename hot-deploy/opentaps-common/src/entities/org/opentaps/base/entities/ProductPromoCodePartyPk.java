@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class ProductPromoCodePartyPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_PROMO_CODE_ID")
     private String productPromoCodeId;
     @Column(name="PARTY_ID")
     private String partyId;
-    
+
     /**
      * Auto generated value setter.
      * @param productPromoCodeId the productPromoCodeId to set
@@ -50,15 +54,35 @@ public class ProductPromoCodePartyPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductPromoCodeId() {
         return this.productPromoCodeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productPromoCodeId).append("*");
+            sb.append(partyId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductPromoCodePartyPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

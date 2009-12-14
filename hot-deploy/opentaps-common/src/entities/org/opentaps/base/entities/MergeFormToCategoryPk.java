@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class MergeFormToCategoryPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="MERGE_FORM_ID")
     private String mergeFormId;
     @Column(name="MERGE_FORM_CATEGORY_ID")
     private String mergeFormCategoryId;
-    
+
     /**
      * Auto generated value setter.
      * @param mergeFormId the mergeFormId to set
@@ -50,15 +54,35 @@ public class MergeFormToCategoryPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getMergeFormId() {
         return this.mergeFormId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getMergeFormCategoryId() {
         return this.mergeFormCategoryId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(mergeFormId).append("*");
+            sb.append(mergeFormCategoryId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof MergeFormToCategoryPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

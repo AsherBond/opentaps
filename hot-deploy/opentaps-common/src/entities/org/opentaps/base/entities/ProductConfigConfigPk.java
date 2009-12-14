@@ -28,6 +28,10 @@ import java.lang.String;
 
 @Embeddable
 public class ProductConfigConfigPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="CONFIG_ID")
     private String configId;
     @Column(name="CONFIG_ITEM_ID")
@@ -36,7 +40,7 @@ public class ProductConfigConfigPk implements Serializable {
     private String configOptionId;
     @Column(name="SEQUENCE_NUM")
     private Long sequenceNum;
-    
+
     /**
      * Auto generated value setter.
      * @param configId the configId to set
@@ -69,29 +73,51 @@ public class ProductConfigConfigPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getConfigId() {
         return this.configId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getConfigItemId() {
         return this.configItemId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getConfigOptionId() {
         return this.configOptionId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Long</code>
-     */  
+     */
     public Long getSequenceNum() {
         return this.sequenceNum;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(configId).append("*");
+            sb.append(configItemId).append("*");
+            sb.append(configOptionId).append("*");
+            sb.append(sequenceNum).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductConfigConfigPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

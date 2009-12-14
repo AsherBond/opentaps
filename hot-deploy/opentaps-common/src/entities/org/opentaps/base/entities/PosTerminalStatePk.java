@@ -28,11 +28,15 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class PosTerminalStatePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="POS_TERMINAL_ID")
     private String posTerminalId;
     @Column(name="OPENED_DATE")
     private Timestamp openedDate;
-    
+
     /**
      * Auto generated value setter.
      * @param posTerminalId the posTerminalId to set
@@ -51,15 +55,35 @@ public class PosTerminalStatePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPosTerminalId() {
         return this.posTerminalId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getOpenedDate() {
         return this.openedDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(posTerminalId).append("*");
+            sb.append(openedDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PosTerminalStatePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -62,10 +62,9 @@ public class EncumbranceDetailPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         EncumbranceDetailPk id = (EncumbranceDetailPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getEncumbranceSnapshotId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getEncumbranceDetailSeqId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class EncumbranceDetailPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

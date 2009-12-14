@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class SegmentGroupClassificationPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="SEGMENT_GROUP_ID")
     private String segmentGroupId;
     @Column(name="PARTY_CLASSIFICATION_GROUP_ID")
     private String partyClassificationGroupId;
-    
+
     /**
      * Auto generated value setter.
      * @param segmentGroupId the segmentGroupId to set
@@ -50,15 +54,35 @@ public class SegmentGroupClassificationPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSegmentGroupId() {
         return this.segmentGroupId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyClassificationGroupId() {
         return this.partyClassificationGroupId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(segmentGroupId).append("*");
+            sb.append(partyClassificationGroupId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof SegmentGroupClassificationPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

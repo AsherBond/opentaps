@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class RequirementCustRequestPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="CUST_REQUEST_ID")
     private String custRequestId;
     @Column(name="CUST_REQUEST_ITEM_SEQ_ID")
     private String custRequestItemSeqId;
     @Column(name="REQUIREMENT_ID")
     private String requirementId;
-    
+
     /**
      * Auto generated value setter.
      * @param custRequestId the custRequestId to set
@@ -59,22 +63,43 @@ public class RequirementCustRequestPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCustRequestId() {
         return this.custRequestId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCustRequestItemSeqId() {
         return this.custRequestItemSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRequirementId() {
         return this.requirementId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(custRequestId).append("*");
+            sb.append(custRequestItemSeqId).append("*");
+            sb.append(requirementId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof RequirementCustRequestPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

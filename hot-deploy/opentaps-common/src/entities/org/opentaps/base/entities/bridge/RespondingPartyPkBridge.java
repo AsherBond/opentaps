@@ -64,12 +64,11 @@ public class RespondingPartyPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         RespondingPartyPk id = (RespondingPartyPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getRespondingPartySeqId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getCustRequestId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPartyId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class RespondingPartyPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

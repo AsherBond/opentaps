@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class PartyGlAccountPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="ORGANIZATION_PARTY_ID")
     private String organizationPartyId;
     @Column(name="PARTY_ID")
@@ -35,7 +39,7 @@ public class PartyGlAccountPk implements Serializable {
     private String roleTypeId;
     @Column(name="GL_ACCOUNT_TYPE_ID")
     private String glAccountTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param organizationPartyId the organizationPartyId to set
@@ -68,29 +72,51 @@ public class PartyGlAccountPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrganizationPartyId() {
         return this.organizationPartyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRoleTypeId() {
         return this.roleTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getGlAccountTypeId() {
         return this.glAccountTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(organizationPartyId).append("*");
+            sb.append(partyId).append("*");
+            sb.append(roleTypeId).append("*");
+            sb.append(glAccountTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PartyGlAccountPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

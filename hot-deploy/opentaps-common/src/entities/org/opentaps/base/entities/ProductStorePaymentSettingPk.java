@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class ProductStorePaymentSettingPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_STORE_ID")
     private String productStoreId;
     @Column(name="PAYMENT_METHOD_TYPE_ID")
     private String paymentMethodTypeId;
     @Column(name="PAYMENT_SERVICE_TYPE_ENUM_ID")
     private String paymentServiceTypeEnumId;
-    
+
     /**
      * Auto generated value setter.
      * @param productStoreId the productStoreId to set
@@ -59,22 +63,43 @@ public class ProductStorePaymentSettingPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductStoreId() {
         return this.productStoreId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPaymentMethodTypeId() {
         return this.paymentMethodTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPaymentServiceTypeEnumId() {
         return this.paymentServiceTypeEnumId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productStoreId).append("*");
+            sb.append(paymentMethodTypeId).append("*");
+            sb.append(paymentServiceTypeEnumId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductStorePaymentSettingPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -66,12 +66,11 @@ public class OldEmplPositionTypeRatePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         OldEmplPositionTypeRatePk id = (OldEmplPositionTypeRatePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getEmplPositionTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPeriodTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -103,6 +102,7 @@ public class OldEmplPositionTypeRatePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

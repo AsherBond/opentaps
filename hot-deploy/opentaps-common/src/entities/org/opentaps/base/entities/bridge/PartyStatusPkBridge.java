@@ -66,12 +66,11 @@ public class PartyStatusPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         PartyStatusPk id = (PartyStatusPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getStatusId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPartyId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getStatusDate());
         return sb.toString();
     }
@@ -103,6 +102,7 @@ public class PartyStatusPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

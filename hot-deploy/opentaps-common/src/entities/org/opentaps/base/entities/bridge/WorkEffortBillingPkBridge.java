@@ -64,12 +64,11 @@ public class WorkEffortBillingPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         WorkEffortBillingPk id = (WorkEffortBillingPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getWorkEffortId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getInvoiceId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getInvoiceItemSeqId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class WorkEffortBillingPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

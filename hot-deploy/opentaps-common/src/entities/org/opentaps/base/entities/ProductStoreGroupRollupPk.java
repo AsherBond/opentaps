@@ -28,13 +28,17 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class ProductStoreGroupRollupPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_STORE_GROUP_ID")
     private String productStoreGroupId;
     @Column(name="PARENT_GROUP_ID")
     private String parentGroupId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param productStoreGroupId the productStoreGroupId to set
@@ -60,22 +64,43 @@ public class ProductStoreGroupRollupPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductStoreGroupId() {
         return this.productStoreGroupId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getParentGroupId() {
         return this.parentGroupId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productStoreGroupId).append("*");
+            sb.append(parentGroupId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductStoreGroupRollupPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

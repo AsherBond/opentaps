@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class ProductCategoryGlAccountPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_CATEGORY_ID")
     private String productCategoryId;
     @Column(name="ORGANIZATION_PARTY_ID")
     private String organizationPartyId;
     @Column(name="GL_ACCOUNT_TYPE_ID")
     private String glAccountTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param productCategoryId the productCategoryId to set
@@ -59,22 +63,43 @@ public class ProductCategoryGlAccountPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductCategoryId() {
         return this.productCategoryId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrganizationPartyId() {
         return this.organizationPartyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getGlAccountTypeId() {
         return this.glAccountTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productCategoryId).append("*");
+            sb.append(organizationPartyId).append("*");
+            sb.append(glAccountTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductCategoryGlAccountPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

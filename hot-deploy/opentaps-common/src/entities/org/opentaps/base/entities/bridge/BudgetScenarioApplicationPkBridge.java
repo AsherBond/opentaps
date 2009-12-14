@@ -62,10 +62,9 @@ public class BudgetScenarioApplicationPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         BudgetScenarioApplicationPk id = (BudgetScenarioApplicationPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getBudgetScenarioApplicId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getBudgetScenarioId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class BudgetScenarioApplicationPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

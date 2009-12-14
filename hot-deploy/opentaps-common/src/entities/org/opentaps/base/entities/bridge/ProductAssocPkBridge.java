@@ -68,14 +68,13 @@ public class ProductAssocPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ProductAssocPk id = (ProductAssocPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getProductId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getProductIdTo());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getProductAssocTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -110,6 +109,7 @@ public class ProductAssocPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

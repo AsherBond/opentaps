@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class InventoryItemDetailPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="INVENTORY_ITEM_ID")
     private String inventoryItemId;
     @Column(name="INVENTORY_ITEM_DETAIL_SEQ_ID")
     private String inventoryItemDetailSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param inventoryItemId the inventoryItemId to set
@@ -50,15 +54,35 @@ public class InventoryItemDetailPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInventoryItemId() {
         return this.inventoryItemId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInventoryItemDetailSeqId() {
         return this.inventoryItemDetailSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(inventoryItemId).append("*");
+            sb.append(inventoryItemDetailSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof InventoryItemDetailPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

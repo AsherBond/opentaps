@@ -64,10 +64,9 @@ public class UserLoginHistoryPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         UserLoginHistoryPk id = (UserLoginHistoryPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getUserLoginId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -96,6 +95,7 @@ public class UserLoginHistoryPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

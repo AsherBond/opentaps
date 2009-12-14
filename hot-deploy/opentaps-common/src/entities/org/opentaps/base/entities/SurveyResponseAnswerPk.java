@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class SurveyResponseAnswerPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="SURVEY_RESPONSE_ID")
     private String surveyResponseId;
     @Column(name="SURVEY_QUESTION_ID")
     private String surveyQuestionId;
     @Column(name="SURVEY_MULTI_RESP_COL_ID")
     private String surveyMultiRespColId;
-    
+
     /**
      * Auto generated value setter.
      * @param surveyResponseId the surveyResponseId to set
@@ -59,22 +63,43 @@ public class SurveyResponseAnswerPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSurveyResponseId() {
         return this.surveyResponseId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSurveyQuestionId() {
         return this.surveyQuestionId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSurveyMultiRespColId() {
         return this.surveyMultiRespColId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(surveyResponseId).append("*");
+            sb.append(surveyQuestionId).append("*");
+            sb.append(surveyMultiRespColId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof SurveyResponseAnswerPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

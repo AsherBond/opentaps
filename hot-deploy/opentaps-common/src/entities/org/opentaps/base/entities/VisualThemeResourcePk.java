@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class VisualThemeResourcePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="VISUAL_THEME_ID")
     private String visualThemeId;
     @Column(name="RESOURCE_TYPE_ENUM_ID")
     private String resourceTypeEnumId;
     @Column(name="SEQUENCE_ID")
     private String sequenceId;
-    
+
     /**
      * Auto generated value setter.
      * @param visualThemeId the visualThemeId to set
@@ -59,22 +63,43 @@ public class VisualThemeResourcePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getVisualThemeId() {
         return this.visualThemeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getResourceTypeEnumId() {
         return this.resourceTypeEnumId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSequenceId() {
         return this.sequenceId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(visualThemeId).append("*");
+            sb.append(resourceTypeEnumId).append("*");
+            sb.append(sequenceId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof VisualThemeResourcePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

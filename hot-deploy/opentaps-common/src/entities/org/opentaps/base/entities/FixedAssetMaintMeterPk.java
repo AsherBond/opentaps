@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class FixedAssetMaintMeterPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="FIXED_ASSET_ID")
     private String fixedAssetId;
     @Column(name="MAINT_HIST_SEQ_ID")
     private String maintHistSeqId;
     @Column(name="PRODUCT_METER_TYPE_ID")
     private String productMeterTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param fixedAssetId the fixedAssetId to set
@@ -59,22 +63,43 @@ public class FixedAssetMaintMeterPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFixedAssetId() {
         return this.fixedAssetId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getMaintHistSeqId() {
         return this.maintHistSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductMeterTypeId() {
         return this.productMeterTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(fixedAssetId).append("*");
+            sb.append(maintHistSeqId).append("*");
+            sb.append(productMeterTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof FixedAssetMaintMeterPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

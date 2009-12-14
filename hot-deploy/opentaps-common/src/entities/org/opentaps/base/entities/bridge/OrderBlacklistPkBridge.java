@@ -62,10 +62,9 @@ public class OrderBlacklistPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         OrderBlacklistPk id = (OrderBlacklistPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getBlacklistString());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getOrderBlacklistTypeId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class OrderBlacklistPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

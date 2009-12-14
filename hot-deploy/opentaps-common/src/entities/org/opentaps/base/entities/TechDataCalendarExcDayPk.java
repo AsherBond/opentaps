@@ -28,11 +28,15 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class TechDataCalendarExcDayPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="CALENDAR_ID")
     private String calendarId;
     @Column(name="EXCEPTION_DATE_START_TIME")
     private Timestamp exceptionDateStartTime;
-    
+
     /**
      * Auto generated value setter.
      * @param calendarId the calendarId to set
@@ -51,15 +55,35 @@ public class TechDataCalendarExcDayPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCalendarId() {
         return this.calendarId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getExceptionDateStartTime() {
         return this.exceptionDateStartTime;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(calendarId).append("*");
+            sb.append(exceptionDateStartTime).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof TechDataCalendarExcDayPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

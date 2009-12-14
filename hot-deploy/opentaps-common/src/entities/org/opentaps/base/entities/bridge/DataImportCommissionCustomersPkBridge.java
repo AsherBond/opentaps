@@ -62,10 +62,9 @@ public class DataImportCommissionCustomersPkBridge implements TwoWayFieldBridge 
      */
     public String objectToString(Object object) {
         DataImportCommissionCustomersPk id = (DataImportCommissionCustomersPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getCustomerId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getToCustomerId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class DataImportCommissionCustomersPkBridge implements TwoWayFieldBridge 
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class BudgetReviewPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="BUDGET_ID")
     private String budgetId;
     @Column(name="BUDGET_REVIEW_ID")
@@ -35,7 +39,7 @@ public class BudgetReviewPk implements Serializable {
     private String partyId;
     @Column(name="BUDGET_REVIEW_RESULT_TYPE_ID")
     private String budgetReviewResultTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param budgetId the budgetId to set
@@ -68,29 +72,51 @@ public class BudgetReviewPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getBudgetId() {
         return this.budgetId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getBudgetReviewId() {
         return this.budgetReviewId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getBudgetReviewResultTypeId() {
         return this.budgetReviewResultTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(budgetId).append("*");
+            sb.append(budgetReviewId).append("*");
+            sb.append(partyId).append("*");
+            sb.append(budgetReviewResultTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof BudgetReviewPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

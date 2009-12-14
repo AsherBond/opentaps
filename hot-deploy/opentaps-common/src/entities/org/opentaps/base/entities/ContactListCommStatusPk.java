@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class ContactListCommStatusPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="CONTACT_LIST_ID")
     private String contactListId;
     @Column(name="COMMUNICATION_EVENT_ID")
     private String communicationEventId;
     @Column(name="CONTACT_MECH_ID")
     private String contactMechId;
-    
+
     /**
      * Auto generated value setter.
      * @param contactListId the contactListId to set
@@ -59,22 +63,43 @@ public class ContactListCommStatusPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getContactListId() {
         return this.contactListId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCommunicationEventId() {
         return this.communicationEventId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getContactMechId() {
         return this.contactMechId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(contactListId).append("*");
+            sb.append(communicationEventId).append("*");
+            sb.append(contactMechId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ContactListCommStatusPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

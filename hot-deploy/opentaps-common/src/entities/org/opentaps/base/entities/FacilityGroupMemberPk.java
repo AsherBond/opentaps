@@ -28,13 +28,17 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class FacilityGroupMemberPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="FACILITY_ID")
     private String facilityId;
     @Column(name="FACILITY_GROUP_ID")
     private String facilityGroupId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
@@ -60,22 +64,43 @@ public class FacilityGroupMemberPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFacilityId() {
         return this.facilityId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFacilityGroupId() {
         return this.facilityGroupId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(facilityId).append("*");
+            sb.append(facilityGroupId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof FacilityGroupMemberPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

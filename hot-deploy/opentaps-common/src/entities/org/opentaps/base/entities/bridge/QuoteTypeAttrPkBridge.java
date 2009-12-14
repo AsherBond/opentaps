@@ -62,10 +62,9 @@ public class QuoteTypeAttrPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         QuoteTypeAttrPk id = (QuoteTypeAttrPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getQuoteTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getAttrName());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class QuoteTypeAttrPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

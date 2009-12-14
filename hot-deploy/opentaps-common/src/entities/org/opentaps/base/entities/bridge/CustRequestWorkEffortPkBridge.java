@@ -62,10 +62,9 @@ public class CustRequestWorkEffortPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         CustRequestWorkEffortPk id = (CustRequestWorkEffortPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getCustRequestId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getWorkEffortId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class CustRequestWorkEffortPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

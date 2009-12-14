@@ -68,14 +68,13 @@ public class FacilityAssocPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         FacilityAssocPk id = (FacilityAssocPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getFacilityId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFacilityIdTo());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFacilityAssocTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -110,6 +109,7 @@ public class FacilityAssocPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

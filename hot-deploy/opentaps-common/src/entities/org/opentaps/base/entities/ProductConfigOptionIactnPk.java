@@ -28,6 +28,10 @@ import java.lang.String;
 
 @Embeddable
 public class ProductConfigOptionIactnPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="CONFIG_ITEM_ID")
     private String configItemId;
     @Column(name="CONFIG_OPTION_ID")
@@ -38,7 +42,7 @@ public class ProductConfigOptionIactnPk implements Serializable {
     private String configOptionIdTo;
     @Column(name="SEQUENCE_NUM")
     private Long sequenceNum;
-    
+
     /**
      * Auto generated value setter.
      * @param configItemId the configItemId to set
@@ -78,36 +82,59 @@ public class ProductConfigOptionIactnPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getConfigItemId() {
         return this.configItemId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getConfigOptionId() {
         return this.configOptionId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getConfigItemIdTo() {
         return this.configItemIdTo;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getConfigOptionIdTo() {
         return this.configOptionIdTo;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Long</code>
-     */  
+     */
     public Long getSequenceNum() {
         return this.sequenceNum;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(configItemId).append("*");
+            sb.append(configOptionId).append("*");
+            sb.append(configItemIdTo).append("*");
+            sb.append(configOptionIdTo).append("*");
+            sb.append(sequenceNum).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductConfigOptionIactnPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -66,14 +66,13 @@ public class FixedAssetMaintOrderPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         FixedAssetMaintOrderPk id = (FixedAssetMaintOrderPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getFixedAssetId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getMaintHistSeqId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getOrderId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getOrderItemSeqId());
         return sb.toString();
     }
@@ -108,6 +107,7 @@ public class FixedAssetMaintOrderPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

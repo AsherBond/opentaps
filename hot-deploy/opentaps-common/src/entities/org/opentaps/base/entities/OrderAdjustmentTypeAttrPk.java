@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class OrderAdjustmentTypeAttrPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="ORDER_ADJUSTMENT_TYPE_ID")
     private String orderAdjustmentTypeId;
     @Column(name="ATTR_NAME")
     private String attrName;
-    
+
     /**
      * Auto generated value setter.
      * @param orderAdjustmentTypeId the orderAdjustmentTypeId to set
@@ -50,15 +54,35 @@ public class OrderAdjustmentTypeAttrPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrderAdjustmentTypeId() {
         return this.orderAdjustmentTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAttrName() {
         return this.attrName;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(orderAdjustmentTypeId).append("*");
+            sb.append(attrName).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof OrderAdjustmentTypeAttrPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

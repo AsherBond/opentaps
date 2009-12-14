@@ -62,10 +62,9 @@ public class SubscriptionCommEventPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         SubscriptionCommEventPk id = (SubscriptionCommEventPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getSubscriptionId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getCommunicationEventId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class SubscriptionCommEventPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

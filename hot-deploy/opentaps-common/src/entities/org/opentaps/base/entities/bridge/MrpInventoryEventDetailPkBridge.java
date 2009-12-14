@@ -70,16 +70,15 @@ public class MrpInventoryEventDetailPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         MrpInventoryEventDetailPk id = (MrpInventoryEventDetailPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getProductId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getEventDate());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getInventoryEventPlanTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFacilityId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getMrpInvEvtDetSeqId());
         return sb.toString();
     }
@@ -117,6 +116,7 @@ public class MrpInventoryEventDetailPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

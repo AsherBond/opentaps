@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class ProductSearchConstraintPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_SEARCH_RESULT_ID")
     private String productSearchResultId;
     @Column(name="CONSTRAINT_SEQ_ID")
     private String constraintSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param productSearchResultId the productSearchResultId to set
@@ -50,15 +54,35 @@ public class ProductSearchConstraintPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductSearchResultId() {
         return this.productSearchResultId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getConstraintSeqId() {
         return this.constraintSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productSearchResultId).append("*");
+            sb.append(constraintSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductSearchConstraintPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

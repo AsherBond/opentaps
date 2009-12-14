@@ -64,12 +64,11 @@ public class ContentMetaDataPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ContentMetaDataPk id = (ContentMetaDataPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getContentId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getMetaDataPredicateId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getMetaDataValue());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class ContentMetaDataPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

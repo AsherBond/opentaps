@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class WebSiteContentPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="WEB_SITE_ID")
     private String webSiteId;
     @Column(name="CONTENT_ID")
@@ -36,7 +40,7 @@ public class WebSiteContentPk implements Serializable {
     private String webSiteContentTypeId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param webSiteId the webSiteId to set
@@ -69,29 +73,51 @@ public class WebSiteContentPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getWebSiteId() {
         return this.webSiteId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getContentId() {
         return this.contentId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getWebSiteContentTypeId() {
         return this.webSiteContentTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(webSiteId).append("*");
+            sb.append(contentId).append("*");
+            sb.append(webSiteContentTypeId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof WebSiteContentPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

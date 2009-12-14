@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class FacilityRolePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="FACILITY_ID")
     private String facilityId;
     @Column(name="PARTY_ID")
     private String partyId;
     @Column(name="ROLE_TYPE_ID")
     private String roleTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
@@ -59,22 +63,43 @@ public class FacilityRolePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFacilityId() {
         return this.facilityId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRoleTypeId() {
         return this.roleTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(facilityId).append("*");
+            sb.append(partyId).append("*");
+            sb.append(roleTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof FacilityRolePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

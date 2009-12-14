@@ -66,12 +66,11 @@ public class InventoryItemStatusPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         InventoryItemStatusPk id = (InventoryItemStatusPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getInventoryItemId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getStatusId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getStatusDatetime());
         return sb.toString();
     }
@@ -103,6 +102,7 @@ public class InventoryItemStatusPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class AmazonProductSearchTermsPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="SEARCH_TERM_ID")
     private String searchTermId;
     @Column(name="PRODUCT_ID")
     private String productId;
-    
+
     /**
      * Auto generated value setter.
      * @param searchTermId the searchTermId to set
@@ -50,15 +54,35 @@ public class AmazonProductSearchTermsPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getSearchTermId() {
         return this.searchTermId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductId() {
         return this.productId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(searchTermId).append("*");
+            sb.append(productId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof AmazonProductSearchTermsPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

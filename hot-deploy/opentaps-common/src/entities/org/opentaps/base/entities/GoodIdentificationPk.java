@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class GoodIdentificationPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="GOOD_IDENTIFICATION_TYPE_ID")
     private String goodIdentificationTypeId;
     @Column(name="PRODUCT_ID")
     private String productId;
-    
+
     /**
      * Auto generated value setter.
      * @param goodIdentificationTypeId the goodIdentificationTypeId to set
@@ -50,15 +54,35 @@ public class GoodIdentificationPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getGoodIdentificationTypeId() {
         return this.goodIdentificationTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductId() {
         return this.productId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(goodIdentificationTypeId).append("*");
+            sb.append(productId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof GoodIdentificationPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

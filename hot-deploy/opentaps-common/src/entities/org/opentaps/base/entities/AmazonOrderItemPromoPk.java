@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class AmazonOrderItemPromoPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="AMAZON_ORDER_ID")
     private String amazonOrderId;
     @Column(name="AMAZON_ORDER_ITEM_CODE")
@@ -37,7 +41,7 @@ public class AmazonOrderItemPromoPk implements Serializable {
     private String merchantPromotionId;
     @Column(name="PROMO_AMOUNT_TYPE")
     private String promoAmountType;
-    
+
     /**
      * Auto generated value setter.
      * @param amazonOrderId the amazonOrderId to set
@@ -77,36 +81,59 @@ public class AmazonOrderItemPromoPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAmazonOrderId() {
         return this.amazonOrderId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAmazonOrderItemCode() {
         return this.amazonOrderItemCode;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPromotionClaimCode() {
         return this.promotionClaimCode;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getMerchantPromotionId() {
         return this.merchantPromotionId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPromoAmountType() {
         return this.promoAmountType;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(amazonOrderId).append("*");
+            sb.append(amazonOrderItemCode).append("*");
+            sb.append(promotionClaimCode).append("*");
+            sb.append(merchantPromotionId).append("*");
+            sb.append(promoAmountType).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof AmazonOrderItemPromoPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

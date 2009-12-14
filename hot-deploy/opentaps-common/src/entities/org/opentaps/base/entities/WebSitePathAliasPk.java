@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class WebSitePathAliasPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="WEB_SITE_ID")
     private String webSiteId;
     @Column(name="PATH_ALIAS")
     private String pathAlias;
-    
+
     /**
      * Auto generated value setter.
      * @param webSiteId the webSiteId to set
@@ -50,15 +54,35 @@ public class WebSitePathAliasPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getWebSiteId() {
         return this.webSiteId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPathAlias() {
         return this.pathAlias;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(webSiteId).append("*");
+            sb.append(pathAlias).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof WebSitePathAliasPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

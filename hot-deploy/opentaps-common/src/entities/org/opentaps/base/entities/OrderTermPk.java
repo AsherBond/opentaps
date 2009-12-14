@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class OrderTermPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="TERM_TYPE_ID")
     private String termTypeId;
     @Column(name="ORDER_ID")
     private String orderId;
     @Column(name="ORDER_ITEM_SEQ_ID")
     private String orderItemSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param termTypeId the termTypeId to set
@@ -59,22 +63,43 @@ public class OrderTermPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTermTypeId() {
         return this.termTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrderId() {
         return this.orderId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrderItemSeqId() {
         return this.orderItemSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(termTypeId).append("*");
+            sb.append(orderId).append("*");
+            sb.append(orderItemSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof OrderTermPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

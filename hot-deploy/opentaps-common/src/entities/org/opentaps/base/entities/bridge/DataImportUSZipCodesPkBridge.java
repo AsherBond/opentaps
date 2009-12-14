@@ -64,12 +64,11 @@ public class DataImportUSZipCodesPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         DataImportUSZipCodesPk id = (DataImportUSZipCodesPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getZipCode());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getCounty());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getStateCode());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class DataImportUSZipCodesPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

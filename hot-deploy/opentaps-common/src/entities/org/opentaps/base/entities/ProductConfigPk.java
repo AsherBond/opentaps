@@ -29,6 +29,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class ProductConfigPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_ID")
     private String productId;
     @Column(name="CONFIG_ITEM_ID")
@@ -37,7 +41,7 @@ public class ProductConfigPk implements Serializable {
     private Long sequenceNum;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param productId the productId to set
@@ -70,29 +74,51 @@ public class ProductConfigPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductId() {
         return this.productId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getConfigItemId() {
         return this.configItemId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Long</code>
-     */  
+     */
     public Long getSequenceNum() {
         return this.sequenceNum;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productId).append("*");
+            sb.append(configItemId).append("*");
+            sb.append(sequenceNum).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductConfigPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class SecurityGroupPermissionPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="GROUP_ID")
     private String groupId;
     @Column(name="PERMISSION_ID")
     private String permissionId;
-    
+
     /**
      * Auto generated value setter.
      * @param groupId the groupId to set
@@ -50,15 +54,35 @@ public class SecurityGroupPermissionPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getGroupId() {
         return this.groupId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPermissionId() {
         return this.permissionId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(groupId).append("*");
+            sb.append(permissionId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof SecurityGroupPermissionPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

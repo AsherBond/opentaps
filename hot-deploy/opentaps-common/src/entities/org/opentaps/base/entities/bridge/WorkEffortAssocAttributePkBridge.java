@@ -66,14 +66,13 @@ public class WorkEffortAssocAttributePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         WorkEffortAssocAttributePk id = (WorkEffortAssocAttributePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getWorkEffortIdFrom());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getWorkEffortIdTo());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getWorkEffortAssocTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getAttrName());
         return sb.toString();
     }
@@ -108,6 +107,7 @@ public class WorkEffortAssocAttributePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

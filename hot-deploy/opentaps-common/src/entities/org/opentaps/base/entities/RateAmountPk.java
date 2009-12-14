@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class RateAmountPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="RATE_TYPE_ID")
     private String rateTypeId;
     @Column(name="RATE_CURRENCY_UOM_ID")
@@ -42,7 +46,7 @@ public class RateAmountPk implements Serializable {
     private String emplPositionTypeId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param rateTypeId the rateTypeId to set
@@ -96,50 +100,75 @@ public class RateAmountPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRateTypeId() {
         return this.rateTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRateCurrencyUomId() {
         return this.rateCurrencyUomId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPeriodTypeId() {
         return this.periodTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyId() {
         return this.partyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getWorkEffortId() {
         return this.workEffortId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getEmplPositionTypeId() {
         return this.emplPositionTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(rateTypeId).append("*");
+            sb.append(rateCurrencyUomId).append("*");
+            sb.append(periodTypeId).append("*");
+            sb.append(partyId).append("*");
+            sb.append(workEffortId).append("*");
+            sb.append(emplPositionTypeId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof RateAmountPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class AmazonOrderTaxJurisToAuthPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="TAX_JURIS_DISTRICT")
     private String taxJurisDistrict;
     @Column(name="TAX_JURIS_CITY")
@@ -35,7 +39,7 @@ public class AmazonOrderTaxJurisToAuthPk implements Serializable {
     private String taxJurisCounty;
     @Column(name="TAX_JURIS_STATE")
     private String taxJurisState;
-    
+
     /**
      * Auto generated value setter.
      * @param taxJurisDistrict the taxJurisDistrict to set
@@ -68,29 +72,51 @@ public class AmazonOrderTaxJurisToAuthPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTaxJurisDistrict() {
         return this.taxJurisDistrict;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTaxJurisCity() {
         return this.taxJurisCity;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTaxJurisCounty() {
         return this.taxJurisCounty;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTaxJurisState() {
         return this.taxJurisState;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(taxJurisDistrict).append("*");
+            sb.append(taxJurisCity).append("*");
+            sb.append(taxJurisCounty).append("*");
+            sb.append(taxJurisState).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof AmazonOrderTaxJurisToAuthPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

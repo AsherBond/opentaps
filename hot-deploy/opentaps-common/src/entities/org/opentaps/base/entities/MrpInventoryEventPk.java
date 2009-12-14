@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class MrpInventoryEventPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_ID")
     private String productId;
     @Column(name="EVENT_DATE")
@@ -36,7 +40,7 @@ public class MrpInventoryEventPk implements Serializable {
     private String inventoryEventPlanTypeId;
     @Column(name="FACILITY_ID")
     private String facilityId;
-    
+
     /**
      * Auto generated value setter.
      * @param productId the productId to set
@@ -69,29 +73,51 @@ public class MrpInventoryEventPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductId() {
         return this.productId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getEventDate() {
         return this.eventDate;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInventoryEventPlanTypeId() {
         return this.inventoryEventPlanTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFacilityId() {
         return this.facilityId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productId).append("*");
+            sb.append(eventDate).append("*");
+            sb.append(inventoryEventPlanTypeId).append("*");
+            sb.append(facilityId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof MrpInventoryEventPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class PartyBenefitPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="ROLE_TYPE_ID_FROM")
     private String roleTypeIdFrom;
     @Column(name="ROLE_TYPE_ID_TO")
@@ -40,7 +44,7 @@ public class PartyBenefitPk implements Serializable {
     private String benefitTypeId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param roleTypeIdFrom the roleTypeIdFrom to set
@@ -87,43 +91,67 @@ public class PartyBenefitPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRoleTypeIdFrom() {
         return this.roleTypeIdFrom;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRoleTypeIdTo() {
         return this.roleTypeIdTo;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyIdFrom() {
         return this.partyIdFrom;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPartyIdTo() {
         return this.partyIdTo;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getBenefitTypeId() {
         return this.benefitTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(roleTypeIdFrom).append("*");
+            sb.append(roleTypeIdTo).append("*");
+            sb.append(partyIdFrom).append("*");
+            sb.append(partyIdTo).append("*");
+            sb.append(benefitTypeId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PartyBenefitPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

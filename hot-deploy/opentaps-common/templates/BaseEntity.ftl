@@ -149,7 +149,7 @@ fieldMapColumns.put("${name}", fields);
 <#if indexWeights.containsKey(field)>   @org.hibernate.search.annotations.Fields( {
      <#if "UN_TOKENIZED" == tokenTypes.get(field)>
        <#-- if the field is set to UN_TOKENIZED also index as TOKENIZED to allow sort and lower case search -->
-       @Field(index=Index.TOKENIZED, store=Store.YES),
+       @Field(index=Index.TOKENIZED, store=Store.NO),
      </#if>
      @Field(index=Index.${tokenTypes.get(field)}, store=Store.YES)
    } )

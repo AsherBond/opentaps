@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class InvoiceContactMechPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="INVOICE_ID")
     private String invoiceId;
     @Column(name="CONTACT_MECH_PURPOSE_TYPE_ID")
     private String contactMechPurposeTypeId;
     @Column(name="CONTACT_MECH_ID")
     private String contactMechId;
-    
+
     /**
      * Auto generated value setter.
      * @param invoiceId the invoiceId to set
@@ -59,22 +63,43 @@ public class InvoiceContactMechPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInvoiceId() {
         return this.invoiceId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getContactMechPurposeTypeId() {
         return this.contactMechPurposeTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getContactMechId() {
         return this.contactMechId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(invoiceId).append("*");
+            sb.append(contactMechPurposeTypeId).append("*");
+            sb.append(contactMechId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof InvoiceContactMechPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

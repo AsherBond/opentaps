@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class ReportGroupMemberPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="REPORT_GROUP_ID")
     private String reportGroupId;
     @Column(name="REPORT_ID")
     private String reportId;
-    
+
     /**
      * Auto generated value setter.
      * @param reportGroupId the reportGroupId to set
@@ -50,15 +54,35 @@ public class ReportGroupMemberPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getReportGroupId() {
         return this.reportGroupId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getReportId() {
         return this.reportId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(reportGroupId).append("*");
+            sb.append(reportId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ReportGroupMemberPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

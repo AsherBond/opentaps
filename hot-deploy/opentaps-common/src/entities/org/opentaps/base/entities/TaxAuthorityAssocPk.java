@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class TaxAuthorityAssocPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="TAX_AUTH_GEO_ID")
     private String taxAuthGeoId;
     @Column(name="TAX_AUTH_PARTY_ID")
@@ -38,7 +42,7 @@ public class TaxAuthorityAssocPk implements Serializable {
     private String toTaxAuthPartyId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param taxAuthGeoId the taxAuthGeoId to set
@@ -78,36 +82,59 @@ public class TaxAuthorityAssocPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTaxAuthGeoId() {
         return this.taxAuthGeoId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTaxAuthPartyId() {
         return this.taxAuthPartyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getToTaxAuthGeoId() {
         return this.toTaxAuthGeoId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getToTaxAuthPartyId() {
         return this.toTaxAuthPartyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(taxAuthGeoId).append("*");
+            sb.append(taxAuthPartyId).append("*");
+            sb.append(toTaxAuthGeoId).append("*");
+            sb.append(toTaxAuthPartyId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof TaxAuthorityAssocPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

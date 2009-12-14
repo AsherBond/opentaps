@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class AmazonOrderItemFulfillmentPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="AMAZON_ORDER_ID")
     private String amazonOrderId;
     @Column(name="AMAZON_ORDER_ITEM_CODE")
@@ -39,7 +43,7 @@ public class AmazonOrderItemFulfillmentPk implements Serializable {
     private String shipmentPackageSeqId;
     @Column(name="ITEM_ISSUANCE_ID")
     private String itemIssuanceId;
-    
+
     /**
      * Auto generated value setter.
      * @param amazonOrderId the amazonOrderId to set
@@ -86,43 +90,67 @@ public class AmazonOrderItemFulfillmentPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAmazonOrderId() {
         return this.amazonOrderId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAmazonOrderItemCode() {
         return this.amazonOrderItemCode;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getShipmentId() {
         return this.shipmentId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getShipmentItemSeqId() {
         return this.shipmentItemSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getShipmentPackageSeqId() {
         return this.shipmentPackageSeqId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getItemIssuanceId() {
         return this.itemIssuanceId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(amazonOrderId).append("*");
+            sb.append(amazonOrderItemCode).append("*");
+            sb.append(shipmentId).append("*");
+            sb.append(shipmentItemSeqId).append("*");
+            sb.append(shipmentPackageSeqId).append("*");
+            sb.append(itemIssuanceId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof AmazonOrderItemFulfillmentPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

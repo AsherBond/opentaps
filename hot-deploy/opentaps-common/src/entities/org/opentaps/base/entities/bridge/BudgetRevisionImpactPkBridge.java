@@ -64,12 +64,11 @@ public class BudgetRevisionImpactPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         BudgetRevisionImpactPk id = (BudgetRevisionImpactPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getBudgetId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getBudgetItemSeqId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getRevisionSeqId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class BudgetRevisionImpactPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

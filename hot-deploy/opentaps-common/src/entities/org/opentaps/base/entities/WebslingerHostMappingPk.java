@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class WebslingerHostMappingPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="HOST_NAME")
     private String hostName;
     @Column(name="CONTEXT_PATH")
     private String contextPath;
-    
+
     /**
      * Auto generated value setter.
      * @param hostName the hostName to set
@@ -50,15 +54,35 @@ public class WebslingerHostMappingPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getHostName() {
         return this.hostName;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getContextPath() {
         return this.contextPath;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(hostName).append("*");
+            sb.append(contextPath).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof WebslingerHostMappingPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

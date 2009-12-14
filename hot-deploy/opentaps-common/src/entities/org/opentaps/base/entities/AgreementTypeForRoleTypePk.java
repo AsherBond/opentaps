@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class AgreementTypeForRoleTypePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="ORGANIZATION_PARTY_ID")
     private String organizationPartyId;
     @Column(name="ROLE_TYPE_ID")
     private String roleTypeId;
     @Column(name="AGREEMENT_TYPE_ID")
     private String agreementTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param organizationPartyId the organizationPartyId to set
@@ -59,22 +63,43 @@ public class AgreementTypeForRoleTypePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrganizationPartyId() {
         return this.organizationPartyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRoleTypeId() {
         return this.roleTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAgreementTypeId() {
         return this.agreementTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(organizationPartyId).append("*");
+            sb.append(roleTypeId).append("*");
+            sb.append(agreementTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof AgreementTypeForRoleTypePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

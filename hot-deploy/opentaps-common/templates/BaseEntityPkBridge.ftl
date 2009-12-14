@@ -48,24 +48,24 @@ public class ${entityName}PkBridge implements TwoWayFieldBridge {
     public Object get(String name, Document document) {
         ${pkName} id = new ${pkName}();
         Field field = null;
-	    <#list primaryKeys as primaryKey>
+    <#list primaryKeys as primaryKey>
         field = document.getField(name + ".${primaryKey}");
-	    <#if pkTypes.get(primaryKey) == "Timestamp">
+      <#if pkTypes.get(primaryKey) == "Timestamp">
         if (field.stringValue() != null && !field.stringValue().equals("")) {
             id.${setPkMethodNames.get(primaryKey)}(new Timestamp(((Date) (new DateBridge(Resolution.DAY)).stringToObject(field.stringValue())).getTime()));
         }
-        <#elseif pkTypes.get(primaryKey) == "Date">
+      <#elseif pkTypes.get(primaryKey) == "Date">
         if (field.stringValue() != null && !field.stringValue().equals("")) {
             id.${setPkMethodNames.get(primaryKey)}(new java.sql.Date(((Date) (new DateBridge(Resolution.DAY)).stringToObject(field.stringValue())).getTime()));
         }
-        <#elseif pkTypes.get(primaryKey) == "BigDecimal">
+      <#elseif pkTypes.get(primaryKey) == "BigDecimal">
         id.${setPkMethodNames.get(primaryKey)}((BigDecimal) (new BigDecimalBridge()).stringToObject(field.stringValue()));
-        <#elseif pkTypes.get(primaryKey) == "Long">
+      <#elseif pkTypes.get(primaryKey) == "Long">
         id.${setPkMethodNames.get(primaryKey)}((Long) (new LongBridge()).stringToObject(field.stringValue()));
-	    <#else>
+      <#else>
         id.${setPkMethodNames.get(primaryKey)}(field.stringValue());
-	    </#if>
-	    </#list>
+      </#if>
+    </#list>
         return id;
     }
 
@@ -76,13 +76,15 @@ public class ${entityName}PkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ${pkName} id = (${pkName}) object;
-        StringBuilder sb = new StringBuilder("");
-        <#assign n = 0 />
-        <#list primaryKeys as primaryKey>
-        <#if n gt 0>sb.append(" ");</#if>
+        StringBuilder sb = new StringBuilder();
+    <#assign n = 0 />
+    <#list primaryKeys as primaryKey>
+      <#if n gt 0>
+        sb.append("_");
+      </#if>
         sb.append(id.${getPkMethodNames.get(primaryKey)}());
-        <#assign n = n+1 /> 
-	    </#list>
+      <#assign n = n+1 />
+    </#list>
         return sb.toString();
     }
 
@@ -101,20 +103,21 @@ public class ${entityName}PkBridge implements TwoWayFieldBridge {
         Float boost = luceneOptions.getBoost();
 
         Field field = null;
-        <#list primaryKeys as primaryKey>
-        <#if pkTypes.get(primaryKey) == "Timestamp" || pkTypes.get(primaryKey) == "Date">
+    <#list primaryKeys as primaryKey>
+      <#if pkTypes.get(primaryKey) == "Timestamp" || pkTypes.get(primaryKey) == "Date">
         field = new Field(name + ".${primaryKey}", (new DateBridge(Resolution.DAY)).objectToString(id.${getPkMethodNames.get(primaryKey)}()), store, index, termVector);
-        <#elseif pkTypes.get(primaryKey) == "BigDecimal" || pkTypes.get(primaryKey) == "Long">
+      <#elseif pkTypes.get(primaryKey) == "BigDecimal" || pkTypes.get(primaryKey) == "Long">
         field = new Field(name + ".${primaryKey}", id.${getPkMethodNames.get(primaryKey)}().toString(), store, index, termVector);
-	    <#else>
+      <#else>
         field = new Field(name + ".${primaryKey}", id.${getPkMethodNames.get(primaryKey)}(), store, index, termVector);
-	    </#if>
+      </#if>
         field.setBoost(boost);
         document.add(field);
-        </#list>
+    </#list>
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

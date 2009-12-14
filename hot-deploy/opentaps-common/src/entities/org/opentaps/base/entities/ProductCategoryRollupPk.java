@@ -28,13 +28,17 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class ProductCategoryRollupPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_CATEGORY_ID")
     private String productCategoryId;
     @Column(name="PARENT_PRODUCT_CATEGORY_ID")
     private String parentProductCategoryId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param productCategoryId the productCategoryId to set
@@ -60,22 +64,43 @@ public class ProductCategoryRollupPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductCategoryId() {
         return this.productCategoryId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getParentProductCategoryId() {
         return this.parentProductCategoryId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productCategoryId).append("*");
+            sb.append(parentProductCategoryId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductCategoryRollupPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

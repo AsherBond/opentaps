@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class InvoiceRecurrencePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="INVOICE_ID")
     private String invoiceId;
     @Column(name="RECURRENCE_INFO_ID")
     private String recurrenceInfoId;
-    
+
     /**
      * Auto generated value setter.
      * @param invoiceId the invoiceId to set
@@ -50,15 +54,35 @@ public class InvoiceRecurrencePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInvoiceId() {
         return this.invoiceId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getRecurrenceInfoId() {
         return this.recurrenceInfoId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(invoiceId).append("*");
+            sb.append(recurrenceInfoId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof InvoiceRecurrencePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

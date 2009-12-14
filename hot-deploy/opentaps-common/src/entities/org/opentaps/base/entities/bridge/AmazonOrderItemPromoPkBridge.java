@@ -68,16 +68,15 @@ public class AmazonOrderItemPromoPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         AmazonOrderItemPromoPk id = (AmazonOrderItemPromoPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getAmazonOrderId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getAmazonOrderItemCode());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPromotionClaimCode());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getMerchantPromotionId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPromoAmountType());
         return sb.toString();
     }
@@ -115,6 +114,7 @@ public class AmazonOrderItemPromoPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

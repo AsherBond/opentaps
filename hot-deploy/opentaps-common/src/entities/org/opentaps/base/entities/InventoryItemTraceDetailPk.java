@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class InventoryItemTraceDetailPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="INVENTORY_ITEM_TRACE_ID")
     private String inventoryItemTraceId;
     @Column(name="INVENTORY_ITEM_TRACE_SEQ_ID")
     private String inventoryItemTraceSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param inventoryItemTraceId the inventoryItemTraceId to set
@@ -50,15 +54,35 @@ public class InventoryItemTraceDetailPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInventoryItemTraceId() {
         return this.inventoryItemTraceId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInventoryItemTraceSeqId() {
         return this.inventoryItemTraceSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(inventoryItemTraceId).append("*");
+            sb.append(inventoryItemTraceSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof InventoryItemTraceDetailPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

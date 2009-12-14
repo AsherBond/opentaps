@@ -66,14 +66,13 @@ public class FacilityCarrierShipmentPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         FacilityCarrierShipmentPk id = (FacilityCarrierShipmentPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getFacilityId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPartyId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getRoleTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getShipmentMethodTypeId());
         return sb.toString();
     }
@@ -108,6 +107,7 @@ public class FacilityCarrierShipmentPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

@@ -64,12 +64,11 @@ public class EntityViewHistoryPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         EntityViewHistoryPk id = (EntityViewHistoryPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getEntityName());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getUserLoginId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPrimaryKeyId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class EntityViewHistoryPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

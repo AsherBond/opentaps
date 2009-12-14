@@ -64,10 +64,9 @@ public class PosTerminalStatePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         PosTerminalStatePk id = (PosTerminalStatePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getPosTerminalId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getOpenedDate());
         return sb.toString();
     }
@@ -96,6 +95,7 @@ public class PosTerminalStatePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

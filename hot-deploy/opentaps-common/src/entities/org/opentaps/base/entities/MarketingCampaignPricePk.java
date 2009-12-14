@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class MarketingCampaignPricePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="MARKETING_CAMPAIGN_ID")
     private String marketingCampaignId;
     @Column(name="PRODUCT_PRICE_RULE_ID")
     private String productPriceRuleId;
-    
+
     /**
      * Auto generated value setter.
      * @param marketingCampaignId the marketingCampaignId to set
@@ -50,15 +54,35 @@ public class MarketingCampaignPricePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getMarketingCampaignId() {
         return this.marketingCampaignId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductPriceRuleId() {
         return this.productPriceRuleId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(marketingCampaignId).append("*");
+            sb.append(productPriceRuleId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof MarketingCampaignPricePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -62,10 +62,9 @@ public class PaginationPreferencePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         PaginationPreferencePk id = (PaginationPreferencePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getUserLoginId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getPaginatorName());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class PaginationPreferencePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

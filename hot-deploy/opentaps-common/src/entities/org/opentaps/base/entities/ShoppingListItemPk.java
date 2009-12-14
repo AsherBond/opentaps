@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class ShoppingListItemPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="SHOPPING_LIST_ID")
     private String shoppingListId;
     @Column(name="SHOPPING_LIST_ITEM_SEQ_ID")
     private String shoppingListItemSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param shoppingListId the shoppingListId to set
@@ -50,15 +54,35 @@ public class ShoppingListItemPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getShoppingListId() {
         return this.shoppingListId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getShoppingListItemSeqId() {
         return this.shoppingListItemSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(shoppingListId).append("*");
+            sb.append(shoppingListItemSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ShoppingListItemPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

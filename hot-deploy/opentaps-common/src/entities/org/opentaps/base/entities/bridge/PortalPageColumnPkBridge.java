@@ -62,10 +62,9 @@ public class PortalPageColumnPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         PortalPageColumnPk id = (PortalPageColumnPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getPortalPageId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getColumnSeqId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class PortalPageColumnPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

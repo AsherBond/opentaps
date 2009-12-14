@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class InvoiceItemTypeMapPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="INVOICE_ITEM_MAP_KEY")
     private String invoiceItemMapKey;
     @Column(name="INVOICE_TYPE_ID")
     private String invoiceTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param invoiceItemMapKey the invoiceItemMapKey to set
@@ -50,15 +54,35 @@ public class InvoiceItemTypeMapPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInvoiceItemMapKey() {
         return this.invoiceItemMapKey;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInvoiceTypeId() {
         return this.invoiceTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(invoiceItemMapKey).append("*");
+            sb.append(invoiceTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof InvoiceItemTypeMapPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

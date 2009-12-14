@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class ViewPreferencePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="VIEW_PREF_TYPE_ID")
     private String viewPrefTypeId;
     @Column(name="USER_LOGIN_ID")
     private String userLoginId;
-    
+
     /**
      * Auto generated value setter.
      * @param viewPrefTypeId the viewPrefTypeId to set
@@ -50,15 +54,35 @@ public class ViewPreferencePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getViewPrefTypeId() {
         return this.viewPrefTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getUserLoginId() {
         return this.userLoginId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(viewPrefTypeId).append("*");
+            sb.append(userLoginId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ViewPreferencePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

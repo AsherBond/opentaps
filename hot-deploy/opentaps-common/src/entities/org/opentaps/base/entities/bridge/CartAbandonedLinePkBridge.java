@@ -62,10 +62,9 @@ public class CartAbandonedLinePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         CartAbandonedLinePk id = (CartAbandonedLinePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getVisitId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getCartAbandonedLineSeqId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class CartAbandonedLinePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

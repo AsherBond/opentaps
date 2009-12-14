@@ -66,12 +66,11 @@ public class SurveyTriggerPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         SurveyTriggerPk id = (SurveyTriggerPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getSurveyId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getSurveyApplTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFromDate());
         return sb.toString();
     }
@@ -103,6 +102,7 @@ public class SurveyTriggerPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class MrpEventPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="MRP_ID")
     private String mrpId;
     @Column(name="PRODUCT_ID")
@@ -36,7 +40,7 @@ public class MrpEventPk implements Serializable {
     private Timestamp eventDate;
     @Column(name="MRP_EVENT_TYPE_ID")
     private String mrpEventTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param mrpId the mrpId to set
@@ -69,29 +73,51 @@ public class MrpEventPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getMrpId() {
         return this.mrpId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductId() {
         return this.productId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getEventDate() {
         return this.eventDate;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getMrpEventTypeId() {
         return this.mrpEventTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(mrpId).append("*");
+            sb.append(productId).append("*");
+            sb.append(eventDate).append("*");
+            sb.append(mrpEventTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof MrpEventPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

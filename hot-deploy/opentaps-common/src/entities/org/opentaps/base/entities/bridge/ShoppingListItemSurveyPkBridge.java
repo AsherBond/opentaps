@@ -64,12 +64,11 @@ public class ShoppingListItemSurveyPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ShoppingListItemSurveyPk id = (ShoppingListItemSurveyPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getShoppingListId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getShoppingListItemSeqId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getSurveyResponseId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class ShoppingListItemSurveyPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

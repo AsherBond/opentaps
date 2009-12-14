@@ -28,13 +28,17 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class OldEmplPositionTypeRatePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="EMPL_POSITION_TYPE_ID")
     private String emplPositionTypeId;
     @Column(name="PERIOD_TYPE_ID")
     private String periodTypeId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param emplPositionTypeId the emplPositionTypeId to set
@@ -60,22 +64,43 @@ public class OldEmplPositionTypeRatePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getEmplPositionTypeId() {
         return this.emplPositionTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPeriodTypeId() {
         return this.periodTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(emplPositionTypeId).append("*");
+            sb.append(periodTypeId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof OldEmplPositionTypeRatePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

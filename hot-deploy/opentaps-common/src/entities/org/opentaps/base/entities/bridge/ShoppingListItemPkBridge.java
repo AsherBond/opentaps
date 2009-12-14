@@ -62,10 +62,9 @@ public class ShoppingListItemPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ShoppingListItemPk id = (ShoppingListItemPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getShoppingListId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getShoppingListItemSeqId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class ShoppingListItemPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

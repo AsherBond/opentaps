@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class AcctgTagEnumTypePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="ORGANIZATION_PARTY_ID")
     private String organizationPartyId;
     @Column(name="ACCTG_TAG_USAGE_TYPE_ID")
     private String acctgTagUsageTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param organizationPartyId the organizationPartyId to set
@@ -50,15 +54,35 @@ public class AcctgTagEnumTypePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrganizationPartyId() {
         return this.organizationPartyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getAcctgTagUsageTypeId() {
         return this.acctgTagUsageTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(organizationPartyId).append("*");
+            sb.append(acctgTagUsageTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof AcctgTagEnumTypePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

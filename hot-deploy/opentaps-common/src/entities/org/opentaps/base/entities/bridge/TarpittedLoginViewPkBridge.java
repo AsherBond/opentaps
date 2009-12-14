@@ -62,10 +62,9 @@ public class TarpittedLoginViewPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         TarpittedLoginViewPk id = (TarpittedLoginViewPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getViewNameId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getUserLoginId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class TarpittedLoginViewPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

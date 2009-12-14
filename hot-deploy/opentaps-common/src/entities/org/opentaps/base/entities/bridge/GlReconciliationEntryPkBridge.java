@@ -64,12 +64,11 @@ public class GlReconciliationEntryPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         GlReconciliationEntryPk id = (GlReconciliationEntryPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getGlReconciliationId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getAcctgTransId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getAcctgTransEntrySeqId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class GlReconciliationEntryPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

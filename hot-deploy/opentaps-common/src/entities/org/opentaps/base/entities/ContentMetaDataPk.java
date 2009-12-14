@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class ContentMetaDataPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="CONTENT_ID")
     private String contentId;
     @Column(name="META_DATA_PREDICATE_ID")
     private String metaDataPredicateId;
     @Column(name="META_DATA_VALUE")
     private String metaDataValue;
-    
+
     /**
      * Auto generated value setter.
      * @param contentId the contentId to set
@@ -59,22 +63,43 @@ public class ContentMetaDataPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getContentId() {
         return this.contentId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getMetaDataPredicateId() {
         return this.metaDataPredicateId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getMetaDataValue() {
         return this.metaDataValue;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(contentId).append("*");
+            sb.append(metaDataPredicateId).append("*");
+            sb.append(metaDataValue).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ContentMetaDataPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

@@ -28,13 +28,17 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class GlBudgetXrefPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="GL_ACCOUNT_ID")
     private String glAccountId;
     @Column(name="BUDGET_ITEM_TYPE_ID")
     private String budgetItemTypeId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param glAccountId the glAccountId to set
@@ -60,22 +64,43 @@ public class GlBudgetXrefPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getGlAccountId() {
         return this.glAccountId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getBudgetItemTypeId() {
         return this.budgetItemTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(glAccountId).append("*");
+            sb.append(budgetItemTypeId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof GlBudgetXrefPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

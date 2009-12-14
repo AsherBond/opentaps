@@ -62,10 +62,9 @@ public class ServiceTestRecordPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ServiceTestRecordPk id = (ServiceTestRecordPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getKey1());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getKey2());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class ServiceTestRecordPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

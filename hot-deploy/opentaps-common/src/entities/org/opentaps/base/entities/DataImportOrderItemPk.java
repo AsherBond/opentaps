@@ -28,6 +28,10 @@ import java.math.BigDecimal;
 
 @Embeddable
 public class DataImportOrderItemPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="ORDER_ID")
     private String orderId;
     @Column(name="PRODUCT_ID")
@@ -38,7 +42,7 @@ public class DataImportOrderItemPk implements Serializable {
     private BigDecimal price;
     @Column(name="ITEM_ADJUSTMENTS_TOTAL")
     private BigDecimal itemAdjustmentsTotal;
-    
+
     /**
      * Auto generated value setter.
      * @param orderId the orderId to set
@@ -78,36 +82,59 @@ public class DataImportOrderItemPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getOrderId() {
         return this.orderId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductId() {
         return this.productId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>BigDecimal</code>
-     */  
+     */
     public BigDecimal getQuantity() {
         return this.quantity;
     }
     /**
      * Auto generated value accessor.
      * @return <code>BigDecimal</code>
-     */  
+     */
     public BigDecimal getPrice() {
         return this.price;
     }
     /**
      * Auto generated value accessor.
      * @return <code>BigDecimal</code>
-     */  
+     */
     public BigDecimal getItemAdjustmentsTotal() {
         return this.itemAdjustmentsTotal;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(orderId).append("*");
+            sb.append(productId).append("*");
+            sb.append(quantity).append("*");
+            sb.append(price).append("*");
+            sb.append(itemAdjustmentsTotal).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof DataImportOrderItemPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

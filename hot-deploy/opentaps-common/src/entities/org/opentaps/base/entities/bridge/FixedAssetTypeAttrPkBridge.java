@@ -62,10 +62,9 @@ public class FixedAssetTypeAttrPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         FixedAssetTypeAttrPk id = (FixedAssetTypeAttrPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getFixedAssetTypeId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getAttrName());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class FixedAssetTypeAttrPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

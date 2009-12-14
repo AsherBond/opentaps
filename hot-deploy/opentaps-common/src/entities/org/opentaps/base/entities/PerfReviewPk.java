@@ -27,13 +27,17 @@ import java.lang.String;
 
 @Embeddable
 public class PerfReviewPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="EMPLOYEE_PARTY_ID")
     private String employeePartyId;
     @Column(name="EMPLOYEE_ROLE_TYPE_ID")
     private String employeeRoleTypeId;
     @Column(name="PERF_REVIEW_ID")
     private String perfReviewId;
-    
+
     /**
      * Auto generated value setter.
      * @param employeePartyId the employeePartyId to set
@@ -59,22 +63,43 @@ public class PerfReviewPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getEmployeePartyId() {
         return this.employeePartyId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getEmployeeRoleTypeId() {
         return this.employeeRoleTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getPerfReviewId() {
         return this.perfReviewId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(employeePartyId).append("*");
+            sb.append(employeeRoleTypeId).append("*");
+            sb.append(perfReviewId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof PerfReviewPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

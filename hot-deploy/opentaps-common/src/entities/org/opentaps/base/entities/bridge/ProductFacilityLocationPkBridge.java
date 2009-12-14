@@ -64,12 +64,11 @@ public class ProductFacilityLocationPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ProductFacilityLocationPk id = (ProductFacilityLocationPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getProductId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getFacilityId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getLocationSeqId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class ProductFacilityLocationPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

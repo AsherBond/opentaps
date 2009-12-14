@@ -64,12 +64,11 @@ public class OrderItemContactMechPkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         OrderItemContactMechPk id = (OrderItemContactMechPk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getOrderId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getOrderItemSeqId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getContactMechPurposeTypeId());
         return sb.toString();
     }
@@ -101,6 +100,7 @@ public class OrderItemContactMechPkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

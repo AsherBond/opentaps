@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class CommunicationEventPurposePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="COMMUNICATION_EVENT_PRP_TYP_ID")
     private String communicationEventPrpTypId;
     @Column(name="COMMUNICATION_EVENT_ID")
     private String communicationEventId;
-    
+
     /**
      * Auto generated value setter.
      * @param communicationEventPrpTypId the communicationEventPrpTypId to set
@@ -50,15 +54,35 @@ public class CommunicationEventPurposePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCommunicationEventPrpTypId() {
         return this.communicationEventPrpTypId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getCommunicationEventId() {
         return this.communicationEventId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(communicationEventPrpTypId).append("*");
+            sb.append(communicationEventId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof CommunicationEventPurposePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

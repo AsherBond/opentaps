@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class TestEntityItemPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="TEST_ENTITY_ID")
     private String testEntityId;
     @Column(name="TEST_ENTITY_ITEM_SEQ_ID")
     private String testEntityItemSeqId;
-    
+
     /**
      * Auto generated value setter.
      * @param testEntityId the testEntityId to set
@@ -50,15 +54,35 @@ public class TestEntityItemPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTestEntityId() {
         return this.testEntityId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTestEntityItemSeqId() {
         return this.testEntityItemSeqId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(testEntityId).append("*");
+            sb.append(testEntityItemSeqId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof TestEntityItemPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

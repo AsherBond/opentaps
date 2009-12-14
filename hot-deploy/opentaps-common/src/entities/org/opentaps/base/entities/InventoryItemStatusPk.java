@@ -28,13 +28,17 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class InventoryItemStatusPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="INVENTORY_ITEM_ID")
     private String inventoryItemId;
     @Column(name="STATUS_ID")
     private String statusId;
     @Column(name="STATUS_DATETIME")
     private Timestamp statusDatetime;
-    
+
     /**
      * Auto generated value setter.
      * @param inventoryItemId the inventoryItemId to set
@@ -60,22 +64,43 @@ public class InventoryItemStatusPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getInventoryItemId() {
         return this.inventoryItemId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getStatusId() {
         return this.statusId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getStatusDatetime() {
         return this.statusDatetime;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(inventoryItemId).append("*");
+            sb.append(statusId).append("*");
+            sb.append(statusDatetime).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof InventoryItemStatusPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

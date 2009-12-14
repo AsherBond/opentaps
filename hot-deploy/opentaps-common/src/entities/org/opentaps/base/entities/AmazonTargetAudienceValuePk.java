@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class AmazonTargetAudienceValuePk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_ID")
     private String productId;
     @Column(name="TARGET_AUDIENCE_ID")
     private String targetAudienceId;
-    
+
     /**
      * Auto generated value setter.
      * @param productId the productId to set
@@ -50,15 +54,35 @@ public class AmazonTargetAudienceValuePk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductId() {
         return this.productId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTargetAudienceId() {
         return this.targetAudienceId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productId).append("*");
+            sb.append(targetAudienceId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof AmazonTargetAudienceValuePk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

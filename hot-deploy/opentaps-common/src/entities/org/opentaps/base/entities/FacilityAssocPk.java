@@ -28,6 +28,10 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class FacilityAssocPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="FACILITY_ID")
     private String facilityId;
     @Column(name="FACILITY_ID_TO")
@@ -36,7 +40,7 @@ public class FacilityAssocPk implements Serializable {
     private String facilityAssocTypeId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
-    
+
     /**
      * Auto generated value setter.
      * @param facilityId the facilityId to set
@@ -69,29 +73,51 @@ public class FacilityAssocPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFacilityId() {
         return this.facilityId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFacilityIdTo() {
         return this.facilityIdTo;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFacilityAssocTypeId() {
         return this.facilityAssocTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
-     */  
+     */
     public Timestamp getFromDate() {
         return this.fromDate;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(facilityId).append("*");
+            sb.append(facilityIdTo).append("*");
+            sb.append(facilityAssocTypeId).append("*");
+            sb.append(fromDate).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof FacilityAssocPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

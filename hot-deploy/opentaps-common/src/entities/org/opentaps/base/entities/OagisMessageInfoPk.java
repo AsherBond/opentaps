@@ -27,6 +27,10 @@ import java.lang.String;
 
 @Embeddable
 public class OagisMessageInfoPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="LOGICAL_ID")
     private String logicalId;
     @Column(name="COMPONENT")
@@ -35,7 +39,7 @@ public class OagisMessageInfoPk implements Serializable {
     private String task;
     @Column(name="REFERENCE_ID")
     private String referenceId;
-    
+
     /**
      * Auto generated value setter.
      * @param logicalId the logicalId to set
@@ -68,29 +72,51 @@ public class OagisMessageInfoPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getLogicalId() {
         return this.logicalId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getComponent() {
         return this.component;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getTask() {
         return this.task;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getReferenceId() {
         return this.referenceId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(logicalId).append("*");
+            sb.append(component).append("*");
+            sb.append(task).append("*");
+            sb.append(referenceId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof OagisMessageInfoPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

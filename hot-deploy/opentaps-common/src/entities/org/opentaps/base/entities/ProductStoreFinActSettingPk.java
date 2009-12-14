@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class ProductStoreFinActSettingPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="PRODUCT_STORE_ID")
     private String productStoreId;
     @Column(name="FIN_ACCOUNT_TYPE_ID")
     private String finAccountTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param productStoreId the productStoreId to set
@@ -50,15 +54,35 @@ public class ProductStoreFinActSettingPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getProductStoreId() {
         return this.productStoreId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFinAccountTypeId() {
         return this.finAccountTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(productStoreId).append("*");
+            sb.append(finAccountTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof ProductStoreFinActSettingPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

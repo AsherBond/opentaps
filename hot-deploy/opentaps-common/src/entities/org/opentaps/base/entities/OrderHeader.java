@@ -137,14 +137,14 @@ fieldMapColumns.put("OrderHeader", fields);
    @Id
    @DocumentId
    @org.hibernate.search.annotations.Fields( {
-       @Field(index=Index.TOKENIZED, store=Store.YES),
+       @Field(index=Index.TOKENIZED, store=Store.NO),
      @Field(index=Index.UN_TOKENIZED, store=Store.YES)
    } )
    @Boost(10f)
    @Column(name="ORDER_ID")
    private String orderId;
    @org.hibernate.search.annotations.Fields( {
-       @Field(index=Index.TOKENIZED, store=Store.YES),
+       @Field(index=Index.TOKENIZED, store=Store.NO),
      @Field(index=Index.UN_TOKENIZED, store=Store.YES)
    } )
    @Boost(1f)
@@ -159,7 +159,7 @@ fieldMapColumns.put("OrderHeader", fields);
    @Column(name="EXTERNAL_ID")
    private String externalId;
    @org.hibernate.search.annotations.Fields( {
-       @Field(index=Index.TOKENIZED, store=Store.YES),
+       @Field(index=Index.TOKENIZED, store=Store.NO),
      @Field(index=Index.UN_TOKENIZED, store=Store.YES)
    } )
    @Boost(1f)
@@ -174,7 +174,7 @@ fieldMapColumns.put("OrderHeader", fields);
    @Column(name="VISIT_ID")
    private String visitId;
    @org.hibernate.search.annotations.Fields( {
-       @Field(index=Index.TOKENIZED, store=Store.YES),
+       @Field(index=Index.TOKENIZED, store=Store.NO),
      @Field(index=Index.UN_TOKENIZED, store=Store.YES)
    } )
    @Boost(1f)

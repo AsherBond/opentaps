@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class EntityGroupEntryPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="ENTITY_GROUP_ID")
     private String entityGroupId;
     @Column(name="ENTITY_OR_PACKAGE")
     private String entityOrPackage;
-    
+
     /**
      * Auto generated value setter.
      * @param entityGroupId the entityGroupId to set
@@ -50,15 +54,35 @@ public class EntityGroupEntryPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getEntityGroupId() {
         return this.entityGroupId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getEntityOrPackage() {
         return this.entityOrPackage;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(entityGroupId).append("*");
+            sb.append(entityOrPackage).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof EntityGroupEntryPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

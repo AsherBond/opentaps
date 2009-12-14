@@ -62,10 +62,9 @@ public class DataResourceAttributePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         DataResourceAttributePk id = (DataResourceAttributePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getDataResourceId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getAttrName());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class DataResourceAttributePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }

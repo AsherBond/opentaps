@@ -27,11 +27,15 @@ import java.lang.String;
 
 @Embeddable
 public class FixedAssetIdentPk implements Serializable {
+
+    @Transient
+    private int _cached_hc = 0;
+
     @Column(name="FIXED_ASSET_ID")
     private String fixedAssetId;
     @Column(name="FIXED_ASSET_IDENT_TYPE_ID")
     private String fixedAssetIdentTypeId;
-    
+
     /**
      * Auto generated value setter.
      * @param fixedAssetId the fixedAssetId to set
@@ -50,15 +54,35 @@ public class FixedAssetIdentPk implements Serializable {
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFixedAssetId() {
         return this.fixedAssetId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
-     */  
+     */
     public String getFixedAssetIdentTypeId() {
         return this.fixedAssetIdentTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        if (_cached_hc == 0) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(fixedAssetId).append("*");
+            sb.append(fixedAssetIdentTypeId).append("*");
+            _cached_hc = sb.toString().hashCode();
+        }
+        return _cached_hc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof FixedAssetIdentPk) {
+            return o.hashCode() == this.hashCode();
+        } else {
+            return false;
+        }
     }
 }

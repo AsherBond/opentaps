@@ -62,10 +62,9 @@ public class ProductPromoRulePkBridge implements TwoWayFieldBridge {
      */
     public String objectToString(Object object) {
         ProductPromoRulePk id = (ProductPromoRulePk) object;
-        StringBuilder sb = new StringBuilder("");
-        
+        StringBuilder sb = new StringBuilder();
         sb.append(id.getProductPromoId());
-        sb.append(" ");
+        sb.append("_");
         sb.append(id.getProductPromoRuleId());
         return sb.toString();
     }
@@ -94,6 +93,7 @@ public class ProductPromoRulePkBridge implements TwoWayFieldBridge {
 
         field = new Field(name, objectToString(id), store, index, termVector);
         field.setBoost(boost);
+        document.add(field);
     }
 
 }
