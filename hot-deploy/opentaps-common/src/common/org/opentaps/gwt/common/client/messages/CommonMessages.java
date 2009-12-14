@@ -2732,6 +2732,8 @@ public interface CommonMessages extends Messages {
     String crmApprovedOrdersOnly();
     @DefaultMessage("Assign")
     String crmAssign();
+    @DefaultMessage("Assign Account")
+    String crmAssignAccount();
     @DefaultMessage("Assign Contact")
     String crmAssignContact();
     @DefaultMessage("Assign Team")

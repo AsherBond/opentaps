@@ -14,11 +14,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package org.opentaps.gwt.crmsfa.client.contacts.form;
+package org.opentaps.gwt.crmsfa.client.accounts.form;
 
 import org.opentaps.gwt.common.client.UtilUi;
-import org.opentaps.gwt.common.client.listviews.ContactListView;
+import org.opentaps.gwt.common.client.listviews.AccountListView;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 
 import com.google.gwt.http.client.Request;
@@ -38,28 +37,21 @@ import com.gwtext.client.widgets.grid.GridPanel;
 import com.gwtext.client.widgets.grid.Renderer;
 import com.gwtext.client.widgets.grid.event.GridCellListenerAdapter;
 
+public class AccountsSublistView extends AccountListView {
 
-/**
- * A list of contacts for a given account.
- */
-public class ContactsSublistView extends ContactListView {
+    public static final String MODULE = AccountsSublistView.class.getName();
 
-    private static final String MODULE = ContactsSublistView.class.getName();
-
-    private final String entityId;
-    private boolean isOpportunity = false;
+    private String contactPartyId;
     private Integer deleteColumnIndex;
 
     /**
-     * Constructor with autoLoad parameter, use this constructor if some filters need to be set prior to loading the grid data.
-     * @param id the Id of the Account to list the contacts for or an opportunity
-     * @param isParentOpportunity ID is sales opportunity identifier if true, account otherwise
-     * @param autoLoad sets the grid autoLoad parameter, set to <code>false</code> if some filters need to be set prior to loading the grid data
+     * Public constructor w/ initializers.
+     * @param contactPartyId
+     * @param autoLoad
      */
-    public ContactsSublistView(String id, boolean isParentOpportunity, boolean autoLoad) {
+    public AccountsSublistView(String contactPartyId, boolean autoLoad) {
         super();
-        this.entityId = id;
-        isOpportunity = isParentOpportunity;
+        this.contactPartyId = contactPartyId;
         setHeader(false);
         setAutoLoad(autoLoad);
         init();
@@ -69,11 +61,11 @@ public class ContactsSublistView extends ContactListView {
     @Override
     public void init() {
 
-        String entityViewUrl = "/crmsfa/control/viewContact?partyId={0}";
+        String entityViewUrl = "/crmsfa/control/viewAccount?partyId={0}";
         StringFieldDef idDefinition = new StringFieldDef(PartyLookupConfiguration.INOUT_PARTY_ID);
 
         makeLinkColumn(UtilUi.MSG.contactId(), idDefinition, entityViewUrl, true);
-        makeLinkColumn(UtilUi.MSG.crmContactName(), idDefinition, new StringFieldDef(PartyLookupConfiguration.INOUT_FRIENDLY_PARTY_NAME), entityViewUrl, true);
+        makeLinkColumn(UtilUi.MSG.crmAccountName(), idDefinition, new StringFieldDef(PartyLookupConfiguration.INOUT_FRIENDLY_PARTY_NAME), entityViewUrl, true);
         makeColumn(UtilUi.MSG.city(), new StringFieldDef(PartyLookupConfiguration.INOUT_CITY));
         makeColumn(UtilUi.MSG.crmPrimaryEmail(), new StringFieldDef(PartyLookupConfiguration.OUT_EMAIL));
         makeColumn(UtilUi.MSG.crmPrimaryPhone(), new StringFieldDef(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER));
@@ -85,49 +77,45 @@ public class ContactsSublistView extends ContactListView {
         makeColumn(UtilUi.MSG.country(), new StringFieldDef(PartyLookupConfiguration.INOUT_COUNTRY));
         makeColumn(UtilUi.MSG.postalCode(), new StringFieldDef(PartyLookupConfiguration.INOUT_POSTAL_CODE));
         makeColumn(UtilUi.MSG.postalCodeExt(), new StringFieldDef(PartyLookupConfiguration.OUT_POSTAL_CODE_EXT));
+
+        // add last column if logged in user has required permission
         deleteColumnIndex = getCurrentColumnIndex();
-        ColumnConfig config = makeColumn("", new Renderer() {
+        if (hasAccountsRemoveAbility()) {
+            ColumnConfig config = makeColumn("", new Renderer() {
                 public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
                     return Format.format("<img width=\"15\" height=\"15\" class=\"checkbox\" src=\"{0}\"/>", UtilUi.ICON_DELETE);
                 }
             });
-        config.setWidth(26);
-        config.setResizable(false);
-        config.setFixed(true);
-        config.setSortable(false);
+            config.setWidth(26);
+            config.setResizable(false);
+            config.setFixed(true);
+            config.setSortable(false);
 
-        addGridCellListener(new GridCellListenerAdapter() {
-            private final String actionUrl = isOpportunity ?
-                    "/crmsfa/control/removeContactFromOpportunity"
-                    : "/crmsfa/control/removeContactFromAccount";
+            addGridCellListener(new GridCellListenerAdapter() {
+                private final String actionUrl = "/crmsfa/control/removeContactFromAccount";
 
                 /** {@inheritDoc} */
                 @Override
                 public void onCellClick(GridPanel grid, int rowIndex, int colindex, EventObject e) {
-                    if (colindex == ContactsSublistView.this.deleteColumnIndex) {
-                        String contactPartyId = getStore().getRecordAt(rowIndex).getAsString("partyId");
+                    if (colindex == AccountsSublistView.this.deleteColumnIndex) {
+                        String accountPartyId = getStore().getRecordAt(rowIndex).getAsString("partyId");
                         RequestBuilder request = new RequestBuilder(RequestBuilder.POST, actionUrl);
                         request.setHeader("Content-type", "application/x-www-form-urlencoded");
-                        if (isOpportunity) {
-                            request.setRequestData(Format.format("salesOpportunityId={0}&contactPartyId={1}", ContactsSublistView.this.entityId, contactPartyId));
-                        } else {
-                            request.setRequestData(Format.format("partyId={0}&accountPartyId={0}&contactPartyId={1}", ContactsSublistView.this.entityId, contactPartyId));
-                        }
+                        request.setRequestData(Format.format("partyId={0}&contactPartyId={0}&accountPartyId={1}", AccountsSublistView.this.contactPartyId, accountPartyId));
                         request.setCallback(new RequestCallback() {
-                                public void onError(Request request, Throwable exception) {
-                                    // display error message
-                                    markGridNotBusy();
-                                    UtilUi.errorMessage(exception.toString());
-                                }
-                                public void onResponseReceived(Request request, Response response) {
-                                    // if it is a correct response, reload the grid
-                                    markGridNotBusy();
-                                    UtilUi.logInfo("onResponseReceived, response = " + response, MODULE, "ContactListView.init()");
-                                    // commit store changes
-                                    getStore().reload();
-                                    loadFirstPage();
-                                }
-                            });
+                            public void onError(Request request, Throwable exception) {
+                                // display error message
+                                markGridNotBusy();
+                                UtilUi.errorMessage(exception.toString());
+                            }
+                            public void onResponseReceived(Request request, Response response) {
+                                // if it is a correct response, reload the grid
+                                markGridNotBusy();
+                                UtilUi.logInfo("onResponseReceived, response = " + response, MODULE, "ContactListView.init()");
+                                getStore().reload();
+                                loadFirstPage();
+                            }
+                        });
 
                         try {
                             markGridBusy();
@@ -142,8 +130,9 @@ public class ContactsSublistView extends ContactListView {
                 }
 
             });
+        }
 
-        configure(PartyLookupConfiguration.URL_FIND_CONTACTS, PartyLookupConfiguration.INOUT_PARTY_ID, SortDir.ASC);
+        configure(PartyLookupConfiguration.URL_FIND_ACCOUNTS, PartyLookupConfiguration.INOUT_PARTY_ID, SortDir.ASC);
 
         // by default, hide non essential columns
         setColumnHidden(PartyLookupConfiguration.INOUT_PARTY_ID, true);
@@ -156,4 +145,13 @@ public class ContactsSublistView extends ContactListView {
         setColumnHidden(PartyLookupConfiguration.INOUT_POSTAL_CODE, true);
         setColumnHidden(PartyLookupConfiguration.OUT_POSTAL_CODE_EXT, true);
     }
+
+    public void filterByContact(String partyId) {
+        contactPartyId = partyId;
+        setFilter(PartyLookupConfiguration.IN_PARTY_ID_FROM, contactPartyId);
+    }
+
+    public static native boolean hasAccountsRemoveAbility()/*-{
+        return $wnd.securityUser.CRMSFA_CONTACT_UPDATE;
+    }-*/;
 }

@@ -16,11 +16,18 @@
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmAccounts}</div>
-    <!-- TODO: this update permission is not the ACCOUNTS_UPDATE one, so what do we do here?
-    <#if hasUpdatePermission?exists>
-    <div class="subMenuBar"><a class="subMenuButton" href="createAccountForm?contactPartyId=${partySummary.partyId}">${uiLabelMap.CrmCreateNew}</a></div>
-    </#if>
-    -->
-</div>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<@sectionHeader title=uiLabelMap.CrmAccounts>
+<#if hasUpdatePermission?exists>
+    <div class="subMenuBar" id="assignAccountToContact">
+        <#--
+        TODO: this update permission is not the ACCOUNTS_UPDATE one, so what do we do here?
+        <@displayLink href="createAccountForm?contactPartyId=${partySummary.partyId}" text="${uiLabelMap.CrmCreateNew}" class="subMenuButton"/>
+        -->
+        <#-- Empty on purpose. GWT widget installs button later. --> 
+    </div>
+</#if>
+</@sectionHeader>
+
+<@gwtWidget id="contactAccountsSubListView" partyId="${partySummary.partyId}"/>

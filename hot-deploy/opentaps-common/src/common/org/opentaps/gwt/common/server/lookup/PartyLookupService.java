@@ -34,16 +34,16 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
-import org.opentaps.common.util.ConvertMapToString;
-import org.opentaps.common.util.ICompositeValue;
 import org.opentaps.base.constants.PartyRelationshipTypeConstants;
 import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.entities.PartyFromByRelnAndContactInfoAndPartyClassification;
 import org.opentaps.base.entities.PartyRoleNameDetailSupplementalData;
+import org.opentaps.base.entities.PartyToSummaryByRelationship;
 import org.opentaps.base.entities.SalesOpportunityRole;
+import org.opentaps.common.util.ConvertMapToString;
+import org.opentaps.common.util.ICompositeValue;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
@@ -552,7 +552,48 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         }
 
         /*
-         * 
+         * Find accounts which are parent for particular contact.
+         */
+        if (getProvider().parameterIsPresent(PartyLookupConfiguration.IN_PARTY_ID_FROM)) {
+
+            setActiveOnly(true);
+
+            // find list of account ID from PartyToSummaryByRelationship entity.
+            String partyIdFrom = getProvider().getParameter(PartyLookupConfiguration.IN_PARTY_ID_FROM);
+            if (UtilValidate.isEmail(partyIdFrom)) {
+                return new ArrayList<T>();
+            }
+
+            Set<String> accountIds = null;
+            try {
+                accountIds = Entity.getDistinctFieldValues(
+                        String.class,
+                        getRepository().findList(
+                                PartyToSummaryByRelationship.class,
+                                EntityCondition.makeCondition(
+                                        Arrays.asList(
+                                                EntityCondition.makeCondition(PartyToSummaryByRelationship.Fields.roleTypeIdFrom.getName(), RoleTypeConstants.CONTACT),
+                                                EntityCondition.makeCondition(PartyToSummaryByRelationship.Fields.roleTypeIdTo.getName(), RoleTypeConstants.ACCOUNT),
+                                                EntityCondition.makeCondition(PartyToSummaryByRelationship.Fields.partyRelationshipTypeId.getName(), PartyRelationshipTypeConstants.CONTACT_REL_INV),
+                                                EntityCondition.makeCondition(PartyToSummaryByRelationship.Fields.partyIdFrom.getName(), partyIdFrom),
+                                                EntityUtil.getFilterByDateExpr()),
+                                                EntityOperator.AND)
+                        ),
+                        PartyToSummaryByRelationship.Fields.partyId
+                );
+            } catch (RepositoryException e) {
+                storeException(e);
+                return null;
+            }
+            EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(UtilMisc.toList(
+                    condition,
+                    EntityCondition.makeCondition(PartyLookupConfiguration.INOUT_PARTY_ID, EntityOperator.IN, accountIds)
+            ));
+            return findAllParties(entity, conditions);
+        }
+
+        /*
+         * Find accounts assigned to an opportunity.
          */
         if (getProvider().parameterIsPresent(PartyLookupConfiguration.IN_SALES_OPPORTUNITY_ID)) {
             String opportunityId = getProvider().getParameter(PartyLookupConfiguration.IN_SALES_OPPORTUNITY_ID);
@@ -572,8 +613,8 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                             SalesOpportunityRole.Fields.partyId
                     );
                 } catch (RepositoryException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    storeException(e);
+                    return null;
                 }
                 return findAllParties(entity, 
                         EntityCondition.makeCondition(
@@ -587,7 +628,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     }
 
     private <T extends EntityInterface> List<T> findAllParties(Class<T> entity, EntityCondition roleCondition) {
-        List<EntityCondition> conditions = Arrays.asList(roleCondition);
+        List<EntityCondition> conditions = UtilMisc.toList(roleCondition);
         if (activeOnly) {
             conditions.add(EntityUtil.getFilterByDateExpr());
         }

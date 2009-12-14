@@ -78,15 +78,6 @@ if (contactActive) {
     // who is currently responsible for contact
     context.put("responsibleParty", responsibleParty);
 
-    // contact accounts
-    findParams = UtilMisc.toMap("entityName", "PartyToSummaryByRelationship",
-            "inputFields", UtilMisc.toMap("partyIdFrom", partyId, "roleTypeIdFrom", "CONTACT", "roleTypeIdTo", "ACCOUNT", "partyRelationshipTypeId", "CONTACT_REL_INV"),
-            "filterByDate", "Y");
-    findParams.put("orderBy", "groupName");
-    
-    results = dispatcher.runSync("performFind", findParams);
-    context.put("accountsListIt", results.get("listIt"));
-
     //*************** order data ********************
     desiredOrderStatuses = UtilMisc.toList("ORDER_APPROVED", "ORDER_CREATED", "ORDER_HOLD");
     ordersOrderBy = parameters.get("ordersOrderBy");

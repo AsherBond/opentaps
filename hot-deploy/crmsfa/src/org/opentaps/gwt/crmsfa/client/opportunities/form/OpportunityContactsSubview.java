@@ -19,6 +19,7 @@ package org.opentaps.gwt.crmsfa.client.opportunities.form;
 
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.FindPartyForm;
+import org.opentaps.gwt.common.client.form.ServiceErrorReader;
 import org.opentaps.gwt.common.client.form.base.SubFormPanel;
 import org.opentaps.gwt.common.client.listviews.ContactListView;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
@@ -28,7 +29,6 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
-import com.google.gwt.http.client.URL;
 import com.gwtext.client.core.EventObject;
 import com.gwtext.client.core.SortDir;
 import com.gwtext.client.data.Record;
@@ -40,6 +40,7 @@ import com.gwtext.client.widgets.grid.ColumnConfig;
 import com.gwtext.client.widgets.grid.GridPanel;
 import com.gwtext.client.widgets.grid.Renderer;
 import com.gwtext.client.widgets.grid.event.GridCellListenerAdapter;
+
 
 /**
  * A combination of a contacts list view and a tabbed form used to filter that list view.
@@ -94,13 +95,14 @@ public class OpportunityContactsSubview extends FindPartyForm {
                 config.setSortable(false);
 
                 addGridCellListener(new GridCellListenerAdapter() {
+                    private final String actionUrl = "/crmsfa/control/removeContactFromAccount";
 
                     /** {@inheritDoc} */
                     @Override
                     public void onCellClick(GridPanel grid, int rowIndex, int colindex, EventObject e) {
                         if (colindex == OpportunityContactsSubview.this.deleteColumnIndex) {
                             String contactPartyId = getStore().getRecordAt(rowIndex).getAsString("partyId");
-                            RequestBuilder request = new RequestBuilder(RequestBuilder.POST, URL.encode(Format.format("/crmsfa/control/removeContactFromAccount", OpportunityContactsSubview.this.accountPartyId, contactPartyId)));
+                            RequestBuilder request = new RequestBuilder(RequestBuilder.POST, actionUrl);
                             request.setHeader("Content-type", "application/x-www-form-urlencoded");
                             request.setRequestData(Format.format("partyId={0}&accountPartyId={0}&contactPartyId={1}", OpportunityContactsSubview.this.accountPartyId, contactPartyId));
                             request.setCallback(new RequestCallback() {
@@ -113,11 +115,11 @@ public class OpportunityContactsSubview extends FindPartyForm {
                                     // if it is a correct response, reload the grid
                                     markGridNotBusy();
                                     UtilUi.logInfo("onResponseReceived, response = " + response, MODULE, "ContactListView.init()");
-                                    //if (!ServiceErrorReader.showErrorMessageIfAny(response, saveAllUrl)) {
-                                    // commit store changes
-                                    getStore().reload();
-                                    loadFirstPage();
-                                    //}
+                                    if (!ServiceErrorReader.showErrorMessageIfAny(response, actionUrl)) {
+                                        // commit store changes
+                                        getStore().reload();
+                                        loadFirstPage();
+                                    }
                                 }
                             });
 

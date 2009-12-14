@@ -141,15 +141,4 @@
         <field name="submitButton" title="${uiLabelMap.CrmReassign}" widget-style="smallSubmit"><submit button-type="button"/></field>
     </form>
 
-    <!-- form to assign a contact to an account -->
-    <form name="assignAccountToContactForm" type="single" target="assignAccountToContact"
-        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
-        <field name="partyId"><hidden value="${parameters.partyId}"/></field> <!-- this one allows the form to return to viewContact with the correct partyId -->
-        <field name="contactPartyId"><hidden value="${parameters.partyId}"/></field>
-        <field name="accountPartyId" position="1" title="${uiLabelMap.CrmNewAccount}" widget-style="inputBox">
-            <lookup target-form-name="LookupAccounts" size="20" maxlength="20"/>
-        </field>
-        <field name="submitButton" title="${uiLabelMap.CrmAssign}" widget-style="smallSubmit"><submit button-type="button"/></field>
-    </form>
-
 </forms>

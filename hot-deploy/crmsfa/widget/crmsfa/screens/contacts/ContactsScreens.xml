@@ -253,17 +253,11 @@
 
                         <!-- Accounts section -->
                         <container style="subSectionBlock">
-                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/contacts/submenus/contactAccountsMenu.ftl"/></html></platform-specific>
-                            <include-form name="ListAccounts" location="component://crmsfa/widget/crmsfa/forms/accounts/AccountsForms.xml"/>
-                            <!-- assign accounts to this contact -->
-                            <section>
-                                <condition><if-compare field="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
-                                <widgets>
-                                    <include-form name="assignAccountToContactForm" location="component://crmsfa/widget/crmsfa/forms/contacts/ContactsForms.xml"/>
-                                </widgets>
-                            </section>
+                            <platform-specific>
+                                <html><html-template location="component://crmsfa/webapp/crmsfa/contacts/contactAccounts.ftl"/></html>
+                            </platform-specific>
                         </container>
-                        
+
                         <!-- Orders section -->
                         <container style="subSectionBlock">
                             <platform-specific><html>
