@@ -19,6 +19,7 @@ under the License.
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 <#assign externalKeyParam = "&externalLoginKey=" + requestAttributes.externalLoginKey?if_exists>
 <div class="screenlet">
+  <#if product?exists>
     <div class="screenlet-title-bar">
         <h3>${uiLabelMap.ProductInventoryItems} ${uiLabelMap.CommonFor} <#if product?exists>${(product.internalName)?if_exists} </#if> [${uiLabelMap.CommonId}:${productId?if_exists}]</h3>
     </div>
