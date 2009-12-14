@@ -23,8 +23,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import javolution.util.FastList;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.webapp.control.LoginWorker;
 import org.opentaps.base.entities.OpentapsWebApps;
 import org.opentaps.domain.webapp.WebAppRepositoryInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
@@ -56,11 +58,12 @@ public class WebAppLookupService  extends EntityLookupService {
         WebAppLookupService service = new WebAppLookupService(provider);
         // get current application id
         String currentApplicationId = UtilHttp.getApplicationName(request);
-        service.findWebApps(currentApplicationId);
+        String externalLoginKey = LoginWorker.getExternalLoginKey(request);
+        service.findWebApps(currentApplicationId, externalLoginKey);
         return json.makeLookupResponse(WebAppLookupConfiguration.OUT_APPLICATION_ID, service, request.getSession(true).getServletContext());
     }
     
-    public List<? extends OpentapsWebApps> findWebApps(String currentApplicationId) {
+    public List<? extends OpentapsWebApps> findWebApps(String currentApplicationId, String externalLoginKey) {
         try {
             WebAppRepositoryInterface webAppRepository = getDomainsDirectory().getWebAppDomain().getWebAppRepository();
             List<? extends OpentapsWebApps> webapps = webAppRepository.getWebApps(getProvider().getUser());
@@ -71,7 +74,6 @@ public class WebAppLookupService  extends EntityLookupService {
                 if (webapp.getApplicationId().equals(currentApplicationId)) {
                     currentWebApps = webapp;
                 }
-                String externalLoginKey = getProvider().getParameter("externalLoginKey");
                 // add ext login parameter for single sign on
                 if (UtilValidate.isNotEmpty(externalLoginKey)) {
                     webapp.setLinkUrl(webapp.getLinkUrl() + "?externalLoginKey=" + externalLoginKey);
