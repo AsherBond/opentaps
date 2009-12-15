@@ -149,10 +149,10 @@ div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${f
         <a href="<@ofbizUrl>myProfile</@ofbizUrl>" class="linktext">${uiLabelMap.PartyProfile}</a> |
       </#if>
         <#if keyboardShortcuts?has_content>
-          <a class="linktext" style="vertical-align:text-top;" href="javascript:showKeyboardShortcutsHelp();" title="${uiLabelMap.OpentapsHelpShortcuts}">${uiLabelMap.OpentapsHelpShortcuts}</a> |
+          <a class="linktext" style="vertical-align:text-top;" href="javascript:showKeyboardShortcutsHelp();" title="${uiLabelMap.OpentapsHelpShortcuts}">${uiLabelMap.OpentapsHelpShortcuts}</a>
         </#if>
       <#if requestAttributes.userLogin?has_content>
-        <a href="<@ofbizUrl>logout</@ofbizUrl>" class="linktext">${uiLabelMap.CommonLogout}</a>
+        | <a href="<@ofbizUrl>logout</@ofbizUrl>" class="linktext">${uiLabelMap.CommonLogout}</a>
       </#if> 
      </div>
     <#-- change facility or organization -->
