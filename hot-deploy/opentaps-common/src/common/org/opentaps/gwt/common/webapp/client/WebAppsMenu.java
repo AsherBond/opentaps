@@ -44,10 +44,9 @@ public class WebAppsMenu extends BaseEntry {
     public static final RecordDef WEB_APPS_RECORD_DEF = new RecordDef(
             new FieldDef[]{
                 new StringFieldDef(WebAppLookupConfiguration.OUT_APPLICATION_ID),
-                new StringFieldDef(WebAppLookupConfiguration.OUT_APPLICATION_NAME),
-                new StringFieldDef(WebAppLookupConfiguration.OUT_DESCRIPTION),
                 new StringFieldDef(WebAppLookupConfiguration.OUT_LINK_URL),
-                new StringFieldDef(WebAppLookupConfiguration.OUT_SEQUENCE_NUM)
+                new StringFieldDef(WebAppLookupConfiguration.OUT_SEQUENCE_NUM),
+                new StringFieldDef(WebAppLookupConfiguration.OUT_SHORT_NAME)
             }
     );
     /**
@@ -91,15 +90,13 @@ public class WebAppsMenu extends BaseEntry {
         for (int i=0; i < records.length; i++) {
             Record record = records[i];
             String applicationId = record.getAsString(WebAppLookupConfiguration.OUT_APPLICATION_ID);
+            String shortName = record.getAsString(WebAppLookupConfiguration.OUT_SHORT_NAME);
+            final String linkUrl = record.getAsString(WebAppLookupConfiguration.OUT_LINK_URL);
             if (applicationId != null) {
-                final String linkUrl = record.getAsString(WebAppLookupConfiguration.OUT_LINK_URL);
                 Command command = null;
-                String menuText = null;
                 String menuStyle = "";
                 if (linkUrl != null && !"".equals(linkUrl)) {
-                    // up case first char and bold the string
-                    menuText = Character.toUpperCase(applicationId.charAt(0)) + applicationId.substring(1);
-                    menuStyle = "linkMenu";
+                    menuStyle = i <= DISPLAY_MENU_ITEMS ? "linkMenu" : "textMenu";
                     command = new Command()
                     {
                         public void execute()
@@ -108,14 +105,12 @@ public class WebAppsMenu extends BaseEntry {
                         }
                     };
                 } else {
-                    // up case first char and create under line for the string
-                    menuText = Character.toUpperCase(applicationId.charAt(0)) + applicationId.substring(1);
                     menuStyle = "textMenu";
                     // null command
                     command = new Command() {public void execute(){}};
                 }
                 
-                MenuItem menuItem = new MenuItem(menuText, command);
+                MenuItem menuItem = new MenuItem(shortName, command);
                 menuItem.addStyleName(menuStyle);
                 if (i <= DISPLAY_MENU_ITEMS) {
                     // The top 5 should be shown above logo.

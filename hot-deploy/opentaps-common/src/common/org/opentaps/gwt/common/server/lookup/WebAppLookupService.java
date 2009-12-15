@@ -26,6 +26,7 @@ import javolution.util.FastList;
 
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.cache.UtilCache;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.webapp.control.LoginWorker;
 import org.opentaps.base.entities.OpentapsWebApps;
@@ -41,7 +42,7 @@ import org.opentaps.gwt.common.server.InputProviderInterface;
 public class WebAppLookupService  extends EntityLookupService {
 
     private static final String MODULE = WebAppLookupService.class.getName();
-
+    protected static UtilCache<String, List<? extends OpentapsWebApps>> webappsCache = new UtilCache<String, List<? extends OpentapsWebApps>>("menu.webapps", 0, 0, false);;
     protected WebAppLookupService(InputProviderInterface provider) {
         super(provider, WebAppLookupConfiguration.LIST_OUT_FIELDS);
     }
@@ -70,33 +71,46 @@ public class WebAppLookupService  extends EntityLookupService {
     
     public List<? extends OpentapsWebApps> findWebApps(String currentApplicationId, String externalLoginKey) {
         try {
-            WebAppRepositoryInterface webAppRepository = getDomainsDirectory().getWebAppDomain().getWebAppRepository();
-            List<? extends OpentapsWebApps> webapps = webAppRepository.getWebApps(getProvider().getUser());
-            // move current apps to top
+            String userLoginId = getProvider().getUser() == null ? "" : getProvider().getUser().getUserId();
             List<OpentapsWebApps> sortedWebapps = new FastList();
-            OpentapsWebApps currentWebApps = null;
-            for (OpentapsWebApps webapp : webapps) {
-                if (webapp.getApplicationId().equals(currentApplicationId)) {
-                    currentWebApps = webapp;
+            List<? extends OpentapsWebApps> webapps;
+            if (webappsCache.containsKey(userLoginId)) {
+                webapps = webappsCache.get(userLoginId);
+            } else {
+                WebAppRepositoryInterface webAppRepository = getDomainsDirectory().getWebAppDomain().getWebAppRepository();
+                webapps = webAppRepository.getWebApps(getProvider().getUser());
+                // cache the webapps
+                synchronized (webappsCache) {
+                    webappsCache.put(userLoginId, webapps);
                 }
+            }
+            for (OpentapsWebApps webapp : webapps) {
+                OpentapsWebApps returnWebApp = new OpentapsWebApps();
+                // prepare the OpentapsWebApps for return
+                returnWebApp.fromEntity(webapp);
+
                 // add ext login parameter for single sign on
                 if (UtilValidate.isNotEmpty(externalLoginKey)) {
-                    webapp.setLinkUrl(webapp.getLinkUrl() + "?externalLoginKey=" + externalLoginKey);
+                    returnWebApp.setLinkUrl(returnWebApp.getLinkUrl() + "?externalLoginKey=" + externalLoginKey);
+                }
+                if (returnWebApp.getApplicationId().equals(currentApplicationId)) {
+                    // set empty string to link
+                    returnWebApp.setLinkUrl("");
+                    // move current app to top
+                    sortedWebapps.add(0, returnWebApp);
+                } else {
+                    sortedWebapps.add(returnWebApp);
                 }
             }
-            if (currentWebApps != null) {
-                // set empty string to linkurl, for we not want to create link for the current webapp menu item
-                currentWebApps.setLinkUrl("");
-                // add it as top item
-                sortedWebapps.add(currentWebApps);
-                webapps.remove(currentWebApps);
-            }
+
             // add other items
-            sortedWebapps.addAll(webapps);
             setResultTotalCount(sortedWebapps.size());
             setResults(sortedWebapps);
             return sortedWebapps;
         } catch (RepositoryException e) {
+            storeException(e);
+            return null;
+        } catch (InfrastructureException e) {
             storeException(e);
             return null;
         }

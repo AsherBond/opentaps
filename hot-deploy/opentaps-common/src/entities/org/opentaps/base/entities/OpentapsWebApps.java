@@ -55,6 +55,7 @@ public class OpentapsWebApps extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("applicationId", "APPLICATION_ID");
+        fields.put("shortName", "SHORT_NAME");
         fields.put("applicationName", "APPLICATION_NAME");
         fields.put("description", "DESCRIPTION");
         fields.put("imageUrl", "IMAGE_URL");
@@ -69,6 +70,7 @@ fieldMapColumns.put("OpentapsWebApps", fields);
 }
   public static enum Fields implements EntityFieldInterface<OpentapsWebApps> {
     applicationId("applicationId"),
+    shortName("shortName"),
     applicationName("applicationName"),
     description("description"),
     imageUrl("imageUrl"),
@@ -94,6 +96,8 @@ fieldMapColumns.put("OpentapsWebApps", fields);
    @Id
    @Column(name="APPLICATION_ID")
    private String applicationId;
+   @Column(name="SHORT_NAME")
+   private String shortName;
    @Column(name="APPLICATION_NAME")
    private String applicationName;
    @Column(name="DESCRIPTION")
@@ -126,7 +130,7 @@ fieldMapColumns.put("OpentapsWebApps", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("applicationId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("applicationId");this.allFieldsNames.add("applicationName");this.allFieldsNames.add("description");this.allFieldsNames.add("imageUrl");this.allFieldsNames.add("imageHoverUrl");this.allFieldsNames.add("linkUrl");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("applicationId");this.allFieldsNames.add("shortName");this.allFieldsNames.add("applicationName");this.allFieldsNames.add("description");this.allFieldsNames.add("imageUrl");this.allFieldsNames.add("imageHoverUrl");this.allFieldsNames.add("linkUrl");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -147,6 +151,13 @@ fieldMapColumns.put("OpentapsWebApps", fields);
      */
     public void setApplicationId(String applicationId) {
         this.applicationId = applicationId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param shortName the shortName to set
+     */
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
     /**
      * Auto generated value setter.
@@ -230,6 +241,13 @@ fieldMapColumns.put("OpentapsWebApps", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getShortName() {
+        return this.shortName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getApplicationName() {
         return this.applicationName;
     }
@@ -305,6 +323,7 @@ fieldMapColumns.put("OpentapsWebApps", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setApplicationId((String) mapValue.get("applicationId"));
+        setShortName((String) mapValue.get("shortName"));
         setApplicationName((String) mapValue.get("applicationName"));
         setDescription((String) mapValue.get("description"));
         setImageUrl((String) mapValue.get("imageUrl"));
@@ -323,6 +342,7 @@ fieldMapColumns.put("OpentapsWebApps", fields);
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("applicationId", getApplicationId());
+        mapValue.put("shortName", getShortName());
         mapValue.put("applicationName", getApplicationName());
         mapValue.put("description", getDescription());
         mapValue.put("imageUrl", getImageUrl());

@@ -33,11 +33,11 @@ public abstract class WebAppLookupConfiguration {
     public static final String OUT_DESCRIPTION = "description";
     public static final String OUT_LINK_URL = "linkUrl";
     public static final String OUT_SEQUENCE_NUM = "sequenceNum";
+    public static final String OUT_SHORT_NAME = "shortName";
     public static final List<String> LIST_OUT_FIELDS = Arrays.asList(
             OUT_APPLICATION_ID,
-            OUT_APPLICATION_NAME,
-            OUT_DESCRIPTION,
             OUT_LINK_URL,
-            OUT_SEQUENCE_NUM
+            OUT_SEQUENCE_NUM,
+            OUT_SHORT_NAME
         );
 }
