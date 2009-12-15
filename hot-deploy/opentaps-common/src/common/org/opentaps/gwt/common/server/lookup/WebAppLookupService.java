@@ -20,12 +20,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import javolution.util.FastList;
 
-import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.GenericValue;
 import org.ofbiz.webapp.control.LoginWorker;
 import org.opentaps.base.entities.OpentapsWebApps;
 import org.opentaps.domain.webapp.WebAppRepositoryInterface;
@@ -56,6 +57,10 @@ public class WebAppLookupService  extends EntityLookupService {
         InputProviderInterface provider = new HttpInputProvider(request);
         JsonResponse json = new JsonResponse(response);
         WebAppLookupService service = new WebAppLookupService(provider);
+       // LoginWorker also to require this, so here it is:
+        HttpSession session = request.getSession(true);
+        GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
+        request.setAttribute("userLogin", userLogin);
         // get current application id
         String currentApplicationId = UtilHttp.getApplicationName(request);
         String externalLoginKey = LoginWorker.getExternalLoginKey(request);
@@ -96,4 +101,6 @@ public class WebAppLookupService  extends EntityLookupService {
             return null;
         }
     }
+    
+    
 }
