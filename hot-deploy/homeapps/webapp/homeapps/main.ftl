@@ -127,7 +127,7 @@
         <#assign appIndex = 0 />
         <#list apps as app>
             <#assign appIndex = appIndex + 1 />
-            <div id="button" class="${app.applicationId}" onmouseover="javascript:writeAppDetails('${app.applicationId?upper_case}','${app.applicationName}','${app.description}')">
+            <div id="button" class="${app.applicationId}" onmouseover="javascript:writeAppDetails('${app.shortName}','${app.applicationName}','${app.description}')">
 
                 <a href="${app.linkUrl}<#if externalKeyParam?exists>?${externalKeyParam}</#if>">
                    <img src="${app.imageUrl}" onmouseover="this.src='${app.imageHoverUrl}'" onmouseout="this.src='${app.imageUrl}'" />
