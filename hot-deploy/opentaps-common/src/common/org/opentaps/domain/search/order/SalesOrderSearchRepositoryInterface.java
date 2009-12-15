@@ -114,10 +114,16 @@ public interface SalesOrderSearchRepositoryInterface extends RepositoryInterface
     public void setViewPref(String viewPref);
 
     /**
-     * Sets the find all option to search for.
+     * Sets the find active orders only.
      * @param findAll a <code>String</code> value
      */
-    public void setFindAll(String findAll);
+    public void setFindActiveOnly(boolean findActiveOnly);
+    
+    /**
+     * Sets the find all desired orders only.
+     * @param findAll a <code>String</code> value
+     */
+    public void setFindDesiredOnly(boolean findDesiredOnly);
 
     /**
      * Sets the userLoginId of current login to search for.

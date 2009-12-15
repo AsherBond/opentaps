@@ -32,6 +32,7 @@ import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.entities.OrderHeaderAndItems;
 import org.opentaps.base.entities.OrderHeaderAndRoles;
+import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
 import org.opentaps.base.entities.ProductAndGoodIdentification;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.domain.DomainsDirectory;
@@ -60,7 +61,7 @@ public class PurchaseOrderSearchRepository  extends Repository implements Purcha
     private String supplierPartyId;
     private String fromDate;
     private String thruDate;
-    private String findAll;
+    private boolean findDesiredOnly = false;
     private Locale locale;
     private TimeZone timeZone;
     private List<String> orderBy;
@@ -125,8 +126,8 @@ public class PurchaseOrderSearchRepository  extends Repository implements Purcha
         searchConditions.add(EntityCondition.makeCondition(OrderHeaderAndRoles.Fields.orderTypeId.name(), EntityOperator.EQUALS, "PURCHASE_ORDER"));
         searchConditions.add(EntityCondition.makeCondition(OrderHeaderAndRoles.Fields.roleTypeId.name(), EntityOperator.EQUALS, "BILL_FROM_VENDOR"));
 
-        if (UtilValidate.isEmpty(findAll) || "N".equals(findAll)) {
-            searchConditions.add(EntityCondition.makeCondition(OrderHeaderAndRoles.Fields.statusId.name(), EntityOperator.IN, UtilMisc.toList("ORDER_CREATED", "ORDER_APPROVED", "ORDER_HOLD")));
+        if (findDesiredOnly) {
+            searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name(), EntityOperator.IN, UtilMisc.toList("ORDER_APPROVED", "ORDER_CREATED", "ORDER_HOLD")));
         }
         EntityCondition searchConditionList = EntityCondition.makeCondition(searchConditions, EntityOperator.AND);
 
@@ -203,12 +204,6 @@ public class PurchaseOrderSearchRepository  extends Repository implements Purcha
         this.thruDate = thruDate;
     }
 
-
-    /** {@inheritDoc} */
-    public void setFindAll(String findAll) {
-        this.findAll = findAll;
-    }
-
     /** {@inheritDoc} */
     public void setLocale(Locale locale) {
         this.locale = locale;
@@ -262,4 +257,9 @@ public class PurchaseOrderSearchRepository  extends Repository implements Purcha
         }
     }
 
+
+    /** {@inheritDoc} */
+    public void setFindDesiredOnly(boolean findDesiredOnly) {
+        this.findDesiredOnly = findDesiredOnly;
+    }
 }

@@ -30,6 +30,12 @@ import org.opentaps.common.util.UtilCommon;
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import com.opensourcestrategies.crmsfa.content.ContentHelper;
 
+import javolution.util.FastList;
+import org.opentaps.common.domain.order.OrderViewForListing;
+import org.opentaps.domain.DomainsDirectory;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.search.order.PurchaseOrderSearchRepositoryInterface;
+
 security = request.getAttribute("security");
 
 // userLogin
@@ -88,30 +94,27 @@ request.setAttribute("displayContactMechs", "Y");
 
 
 //  *************** order data ********************
-desiredOrderStatuses = UtilMisc.toList("ORDER_APPROVED", "ORDER_CREATED", "ORDER_HOLD");
 ordersOrderBy = parameters.get("ordersOrderBy");
 if (ordersOrderBy == null) ordersOrderBy = "orderDate DESC";
-//must specify minimum required fields so that the distinct select works
-fieldsToSelect = UtilMisc.toList("orderName", "orderId", "correspondingPoId", "statusId", "grandTotal", "partyId");
-fieldsToSelect.add("orderDate");
-//build the main condition
-conditionList = new EntityConditionList(UtilMisc.toList(
-            new EntityExpr("orderTypeId", EntityOperator.EQUALS, "PURCHASE_ORDER"),
-            new EntityExpr("partyId", EntityOperator.EQUALS, partyId),
-            new EntityExpr("roleTypeId", EntityOperator.EQUALS, "BILL_FROM_VENDOR"),
-            new EntityExpr("statusId", EntityOperator.IN, desiredOrderStatuses)
-            ), EntityOperator.AND);
-
-// 	perform the find
-myOrders = delegator.findListIteratorByCondition("OrderHeaderItemAndRoles", conditionList, null, 
-        fieldsToSelect, // fields to select (null => all)
-        UtilMisc.toList(ordersOrderBy), // fields to order by
-        // the first true here is for "specifyTypeAndConcur"
-        // the second true is for a distinct select.  Apparently this is the only way the entity engine can do a distinct query
-        new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true));
-
+dd = new DomainsLoader(request).loadDomainsDirectory();
+purchaseOrderSearchRepository = dd.getOrderDomain().getPurchaseOrderSearchRepository();
+userLoginId = userLogin.getString("userLoginId");
+// pass locale and timeZone instances for format the date string
+purchaseOrderSearchRepository.setLocale(locale);
+purchaseOrderSearchRepository.setTimeZone(timeZone);
+purchaseOrderSearchRepository.setOrganizationPartyId(organizationPartyId);
+purchaseOrderSearchRepository.setFindDesiredOnly(true);
+purchaseOrderSearchRepository.setSupplierPartyId(partyId);
+purchaseOrderSearchRepository.setOrderBy(UtilMisc.toList(ordersOrderBy));
+orders = purchaseOrderSearchRepository.findOrders();
+myOrders = FastList.newInstance();
+// return the map collection for the screen render
+for (OrderViewForListing order : orders) {
+    myOrders.add(order.toMap());
+}
 context.put("ordersListIt", myOrders);
 //  *************** order data ********************
+
 
 // supplier data sources
 sources = delegator.findByAnd("PartyDataSource", UtilMisc.toMap("partyId", partyId), UtilMisc.toList("fromDate DESC"));

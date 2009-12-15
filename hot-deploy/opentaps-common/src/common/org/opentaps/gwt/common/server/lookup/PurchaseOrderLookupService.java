@@ -123,8 +123,8 @@ public class PurchaseOrderLookupService extends EntityLookupAndSuggestService {
             if (UtilValidate.isNotEmpty(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_CREATED_BY))) {
                 purchaseOrderSearchRepository.setCreatedBy(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_CREATED_BY));
             }
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_FIND_ALL))) {
-                purchaseOrderSearchRepository.setFindAll(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_FIND_ALL));
+            if (UtilValidate.isEmpty(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_FIND_ALL)) || "N".equals(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_FIND_ALL))) {
+                purchaseOrderSearchRepository.setFindDesiredOnly(true);
             }
 
             // set sort conditions

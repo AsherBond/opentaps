@@ -134,8 +134,8 @@ public class SalesOrderLookupService extends EntityLookupAndSuggestService {
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SERIAL_NUMBER))) {
                 salesOrderSearchRepository.setSerialNumber(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SERIAL_NUMBER));
             }
-            if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_FIND_ALL))) {
-                salesOrderSearchRepository.setFindAll(getProvider().getParameter(SalesOrderLookupConfiguration.IN_FIND_ALL));
+            if (UtilValidate.isEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_FIND_ALL)) || "N".equals(getProvider().getParameter(SalesOrderLookupConfiguration.IN_FIND_ALL))) {
+                salesOrderSearchRepository.setFindActiveOnly(true);
             }
 
             // set sort conditions

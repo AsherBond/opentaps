@@ -61,7 +61,8 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
     private String thruDate;
     private String userLoginId;
     private String viewPref;
-    private String findAll;
+    private boolean findActiveOnly = false;
+    private boolean findDesiredOnly = false;
     private Locale locale;
     private TimeZone timeZone;
     private List<String> orderBy;
@@ -109,8 +110,11 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
                     EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.billFromPartyId.name(), EntityOperator.EQUALS, organizationPartyId));
             searchConditions.add(additionalConditions);
         }
-        if (UtilValidate.isEmpty(findAll) || "N".equals(findAll)) {
+        if (findActiveOnly) {
             searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name(), EntityOperator.IN, UtilMisc.toList("ORDER_APPROVED", "ORDER_CREATED", "ORDER_HOLD", "ORDER_PROCESSING")));
+        }
+        if (findDesiredOnly) {
+            searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name(), EntityOperator.IN, UtilMisc.toList("ORDER_APPROVED", "ORDER_CREATED", "ORDER_HOLD")));
         }
         EntityCondition searchConditionList = EntityCondition.makeCondition(searchConditions, EntityOperator.AND);
         List<EntityCondition> conds = new ArrayList<EntityCondition>();
@@ -297,11 +301,6 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
     }
 
     /** {@inheritDoc} */
-    public void setFindAll(String findAll) {
-        this.findAll = findAll;
-    }
-
-    /** {@inheritDoc} */
     public void setLocale(Locale locale) {
         this.locale = locale;
     }
@@ -311,4 +310,13 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
         this.timeZone = timeZone;
     }
 
+    /** {@inheritDoc} */
+    public void setFindActiveOnly(boolean findActiveOnly) {
+        this.findActiveOnly = findActiveOnly;
+    }
+
+    /** {@inheritDoc} */
+    public void setFindDesiredOnly(boolean findDesiredOnly) {
+        this.findDesiredOnly = findDesiredOnly;
+    }
 }

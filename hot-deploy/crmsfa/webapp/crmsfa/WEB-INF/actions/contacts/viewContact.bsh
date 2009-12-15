@@ -36,6 +36,12 @@ import com.opensourcestrategies.crmsfa.opportunities.UtilOpportunity;
 import com.opensourcestrategies.crmsfa.content.ContentHelper;
 import org.opentaps.common.util.UtilCommon;
 
+import javolution.util.FastList;
+import org.opentaps.common.domain.order.OrderViewForListing;
+import org.opentaps.domain.DomainsDirectory;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.search.order.SalesOrderSearchRepositoryInterface;
+
 /* finds all the information relevant to this contact and puts them in the context, so the various forms
 and FTLs of this screen can display them correctly */
 
@@ -78,29 +84,28 @@ if (contactActive) {
     // who is currently responsible for contact
     context.put("responsibleParty", responsibleParty);
 
-    //*************** order data ********************
-    desiredOrderStatuses = UtilMisc.toList("ORDER_APPROVED", "ORDER_CREATED", "ORDER_HOLD");
+
+    //  *************** order data ********************
     ordersOrderBy = parameters.get("ordersOrderBy");
     if (ordersOrderBy == null) ordersOrderBy = "orderDate DESC";
-    //must specify minimum required fields so that the distinct select works
-    fieldsToSelect = UtilMisc.toList("orderName", "orderId", "correspondingPoId", "statusId", "grandTotal", "partyId");
-    fieldsToSelect.add("orderDate");
-    //build the main condition
-    conditionList = new EntityConditionList(UtilMisc.toList(
-                new EntityExpr("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
-                new EntityExpr("partyId", EntityOperator.EQUALS, partyId),
-                new EntityExpr("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER"),
-                new EntityExpr("statusId", EntityOperator.IN, desiredOrderStatuses)
-                ), EntityOperator.AND);
-
-    // 	perform the find
-    myOrders = delegator.findListIteratorByCondition("OrderHeaderItemAndRoles", conditionList, null, 
-            fieldsToSelect, // fields to select (null => all)
-            UtilMisc.toList(ordersOrderBy), // fields to order by
-            // the first true here is for "specifyTypeAndConcur"
-            // the second true is for a distinct select.  Apparently this is the only way the entity engine can do a distinct query
-            new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true));
-    
+    dd = new DomainsLoader(request).loadDomainsDirectory();
+    salesOrderSearchRepository = dd.getOrderDomain().getSalesOrderSearchRepository();
+    organizationPartyId = UtilProperties.getPropertyValue("opentaps", "organizationPartyId");
+    userLoginId = userLogin.getString("userLoginId");
+    // pass locale and timeZone instances for format the date string
+    salesOrderSearchRepository.setLocale(locale);
+    salesOrderSearchRepository.setTimeZone(timeZone);
+    salesOrderSearchRepository.setUserLoginId(userLoginId);
+    salesOrderSearchRepository.setOrganizationPartyId(organizationPartyId);
+    salesOrderSearchRepository.setFindDesiredOnly(true);
+    salesOrderSearchRepository.setCustomerPartyId(partyId);
+    salesOrderSearchRepository.setOrderBy(UtilMisc.toList(ordersOrderBy));
+    orders = salesOrderSearchRepository.findOrders();
+    myOrders = FastList.newInstance();
+    // return the map collection for the screen render
+    for (OrderViewForListing order : orders) {
+        myOrders.add(order.toMap());
+    }
     context.put("ordersListIt", myOrders);
     //  *************** order data ********************
     

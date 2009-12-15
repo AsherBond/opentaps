@@ -86,10 +86,10 @@ public interface PurchaseOrderSearchRepositoryInterface  extends RepositoryInter
 
 
     /**
-     * Sets the find all option to search for.
+     * Sets the find all desired orders only.
      * @param findAll a <code>String</code> value
      */
-    public void setFindAll(String findAll);
+    public void setFindDesiredOnly(boolean findDesiredOnly);
 
 
     /**
