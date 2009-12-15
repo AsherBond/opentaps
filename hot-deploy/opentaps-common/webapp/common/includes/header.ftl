@@ -138,9 +138,9 @@ div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${f
 
     <div class="insideHeaderText">
       <#if person?has_content>
-        ${uiLabelMap.CommonWelcome}&nbsp;${person.firstName?if_exists}&nbsp;${person.lastName?if_exists} |
+        ${person.firstName?if_exists}&nbsp;${person.lastName?if_exists} |
       <#elseif partyGroup?has_content>
-        ${uiLabelMap.CommonWelcome}&nbsp;${partyGroup.groupName?if_exists} |
+        ${partyGroup.groupName?if_exists} |
       <#else>
       </#if>
       <#-- user, profile, shortcuts, logout buttons -->
