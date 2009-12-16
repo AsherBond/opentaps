@@ -64,6 +64,10 @@ public class OpentapsImporter {
     protected Object[] args;
     protected List<String> orderBy = null;
     protected int maxToImport = -1;
+    // define the constant for the status IDs
+    public static final String DATAIMP_NOT_PROC = "DATAIMP_NOT_PROC";
+    public static final String DATAIMP_FAILED = "DATAIMP_FAILED";
+    public static final String DATAIMP_IMPORTED = "DATAIMP_IMPORTED";
 
     // a positive failure threshold means we're counting, otherwise we're not
     protected int failureThreshold = 0;
@@ -149,8 +153,8 @@ public class OpentapsImporter {
      */
     public int runImport() throws GenericEntityException {
         EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
-                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, "DATAIMP_NOT_PROC"),
-                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, "DATAIMP_FAILED"),
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, DATAIMP_NOT_PROC),
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, DATAIMP_FAILED),
                 EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
         List<EntityCondition> conds = UtilMisc.toList(statusCond);
         if (conditions != null) {
@@ -187,7 +191,7 @@ public class OpentapsImporter {
                 delegator.storeAll(toStore);
 
                 // also mark the flat entity as processed
-                flatEntity.set("importStatusId", "DATAIMP_IMPORTED");
+                flatEntity.set("importStatusId", DATAIMP_IMPORTED);
                 flatEntity.set("processedTimestamp", UtilDateTime.nowTimestamp());
                 flatEntity.set("importError", null); // clear this out in case it had an exception originally
                 flatEntity.store();
@@ -206,7 +210,7 @@ public class OpentapsImporter {
                 TransactionUtil.rollback();
 
                 // store the exception and mark as failed (if this errors then the whole thing crashes, which it should anyway since there's a big problem)
-                flatEntity.set("importStatusId", "DATAIMP_FAILED");
+                flatEntity.set("importStatusId", DATAIMP_FAILED);
                 flatEntity.set("processedTimestamp", UtilDateTime.nowTimestamp());
                 flatEntity.set("importError", message);
                 flatEntity.store();
