@@ -66,6 +66,8 @@ public class ServiceErrorReader {
         SERVER_ERROR_PAGE,
         /** A valid JSON response was successfully parsed from the server. */
         JSON_ERROR_MESSAGE,
+        /** OfBiz style error message was successfully parsed from the server */
+        JSON_SERVICE_ERROR_MESSAGE,
         /** A valid JSON response was successfully parsed from the server, and it did not contain any error message. */
         JSON_NO_ERROR_MESSAGE
     }
@@ -135,6 +137,7 @@ public class ServiceErrorReader {
             // we cannot load it directly because if the JSON does not have the expected root it will chock
             JavaScriptObject jsObj = JSON.decode(response);
             JSONObject jsonObj = new JSONObject(jsObj);
+            UtilUi.logDebug(jsonObj.toString(), MODULE, "XXXX");
             // check if it is really an Exception message, else not an error and return
             if (jsonObj.containsKey(UtilLookup.JSON_ERROR_EXCEPTION)) {
                 UtilUi.logDebug("Got an exception response.", "readResponse", MODULE);
@@ -142,6 +145,11 @@ public class ServiceErrorReader {
             } else if (jsonObj.containsKey(UtilLookup.JSON_ERRORS)) {
                 UtilUi.logDebug("Got a normal error response.", "readResponse", MODULE);
                 fieldErrorsStore.loadJsonData(response, false);
+            } else if (jsonObj.containsKey(UtilLookup.JSON_SERVICE_ERROR_MESSAGE)) {
+                UtilUi.logDebug("Got an OfBiz  error response.", MODULE, "readResponse");
+                responseType = ResponseType.JSON_SERVICE_ERROR_MESSAGE;
+                parsedErrorMessage = jsonObj.get(UtilLookup.JSON_SERVICE_ERROR_MESSAGE).toString();
+                return;
             } else {
                 responseType = ResponseType.JSON_NO_ERROR_MESSAGE;
                 return;
