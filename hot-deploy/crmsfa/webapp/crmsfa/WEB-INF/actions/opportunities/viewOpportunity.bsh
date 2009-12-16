@@ -88,7 +88,7 @@ if (opportunityOpen) {
     if (CrmsfaSecurity.hasOpportunityPermission(security, "_UPDATE", userLogin, salesOpportunityId)) {
         context.put("hasUpdatePermission", true);
 
-        // this also means activiites may be created, but only if user has CRMSFA_ACT_CREATE
+        // this also means activities may be created, but only if user has CRMSFA_ACT_CREATE
         if (security.hasEntityPermission("CRMSFA_ACT", "_CREATE", userLogin)) {
             context.put("hasNewActivityPermission", true);
         }

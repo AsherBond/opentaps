@@ -246,34 +246,6 @@
         <field name="nextStep" title="${uiLabelMap.CrmNextStep}"><display/></field>
     </form>
 
-    <form name="ListContacts" type="list" separate-columns="true" 
-        title="Contacts"  default-title-style="tableheadtext" target=""
-        default-widget-style="tabletext" default-tooltip-style="tabletext"
-        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
-        paginate-target="findContacts"  list-name="contacts">
-        <field name="partyId" title="${uiLabelMap.CrmContactName}" widget-area-style="fieldWidth300" widget-style="tabletext">
-            <display-entity entity-name="PartySummaryCRMView" description="${firstName} ${lastName} (${partyId})">
-                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewContact">
-                    <parameter param-name="partyId" from-field="partyId"/>
-                </sub-hyperlink>
-            </display-entity>
-        </field>
-        <field name="primaryEmail" title="${uiLabelMap.CrmPrimaryEmail}" widget-area-style="fieldWidth100">
-            <display description="${groovy:org.opentaps.common.party.PartyContactHelper.getElectronicAddressByPurpose(partyId, &quot;EMAIL_ADDRESS&quot;, &quot;PRIMARY_EMAIL&quot;, delegator);}"/>
-        </field>
-        <field name="primaryPhone" title="${uiLabelMap.CrmPrimaryPhone}" widget-area-style="fieldWidth100">
-            <display description="${groovy:org.opentaps.common.party.PartyContactHelper.getTelecomNumberByPurpose(partyId, &quot;PRIMARY_PHONE&quot;, delegator);}"/>
-        </field>
-        <!-- since this form is re-usable, define hasContactRemoveAbility when the Remove option should be visible -->
-        <field name="Remove" title="" use-when="hasUpdatePermission==true" widget-style="buttontext">
-            <hyperlink description="${uiLabelMap.CommonRemove}" 
-                target="removeContactFromOpportunity">
-                <parameter param-name="contactPartyId" from-field="partyId"/>
-                <parameter param-name="salesOpportunityId" value="${parameters.salesOpportunityId}"/>
-            </hyperlink>
-        </field>
-    </form>   
-
     <!-- form to add a contact to an opportunity -->
     <form name="addContactToOpportunityForm" type="single" target="addContactToOpportunity"
         default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
