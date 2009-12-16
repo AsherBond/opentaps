@@ -252,11 +252,9 @@
                         <include-screen name="pendingActivities" location="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml"/>
 
                         <!-- Accounts section -->
-                        <container style="subSectionBlock">
-                            <platform-specific>
-                                <html><html-template location="component://crmsfa/webapp/crmsfa/contacts/contactAccounts.ftl"/></html>
-                            </platform-specific>
-                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/contacts/contactAccounts.ftl"/></html>
+                        </platform-specific>
 
                         <!-- Orders section -->
                         <container style="subSectionBlock">

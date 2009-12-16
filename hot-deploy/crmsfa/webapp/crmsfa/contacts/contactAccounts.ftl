@@ -18,6 +18,7 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
+<div class="subSectionBlock">
 <@sectionHeader title=uiLabelMap.CrmAccounts>
 <#if hasUpdatePermission?exists>
     <div class="subMenuBar" id="assignAccountToContact">
@@ -29,3 +30,4 @@
 </@sectionHeader>
 
 <@gwtWidget id="contactAccountsSubListView" partyId="${partySummary.partyId}"/>
+</div>
