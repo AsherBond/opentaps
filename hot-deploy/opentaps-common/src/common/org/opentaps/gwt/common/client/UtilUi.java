@@ -455,7 +455,7 @@ public abstract class UtilUi {
         }
         return DateTimeFormat.getFormat(DATE_TIME_FORMAT).format(date);
     }
-    
+
     public static Widget makeBlankFormCell() {
     	return new HTML("<span class='gwt-blank-field'>&nbsp;</span>");
     }

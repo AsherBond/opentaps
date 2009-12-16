@@ -16756,6 +16756,10 @@ public interface CommonMessages extends Messages {
     String saveAll();
     @DefaultMessage("Search")
     String search();
+    @DefaultMessage("Item")
+    String searchItem();
+    @DefaultMessage("Items")
+    String searchItems();
     @DefaultMessage("No results found for the keyword: \"{0}\"")
     String searchNoResults(String query);
     @DefaultMessage("Search Results")

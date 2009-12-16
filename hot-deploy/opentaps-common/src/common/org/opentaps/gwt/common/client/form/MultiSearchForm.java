@@ -26,6 +26,7 @@ import com.gwtext.client.widgets.form.TextField;
 import com.gwtext.client.widgets.layout.HorizontalLayout;
 import com.gwtext.client.widgets.layout.RowLayout;
 import org.opentaps.gwt.common.client.UtilUi;
+import org.opentaps.gwt.common.client.events.LoadableListener;
 import org.opentaps.gwt.common.client.form.base.BaseFormPanel;
 import org.opentaps.gwt.common.client.listviews.EntityListView;
 import org.opentaps.gwt.common.client.listviews.SearchResultsListViewInterface;
@@ -78,7 +79,21 @@ public class MultiSearchForm extends BaseFormPanel {
         win.setCloseAction(Window.HIDE);
     }
 
-    public <T extends EntityListView & SearchResultsListViewInterface> void addResultsGrid(T grid) {
+    public <T extends EntityListView & SearchResultsListViewInterface> void addResultsGrid(final T grid) {
+        // add special handler to auto collapse sections with no results
+        // also set the title
+        grid.addLoadableListener(new LoadableListener() {
+                public void onLoad() {
+                    String title = grid.getTitle().split(" - ")[0];
+                    if (grid.getStore().getRecords().length == 0) {
+                        grid.collapse();
+                        grid.setTitle(title + " - " + UtilUi.MSG.searchNoResults(searchInput.getText()));
+                    } else {
+                        grid.expand();
+                        grid.setTitle(title + " - " + grid.getStore().getTotalCount() + " " + (grid.getStore().getTotalCount() > 1 ? UtilUi.MSG.searchItems() : UtilUi.MSG.searchItem()));
+                    }
+                }
+            });
         resultGrids.add(grid);
         grid.setFrame(false);
         grid.setAutoHeight(false);

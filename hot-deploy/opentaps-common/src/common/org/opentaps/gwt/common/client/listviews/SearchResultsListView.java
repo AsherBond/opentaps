@@ -23,6 +23,7 @@ import com.gwtext.client.data.Store;
 import com.gwtext.client.data.StringFieldDef;
 import com.gwtext.client.widgets.grid.CellMetadata;
 import com.gwtext.client.widgets.grid.Renderer;
+import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.lookup.UtilLookup;
 import org.opentaps.gwt.common.client.lookup.configuration.SearchLookupConfiguration;
 
@@ -61,7 +62,7 @@ public class SearchResultsListView extends BaseSearchResultsListView {
 
         makeColumn("Text", renderer);
 
-        String groupTpl = "{text} ({[values.rs.length]} {[values.rs.length > 1 ?  \"Items\" : \"Item\"]})";
+        String groupTpl = "{text} ({[values.rs.length]} {[values.rs.length > 1 ?  \"" + UtilUi.MSG.searchItems() + "\" : \"" + UtilUi.MSG.searchItem() + "\"]})";
         setGrouping(SearchLookupConfiguration.RESULT_TYPE, groupTpl);
 
         configure(url, UtilLookup.SUGGEST_ID, SortDir.ASC);
