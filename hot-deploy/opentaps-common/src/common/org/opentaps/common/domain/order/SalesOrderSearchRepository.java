@@ -31,6 +31,9 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.base.constants.OrderTypeConstants;
+import org.opentaps.base.constants.RoleTypeConstants;
+import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvCompleted;
 import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
 import org.opentaps.common.util.UtilDate;
@@ -44,6 +47,7 @@ import org.opentaps.foundation.repository.ofbiz.Repository;
  */
 public class SalesOrderSearchRepository extends Repository implements SalesOrderSearchRepositoryInterface {
 
+    @SuppressWarnings("unused")
     private static final String MODULE = SalesOrderSearchRepository.class.getName();
 
     private String orderId;
@@ -98,23 +102,23 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
         searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.billFromPartyId.name(), EntityOperator.EQUALS, organizationPartyId));
 
         // other conditions to limit the list
-        searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.orderTypeId.name(), EntityOperator.EQUALS, "SALES_ORDER"));
-        searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.roleTypeId.name(), EntityOperator.EQUALS, "BILL_TO_CUSTOMER"));
+        searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.orderTypeId.name(), EntityOperator.EQUALS, OrderTypeConstants.SALES_ORDER));
+        searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.roleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.BILL_TO_CUSTOMER));
 
         // select parties assigned to current user or his team according to view preferences.
         if (UtilValidate.isNotEmpty(viewPref)) {
             EntityCondition additionalConditions = EntityCondition.makeCondition(EntityOperator.AND,
-                    EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.orderTypeId.name(), EntityOperator.EQUALS, "SALES_ORDER"),
+                    EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.orderTypeId.name(), EntityOperator.EQUALS, OrderTypeConstants.SALES_ORDER),
                     EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.createdBy.name(), EntityOperator.EQUALS, userLoginId),
-                    EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.roleTypeId.name(), EntityOperator.EQUALS, "BILL_TO_CUSTOMER"),
+                    EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.roleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.BILL_TO_CUSTOMER),
                     EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.billFromPartyId.name(), EntityOperator.EQUALS, organizationPartyId));
             searchConditions.add(additionalConditions);
         }
         if (findActiveOnly) {
-            searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name(), EntityOperator.IN, UtilMisc.toList("ORDER_APPROVED", "ORDER_CREATED", "ORDER_HOLD", "ORDER_PROCESSING")));
+            searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name(), EntityOperator.IN, UtilMisc.toList(StatusItemConstants.OrderStatus.ORDER_APPROVED, StatusItemConstants.OrderStatus.ORDER_CREATED, StatusItemConstants.OrderStatus.ORDER_HOLD, StatusItemConstants.OrderStatus.ORDER_PROCESSING)));
         }
         if (findDesiredOnly) {
-            searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name(), EntityOperator.IN, UtilMisc.toList("ORDER_APPROVED", "ORDER_CREATED", "ORDER_HOLD")));
+            searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name(), EntityOperator.IN, UtilMisc.toList(StatusItemConstants.OrderStatus.ORDER_APPROVED, StatusItemConstants.OrderStatus.ORDER_CREATED, StatusItemConstants.OrderStatus.ORDER_HOLD)));
         }
         EntityCondition searchConditionList = EntityCondition.makeCondition(searchConditions, EntityOperator.AND);
         List<EntityCondition> conds = new ArrayList<EntityCondition>();

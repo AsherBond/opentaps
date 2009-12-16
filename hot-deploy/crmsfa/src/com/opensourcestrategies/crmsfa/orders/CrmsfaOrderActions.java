@@ -37,6 +37,7 @@ import org.opentaps.foundation.action.ActionContext;
  */
 public final class CrmsfaOrderActions {
 
+    @SuppressWarnings("unused")
     private static final String MODULE = CrmsfaOrderActions.class.getName();
 
     private CrmsfaOrderActions() { }
@@ -123,7 +124,7 @@ public final class CrmsfaOrderActions {
         }
         salesOrderSearchRepository.setOrderBy(orderBy);
         List<OrderViewForListing> orders = salesOrderSearchRepository.findOrders();
-        List<Map> orderMaps = FastList.newInstance();
+        List<Map<String, Object>> orderMaps = FastList.<Map<String, Object>>newInstance();
         // return the map collection for the screen render
         for (OrderViewForListing order : orders) {
             orderMaps.add(order.toMap());

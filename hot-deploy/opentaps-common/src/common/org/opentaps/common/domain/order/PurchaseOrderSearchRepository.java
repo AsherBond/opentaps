@@ -30,6 +30,9 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.base.constants.OrderTypeConstants;
+import org.opentaps.base.constants.RoleTypeConstants;
+import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.OrderHeaderAndItems;
 import org.opentaps.base.entities.OrderHeaderAndRoles;
 import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
@@ -50,6 +53,7 @@ import org.opentaps.foundation.repository.ofbiz.Repository;
  */
 public class PurchaseOrderSearchRepository  extends Repository implements PurchaseOrderSearchRepositoryInterface {
 
+    @SuppressWarnings("unused")
     private static final String MODULE = PurchaseOrderSearchRepository.class.getName();
 
     private String orderId;
@@ -123,11 +127,16 @@ public class PurchaseOrderSearchRepository  extends Repository implements Purcha
 
 
         // other conditions to limit the list
-        searchConditions.add(EntityCondition.makeCondition(OrderHeaderAndRoles.Fields.orderTypeId.name(), EntityOperator.EQUALS, "PURCHASE_ORDER"));
-        searchConditions.add(EntityCondition.makeCondition(OrderHeaderAndRoles.Fields.roleTypeId.name(), EntityOperator.EQUALS, "BILL_FROM_VENDOR"));
+        searchConditions.add(EntityCondition.makeCondition(OrderHeaderAndRoles.Fields.orderTypeId.name(), EntityOperator.EQUALS, OrderTypeConstants.PURCHASE_ORDER));
+        searchConditions.add(EntityCondition.makeCondition(OrderHeaderAndRoles.Fields.roleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.BILL_FROM_VENDOR));
 
         if (findDesiredOnly) {
-            searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name(), EntityOperator.IN, UtilMisc.toList("ORDER_APPROVED", "ORDER_CREATED", "ORDER_HOLD")));
+            searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name(), EntityOperator.IN, 
+                    UtilMisc.toList(
+                            StatusItemConstants.OrderStatus.ORDER_APPROVED,
+                            StatusItemConstants.OrderStatus.ORDER_CREATED,
+                            StatusItemConstants.OrderStatus.ORDER_HOLD)
+            ));
         }
         EntityCondition searchConditionList = EntityCondition.makeCondition(searchConditions, EntityOperator.AND);
 
