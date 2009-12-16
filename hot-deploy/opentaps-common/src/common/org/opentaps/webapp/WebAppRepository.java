@@ -46,6 +46,7 @@ public class WebAppRepository  extends Repository implements WebAppRepositoryInt
         List<OpentapsWebApps> opentapsWebapps =  findAllCache(OpentapsWebApps.class, Arrays.asList(OpentapsWebApps.Fields.sequenceNum.asc()));
         //get all webapps defined in all the ofbiz-components
         List<WebappInfo> webapps = ComponentConfig.getAllWebappResourceInfos();
+        Debug.logVerbose("number of webapps found = " + webapps.size(), MODULE);
         Map<String, String[]> webappsMap = FastMap.newInstance();
         //create a map entry (name , permissions[]) for every webapp
         for (WebappInfo webapp : webapps) {
@@ -56,6 +57,7 @@ public class WebAppRepository  extends Repository implements WebAppRepositoryInt
             for (OpentapsWebApps webapp : opentapsWebapps) {
                 String[] permissions = webappsMap.get(webapp.getApplicationId());
                 if (user != null) {
+                    Debug.logVerbose("Checking permissions for user [" + user + "]", MODULE);
                     boolean permitted = true;
                     if (permissions != null) {
                         //  if there are permissions for this application, then check if the user can view it
@@ -63,6 +65,7 @@ public class WebAppRepository  extends Repository implements WebAppRepositoryInt
                             // if the application has basePermissions and user doesn't has VIEW/ADMIN permissions on them, don't get the app
                             try {
                                 if (!"NONE".equals(permissions[i]) && !user.hasPermission(permissions[i], "VIEW") && !user.hasAdminPermissionsForModule(permissions[i])) {
+                                    Debug.logVerbose("User [" + user + "] does not have permission for webapp [" + webapp.getApplicationId() + "]", MODULE);
                                     permitted = false;
                                     break;
                                 }
@@ -71,7 +74,8 @@ public class WebAppRepository  extends Repository implements WebAppRepositoryInt
                             }
                         }
                     }
-                    if (permitted){
+                    if (permitted) {
+			Debug.logVerbose("Webapp [" + webapp.getApplicationId() + "] is enabled for user [" + user + "]", MODULE);
                         apps.add(webapp);
                     }
                 } else {
