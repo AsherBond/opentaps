@@ -20,6 +20,9 @@ package org.opentaps.gwt.common.client.listviews;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.lookup.UtilLookup;
 
+/**
+ * Base class for search results list views that provides a default implementation for the search method.
+ */
 public abstract class BaseSearchResultsListView extends EntityListView implements SearchResultsListViewInterface {
 
     /**

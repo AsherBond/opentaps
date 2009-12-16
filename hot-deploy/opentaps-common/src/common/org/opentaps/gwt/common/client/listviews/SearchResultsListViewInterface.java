@@ -17,6 +17,9 @@
 
 package org.opentaps.gwt.common.client.listviews;
 
+/**
+ * Interface used by all list views that are used for search results.
+ */
 public interface SearchResultsListViewInterface {
 
     /**
