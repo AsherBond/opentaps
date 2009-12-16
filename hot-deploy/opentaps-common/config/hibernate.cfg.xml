@@ -10,7 +10,7 @@
   <property name="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</property>
   <property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
   <property name="net.sf.ehcache.configurationResourceName">ehcache.xml</property>
-  <property name="hibernate.search.worker.execution">async</property>
+  <property name="hibernate.search.worker.execution">sync</property>
   <property name="hibernate.cache.use_query_cache">true</property>
   <property name="hibernate.cache.use_second_level_cache">true</property>
   <property name="hibernate.search.worker.buffer_queue.max">5</property>
