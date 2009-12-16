@@ -92,7 +92,7 @@ public class AccountsSublistView extends AccountListView {
             config.setSortable(false);
 
             addGridCellListener(new GridCellListenerAdapter() {
-                private final String actionUrl = "/crmsfa/control/removeContactFromAccount";
+                private final String actionUrl = "/crmsfa/control/removeContactFromAccountAJX";
 
                 /** {@inheritDoc} */
                 @Override

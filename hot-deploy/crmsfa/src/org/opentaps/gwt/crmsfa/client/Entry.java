@@ -518,7 +518,7 @@ public class Entry extends BaseEntry {
 
                 // nothing special, just send HTTP POST request
                 // and run crmsfa.assignContactToAccount service
-                RequestBuilder request = new RequestBuilder(RequestBuilder.POST, URL.encode("/crmsfa/control/assignAccountToContact"));
+                RequestBuilder request = new RequestBuilder(RequestBuilder.POST, URL.encode("/crmsfa/control/assignAccountToContactAJX"));
                 request.setHeader("Content-type", "application/x-www-form-urlencoded");
                 request.setRequestData(Format.format("partyId={0}&contactPartyId={0}&accountPartyId={1}", getPartyId(), accountPartyId));
                 request.setCallback(new RequestCallback() {
@@ -630,7 +630,7 @@ public class Entry extends BaseEntry {
 
                 // nothing special, just send HTTP POST request
                 // and run crmsfa.assignContactToAccount service
-                RequestBuilder request = new RequestBuilder(RequestBuilder.POST, URL.encode("/crmsfa/control/addContactToOpportunity"));
+                RequestBuilder request = new RequestBuilder(RequestBuilder.POST, URL.encode("/crmsfa/control/addContactToOpportunityAJX"));
                 request.setHeader("Content-type", "application/x-www-form-urlencoded");
                 request.setRequestData(Format.format("salesOpportunityId={0}&contactPartyId={1}", getSalesOpportunityId(), contactPartyId));
                 request.setCallback(new RequestCallback() {
@@ -723,7 +723,7 @@ public class Entry extends BaseEntry {
 
                 // nothing special, just send HTTP POST request
                 // and run crmsfa.assignContactToAccount service
-                RequestBuilder request = new RequestBuilder(RequestBuilder.POST, URL.encode("/crmsfa/control/assignContactToAccount"));
+                RequestBuilder request = new RequestBuilder(RequestBuilder.POST, URL.encode("/crmsfa/control/assignContactToAccountAJX"));
                 request.setHeader("Content-type", "application/x-www-form-urlencoded");
                 request.setRequestData(Format.format("partyId={0}&accountPartyId={0}&contactPartyId={1}", getPartyId(), contactPartyId));
                 request.setCallback(new RequestCallback() {

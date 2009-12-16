@@ -375,6 +375,12 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         </response>
         <response name="error" type="view" value="viewAccount"/>
     </request-map>
+    <request-map uri="removeContactFromAccountAJX">
+        <security https="true" auth="true"/>
+        <event type="jsonservice" invoke="crmsfa.removeContactFromAccount"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
     <request-map uri="addAccountDataSource">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.addAccountDataSource"/>
@@ -420,6 +426,12 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         </response>
         <response name="error" type="view" value="viewAccount"/>
     </request-map>
+    <request-map uri="assignContactToAccountAJX">
+        <security https="true" auth="true"/>
+        <event type="jsonservice" invoke="crmsfa.assignContactToAccount"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
     <request-map uri="assignAccountToContact">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.assignContactToAccount"/>
@@ -427,6 +439,12 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
           <redirect-parameter name="partyId" />
         </response>
         <response name="error" type="view" value="viewContact"/>
+    </request-map>
+    <request-map uri="assignAccountToContactAJX">
+        <security https="true" auth="true"/>
+        <event type="jsonservice" invoke="crmsfa.assignContactToAccount"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
     </request-map>
 
     <!-- ============= -->
@@ -1095,6 +1113,12 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
           <redirect-parameter name="salesOpportunityId"/>
         </response>
     </request-map>
+    <request-map uri="addContactToOpportunityAJX">
+        <security https="true" auth="true"/>
+        <event type="jsonservice" invoke="crmsfa.addContactToOpportunity"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
     <request-map uri="removeContactFromOpportunity">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.removeContactFromOpportunity"/>
@@ -1102,6 +1126,12 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
           <redirect-parameter name="salesOpportunityId"/>
         </response>
         <response name="error" type="view" value="viewOpportunity"/>
+    </request-map>
+    <request-map uri="removeContactFromOpportunityAJX">
+        <security https="true" auth="true"/>
+        <event type="jsonservice" invoke="crmsfa.removeContactFromOpportunity"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
     </request-map>
 
 

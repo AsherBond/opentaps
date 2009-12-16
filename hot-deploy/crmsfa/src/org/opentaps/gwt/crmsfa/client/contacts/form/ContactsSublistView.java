@@ -101,8 +101,8 @@ public class ContactsSublistView extends ContactListView {
 
             addGridCellListener(new GridCellListenerAdapter() {
                 private final String actionUrl = isOpportunity ?
-                        "/crmsfa/control/removeContactFromOpportunity"
-                        : "/crmsfa/control/removeContactFromAccount";
+                        "/crmsfa/control/removeContactFromOpportunityAJX"
+                        : "/crmsfa/control/removeContactFromAccountAJX";
 
                 /** {@inheritDoc} */
                 @Override
