@@ -68,6 +68,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("comments", "COMMENTS");
         fields.put("productStoreShipMethId", "PRODUCT_STORE_SHIP_METH_ID");
         fields.put("orderClosed", "ORDER_CLOSED");
+        fields.put("importStatusId", "IMPORT_STATUS_ID");
+        fields.put("importError", "IMPORT_ERROR");
         fields.put("processedTimestamp", "PROCESSED_TIMESTAMP");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
@@ -90,6 +92,8 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
     comments("comments"),
     productStoreShipMethId("productStoreShipMethId"),
     orderClosed("orderClosed"),
+    importStatusId("importStatusId"),
+    importError("importError"),
     processedTimestamp("processedTimestamp"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
@@ -136,6 +140,10 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
    private String productStoreShipMethId;
    @Column(name="ORDER_CLOSED")
    private String orderClosed;
+   @Column(name="IMPORT_STATUS_ID")
+   private String importStatusId;
+   @Column(name="IMPORT_ERROR")
+   private String importError;
    @Column(name="PROCESSED_TIMESTAMP")
    private Timestamp processedTimestamp;
    @Column(name="LAST_UPDATED_STAMP")
@@ -197,7 +205,7 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("customerPartyId");this.allFieldsNames.add("supplierPartyId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("shippingTotal");this.allFieldsNames.add("orderTax");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("adjustmentsTotal");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("comments");this.allFieldsNames.add("productStoreShipMethId");this.allFieldsNames.add("orderClosed");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("customerPartyId");this.allFieldsNames.add("supplierPartyId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("shippingTotal");this.allFieldsNames.add("orderTax");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("adjustmentsTotal");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("comments");this.allFieldsNames.add("productStoreShipMethId");this.allFieldsNames.add("orderClosed");this.allFieldsNames.add("importStatusId");this.allFieldsNames.add("importError");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -309,6 +317,20 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
      */
     public void setOrderClosed(String orderClosed) {
         this.orderClosed = orderClosed;
+    }
+    /**
+     * Auto generated value setter.
+     * @param importStatusId the importStatusId to set
+     */
+    public void setImportStatusId(String importStatusId) {
+        this.importStatusId = importStatusId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param importError the importError to set
+     */
+    public void setImportError(String importError) {
+        this.importError = importError;
     }
     /**
      * Auto generated value setter.
@@ -443,6 +465,20 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
      */
     public String getOrderClosed() {
         return this.orderClosed;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getImportStatusId() {
+        return this.importStatusId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getImportError() {
+        return this.importError;
     }
     /**
      * Auto generated value accessor.
@@ -636,6 +672,8 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
         setComments((String) mapValue.get("comments"));
         setProductStoreShipMethId((String) mapValue.get("productStoreShipMethId"));
         setOrderClosed((String) mapValue.get("orderClosed"));
+        setImportStatusId((String) mapValue.get("importStatusId"));
+        setImportError((String) mapValue.get("importError"));
         setProcessedTimestamp((Timestamp) mapValue.get("processedTimestamp"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
@@ -662,6 +700,8 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
         mapValue.put("comments", getComments());
         mapValue.put("productStoreShipMethId", getProductStoreShipMethId());
         mapValue.put("orderClosed", getOrderClosed());
+        mapValue.put("importStatusId", getImportStatusId());
+        mapValue.put("importError", getImportError());
         mapValue.put("processedTimestamp", getProcessedTimestamp());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());

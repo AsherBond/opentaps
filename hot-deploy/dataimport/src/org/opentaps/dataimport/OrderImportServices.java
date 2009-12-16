@@ -127,9 +127,13 @@ public class OrderImportServices {
             }
 
             // need to get an ELI because of possibly large number of records.  productId <> null will get all records
+            EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, "DATAIMP_NOT_PROC"),
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, "DATAIMP_FAILED"),
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
             EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                         EntityCondition.makeCondition("orderId", EntityOperator.NOT_EQUAL, null),
-                        EntityCondition.makeCondition("processedTimestamp", EntityOperator.EQUALS, null)   // leave out previously processed orders
+                        statusCond   // leave out previously processed orders
                         );
             TransactionUtil.begin();   // since the service is not inside a transaction, this needs to be in its own transaction, or you'll get a harmless exception
             EntityListIterator importOrderHeaders = delegator.findListIteratorByCondition("DataImportOrderHeader", conditions, null, null);
@@ -193,9 +197,15 @@ public class OrderImportServices {
                 } catch (GenericEntityException e) {
                     TransactionUtil.rollback();
                     Debug.logError(e, "Failed to import orderHeader[" + orderHeader.get("orderId") + "]. Error stack follows.", MODULE);
+                    // store the import error
+                    String message = "Failed to import Order " + orderHeader.getPkShortValueString() + ": " + e.getMessage();
+                    storeImportError(orderHeader, message,delegator);
                 } catch (Exception e) {
                     TransactionUtil.rollback();
                     Debug.logError(e, "Import of orderHeader[" + orderHeader.get("orderId") + "] was unsuccessful. Error stack follows.", MODULE);
+                    // store the import error
+                    String message = "Failed to import Order " + orderHeader.getPkShortValueString() + ": " + e.getMessage();
+                    storeImportError(orderHeader, message,delegator);
                 }
             }
             importOrderHeaders.close();
@@ -211,6 +221,36 @@ public class OrderImportServices {
         return results;
     }
 
+    /**
+     * Helper method to store import error to DataImportOrderHeader/DataImportOrderItem entities.
+     * @param dataImportOrderHeader a <code>GenericValue</code> value
+     * @param message a <code>String</code> value
+     * @param delegator a <code>GenericDelegator</code> value
+     * @exception GenericEntityException if an error occurs
+     */
+    @SuppressWarnings("unchecked")
+    private static void storeImportError(GenericValue dataImportOrderHeader, String message, GenericDelegator delegator) throws GenericEntityException {
+        // OrderItems
+        EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, "DATAIMP_NOT_PROC"),
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, "DATAIMP_FAILED"),
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
+        List orderItemConditions = UtilMisc.toList(EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, dataImportOrderHeader.getString("orderId")), statusCond);
+        List<GenericValue> dataImportOrderItems = delegator.findByCondition("DataImportOrderItem", EntityCondition.makeCondition(orderItemConditions, EntityOperator.AND), null, null);
+        for (GenericValue dataImportOrderItem : dataImportOrderItems) {
+            // store the exception and mark as failed
+            dataImportOrderItem.set("importStatusId", "DATAIMP_FAILED");
+            dataImportOrderItem.set("processedTimestamp", UtilDateTime.nowTimestamp());
+            dataImportOrderItem.set("importError", message);
+            dataImportOrderItem.store();
+        }
+        // store the exception and mark as failed
+        dataImportOrderHeader.set("importStatusId", "DATAIMP_FAILED");
+        dataImportOrderHeader.set("processedTimestamp", UtilDateTime.nowTimestamp());
+        dataImportOrderHeader.set("importError", message);
+        dataImportOrderHeader.store();
+    }
+    
     /**
      * Helper method to decode a DataImportOrderHeader/DataImportOrderItem into a List of GenericValues modeling that product in the OFBiz schema.
      * If for some reason obtaining data via the delegator fails, this service throws that exception.
@@ -367,8 +407,11 @@ public class OrderImportServices {
         }
 
         // OrderItems
-
-        List orderItemConditions = UtilMisc.toList(EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId), EntityCondition.makeCondition("processedTimestamp", EntityOperator.EQUALS, null));
+        EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, "DATAIMP_NOT_PROC"),
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, "DATAIMP_FAILED"),
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
+        List orderItemConditions = UtilMisc.toList(EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId), statusCond);
         List externalOrderItems = delegator.findByCondition("DataImportOrderItem", EntityCondition.makeCondition(orderItemConditions, EntityOperator.AND), null, null); //getExternalOrderItems(externalOrderHeader.getString("orderId"), delegator);
 
         // If orders without orderItems should not be imported, return now without doing anything
@@ -383,7 +426,7 @@ public class OrderImportServices {
         List oisgAssocs = new ArrayList();
         for (int count = 0; count < externalOrderItems.size(); count++) {
             GenericValue externalOrderItem = (GenericValue) externalOrderItems.get(count);
-
+            
             String orderItemSeqId = UtilFormatOut.formatPaddedNumber(count + 1, 5);
             Double quantity = UtilValidate.isEmpty(externalOrderItem.get("quantity")) ? new Double(0) : externalOrderItem.getDouble("quantity");
 
@@ -451,7 +494,8 @@ public class OrderImportServices {
                     orderAdjustments.add(adj);
                 }
             }
-
+            externalOrderItem.set("importStatusId", "DATAIMP_IMPORTED");
+            externalOrderItem.set("importError", null);
             externalOrderItem.set("processedTimestamp", UtilDateTime.nowTimestamp());
             externalOrderItem.set("orderItemSeqId", orderItemSeqId);
         }
@@ -527,7 +571,9 @@ public class OrderImportServices {
 
         // Set the processedTimestamp on the externalOrderHeader
         externalOrderHeader.set("processedTimestamp", UtilDateTime.nowTimestamp());
-
+        externalOrderHeader.set("importStatusId", "DATAIMP_IMPORTED");
+        externalOrderHeader.set("importError", null); // clear this out in case it had an exception originally
+        
         // Add everything to the store list here to avoid problems with having to derive more values for order header, etc.
         List toStore = FastList.newInstance();
         toStore.add(delegator.makeValue("OrderHeader", orderHeaderInput));

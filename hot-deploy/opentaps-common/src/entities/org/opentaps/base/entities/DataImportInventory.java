@@ -63,6 +63,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("reorderQuantity", "REORDER_QUANTITY");
         fields.put("daysToShip", "DAYS_TO_SHIP");
         fields.put("inventoryValue", "INVENTORY_VALUE");
+        fields.put("importStatusId", "IMPORT_STATUS_ID");
+        fields.put("importError", "IMPORT_ERROR");
         fields.put("processedTimestamp", "PROCESSED_TIMESTAMP");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
@@ -80,6 +82,8 @@ fieldMapColumns.put("DataImportInventory", fields);
     reorderQuantity("reorderQuantity"),
     daysToShip("daysToShip"),
     inventoryValue("inventoryValue"),
+    importStatusId("importStatusId"),
+    importError("importError"),
     processedTimestamp("processedTimestamp"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
@@ -116,6 +120,10 @@ fieldMapColumns.put("DataImportInventory", fields);
    private BigDecimal daysToShip;
    @Column(name="INVENTORY_VALUE")
    private BigDecimal inventoryValue;
+   @Column(name="IMPORT_STATUS_ID")
+   private String importStatusId;
+   @Column(name="IMPORT_ERROR")
+   private String importError;
    @Column(name="PROCESSED_TIMESTAMP")
    private Timestamp processedTimestamp;
    @Column(name="LAST_UPDATED_STAMP")
@@ -152,7 +160,7 @@ fieldMapColumns.put("DataImportInventory", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("itemId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("itemId");this.allFieldsNames.add("productId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("availableToPromise");this.allFieldsNames.add("onHand");this.allFieldsNames.add("minimumStock");this.allFieldsNames.add("reorderQuantity");this.allFieldsNames.add("daysToShip");this.allFieldsNames.add("inventoryValue");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("itemId");this.allFieldsNames.add("productId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("availableToPromise");this.allFieldsNames.add("onHand");this.allFieldsNames.add("minimumStock");this.allFieldsNames.add("reorderQuantity");this.allFieldsNames.add("daysToShip");this.allFieldsNames.add("inventoryValue");this.allFieldsNames.add("importStatusId");this.allFieldsNames.add("importError");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -229,6 +237,20 @@ fieldMapColumns.put("DataImportInventory", fields);
      */
     public void setInventoryValue(BigDecimal inventoryValue) {
         this.inventoryValue = inventoryValue;
+    }
+    /**
+     * Auto generated value setter.
+     * @param importStatusId the importStatusId to set
+     */
+    public void setImportStatusId(String importStatusId) {
+        this.importStatusId = importStatusId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param importError the importError to set
+     */
+    public void setImportError(String importError) {
+        this.importError = importError;
     }
     /**
      * Auto generated value setter.
@@ -331,6 +353,20 @@ fieldMapColumns.put("DataImportInventory", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getImportStatusId() {
+        return this.importStatusId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getImportError() {
+        return this.importError;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getProcessedTimestamp() {
@@ -417,6 +453,8 @@ fieldMapColumns.put("DataImportInventory", fields);
         setReorderQuantity(convertToBigDecimal(mapValue.get("reorderQuantity")));
         setDaysToShip(convertToBigDecimal(mapValue.get("daysToShip")));
         setInventoryValue(convertToBigDecimal(mapValue.get("inventoryValue")));
+        setImportStatusId((String) mapValue.get("importStatusId"));
+        setImportError((String) mapValue.get("importError"));
         setProcessedTimestamp((Timestamp) mapValue.get("processedTimestamp"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
@@ -438,6 +476,8 @@ fieldMapColumns.put("DataImportInventory", fields);
         mapValue.put("reorderQuantity", getReorderQuantity());
         mapValue.put("daysToShip", getDaysToShip());
         mapValue.put("inventoryValue", getInventoryValue());
+        mapValue.put("importStatusId", getImportStatusId());
+        mapValue.put("importError", getImportError());
         mapValue.put("processedTimestamp", getProcessedTimestamp());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());

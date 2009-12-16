@@ -94,10 +94,14 @@ public final class ProductImportServices {
                 }
             }
 
+            EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, "DATAIMP_NOT_PROC"),
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, "DATAIMP_FAILED"),
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
             // need to get an ELI because of possibly large number of records.  productId <> null will get all records
             EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                         EntityCondition.makeCondition("productId", EntityOperator.NOT_EQUAL, null),
-                        EntityCondition.makeCondition("processedTimestamp", EntityOperator.EQUALS, null)   // leave out previously processed products
+                        statusCond   // leave out previously processed products
             );
             TransactionUtil.begin();   // since the service is not inside a transaction, this needs to be in its own transaction, or you'll get a harmless exception
             EntityListIterator importProducts = delegator.findListIteratorByCondition("DataImportProduct", conditions, null, null);
@@ -129,9 +133,17 @@ public final class ProductImportServices {
                     // if there was an error, we'll just skip this product
                     TransactionUtil.rollback();
                     Debug.logError(e, "Faild to import product[" + product.get("productId") + "]. Error stack follows.", MODULE);
+                    
+                    // store the import error
+                    String message = "Faild to import product[" + product.get("productId") + "], Error message : " + e.getMessage();
+                    storeImportProductError(product, message,delegator);
                 } catch (Exception e) {
                     TransactionUtil.rollback();
                     Debug.logError(e, "Faild to import product[" + product.get("productId") + "]. Error stack follows.", MODULE);
+
+                    // store the import error
+                    String message = "Faild to import product[" + product.get("productId") + "], Error message : " + e.getMessage();
+                    storeImportProductError(product, message,delegator);
                 }
             }
             importProducts.close();
@@ -174,9 +186,13 @@ public final class ProductImportServices {
 
         // run the facility-specific data importing routine for each unique facility
         try {
+            EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, "DATAIMP_NOT_PROC"),
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, "DATAIMP_FAILED"),
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
             // Get a list of distinct facilityIds to import
             EntityListIterator facilitiesIterator = delegator.findListIteratorByCondition("DataImportInventory",
-                        EntityCondition.makeCondition("processedTimestamp", EntityOperator.EQUALS, null),   // unprocessed records
+                        statusCond,   // unprocessed records
                         null, // havingEntityConditions
                         UtilMisc.toList("facilityId"),
                         UtilMisc.toList("facilityId"),
@@ -275,11 +291,15 @@ public final class ProductImportServices {
         }
         String acctgTransId = (String) createAcctgTransResults.get("acctgTransId");
 
+        EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, "DATAIMP_NOT_PROC"),
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, "DATAIMP_FAILED"),
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
         // need to get an ELI because of possibly large number of records.  productId <> null will get all records
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 EntityCondition.makeCondition("productId", EntityOperator.NOT_EQUAL, null),
                 EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
-                EntityCondition.makeCondition("processedTimestamp", EntityOperator.EQUALS, null)   // leave out previously processed orders
+                statusCond   // leave out previously processed orders
         );
         TransactionUtil.begin();
         EntityListIterator importProductInventory = delegator.findListIteratorByCondition("DataImportInventory", conditions, null, null);
@@ -292,7 +312,7 @@ public final class ProductImportServices {
             try {
                 List toStore = decodeInventory(productInventory, organizationPartyId, facilityId, inventoryGlAccountId, offsettingGlAccountId, acctgTransId, currencyUomId, now, delegator);
                 if (toStore == null) {
-                    Debug.logWarning("Import of product inventory[" + productInventory.get("itemId") + "] was unsuccessful.", MODULE);
+                    Debug.logWarning("Import of product inventory [" + productInventory.get("itemId") + "] was unsuccessful.", MODULE);
                 }
 
                 TransactionUtil.begin();
@@ -306,11 +326,18 @@ public final class ProductImportServices {
 
             } catch (GenericEntityException e) {
                 TransactionUtil.rollback();
-                Debug.logError(e, "Failed to import product inventory[" + productInventory.get("itemId") + "]. Error stack follows.", MODULE);
+                Debug.logError(e, "Failed to import product inventory [" + productInventory.get("itemId") + "]. Error stack follows.", MODULE);
+                // store the import error
+                String message = "Failed to import product inventory [" + productInventory.get("itemId") + "]. Error message : " + e.getMessage();
+                storeImportInventoryError(productInventory, message, delegator);
             } catch (Exception e) {
                 TransactionUtil.rollback();
-                Debug.logWarning(e, "Import of product inventory[" + productInventory.get("itemId") + "] was unsuccessful.", MODULE);
+                Debug.logWarning(e, "Import of product inventory [" + productInventory.get("itemId") + "] was unsuccessful.", MODULE);
+                // store the import error
+                String message = "Failed to import product inventory [" + productInventory.get("itemId") + "]. Error message : " + e.getMessage();
+                storeImportInventoryError(productInventory, message, delegator);
             }
+
         }
         importProductInventory.close();
         return imported;
@@ -453,6 +480,9 @@ public final class ProductImportServices {
             toStore.add(supplierProduct);
         }
 
+        // mark the entity as processed
+        data.set("importStatusId", "DATAIMP_IMPORTED");
+        data.set("importError", null);
         // update the original data record with a timestamp which also denotes that it has been processed (processedTimestamp = null was original search condition)
         data.set("processedTimestamp", UtilDateTime.nowTimestamp());
         toStore.add(data);
@@ -588,8 +618,43 @@ public final class ProductImportServices {
 
         // Update the original productInventory record with a timestamp which also denotes that it has been processed (processedTimestamp = null was original search condition)
         productInventory.set("processedTimestamp", UtilDateTime.nowTimestamp());
+        productInventory.set("importStatusId", "DATAIMP_IMPORTED");
+        productInventory.set("importError", null); // clear this out in case it had an exception originally
         toStore.add(productInventory);
 
         return toStore;
     }
+
+    /**
+     * Helper method to store import product error to DataImportProduct entities.
+     * @param dataImportProduct a <code>GenericValue</code> value
+     * @param message a <code>String</code> value
+     * @param delegator a <code>GenericDelegator</code> value
+     * @exception GenericEntityException if an error occurs
+     */
+    @SuppressWarnings("unchecked")
+    private static void storeImportProductError(GenericValue dataImportProduct, String message, GenericDelegator delegator) throws GenericEntityException {
+        // store the exception and mark as failed
+        dataImportProduct.set("importStatusId", "DATAIMP_FAILED");
+        dataImportProduct.set("processedTimestamp", UtilDateTime.nowTimestamp());
+        dataImportProduct.set("importError", message);
+        dataImportProduct.store();
+    }
+    
+    /**
+     * Helper method to store import product error to DataImportInventory entities.
+     * @param dataImportInventory a <code>GenericValue</code> value
+     * @param message a <code>String</code> value
+     * @param delegator a <code>GenericDelegator</code> value
+     * @exception GenericEntityException if an error occurs
+     */
+    @SuppressWarnings("unchecked")
+    private static void storeImportInventoryError(GenericValue dataImportInventory, String message, GenericDelegator delegator) throws GenericEntityException {
+        // store the exception and mark as failed
+        dataImportInventory.set("importStatusId", "DATAIMP_FAILED");
+        dataImportInventory.set("processedTimestamp", UtilDateTime.nowTimestamp());
+        dataImportInventory.set("importError", message);
+        dataImportInventory.store();
+    }
+    
 }

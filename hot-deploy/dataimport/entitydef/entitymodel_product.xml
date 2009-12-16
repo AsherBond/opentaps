@@ -55,6 +55,8 @@
         <field name="productFeature1" type="description"><description>This can be used to associate a productFeatureId with this product and is used to import brand, size, etc.</description></field>
         <field name="supplierPartyId" type="id-ne"/>
         <field name="purchasePrice" type="currency-precise"/>
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
         <field name="processedTimestamp" type="date-time">
             <description>Special field for system to record when entry was successfully imported.  
                 Do not use for any other purpose.</description>
@@ -75,6 +77,8 @@
         <field name="reorderQuantity" type="floating-point"/>
         <field name="daysToShip" type="floating-point"/>
         <field name="inventoryValue" type="currency-amount"/>
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
         <field name="processedTimestamp" type="date-time"/>
         <prim-key field="itemId"/>
         <relation type="one-nofk" rel-entity-name="Product">

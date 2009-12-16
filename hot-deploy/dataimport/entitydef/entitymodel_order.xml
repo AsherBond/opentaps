@@ -54,6 +54,8 @@
         <field name="comments" type="comment"></field>
         <field name="productStoreShipMethId" type="id"><description>The ProductStoreShipmentMeth corresponding to the shipment method the customer selected.</description></field>
         <field name="orderClosed" type="indicator"><description>If set to N or n, the order will be created in the Approved state.</description></field>
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
         <field name="processedTimestamp" type="date-time">
             <description>Special field for system to record when entry was successfully imported.  
                 Do not use for any other purpose.</description>
@@ -91,6 +93,8 @@
         <field name="itemAdjustmentsTotal" type="currency-amount"></field>
         <field name="customerPo" type="id"></field>
         <field name="comments" type="comment"></field>
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
         <field name="processedTimestamp" type="date-time">
             <description>Special field for system to record when entry was successfully imported.  
                 Do not use for any other purpose.</description>

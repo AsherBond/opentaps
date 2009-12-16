@@ -73,6 +73,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("productFeature1", "PRODUCT_FEATURE1");
         fields.put("supplierPartyId", "SUPPLIER_PARTY_ID");
         fields.put("purchasePrice", "PURCHASE_PRICE");
+        fields.put("importStatusId", "IMPORT_STATUS_ID");
+        fields.put("importError", "IMPORT_ERROR");
         fields.put("processedTimestamp", "PROCESSED_TIMESTAMP");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
@@ -100,6 +102,8 @@ fieldMapColumns.put("DataImportProduct", fields);
     productFeature1("productFeature1"),
     supplierPartyId("supplierPartyId"),
     purchasePrice("purchasePrice"),
+    importStatusId("importStatusId"),
+    importError("importError"),
     processedTimestamp("processedTimestamp"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
@@ -156,6 +160,10 @@ fieldMapColumns.put("DataImportProduct", fields);
    private String supplierPartyId;
    @Column(name="PURCHASE_PRICE")
    private BigDecimal purchasePrice;
+   @Column(name="IMPORT_STATUS_ID")
+   private String importStatusId;
+   @Column(name="IMPORT_ERROR")
+   private String importError;
    @Column(name="PROCESSED_TIMESTAMP")
    private Timestamp processedTimestamp;
    @Column(name="LAST_UPDATED_STAMP")
@@ -178,7 +186,7 @@ fieldMapColumns.put("DataImportProduct", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productId");this.allFieldsNames.add("productTypeId");this.allFieldsNames.add("isInactive");this.allFieldsNames.add("customId1");this.allFieldsNames.add("customId2");this.allFieldsNames.add("description");this.allFieldsNames.add("weight");this.allFieldsNames.add("weightUomId");this.allFieldsNames.add("productLength");this.allFieldsNames.add("productLengthUomId");this.allFieldsNames.add("width");this.allFieldsNames.add("widthUomId");this.allFieldsNames.add("height");this.allFieldsNames.add("heightUomId");this.allFieldsNames.add("price");this.allFieldsNames.add("priceCurrencyUomId");this.allFieldsNames.add("productFeature1");this.allFieldsNames.add("supplierPartyId");this.allFieldsNames.add("purchasePrice");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("productId");this.allFieldsNames.add("productTypeId");this.allFieldsNames.add("isInactive");this.allFieldsNames.add("customId1");this.allFieldsNames.add("customId2");this.allFieldsNames.add("description");this.allFieldsNames.add("weight");this.allFieldsNames.add("weightUomId");this.allFieldsNames.add("productLength");this.allFieldsNames.add("productLengthUomId");this.allFieldsNames.add("width");this.allFieldsNames.add("widthUomId");this.allFieldsNames.add("height");this.allFieldsNames.add("heightUomId");this.allFieldsNames.add("price");this.allFieldsNames.add("priceCurrencyUomId");this.allFieldsNames.add("productFeature1");this.allFieldsNames.add("supplierPartyId");this.allFieldsNames.add("purchasePrice");this.allFieldsNames.add("importStatusId");this.allFieldsNames.add("importError");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -325,6 +333,20 @@ fieldMapColumns.put("DataImportProduct", fields);
      */
     public void setPurchasePrice(BigDecimal purchasePrice) {
         this.purchasePrice = purchasePrice;
+    }
+    /**
+     * Auto generated value setter.
+     * @param importStatusId the importStatusId to set
+     */
+    public void setImportStatusId(String importStatusId) {
+        this.importStatusId = importStatusId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param importError the importError to set
+     */
+    public void setImportError(String importError) {
+        this.importError = importError;
     }
     /**
      * Auto generated value setter.
@@ -497,6 +519,20 @@ fieldMapColumns.put("DataImportProduct", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getImportStatusId() {
+        return this.importStatusId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getImportError() {
+        return this.importError;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getProcessedTimestamp() {
@@ -557,6 +593,8 @@ fieldMapColumns.put("DataImportProduct", fields);
         setProductFeature1((String) mapValue.get("productFeature1"));
         setSupplierPartyId((String) mapValue.get("supplierPartyId"));
         setPurchasePrice(convertToBigDecimal(mapValue.get("purchasePrice")));
+        setImportStatusId((String) mapValue.get("importStatusId"));
+        setImportError((String) mapValue.get("importError"));
         setProcessedTimestamp((Timestamp) mapValue.get("processedTimestamp"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
@@ -588,6 +626,8 @@ fieldMapColumns.put("DataImportProduct", fields);
         mapValue.put("productFeature1", getProductFeature1());
         mapValue.put("supplierPartyId", getSupplierPartyId());
         mapValue.put("purchasePrice", getPurchasePrice());
+        mapValue.put("importStatusId", getImportStatusId());
+        mapValue.put("importError", getImportError());
         mapValue.put("processedTimestamp", getProcessedTimestamp());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
