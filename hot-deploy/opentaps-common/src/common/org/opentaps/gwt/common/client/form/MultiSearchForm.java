@@ -92,9 +92,31 @@ public class MultiSearchForm extends BaseFormPanel {
     }
 
     private void search() {
-        if (win.getHeight() < RESULT_HEIGHT) {
-            win.setHeight(RESULT_HEIGHT);
+        int ph = com.google.gwt.user.client.Window.getClientHeight();
+        int pw = com.google.gwt.user.client.Window.getClientWidth();
+
+        int h = win.getHeight();
+        if (h < RESULT_HEIGHT) {
+            h = RESULT_HEIGHT;
         }
+        // make sure the window is not bigger than the page
+        // because the popup does not have scrollbars
+        if (h > ph) {
+            h = ph - 50;
+        }
+        win.setHeight(h);
+
+        int w = win.getWidth();
+        if (w < RESULT_WIDTH) {
+            w = RESULT_WIDTH;
+        }
+        // make sure the window is not bigger than the page
+        // because the popup does not have scrollbars
+        if (w > pw) {
+            w = pw - 50;
+        }
+        win.setWidth(w);
+
         win.show();
         win.center();
         for (SearchResultsListViewInterface grid : resultGrids) {
