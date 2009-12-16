@@ -26,6 +26,7 @@ import org.opentaps.gwt.common.client.form.LookupAccountsWindow;
 import org.opentaps.gwt.common.client.form.LookupContactsWindow;
 import org.opentaps.gwt.common.client.form.MultiSearchForm;
 import org.opentaps.gwt.common.client.form.OrderItemsEditable;
+import org.opentaps.gwt.common.client.form.ServiceErrorReader;
 import org.opentaps.gwt.common.client.listviews.AccountSearchListView;
 import org.opentaps.gwt.common.client.listviews.CaseSearchListView;
 import org.opentaps.gwt.common.client.listviews.ContactSearchListView;
@@ -513,12 +514,14 @@ public class Entry extends BaseEntry {
                     return;
                 }
 
+                final String actionUrl = "/crmsfa/control/assignAccountToContactAJX";
+
                 // keep user's selection
                 String accountPartyId = obj;
 
                 // nothing special, just send HTTP POST request
                 // and run crmsfa.assignContactToAccount service
-                RequestBuilder request = new RequestBuilder(RequestBuilder.POST, URL.encode("/crmsfa/control/assignAccountToContactAJX"));
+                RequestBuilder request = new RequestBuilder(RequestBuilder.POST, actionUrl);
                 request.setHeader("Content-type", "application/x-www-form-urlencoded");
                 request.setRequestData(Format.format("partyId={0}&contactPartyId={0}&accountPartyId={1}", getPartyId(), accountPartyId));
                 request.setCallback(new RequestCallback() {
@@ -529,8 +532,10 @@ public class Entry extends BaseEntry {
                     public void onResponseReceived(Request request, Response response) {
                         // we don't expect anything from server, just reload the list of contacts
                         UtilUi.logInfo("onResponseReceived, response = " + response, "", "loadAssignContactToAccountWidget");
-                        contactAccounts.getStore().reload();
-                        contactAccounts.loadFirstPage();
+                        if (!ServiceErrorReader.showErrorMessageIfAny(response, actionUrl)) {
+                            contactAccounts.getStore().reload();
+                            contactAccounts.loadFirstPage();
+                        }
                         contactAccounts.markGridNotBusy();
                     }
                 });
@@ -625,12 +630,14 @@ public class Entry extends BaseEntry {
                     return;
                 }
 
+                final String actionUrl = "/crmsfa/control/addContactToOpportunityAJX";
+
                 // keep user's selection
                 String contactPartyId = obj;
 
                 // nothing special, just send HTTP POST request
                 // and run crmsfa.assignContactToAccount service
-                RequestBuilder request = new RequestBuilder(RequestBuilder.POST, URL.encode("/crmsfa/control/addContactToOpportunityAJX"));
+                RequestBuilder request = new RequestBuilder(RequestBuilder.POST, actionUrl);
                 request.setHeader("Content-type", "application/x-www-form-urlencoded");
                 request.setRequestData(Format.format("salesOpportunityId={0}&contactPartyId={1}", getSalesOpportunityId(), contactPartyId));
                 request.setCallback(new RequestCallback() {
@@ -641,8 +648,10 @@ public class Entry extends BaseEntry {
                     public void onResponseReceived(Request request, Response response) {
                         // we don't expect anything from server, just reload the list of contacts
                         UtilUi.logInfo("onResponseReceived, response = " + response, "", "loadAssignContactToAccountWidget");
-                        opportunityContacts.getStore().reload();
-                        opportunityContacts.loadFirstPage();
+                        if (!ServiceErrorReader.showErrorMessageIfAny(response, actionUrl)) {
+                            opportunityContacts.getStore().reload();
+                            opportunityContacts.loadFirstPage();
+                        }
                         opportunityContacts.markGridNotBusy();
                     }
                 });
@@ -718,12 +727,14 @@ public class Entry extends BaseEntry {
                     return;
                 }
 
+                final String actionUrl = "/crmsfa/control/assignContactToAccountAJX";
+
                 // keep user's selection
                 String contactPartyId = obj;
 
                 // nothing special, just send HTTP POST request
                 // and run crmsfa.assignContactToAccount service
-                RequestBuilder request = new RequestBuilder(RequestBuilder.POST, URL.encode("/crmsfa/control/assignContactToAccountAJX"));
+                RequestBuilder request = new RequestBuilder(RequestBuilder.POST, actionUrl);
                 request.setHeader("Content-type", "application/x-www-form-urlencoded");
                 request.setRequestData(Format.format("partyId={0}&accountPartyId={0}&contactPartyId={1}", getPartyId(), contactPartyId));
                 request.setCallback(new RequestCallback() {
@@ -734,8 +745,10 @@ public class Entry extends BaseEntry {
                     public void onResponseReceived(Request request, Response response) {
                         // we don't expect anything from server, just reload the list of contacts
                         UtilUi.logInfo("onResponseReceived, response = " + response, "", "loadAssignContactToAccountWidget");
-                        accountContacts.getStore().reload();
-                        accountContacts.loadFirstPage();
+                        if (!ServiceErrorReader.showErrorMessageIfAny(response, actionUrl)) {
+                            accountContacts.getStore().reload();
+                            accountContacts.loadFirstPage();
+                        }
                         accountContacts.markGridNotBusy();
                     }
                 });

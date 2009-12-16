@@ -17,6 +17,7 @@
 package org.opentaps.gwt.crmsfa.client.accounts.form;
 
 import org.opentaps.gwt.common.client.UtilUi;
+import org.opentaps.gwt.common.client.form.ServiceErrorReader;
 import org.opentaps.gwt.common.client.listviews.AccountListView;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 
@@ -112,8 +113,10 @@ public class AccountsSublistView extends AccountListView {
                                 // if it is a correct response, reload the grid
                                 markGridNotBusy();
                                 UtilUi.logInfo("onResponseReceived, response = " + response, MODULE, "ContactListView.init()");
-                                getStore().reload();
-                                loadFirstPage();
+                                if (!ServiceErrorReader.showErrorMessageIfAny(response, actionUrl)) {
+                                    getStore().reload();
+                                    loadFirstPage();
+                                }
                             }
                         });
 
