@@ -36,6 +36,7 @@
     <handler name="json" type="request" class="org.ofbiz.webapp.event.JSONServiceEventHandler"/>
     <handler name="chart" type="view" class="org.opentaps.common.reporting.ChartViewHandler"/>
     <handler name="jasperreports" type="view" class="org.opentaps.common.reporting.jasper.JasperReportsViewHandler"/>
+    <handler name="jsonservice" type="request" class="org.ofbiz.webapp.event.JSONServiceEventHandler"/>
 
     <request-map uri="forgotpassword">
         <security https="true" auth="false"/>
