@@ -19,8 +19,8 @@ package org.opentaps.gwt.crmsfa.client;
 
 import org.opentaps.gwt.common.client.BaseEntry;
 import org.opentaps.gwt.common.client.UtilUi;
-import org.opentaps.gwt.common.client.form.FindContactsForm;
 import org.opentaps.gwt.common.client.form.FindAccountsForm;
+import org.opentaps.gwt.common.client.form.FindContactsForm;
 import org.opentaps.gwt.common.client.form.FormNotificationInterface;
 import org.opentaps.gwt.common.client.form.LookupAccountsWindow;
 import org.opentaps.gwt.common.client.form.LookupContactsWindow;
@@ -58,10 +58,8 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.Dictionary;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.gwtext.client.util.Format;
 import com.gwtext.client.widgets.Panel;
 
@@ -862,11 +860,12 @@ public class Entry extends BaseEntry {
 
         Hyperlink embedLink = new Hyperlink(UtilUi.MSG.opentapsReReserve(), null);
         embedLink.setStyleName("buttontext");
-        embedLink.addClickListener(new ClickListener() {
+        embedLink.addClickHandler(new ClickHandler() {
 
-            public void onClick(Widget sender) {
+            public void onClick(ClickEvent event) {
                 window.show();
             }
+
         });
 
         panel.add(embedLink);
