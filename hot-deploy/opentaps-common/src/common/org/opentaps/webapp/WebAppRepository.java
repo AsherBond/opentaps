@@ -43,7 +43,7 @@ public class WebAppRepository  extends Repository implements WebAppRepositoryInt
     /** {@inheritDoc}
      * @throws RepositoryException */
     public List<? extends OpentapsWebApps> getWebApps(User user) throws RepositoryException {
-        List<OpentapsWebApps> opentapsWebapps =  findAll(OpentapsWebApps.class, Arrays.asList(OpentapsWebApps.Fields.sequenceNum.asc()));
+        List<OpentapsWebApps> opentapsWebapps =  findAllCache(OpentapsWebApps.class, Arrays.asList(OpentapsWebApps.Fields.sequenceNum.asc()));
         //get all webapps defined in all the ofbiz-components
         List<WebappInfo> webapps = ComponentConfig.getAllWebappResourceInfos();
         Map<String, String[]> webappsMap = FastMap.newInstance();

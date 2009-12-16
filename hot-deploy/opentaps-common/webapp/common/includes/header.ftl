@@ -124,14 +124,16 @@ div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${f
     </script>
   </#if>
   <!-- display webapps menu -->
-  <@gwtWidget id="webAppsMenu"/>
   <!-- got the url of link to ofbiz application -->
   <#assign ofbizTabTarget= Static["org.opentaps.common.util.UtilConfig"].getPropertyValue(appName, appName + ".tab.ofbiz.target")/>
   <#if ofbizTabTarget?exists>  
     <#assign ofbizAppUrl=response.encodeURL(ofbizTabTarget)/>
   </#if>
-  <div style="float: left; margin-left: 10px; margin-top: 5px; margin-bottom: 10px;">
+  <div style="float: left; vertical-align:top; margin-top: 0px;">
+    <@gwtWidget id="webAppsMenu"/>
+    <div style="margin-left: 10px; margin-top: 5px; margin-bottom: 10px;">
     <#if ofbizAppUrl?exists><a href="${ofbizAppUrl}"></#if><img alt="${configProperties.get(opentapsApplicationName+".title")}" src="<@ofbizContentUrl>${configProperties.get("opentaps.logo")}</@ofbizContentUrl>" border="0"/><#if ofbizAppUrl?exists></a></#if>
+    </div>
   </div>
 
   <div align="right" style="margin-left: 300px; margin-right: 10px; margin-top: 10px;">

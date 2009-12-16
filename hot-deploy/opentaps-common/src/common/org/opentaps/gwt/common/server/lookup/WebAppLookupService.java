@@ -26,7 +26,6 @@ import javolution.util.FastList;
 
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.base.util.cache.UtilCache;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.webapp.control.LoginWorker;
 import org.opentaps.base.entities.OpentapsWebApps;
@@ -42,7 +41,6 @@ import org.opentaps.gwt.common.server.InputProviderInterface;
 public class WebAppLookupService  extends EntityLookupService {
 
     private static final String MODULE = WebAppLookupService.class.getName();
-    protected static UtilCache<String, List<? extends OpentapsWebApps>> webappsCache = new UtilCache<String, List<? extends OpentapsWebApps>>("menu.webapps", 0, 0, false);;
     protected WebAppLookupService(InputProviderInterface provider) {
         super(provider, WebAppLookupConfiguration.LIST_OUT_FIELDS);
     }
@@ -71,19 +69,9 @@ public class WebAppLookupService  extends EntityLookupService {
     
     public List<? extends OpentapsWebApps> findWebApps(String currentApplicationId, String externalLoginKey) {
         try {
-            String userLoginId = getProvider().getUser() == null ? "" : getProvider().getUser().getUserId();
             List<OpentapsWebApps> sortedWebapps = new FastList();
-            List<? extends OpentapsWebApps> webapps;
-            if (webappsCache.containsKey(userLoginId)) {
-                webapps = webappsCache.get(userLoginId);
-            } else {
-                WebAppRepositoryInterface webAppRepository = getDomainsDirectory().getWebAppDomain().getWebAppRepository();
-                webapps = webAppRepository.getWebApps(getProvider().getUser());
-                // cache the webapps
-                synchronized (webappsCache) {
-                    webappsCache.put(userLoginId, webapps);
-                }
-            }
+            WebAppRepositoryInterface webAppRepository = getDomainsDirectory().getWebAppDomain().getWebAppRepository();
+            List<? extends OpentapsWebApps> webapps = webAppRepository.getWebApps(getProvider().getUser());
             for (OpentapsWebApps webapp : webapps) {
                 OpentapsWebApps returnWebApp = new OpentapsWebApps();
                 // prepare the OpentapsWebApps for return
@@ -96,11 +84,8 @@ public class WebAppLookupService  extends EntityLookupService {
                 if (returnWebApp.getApplicationId().equals(currentApplicationId)) {
                     // set empty string to link
                     returnWebApp.setLinkUrl("");
-                    // move current app to top
-                    sortedWebapps.add(0, returnWebApp);
-                } else {
-                    sortedWebapps.add(returnWebApp);
                 }
+                sortedWebapps.add(returnWebApp);
             }
 
             // add other items
@@ -108,9 +93,6 @@ public class WebAppLookupService  extends EntityLookupService {
             setResults(sortedWebapps);
             return sortedWebapps;
         } catch (RepositoryException e) {
-            storeException(e);
-            return null;
-        } catch (InfrastructureException e) {
             storeException(e);
             return null;
         }
