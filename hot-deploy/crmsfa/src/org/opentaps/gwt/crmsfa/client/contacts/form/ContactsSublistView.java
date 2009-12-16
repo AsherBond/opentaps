@@ -85,21 +85,24 @@ public class ContactsSublistView extends ContactListView {
         makeColumn(UtilUi.MSG.country(), new StringFieldDef(PartyLookupConfiguration.INOUT_COUNTRY));
         makeColumn(UtilUi.MSG.postalCode(), new StringFieldDef(PartyLookupConfiguration.INOUT_POSTAL_CODE));
         makeColumn(UtilUi.MSG.postalCodeExt(), new StringFieldDef(PartyLookupConfiguration.OUT_POSTAL_CODE_EXT));
-        deleteColumnIndex = getCurrentColumnIndex();
-        ColumnConfig config = makeColumn("", new Renderer() {
+
+        // add Remove button if user has required permission
+        if (hasRemovePermission(isOpportunity)) {
+            deleteColumnIndex = getCurrentColumnIndex();
+            ColumnConfig config = makeColumn("", new Renderer() {
                 public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
                     return Format.format("<img width=\"15\" height=\"15\" class=\"checkbox\" src=\"{0}\"/>", UtilUi.ICON_DELETE);
                 }
             });
-        config.setWidth(26);
-        config.setResizable(false);
-        config.setFixed(true);
-        config.setSortable(false);
+            config.setWidth(26);
+            config.setResizable(false);
+            config.setFixed(true);
+            config.setSortable(false);
 
-        addGridCellListener(new GridCellListenerAdapter() {
-            private final String actionUrl = isOpportunity ?
-                    "/crmsfa/control/removeContactFromOpportunity"
-                    : "/crmsfa/control/removeContactFromAccount";
+            addGridCellListener(new GridCellListenerAdapter() {
+                private final String actionUrl = isOpportunity ?
+                        "/crmsfa/control/removeContactFromOpportunity"
+                        : "/crmsfa/control/removeContactFromAccount";
 
                 /** {@inheritDoc} */
                 @Override
@@ -114,20 +117,20 @@ public class ContactsSublistView extends ContactListView {
                             request.setRequestData(Format.format("partyId={0}&accountPartyId={0}&contactPartyId={1}", ContactsSublistView.this.entityId, contactPartyId));
                         }
                         request.setCallback(new RequestCallback() {
-                                public void onError(Request request, Throwable exception) {
-                                    // display error message
-                                    markGridNotBusy();
-                                    UtilUi.errorMessage(exception.toString());
-                                }
-                                public void onResponseReceived(Request request, Response response) {
-                                    // if it is a correct response, reload the grid
-                                    markGridNotBusy();
-                                    UtilUi.logInfo("onResponseReceived, response = " + response, MODULE, "ContactListView.init()");
-                                    // commit store changes
-                                    getStore().reload();
-                                    loadFirstPage();
-                                }
-                            });
+                            public void onError(Request request, Throwable exception) {
+                                // display error message
+                                markGridNotBusy();
+                                UtilUi.errorMessage(exception.toString());
+                            }
+                            public void onResponseReceived(Request request, Response response) {
+                                // if it is a correct response, reload the grid
+                                markGridNotBusy();
+                                UtilUi.logInfo("onResponseReceived, response = " + response, MODULE, "ContactListView.init()");
+                                // commit store changes
+                                getStore().reload();
+                                loadFirstPage();
+                            }
+                        });
 
                         try {
                             markGridBusy();
@@ -142,6 +145,7 @@ public class ContactsSublistView extends ContactListView {
                 }
 
             });
+        }
 
         configure(PartyLookupConfiguration.URL_FIND_CONTACTS, PartyLookupConfiguration.INOUT_PARTY_ID, SortDir.ASC);
 
@@ -156,4 +160,21 @@ public class ContactsSublistView extends ContactListView {
         setColumnHidden(PartyLookupConfiguration.INOUT_POSTAL_CODE, true);
         setColumnHidden(PartyLookupConfiguration.OUT_POSTAL_CODE_EXT, true);
     }
+
+    /**
+     * Contact list in view opportunity must has Remove button if user has
+     * CRMSFA_OPP_UPDATE permission. For view account screen required permission
+     * is CRMSFA_ACCOUNT_UPDATE.
+     * @param isOpportunity <code>true</code> if widget is used on view opportunity page
+     * @return put Remove button as last column if user has permission to remove contacts.
+     */
+    private native boolean hasRemovePermission(boolean isOpportunity)/*-{
+        if (isOpportunity && $wnd.securityUser.CRMSFA_OPP_UPDATE) {
+            return true;
+        } else if ($wnd.securityUser.CRMSFA_ACCOUNT_UPDATE) {
+            return true;
+        };
+
+        return false;
+    }-*/;
 }
