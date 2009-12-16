@@ -164,7 +164,12 @@ if (contactActive) {
     if (CrmsfaSecurity.hasPartyRelationSecurity(request.getAttribute("security"), "CRMSFA_CASE", "_CREATE", request.getAttribute("userLogin"), partyId)) {
         context.put("hasCreateCasePermission", true);
     }
-    
+
+    // permission to create new account
+    if (security.hasEntityPermission("CRMSFA_ACCOUNT", "_CREATE", userLogin)) {
+        context.put("hasCreateAccountPermission", true);
+    }
+
     //  permission to create orders
     if (CrmsfaSecurity.hasPartyRelationSecurity(request.getAttribute("security"), "CRMSFA_ORDER", "_CREATE", request.getAttribute("userLogin"), partyId)) 
         context.put("hasCreateOrderPermission", true);

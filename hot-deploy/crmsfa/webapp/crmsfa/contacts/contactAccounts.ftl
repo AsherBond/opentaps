@@ -21,11 +21,9 @@
 <@sectionHeader title=uiLabelMap.CrmAccounts>
 <#if hasUpdatePermission?exists>
     <div class="subMenuBar" id="assignAccountToContact">
-        <#--
-        TODO: this update permission is not the ACCOUNTS_UPDATE one, so what do we do here?
-        <@displayLink href="createAccountForm?contactPartyId=${partySummary.partyId}" text="${uiLabelMap.CrmCreateNew}" class="subMenuButton"/>
-        -->
-        <#-- Empty on purpose. GWT widget installs button later. --> 
+        <#if hasCreateAccountPermission?exists>
+            <@displayLink href="createAccountForm?contactPartyId=${partySummary.partyId}" text="${uiLabelMap.CrmCreateNew}" class="subMenuButton"/>
+        </#if>
     </div>
 </#if>
 </@sectionHeader>
