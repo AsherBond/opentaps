@@ -150,6 +150,11 @@
     font-family:arial,sans-serif;
 }
 
+.moreMenu {
+    text-decoration:underline !important;
+    font-family:arial,sans-serif;
+}
+
 .topMenu .gwt-MenuBar-horizontal {
   background: #ffffff !important;
   border: 0px !important;

@@ -86,6 +86,7 @@ public class WebAppsMenu extends BaseEntry {
 
        // More menu - vertical=true
         MenuBar menuMore = new MenuBar(true);
+        menuMore.addStyleName("moreMenu");
         
         for (int i=0; i < records.length; i++) {
             Record record = records[i];
@@ -93,24 +94,18 @@ public class WebAppsMenu extends BaseEntry {
             String shortName = record.getAsString(WebAppLookupConfiguration.OUT_SHORT_NAME);
             final String linkUrl = record.getAsString(WebAppLookupConfiguration.OUT_LINK_URL);
             if (applicationId != null) {
-                Command command = null;
+                Command command = new Command() {public void execute(){}};
                 String menuStyle = "";
+                String menuText = "";
                 if (linkUrl != null && !"".equals(linkUrl)) {
                     menuStyle = i <= DISPLAY_MENU_ITEMS ? "linkMenu" : "textMenu";
-                    command = new Command()
-                    {
-                        public void execute()
-                        {
-                            redirect(linkUrl);
-                        }
-                    };
+                    menuText =  "<a href=\"" + linkUrl + "\">" + shortName + "</a>";
                 } else {
                     menuStyle = "textMenu";
-                    // null command
-                    command = new Command() {public void execute(){}};
+                    menuText = shortName;
                 }
                 
-                MenuItem menuItem = new MenuItem(shortName, command);
+                MenuItem menuItem = new MenuItem(menuText, true, command);
                 menuItem.addStyleName(menuStyle);
                 if (i <= DISPLAY_MENU_ITEMS) {
                     // The top 5 should be shown above logo.
@@ -123,7 +118,7 @@ public class WebAppsMenu extends BaseEntry {
         }
         // add "more" second level menu for contain more link 
         if (records.length > DISPLAY_MENU_ITEMS + 1) {
-            menuTop.addItem("more", menuMore);
+            menuTop.addItem("<u>more</u>", true, menuMore);
         }
         // add menu to the root panel.
         RootPanel.get(WEBAPPS_MENU_ID).add(menuTop);
