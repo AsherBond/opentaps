@@ -19,6 +19,8 @@ package org.opentaps.search.party;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.entities.PartyRole;
 import org.opentaps.search.HibernateSearchService;
 
@@ -72,6 +74,16 @@ public final class PartySearch {
         sb.append(")");
     }
 
+    public static void makeLeadQuery(StringBuilder sb) {
+        sb.append("( +id.roleTypeId:").append(RoleTypeConstants.PROSPECT).append(" +(");
+        for (String f : Arrays.asList("partyId", "firstName", "lastName", "middleName", "firstNameLocal", "lastNameLocal", "nickname")) {
+            sb.append("party.person.").append(f).append(":").append(HibernateSearchService.DEFAULT_PLACEHOLDER).append(" ");
+        }
+        sb.append("party.partySupplementalData.companyName:").append(HibernateSearchService.DEFAULT_PLACEHOLDER).append(" ");
+        sb.append("party.partySupplementalData.companyNameLocal:").append(HibernateSearchService.DEFAULT_PLACEHOLDER);
+        sb.append("))");
+    }
+
     /**
      * Builds a Lucene query for each indexed field of a Party Group entity.
      * eg: <code>party.partyGroup.partyId:? party.partyGroup.groupName:? ...</code>
@@ -84,4 +96,5 @@ public final class PartySearch {
         }
         sb.append(")");
     }
+
 }

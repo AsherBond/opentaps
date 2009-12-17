@@ -51,7 +51,7 @@ public class LeadSearchService extends HibernateSearchService implements LeadSea
     /** {@inheritDoc} */
     public String getQueryString() {
         StringBuilder sb = new StringBuilder();
-        PartySearch.makePersonQuery(sb, RoleTypeConstants.PROSPECT);
+        PartySearch.makeLeadQuery(sb);
         return sb.toString();
     }
 
