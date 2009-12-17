@@ -51,6 +51,7 @@ import java.sql.Timestamp;
  * Auto generated base entity PartySupplementalData.
  */
 @javax.persistence.Entity
+@Indexed
 @Table(name="PARTY_SUPPLEMENTAL_DATA")
 public class PartySupplementalData extends Entity {
 static {
@@ -113,6 +114,12 @@ fieldMapColumns.put("PartySupplementalData", fields);
    @org.hibernate.annotations.GenericGenerator(name="PartySupplementalData_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
    @GeneratedValue(generator="PartySupplementalData_GEN")
    @Id
+   @DocumentId
+   @org.hibernate.search.annotations.Fields( {
+       @Field(index=Index.TOKENIZED, store=Store.NO),
+     @Field(index=Index.UN_TOKENIZED, store=Store.YES)
+   } )
+   @Boost(1f)
    @Column(name="PARTY_ID")
    private String partyId;
    @Column(name="PARENT_PARTY_ID")
@@ -174,14 +181,14 @@ fieldMapColumns.put("PartySupplementalData", fields);
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
-   
+   @IndexedEmbedded(depth = 2)
    private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
-   
+   @IndexedEmbedded(depth = 2)
    private Party parentParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)

@@ -722,11 +722,11 @@ fieldMapColumns.put("Party", fields);
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
-   
+   @IndexedEmbedded(depth = 2)
    private PartySupplementalData partySupplementalData = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_PARTY_ID")
-   
+   @ContainedIn
    private List<PartySupplementalData> parentPartySupplementalDatas = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
