@@ -38,6 +38,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.common.util.UtilCommon;
 
 /**
@@ -95,8 +96,8 @@ public final class ProductImportServices {
             }
 
             EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
-                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, OpentapsImporter.DATAIMP_NOT_PROC),
-                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, OpentapsImporter.DATAIMP_FAILED),
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_NOT_PROC),
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_FAILED),
                     EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
             // need to get an ELI because of possibly large number of records.  productId <> null will get all records
             EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
@@ -187,8 +188,8 @@ public final class ProductImportServices {
         // run the facility-specific data importing routine for each unique facility
         try {
             EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
-                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, OpentapsImporter.DATAIMP_NOT_PROC),
-                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, OpentapsImporter.DATAIMP_FAILED),
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_NOT_PROC),
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_FAILED),
                     EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
             // Get a list of distinct facilityIds to import
             EntityListIterator facilitiesIterator = delegator.findListIteratorByCondition("DataImportInventory",
@@ -292,8 +293,8 @@ public final class ProductImportServices {
         String acctgTransId = (String) createAcctgTransResults.get("acctgTransId");
 
         EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
-                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, OpentapsImporter.DATAIMP_NOT_PROC),
-                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, OpentapsImporter.DATAIMP_FAILED),
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_NOT_PROC),
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_FAILED),
                 EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
         // need to get an ELI because of possibly large number of records.  productId <> null will get all records
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
@@ -481,7 +482,7 @@ public final class ProductImportServices {
         }
 
         // mark the entity as processed
-        data.set("importStatusId", OpentapsImporter.DATAIMP_IMPORTED);
+        data.set("importStatusId", StatusItemConstants.Dataimport.DATAIMP_IMPORTED);
         data.set("importError", null);
         // update the original data record with a timestamp which also denotes that it has been processed (processedTimestamp = null was original search condition)
         data.set("processedTimestamp", UtilDateTime.nowTimestamp());
@@ -618,7 +619,7 @@ public final class ProductImportServices {
 
         // Update the original productInventory record with a timestamp which also denotes that it has been processed (processedTimestamp = null was original search condition)
         productInventory.set("processedTimestamp", UtilDateTime.nowTimestamp());
-        productInventory.set("importStatusId", OpentapsImporter.DATAIMP_IMPORTED);
+        productInventory.set("importStatusId", StatusItemConstants.Dataimport.DATAIMP_IMPORTED);
         productInventory.set("importError", null); // clear this out in case it had an exception originally
         toStore.add(productInventory);
 
@@ -635,7 +636,7 @@ public final class ProductImportServices {
     @SuppressWarnings("unchecked")
     private static void storeImportProductError(GenericValue dataImportProduct, String message, GenericDelegator delegator) throws GenericEntityException {
         // store the exception and mark as failed
-        dataImportProduct.set("importStatusId", OpentapsImporter.DATAIMP_FAILED);
+        dataImportProduct.set("importStatusId", StatusItemConstants.Dataimport.DATAIMP_FAILED);
         dataImportProduct.set("processedTimestamp", UtilDateTime.nowTimestamp());
         dataImportProduct.set("importError", message);
         dataImportProduct.store();
@@ -651,7 +652,7 @@ public final class ProductImportServices {
     @SuppressWarnings("unchecked")
     private static void storeImportInventoryError(GenericValue dataImportInventory, String message, GenericDelegator delegator) throws GenericEntityException {
         // store the exception and mark as failed
-        dataImportInventory.set("importStatusId", OpentapsImporter.DATAIMP_FAILED);
+        dataImportInventory.set("importStatusId", StatusItemConstants.Dataimport.DATAIMP_FAILED);
         dataImportInventory.set("processedTimestamp", UtilDateTime.nowTimestamp());
         dataImportInventory.set("importError", message);
         dataImportInventory.store();

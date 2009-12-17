@@ -43,6 +43,7 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.common.party.PartyContactHelper;
 
 /**
@@ -128,8 +129,8 @@ public class OrderImportServices {
 
             // need to get an ELI because of possibly large number of records.  productId <> null will get all records
             EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
-                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, OpentapsImporter.DATAIMP_NOT_PROC),
-                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, OpentapsImporter.DATAIMP_FAILED),
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_NOT_PROC),
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_FAILED),
                     EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
             EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                         EntityCondition.makeCondition("orderId", EntityOperator.NOT_EQUAL, null),
@@ -232,20 +233,20 @@ public class OrderImportServices {
     private static void storeImportError(GenericValue dataImportOrderHeader, String message, GenericDelegator delegator) throws GenericEntityException {
         // OrderItems
         EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
-                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, OpentapsImporter.DATAIMP_NOT_PROC),
-                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, OpentapsImporter.DATAIMP_FAILED),
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_NOT_PROC),
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_FAILED),
                 EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
         List orderItemConditions = UtilMisc.toList(EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, dataImportOrderHeader.getString("orderId")), statusCond);
         List<GenericValue> dataImportOrderItems = delegator.findByCondition("DataImportOrderItem", EntityCondition.makeCondition(orderItemConditions, EntityOperator.AND), null, null);
         for (GenericValue dataImportOrderItem : dataImportOrderItems) {
             // store the exception and mark as failed
-            dataImportOrderItem.set("importStatusId", OpentapsImporter.DATAIMP_FAILED);
+            dataImportOrderItem.set("importStatusId", StatusItemConstants.Dataimport.DATAIMP_FAILED);
             dataImportOrderItem.set("processedTimestamp", UtilDateTime.nowTimestamp());
             dataImportOrderItem.set("importError", message);
             dataImportOrderItem.store();
         }
         // store the exception and mark as failed
-        dataImportOrderHeader.set("importStatusId", OpentapsImporter.DATAIMP_FAILED);
+        dataImportOrderHeader.set("importStatusId", StatusItemConstants.Dataimport.DATAIMP_FAILED);
         dataImportOrderHeader.set("processedTimestamp", UtilDateTime.nowTimestamp());
         dataImportOrderHeader.set("importError", message);
         dataImportOrderHeader.store();
@@ -408,8 +409,8 @@ public class OrderImportServices {
 
         // OrderItems
         EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
-                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, OpentapsImporter.DATAIMP_NOT_PROC),
-                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, OpentapsImporter.DATAIMP_FAILED),
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_NOT_PROC),
+                EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_FAILED),
                 EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
         List orderItemConditions = UtilMisc.toList(EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId), statusCond);
         List externalOrderItems = delegator.findByCondition("DataImportOrderItem", EntityCondition.makeCondition(orderItemConditions, EntityOperator.AND), null, null); //getExternalOrderItems(externalOrderHeader.getString("orderId"), delegator);
@@ -494,7 +495,7 @@ public class OrderImportServices {
                     orderAdjustments.add(adj);
                 }
             }
-            externalOrderItem.set("importStatusId", OpentapsImporter.DATAIMP_IMPORTED);
+            externalOrderItem.set("importStatusId", StatusItemConstants.Dataimport.DATAIMP_IMPORTED);
             externalOrderItem.set("importError", null);
             externalOrderItem.set("processedTimestamp", UtilDateTime.nowTimestamp());
             externalOrderItem.set("orderItemSeqId", orderItemSeqId);
@@ -571,7 +572,7 @@ public class OrderImportServices {
 
         // Set the processedTimestamp on the externalOrderHeader
         externalOrderHeader.set("processedTimestamp", UtilDateTime.nowTimestamp());
-        externalOrderHeader.set("importStatusId", OpentapsImporter.DATAIMP_IMPORTED);
+        externalOrderHeader.set("importStatusId", StatusItemConstants.Dataimport.DATAIMP_IMPORTED);
         externalOrderHeader.set("importError", null); // clear this out in case it had an exception originally
         
         // Add everything to the store list here to avoid problems with having to derive more values for order header, etc.
