@@ -149,3 +149,22 @@
     text-decoration:underline !important;
     font-family:arial,sans-serif;
 }
+
+.topMenu .gwt-MenuBar-horizontal {
+  background: #ffffff !important;
+  border: 0px !important;
+}
+
+.topMenu { 
+  background: #ffffff !important;
+  border: 0px !important;
+}
+
+.topMenu .gwt-MenuItem { 
+  background: #ffffff !important;
+  border: 0px !important;
+}
+.topMenu .gwt-MenuItem-selected { 
+  background: #ffffff !important;
+  border: 0px !important;
+}
