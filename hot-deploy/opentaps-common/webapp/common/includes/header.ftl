@@ -139,11 +139,8 @@ div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${f
   <div align="right" style="margin-left: 300px; margin-right: 10px; margin-top: 10px;">
 
     <div class="insideHeaderText">
-      <#if person?has_content>
-        ${person.firstName?if_exists}&nbsp;${person.lastName?if_exists} |
-      <#elseif partyGroup?has_content>
-        ${partyGroup.groupName?if_exists} |
-      <#else>
+      <#if requestAttributes.userLogin?has_content>
+        <b>${userLogin.userLoginId}</b> |
       </#if>
       <#-- user, profile, shortcuts, logout buttons -->
       <#if requestAttributes.userLogin?has_content>
