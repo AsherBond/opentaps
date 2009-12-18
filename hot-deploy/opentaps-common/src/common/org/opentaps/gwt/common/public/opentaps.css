@@ -147,13 +147,13 @@
 
 .linkMenu {
     text-decoration:underline !important;
-    font-weight:normal;
-    font-family:Verdana,Arial,Helvetica,sans-serif;
+    font-weight:normal !important;
+    font-family:Verdana,Arial,Helvetica,sans-serif !important;
 }
 
 .moreMenu {
     text-decoration:underline !important;
-    font-family:Verdana,Arial,Helvetica,sans-serif;
+    font-family:Verdana,Arial,Helvetica,sans-serif !important;
 }
 
 .topMenu .gwt-MenuBar-horizontal {
