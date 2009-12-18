@@ -92,6 +92,10 @@ public class WebAppsMenu extends BaseEntry {
             Record record = records[i];
             String applicationId = record.getAsString(WebAppLookupConfiguration.OUT_APPLICATION_ID);
             String shortName = record.getAsString(WebAppLookupConfiguration.OUT_SHORT_NAME);
+            // in case the app has no shortName set, display the applicationId
+            if (shortName == null) {
+                shortName = applicationId;
+            }
             final String linkUrl = record.getAsString(WebAppLookupConfiguration.OUT_LINK_URL);
             if (applicationId != null) {
                 Command command = new Command() {public void execute(){}};
