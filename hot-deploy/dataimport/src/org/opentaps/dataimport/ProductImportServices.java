@@ -374,20 +374,32 @@ public final class ProductImportServices {
         }
         input.put("productId", data.get("productId"));
         input.put("productTypeId", data.get("productTypeId"));
-        input.put("internalName", data.get("description"));
+        input.put("internalName", data.get("internalName"));
         input.put("description", data.get("description"));
-        input.put("productName", data.get("description"));
+        input.put("longDescription", data.get("longDescription"));
+        input.put("productName", data.get("productName"));
+        input.put("brandName", data.get("brandName"));
+        input.put("comments", data.get("comments"));
+        input.put("smallImageUrl", data.get("smallImageUrl"));
+        input.put("mediumImageUrl", data.get("mediumImageUrl"));
+        input.put("largeImageUrl", data.get("largeImageUrl"));
+
         input.put("productHeight", data.get("height"));
         input.put("heightUomId", data.get("heightUomId"));
         input.put("productDepth", data.get("productLength"));
         input.put("depthUomId", data.get("productLengthUomId"));
         input.put("productWidth", data.get("width"));
         input.put("widthUomId", data.get("widthUomId"));
+        input.put("taxable", data.get("taxable"));        
         input.put("weight", data.get("weight"));
         input.put("weightUomId", data.get("weightUomId"));
         input.put("isVirtual", "N");
         input.put("isVariant", "N");
-        input.put("createdDate", now);
+        if(data.get("createdDate")!=null || data.get("createdDate")!=""){
+            input.put("createdDate",data.get("createdDate"));
+        }else{
+            input.put("createdDate", now);
+        }        
         GenericValue product = delegator.makeValue("Product", input);
         toStore.add(product);
 
