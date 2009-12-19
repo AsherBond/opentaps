@@ -30,7 +30,7 @@
 
 <html>
  <head>
-  <title>Opentaps Funambol Module</title>
+  <title>opentaps Funambol Module</title>
   <link rel="stylesheet" href="css/home.css" type="text/css">
  </head>
 
@@ -40,9 +40,11 @@
     <tr>
      <td valign="top" align="center">
       <div align="center">
-	   <a href="/crmsfa/control/main">Opentaps</a> Funambol Module<br/><br/>
+	   <a href="/opentaps/control/main">opentaps</a> Funambol Module<br/><br/>
 		
-	   <a href="http://www.opensourcestrategies.com">Open Source Strategies, Inc.</a><br/>
+           This is just a test page.  If you see this page, then the Funambol module is loaded.<br/>
+           Please see <a href="http://www.opentaps.org/docs/index.php/Opentaps_Funambol_Setup">opentaps Funambol Setup</a>
+           for instructions.<br/><br/>
 	   Powered by:	  
 	   <a href="http://www.funambol.com"><img src="imgs/funambol.gif" alt="Funambol Data Synchronization Server" width="146" height="118" border="0"></a>
      </td>
