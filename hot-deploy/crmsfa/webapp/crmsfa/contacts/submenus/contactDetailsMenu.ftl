@@ -16,27 +16,28 @@
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
-<#if hasUpdatePermission?exists>
-  <#assign updateLink><a class="subMenuButton" href="updateContactForm?partyId=${partySummary.partyId}">${uiLabelMap.CommonEdit}</a></#assign>
-</#if>
-
-  <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#if isDeactivateLinkRendered?default(false)>  
-  <#assign deactivateLink><@inputConfirm class="subMenuButtonDangerous" href="deactivateContact?partyId=${partySummary.partyId}" title=uiLabelMap.CrmDeactivateContact /></#assign>
+  <@form name="DeactivateContactHiddenForm" url="deactivateContact" partyId="${partySummary.partyId}" />
 </#if>
 
 <#if isAssignedToMeLinkRendered?default(false)>
-  <#assign assignLink><a class="subMenuButton" href="assignContactToParty?partyId=${parameters.partyId}&roleTypeId=CONTACT">${uiLabelMap.OpentapsAssignToMe}</a></#assign>
+  <@form name="AssignContactHiddenForm" url="assignContactToParty" partyId="${parameters.partyId}" roleTypeId="CONTACT" />
 </#if>
 
 <#if isUnassignLinkRendered?default(false)>
-  <#assign unassignLink><a class="subMenuButton" href="unassignPartyFromContact?partyId=${parameters.partyId}&roleTypeId=CONTACT">${uiLabelMap.OpentapsUnassign}</a></#assign>
+  <@form name="UnassignContactHiddenForm" url="unassignPartyFromContact" partyId="${parameters.partyId}" roleTypeId="CONTACT" />
 </#if>
 
 <div class="subSectionHeader">
     <div class="subSectionTitle">${uiLabelMap.CrmContact}
         <#if contactDeactivated?exists><span class="subSectionWarning">${uiLabelMap.CrmContactDeactivated} ${getLocalizedDate(contactDeactivatedDate, "DATE_TIME")}</span></#if>
     </div>
-    <div class="subMenuBar">${assignLink?if_exists}${unassignLink?if_exists}${updateLink?if_exists}${deactivateLink?if_exists}</div>
+    <div class="subMenuBar">
+        <#if isAssignedToMeLinkRendered?default(false)><@submitFormLink form="AssignContactHiddenForm" text="${uiLabelMap.OpentapsAssignToMe}" class="subMenuButton"/></#if>
+        <#if isUnassignLinkRendered?default(false)><@submitFormLink form="UnassignContactHiddenForm" text="${uiLabelMap.OpentapsUnassign}" class="subMenuButton"/></#if>
+        <#if hasUpdatePermission?exists><@displayLink href="updateContactForm?partyId=${partySummary.partyId}" text="${uiLabelMap.CommonEdit}" class="subMenuButton"/></#if>
+        <#if isDeactivateLinkRendered?default(false)><@submitFormLinkConfirm form="DeactivateContactHiddenForm" text="${uiLabelMap.CrmDeactivateContact}" class="subMenuButtonDangerous" /></#if>
+    </div>
 </div>
