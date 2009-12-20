@@ -43,9 +43,6 @@ import org.ofbiz.base.util.UtilMisc;
 import org.opentaps.common.util.UtilConfig;
 import org.opentaps.common.security.OpentapsSecurity;
 
-//organization party
-organizationPartyId = session.getAttribute("organizationPartyId");
-
 
 // Get userLogin
 userLogin = request.getAttribute("userLogin");
@@ -59,9 +56,9 @@ security = request.getAttribute("security");
 context{"security"} = security;
 dataimportSecurity = new OpentapsSecurity(security, userLogin);
 hasDIAdminPermissions = Boolean.FALSE;
-if (organizationPartyId != null) {
+
     hasDIAdminPermissions = dataimportSecurity.hasPartyRelationSecurity("DATAIMPORT", "_ADMIN", organizationPartyId);
-}
+
 globalContext.put("hasDIAdminPermissions", hasDIAdminPermissions);
 
 // external login key
