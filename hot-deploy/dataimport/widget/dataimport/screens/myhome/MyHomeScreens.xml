@@ -38,7 +38,7 @@
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId" default-value="0"/>
                 
                 <!-- Data required by dashboard -->
-                <script location="component://dataimport/webapp/dataimport/WEB-INF/actions/myhome/myHome.bsh"/>
+                <script location="component://dataimport/webapp/dataimport/WEB-INF/actions/myhome/myHome.groovy"/>
                 
             </actions>
             <widgets>
@@ -60,7 +60,7 @@
         <section>
             <actions>
                 <set field="pageTitleLabel" value="OpentapsMyHome"/>
-                <script location="component://webtools/webapp/webtools/WEB-INF/actions/service/scheduleJob.bsh"/>
+                <script location="component://webtools/webapp/webtools/WEB-INF/actions/service/ScheduleJob.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
