@@ -61,6 +61,7 @@ public class ScreenXmlViewHandler extends ScreenWidgetViewHandler {
             // this is the object used to render forms from their definitions
             screens.getContext().put("formStringRenderer", new XmlFormRenderer(request, response));
             screens.getContext().put("simpleEncoder", StringUtil.xmlEncoder);
+            screens.getContext().put("_CONTENT_TYPE_", contentType);
             screens.render(page);
         } catch (IOException e) {
             throw new ViewHandlerException("Error in the response writer/output stream: " + e.toString(), e);
