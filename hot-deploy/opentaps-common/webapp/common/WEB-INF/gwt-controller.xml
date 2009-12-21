@@ -218,7 +218,7 @@
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>
-    
+
     <request-map uri="gwtSuggestCasePriorities">
         <security https="true" auth="true"/>
         <event type="java" path="org.opentaps.gwt.common.server.lookup.CasePriorityLookupService" invoke="suggestCasePriorities"/>

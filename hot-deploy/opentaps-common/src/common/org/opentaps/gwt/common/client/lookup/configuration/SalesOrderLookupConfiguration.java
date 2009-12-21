@@ -35,6 +35,7 @@ public abstract class SalesOrderLookupConfiguration {
     public static final String MY_VALUES = "MY_VALUES";
 
     public static final String IN_FIND_ALL = "findAll";
+    public static final String IN_DESIRED = "desiredOrdersOnly";
 
     public static final String INOUT_ORDER_ID = "orderId";
     public static final String IN_EXTERNAL_ID = "externalId";

@@ -29,13 +29,14 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
-import org.opentaps.common.util.UtilView;
 import org.opentaps.base.entities.CustRequestAndPartyRelationshipAndRole;
+import org.opentaps.common.util.UtilView;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.gwt.common.client.lookup.configuration.CaseLookupConfiguration;
 import org.opentaps.gwt.common.server.HttpInputProvider;
 import org.opentaps.gwt.common.server.InputProviderInterface;
+
 /**
  * The RPC service used to populate the CaseListview.
  */
@@ -46,7 +47,7 @@ public class CaseLookupService extends EntityLookupAndSuggestService {
             CaseLookupConfiguration.INOUT_STATUS_ID,
             CaseLookupConfiguration.INOUT_CUST_REQUEST_TYPE_ID,
             CaseLookupConfiguration.INOUT_CUST_REQUEST_NAME
-        );
+    );
     /**
      * Creates a new <code>CaseLookupService</code> instance.
      * @param provider an <code>InputProviderInterface</code> value
@@ -56,7 +57,7 @@ public class CaseLookupService extends EntityLookupAndSuggestService {
     }
 
     /**
-     * AJAX event to perform lookups on Accounts.
+     * AJAX event to perform lookups on customer requests.
      * @param request a <code>HttpServletRequest</code> value
      * @param response a <code>HttpServletResponse</code> value
      * @return the resulting JSON response
@@ -66,17 +67,22 @@ public class CaseLookupService extends EntityLookupAndSuggestService {
         InputProviderInterface provider = new HttpInputProvider(request);
         JsonResponse json = new JsonResponse(response);
         CaseLookupService service = new CaseLookupService(provider);
-        service.findCases();
+        if (provider.parameterIsPresent(CaseLookupConfiguration.IN_PARTY_ID_FROM) && provider.parameterIsPresent(CaseLookupConfiguration.IN_ROLE_TYPE_FROM)) {
+            service.findCasesForParty();
+        } else {
+            service.findCases();
+        }
         return json.makeLookupResponse(CaseLookupConfiguration.INOUT_CUST_REQUEST_ID, service, request.getSession(true).getServletContext());
     }
 
     /**
-     * Finds a list of <code>Account</code>.
-     * @return the list of <code>Account</code>, or <code>null</code> if an error occurred
+     * Finds a list of cases.
+     * @return the list of cases, or <code>null</code> if an error occurred
      */
     public List<CustRequestAndPartyRelationshipAndRole> findCases() {
         List<CustRequestAndPartyRelationshipAndRole> custRequests;
         EntityCondition prefCond = null;
+
         String partyId = null;
         String userLoginId = null;
         if (getProvider().getUser().getOfbizUserLogin() != null) {
@@ -85,37 +91,41 @@ public class CaseLookupService extends EntityLookupAndSuggestService {
         } else {
             Debug.logError("Current session do not have any UserLogin set.", MODULE);
         }
+
         EntityCondition takerCond = EntityCondition.makeCondition(EntityOperator.AND,
-                EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId),
-                EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "REQ_TAKER"));
+                EntityCondition.makeCondition("partyId", partyId),
+                EntityCondition.makeCondition("roleTypeId", "REQ_TAKER"));
 
         // or condition to find all cases for all accounts and contacts which the userLogin can view
         EntityCondition roleCond = EntityCondition.makeCondition(EntityOperator.OR,
-                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT"),
-                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "CONTACT"));
+                EntityCondition.makeCondition("roleTypeIdFrom", "ACCOUNT"),
+                EntityCondition.makeCondition("roleTypeIdFrom", "CONTACT"));
+
         EntityCondition accountContactCond = EntityCondition.makeCondition(EntityOperator.AND,
                 roleCond,
                 EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyId),
                 EntityUtil.getFilterByDateExpr());
+
         prefCond = accountContactCond;
+
         // select parties assigned to current user or his team according to view preferences.
         if (getProvider().parameterIsPresent(CaseLookupConfiguration.IN_RESPONSIBILTY)) {
-                String viewPref = getProvider().getParameter(CaseLookupConfiguration.IN_RESPONSIBILTY);
-                // condition to find all cases where userLogin is the request taker
-                // decide which condition to use based on preferences (default is team)
-                if (CaseLookupConfiguration.MY_VALUES.equals(viewPref)) {
-                    prefCond = takerCond;
-                }
+            String viewPref = getProvider().getParameter(CaseLookupConfiguration.IN_RESPONSIBILTY);
+            // condition to find all cases where userLogin is the request taker
+            // decide which condition to use based on preferences (default is team)
+            if (CaseLookupConfiguration.MY_VALUES.equals(viewPref)) {
+                prefCond = takerCond;
+            }
         }
         EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
-                    // exclude these case statuses
-                    EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "CRQ_COMPLETED"),
-                    EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "CRQ_REJECTED"),
-                    EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "CRQ_CANCELLED"),
-                    // catalog requests should not be counted as cases
-                    EntityCondition.makeCondition("custRequestTypeId", EntityOperator.NOT_EQUAL, "RF_CATALOG"),
-                    // the my or team preference condition
-                    prefCond);
+                // exclude these case statuses
+                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "CRQ_COMPLETED"),
+                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "CRQ_REJECTED"),
+                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "CRQ_CANCELLED"),
+                // catalog requests should not be counted as cases
+                EntityCondition.makeCondition("custRequestTypeId", EntityOperator.NOT_EQUAL, "RF_CATALOG"),
+                // the my or team preference condition
+                prefCond);
         if (getProvider().oneParameterIsPresent(BY_ADVANCED_FILTERS)) {
             custRequests = findCaseBy(CustRequestAndPartyRelationshipAndRole.class, condition, BY_ADVANCED_FILTERS);
         } else {
@@ -130,6 +140,40 @@ public class CaseLookupService extends EntityLookupAndSuggestService {
         } catch (GenericEntityException e) {
             Debug.logError(e, MODULE);
         }
+        return custRequests;
+    }
+
+    /**
+     * Finds a list of cases for particular contact or account.
+     * @return the list of cases, or <code>null</code> if an error occurred
+     */
+    public List<CustRequestAndPartyRelationshipAndRole> findCasesForParty() {
+        String userLoginId = null;
+        if (getProvider().getUser().getOfbizUserLogin() != null) {
+            userLoginId = getProvider().getUser().getOfbizUserLogin().getString("userLoginId");
+        } else {
+            Debug.logError("Current session do not have any UserLogin set.", MODULE);
+        }
+
+        EntityCondition conditions = EntityCondition.makeCondition(
+                EntityCondition.makeCondition("statusId", EntityOperator.NOT_IN, Arrays.asList("CRQ_COMPLETED", "CRQ_REJECTED", "CRQ_CANCELLED")),
+                EntityCondition.makeCondition("roleTypeIdFrom", getProvider().getParameter(CaseLookupConfiguration.IN_ROLE_TYPE_FROM)),
+                EntityCondition.makeCondition("partyIdFrom", getProvider().getParameter(CaseLookupConfiguration.IN_PARTY_ID_FROM))
+        );
+
+        List<CustRequestAndPartyRelationshipAndRole> custRequests =
+            findAllCases(CustRequestAndPartyRelationshipAndRole.class, conditions);
+
+        try {
+            // make value for updated field
+            for (CustRequestAndPartyRelationshipAndRole custRequestAndPartyRelationshipAndRole : custRequests) {
+                boolean isUpdated = UtilView.isUpdatedSinceLastView(getProvider().getInfrastructure().getDelegator(), custRequestAndPartyRelationshipAndRole.getCustRequestId(), userLoginId);
+                custRequestAndPartyRelationshipAndRole.setUpdated(isUpdated ? "Y" : "N");
+            }
+        } catch (GenericEntityException e) {
+            Debug.logError(e, MODULE);
+        }
+
         return custRequests;
     }
 

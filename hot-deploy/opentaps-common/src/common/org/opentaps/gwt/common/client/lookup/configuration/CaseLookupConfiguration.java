@@ -34,6 +34,8 @@ public abstract class CaseLookupConfiguration {
     public static final String IN_RESPONSIBILTY = "MyOrTeamResponsibility";
     public static final String MY_VALUES = "MY_VALUES";
     public static final String TEAM_VALUES = "TEAM_VALUES";
+    public static final String IN_PARTY_ID_FROM = "partyIdFrom";
+    public static final String IN_ROLE_TYPE_FROM = "roleTypeIdFrom";
 
     public static final String INOUT_CUST_REQUEST_ID = "custRequestId";
     public static final String INOUT_PRIORITY = "priority";

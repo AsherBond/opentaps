@@ -126,8 +126,6 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
         return findOrderListWithFilters(conds);
     }
 
-
-
     /**
      * Find the orders with conditions and filters.
      * @param conds initial list of conditions

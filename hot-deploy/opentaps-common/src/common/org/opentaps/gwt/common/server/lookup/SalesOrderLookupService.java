@@ -81,20 +81,25 @@ public class SalesOrderLookupService extends EntityLookupAndSuggestService {
     public List<OrderViewForListing> findOrders(Locale locale) {
         try {
             SalesOrderSearchRepositoryInterface salesOrderSearchRepository = getDomainsDirectory().getOrderDomain().getSalesOrderSearchRepository();
+
             String organizationPartyId = UtilProperties.getPropertyValue("opentaps", "organizationPartyId");
+
             String userLoginId = null;
             if (getProvider().getUser().getOfbizUserLogin() != null) {
                 userLoginId = getProvider().getUser().getOfbizUserLogin().getString("userLoginId");
             } else {
                 Debug.logError("Current session do not have any UserLogin set.", MODULE);
             }
+
             // pass locale and timeZone instances for format the date string
             // use Locale.US for change gwt date input -- is this required to be US ??
             salesOrderSearchRepository.setLocale(locale);
             salesOrderSearchRepository.setTimeZone(getProvider().getTimeZone());
+
             // pass parameters into repository
             salesOrderSearchRepository.setUserLoginId(userLoginId);
             salesOrderSearchRepository.setOrganizationPartyId(organizationPartyId);
+
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_FROM_DATE))) {
                 salesOrderSearchRepository.setFromDate(getProvider().getParameter(SalesOrderLookupConfiguration.IN_FROM_DATE));
             }
@@ -134,14 +139,25 @@ public class SalesOrderLookupService extends EntityLookupAndSuggestService {
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SERIAL_NUMBER))) {
                 salesOrderSearchRepository.setSerialNumber(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SERIAL_NUMBER));
             }
-            if (UtilValidate.isEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_FIND_ALL)) || "N".equals(getProvider().getParameter(SalesOrderLookupConfiguration.IN_FIND_ALL))) {
+
+            // takes into account order statuses
+            // activeOnly & desired flags aren't mutually exclusive, activeOnly statuses is a superset 
+            // of desired statuses. 
+            String isActiveOnly = getProvider().getParameter(SalesOrderLookupConfiguration.IN_FIND_ALL);
+            if (UtilValidate.isNotEmpty(isActiveOnly) && "Y".equals(isActiveOnly)) {
                 salesOrderSearchRepository.setFindActiveOnly(true);
+            }
+            String isDesired = getProvider().getParameter(SalesOrderLookupConfiguration.IN_DESIRED);
+            if (UtilValidate.isNotEmpty(isDesired) && "Y".equals(isDesired)) {
+                salesOrderSearchRepository.setFindDesiredOnly(true);
             }
 
             // set sort conditions
             salesOrderSearchRepository.setOrderBy(getOrderBy());
+
             // return the matching result
             return paginateResults(salesOrderSearchRepository.findOrders());
+
         } catch (RepositoryException e) {
             storeException(e);
             return null;
