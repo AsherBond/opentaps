@@ -57,7 +57,7 @@ context{"security"} = security;
 dataimportSecurity = new OpentapsSecurity(security, userLogin);
 hasDIAdminPermissions = Boolean.FALSE;
 
-    hasDIAdminPermissions = dataimportSecurity.hasPartyRelationSecurity("DATAIMPORT", "_ADMIN", organizationPartyId);
+    hasDIAdminPermissions = dataimportSecurity.hasPartyRelationSecurity("DATAIMPORT", "_ADMIN", null);
 
 globalContext.put("hasDIAdminPermissions", hasDIAdminPermissions);
 
@@ -73,8 +73,8 @@ context{"contextPath"} = request.getContextPath();
 
 // Basic permissions
 if (organizationPartyId != null) {
-    hasViewPermission = dataimportSecurity.hasPartyRelationSecurity("DATAIMPORT", "_VIEW", organizationPartyId);
-    hasAdminPermission = dataimportSecurity.hasPartyRelationSecurity("DATAIMPORT", "_ADMIN", organizationPartyId);
+    hasViewPermission = dataimportSecurity.hasPartyRelationSecurity("DATAIMPORT", "_VIEW", null);
+    hasAdminPermission = dataimportSecurity.hasPartyRelationSecurity("DATAIMPORT", "_ADMIN", null);
     context{"hasViewPermission"} = (Boolean)hasViewPermission;
     context{"hasAdminPermission"} = (Boolean)hasAdminPermission;
 }

@@ -39,7 +39,9 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.base.constants.StatusItemConstants;
+import org.opentaps.base.services.SafeAddProductToCategoryService;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.foundation.infrastructure.Infrastructure;
 
 /**
  * Import products via intermediate DataImportProduct entity.
@@ -68,6 +70,7 @@ public final class ProductImportServices {
      */
     @SuppressWarnings("unchecked")
     public static Map importProducts(DispatchContext dctx, Map context) {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
 
         String goodIdentificationTypeId1 = (String) context.get("goodIdentificationTypeId1");
@@ -113,6 +116,7 @@ public final class ProductImportServices {
 
                 try {
                     // use the helper method to decode the product into a List of GenericValues
+                    //todo this will nevev be null
                     List toStore = decodeProduct(product, now, goodIdentificationTypeId1, goodIdentificationTypeId2, delegator);
                     if (toStore == null) {
                         Debug.logWarning("Faild to import product[" + product.get("productId") + "] because data was bad.  Check preceding warnings for reason.", MODULE);
@@ -133,17 +137,17 @@ public final class ProductImportServices {
                 } catch (GenericEntityException e) {
                     // if there was an error, we'll just skip this product
                     TransactionUtil.rollback();
-                    Debug.logError(e, "Faild to import product[" + product.get("productId") + "]. Error stack follows.", MODULE);
+                    Debug.logError(e, "Failed to import product[" + product.get("productId") + "]. Error stack follows.", MODULE);
                     
                     // store the import error
-                    String message = "Faild to import product[" + product.get("productId") + "], Error message : " + e.getMessage();
+                    String message = "Failed to import product[" + product.get("productId") + "], Error message : " + e.getMessage();
                     storeImportProductError(product, message,delegator);
                 } catch (Exception e) {
                     TransactionUtil.rollback();
-                    Debug.logError(e, "Faild to import product[" + product.get("productId") + "]. Error stack follows.", MODULE);
+                    Debug.logError(e, "Failed to import product[" + product.get("productId") + "]. Error stack follows.", MODULE);
 
                     // store the import error
-                    String message = "Faild to import product[" + product.get("productId") + "], Error message : " + e.getMessage();
+                    String message = "Failed to import product[" + product.get("productId") + "], Error message : " + e.getMessage();
                     storeImportProductError(product, message,delegator);
                 }
             }
@@ -178,6 +182,7 @@ public final class ProductImportServices {
     public static Map importProductInventory(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
+        Infrastructure infrastructure = new Infrastructure(dispatcher);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String inventoryGlAccountId = (String) context.get("inventoryGlAccountId");
@@ -361,6 +366,7 @@ public final class ProductImportServices {
      */
     @SuppressWarnings("unchecked")
     private static List<GenericValue> decodeProduct(GenericValue data, Timestamp now, String goodIdentificationTypeId1, String goodIdentificationTypeId2, GenericDelegator delegator) throws GenericEntityException, Exception {
+
         Map input;
         List toStore = FastList.newInstance();
         Debug.logInfo("Now processing  data [" + data.get("productId") + "] description [" + data.get("description") + "]", MODULE);
@@ -425,6 +431,26 @@ public final class ProductImportServices {
         GenericValue listPrice = delegator.makeValue("ProductPrice", productPrice.getAllFields());
         listPrice.put("productPriceTypeId", "LIST_PRICE");
         toStore.add(listPrice);
+
+          //product store
+        //todo this logic shoudl be moved into magento-opentaps integration module
+        //we are mapping magento storeid to opentaps's category id associated with a opentaps catalog associated to the product store
+        if(UtilValidate.isNotEmpty(data.get("storeId"))){
+            Object storeId = data.get("storeId");
+            //we verify that the catalog id exist; if it doesn't the product will not be associated to any catalog or store
+            //GenericValue prodCatalog = delegator.findByPrimaryKeyCache("ProductCategoryMember", UtilMisc.toMap("productCategoryId", storeId));
+            //if(!UtilValidate.isEmpty(prodCatalog)){
+                input = FastMap.newInstance();
+                 input.put("productCategoryId", storeId);
+                 input.put("productId", data.get("productId"));
+                 input.put("fromDate",now);
+                GenericValue productCategory = delegator.makeValue("ProductCategoryMember", input);
+                toStore.add(productCategory);
+            //}else{
+               // Debug.logWarning("Product [" + data.get("productId") + "] cannot be associated to any store id [" + storeId + "]", MODULE);
+
+            //}
+        }
 
         // good identification (this is per customIdN)
         if (!UtilValidate.isEmpty(data.getString("customId1")) && !UtilValidate.isEmpty(goodIdentificationTypeId1)) {
@@ -492,6 +518,10 @@ public final class ProductImportServices {
             GenericValue supplierProduct = delegator.makeValue("SupplierProduct", input);
             toStore.add(supplierProduct);
         }
+
+
+
+        // ##########################################################################
 
         // mark the entity as processed
         data.set("importStatusId", StatusItemConstants.Dataimport.DATAIMP_IMPORTED);

@@ -35,7 +35,7 @@
             <actions>
                 <set field="pageTitleLabel" value="OpentapsMyHome"/>
                 <set field="sectionHeaderUiLabel" value="OpentapsMyHome"/>
-                <set field="organizationPartyId" from-field="parameters.organizationPartyId" default-value="0"/>
+                
                 
                 <!-- Data required by dashboard -->
                 <script location="component://dataimport/webapp/dataimport/WEB-INF/actions/myhome/myHome.groovy"/>

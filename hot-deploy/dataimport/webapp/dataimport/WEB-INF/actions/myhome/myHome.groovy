@@ -17,7 +17,8 @@
 
  import javolution.util.FastList;
  import org.ofbiz.entity.condition.*;
- import org.ofbiz.entity.util.EntityUtil;
+ import org.ofbiz.entity.util.EntityUtil
+import org.opentaps.base.constants.StatusItemConstants;
 
  customersProcessed = 0;
  customersNotProcessed = 0;
@@ -34,7 +35,7 @@
 GET PROCESSED
 */
  searchConditions = FastList.newInstance();
- searchConditions.add(new EntityExpr("processedTimestamp", EntityOperator.NOT_EQUAL, null));
+ searchConditions.add(new EntityExpr("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_IMPORTED));
  allConditions = new EntityConditionList(searchConditions, EntityOperator.AND);
 
  customersProcessed = delegator.findCountByCondition("DataImportCustomer", allConditions, null);
@@ -46,15 +47,17 @@ GET PROCESSED
 /*
 GET NOT-PROCESSED
 */
- searchConditions = FastList.newInstance();
- searchConditions.add(new EntityExpr("processedTimestamp", EntityOperator.EQUALS, null));
- allConditions = new EntityConditionList(searchConditions, EntityOperator.AND);
 
- customersNotProcessed = delegator.findCountByCondition("DataImportCustomer", allConditions, null);
- productsNotProcessed = delegator.findCountByCondition("DataImportProduct", allConditions, null);
- inventoryNotProcessed = delegator.findCountByCondition("DataImportInventory", allConditions, null);
- orderHeadersNotProcessed = delegator.findCountByCondition("DataImportOrderHeader", allConditions, null);
- orderItemsNotProcessed = delegator.findCountByCondition("DataImportOrderItem", allConditions, null);
+EntityCondition statusCond = EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_NOT_PROC),
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_FAILED),
+                    EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
+
+ customersNotProcessed = delegator.findCountByCondition("DataImportCustomer", statusCond, null);
+ productsNotProcessed = delegator.findCountByCondition("DataImportProduct", statusCond, null);
+ inventoryNotProcessed = delegator.findCountByCondition("DataImportInventory", statusCond, null);
+ orderHeadersNotProcessed = delegator.findCountByCondition("DataImportOrderHeader", statusCond, null);
+ orderItemsNotProcessed = delegator.findCountByCondition("DataImportOrderItem", statusCond, null);
 
  context.put("customersProcessed", customersProcessed);
  context.put("customersNotProcessed", customersNotProcessed);

@@ -64,6 +64,8 @@
         <field name="largeImageUrl" type="url" />
         <field name="purchasePrice" type="currency-precise"/>
         <field name="taxable" type="indicator" />
+        <!--todo storeId should be moved into opentaps-magento integration module-->
+        <field name="storeId" type="id" />
         <field name="createdDate" type="date-time" />
          <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
         <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
