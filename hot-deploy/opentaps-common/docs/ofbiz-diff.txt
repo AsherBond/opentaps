@@ -127,6 +127,9 @@ framework/widget/src/org/ofbiz/widget/screen/ScreenWidgetViewHandler.java
 r13276 Save the current content type in the context, and skip inserting an HTML DocType if the content type is not html. This is used for example for javascript files.
 r13298 Fixed, reverted previous change in RequestHandler.java
 
+framework/widget/src/org/ofbiz/widget/screen/ScreenXmlViewHandler.java
+r14305 Adding content type to the view handler
+
 framework/widget/src/org/ofbiz/widget/form/ModelFormField.java
 framework/widget/src/org/ofbiz/widget/html/HtmlFormRenderer.java
 r13551,r13554 add re-display search value for date/time calendar on submit support.
