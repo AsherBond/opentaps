@@ -128,8 +128,16 @@ fieldMapColumns.put("PartySupplementalData", fields);
    private String departmentName;
    @Column(name="GENERAL_PROF_TITLE")
    private String generalProfTitle;
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
+   @Boost(5f)
    @Column(name="COMPANY_NAME")
    private String companyName;
+   @org.hibernate.search.annotations.Fields( {
+     @Field(index=Index.TOKENIZED, store=Store.YES)
+   } )
+   @Boost(5f)
    @Column(name="COMPANY_NAME_LOCAL")
    private String companyNameLocal;
    @Column(name="ANNUAL_REVENUE")
