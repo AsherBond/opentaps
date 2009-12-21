@@ -144,42 +144,6 @@
         <field name="description" title="${uiLabelMap.CommonDescription}"><display/></field>
     </form>
 
-    <!-- present a list of cases (this is a re-usable form) -->
-    <form name="ListCases" type="list" separate-columns="true" 
-        title="Cases"  default-title-style="tableheadtext" target=""
-        default-widget-style="tabletext" default-tooltip-style="tabletext"
-        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
-        paginate-target="${listSortTarget}" paginate-target-anchor="ListCases" paginate-size-field="casesSize" paginate-index-field="casesIndex"
-        list-name="casesListIt">
-        <field name="priority" title="${uiLabelMap.CommonPriority}"
-            header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;casesOrderBy=priority${findParams}#ListCases" header-link-style="orderByHeaderLink">
-            <display/>
-        </field>
-        <!-- show either the link to viewCase or a javascript set_value depending on whether we're in a lookup -->
-        <field name="custRequestName" title="${uiLabelMap.PartySubject}" widget-style="linktext" widget-area-style="fieldWidth50pct"
-            header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;casesOrderBy=custRequestName${findParams}#ListCases" header-link-style="orderByHeaderLink"
-            use-when="(isLookup==void)||(isLookup==null)||(isLookup.equals(&quot;false&quot;))">
-            <hyperlink description="${custRequestName} (${custRequestId})" target="viewCase?custRequestId=${custRequestId}"/>
-        </field>
-        <field name="custRequestName" title="${uiLabelMap.PartySubject}" widget-style="linktext" widget-area-style="fieldWidth50pct"
-            header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;casesOrderBy=custRequestName${findParams}#ListCases" header-link-style="orderByHeaderLink"
-            use-when="(isLookup!=void)&amp;&amp;(isLookup!=null)&amp;&amp;(isLookup.equals(&quot;true&quot;))">
-            <hyperlink also-hidden="false" target-type="plain" description="${custRequestName} (${custRequestId})" target="javascript:set_value('${custRequestId}')"/>
-        </field>
-        <field name="statusId" title="${uiLabelMap.CommonStatus}"
-            header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;casesOrderBy=statusId${findParams}#ListCases" header-link-style="orderByHeaderLink">
-            <display-entity entity-name="StatusItem"/>
-        </field>
-        <field name="custRequestTypeId" title="${uiLabelMap.CommonType}"
-            header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;casesOrderBy=custRequestTypeId${findParams}#ListCases" header-link-style="orderByHeaderLink">
-            <display-entity entity-name="CustRequestType"/>
-        </field>
-        <field name="custRequestCategoryId" title="${uiLabelMap.CrmReason}"
-            header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;casesOrderBy=custRequestCategoryId${findParams}#ListCases" header-link-style="orderByHeaderLink">
-            <display-entity entity-name="CustRequestCategory"/>
-        </field>
-    </form>   
-
     <!-- shows the status change history (CustRequestStatus) -->
     <form name="listCaseHistory" type="list" separate-columns="true" 
         title="Cases"  default-title-style="tableheadtext" target=""

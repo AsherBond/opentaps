@@ -207,12 +207,10 @@
                 <set field="hasModulePermission" value="CRMSFA_CONTACT"/>
                 <set field="hasOperationPermission" value="_VIEW"/>
                 <set field="findActivitiesKey" value="partyId"/>  <!-- we want activities based on the partyId parameter -->
-                <set field="casePaginatorName" value="contactsCases"/>                
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexSecurity.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
                 <!-- data for the various subsections -->
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/contacts/viewContact.bsh"/>
-                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/cases/listCases.bsh"/>                
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/contactmech/viewprofile.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/findActivities.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/getCatalogRequests.bsh"/>
@@ -257,17 +255,9 @@
                         </platform-specific>
 
                         <!-- Orders section -->
-                        <container style="subSectionBlock">
-                            <platform-specific><html>
-                                <html-template location="component://crmsfa/webapp/crmsfa/accounts/submenus/viewAccountOrdersMenu.ftl"/>
-                            </html></platform-specific>
-                            <section>
-                                <condition><if-compare field="hasViewOrderPermission" operator="equals" value="true" type="Boolean"/></condition>
-                                <widgets>
-                                    <include-form name="ListOrders" location="component://crmsfa/widget/crmsfa/forms/orders/OrdersForms.xml"/>
-                                </widgets>
-                            </section>
-                        </container>
+                        <platform-specific><html>
+                            <html-template location="component://crmsfa/webapp/crmsfa/contacts/contactOrders.ftl"/>
+                        </html></platform-specific>
 
                         <!-- Opportunities section -->
                         <container style="subSectionBlock">
@@ -282,10 +272,9 @@
                         </container>
 
                         <!-- cases section -->
-                        <container style="subSectionBlock">
-                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/contacts/submenus/casesMenu.ftl"/></html></platform-specific>
-                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/cases/listCases.ftl"/></html></platform-specific>                            
-                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/contacts/contactCases.ftl"/></html>
+                        </platform-specific>
 
                         <!-- completed activities -->
                         <include-screen name="completedActivities" location="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml"/>

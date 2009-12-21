@@ -16,7 +16,19 @@
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmOpenOrders}</div>
-    <div class="subMenuBar"><a class="subMenuButton" href="<@ofbizUrl>findOrders?partyIdSearch=${parameters.partyId?if_exists}</@ofbizUrl>">${uiLabelMap.OrderOrders}</a><a class="subMenuButton" href="<@ofbizUrl>findQuotes?customerPartyId=${parameters.partyId?if_exists}</@ofbizUrl>">${uiLabelMap.OrderOrderQuotes}</a></div>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<div class="subSectionBlock">
+
+<@sectionHeader title=uiLabelMap.CrmOpenOrders>
+    <div class="subMenuBar">
+        <@displayLink href="findOrders?partyIdSearch=${parameters.partyId?if_exists}" text="${uiLabelMap.OrderOrders}" class="subMenuButton" />
+        <@displayLink href="findQuotes?customerPartyId=${parameters.partyId?if_exists}" text="${uiLabelMap.OrderOrderQuotes}" class="subMenuButton" />
+    </div>
+</@sectionHeader>
+
+<#if hasViewOrderPermission?exists>
+    <@gwtWidget id="contactOpenOrdersSubsection" partyId="${partySummary.partyId}"/>
+</#if>
+
 </div>

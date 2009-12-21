@@ -16,12 +16,18 @@
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
-<#if hasCreateCasePermission?exists>
-<#assign createCaseLink = "<a class='subMenuButton' href='createCaseForm?contactPartyId=" + partySummary.partyId + "'>" + uiLabelMap.CommonCreateNew + "</a>">
-</#if>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<a name="ListCases"></a>
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmCases}</div>
-    <div class="subMenuBar">${createCaseLink?if_exists}</div>
+<div class="subSectionBlock">
+
+<@sectionHeader title=uiLabelMap.CrmCases>
+    <div class="subMenuBar">
+        <#if hasCreateCasePermission?exists>
+        <@displayLink href="createCaseForm?accountPartyId=${partySummary.partyId}" text=uiLabelMap.CrmCreateNew class="subMenuButton"/>
+        </#if>
+    </div>
+</@sectionHeader>
+
+<@gwtWidget id="accountCasesSubsection" partyId="${partySummary.partyId}"/>
+
 </div>

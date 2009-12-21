@@ -31,16 +31,9 @@ import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.opentaps.common.util.UtilView;
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
-import com.opensourcestrategies.crmsfa.cases.UtilCase;
 import com.opensourcestrategies.crmsfa.opportunities.UtilOpportunity;
 import com.opensourcestrategies.crmsfa.content.ContentHelper;
 import org.opentaps.common.util.UtilCommon;
-
-import javolution.util.FastList;
-import org.opentaps.common.domain.order.OrderViewForListing;
-import org.opentaps.domain.DomainsDirectory;
-import org.opentaps.domain.DomainsLoader;
-import org.opentaps.domain.search.order.SalesOrderSearchRepositoryInterface;
 
 /* finds all the information relevant to this contact and puts them in the context, so the various forms
 and FTLs of this screen can display them correctly */
@@ -84,47 +77,6 @@ if (contactActive) {
     // who is currently responsible for contact
     context.put("responsibleParty", responsibleParty);
 
-
-    //  *************** order data ********************
-    ordersOrderBy = parameters.get("ordersOrderBy");
-    if (ordersOrderBy == null) ordersOrderBy = "orderDate DESC";
-    dd = new DomainsLoader(request).loadDomainsDirectory();
-    salesOrderSearchRepository = dd.getOrderDomain().getSalesOrderSearchRepository();
-    organizationPartyId = UtilProperties.getPropertyValue("opentaps", "organizationPartyId");
-    userLoginId = userLogin.getString("userLoginId");
-    // pass locale and timeZone instances for format the date string
-    salesOrderSearchRepository.setLocale(locale);
-    salesOrderSearchRepository.setTimeZone(timeZone);
-    salesOrderSearchRepository.setUserLoginId(userLoginId);
-    salesOrderSearchRepository.setOrganizationPartyId(organizationPartyId);
-    salesOrderSearchRepository.setFindDesiredOnly(true);
-    salesOrderSearchRepository.setCustomerPartyId(partyId);
-    salesOrderSearchRepository.setOrderBy(UtilMisc.toList(ordersOrderBy));
-    orders = salesOrderSearchRepository.findOrders();
-    myOrders = FastList.newInstance();
-    // return the map collection for the screen render
-    for (OrderViewForListing order : orders) {
-        myOrders.add(order.toMap());
-    }
-    context.put("ordersListIt", myOrders);
-    //  *************** order data ********************
-    
-    casesOrderBy = parameters.get("casesOrderBy");
-
-    // prepare conditions to the case page builder in listCases.bsh
-    context.put("entityName", "PartyRelationshipAndCaseRole");
-    fieldsToSelect = UtilMisc.toList("custRequestId", "priority", "custRequestName", "statusId");
-    fieldsToSelect.add("custRequestTypeId");
-    fieldsToSelect.add("custRequestCategoryId");    
-    context.put("fieldsToSelect", fieldsToSelect);
-    if (UtilValidate.isNotEmpty(casesOrderBy)) {
-        orderBy = UtilMisc.toList(casesOrderBy);
-    } else {
-        orderBy = UtilMisc.toList("priority DESC");        
-    }    
-    context.put("orderBy", orderBy);
-    caseCond = UtilCase.getCasesForPartyCond(partyId, "CONTACT");
-    context.put("conditions", caseCond);    
 
     // contact notes
     results = delegator.findByAnd("PartyNoteView", UtilMisc.toMap("targetPartyId", partyId), UtilMisc.toList("noteDateTime DESC"));
