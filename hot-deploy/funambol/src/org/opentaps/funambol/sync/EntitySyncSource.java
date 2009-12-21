@@ -103,7 +103,7 @@ public class EntitySyncSource extends AbstractSyncSource implements MergeableSyn
     //=== Initialization ===
 
     /**
-     * TODO: check Performance no acesso a base de dados visto que � criado um syncSource para cada sincroniza��o.
+     * TODO: check Performance no acesso a base de dados visto que criado um syncSource para cada sincronizao.
      */
     public EntitySyncSource()
     {
