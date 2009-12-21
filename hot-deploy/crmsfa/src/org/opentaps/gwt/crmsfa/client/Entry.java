@@ -36,6 +36,7 @@ import org.opentaps.gwt.common.client.listviews.OrderItemsEditableListView.Order
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 import org.opentaps.gwt.crmsfa.client.accounts.form.AccountsSublistView;
 import org.opentaps.gwt.crmsfa.client.accounts.form.QuickNewAccountForm;
+import org.opentaps.gwt.crmsfa.client.cases.form.CaseSublistView;
 import org.opentaps.gwt.crmsfa.client.cases.form.FindCasesForm;
 import org.opentaps.gwt.crmsfa.client.cases.form.QuickNewCaseForm;
 import org.opentaps.gwt.crmsfa.client.contacts.form.ContactsSublistView;
@@ -47,6 +48,7 @@ import org.opentaps.gwt.crmsfa.client.opportunities.form.OpportunitiesSublistVie
 import org.opentaps.gwt.crmsfa.client.opportunities.form.QuickNewOpportunityForm;
 import org.opentaps.gwt.crmsfa.client.orders.form.FindOrdersForm;
 import org.opentaps.gwt.crmsfa.client.orders.form.ProductReReservationForm;
+import org.opentaps.gwt.crmsfa.client.orders.form.SalesOrdersSublistView;
 import org.opentaps.gwt.crmsfa.client.partners.form.FindPartnersForm;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -108,6 +110,10 @@ public class Entry extends BaseEntry {
     private static final String CONTACT_ACCOUNTS = "contactAccountsSubListView";
     /** An ID where CONTACT_ACCOUNTS may place "Assign Account" button. */
     private static final String ASSIGN_ACCOUNT_TO_CONTACT = "assignAccountToContact";
+    /** List of open orders for a contact */
+    private static final String CONTACT_ORDERS = "contactOpenOrdersSubsection";
+    /** List of cases for a contact */
+    private static final String CONTACT_CASES = "contactCasesSubsection";
 
     // CRMSFA/Leads widget identifiers
     private static final String FIND_LEADS_ID = "findLeads";
@@ -145,6 +151,10 @@ public class Entry extends BaseEntry {
     private static final String ASSIGN_CONTACT_WIDGET = "assignContactToAccount";
     /** List of related opportunities on view account page. */
     private static final String ACCOUNT_OPPORTUNITIES = "accountOpportunitiesSubListView";
+    /** List of open orders for an account */
+    private static final String ACCOUNT_ORDERS = "accountOpenOrdersSubsection";
+    /** List of cases for an account */
+    private static final String ACCOUNT_CASES = "accountCasesSubsection";
 
     // CRMSFA/Cases widget identifiers
     private static final String QUICK_CREATE_CASE_ID = "quickNewCase";
@@ -212,6 +222,14 @@ public class Entry extends BaseEntry {
         if (RootPanel.get(ACCOUNT_OPPORTUNITIES) != null) {
             loadAccountOpportunities();
         }
+
+        if (RootPanel.get(ACCOUNT_ORDERS) != null) {
+            loadAccountOrders();
+        }
+
+        if (RootPanel.get(ACCOUNT_CASES) != null) {
+            loadAccountCases();
+        }
     }
 
     private void loadContactsWidgets() {
@@ -244,6 +262,14 @@ public class Entry extends BaseEntry {
 
         if (RootPanel.get(CONTACT_ACCOUNTS) != null) {
             loadContactAccounts();
+        }
+
+        if (RootPanel.get(CONTACT_ORDERS) != null) {
+            loadContactOrders();
+        }
+
+        if (RootPanel.get(CONTACT_CASES) != null) {
+            loadContactCases();
         }
     }
 
@@ -568,6 +594,34 @@ public class Entry extends BaseEntry {
         container.add(embedLink);
     }
 
+    /**
+     * Load list of open orders as view contact page subsection.
+     */
+    private void loadContactOrders() {
+        // setup order list view subsection
+        SalesOrdersSublistView orders = new SalesOrdersSublistView(getPartyId());
+        // limit orders to particular account
+        orders.filterForParty();
+        orders.applyFilters();
+
+        // add widget to page
+        RootPanel.get(CONTACT_ORDERS).add(orders);
+    }
+
+    /**
+     * Load list of cases as view contact page subsection.
+     */
+    private void loadContactCases() {
+        // setup case list view as subsection
+        CaseSublistView cases = new CaseSublistView(getPartyId());
+        // limit cases to the contact
+        cases.filterForContact();
+        cases.applyFilters();
+
+        // add widget to page
+        RootPanel.get(CONTACT_CASES).add(cases);
+    }
+
     private void loadQuickNewOpportunity() {
         quickNewOpportunityForm = new QuickNewOpportunityForm();
         RootPanel.get(QUICK_CREATE_OPPORTUNITY_ID).add(quickNewOpportunityForm);
@@ -795,6 +849,34 @@ public class Entry extends BaseEntry {
 
         // add widget to page
         RootPanel.get(ACCOUNT_OPPORTUNITIES).add(accountOpportunities);
+    }
+
+    /**
+     * Load list of open orders as view account page subsection.
+     */
+    private void loadAccountOrders() {
+        // setup order list view subsection
+        SalesOrdersSublistView orders = new SalesOrdersSublistView(getPartyId());
+        // limit orders to particular account
+        orders.filterForParty();
+        orders.applyFilters();
+
+        // add widget to page
+        RootPanel.get(ACCOUNT_ORDERS).add(orders);
+    }
+
+    /**
+     * Load list of cases as view account page subsection.
+     */
+    private void loadAccountCases() {
+        // setup case list view as subsection
+        CaseSublistView cases = new CaseSublistView(getPartyId());
+        // limit cases to the account
+        cases.filterForAccount();
+        cases.applyFilters();
+
+        // add widget to page
+        RootPanel.get(ACCOUNT_CASES).add(cases);
     }
 
     private void loadFindAccounts() {
