@@ -431,7 +431,7 @@ public class SQLProcessor {
         } catch (SQLException sqle) {
             this.checkLockWaitInfo(sqle);
             // don't display this here, may not be critical, allow handling further up... Debug.logError(sqle, "SQLProcessor.executeUpdate() : ERROR : ", module);
-            throw new GenericDataSourceException("SQL Exception while executing the following:" + _sql, sqle);
+            throw new GenericDataSourceException("SQL Exception:" , sqle);
         }
     }
 
