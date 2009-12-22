@@ -38,7 +38,7 @@ import org.opentaps.foundation.infrastructure.User;
       .
  * Auto generated base service entity recalcPaymentAmounts.
  *
- * Engine: java
+ * Engine: pojo
  * Location: org.opentaps.financials.domain.billing.payment.PaymentService
  * Invoke: recalcPaymentAmounts
  * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/financials/servicedef/services_payment.xml

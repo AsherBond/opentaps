@@ -50,7 +50,7 @@ import java.sql.Timestamp;
  * Auto generated base entity InvoiceAndApplAndPayment.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectInvoiceAndApplAndPayments", query="SELECT INV.INVOICE_ID AS \"invoiceId\",INV.INVOICE_TYPE_ID AS \"invoiceTypeId\",INV.PARTY_ID_FROM AS \"partyIdFrom\",INV.PARTY_ID AS \"partyId\",INV.ROLE_TYPE_ID AS \"roleTypeId\",INV.STATUS_ID AS \"statusId\",INV.BILLING_ACCOUNT_ID AS \"billingAccountId\",INV.CONTACT_MECH_ID AS \"contactMechId\",INV.INVOICE_DATE AS \"invoiceDate\",INV.DUE_DATE AS \"dueDate\",INV.PAID_DATE AS \"paidDate\",INV.INVOICE_MESSAGE AS \"invoiceMessage\",INV.REFERENCE_NUMBER AS \"referenceNumber\",INV.DESCRIPTION AS \"description\",INV.CURRENCY_UOM_ID AS \"currencyUomId\",INV.RECURRENCE_INFO_ID AS \"recurrenceInfoId\",INV.INVOICE_ADJUSTED_TOTAL AS \"invoiceAdjustedTotal\",INV.INVOICE_TOTAL AS \"invoiceTotal\",INV.INTEREST_CHARGED AS \"interestCharged\",INV.SALES_TAX_TOTAL AS \"salesTaxTotal\",INV.ADJUSTED_AMOUNT AS \"adjustedAmount\",INV.APPLIED_AMOUNT AS \"appliedAmount\",INV.OPEN_AMOUNT AS \"openAmount\",INV.PENDING_OPEN_AMOUNT AS \"pendingOpenAmount\",INV.PENDING_APPLIED_AMOUNT AS \"pendingAppliedAmount\",INV.PROCESSING_STATUS_ID AS \"processingStatusId\",PAP.PAYMENT_APPLICATION_ID AS \"paymentApplicationId\",PAP.PAYMENT_ID AS \"paymentId\",PAP.INVOICE_ITEM_SEQ_ID AS \"invoiceItemSeqId\",PAP.OVERRIDE_GL_ACCOUNT_ID AS \"overrideGlAccountId\",PAP.TO_PAYMENT_ID AS \"toPaymentId\",PAP.TAX_AUTH_GEO_ID AS \"taxAuthGeoId\",PAP.AMOUNT_APPLIED AS \"amountApplied\",PAP.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",PAP.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",PAP.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",PAP.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",PAP.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",PAP.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",PAP.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",PAP.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",PAP.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",PAP.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",PAM.PAYMENT_ID AS \"paymentId\",PAM.PAYMENT_TYPE_ID AS \"paymentTypeId\",PAM.PAYMENT_METHOD_TYPE_ID AS \"paymentMethodTypeId\",PAM.PAYMENT_METHOD_ID AS \"paymentMethodId\",PAM.PAYMENT_GATEWAY_RESPONSE_ID AS \"paymentGatewayResponseId\",PAM.PAYMENT_PREFERENCE_ID AS \"paymentPreferenceId\",PAM.PARTY_ID_FROM AS \"partyIdFrom\",PAM.PARTY_ID_TO AS \"partyIdTo\",PAM.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PAM.STATUS_ID AS \"statusId\",PAM.EFFECTIVE_DATE AS \"effectiveDate\",PAM.PAYMENT_REF_NUM AS \"paymentRefNum\",PAM.AMOUNT AS \"amount\",PAM.CURRENCY_UOM_ID AS \"currencyUomId\",PAM.COMMENTS AS \"comments\",PAM.FIN_ACCOUNT_TRANS_ID AS \"finAccountTransId\",PAM.OVERRIDE_GL_ACCOUNT_ID AS \"overrideGlAccountId\",PAM.ACTUAL_CURRENCY_AMOUNT AS \"actualCurrencyAmount\",PAM.ACTUAL_CURRENCY_UOM_ID AS \"actualCurrencyUomId\",PAM.APPLIED_AMOUNT AS \"appliedAmount\",PAM.OPEN_AMOUNT AS \"openAmount\",PAM.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",PAM.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",PAM.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",PAM.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",PAM.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",PAM.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",PAM.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",PAM.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",PAM.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",PAM.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\" FROM INVOICE INV INNER JOIN PAYMENT_APPLICATION PAP ON INV.INVOICE_ID = PAP.INVOICE_ID INNER JOIN PAYMENT PAM ON PAP.PAYMENT_ID = PAM.PAYMENT_ID", resultSetMapping="InvoiceAndApplAndPaymentMapping")
+@NamedNativeQuery(name="selectInvoiceAndApplAndPayments", query="SELECT INV.INVOICE_ID AS \"invoiceId\",INV.INVOICE_TYPE_ID AS \"invoiceTypeId\",INV.PARTY_ID_FROM AS \"partyIdFrom\",INV.PARTY_ID AS \"partyId\",INV.ROLE_TYPE_ID AS \"roleTypeId\",INV.STATUS_ID AS \"statusId\",INV.BILLING_ACCOUNT_ID AS \"billingAccountId\",INV.CONTACT_MECH_ID AS \"contactMechId\",INV.INVOICE_DATE AS \"invoiceDate\",INV.DUE_DATE AS \"dueDate\",INV.PAID_DATE AS \"paidDate\",INV.INVOICE_MESSAGE AS \"invoiceMessage\",INV.REFERENCE_NUMBER AS \"referenceNumber\",INV.DESCRIPTION AS \"description\",INV.CURRENCY_UOM_ID AS \"currencyUomId\",INV.RECURRENCE_INFO_ID AS \"recurrenceInfoId\",INV.INVOICE_ADJUSTED_TOTAL AS \"invoiceAdjustedTotal\",INV.INVOICE_TOTAL AS \"invoiceTotal\",INV.INTEREST_CHARGED AS \"interestCharged\",INV.SALES_TAX_TOTAL AS \"salesTaxTotal\",INV.ADJUSTED_AMOUNT AS \"adjustedAmount\",INV.APPLIED_AMOUNT AS \"appliedAmount\",INV.OPEN_AMOUNT AS \"openAmount\",INV.PENDING_OPEN_AMOUNT AS \"pendingOpenAmount\",INV.PENDING_APPLIED_AMOUNT AS \"pendingAppliedAmount\",INV.PROCESSING_STATUS_ID AS \"processingStatusId\",PAP.PAYMENT_APPLICATION_ID AS \"paymentApplicationId\",PAP.PAYMENT_ID AS \"paymentId\",PAP.INVOICE_ITEM_SEQ_ID AS \"invoiceItemSeqId\",PAP.OVERRIDE_GL_ACCOUNT_ID AS \"overrideGlAccountId\",PAP.TO_PAYMENT_ID AS \"toPaymentId\",PAP.TAX_AUTH_GEO_ID AS \"taxAuthGeoId\",PAP.AMOUNT_APPLIED AS \"amountApplied\",PAP.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",PAP.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",PAP.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",PAP.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",PAP.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",PAP.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",PAP.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",PAP.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",PAP.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",PAP.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",PAP.NOTE AS \"note\",PAM.PAYMENT_ID AS \"paymentId\",PAM.PAYMENT_TYPE_ID AS \"paymentTypeId\",PAM.PAYMENT_METHOD_TYPE_ID AS \"paymentMethodTypeId\",PAM.PAYMENT_METHOD_ID AS \"paymentMethodId\",PAM.PAYMENT_GATEWAY_RESPONSE_ID AS \"paymentGatewayResponseId\",PAM.PAYMENT_PREFERENCE_ID AS \"paymentPreferenceId\",PAM.PARTY_ID_FROM AS \"partyIdFrom\",PAM.PARTY_ID_TO AS \"partyIdTo\",PAM.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PAM.STATUS_ID AS \"statusId\",PAM.EFFECTIVE_DATE AS \"effectiveDate\",PAM.PAYMENT_REF_NUM AS \"paymentRefNum\",PAM.AMOUNT AS \"amount\",PAM.CURRENCY_UOM_ID AS \"currencyUomId\",PAM.COMMENTS AS \"comments\",PAM.FIN_ACCOUNT_TRANS_ID AS \"finAccountTransId\",PAM.OVERRIDE_GL_ACCOUNT_ID AS \"overrideGlAccountId\",PAM.ACTUAL_CURRENCY_AMOUNT AS \"actualCurrencyAmount\",PAM.ACTUAL_CURRENCY_UOM_ID AS \"actualCurrencyUomId\",PAM.APPLIED_AMOUNT AS \"appliedAmount\",PAM.OPEN_AMOUNT AS \"openAmount\",PAM.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",PAM.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",PAM.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",PAM.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",PAM.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",PAM.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",PAM.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",PAM.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",PAM.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",PAM.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\" FROM INVOICE INV INNER JOIN PAYMENT_APPLICATION PAP ON INV.INVOICE_ID = PAP.INVOICE_ID INNER JOIN PAYMENT PAM ON PAP.PAYMENT_ID = PAM.PAYMENT_ID", resultSetMapping="InvoiceAndApplAndPaymentMapping")
 @SqlResultSetMapping(name="InvoiceAndApplAndPaymentMapping", entities={
 @EntityResult(entityClass=InvoiceAndApplAndPayment.class, fields = {
 @FieldResult(name="invoiceId", column="invoiceId")
@@ -96,6 +96,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="acctgTagEnumId8", column="acctgTagEnumId8")
 ,@FieldResult(name="acctgTagEnumId9", column="acctgTagEnumId9")
 ,@FieldResult(name="acctgTagEnumId10", column="acctgTagEnumId10")
+,@FieldResult(name="note", column="note")
 ,@FieldResult(name="pmPaymentId", column="pmPaymentId")
 ,@FieldResult(name="pmPaymentTypeId", column="pmPaymentTypeId")
 ,@FieldResult(name="pmPaymentMethodTypeId", column="pmPaymentMethodTypeId")
@@ -176,6 +177,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("acctgTagEnumId8", "PAP.ACCTG_TAG_ENUM_ID8");
         fields.put("acctgTagEnumId9", "PAP.ACCTG_TAG_ENUM_ID9");
         fields.put("acctgTagEnumId10", "PAP.ACCTG_TAG_ENUM_ID10");
+        fields.put("note", "PAP.NOTE");
         fields.put("pmPaymentId", "PAM.PAYMENT_ID");
         fields.put("pmPaymentTypeId", "PAM.PAYMENT_TYPE_ID");
         fields.put("pmPaymentMethodTypeId", "PAM.PAYMENT_METHOD_TYPE_ID");
@@ -253,6 +255,7 @@ fieldMapColumns.put("InvoiceAndApplAndPayment", fields);
     acctgTagEnumId8("acctgTagEnumId8"),
     acctgTagEnumId9("acctgTagEnumId9"),
     acctgTagEnumId10("acctgTagEnumId10"),
+    note("note"),
     pmPaymentId("pmPaymentId"),
     pmPaymentTypeId("pmPaymentTypeId"),
     pmPaymentMethodTypeId("pmPaymentMethodTypeId"),
@@ -381,6 +384,8 @@ fieldMapColumns.put("InvoiceAndApplAndPayment", fields);
     
    private String acctgTagEnumId10;
     
+   private String note;
+    
    private String pmPaymentId;
     
    private String pmPaymentTypeId;
@@ -454,7 +459,7 @@ fieldMapColumns.put("InvoiceAndApplAndPayment", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("invoiceId");this.primaryKeyNames.add("paymentApplicationId");this.primaryKeyNames.add("pmPaymentId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceTypeId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("invoiceDate");this.allFieldsNames.add("dueDate");this.allFieldsNames.add("paidDate");this.allFieldsNames.add("invoiceMessage");this.allFieldsNames.add("referenceNumber");this.allFieldsNames.add("description");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("invoiceAdjustedTotal");this.allFieldsNames.add("invoiceTotal");this.allFieldsNames.add("interestCharged");this.allFieldsNames.add("salesTaxTotal");this.allFieldsNames.add("adjustedAmount");this.allFieldsNames.add("appliedAmount");this.allFieldsNames.add("openAmount");this.allFieldsNames.add("pendingOpenAmount");this.allFieldsNames.add("pendingAppliedAmount");this.allFieldsNames.add("processingStatusId");this.allFieldsNames.add("paymentApplicationId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("toPaymentId");this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("amountApplied");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");this.allFieldsNames.add("pmPaymentId");this.allFieldsNames.add("pmPaymentTypeId");this.allFieldsNames.add("pmPaymentMethodTypeId");this.allFieldsNames.add("pmPaymentMethodId");this.allFieldsNames.add("pmPaymentGatewayResponseId");this.allFieldsNames.add("pmPaymentPreferenceId");this.allFieldsNames.add("pmPartyIdFrom");this.allFieldsNames.add("pmPartyIdTo");this.allFieldsNames.add("pmRoleTypeIdTo");this.allFieldsNames.add("pmStatusId");this.allFieldsNames.add("pmEffectiveDate");this.allFieldsNames.add("pmPaymentRefNum");this.allFieldsNames.add("pmAmount");this.allFieldsNames.add("pmCurrencyUomId");this.allFieldsNames.add("pmComments");this.allFieldsNames.add("pmFinAccountTransId");this.allFieldsNames.add("pmOverrideGlAccountId");this.allFieldsNames.add("pmActualCurrencyAmount");this.allFieldsNames.add("pmActualCurrencyUomId");this.allFieldsNames.add("pmAppliedAmount");this.allFieldsNames.add("pmOpenAmount");this.allFieldsNames.add("pmAcctgTagEnumId1");this.allFieldsNames.add("pmAcctgTagEnumId2");this.allFieldsNames.add("pmAcctgTagEnumId3");this.allFieldsNames.add("pmAcctgTagEnumId4");this.allFieldsNames.add("pmAcctgTagEnumId5");this.allFieldsNames.add("pmAcctgTagEnumId6");this.allFieldsNames.add("pmAcctgTagEnumId7");this.allFieldsNames.add("pmAcctgTagEnumId8");this.allFieldsNames.add("pmAcctgTagEnumId9");this.allFieldsNames.add("pmAcctgTagEnumId10");
+      this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceTypeId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("invoiceDate");this.allFieldsNames.add("dueDate");this.allFieldsNames.add("paidDate");this.allFieldsNames.add("invoiceMessage");this.allFieldsNames.add("referenceNumber");this.allFieldsNames.add("description");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("invoiceAdjustedTotal");this.allFieldsNames.add("invoiceTotal");this.allFieldsNames.add("interestCharged");this.allFieldsNames.add("salesTaxTotal");this.allFieldsNames.add("adjustedAmount");this.allFieldsNames.add("appliedAmount");this.allFieldsNames.add("openAmount");this.allFieldsNames.add("pendingOpenAmount");this.allFieldsNames.add("pendingAppliedAmount");this.allFieldsNames.add("processingStatusId");this.allFieldsNames.add("paymentApplicationId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("toPaymentId");this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("amountApplied");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");this.allFieldsNames.add("note");this.allFieldsNames.add("pmPaymentId");this.allFieldsNames.add("pmPaymentTypeId");this.allFieldsNames.add("pmPaymentMethodTypeId");this.allFieldsNames.add("pmPaymentMethodId");this.allFieldsNames.add("pmPaymentGatewayResponseId");this.allFieldsNames.add("pmPaymentPreferenceId");this.allFieldsNames.add("pmPartyIdFrom");this.allFieldsNames.add("pmPartyIdTo");this.allFieldsNames.add("pmRoleTypeIdTo");this.allFieldsNames.add("pmStatusId");this.allFieldsNames.add("pmEffectiveDate");this.allFieldsNames.add("pmPaymentRefNum");this.allFieldsNames.add("pmAmount");this.allFieldsNames.add("pmCurrencyUomId");this.allFieldsNames.add("pmComments");this.allFieldsNames.add("pmFinAccountTransId");this.allFieldsNames.add("pmOverrideGlAccountId");this.allFieldsNames.add("pmActualCurrencyAmount");this.allFieldsNames.add("pmActualCurrencyUomId");this.allFieldsNames.add("pmAppliedAmount");this.allFieldsNames.add("pmOpenAmount");this.allFieldsNames.add("pmAcctgTagEnumId1");this.allFieldsNames.add("pmAcctgTagEnumId2");this.allFieldsNames.add("pmAcctgTagEnumId3");this.allFieldsNames.add("pmAcctgTagEnumId4");this.allFieldsNames.add("pmAcctgTagEnumId5");this.allFieldsNames.add("pmAcctgTagEnumId6");this.allFieldsNames.add("pmAcctgTagEnumId7");this.allFieldsNames.add("pmAcctgTagEnumId8");this.allFieldsNames.add("pmAcctgTagEnumId9");this.allFieldsNames.add("pmAcctgTagEnumId10");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -772,6 +777,13 @@ fieldMapColumns.put("InvoiceAndApplAndPayment", fields);
      */
     public void setAcctgTagEnumId10(String acctgTagEnumId10) {
         this.acctgTagEnumId10 = acctgTagEnumId10;
+    }
+    /**
+     * Auto generated value setter.
+     * @param note the note to set
+     */
+    public void setNote(String note) {
+        this.note = note;
     }
     /**
      * Auto generated value setter.
@@ -1296,6 +1308,13 @@ fieldMapColumns.put("InvoiceAndApplAndPayment", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getNote() {
+        return this.note;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getPmPaymentId() {
         return this.pmPaymentId;
     }
@@ -1560,6 +1579,7 @@ fieldMapColumns.put("InvoiceAndApplAndPayment", fields);
         setAcctgTagEnumId8((String) mapValue.get("acctgTagEnumId8"));
         setAcctgTagEnumId9((String) mapValue.get("acctgTagEnumId9"));
         setAcctgTagEnumId10((String) mapValue.get("acctgTagEnumId10"));
+        setNote((String) mapValue.get("note"));
         setPmPaymentId((String) mapValue.get("pmPaymentId"));
         setPmPaymentTypeId((String) mapValue.get("pmPaymentTypeId"));
         setPmPaymentMethodTypeId((String) mapValue.get("pmPaymentMethodTypeId"));
@@ -1641,6 +1661,7 @@ fieldMapColumns.put("InvoiceAndApplAndPayment", fields);
         mapValue.put("acctgTagEnumId8", getAcctgTagEnumId8());
         mapValue.put("acctgTagEnumId9", getAcctgTagEnumId9());
         mapValue.put("acctgTagEnumId10", getAcctgTagEnumId10());
+        mapValue.put("note", getNote());
         mapValue.put("pmPaymentId", getPmPaymentId());
         mapValue.put("pmPaymentTypeId", getPmPaymentTypeId());
         mapValue.put("pmPaymentMethodTypeId", getPmPaymentMethodTypeId());

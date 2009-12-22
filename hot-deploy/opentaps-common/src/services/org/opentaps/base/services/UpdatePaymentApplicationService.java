@@ -74,6 +74,7 @@ public class UpdatePaymentApplicationService extends ServiceWrapper {
         invoiceItemSeqId("invoiceItemSeqId"),
         invoiceProcessing("invoiceProcessing"),
         locale("locale"),
+        note("note"),
         overrideGlAccountId("overrideGlAccountId"),
         paymentApplicationId("paymentApplicationId"),
         paymentId("paymentId"),
@@ -124,6 +125,7 @@ public class UpdatePaymentApplicationService extends ServiceWrapper {
     private String inInvoiceItemSeqId;
     private String inInvoiceProcessing;
     private Locale inLocale;
+    private String inNote;
     private String inOverrideGlAccountId;
     private String inPaymentApplicationId;
     private String inPaymentId;
@@ -270,6 +272,14 @@ public class UpdatePaymentApplicationService extends ServiceWrapper {
      */
     public Locale getInLocale() {
         return this.inLocale;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInNote() {
+        return this.inNote;
     }
     /**
      * Auto generated value accessor.
@@ -539,6 +549,15 @@ public class UpdatePaymentApplicationService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inNote the inNote to set
+    */
+    public void setInNote(String inNote) {
+        this.inParameters.add("note");
+        this.inNote = inNote;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inOverrideGlAccountId the inOverrideGlAccountId to set
     */
     public void setInOverrideGlAccountId(String inOverrideGlAccountId) {
@@ -711,6 +730,7 @@ public class UpdatePaymentApplicationService extends ServiceWrapper {
         if (inParameters.contains("invoiceItemSeqId")) mapValue.put("invoiceItemSeqId", getInInvoiceItemSeqId());
         if (inParameters.contains("invoiceProcessing")) mapValue.put("invoiceProcessing", getInInvoiceProcessing());
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
+        if (inParameters.contains("note")) mapValue.put("note", getInNote());
         if (inParameters.contains("overrideGlAccountId")) mapValue.put("overrideGlAccountId", getInOverrideGlAccountId());
         if (inParameters.contains("paymentApplicationId")) mapValue.put("paymentApplicationId", getInPaymentApplicationId());
         if (inParameters.contains("paymentId")) mapValue.put("paymentId", getInPaymentId());
@@ -755,6 +775,7 @@ public class UpdatePaymentApplicationService extends ServiceWrapper {
         if (mapValue.containsKey("invoiceItemSeqId")) setInInvoiceItemSeqId((String) mapValue.get("invoiceItemSeqId"));
         if (mapValue.containsKey("invoiceProcessing")) setInInvoiceProcessing((String) mapValue.get("invoiceProcessing"));
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
+        if (mapValue.containsKey("note")) setInNote((String) mapValue.get("note"));
         if (mapValue.containsKey("overrideGlAccountId")) setInOverrideGlAccountId((String) mapValue.get("overrideGlAccountId"));
         if (mapValue.containsKey("paymentApplicationId")) setInPaymentApplicationId((String) mapValue.get("paymentApplicationId"));
         if (mapValue.containsKey("paymentId")) setInPaymentId((String) mapValue.get("paymentId"));

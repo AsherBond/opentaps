@@ -77,6 +77,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("acctgTagEnumId8", "ACCTG_TAG_ENUM_ID8");
         fields.put("acctgTagEnumId9", "ACCTG_TAG_ENUM_ID9");
         fields.put("acctgTagEnumId10", "ACCTG_TAG_ENUM_ID10");
+        fields.put("note", "NOTE");
 fieldMapColumns.put("PaymentApplication", fields);
 }
   public static enum Fields implements EntityFieldInterface<PaymentApplication> {
@@ -102,7 +103,8 @@ fieldMapColumns.put("PaymentApplication", fields);
     acctgTagEnumId7("acctgTagEnumId7"),
     acctgTagEnumId8("acctgTagEnumId8"),
     acctgTagEnumId9("acctgTagEnumId9"),
-    acctgTagEnumId10("acctgTagEnumId10");
+    acctgTagEnumId10("acctgTagEnumId10"),
+    note("note");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -162,6 +164,8 @@ fieldMapColumns.put("PaymentApplication", fields);
    private String acctgTagEnumId9;
    @Column(name="ACCTG_TAG_ENUM_ID10")
    private String acctgTagEnumId10;
+   @Column(name="NOTE")
+   private String note;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -299,7 +303,7 @@ fieldMapColumns.put("PaymentApplication", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("paymentApplicationId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("paymentApplicationId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("toPaymentId");this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("amountApplied");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");
+      this.allFieldsNames.add("paymentApplicationId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("toPaymentId");this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("amountApplied");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");this.allFieldsNames.add("note");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -475,6 +479,13 @@ fieldMapColumns.put("PaymentApplication", fields);
     public void setAcctgTagEnumId10(String acctgTagEnumId10) {
         this.acctgTagEnumId10 = acctgTagEnumId10;
     }
+    /**
+     * Auto generated value setter.
+     * @param note the note to set
+     */
+    public void setNote(String note) {
+        this.note = note;
+    }
 
     /**
      * Auto generated value accessor.
@@ -636,6 +647,13 @@ fieldMapColumns.put("PaymentApplication", fields);
      */
     public String getAcctgTagEnumId10() {
         return this.acctgTagEnumId10;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getNote() {
+        return this.note;
     }
 
     /**
@@ -1028,6 +1046,7 @@ fieldMapColumns.put("PaymentApplication", fields);
         setAcctgTagEnumId8((String) mapValue.get("acctgTagEnumId8"));
         setAcctgTagEnumId9((String) mapValue.get("acctgTagEnumId9"));
         setAcctgTagEnumId10((String) mapValue.get("acctgTagEnumId10"));
+        setNote((String) mapValue.get("note"));
         postInit();
     }
 
@@ -1058,6 +1077,7 @@ fieldMapColumns.put("PaymentApplication", fields);
         mapValue.put("acctgTagEnumId8", getAcctgTagEnumId8());
         mapValue.put("acctgTagEnumId9", getAcctgTagEnumId9());
         mapValue.put("acctgTagEnumId10", getAcctgTagEnumId10());
+        mapValue.put("note", getNote());
         return mapValue;
     }
 

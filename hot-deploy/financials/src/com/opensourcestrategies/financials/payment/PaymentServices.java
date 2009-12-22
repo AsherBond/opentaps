@@ -112,7 +112,7 @@ public final class PaymentServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String paymentType = (String) context.get("paymentType");
         String partyIdFrom = (String) context.get("partyIdFrom");
-        String partyIdTo = (String) context.get("partyIdTo");        
+        String partyIdTo = (String) context.get("partyIdTo");
         Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
 
@@ -210,7 +210,7 @@ public final class PaymentServices {
                 partyIdFrom = payment.getString("partyIdFrom");
                 partyIdTo = payment.getString("partyIdTo");
             }
-        }        
+        }
         if (paymentTypeId != null) {
             //get parentTypeId of PaymentType
             GenericValue paymentType = delegator.findByPrimaryKey("PaymentType", UtilMisc.toMap("paymentTypeId", paymentTypeId));
@@ -391,6 +391,7 @@ public final class PaymentServices {
         String overrideGlAccountId = (String) context.get("overrideGlAccountId");
         String taxAuthGeoId = (String) context.get("taxAuthGeoId");
         Boolean checkForOverApplication = (Boolean) context.get("checkForOverApplication");
+        String note = (String) context.get("note");
         if (checkForOverApplication == null) {
             checkForOverApplication = false;
         }
@@ -491,13 +492,10 @@ public final class PaymentServices {
         paymentApplication.put("paymentApplicationId", paymentApplicationId);
         // put the updated amountApplied
         paymentApplication.put("amountApplied", amountApplied);
-
         // persist
         try {
             if (organization.allocatePaymentTagsToApplications()) {
                 UtilAccountingTags.putAllAccountingTags(context, paymentApplication);
-                Debug.logInfo("context acctgTagEnumId1 : " + context.get("acctgTagEnumId1") + ", acctgTagEnumId2 : " + context.get("acctgTagEnumId2"), MODULE);
-                Debug.logInfo("paymentApplication acctgTagEnumId1 : " + paymentApplication.get("acctgTagEnumId1") + ", acctgTagEnumId2 : " + paymentApplication.get("acctgTagEnumId2"), MODULE);
             }
             paymentApplication.create();
         } catch (GenericEntityException e) {
@@ -540,7 +538,7 @@ public final class PaymentServices {
         BigDecimal amountApplied = (BigDecimal) context.get("amountApplied");
         String paymentId = (String) context.get("paymentId");
 
-     // get Payment
+        // get Payment
         GenericValue payment;
         Organization organization;
         try {
@@ -639,6 +637,7 @@ public final class PaymentServices {
         String billingAccountId = (String) context.get("billingAccountId");
         String taxAuthGeoId = (String) context.get("taxAuthGeoId");
         String useHighestAmount = (String) context.get("useHighestAmount");
+        String note = (String) context.get("note");
 
         List<String> errorMessageList = new LinkedList<String>();
 
@@ -654,6 +653,7 @@ public final class PaymentServices {
                 + " BillingAccountId: " + billingAccountId
                 + " toPaymentId: " + toPaymentId
                 + " amountApplied: " + amountApplied
+                + " note: " + note
                 + " TaxAuthGeoId: " + taxAuthGeoId, MODULE);
         }
 
@@ -1156,7 +1156,7 @@ public final class PaymentServices {
         }
 
         // ============ start processing ======================
-           // if the application is specified it is easy, update the existing record only
+        // if the application is specified it is easy, update the existing record only
         if (paymentApplicationId != null) {
             // record is already retrieved previously
             if (debug) {
@@ -1170,6 +1170,7 @@ public final class PaymentServices {
             paymentApplication.set("amountApplied", amountApplied);
             paymentApplication.set("billingAccountId", billingAccountId);
             paymentApplication.set("taxAuthGeoId", taxAuthGeoId);
+            paymentApplication.set("note", note);
             return storePaymentApplication(delegator, paymentApplication, locale);
         }
 
@@ -1190,6 +1191,7 @@ public final class PaymentServices {
                 paymentApplication.set("amountApplied", amountApplied);
                 paymentApplication.set("billingAccountId", billingAccountId);
                 paymentApplication.set("taxAuthGeoId", null);
+                paymentApplication.set("note", note);
                 if (debug) {
                     Debug.logInfo("creating new paymentapplication", MODULE);
                 }
@@ -1280,6 +1282,7 @@ public final class PaymentServices {
                             paymentApplication.set("amountApplied", tobeApplied);
                             paymentApplication.set("billingAccountId", billingAccountId);
                             paymentApplication.set("taxAuthGeoId", taxAuthGeoId);
+                            paymentApplication.set("note", note);
                             storePaymentApplication(delegator, paymentApplication, locale);
                         }
                     }
@@ -1308,6 +1311,7 @@ public final class PaymentServices {
             paymentApplication.set("amountApplied", amountApplied);
             paymentApplication.set("billingAccountId", billingAccountId);
             paymentApplication.set("taxAuthGeoId", taxAuthGeoId);
+            paymentApplication.set("note", note);
             return storePaymentApplication(delegator, paymentApplication, locale);
         }
 
@@ -1317,7 +1321,7 @@ public final class PaymentServices {
         return ServiceUtil.returnError(errorMessageList);
     }
 
- 
+
     /**
      * Sets all transaction entries related to a payment to partially reconciled when the payment is confirmed.
      * @param dctx a <code>DispatchContext</code> value
@@ -1462,6 +1466,7 @@ public final class PaymentServices {
         String billingAccountId = (String) context.get("billingAccountId");
         String taxAuthGeoId = (String) context.get("taxAuthGeoId");
         String useHighestAmount = (String) context.get("useHighestAmount");
+        String note = (String) context.get("note");
 
         List errorMessageList = new LinkedList();
 
@@ -1477,7 +1482,8 @@ public final class PaymentServices {
                 + " BillingAccountId: " + billingAccountId
                 + " toPaymentId: " + toPaymentId
                 + " amountApplied: " + amountApplied
-                + " TaxAuthGeoId: " + taxAuthGeoId;
+                + " TaxAuthGeoId: " + taxAuthGeoId
+                + " note: " + note;
             // add tags condition, just update the PaymentApplication who have same accounting tags
             for (int i = 1; i <= UtilAccountingTags.TAG_COUNT; i++) {
                 if (UtilValidate.isNotEmpty(UtilCommon.getParameter(context, UtilAccountingTags.ENTITY_TAG_PREFIX + i)))
@@ -1986,6 +1992,7 @@ public final class PaymentServices {
             paymentApplication.set("amountApplied", amountApplied);
             paymentApplication.set("billingAccountId", billingAccountId);
             paymentApplication.set("taxAuthGeoId", taxAuthGeoId);
+            paymentApplication.set("note", note);
             return storePaymentApplication(delegator, paymentApplication, locale);
         }
 
@@ -2004,6 +2011,7 @@ public final class PaymentServices {
                 paymentApplication.set("amountApplied", amountApplied);
                 paymentApplication.set("billingAccountId", billingAccountId);
                 paymentApplication.set("taxAuthGeoId", null);
+                paymentApplication.set("note", note);
                 if (debug) Debug.logInfo("creating new paymentapplication", MODULE);
                 return storePaymentApplication(delegator, paymentApplication, locale);
             } else { // spread the amount over every single item number
@@ -2086,6 +2094,7 @@ public final class PaymentServices {
                             paymentApplication.set("amountApplied", tobeApplied);
                             paymentApplication.set("billingAccountId", billingAccountId);
                             paymentApplication.set("taxAuthGeoId", taxAuthGeoId);
+                            paymentApplication.set("note", note);
                             storePaymentApplication(delegator, paymentApplication, locale);
                         }
                     }
@@ -2114,6 +2123,7 @@ public final class PaymentServices {
             paymentApplication.set("amountApplied", amountApplied);
             paymentApplication.set("billingAccountId", billingAccountId);
             paymentApplication.set("taxAuthGeoId", taxAuthGeoId);
+            paymentApplication.set("note", note);
             return storePaymentApplication(delegator, paymentApplication, locale);
         }
 
@@ -2142,9 +2152,9 @@ public final class PaymentServices {
         }
 
         // check if a record already exists with this data
-        List checkAppls = null;
+        List<GenericValue> checkAppls = null;
         try {
-            Map condition = UtilMisc.toMap(
+            Map<String, Object> condition = UtilMisc.<String, Object>toMap(
                     "invoiceId", paymentApplication.get("invoiceId"),
                     "invoiceItemSeqId", paymentApplication.get("invoiceItemSeqId"),
                     "billingAccountId", paymentApplication.get("billingAccountId"),
@@ -2160,16 +2170,21 @@ public final class PaymentServices {
             ServiceUtil.returnError(e.getMessage());
         }
         if (checkAppls != null && checkAppls.size() > 0) {
-            if (debug) Debug.logInfo(checkAppls.size() + " records already exist", MODULE);
+            if (debug) {
+                Debug.logInfo(checkAppls.size() + " records already exist", MODULE);
+            }
             // 1 record exists just update and if diffrent ID delete other record and add together.
-            GenericValue checkAppl = (GenericValue) checkAppls.get(0);
+            GenericValue checkAppl = checkAppls.get(0);
             // if new record  add to the already existing one.
             if (paymentApplication.get("paymentApplicationId") == null) {
                 // add 2 amounts together
                 checkAppl.set("amountApplied", paymentApplication.getBigDecimal("amountApplied").
                         add(checkAppl.getBigDecimal("amountApplied")).setScale(DECIMALS, ROUNDING));
-                if (debug)
+                // replace the note
+                checkAppl.set("note", paymentApplication.getString("note"));
+                if (debug) {
                     Debug.logInfo("Update paymentApplication record: " + checkAppl.getString("paymentApplicationId") + " with appliedAmount:" + checkAppl.getBigDecimal("amountApplied"), MODULE);
+                }
                 try {
                     checkAppl.store();
                 } catch (GenericEntityException e) {
@@ -2178,8 +2193,11 @@ public final class PaymentServices {
             } else if (paymentApplication.getString("paymentApplicationId").equals(checkAppl.getString("paymentApplicationId"))) {
                 // update existing record inplace
                 checkAppl.set("amountApplied", paymentApplication.getBigDecimal("amountApplied"));
-                if (debug)
+                // replace the note
+                checkAppl.set("note", paymentApplication.getString("note"));
+                if (debug) {
                     Debug.logInfo("Update paymentApplication record: " + checkAppl.getString("paymentApplicationId") + " with appliedAmount:" + checkAppl.getBigDecimal("amountApplied"), MODULE);
+                }
                 try {
                     checkAppl.store();
                 } catch (GenericEntityException e) {
@@ -2189,16 +2207,21 @@ public final class PaymentServices {
                 // add 2 amounts together
                 checkAppl.set("amountApplied", paymentApplication.getBigDecimal("amountApplied").
                         add(checkAppl.getBigDecimal("amountApplied")).setScale(DECIMALS, ROUNDING));
+                // replace the note
+                checkAppl.set("note", paymentApplication.getString("note"));
                 // delete paymentApplication record and update the checkAppls one.
-                if (debug) Debug.logInfo("Delete paymentApplication record: " + paymentApplication.getString("paymentApplicationId") + " with appliedAmount:" + paymentApplication.getBigDecimal("amountApplied"), MODULE);
+                if (debug) {
+                    Debug.logInfo("Delete paymentApplication record: " + paymentApplication.getString("paymentApplicationId") + " with appliedAmount:" + paymentApplication.getBigDecimal("amountApplied"), MODULE);
+                }
                 try {
                     paymentApplication.remove();
                 } catch (GenericEntityException e) {
                     ServiceUtil.returnError(e.getMessage());
                 }
                 // update amount existing record
-                if (debug)
+                if (debug) {
                     Debug.logInfo("Update paymentApplication record: " + checkAppl.getString("paymentApplicationId") + " with appliedAmount:" + checkAppl.getBigDecimal("amountApplied"), MODULE);
+                }
                 try {
                     checkAppl.store();
                 } catch (GenericEntityException e) {
@@ -2236,7 +2259,7 @@ public final class PaymentServices {
         try {
             paymentApplications = invoiceItem.getRelated("PaymentApplication");
         } catch (GenericEntityException e) {
-            Debug.logError(e, "Trouble getting paymentApplicationlist", MODULE);            
+            Debug.logError(e, "Trouble getting paymentApplicationlist", MODULE);
         }
         if (paymentApplications != null && paymentApplications.size() > 0) {
             Iterator p = paymentApplications.iterator();
@@ -2245,16 +2268,16 @@ public final class PaymentServices {
                 invoiceItemApplied = invoiceItemApplied.add(paymentApplication.getBigDecimal("amountApplied")).setScale(DECIMALS, ROUNDING);
             }
         }
-        return invoiceItemApplied;        
+        return invoiceItemApplied;
     }
-    
+
     private static BigDecimal getPaymentAppliedBd(GenericValue payment) {
         BigDecimal paymentApplied = BigDecimal.ZERO;
         List<GenericValue> paymentApplications = null;
         try {
             paymentApplications = payment.getRelated("PaymentApplication");
         } catch (GenericEntityException e) {
-            Debug.logError(e, "Trouble getting paymentApplicationlist", MODULE);            
+            Debug.logError(e, "Trouble getting paymentApplicationlist", MODULE);
         }
         if (paymentApplications != null && paymentApplications.size() > 0) {
             for (GenericValue paymentApplication : paymentApplications) {
@@ -2266,14 +2289,14 @@ public final class PaymentServices {
         try {
             paymentApplications = payment.getRelated("ToPaymentApplication");
         } catch (GenericEntityException e) {
-            Debug.logError(e, "Trouble getting the 'to' paymentApplicationlist", MODULE);            
+            Debug.logError(e, "Trouble getting the 'to' paymentApplicationlist", MODULE);
         }
         if (paymentApplications != null && paymentApplications.size() > 0) {
             for (GenericValue paymentApplication : paymentApplications) {
                 paymentApplied = paymentApplied.add(paymentApplication.getBigDecimal("amountApplied")).setScale(DECIMALS, ROUNDING);
             }
         }
-        return paymentApplied;        
+        return paymentApplied;
     }
 
     private static BigDecimal getInvoiceTotalBd(GenericValue invoice) {
@@ -2283,7 +2306,7 @@ public final class PaymentServices {
         try {
             invoiceItems = invoice.getRelated("InvoiceItem");
         } catch (GenericEntityException e) {
-            Debug.logError(e, "Trouble getting InvoiceItem list", MODULE);            
+            Debug.logError(e, "Trouble getting InvoiceItem list", MODULE);
         }
         if (invoiceItems != null && invoiceItems.size() > 0) {
             Iterator invoiceItemsIter = invoiceItems.iterator();

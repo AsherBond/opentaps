@@ -185,7 +185,7 @@ if (! payment.isVoided()) {
         paymentApplicationMap.put("acctgTagEnumId8", application.getAcctgTagEnumId8());
         paymentApplicationMap.put("acctgTagEnumId9", application.getAcctgTagEnumId9());
         paymentApplicationMap.put("acctgTagEnumId10", application.getAcctgTagEnumId10());
-        
+        paymentApplicationMap.put("note", application.getNote());
         invoiceId = application.getInvoiceId();
         invoice = null;
         if (UtilValidate.isNotEmpty(invoiceId)) {

@@ -22,6 +22,7 @@
 		    <td><span class="boxhead"></span></td>
 		    <td><span class="boxhead"></span></td>		    
 		    <td><span class="boxhead">${uiLabelMap.FinancialsAmountOutstanding}</span></td>
+		    <td><span class="boxhead">${uiLabelMap.CommonNote}</span></td>
 			<#if tagTypes?has_content>
 			    <@accountingTagsDisplayColumns tags=tagTypes/>
 			</#if>		    
@@ -36,6 +37,7 @@
    			    <td></td>
    			    <td></td>
                 <@inputTextCell name="amountApplied" default=row.amountToApply/>
+                <@inputTextCell name="note" default=row.note/>
 	            <@displayLinkCell class="buttontext" href="javascript:document.addPaymentApplicationTax_${row_index}.submit();" text=uiLabelMap.CommonApply/>  
             </tr>
             <#if tagTypes?has_content && allocatePaymentTagsToApplications>

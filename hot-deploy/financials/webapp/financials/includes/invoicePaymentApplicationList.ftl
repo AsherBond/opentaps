@@ -31,6 +31,7 @@
 			<#if invoiceProcessing.equals("N")>
 		    <td><span class="boxhead">${uiLabelMap.CommonApply}</span></td>
 			</#if>	
+		    <td><span class="boxhead">${uiLabelMap.CommonNote}</span></td>
 		    <td><span class="boxhead"></span></td>
            </tr>
            <#if invoices?has_content>
@@ -51,6 +52,7 @@
                 <@displayDateCell date=row.invoiceDate/>
                 <@displayCell text=row.outstandingAmount/>
                 <@inputTextCell name="amountApplied" default=row.amountToApply/>
+                <@inputTextCell name="note" ignoreParameters=true default=row.note/>
                 <@inputButtonCell title=uiLabelMap.CommonApply/>
             </tr>
 			    <#if tagTypes?has_content && allocatePaymentTagsToApplications>

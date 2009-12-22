@@ -82,6 +82,7 @@ public class RemovePaymentApplicationService extends ServiceWrapper {
         invoiceId("invoiceId"),
         invoiceItemSeqId("invoiceItemSeqId"),
         locale("locale"),
+        note("note"),
         overrideGlAccountId("overrideGlAccountId"),
         paymentId("paymentId"),
         responseMessage("responseMessage"),
@@ -132,6 +133,7 @@ public class RemovePaymentApplicationService extends ServiceWrapper {
     private String outInvoiceId;
     private String outInvoiceItemSeqId;
     private Locale outLocale;
+    private String outNote;
     private String outOverrideGlAccountId;
     private String outPaymentId;
     private String outResponseMessage;
@@ -312,6 +314,14 @@ public class RemovePaymentApplicationService extends ServiceWrapper {
      */
     public Locale getOutLocale() {
         return this.outLocale;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getOutNote() {
+        return this.outNote;
     }
     /**
      * Auto generated value accessor.
@@ -578,6 +588,15 @@ public class RemovePaymentApplicationService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param outNote the outNote to set
+    */
+    public void setOutNote(String outNote) {
+        this.outParameters.add("note");
+        this.outNote = outNote;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param outOverrideGlAccountId the outOverrideGlAccountId to set
     */
     public void setOutOverrideGlAccountId(String outOverrideGlAccountId) {
@@ -709,6 +728,7 @@ public class RemovePaymentApplicationService extends ServiceWrapper {
         if (outParameters.contains("invoiceId")) mapValue.put("invoiceId", getOutInvoiceId());
         if (outParameters.contains("invoiceItemSeqId")) mapValue.put("invoiceItemSeqId", getOutInvoiceItemSeqId());
         if (outParameters.contains("locale")) mapValue.put("locale", getOutLocale());
+        if (outParameters.contains("note")) mapValue.put("note", getOutNote());
         if (outParameters.contains("overrideGlAccountId")) mapValue.put("overrideGlAccountId", getOutOverrideGlAccountId());
         if (outParameters.contains("paymentId")) mapValue.put("paymentId", getOutPaymentId());
         if (outParameters.contains("responseMessage")) mapValue.put("responseMessage", getOutResponseMessage());
@@ -748,6 +768,7 @@ public class RemovePaymentApplicationService extends ServiceWrapper {
         if (mapValue.containsKey("invoiceId")) setOutInvoiceId((String) mapValue.get("invoiceId"));
         if (mapValue.containsKey("invoiceItemSeqId")) setOutInvoiceItemSeqId((String) mapValue.get("invoiceItemSeqId"));
         if (mapValue.containsKey("locale")) setOutLocale((Locale) mapValue.get("locale"));
+        if (mapValue.containsKey("note")) setOutNote((String) mapValue.get("note"));
         if (mapValue.containsKey("overrideGlAccountId")) setOutOverrideGlAccountId((String) mapValue.get("overrideGlAccountId"));
         if (mapValue.containsKey("paymentId")) setOutPaymentId((String) mapValue.get("paymentId"));
         if (mapValue.containsKey("responseMessage")) setOutResponseMessage((String) mapValue.get("responseMessage"));

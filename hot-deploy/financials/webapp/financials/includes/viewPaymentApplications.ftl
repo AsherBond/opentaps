@@ -24,6 +24,7 @@
 		    <td><span class="boxhead">${uiLabelMap.AccountingInvoiceDate}</span></td>
 		    <td><span class="boxhead">${uiLabelMap.FinancialsAmountOutstanding}</span></td>
 		    <td><span class="boxhead">${uiLabelMap.AccountingAmountApplied}</span></td>
+		    <td><span class="boxhead">${uiLabelMap.CommonNote}</span></td>
            </tr>
             <#list paymentApplicationsList as row>
             <tr class="viewManyTR2">
@@ -33,6 +34,7 @@
                 <@displayDateCell date=row.invoiceDate/>
                 <@displayCurrencyCell amount=row.outstandingAmount currencyUomId=row.currencyUomId />
                 <@displayCurrencyCell amount=row.amountApplied currencyUomId=row.currencyUomId/>
+                <@displayCell text=row.note/>
             </tr>
             <#if tagTypes?has_content && allocatePaymentTagsToApplications>
 			    <@accountingTagsInputCells tags=tagTypes prefix="acctgTagEnumId" tagColSpan="2" entity=row! readonly="true"/>

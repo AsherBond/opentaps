@@ -212,6 +212,7 @@ under the License.
         <field name="acctgTagEnumId8" type="id-ne"/>
         <field name="acctgTagEnumId9" type="id-ne"/>
         <field name="acctgTagEnumId10" type="id-ne"/>
+        <field name="note" type="comment"/>
         <relation type="one" rel-entity-name="Enumeration" fk-name="PAYMENT_APP_TAG1" title="tag1">
             <key-map field-name="acctgTagEnumId1" rel-field-name="enumId"/>
         </relation>

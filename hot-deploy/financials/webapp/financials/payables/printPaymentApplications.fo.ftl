@@ -68,11 +68,8 @@ under the License.
               <fo:table-cell padding="3pt">
                 <fo:block font-weight="bold">${uiLabelMap.CommonDate}</fo:block>
               </fo:table-cell>
-              <fo:table-cell padding="3pt">
-                <fo:block font-weight="bold">${uiLabelMap.AccountingReferenceNumber}</fo:block>
-              </fo:table-cell>
-              <fo:table-cell padding="3pt">
-                <fo:block font-weight="bold">${uiLabelMap.FinancialsCustomerCode}</fo:block>
+              <fo:table-cell padding="3pt" number-columns-spanned="2">
+                <fo:block font-weight="bold">${uiLabelMap.OpentapsReference}</fo:block>
               </fo:table-cell>
               <fo:table-cell padding="3pt">
                 <fo:block font-weight="bold" text-align="right">${uiLabelMap.AccountingAmount}</fo:block>
@@ -94,15 +91,16 @@ under the License.
           <fo:table-cell padding="3pt">
             <fo:block><@displayDateFO date=payment.effectiveDate/></fo:block>
           </fo:table-cell>
-          <fo:table-cell padding="3pt">
+          <fo:table-cell padding="3pt" number-columns-spanned="2">
             <fo:block>
-              <#if invoice?exists>${invoice.referenceNumber?if_exists}</#if>
+            <#if invoice?exists>
+              ${invoice.referenceNumber?if_exists}
+              ${vendorCustomerId?if_exists}
+            </#if>
+            ${paymentApplication.note?if_exists}
             ${paymentApplication.taxAuthGeoId?if_exists}
           </fo:block>
         </fo:table-cell>
-        <fo:table-cell padding="3pt">
-          <fo:block><#if invoice?exists>${vendorCustomerId?if_exists}</#if></fo:block>
-      </fo:table-cell>
       <fo:table-cell padding="3pt">
         <fo:block text-align="end">${paymentApplication.getBigDecimal("amountApplied").setScale(2, rounding).toString()}</fo:block>
       </fo:table-cell>
