@@ -78,6 +78,10 @@ framework/entity/src/org/ofbiz/entity/GenericDelegator.java
 r12909 Removed depracation tags for the findXXX methods. Ofbiz deprecated them to be replaced with findOne, findList but the old methods are used in too many places to be refactored
 completely for now.
 
+framework/entity/src/org/ofbiz/entity/datasource/GenericDAO.java
+framework/entity/src/org/ofbiz/entity/jdbc/SQLProcessor.java
+r14349 abbreviate the SQL exception messages
+
 framework/entity/src/org/ofbiz/entity/condition/EntityExpr.java
 r13040 fix a bug in the validation which did not work if the rhs was an empty collection
 
