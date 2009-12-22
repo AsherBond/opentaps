@@ -93,6 +93,8 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                                                                       PartyLookupConfiguration.INOUT_COUNTRY,
                                                                       PartyLookupConfiguration.INOUT_STATE,
                                                                       PartyLookupConfiguration.INOUT_CITY,
+                                                                      PartyLookupConfiguration.INOUT_TO_NAME,
+                                                                      PartyLookupConfiguration.INOUT_ATTENTION_NAME,
                                                                       PartyLookupConfiguration.INOUT_POSTAL_CODE);
     private static List<String> ACCOUNT_CONTACTS_FILTERS = Arrays.asList(PartyLookupConfiguration.IN_PARTY_ID_TO);
 

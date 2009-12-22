@@ -92,8 +92,8 @@ public abstract class PartyListView extends EntityListView {
         }
 
         // add remaining fields
-        makeColumn(UtilUi.MSG.toName(), new StringFieldDef(PartyLookupConfiguration.OUT_TO_NAME));
-        makeColumn(UtilUi.MSG.attnName(), new StringFieldDef(PartyLookupConfiguration.OUT_ATTENTION_NAME));
+        makeColumn(UtilUi.MSG.toName(), new StringFieldDef(PartyLookupConfiguration.INOUT_TO_NAME));
+        makeColumn(UtilUi.MSG.attnName(), new StringFieldDef(PartyLookupConfiguration.INOUT_ATTENTION_NAME));
         makeColumn(UtilUi.MSG.address(), new StringFieldDef(PartyLookupConfiguration.INOUT_ADDRESS));
         makeColumn(UtilUi.MSG.address2(), new StringFieldDef(PartyLookupConfiguration.OUT_ADDRESS_2));
         makeColumn(UtilUi.MSG.city(), new StringFieldDef(PartyLookupConfiguration.INOUT_CITY));
@@ -109,8 +109,8 @@ public abstract class PartyListView extends EntityListView {
         // by default, hide non essential columns
         setColumnHidden(PartyLookupConfiguration.INOUT_FRIENDLY_PARTY_NAME, true);
         setColumnHidden(PartyLookupConfiguration.INOUT_COUNTRY, true);
-        setColumnHidden(PartyLookupConfiguration.OUT_TO_NAME, true);
-        setColumnHidden(PartyLookupConfiguration.OUT_ATTENTION_NAME, true);
+        setColumnHidden(PartyLookupConfiguration.INOUT_TO_NAME, true);
+        setColumnHidden(PartyLookupConfiguration.INOUT_ATTENTION_NAME, true);
         setColumnHidden(PartyLookupConfiguration.OUT_ADDRESS_2, true);
         setColumnHidden(PartyLookupConfiguration.INOUT_POSTAL_CODE, true);
         setColumnHidden(PartyLookupConfiguration.OUT_POSTAL_CODE_EXT, true);
@@ -212,6 +212,22 @@ public abstract class PartyListView extends EntityListView {
      */
     public void filterByPhoneNumber(String number) {
         setFilter(PartyLookupConfiguration.INOUT_PHONE_NUMBER, number);
+    }
+
+    /**
+     * Filters the records of the list by the to name of the party matching the given sub string.
+     * @param toName a <code>String</code> value
+     */
+    public void filterByToName(String toName) {
+        setFilter(PartyLookupConfiguration.INOUT_TO_NAME, toName);
+    }
+
+    /**
+     * Filters the records of the list by the attention name of the party matching the given sub string.
+     * @param attnName a <code>String</code> value
+     */
+    public void filterByAttnName(String attnName) {
+        setFilter(PartyLookupConfiguration.INOUT_ATTENTION_NAME, attnName);
     }
 
 }

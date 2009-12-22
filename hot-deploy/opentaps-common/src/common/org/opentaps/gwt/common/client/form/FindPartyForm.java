@@ -52,6 +52,8 @@ public abstract class FindPartyForm extends FindEntityForm<PartyListView> {
     protected final CountryAutocomplete countryInput;
     protected final StateAutocomplete stateInput;
     protected final TextField postalCodeInput;
+    protected final TextField toNameInput;
+    protected final TextField attnNameInput;
 
     /**
      * Constructor.  The order in which the tab widgets are created reflects the
@@ -77,6 +79,8 @@ public abstract class FindPartyForm extends FindEntityForm<PartyListView> {
         filterByPhoneTab.addField(phoneInput);
 
         classificationInput = new PartyClassificationAutocomplete(UtilUi.MSG.classification(), "classification", getInputLength());
+        toNameInput = new TextField(UtilUi.MSG.partyToName(), "toName", getInputLength());
+        attnNameInput = new TextField(UtilUi.MSG.partyAttentionName(), "attnName", getInputLength());
         addressInput = new TextField(UtilUi.MSG.address(), "address", getInputLength());
         cityInput = new TextField(UtilUi.MSG.city(), "city", getInputLength());
         postalCodeInput = new TextField(UtilUi.MSG.postalCode(), "postalCode", getInputLength());
@@ -110,6 +114,8 @@ public abstract class FindPartyForm extends FindEntityForm<PartyListView> {
      */
     protected void buildFilterByAdvancedTab(SubFormPanel p) {
         filterByAdvancedTab.addField(classificationInput);
+        filterByAdvancedTab.addField(toNameInput);
+        filterByAdvancedTab.addField(attnNameInput);
         filterByAdvancedTab.addField(addressInput);
         filterByAdvancedTab.addField(cityInput);
         filterByAdvancedTab.addField(countryInput);
@@ -134,6 +140,8 @@ public abstract class FindPartyForm extends FindEntityForm<PartyListView> {
         getListView().filterByCountry(countryInput.getText());
         getListView().filterByStateProvince(stateInput.getText());
         getListView().filterByPostalCode(postalCodeInput.getText());
+        getListView().filterByToName(toNameInput.getText());
+        getListView().filterByAttnName(attnNameInput.getText());
     }
 
     @Override protected void filter() {

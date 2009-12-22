@@ -78,8 +78,8 @@ public class ContactsSublistView extends ContactListView {
         makeColumn(UtilUi.MSG.city(), new StringFieldDef(PartyLookupConfiguration.INOUT_CITY));
         makeColumn(UtilUi.MSG.crmPrimaryEmail(), new StringFieldDef(PartyLookupConfiguration.OUT_EMAIL));
         makeColumn(UtilUi.MSG.crmPrimaryPhone(), new StringFieldDef(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER));
-        makeColumn(UtilUi.MSG.toName(), new StringFieldDef(PartyLookupConfiguration.OUT_TO_NAME));
-        makeColumn(UtilUi.MSG.attnName(), new StringFieldDef(PartyLookupConfiguration.OUT_ATTENTION_NAME));
+        makeColumn(UtilUi.MSG.toName(), new StringFieldDef(PartyLookupConfiguration.INOUT_TO_NAME));
+        makeColumn(UtilUi.MSG.attnName(), new StringFieldDef(PartyLookupConfiguration.INOUT_ATTENTION_NAME));
         makeColumn(UtilUi.MSG.address(), new StringFieldDef(PartyLookupConfiguration.INOUT_ADDRESS));
         makeColumn(UtilUi.MSG.address2(), new StringFieldDef(PartyLookupConfiguration.OUT_ADDRESS_2));
         makeColumn(UtilUi.MSG.stateOrProvince(), new StringFieldDef(PartyLookupConfiguration.INOUT_STATE));
@@ -156,8 +156,8 @@ public class ContactsSublistView extends ContactListView {
         setColumnHidden(PartyLookupConfiguration.INOUT_PARTY_ID, true);
         setColumnHidden(PartyLookupConfiguration.INOUT_STATE, true);
         setColumnHidden(PartyLookupConfiguration.INOUT_COUNTRY, true);
-        setColumnHidden(PartyLookupConfiguration.OUT_TO_NAME, true);
-        setColumnHidden(PartyLookupConfiguration.OUT_ATTENTION_NAME, true);
+        setColumnHidden(PartyLookupConfiguration.INOUT_TO_NAME, true);
+        setColumnHidden(PartyLookupConfiguration.INOUT_ATTENTION_NAME, true);
         setColumnHidden(PartyLookupConfiguration.INOUT_ADDRESS, true);
         setColumnHidden(PartyLookupConfiguration.OUT_ADDRESS_2, true);
         setColumnHidden(PartyLookupConfiguration.INOUT_POSTAL_CODE, true);
