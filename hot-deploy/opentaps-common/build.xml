@@ -287,6 +287,8 @@
           <java classpathref="gwt.class.path" classname="com.google.gwt.dev.Compiler" fork="true" failonerror="true">
             <jvmarg line="-Xmx1024M"/>  
             <arg line="-style ${gwt.compiler.style}"/>
+            <!-- draftCompile can be used to tell the compiler to skip optimization and seedup compilation for dev/testing -->
+            <arg line="-draftCompile"/>
             <arg line="-war ${gwt.deploy.dir}"/>
             <arg line="${gwt.module.base}.${module}.${module}"/>
           </java>
