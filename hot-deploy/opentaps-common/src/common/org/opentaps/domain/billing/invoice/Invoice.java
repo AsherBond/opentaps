@@ -21,10 +21,17 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilNumber;
+import org.opentaps.base.entities.InvoiceAdjustment;
+import org.opentaps.base.entities.InvoiceAndInvoiceItem;
+import org.opentaps.base.entities.InvoiceItem;
+import org.opentaps.base.entities.InvoiceItemType;
+import org.opentaps.base.entities.Party;
+import org.opentaps.base.entities.PaymentAndApplication;
+import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.common.util.UtilDate;
-import org.opentaps.base.entities.*;
 import org.opentaps.foundation.repository.RepositoryException;
 
 /**
@@ -37,6 +44,8 @@ import org.opentaps.foundation.repository.RepositoryException;
  */
 public class Invoice extends org.opentaps.base.entities.Invoice {
 
+    private static final String MODULE = Invoice.class.getName();
+
     // this is actually the logical place for these constants.  if we add get methods for them, then we are good
     private static final int DECIMALS = UtilNumber.getBigDecimalScale("invoice.decimals");
     private static final int ROUNDING = UtilNumber.getBigDecimalRoundingMode("invoice.rounding");
@@ -46,9 +55,7 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
     protected static String VALID_ENTITY_NAME = "Invoice";      // only GenericValue of ModelEntity "Invoice" can be instantiated into this Entity object
 
     // null is the right initial state for these values, so we know that they have not been set yet.
-    private BigDecimal invoiceTotal;
     private BigDecimal salesTaxTotal;
-    private BigDecimal interestCharged;
     private List<InvoiceItem> invoiceItems;
 
     /**
@@ -144,7 +151,7 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
      * @throws RepositoryException
      */
     private void calculateTotals() throws RepositoryException {
-        invoiceTotal = BigDecimal.ZERO;
+        BigDecimal invoiceTotal = BigDecimal.ZERO;
         salesTaxTotal = BigDecimal.ZERO;
 
         for (InvoiceItem item : getInvoiceItems()) {
@@ -160,28 +167,40 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
             }
         }
         invoiceTotal = invoiceTotal.setScale(DECIMALS, ROUNDING);
+        setInvoiceTotal(invoiceTotal);
     }
 
     /**
      * Gets the total value of this invoice based on all the InvoiceItems.  Assume 1 for any item whose quantity or amount is null.
      * This total includes sales tax line items.
      * @return the total value
-     * @throws RepositoryException if an error occurs
      */
-    public BigDecimal getInvoiceTotal() throws RepositoryException {
-        if (invoiceTotal == null) {
-            calculateTotals();
+    @Override
+    public BigDecimal getInvoiceTotal() {
+        if (super.getInvoiceTotal() == null) {
+            try {
+                calculateTotals();
+            } catch (RepositoryException e) {
+                Debug.logError(e, "Could not calculate the invoice total", MODULE);
+            }
         }
-        return invoiceTotal;
+        return super.getInvoiceTotal();
     }
 
     /**
      * Gets the total of payments applied to this invoice as of right now.
      * @return the total of payments applied
-     * @throws RepositoryException if an error occurs
      */
-    public BigDecimal getAppliedAmount() throws RepositoryException {
-        return getAppliedAmount(UtilDateTime.nowTimestamp());
+    @Override
+    public BigDecimal getAppliedAmount() {
+        if (super.getAppliedAmount() == null) {
+            try {
+                setAppliedAmount(getAppliedAmount(UtilDateTime.nowTimestamp()));
+            } catch (RepositoryException e) {
+                Debug.logError(e, "Could not calculate the applied amount", MODULE);
+            }
+        }
+        return super.getAppliedAmount();
     }
 
     /**
@@ -194,7 +213,7 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
      * @exception RepositoryException if an error occurs
      */
     public BigDecimal getAppliedAmount(Timestamp asOfDateTime) throws RepositoryException {
-        BigDecimal appliedAmount = BigDecimal.ZERO; // this unfortunately can't be memorized like invoiceTotal due to the parametrization on asOfDateTime
+        BigDecimal appliedAmount = BigDecimal.ZERO;
 
         List<PaymentAndApplication> applications = getRepository().getPaymentsApplied(this, asOfDateTime);
         for (PaymentAndApplication application : applications) {
@@ -223,10 +242,17 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
     /**
      * Get the adjusted amount applied to this invoice as of now.
      * @return the adjusted amount
-     * @throws RepositoryException if an error occurs
      */
-    public BigDecimal getAdjustedAmount() throws RepositoryException {
-        return getAdjustedAmount(UtilDateTime.nowTimestamp());
+    @Override
+    public BigDecimal getAdjustedAmount() {
+        if (super.getAdjustedAmount() == null) {
+            try {
+                setAdjustedAmount(getAdjustedAmount(UtilDateTime.nowTimestamp()));
+            } catch (RepositoryException e) {
+                Debug.logError(e, "Could not calculate the adjusted amount", MODULE);
+            }
+        }
+        return super.getAdjustedAmount();
     }
 
     /**
@@ -255,10 +281,17 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
      * This represents the actual amount that must be paid to close the invoice.
      *
      * @return the invoice total plus adjustments, minus applied amounts
-     * @throws RepositoryException if an error occurs
      */
-    public BigDecimal getOpenAmount() throws RepositoryException {
-        return getOpenAmount(UtilDateTime.nowTimestamp());
+    @Override
+    public BigDecimal getOpenAmount() {
+        if (super.getOpenAmount() == null) {
+            try {
+                setOpenAmount(getOpenAmount(UtilDateTime.nowTimestamp()));
+            } catch (RepositoryException e) {
+                Debug.logError(e, "Could not calculate the open amount", MODULE);
+            }
+        }
+        return super.getOpenAmount();
     }
 
     /**
@@ -278,12 +311,19 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
      * Gets the pending open amount as of right now, which is the invoice adjusted total minus the payments made minus the pending payments.
      *
      * @return the invoice total plus adjustments, minus pending and applied amounts
-     * @throws RepositoryException if an error occurs
      * @see #getOpenAmount
      * @see #getPendingOpenAmount(Timestamp)
      */
-    public BigDecimal getPendingOpenAmount() throws RepositoryException {
-        return getPendingOpenAmount(UtilDateTime.nowTimestamp());
+    @Override
+    public BigDecimal getPendingOpenAmount() {
+        if (super.getPendingOpenAmount() == null) {
+            try {
+                setPendingOpenAmount(getPendingOpenAmount(UtilDateTime.nowTimestamp()));
+            } catch (RepositoryException e) {
+                Debug.logError(e, "Could not calculate the open pending amount", MODULE);
+            }
+        }
+        return super.getPendingOpenAmount();
     }
 
     /**
@@ -318,32 +358,42 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
     /**
      * Gets the invoice total with adjustments as of right now.
      * @return Invoice total plus adjustments
-     * @throws RepositoryException if an error occurs
      */
-    public BigDecimal getInvoiceAdjustedTotal() throws RepositoryException {
-        return getInvoiceAdjustedTotal(UtilDateTime.nowTimestamp());
+    @Override
+    public BigDecimal getInvoiceAdjustedTotal() {
+        if (super.getInvoiceAdjustedTotal() == null) {
+            try {
+                setInvoiceAdjustedTotal(getInvoiceAdjustedTotal(UtilDateTime.nowTimestamp()));
+            } catch (RepositoryException e) {
+                Debug.logError(e, "Could not calculate the invoice adjusted total", MODULE);
+            }
+        }
+        return super.getInvoiceAdjustedTotal();
     }
 
     /**
      * Gets the total interest charges assessed against this invoice already.
      * @return the total interest charges
-     * @throws RepositoryException if an error occurs
      */
-    public BigDecimal getInterestCharged() throws RepositoryException {
-        if (interestCharged != null) {
-            return interestCharged;
-        }
-
-        interestCharged = BigDecimal.ZERO;
-        List<InvoiceAndInvoiceItem> interestInvoiceItems = getRepository().getRelatedInterestInvoiceItems(this);
-        if (interestInvoiceItems != null) {
-            for (InvoiceAndInvoiceItem interestInvoiceItem : interestInvoiceItems) {
-                if (interestInvoiceItem.getItemAmount() != null) {
-                    interestCharged = interestCharged.add(interestInvoiceItem.getItemAmount().setScale(DECIMALS, ROUNDING));
+    @Override
+    public BigDecimal getInterestCharged() {
+        if (super.getInterestCharged() == null) {
+            try {
+                BigDecimal interestCharged = BigDecimal.ZERO;
+                List<InvoiceAndInvoiceItem> interestInvoiceItems = getRepository().getRelatedInterestInvoiceItems(this);
+                if (interestInvoiceItems != null) {
+                    for (InvoiceAndInvoiceItem interestInvoiceItem : interestInvoiceItems) {
+                        if (interestInvoiceItem.getItemAmount() != null) {
+                            interestCharged = interestCharged.add(interestInvoiceItem.getItemAmount().setScale(DECIMALS, ROUNDING));
+                        }
+                    }
                 }
+                setInterestCharged(interestCharged);
+            } catch (RepositoryException e) {
+                Debug.logError(e, "Could not calculate the interest charged", MODULE);
             }
         }
-        return interestCharged;
+        return super.getInterestCharged();
     }
 
     /**
