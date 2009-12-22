@@ -34,6 +34,7 @@ import org.opentaps.base.services.CrmsfaCreateContactService;
 import org.opentaps.base.services.CrmsfaCreateLeadService;
 import org.opentaps.base.services.CrmsfaCreateOpportunityService;
 import org.opentaps.base.services.CrmsfaUpdateOpportunityService;
+import org.opentaps.base.services.OpentapsCreateHibernateSearchIndexService;
 import org.opentaps.base.services.PurchasingCreateSupplierService;
 import org.opentaps.common.order.PurchaseOrderFactory;
 import org.opentaps.common.order.SalesOrderFactory;
@@ -323,6 +324,53 @@ public class SearchTests extends OpentapsTestCase {
         List<PartyGroup> suppliers = purchasingSearch.getSuppliers();
         Set<String> supplierIds = Entity.getDistinctFieldValues(String.class, suppliers, PartyGroup.Fields.partyId);
         assertFalse("Should not have found the new lead [" + partyId + "] in the Supplier results", supplierIds.contains(partyId));
+    }
+
+    /**
+     * Test that a lead will show up in the list of search results for leads
+     * when we search keywords from first/last name and company name that is
+     * a field of <code>PartySumplementalData</code>.
+     * @throws Exception 
+     */
+    public void testLeadSupplementalDataSearch() throws Exception {
+        // create lead with first name Zaph, last name Bibrocks, company name Hitchhikers Publishing
+        CrmsfaCreateLeadService createLead = new CrmsfaCreateLeadService();
+        createLead.setInUserLogin(admin);
+        createLead.setInFirstName("Zaph");
+        createLead.setInLastName("Bibrocks");
+        createLead.setInCompanyName("Hitchhikers Publishing");
+        runAndAssertServiceSuccess(createLead);
+        String partyId = createLead.getOutPartyId();
+
+        pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
+
+        // make sure that this lead shows up when searching for 
+        // "zaph"
+        CrmsfaSearchService crmSearch = crmsfaSearchParties("zaph");
+        List<Lead> leads = crmSearch.getLeads();
+        assertNotNull("Lead isn't found using keyword \"zaph\"", leads);
+        assertNotEquals("Lead not found using keyword \"zaph\"", 0, crmSearch.getLeads().size());
+        assertTrue("Wrong lead is found", "Zaph".equals(leads.get(0).getFirstName()));
+
+        // "Bibrocks"
+        crmSearch = crmsfaSearchParties("Bibrocks");
+        leads = crmSearch.getLeads();
+        assertNotNull("Lead isn't found using keyword \"Bibrocks\"", leads);
+        assertNotEquals("Lead not found using keyword \"Bibrocks\"", 0, crmSearch.getLeads().size());
+        assertTrue("Wrong lead is found", "Bibrocks".equals(leads.get(0).getLastName()));
+
+        // force re-indexing 
+        OpentapsCreateHibernateSearchIndexService createIndexSrvc = new OpentapsCreateHibernateSearchIndexService();
+        createIndexSrvc.setInUserLogin(admin);
+        runAndAssertServiceSuccess(createIndexSrvc);
+
+        // "Hitchhikers" and "Publishing"
+        crmSearch = crmsfaSearchParties("Hitchhikers Publishing");
+        leads = crmSearch.getLeads();
+        assertNotNull("Lead isn't found using keywords \"Hitchhikers Publishing\"", leads);
+        assertNotEquals("Lead not found using keywords \"Hitchhikers Publishing\"", 0, crmSearch.getLeads().size());
+        assertTrue("Wrong lead is found", "Hitchhikers Publishing".equals(leads.get(0).getCompanyName()));
+
     }
 
     /**
