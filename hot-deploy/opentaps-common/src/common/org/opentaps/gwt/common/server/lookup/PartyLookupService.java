@@ -490,6 +490,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         // select parties assigned to current user or his team according to view preferences.
         if (getProvider().parameterIsPresent(PartyLookupConfiguration.IN_RESPONSIBILTY)) {
             if (getProvider().getUser().getOfbizUserLogin() != null) {
+                setActiveOnly(true);
                 String userId = getProvider().getUser().getOfbizUserLogin().getString("partyId");
                 String viewPref = getProvider().getParameter(PartyLookupConfiguration.IN_RESPONSIBILTY);
                 if (PartyLookupConfiguration.MY_VALUES.equals(viewPref)) {
