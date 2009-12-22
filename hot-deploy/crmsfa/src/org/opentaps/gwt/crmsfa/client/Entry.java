@@ -183,8 +183,8 @@ public class Entry extends BaseEntry {
             multiCrmsfaSearch.addResultsGrid(new ContactSearchListView());
             multiCrmsfaSearch.addResultsGrid(new LeadSearchListView());
             multiCrmsfaSearch.addResultsGrid(new CaseSearchListView());
-            multiCrmsfaSearch.addResultsGrid(new SalesOrderSearchListView());
             multiCrmsfaSearch.addResultsGrid(new SalesOpportunitySearchListView());
+            multiCrmsfaSearch.addResultsGrid(new SalesOrderSearchListView());
             // That's for a all in one simple search
             //crmsfaSearch = new SearchForm(new CrmsfaSearchResultsListView());
             //RootPanel.get(CRMSFA_SEARCH_ID).add(crmsfaSearch);
