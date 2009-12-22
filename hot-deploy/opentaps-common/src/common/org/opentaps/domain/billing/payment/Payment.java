@@ -19,11 +19,12 @@ package org.opentaps.domain.billing.payment;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
+import org.opentaps.base.entities.PaymentApplication;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.domain.DomainsDirectory;
-import org.opentaps.base.entities.PaymentApplication;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
@@ -35,6 +36,8 @@ import org.opentaps.foundation.repository.RepositoryException;
  * Order Payment Preference entity.
  */
 public class Payment extends org.opentaps.base.entities.Payment {
+
+    private static final String MODULE = Payment.class.getName();
 
     private static int DECIMALS = UtilNumber.getBigDecimalScale("invoice.decimals");
     private static int ROUNDING = UtilNumber.getBigDecimalRoundingMode("invoice.rounding");
@@ -92,17 +95,21 @@ public class Payment extends org.opentaps.base.entities.Payment {
     }
 
     /**
-     * Gets the amount applied from this payment.
-     * @return a <code>BigDecimal</code> value
+     * Calculates and sets the applied and open amounts for this payment.
      * @throws RepositoryException if an error occurs
      */
-    public BigDecimal getAppliedAmount() throws RepositoryException {
+    public void calculateAppliedAndOpenAmount() throws RepositoryException {
         BigDecimal appliedAmount = BigDecimal.ZERO;
         List<PaymentApplication> applications = getRelated(PaymentApplication.class);
         for (PaymentApplication application : applications) {
             appliedAmount = appliedAmount.add(application.getAmountApplied()).setScale(DECIMALS, ROUNDING);
         }
-        return appliedAmount;
+        setAppliedAmount(appliedAmount);
+        BigDecimal amount = getAmount();
+        if (amount == null) {
+            amount = BigDecimal.ZERO;
+        }
+        setOpenAmount(amount.subtract(appliedAmount));
     }
 
     /**
@@ -305,5 +312,5 @@ public class Payment extends org.opentaps.base.entities.Payment {
             throw new RepositoryException(e);
         }
         return Boolean.FALSE;
-    }    
+    }
 }

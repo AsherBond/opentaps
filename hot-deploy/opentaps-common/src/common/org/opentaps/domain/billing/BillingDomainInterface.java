@@ -22,6 +22,7 @@ import org.opentaps.domain.billing.invoice.InvoiceServiceInterface;
 import org.opentaps.domain.billing.invoice.OrderInvoicingServiceInterface;
 import org.opentaps.domain.billing.lockbox.LockboxRepositoryInterface;
 import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
+import org.opentaps.domain.billing.payment.PaymentServiceInterface;
 import org.opentaps.foundation.domain.DomainInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
@@ -51,6 +52,13 @@ public interface BillingDomainInterface extends DomainInterface {
      * @throws ServiceException if an error occurs
      */
     public InvoiceServiceInterface getInvoiceService() throws ServiceException;
+
+    /**
+     * Returns the payment service instance.
+     * @return an <code>PaymentServiceInterface</code> value
+     * @throws ServiceException if an error occurs
+     */
+    public PaymentServiceInterface getPaymentService() throws ServiceException;
 
     /**
      * Returns the order invoicing service instance.

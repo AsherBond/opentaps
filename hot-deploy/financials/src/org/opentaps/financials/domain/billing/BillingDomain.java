@@ -17,12 +17,13 @@
 package org.opentaps.financials.domain.billing;
 
 import org.opentaps.domain.billing.BillingDomainInterface;
-import org.opentaps.financials.domain.billing.payment.PaymentRepository;
 import org.opentaps.financials.domain.billing.agreement.AgreementRepository;
 import org.opentaps.financials.domain.billing.invoice.InvoiceRepository;
 import org.opentaps.financials.domain.billing.invoice.InvoiceService;
 import org.opentaps.financials.domain.billing.invoice.OrderInvoicingService;
 import org.opentaps.financials.domain.billing.lockbox.LockboxRepository;
+import org.opentaps.financials.domain.billing.payment.PaymentRepository;
+import org.opentaps.financials.domain.billing.payment.PaymentService;
 import org.opentaps.foundation.domain.Domain;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
@@ -50,6 +51,11 @@ public class BillingDomain extends Domain implements BillingDomainInterface {
     /** {@inheritDoc} */
     public InvoiceService getInvoiceService() throws ServiceException {
         return instantiateService(InvoiceService.class);
+    }
+
+    /** {@inheritDoc} */
+    public PaymentService getPaymentService() throws ServiceException {
+        return instantiateService(PaymentService.class);
     }
 
     /** {@inheritDoc} */

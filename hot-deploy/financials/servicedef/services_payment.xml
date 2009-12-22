@@ -114,4 +114,12 @@ under the License.
         <attribute name="oldStatusId" type="String" mode="OUT" optional="true"/>
     </service>
 
+
+    <service name="recalcPaymentAmounts" engine="pojo" default-entity-name="Payment"
+        location="org.opentaps.financials.domain.billing.payment.PaymentService" invoke="recalcPaymentAmounts" auth="true">
+      <description>
+        Recalculate the Payment calculated fields.
+      </description>
+      <auto-attributes include="pk" mode="IN" optional="false"/>
+    </service>
 </services>
