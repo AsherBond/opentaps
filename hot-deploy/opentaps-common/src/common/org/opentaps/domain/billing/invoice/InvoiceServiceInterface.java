@@ -91,4 +91,20 @@ public interface InvoiceServiceInterface extends ServiceInterface {
      */
     public void setAccountingTags() throws ServiceException;
 
+    /**
+     * Recalculates an <code>Invoice</code> calculated fields, used for initial population
+     * and later synchronization when a child entity is modified.
+     * @throws ServiceException if an error occurs
+     * @see #setInvoiceId required input <code>invoiceId</code>
+     */
+    public void recalcInvoiceAmounts() throws ServiceException;
+
+    /**
+     * Recalculates an <code>Invoice</code> calculated fields when a Payment was modified.
+     * For example the applied / open amount may chaneg when the payment status changes.
+     * @throws ServiceException if an error occurs
+     * @see #setPaymentId required input <code>paymentId</code>
+     */
+    public void recalcInvoiceAmountsFromPayment() throws ServiceException;
+
 }

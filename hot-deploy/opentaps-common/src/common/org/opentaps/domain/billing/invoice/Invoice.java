@@ -21,7 +21,6 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
-import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilNumber;
 import org.opentaps.base.entities.InvoiceAdjustment;
@@ -43,8 +42,6 @@ import org.opentaps.foundation.repository.RepositoryException;
  * should go through Invoice and get its items, contact mechs, attributes, etc.
  */
 public class Invoice extends org.opentaps.base.entities.Invoice {
-
-    private static final String MODULE = Invoice.class.getName();
 
     // this is actually the logical place for these constants.  if we add get methods for them, then we are good
     private static final int DECIMALS = UtilNumber.getBigDecimalScale("invoice.decimals");
@@ -136,7 +133,7 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
     }
 
     /**
-     * Check if invoice is past due at the specified time.  If Invoice has no dueDate, it will never be past due.
+     * Checks if invoice is past due at the specified time.  If Invoice has no dueDate, it will never be past due.
      * @param asOfDateTime a <code>Timestamp</code> value
      * @return a <code>boolean</code> value
      */
@@ -148,7 +145,7 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
      * Helpful internal method to calculate cached totals for this invoice.
      * Sets <code>invoiceTotal</code> to the sum of all <code>InvoiceItem</code> including Sales Tax items.
      * Sets <code>salesTaxTotal</code> to the sum of all Sales Tax <code>InvoiceItem</code>.
-     * @throws RepositoryException
+     * @throws RepositoryException if an error occurs
      */
     private void calculateTotals() throws RepositoryException {
         BigDecimal invoiceTotal = BigDecimal.ZERO;
@@ -168,39 +165,28 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
         }
         invoiceTotal = invoiceTotal.setScale(DECIMALS, ROUNDING);
         setInvoiceTotal(invoiceTotal);
+        setSalesTaxTotal(salesTaxTotal);
     }
 
     /**
      * Gets the total value of this invoice based on all the InvoiceItems.  Assume 1 for any item whose quantity or amount is null.
      * This total includes sales tax line items.
      * @return the total value
+     * @throws RepositoryException if an error occurs
      */
-    @Override
-    public BigDecimal getInvoiceTotal() {
-        if (super.getInvoiceTotal() == null) {
-            try {
-                calculateTotals();
-            } catch (RepositoryException e) {
-                Debug.logError(e, "Could not calculate the invoice total", MODULE);
-            }
-        }
-        return super.getInvoiceTotal();
+    public BigDecimal calculateInvoiceTotal() throws RepositoryException {
+        calculateTotals();
+        return getInvoiceTotal();
     }
 
     /**
      * Gets the total of payments applied to this invoice as of right now.
      * @return the total of payments applied
+     * @throws RepositoryException if an error occurs
      */
-    @Override
-    public BigDecimal getAppliedAmount() {
-        if (super.getAppliedAmount() == null) {
-            try {
-                setAppliedAmount(getAppliedAmount(UtilDateTime.nowTimestamp()));
-            } catch (RepositoryException e) {
-                Debug.logError(e, "Could not calculate the applied amount", MODULE);
-            }
-        }
-        return super.getAppliedAmount();
+    public BigDecimal calculateAppliedAmount() throws RepositoryException {
+        setAppliedAmount(getAppliedAmount(UtilDateTime.nowTimestamp()));
+        return getAppliedAmount();
     }
 
     /**
@@ -221,6 +207,16 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
         }
         return appliedAmount;
     }
+    /**
+     * Gets the total payments applied to this invoice that are pending.  This complements the getAppliedAmount() method
+     * by letting us know what payments have been applied to the invoice but have not been marked as paid.
+     * @return the total of payments applied
+     * @throws RepositoryException if an error occurs
+     */
+    public BigDecimal calculatePendingAppliedAmount() throws RepositoryException {
+        setPendingAppliedAmount(getPendingAppliedAmount(UtilDateTime.nowTimestamp()));
+        return getPendingAppliedAmount();
+    }
 
     /**
      * Gets the total payments applied to this invoice that are pending.  This complements the getAppliedAmount() method
@@ -240,23 +236,17 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
     }
 
     /**
-     * Get the adjusted amount applied to this invoice as of now.
+     * Gets the adjusted amount applied to this invoice as of now.
      * @return the adjusted amount
+     * @throws RepositoryException if an error occurs
      */
-    @Override
-    public BigDecimal getAdjustedAmount() {
-        if (super.getAdjustedAmount() == null) {
-            try {
-                setAdjustedAmount(getAdjustedAmount(UtilDateTime.nowTimestamp()));
-            } catch (RepositoryException e) {
-                Debug.logError(e, "Could not calculate the adjusted amount", MODULE);
-            }
-        }
-        return super.getAdjustedAmount();
+    public BigDecimal calculateAdjustedAmount() throws RepositoryException {
+        setAdjustedAmount(getAdjustedAmount(UtilDateTime.nowTimestamp()));
+        return getAdjustedAmount();
     }
 
     /**
-     * Get the total of adjustments applied to this invoice as of a specified date/time.
+     * Gets the total of adjustments applied to this invoice as of a specified date/time.
      *
      * Note that adjustments are not considered part of an invoice total.  Instead, they behave like payments on the
      * invoice and are used for discounts such as early payment bonuses and fees such as late payment penalties.
@@ -281,17 +271,11 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
      * This represents the actual amount that must be paid to close the invoice.
      *
      * @return the invoice total plus adjustments, minus applied amounts
+     * @throws RepositoryException if an error occurs
      */
-    @Override
-    public BigDecimal getOpenAmount() {
-        if (super.getOpenAmount() == null) {
-            try {
-                setOpenAmount(getOpenAmount(UtilDateTime.nowTimestamp()));
-            } catch (RepositoryException e) {
-                Debug.logError(e, "Could not calculate the open amount", MODULE);
-            }
-        }
-        return super.getOpenAmount();
+    public BigDecimal calculateOpenAmount() throws RepositoryException {
+        setOpenAmount(getOpenAmount(UtilDateTime.nowTimestamp()));
+        return getOpenAmount();
     }
 
     /**
@@ -313,17 +297,11 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
      * @return the invoice total plus adjustments, minus pending and applied amounts
      * @see #getOpenAmount
      * @see #getPendingOpenAmount(Timestamp)
+     * @throws RepositoryException if an error occurs
      */
-    @Override
-    public BigDecimal getPendingOpenAmount() {
-        if (super.getPendingOpenAmount() == null) {
-            try {
-                setPendingOpenAmount(getPendingOpenAmount(UtilDateTime.nowTimestamp()));
-            } catch (RepositoryException e) {
-                Debug.logError(e, "Could not calculate the open pending amount", MODULE);
-            }
-        }
-        return super.getPendingOpenAmount();
+    public BigDecimal calculatePendingOpenAmount() throws RepositoryException {
+        setPendingOpenAmount(getPendingOpenAmount(UtilDateTime.nowTimestamp()));
+        return getPendingOpenAmount();
     }
 
     /**
@@ -358,42 +336,30 @@ public class Invoice extends org.opentaps.base.entities.Invoice {
     /**
      * Gets the invoice total with adjustments as of right now.
      * @return Invoice total plus adjustments
+     * @throws RepositoryException if an error occurs
      */
-    @Override
-    public BigDecimal getInvoiceAdjustedTotal() {
-        if (super.getInvoiceAdjustedTotal() == null) {
-            try {
-                setInvoiceAdjustedTotal(getInvoiceAdjustedTotal(UtilDateTime.nowTimestamp()));
-            } catch (RepositoryException e) {
-                Debug.logError(e, "Could not calculate the invoice adjusted total", MODULE);
-            }
-        }
-        return super.getInvoiceAdjustedTotal();
+    public BigDecimal calculateInvoiceAdjustedTotal() throws RepositoryException {
+        setInvoiceAdjustedTotal(getInvoiceAdjustedTotal(UtilDateTime.nowTimestamp()));
+        return getInvoiceAdjustedTotal();
     }
 
     /**
      * Gets the total interest charges assessed against this invoice already.
      * @return the total interest charges
+     * @throws RepositoryException if an error occurs
      */
-    @Override
-    public BigDecimal getInterestCharged() {
-        if (super.getInterestCharged() == null) {
-            try {
-                BigDecimal interestCharged = BigDecimal.ZERO;
-                List<InvoiceAndInvoiceItem> interestInvoiceItems = getRepository().getRelatedInterestInvoiceItems(this);
-                if (interestInvoiceItems != null) {
-                    for (InvoiceAndInvoiceItem interestInvoiceItem : interestInvoiceItems) {
-                        if (interestInvoiceItem.getItemAmount() != null) {
-                            interestCharged = interestCharged.add(interestInvoiceItem.getItemAmount().setScale(DECIMALS, ROUNDING));
-                        }
-                    }
+    public BigDecimal calculateInterestCharged() throws RepositoryException {
+        BigDecimal interestCharged = BigDecimal.ZERO;
+        List<InvoiceAndInvoiceItem> interestInvoiceItems = getRepository().getRelatedInterestInvoiceItems(this);
+        if (interestInvoiceItems != null) {
+            for (InvoiceAndInvoiceItem interestInvoiceItem : interestInvoiceItems) {
+                if (interestInvoiceItem.getItemAmount() != null) {
+                    interestCharged = interestCharged.add(interestInvoiceItem.getItemAmount().setScale(DECIMALS, ROUNDING));
                 }
-                setInterestCharged(interestCharged);
-            } catch (RepositoryException e) {
-                Debug.logError(e, "Could not calculate the interest charged", MODULE);
             }
         }
-        return super.getInterestCharged();
+        setInterestCharged(interestCharged);
+        return getInterestCharged();
     }
 
     /**

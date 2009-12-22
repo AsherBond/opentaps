@@ -71,6 +71,7 @@
 
     <!-- Lockbox Test data -->
     <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoLockbox.xml"/>
+    <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/invoice_eecas.xml"/>
 
     <service-resource type="model" loader="main" location="servicedef/services_ledger_ext.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_invoice.xml"/>
@@ -87,6 +88,7 @@
 
     <service-resource type="eca" loader="main" location="servicedef/secas_ledger.xml"/>
     <service-resource type="eca" loader="main" location="servicedef/secas_invoice.xml"/>
+
 
     <webapp name="financials"
         title="Financials"

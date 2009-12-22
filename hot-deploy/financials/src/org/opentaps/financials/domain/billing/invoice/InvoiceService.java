@@ -17,22 +17,29 @@
 package org.opentaps.financials.domain.billing.invoice;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
-import org.opentaps.domain.DomainService;
+import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.base.entities.InvoiceAdjustment;
 import org.opentaps.base.entities.InvoiceItem;
 import org.opentaps.base.entities.OrderItem;
 import org.opentaps.base.entities.OrderItemBilling;
+import org.opentaps.base.entities.PaymentApplication;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.billing.invoice.InvoiceServiceInterface;
+import org.opentaps.domain.billing.payment.Payment;
+import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
 import org.opentaps.domain.ledger.InvoiceLedgerServiceInterface;
 import org.opentaps.domain.ledger.LedgerSpecificationInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
+import org.opentaps.foundation.entity.Entity;
 
 /** {@inheritDoc} */
 public class InvoiceService extends DomainService implements InvoiceServiceInterface {
@@ -121,6 +128,8 @@ public class InvoiceService extends DomainService implements InvoiceServiceInter
             // finally check if the invoice is paid TODO make check more robust with specification use, also use status valid change
             // TODO should this be in the isPosted() block above?
             if (!invoice.isWrittenOff()) {
+                // force a reload as the calculated fields changed
+                invoice = null;
                 checkInvoicePaid();
             }
 
@@ -178,8 +187,68 @@ public class InvoiceService extends DomainService implements InvoiceServiceInter
         }
     }
 
+    /** {@inheritDoc} */
+    public void recalcInvoiceAmounts() throws ServiceException {
+        try {
+            invoiceRepository = getInvoiceRepository();
+            if (invoice == null) {
+                invoice = invoiceRepository.getInvoiceById(invoiceId);
+            }
+            // recalculate each field
+            Debug.logInfo("recalcInvoiceAmounts: [" + invoice.getInvoiceId() + "] invoice total = " + invoice.calculateInvoiceTotal(), MODULE);
+            Debug.logInfo("recalcInvoiceAmounts: [" + invoice.getInvoiceId() + "] applied amount = " + invoice.calculateAppliedAmount(), MODULE);
+            Debug.logInfo("recalcInvoiceAmounts: [" + invoice.getInvoiceId() + "] adjusted amount = " + invoice.calculateAdjustedAmount(), MODULE);
+            Debug.logInfo("recalcInvoiceAmounts: [" + invoice.getInvoiceId() + "] open amount = " + invoice.calculateOpenAmount(), MODULE);
+            Debug.logInfo("recalcInvoiceAmounts: [" + invoice.getInvoiceId() + "] pending open amount = " + invoice.calculatePendingAppliedAmount(), MODULE);
+            Debug.logInfo("recalcInvoiceAmounts: [" + invoice.getInvoiceId() + "] pending open amount = " + invoice.calculatePendingOpenAmount(), MODULE);
+            Debug.logInfo("recalcInvoiceAmounts: [" + invoice.getInvoiceId() + "] invoice adjusted total = " + invoice.calculateInvoiceAdjustedTotal(), MODULE);
+            Debug.logInfo("recalcInvoiceAmounts: [" + invoice.getInvoiceId() + "] interest charged = " + invoice.calculateInterestCharged(), MODULE);
+            // persist the updated values
+            invoiceRepository.update(invoice);
+
+            // cascade the update to children invoices, this applies to interest charged for example
+            Set<String> invoiceIds = Entity.getDistinctFieldValues(String.class, invoice.getInvoiceItems(), InvoiceItem.Fields.parentInvoiceId);
+            invoiceIds.remove(invoice.getInvoiceId());
+            for (String id : invoiceIds) {
+                if (id != null) {
+                    invoice = invoiceRepository.getInvoiceById(id);
+                    recalcInvoiceAmounts();
+                }
+            }
+
+        } catch (Exception e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    /** {@inheritDoc} */
+    public void recalcInvoiceAmountsFromPayment() throws ServiceException {
+        try {
+            invoiceRepository = getInvoiceRepository();
+            PaymentRepositoryInterface repository = getPaymentRepository();
+            Payment payment = repository.getPaymentById(paymentId);
+            Set<String> invoiceIds = new HashSet<String>();
+            List<? extends PaymentApplication> applications = payment.getPaymentApplications();
+            for (PaymentApplication application : applications) {
+                if (UtilValidate.isNotEmpty(application.getInvoiceId())) {
+                    invoiceIds.add(application.getInvoiceId());
+                }
+            }
+            for (String invoiceId : invoiceIds) {
+                invoice = invoiceRepository.getInvoiceById(invoiceId);
+                recalcInvoiceAmounts();
+            }
+        } catch (Exception e) {
+            throw new ServiceException(e);
+        }
+    }
+
     private InvoiceRepositoryInterface getInvoiceRepository() throws RepositoryException {
         return getDomainsDirectory().getBillingDomain().getInvoiceRepository();
+    }
+
+    private PaymentRepositoryInterface getPaymentRepository() throws RepositoryException {
+        return getDomainsDirectory().getBillingDomain().getPaymentRepository();
     }
 
     private LedgerSpecificationInterface getLedgerSpecification() throws RepositoryException {

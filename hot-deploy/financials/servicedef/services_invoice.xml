@@ -343,5 +343,21 @@
         <description>Update an existing Invoice</description>
         <auto-attributes mode="IN" include="pk" optional="false"/>
         <auto-attributes mode="IN" include="nonpk" optional="true"/>
-    </service>  
+    </service>
+
+    <!-- recalculate an Invoice calculated fields, used for initial population and later synchronization when a child entity is modified -->
+    <service name="recalcInvoiceAmounts" engine="pojo" default-entity-name="Invoice"
+        location="org.opentaps.financials.domain.billing.invoice.InvoiceService" invoke="recalcInvoiceAmounts">
+        <description>Recalculate an Invoice calculated fields</description>
+        <auto-attributes mode="IN" include="pk" optional="false"/>
+    </service>
+    <service name="recalcInvoiceAmountsFromPayment" engine="pojo" default-entity-name="Payment"
+        location="org.opentaps.financials.domain.billing.invoice.InvoiceService" invoke="recalcInvoiceAmountsFromPayment">
+      <description>
+        Recalculate the Invoices calculated fields related to the given Payment.
+        This is needed as the applied / open amounts change when a payment status change
+        (other things in the payment may also trigger a change).
+      </description>
+        <auto-attributes mode="IN" include="pk" optional="false"/>
+    </service>
 </services>
