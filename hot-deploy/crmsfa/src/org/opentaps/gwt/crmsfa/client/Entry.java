@@ -17,6 +17,19 @@
 
 package org.opentaps.gwt.crmsfa.client;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
+import com.google.gwt.i18n.client.Dictionary;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.gwtext.client.util.Format;
+import com.gwtext.client.widgets.Panel;
 import org.opentaps.gwt.common.client.BaseEntry;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.FindAccountsForm;
@@ -31,8 +44,9 @@ import org.opentaps.gwt.common.client.listviews.AccountSearchListView;
 import org.opentaps.gwt.common.client.listviews.CaseSearchListView;
 import org.opentaps.gwt.common.client.listviews.ContactSearchListView;
 import org.opentaps.gwt.common.client.listviews.LeadSearchListView;
-import org.opentaps.gwt.common.client.listviews.SalesOrderSearchListView;
 import org.opentaps.gwt.common.client.listviews.OrderItemsEditableListView.OrderType;
+import org.opentaps.gwt.common.client.listviews.SalesOpportunitySearchListView;
+import org.opentaps.gwt.common.client.listviews.SalesOrderSearchListView;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 import org.opentaps.gwt.crmsfa.client.accounts.form.AccountsSublistView;
 import org.opentaps.gwt.crmsfa.client.accounts.form.QuickNewAccountForm;
@@ -50,20 +64,6 @@ import org.opentaps.gwt.crmsfa.client.orders.form.FindOrdersForm;
 import org.opentaps.gwt.crmsfa.client.orders.form.ProductReReservationForm;
 import org.opentaps.gwt.crmsfa.client.orders.form.SalesOrdersSublistView;
 import org.opentaps.gwt.crmsfa.client.partners.form.FindPartnersForm;
-
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
-import com.google.gwt.i18n.client.Dictionary;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Hyperlink;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.gwtext.client.util.Format;
-import com.gwtext.client.widgets.Panel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -184,6 +184,7 @@ public class Entry extends BaseEntry {
             multiCrmsfaSearch.addResultsGrid(new LeadSearchListView());
             multiCrmsfaSearch.addResultsGrid(new CaseSearchListView());
             multiCrmsfaSearch.addResultsGrid(new SalesOrderSearchListView());
+            multiCrmsfaSearch.addResultsGrid(new SalesOpportunitySearchListView());
             // That's for a all in one simple search
             //crmsfaSearch = new SearchForm(new CrmsfaSearchResultsListView());
             //RootPanel.get(CRMSFA_SEARCH_ID).add(crmsfaSearch);

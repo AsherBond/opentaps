@@ -29,6 +29,7 @@ public abstract class OpportunityLookupConfiguration {
     private OpportunityLookupConfiguration() { }
 
     public static final String URL_FIND_OPPORTUNITIES = "gwtFindOpportunities";
+    public static final String URL_SEARCH_OPPORTUNITIES = "gwtSearchSalesOpportunities";
 
     public static final String IN_RESPONSIBILTY = "MyOrTeamResponsibility";
     public static final String MY_VALUES = "MY_VALUES";
@@ -36,7 +37,7 @@ public abstract class OpportunityLookupConfiguration {
 
     public static final String IN_FIND_ALL = "findAll";
     public static final String IN_ROLE_TYPE_FROM = "roleTypeIdFrom";
-    
+
     public static final String INOUT_OPPORTUNITY_NAME = "opportunityName";
     public static final String INOUT_SALES_OPPORTUNITY_ID = "salesOpportunityId";
     public static final String INOUT_COMPOSITE_OPPORTUNITY_NAME = "opportunityNameAndId";

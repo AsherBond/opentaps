@@ -33,6 +33,7 @@ import org.opentaps.base.entities.CustRequestAndPartyRelationshipAndRole;
 import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
 import org.opentaps.base.entities.PartyFromByRelnAndContactInfoAndPartyClassification;
 import org.opentaps.base.entities.SalesOpportunity;
+import org.opentaps.base.entities.SalesOpportunityAndPartyRelationshipAndStage;
 import org.opentaps.common.domain.order.OrderViewForListing;
 import org.opentaps.common.util.ConvertMapToString;
 import org.opentaps.common.util.ICompositeValue;
@@ -48,6 +49,7 @@ import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
 import org.opentaps.gwt.common.client.lookup.configuration.CaseLookupConfiguration;
+import org.opentaps.gwt.common.client.lookup.configuration.OpportunityLookupConfiguration;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
 import org.opentaps.gwt.common.client.lookup.configuration.SalesOrderLookupConfiguration;
 import org.opentaps.gwt.common.client.lookup.configuration.SearchLookupConfiguration;
@@ -89,6 +91,15 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
      */
     public static CrmsfaSearchLookupService makeSalesOrderSearchService(InputProviderInterface provider) {
         return new CrmsfaSearchLookupService(provider, SalesOrderLookupConfiguration.LIST_OUT_FIELDS);
+    }
+
+    /**
+     * Creates a new <code>CrmsfaSearchService</code> instance for searching sales opportunities.
+     * @param provider an <code>InputProviderInterface</code> value
+     * @return a <code>CrmsfaSearchLookupService</code> value
+     */
+    public static CrmsfaSearchLookupService makeSalesOpportunitiesSearchService(InputProviderInterface provider) {
+        return new CrmsfaSearchLookupService(provider, OpportunityLookupConfiguration.LIST_OUT_FIELDS);
     }
 
     /**
@@ -173,6 +184,21 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
         CrmsfaSearchLookupService service = CrmsfaSearchLookupService.makeCaseSearchService(provider);
         service.searchCases();
         return json.makeLookupResponse(CaseLookupConfiguration.INOUT_CUST_REQUEST_ID, service, request.getSession(true).getServletContext());
+    }
+
+    /**
+     * AJAX event to search Sales Orders.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return the resulting JSON response
+     * @throws InfrastructureException if an error occurs
+     */
+    public static String crmsfaSearchSalesOpportunities(HttpServletRequest request, HttpServletResponse response) throws InfrastructureException {
+        InputProviderInterface provider = new HttpInputProvider(request);
+        JsonResponse json = new JsonResponse(response);
+        CrmsfaSearchLookupService service = CrmsfaSearchLookupService.makeSalesOpportunitiesSearchService(provider);
+        service.searchSalesOpportunities();
+        return json.makeLookupResponse(OpportunityLookupConfiguration.INOUT_SALES_OPPORTUNITY_ID, service, request.getSession(true).getServletContext());
     }
 
     /**
@@ -347,6 +373,33 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
                         EntityCondition.makeCondition(CustRequestAndPartyRelationshipAndRole.Fields.custRequestId.name(),
                                                       EntityOperator.IN,
                                                       Entity.getDistinctFieldValues(String.class, crmSearch.getCases(), CustRequest.Fields.custRequestId)));
+        } catch (ServiceException e) {
+            storeException(e);
+            return null;
+        }
+    }
+
+    /**
+     * Searches a List of Sales Opportunities.
+     * @return a list of <code>SalesOpportunityAndPartyRelationshipAndStage</code>
+     */
+    public List<SalesOpportunityAndPartyRelationshipAndStage> searchSalesOpportunities() {
+
+        if (getSuggestQuery() == null || getSuggestQuery().trim().equals("")) {
+            List<SalesOpportunityAndPartyRelationshipAndStage> res = new ArrayList<SalesOpportunityAndPartyRelationshipAndStage>();
+            setResults(res);
+            return res;
+        }
+
+        try {
+            CrmsfaSearchService crmSearch = new CrmsfaSearchService();
+            // set options on what is searched
+            crmSearch.setSearchSalesOpportunities(true);
+            prepareSearch(crmSearch);
+            return findList(SalesOpportunityAndPartyRelationshipAndStage.class,
+                        EntityCondition.makeCondition(SalesOpportunityAndPartyRelationshipAndStage.Fields.salesOpportunityId.name(),
+                                                      EntityOperator.IN,
+                                                      Entity.getDistinctFieldValues(String.class, crmSearch.getSalesOpportunities(), SalesOpportunity.Fields.salesOpportunityId)));
         } catch (ServiceException e) {
             storeException(e);
             return null;
