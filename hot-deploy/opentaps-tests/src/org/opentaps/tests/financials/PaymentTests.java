@@ -27,8 +27,10 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
-import org.opentaps.domain.DomainsLoader;
 import org.opentaps.base.entities.PaymentMethod;
+import org.opentaps.base.services.CreatePaymentApplicationService;
+import org.opentaps.base.services.UpdatePaymentService;
+import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
 import org.opentaps.domain.organization.Organization;
@@ -935,6 +937,62 @@ public class PaymentTests extends FinancialsTestCase {
         Map expectedChange = UtilFinancial.replaceGlAccountTypeWithGlAccountForOrg(organizationPartyId, UtilMisc.toMap("ACCOUNTS_PAYABLE", invoiceAmount), delegator);
         expectedChange.put(overrideGlAccountId, overrideAmount);
         assertMapDifferenceCorrect(initialBalances, finalBalances, expectedChange);
+    }
+
+    /**
+     * This test verifies the Payment calculated fields.
+     * @throws GeneralException if an error occurs
+     */
+    public void testPaymentFieldsCalculation() throws GeneralException {
+        PaymentRepositoryInterface repository = billingDomain.getPaymentRepository();
+        FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, demofinadmin);
+        // create a new customer party
+        String customerPartyId = createPartyFromTemplate("DemoCustomer", "Cash", "Payer");
+        // create a payment
+        String paymentId = fa.createPayment(new BigDecimal("100"), customerPartyId, "CUSTOMER_PAYMENT", "CASH");
+
+        // check the fields
+        Payment payment = repository.getPaymentById(paymentId);
+        assertEquals("Payment [" + paymentId + "] open amount incorrect.", payment.getOpenAmount(), new BigDecimal("100"));
+        assertEquals("Payment [" + paymentId + "] applied amount incorrect.", payment.getAppliedAmount(), BigDecimal.ZERO);
+
+        // make an application of 25
+        CreatePaymentApplicationService service = new CreatePaymentApplicationService();
+        service.setInUserLogin(demofinadmin);
+        service.setInPaymentId(paymentId);
+        service.setInAmountApplied(new BigDecimal("25"));
+        service.setInTaxAuthGeoId("CA");
+        runAndAssertServiceSuccess(service);
+
+        // check the fields
+        payment = repository.getPaymentById(paymentId);
+        assertEquals("Payment [" + paymentId + "] open amount incorrect.", payment.getOpenAmount(), new BigDecimal("75"));
+        assertEquals("Payment [" + paymentId + "] applied amount incorrect.", payment.getAppliedAmount(), new BigDecimal("25"));
+
+        // make another application of 30
+        service = new CreatePaymentApplicationService();
+        service.setInUserLogin(demofinadmin);
+        service.setInPaymentId(paymentId);
+        service.setInAmountApplied(new BigDecimal("30"));
+        service.setInTaxAuthGeoId("CA");
+        runAndAssertServiceSuccess(service);
+
+        // check the fields
+        payment = repository.getPaymentById(paymentId);
+        assertEquals("Payment [" + paymentId + "] open amount incorrect.", payment.getOpenAmount(), new BigDecimal("45"));
+        assertEquals("Payment [" + paymentId + "] applied amount incorrect.", payment.getAppliedAmount(), new BigDecimal("55"));
+
+        // change the payment amount to be 80
+        UpdatePaymentService service2 = new UpdatePaymentService();
+        service2.setInUserLogin(demofinadmin);
+        service2.setInPaymentId(paymentId);
+        service2.setInAmount(new BigDecimal("80"));
+        runAndAssertServiceSuccess(service2);
+
+        // check the fields
+        payment = repository.getPaymentById(paymentId);
+        assertEquals("Payment [" + paymentId + "] open amount incorrect.", payment.getOpenAmount(), new BigDecimal("25"));
+        assertEquals("Payment [" + paymentId + "] applied amount incorrect.", payment.getAppliedAmount(), new BigDecimal("55"));
     }
 
     // sets PartySupplementalData.parentPartyId for the given partyId
