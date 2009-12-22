@@ -16,6 +16,9 @@
  */
 package org.opentaps.domain.party;
 
+import org.opentaps.base.entities.PartySupplementalData;
+import org.opentaps.foundation.repository.RepositoryException;
+
 /**
  * Domain class for CRMSFA lead.
  */
@@ -26,5 +29,15 @@ public class Lead extends Party {
      */
     public Lead() {
         super();
+    }
+
+    /**
+     * Gets a lead company name.
+     * @return company name from related <code>PartySupplementalEntity</code>
+     * @throws RepositoryException
+     */
+    public String getCompanyName() throws RepositoryException {
+        PartySupplementalData supplementalData = getPartySupplementalData();
+        return supplementalData != null ? supplementalData.getCompanyName() : null;
     }
 }
