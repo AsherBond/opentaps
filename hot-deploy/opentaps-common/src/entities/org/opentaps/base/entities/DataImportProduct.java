@@ -59,7 +59,12 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("isInactive", "IS_INACTIVE");
         fields.put("customId1", "CUSTOM_ID1");
         fields.put("customId2", "CUSTOM_ID2");
+        fields.put("internalName", "INTERNAL_NAME");
+        fields.put("brandName", "BRAND_NAME");
+        fields.put("comments", "COMMENTS");
+        fields.put("productName", "PRODUCT_NAME");
         fields.put("description", "DESCRIPTION");
+        fields.put("longDescription", "LONG_DESCRIPTION");
         fields.put("weight", "WEIGHT");
         fields.put("weightUomId", "WEIGHT_UOM_ID");
         fields.put("productLength", "PRODUCT_LENGTH");
@@ -72,9 +77,16 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("priceCurrencyUomId", "PRICE_CURRENCY_UOM_ID");
         fields.put("productFeature1", "PRODUCT_FEATURE1");
         fields.put("supplierPartyId", "SUPPLIER_PARTY_ID");
+        fields.put("smallImageUrl", "SMALL_IMAGE_URL");
+        fields.put("mediumImageUrl", "MEDIUM_IMAGE_URL");
+        fields.put("largeImageUrl", "LARGE_IMAGE_URL");
         fields.put("purchasePrice", "PURCHASE_PRICE");
+        fields.put("taxable", "TAXABLE");
+        fields.put("storeId", "STORE_ID");
+        fields.put("createdDate", "CREATED_DATE");
         fields.put("importStatusId", "IMPORT_STATUS_ID");
         fields.put("importError", "IMPORT_ERROR");
+        fields.put("lastModifiedDate", "LAST_MODIFIED_DATE");
         fields.put("processedTimestamp", "PROCESSED_TIMESTAMP");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
@@ -88,7 +100,12 @@ fieldMapColumns.put("DataImportProduct", fields);
     isInactive("isInactive"),
     customId1("customId1"),
     customId2("customId2"),
+    internalName("internalName"),
+    brandName("brandName"),
+    comments("comments"),
+    productName("productName"),
     description("description"),
+    longDescription("longDescription"),
     weight("weight"),
     weightUomId("weightUomId"),
     productLength("productLength"),
@@ -101,9 +118,16 @@ fieldMapColumns.put("DataImportProduct", fields);
     priceCurrencyUomId("priceCurrencyUomId"),
     productFeature1("productFeature1"),
     supplierPartyId("supplierPartyId"),
+    smallImageUrl("smallImageUrl"),
+    mediumImageUrl("mediumImageUrl"),
+    largeImageUrl("largeImageUrl"),
     purchasePrice("purchasePrice"),
+    taxable("taxable"),
+    storeId("storeId"),
+    createdDate("createdDate"),
     importStatusId("importStatusId"),
     importError("importError"),
+    lastModifiedDate("lastModifiedDate"),
     processedTimestamp("processedTimestamp"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
@@ -132,8 +156,18 @@ fieldMapColumns.put("DataImportProduct", fields);
    private String customId1;
    @Column(name="CUSTOM_ID2")
    private String customId2;
+   @Column(name="INTERNAL_NAME")
+   private String internalName;
+   @Column(name="BRAND_NAME")
+   private String brandName;
+   @Column(name="COMMENTS")
+   private String comments;
+   @Column(name="PRODUCT_NAME")
+   private String productName;
    @Column(name="DESCRIPTION")
    private String description;
+   @Column(name="LONG_DESCRIPTION")
+   private String longDescription;
    @Column(name="WEIGHT")
    private BigDecimal weight;
    @Column(name="WEIGHT_UOM_ID")
@@ -158,12 +192,26 @@ fieldMapColumns.put("DataImportProduct", fields);
    private String productFeature1;
    @Column(name="SUPPLIER_PARTY_ID")
    private String supplierPartyId;
+   @Column(name="SMALL_IMAGE_URL")
+   private String smallImageUrl;
+   @Column(name="MEDIUM_IMAGE_URL")
+   private String mediumImageUrl;
+   @Column(name="LARGE_IMAGE_URL")
+   private String largeImageUrl;
    @Column(name="PURCHASE_PRICE")
    private BigDecimal purchasePrice;
+   @Column(name="TAXABLE")
+   private String taxable;
+   @Column(name="STORE_ID")
+   private String storeId;
+   @Column(name="CREATED_DATE")
+   private Timestamp createdDate;
    @Column(name="IMPORT_STATUS_ID")
    private String importStatusId;
    @Column(name="IMPORT_ERROR")
    private String importError;
+   @Column(name="LAST_MODIFIED_DATE")
+   private Timestamp lastModifiedDate;
    @Column(name="PROCESSED_TIMESTAMP")
    private Timestamp processedTimestamp;
    @Column(name="LAST_UPDATED_STAMP")
@@ -186,7 +234,7 @@ fieldMapColumns.put("DataImportProduct", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productId");this.allFieldsNames.add("productTypeId");this.allFieldsNames.add("isInactive");this.allFieldsNames.add("customId1");this.allFieldsNames.add("customId2");this.allFieldsNames.add("description");this.allFieldsNames.add("weight");this.allFieldsNames.add("weightUomId");this.allFieldsNames.add("productLength");this.allFieldsNames.add("productLengthUomId");this.allFieldsNames.add("width");this.allFieldsNames.add("widthUomId");this.allFieldsNames.add("height");this.allFieldsNames.add("heightUomId");this.allFieldsNames.add("price");this.allFieldsNames.add("priceCurrencyUomId");this.allFieldsNames.add("productFeature1");this.allFieldsNames.add("supplierPartyId");this.allFieldsNames.add("purchasePrice");this.allFieldsNames.add("importStatusId");this.allFieldsNames.add("importError");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("productId");this.allFieldsNames.add("productTypeId");this.allFieldsNames.add("isInactive");this.allFieldsNames.add("customId1");this.allFieldsNames.add("customId2");this.allFieldsNames.add("internalName");this.allFieldsNames.add("brandName");this.allFieldsNames.add("comments");this.allFieldsNames.add("productName");this.allFieldsNames.add("description");this.allFieldsNames.add("longDescription");this.allFieldsNames.add("weight");this.allFieldsNames.add("weightUomId");this.allFieldsNames.add("productLength");this.allFieldsNames.add("productLengthUomId");this.allFieldsNames.add("width");this.allFieldsNames.add("widthUomId");this.allFieldsNames.add("height");this.allFieldsNames.add("heightUomId");this.allFieldsNames.add("price");this.allFieldsNames.add("priceCurrencyUomId");this.allFieldsNames.add("productFeature1");this.allFieldsNames.add("supplierPartyId");this.allFieldsNames.add("smallImageUrl");this.allFieldsNames.add("mediumImageUrl");this.allFieldsNames.add("largeImageUrl");this.allFieldsNames.add("purchasePrice");this.allFieldsNames.add("taxable");this.allFieldsNames.add("storeId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("importStatusId");this.allFieldsNames.add("importError");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -238,10 +286,45 @@ fieldMapColumns.put("DataImportProduct", fields);
     }
     /**
      * Auto generated value setter.
+     * @param internalName the internalName to set
+     */
+    public void setInternalName(String internalName) {
+        this.internalName = internalName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param brandName the brandName to set
+     */
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param comments the comments to set
+     */
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productName the productName to set
+     */
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+    /**
+     * Auto generated value setter.
      * @param description the description to set
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+    /**
+     * Auto generated value setter.
+     * @param longDescription the longDescription to set
+     */
+    public void setLongDescription(String longDescription) {
+        this.longDescription = longDescription;
     }
     /**
      * Auto generated value setter.
@@ -329,10 +412,52 @@ fieldMapColumns.put("DataImportProduct", fields);
     }
     /**
      * Auto generated value setter.
+     * @param smallImageUrl the smallImageUrl to set
+     */
+    public void setSmallImageUrl(String smallImageUrl) {
+        this.smallImageUrl = smallImageUrl;
+    }
+    /**
+     * Auto generated value setter.
+     * @param mediumImageUrl the mediumImageUrl to set
+     */
+    public void setMediumImageUrl(String mediumImageUrl) {
+        this.mediumImageUrl = mediumImageUrl;
+    }
+    /**
+     * Auto generated value setter.
+     * @param largeImageUrl the largeImageUrl to set
+     */
+    public void setLargeImageUrl(String largeImageUrl) {
+        this.largeImageUrl = largeImageUrl;
+    }
+    /**
+     * Auto generated value setter.
      * @param purchasePrice the purchasePrice to set
      */
     public void setPurchasePrice(BigDecimal purchasePrice) {
         this.purchasePrice = purchasePrice;
+    }
+    /**
+     * Auto generated value setter.
+     * @param taxable the taxable to set
+     */
+    public void setTaxable(String taxable) {
+        this.taxable = taxable;
+    }
+    /**
+     * Auto generated value setter.
+     * @param storeId the storeId to set
+     */
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param createdDate the createdDate to set
+     */
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
     }
     /**
      * Auto generated value setter.
@@ -347,6 +472,13 @@ fieldMapColumns.put("DataImportProduct", fields);
      */
     public void setImportError(String importError) {
         this.importError = importError;
+    }
+    /**
+     * Auto generated value setter.
+     * @param lastModifiedDate the lastModifiedDate to set
+     */
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
     /**
      * Auto generated value setter.
@@ -423,8 +555,43 @@ fieldMapColumns.put("DataImportProduct", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getInternalName() {
+        return this.internalName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getBrandName() {
+        return this.brandName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getComments() {
+        return this.comments;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getProductName() {
+        return this.productName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getDescription() {
         return this.description;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getLongDescription() {
+        return this.longDescription;
     }
     /**
      * Auto generated value accessor.
@@ -512,10 +679,52 @@ fieldMapColumns.put("DataImportProduct", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSmallImageUrl() {
+        return this.smallImageUrl;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getMediumImageUrl() {
+        return this.mediumImageUrl;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getLargeImageUrl() {
+        return this.largeImageUrl;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>BigDecimal</code>
      */
     public BigDecimal getPurchasePrice() {
         return this.purchasePrice;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getTaxable() {
+        return this.taxable;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getStoreId() {
+        return this.storeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getCreatedDate() {
+        return this.createdDate;
     }
     /**
      * Auto generated value accessor.
@@ -530,6 +739,13 @@ fieldMapColumns.put("DataImportProduct", fields);
      */
     public String getImportError() {
         return this.importError;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getLastModifiedDate() {
+        return this.lastModifiedDate;
     }
     /**
      * Auto generated value accessor.
@@ -579,7 +795,12 @@ fieldMapColumns.put("DataImportProduct", fields);
         setIsInactive((String) mapValue.get("isInactive"));
         setCustomId1((String) mapValue.get("customId1"));
         setCustomId2((String) mapValue.get("customId2"));
+        setInternalName((String) mapValue.get("internalName"));
+        setBrandName((String) mapValue.get("brandName"));
+        setComments((String) mapValue.get("comments"));
+        setProductName((String) mapValue.get("productName"));
         setDescription((String) mapValue.get("description"));
+        setLongDescription((String) mapValue.get("longDescription"));
         setWeight(convertToBigDecimal(mapValue.get("weight")));
         setWeightUomId((String) mapValue.get("weightUomId"));
         setProductLength(convertToBigDecimal(mapValue.get("productLength")));
@@ -592,9 +813,16 @@ fieldMapColumns.put("DataImportProduct", fields);
         setPriceCurrencyUomId((String) mapValue.get("priceCurrencyUomId"));
         setProductFeature1((String) mapValue.get("productFeature1"));
         setSupplierPartyId((String) mapValue.get("supplierPartyId"));
+        setSmallImageUrl((String) mapValue.get("smallImageUrl"));
+        setMediumImageUrl((String) mapValue.get("mediumImageUrl"));
+        setLargeImageUrl((String) mapValue.get("largeImageUrl"));
         setPurchasePrice(convertToBigDecimal(mapValue.get("purchasePrice")));
+        setTaxable((String) mapValue.get("taxable"));
+        setStoreId((String) mapValue.get("storeId"));
+        setCreatedDate((Timestamp) mapValue.get("createdDate"));
         setImportStatusId((String) mapValue.get("importStatusId"));
         setImportError((String) mapValue.get("importError"));
+        setLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
         setProcessedTimestamp((Timestamp) mapValue.get("processedTimestamp"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
@@ -612,7 +840,12 @@ fieldMapColumns.put("DataImportProduct", fields);
         mapValue.put("isInactive", getIsInactive());
         mapValue.put("customId1", getCustomId1());
         mapValue.put("customId2", getCustomId2());
+        mapValue.put("internalName", getInternalName());
+        mapValue.put("brandName", getBrandName());
+        mapValue.put("comments", getComments());
+        mapValue.put("productName", getProductName());
         mapValue.put("description", getDescription());
+        mapValue.put("longDescription", getLongDescription());
         mapValue.put("weight", getWeight());
         mapValue.put("weightUomId", getWeightUomId());
         mapValue.put("productLength", getProductLength());
@@ -625,9 +858,16 @@ fieldMapColumns.put("DataImportProduct", fields);
         mapValue.put("priceCurrencyUomId", getPriceCurrencyUomId());
         mapValue.put("productFeature1", getProductFeature1());
         mapValue.put("supplierPartyId", getSupplierPartyId());
+        mapValue.put("smallImageUrl", getSmallImageUrl());
+        mapValue.put("mediumImageUrl", getMediumImageUrl());
+        mapValue.put("largeImageUrl", getLargeImageUrl());
         mapValue.put("purchasePrice", getPurchasePrice());
+        mapValue.put("taxable", getTaxable());
+        mapValue.put("storeId", getStoreId());
+        mapValue.put("createdDate", getCreatedDate());
         mapValue.put("importStatusId", getImportStatusId());
         mapValue.put("importError", getImportError());
+        mapValue.put("lastModifiedDate", getLastModifiedDate());
         mapValue.put("processedTimestamp", getProcessedTimestamp());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
