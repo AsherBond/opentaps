@@ -75,7 +75,7 @@ public final class PartySearch {
     }
 
     public static void makeLeadQuery(StringBuilder sb) {
-        sb.append("( +id.roleTypeId:").append(RoleTypeConstants.PROSPECT).append(" +(");
+        sb.append("(+id.roleTypeId:").append(RoleTypeConstants.PROSPECT).append(" +(");
         for (String f : Arrays.asList("partyId", "firstName", "lastName", "middleName", "firstNameLocal", "lastNameLocal", "nickname")) {
             sb.append("party.person.").append(f).append(":").append(HibernateSearchService.DEFAULT_PLACEHOLDER).append(" ");
         }
