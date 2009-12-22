@@ -22,6 +22,7 @@ package org.opentaps.base.services;
 
 import org.opentaps.foundation.service.ServiceWrapper;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Locale;
@@ -55,23 +56,32 @@ public class CreateInvoiceService extends ServiceWrapper {
 
     /** The enumeration of input parameters. */
     public static enum In {
+        adjustedAmount("adjustedAmount"),
+        appliedAmount("appliedAmount"),
         billingAccountId("billingAccountId"),
         contactMechId("contactMechId"),
         currencyUomId("currencyUomId"),
         description("description"),
         dueDate("dueDate"),
+        interestCharged("interestCharged"),
+        invoiceAdjustedTotal("invoiceAdjustedTotal"),
         invoiceDate("invoiceDate"),
         invoiceId("invoiceId"),
         invoiceMessage("invoiceMessage"),
+        invoiceTotal("invoiceTotal"),
         invoiceTypeId("invoiceTypeId"),
         locale("locale"),
+        openAmount("openAmount"),
         paidDate("paidDate"),
         partyId("partyId"),
         partyIdFrom("partyIdFrom"),
+        pendingAppliedAmount("pendingAppliedAmount"),
+        pendingOpenAmount("pendingOpenAmount"),
         processingStatusId("processingStatusId"),
         recurrenceInfoId("recurrenceInfoId"),
         referenceNumber("referenceNumber"),
         roleTypeId("roleTypeId"),
+        salesTaxTotal("salesTaxTotal"),
         statusId("statusId"),
         timeZone("timeZone"),
         userLogin("userLogin");
@@ -110,23 +120,32 @@ public class CreateInvoiceService extends ServiceWrapper {
         super(user);
     }
 
+    private BigDecimal inAdjustedAmount;
+    private BigDecimal inAppliedAmount;
     private String inBillingAccountId;
     private String inContactMechId;
     private String inCurrencyUomId;
     private String inDescription;
     private Timestamp inDueDate;
+    private BigDecimal inInterestCharged;
+    private BigDecimal inInvoiceAdjustedTotal;
     private Timestamp inInvoiceDate;
     private String inInvoiceId;
     private String inInvoiceMessage;
+    private BigDecimal inInvoiceTotal;
     private String inInvoiceTypeId;
     private Locale inLocale;
+    private BigDecimal inOpenAmount;
     private Timestamp inPaidDate;
     private String inPartyId;
     private String inPartyIdFrom;
+    private BigDecimal inPendingAppliedAmount;
+    private BigDecimal inPendingOpenAmount;
     private String inProcessingStatusId;
     private String inRecurrenceInfoId;
     private String inReferenceNumber;
     private String inRoleTypeId;
+    private BigDecimal inSalesTaxTotal;
     private String inStatusId;
     private TimeZone inTimeZone;
     private GenericValue inUserLogin;
@@ -143,6 +162,22 @@ public class CreateInvoiceService extends ServiceWrapper {
     private Set<String> inParameters = FastSet.newInstance();
     private Set<String> outParameters = FastSet.newInstance();
 
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInAdjustedAmount() {
+        return this.inAdjustedAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInAppliedAmount() {
+        return this.inAppliedAmount;
+    }
     /**
      * Auto generated value accessor.
      * This parameter is optional.
@@ -186,6 +221,22 @@ public class CreateInvoiceService extends ServiceWrapper {
     /**
      * Auto generated value accessor.
      * This parameter is optional.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInInterestCharged() {
+        return this.inInterestCharged;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInInvoiceAdjustedTotal() {
+        return this.inInvoiceAdjustedTotal;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
      * @return <code>Timestamp</code>
      */
     public Timestamp getInInvoiceDate() {
@@ -209,6 +260,14 @@ public class CreateInvoiceService extends ServiceWrapper {
     }
     /**
      * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInInvoiceTotal() {
+        return this.inInvoiceTotal;
+    }
+    /**
+     * Auto generated value accessor.
      * This parameter is required.
      * @return <code>String</code>
      */
@@ -222,6 +281,14 @@ public class CreateInvoiceService extends ServiceWrapper {
      */
     public Locale getInLocale() {
         return this.inLocale;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInOpenAmount() {
+        return this.inOpenAmount;
     }
     /**
      * Auto generated value accessor.
@@ -246,6 +313,22 @@ public class CreateInvoiceService extends ServiceWrapper {
      */
     public String getInPartyIdFrom() {
         return this.inPartyIdFrom;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInPendingAppliedAmount() {
+        return this.inPendingAppliedAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInPendingOpenAmount() {
+        return this.inPendingOpenAmount;
     }
     /**
      * Auto generated value accessor.
@@ -278,6 +361,14 @@ public class CreateInvoiceService extends ServiceWrapper {
      */
     public String getInRoleTypeId() {
         return this.inRoleTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInSalesTaxTotal() {
+        return this.inSalesTaxTotal;
     }
     /**
      * Auto generated value accessor.
@@ -379,6 +470,24 @@ public class CreateInvoiceService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inAdjustedAmount the inAdjustedAmount to set
+    */
+    public void setInAdjustedAmount(BigDecimal inAdjustedAmount) {
+        this.inParameters.add("adjustedAmount");
+        this.inAdjustedAmount = inAdjustedAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inAppliedAmount the inAppliedAmount to set
+    */
+    public void setInAppliedAmount(BigDecimal inAppliedAmount) {
+        this.inParameters.add("appliedAmount");
+        this.inAppliedAmount = inAppliedAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inBillingAccountId the inBillingAccountId to set
     */
     public void setInBillingAccountId(String inBillingAccountId) {
@@ -424,6 +533,24 @@ public class CreateInvoiceService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inInterestCharged the inInterestCharged to set
+    */
+    public void setInInterestCharged(BigDecimal inInterestCharged) {
+        this.inParameters.add("interestCharged");
+        this.inInterestCharged = inInterestCharged;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inInvoiceAdjustedTotal the inInvoiceAdjustedTotal to set
+    */
+    public void setInInvoiceAdjustedTotal(BigDecimal inInvoiceAdjustedTotal) {
+        this.inParameters.add("invoiceAdjustedTotal");
+        this.inInvoiceAdjustedTotal = inInvoiceAdjustedTotal;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inInvoiceDate the inInvoiceDate to set
     */
     public void setInInvoiceDate(Timestamp inInvoiceDate) {
@@ -450,6 +577,15 @@ public class CreateInvoiceService extends ServiceWrapper {
     }
     /**
      * Auto generated value setter.
+     * This parameter is optional.
+     * @param inInvoiceTotal the inInvoiceTotal to set
+    */
+    public void setInInvoiceTotal(BigDecimal inInvoiceTotal) {
+        this.inParameters.add("invoiceTotal");
+        this.inInvoiceTotal = inInvoiceTotal;
+    }
+    /**
+     * Auto generated value setter.
      * This parameter is required.
      * @param inInvoiceTypeId the inInvoiceTypeId to set
     */
@@ -465,6 +601,15 @@ public class CreateInvoiceService extends ServiceWrapper {
     public void setInLocale(Locale inLocale) {
         this.inParameters.add("locale");
         this.inLocale = inLocale;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inOpenAmount the inOpenAmount to set
+    */
+    public void setInOpenAmount(BigDecimal inOpenAmount) {
+        this.inParameters.add("openAmount");
+        this.inOpenAmount = inOpenAmount;
     }
     /**
      * Auto generated value setter.
@@ -492,6 +637,24 @@ public class CreateInvoiceService extends ServiceWrapper {
     public void setInPartyIdFrom(String inPartyIdFrom) {
         this.inParameters.add("partyIdFrom");
         this.inPartyIdFrom = inPartyIdFrom;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inPendingAppliedAmount the inPendingAppliedAmount to set
+    */
+    public void setInPendingAppliedAmount(BigDecimal inPendingAppliedAmount) {
+        this.inParameters.add("pendingAppliedAmount");
+        this.inPendingAppliedAmount = inPendingAppliedAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inPendingOpenAmount the inPendingOpenAmount to set
+    */
+    public void setInPendingOpenAmount(BigDecimal inPendingOpenAmount) {
+        this.inParameters.add("pendingOpenAmount");
+        this.inPendingOpenAmount = inPendingOpenAmount;
     }
     /**
      * Auto generated value setter.
@@ -528,6 +691,15 @@ public class CreateInvoiceService extends ServiceWrapper {
     public void setInRoleTypeId(String inRoleTypeId) {
         this.inParameters.add("roleTypeId");
         this.inRoleTypeId = inRoleTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inSalesTaxTotal the inSalesTaxTotal to set
+    */
+    public void setInSalesTaxTotal(BigDecimal inSalesTaxTotal) {
+        this.inParameters.add("salesTaxTotal");
+        this.inSalesTaxTotal = inSalesTaxTotal;
     }
     /**
      * Auto generated value setter.
@@ -661,23 +833,32 @@ public class CreateInvoiceService extends ServiceWrapper {
     /** {@inheritDoc} */
     public Map<String, Object> inputMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
+        if (inParameters.contains("adjustedAmount")) mapValue.put("adjustedAmount", getInAdjustedAmount());
+        if (inParameters.contains("appliedAmount")) mapValue.put("appliedAmount", getInAppliedAmount());
         if (inParameters.contains("billingAccountId")) mapValue.put("billingAccountId", getInBillingAccountId());
         if (inParameters.contains("contactMechId")) mapValue.put("contactMechId", getInContactMechId());
         if (inParameters.contains("currencyUomId")) mapValue.put("currencyUomId", getInCurrencyUomId());
         if (inParameters.contains("description")) mapValue.put("description", getInDescription());
         if (inParameters.contains("dueDate")) mapValue.put("dueDate", getInDueDate());
+        if (inParameters.contains("interestCharged")) mapValue.put("interestCharged", getInInterestCharged());
+        if (inParameters.contains("invoiceAdjustedTotal")) mapValue.put("invoiceAdjustedTotal", getInInvoiceAdjustedTotal());
         if (inParameters.contains("invoiceDate")) mapValue.put("invoiceDate", getInInvoiceDate());
         if (inParameters.contains("invoiceId")) mapValue.put("invoiceId", getInInvoiceId());
         if (inParameters.contains("invoiceMessage")) mapValue.put("invoiceMessage", getInInvoiceMessage());
+        if (inParameters.contains("invoiceTotal")) mapValue.put("invoiceTotal", getInInvoiceTotal());
         if (inParameters.contains("invoiceTypeId")) mapValue.put("invoiceTypeId", getInInvoiceTypeId());
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
+        if (inParameters.contains("openAmount")) mapValue.put("openAmount", getInOpenAmount());
         if (inParameters.contains("paidDate")) mapValue.put("paidDate", getInPaidDate());
         if (inParameters.contains("partyId")) mapValue.put("partyId", getInPartyId());
         if (inParameters.contains("partyIdFrom")) mapValue.put("partyIdFrom", getInPartyIdFrom());
+        if (inParameters.contains("pendingAppliedAmount")) mapValue.put("pendingAppliedAmount", getInPendingAppliedAmount());
+        if (inParameters.contains("pendingOpenAmount")) mapValue.put("pendingOpenAmount", getInPendingOpenAmount());
         if (inParameters.contains("processingStatusId")) mapValue.put("processingStatusId", getInProcessingStatusId());
         if (inParameters.contains("recurrenceInfoId")) mapValue.put("recurrenceInfoId", getInRecurrenceInfoId());
         if (inParameters.contains("referenceNumber")) mapValue.put("referenceNumber", getInReferenceNumber());
         if (inParameters.contains("roleTypeId")) mapValue.put("roleTypeId", getInRoleTypeId());
+        if (inParameters.contains("salesTaxTotal")) mapValue.put("salesTaxTotal", getInSalesTaxTotal());
         if (inParameters.contains("statusId")) mapValue.put("statusId", getInStatusId());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
@@ -703,23 +884,32 @@ public class CreateInvoiceService extends ServiceWrapper {
 
     /** {@inheritDoc} */
     public void putAllInput(Map<String, Object> mapValue) {
+        if (mapValue.containsKey("adjustedAmount")) setInAdjustedAmount((BigDecimal) mapValue.get("adjustedAmount"));
+        if (mapValue.containsKey("appliedAmount")) setInAppliedAmount((BigDecimal) mapValue.get("appliedAmount"));
         if (mapValue.containsKey("billingAccountId")) setInBillingAccountId((String) mapValue.get("billingAccountId"));
         if (mapValue.containsKey("contactMechId")) setInContactMechId((String) mapValue.get("contactMechId"));
         if (mapValue.containsKey("currencyUomId")) setInCurrencyUomId((String) mapValue.get("currencyUomId"));
         if (mapValue.containsKey("description")) setInDescription((String) mapValue.get("description"));
         if (mapValue.containsKey("dueDate")) setInDueDate((Timestamp) mapValue.get("dueDate"));
+        if (mapValue.containsKey("interestCharged")) setInInterestCharged((BigDecimal) mapValue.get("interestCharged"));
+        if (mapValue.containsKey("invoiceAdjustedTotal")) setInInvoiceAdjustedTotal((BigDecimal) mapValue.get("invoiceAdjustedTotal"));
         if (mapValue.containsKey("invoiceDate")) setInInvoiceDate((Timestamp) mapValue.get("invoiceDate"));
         if (mapValue.containsKey("invoiceId")) setInInvoiceId((String) mapValue.get("invoiceId"));
         if (mapValue.containsKey("invoiceMessage")) setInInvoiceMessage((String) mapValue.get("invoiceMessage"));
+        if (mapValue.containsKey("invoiceTotal")) setInInvoiceTotal((BigDecimal) mapValue.get("invoiceTotal"));
         if (mapValue.containsKey("invoiceTypeId")) setInInvoiceTypeId((String) mapValue.get("invoiceTypeId"));
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
+        if (mapValue.containsKey("openAmount")) setInOpenAmount((BigDecimal) mapValue.get("openAmount"));
         if (mapValue.containsKey("paidDate")) setInPaidDate((Timestamp) mapValue.get("paidDate"));
         if (mapValue.containsKey("partyId")) setInPartyId((String) mapValue.get("partyId"));
         if (mapValue.containsKey("partyIdFrom")) setInPartyIdFrom((String) mapValue.get("partyIdFrom"));
+        if (mapValue.containsKey("pendingAppliedAmount")) setInPendingAppliedAmount((BigDecimal) mapValue.get("pendingAppliedAmount"));
+        if (mapValue.containsKey("pendingOpenAmount")) setInPendingOpenAmount((BigDecimal) mapValue.get("pendingOpenAmount"));
         if (mapValue.containsKey("processingStatusId")) setInProcessingStatusId((String) mapValue.get("processingStatusId"));
         if (mapValue.containsKey("recurrenceInfoId")) setInRecurrenceInfoId((String) mapValue.get("recurrenceInfoId"));
         if (mapValue.containsKey("referenceNumber")) setInReferenceNumber((String) mapValue.get("referenceNumber"));
         if (mapValue.containsKey("roleTypeId")) setInRoleTypeId((String) mapValue.get("roleTypeId"));
+        if (mapValue.containsKey("salesTaxTotal")) setInSalesTaxTotal((BigDecimal) mapValue.get("salesTaxTotal"));
         if (mapValue.containsKey("statusId")) setInStatusId((String) mapValue.get("statusId"));
         if (mapValue.containsKey("timeZone")) setInTimeZone((TimeZone) mapValue.get("timeZone"));
         if (mapValue.containsKey("userLogin")) setInUserLogin((GenericValue) mapValue.get("userLogin"));

@@ -1296,9 +1296,20 @@ under the License.
     </entity>
 
     <!-- Extend the Invoice to provide an additionnal processing
-         status field -->
+         status field and calculated fields -->
     <extend-entity entity-name="Invoice">
-        <field name="processingStatusId" type="id"></field>
+        <!-- calculated amounts-->
+        <field name="invoiceAdjustedTotal" type="currency-precise"/>
+        <field name="invoiceTotal" type="currency-precise"/>
+        <field name="interestCharged" type="currency-precise"/>
+        <field name="salesTaxTotal" type="currency-precise"/>
+        <field name="adjustedAmount" type="currency-precise"/>
+        <field name="appliedAmount" type="currency-precise"/>
+        <field name="openAmount" type="currency-precise"/>
+        <field name="pendingOpenAmount" type="currency-precise"/>
+        <field name="pendingAppliedAmount" type="currency-precise"/>
+        <!-- processing status -->
+        <field name="processingStatusId" type="id"/>
         <relation type="one" title="Processing" fk-name="INVOICE_PROC_STTS" rel-entity-name="StatusItem">
             <key-map field-name="processingStatusId" rel-field-name="statusId"/>
         </relation>

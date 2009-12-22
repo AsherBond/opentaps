@@ -43,6 +43,7 @@ import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
 import java.lang.String;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
@@ -73,6 +74,15 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
+        fields.put("invoiceAdjustedTotal", "INVOICE_ADJUSTED_TOTAL");
+        fields.put("invoiceTotal", "INVOICE_TOTAL");
+        fields.put("interestCharged", "INTEREST_CHARGED");
+        fields.put("salesTaxTotal", "SALES_TAX_TOTAL");
+        fields.put("adjustedAmount", "ADJUSTED_AMOUNT");
+        fields.put("appliedAmount", "APPLIED_AMOUNT");
+        fields.put("openAmount", "OPEN_AMOUNT");
+        fields.put("pendingOpenAmount", "PENDING_OPEN_AMOUNT");
+        fields.put("pendingAppliedAmount", "PENDING_APPLIED_AMOUNT");
         fields.put("processingStatusId", "PROCESSING_STATUS_ID");
 fieldMapColumns.put("Invoice", fields);
 }
@@ -97,6 +107,15 @@ fieldMapColumns.put("Invoice", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
+    invoiceAdjustedTotal("invoiceAdjustedTotal"),
+    invoiceTotal("invoiceTotal"),
+    interestCharged("interestCharged"),
+    salesTaxTotal("salesTaxTotal"),
+    adjustedAmount("adjustedAmount"),
+    appliedAmount("appliedAmount"),
+    openAmount("openAmount"),
+    pendingOpenAmount("pendingOpenAmount"),
+    pendingAppliedAmount("pendingAppliedAmount"),
     processingStatusId("processingStatusId");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
@@ -151,6 +170,24 @@ fieldMapColumns.put("Invoice", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
+   @Column(name="INVOICE_ADJUSTED_TOTAL")
+   private BigDecimal invoiceAdjustedTotal;
+   @Column(name="INVOICE_TOTAL")
+   private BigDecimal invoiceTotal;
+   @Column(name="INTEREST_CHARGED")
+   private BigDecimal interestCharged;
+   @Column(name="SALES_TAX_TOTAL")
+   private BigDecimal salesTaxTotal;
+   @Column(name="ADJUSTED_AMOUNT")
+   private BigDecimal adjustedAmount;
+   @Column(name="APPLIED_AMOUNT")
+   private BigDecimal appliedAmount;
+   @Column(name="OPEN_AMOUNT")
+   private BigDecimal openAmount;
+   @Column(name="PENDING_OPEN_AMOUNT")
+   private BigDecimal pendingOpenAmount;
+   @Column(name="PENDING_APPLIED_AMOUNT")
+   private BigDecimal pendingAppliedAmount;
    @Column(name="PROCESSING_STATUS_ID")
    private String processingStatusId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -312,7 +349,7 @@ fieldMapColumns.put("Invoice", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("invoiceId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceTypeId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("invoiceDate");this.allFieldsNames.add("dueDate");this.allFieldsNames.add("paidDate");this.allFieldsNames.add("invoiceMessage");this.allFieldsNames.add("referenceNumber");this.allFieldsNames.add("description");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("processingStatusId");
+      this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceTypeId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("invoiceDate");this.allFieldsNames.add("dueDate");this.allFieldsNames.add("paidDate");this.allFieldsNames.add("invoiceMessage");this.allFieldsNames.add("referenceNumber");this.allFieldsNames.add("description");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("invoiceAdjustedTotal");this.allFieldsNames.add("invoiceTotal");this.allFieldsNames.add("interestCharged");this.allFieldsNames.add("salesTaxTotal");this.allFieldsNames.add("adjustedAmount");this.allFieldsNames.add("appliedAmount");this.allFieldsNames.add("openAmount");this.allFieldsNames.add("pendingOpenAmount");this.allFieldsNames.add("pendingAppliedAmount");this.allFieldsNames.add("processingStatusId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -469,6 +506,69 @@ fieldMapColumns.put("Invoice", fields);
     }
     /**
      * Auto generated value setter.
+     * @param invoiceAdjustedTotal the invoiceAdjustedTotal to set
+     */
+    public void setInvoiceAdjustedTotal(BigDecimal invoiceAdjustedTotal) {
+        this.invoiceAdjustedTotal = invoiceAdjustedTotal;
+    }
+    /**
+     * Auto generated value setter.
+     * @param invoiceTotal the invoiceTotal to set
+     */
+    public void setInvoiceTotal(BigDecimal invoiceTotal) {
+        this.invoiceTotal = invoiceTotal;
+    }
+    /**
+     * Auto generated value setter.
+     * @param interestCharged the interestCharged to set
+     */
+    public void setInterestCharged(BigDecimal interestCharged) {
+        this.interestCharged = interestCharged;
+    }
+    /**
+     * Auto generated value setter.
+     * @param salesTaxTotal the salesTaxTotal to set
+     */
+    public void setSalesTaxTotal(BigDecimal salesTaxTotal) {
+        this.salesTaxTotal = salesTaxTotal;
+    }
+    /**
+     * Auto generated value setter.
+     * @param adjustedAmount the adjustedAmount to set
+     */
+    public void setAdjustedAmount(BigDecimal adjustedAmount) {
+        this.adjustedAmount = adjustedAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param appliedAmount the appliedAmount to set
+     */
+    public void setAppliedAmount(BigDecimal appliedAmount) {
+        this.appliedAmount = appliedAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param openAmount the openAmount to set
+     */
+    public void setOpenAmount(BigDecimal openAmount) {
+        this.openAmount = openAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param pendingOpenAmount the pendingOpenAmount to set
+     */
+    public void setPendingOpenAmount(BigDecimal pendingOpenAmount) {
+        this.pendingOpenAmount = pendingOpenAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param pendingAppliedAmount the pendingAppliedAmount to set
+     */
+    public void setPendingAppliedAmount(BigDecimal pendingAppliedAmount) {
+        this.pendingAppliedAmount = pendingAppliedAmount;
+    }
+    /**
+     * Auto generated value setter.
      * @param processingStatusId the processingStatusId to set
      */
     public void setProcessingStatusId(String processingStatusId) {
@@ -614,6 +714,69 @@ fieldMapColumns.put("Invoice", fields);
      */
     public Timestamp getCreatedTxStamp() {
         return this.createdTxStamp;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInvoiceAdjustedTotal() {
+        return this.invoiceAdjustedTotal;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInvoiceTotal() {
+        return this.invoiceTotal;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInterestCharged() {
+        return this.interestCharged;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getSalesTaxTotal() {
+        return this.salesTaxTotal;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getAdjustedAmount() {
+        return this.adjustedAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getAppliedAmount() {
+        return this.appliedAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getOpenAmount() {
+        return this.openAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getPendingOpenAmount() {
+        return this.pendingOpenAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getPendingAppliedAmount() {
+        return this.pendingAppliedAmount;
     }
     /**
      * Auto generated value accessor.
@@ -1487,6 +1650,15 @@ fieldMapColumns.put("Invoice", fields);
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
         setCreatedTxStamp((Timestamp) mapValue.get("createdTxStamp"));
+        setInvoiceAdjustedTotal(convertToBigDecimal(mapValue.get("invoiceAdjustedTotal")));
+        setInvoiceTotal(convertToBigDecimal(mapValue.get("invoiceTotal")));
+        setInterestCharged(convertToBigDecimal(mapValue.get("interestCharged")));
+        setSalesTaxTotal(convertToBigDecimal(mapValue.get("salesTaxTotal")));
+        setAdjustedAmount(convertToBigDecimal(mapValue.get("adjustedAmount")));
+        setAppliedAmount(convertToBigDecimal(mapValue.get("appliedAmount")));
+        setOpenAmount(convertToBigDecimal(mapValue.get("openAmount")));
+        setPendingOpenAmount(convertToBigDecimal(mapValue.get("pendingOpenAmount")));
+        setPendingAppliedAmount(convertToBigDecimal(mapValue.get("pendingAppliedAmount")));
         setProcessingStatusId((String) mapValue.get("processingStatusId"));
         postInit();
     }
@@ -1515,6 +1687,15 @@ fieldMapColumns.put("Invoice", fields);
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());
         mapValue.put("createdTxStamp", getCreatedTxStamp());
+        mapValue.put("invoiceAdjustedTotal", getInvoiceAdjustedTotal());
+        mapValue.put("invoiceTotal", getInvoiceTotal());
+        mapValue.put("interestCharged", getInterestCharged());
+        mapValue.put("salesTaxTotal", getSalesTaxTotal());
+        mapValue.put("adjustedAmount", getAdjustedAmount());
+        mapValue.put("appliedAmount", getAppliedAmount());
+        mapValue.put("openAmount", getOpenAmount());
+        mapValue.put("pendingOpenAmount", getPendingOpenAmount());
+        mapValue.put("pendingAppliedAmount", getPendingAppliedAmount());
         mapValue.put("processingStatusId", getProcessingStatusId());
         return mapValue;
     }

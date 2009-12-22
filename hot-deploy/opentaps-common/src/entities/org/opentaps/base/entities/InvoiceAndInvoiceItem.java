@@ -50,7 +50,7 @@ import java.sql.Timestamp;
  * Auto generated base entity InvoiceAndInvoiceItem.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectInvoiceAndInvoiceItems", query="SELECT I.INVOICE_ID AS \"invoiceId\",I.INVOICE_TYPE_ID AS \"invoiceTypeId\",I.PARTY_ID_FROM AS \"partyIdFrom\",I.PARTY_ID AS \"partyId\",I.ROLE_TYPE_ID AS \"roleTypeId\",I.STATUS_ID AS \"statusId\",I.BILLING_ACCOUNT_ID AS \"billingAccountId\",I.CONTACT_MECH_ID AS \"contactMechId\",I.INVOICE_DATE AS \"invoiceDate\",I.DUE_DATE AS \"dueDate\",I.PAID_DATE AS \"paidDate\",I.INVOICE_MESSAGE AS \"invoiceMessage\",I.REFERENCE_NUMBER AS \"referenceNumber\",I.DESCRIPTION AS \"description\",I.CURRENCY_UOM_ID AS \"currencyUomId\",I.RECURRENCE_INFO_ID AS \"recurrenceInfoId\",I.PROCESSING_STATUS_ID AS \"processingStatusId\",II.INVOICE_ID AS \"invoiceId\",II.INVOICE_ITEM_SEQ_ID AS \"invoiceItemSeqId\",II.INVOICE_ITEM_TYPE_ID AS \"invoiceItemTypeId\",II.OVERRIDE_GL_ACCOUNT_ID AS \"overrideGlAccountId\",II.OVERRIDE_ORG_PARTY_ID AS \"overrideOrgPartyId\",II.INVENTORY_ITEM_ID AS \"inventoryItemId\",II.PRODUCT_ID AS \"productId\",II.PRODUCT_FEATURE_ID AS \"productFeatureId\",II.PARENT_INVOICE_ID AS \"parentInvoiceId\",II.PARENT_INVOICE_ITEM_SEQ_ID AS \"parentInvoiceItemSeqId\",II.UOM_ID AS \"uomId\",II.TAXABLE_FLAG AS \"taxableFlag\",II.QUANTITY AS \"quantity\",II.AMOUNT AS \"amount\",II.DESCRIPTION AS \"description\",II.TAX_AUTH_PARTY_ID AS \"taxAuthPartyId\",II.TAX_AUTH_GEO_ID AS \"taxAuthGeoId\",II.TAX_AUTHORITY_RATE_SEQ_ID AS \"taxAuthorityRateSeqId\",II.SALES_OPPORTUNITY_ID AS \"salesOpportunityId\",II.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",II.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",II.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",II.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",II.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",II.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",II.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",II.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",II.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",II.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\" FROM INVOICE I INNER JOIN INVOICE_ITEM II ON I.INVOICE_ID = II.INVOICE_ID", resultSetMapping="InvoiceAndInvoiceItemMapping")
+@NamedNativeQuery(name="selectInvoiceAndInvoiceItems", query="SELECT I.INVOICE_ID AS \"invoiceId\",I.INVOICE_TYPE_ID AS \"invoiceTypeId\",I.PARTY_ID_FROM AS \"partyIdFrom\",I.PARTY_ID AS \"partyId\",I.ROLE_TYPE_ID AS \"roleTypeId\",I.STATUS_ID AS \"statusId\",I.BILLING_ACCOUNT_ID AS \"billingAccountId\",I.CONTACT_MECH_ID AS \"contactMechId\",I.INVOICE_DATE AS \"invoiceDate\",I.DUE_DATE AS \"dueDate\",I.PAID_DATE AS \"paidDate\",I.INVOICE_MESSAGE AS \"invoiceMessage\",I.REFERENCE_NUMBER AS \"referenceNumber\",I.DESCRIPTION AS \"description\",I.CURRENCY_UOM_ID AS \"currencyUomId\",I.RECURRENCE_INFO_ID AS \"recurrenceInfoId\",I.INVOICE_ADJUSTED_TOTAL AS \"invoiceAdjustedTotal\",I.INVOICE_TOTAL AS \"invoiceTotal\",I.INTEREST_CHARGED AS \"interestCharged\",I.SALES_TAX_TOTAL AS \"salesTaxTotal\",I.ADJUSTED_AMOUNT AS \"adjustedAmount\",I.APPLIED_AMOUNT AS \"appliedAmount\",I.OPEN_AMOUNT AS \"openAmount\",I.PENDING_OPEN_AMOUNT AS \"pendingOpenAmount\",I.PENDING_APPLIED_AMOUNT AS \"pendingAppliedAmount\",I.PROCESSING_STATUS_ID AS \"processingStatusId\",II.INVOICE_ID AS \"invoiceId\",II.INVOICE_ITEM_SEQ_ID AS \"invoiceItemSeqId\",II.INVOICE_ITEM_TYPE_ID AS \"invoiceItemTypeId\",II.OVERRIDE_GL_ACCOUNT_ID AS \"overrideGlAccountId\",II.OVERRIDE_ORG_PARTY_ID AS \"overrideOrgPartyId\",II.INVENTORY_ITEM_ID AS \"inventoryItemId\",II.PRODUCT_ID AS \"productId\",II.PRODUCT_FEATURE_ID AS \"productFeatureId\",II.PARENT_INVOICE_ID AS \"parentInvoiceId\",II.PARENT_INVOICE_ITEM_SEQ_ID AS \"parentInvoiceItemSeqId\",II.UOM_ID AS \"uomId\",II.TAXABLE_FLAG AS \"taxableFlag\",II.QUANTITY AS \"quantity\",II.AMOUNT AS \"amount\",II.DESCRIPTION AS \"description\",II.TAX_AUTH_PARTY_ID AS \"taxAuthPartyId\",II.TAX_AUTH_GEO_ID AS \"taxAuthGeoId\",II.TAX_AUTHORITY_RATE_SEQ_ID AS \"taxAuthorityRateSeqId\",II.SALES_OPPORTUNITY_ID AS \"salesOpportunityId\",II.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",II.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",II.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",II.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",II.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",II.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",II.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",II.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",II.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",II.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\" FROM INVOICE I INNER JOIN INVOICE_ITEM II ON I.INVOICE_ID = II.INVOICE_ID", resultSetMapping="InvoiceAndInvoiceItemMapping")
 @SqlResultSetMapping(name="InvoiceAndInvoiceItemMapping", entities={
 @EntityResult(entityClass=InvoiceAndInvoiceItem.class, fields = {
 @FieldResult(name="invoiceId", column="invoiceId")
@@ -69,6 +69,15 @@ import java.sql.Timestamp;
 ,@FieldResult(name="description", column="description")
 ,@FieldResult(name="currencyUomId", column="currencyUomId")
 ,@FieldResult(name="recurrenceInfoId", column="recurrenceInfoId")
+,@FieldResult(name="invoiceAdjustedTotal", column="invoiceAdjustedTotal")
+,@FieldResult(name="invoiceTotal", column="invoiceTotal")
+,@FieldResult(name="interestCharged", column="interestCharged")
+,@FieldResult(name="salesTaxTotal", column="salesTaxTotal")
+,@FieldResult(name="adjustedAmount", column="adjustedAmount")
+,@FieldResult(name="appliedAmount", column="appliedAmount")
+,@FieldResult(name="openAmount", column="openAmount")
+,@FieldResult(name="pendingOpenAmount", column="pendingOpenAmount")
+,@FieldResult(name="pendingAppliedAmount", column="pendingAppliedAmount")
 ,@FieldResult(name="processingStatusId", column="processingStatusId")
 ,@FieldResult(name="itemInvoiceId", column="itemInvoiceId")
 ,@FieldResult(name="itemInvoiceItemSeqId", column="itemInvoiceItemSeqId")
@@ -121,6 +130,15 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("description", "I.DESCRIPTION");
         fields.put("currencyUomId", "I.CURRENCY_UOM_ID");
         fields.put("recurrenceInfoId", "I.RECURRENCE_INFO_ID");
+        fields.put("invoiceAdjustedTotal", "I.INVOICE_ADJUSTED_TOTAL");
+        fields.put("invoiceTotal", "I.INVOICE_TOTAL");
+        fields.put("interestCharged", "I.INTEREST_CHARGED");
+        fields.put("salesTaxTotal", "I.SALES_TAX_TOTAL");
+        fields.put("adjustedAmount", "I.ADJUSTED_AMOUNT");
+        fields.put("appliedAmount", "I.APPLIED_AMOUNT");
+        fields.put("openAmount", "I.OPEN_AMOUNT");
+        fields.put("pendingOpenAmount", "I.PENDING_OPEN_AMOUNT");
+        fields.put("pendingAppliedAmount", "I.PENDING_APPLIED_AMOUNT");
         fields.put("processingStatusId", "I.PROCESSING_STATUS_ID");
         fields.put("itemInvoiceId", "II.INVOICE_ID");
         fields.put("itemInvoiceItemSeqId", "II.INVOICE_ITEM_SEQ_ID");
@@ -170,6 +188,15 @@ fieldMapColumns.put("InvoiceAndInvoiceItem", fields);
     description("description"),
     currencyUomId("currencyUomId"),
     recurrenceInfoId("recurrenceInfoId"),
+    invoiceAdjustedTotal("invoiceAdjustedTotal"),
+    invoiceTotal("invoiceTotal"),
+    interestCharged("interestCharged"),
+    salesTaxTotal("salesTaxTotal"),
+    adjustedAmount("adjustedAmount"),
+    appliedAmount("appliedAmount"),
+    openAmount("openAmount"),
+    pendingOpenAmount("pendingOpenAmount"),
+    pendingAppliedAmount("pendingAppliedAmount"),
     processingStatusId("processingStatusId"),
     itemInvoiceId("itemInvoiceId"),
     itemInvoiceItemSeqId("itemInvoiceItemSeqId"),
@@ -243,6 +270,24 @@ fieldMapColumns.put("InvoiceAndInvoiceItem", fields);
     
    private String recurrenceInfoId;
     
+   private BigDecimal invoiceAdjustedTotal;
+    
+   private BigDecimal invoiceTotal;
+    
+   private BigDecimal interestCharged;
+    
+   private BigDecimal salesTaxTotal;
+    
+   private BigDecimal adjustedAmount;
+    
+   private BigDecimal appliedAmount;
+    
+   private BigDecimal openAmount;
+    
+   private BigDecimal pendingOpenAmount;
+    
+   private BigDecimal pendingAppliedAmount;
+    
    private String processingStatusId;
     
    private String itemInvoiceId;
@@ -314,7 +359,7 @@ fieldMapColumns.put("InvoiceAndInvoiceItem", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("invoiceId");this.primaryKeyNames.add("itemInvoiceId");this.primaryKeyNames.add("itemInvoiceItemSeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceTypeId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("invoiceDate");this.allFieldsNames.add("dueDate");this.allFieldsNames.add("paidDate");this.allFieldsNames.add("invoiceMessage");this.allFieldsNames.add("referenceNumber");this.allFieldsNames.add("description");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("processingStatusId");this.allFieldsNames.add("itemInvoiceId");this.allFieldsNames.add("itemInvoiceItemSeqId");this.allFieldsNames.add("itemInvoiceItemTypeId");this.allFieldsNames.add("itemOverrideGlAccountId");this.allFieldsNames.add("itemOverrideOrgPartyId");this.allFieldsNames.add("itemInventoryItemId");this.allFieldsNames.add("itemProductId");this.allFieldsNames.add("itemProductFeatureId");this.allFieldsNames.add("itemParentInvoiceId");this.allFieldsNames.add("itemParentInvoiceItemSeqId");this.allFieldsNames.add("itemUomId");this.allFieldsNames.add("itemTaxableFlag");this.allFieldsNames.add("itemQuantity");this.allFieldsNames.add("itemAmount");this.allFieldsNames.add("itemDescription");this.allFieldsNames.add("itemTaxAuthPartyId");this.allFieldsNames.add("itemTaxAuthGeoId");this.allFieldsNames.add("itemTaxAuthorityRateSeqId");this.allFieldsNames.add("itemSalesOpportunityId");this.allFieldsNames.add("itemAcctgTagEnumId1");this.allFieldsNames.add("itemAcctgTagEnumId2");this.allFieldsNames.add("itemAcctgTagEnumId3");this.allFieldsNames.add("itemAcctgTagEnumId4");this.allFieldsNames.add("itemAcctgTagEnumId5");this.allFieldsNames.add("itemAcctgTagEnumId6");this.allFieldsNames.add("itemAcctgTagEnumId7");this.allFieldsNames.add("itemAcctgTagEnumId8");this.allFieldsNames.add("itemAcctgTagEnumId9");this.allFieldsNames.add("itemAcctgTagEnumId10");
+      this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceTypeId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("invoiceDate");this.allFieldsNames.add("dueDate");this.allFieldsNames.add("paidDate");this.allFieldsNames.add("invoiceMessage");this.allFieldsNames.add("referenceNumber");this.allFieldsNames.add("description");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("invoiceAdjustedTotal");this.allFieldsNames.add("invoiceTotal");this.allFieldsNames.add("interestCharged");this.allFieldsNames.add("salesTaxTotal");this.allFieldsNames.add("adjustedAmount");this.allFieldsNames.add("appliedAmount");this.allFieldsNames.add("openAmount");this.allFieldsNames.add("pendingOpenAmount");this.allFieldsNames.add("pendingAppliedAmount");this.allFieldsNames.add("processingStatusId");this.allFieldsNames.add("itemInvoiceId");this.allFieldsNames.add("itemInvoiceItemSeqId");this.allFieldsNames.add("itemInvoiceItemTypeId");this.allFieldsNames.add("itemOverrideGlAccountId");this.allFieldsNames.add("itemOverrideOrgPartyId");this.allFieldsNames.add("itemInventoryItemId");this.allFieldsNames.add("itemProductId");this.allFieldsNames.add("itemProductFeatureId");this.allFieldsNames.add("itemParentInvoiceId");this.allFieldsNames.add("itemParentInvoiceItemSeqId");this.allFieldsNames.add("itemUomId");this.allFieldsNames.add("itemTaxableFlag");this.allFieldsNames.add("itemQuantity");this.allFieldsNames.add("itemAmount");this.allFieldsNames.add("itemDescription");this.allFieldsNames.add("itemTaxAuthPartyId");this.allFieldsNames.add("itemTaxAuthGeoId");this.allFieldsNames.add("itemTaxAuthorityRateSeqId");this.allFieldsNames.add("itemSalesOpportunityId");this.allFieldsNames.add("itemAcctgTagEnumId1");this.allFieldsNames.add("itemAcctgTagEnumId2");this.allFieldsNames.add("itemAcctgTagEnumId3");this.allFieldsNames.add("itemAcctgTagEnumId4");this.allFieldsNames.add("itemAcctgTagEnumId5");this.allFieldsNames.add("itemAcctgTagEnumId6");this.allFieldsNames.add("itemAcctgTagEnumId7");this.allFieldsNames.add("itemAcctgTagEnumId8");this.allFieldsNames.add("itemAcctgTagEnumId9");this.allFieldsNames.add("itemAcctgTagEnumId10");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -443,6 +488,69 @@ fieldMapColumns.put("InvoiceAndInvoiceItem", fields);
      */
     public void setRecurrenceInfoId(String recurrenceInfoId) {
         this.recurrenceInfoId = recurrenceInfoId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param invoiceAdjustedTotal the invoiceAdjustedTotal to set
+     */
+    public void setInvoiceAdjustedTotal(BigDecimal invoiceAdjustedTotal) {
+        this.invoiceAdjustedTotal = invoiceAdjustedTotal;
+    }
+    /**
+     * Auto generated value setter.
+     * @param invoiceTotal the invoiceTotal to set
+     */
+    public void setInvoiceTotal(BigDecimal invoiceTotal) {
+        this.invoiceTotal = invoiceTotal;
+    }
+    /**
+     * Auto generated value setter.
+     * @param interestCharged the interestCharged to set
+     */
+    public void setInterestCharged(BigDecimal interestCharged) {
+        this.interestCharged = interestCharged;
+    }
+    /**
+     * Auto generated value setter.
+     * @param salesTaxTotal the salesTaxTotal to set
+     */
+    public void setSalesTaxTotal(BigDecimal salesTaxTotal) {
+        this.salesTaxTotal = salesTaxTotal;
+    }
+    /**
+     * Auto generated value setter.
+     * @param adjustedAmount the adjustedAmount to set
+     */
+    public void setAdjustedAmount(BigDecimal adjustedAmount) {
+        this.adjustedAmount = adjustedAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param appliedAmount the appliedAmount to set
+     */
+    public void setAppliedAmount(BigDecimal appliedAmount) {
+        this.appliedAmount = appliedAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param openAmount the openAmount to set
+     */
+    public void setOpenAmount(BigDecimal openAmount) {
+        this.openAmount = openAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param pendingOpenAmount the pendingOpenAmount to set
+     */
+    public void setPendingOpenAmount(BigDecimal pendingOpenAmount) {
+        this.pendingOpenAmount = pendingOpenAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param pendingAppliedAmount the pendingAppliedAmount to set
+     */
+    public void setPendingAppliedAmount(BigDecimal pendingAppliedAmount) {
+        this.pendingAppliedAmount = pendingAppliedAmount;
     }
     /**
      * Auto generated value setter.
@@ -769,6 +877,69 @@ fieldMapColumns.put("InvoiceAndInvoiceItem", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInvoiceAdjustedTotal() {
+        return this.invoiceAdjustedTotal;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInvoiceTotal() {
+        return this.invoiceTotal;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInterestCharged() {
+        return this.interestCharged;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getSalesTaxTotal() {
+        return this.salesTaxTotal;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getAdjustedAmount() {
+        return this.adjustedAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getAppliedAmount() {
+        return this.appliedAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getOpenAmount() {
+        return this.openAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getPendingOpenAmount() {
+        return this.pendingOpenAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getPendingAppliedAmount() {
+        return this.pendingAppliedAmount;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>String</code>
      */
     public String getProcessingStatusId() {
@@ -1001,6 +1172,15 @@ fieldMapColumns.put("InvoiceAndInvoiceItem", fields);
         setDescription((String) mapValue.get("description"));
         setCurrencyUomId((String) mapValue.get("currencyUomId"));
         setRecurrenceInfoId((String) mapValue.get("recurrenceInfoId"));
+        setInvoiceAdjustedTotal(convertToBigDecimal(mapValue.get("invoiceAdjustedTotal")));
+        setInvoiceTotal(convertToBigDecimal(mapValue.get("invoiceTotal")));
+        setInterestCharged(convertToBigDecimal(mapValue.get("interestCharged")));
+        setSalesTaxTotal(convertToBigDecimal(mapValue.get("salesTaxTotal")));
+        setAdjustedAmount(convertToBigDecimal(mapValue.get("adjustedAmount")));
+        setAppliedAmount(convertToBigDecimal(mapValue.get("appliedAmount")));
+        setOpenAmount(convertToBigDecimal(mapValue.get("openAmount")));
+        setPendingOpenAmount(convertToBigDecimal(mapValue.get("pendingOpenAmount")));
+        setPendingAppliedAmount(convertToBigDecimal(mapValue.get("pendingAppliedAmount")));
         setProcessingStatusId((String) mapValue.get("processingStatusId"));
         setItemInvoiceId((String) mapValue.get("itemInvoiceId"));
         setItemInvoiceItemSeqId((String) mapValue.get("itemInvoiceItemSeqId"));
@@ -1054,6 +1234,15 @@ fieldMapColumns.put("InvoiceAndInvoiceItem", fields);
         mapValue.put("description", getDescription());
         mapValue.put("currencyUomId", getCurrencyUomId());
         mapValue.put("recurrenceInfoId", getRecurrenceInfoId());
+        mapValue.put("invoiceAdjustedTotal", getInvoiceAdjustedTotal());
+        mapValue.put("invoiceTotal", getInvoiceTotal());
+        mapValue.put("interestCharged", getInterestCharged());
+        mapValue.put("salesTaxTotal", getSalesTaxTotal());
+        mapValue.put("adjustedAmount", getAdjustedAmount());
+        mapValue.put("appliedAmount", getAppliedAmount());
+        mapValue.put("openAmount", getOpenAmount());
+        mapValue.put("pendingOpenAmount", getPendingOpenAmount());
+        mapValue.put("pendingAppliedAmount", getPendingAppliedAmount());
         mapValue.put("processingStatusId", getProcessingStatusId());
         mapValue.put("itemInvoiceId", getItemInvoiceId());
         mapValue.put("itemInvoiceItemSeqId", getItemInvoiceItemSeqId());
