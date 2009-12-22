@@ -23,6 +23,7 @@ import com.gwtext.client.widgets.Button;
 import com.gwtext.client.widgets.Panel;
 import com.gwtext.client.widgets.Window;
 import com.gwtext.client.widgets.form.TextField;
+import com.gwtext.client.widgets.layout.FitLayout;
 import com.gwtext.client.widgets.layout.HorizontalLayout;
 import com.gwtext.client.widgets.layout.RowLayout;
 import org.opentaps.gwt.common.client.UtilUi;
@@ -34,17 +35,19 @@ import org.opentaps.gwt.common.client.lookup.configuration.SearchLookupConfigura
 
 /**
  * A generic search form.
- * This contains a simple text input and a searchhbutton.
+ * This contains a simple text input and a search button.
  * Results are presented in a popup window with one result grid by search type.
  */
 public class MultiSearchForm extends BaseFormPanel {
 
     private final Window win;
     private final TextField searchInput;
+    private final Panel winInnerPanel;
     private List<SearchResultsListViewInterface> resultGrids = new ArrayList<SearchResultsListViewInterface>();
 
-    private static final int RESULT_HEIGHT = 700;
-    private static final int RESULT_WIDTH = 900;
+    private static final int RESULT_GRID_HEIGHT = 200;
+    private static final int RESULT_WINDOW_HEIGHT = 700;
+    private static final int RESULT_WINDOW_WIDTH = 900;
 
     /**
      * Default constructor.
@@ -70,13 +73,21 @@ public class MultiSearchForm extends BaseFormPanel {
 
         add(innerPanel);
 
+        winInnerPanel = new Panel();
+        winInnerPanel.setBorder(false);
+        winInnerPanel.setFrame(false);
+        winInnerPanel.setHeader(false);
+        winInnerPanel.setLayout(new RowLayout());
+        winInnerPanel.setAutoScroll(true);
         win = new Window(UtilUi.MSG.searchResults());
         win.setModal(false);
         win.setResizable(true);
-        win.setMinHeight(RESULT_HEIGHT);
-        win.setWidth(RESULT_WIDTH);
-        win.setLayout(new RowLayout());
+        win.setMinHeight(RESULT_WINDOW_HEIGHT);
+        win.setWidth(RESULT_WINDOW_WIDTH);
+        win.setAutoScroll(true);
         win.setCloseAction(Window.HIDE);
+        win.setLayout(new FitLayout());
+        win.add(winInnerPanel);
     }
 
     public <T extends EntityListView & SearchResultsListViewInterface> void addResultsGrid(final T grid) {
@@ -98,8 +109,9 @@ public class MultiSearchForm extends BaseFormPanel {
         grid.setFrame(false);
         grid.setAutoHeight(false);
         grid.setBorder(false);
-        grid.setWidth(RESULT_WIDTH);
-        win.add(grid);
+        grid.setWidth(RESULT_WINDOW_WIDTH);
+        grid.setHeight(RESULT_GRID_HEIGHT);
+        winInnerPanel.add(grid);
     }
 
     @Override public void submit() {
@@ -111,8 +123,8 @@ public class MultiSearchForm extends BaseFormPanel {
         int pw = com.google.gwt.user.client.Window.getClientWidth();
 
         int h = win.getHeight();
-        if (h < RESULT_HEIGHT) {
-            h = RESULT_HEIGHT;
+        if (h < RESULT_WINDOW_HEIGHT) {
+            h = RESULT_WINDOW_HEIGHT;
         }
         // make sure the window is not bigger than the page
         // because the popup does not have scrollbars
@@ -122,8 +134,8 @@ public class MultiSearchForm extends BaseFormPanel {
         win.setHeight(h);
 
         int w = win.getWidth();
-        if (w < RESULT_WIDTH) {
-            w = RESULT_WIDTH;
+        if (w < RESULT_WINDOW_WIDTH) {
+            w = RESULT_WINDOW_WIDTH;
         }
         // make sure the window is not bigger than the page
         // because the popup does not have scrollbars
