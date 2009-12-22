@@ -69,11 +69,13 @@ public class QuickSendPaymentService extends ServiceWrapper {
         actualCurrencyAmount("actualCurrencyAmount"),
         actualCurrencyUomId("actualCurrencyUomId"),
         amount("amount"),
+        appliedAmount("appliedAmount"),
         comments("comments"),
         currencyUomId("currencyUomId"),
         effectiveDate("effectiveDate"),
         finAccountTransId("finAccountTransId"),
         locale("locale"),
+        openAmount("openAmount"),
         overrideGlAccountId("overrideGlAccountId"),
         partyIdFrom("partyIdFrom"),
         partyIdTo("partyIdTo"),
@@ -128,11 +130,13 @@ public class QuickSendPaymentService extends ServiceWrapper {
     private BigDecimal inActualCurrencyAmount;
     private String inActualCurrencyUomId;
     private BigDecimal inAmount;
+    private BigDecimal inAppliedAmount;
     private String inComments;
     private String inCurrencyUomId;
     private Timestamp inEffectiveDate;
     private String inFinAccountTransId;
     private Locale inLocale;
+    private BigDecimal inOpenAmount;
     private String inOverrideGlAccountId;
     private String inPartyIdFrom;
     private String inPartyIdTo;
@@ -266,6 +270,14 @@ public class QuickSendPaymentService extends ServiceWrapper {
     /**
      * Auto generated value accessor.
      * This parameter is optional.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInAppliedAmount() {
+        return this.inAppliedAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
      * @return <code>String</code>
      */
     public String getInComments() {
@@ -302,6 +314,14 @@ public class QuickSendPaymentService extends ServiceWrapper {
      */
     public Locale getInLocale() {
         return this.inLocale;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInOpenAmount() {
+        return this.inOpenAmount;
     }
     /**
      * Auto generated value accessor.
@@ -600,6 +620,15 @@ public class QuickSendPaymentService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inAppliedAmount the inAppliedAmount to set
+    */
+    public void setInAppliedAmount(BigDecimal inAppliedAmount) {
+        this.inParameters.add("appliedAmount");
+        this.inAppliedAmount = inAppliedAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inComments the inComments to set
     */
     public void setInComments(String inComments) {
@@ -641,6 +670,15 @@ public class QuickSendPaymentService extends ServiceWrapper {
     public void setInLocale(Locale inLocale) {
         this.inParameters.add("locale");
         this.inLocale = inLocale;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inOpenAmount the inOpenAmount to set
+    */
+    public void setInOpenAmount(BigDecimal inOpenAmount) {
+        this.inParameters.add("openAmount");
+        this.inOpenAmount = inOpenAmount;
     }
     /**
      * Auto generated value setter.
@@ -877,11 +915,13 @@ public class QuickSendPaymentService extends ServiceWrapper {
         if (inParameters.contains("actualCurrencyAmount")) mapValue.put("actualCurrencyAmount", getInActualCurrencyAmount());
         if (inParameters.contains("actualCurrencyUomId")) mapValue.put("actualCurrencyUomId", getInActualCurrencyUomId());
         if (inParameters.contains("amount")) mapValue.put("amount", getInAmount());
+        if (inParameters.contains("appliedAmount")) mapValue.put("appliedAmount", getInAppliedAmount());
         if (inParameters.contains("comments")) mapValue.put("comments", getInComments());
         if (inParameters.contains("currencyUomId")) mapValue.put("currencyUomId", getInCurrencyUomId());
         if (inParameters.contains("effectiveDate")) mapValue.put("effectiveDate", getInEffectiveDate());
         if (inParameters.contains("finAccountTransId")) mapValue.put("finAccountTransId", getInFinAccountTransId());
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
+        if (inParameters.contains("openAmount")) mapValue.put("openAmount", getInOpenAmount());
         if (inParameters.contains("overrideGlAccountId")) mapValue.put("overrideGlAccountId", getInOverrideGlAccountId());
         if (inParameters.contains("partyIdFrom")) mapValue.put("partyIdFrom", getInPartyIdFrom());
         if (inParameters.contains("partyIdTo")) mapValue.put("partyIdTo", getInPartyIdTo());
@@ -930,11 +970,13 @@ public class QuickSendPaymentService extends ServiceWrapper {
         if (mapValue.containsKey("actualCurrencyAmount")) setInActualCurrencyAmount((BigDecimal) mapValue.get("actualCurrencyAmount"));
         if (mapValue.containsKey("actualCurrencyUomId")) setInActualCurrencyUomId((String) mapValue.get("actualCurrencyUomId"));
         if (mapValue.containsKey("amount")) setInAmount((BigDecimal) mapValue.get("amount"));
+        if (mapValue.containsKey("appliedAmount")) setInAppliedAmount((BigDecimal) mapValue.get("appliedAmount"));
         if (mapValue.containsKey("comments")) setInComments((String) mapValue.get("comments"));
         if (mapValue.containsKey("currencyUomId")) setInCurrencyUomId((String) mapValue.get("currencyUomId"));
         if (mapValue.containsKey("effectiveDate")) setInEffectiveDate((Timestamp) mapValue.get("effectiveDate"));
         if (mapValue.containsKey("finAccountTransId")) setInFinAccountTransId((String) mapValue.get("finAccountTransId"));
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
+        if (mapValue.containsKey("openAmount")) setInOpenAmount((BigDecimal) mapValue.get("openAmount"));
         if (mapValue.containsKey("overrideGlAccountId")) setInOverrideGlAccountId((String) mapValue.get("overrideGlAccountId"));
         if (mapValue.containsKey("partyIdFrom")) setInPartyIdFrom((String) mapValue.get("partyIdFrom"));
         if (mapValue.containsKey("partyIdTo")) setInPartyIdTo((String) mapValue.get("partyIdTo"));

@@ -69,6 +69,7 @@ public class CreatePaymentAndApplicationService extends ServiceWrapper {
         actualCurrencyAmount("actualCurrencyAmount"),
         actualCurrencyUomId("actualCurrencyUomId"),
         amount("amount"),
+        appliedAmount("appliedAmount"),
         billingAccountId("billingAccountId"),
         comments("comments"),
         currencyUomId("currencyUomId"),
@@ -77,6 +78,7 @@ public class CreatePaymentAndApplicationService extends ServiceWrapper {
         invoiceId("invoiceId"),
         invoiceItemSeqId("invoiceItemSeqId"),
         locale("locale"),
+        openAmount("openAmount"),
         overrideGlAccountId("overrideGlAccountId"),
         partyIdFrom("partyIdFrom"),
         partyIdTo("partyIdTo"),
@@ -141,6 +143,7 @@ public class CreatePaymentAndApplicationService extends ServiceWrapper {
     private BigDecimal inActualCurrencyAmount;
     private String inActualCurrencyUomId;
     private BigDecimal inAmount;
+    private BigDecimal inAppliedAmount;
     private String inBillingAccountId;
     private String inComments;
     private String inCurrencyUomId;
@@ -149,6 +152,7 @@ public class CreatePaymentAndApplicationService extends ServiceWrapper {
     private String inInvoiceId;
     private String inInvoiceItemSeqId;
     private Locale inLocale;
+    private BigDecimal inOpenAmount;
     private String inOverrideGlAccountId;
     private String inPartyIdFrom;
     private String inPartyIdTo;
@@ -285,6 +289,14 @@ public class CreatePaymentAndApplicationService extends ServiceWrapper {
     /**
      * Auto generated value accessor.
      * This parameter is optional.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInAppliedAmount() {
+        return this.inAppliedAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
      * @return <code>String</code>
      */
     public String getInBillingAccountId() {
@@ -345,6 +357,14 @@ public class CreatePaymentAndApplicationService extends ServiceWrapper {
      */
     public Locale getInLocale() {
         return this.inLocale;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInOpenAmount() {
+        return this.inOpenAmount;
     }
     /**
      * Auto generated value accessor.
@@ -667,6 +687,15 @@ public class CreatePaymentAndApplicationService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inAppliedAmount the inAppliedAmount to set
+    */
+    public void setInAppliedAmount(BigDecimal inAppliedAmount) {
+        this.inParameters.add("appliedAmount");
+        this.inAppliedAmount = inAppliedAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inBillingAccountId the inBillingAccountId to set
     */
     public void setInBillingAccountId(String inBillingAccountId) {
@@ -735,6 +764,15 @@ public class CreatePaymentAndApplicationService extends ServiceWrapper {
     public void setInLocale(Locale inLocale) {
         this.inParameters.add("locale");
         this.inLocale = inLocale;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
+     * @param inOpenAmount the inOpenAmount to set
+    */
+    public void setInOpenAmount(BigDecimal inOpenAmount) {
+        this.inParameters.add("openAmount");
+        this.inOpenAmount = inOpenAmount;
     }
     /**
      * Auto generated value setter.
@@ -998,6 +1036,7 @@ public class CreatePaymentAndApplicationService extends ServiceWrapper {
         if (inParameters.contains("actualCurrencyAmount")) mapValue.put("actualCurrencyAmount", getInActualCurrencyAmount());
         if (inParameters.contains("actualCurrencyUomId")) mapValue.put("actualCurrencyUomId", getInActualCurrencyUomId());
         if (inParameters.contains("amount")) mapValue.put("amount", getInAmount());
+        if (inParameters.contains("appliedAmount")) mapValue.put("appliedAmount", getInAppliedAmount());
         if (inParameters.contains("billingAccountId")) mapValue.put("billingAccountId", getInBillingAccountId());
         if (inParameters.contains("comments")) mapValue.put("comments", getInComments());
         if (inParameters.contains("currencyUomId")) mapValue.put("currencyUomId", getInCurrencyUomId());
@@ -1006,6 +1045,7 @@ public class CreatePaymentAndApplicationService extends ServiceWrapper {
         if (inParameters.contains("invoiceId")) mapValue.put("invoiceId", getInInvoiceId());
         if (inParameters.contains("invoiceItemSeqId")) mapValue.put("invoiceItemSeqId", getInInvoiceItemSeqId());
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
+        if (inParameters.contains("openAmount")) mapValue.put("openAmount", getInOpenAmount());
         if (inParameters.contains("overrideGlAccountId")) mapValue.put("overrideGlAccountId", getInOverrideGlAccountId());
         if (inParameters.contains("partyIdFrom")) mapValue.put("partyIdFrom", getInPartyIdFrom());
         if (inParameters.contains("partyIdTo")) mapValue.put("partyIdTo", getInPartyIdTo());
@@ -1057,6 +1097,7 @@ public class CreatePaymentAndApplicationService extends ServiceWrapper {
         if (mapValue.containsKey("actualCurrencyAmount")) setInActualCurrencyAmount((BigDecimal) mapValue.get("actualCurrencyAmount"));
         if (mapValue.containsKey("actualCurrencyUomId")) setInActualCurrencyUomId((String) mapValue.get("actualCurrencyUomId"));
         if (mapValue.containsKey("amount")) setInAmount((BigDecimal) mapValue.get("amount"));
+        if (mapValue.containsKey("appliedAmount")) setInAppliedAmount((BigDecimal) mapValue.get("appliedAmount"));
         if (mapValue.containsKey("billingAccountId")) setInBillingAccountId((String) mapValue.get("billingAccountId"));
         if (mapValue.containsKey("comments")) setInComments((String) mapValue.get("comments"));
         if (mapValue.containsKey("currencyUomId")) setInCurrencyUomId((String) mapValue.get("currencyUomId"));
@@ -1065,6 +1106,7 @@ public class CreatePaymentAndApplicationService extends ServiceWrapper {
         if (mapValue.containsKey("invoiceId")) setInInvoiceId((String) mapValue.get("invoiceId"));
         if (mapValue.containsKey("invoiceItemSeqId")) setInInvoiceItemSeqId((String) mapValue.get("invoiceItemSeqId"));
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
+        if (mapValue.containsKey("openAmount")) setInOpenAmount((BigDecimal) mapValue.get("openAmount"));
         if (mapValue.containsKey("overrideGlAccountId")) setInOverrideGlAccountId((String) mapValue.get("overrideGlAccountId"));
         if (mapValue.containsKey("partyIdFrom")) setInPartyIdFrom((String) mapValue.get("partyIdFrom"));
         if (mapValue.containsKey("partyIdTo")) setInPartyIdTo((String) mapValue.get("partyIdTo"));

@@ -1000,6 +1000,10 @@ under the License.
     </extend-entity> 
 
     <extend-entity entity-name="Payment">
+        <!-- calculated amounts-->
+        <field name="appliedAmount" type="currency-precise"/>
+        <field name="openAmount" type="currency-precise"/>
+        <!-- accounting tags -->
         <field name="acctgTagEnumId1" type="id-ne"/>
         <field name="acctgTagEnumId2" type="id-ne"/>
         <field name="acctgTagEnumId3" type="id-ne"/>

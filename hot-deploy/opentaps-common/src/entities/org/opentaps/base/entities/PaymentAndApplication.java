@@ -50,7 +50,7 @@ import java.sql.Timestamp;
  * Auto generated base entity PaymentAndApplication.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectPaymentAndApplications", query="SELECT PY.PAYMENT_ID AS \"paymentId\",PY.PAYMENT_TYPE_ID AS \"paymentTypeId\",PY.PAYMENT_METHOD_TYPE_ID AS \"paymentMethodTypeId\",PY.PAYMENT_METHOD_ID AS \"paymentMethodId\",PY.PAYMENT_GATEWAY_RESPONSE_ID AS \"paymentGatewayResponseId\",PY.PAYMENT_PREFERENCE_ID AS \"paymentPreferenceId\",PY.PARTY_ID_FROM AS \"partyIdFrom\",PY.PARTY_ID_TO AS \"partyIdTo\",PY.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PY.STATUS_ID AS \"statusId\",PY.EFFECTIVE_DATE AS \"effectiveDate\",PY.PAYMENT_REF_NUM AS \"paymentRefNum\",PY.AMOUNT AS \"amount\",PY.CURRENCY_UOM_ID AS \"currencyUomId\",PY.COMMENTS AS \"comments\",PY.FIN_ACCOUNT_TRANS_ID AS \"finAccountTransId\",PY.ACTUAL_CURRENCY_AMOUNT AS \"actualCurrencyAmount\",PY.ACTUAL_CURRENCY_UOM_ID AS \"actualCurrencyUomId\",PY.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",PY.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",PY.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",PY.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",PY.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",PY.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",PY.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",PY.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",PY.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",PY.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",PA.PAYMENT_APPLICATION_ID AS \"paymentApplicationId\",PA.INVOICE_ID AS \"invoiceId\",PA.INVOICE_ITEM_SEQ_ID AS \"invoiceItemSeqId\",PA.BILLING_ACCOUNT_ID AS \"billingAccountId\",PA.OVERRIDE_GL_ACCOUNT_ID AS \"overrideGlAccountId\",PA.TO_PAYMENT_ID AS \"toPaymentId\",PA.TAX_AUTH_GEO_ID AS \"taxAuthGeoId\",PA.AMOUNT_APPLIED AS \"amountApplied\" FROM PAYMENT PY INNER JOIN PAYMENT_APPLICATION PA ON PY.PAYMENT_ID = PA.PAYMENT_ID", resultSetMapping="PaymentAndApplicationMapping")
+@NamedNativeQuery(name="selectPaymentAndApplications", query="SELECT PY.PAYMENT_ID AS \"paymentId\",PY.PAYMENT_TYPE_ID AS \"paymentTypeId\",PY.PAYMENT_METHOD_TYPE_ID AS \"paymentMethodTypeId\",PY.PAYMENT_METHOD_ID AS \"paymentMethodId\",PY.PAYMENT_GATEWAY_RESPONSE_ID AS \"paymentGatewayResponseId\",PY.PAYMENT_PREFERENCE_ID AS \"paymentPreferenceId\",PY.PARTY_ID_FROM AS \"partyIdFrom\",PY.PARTY_ID_TO AS \"partyIdTo\",PY.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PY.STATUS_ID AS \"statusId\",PY.EFFECTIVE_DATE AS \"effectiveDate\",PY.PAYMENT_REF_NUM AS \"paymentRefNum\",PY.AMOUNT AS \"amount\",PY.CURRENCY_UOM_ID AS \"currencyUomId\",PY.COMMENTS AS \"comments\",PY.FIN_ACCOUNT_TRANS_ID AS \"finAccountTransId\",PY.ACTUAL_CURRENCY_AMOUNT AS \"actualCurrencyAmount\",PY.ACTUAL_CURRENCY_UOM_ID AS \"actualCurrencyUomId\",PY.APPLIED_AMOUNT AS \"appliedAmount\",PY.OPEN_AMOUNT AS \"openAmount\",PY.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",PY.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",PY.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",PY.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",PY.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",PY.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",PY.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",PY.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",PY.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",PY.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",PA.PAYMENT_APPLICATION_ID AS \"paymentApplicationId\",PA.INVOICE_ID AS \"invoiceId\",PA.INVOICE_ITEM_SEQ_ID AS \"invoiceItemSeqId\",PA.BILLING_ACCOUNT_ID AS \"billingAccountId\",PA.OVERRIDE_GL_ACCOUNT_ID AS \"overrideGlAccountId\",PA.TO_PAYMENT_ID AS \"toPaymentId\",PA.TAX_AUTH_GEO_ID AS \"taxAuthGeoId\",PA.AMOUNT_APPLIED AS \"amountApplied\" FROM PAYMENT PY INNER JOIN PAYMENT_APPLICATION PA ON PY.PAYMENT_ID = PA.PAYMENT_ID", resultSetMapping="PaymentAndApplicationMapping")
 @SqlResultSetMapping(name="PaymentAndApplicationMapping", entities={
 @EntityResult(entityClass=PaymentAndApplication.class, fields = {
 @FieldResult(name="paymentId", column="paymentId")
@@ -71,6 +71,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="finAccountTransId", column="finAccountTransId")
 ,@FieldResult(name="actualCurrencyAmount", column="actualCurrencyAmount")
 ,@FieldResult(name="actualCurrencyUomId", column="actualCurrencyUomId")
+,@FieldResult(name="appliedAmount", column="appliedAmount")
+,@FieldResult(name="openAmount", column="openAmount")
 ,@FieldResult(name="acctgTagEnumId1", column="acctgTagEnumId1")
 ,@FieldResult(name="acctgTagEnumId2", column="acctgTagEnumId2")
 ,@FieldResult(name="acctgTagEnumId3", column="acctgTagEnumId3")
@@ -113,6 +115,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("finAccountTransId", "PY.FIN_ACCOUNT_TRANS_ID");
         fields.put("actualCurrencyAmount", "PY.ACTUAL_CURRENCY_AMOUNT");
         fields.put("actualCurrencyUomId", "PY.ACTUAL_CURRENCY_UOM_ID");
+        fields.put("appliedAmount", "PY.APPLIED_AMOUNT");
+        fields.put("openAmount", "PY.OPEN_AMOUNT");
         fields.put("acctgTagEnumId1", "PY.ACCTG_TAG_ENUM_ID1");
         fields.put("acctgTagEnumId2", "PY.ACCTG_TAG_ENUM_ID2");
         fields.put("acctgTagEnumId3", "PY.ACCTG_TAG_ENUM_ID3");
@@ -152,6 +156,8 @@ fieldMapColumns.put("PaymentAndApplication", fields);
     finAccountTransId("finAccountTransId"),
     actualCurrencyAmount("actualCurrencyAmount"),
     actualCurrencyUomId("actualCurrencyUomId"),
+    appliedAmount("appliedAmount"),
+    openAmount("openAmount"),
     acctgTagEnumId1("acctgTagEnumId1"),
     acctgTagEnumId2("acctgTagEnumId2"),
     acctgTagEnumId3("acctgTagEnumId3"),
@@ -216,6 +222,10 @@ fieldMapColumns.put("PaymentAndApplication", fields);
    private BigDecimal actualCurrencyAmount;
     
    private String actualCurrencyUomId;
+    
+   private BigDecimal appliedAmount;
+    
+   private BigDecimal openAmount;
     
    private String acctgTagEnumId1;
     
@@ -313,7 +323,7 @@ fieldMapColumns.put("PaymentAndApplication", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("paymentId");this.primaryKeyNames.add("paymentApplicationId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("paymentId");this.allFieldsNames.add("paymentTypeId");this.allFieldsNames.add("paymentMethodTypeId");this.allFieldsNames.add("paymentMethodId");this.allFieldsNames.add("paymentGatewayResponseId");this.allFieldsNames.add("paymentPreferenceId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("statusId");this.allFieldsNames.add("effectiveDate");this.allFieldsNames.add("paymentRefNum");this.allFieldsNames.add("amount");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("comments");this.allFieldsNames.add("finAccountTransId");this.allFieldsNames.add("actualCurrencyAmount");this.allFieldsNames.add("actualCurrencyUomId");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");this.allFieldsNames.add("paymentApplicationId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("toPaymentId");this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("amountApplied");
+      this.allFieldsNames.add("paymentId");this.allFieldsNames.add("paymentTypeId");this.allFieldsNames.add("paymentMethodTypeId");this.allFieldsNames.add("paymentMethodId");this.allFieldsNames.add("paymentGatewayResponseId");this.allFieldsNames.add("paymentPreferenceId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("statusId");this.allFieldsNames.add("effectiveDate");this.allFieldsNames.add("paymentRefNum");this.allFieldsNames.add("amount");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("comments");this.allFieldsNames.add("finAccountTransId");this.allFieldsNames.add("actualCurrencyAmount");this.allFieldsNames.add("actualCurrencyUomId");this.allFieldsNames.add("appliedAmount");this.allFieldsNames.add("openAmount");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");this.allFieldsNames.add("paymentApplicationId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("toPaymentId");this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("amountApplied");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -456,6 +466,20 @@ fieldMapColumns.put("PaymentAndApplication", fields);
      */
     public void setActualCurrencyUomId(String actualCurrencyUomId) {
         this.actualCurrencyUomId = actualCurrencyUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param appliedAmount the appliedAmount to set
+     */
+    public void setAppliedAmount(BigDecimal appliedAmount) {
+        this.appliedAmount = appliedAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param openAmount the openAmount to set
+     */
+    public void setOpenAmount(BigDecimal openAmount) {
+        this.openAmount = openAmount;
     }
     /**
      * Auto generated value setter.
@@ -709,6 +733,20 @@ fieldMapColumns.put("PaymentAndApplication", fields);
      */
     public String getActualCurrencyUomId() {
         return this.actualCurrencyUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getAppliedAmount() {
+        return this.appliedAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getOpenAmount() {
+        return this.openAmount;
     }
     /**
      * Auto generated value accessor.
@@ -988,6 +1026,8 @@ fieldMapColumns.put("PaymentAndApplication", fields);
         setFinAccountTransId((String) mapValue.get("finAccountTransId"));
         setActualCurrencyAmount(convertToBigDecimal(mapValue.get("actualCurrencyAmount")));
         setActualCurrencyUomId((String) mapValue.get("actualCurrencyUomId"));
+        setAppliedAmount(convertToBigDecimal(mapValue.get("appliedAmount")));
+        setOpenAmount(convertToBigDecimal(mapValue.get("openAmount")));
         setAcctgTagEnumId1((String) mapValue.get("acctgTagEnumId1"));
         setAcctgTagEnumId2((String) mapValue.get("acctgTagEnumId2"));
         setAcctgTagEnumId3((String) mapValue.get("acctgTagEnumId3"));
@@ -1031,6 +1071,8 @@ fieldMapColumns.put("PaymentAndApplication", fields);
         mapValue.put("finAccountTransId", getFinAccountTransId());
         mapValue.put("actualCurrencyAmount", getActualCurrencyAmount());
         mapValue.put("actualCurrencyUomId", getActualCurrencyUomId());
+        mapValue.put("appliedAmount", getAppliedAmount());
+        mapValue.put("openAmount", getOpenAmount());
         mapValue.put("acctgTagEnumId1", getAcctgTagEnumId1());
         mapValue.put("acctgTagEnumId2", getAcctgTagEnumId2());
         mapValue.put("acctgTagEnumId3", getAcctgTagEnumId3());

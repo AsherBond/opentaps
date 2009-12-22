@@ -50,7 +50,7 @@ import java.sql.Timestamp;
  * Auto generated base entity CashDrawerTransPaymentAndMType.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectCashDrawerTransPaymentAndMTypes", query="SELECT CDT.CASH_DRAWER_ID AS \"cashDrawerId\",CDT.CASH_DRAWER_ITEM_SEQ_ID AS \"cashDrawerItemSeqId\",P.PAYMENT_METHOD_TYPE_ID AS \"paymentMethodTypeId\",PMT.DESCRIPTION AS \"description\",P.PAYMENT_ID AS \"paymentId\",P.PAYMENT_TYPE_ID AS \"paymentTypeId\",P.PAYMENT_METHOD_ID AS \"paymentMethodId\",P.PAYMENT_GATEWAY_RESPONSE_ID AS \"paymentGatewayResponseId\",P.PAYMENT_PREFERENCE_ID AS \"paymentPreferenceId\",P.PARTY_ID_FROM AS \"partyIdFrom\",P.PARTY_ID_TO AS \"partyIdTo\",P.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",P.STATUS_ID AS \"statusId\",P.EFFECTIVE_DATE AS \"effectiveDate\",P.PAYMENT_REF_NUM AS \"paymentRefNum\",P.AMOUNT AS \"amount\",P.CURRENCY_UOM_ID AS \"currencyUomId\",P.COMMENTS AS \"comments\",P.FIN_ACCOUNT_TRANS_ID AS \"finAccountTransId\",P.OVERRIDE_GL_ACCOUNT_ID AS \"overrideGlAccountId\",P.ACTUAL_CURRENCY_AMOUNT AS \"actualCurrencyAmount\",P.ACTUAL_CURRENCY_UOM_ID AS \"actualCurrencyUomId\",P.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",P.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",P.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",P.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",P.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",P.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",P.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",P.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",P.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",P.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\" FROM CASH_DRAWER_TRANSACTION CDT INNER JOIN PAYMENT P ON CDT.PAYMENT_ID = P.PAYMENT_ID INNER JOIN PAYMENT_METHOD_TYPE PMT ON P.PAYMENT_METHOD_TYPE_ID = PMT.PAYMENT_METHOD_TYPE_ID", resultSetMapping="CashDrawerTransPaymentAndMTypeMapping")
+@NamedNativeQuery(name="selectCashDrawerTransPaymentAndMTypes", query="SELECT CDT.CASH_DRAWER_ID AS \"cashDrawerId\",CDT.CASH_DRAWER_ITEM_SEQ_ID AS \"cashDrawerItemSeqId\",P.PAYMENT_METHOD_TYPE_ID AS \"paymentMethodTypeId\",PMT.DESCRIPTION AS \"description\",P.PAYMENT_ID AS \"paymentId\",P.PAYMENT_TYPE_ID AS \"paymentTypeId\",P.PAYMENT_METHOD_ID AS \"paymentMethodId\",P.PAYMENT_GATEWAY_RESPONSE_ID AS \"paymentGatewayResponseId\",P.PAYMENT_PREFERENCE_ID AS \"paymentPreferenceId\",P.PARTY_ID_FROM AS \"partyIdFrom\",P.PARTY_ID_TO AS \"partyIdTo\",P.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",P.STATUS_ID AS \"statusId\",P.EFFECTIVE_DATE AS \"effectiveDate\",P.PAYMENT_REF_NUM AS \"paymentRefNum\",P.AMOUNT AS \"amount\",P.CURRENCY_UOM_ID AS \"currencyUomId\",P.COMMENTS AS \"comments\",P.FIN_ACCOUNT_TRANS_ID AS \"finAccountTransId\",P.OVERRIDE_GL_ACCOUNT_ID AS \"overrideGlAccountId\",P.ACTUAL_CURRENCY_AMOUNT AS \"actualCurrencyAmount\",P.ACTUAL_CURRENCY_UOM_ID AS \"actualCurrencyUomId\",P.APPLIED_AMOUNT AS \"appliedAmount\",P.OPEN_AMOUNT AS \"openAmount\",P.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",P.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",P.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",P.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",P.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",P.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",P.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",P.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",P.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",P.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\" FROM CASH_DRAWER_TRANSACTION CDT INNER JOIN PAYMENT P ON CDT.PAYMENT_ID = P.PAYMENT_ID INNER JOIN PAYMENT_METHOD_TYPE PMT ON P.PAYMENT_METHOD_TYPE_ID = PMT.PAYMENT_METHOD_TYPE_ID", resultSetMapping="CashDrawerTransPaymentAndMTypeMapping")
 @SqlResultSetMapping(name="CashDrawerTransPaymentAndMTypeMapping", entities={
 @EntityResult(entityClass=CashDrawerTransPaymentAndMType.class, fields = {
 @FieldResult(name="cashDrawerId", column="cashDrawerId")
@@ -75,6 +75,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="overrideGlAccountId", column="overrideGlAccountId")
 ,@FieldResult(name="actualCurrencyAmount", column="actualCurrencyAmount")
 ,@FieldResult(name="actualCurrencyUomId", column="actualCurrencyUomId")
+,@FieldResult(name="appliedAmount", column="appliedAmount")
+,@FieldResult(name="openAmount", column="openAmount")
 ,@FieldResult(name="acctgTagEnumId1", column="acctgTagEnumId1")
 ,@FieldResult(name="acctgTagEnumId2", column="acctgTagEnumId2")
 ,@FieldResult(name="acctgTagEnumId3", column="acctgTagEnumId3")
@@ -113,6 +115,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("overrideGlAccountId", "P.OVERRIDE_GL_ACCOUNT_ID");
         fields.put("actualCurrencyAmount", "P.ACTUAL_CURRENCY_AMOUNT");
         fields.put("actualCurrencyUomId", "P.ACTUAL_CURRENCY_UOM_ID");
+        fields.put("appliedAmount", "P.APPLIED_AMOUNT");
+        fields.put("openAmount", "P.OPEN_AMOUNT");
         fields.put("acctgTagEnumId1", "P.ACCTG_TAG_ENUM_ID1");
         fields.put("acctgTagEnumId2", "P.ACCTG_TAG_ENUM_ID2");
         fields.put("acctgTagEnumId3", "P.ACCTG_TAG_ENUM_ID3");
@@ -148,6 +152,8 @@ fieldMapColumns.put("CashDrawerTransPaymentAndMType", fields);
     overrideGlAccountId("overrideGlAccountId"),
     actualCurrencyAmount("actualCurrencyAmount"),
     actualCurrencyUomId("actualCurrencyUomId"),
+    appliedAmount("appliedAmount"),
+    openAmount("openAmount"),
     acctgTagEnumId1("acctgTagEnumId1"),
     acctgTagEnumId2("acctgTagEnumId2"),
     acctgTagEnumId3("acctgTagEnumId3"),
@@ -213,6 +219,10 @@ fieldMapColumns.put("CashDrawerTransPaymentAndMType", fields);
     
    private String actualCurrencyUomId;
     
+   private BigDecimal appliedAmount;
+    
+   private BigDecimal openAmount;
+    
    private String acctgTagEnumId1;
     
    private String acctgTagEnumId2;
@@ -251,7 +261,7 @@ fieldMapColumns.put("CashDrawerTransPaymentAndMType", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("cashDrawerId");this.primaryKeyNames.add("cashDrawerItemSeqId");this.primaryKeyNames.add("paymentId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("cashDrawerId");this.allFieldsNames.add("cashDrawerItemSeqId");this.allFieldsNames.add("paymentMethodTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("paymentTypeId");this.allFieldsNames.add("paymentMethodId");this.allFieldsNames.add("paymentGatewayResponseId");this.allFieldsNames.add("paymentPreferenceId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("statusId");this.allFieldsNames.add("effectiveDate");this.allFieldsNames.add("paymentRefNum");this.allFieldsNames.add("amount");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("comments");this.allFieldsNames.add("finAccountTransId");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("actualCurrencyAmount");this.allFieldsNames.add("actualCurrencyUomId");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");
+      this.allFieldsNames.add("cashDrawerId");this.allFieldsNames.add("cashDrawerItemSeqId");this.allFieldsNames.add("paymentMethodTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("paymentTypeId");this.allFieldsNames.add("paymentMethodId");this.allFieldsNames.add("paymentGatewayResponseId");this.allFieldsNames.add("paymentPreferenceId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("statusId");this.allFieldsNames.add("effectiveDate");this.allFieldsNames.add("paymentRefNum");this.allFieldsNames.add("amount");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("comments");this.allFieldsNames.add("finAccountTransId");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("actualCurrencyAmount");this.allFieldsNames.add("actualCurrencyUomId");this.allFieldsNames.add("appliedAmount");this.allFieldsNames.add("openAmount");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -422,6 +432,20 @@ fieldMapColumns.put("CashDrawerTransPaymentAndMType", fields);
      */
     public void setActualCurrencyUomId(String actualCurrencyUomId) {
         this.actualCurrencyUomId = actualCurrencyUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param appliedAmount the appliedAmount to set
+     */
+    public void setAppliedAmount(BigDecimal appliedAmount) {
+        this.appliedAmount = appliedAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param openAmount the openAmount to set
+     */
+    public void setOpenAmount(BigDecimal openAmount) {
+        this.openAmount = openAmount;
     }
     /**
      * Auto generated value setter.
@@ -650,6 +674,20 @@ fieldMapColumns.put("CashDrawerTransPaymentAndMType", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getAppliedAmount() {
+        return this.appliedAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getOpenAmount() {
+        return this.openAmount;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>String</code>
      */
     public String getAcctgTagEnumId1() {
@@ -766,6 +804,8 @@ fieldMapColumns.put("CashDrawerTransPaymentAndMType", fields);
         setOverrideGlAccountId((String) mapValue.get("overrideGlAccountId"));
         setActualCurrencyAmount(convertToBigDecimal(mapValue.get("actualCurrencyAmount")));
         setActualCurrencyUomId((String) mapValue.get("actualCurrencyUomId"));
+        setAppliedAmount(convertToBigDecimal(mapValue.get("appliedAmount")));
+        setOpenAmount(convertToBigDecimal(mapValue.get("openAmount")));
         setAcctgTagEnumId1((String) mapValue.get("acctgTagEnumId1"));
         setAcctgTagEnumId2((String) mapValue.get("acctgTagEnumId2"));
         setAcctgTagEnumId3((String) mapValue.get("acctgTagEnumId3"));
@@ -805,6 +845,8 @@ fieldMapColumns.put("CashDrawerTransPaymentAndMType", fields);
         mapValue.put("overrideGlAccountId", getOverrideGlAccountId());
         mapValue.put("actualCurrencyAmount", getActualCurrencyAmount());
         mapValue.put("actualCurrencyUomId", getActualCurrencyUomId());
+        mapValue.put("appliedAmount", getAppliedAmount());
+        mapValue.put("openAmount", getOpenAmount());
         mapValue.put("acctgTagEnumId1", getAcctgTagEnumId1());
         mapValue.put("acctgTagEnumId2", getAcctgTagEnumId2());
         mapValue.put("acctgTagEnumId3", getAcctgTagEnumId3());
