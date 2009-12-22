@@ -46,7 +46,7 @@
   <extend-property name="locale" values="nl"/>
   <extend-property name="locale" values="it"/>-->
   <inherits name='org.opentaps.base.constants'/>
-  <stylesheet src="opentaps.css"/>
+  <stylesheet src="gwt-opentaps.css"/>
   <stylesheet src="resources/css/ext-all.css"/>
   <stylesheet src="resources/css/xtheme-gray.css"/>
   <script src="adapter/ext/ext-base.js" />

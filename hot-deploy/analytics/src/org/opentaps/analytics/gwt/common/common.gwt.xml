@@ -8,7 +8,6 @@
 
     <extend-property name="locale" values="en"/>
 
-    <!-- stylesheet src="opentaps.css"/-->
     <stylesheet src="resources/css/ext-all.css"/>
     <stylesheet src="resources/css/xtheme-gray.css"/>
     <script src="adapter/ext/ext-base.js" />
