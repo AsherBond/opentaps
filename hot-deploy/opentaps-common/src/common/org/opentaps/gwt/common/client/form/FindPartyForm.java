@@ -31,10 +31,10 @@ import org.opentaps.gwt.common.client.suggest.StateAutocomplete;
 /**
  * Base class for the common Find party form + list view pattern.
  *
- * @see org.opentaps.gwt.crmsfa.accounts.client.form.FindAccountsForm
+ * @see org.opentaps.gwt.common.client.form.FindAccountsForm
  * @see org.opentaps.gwt.common.client.form.FindContactsForm
- * @see org.opentaps.gwt.crmsfa.leads.client.form.FindLeadsForm
- * @see org.opentaps.gwt.crmsfa.partners.client.form.FindPartnersForm
+ * @see org.opentaps.gwt.crmsfa.client.leads.form.FindLeadsForm
+ * @see org.opentaps.gwt.crmsfa.client.partners.form.FindPartnersForm
  * @see org.opentaps.gwt.purchasing.suppliers.client.form.FindSuppliersForm
  */
 public abstract class FindPartyForm extends FindEntityForm<PartyListView> {
