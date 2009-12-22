@@ -1396,10 +1396,15 @@ public final class OrderEvents {
                 jrParameters.put("clientPhoneNumberList", new JRMapCollectionDataSource(clientPhoneNumbers));
             }
         }
-        
+
         // retrieve contact mech info and pass it to JR
         List<Map<String, Object>> orderContactMechList = FastList.newInstance();
         for (OrderContactMech orderContactMech : order.getOrderContactMeches()) {
+            // ignore if the address is set to _NA_
+            if ("_NA_".equals(orderContactMech.getContactMechId())) {
+                continue;
+            }
+
             Map<String, Object> contactMechLine = FastMap.newInstance();
             ContactMech contactMech = orderContactMech.getContactMech();
             if (contactMech.getContactMechTypeId().equals("POSTAL_ADDRESS") && contactMech.getPostalAddress() != null) {

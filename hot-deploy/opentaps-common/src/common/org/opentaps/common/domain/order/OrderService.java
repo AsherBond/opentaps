@@ -642,7 +642,7 @@ public class OrderService extends DomainService implements OrderServiceInterface
     /** {@inheritDoc} */
     public void updateOrderShippingAddress() throws ServiceException {
 
-        if ("_NA_".equals(newOrderContactMechId)) {
+        if (UtilValidate.isEmpty(newOrderContactMechId)) {
             return;
         }
 
@@ -663,7 +663,7 @@ public class OrderService extends DomainService implements OrderServiceInterface
     /** {@inheritDoc} */
     public void updateOrderBillingAddress() throws ServiceException {
 
-        if ("_NA_".equals(newOrderContactMechId)) {
+        if (UtilValidate.isEmpty(newOrderContactMechId)) {
             return;
         }
 

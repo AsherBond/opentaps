@@ -71,8 +71,8 @@ context.put("orderHeader", Repository.genericValueFromEntity(delegator, order));
 
 // Add to contact mech values phone numbers
 cmvm = context.get("orderContactMechValueMaps");
+billFromPartyId = order.getBillFromVendorPartyId();
 if (UtilValidate.isNotEmpty(cmvm)) {
-    billFromPartyId = order.getBillFromVendorPartyId();
     conditions = FastList.newInstance();
     conditions.add(new EntityExpr("partyId", EntityOperator.EQUALS, billFromPartyId));
     conditions.add(new EntityExpr("contactMechTypeId", EntityOperator.EQUALS, "TELECOM_NUMBER"));
@@ -120,22 +120,22 @@ if (UtilValidate.isNotEmpty(facilities)) {
 }
 // add Purchase Order Delivery Address to choices map
 if (UtilValidate.isNotEmpty(billFromPartyId)) {
-	         facilityContactMechValueMap = new HashMap();
-	         // PO_DELIV_ADDRESS postal address
-	         purchaseOrderDeliveryAddresses = PartyContactHelper.getContactMechsByPurpose(billFromPartyId, "POSTAL_ADDRESS", "PO_DELIV_ADDRESS", true, delegator);
-	         if ((purchaseOrderDeliveryAddresses != null) && (purchaseOrderDeliveryAddresses.size() > 0)) {
-	            contactMech = purchaseOrderDeliveryAddresses.get(0).getRelatedOne("ContactMech");
-	            facilityContactMechValueMap.put("contactMech", contactMech);
-	            if (contactMech != null) {
-	                facilityContactMechValueMap.put("postalAddress", contactMech.getRelatedOne("PostalAddress"));
-	            }
-	            facilityContactMechValueMaps = new LinkedList();
-	            facilityContactMechValueMaps.add(facilityContactMechValueMap);
-	            // add it to choices map
-	            facilityMaps.add(UtilMisc.toMap(
-	               "facility", null,
-	               "facilityContactMechList", facilityContactMechValueMaps
-	            ));
-	         } 
+    facilityContactMechValueMap = new HashMap();
+    // PO_DELIV_ADDRESS postal address
+    purchaseOrderDeliveryAddresses = PartyContactHelper.getContactMechsByPurpose(billFromPartyId, "POSTAL_ADDRESS", "PO_DELIV_ADDRESS", true, delegator);
+    if ((purchaseOrderDeliveryAddresses != null) && (purchaseOrderDeliveryAddresses.size() > 0)) {
+        contactMech = purchaseOrderDeliveryAddresses.get(0).getRelatedOne("ContactMech");
+        facilityContactMechValueMap.put("contactMech", contactMech);
+        if (contactMech != null) {
+            facilityContactMechValueMap.put("postalAddress", contactMech.getRelatedOne("PostalAddress"));
+        }
+        facilityContactMechValueMaps = new LinkedList();
+        facilityContactMechValueMaps.add(facilityContactMechValueMap);
+        // add it to choices map
+        facilityMaps.add(UtilMisc.toMap(
+                                        "facility", null,
+                                        "facilityContactMechList", facilityContactMechValueMaps
+                                        ));
+    }
 }
 context{"facilityMaps"} = facilityMaps;

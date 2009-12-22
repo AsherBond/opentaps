@@ -90,10 +90,8 @@ under the License.
                     </#if>
                   </#if>
                 <#else/>
-                  <div class="tabletext">${uiLabelMap.CrmAddressUnknown}</div>
-                  <#if order.isApproved()>
-                    <div class="errorMessage">${uiLabelMap.CrmOrderCannotShipUntilShippingAddressSet}</div>
-                  </#if>
+                  <div class="tabletext">${uiLabelMap.PurchNoShippingAddress}</div>
+                  <#assign shippingContactMechId = contactMech.contactMechId />
                 </#if>
               <#elseif contactMech.contactMechTypeId == "EMAIL_ADDRESS">
                 <div class="tabletext">
@@ -174,8 +172,6 @@ under the License.
         <td width="5">&nbsp;</td>
         <td width="80%">
           <select name="newOrderContactMechId" class="selectBox">
-            <option value="_NA_"></option>
-            <option value="">${uiLabelMap.PurchNoShippingAddress}</option>
             <#list facilityMaps as facilityMap>
               <#assign facility = facilityMap.facility?if_exists>
               <#assign facilityContactMechList = facilityMap.facilityContactMechList>
@@ -184,13 +180,14 @@ under the License.
                   <#if facilityContactMech.postalAddress?exists>
                     <#assign address = facilityContactMech.postalAddress>
                     <#assign contactMech = facilityContactMech.contactMech>
-                    <option value="${contactMech.contactMechId}"  <#if contactMech.contactMechId==shippingContactMechId?default("_NA_")> selected</#if>>
+                    <option value="${contactMech.contactMechId}"  <#if contactMech.contactMechId==shippingContactMechId?default("_NA_")> selected="selected"</#if>>
                       <#if facility?has_content>${facility.facilityName?if_exists}<#else>${address.toName?if_exists}</#if> ${uiLabelMap.CommonAt} ${address.address1} - ${address.city?if_exists} ${address.countryGeoId?if_exists}
                     </option>
                   </#if>
                 </#list> 
               </#if>          
             </#list>
+            <option value="_NA_" <#if shippingContactMechId?if_exists=="_NA_"> selected="selected"</#if>>${uiLabelMap.PurchNoShippingAddress}</option>
           </select>
         </td>
       </tr>

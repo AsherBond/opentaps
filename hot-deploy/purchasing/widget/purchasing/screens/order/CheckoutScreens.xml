@@ -136,7 +136,7 @@ under the License.
                             <html><html-template location="component://order/webapp/ordermgr/entry/order/orderpaymentinfo.ftl"/></html>
                         </platform-specific>
                         <platform-specific>
-                            <html><html-template location="component://order/webapp/ordermgr/entry/order/shipGroupConfirmSummary.ftl"/></html>
+                            <html><html-template location="component://purchasing/webapp/purchasing/order/entry/shipGroupConfirmSummary.ftl"/></html>
                         </platform-specific>
                         <platform-specific>
                             <html><html-template location="component://opentaps-common/webapp/common/order/reviewOrderItems.ftl"/></html>

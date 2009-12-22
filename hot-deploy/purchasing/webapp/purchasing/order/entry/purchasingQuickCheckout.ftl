@@ -211,6 +211,7 @@
            </#list> 
            </#if>          
        </#list>
+         <option value="_NA_">${uiLabelMap.PurchNoShippingAddress}</option>
        </select>
      </td>
    </tr>
