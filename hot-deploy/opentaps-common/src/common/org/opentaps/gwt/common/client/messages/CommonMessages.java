@@ -5860,6 +5860,8 @@ public interface CommonMessages extends Messages {
     String findByAdvanced();
     @DefaultMessage("Id")
     String findById();
+    @DefaultMessage("Name and ID")
+    String findByIdAndName();
     @DefaultMessage("Name")
     String findByName();
     @DefaultMessage("Phone")

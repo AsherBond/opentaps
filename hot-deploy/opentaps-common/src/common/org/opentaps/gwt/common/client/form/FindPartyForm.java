@@ -39,10 +39,8 @@ import org.opentaps.gwt.common.client.suggest.StateAutocomplete;
  */
 public abstract class FindPartyForm extends FindEntityForm<PartyListView> {
 
-    private final SubFormPanel filterByIdTab;
+    private final SubFormPanel filterByIdAndNameTab;
     private final TextField idInput;
-
-    private final SubFormPanel filterByNameTab;
 
     private final SubFormPanel filterByPhoneTab;
     private final PhoneNumberField phoneInput;
@@ -65,14 +63,13 @@ public abstract class FindPartyForm extends FindEntityForm<PartyListView> {
     public FindPartyForm(String idLabel, String findButtonLabel) {
         super(findButtonLabel);
 
-        // Filter by Name
-        filterByNameTab = getMainForm().addTab(UtilUi.MSG.findByName());
-        buildFilterByNameTab(filterByNameTab);
-
-        // Filter by ID
-        filterByIdTab = getMainForm().addTab(UtilUi.MSG.findById());
+        // Filter by ID and Name
+        filterByIdAndNameTab = getMainForm().addTab(UtilUi.MSG.findByIdAndName());
         idInput = new TextField(idLabel, "id", getInputLength());
-        filterByIdTab.addField(idInput);
+        filterByIdAndNameTab.addField(idInput);
+        // adds the name fields, implemented in the sub classes
+        buildFilterByNameTab(filterByIdAndNameTab);
+
 
         // Filter by Phone Number
         filterByPhoneTab = getMainForm().addTab(UtilUi.MSG.findByPhone());
@@ -142,9 +139,8 @@ public abstract class FindPartyForm extends FindEntityForm<PartyListView> {
     @Override protected void filter() {
         getListView().clearFilters();
         Panel p = getMainForm().getTabPanel().getActiveTab();
-        if (p == filterByIdTab) {
+        if (p == filterByIdAndNameTab) {
             filterById();
-        } else if (p == filterByNameTab) {
             filterByNames();
         } else if (p == filterByPhoneTab) {
             filterByPhoneNumber();
