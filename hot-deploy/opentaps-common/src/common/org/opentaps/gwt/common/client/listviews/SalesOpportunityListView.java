@@ -48,7 +48,7 @@ public class SalesOpportunityListView  extends EntityListView {
     }
 
     /**
-     * Placeholder to remind extended classes that on of the init methods must be called.
+     * Placeholder to remind extended classes that one of the init methods must be called.
      */
     public void init() {
         init(OpportunityLookupConfiguration.URL_FIND_OPPORTUNITIES, "/crmsfa/control/viewOpportunity?salesOpportunityId={0}", UtilUi.MSG.crmOpportunityId());
@@ -98,7 +98,7 @@ public class SalesOpportunityListView  extends EntityListView {
     public void filterMyOrTeamParties(String viewPref) {
         setFilter(OpportunityLookupConfiguration.IN_RESPONSIBILTY, viewPref);
     }
-    
+
     /**
      * Filters the records of the list if include the inactive opportunities.
      * @param findAll a <code>boolean</code> value
@@ -132,8 +132,8 @@ public class SalesOpportunityListView  extends EntityListView {
     }
 
     /**
-     * Filter the records of the list by parent account. 
-     * @param accountPartyId a <code>String</code> value that is related partyId with ACCOUNT role.
+     * Filter the records of the list by parent account.
+     * @param partyId a <code>String</code> value that is related partyId with ACCOUNT role.
      */
     public void filterByAccount(String partyId) {
         setFilter(OpportunityLookupConfiguration.INOUT_PARTY_ID_FROM_ID, partyId);
@@ -141,8 +141,8 @@ public class SalesOpportunityListView  extends EntityListView {
     }
 
     /**
-     * Filter the records of the list by parent contact. 
-     * @param accountPartyId a <code>String</code> value that is related partyId with CONTACT role.
+     * Filter the records of the list by parent contact.
+     * @param partyId a <code>String</code> value that is related partyId with CONTACT role.
      */
     public void filterByContact(String partyId) {
         setFilter(OpportunityLookupConfiguration.INOUT_PARTY_ID_FROM_ID, partyId);
@@ -150,8 +150,8 @@ public class SalesOpportunityListView  extends EntityListView {
     }
 
     /**
-     * Filter the records of the list by parent lead. 
-     * @param accountPartyId a <code>String</code> value that is related partyId with PROSPECT role.
+     * Filter the records of the list by parent lead.
+     * @param partyId a <code>String</code> value that is related partyId with PROSPECT role.
      */
     public void filterByLead(String partyId) {
         setFilter(OpportunityLookupConfiguration.INOUT_PARTY_ID_FROM_ID, partyId);
