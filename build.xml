@@ -58,6 +58,7 @@ under the License.
         <antcall target="clean-catalina"/>
         <antcall target="clean-cache"/>
         <antcall target="clean-gwt"/>
+        <antcall target="clean-indexes"/>
         <antcall target="clean"/>
     </target>
 
@@ -92,8 +93,8 @@ under the License.
             <filelist dir="." files="framework/build.xml"/>
         </subant>
     </target>
-    
-    <target name="clean-indexs">
+
+    <target name="clean-indexes" description="Remove indexes for full text search">
         <delete verbose="on" dir="runtime/lucene"/>
     </target>
 
