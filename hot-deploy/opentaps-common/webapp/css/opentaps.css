@@ -188,7 +188,7 @@ div.sectionHeaderTitle span {
     margin-left: 8px;
     padding-left: 6px;
     padding-right: 6px;
-    font: bold 8pt Verdana, Arial, Helvetica, sans-serif;
+    font: 8pt Verdana, Arial, Helvetica, sans-serif;
     color: #000099;
     background-color: white;
     border: 1px solid #AAAAAA;
@@ -201,7 +201,7 @@ div.subMenuButton {
     display: inline;
 }
 .subMenuButton a {
-    font: bold 8pt Verdana, Arial, Helvetica, sans-serif;
+    font: 8pt Verdana, Arial, Helvetica, sans-serif;
     color: #000099;
     white-space: nowrap;
 }
@@ -215,7 +215,7 @@ div.subMenuButton {
     margin-left: 8px;
     padding-left: 6px;
     padding-right: 6px;
-    font: bold 8pt Verdana, Arial, Helvetica, sans-serif;
+    font: 8pt Verdana, Arial, Helvetica, sans-serif;
     color: #AA0000;
     background-color: white;
     border: 1px solid #AAAAAA;
@@ -226,7 +226,7 @@ div.subMenuButton {
     padding-left: 6px;
     padding-right: 6px;
     padding-bottom: 1px;
-    font: bold 8pt Verdana, Arial, Helvetica, sans-serif;
+    font: 8pt Verdana, Arial, Helvetica, sans-serif;
     color: #AA0000 !important;
     background-color: white;
     border: 1px solid #AAAAAA;
