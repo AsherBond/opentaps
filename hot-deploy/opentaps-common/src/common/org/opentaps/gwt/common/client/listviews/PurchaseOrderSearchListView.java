@@ -40,7 +40,7 @@ public class PurchaseOrderSearchListView extends PurchaseOrderListView implement
 
         // the grid should not try to load before a query is made
         setAutoLoad(false);
-        init(PurchaseOrderLookupConfiguration.URL_SEARCH_ORDERS, "/crmsfa/control/orderview?orderId={0}", UtilUi.MSG.orderOrderId());
+        init(PurchaseOrderLookupConfiguration.URL_SEARCH_ORDERS, "/purchasing/control/orderview?orderId={0}", UtilUi.MSG.orderOrderId());
     }
 
     /** {@inheritDoc} */
