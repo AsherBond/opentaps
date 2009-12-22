@@ -195,7 +195,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
     /** {@inheritDoc} */
     public PostalAddress getShippingAddress(Invoice invoice) throws RepositoryException {
         // if more than one defined, then return a "random" one
-        InvoiceContactMech mech = getFirst(findList(InvoiceContactMech.class, map(InvoiceContactMech.Fields.invoiceId, invoice.getInvoiceId(), InvoiceContactMech.Fields.contactMechPurposeTypeId, ContactMechPurposeTypeConstants.SHIPPING_LOCATION)));
+        InvoiceContactMech mech = getFirst(findList(InvoiceContactMech.class, map(InvoiceContactMech.Fields.invoiceId, invoice.getInvoiceId(), InvoiceContactMech.Fields.contactMechPurposeTypeId, ContactMechPurposeTypeConstants.SHIPPING_LOCATION), UtilMisc.toList("lastUpdatedStamp DESC")));
         if (mech == null) {
             return null;
         }
@@ -215,7 +215,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
     public PostalAddress getBillingAddress(Invoice invoice) throws RepositoryException {
         String billingPartyId = invoice.isReceivable() ? invoice.getPartyId() : invoice.getPartyIdFrom();
 
-        InvoiceContactMech mech = getFirst(findList(InvoiceContactMech.class, map(InvoiceContactMech.Fields.invoiceId, invoice.getInvoiceId(), InvoiceContactMech.Fields.contactMechPurposeTypeId, ContactMechPurposeTypeConstants.BILLING_LOCATION)));
+        InvoiceContactMech mech = getFirst(findList(InvoiceContactMech.class, map(InvoiceContactMech.Fields.invoiceId, invoice.getInvoiceId(), InvoiceContactMech.Fields.contactMechPurposeTypeId, ContactMechPurposeTypeConstants.BILLING_LOCATION), UtilMisc.toList("lastUpdatedStamp DESC")));
         if (mech != null) {
             return findOne(PostalAddress.class, map(PostalAddress.Fields.contactMechId, mech.getContactMechId()));
         }

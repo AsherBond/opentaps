@@ -211,7 +211,7 @@ public final class InvoiceActions {
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                                           EntityCondition.makeCondition(InvoiceContactMech.Fields.contactMechPurposeTypeId.name(), EntityOperator.EQUALS, "BILLING_LOCATION"),
                                           EntityCondition.makeCondition(InvoiceContactMech.Fields.invoiceId.name(), EntityOperator.EQUALS, invoice.getInvoiceId()));
-        InvoiceContactMech invoiceContactMech = Entity.getFirst(invoiceRepository.findList(InvoiceContactMech.class, conditions));
+        InvoiceContactMech invoiceContactMech = Entity.getFirst(invoiceRepository.findList(InvoiceContactMech.class, conditions, UtilMisc.toList("lastUpdatedStamp DESC")));
         if (invoiceContactMech != null) {
             invoiceContactMechId = invoiceContactMech.getContactMechId();
             invoiceAddress = invoiceRepository.findOne(PostalAddress.class, invoiceRepository.map(PostalAddress.Fields.contactMechId, invoiceContactMech.getContactMechId()));
