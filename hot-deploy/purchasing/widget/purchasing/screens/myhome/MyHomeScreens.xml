@@ -21,6 +21,7 @@
     <screen name="main-section-decorator">
         <section>
             <actions>
+                <set field="gwtScripts[]" value="purchasinggwt/org.opentaps.gwt.purchasing.purchasing" global="true"/>
                 <set field="sectionName" value="myHome" global="true"/>
                 <set field="sectionStyle" value="singleColumn"/>
             </actions>

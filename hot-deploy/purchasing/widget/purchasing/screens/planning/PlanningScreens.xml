@@ -41,6 +41,7 @@ under the License.
     <screen name="main-section-decorator">
         <section>
             <actions>
+                <set field="gwtScripts[]" value="purchasinggwt/org.opentaps.gwt.purchasing.purchasing" global="true"/>
                 <set field="sectionName" value="planning" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <set field="requiredPermission" value="PRCH_PLAN"/>

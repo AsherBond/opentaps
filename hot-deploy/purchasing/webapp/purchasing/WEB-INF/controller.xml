@@ -915,6 +915,19 @@
         <response name="error" type="request" value="orderentry"/>
     </request-map>
 
+    <request-map uri="gwtSearchSuppliers">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.purchasing.server.search.PurchasingSearchLookupService" invoke="purchasingSearchSuppliers"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtSearchPurchasingOrders">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.purchasing.server.search.PurchasingSearchLookupService" invoke="purchasingSearchPurchaseOrders"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+  
     <!-- ============= -->
     <!-- View Mappings -->
     <!-- ============= -->

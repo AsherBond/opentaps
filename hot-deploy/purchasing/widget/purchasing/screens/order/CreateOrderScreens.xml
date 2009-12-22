@@ -48,7 +48,7 @@ under the License.
             <actions>
                 <set field="sectionName" value="order" global="true"/>
                 <set field="requiredPermission" value="PRCH_PO"/>
-                <set field="gwtScripts[]" value="purchasinggwt/org.opentaps.gwt.purchasing.orders.orders" global="true"/>
+                <set field="gwtScripts[]" value="purchasinggwt/org.opentaps.gwt.purchasing.purchasing" global="true"/>
             </actions>
             <widgets>
                 <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>

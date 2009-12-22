@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.gwt.purchasing.suppliers.client.form;
+package org.opentaps.gwt.purchasing.client.suppliers.form;
 
 import com.gwtext.client.widgets.form.TextField;
 import org.opentaps.gwt.common.client.UtilUi;
