@@ -471,7 +471,7 @@ public class Entry extends BaseEntry {
     private void loadMyContacts() {
         myContactsForm = new FindContactsForm(false);
         myContactsForm.hideFilters();
-        myContactsForm.getListView().filterMyOrTeamParties(PartyLookupConfiguration.MY_VALUES);
+        myContactsForm.getListView().filterMyOrTeamParties(PartyLookupConfiguration.TEAM_VALUES);
         myContactsForm.getListView().applyFilters();
         RootPanel.get(MY_CONTACTS_ID).add(myContactsForm.getMainPanel());
     }
