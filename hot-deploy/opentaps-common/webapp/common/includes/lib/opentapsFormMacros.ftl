@@ -1293,8 +1293,7 @@ For more information, please see documentation/opentapsFormMacros.html
 
 <#macro displayError name index=-1><@tooltip text=opentapsErrors.field.get(getIndexedName(name,index)) class="errortooltip" /></#macro>
 
-<#macro frameSection title>
-<div class="frameSection">
+<#macro frameSectionHeader title>
   <div class="x-panel-tl">
     <div class="x-panel-tr">
       <div class="x-panel-tc">
@@ -1302,6 +1301,11 @@ For more information, please see documentation/opentapsFormMacros.html
       </div>
     </div>
   </div>
+</#macro>
+
+<#macro frameSection title>
+<div class="frameSection">
+  <@frameSectionHeader title=title/>
   <div class="frameSectionBody">
     <#nested/>
   </div>

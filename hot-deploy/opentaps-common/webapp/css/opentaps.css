@@ -27,10 +27,9 @@ ul.ofbizErrorMessagesList {
 /* Section tab buttons */
 ul.sectionTabBar a {
     color: gray;
-    background: white;
     text-decoration: none;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 
 ul.sectionTabBar a:hover {
@@ -49,8 +48,6 @@ ul.sectionTabBar {
 ul.sectionTabBar li {
     float: left;
     margin: 0;
-    border-top: 1px solid gray;
-    border-right: 1px solid gray;
 }
 
 div.sectionTabBorder {

@@ -60,12 +60,15 @@
       <#assign fgcolor = StringUtil.wrapString(Static["org.opentaps.common.util.UtilConfig"].getSectionFgColor(opentapsApplicationName, sectionName))/>
       <style type="text/css">
 h1, h2, .gwt-screenlet-header, .sectionHeader, .subSectionHeader, .subSectionTitle, .formSectionHeader, .formSectionHeaderTitle, .screenlet-header, .boxhead, .boxtop, div.boxtop, .toggleButtonDisabled, .tundra .dijitDialogTitleBar, .shortcutGroup td, .screenlet-title-bar {color: ${fgcolor}; background-color: ${bgcolor};}
-div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${fgcolor?replace("&#35;", "#")}; background-color: ${bgcolor?replace("&#35;", "#")};}
-.x-panel-tl { background-image:url(/opentaps_images/panels/corners-sprite2-${sectionName}.gif) !important; }
-.x-panel-tr { background-image:url(/opentaps_images/panels/corners-sprite2-${sectionName}.gif) !important; }
-.x-panel-tc { background-image:url(/opentaps_images/panels/top-bottom2-${sectionName}.gif) !important; }
+div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${fgcolor?replace("&#35;", "#")};}
+div.sectionTabBorder {background: ${bgcolor?replace("&#35;", "#")} !important;}
+.x-panel-tl, .x-panel-tr { background-image:url(/opentaps_images/panels/corners-sprite2-${sectionName}.gif) !important; }
+div.sectionTabBorder, .x-panel-tc { background-image:url(/opentaps_images/panels/top-bottom2-${sectionName}.gif) !important; }
 .x-panel-tl .x-panel-header {color: ${fgcolor?replace("&#35;", "#")} !important; }
 .x-panel-noborder .x-panel-header-noborder { border:none !important; }
+ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tl,
+ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tr { background-image:url(/opentaps_images/panels/corners-sprite2-bw.gif) !important; }
+ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tc { background-image:url(/opentaps_images/panels/top-bottom2-bw.gif) !important; }
       </style>
 
       <script type="text/javascript">

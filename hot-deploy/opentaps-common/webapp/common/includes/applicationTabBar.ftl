@@ -43,6 +43,8 @@
 
 <#-- This file contains the tab bar for an opentaps section, which allows selection of a section. -->
 
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
 <#if userLogin?exists && applicationSections?exists>
 <ul class="sectionTabBar">
 <#list applicationSections as section> 
@@ -57,7 +59,7 @@
     <#else>
       <#assign tabClass = "sectionTabButtonUnselected">
     </#if>
-    <li class="${tabClass}"><span><a href="${url}">${uiLabelMap.get(section.uiLabel)}</a></span></li>
+    <li class="${tabClass}"><@frameSectionHeader title="<a href=\"${url}\">${uiLabelMap.get(section.uiLabel)}</a>" /></li>
   </#if>
 </#list>
 </ul>
