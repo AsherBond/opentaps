@@ -114,7 +114,7 @@ public class OrderViewForListing extends Entity {
         if (o.getPartyId() != null) {
             o.setPartyName(PartyHelper.getPartyName(delegator, o.getPartyId(), false));
         }
-        o.setOrderNameId((o.getOrderName() == null ? "" : o.getOrderName()) + " (" + o.getOrderId() + ")");
+        o.setOrderNameId(o.getOrderId() + (o.getOrderName() == null ? "" : ": " + o.getOrderName()));
         if (o.getStatusId() != null) {
             try {
                 GenericValue status = delegator.findByPrimaryKeyCache("StatusItem", UtilMisc.toMap(StatusItem.Fields.statusId.name(), o.getStatusId()));
