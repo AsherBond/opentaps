@@ -36,7 +36,7 @@
         <#assign quoteStatusChangeAction>${quoteStatusChangeAction}<@submitFormLink form="editQuote" text=uiLabelMap.CommonEdit class="buttontext" /></#assign>
       </#if>
 
-      <@form name="toQuotePdf" url="quote.pdf" quoteId="${quote.quoteId}" />
+      <@form name="toQuotePdf" url="quote.pdf" quoteId="${quote.quoteId}" reportId="SALESQUOTE" reportType="application/pdf" />
       <#assign quoteStatusChangeAction>${quoteStatusChangeAction}<@submitFormLink form="toQuotePdf" text=uiLabelMap.AccountingInvoicePDF class="buttontext" /></#assign>
       <@form name="writeQuoteEmail" url="writeQuoteEmail" quoteId="${quote.quoteId}" emailType="PRDS_QUO_CONFIRM" />
       <#assign quoteStatusChangeAction>${quoteStatusChangeAction}<@submitFormLink form="writeQuoteEmail" text=uiLabelMap.CommonEmail class="buttontext" /></#assign>

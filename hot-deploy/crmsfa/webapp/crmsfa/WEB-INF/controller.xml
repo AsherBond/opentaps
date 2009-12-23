@@ -2931,11 +2931,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="quote.pdf">
        <security https="true" auth="true"/>
        <event type="java" invoke="prepareQuoteReport" path="org.opentaps.common.quote.QuoteEvents"/>
-       <response name="success" type="view" value="QuoteJR"/>
-    </request-map>
-    <request-map uri="QuoteJR">
-        <security https="true" auth="true"/>
-        <response name="success" type="view" value="QuoteJR"/>
+       <response name="success" type="request" value="runReport"/>
     </request-map>
 
     <request-map uri="QuoteReport">
@@ -3209,6 +3205,5 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <view-map name="PackingSlipPDF" type="screenfop" page="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#PackingSlip.fo" content-type="application/pdf" encoding="none"/>
     <view-map name="OrderPDF" type="screenfop" page="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#OrderPDF" content-type="application/pdf" encoding="none"/>
     <view-map name="QuoteReport" type="screenfop" page="component://order/widget/ordermgr/QuoteScreens.xml#QuoteReport" content-type="application/pdf" encoding="none"/>
-    <view-map name="QuoteJR" type="jasperreports" page="component://crmsfa/webapp/crmsfa/reports/repository/quotePDF/Quote.jrxml" content-type="application/pdf" encoding="none"/>
 
 </site-conf>
