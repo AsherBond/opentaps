@@ -769,8 +769,6 @@ public final class EnumerationConstants {
         public static final String PRIP_PARTY_GRP_MEM = "PRIP_PARTY_GRP_MEM";
         /** Party. */
         public static final String PRIP_PARTY_ID = "PRIP_PARTY_ID";
-        /** Product. */
-        public static final String PRIP_PRODUCT_ID = "PRIP_PRODUCT_ID";
         /** Product Category. */
         public static final String PRIP_PROD_CAT_ID = "PRIP_PROD_CAT_ID";
         /** Product Catalog. */
@@ -779,6 +777,8 @@ public final class EnumerationConstants {
         public static final String PRIP_PROD_FEAT_ID = "PRIP_PROD_FEAT_ID";
         /** Product Store Group. */
         public static final String PRIP_PROD_SGRP_ID = "PRIP_PROD_SGRP_ID";
+        /** Product. */
+        public static final String PRIP_PRODUCT_ID = "PRIP_PRODUCT_ID";
         /** Quantity. */
         public static final String PRIP_QUANTITY = "PRIP_QUANTITY";
         /** Role Type. */

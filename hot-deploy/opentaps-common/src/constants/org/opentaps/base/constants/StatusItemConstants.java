@@ -85,10 +85,10 @@ public final class StatusItemConstants {
         public static final String AMZN_ORDR_IMPTD_ERR = "AMZN_ORDR_IMPTD_ERR";
         /** Import not acknowledged. */
         public static final String AMZN_ORDR_NOT_ACKED = "AMZN_ORDR_NOT_ACKED";
-        /** Successful import acknowledged. */
-        public static final String AMZN_ORDR_SCSS_ACKED = "AMZN_ORDR_SCSS_ACKED";
         /** Error acknowledging import success. */
         public static final String AMZN_ORDR_SC_ACK_ERR = "AMZN_ORDR_SC_ACK_ERR";
+        /** Successful import acknowledged. */
+        public static final String AMZN_ORDR_SCSS_ACKED = "AMZN_ORDR_SCSS_ACKED";
     }
     public static final class AmznProduct {
         private AmznProduct() { }
@@ -100,10 +100,10 @@ public final class StatusItemConstants {
         public static final String AMZN_PROD_CHANGED = "AMZN_PROD_CHANGED";
         /** New product. */
         public static final String AMZN_PROD_CREATED = "AMZN_PROD_CREATED";
-        /** Product is planned for deletion. */
-        public static final String AMZN_PROD_DELETED = "AMZN_PROD_DELETED";
         /** Error deleting product. */
         public static final String AMZN_PROD_DEL_ERR = "AMZN_PROD_DEL_ERR";
+        /** Product is planned for deletion. */
+        public static final String AMZN_PROD_DELETED = "AMZN_PROD_DELETED";
         /** Product isn't accepted. */
         public static final String AMZN_PROD_ERROR = "AMZN_PROD_ERROR";
         /** Product isn't acknowledged. */
@@ -192,10 +192,10 @@ public final class StatusItemConstants {
         private ContactlstParty() { }
         /** Accepted. */
         public static final String CLPT_ACCEPTED = "CLPT_ACCEPTED";
-        /** Invalid. */
-        public static final String CLPT_INVALID = "CLPT_INVALID";
         /** In Use. */
         public static final String CLPT_IN_USE = "CLPT_IN_USE";
+        /** Invalid. */
+        public static final String CLPT_INVALID = "CLPT_INVALID";
         /** Pending Acceptance. */
         public static final String CLPT_PENDING = "CLPT_PENDING";
         /** Rejected. */
@@ -415,10 +415,10 @@ public final class StatusItemConstants {
         public static final String INVOICE_APPROVED = "INVOICE_APPROVED";
         /** Cancelled. */
         public static final String INVOICE_CANCELLED = "INVOICE_CANCELLED";
-        /** Invoiced to Partner. */
-        public static final String INVOICE_INV_PTNR = "INVOICE_INV_PTNR";
         /** Pending. */
         public static final String INVOICE_IN_PROCESS = "INVOICE_IN_PROCESS";
+        /** Invoiced to Partner. */
+        public static final String INVOICE_INV_PTNR = "INVOICE_INV_PTNR";
         /** Paid. */
         public static final String INVOICE_PAID = "INVOICE_PAID";
         /** Ready. */

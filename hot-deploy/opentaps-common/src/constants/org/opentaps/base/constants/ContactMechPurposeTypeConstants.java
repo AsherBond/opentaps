@@ -68,14 +68,16 @@ public final class ContactMechPurposeTypeConstants {
     public static final String PHONE_PAYMENT = "PHONE_PAYMENT";
     /** Quick Calls Phone Number. */
     public static final String PHONE_QUICK = "PHONE_QUICK";
-    /** Shipping Destination Phone Number. */
-    public static final String PHONE_SHIPPING = "PHONE_SHIPPING";
     /** Shipping Origin Phone Number. */
     public static final String PHONE_SHIP_ORIG = "PHONE_SHIP_ORIG";
+    /** Shipping Destination Phone Number. */
+    public static final String PHONE_SHIPPING = "PHONE_SHIPPING";
     /** Main Work Phone Number. */
     public static final String PHONE_WORK = "PHONE_WORK";
     /** Secondary Work Phone Number. */
     public static final String PHONE_WORK_SEC = "PHONE_WORK_SEC";
+    /** Purchase Order Delivery Address. */
+    public static final String PO_DELIV_ADDRESS = "PO_DELIV_ADDRESS";
     /** Previous Address. */
     public static final String PREVIOUS_LOCATION = "PREVIOUS_LOCATION";
     /** Primary Email Address. */
@@ -90,9 +92,9 @@ public final class ContactMechPurposeTypeConstants {
     public static final String PUR_RET_LOCATION = "PUR_RET_LOCATION";
     /** Owner of Received Emails. */
     public static final String RECEIVE_EMAIL_OWNER = "RECEIVE_EMAIL_OWNER";
-    /** Shipping Destination Address. */
-    public static final String SHIPPING_LOCATION = "SHIPPING_LOCATION";
     /** Shipping Origin Address. */
     public static final String SHIP_ORIG_LOCATION = "SHIP_ORIG_LOCATION";
+    /** Shipping Destination Address. */
+    public static final String SHIPPING_LOCATION = "SHIPPING_LOCATION";
 
 }

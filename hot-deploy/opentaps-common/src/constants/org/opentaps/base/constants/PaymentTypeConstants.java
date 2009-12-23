@@ -34,10 +34,10 @@ public final class PaymentTypeConstants {
         public static final String CUSTOMER_REFUND = "CUSTOMER_REFUND";
         /** Gift Certificate Withdrawal. */
         public static final String GC_WITHDRAWAL = "GC_WITHDRAWAL";
-        /** Payrol Payment. */
-        public static final String PAYROL_PAYMENT = "PAYROL_PAYMENT";
         /** Pay Check. */
         public static final String PAY_CHECK = "PAY_CHECK";
+        /** Payrol Payment. */
+        public static final String PAYROL_PAYMENT = "PAYROL_PAYMENT";
         /** POS Paid Out. */
         public static final String POS_PAID_OUT = "POS_PAID_OUT";
         /** Tax Payment. */
