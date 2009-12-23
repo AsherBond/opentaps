@@ -119,16 +119,16 @@ public class LeadsServices {
             }
             leadPartyId = (String) serviceResults.get("partyId");
 
+            // create PartySupplementalData
+            GenericValue partyData = delegator.makeValue("PartySupplementalData", UtilMisc.toMap("partyId", leadPartyId));
+            partyData.setNonPKFields(context);
+            partyData.create();
+
             // create a PartyRole for the resulting Lead partyId with roleTypeId = PROSPECT
             serviceResults = dispatcher.runSync("createPartyRole", UtilMisc.toMap("partyId", leadPartyId, "roleTypeId", "PROSPECT", "userLogin", userLogin));
             if (ServiceUtil.isError(serviceResults)) {
                 return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateLeadFail", locale, module);
             }
-
-            // create PartySupplementalData
-            GenericValue partyData = delegator.makeValue("PartySupplementalData", UtilMisc.toMap("partyId", leadPartyId));
-            partyData.setNonPKFields(context);
-            partyData.create();
 
             // create a party relationship between the userLogin and the Lead with partyRelationshipTypeId RESPONSIBLE_FOR
             PartyHelper.createNewPartyToRelationship(userLogin.getString("partyId"), leadPartyId, "PROSPECT", "RESPONSIBLE_FOR",
@@ -213,7 +213,17 @@ public class LeadsServices {
                 if (ServiceUtil.isError(serviceResults)) {
                     return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorUpdateLeadFail", locale, module);
                 }
-            } 
+            }
+
+            // update PartySupplementalData
+            GenericValue partyData = delegator.findByPrimaryKey("PartySupplementalData", UtilMisc.toMap("partyId", leadPartyId));
+            if (partyData == null) {
+                // create a new one
+                partyData = delegator.makeValue("PartySupplementalData", UtilMisc.toMap("partyId", leadPartyId));
+                partyData.create();
+            }
+            partyData.setNonPKFields(context);
+            partyData.store();
 
             // update the Party and Person
             Map<String, Object> input = UtilMisc.toMap("partyId", leadPartyId, "firstName", context.get("firstName"), "lastName", context.get("lastName"));
@@ -228,16 +238,6 @@ public class LeadsServices {
             if (ServiceUtil.isError(serviceResults)) {
                 return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorUpdateLeadFail", locale, module);
             }
-
-            // update PartySupplementalData
-            GenericValue partyData = delegator.findByPrimaryKey("PartySupplementalData", UtilMisc.toMap("partyId", leadPartyId));
-            if (partyData == null) {
-                // create a new one
-                partyData = delegator.makeValue("PartySupplementalData", UtilMisc.toMap("partyId", leadPartyId));
-                partyData.create();
-            }
-            partyData.setNonPKFields(context);
-            partyData.store();
 
         } catch (GenericServiceException e) {
             return UtilMessage.createAndLogServiceError(e, "CrmErrorUpdateLeadFail", locale, module);
@@ -638,15 +638,15 @@ public class LeadsServices {
             String newPartyName = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, newPartyId, false);
             String leadPartyName = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, leadPartyId, false);
 
-            Map messageMap = UtilMisc.toMap("newPartyId", newPartyId, "newPartyName", newPartyName, "leadPartyId", leadPartyId, "leadPartyName", leadPartyName);
+            Map<String, Object> messageMap = UtilMisc.<String, Object>toMap("newPartyId", newPartyId, "newPartyName", newPartyName, "leadPartyId", leadPartyId, "leadPartyName", leadPartyName);
             String url = UtilProperties.getMessage(notificationResource, "crmsfa.url.lead", messageMap, locale);
             messageMap.put("url", url);
             String subject = UtilProperties.getMessage(notificationResource, "subject.lead", messageMap, locale);
 
-            Map bodyParameters = UtilMisc.toMap("eventType", "lead");
+            Map<String, Object> bodyParameters = UtilMisc.<String, Object>toMap("eventType", "lead");
             bodyParameters.putAll(messageMap);
 
-            Map sendEmailsResult = dispatcher.runSync("crmsfa.sendCrmNotificationEmails", UtilMisc.toMap("notifyPartyIds", UtilMisc.toList(newPartyId), "eventType", "lead", "subject", subject, "bodyParameters", bodyParameters, "userLogin", userLogin));
+            Map<String, Object> sendEmailsResult = dispatcher.runSync("crmsfa.sendCrmNotificationEmails", UtilMisc.<String, Object>toMap("notifyPartyIds", UtilMisc.toList(newPartyId), "eventType", "lead", "subject", subject, "bodyParameters", bodyParameters, "userLogin", userLogin));
             if (ServiceUtil.isError(sendEmailsResult)) {
                 return sendEmailsResult; 
             }
