@@ -173,6 +173,7 @@
         <alias entity-alias="PMTN" name="primaryContactNumber" field="contactNumber"/>
         <alias entity-alias="PMTN" name="primaryAskForName" field="askForName"/>
         <alias entity-alias="CMEM" name="primaryEmail" field="infoString"/>
+        <alias entity-alias="CMEM" name="primaryEmailContactMechId" field="contactMechId"/>
         <alias entity-alias="CTRYG" name="primaryCountryAbbreviation" field="abbreviation"/>
         <alias entity-alias="STTG" name="primaryStateProvinceAbbreviation" field="abbreviation"/>
         <alias entity-alias="CTYG" name="primaryCountyAbbreviation" field="abbreviation"/>

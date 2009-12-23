@@ -31,6 +31,7 @@ import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
@@ -471,7 +472,30 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
             }
 
         }
+        
+        /** Voip if enable formatter. */
+        class VoipLinkEnableSortable extends ConvertMapToString implements ICompositeValue {
+            /** {@inheritDoc} */
+            @Override
+            public String convert(Map<String, ?> value) {
+            	String voipEnabled = UtilProperties.getPropertyValue("voip.properties", "voip.enabled", "N");
+        		String phoneNumber = (String) value.get(PartyLookupConfiguration.INOUT_PHONE_NUMBER);
+            	if ("Y".equals(voipEnabled) && (phoneNumber != null && !"".equals(phoneNumber))) {
+            		return "Y";
+            	} else {
+            		return "N";
+            	}
+            	
+            }
 
+            /** {@inheritDoc} */
+            public LinkedHashSet<String> getFields() {
+                LinkedHashSet<String> s = new LinkedHashSet<String>(1);
+                s.add(PartyLookupConfiguration.INOUT_PHONE_NUMBER);
+                return s;
+            }
+        }
+        
         // keep rules for calculated fields
         Map<String, ConvertMapToString> calcField = FastMap.<String, ConvertMapToString>newInstance();
         calcField.put(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER, new PhoneNumberSortable());
@@ -479,6 +503,10 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
 
         calcField = FastMap.<String, ConvertMapToString>newInstance();
         calcField.put(PartyLookupConfiguration.INOUT_FRIENDLY_PARTY_NAME, new FriendlyPartyNameSortable());
+        service.makeCalculatedField(calcField);
+        
+        calcField = FastMap.<String, ConvertMapToString>newInstance();
+        calcField.put(PartyLookupConfiguration.OUT_VOIP_ENABLED, new VoipLinkEnableSortable());
         service.makeCalculatedField(calcField);
     }
 

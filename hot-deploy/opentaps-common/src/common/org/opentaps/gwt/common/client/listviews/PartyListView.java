@@ -17,10 +17,17 @@
 
 package org.opentaps.gwt.common.client.listviews;
 
-import com.gwtext.client.core.SortDir;
-import com.gwtext.client.data.StringFieldDef;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.lookup.configuration.PartyLookupConfiguration;
+
+import com.gwtext.client.core.SortDir;
+import com.gwtext.client.data.Record;
+import com.gwtext.client.data.Store;
+import com.gwtext.client.data.StringFieldDef;
+import com.gwtext.client.util.Format;
+import com.gwtext.client.widgets.grid.CellMetadata;
+import com.gwtext.client.widgets.grid.ColumnConfig;
+import com.gwtext.client.widgets.grid.Renderer;
 
 /**
  * Generic list of Parties.
@@ -68,7 +75,7 @@ public abstract class PartyListView extends EntityListView {
      * @param partyIdLabel the label of the ID column, which depends of the entity that is listed
      * @param nameColumns the list of extra columns to insert after the ID column, in the order they should appear. By default the party list provides ID, Country, State, City, Postal code
      */
-    protected void init(String entityFindUrl, String entityViewUrl, String partyIdLabel, String[] nameColumns) {
+    protected void init(String entityFindUrl, final String entityViewUrl, String partyIdLabel, String[] nameColumns) {
         final int nameColumnsCount = nameColumns.length / 2;
 
         // add party id as the first column
@@ -101,8 +108,60 @@ public abstract class PartyListView extends EntityListView {
         makeColumn(UtilUi.MSG.country(), new StringFieldDef(PartyLookupConfiguration.INOUT_COUNTRY));
         makeColumn(UtilUi.MSG.postalCode(), new StringFieldDef(PartyLookupConfiguration.INOUT_POSTAL_CODE));
         makeColumn(UtilUi.MSG.postalCodeExt(), new StringFieldDef(PartyLookupConfiguration.OUT_POSTAL_CODE_EXT));
-        makeColumn(UtilUi.MSG.phoneNumber(), new StringFieldDef(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER));
-        makeColumn(UtilUi.MSG.emailAddress(), new StringFieldDef(PartyLookupConfiguration.OUT_EMAIL));
+        
+
+        
+        ColumnConfig columnPhone = makeLinkColumn(UtilUi.MSG.phoneNumber(), idDefinition, new StringFieldDef(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER), entityViewUrl, true);
+        columnPhone.setRenderer(new Renderer() {
+            public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
+                // bold priority field if record is updated
+                String voipEnabled = record.getAsString(PartyLookupConfiguration.OUT_VOIP_ENABLED);
+                String formatedPrimaryPhone = record.getAsString(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER);
+                String primaryCountryCode = record.getAsString(PartyLookupConfiguration.INOUT_PHONE_COUNTRY_CODE);
+                String primaryAreaCode = record.getAsString(PartyLookupConfiguration.INOUT_PHONE_AREA_CODE);
+                String primaryContactNumber = record.getAsString(PartyLookupConfiguration.INOUT_PHONE_NUMBER);
+                if ("Y".equals(voipEnabled)) {
+                    String link = "<a class=\"linktext\" href=\"javascript:opentaps.makeOutgoingCall('" + primaryCountryCode + "','" + primaryAreaCode + "','" + primaryContactNumber + "');\">" + formatedPrimaryPhone + "</a>";
+                    return link;                    
+                } else {
+                    return formatedPrimaryPhone;
+                }
+            }
+        });
+        
+        ColumnConfig columnEmail = makeLinkColumn(UtilUi.MSG.emailAddress(), idDefinition, new StringFieldDef(PartyLookupConfiguration.OUT_EMAIL), entityViewUrl, true);
+        columnEmail.setRenderer(new Renderer() {
+            public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
+                // bold priority field if record is updated
+                String email = record.getAsString(PartyLookupConfiguration.OUT_EMAIL);
+                String contactMechIdTo = record.getAsString(PartyLookupConfiguration.OUT_EMAIL_CONTACT_MECH_ID);
+                String internalPartyId = record.getAsString(PartyLookupConfiguration.INOUT_PARTY_ID);
+                String donePage = entityViewUrl;
+                if (contactMechIdTo == null || "".equals(contactMechIdTo)) {
+                    return email;
+                } else {
+                    String url = "<a class=\"linktext\" href='writeEmail?contactMechIdTo=" + contactMechIdTo + "&internalPartyId=" + internalPartyId + "&donePage=" + donePage + "'>" + email + "</a>";
+                    return Format.format(url, internalPartyId);                    
+                }
+            }
+        });
+
+        
+        // hidden columns
+        makeColumn("", new StringFieldDef(PartyLookupConfiguration.INOUT_PHONE_COUNTRY_CODE)).setHidden(true);
+        getColumn().setFixed(true);
+        makeColumn("", new StringFieldDef(PartyLookupConfiguration.INOUT_PHONE_AREA_CODE)).setHidden(true);
+        getColumn().setFixed(true);
+        makeColumn("", new StringFieldDef(PartyLookupConfiguration.INOUT_PHONE_NUMBER)).setHidden(true);
+        getColumn().setFixed(true);
+        makeColumn("", new StringFieldDef(PartyLookupConfiguration.OUT_EMAIL_CONTACT_MECH_ID)).setHidden(true);
+        getColumn().setFixed(true);
+        makeColumn("", new StringFieldDef(PartyLookupConfiguration.OUT_VOIP_ENABLED)).setHidden(true);
+        getColumn().setFixed(true);
+        makeColumn("", new StringFieldDef(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER)).setHidden(true);
+        getColumn().setFixed(true);
+        makeColumn("", new StringFieldDef(PartyLookupConfiguration.OUT_EMAIL)).setHidden(true);
+        getColumn().setFixed(true);
 
         configure(entityFindUrl, PartyLookupConfiguration.INOUT_PARTY_ID, SortDir.ASC);
 
@@ -114,6 +173,7 @@ public abstract class PartyListView extends EntityListView {
         setColumnHidden(PartyLookupConfiguration.OUT_ADDRESS_2, true);
         setColumnHidden(PartyLookupConfiguration.INOUT_POSTAL_CODE, true);
         setColumnHidden(PartyLookupConfiguration.OUT_POSTAL_CODE_EXT, true);
+        
     }
 
     /**

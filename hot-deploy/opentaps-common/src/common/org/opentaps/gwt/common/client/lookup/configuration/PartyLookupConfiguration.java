@@ -72,12 +72,14 @@ public abstract class PartyLookupConfiguration {
     public static final String OUT_POSTAL_CODE_EXT = "primaryPostalCodeExt";
     public static final String OUT_PHONE_ID = "primaryTelecomNumberId";
     public static final String OUT_EMAIL = "primaryEmail";
+    public static final String OUT_EMAIL_CONTACT_MECH_ID = "primaryEmailContactMechId";
     public static final String OUT_EMAIL_ID = "primaryEmailId";
     public static final String IN_PARTY_ID_TO = "partyIdTo";
     public static final String IN_PARTY_ID_FROM = "partyIdFrom";
     public static final String IN_ROLE_TO = "roleTypeIdTo";
     public static final String IN_RELATIONSHIP_TYPE_ID = "partyRelationshipTypeId";
     public static final String IN_SALES_OPPORTUNITY_ID = "salesOpportunityId";
+    public static final String OUT_VOIP_ENABLED = "voipEnabled";
 
     public static final List<String> LIST_OUT_FIELDS = Arrays.asList(
         INOUT_PARTY_ID,
@@ -98,6 +100,7 @@ public abstract class PartyLookupConfiguration {
         OUT_ADDRESS_2,
         OUT_POSTAL_CODE_EXT,
         OUT_EMAIL,
+        OUT_EMAIL_CONTACT_MECH_ID,
         OUT_EMAIL_ID,
         OUT_PHONE_ID,
         OUT_ADDRESS_ID
