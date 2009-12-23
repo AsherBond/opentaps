@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.securityext.cert.CertificateServices
  * Invoke: importIssuerCertificate
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/securityext/servicedef/services.xml
+ * Defined in: applications/securityext/servicedef/services.xml
  */
 public class ImportIssuerProvisionService extends ServiceWrapper {
 

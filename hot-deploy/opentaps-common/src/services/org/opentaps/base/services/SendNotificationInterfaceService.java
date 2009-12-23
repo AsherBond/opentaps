@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: interface
  * Location: 
  * Invoke: 
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services_email.xml
+ * Defined in: framework/common/servicedef/services_email.xml
  */
 public class SendNotificationInterfaceService extends ServiceWrapper {
 

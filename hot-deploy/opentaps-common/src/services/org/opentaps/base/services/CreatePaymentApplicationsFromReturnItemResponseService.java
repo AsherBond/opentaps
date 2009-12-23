@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.order.order.OrderReturnServices
  * Invoke: createPaymentApplicationsFromReturnItemResponse
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/order/servicedef/services_return.xml
+ * Defined in: applications/order/servicedef/services_return.xml
  */
 public class CreatePaymentApplicationsFromReturnItemResponseService extends ServiceWrapper {
 

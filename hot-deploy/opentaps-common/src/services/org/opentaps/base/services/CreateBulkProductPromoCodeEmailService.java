@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.product.promo.PromoServices
  * Invoke: importPromoCodeEmailsFromFile
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_pricepromo.xml
+ * Defined in: applications/product/servicedef/services_pricepromo.xml
  */
 public class CreateBulkProductPromoCodeEmailService extends ServiceWrapper {
 

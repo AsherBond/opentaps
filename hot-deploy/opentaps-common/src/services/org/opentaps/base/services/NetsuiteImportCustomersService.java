@@ -43,7 +43,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.dataimport.netsuite.NetSuiteImportServices
  * Invoke: importCustomers
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/dataimport/servicedef/services_netsuite.xml
+ * Defined in: hot-deploy/dataimport/servicedef/services_netsuite.xml
  */
 public class NetsuiteImportCustomersService extends ServiceWrapper {
 

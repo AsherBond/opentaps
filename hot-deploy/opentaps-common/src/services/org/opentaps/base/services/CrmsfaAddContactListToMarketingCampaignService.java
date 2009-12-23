@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.marketing.MarketingCampaignServices
  * Invoke: addContactListToMarketingCampaign
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_marketing.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_marketing.xml
  */
 public class CrmsfaAddContactListToMarketingCampaignService extends ServiceWrapper {
 

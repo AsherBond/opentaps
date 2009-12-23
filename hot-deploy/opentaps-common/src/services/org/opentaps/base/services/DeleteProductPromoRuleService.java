@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://product/script/org/ofbiz/product/promo/PromoServices.xml
  * Invoke: deleteProductPromoRule
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_pricepromo.xml
+ * Defined in: applications/product/servicedef/services_pricepromo.xml
  */
 public class DeleteProductPromoRuleService extends ServiceWrapper {
 

@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: entity-auto
  * Location: 
  * Invoke: create
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/example/servicedef/services.xml
+ * Defined in: framework/example/servicedef/services.xml
  */
 public class CreateExampleFeatureService extends ServiceWrapper {
 

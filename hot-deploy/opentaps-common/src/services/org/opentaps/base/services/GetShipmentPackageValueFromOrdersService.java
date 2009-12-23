@@ -42,7 +42,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.shipment.shipment.ShipmentServices
  * Invoke: getShipmentPackageValueFromOrders
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_shipment.xml
+ * Defined in: applications/product/servicedef/services_shipment.xml
  */
 public class GetShipmentPackageValueFromOrdersService extends ServiceWrapper {
 

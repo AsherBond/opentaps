@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.assetmaint.FixedAssetMaintServices
  * Invoke: addPartFixedAssetMaint
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/assetmaint/servicedef/services.xml
+ * Defined in: specialpurpose/assetmaint/servicedef/services.xml
  */
 public class AddPartFixedAssetMaintService extends ServiceWrapper {
 

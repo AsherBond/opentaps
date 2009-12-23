@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://product/script/org/ofbiz/product/cost/CostServices.xml
  * Invoke: updateCostComponent
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_cost.xml
+ * Defined in: applications/product/servicedef/services_cost.xml
  */
 public class UpdateCostComponentService extends ServiceWrapper {
 

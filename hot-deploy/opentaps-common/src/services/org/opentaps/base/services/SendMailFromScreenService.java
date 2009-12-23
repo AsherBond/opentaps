@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.common.email.EmailServices
  * Invoke: sendMailFromScreen
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services_email.xml
+ * Defined in: framework/common/servicedef/services_email.xml
  */
 public class SendMailFromScreenService extends ServiceWrapper {
 

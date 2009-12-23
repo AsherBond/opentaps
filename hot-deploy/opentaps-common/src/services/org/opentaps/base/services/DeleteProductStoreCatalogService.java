@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://product/script/org/ofbiz/product/store/ProductStoreServices.xml
  * Invoke: deleteProductStoreCatalog
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_store.xml
+ * Defined in: applications/product/servicedef/services_store.xml
  */
 public class DeleteProductStoreCatalogService extends ServiceWrapper {
 

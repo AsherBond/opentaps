@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.common.status.StatusServices
  * Invoke: getStatusValidChangeToDetails
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services.xml
+ * Defined in: framework/common/servicedef/services.xml
  */
 public class GetStatusValidChangeToDetailsService extends ServiceWrapper {
 

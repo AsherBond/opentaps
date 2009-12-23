@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.order.shoppingcart.ShoppingCartServices
  * Invoke: assignItemShipGroup
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/order/servicedef/services_cart.xml
+ * Defined in: applications/order/servicedef/services_cart.xml
  */
 public class AssignItemShipGroupService extends ServiceWrapper {
 

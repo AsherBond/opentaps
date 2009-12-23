@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.accounting.thirdparty.gosoftware.PcChargeServices
  * Invoke: ccCapture
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_pccharge.xml
+ * Defined in: applications/accounting/servicedef/services_pccharge.xml
  */
 public class PcChargeCCCaptureService extends ServiceWrapper {
 

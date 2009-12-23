@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.googlebase.ProductsExportToGoogle
  * Invoke: exportToGoogle
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/googlebase/servicedef/services.xml
+ * Defined in: specialpurpose/googlebase/servicedef/services.xml
  */
 public class ExportToGoogleService extends ServiceWrapper {
 

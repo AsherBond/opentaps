@@ -42,7 +42,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.common.FindServices
  * Invoke: performFind
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services.xml
+ * Defined in: framework/common/servicedef/services.xml
  */
 public class PerformFindService extends ServiceWrapper {
 

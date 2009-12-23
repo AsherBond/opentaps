@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.shipment.thirdparty.ups.UpsServices
  * Invoke: upsRateInquire
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_shipment_ups.xml
+ * Defined in: applications/product/servicedef/services_shipment_ups.xml
  */
 public class UpsRateEstimateService extends ServiceWrapper {
 

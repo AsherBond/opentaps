@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://product/script/org/ofbiz/shipment/receipt/ShipmentReceiptServices.xml
  * Invoke: updatePoOnReceiveInventory
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/order/servicedef/services.xml
+ * Defined in: applications/order/servicedef/services.xml
  */
 public class UpdatePoOnReceiveInventoryService extends ServiceWrapper {
 

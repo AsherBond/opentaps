@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.transactions.TransactionServices
  * Invoke: reverseAcctgTrans
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/financials/servicedef/services_transactions.xml
+ * Defined in: hot-deploy/financials/servicedef/services_transactions.xml
  */
 public class ReverseAcctgTransService extends ServiceWrapper {
 

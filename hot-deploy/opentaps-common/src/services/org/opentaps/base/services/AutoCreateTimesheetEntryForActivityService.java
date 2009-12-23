@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.activities.ActivitiesServices
  * Invoke: autoCreateTimesheetEntryForActivity
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_activities.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_activities.xml
  */
 public class AutoCreateTimesheetEntryForActivityService extends ServiceWrapper {
 

@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.workeffort.workeffort.WorkEffortServices
  * Invoke: getWorkEffortAssignedEventsForRoleOfAllParties
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/workeffort/servicedef/services.xml
+ * Defined in: applications/workeffort/servicedef/services.xml
  */
 public class GetWorkEffortAssignedEventsForRoleOfAllPartiesService extends ServiceWrapper {
 

@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.webpos.WebPosEvents
  * Invoke: posLogin
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/webpos/servicedef/services.xml
+ * Defined in: specialpurpose/webpos/servicedef/services.xml
  */
 public class PosLoginService extends ServiceWrapper {
 

@@ -46,7 +46,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: interface
  * Location: 
  * Invoke: 
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/testtools/servicedef/services.xml
+ * Defined in: framework/testtools/servicedef/services.xml
  */
 public class TestServiceInterfaceService extends ServiceWrapper {
 

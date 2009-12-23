@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.product.product.ProductUtilServices
  * Invoke: makeStandAloneFromSingleVariantVirtuals
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_maint.xml
+ * Defined in: applications/product/servicedef/services_maint.xml
  */
 public class MakeStandAloneFromSingleVariantVirtualsService extends ServiceWrapper {
 

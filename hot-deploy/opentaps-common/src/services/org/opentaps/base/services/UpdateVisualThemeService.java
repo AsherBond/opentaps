@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: entity-auto
  * Location: 
  * Invoke: update
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services.xml
+ * Defined in: framework/common/servicedef/services.xml
  */
 public class UpdateVisualThemeService extends ServiceWrapper {
 

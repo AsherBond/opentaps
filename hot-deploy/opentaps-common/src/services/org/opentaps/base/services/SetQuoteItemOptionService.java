@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.quotes.QuoteServices
  * Invoke: setQuoteItemOption
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_quotes.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_quotes.xml
  */
 public class SetQuoteItemOptionService extends ServiceWrapper {
 

@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: com/opensourcestrategies/order/request/CustRequestServices.xml
  * Invoke: createCustRequestRole
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/opentaps-common/servicedef/services_orders.xml
+ * Defined in: hot-deploy/opentaps-common/servicedef/services_orders.xml
  */
 public class CreateCustRequestRoleService extends ServiceWrapper {
 

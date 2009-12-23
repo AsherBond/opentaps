@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://content/script/org/ofbiz/content/data/DataServices.xml
  * Invoke: updateDataResource
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services_data.xml
+ * Defined in: applications/content/servicedef/services_data.xml
  */
 public class UpdateDataResourceService extends ServiceWrapper {
 

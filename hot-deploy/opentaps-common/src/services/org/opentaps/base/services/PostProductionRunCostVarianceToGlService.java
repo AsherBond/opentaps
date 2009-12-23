@@ -43,7 +43,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.financials.domain.ledger.ManufacturingLedgerService
  * Invoke: postProductionRunCostVarianceToGl
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/financials/servicedef/services_ledger_ext.xml
+ * Defined in: hot-deploy/financials/servicedef/services_ledger_ext.xml
  */
 public class PostProductionRunCostVarianceToGlService extends ServiceWrapper {
 

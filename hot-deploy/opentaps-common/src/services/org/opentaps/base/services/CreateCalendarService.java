@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://manufacturing/script/org/ofbiz/manufacturing/techdata/RoutingSimpleServices.xml
  * Invoke: createCalendar
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/manufacturing/servicedef/services_calendar.xml
+ * Defined in: applications/manufacturing/servicedef/services_calendar.xml
  */
 public class CreateCalendarService extends ServiceWrapper {
 

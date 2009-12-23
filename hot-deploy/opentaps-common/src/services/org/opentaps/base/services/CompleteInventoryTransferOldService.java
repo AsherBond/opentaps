@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.product.inventory.InventoryServices
  * Invoke: completeInventoryTransfer
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/opentaps-common/servicedef/services_inventory.xml
+ * Defined in: hot-deploy/opentaps-common/servicedef/services_inventory.xml
  */
 public class CompleteInventoryTransferOldService extends ServiceWrapper {
 

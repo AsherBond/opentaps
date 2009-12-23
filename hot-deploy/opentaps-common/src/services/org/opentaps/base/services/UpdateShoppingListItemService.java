@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://order/script/org/ofbiz/order/shoppinglist/ShoppingListServices.xml
  * Invoke: updateShoppingListItem
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/order/servicedef/services_shoppinglist.xml
+ * Defined in: applications/order/servicedef/services_shoppinglist.xml
  */
 public class UpdateShoppingListItemService extends ServiceWrapper {
 

@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://product/script/org/ofbiz/product/category/CategoryServices.xml
  * Invoke: updateProductCategory
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services.xml
+ * Defined in: applications/product/servicedef/services.xml
  */
 public class UpdateProductCategoryService extends ServiceWrapper {
 

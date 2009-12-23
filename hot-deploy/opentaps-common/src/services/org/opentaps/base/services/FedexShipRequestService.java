@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.shipment.thirdparty.fedex.FedexServices
  * Invoke: fedexShipRequest
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_shipment_fedex.xml
+ * Defined in: applications/product/servicedef/services_shipment_fedex.xml
  */
 public class FedexShipRequestService extends ServiceWrapper {
 

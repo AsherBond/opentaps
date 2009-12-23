@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.entityext.EntityWatchServices
  * Invoke: watchEntity
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/entityext/servicedef/services.xml
+ * Defined in: framework/entityext/servicedef/services.xml
  */
 public class WatchEntityService extends ServiceWrapper {
 

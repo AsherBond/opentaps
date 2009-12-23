@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://content/script/org/ofbiz/content/compdoc/CompDocServices.xml
  * Invoke: persistCompDoc
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services.xml
+ * Defined in: applications/content/servicedef/services.xml
  */
 public class PersistCompDocService extends ServiceWrapper {
 

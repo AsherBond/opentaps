@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.accounting.payment.PaymentGatewayServices
  * Invoke: processManualCcAuth
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_paymentmethod.xml
+ * Defined in: applications/accounting/servicedef/services_paymentmethod.xml
  */
 public class ManualForcedCcAuthTransactionService extends ServiceWrapper {
 

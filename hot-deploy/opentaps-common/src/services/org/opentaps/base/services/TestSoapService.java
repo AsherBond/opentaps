@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: soap
  * Location: http://localhost:8080/webtools/control/SOAPService
  * Invoke: testScv
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services_test.xml
+ * Defined in: framework/common/servicedef/services_test.xml
  */
 public class TestSoapService extends ServiceWrapper {
 

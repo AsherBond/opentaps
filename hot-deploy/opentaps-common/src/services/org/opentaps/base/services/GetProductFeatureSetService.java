@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.product.product.ProductServices
  * Invoke: prodFindFeatureTypes
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_view.xml
+ * Defined in: applications/product/servicedef/services_view.xml
  */
 public class GetProductFeatureSetService extends ServiceWrapper {
 

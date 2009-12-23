@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.product.category.CategoryServices
  * Invoke: getCategoryMembers
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_view.xml
+ * Defined in: applications/product/servicedef/services_view.xml
  */
 public class GetProductCategoryMembersService extends ServiceWrapper {
 

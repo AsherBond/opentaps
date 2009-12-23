@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://content/script/org/ofbiz/content/content/ContentServices.xml
  * Invoke: removeContentAssocPredicate
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services_contenttypes.xml
+ * Defined in: applications/content/servicedef/services_contenttypes.xml
  */
 public class RemoveContentAssocPredicateService extends ServiceWrapper {
 

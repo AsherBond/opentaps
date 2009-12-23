@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.content.ContentManagementServices
  * Invoke: persistDataResourceAndData
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services.xml
+ * Defined in: applications/content/servicedef/services.xml
  */
 public class PersistDataResourceAndDataService extends ServiceWrapper {
 

@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.amazon.sync.AmazonSyncServices
  * Invoke: updateAmazonProductPrices
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/amazon/servicedef/services_amazon_sync.xml
+ * Defined in: hot-deploy/amazon/servicedef/services_amazon_sync.xml
  */
 public class OpentapsAmazonUpdateAmazonProductPricesService extends ServiceWrapper {
 

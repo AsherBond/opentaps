@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://webpos/script/org/ofbiz/webpos/event/PromoEvents.xml
  * Invoke: addPromoCode
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/webpos/servicedef/services_promo.xml
+ * Defined in: specialpurpose/webpos/servicedef/services_promo.xml
  */
 public class AddPromoCodeService extends ServiceWrapper {
 

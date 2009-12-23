@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://accounting/script/org/ofbiz/accounting/invoice/InvoiceServices.xml
  * Invoke: autoGenerateInvoiceFromExistingInvoice
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_invoice.xml
+ * Defined in: applications/accounting/servicedef/services_invoice.xml
  */
 public class AutoGenerateInvoiceFromExistingInvoiceService extends ServiceWrapper {
 

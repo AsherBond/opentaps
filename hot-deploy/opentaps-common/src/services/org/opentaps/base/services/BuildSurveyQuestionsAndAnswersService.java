@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.content.survey.PdfSurveyServices
  * Invoke: buildSurveyQuestionsAndAnswers
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services_survey.xml
+ * Defined in: applications/content/servicedef/services_survey.xml
  */
 public class BuildSurveyQuestionsAndAnswersService extends ServiceWrapper {
 

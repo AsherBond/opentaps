@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.accounting.thirdparty.verisign.PayflowPro
  * Invoke: ccVoid
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_verisign.xml
+ * Defined in: applications/accounting/servicedef/services_verisign.xml
  */
 public class PayflowCCVoidService extends ServiceWrapper {
 

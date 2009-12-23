@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.party.PartyServices
  * Invoke: findCrmPartiesForMerge
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_party.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_party.xml
  */
 public class CrmsfaFindCrmPartiesForMergeService extends ServiceWrapper {
 

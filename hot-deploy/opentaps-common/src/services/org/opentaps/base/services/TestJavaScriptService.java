@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: javascript
  * Location: component://common/script/org/ofbiz/common/JavaScriptTest.js
  * Invoke: 
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services_test.xml
+ * Defined in: framework/common/servicedef/services_test.xml
  */
 public class TestJavaScriptService extends ServiceWrapper {
 

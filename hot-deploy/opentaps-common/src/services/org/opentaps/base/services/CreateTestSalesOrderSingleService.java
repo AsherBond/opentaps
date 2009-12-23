@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.order.test.OrderTestServices
  * Invoke: createTestSalesOrderSingle
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/order/servicedef/services.xml
+ * Defined in: applications/order/servicedef/services.xml
  */
 public class CreateTestSalesOrderSingleService extends ServiceWrapper {
 

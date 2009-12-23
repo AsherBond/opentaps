@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.shipment.thirdparty.dhl.DhlServices
  * Invoke: dhlShipmentConfirm
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_shipment_dhl.xml
+ * Defined in: applications/product/servicedef/services_shipment_dhl.xml
  */
 public class DhlShipmentConfirmService extends ServiceWrapper {
 

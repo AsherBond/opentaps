@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.tests.service.TestEntityPojoServices
  * Invoke: createTestEntityAndItems
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/opentaps-tests/servicedef/services_tests.xml
+ * Defined in: hot-deploy/opentaps-tests/servicedef/services_tests.xml
  */
 public class CreateTestEntityAndItemsService extends ServiceWrapper {
 

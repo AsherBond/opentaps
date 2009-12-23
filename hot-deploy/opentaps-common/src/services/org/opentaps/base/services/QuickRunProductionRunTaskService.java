@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.manufacturing.jobshopmgt.ProductionRunServices
  * Invoke: quickRunProductionRunTask
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/manufacturing/servicedef/services_production_run.xml
+ * Defined in: applications/manufacturing/servicedef/services_production_run.xml
  */
 public class QuickRunProductionRunTaskService extends ServiceWrapper {
 

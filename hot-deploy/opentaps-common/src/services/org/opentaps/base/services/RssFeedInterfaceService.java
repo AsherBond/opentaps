@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: interface
  * Location: 
  * Invoke: 
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services.xml
+ * Defined in: framework/common/servicedef/services.xml
  */
 public class RssFeedInterfaceService extends ServiceWrapper {
 

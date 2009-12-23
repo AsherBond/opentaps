@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://webpos/script/org/ofbiz/webpos/event/ManagerEvents.xml
  * Invoke: openTerminal
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/webpos/servicedef/services_manager.xml
+ * Defined in: specialpurpose/webpos/servicedef/services_manager.xml
  */
 public class OpenTerminalService extends ServiceWrapper {
 

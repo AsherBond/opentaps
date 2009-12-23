@@ -40,7 +40,7 @@ import org.w3c.dom.Document;
  * Engine: java
  * Location: org.ofbiz.oagis.OagisInventoryServices
  * Invoke: oagisReceiveAcknowledgeDeliveryPo
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/oagis/servicedef/services.xml
+ * Defined in: specialpurpose/oagis/servicedef/services.xml
  */
 public class OagisReceiveAcknowledgeDeliveryPoService extends ServiceWrapper {
 

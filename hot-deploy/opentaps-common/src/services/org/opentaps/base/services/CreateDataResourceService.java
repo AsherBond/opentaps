@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://content/script/org/ofbiz/content/data/DataServices.xml
  * Invoke: createDataResource
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services_data.xml
+ * Defined in: applications/content/servicedef/services_data.xml
  */
 public class CreateDataResourceService extends ServiceWrapper {
 

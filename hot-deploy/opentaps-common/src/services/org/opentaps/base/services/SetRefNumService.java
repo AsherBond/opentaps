@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://webpos/script/org/ofbiz/webpos/event/PaymentEvents.xml
  * Invoke: setRefNum
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/webpos/servicedef/services_payment.xml
+ * Defined in: specialpurpose/webpos/servicedef/services_payment.xml
  */
 public class SetRefNumService extends ServiceWrapper {
 

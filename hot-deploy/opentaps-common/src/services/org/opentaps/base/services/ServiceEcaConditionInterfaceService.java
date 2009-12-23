@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: interface
  * Location: 
  * Invoke: 
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/service/servicedef/services.xml
+ * Defined in: framework/service/servicedef/services.xml
  */
 public class ServiceEcaConditionInterfaceService extends ServiceWrapper {
 

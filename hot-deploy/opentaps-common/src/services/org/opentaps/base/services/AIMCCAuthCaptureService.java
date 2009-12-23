@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.accounting.thirdparty.authorizedotnet.AIMPaymentServices
  * Invoke: ccAuthCapture
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_authorizedotnet.xml
+ * Defined in: applications/accounting/servicedef/services_authorizedotnet.xml
  */
 public class AIMCCAuthCaptureService extends ServiceWrapper {
 

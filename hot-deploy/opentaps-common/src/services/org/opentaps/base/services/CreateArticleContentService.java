@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://content/script/org/ofbiz/content/content/ContentServices.xml
  * Invoke: createArticleContent
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services.xml
+ * Defined in: applications/content/servicedef/services.xml
  */
 public class CreateArticleContentService extends ServiceWrapper {
 

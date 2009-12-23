@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.workeffort.WorkEffortServices
  * Invoke: markWorkEffortAsUpdated
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/opentaps-common/servicedef/services_workeffort.xml
+ * Defined in: hot-deploy/opentaps-common/servicedef/services_workeffort.xml
  */
 public class MarkWorkEffortAsUpdatedService extends ServiceWrapper {
 

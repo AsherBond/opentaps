@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://content/script/org/ofbiz/content/data/DataServices.xml
  * Invoke: updateElectronicText
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services_data.xml
+ * Defined in: applications/content/servicedef/services_data.xml
  */
 public class UpdateElectronicTextService extends ServiceWrapper {
 

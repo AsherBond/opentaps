@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://order/script/org/ofbiz/order/quote/QuoteServices.xml
  * Invoke: autoUpdateQuotePrice
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/order/servicedef/services_quote.xml
+ * Defined in: applications/order/servicedef/services_quote.xml
  */
 public class AutoUpdateQuotePriceService extends ServiceWrapper {
 

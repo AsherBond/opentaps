@@ -42,7 +42,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: com/opensourcestrategies/warehouse/manufacturing/ProductionRunServices.xml
  * Invoke: issueProductionRunTaskComponent
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/warehouse/servicedef/services_manufacturing.xml
+ * Defined in: hot-deploy/warehouse/servicedef/services_manufacturing.xml
  */
 public class IssueProductionRunTaskComponentService extends ServiceWrapper {
 

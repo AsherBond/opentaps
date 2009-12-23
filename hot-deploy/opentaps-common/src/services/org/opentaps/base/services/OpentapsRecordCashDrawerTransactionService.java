@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.order.OrderServices
  * Invoke: recordCashDrawerTransaction
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/opentaps-common/servicedef/services_orders.xml
+ * Defined in: hot-deploy/opentaps-common/servicedef/services_orders.xml
  */
 public class OpentapsRecordCashDrawerTransactionService extends ServiceWrapper {
 

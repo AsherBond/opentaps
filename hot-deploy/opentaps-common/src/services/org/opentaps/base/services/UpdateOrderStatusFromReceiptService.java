@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://order/script/org/ofbiz/order/order/OrderSimpleMethods.xml
  * Invoke: updateOrderStatusFromReceipt
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/order/servicedef/services.xml
+ * Defined in: applications/order/servicedef/services.xml
  */
 public class UpdateOrderStatusFromReceiptService extends ServiceWrapper {
 

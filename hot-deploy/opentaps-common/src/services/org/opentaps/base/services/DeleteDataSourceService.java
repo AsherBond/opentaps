@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://common/script/org/ofbiz/common/datasource/DataSourceServices.xml
  * Invoke: deleteDataSource
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services.xml
+ * Defined in: framework/common/servicedef/services.xml
  */
 public class DeleteDataSourceService extends ServiceWrapper {
 

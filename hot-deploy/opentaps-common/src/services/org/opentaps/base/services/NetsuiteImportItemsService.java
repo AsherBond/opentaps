@@ -46,7 +46,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.dataimport.netsuite.NetSuiteImportServices
  * Invoke: importItems
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/dataimport/servicedef/services_netsuite.xml
+ * Defined in: hot-deploy/dataimport/servicedef/services_netsuite.xml
  */
 public class NetsuiteImportItemsService extends ServiceWrapper {
 

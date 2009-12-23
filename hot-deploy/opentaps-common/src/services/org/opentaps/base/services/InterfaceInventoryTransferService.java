@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: interface
  * Location: 
  * Invoke: 
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_facility.xml
+ * Defined in: applications/product/servicedef/services_facility.xml
  */
 public class InterfaceInventoryTransferService extends ServiceWrapper {
 

@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://accounting/script/org/ofbiz/accounting/rate/RateServices.xml
  * Invoke: deletePartyRate
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_rate.xml
+ * Defined in: applications/accounting/servicedef/services_rate.xml
  */
 public class DeletePartyRateService extends ServiceWrapper {
 

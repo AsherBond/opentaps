@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://manufacturing/script/org/ofbiz/manufacturing/bom/BomSimpleMethods.xml
  * Invoke: deleteProductManufacturingRule
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/manufacturing/servicedef/services_bom.xml
+ * Defined in: applications/manufacturing/servicedef/services_bom.xml
  */
 public class DeleteProductManufacturingRuleService extends ServiceWrapper {
 

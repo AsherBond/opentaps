@@ -42,7 +42,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.dataimport.TaxImportServices
  * Invoke: importUSTaxRates
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/dataimport/servicedef/services.xml
+ * Defined in: hot-deploy/dataimport/servicedef/services.xml
  */
 public class ImportUSTaxRatesService extends ServiceWrapper {
 

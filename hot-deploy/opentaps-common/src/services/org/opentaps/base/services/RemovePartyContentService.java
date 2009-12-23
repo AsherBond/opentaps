@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://party/script/org/ofbiz/party/content/PartyContentServices.xml
  * Invoke: removePartyContent
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/party/servicedef/services.xml
+ * Defined in: applications/party/servicedef/services.xml
  */
 public class RemovePartyContentService extends ServiceWrapper {
 

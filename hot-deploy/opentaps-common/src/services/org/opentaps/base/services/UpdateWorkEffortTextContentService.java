@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: group
  * Location: 
  * Invoke: _updateWorkEffortTextContent.group
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/workeffort/servicedef/services.xml
+ * Defined in: applications/workeffort/servicedef/services.xml
  */
 public class UpdateWorkEffortTextContentService extends ServiceWrapper {
 

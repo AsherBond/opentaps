@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: group
  * Location: 
  * Invoke: _updateContentAndUploadedFile.group
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services_content.xml
+ * Defined in: applications/content/servicedef/services_content.xml
  */
 public class UpdateContentAndUploadedFileService extends ServiceWrapper {
 

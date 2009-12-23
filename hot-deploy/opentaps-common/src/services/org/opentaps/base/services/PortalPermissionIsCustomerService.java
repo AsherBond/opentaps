@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://myportal/script/org/ofbiz/myportal/MyPortalServices.xml
  * Invoke: portalPermissionIsCustomer
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/myportal/servicedef/services.xml
+ * Defined in: specialpurpose/myportal/servicedef/services.xml
  */
 public class PortalPermissionIsCustomerService extends ServiceWrapper {
 

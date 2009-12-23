@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.warehouse.domain.inventory.TraceInventoryService
  * Invoke: traceInventoryUsageForward
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/warehouse/servicedef/services_inventory.xml
+ * Defined in: hot-deploy/warehouse/servicedef/services_inventory.xml
  */
 public class TraceInventoryUsageForwardService extends ServiceWrapper {
 

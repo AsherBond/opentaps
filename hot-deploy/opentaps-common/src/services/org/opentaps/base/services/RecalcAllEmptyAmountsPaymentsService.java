@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.financials.domain.billing.payment.PaymentService
  * Invoke: recalcAllEmptyAmountsPayments
- * Defined in: file:/D:/eclipse/workspace/opentaps-1.4/hot-deploy/financials/servicedef/services_payment.xml
+ * Defined in: hot-deploy/financials/servicedef/services_payment.xml
  */
 public class RecalcAllEmptyAmountsPaymentsService extends ServiceWrapper {
 

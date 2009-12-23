@@ -42,7 +42,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.product.feature.ProductFeatureServices
  * Invoke: getAllExistingVariants
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services.xml
+ * Defined in: applications/product/servicedef/services.xml
  */
 public class GetAllExistingVariantsService extends ServiceWrapper {
 

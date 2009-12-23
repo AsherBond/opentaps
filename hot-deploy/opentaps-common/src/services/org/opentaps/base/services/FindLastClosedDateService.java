@@ -44,7 +44,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.accounting.period.PeriodServices
  * Invoke: findLastClosedDate
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_ledger.xml
+ * Defined in: applications/accounting/servicedef/services_ledger.xml
  */
 public class FindLastClosedDateService extends ServiceWrapper {
 

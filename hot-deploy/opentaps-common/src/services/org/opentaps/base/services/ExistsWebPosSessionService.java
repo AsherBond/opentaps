@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.webpos.WebPosEvents
  * Invoke: existsWebPosSession
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/webpos/servicedef/services.xml
+ * Defined in: specialpurpose/webpos/servicedef/services.xml
  */
 public class ExistsWebPosSessionService extends ServiceWrapper {
 

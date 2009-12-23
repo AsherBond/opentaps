@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: bsh
  * Location: component://common/script/org/ofbiz/common/BshServiceTest.bsh
  * Invoke: 
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services_test.xml
+ * Defined in: framework/common/servicedef/services_test.xml
  */
 public class TestBshService extends ServiceWrapper {
 

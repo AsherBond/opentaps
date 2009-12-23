@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.common.olap.CommonDimensionServices
  * Invoke: loadDateDimension
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services_olap.xml
+ * Defined in: framework/common/servicedef/services_olap.xml
  */
 public class LoadDateDimensionService extends ServiceWrapper {
 

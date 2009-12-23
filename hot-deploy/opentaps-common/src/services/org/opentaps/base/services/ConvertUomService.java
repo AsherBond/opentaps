@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://common/script/org/ofbiz/common/CommonServices.xml
  * Invoke: convertUom
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services.xml
+ * Defined in: framework/common/servicedef/services.xml
  */
 public class ConvertUomService extends ServiceWrapper {
 

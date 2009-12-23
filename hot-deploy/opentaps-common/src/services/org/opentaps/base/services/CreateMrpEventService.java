@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.manufacturing.mrp.InventoryEventPlannedServices
  * Invoke: createMrpEvent
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/manufacturing/servicedef/services_mrp.xml
+ * Defined in: applications/manufacturing/servicedef/services_mrp.xml
  */
 public class CreateMrpEventService extends ServiceWrapper {
 

@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://accounting/script/org/ofbiz/accounting/tax/TaxAuthorityServices.xml
  * Invoke: updateTaxAuthorityAssoc
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_tax.xml
+ * Defined in: applications/accounting/servicedef/services_tax.xml
  */
 public class UpdateTaxAuthorityAssocService extends ServiceWrapper {
 

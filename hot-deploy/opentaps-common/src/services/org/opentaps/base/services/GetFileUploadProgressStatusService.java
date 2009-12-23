@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://common/script/org/ofbiz/common/CommonServices.xml
  * Invoke: getFileUploadProgressStatus
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services.xml
+ * Defined in: framework/common/servicedef/services.xml
  */
 public class GetFileUploadProgressStatusService extends ServiceWrapper {
 

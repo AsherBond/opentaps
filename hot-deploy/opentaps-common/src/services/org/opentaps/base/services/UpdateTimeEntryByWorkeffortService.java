@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://projectmgr/script/org/ofbiz/project/ProjectServices.xml
  * Invoke: updateTimeEntryByWorkeffort
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/projectmgr/servicedef/services.xml
+ * Defined in: specialpurpose/projectmgr/servicedef/services.xml
  */
 public class UpdateTimeEntryByWorkeffortService extends ServiceWrapper {
 

@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://accounting/script/org/ofbiz/accounting/fixedasset/FixedAssetServices.xml
  * Invoke: deleteFixedAssetMeter
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_fixedasset.xml
+ * Defined in: applications/accounting/servicedef/services_fixedasset.xml
  */
 public class DeleteFixedAssetMeterService extends ServiceWrapper {
 

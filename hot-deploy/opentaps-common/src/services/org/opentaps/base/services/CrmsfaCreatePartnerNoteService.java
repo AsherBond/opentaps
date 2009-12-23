@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.common.NoteServices
  * Invoke: createPartnerNote
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_notes.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_notes.xml
  */
 public class CrmsfaCreatePartnerNoteService extends ServiceWrapper {
 

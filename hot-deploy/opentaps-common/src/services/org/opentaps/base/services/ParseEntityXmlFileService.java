@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.webtools.WebToolsServices
  * Invoke: parseEntityXmlFile
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/webtools/servicedef/services.xml
+ * Defined in: framework/webtools/servicedef/services.xml
  */
 public class ParseEntityXmlFileService extends ServiceWrapper {
 

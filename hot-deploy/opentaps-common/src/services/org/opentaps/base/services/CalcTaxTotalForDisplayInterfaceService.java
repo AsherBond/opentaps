@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: interface
  * Location: 
  * Invoke: 
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_tax.xml
+ * Defined in: applications/accounting/servicedef/services_tax.xml
  */
 public class CalcTaxTotalForDisplayInterfaceService extends ServiceWrapper {
 

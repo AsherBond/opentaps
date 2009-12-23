@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.service.ServiceUtil
  * Invoke: purgeOldJobs
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/service/servicedef/services.xml
+ * Defined in: framework/service/servicedef/services.xml
  */
 public class PurgeOldJobsService extends ServiceWrapper {
 

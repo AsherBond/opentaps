@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: interface
  * Location: 
  * Invoke: 
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_uom.xml
+ * Defined in: applications/product/servicedef/services_uom.xml
  */
 public class InterfaceUomFormulaService extends ServiceWrapper {
 

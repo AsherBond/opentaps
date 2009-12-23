@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: rmi
  * Location: main-rmi
  * Invoke: testBsh
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services_test.xml
+ * Defined in: framework/common/servicedef/services_test.xml
  */
 public class TestRmiFailService extends ServiceWrapper {
 

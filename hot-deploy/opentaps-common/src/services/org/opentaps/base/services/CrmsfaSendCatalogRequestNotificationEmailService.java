@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.common.NotificationServices
  * Invoke: sendCatalogRequestNotificationEmail
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_leads.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_leads.xml
  */
 public class CrmsfaSendCatalogRequestNotificationEmailService extends ServiceWrapper {
 

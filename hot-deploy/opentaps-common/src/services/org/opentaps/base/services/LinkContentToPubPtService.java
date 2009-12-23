@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.content.content.ContentServices
  * Invoke: linkContentToPubPt
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services.xml
+ * Defined in: applications/content/servicedef/services.xml
  */
 public class LinkContentToPubPtService extends ServiceWrapper {
 

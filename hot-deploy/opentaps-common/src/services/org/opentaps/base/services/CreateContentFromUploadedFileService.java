@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: group
  * Location: 
  * Invoke: _createContentFromUploadedFile.group
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services_content.xml
+ * Defined in: applications/content/servicedef/services_content.xml
  */
 public class CreateContentFromUploadedFileService extends ServiceWrapper {
 

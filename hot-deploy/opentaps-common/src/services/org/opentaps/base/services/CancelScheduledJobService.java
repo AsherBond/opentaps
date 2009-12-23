@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.service.ServiceUtil
  * Invoke: cancelJob
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/service/servicedef/services.xml
+ * Defined in: framework/service/servicedef/services.xml
  */
 public class CancelScheduledJobService extends ServiceWrapper {
 

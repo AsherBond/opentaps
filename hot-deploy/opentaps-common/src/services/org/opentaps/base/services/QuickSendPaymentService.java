@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://accounting/script/org/ofbiz/accounting/payment/PaymentServices.xml
  * Invoke: quickSendPayment
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_payment.xml
+ * Defined in: applications/accounting/servicedef/services_payment.xml
  */
 public class QuickSendPaymentService extends ServiceWrapper {
 

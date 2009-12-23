@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: rmi
  * Location: rita-rmi
  * Invoke: ritaCCCapture
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_rita.xml
+ * Defined in: applications/accounting/servicedef/services_rita.xml
  */
 public class RitaCCCaptureRemoteService extends ServiceWrapper {
 

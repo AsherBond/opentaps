@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.financials.domain.billing.invoice.InvoiceService
  * Invoke: setAccountingTags
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/financials/servicedef/services_invoice.xml
+ * Defined in: hot-deploy/financials/servicedef/services_invoice.xml
  */
 public class SetAccountingTagsService extends ServiceWrapper {
 

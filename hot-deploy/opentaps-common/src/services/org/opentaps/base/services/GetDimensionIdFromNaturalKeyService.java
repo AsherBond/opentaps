@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.bi.util.DimensionServices
  * Invoke: getDimensionIdFromNaturalKey
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/bi/servicedef/services.xml
+ * Defined in: framework/bi/servicedef/services.xml
  */
 public class GetDimensionIdFromNaturalKeyService extends ServiceWrapper {
 

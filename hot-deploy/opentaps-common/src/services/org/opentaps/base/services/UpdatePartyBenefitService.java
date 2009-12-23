@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://humanres/script/org/ofbiz/humanres/HumanResServices.xml
  * Invoke: updatePartyBenefit
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/humanres/servicedef/services.xml
+ * Defined in: applications/humanres/servicedef/services.xml
  */
 public class UpdatePartyBenefitService extends ServiceWrapper {
 

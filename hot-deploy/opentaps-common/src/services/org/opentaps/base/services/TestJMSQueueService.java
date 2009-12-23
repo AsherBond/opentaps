@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: jms
  * Location: serviceMessenger
  * Invoke: testScv
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services_test.xml
+ * Defined in: framework/common/servicedef/services_test.xml
  */
 public class TestJMSQueueService extends ServiceWrapper {
 

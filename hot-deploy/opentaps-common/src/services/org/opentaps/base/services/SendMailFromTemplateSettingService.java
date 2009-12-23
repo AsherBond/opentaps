@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://common/script/org/ofbiz/common/email/EmailServices.xml
  * Invoke: sendMailFromTemplateSetting
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services_email.xml
+ * Defined in: framework/common/servicedef/services_email.xml
  */
 public class SendMailFromTemplateSettingService extends ServiceWrapper {
 

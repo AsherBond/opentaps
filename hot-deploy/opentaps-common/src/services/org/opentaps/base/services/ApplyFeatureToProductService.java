@@ -43,7 +43,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://product/script/org/ofbiz/product/feature/ProductFeatureServices.xml
  * Invoke: applyFeatureToProduct
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_feature.xml
+ * Defined in: applications/product/servicedef/services_feature.xml
  */
 public class ApplyFeatureToProductService extends ServiceWrapper {
 

@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://product/script/org/ofbiz/product/product/ProductUomFormulas.xml
  * Invoke: convertUomProduct
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_uom.xml
+ * Defined in: applications/product/servicedef/services_uom.xml
  */
 public class ConvertUomProductService extends ServiceWrapper {
 

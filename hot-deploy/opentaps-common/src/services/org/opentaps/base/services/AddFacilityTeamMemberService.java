@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.warehouse.configuration.ConfigurationServices
  * Invoke: addFacilityTeamMember
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/warehouse/servicedef/services_configuration.xml
+ * Defined in: hot-deploy/warehouse/servicedef/services_configuration.xml
  */
 public class AddFacilityTeamMemberService extends ServiceWrapper {
 

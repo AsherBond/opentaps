@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.common.domain.cache.HibernateCacheService
  * Invoke: evictHibernateCache
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/opentaps-common/servicedef/services_cache.xml
+ * Defined in: hot-deploy/opentaps-common/servicedef/services_cache.xml
  */
 public class OpentapsEvictHibernateCacheService extends ServiceWrapper {
 

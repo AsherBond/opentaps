@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.marketing.marketing.MarketingServices
  * Invoke: signUpForContactList
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/marketing/servicedef/services.xml
+ * Defined in: applications/marketing/servicedef/services.xml
  */
 public class SignUpForContactListService extends ServiceWrapper {
 

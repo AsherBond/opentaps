@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: interface
  * Location: 
  * Invoke: 
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/manufacturing/servicedef/services_formula.xml
+ * Defined in: applications/manufacturing/servicedef/services_formula.xml
  */
 public class InterfaceBomFormulaService extends ServiceWrapper {
 

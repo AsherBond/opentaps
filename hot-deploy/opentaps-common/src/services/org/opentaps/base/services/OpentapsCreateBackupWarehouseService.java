@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.purchasing.facility.FacilityServices
  * Invoke: createBackupWarehouse
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/purchasing/servicedef/services_facility.xml
+ * Defined in: hot-deploy/purchasing/servicedef/services_facility.xml
  */
 public class OpentapsCreateBackupWarehouseService extends ServiceWrapper {
 

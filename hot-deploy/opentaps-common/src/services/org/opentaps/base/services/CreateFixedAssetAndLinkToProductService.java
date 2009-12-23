@@ -42,7 +42,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://product/script/org/ofbiz/product/rental/RentalServices.xml
  * Invoke: createFixedAssetAndLinkToProduct
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_rental.xml
+ * Defined in: applications/product/servicedef/services_rental.xml
  */
 public class CreateFixedAssetAndLinkToProductService extends ServiceWrapper {
 

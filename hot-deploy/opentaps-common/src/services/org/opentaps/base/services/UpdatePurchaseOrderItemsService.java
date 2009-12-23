@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.order.OrderServices
  * Invoke: updatePurchaseOrderItems
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/purchasing/servicedef/services.xml
+ * Defined in: hot-deploy/purchasing/servicedef/services.xml
  */
 public class UpdatePurchaseOrderItemsService extends ServiceWrapper {
 

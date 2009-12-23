@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://product/script/org/ofbiz/product/category/CategoryServices.xml
  * Invoke: copyCategoryProductMembers
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_maint.xml
+ * Defined in: applications/product/servicedef/services_maint.xml
  */
 public class CopyCategoryProductMembersService extends ServiceWrapper {
 

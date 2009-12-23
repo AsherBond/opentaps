@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://bi/script/org/ofbiz/bi/DimensionServices.xml
  * Invoke: quickInitDataWarehouse
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/bi/servicedef/services.xml
+ * Defined in: framework/bi/servicedef/services.xml
  */
 public class QuickInitDataWarehouseService extends ServiceWrapper {
 

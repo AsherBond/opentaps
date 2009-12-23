@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: interface
  * Location: 
  * Invoke: 
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/order/servicedef/services_requirement.xml
+ * Defined in: applications/order/servicedef/services_requirement.xml
  */
 public class RequirementInterfaceService extends ServiceWrapper {
 

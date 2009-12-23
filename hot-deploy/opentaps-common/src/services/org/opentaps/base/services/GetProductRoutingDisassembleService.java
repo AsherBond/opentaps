@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.warehouse.manufacturing.ProductionRunServices
  * Invoke: getProductRoutingDisassemble
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/warehouse/servicedef/services_manufacturing.xml
+ * Defined in: hot-deploy/warehouse/servicedef/services_manufacturing.xml
  */
 public class GetProductRoutingDisassembleService extends ServiceWrapper {
 

@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.purchasing.order.PurchasingOrderServices
  * Invoke: updateOrderItemEstimatedDeliveryDate
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/purchasing/servicedef/services.xml
+ * Defined in: hot-deploy/purchasing/servicedef/services.xml
  */
 public class PurchasingUpdateOrderItemEstimatedDeliveryDateService extends ServiceWrapper {
 

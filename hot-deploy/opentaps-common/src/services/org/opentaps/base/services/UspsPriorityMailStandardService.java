@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.shipment.thirdparty.usps.UspsServices
  * Invoke: uspsPriorityMailStandard
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_shipment_usps.xml
+ * Defined in: applications/product/servicedef/services_shipment_usps.xml
  */
 public class UspsPriorityMailStandardService extends ServiceWrapper {
 

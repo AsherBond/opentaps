@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.ebay.ImportOrdersFromEbay
  * Invoke: setEbayOrderToComplete
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/ebay/servicedef/services.xml
+ * Defined in: specialpurpose/ebay/servicedef/services.xml
  */
 public class SetEbayOrderToCompleteService extends ServiceWrapper {
 

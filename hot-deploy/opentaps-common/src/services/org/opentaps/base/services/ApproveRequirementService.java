@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.manufacturing.jobshopmgt.ProductionRunServices
  * Invoke: approveRequirement
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/order/servicedef/services_requirement.xml
+ * Defined in: applications/order/servicedef/services_requirement.xml
  */
 public class ApproveRequirementService extends ServiceWrapper {
 

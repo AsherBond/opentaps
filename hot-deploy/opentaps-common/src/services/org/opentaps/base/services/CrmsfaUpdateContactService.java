@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.contacts.ContactsServices
  * Invoke: updateContact
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_contacts.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_contacts.xml
  */
 public class CrmsfaUpdateContactService extends ServiceWrapper {
 

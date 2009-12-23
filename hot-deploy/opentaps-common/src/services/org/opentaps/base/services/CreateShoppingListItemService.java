@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://order/script/org/ofbiz/order/shoppinglist/ShoppingListServices.xml
  * Invoke: createShoppingListItem
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/order/servicedef/services_shoppinglist.xml
+ * Defined in: applications/order/servicedef/services_shoppinglist.xml
  */
 public class CreateShoppingListItemService extends ServiceWrapper {
 

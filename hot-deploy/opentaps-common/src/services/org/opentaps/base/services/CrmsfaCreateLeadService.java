@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.leads.LeadsServices
  * Invoke: createLead
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_leads.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_leads.xml
  */
 public class CrmsfaCreateLeadService extends ServiceWrapper {
 

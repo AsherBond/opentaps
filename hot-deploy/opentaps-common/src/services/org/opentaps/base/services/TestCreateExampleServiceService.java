@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://example/script/org/ofbiz/example/example/ExampleServices.xml
  * Invoke: testCreateExampleService
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/example/servicedef/services.xml
+ * Defined in: framework/example/servicedef/services.xml
  */
 public class TestCreateExampleServiceService extends ServiceWrapper {
 

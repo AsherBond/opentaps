@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.content.content.ContentPermissionServices
  * Invoke: checkAssocPermission
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services_content.xml
+ * Defined in: applications/content/servicedef/services_content.xml
  */
 public class CheckAssocPermissionService extends ServiceWrapper {
 

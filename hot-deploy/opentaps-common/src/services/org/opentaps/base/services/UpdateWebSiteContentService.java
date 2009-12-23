@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://content/script/org/ofbiz/content/website/WebSiteServices.xml
  * Invoke: updateWebSiteContent
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services_website.xml
+ * Defined in: applications/content/servicedef/services_website.xml
  */
 public class UpdateWebSiteContentService extends ServiceWrapper {
 

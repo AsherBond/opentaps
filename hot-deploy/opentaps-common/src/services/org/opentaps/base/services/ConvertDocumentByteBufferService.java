@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.content.openoffice.OpenOfficeServices
  * Invoke: convertDocumentByteBuffer
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services.xml
+ * Defined in: applications/content/servicedef/services.xml
  */
 public class ConvertDocumentByteBufferService extends ServiceWrapper {
 

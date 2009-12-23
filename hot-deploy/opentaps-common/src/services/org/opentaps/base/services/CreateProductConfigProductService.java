@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://product/script/org/ofbiz/product/config/ConfigServices.xml
  * Invoke: createProductConfigProduct
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services.xml
+ * Defined in: applications/product/servicedef/services.xml
  */
 public class CreateProductConfigProductService extends ServiceWrapper {
 

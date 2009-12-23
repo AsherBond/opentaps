@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://marketing/script/org/ofbiz/marketing/contact/ContactListServices.xml
  * Invoke: createContactListPartyStatus
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/marketing/servicedef/services.xml
+ * Defined in: applications/marketing/servicedef/services.xml
  */
 public class CreateContactListPartyStatusService extends ServiceWrapper {
 

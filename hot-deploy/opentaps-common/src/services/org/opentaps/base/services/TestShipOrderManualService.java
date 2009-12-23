@@ -45,7 +45,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.tests.warehouse.TestShippingServices
  * Invoke: testShipOrderManual
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/opentaps-tests/servicedef/services_test.xml
+ * Defined in: hot-deploy/opentaps-tests/servicedef/services_test.xml
  */
 public class TestShipOrderManualService extends ServiceWrapper {
 

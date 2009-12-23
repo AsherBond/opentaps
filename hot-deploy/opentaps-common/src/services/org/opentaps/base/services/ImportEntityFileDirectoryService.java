@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.entityext.data.EntityDataServices
  * Invoke: importDelimitedFromDirectory
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/entityext/servicedef/services.xml
+ * Defined in: framework/entityext/servicedef/services.xml
  */
 public class ImportEntityFileDirectoryService extends ServiceWrapper {
 

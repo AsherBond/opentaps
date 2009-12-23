@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.order.order.OrderReturnServices
  * Invoke: createReturnAdjustment
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/order/servicedef/services_return.xml
+ * Defined in: applications/order/servicedef/services_return.xml
  */
 public class CreateReturnAdjustmentService extends ServiceWrapper {
 

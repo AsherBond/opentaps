@@ -43,7 +43,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.order.requirement.RequirementServices
  * Invoke: createATPRequirementsForOrder
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/order/servicedef/services_requirement.xml
+ * Defined in: applications/order/servicedef/services_requirement.xml
  */
 public class CreateATPRequirementsForOrderService extends ServiceWrapper {
 

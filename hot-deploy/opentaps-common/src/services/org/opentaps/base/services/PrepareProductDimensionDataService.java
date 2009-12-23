@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://product/script/org/ofbiz/product/olap/ProductDimensionServices.xml
  * Invoke: prepareProductDimensionData
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_olap.xml
+ * Defined in: applications/product/servicedef/services_olap.xml
  */
 public class PrepareProductDimensionDataService extends ServiceWrapper {
 

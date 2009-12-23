@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://product/script/org/ofbiz/product/subscription/SubscriptionServices.xml
  * Invoke: createSubscriptionResource
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_subscription.xml
+ * Defined in: applications/product/servicedef/services_subscription.xml
  */
 public class CreateSubscriptionResourceService extends ServiceWrapper {
 

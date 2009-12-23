@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: bsh
  * Location: summary/backOrderedService.bsh
  * Invoke: 
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/warehouse/servicedef/services_facility.xml
+ * Defined in: hot-deploy/warehouse/servicedef/services_facility.xml
  */
 public class GetBackOrderedCountsService extends ServiceWrapper {
 

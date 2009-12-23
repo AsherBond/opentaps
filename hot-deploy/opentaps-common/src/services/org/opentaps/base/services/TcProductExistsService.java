@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://hhfacility/script/org/ofbiz/hhfacility/FacilityServices.xml
  * Invoke: tc_ProductExists
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/hhfacility/servicedef/services_hhfacility.xml
+ * Defined in: specialpurpose/hhfacility/servicedef/services_hhfacility.xml
  */
 public class TcProductExistsService extends ServiceWrapper {
 

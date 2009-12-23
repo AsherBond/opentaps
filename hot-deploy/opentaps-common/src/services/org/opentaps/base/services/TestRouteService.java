@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: route
  * Location: 
  * Invoke: 
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services_test.xml
+ * Defined in: framework/common/servicedef/services_test.xml
  */
 public class TestRouteService extends ServiceWrapper {
 

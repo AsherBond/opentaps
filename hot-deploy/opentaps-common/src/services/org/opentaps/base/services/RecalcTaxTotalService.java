@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.common.domain.order.OrderService
  * Invoke: recalcOrderTax
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/opentaps-common/servicedef/services_orders.xml
+ * Defined in: hot-deploy/opentaps-common/servicedef/services_orders.xml
  */
 public class RecalcTaxTotalService extends ServiceWrapper {
 

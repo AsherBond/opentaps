@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://common/script/org/ofbiz/common/CdyneServices.xml
  * Invoke: cdynePostalAddressFillInCounty
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services_cdyne.xml
+ * Defined in: framework/common/servicedef/services_cdyne.xml
  */
 public class CdynePostalAddressFillInCountyService extends ServiceWrapper {
 

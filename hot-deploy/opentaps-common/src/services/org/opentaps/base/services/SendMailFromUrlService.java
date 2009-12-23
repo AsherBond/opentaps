@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.common.email.EmailServices
  * Invoke: sendMailFromUrl
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services_email.xml
+ * Defined in: framework/common/servicedef/services_email.xml
  */
 public class SendMailFromUrlService extends ServiceWrapper {
 

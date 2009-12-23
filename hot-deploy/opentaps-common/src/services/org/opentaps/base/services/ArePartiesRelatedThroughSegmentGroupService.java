@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://marketing/script/org/ofbiz/marketing/segment/SegmentServices.xml
  * Invoke: arePartiesRelatedThroughSegmentGroup
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/marketing/servicedef/services.xml
+ * Defined in: applications/marketing/servicedef/services.xml
  */
 public class ArePartiesRelatedThroughSegmentGroupService extends ServiceWrapper {
 

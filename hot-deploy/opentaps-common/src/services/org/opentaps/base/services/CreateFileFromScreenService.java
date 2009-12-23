@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.content.output.OutputServices
  * Invoke: createFileFromScreen
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services_output.xml
+ * Defined in: applications/content/servicedef/services_output.xml
  */
 public class CreateFileFromScreenService extends ServiceWrapper {
 

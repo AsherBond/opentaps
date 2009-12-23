@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.partners.PartnerServices
  * Invoke: createPartnerSalesAgreement
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_partners.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_partners.xml
  */
 public class OpentapsCreatePartnerSalesAgreementService extends ServiceWrapper {
 

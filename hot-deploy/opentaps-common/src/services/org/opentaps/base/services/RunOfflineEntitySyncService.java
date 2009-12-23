@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.entityext.synchronization.EntitySyncServices
  * Invoke: runOfflineEntitySync
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/entityext/servicedef/services.xml
+ * Defined in: framework/entityext/servicedef/services.xml
  */
 public class RunOfflineEntitySyncService extends ServiceWrapper {
 

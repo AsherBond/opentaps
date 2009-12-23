@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: group
  * Location: 
  * Invoke: _uploadWorkEffortContentFile.group
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/workeffort/servicedef/services.xml
+ * Defined in: applications/workeffort/servicedef/services.xml
  */
 public class UploadWorkEffortContentFileService extends ServiceWrapper {
 

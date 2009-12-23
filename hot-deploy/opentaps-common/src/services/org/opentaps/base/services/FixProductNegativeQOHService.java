@@ -42,7 +42,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.hhfacility.FacilityServices
  * Invoke: fixProductNegativeQOH
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/hhfacility/servicedef/services_hhfacility.xml
+ * Defined in: specialpurpose/hhfacility/servicedef/services_hhfacility.xml
  */
 public class FixProductNegativeQOHService extends ServiceWrapper {
 

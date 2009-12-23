@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.warehouse.shipment.ShippingServices
  * Invoke: calcPackSessionAdditionalShippingCharge
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/warehouse/servicedef/services_shipping.xml
+ * Defined in: hot-deploy/warehouse/servicedef/services_shipping.xml
  */
 public class WarehouseCalcPackSessionAdditionalShippingChargeService extends ServiceWrapper {
 

@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://common/script/org/ofbiz/common/olap/CommonDimensionServices.xml
  * Invoke: loadCurrencyDimension
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services_olap.xml
+ * Defined in: framework/common/servicedef/services_olap.xml
  */
 public class LoadCurrencyDimensionService extends ServiceWrapper {
 

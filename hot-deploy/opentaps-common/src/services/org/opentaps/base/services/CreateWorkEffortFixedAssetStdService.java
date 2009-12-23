@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://workeffort/script/org/ofbiz/workeffort/workeffort/WorkEffortSimpleServices.xml
  * Invoke: createWorkEffortFixedAssetStd
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/workeffort/servicedef/services.xml
+ * Defined in: applications/workeffort/servicedef/services.xml
  */
 public class CreateWorkEffortFixedAssetStdService extends ServiceWrapper {
 

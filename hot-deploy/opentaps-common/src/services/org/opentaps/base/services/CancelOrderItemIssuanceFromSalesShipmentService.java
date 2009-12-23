@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://product/script/org/ofbiz/shipment/issuance/IssuanceServices.xml
  * Invoke: cancelOrderItemIssuanceFromSalesShipment
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_shipment.xml
+ * Defined in: applications/product/servicedef/services_shipment.xml
  */
 public class CancelOrderItemIssuanceFromSalesShipmentService extends ServiceWrapper {
 

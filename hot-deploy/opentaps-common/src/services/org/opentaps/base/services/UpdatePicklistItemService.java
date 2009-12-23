@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://product/script/org/ofbiz/shipment/picklist/PicklistServices.xml
  * Invoke: updatePicklistItem
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_picklist.xml
+ * Defined in: applications/product/servicedef/services_picklist.xml
  */
 public class UpdatePicklistItemService extends ServiceWrapper {
 

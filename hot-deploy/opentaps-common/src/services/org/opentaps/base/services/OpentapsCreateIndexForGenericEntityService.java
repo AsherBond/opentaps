@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.search.IndexingService
  * Invoke: createIndexForGenericEntity
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/search/servicedef/services_search.xml
+ * Defined in: hot-deploy/search/servicedef/services_search.xml
  */
 public class OpentapsCreateIndexForGenericEntityService extends ServiceWrapper {
 

@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices
  * Invoke: invoiceAndCaptureOrder
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_orders.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_orders.xml
  */
 public class InvoiceAndCaptureOrderService extends ServiceWrapper {
 

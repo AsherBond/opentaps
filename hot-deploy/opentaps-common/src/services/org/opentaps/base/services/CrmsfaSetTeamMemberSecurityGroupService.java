@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.teams.TeamServices
  * Invoke: setTeamMemberSecurityGroup
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_teams.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_teams.xml
  */
 public class CrmsfaSetTeamMemberSecurityGroupService extends ServiceWrapper {
 

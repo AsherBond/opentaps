@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.sfa.vcard.VCard
  * Invoke: exportVCard
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/marketing/servicedef/services.xml
+ * Defined in: applications/marketing/servicedef/services.xml
  */
 public class ExportVCardService extends ServiceWrapper {
 

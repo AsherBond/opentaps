@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.content.content.ContentPermissionServices
  * Invoke: checkContentPermission
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services_content.xml
+ * Defined in: applications/content/servicedef/services_content.xml
  */
 public class CheckContentPermissionService extends ServiceWrapper {
 

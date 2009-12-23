@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://oagis/script/org/ofbiz/oagis/OagisMessageServices.xml
  * Invoke: updateOagisMessageInfo
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/oagis/servicedef/services.xml
+ * Defined in: specialpurpose/oagis/servicedef/services.xml
  */
 public class UpdateOagisMessageInfoService extends ServiceWrapper {
 

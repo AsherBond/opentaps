@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://product/script/org/ofbiz/product/promo/PromoServices.xml
  * Invoke: createProductStorePromoAppl
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_store.xml
+ * Defined in: applications/product/servicedef/services_store.xml
  */
 public class CreateProductStorePromoApplService extends ServiceWrapper {
 

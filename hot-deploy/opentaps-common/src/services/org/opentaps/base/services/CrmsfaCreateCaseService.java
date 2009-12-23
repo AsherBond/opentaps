@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.cases.CasesServices
  * Invoke: createCase
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_cases.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_cases.xml
  */
 public class CrmsfaCreateCaseService extends ServiceWrapper {
 

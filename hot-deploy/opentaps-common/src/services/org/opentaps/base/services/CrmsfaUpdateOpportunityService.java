@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.opportunities.OpportunitiesServices
  * Invoke: updateOpportunity
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_opportunities.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_opportunities.xml
  */
 public class CrmsfaUpdateOpportunityService extends ServiceWrapper {
 

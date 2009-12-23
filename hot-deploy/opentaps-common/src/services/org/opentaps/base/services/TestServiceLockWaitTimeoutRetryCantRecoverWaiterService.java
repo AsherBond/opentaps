@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.service.test.ServiceEngineTestServices
  * Invoke: testServiceLockWaitTimeoutRetryCantRecoverWaiter
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/service/servicedef/services_test_se.xml
+ * Defined in: framework/service/servicedef/services_test_se.xml
  */
 public class TestServiceLockWaitTimeoutRetryCantRecoverWaiterService extends ServiceWrapper {
 

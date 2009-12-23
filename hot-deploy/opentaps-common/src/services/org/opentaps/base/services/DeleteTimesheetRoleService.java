@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://workeffort/script/org/ofbiz/workeffort/timesheet/TimesheetServices.xml
  * Invoke: deleteTimesheetRole
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/workeffort/servicedef/services_timesheet.xml
+ * Defined in: applications/workeffort/servicedef/services_timesheet.xml
  */
 public class DeleteTimesheetRoleService extends ServiceWrapper {
 

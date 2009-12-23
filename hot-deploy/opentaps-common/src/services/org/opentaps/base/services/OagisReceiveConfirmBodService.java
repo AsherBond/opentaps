@@ -40,7 +40,7 @@ import org.w3c.dom.Document;
  * Engine: java
  * Location: org.ofbiz.oagis.OagisServices
  * Invoke: oagisReceiveConfirmBod
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/oagis/servicedef/services.xml
+ * Defined in: specialpurpose/oagis/servicedef/services.xml
  */
 public class OagisReceiveConfirmBodService extends ServiceWrapper {
 

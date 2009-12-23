@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.manufacturing.bom.BomServices
  * Invoke: updateLowLevelCode
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/opentaps-common/servicedef/services_bom.xml
+ * Defined in: hot-deploy/opentaps-common/servicedef/services_bom.xml
  */
 public class UpdateLowLevelCodeService extends ServiceWrapper {
 

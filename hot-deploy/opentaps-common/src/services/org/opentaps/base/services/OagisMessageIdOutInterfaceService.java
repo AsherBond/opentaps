@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: interface
  * Location: 
  * Invoke: 
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/oagis/servicedef/services.xml
+ * Defined in: specialpurpose/oagis/servicedef/services.xml
  */
 public class OagisMessageIdOutInterfaceService extends ServiceWrapper {
 

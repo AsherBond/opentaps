@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.accounting.finaccount.FinAccountServices
  * Invoke: checkFinAccountStatus
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_finaccount.xml
+ * Defined in: applications/accounting/servicedef/services_finaccount.xml
  */
 public class CheckFinAccountStatusService extends ServiceWrapper {
 

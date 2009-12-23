@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: group
  * Location: 
  * Invoke: _completePurchaseOrder.group
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/order/servicedef/services.xml
+ * Defined in: applications/order/servicedef/services.xml
  */
 public class CompletePurchaseOrderService extends ServiceWrapper {
 

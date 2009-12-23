@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://workeffort/script/org/ofbiz/workeffort/timesheet/TimesheetServices.xml
  * Invoke: createTimesheetForThisWeek
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/projectmgr/servicedef/services.xml
+ * Defined in: specialpurpose/projectmgr/servicedef/services.xml
  */
 public class CreateProjectTimesheetService extends ServiceWrapper {
 

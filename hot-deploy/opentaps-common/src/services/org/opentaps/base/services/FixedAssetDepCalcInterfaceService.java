@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: interface
  * Location: 
  * Invoke: 
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_fixedasset.xml
+ * Defined in: applications/accounting/servicedef/services_fixedasset.xml
  */
 public class FixedAssetDepCalcInterfaceService extends ServiceWrapper {
 

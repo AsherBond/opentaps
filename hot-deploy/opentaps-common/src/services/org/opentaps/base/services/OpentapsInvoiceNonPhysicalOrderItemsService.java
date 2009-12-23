@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.financials.domain.billing.invoice.OrderInvoicingService
  * Invoke: invoiceNonPhysicalOrderItems
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/financials/servicedef/services_invoice.xml
+ * Defined in: hot-deploy/financials/servicedef/services_invoice.xml
  */
 public class OpentapsInvoiceNonPhysicalOrderItemsService extends ServiceWrapper {
 

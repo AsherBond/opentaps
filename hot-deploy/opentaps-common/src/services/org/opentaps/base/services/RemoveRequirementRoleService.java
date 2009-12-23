@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://order/script/org/ofbiz/order/requirement/RequirementServices.xml
  * Invoke: removeRequirementRole
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/order/servicedef/services_requirement.xml
+ * Defined in: applications/order/servicedef/services_requirement.xml
  */
 public class RemoveRequirementRoleService extends ServiceWrapper {
 

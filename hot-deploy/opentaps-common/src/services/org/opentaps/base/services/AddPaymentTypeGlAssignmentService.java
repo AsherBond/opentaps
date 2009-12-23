@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: entity-auto
  * Location: 
  * Invoke: create
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_admin.xml
+ * Defined in: applications/accounting/servicedef/services_admin.xml
  */
 public class AddPaymentTypeGlAssignmentService extends ServiceWrapper {
 

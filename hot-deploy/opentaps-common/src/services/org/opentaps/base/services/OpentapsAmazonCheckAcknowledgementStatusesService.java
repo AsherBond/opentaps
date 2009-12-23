@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.amazon.order.AmazonOrderServices
  * Invoke: checkAcknowledgementStatuses
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/amazon/servicedef/services_amazon.xml
+ * Defined in: hot-deploy/amazon/servicedef/services_amazon.xml
  */
 public class OpentapsAmazonCheckAcknowledgementStatusesService extends ServiceWrapper {
 

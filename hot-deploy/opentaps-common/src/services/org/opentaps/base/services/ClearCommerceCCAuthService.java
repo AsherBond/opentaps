@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.accounting.thirdparty.clearcommerce.CCPaymentServices
  * Invoke: ccAuth
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_clearcommerce.xml
+ * Defined in: applications/accounting/servicedef/services_clearcommerce.xml
  */
 public class ClearCommerceCCAuthService extends ServiceWrapper {
 

@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices
  * Invoke: markServicesAsPerformed
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_orders.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_orders.xml
  */
 public class CrmsfaMarkServicesAsPerformedService extends ServiceWrapper {
 

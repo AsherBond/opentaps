@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.content.EmailServices
  * Invoke: prepareQuoteEmail
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_quotes.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_quotes.xml
  */
 public class CrmsfaPrepareQuoteEmailService extends ServiceWrapper {
 

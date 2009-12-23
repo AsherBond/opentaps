@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: jms
  * Location: serviceMessenger
  * Invoke: clearCacheLineByPrimaryKey
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/entityext/servicedef/services.xml
+ * Defined in: framework/entityext/servicedef/services.xml
  */
 public class DistributedClearCacheLineByPrimaryKeyService extends ServiceWrapper {
 

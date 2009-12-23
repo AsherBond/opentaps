@@ -50,7 +50,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.accounting.agreement.AgreementServices
  * Invoke: getCommissionForProduct
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_agreement.xml
+ * Defined in: applications/accounting/servicedef/services_agreement.xml
  */
 public class GetCommissionForProductService extends ServiceWrapper {
 

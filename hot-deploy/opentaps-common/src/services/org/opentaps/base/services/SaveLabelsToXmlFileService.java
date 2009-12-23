@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.webtools.labelmanager.SaveLabelsToXmlFile
  * Invoke: saveLabelsToXmlFile
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/webtools/servicedef/services.xml
+ * Defined in: framework/webtools/servicedef/services.xml
  */
 public class SaveLabelsToXmlFileService extends ServiceWrapper {
 

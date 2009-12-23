@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://securityext/script/org/ofbiz/securityext/securitygroup/SecurityGroupServices.xml
  * Invoke: updateSecurityPermission
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/securityext/servicedef/services.xml
+ * Defined in: applications/securityext/servicedef/services.xml
  */
 public class UpdateSecurityPermissionService extends ServiceWrapper {
 

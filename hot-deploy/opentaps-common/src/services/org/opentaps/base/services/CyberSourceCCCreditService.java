@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.accounting.thirdparty.cybersource.IcsPaymentServices
  * Invoke: ccCredit
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_cybersource.xml
+ * Defined in: applications/accounting/servicedef/services_cybersource.xml
  */
 public class CyberSourceCCCreditService extends ServiceWrapper {
 

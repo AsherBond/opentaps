@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.party.PartyServices
  * Invoke: setSupplementalDataForAllParties
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/opentaps-common/servicedef/services_party.xml
+ * Defined in: hot-deploy/opentaps-common/servicedef/services_party.xml
  */
 public class OpentapsSetSupplementalDataForAllPartiesService extends ServiceWrapper {
 

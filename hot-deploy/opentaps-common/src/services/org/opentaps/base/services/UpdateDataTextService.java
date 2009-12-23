@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: route
  * Location: 
  * Invoke: 
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services_data.xml
+ * Defined in: applications/content/servicedef/services_data.xml
  */
 public class UpdateDataTextService extends ServiceWrapper {
 

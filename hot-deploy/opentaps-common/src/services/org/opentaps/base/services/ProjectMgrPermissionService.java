@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://projectmgr/script/org/ofbiz/project/ProjectPermissionServices.xml
  * Invoke: projectMgrPermission
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/projectmgr/servicedef/services.xml
+ * Defined in: specialpurpose/projectmgr/servicedef/services.xml
  */
 public class ProjectMgrPermissionService extends ServiceWrapper {
 

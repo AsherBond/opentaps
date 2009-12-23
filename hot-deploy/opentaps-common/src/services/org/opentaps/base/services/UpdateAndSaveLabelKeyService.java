@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.webtools.labelmanager.LabelManagerFactory
  * Invoke: updateAndSaveLabelKey
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/webtools/servicedef/services.xml
+ * Defined in: framework/webtools/servicedef/services.xml
  */
 public class UpdateAndSaveLabelKeyService extends ServiceWrapper {
 

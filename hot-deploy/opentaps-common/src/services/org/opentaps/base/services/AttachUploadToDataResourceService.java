@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://content/script/org/ofbiz/content/data/DataServices.xml
  * Invoke: attachUploadToDataResource
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services_content.xml
+ * Defined in: applications/content/servicedef/services_content.xml
  */
 public class AttachUploadToDataResourceService extends ServiceWrapper {
 

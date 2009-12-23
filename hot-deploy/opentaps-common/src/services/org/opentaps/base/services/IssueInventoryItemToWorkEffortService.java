@@ -43,7 +43,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://manufacturing/script/org/ofbiz/manufacturing/jobshopmgt/ProductionRunServices.xml
  * Invoke: issueInventoryItemToWorkEffort
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/manufacturing/servicedef/services_production_run.xml
+ * Defined in: applications/manufacturing/servicedef/services_production_run.xml
  */
 public class IssueInventoryItemToWorkEffortService extends ServiceWrapper {
 

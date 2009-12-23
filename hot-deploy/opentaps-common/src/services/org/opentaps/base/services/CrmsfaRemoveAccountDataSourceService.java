@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.common.DataSourceServices
  * Invoke: removeAccountDataSource
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_datasources.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_datasources.xml
  */
 public class CrmsfaRemoveAccountDataSourceService extends ServiceWrapper {
 

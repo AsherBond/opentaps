@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.purchasing.planning.PlanningServices
  * Invoke: cancelRequirementsApprovedByVendor
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/purchasing/servicedef/services.xml
+ * Defined in: hot-deploy/purchasing/servicedef/services.xml
  */
 public class PurchasingCancelRequirementsApprovedByVendorService extends ServiceWrapper {
 

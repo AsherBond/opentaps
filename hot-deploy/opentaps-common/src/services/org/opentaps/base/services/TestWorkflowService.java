@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: workflow
  * Location: TEST-PKG
  * Invoke: TestWorkflow
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services_test.xml
+ * Defined in: framework/common/servicedef/services_test.xml
  */
 public class TestWorkflowService extends ServiceWrapper {
 

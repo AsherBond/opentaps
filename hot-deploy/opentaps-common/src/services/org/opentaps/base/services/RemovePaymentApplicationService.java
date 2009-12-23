@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://accounting/script/org/ofbiz/accounting/invoice/InvoiceServices.xml
  * Invoke: removePaymentApplication
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_payment.xml
+ * Defined in: applications/accounting/servicedef/services_payment.xml
  */
 public class RemovePaymentApplicationService extends ServiceWrapper {
 

@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://content/script/org/ofbiz/content/survey/SurveyServices.xml
  * Invoke: createSurveyTrigger
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services_survey.xml
+ * Defined in: applications/content/servicedef/services_survey.xml
  */
 public class CreateSurveyTriggerService extends ServiceWrapper {
 

@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: http
  * Location: http://localhost:8080/webtools/control/httpService
  * Invoke: testScv
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services_test.xml
+ * Defined in: framework/common/servicedef/services_test.xml
  */
 public class TestHttpService extends ServiceWrapper {
 

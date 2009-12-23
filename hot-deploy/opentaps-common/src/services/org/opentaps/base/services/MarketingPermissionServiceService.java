@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://common/script/org/ofbiz/common/permission/CommonPermissionServices.xml
  * Invoke: genericBasePermissionCheck
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/marketing/servicedef/services.xml
+ * Defined in: applications/marketing/servicedef/services.xml
  */
 public class MarketingPermissionServiceService extends ServiceWrapper {
 

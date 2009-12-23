@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.product.supplier.SupplierProductServices
  * Invoke: getSuppliersForProduct
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_view.xml
+ * Defined in: applications/product/servicedef/services_view.xml
  */
 public class GetSuppliersForProductService extends ServiceWrapper {
 

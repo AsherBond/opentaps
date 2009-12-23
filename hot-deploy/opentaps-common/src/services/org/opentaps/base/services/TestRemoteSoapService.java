@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: soap
  * Location: http://nagoya.apache.org:5049/axis/servlet/AxisServlet
  * Invoke: echoString
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/common/servicedef/services_test.xml
+ * Defined in: framework/common/servicedef/services_test.xml
  */
 public class TestRemoteSoapService extends ServiceWrapper {
 

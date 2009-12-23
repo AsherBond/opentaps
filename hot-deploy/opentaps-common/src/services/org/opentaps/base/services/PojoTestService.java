@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.tests.service.POJOTestServices
  * Invoke: pojoTest
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/opentaps-tests/servicedef/services_pojo_tests.xml
+ * Defined in: hot-deploy/opentaps-tests/servicedef/services_pojo_tests.xml
  */
 public class PojoTestService extends ServiceWrapper {
 

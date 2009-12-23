@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: org/ofbiz/accounting/payment/PaymentGatewayConfigServices.xml
  * Invoke: updateGatewayConfigurationType
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_paymentgateway.xml
+ * Defined in: applications/accounting/servicedef/services_paymentgateway.xml
  */
 public class UpdateGatewayConfigurationTypeService extends ServiceWrapper {
 

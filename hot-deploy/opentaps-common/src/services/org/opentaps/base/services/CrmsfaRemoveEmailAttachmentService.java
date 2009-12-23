@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: group
  * Location: 
  * Invoke: _crmsfa.removeEmailAttachment.group
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_content.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_content.xml
  */
 public class CrmsfaRemoveEmailAttachmentService extends ServiceWrapper {
 

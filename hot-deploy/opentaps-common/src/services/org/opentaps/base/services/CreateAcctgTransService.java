@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://accounting/script/org/ofbiz/accounting/ledger/AcctgTransServices.xml
  * Invoke: createAcctgTrans
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_ledger.xml
+ * Defined in: applications/accounting/servicedef/services_ledger.xml
  */
 public class CreateAcctgTransService extends ServiceWrapper {
 

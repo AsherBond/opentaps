@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.manufacturing.bom.BOMServices
  * Invoke: searchDuplicatedAncestor
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/manufacturing/servicedef/services_bom.xml
+ * Defined in: applications/manufacturing/servicedef/services_bom.xml
  */
 public class SearchDuplicatedAncestorService extends ServiceWrapper {
 

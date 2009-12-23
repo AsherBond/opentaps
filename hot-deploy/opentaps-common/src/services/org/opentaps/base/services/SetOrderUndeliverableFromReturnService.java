@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.returns.ReturnServices
  * Invoke: setOrderUndeliverableFromReturn
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_returns.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_returns.xml
  */
 public class SetOrderUndeliverableFromReturnService extends ServiceWrapper {
 

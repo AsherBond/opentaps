@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://example/script/org/ofbiz/example/ExamplePermissionServices.xml
  * Invoke: exampleGenericPermission
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/example/servicedef/services.xml
+ * Defined in: framework/example/servicedef/services.xml
  */
 public class ExampleGenericPermissionService extends ServiceWrapper {
 

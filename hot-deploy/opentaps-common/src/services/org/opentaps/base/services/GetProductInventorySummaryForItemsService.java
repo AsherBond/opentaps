@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.product.inventory.InventoryServices
  * Invoke: getProductInventorySummaryForItems
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_facility.xml
+ * Defined in: applications/product/servicedef/services_facility.xml
  */
 public class GetProductInventorySummaryForItemsService extends ServiceWrapper {
 

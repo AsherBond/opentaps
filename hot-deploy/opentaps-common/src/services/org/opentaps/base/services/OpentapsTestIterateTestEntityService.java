@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.CommonServices
  * Invoke: testIterateTestEntity
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/opentaps-common/servicedef/services_common.xml
+ * Defined in: hot-deploy/opentaps-common/servicedef/services_common.xml
  */
 public class OpentapsTestIterateTestEntityService extends ServiceWrapper {
 

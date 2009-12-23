@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.order.shoppinglist.ShoppingListServices
  * Invoke: setShoppingListRecurrence
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/order/servicedef/services_shoppinglist.xml
+ * Defined in: applications/order/servicedef/services_shoppinglist.xml
  */
 public class CreateShoppingListRecurrenceService extends ServiceWrapper {
 

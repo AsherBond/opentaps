@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.ledger.LedgerServices
  * Invoke: postInventoryProducedToGl
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/financials/servicedef/services_ledger_ext.xml
+ * Defined in: hot-deploy/financials/servicedef/services_ledger_ext.xml
  */
 public class PostInventoryProducedToGlService extends ServiceWrapper {
 

@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://order/script/org/ofbiz/order/request/CustRequestServices.xml
  * Invoke: updateCustRequestNote
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/order/servicedef/services_request.xml
+ * Defined in: applications/order/servicedef/services_request.xml
  */
 public class UpdateCustRequestNoteService extends ServiceWrapper {
 

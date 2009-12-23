@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://entityext/script/org/ofbiz/entityext/synchronization/EntitySyncServices.xml
  * Invoke: resetEntitySyncStatusToNotStarted
- * Defined in: file:/home/jeremy/programmation/opentaps-git/framework/entityext/servicedef/services.xml
+ * Defined in: framework/entityext/servicedef/services.xml
  */
 public class ResetEntitySyncStatusToNotStartedService extends ServiceWrapper {
 

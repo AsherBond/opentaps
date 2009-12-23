@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://accounting/script/org/ofbiz/accounting/payment/BillingServices.xml
  * Invoke: createBillingAccountTerm
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_billing.xml
+ * Defined in: applications/accounting/servicedef/services_billing.xml
  */
 public class CreateBillingAccountTermService extends ServiceWrapper {
 

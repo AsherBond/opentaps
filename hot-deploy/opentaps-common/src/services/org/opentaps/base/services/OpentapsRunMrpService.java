@@ -51,7 +51,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.purchasing.mrp.OpentapsMrpServices
  * Invoke: runMrp
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/purchasing/servicedef/services_mrp.xml
+ * Defined in: hot-deploy/purchasing/servicedef/services_mrp.xml
  */
 public class OpentapsRunMrpService extends ServiceWrapper {
 

@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://manufacturing/script/org/ofbiz/manufacturing/bom/BomFormulas.xml
  * Invoke: exampleComponentFormula
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/manufacturing/servicedef/services_formula.xml
+ * Defined in: applications/manufacturing/servicedef/services_formula.xml
  */
 public class ExampleComponentFormulaService extends ServiceWrapper {
 

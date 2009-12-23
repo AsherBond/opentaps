@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: com/opensourcestrategies/financials/cogs/COGSServices.xml
  * Invoke: getInvoiceItemCOGS
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/financials/servicedef/services_cogs.xml
+ * Defined in: hot-deploy/financials/servicedef/services_cogs.xml
  */
 public class GetInvoiceItemCOGSService extends ServiceWrapper {
 

@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.common.NotificationServices
  * Invoke: sendCrmNotificationEmails
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_common.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_common.xml
  */
 public class CrmsfaSendCrmNotificationEmailsService extends ServiceWrapper {
 

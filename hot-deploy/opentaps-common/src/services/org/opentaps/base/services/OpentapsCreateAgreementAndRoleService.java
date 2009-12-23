@@ -42,7 +42,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.agreement.AgreementServices
  * Invoke: createAgreementAndRole
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/opentaps-common/servicedef/services_agreement.xml
+ * Defined in: hot-deploy/opentaps-common/servicedef/services_agreement.xml
  */
 public class OpentapsCreateAgreementAndRoleService extends ServiceWrapper {
 

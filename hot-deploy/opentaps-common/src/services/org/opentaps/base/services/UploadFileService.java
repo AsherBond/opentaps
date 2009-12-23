@@ -44,7 +44,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.content.ContentServices
  * Invoke: uploadFile
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/opentaps-common/servicedef/services_content.xml
+ * Defined in: hot-deploy/opentaps-common/servicedef/services_content.xml
  */
 public class UploadFileService extends ServiceWrapper {
 

@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://content/script/org/ofbiz/content/data/DataServices.xml
  * Invoke: updateCharacterSet
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services_contenttypes.xml
+ * Defined in: applications/content/servicedef/services_contenttypes.xml
  */
 public class UpdateCharacterSetService extends ServiceWrapper {
 

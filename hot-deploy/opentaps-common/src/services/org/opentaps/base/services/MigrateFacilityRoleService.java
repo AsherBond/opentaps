@@ -46,7 +46,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://product/script/org/ofbiz/product/UpgradeServices.xml
  * Invoke: migrateFacilityRole
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_upgrade.xml
+ * Defined in: applications/product/servicedef/services_upgrade.xml
  */
 public class MigrateFacilityRoleService extends ServiceWrapper {
 

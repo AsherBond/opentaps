@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.shipment.picklist.PickListServices
  * Invoke: convertOrderIdListToHeaders
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_picklist.xml
+ * Defined in: applications/product/servicedef/services_picklist.xml
  */
 public class ConvertPickOrderIdListToHeadersService extends ServiceWrapper {
 

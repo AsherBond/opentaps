@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.tests.service.TestEntityServices
  * Invoke: logTestEntityHasUpdated
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/opentaps-tests/servicedef/services_tests.xml
+ * Defined in: hot-deploy/opentaps-tests/servicedef/services_tests.xml
  */
 public class OpentapsTestReturnStoreTestEntitySecaService extends ServiceWrapper {
 

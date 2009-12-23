@@ -46,7 +46,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://party/script/org/ofbiz/party/party/PartyServices.xml
  * Invoke: getParentOrganizations
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/party/servicedef/services_view.xml
+ * Defined in: applications/party/servicedef/services_view.xml
  */
 public class GetParentOrganizationsService extends ServiceWrapper {
 

@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://accounting/script/org/ofbiz/accounting/admin/AcctgAdminServices.xml
  * Invoke: updateFXConversion
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_admin.xml
+ * Defined in: applications/accounting/servicedef/services_admin.xml
  */
 public class UpdateFXConversionService extends ServiceWrapper {
 

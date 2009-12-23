@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.shipment.verify.VerifyPickServices
  * Invoke: verifySingleItem
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_shipment.xml
+ * Defined in: applications/product/servicedef/services_shipment.xml
  */
 public class VerifySingleItemService extends ServiceWrapper {
 

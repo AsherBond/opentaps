@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.content.data.DataServices
  * Invoke: updateDataResourceAndText
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/content/servicedef/services_data.xml
+ * Defined in: applications/content/servicedef/services_data.xml
  */
 public class UpdateDataResourceAndTextService extends ServiceWrapper {
 

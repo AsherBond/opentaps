@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://assetmaint/script/org/ofbiz/assetmaint/FixedAssetMaintEvents.xml
  * Invoke: assetMaintPermissionCheck
- * Defined in: file:/home/jeremy/programmation/opentaps-git/specialpurpose/assetmaint/servicedef/services.xml
+ * Defined in: specialpurpose/assetmaint/servicedef/services.xml
  */
 public class AssetMaintPermissionCheckService extends ServiceWrapper {
 

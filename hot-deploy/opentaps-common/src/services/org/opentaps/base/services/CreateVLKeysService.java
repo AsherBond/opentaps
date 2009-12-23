@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.accounting.thirdparty.valuelink.ValueLinkServices
  * Invoke: createKeys
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/accounting/servicedef/services_valuelink.xml
+ * Defined in: applications/accounting/servicedef/services_valuelink.xml
  */
 public class CreateVLKeysService extends ServiceWrapper {
 

@@ -44,7 +44,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.invoice.InvoiceServices
  * Invoke: isInvoiceReady
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/financials/servicedef/services_invoice.xml
+ * Defined in: hot-deploy/financials/servicedef/services_invoice.xml
  */
 public class OpentapsIsInvoiceReadyService extends ServiceWrapper {
 

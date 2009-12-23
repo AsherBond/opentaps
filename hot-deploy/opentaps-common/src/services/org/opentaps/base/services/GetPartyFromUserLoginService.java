@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.ofbiz.party.party.PartyServices
  * Invoke: getPartyFromUserLogin
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/party/servicedef/services_view.xml
+ * Defined in: applications/party/servicedef/services_view.xml
  */
 public class GetPartyFromUserLoginService extends ServiceWrapper {
 

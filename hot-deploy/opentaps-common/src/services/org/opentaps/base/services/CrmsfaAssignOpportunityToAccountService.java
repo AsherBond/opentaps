@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.crmsfa.opportunities.OpportunitiesServices
  * Invoke: assignOpportunityToAccount
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/crmsfa/servicedef/services_opportunities.xml
+ * Defined in: hot-deploy/crmsfa/servicedef/services_opportunities.xml
  */
 public class CrmsfaAssignOpportunityToAccountService extends ServiceWrapper {
 

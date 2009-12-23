@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: workflow
  * Location: org.ofbiz.order
  * Invoke: ProcessOrder
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/order/servicedef/services.xml
+ * Defined in: applications/order/servicedef/services.xml
  */
 public class ProcessOrderWfService extends ServiceWrapper {
 

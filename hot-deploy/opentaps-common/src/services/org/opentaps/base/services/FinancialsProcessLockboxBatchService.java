@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.financials.domain.billing.lockbox.LockboxService
  * Invoke: processLockboxBatch
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/financials/servicedef/services_other.xml
+ * Defined in: hot-deploy/financials/servicedef/services_other.xml
  */
 public class FinancialsProcessLockboxBatchService extends ServiceWrapper {
 

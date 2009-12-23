@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: com.opensourcestrategies.financials.configuration.ConfigurationServices
  * Invoke: updateAccountingTagPostingCheck
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/financials/servicedef/services_configuration.xml
+ * Defined in: hot-deploy/financials/servicedef/services_configuration.xml
  */
 public class UpdateAccountingTagPostingCheckService extends ServiceWrapper {
 

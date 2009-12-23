@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: interface
  * Location: 
  * Invoke: 
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services.xml
+ * Defined in: applications/product/servicedef/services.xml
  */
 public class InterfaceProductService extends ServiceWrapper {
 

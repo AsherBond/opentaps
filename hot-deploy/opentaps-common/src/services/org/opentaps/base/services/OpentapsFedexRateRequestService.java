@@ -41,7 +41,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: java
  * Location: org.opentaps.common.shipment.fedex.OpentapsFedexServices
  * Invoke: fedexRateRequest
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/opentaps-common/servicedef/services_shipping.xml
+ * Defined in: hot-deploy/opentaps-common/servicedef/services_shipping.xml
  */
 public class OpentapsFedexRateRequestService extends ServiceWrapper {
 

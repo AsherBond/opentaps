@@ -39,7 +39,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: simple
  * Location: component://product/script/org/ofbiz/product/inventory/InventoryServices.xml
  * Invoke: deleteInventoryItemLabelAppl
- * Defined in: file:/home/jeremy/programmation/opentaps-git/applications/product/servicedef/services_facility.xml
+ * Defined in: applications/product/servicedef/services_facility.xml
  */
 public class DeleteInventoryItemLabelApplService extends ServiceWrapper {
 

@@ -40,7 +40,7 @@ import org.opentaps.foundation.infrastructure.User;
  * Engine: pojo
  * Location: org.opentaps.common.domain.inventory.OrderInventoryService
  * Invoke: reReserveProductInventory
- * Defined in: file:/home/jeremy/programmation/opentaps-git/hot-deploy/opentaps-common/servicedef/services_orders.xml
+ * Defined in: hot-deploy/opentaps-common/servicedef/services_orders.xml
  */
 public class ReReserveProductInventoryService extends ServiceWrapper {
 
