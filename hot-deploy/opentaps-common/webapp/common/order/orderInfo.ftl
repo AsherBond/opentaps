@@ -61,7 +61,12 @@ under the License.
 </#if>
 <#-- Order PDF action -->
 <#assign pdfAction><@actionForm form="orderPdfAction" text="${uiLabelMap.OpentapsContentType_ApplicationPDF}"/></#assign>
-<@form name="orderPdfAction" method="get" url="order.pdf" orderId=order.orderId />
+<#if order.isSalesOrder()>
+  <#assign orderReportId = "SALESORDER" />
+<#else>
+  <#assign orderReportId = "PRUCHORDER" />
+</#if>
+<@form name="orderPdfAction" method="get" url="order.pdf" orderId=order.orderId reportType="application/pdf" reportId="${orderReportId}"/>
 <#-- Order Picklist PDF action -->
 <#if order.isPickable()>
   <#assign picklistAction><@actionForm form="orderPicklistPdfAction" text="${uiLabelMap.ProductPickList}"/></#assign>

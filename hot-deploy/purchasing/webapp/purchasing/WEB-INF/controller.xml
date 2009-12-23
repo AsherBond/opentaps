@@ -556,16 +556,12 @@
     <request-map uri="order.pdf">
         <security https="true" auth="true"/>
         <event type="java" invoke="prepareOrderReport" path="org.opentaps.common.order.OrderEvents"/>
-        <response name="success" type="view" value="OrderJR"/>
+        <response name="success" type="request" value="runReport"/>
         <response name="error" type="view" value="orderview"/>
     </request-map>
     <request-map uri="orderold.pdf">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="OrderPDF"/>
-    </request-map>
-    <request-map uri="OrderJR">
-        <security https="true" auth="true"/>
-        <response name="success" type="view" value="OrderJR"/>
     </request-map>
     <request-map uri="findOrders">
         <security https="true" auth="true"/>
@@ -1012,6 +1008,5 @@
     <view-map name="createAgreement" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#createAgreement"/>
     <view-map name="editAgreement" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#editAgreement"/>
     <view-map name="outsourceRoutingTaskForm" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#outsourceRoutingTaskForm"/>
-    <view-map name="OrderJR" type="jasperreports" page="component://purchasing/webapp/purchasing/reports/repository/orderPDF/Order.jrxml" content-type="application/pdf" encoding="none"/>
 
 </site-conf>
