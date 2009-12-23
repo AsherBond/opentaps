@@ -52,6 +52,7 @@
                 <set field="sectionName" value="opportunities" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <set field="requiredPermission" value="CRMSFA_OPPS"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/opportunities/shortcuts.bsh"/>
                 <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/opportunities/OpportunitiesScreens.xml#leftBarScreen"/>
             </actions>
             <widgets>
@@ -63,9 +64,6 @@
     <screen name="leftBarScreen">
         <section>
             <widgets>
-                <platform-specific>
-                    <html><html-template location="component://crmsfa/webapp/crmsfa/opportunities/screenlets/shortcuts.ftl"/></html>
-                </platform-specific>
                 <platform-specific>
                     <html><html-template location="component://crmsfa/webapp/crmsfa/common/screenlets/quickCreateForms.ftl"/></html>
                 </platform-specific>

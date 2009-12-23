@@ -52,6 +52,7 @@
                 <set field="sectionName" value="contacts" global="true"/>
                 <set field="sectionStyle" value="twoColumn"/>
                 <set field="requiredPermission" value="CRMSFA_CONTACTS"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/contacts/shortcuts.bsh"/>
                 <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml#leftBarScreen"/>
             </actions>
             <widgets>
@@ -63,9 +64,6 @@
     <screen name="leftBarScreen">
         <section>
             <widgets>
-                <platform-specific>
-                    <html><html-template location="component://crmsfa/webapp/crmsfa/contacts/screenlets/shortcuts.ftl"/></html>
-                </platform-specific>
                 <platform-specific>
                     <html><html-template location="component://crmsfa/webapp/crmsfa/contacts/screenlets/contactShortcuts.ftl"/></html>
                 </platform-specific>
