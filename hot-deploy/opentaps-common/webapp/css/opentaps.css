@@ -1265,3 +1265,68 @@ border: #999999 solid 1px;
 margin: 2px;
 width: 120px;
 }
+
+
+
+a.buttontext,
+.loginButton,
+.subMenuButton,
+.smallSubmit,
+.buttonDangerous,
+.subMenuButtonDangerous
+{
+display:inline-block;
+color:#000000 !important;
+font-family:Tahoma,Verdana,Arial;
+font-size:11px;
+font-weight:normal;
+height:21px !important;
+border-top:0 none !important;
+border-bottom:0 none !important;
+cursor:pointer;
+line-height:21px !important;
+padding:0px 5px !important;
+
+}
+
+a.buttontext,
+.loginButton,
+.subMenuButton,
+.smallSubmit {
+background:transparent url(/opentaps_images/buttons/btn-sprite.gif) repeat-x scroll 0 -42px !important;
+}
+
+.buttonDangerous,
+.subMenuButtonDangerous { 
+background:transparent url(/opentaps_images/buttons/btn-sprite.gif) repeat-x scroll 0 -315px !important;
+border-left:1px solid #fe8484 !important;
+border-right:1px solid #fe8484 !important;
+color:#000000 !important;
+}
+
+a.buttontext:active,
+a.buttontext:hover,
+.loginButton:active,
+.loginButton:hover,
+.subMenuButton:active,
+.subMenuButton:hover,
+.smallSubmit:active,
+.smallSubmit:hover
+{ 
+background:transparent url(/opentaps_images/buttons/btn-sprite.gif) repeat-x scroll 0 -105px !important;
+border-left:1px solid #568bc4 !important;
+border-right:1px solid #568bc4 !important;
+color:#000000 !important;
+text-decoration:none;
+}
+
+.subMenuButtonDangerous:active,
+.subMenuButtonDangerous:hover,
+.buttonDangerous:active,
+.buttonDangerous:hover
+{ 
+background:transparent url(/opentaps_images/buttons/btn-sprite.gif) repeat-x scroll 0 -252px !important;
+border-left:1px solid #fe0909 !important;
+border-right:1px solid #fe0909 !important;
+color:#000000 !important;
+}
