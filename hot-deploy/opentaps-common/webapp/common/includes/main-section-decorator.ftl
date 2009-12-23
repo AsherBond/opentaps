@@ -53,11 +53,10 @@ If "twoColumn" is used for sectionStyle, then the following options are also ava
 <#if sectionHeaderScreen?exists>
   ${screens.render(sectionHeaderScreen)}
 <#else> 
+  <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
   <#if sectionHeaderUiLabel?exists>
-    <div class="sectionHeader sectionHeaderTitle" id="sectionHeaderTitle_${sectionName?if_exists}">
-      <span>${uiLabelMap.get(sectionHeaderUiLabel)}</span>
-    </div>
+    <@frameSectionTitleBar title=uiLabelMap.get(sectionHeaderUiLabel) titleClass="sectionHeaderTitle" titleId="sectionHeaderTitle_${sectionName?if_exists}"/>
   </#if>
   
 </#if>

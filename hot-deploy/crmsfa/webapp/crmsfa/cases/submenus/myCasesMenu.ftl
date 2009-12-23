@@ -28,7 +28,6 @@
 </#if>
   </form>
 
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${title?if_exists}</div>
-    <div class="subMenuBar">${prefChangeAction?if_exists}</div>
-</div>
+<@sectionHeader title=title?if_exists>
+  ${prefChangeAction?if_exists}
+</@sectionHeader>

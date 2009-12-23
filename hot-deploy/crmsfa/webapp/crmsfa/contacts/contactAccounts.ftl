@@ -20,13 +20,13 @@
 
 <div class="subSectionBlock">
 <@sectionHeader title=uiLabelMap.CrmAccounts>
-<#if hasUpdatePermission?exists>
-    <div class="subMenuBar" id="assignAccountToContact">
+  <#if hasUpdatePermission?exists>
+    <div id="assignAccountToContact">
         <#if hasCreateAccountPermission?exists>
             <@displayLink href="createAccountForm?contactPartyId=${partySummary.partyId}" text="${uiLabelMap.CrmCreateNew}" class="subMenuButton"/>
         </#if>
     </div>
-</#if>
+  </#if>
 </@sectionHeader>
 
 <@gwtWidget id="contactAccountsSubListView" partyId="${partySummary.partyId}"/>

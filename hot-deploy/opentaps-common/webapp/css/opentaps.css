@@ -1337,9 +1337,29 @@ border-bottom:0px none !important;
 margin-bottom:10px;
 }
 
-.frameSectionBody
+.allSubSectionBlocks .frameSectionHeader .x-panel-header
 { 
+font-size:11pt;
+}
+
+.frameSectionHeader .x-panel-tc .sectionHeaderTitle
+{ 
+font-size:14pt;
+}
+
+
+.frameSectionBody
+{
 background-color:#FFFFFF;
 padding:4px;
 border: 1px solid #999999;
 }
+
+.frameSectionExtra
+{
+text-align:right;
+padding:5px 0 4px;
+}
+
+.titleBar { margin-bottom:10px; }
+.titleBar .x-panel-br .x-panel-bc { height:3px; }

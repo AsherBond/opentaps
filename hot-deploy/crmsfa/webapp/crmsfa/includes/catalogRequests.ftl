@@ -17,12 +17,8 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<div class="subSectionBlock">
-  <a name="CatalogRequests"></a>
-  <div class="subSectionHeader">
-      <div class="subSectionTitle">${uiLabelMap.CrmCatalogRequests}</div>
-  </div>
-  
+<a name="CatalogRequests"></a>
+<@frameSectionHeader title=uiLabelMap.CrmCatalogRequests/>
   <table class="listTable" cellspacing="0">
     <tr class="listTableHeader">
       <td>${uiLabelMap.CommonDate}</td>
@@ -44,4 +40,3 @@
       </tr>
     </#list>
   </table>
-</div>

@@ -83,19 +83,18 @@
   <#assign downloadLink = "downloadQuoteContent?" + objectIdParam>
 </#if>
 
-<div class="subSectionHeader">
-  <div class="subSectionTitle">${uiLabelMap.CrmContentList}</div>
+<#assign extraOptions>
   <#if hasUpdatePermission?exists && hasUpdatePermission>
-  <div class="subMenuBar">
-  <#if addContentUrlTarget != "" >
-  <a class="subMenuButton" href="<@ofbizUrl>${addContentUrlTarget}</@ofbizUrl>">${uiLabelMap.CrmAddUrl}</a>
+    <#if addContentUrlTarget != "" >
+      <a class="subMenuButton" href="<@ofbizUrl>${addContentUrlTarget}</@ofbizUrl>">${uiLabelMap.CrmAddUrl}</a>
+    </#if>
+    <#if uploadContentTarget != "" >
+      <a class="subMenuButton" href="<@ofbizUrl>${uploadContentTarget}</@ofbizUrl>">${uiLabelMap.CrmUploadFile}</a>
+    </#if>
   </#if>
-  <#if uploadContentTarget != "" >
-  <a class="subMenuButton" href="<@ofbizUrl>${uploadContentTarget}</@ofbizUrl>">${uiLabelMap.CrmUploadFile}</a>
-  </#if>
-  </div>
-  </#if>
-</div>
+</#assign>
+
+<@frameSectionHeader title=uiLabelMap.CrmContentList extra=extraOptions/>
 
 <table class="crmsfaListTable">
   <tbody>

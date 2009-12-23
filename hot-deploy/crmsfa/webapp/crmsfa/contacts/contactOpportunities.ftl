@@ -18,11 +18,9 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <@sectionHeader title=uiLabelMap.CrmOpportunities>
-<#if hasUpdatePermission?exists>
-    <div class="subMenuBar">
-        <@displayLink href="createOpportunityForm?contactPartyId=${partySummary.partyId}" text="${uiLabelMap.CrmCreateNew}" class="subMenuButton" />
-    </div>
-</#if>
+  <#if hasUpdatePermission?exists>
+    <@displayLink href="createOpportunityForm?contactPartyId=${partySummary.partyId}" text="${uiLabelMap.CrmCreateNew}" class="subMenuButton" />
+  </#if>
 </@sectionHeader>
 
 <@gwtWidget id="contactOpportunitiesSubListView" partyId="${partySummary.partyId}"/>

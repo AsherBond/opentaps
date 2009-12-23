@@ -1293,19 +1293,42 @@ For more information, please see documentation/opentapsFormMacros.html
 
 <#macro displayError name index=-1><@tooltip text=opentapsErrors.field.get(getIndexedName(name,index)) class="errortooltip" /></#macro>
 
-<#macro frameSectionHeader title>
-  <div class="x-panel-tl">
-    <div class="x-panel-tr">
-      <div class="x-panel-tc">
-        <div class="x-panel-header">${title}</div>
+<#macro frameSectionTitleBar title extra="" titleId="" titleClass="" style="">
+<div class="titleBar">
+  <div class="frameSectionHeader" style="${style}">
+    <div class="x-panel-tl">
+      <div class="x-panel-tr">
+        <div class="x-panel-tc">
+          <div class="x-panel-header<#if titleClass?has_content> ${titleClass}</#if>" style="float:left" id="${titleId}">${title}</div>
+          <div class="frameSectionExtra">${extra}</div>
+        </div>
+      </div>
+    </div>
+    <div class="x-panel-bl">
+      <div class="x-panel-br">
+        <div class="x-panel-bc"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</#macro>
+
+<#macro frameSectionHeader title extra="" titleId="" titleClass="" style="">
+  <div class="frameSectionHeader" style="${style}">
+    <div class="x-panel-tl">
+      <div class="x-panel-tr">
+        <div class="x-panel-tc">
+          <div class="x-panel-header<#if titleClass?has_content> ${titleClass}</#if>" style="float:left" id="${titleId}">${title}</div>
+          <div class="frameSectionExtra">${extra}</div>
+        </div>
       </div>
     </div>
   </div>
 </#macro>
 
-<#macro frameSection title>
-<div class="frameSection">
-  <@frameSectionHeader title=title/>
+<#macro frameSection title extra="" style="">
+<div class="frameSection" style="${style}">
+  <@frameSectionHeader title=title extra=extra/>
   <div class="frameSectionBody">
     <#nested/>
   </div>
@@ -1314,10 +1337,10 @@ For more information, please see documentation/opentapsFormMacros.html
 
 <#-- Leon: I am on the fence about this one, it seems too minimal to be a proper macro and seems to serve more as a mnemonic.  Needs discussion.  -->
 <#macro sectionHeader title headerClass="subSectionHeader" titleClass="subSectionTitle">
-  <div class="${headerClass}">
-    <div class="${titleClass}">${title}</div>
-    <#nested>
-  </div>
+  <#assign extra>
+    <#nested/>
+  </#assign>
+  <@frameSectionHeader title=title extra=extra/>
 </#macro>
 
 <#macro pagination viewIndex viewSize currentResultSize requestName totalResultSize=-1 extraParameters="">

@@ -16,9 +16,14 @@
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<#assign extraOptions>
+  <#if hasNewActivityPermission?exists>
+    <a class="subMenuButton" href="logTaskForm?${activityValueParams}&workEffortPurposeTypeId=WEPT_TASK_PHONE_CALL">${uiLabelMap.CrmLogCall}</a><a class="subMenuButton" href="logTaskForm?${activityValueParams}&workEffortPurposeTypeId=WEPT_TASK_EMAIL">${uiLabelMap.CrmLogEmail}</a>
+  </#if>
+</#assign>
+
 <#-- This is re-used everywhere for pending activities so it is one standard page.  Whichever page calls it should put in the activityValueParams, be they party, case, or opportunity ids -->
 <a name="ListCompletedActivities"></a>
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmCompletedActivities}</div><#if hasNewActivityPermission?exists><div class="subMenuBar"><a class="subMenuButton" href="logTaskForm?${activityValueParams}&workEffortPurposeTypeId=WEPT_TASK_PHONE_CALL">${uiLabelMap.CrmLogCall}</a><a class="subMenuButton" href="logTaskForm?${activityValueParams}&workEffortPurposeTypeId=WEPT_TASK_EMAIL">${uiLabelMap.CrmLogEmail}</a></div>
-    </#if>
-</div>
+<@frameSectionHeader title=uiLabelMap.CrmCompletedActivities extra=extraOptions/>

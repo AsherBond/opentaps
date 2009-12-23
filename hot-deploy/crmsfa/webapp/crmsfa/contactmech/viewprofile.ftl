@@ -58,10 +58,8 @@
 <#assign donePageEscaped = donePage + "?partyId%3d" + parameters.partyId>
 </#if>
 
-<div class="subSectionHeader">
-  <div class="subSectionTitle">${uiLabelMap.PartyContactInformation}</div>
+<#assign extraOptions>
   <#if hasUpdatePermission?exists>
-  <div class="subMenuBar">
     <@selectAction name="createNewContactMechTarget" prompt="${uiLabelMap.CommonCreateNew}">
       <@action url="${editContactMechPage}?partyId=${partySummary.partyId}&amp;preContactMechTypeId=POSTAL_ADDRESS&amp;DONE_PAGE=${donePageEscaped}" text="${uiLabelMap.OpentapsAddress}"/>
       <@action url="${editContactMechPage}?partyId=${partySummary.partyId}&amp;preContactMechTypeId=TELECOM_NUMBER&amp;DONE_PAGE=${donePageEscaped}" text="${uiLabelMap.OpentapsPhoneNumber}"/>
@@ -69,13 +67,11 @@
       <@action url="${editContactMechPage}?partyId=${partySummary.partyId}&amp;preContactMechTypeId=WEB_ADDRESS&amp;DONE_PAGE=${donePageEscaped}" text="${uiLabelMap.OpentapsWebUrl}"/>
       <@action url="${editContactMechPage}?partyId=${partySummary.partyId}&amp;preContactMechTypeId=SKYPE&amp;DONE_PAGE=${donePageEscaped}" text="${uiLabelMap.CrmSkypeContact}"/>
     </@selectAction>
-  </div>
   </#if>
-</div>
+</#assign>
 
-<div class="form">
+<@frameSection title=uiLabelMap.PartyContactInformation extra=extraOptions>
   <#if contactMeches?has_content>
-
     <table class="contactTable">
 
       <tr>
@@ -240,4 +236,4 @@
   <#else>
     <div class="tabletext">${uiLabelMap.PartyNoContactInformation}</div>
   </#if>
-</div>
+</@frameSection>

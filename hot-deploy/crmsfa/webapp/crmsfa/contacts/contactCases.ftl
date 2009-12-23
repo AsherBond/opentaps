@@ -21,11 +21,9 @@
 <div class="subSectionBlock">
 
 <@sectionHeader title=uiLabelMap.CrmCases>
-    <div class="subMenuBar">
-        <#if hasCreateCasePermission?exists>
-        <@displayLink href="createCaseForm?contactPartyId=${partySummary.partyId}" text="${uiLabelMap.CommonCreateNew}" class="subMenuButton" />
-        </#if>
-    </div>
+  <#if hasCreateCasePermission?exists>
+    <@displayLink href="createCaseForm?contactPartyId=${partySummary.partyId}" text="${uiLabelMap.CommonCreateNew}" class="subMenuButton" />
+  </#if>
 </@sectionHeader>
 
 <@gwtWidget id="contactCasesSubsection" partyId="${partySummary.partyId}"/>

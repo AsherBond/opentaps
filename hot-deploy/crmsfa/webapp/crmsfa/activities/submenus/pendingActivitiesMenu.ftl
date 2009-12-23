@@ -16,9 +16,15 @@
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
 <#-- This is re-used everywhere for pending activities so it is one standard page.  Whichever page calls it should put in the activityValueParams, be they party, case, or opportunity ids -->
 <a name="ListPendingActivities"></a>
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmPendingActivities}</div><#if hasNewActivityPermission?exists><div class="subMenuBar"><a class="subMenuButton" href="createEventForm?${activityValueParams}&workEffortTypeId=EVENT">${uiLabelMap.CrmCreateNewEvent}</a><a class="subMenuButton" href="createTaskForm?${activityValueParams}&workEffortTypeId=TASK">${uiLabelMap.CrmCreateNewTask}</a></div>
-    </#if>
-</div>
+
+<#assign extraOptions>
+  <#if hasNewActivityPermission?exists>
+    <a class="subMenuButton" href="createEventForm?${activityValueParams}&workEffortTypeId=EVENT">${uiLabelMap.CrmCreateNewEvent}</a><a class="subMenuButton" href="createTaskForm?${activityValueParams}&workEffortTypeId=TASK">${uiLabelMap.CrmCreateNewTask}</a>
+  </#if>
+</#assign>
+
+<@frameSectionHeader title=uiLabelMap.CrmPendingActivities extra=extraOptions/>

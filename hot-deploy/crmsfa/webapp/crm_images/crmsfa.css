@@ -426,58 +426,58 @@ div.paymentSettingHeader {
 
 
 div#sectionHeaderTitle_leads {
-    background-image: url('/opentaps_images/openclipart.org/headset_24x24.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/headset_24x24.png') no-repeat 0 5px;;
+    padding: 7px 0 0 35px;
 }
 div#sectionHeaderTitle_accounts {
-    background-image: url('/opentaps_images/openclipart.org/handshake_24x24.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/handshake_24x24.png') no-repeat 0 5px;;
+    padding: 7px 0 0 35px;
 }
 div#sectionHeaderTitle_activities {
-    background-image: url('/opentaps_images/openclipart.org/folder_24x24.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/folder_24x24.png') no-repeat 0 5px;;
+    padding: 7px 0 0 35px;
 }
 div#sectionHeaderTitle_cases {
-    background-image: url('/opentaps_images/openclipart.org/clipboard_24x24.png');
-    padding-left: 40px;
+    background:transparent  url('/opentaps_images/openclipart.org/clipboard_24x24.png') no-repeat 0 5px;;
+    padding: 7px 0 0 35px;
 }
 div#sectionHeaderTitle_contacts {
-    background-image: url('/opentaps_images/openclipart.org/ppl3_24x24.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/ppl3_24x24.png') no-repeat 0 5px;;
+    padding: 7px 0 0 35px;
 }
 div#sectionHeaderTitle_forecasts {
-    background-image: url('/opentaps_images/openclipart.org/histogram_24x24.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/histogram_24x24.png') no-repeat 0 5px;;
+    padding: 7px 0 0 35px;
 }
 div#sectionHeaderTitle_marketing {
-    background-image: url('/opentaps_images/openclipart.org/lampada_di_aladino_alad_01_24x24.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/lampada_di_aladino_alad_01_24x24.png') no-repeat 0 5px;;
+    padding: 7px 0 0 35px;
 }
 div#sectionHeaderTitle_myHome {
-    background-image: url('/opentaps_images/openclipart.org/folders_24x24.png');
-    padding-left: 40px;
+    background: url('/opentaps_images/openclipart.org/folders_24x24.png') no-repeat 0 5px;;
+    padding-lefttransparent : 40px;
 }
 div#sectionHeaderTitle_opportunities {
-    background-image: url('/opentaps_images/openclipart.org/ringing_24x24.png');
-    padding-left: 40px;
+    background:transparent  url('/opentaps_images/openclipart.org/ringing_24x24.png') no-repeat 0 5px;;
+    padding: 7px 0 0 35px;
 }
 div#sectionHeaderTitle_partners {
-    background-image: url('/opentaps_images/openclipart.org/earth_24x24.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/earth_24x24.png') no-repeat 0 5px;;
+    padding: 7px 0 0 35px;
 }
 div#sectionHeaderTitle_quotes {
-    background-image: url('/opentaps_images/openclipart.org/clipboard_and_pen_24x24.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/clipboard_and_pen_24x24.png') no-repeat 0 5px;;
+    padding: 7px 0 0 35px;
 }
 div#sectionHeaderTitle_teams {
-    background-image: url('/opentaps_images/openclipart.org/ppls_24x24.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/ppls_24x24.png') no-repeat 0 5px;;
+    padding: 7px 0 0 35px;
 }
 div#sectionHeaderTitle_orders {
-    background-image: url('/opentaps_images/openclipart.org/calcolatrice_architetto__01_24x24.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/calcolatrice_architetto__01_24x24.png') no-repeat 0 5px;;
+    padding: 7px 0 0 35px;
 }
 div#sectionHeaderTitle_reports {
-    background-image: url('/opentaps_images/openclipart.org/inservice_presentation_01.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/inservice_presentation_01.png') no-repeat 0 5px;;
+    padding: 7px 0 0 35px;
 }

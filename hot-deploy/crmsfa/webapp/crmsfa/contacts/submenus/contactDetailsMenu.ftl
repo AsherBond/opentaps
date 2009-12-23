@@ -30,14 +30,16 @@
   <@form name="UnassignContactHiddenForm" url="unassignPartyFromContact" partyId="${parameters.partyId}" roleTypeId="CONTACT" />
 </#if>
 
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmContact}
-        <#if contactDeactivated?exists><span class="subSectionWarning">${uiLabelMap.CrmContactDeactivated} ${getLocalizedDate(contactDeactivatedDate, "DATE_TIME")}</span></#if>
-    </div>
-    <div class="subMenuBar">
-        <#if isAssignedToMeLinkRendered?default(false)><@submitFormLink form="AssignContactHiddenForm" text="${uiLabelMap.OpentapsAssignToMe}" class="subMenuButton"/></#if>
-        <#if isUnassignLinkRendered?default(false)><@submitFormLink form="UnassignContactHiddenForm" text="${uiLabelMap.OpentapsUnassign}" class="subMenuButton"/></#if>
-        <#if hasUpdatePermission?exists><@displayLink href="updateContactForm?partyId=${partySummary.partyId}" text="${uiLabelMap.CommonEdit}" class="subMenuButton"/></#if>
-        <#if isDeactivateLinkRendered?default(false)><@submitFormLinkConfirm form="DeactivateContactHiddenForm" text="${uiLabelMap.CrmDeactivateContact}" class="subMenuButtonDangerous" /></#if>
-    </div>
-</div>
+<#assign frameTitle>
+  ${uiLabelMap.CrmContact}
+  <#if contactDeactivated?exists><span class="subSectionWarning">${uiLabelMap.CrmContactDeactivated} ${getLocalizedDate(contactDeactivatedDate, "DATE_TIME")}</span></#if>
+</#assign>
+
+<#assign extraOptions>
+  <#if isAssignedToMeLinkRendered?default(false)><@submitFormLink form="AssignContactHiddenForm" text="${uiLabelMap.OpentapsAssignToMe}" class="subMenuButton"/></#if>
+  <#if isUnassignLinkRendered?default(false)><@submitFormLink form="UnassignContactHiddenForm" text="${uiLabelMap.OpentapsUnassign}" class="subMenuButton"/></#if>
+  <#if hasUpdatePermission?exists><@displayLink href="updateContactForm?partyId=${partySummary.partyId}" text="${uiLabelMap.CommonEdit}" class="subMenuButton"/></#if>
+  <#if isDeactivateLinkRendered?default(false)><@submitFormLinkConfirm form="DeactivateContactHiddenForm" text="${uiLabelMap.CrmDeactivateContact}" class="subMenuButtonDangerous" /></#if>
+</#assign>
+
+<@frameSectionHeader title=frameTitle extra=extraOptions/>

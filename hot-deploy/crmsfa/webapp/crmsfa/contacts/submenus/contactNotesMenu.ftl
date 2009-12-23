@@ -16,10 +16,13 @@
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<#assign extraOptions>
+  <#if hasUpdatePermission?exists>
+    <a class="subMenuButton" href="createContactNoteForm?partyId=${partySummary.partyId}">${uiLabelMap.CrmCreateNew}</a>
+  </#if>
+</#assign>
+
 <#-- TODO: this can be refactored for all note creation (put in includes/, use ${uri} to call) -->
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmNotes}</div>
-    <#if hasUpdatePermission?exists>
-    <div class="subMenuBar"><a class="subMenuButton" href="createContactNoteForm?partyId=${partySummary.partyId}">${uiLabelMap.CrmCreateNew}</a></div>
-    </#if>
-</div>
+<@frameSectionHeader title=uiLabelMap.CrmNotes extra=extraOptions/>

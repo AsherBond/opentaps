@@ -30,7 +30,8 @@
 
 <@form name="MyAccountsPrefChangeForm" url="setViewPreference" viewPrefValue="${prefValue}" viewPrefTypeId="MY_OR_TEAM_ACCOUNTS" donePage="myAccounts"/>
 
-<div class="subSectionHeader  sectionHeaderTitle" id="sectionHeaderTitle_accounts" style="font: bold 14pt Verdana, Arial, Helvetica, sans-serif; padding-top: 5px; padding-bottom: 0px; height: 1.3em; border-bottom: 1px solid #AAAAAA;">
-    <div class="subSectionTitle">${title?if_exists}</div>
-    <div class="subMenuBar"><@submitFormLink form="MyAccountsPrefChangeForm" text="${prefButtonLabel}" /></div>
-</div>
+<#assign extraOptions>
+  <@submitFormLink form="MyAccountsPrefChangeForm" text="${prefButtonLabel}" />
+</#assign>
+
+<@frameSectionTitleBar title=title?if_exists titleClass="sectionHeaderTitle" titleId="sectionHeaderTitle_${sectionName?if_exists}" extra=extraOptions/>

@@ -26,12 +26,8 @@ under the License.
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<div class="subSectionBlock">
-
-<div class="subSectionHeader">
-  <div class="subSectionTitle">${uiLabelMap.CrmPaymentAndShippingAccounts}</div>
+<#assign extraOptions>
   <#if hasPaymentUpdatePermission>
-  <div class="subMenuBar">
     <@selectAction name="createNewPaymentAccountTarget" prompt="${uiLabelMap.CommonCreateNew}">
       <@action url="${editEftAccountPage}?partyId=${parameters.partyId}" text="${uiLabelMap.AccountingEFTAccount}"/>
       <@action url="${editGiftCardPage}?partyId=${parameters.partyId}" text="${uiLabelMap.AccountingGiftCard}"/>
@@ -39,11 +35,10 @@ under the License.
       <@action url="${editTaxAuthPartyInfo}?partyId=${parameters.partyId}" text="${uiLabelMap.OpentapsTaxAuthPartyId}"/>
       <@action url="${editShippingAccount}?partyId=${parameters.partyId}" text="${uiLabelMap.CrmShippingAccount}"/>
     </@selectAction>
-  </div>
   </#if>
-</div>
+</#assign>
 
-<div class="form">
+<@frameSection title=uiLabelMap.CrmPaymentAndShippingAccounts extra=extraOptions>
 
       <#if paymentMethodValueMaps?has_content || partyCarrierAccounts?has_content || partyTaxAuthInfoList?has_content>
         <table class="basic-table" cellspacing="0">
@@ -206,8 +201,6 @@ under the License.
         <span class="tabletext">${uiLabelMap.PartyNoPaymentMethodInformation}</span>
       </#if>
 
-</div>
-
-</div>
+</@frameSection>
 
 </#if> <#-- hasPaymentViewPermission -->
