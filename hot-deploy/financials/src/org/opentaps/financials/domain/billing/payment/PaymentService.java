@@ -16,7 +16,12 @@
  */
 package org.opentaps.financials.domain.billing.payment;
 
+import java.util.List;
+
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.base.services.RecalcPaymentAmountsService;
 import org.opentaps.domain.DomainService;
 import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
@@ -69,4 +74,23 @@ public class PaymentService extends DomainService implements PaymentServiceInter
     private PaymentRepositoryInterface getPaymentRepository() throws RepositoryException {
         return getDomainsDirectory().getBillingDomain().getPaymentRepository();
     }
+
+    /** {@inheritDoc} */
+	public void recalcAllEmptyAmountsPayments() throws ServiceException {
+		try {
+            paymentRepository = getPaymentRepository();
+            EntityCondition condition = EntityCondition.makeCondition(EntityOperator.OR,
+            		EntityCondition.makeCondition(Payment.Fields.openAmount.name(), EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition(Payment.Fields.appliedAmount.name(), EntityOperator.EQUALS, null));
+            List<Payment> payments = paymentRepository.findList(Payment.class, condition);
+            for (Payment payment : payments) {
+            	RecalcPaymentAmountsService service = new RecalcPaymentAmountsService();
+	            service.setInPaymentId(payment.getPaymentId());
+	            runSync(service);
+            }
+            
+		} catch (Exception e) {
+            throw new ServiceException(e);
+        }
+	}
 }

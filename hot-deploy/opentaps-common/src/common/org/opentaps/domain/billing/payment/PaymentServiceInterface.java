@@ -37,5 +37,13 @@ public interface PaymentServiceInterface extends ServiceInterface {
      * @see #setPaymentId required input <code>paymentId</code>
      */
     public void recalcPaymentAmounts() throws ServiceException;
+    
+    
+    /**
+     * Recalculates all <code>Payment</code> calculated fields if it is null.
+     * @throws ServiceException if an error occurs
+     * @see #setPaymentId required input <code>paymentId</code>
+     */
+    public void recalcAllEmptyAmountsPayments() throws ServiceException;
 
 }

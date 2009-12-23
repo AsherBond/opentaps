@@ -101,10 +101,17 @@ public interface InvoiceServiceInterface extends ServiceInterface {
 
     /**
      * Recalculates an <code>Invoice</code> calculated fields when a Payment was modified.
-     * For example the applied / open amount may chaneg when the payment status changes.
+     * For example the applied / open amount may change when the payment status changes.
      * @throws ServiceException if an error occurs
      * @see #setPaymentId required input <code>paymentId</code>
      */
     public void recalcInvoiceAmountsFromPayment() throws ServiceException;
+    
+    /**
+     * Recalculates all <code>Invoice</code> calculated fields if the it is null.
+     * @throws ServiceException if an error occurs
+     * @see #setPaymentId required input <code>paymentId</code>
+     */
+    public void recalcAllEmptyAmountsInvoices() throws ServiceException;
 
 }

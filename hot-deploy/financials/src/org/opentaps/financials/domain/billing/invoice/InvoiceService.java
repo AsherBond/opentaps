@@ -24,11 +24,14 @@ import java.util.Set;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.entities.InvoiceAdjustment;
 import org.opentaps.base.entities.InvoiceItem;
 import org.opentaps.base.entities.OrderItem;
 import org.opentaps.base.entities.OrderItemBilling;
 import org.opentaps.base.entities.PaymentApplication;
+import org.opentaps.base.services.RecalcInvoiceAmountsService;
 import org.opentaps.domain.DomainService;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
@@ -37,9 +40,9 @@ import org.opentaps.domain.billing.payment.Payment;
 import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
 import org.opentaps.domain.ledger.InvoiceLedgerServiceInterface;
 import org.opentaps.domain.ledger.LedgerSpecificationInterface;
+import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
-import org.opentaps.foundation.entity.Entity;
 
 /** {@inheritDoc} */
 public class InvoiceService extends DomainService implements InvoiceServiceInterface {
@@ -199,7 +202,7 @@ public class InvoiceService extends DomainService implements InvoiceServiceInter
             Debug.logInfo("recalcInvoiceAmounts: [" + invoice.getInvoiceId() + "] applied amount = " + invoice.calculateAppliedAmount(), MODULE);
             Debug.logInfo("recalcInvoiceAmounts: [" + invoice.getInvoiceId() + "] adjusted amount = " + invoice.calculateAdjustedAmount(), MODULE);
             Debug.logInfo("recalcInvoiceAmounts: [" + invoice.getInvoiceId() + "] open amount = " + invoice.calculateOpenAmount(), MODULE);
-            Debug.logInfo("recalcInvoiceAmounts: [" + invoice.getInvoiceId() + "] pending open amount = " + invoice.calculatePendingAppliedAmount(), MODULE);
+            Debug.logInfo("recalcInvoiceAmounts: [" + invoice.getInvoiceId() + "] pending applied amount = " + invoice.calculatePendingAppliedAmount(), MODULE);
             Debug.logInfo("recalcInvoiceAmounts: [" + invoice.getInvoiceId() + "] pending open amount = " + invoice.calculatePendingOpenAmount(), MODULE);
             Debug.logInfo("recalcInvoiceAmounts: [" + invoice.getInvoiceId() + "] invoice adjusted total = " + invoice.calculateInvoiceAdjustedTotal(), MODULE);
             Debug.logInfo("recalcInvoiceAmounts: [" + invoice.getInvoiceId() + "] interest charged = " + invoice.calculateInterestCharged(), MODULE);
@@ -243,6 +246,32 @@ public class InvoiceService extends DomainService implements InvoiceServiceInter
         }
     }
 
+    /** {@inheritDoc} */
+    public void recalcAllEmptyAmountsInvoices() throws ServiceException {
+    	try {
+            invoiceRepository = getInvoiceRepository();
+            EntityCondition condition = EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition(Invoice.Fields.invoiceTotal.name(), EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition(Invoice.Fields.appliedAmount.name(), EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition(Invoice.Fields.adjustedAmount.name(), EntityOperator.EQUALS, null),
+            		EntityCondition.makeCondition(Invoice.Fields.openAmount.name(), EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition(Invoice.Fields.pendingAppliedAmount.name(), EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition(Invoice.Fields.pendingOpenAmount.name(), EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition(Invoice.Fields.invoiceAdjustedTotal.name(), EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition(Invoice.Fields.interestCharged.name(), EntityOperator.EQUALS, null)
+                    );
+            List<Invoice> invoices = invoiceRepository.findList(Invoice.class, condition);
+            for (Invoice invoice : invoices) {
+            	RecalcInvoiceAmountsService service = new RecalcInvoiceAmountsService();
+	            service.setInInvoiceId(invoice.getInvoiceId());
+	            runSync(service);
+            }
+        } catch (Exception e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    
     private InvoiceRepositoryInterface getInvoiceRepository() throws RepositoryException {
         return getDomainsDirectory().getBillingDomain().getInvoiceRepository();
     }
