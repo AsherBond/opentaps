@@ -1330,3 +1330,19 @@ border-left:1px solid #fe0909 !important;
 border-right:1px solid #fe0909 !important;
 color:#000000 !important;
 }
+
+.x-panel-tl { 
+border-bottom:0px none !important;
+}
+
+.frameSection
+{ 
+margin-bottom:10px;
+}
+
+.frameSectionBody
+{ 
+background-color:#FFFFFF;
+padding:4px;
+border: 1px solid #999999;
+}

@@ -42,9 +42,7 @@ public class ScreenletFormPanel extends BaseFormPanel {
     public ScreenletFormPanel(final Position formPosition, final String title) {
         super(formPosition);
         setTitle(title);
-        setBaseCls(UtilUi.SCREENLET_STYLE);
-        setTabCls(UtilUi.SCREENLET_HEADER_STYLE);
-        setBodyStyle(UtilUi.SCREENLET_BODY_STYLE);
+        setFrame(true);
         setCollapsible(true);
         setTitleCollapse(true);
 

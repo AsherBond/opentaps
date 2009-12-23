@@ -1293,6 +1293,20 @@ For more information, please see documentation/opentapsFormMacros.html
 
 <#macro displayError name index=-1><@tooltip text=opentapsErrors.field.get(getIndexedName(name,index)) class="errortooltip" /></#macro>
 
+<#macro frameSection title>
+<div class="frameSection">
+  <div class="x-panel-tl">
+    <div class="x-panel-tr">
+      <div class="x-panel-tc">
+        <div class="x-panel-header">${title}</div>
+      </div>
+    </div>
+  </div>
+  <div class="frameSectionBody">
+    <#nested/>
+  </div>
+</div>
+</#macro>
 
 <#-- Leon: I am on the fence about this one, it seems too minimal to be a proper macro and seems to serve more as a mnemonic.  Needs discussion.  -->
 <#macro sectionHeader title headerClass="subSectionHeader" titleClass="subSectionTitle">

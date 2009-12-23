@@ -19,17 +19,17 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#if (security.hasEntityPermission("CRMSFA_ACCOUNT", "_CREATE", session))>
-  <@gwtWidget id="quickNewAccount"/>
+  <@gwtWidget id="quickNewAccount" class="gwt-screenlet"/>
 </#if>
 <#if (security.hasEntityPermission("CRMSFA_CONTACT", "_CREATE", session))>
-  <@gwtWidget id="quickNewContact"/>
+  <@gwtWidget id="quickNewContact" class="gwt-screenlet"/>
 </#if>
 <#if (security.hasEntityPermission("CRMSFA_CASE", "_CREATE", session))>
-  <@gwtWidget id="quickNewCase"/>
+  <@gwtWidget id="quickNewCase" class="gwt-screenlet"/>
 </#if>
 <#if (security.hasEntityPermission("CRMSFA_LEAD", "_CREATE", session))>
-  <@gwtWidget id="quickNewLead"/>
+  <@gwtWidget id="quickNewLead" class="gwt-screenlet"/>
 </#if>
 <#if (security.hasEntityPermission("CRMSFA_OPP", "_CREATE", session))>
-  <@gwtWidget id="quickNewOpportunity"/>
+  <@gwtWidget id="quickNewOpportunity" class="gwt-screenlet"/>
 </#if>

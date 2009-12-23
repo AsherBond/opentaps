@@ -15,15 +15,14 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<div class="screenlet">
-  <div class="screenlet-header"><div class="boxhead">${uiLabelMap.OpentapsShortcuts}</div></div>
-  <div class="screenlet-body">
-    <ul class="shortcuts">
-      <#list shortcuts as shortcut>
-      <#assign shortcutClass = (parameters.thisRequestUri?default("") == shortcut.uri)?string("class=\"selected\"", "")>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<@frameSection title=uiLabelMap.OpentapsShortcuts>
+  <ul class="shortcuts">
+    <#list shortcuts as shortcut>
+      <#assign shortcutClass = (parameters.thisRequestUri?default("") == shortcut.uri)?string("class=\"selected\"", "")/>
       <#assign shortcutParameters = shortcut.parameters?default("")/>
       <li><a href="<@ofbizUrl>${shortcut.uri}${shortcutParameters}</@ofbizUrl>" ${shortcutClass}>${uiLabelMap.get(shortcut.uiLabel)}</a></li>
-      </#list>
-    </ul>
-  </div>
-</div>
+    </#list>
+  </ul>
+</@frameSection>

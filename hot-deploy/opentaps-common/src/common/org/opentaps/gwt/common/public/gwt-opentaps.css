@@ -2,28 +2,8 @@
 
 .gwtWidget .gwt-screenlet {
   background-color:#FFFFFF;
-  border:1px solid #999999;
   margin-bottom:10px;
   width:100%;
-}
-
-.gwtWidget .gwt-screenlet-header {
-  padding:1px 4px;
-  vertical-align:middle;
-  font-family:Verdana,Arial,Helvetica,sans-serif;
-  font-size:8pt;
-  font-weight:bold;
-  margin:0;
-  text-decoration:none;
-}
-
-.gwtWidget .gwt-screenlet-body {
-  background-color:#FFFFFF;
-  padding:4px;
-}
-
-.gwtWidget .gwt-screenlet-body .x-form-item  {
-  padding:0 !important;
 }
 
 .gwtWidget .x-form-item-label {

@@ -19,11 +19,9 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#if (security.hasEntityPermission("CRMSFA_ORDER", "_CREATE", session))>
-<form name="quickCreateOrderForm" method="post" action="<@ofbizUrl>quickCreateOrder</@ofbizUrl>">
-<div class="screenlet">
-    <div class="screenlet-header"><div class="boxhead">${uiLabelMap.OrderNewOrder}</div></div>
-    <div class="screenlet-body">
 
+<@frameSection title=uiLabelMap.OrderNewOrder>
+  <form name="quickCreateOrderForm" method="post" action="<@ofbizUrl>quickCreateOrder</@ofbizUrl>">
       <span class="requiredFieldNormal">${uiLabelMap.ProductCustomer}</span><br/>
       <@inputAutoCompleteClient name="partyId" id="quickCreateOrderFormPartyId" size=10 />
       <br/>
@@ -45,7 +43,7 @@
       <br/>
 
       <@inputSubmit title=uiLabelMap.CommonCreate/>
-    </div>
-</div>
-</form>
+  </form>
+</@frameSection>
+
 </#if>

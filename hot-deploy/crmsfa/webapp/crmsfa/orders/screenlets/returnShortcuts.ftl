@@ -15,15 +15,14 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<div class="screenlet">
-    <div class="screenlet-header"><div class="boxhead">${uiLabelMap.CrmReturns}</div></div>
-    <div class="screenlet-body">
-      <ul class="shortcuts">
-        <li><a href="<@ofbizUrl>pendingReturns</@ofbizUrl>">${uiLabelMap.CrmPendingReturns}</a></li>
-        <li><a href="<@ofbizUrl>findReturns</@ofbizUrl>">${uiLabelMap.CrmFindReturns}</a></li>
-        <#if security.hasEntityPermission("CRMSFA", "_RETURN_CREATE", userLogin)>
-        <li><a href="<@ofbizUrl>createReturnForm</@ofbizUrl>">${uiLabelMap.CrmCreateReturn}</a></li>
-        </#if>
-      </ul>
-    </div>
-</div>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<@frameSection title=uiLabelMap.CrmReturns>
+  <ul class="shortcuts">
+    <li><a href="<@ofbizUrl>pendingReturns</@ofbizUrl>">${uiLabelMap.CrmPendingReturns}</a></li>
+    <li><a href="<@ofbizUrl>findReturns</@ofbizUrl>">${uiLabelMap.CrmFindReturns}</a></li>
+    <#if security.hasEntityPermission("CRMSFA", "_RETURN_CREATE", userLogin)>
+      <li><a href="<@ofbizUrl>createReturnForm</@ofbizUrl>">${uiLabelMap.CrmCreateReturn}</a></li>
+    </#if>
+  </ul>
+</@frameSection>

@@ -14,16 +14,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
 <#assign hasViewSltPermission = security.hasEntityPermission("CRMSFA_SLT", "_VIEW", userLogin)/>
 <#if hasViewSltPermission>
-<div class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">${uiLabelMap.CrmShoppingLists}</div>
-    </div>
-    <div class="screenlet-body">
-      <ul class="shortcuts">
-        <li><a href="<@ofbizUrl>findShoppingList</@ofbizUrl>">${uiLabelMap.CrmFindShoppingList}</a></li>
-      </ul>
-    </div>
-</div>
+
+  <@frameSection title=uiLabelMap.CrmShoppingLists>
+    <ul class="shortcuts">
+      <li><a href="<@ofbizUrl>findShoppingList</@ofbizUrl>">${uiLabelMap.CrmFindShoppingList}</a></li>
+    </ul>
+  </@frameSection>
+
 </#if>
