@@ -23,13 +23,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.hibernate.Transaction;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.base.constants.SalesOpportunityStageConstants;
 import org.opentaps.base.entities.PartyGroup;
-import org.opentaps.base.entities.PartySupplementalData;
 import org.opentaps.base.entities.Product;
 import org.opentaps.base.entities.SalesOpportunity;
 import org.opentaps.base.services.CrmsfaCreateAccountService;
@@ -37,7 +35,6 @@ import org.opentaps.base.services.CrmsfaCreateContactService;
 import org.opentaps.base.services.CrmsfaCreateLeadService;
 import org.opentaps.base.services.CrmsfaCreateOpportunityService;
 import org.opentaps.base.services.CrmsfaUpdateOpportunityService;
-import org.opentaps.base.services.OpentapsCreateHibernateSearchIndexService;
 import org.opentaps.base.services.PurchasingCreateSupplierService;
 import org.opentaps.common.order.PurchaseOrderFactory;
 import org.opentaps.common.order.SalesOrderFactory;
@@ -49,7 +46,6 @@ import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.Lead;
 import org.opentaps.domain.party.Party;
 import org.opentaps.foundation.entity.Entity;
-import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.ofbiz.Repository;
@@ -267,11 +263,6 @@ public class SearchTests extends OpentapsTestCase {
         supplData.set("companyName", "Pardvaronis");
         supplData.store();
 
-        // force re-indexing 
-        OpentapsCreateHibernateSearchIndexService createIndexSrvc = new OpentapsCreateHibernateSearchIndexService();
-        createIndexSrvc.setInUserLogin(admin);
-        runAndAssertServiceSuccess(createIndexSrvc);
-
         pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
         
         // CRM search should return the account for "Aaardvark" and "Zambonis"  but not for "Pardvaronis"
@@ -381,7 +372,6 @@ public class SearchTests extends OpentapsTestCase {
         createLead.setInLastName("Bibrocks");
         createLead.setInCompanyName("Hitchhikers Publishing");
         runAndAssertServiceSuccess(createLead);
-        String partyId = createLead.getOutPartyId();
 
         pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
 
@@ -399,11 +389,6 @@ public class SearchTests extends OpentapsTestCase {
         assertNotNull("Lead isn't found using keyword \"Bibrocks\"", leads);
         assertNotEquals("Lead not found using keyword \"Bibrocks\"", 0, crmSearch.getLeads().size());
         assertTrue("Wrong lead is found", "Bibrocks".equals(leads.get(0).getLastName()));
-
-        // force re-indexing 
-        OpentapsCreateHibernateSearchIndexService createIndexSrvc = new OpentapsCreateHibernateSearchIndexService();
-        createIndexSrvc.setInUserLogin(admin);
-        runAndAssertServiceSuccess(createIndexSrvc);
 
         // "Hitchhikers" and "Publishing"
         crmSearch = crmsfaSearchParties("Hitchhikers Publishing");
