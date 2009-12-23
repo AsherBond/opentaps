@@ -23,10 +23,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.hibernate.Transaction;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.base.constants.SalesOpportunityStageConstants;
 import org.opentaps.base.entities.PartyGroup;
+import org.opentaps.base.entities.PartySupplementalData;
 import org.opentaps.base.entities.Product;
 import org.opentaps.base.entities.SalesOpportunity;
 import org.opentaps.base.services.CrmsfaCreateAccountService;
@@ -46,6 +49,7 @@ import org.opentaps.domain.party.Contact;
 import org.opentaps.domain.party.Lead;
 import org.opentaps.domain.party.Party;
 import org.opentaps.foundation.entity.Entity;
+import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.ofbiz.Repository;
@@ -243,6 +247,43 @@ public class SearchTests extends OpentapsTestCase {
         List<PartyGroup> suppliers = purchasingSearch.getSuppliers();
         Set<String> supplierIds = Entity.getDistinctFieldValues(String.class, suppliers, PartyGroup.Fields.partyId);
         assertFalse("Should not have found the new account [" + partyId + "] in the Supplier results", supplierIds.contains(partyId));
+    }
+
+    /**
+     * Test account can be found using full-text index by its name but not
+     * by PartySupplementalData.companyName. last one should be used for leads
+     * only. 
+     */
+    public void testAccountSupplementalDataNotSearched() throws Exception {
+        //  create account with account name "Aaardvark Zambonis"
+        CrmsfaCreateAccountService createAccount = new CrmsfaCreateAccountService();
+        createAccount.setInUserLogin(admin);
+        createAccount.setInAccountName("Aaardvark Zambonis");
+        runAndAssertServiceSuccess(createAccount);
+        String partyId = createAccount.getOutPartyId();
+
+        // create a PartySupplementalData record for this account with company name "Pardvaronis"
+        GenericValue supplData = delegator.findByPrimaryKey("PartySupplementalData", UtilMisc.toMap("partyId", partyId));
+        supplData.set("companyName", "Pardvaronis");
+        supplData.store();
+
+        // force re-indexing 
+        OpentapsCreateHibernateSearchIndexService createIndexSrvc = new OpentapsCreateHibernateSearchIndexService();
+        createIndexSrvc.setInUserLogin(admin);
+        runAndAssertServiceSuccess(createIndexSrvc);
+
+        pause("Pausing for the search index to be in sync.", INDEX_PAUSE);
+        
+        // CRM search should return the account for "Aaardvark" and "Zambonis"  but not for "Pardvaronis"
+        CrmsfaSearchService crmSearch = crmsfaSearchParties("Aaardvark Zambonis");
+        List<Account> accounts = crmSearch.getAccounts();
+        assertNotNull("Account isn't found using keywords \"Aaardvark Zambonis\"", accounts);
+        assertNotEquals("Account not found using keyword \"Aaardvark Zambonis\"", 0, accounts.size());
+        assertTrue("Wrong account is found", "Aaardvark Zambonis".equals(accounts.get(0).getGroupName()));
+
+        crmSearch = crmsfaSearchParties("Pardvaronis");
+        accounts = crmSearch.getAccounts();
+        assertEquals("Some accounts are found using keyword \"Pardvaronis\" but should not be", 0, accounts.size());
     }
 
     /**
