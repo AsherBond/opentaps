@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -66,6 +67,7 @@ import org.ofbiz.base.container.ContainerException;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.ObjectType;
 import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilURL;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
 import org.ofbiz.entity.GenericDelegator;
@@ -462,7 +464,13 @@ public class PojoGeneratorContainer implements Container {
                 entityInfo.put("serviceEngine", modelService.engineName);
                 entityInfo.put("serviceLocation", modelService.location);
                 entityInfo.put("serviceInvoke", modelService.invoke);
-                entityInfo.put("serviceDefinition", modelService.definitionLocation);
+                String serviceDefPath = null;
+                try {
+                    serviceDefPath = UtilURL.getOfbizHomeRelativeLocation(new URL(modelService.definitionLocation));
+                } catch (MalformedURLException e) {
+                    Debug.logError(e.getMessage(), MODULE);
+                }
+                entityInfo.put("serviceDefinition", serviceDefPath);
 
                 // render it as FTL
                 Writer writer = new StringWriter();
@@ -1307,5 +1315,4 @@ public class PojoGeneratorContainer implements Container {
         String pkName = Character.toLowerCase(entityName.charAt(0)) + entityName.substring(1, entityName.length()) + "Id";
         return pkName;
     }
-
 }
