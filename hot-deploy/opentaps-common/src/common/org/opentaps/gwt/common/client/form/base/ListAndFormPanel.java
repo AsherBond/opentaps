@@ -48,6 +48,7 @@ public abstract class ListAndFormPanel<TFORM extends BaseFormPanel, TLIST extend
     private final Panel mainPanel;
     private final Panel mainListContainer;
     private final Panel mainFormContainer;
+    private Panel spacer = null;
     private TLIST listView;
     private TFORM mainForm;
     private Layout currentLayout;
@@ -114,11 +115,11 @@ public abstract class ListAndFormPanel<TFORM extends BaseFormPanel, TLIST extend
     }
 
     private Panel makeVerticalSpacer(int size) {
-        final Panel spacingPanel = new Panel();
-        spacingPanel.setBorder(false);
-        spacingPanel.setHeight(size);
-        spacingPanel.setBodyStyle("background:inherit");
-        return spacingPanel;
+        spacer = new Panel();
+        spacer.setBorder(false);
+        spacer.setHeight(size);
+        spacer.setBodyStyle("background:inherit");
+        return spacer;
     }
 
     /**
@@ -224,6 +225,14 @@ public abstract class ListAndFormPanel<TFORM extends BaseFormPanel, TLIST extend
      */
     public Integer getListWidth() {
         return listWidth;
+    }
+
+    /**
+     * Gets the spacer panel.
+     * @return the spacer <code>Panel</code>
+     */
+    public final Panel getSpacerPanel() {
+        return this.spacer;
     }
 
     /**

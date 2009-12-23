@@ -57,12 +57,14 @@ public abstract class FindEntityForm<TLIST extends EntityEditableListView> exten
      */
     public void hideFilters() {
         getMainFormPanel().hide();
+        getSpacerPanel().hide();
     }
 
     /**
      * Shows the tabbed form used to filter the list view.
      */
     public void showFilters() {
+        getSpacerPanel().show();
         getMainFormPanel().show();
     }
 
