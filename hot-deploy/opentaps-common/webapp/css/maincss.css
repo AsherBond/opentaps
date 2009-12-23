@@ -882,9 +882,8 @@ margin: 2px;
 .inputBox {
 font-family: Verdana, Arial, Helvetica, sans-serif;
 font-weight: normal;
-background: #FFFFFF;
+background: #FFFFFF url("/opentaps_images/text-bg.gif") repeat-x scroll 0 0;
 font-size: 8pt;
-background: white;
 border: #999999 solid 1px;
 margin: 2px;
 }
