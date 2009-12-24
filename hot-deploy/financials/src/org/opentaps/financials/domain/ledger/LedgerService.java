@@ -23,13 +23,24 @@ import java.util.Set;
 
 import javolution.util.FastMap;
 import javolution.util.FastSet;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.base.entities.AcctgTransEntry;
+import org.opentaps.base.entities.CustomTimePeriod;
+import org.opentaps.base.entities.GlAccountHistory;
+import org.opentaps.base.entities.GlAccountOrganization;
 import org.opentaps.domain.DomainService;
-import org.opentaps.base.entities.*;
-import org.opentaps.domain.ledger.*;
+import org.opentaps.domain.ledger.AccountingTransaction;
+import org.opentaps.domain.ledger.GeneralLedgerAccount;
+import org.opentaps.domain.ledger.LedgerException;
+import org.opentaps.domain.ledger.LedgerRepositoryInterface;
+import org.opentaps.domain.ledger.LedgerServiceInterface;
+import org.opentaps.domain.ledger.LedgerSpecificationInterface;
 import org.opentaps.domain.ledger.AccountingTransaction.TagBalance;
 import org.opentaps.domain.organization.OrganizationDomainInterface;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
@@ -63,6 +74,9 @@ public class LedgerService extends DomainService implements LedgerServiceInterfa
             LedgerRepositoryInterface ledgerRepository = getRepository();
             AccountingTransaction acctgTrans = ledgerRepository.getAccountingTransaction(acctgTransId);
             postToLedger(acctgTrans);
+            //store the total debit amount in postedAmount
+            acctgTrans.setPostedAmount(acctgTrans.getDebitTotal());
+            getRepository().update(acctgTrans);
         } catch (GeneralException e)  {
             throw new ServiceException(e);
         }
@@ -167,6 +181,22 @@ public class LedgerService extends DomainService implements LedgerServiceInterfa
             }
         }
     }
+    
+    /** {@inheritDoc} */
+	public void updatePostedAmountAcctgTrans() throws ServiceException {
+		try {
+			LedgerRepositoryInterface ledgerRepository = getRepository();
+            EntityCondition condition = EntityCondition.makeCondition(AccountingTransaction.Fields.isPosted.name(), EntityOperator.EQUALS, "Y");
+            List<AccountingTransaction> acctgTrans = ledgerRepository.findList(AccountingTransaction.class, condition);
+            for (AccountingTransaction acctgTran : acctgTrans) {
+            	acctgTran.setPostedAmount(acctgTran.getDebitTotal());
+            	getRepository().update(acctgTran);
+            }
+        } catch (Exception e) {
+            throw new ServiceException(e);
+        }
+		
+	}
 
     // verify the open time periods and if something's wrong, throw a ledger exception
     private void validateOpenTimePeriods(List<CustomTimePeriod> periods, AccountingTransaction transaction, AcctgTransEntry entry) throws RepositoryException, LedgerException {
@@ -191,4 +221,5 @@ public class LedgerService extends DomainService implements LedgerServiceInterfa
     private LedgerSpecificationInterface getSpecification() throws RepositoryException {
         return getRepository().getSpecification();
     }
+
 }

@@ -251,6 +251,7 @@ under the License.
     <extend-entity entity-name="AcctgTrans">
         <field name="invoiceAdjustmentId" type="id"/>
         <field name="paymentApplicationId" type="id"/>
+        <field name="postedAmount" type="currency-precise"/>
         <relation type="one" rel-entity-name="InvoiceAdjustment">
             <key-map field-name="invoiceAdjustmentId"/>
         </relation>

@@ -57,5 +57,12 @@ public interface LedgerServiceInterface extends ServiceInterface {
      * @throws LedgerException if an error occurs
      */
     public void updateBalanceForTransaction(GeneralLedgerAccount account, AccountingTransaction transaction, OrganizationRepositoryInterface orgRepository) throws RepositoryException, LedgerException;
+    
+    /**
+     * Finds all AcctgTrans where isPosted=Y and sets the postedAmount to the sum of all the debit amounts for the accounting transaction.
+     * @throws ServiceException if an error occurs
+     * @see #setPaymentId required input <code>paymentId</code>
+     */
+    public void updatePostedAmountAcctgTrans() throws ServiceException;
 
 }

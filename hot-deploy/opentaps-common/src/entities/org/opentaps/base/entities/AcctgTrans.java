@@ -43,6 +43,7 @@ import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
 import java.lang.String;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
@@ -85,6 +86,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
         fields.put("invoiceAdjustmentId", "INVOICE_ADJUSTMENT_ID");
         fields.put("paymentApplicationId", "PAYMENT_APPLICATION_ID");
+        fields.put("postedAmount", "POSTED_AMOUNT");
 fieldMapColumns.put("AcctgTrans", fields);
 }
   public static enum Fields implements EntityFieldInterface<AcctgTrans> {
@@ -119,7 +121,8 @@ fieldMapColumns.put("AcctgTrans", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     invoiceAdjustmentId("invoiceAdjustmentId"),
-    paymentApplicationId("paymentApplicationId");
+    paymentApplicationId("paymentApplicationId"),
+    postedAmount("postedAmount");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -197,6 +200,8 @@ fieldMapColumns.put("AcctgTrans", fields);
    private String invoiceAdjustmentId;
    @Column(name="PAYMENT_APPLICATION_ID")
    private String paymentApplicationId;
+   @Column(name="POSTED_AMOUNT")
+   private BigDecimal postedAmount;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TRANS_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -346,7 +351,7 @@ fieldMapColumns.put("AcctgTrans", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("acctgTransId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("isPosted");this.allFieldsNames.add("postedDate");this.allFieldsNames.add("scheduledPostingDate");this.allFieldsNames.add("glJournalId");this.allFieldsNames.add("glFiscalTypeId");this.allFieldsNames.add("voucherRef");this.allFieldsNames.add("voucherDate");this.allFieldsNames.add("groupStatusId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("physicalInventoryId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("finAccountTransId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("receiptId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("theirAcctgTransId");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("invoiceAdjustmentId");this.allFieldsNames.add("paymentApplicationId");
+      this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("isPosted");this.allFieldsNames.add("postedDate");this.allFieldsNames.add("scheduledPostingDate");this.allFieldsNames.add("glJournalId");this.allFieldsNames.add("glFiscalTypeId");this.allFieldsNames.add("voucherRef");this.allFieldsNames.add("voucherDate");this.allFieldsNames.add("groupStatusId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("physicalInventoryId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("finAccountTransId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("receiptId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("theirAcctgTransId");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("invoiceAdjustmentId");this.allFieldsNames.add("paymentApplicationId");this.allFieldsNames.add("postedAmount");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -585,6 +590,13 @@ fieldMapColumns.put("AcctgTrans", fields);
     public void setPaymentApplicationId(String paymentApplicationId) {
         this.paymentApplicationId = paymentApplicationId;
     }
+    /**
+     * Auto generated value setter.
+     * @param postedAmount the postedAmount to set
+     */
+    public void setPostedAmount(BigDecimal postedAmount) {
+        this.postedAmount = postedAmount;
+    }
 
     /**
      * Auto generated value accessor.
@@ -809,6 +821,13 @@ fieldMapColumns.put("AcctgTrans", fields);
      */
     public String getPaymentApplicationId() {
         return this.paymentApplicationId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getPostedAmount() {
+        return this.postedAmount;
     }
 
     /**
@@ -1345,6 +1364,7 @@ fieldMapColumns.put("AcctgTrans", fields);
         setCreatedTxStamp((Timestamp) mapValue.get("createdTxStamp"));
         setInvoiceAdjustmentId((String) mapValue.get("invoiceAdjustmentId"));
         setPaymentApplicationId((String) mapValue.get("paymentApplicationId"));
+        setPostedAmount(convertToBigDecimal(mapValue.get("postedAmount")));
         postInit();
     }
 
@@ -1384,6 +1404,7 @@ fieldMapColumns.put("AcctgTrans", fields);
         mapValue.put("createdTxStamp", getCreatedTxStamp());
         mapValue.put("invoiceAdjustmentId", getInvoiceAdjustmentId());
         mapValue.put("paymentApplicationId", getPaymentApplicationId());
+        mapValue.put("postedAmount", getPostedAmount());
         return mapValue;
     }
 
