@@ -3,8 +3,8 @@
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<import value="net.sf.jasperreports.engine.*"/>
-	<import value="java.util.*"/>
 	<import value="org.opentaps.base.entities.*"/>
+	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<field name="countryCode" class="java.lang.String"/>
 	<field name="areaCode" class="java.lang.String"/>
@@ -37,7 +37,7 @@
 				<textElement>
 					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Phone Number: " + $F{countryCode} + " (" + $F{areaCode} + ") " + $F{contactNumber}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsPhoneNumber} + ": " + $F{countryCode} + " (" + $F{areaCode} + ") " + $F{contactNumber}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
