@@ -62,13 +62,12 @@ public final class QuoteEvents {
      * @return the event response <code>String</code>
      * @exception GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
-    public static Map prepareQuoteReportParameters(GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin, Locale locale, String quoteId) throws GeneralException {
+    public static Map<String, Object> prepareQuoteReportParameters(GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin, Locale locale, String quoteId) throws GeneralException {
         Map<String, Object> parameters = FastMap.newInstance();
 
         String organizationPartyId = null;
         //  placeholder for report parameters
-        Map<String, Object> jrParameters = FastMap.newInstance();
+        Map<String, Object> jrParameters = FastMap.<String, Object>newInstance();
 
         GenericValue quote = delegator.findByPrimaryKey("Quote", UtilMisc.toMap("quoteId", quoteId));
         GenericValue productStore = quote.getRelatedOne("ProductStore");
@@ -76,6 +75,7 @@ public final class QuoteEvents {
             organizationPartyId = productStore.getString("payToPartyId");
         }
         GenericValue party = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", quote.getString("partyId")));
+
         // prepare company information
         Map<String, Object> organizationInfo = UtilCommon.getOrganizationHeaderInfo(organizationPartyId, delegator);
         GenericValue organizationAddress = (GenericValue) organizationInfo.get("organizationPostalAddress");
@@ -102,7 +102,7 @@ public final class QuoteEvents {
             jrParameters.put("eftAccountBankAccountNumber", backAccount.getString("accountNumber"));
         }
         // get name of quote.party and pass it to JR
-        Map quotePartyNameResult = dispatcher.runSync("getPartyNameForDate", UtilMisc.toMap("partyId", quote.getString("partyId"), "compareDate", quote.getString("issueDate"), "lastNameFirst", "Y", "userLogin", userLogin));
+        Map<String, Object> quotePartyNameResult = dispatcher.runSync("getPartyNameForDate", UtilMisc.toMap("partyId", quote.get("partyId"), "compareDate", quote.get("issueDate"), "lastNameFirst", "Y", "userLogin", userLogin));
         if (ServiceUtil.isError(quotePartyNameResult) || ServiceUtil.isFailure(quotePartyNameResult)) {
             throw new GenericServiceException(ServiceUtil.getErrorMessage(quotePartyNameResult));
         }
@@ -110,7 +110,7 @@ public final class QuoteEvents {
         jrParameters.put("quotePartyName", quotePartyName);
         jrParameters.put("issueDate", quote.getTimestamp("issueDate"));
         // get party's address information and pass it to JR
-        GenericValue address = EntityUtil.getFirst((List) ContactHelper.getContactMech(party, "GENERAL_LOCATION", "POSTAL_ADDRESS", false));
+        GenericValue address = EntityUtil.getFirst((List<GenericValue>) ContactHelper.getContactMech(party, "GENERAL_LOCATION", "POSTAL_ADDRESS", false));
         if (address != null) {
             GenericValue toPostalAddress = address.getRelatedOne("PostalAddress");
             jrParameters.put("address1", toPostalAddress.getString("address1"));
@@ -125,15 +125,15 @@ public final class QuoteEvents {
         jrParameters.put("validFromDate", quote.getTimestamp("validFromDate"));
         jrParameters.put("validThruDate", quote.getTimestamp("validThruDate"));
         // the list which using for store product item
-        List<Map<String, Object>> reportList = new FastList();
+        List<Map<String, Object>> reportList = FastList.<Map<String, Object>>newInstance();
         // the list which using for store charge item
-        List<Map<String, Object>> chargeList = new FastList();
+        List<Map<String, Object>> chargeList = FastList.<Map<String, Object>>newInstance();
         // retrieve quote item info and pass it to JR, add as report data
         List<GenericValue> quoteItems = quote.getRelated("QuoteItem", UtilMisc.toList("quoteItemSeqId"));
         for (GenericValue quoteItem : quoteItems) {
             GenericValue product = quoteItem.getRelatedOne("Product");
             if (quoteItem.getBigDecimal("quantity") != null && quoteItem.getBigDecimal("quoteUnitPrice") != null) {
-                Map<String, Object> reportLine = new FastMap();
+                Map<String, Object> reportLine = FastMap.<String, Object>newInstance();
                 reportLine.put("quoteItemSeqId", quoteItem.getString("quoteItemSeqId"));
                 reportLine.put("productId", quoteItem.getString("productId"));
                 reportLine.put("productName", quoteItem.getString("description"));
@@ -160,7 +160,7 @@ public final class QuoteEvents {
                 List<GenericValue> quoteItemOptions = quoteItem.getRelated("QuoteItemOption", UtilMisc.toList("quoteItemOptionSeqId"));
                 int optionSeq = 1;
                 for (GenericValue quoteItemOption : quoteItemOptions) {
-                    Map<String, Object> reportOptionLine = new FastMap();
+                    Map<String, Object> reportOptionLine = FastMap.<String, Object>newInstance();
                     reportOptionLine.put("quoteItemSeqId", quoteItem.getString("quoteItemSeqId"));
                     reportOptionLine.put("productId", quoteItem.getString("productId"));
                     reportOptionLine.put("productName", quoteItem.getString("description"));
@@ -198,13 +198,13 @@ public final class QuoteEvents {
         parameters.put("jrParameters", jrParameters);
         return parameters;
     }
+
     /**
      * Prepare data and parameters for running quote report.
      * @param request a <code>HttpServletRequest</code> value
      * @param response a <code>HttpServletResponse</code> value
      * @return the event response <code>String</code>
      */
-    @SuppressWarnings("unchecked")
     public static String prepareQuoteReport(HttpServletRequest request, HttpServletResponse response) {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
@@ -214,7 +214,7 @@ public final class QuoteEvents {
 
         try {
             // get parameter for jasper
-            Map jasperParameters = prepareQuoteReportParameters(delegator, dispatcher, userLogin, locale, quoteId);
+            Map<String, Object> jasperParameters = prepareQuoteReportParameters(delegator, dispatcher, userLogin, locale, quoteId);
             request.setAttribute("jrParameters", jasperParameters.get("jrParameters"));
             request.setAttribute("jrDataSource", jasperParameters.get("jrDataSource"));
 
