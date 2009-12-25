@@ -38,6 +38,9 @@ import org.ofbiz.party.contact.ContactHelper;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
+import org.opentaps.base.constants.ContactMechTypeConstants;
+import org.opentaps.base.constants.ProductTypeConstants;
 import org.opentaps.common.party.PartyContactHelper;
 import org.opentaps.common.party.PartyReader;
 import org.opentaps.common.util.UtilCommon;
@@ -92,8 +95,8 @@ public final class QuoteEvents {
         PartyReader pr = new PartyReader(organizationPartyId, delegator);
         jrParameters.put("website", pr.getWebsite());
         jrParameters.put("email", pr.getEmail());
-        jrParameters.put("primaryPhone", PartyContactHelper.getTelecomNumberByPurpose(organizationPartyId, "PRIMARY_PHONE", true, delegator));
-        jrParameters.put("primaryFax", PartyContactHelper.getTelecomNumberByPurpose(organizationPartyId, "FAX_NUMBER", true, delegator));
+        jrParameters.put("primaryPhone", PartyContactHelper.getTelecomNumberByPurpose(organizationPartyId, ContactMechPurposeTypeConstants.PRIMARY_PHONE, true, delegator));
+        jrParameters.put("primaryFax", PartyContactHelper.getTelecomNumberByPurpose(organizationPartyId, ContactMechPurposeTypeConstants.FAX_NUMBER, true, delegator));
         GenericValue backAccount = pr.getBackAccount();
         // get parameters of eftAccountBank and pass it to JR
         if (backAccount != null) {
@@ -110,7 +113,7 @@ public final class QuoteEvents {
         jrParameters.put("quotePartyName", quotePartyName);
         jrParameters.put("issueDate", quote.getTimestamp("issueDate"));
         // get party's address information and pass it to JR
-        GenericValue address = EntityUtil.getFirst((List<GenericValue>) ContactHelper.getContactMech(party, "GENERAL_LOCATION", "POSTAL_ADDRESS", false));
+        GenericValue address = EntityUtil.getFirst((List<GenericValue>) ContactHelper.getContactMech(party, ContactMechPurposeTypeConstants.GENERAL_LOCATION, ContactMechTypeConstants.POSTAL_ADDRESS, false));
         if (address != null) {
             GenericValue toPostalAddress = address.getRelatedOne("PostalAddress");
             jrParameters.put("address1", toPostalAddress.getString("address1"));
@@ -149,7 +152,7 @@ public final class QuoteEvents {
                 reportLine.put("quoteItemAmount", quoteItemAmount);
                 reportLine.put("isQuoteItem", new Boolean(true));
                 // put it into report data collection
-                if (product == null || !"SERVICE".equals(product.getString("productTypeId"))) {
+                if (product == null || !ProductTypeConstants.Service.SERVICE.equals(product.getString("productTypeId"))) {
                     // add as report item
                     reportList.add(reportLine);
                 } else {
