@@ -302,6 +302,9 @@ r13899 Fix reservation and cancelOrderItem did not account for already issued qu
 applications/workeffort/src/org/ofbiz/workeffort/workeffort/WorkEffortServices.java
 r14110 exclude cancelled task on filter out cancel event is true
 
+framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
+r14376 fix the add redirect parameter of request-redirect which after multipart/form-data form submit
+
 Other API Changes
 -----------------
 
