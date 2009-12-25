@@ -2,8 +2,8 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DatamartSalesTaxReport" pageWidth="612" pageHeight="792" columnWidth="556" leftMargin="28" rightMargin="28" topMargin="20" bottomMargin="20">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
-	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="org.opentaps.common.reporting.UtilReports"/>
+	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<parameter name="fromDate" class="java.sql.Timestamp" isForPrompting="false">
@@ -86,7 +86,7 @@ ORDER BY STORE_DIM.STORE_DIM_NAME]]>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-1" x="0" y="3" width="556" height="35"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font size="18" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="18" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsSalesTaxStatement}]]></textFieldExpression>
 			</textField>
@@ -103,7 +103,7 @@ ORDER BY STORE_DIM.STORE_DIM_NAME]]>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="12" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonFromDate}+":"]]></textFieldExpression>
 			</textField>
@@ -116,7 +116,7 @@ ORDER BY STORE_DIM.STORE_DIM_NAME]]>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="12" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonThruDate}+":"]]></textFieldExpression>
 			</textField>
@@ -129,7 +129,7 @@ ORDER BY STORE_DIM.STORE_DIM_NAME]]>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{thruDate}]]></textFieldExpression>
 			</textField>
@@ -142,7 +142,7 @@ ORDER BY STORE_DIM.STORE_DIM_NAME]]>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDate}]]></textFieldExpression>
 			</textField>
@@ -158,11 +158,11 @@ ORDER BY STORE_DIM.STORE_DIM_NAME]]>
 				<subreportParameter name="REPORT_LOCALE">
 					<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="organizationPartyId">
-					<subreportParameterExpression><![CDATA[$P{organizationPartyId}]]></subreportParameterExpression>
-				</subreportParameter>
 				<subreportParameter name="periodStart">
 					<subreportParameterExpression><![CDATA[$P{periodStart}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="organizationPartyId">
+					<subreportParameterExpression><![CDATA[$P{organizationPartyId}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="thruDate">
 					<subreportParameterExpression><![CDATA[$P{thruDate}]]></subreportParameterExpression>
@@ -170,11 +170,11 @@ ORDER BY STORE_DIM.STORE_DIM_NAME]]>
 				<subreportParameter name="fromDate">
 					<subreportParameterExpression><![CDATA[$P{fromDate}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="currencyUomId">
-					<subreportParameterExpression><![CDATA[$P{currencyUomId}]]></subreportParameterExpression>
-				</subreportParameter>
 				<subreportParameter name="periodEnd">
 					<subreportParameterExpression><![CDATA[$P{periodEnd}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="currencyUomId">
+					<subreportParameterExpression><![CDATA[$P{currencyUomId}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="StoreName">
 					<subreportParameterExpression><![CDATA[$F{name}]]></subreportParameterExpression>

@@ -33,7 +33,7 @@
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-9" x="0" y="0" width="732" height="28"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font size="18" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="18" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsCommissionReport}.toUpperCase()]]></textFieldExpression>
 			</textField>
@@ -45,7 +45,9 @@
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonFor} + " " + $P{organizationName} + ($P{reportFromDate} == null ? "" : " " + $R{CommonFrom} + " " + $P{reportFromDate}) + ($P{reportThruDate} == null ? "" : " " + $R{CommonThru} + " " + $P{reportThruDate})]]></textFieldExpression>
 			</textField>
 		</band>
@@ -61,56 +63,56 @@
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-1" x="0" y="0" width="145" height="18"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CrmCommissionRep}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-2" x="145" y="0" width="145" height="18"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsCustomer}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-3" x="290" y="0" width="70" height="18"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsInvNbr}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-4" x="360" y="0" width="70" height="18"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsInvTotal}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-5" x="430" y="0" width="80" height="18"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{AccountingInvoiceDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-6" x="510" y="0" width="80" height="18"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsPMTDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-7" x="590" y="0" width="70" height="18"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsPMTAmount}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-8" x="660" y="0" width="70" height="18"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsCommission}]]></textFieldExpression>
 			</textField>
@@ -134,7 +136,9 @@
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{agentName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
@@ -145,7 +149,9 @@
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customerName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
@@ -156,7 +162,9 @@
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{origInvoiceId}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
@@ -167,7 +175,9 @@
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{origAmount}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
@@ -178,7 +188,9 @@
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{invoiceDate}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
@@ -191,7 +203,9 @@
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{billingDatetime}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
@@ -204,7 +218,9 @@
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{origPaymentAmount}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
@@ -215,7 +231,9 @@
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{amount}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -233,7 +251,9 @@
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
-				<textElement/>
+				<textElement>
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonPage} + " " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>

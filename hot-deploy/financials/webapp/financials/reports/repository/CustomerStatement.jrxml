@@ -75,7 +75,7 @@ from invoice]]>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-20" style="Statement Style" x="464" y="96" width="69" height="8"/>
 				<textElement textAlignment="Right" markup="none">
-					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsCustomer}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
@@ -88,14 +88,14 @@ from invoice]]>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{party_id}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-21" style="Statement Style" x="533" y="96" width="76" height="8"/>
 				<textElement textAlignment="Center" markup="none">
-					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonDate}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
@@ -108,14 +108,14 @@ from invoice]]>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{as_of_date}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-22" style="Statement Style" x="42" y="96" width="66" height="8"/>
 				<textElement textAlignment="Right" markup="none">
-					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsCustomer}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
@@ -128,14 +128,14 @@ from invoice]]>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{party_id}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-23" style="Statement Style" x="248" y="96" width="66" height="8"/>
 				<textElement textAlignment="Center" markup="none">
-					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonDate}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
@@ -148,7 +148,7 @@ from invoice]]>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{as_of_date}]]></textFieldExpression>
 			</textField>
@@ -161,11 +161,11 @@ from invoice]]>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonPage}.toUppercase($P{REPORT_LOCALE}) +" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
-			<image scaleImage="FillFrame" onErrorType="Blank">
+			<image onErrorType="Blank">
 				<reportElement key="image-1" style="Statement Style" x="464" y="10" width="145" height="29">
 					<printWhenExpression><![CDATA[new Boolean($P{logo_url} != null)]]></printWhenExpression>
 				</reportElement>
@@ -183,11 +183,11 @@ from invoice]]>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-24" style="Statement Style" x="478" y="173" width="116" height="18"/>
 				<textElement textAlignment="Center" markup="none">
-					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsReturnPortionNote}]]></textFieldExpression>
 			</textField>
-			<image scaleImage="FillFrame" onErrorType="Blank">
+			<image onErrorType="Blank">
 				<reportElement key="image-2" style="Statement Style" x="154" y="10" width="145" height="29">
 					<printWhenExpression><![CDATA[new Boolean($P{logo_url} != null)]]></printWhenExpression>
 				</reportElement>
@@ -211,7 +211,7 @@ from invoice]]>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{org_address1}]]></textFieldExpression>
 			</textField>
@@ -224,7 +224,7 @@ from invoice]]>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{org_city} +
 ", " +
@@ -241,7 +241,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{org_phone}]]></textFieldExpression>
 			</textField>
@@ -254,7 +254,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{org_fax} + " fax"]]></textFieldExpression>
 			</textField>
@@ -267,7 +267,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{org_address1}]]></textFieldExpression>
 			</textField>
@@ -280,7 +280,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{org_city} +
 ", " +
@@ -296,7 +296,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{org_phone}]]></textFieldExpression>
 			</textField>
@@ -309,7 +309,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{org_fax} + " fax"]]></textFieldExpression>
 			</textField>
@@ -322,7 +322,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
-					<font size="10"/>
+					<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{party_data}.get($F{party_id} + "billing_address")]]></textFieldExpression>
 			</textField>
@@ -331,7 +331,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<printWhenExpression><![CDATA[$P{party_data}.get($F{party_id} + "is_past_due")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="Helvetica" size="24" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="Helvetica" size="24" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsPastDue}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
@@ -345,63 +345,63 @@ $P{org_postal_code}]]></textFieldExpression>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-1" x="0" y="0" width="76" height="11" forecolor="#FFFFFF" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="Courier" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="Courier" size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{AccountingInvoice}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-2" x="76" y="0" width="61" height="11" forecolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="Courier" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="Courier" size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsTransDate}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-3" x="137" y="0" width="61" height="11" forecolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="Courier" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="Courier" size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{AccountingDueDate}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-4" x="198" y="0" width="30" height="11" forecolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="Courier" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="Courier" size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonType}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-5" x="228" y="0" width="82" height="11" forecolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="Courier" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="Courier" size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonAmount}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-7" x="352" y="0" width="82" height="11" forecolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="Courier" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="Courier" size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsOpenAmount}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-6" x="310" y="0" width="42" height="11" forecolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="Courier" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="Courier" size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsAgeDate}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-8" x="434" y="0" width="100" height="11" forecolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="Courier" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="Courier" size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{AccountingInvoice}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-9" x="534" y="0" width="100" height="11" forecolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="Courier" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="Courier" size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsOpenAmount}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
@@ -418,7 +418,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{invoice_id}]]></textFieldExpression>
 			</textField>
@@ -431,7 +431,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{transaction_date}]]></textFieldExpression>
 			</textField>
@@ -444,7 +444,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{due_date}]]></textFieldExpression>
 			</textField>
@@ -457,7 +457,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{type}]]></textFieldExpression>
 			</textField>
@@ -470,7 +470,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{invoice_total}]]></textFieldExpression>
 			</textField>
@@ -483,7 +483,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{open_amount}]]></textFieldExpression>
 			</textField>
@@ -496,7 +496,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{invoice_id_2}]]></textFieldExpression>
 			</textField>
@@ -509,7 +509,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{open_amount}]]></textFieldExpression>
 			</textField>
@@ -522,7 +522,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{age_date}]]></textFieldExpression>
 			</textField>
@@ -536,42 +536,42 @@ $P{org_postal_code}]]></textFieldExpression>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-10" x="0" y="0" width="143" height="23"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom" markup="none">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsOver30}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-11" x="0" y="23" width="143" height="23"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom" markup="none">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsOver90}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-12" x="143" y="0" width="143" height="23"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom" markup="none">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsOver60}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement key="staticText-13" x="143" y="23" width="143" height="23"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom" markup="none">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsOver120}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-14" x="286" y="0" width="148" height="23"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom" markup="none">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonCurrent}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-15" x="286" y="23" width="74" height="23"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsPleasePay}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
@@ -584,7 +584,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.5" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Courier" size="10"/>
+					<font fontName="Courier" size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[(Double) $P{party_data}.get($F{party_id} + "total_open")]]></textFieldExpression>
 			</textField>
@@ -597,14 +597,14 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[(Double) $P{party_data}.get($F{party_id} + "total_open")]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-17" x="434" y="0" width="100" height="46"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="Courier" size="8"/>
+					<font fontName="Courier" size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsPleasePay}.toUpperCase($P{REPORT_LOCALE})]]></textFieldExpression>
 			</textField>
@@ -616,7 +616,9 @@ $P{org_postal_code}]]></textFieldExpression>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[(Double) $P{party_data}.get($F{party_id} + "current")]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
@@ -628,7 +630,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[(Double) $P{party_data}.get($F{party_id} + "over_3N")]]></textFieldExpression>
 			</textField>
@@ -640,7 +642,9 @@ $P{org_postal_code}]]></textFieldExpression>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[(Double) $P{party_data}.get($F{party_id} + "over_2N")]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
@@ -651,7 +655,9 @@ $P{org_postal_code}]]></textFieldExpression>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[(Double) $P{party_data}.get($F{party_id} + "over_4N")]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
@@ -663,7 +669,7 @@ $P{org_postal_code}]]></textFieldExpression>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[(Double) $P{party_data}.get($F{party_id} + "over_1N")]]></textFieldExpression>
 			</textField>

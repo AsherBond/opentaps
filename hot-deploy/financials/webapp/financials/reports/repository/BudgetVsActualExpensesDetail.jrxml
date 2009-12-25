@@ -184,14 +184,14 @@ WHERE
 				<textField isBlankWhenNull="true">
 					<reportElement key="textField" x="75" y="0" width="407" height="16"/>
 					<textElement verticalAlignment="Middle">
-						<font size="9"/>
+						<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{AccountName}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement key="textField" x="0" y="0" width="75" height="16"/>
 					<textElement verticalAlignment="Middle">
-						<font size="9"/>
+						<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{AccountCode}]]></textFieldExpression>
 				</textField>
@@ -202,42 +202,42 @@ WHERE
 				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 					<reportElement key="textField" x="482" y="0" width="90" height="16"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="9"/>
+						<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$V{AccountBudgetTotal}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 					<reportElement key="textField" x="572" y="0" width="90" height="16"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="9"/>
+						<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$V{AccountExpensesTotal}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 					<reportElement key="textField" x="662" y="0" width="90" height="16"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="9"/>
+						<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$V{AccountEncumbrancesTotal}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement x="382" y="0" width="100" height="16"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
-						<font size="9" isBold="true"/>
+						<font size="9" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsAccountTotal} + ":"]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 					<reportElement key="textField" x="662" y="16" width="90" height="16"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="9"/>
+						<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$V{AccountBalance}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement x="562" y="16" width="100" height="16"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
-						<font size="9" isBold="true"/>
+						<font size="9" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsAccountBalance} + ":"]]></textFieldExpression>
 				</textField>
@@ -252,35 +252,43 @@ WHERE
 			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="752" height="20"/>
 				<textElement textAlignment="Center" markup="none">
-					<font isBold="true"/>
+					<font isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsBudgetVsActualExpensesDetails}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="0" y="43" width="752" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="false"/>
+					<font isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{accountingTags}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MM/dd/yy h.mm a" isBlankWhenNull="true">
 				<reportElement x="457" y="20" width="100" height="16"/>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{thruDate}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MM/dd/yy h.mm a" isBlankWhenNull="true">
 				<reportElement x="295" y="20" width="100" height="16"/>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDate}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
 				<reportElement x="233" y="20" width="60" height="16"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonFromDate} + ":"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
 				<reportElement x="395" y="20" width="60" height="16"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonThruDate} + ":"]]></textFieldExpression>
 			</textField>
 		</band>
@@ -293,21 +301,21 @@ WHERE
 			<textField>
 				<reportElement x="0" y="0" width="482" height="18"/>
 				<textElement markup="none">
-					<font isBold="true"/>
+					<font isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsAccountCodeName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="482" y="2" width="90" height="18"/>
 				<textElement textAlignment="Right" markup="none">
-					<font isBold="true"/>
+					<font isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsBudget}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="572" y="2" width="90" height="18"/>
 				<textElement textAlignment="Right" markup="none">
-					<font isBold="true"/>
+					<font isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsExpenses}]]></textFieldExpression>
 			</textField>
@@ -325,42 +333,42 @@ WHERE
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 				<reportElement key="textField" x="482" y="0" width="90" height="16"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{BudgetNetAmount}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 				<reportElement key="textField" x="572" y="0" width="90" height="16"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{ActualNetAmount}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 				<reportElement key="textField" x="662" y="0" width="90" height="16"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{EncumberedNetAmount}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="textField" x="0" y="0" width="134" height="16"/>
 				<textElement verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{OrderId} == null ? ("Acctg Trans: " + $F{AcctgTransId} + "/" + $F{AcctgTransEntrySeqId}) : ("PO: " + $F{OrderId} + "/" + $F{OrderItemSeqId})]]></textFieldExpression>
 			</textField>
 			<textField pattern="MM/dd/yy" isBlankWhenNull="true">
 				<reportElement key="textField" x="134" y="0" width="61" height="16"/>
 				<textElement verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{TransactionDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="textField" x="195" y="0" width="287" height="16"/>
 				<textElement verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{OrderId} == null ? $F{AcctgTransDescription} : $F{OrderName}]]></textFieldExpression>
 			</textField>
@@ -371,14 +379,14 @@ WHERE
 			<textField isBlankWhenNull="true">
 				<reportElement key="textField" x="314" y="0" width="80" height="16"/>
 				<textElement textAlignment="Right">
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonPage}+" "+$V{PAGE_NUMBER}+" "+$R{OpentapsOf}]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report" isBlankWhenNull="true">
 				<reportElement key="textField" x="394" y="0" width="40" height="16"/>
 				<textElement>
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
@@ -392,42 +400,42 @@ WHERE
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 				<reportElement key="textField" x="482" y="1" width="90" height="16"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$V{BudgetTotal}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 				<reportElement key="textField" x="572" y="1" width="90" height="16"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$V{ExpensesTotal}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 				<reportElement key="textField" x="662" y="1" width="90" height="16"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$V{EncumbrancesTotal}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="382" y="1" width="100" height="16"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
-					<font size="9" isBold="true"/>
+					<font size="9" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsGrandTotal} + ":"]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
 				<reportElement key="textField" x="662" y="17" width="90" height="16"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$V{BalanceTotal}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="562" y="16" width="100" height="16"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
-					<font size="9" isBold="true"/>
+					<font size="9" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsBalance} + ":"]]></textFieldExpression>
 			</textField>

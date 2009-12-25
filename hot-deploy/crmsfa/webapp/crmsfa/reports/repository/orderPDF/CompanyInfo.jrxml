@@ -2,10 +2,10 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CompanyInfo" pageWidth="500" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="500" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
-	<import value="org.opentaps.base.entities.*"/>
 	<import value="org.opentaps.domain.order.Order"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
+	<import value="org.opentaps.base.entities.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<parameter name="organizationCompanyName" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="organizationPostalAddress" class="java.lang.Object" isForPrompting="false"/>
@@ -31,7 +31,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{organizationCompanyName}]]></textFieldExpression>
 			</textField>
@@ -44,7 +44,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[((Map)$P{organizationPostalAddress}).get("address1")]]></textFieldExpression>
 			</textField>
@@ -59,7 +59,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[((Map)$P{organizationPostalAddress}).get("address2")]]></textFieldExpression>
 			</textField>
@@ -72,7 +72,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[(((Map)$P{organizationPostalAddress}).get("city")) + ", " + $P{stateProvinceAbbrv} + " " + (((Map)$P{organizationPostalAddress}).get("postalCode")) + ", " + $P{countryName}]]></textFieldExpression>
 			</textField>
@@ -87,7 +87,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{website}]]></textFieldExpression>
 			</textField>
@@ -102,7 +102,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{primaryPhone} != null ? ($R{CrmPrimaryPhone} + ": " + $P{primaryPhone}) : null]]></textFieldExpression>
 			</textField>
@@ -117,7 +117,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{primaryFax} != null ? ($R{PartyContactFaxPhoneNumber} + ": " + $P{primaryFax}) : null]]></textFieldExpression>
 			</textField>

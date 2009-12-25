@@ -4,8 +4,8 @@
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.1" value="pageFooter"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
-	<import value="org.opentaps.common.reporting.UtilReports"/>
 	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="org.opentaps.common.reporting.UtilReports"/>
 	<import value="org.ofbiz.base.util.UtilDateTime"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -82,7 +82,7 @@ product filter.]]></fieldDescription>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement verticalAlignment="Middle">
-						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<font size="10" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{ProductSupplier}]]></textFieldExpression>
 				</textField>
@@ -95,7 +95,7 @@ product filter.]]></fieldDescription>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+						<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsPurchaseOrders}]]></textFieldExpression>
 				</textField>
@@ -108,7 +108,7 @@ product filter.]]></fieldDescription>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+						<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonTotalValue}]]></textFieldExpression>
 				</textField>
@@ -121,7 +121,7 @@ product filter.]]></fieldDescription>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+						<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{ProductCurrency}]]></textFieldExpression>
 				</textField>
@@ -145,7 +145,7 @@ product filter.]]></fieldDescription>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="18" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="Arial" size="18" isBold="true" pdfFontName="DejaVuSerif-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{PurchPurchasesBySupplierReport}]]></textFieldExpression>
 			</textField>
@@ -161,7 +161,9 @@ product filter.]]></fieldDescription>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Middle" lineSpacing="Single"/>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonFromDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
@@ -172,7 +174,9 @@ product filter.]]></fieldDescription>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonThruDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
@@ -185,7 +189,9 @@ product filter.]]></fieldDescription>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{PurchReportFilteredByProductId}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
@@ -198,7 +204,9 @@ product filter.]]></fieldDescription>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{productId} + "*"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
@@ -209,7 +217,9 @@ product filter.]]></fieldDescription>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Middle" lineSpacing="Single"/>
+				<textElement verticalAlignment="Middle" lineSpacing="Single">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{CommonFromDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
@@ -220,7 +230,9 @@ product filter.]]></fieldDescription>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" lineSpacing="Single">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{CommonThruDate}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -238,7 +250,9 @@ product filter.]]></fieldDescription>
 					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{supplier_id}]]></textFieldExpression>
 			</textField>
 			<textField pattern="##0.00" isBlankWhenNull="true">
@@ -249,7 +263,9 @@ product filter.]]></fieldDescription>
 					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{order_count}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
@@ -260,7 +276,9 @@ product filter.]]></fieldDescription>
 					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{value}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
@@ -271,7 +289,9 @@ product filter.]]></fieldDescription>
 					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{currency_uom_id}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
@@ -282,7 +302,9 @@ product filter.]]></fieldDescription>
 					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{supplier_name}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -301,7 +323,7 @@ product filter.]]></fieldDescription>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font fontName="Times-Roman" size="10"/>
+					<font fontName="sansserif" size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
 			</textField>
@@ -314,7 +336,7 @@ product filter.]]></fieldDescription>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right">
-					<font fontName="Helvetica" size="10"/>
+					<font fontName="sansserif" size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsPage} + " " + $V{PAGE_NUMBER} + " " + $R{OpentapsOf}]]></textFieldExpression>
 			</textField>
@@ -327,7 +349,7 @@ product filter.]]></fieldDescription>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Helvetica" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="CP1252" isPdfEmbedded="false"/>
+					<font fontName="sansserif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>

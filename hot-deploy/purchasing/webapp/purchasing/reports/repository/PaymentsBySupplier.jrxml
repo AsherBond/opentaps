@@ -49,7 +49,7 @@ ORDER BY PG.GROUP_NAME]]>
 			<staticText>
 				<reportElement x="220" y="16" width="424" height="35"/>
 				<textElement textAlignment="Center">
-					<font size="26" isBold="true"/>
+					<font size="26" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Payments by Supplier]]></text>
 			</staticText>
@@ -63,28 +63,28 @@ ORDER BY PG.GROUP_NAME]]>
 			<staticText>
 				<reportElement mode="Opaque" x="0" y="0" width="126" height="18" forecolor="#FFFFFF" backcolor="#999999"/>
 				<textElement>
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[PARTY ID]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="138" y="0" width="352" height="18" forecolor="#FFFFFF" backcolor="#999999"/>
 				<textElement>
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[SUPPLIER NAME]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="506" y="0" width="138" height="18" forecolor="#FFFFFF" backcolor="#999999"/>
 				<textElement textAlignment="Justified">
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[# OF PAYMENTS]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="664" y="0" width="138" height="18" forecolor="#FFFFFF" backcolor="#999999"/>
 				<textElement textAlignment="Justified">
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL AMOUNT]]></text>
 			</staticText>
@@ -95,28 +95,28 @@ ORDER BY PG.GROUP_NAME]]>
 			<textField>
 				<reportElement x="0" y="0" width="126" height="20"/>
 				<textElement>
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{PARTY_ID_TO}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="138" y="0" width="352" height="20"/>
 				<textElement>
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{GROUP_NAME}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="506" y="0" width="138" height="20"/>
 				<textElement textAlignment="Right">
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Long"><![CDATA[$F{NUMBER_PAYMENTS}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="664" y="0" width="138" height="20"/>
 				<textElement textAlignment="Right">
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{TOTAL_PAYMENTS}]]></textFieldExpression>
 			</textField>
@@ -136,7 +136,7 @@ ORDER BY PG.GROUP_NAME]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="10"/>
+					<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
@@ -149,7 +149,7 @@ ORDER BY PG.GROUP_NAME]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right">
-					<font size="10"/>
+					<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Page " + $V{PAGE_NUMBER} + " of "]]></textFieldExpression>
 			</textField>
@@ -162,7 +162,7 @@ ORDER BY PG.GROUP_NAME]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="10"/>
+					<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
 			</textField>

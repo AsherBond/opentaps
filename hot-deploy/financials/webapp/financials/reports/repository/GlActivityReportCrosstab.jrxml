@@ -154,7 +154,7 @@ WHERE
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="14" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsGlActivityReport}.toUpperCase()]]></textFieldExpression>
 			</textField>
@@ -167,7 +167,7 @@ WHERE
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="10" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonFromDate}+":"]]></textFieldExpression>
 			</textField>
@@ -179,7 +179,9 @@ WHERE
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{thruDateMark}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
@@ -191,7 +193,7 @@ WHERE
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="10" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonThruDate}+":"]]></textFieldExpression>
 			</textField>
@@ -203,7 +205,9 @@ WHERE
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDateMark}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
@@ -215,7 +219,7 @@ WHERE
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="12" isBold="true" isItalic="false" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+					<font size="12" isBold="true" isItalic="false" isUnderline="false" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{AccountingGlAccount}.toUpperCase() + ": " + $P{accountCode} + " " + $P{accountName}]]></textFieldExpression>
 			</textField>
@@ -274,7 +278,7 @@ WHERE
 									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
-									<font isBold="true" pdfFontName="Helvetica-Bold"/>
+									<font isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 								</textElement>
 								<textFieldExpression class="java.lang.String"><![CDATA[( $V{group_name} != null ? $V{group_name} : $R{OpentapsNA} )]]></textFieldExpression>
 							</textField>
@@ -304,7 +308,9 @@ WHERE
 									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+								</textElement>
 								<textFieldExpression class="java.lang.String"><![CDATA[$V{debit_credit_flag}]]></textFieldExpression>
 							</textField>
 						</cellContents>
@@ -333,7 +339,9 @@ WHERE
 									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
-								<textElement textAlignment="Left" verticalAlignment="Middle" rotation="Left"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle" rotation="Left">
+									<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+								</textElement>
 								<textFieldExpression class="java.lang.String"><![CDATA[( $V{internal_name} != null ? $V{internal_name} : $R{OpentapsNA} )]]></textFieldExpression>
 							</textField>
 						</cellContents>
@@ -354,7 +362,9 @@ WHERE
 									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
-								<textElement textAlignment="Left" verticalAlignment="Middle" rotation="Left"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle" rotation="Left">
+									<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+								</textElement>
 								<textFieldExpression class="java.lang.String"><![CDATA["Total"]]></textFieldExpression>
 							</textField>
 						</cellContents>
@@ -379,7 +389,9 @@ WHERE
 								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
-							<textElement textAlignment="Center" verticalAlignment="Middle"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+							</textElement>
 							<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{amount_Sum}]]></textFieldExpression>
 						</textField>
 					</cellContents>
@@ -400,7 +412,9 @@ WHERE
 								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
-							<textElement textAlignment="Center" verticalAlignment="Middle"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+							</textElement>
 							<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{amount_Sum}]]></textFieldExpression>
 						</textField>
 					</cellContents>
@@ -468,7 +482,9 @@ WHERE
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center">
+					<font pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsReportDatasourceEmpty}]]></textFieldExpression>
 			</textField>
 		</band>

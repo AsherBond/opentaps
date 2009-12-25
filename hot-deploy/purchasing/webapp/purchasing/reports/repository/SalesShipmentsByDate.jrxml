@@ -47,7 +47,7 @@ GROUP BY S.ORIGIN_FACILITY_ID, FAC.FACILITY_NAME, S.LAST_MODIFIED_DATE]]>
 			<staticText>
 				<reportElement x="65" y="13" width="424" height="35"/>
 				<textElement textAlignment="Center">
-					<font size="26" isBold="true"/>
+					<font size="26" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Sales Shipments by Date]]></text>
 			</staticText>
@@ -61,21 +61,21 @@ GROUP BY S.ORIGIN_FACILITY_ID, FAC.FACILITY_NAME, S.LAST_MODIFIED_DATE]]>
 			<staticText>
 				<reportElement mode="Opaque" x="1" y="0" width="264" height="18" forecolor="#FFFFFF" backcolor="#999999"/>
 				<textElement>
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[FACILITY NAME]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="276" y="0" width="138" height="18" forecolor="#FFFFFF" backcolor="#999999"/>
 				<textElement>
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[DATE]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="428" y="0" width="124" height="18" forecolor="#FFFFFF" backcolor="#999999"/>
 				<textElement>
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[# SHIPMENTS]]></text>
 			</staticText>
@@ -86,21 +86,21 @@ GROUP BY S.ORIGIN_FACILITY_ID, FAC.FACILITY_NAME, S.LAST_MODIFIED_DATE]]>
 			<textField>
 				<reportElement x="1" y="0" width="264" height="20"/>
 				<textElement>
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{FACILITY_NAME}]]></textFieldExpression>
 			</textField>
 			<textField pattern="yyyy-MM-dd">
 				<reportElement x="276" y="0" width="138" height="20"/>
 				<textElement>
-					<font size="12" isItalic="false"/>
+					<font size="12" isItalic="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{SHIP_DATE}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="428" y="0" width="124" height="20"/>
 				<textElement textAlignment="Right">
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Long"><![CDATA[$F{NUMBER_SHIPMENTS}]]></textFieldExpression>
 			</textField>
@@ -120,7 +120,7 @@ GROUP BY S.ORIGIN_FACILITY_ID, FAC.FACILITY_NAME, S.LAST_MODIFIED_DATE]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="10"/>
+					<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
@@ -133,7 +133,7 @@ GROUP BY S.ORIGIN_FACILITY_ID, FAC.FACILITY_NAME, S.LAST_MODIFIED_DATE]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right">
-					<font size="10"/>
+					<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Page " + $V{PAGE_NUMBER} + " of "]]></textFieldExpression>
 			</textField>
@@ -146,7 +146,7 @@ GROUP BY S.ORIGIN_FACILITY_ID, FAC.FACILITY_NAME, S.LAST_MODIFIED_DATE]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="10"/>
+					<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
 			</textField>

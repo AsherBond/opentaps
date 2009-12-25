@@ -51,7 +51,7 @@ GROUP BY OI.PRODUCT_ID, PR.INTERNAL_NAME, PF.MINIMUM_STOCK]]>
 			<staticText>
 				<reportElement x="210" y="16" width="424" height="35"/>
 				<textElement textAlignment="Center">
-					<font size="26" isBold="true"/>
+					<font size="26" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Sales versus Minimum Stock]]></text>
 			</staticText>
@@ -65,42 +65,42 @@ GROUP BY OI.PRODUCT_ID, PR.INTERNAL_NAME, PF.MINIMUM_STOCK]]>
 			<staticText>
 				<reportElement x="1" y="0" width="101" height="20"/>
 				<textElement>
-					<font size="12" isBold="true"/>
+					<font size="12" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[PRODUCT ID]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="312" y="0" width="122" height="20"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+					<font size="12" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[QTY SOLD]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="434" y="0" width="108" height="20"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+					<font size="12" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[QTY CANCELLED]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="685" y="0" width="117" height="20"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+					<font size="12" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[MINIMUM STOCK]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="102" y="0" width="210" height="20"/>
 				<textElement>
-					<font size="12" isBold="true"/>
+					<font size="12" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[INTERNAL NAME]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="568" y="0" width="117" height="20"/>
 				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
+					<font size="12" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[NET QTY SOLD]]></text>
 			</staticText>
@@ -111,38 +111,42 @@ GROUP BY OI.PRODUCT_ID, PR.INTERNAL_NAME, PF.MINIMUM_STOCK]]>
 			<textField>
 				<reportElement x="312" y="0" width="122" height="20"/>
 				<textElement textAlignment="Right">
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{SUM(OI.QUANTITY)}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="685" y="0" width="117" height="20"/>
 				<textElement textAlignment="Right">
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{MINIMUM_STOCK}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="434" y="0" width="108" height="20"/>
 				<textElement textAlignment="Right">
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{SUM(OI.CANCEL_QUANTITY)}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="1" y="0" width="101" height="20"/>
-				<textElement/>
+				<textElement>
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{PRODUCT_ID}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="102" y="0" width="210" height="20"/>
-				<textElement/>
+				<textElement>
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{INTERNAL_NAME}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="568" y="0" width="117" height="20"/>
 				<textElement textAlignment="Right">
-					<font size="12"/>
+					<font size="12" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{NET_SOLD}]]></textFieldExpression>
 			</textField>
@@ -162,7 +166,7 @@ GROUP BY OI.PRODUCT_ID, PR.INTERNAL_NAME, PF.MINIMUM_STOCK]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="10"/>
+					<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
@@ -175,7 +179,7 @@ GROUP BY OI.PRODUCT_ID, PR.INTERNAL_NAME, PF.MINIMUM_STOCK]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right">
-					<font size="10"/>
+					<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Page " + $V{PAGE_NUMBER} + " of "]]></textFieldExpression>
 			</textField>
@@ -188,7 +192,7 @@ GROUP BY OI.PRODUCT_ID, PR.INTERNAL_NAME, PF.MINIMUM_STOCK]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="10"/>
+					<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
 			</textField>

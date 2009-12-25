@@ -74,7 +74,7 @@ ORDER BY STORE_DIM.STORE_DIM_NAME, GROUP_NAME, GEO_NAME, GEO_CODE]]>
 						<rightPen lineWidth="0.0" lineColor="#000000"/>
 					</box>
 					<textElement>
-						<font size="8" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+						<font size="8" isBold="true" isItalic="true" pdfFontName="DejaVuSans-BoldOblique.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$P{StoreName}]]></textFieldExpression>
 				</textField>
@@ -91,14 +91,14 @@ ORDER BY STORE_DIM.STORE_DIM_NAME, GROUP_NAME, GEO_NAME, GEO_CODE]]>
 						<rightPen lineWidth="0.0" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Right">
-						<font size="8"/>
+						<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$P{TotalSales}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement key="staticText-2" x="406" y="1" width="73" height="21" forecolor="#000000" backcolor="#FFFFFF"/>
 					<textElement textAlignment="Left" markup="none">
-						<font fontName="" size="8" isBold="true" isItalic="false" pdfFontName="Helvetica-Bold"/>
+						<font fontName="" size="8" isBold="true" isItalic="false" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsTotalSales} + ":"]]></textFieldExpression>
 				</textField>
@@ -134,28 +134,28 @@ ORDER BY STORE_DIM.STORE_DIM_NAME, GROUP_NAME, GEO_NAME, GEO_CODE]]>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText" x="0" y="0" width="209" height="16" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement verticalAlignment="Bottom" markup="none">
-					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{AccountingTaxAuthority}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText" positionType="Float" x="405" y="0" width="72" height="16" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom" markup="none">
-					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsTaxableSales}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText" positionType="Float" x="478" y="0" width="73" height="16" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Bottom" markup="none">
-					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsTaxDue}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-6" x="209" y="0" width="196" height="16" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement verticalAlignment="Bottom" markup="none">
-					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="8" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsRegion}]]></textFieldExpression>
 			</textField>
@@ -178,7 +178,7 @@ ORDER BY STORE_DIM.STORE_DIM_NAME, GROUP_NAME, GEO_NAME, GEO_CODE]]>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="8" isBold="false"/>
+					<font size="8" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[( new java.lang.Boolean($F{group_name}.toString() != null).booleanValue() ? $F{group_name}.toString() : new java.lang.String("Not Available" ))]]></textFieldExpression>
 			</textField>
@@ -191,7 +191,7 @@ ORDER BY STORE_DIM.STORE_DIM_NAME, GROUP_NAME, GEO_NAME, GEO_CODE]]>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right">
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{taxable}]]></textFieldExpression>
 			</textField>
@@ -204,7 +204,7 @@ ORDER BY STORE_DIM.STORE_DIM_NAME, GROUP_NAME, GEO_NAME, GEO_CODE]]>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right">
-					<font size="8"/>
+					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{taxdue}]]></textFieldExpression>
 			</textField>
@@ -217,7 +217,7 @@ ORDER BY STORE_DIM.STORE_DIM_NAME, GROUP_NAME, GEO_NAME, GEO_CODE]]>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="8" isBold="false"/>
+					<font size="8" isBold="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[( new java.lang.Boolean($F{geo_name}.toString() != null).booleanValue() ? $F{geo_name}.toString() : new java.lang.String("Not Available" ))]]></textFieldExpression>
 			</textField>

@@ -56,7 +56,7 @@ ORDER BY PS.STORE_NAME, CAST(ORDER_DATE AS DATE)]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement verticalAlignment="Top">
-						<font size="10" isBold="false" isItalic="false" pdfFontName="Helvetica"/>
+						<font size="10" isBold="false" isItalic="false" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{store_name}]]></textFieldExpression>
 				</textField>
@@ -69,7 +69,7 @@ ORDER BY PS.STORE_NAME, CAST(ORDER_DATE AS DATE)]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Left">
-						<font size="10"/>
+						<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.util.Date"><![CDATA[$F{order_date}]]></textFieldExpression>
 				</textField>
@@ -82,7 +82,7 @@ ORDER BY PS.STORE_NAME, CAST(ORDER_DATE AS DATE)]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Right">
-						<font size="10"/>
+						<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.Long"><![CDATA[$F{number_of_orders}]]></textFieldExpression>
 				</textField>
@@ -95,7 +95,7 @@ ORDER BY PS.STORE_NAME, CAST(ORDER_DATE AS DATE)]]>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Right">
-						<font size="10"/>
+						<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{total_of_orders}]]></textFieldExpression>
 				</textField>
@@ -107,7 +107,9 @@ ORDER BY PS.STORE_NAME, CAST(ORDER_DATE AS DATE)]]>
 						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
-					<textElement/>
+					<textElement>
+						<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
 					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
@@ -118,7 +120,9 @@ ORDER BY PS.STORE_NAME, CAST(ORDER_DATE AS DATE)]]>
 						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
-					<textElement/>
+					<textElement>
+						<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
 					<text><![CDATA[]]></text>
 				</staticText>
 			</band>
@@ -147,7 +151,7 @@ ORDER BY PS.STORE_NAME, CAST(ORDER_DATE AS DATE)]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="18" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="18" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsSalesByStoreByDayReportTitle}]]></textFieldExpression>
 			</textField>
@@ -164,7 +168,7 @@ ORDER BY PS.STORE_NAME, CAST(ORDER_DATE AS DATE)]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right">
-					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="10" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsSalesByStoreByOrderReportNumberOfOrders}]]></textFieldExpression>
 			</textField>
@@ -177,7 +181,7 @@ ORDER BY PS.STORE_NAME, CAST(ORDER_DATE AS DATE)]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right">
-					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="10" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsSalesByStoreByOrderReportTotalAmount}]]></textFieldExpression>
 			</textField>
@@ -190,7 +194,7 @@ ORDER BY PS.STORE_NAME, CAST(ORDER_DATE AS DATE)]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="10" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsSalesByStoreByOrderReportOrderDate}]]></textFieldExpression>
 			</textField>
@@ -202,7 +206,9 @@ ORDER BY PS.STORE_NAME, CAST(ORDER_DATE AS DATE)]]>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement/>
+				<textElement>
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
@@ -213,7 +219,9 @@ ORDER BY PS.STORE_NAME, CAST(ORDER_DATE AS DATE)]]>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement/>
+				<textElement>
+					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
 				<text><![CDATA[]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
@@ -225,7 +233,7 @@ ORDER BY PS.STORE_NAME, CAST(ORDER_DATE AS DATE)]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="10" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsSalesByStoreByOrderReportStore}]]></textFieldExpression>
 			</textField>
@@ -251,7 +259,7 @@ ORDER BY PS.STORE_NAME, CAST(ORDER_DATE AS DATE)]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right">
-					<font size="10"/>
+					<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonPage} + " " + $V{PAGE_NUMBER} + " " + $R{OpentapsOf} + " "]]></textFieldExpression>
 			</textField>
@@ -264,7 +272,7 @@ ORDER BY PS.STORE_NAME, CAST(ORDER_DATE AS DATE)]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="10"/>
+					<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
@@ -280,7 +288,7 @@ ORDER BY PS.STORE_NAME, CAST(ORDER_DATE AS DATE)]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="10"/>
+					<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
 			</textField>

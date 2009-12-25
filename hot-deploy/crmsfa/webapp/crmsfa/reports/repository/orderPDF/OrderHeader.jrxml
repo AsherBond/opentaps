@@ -4,8 +4,8 @@
 	<property name="ireport.encoding" value="UTF-8"/>
 	<import value="org.opentaps.domain.order.Order"/>
 	<import value="net.sf.jasperreports.engine.*"/>
-	<import value="org.opentaps.base.entities.*"/>
 	<import value="java.util.*"/>
+	<import value="org.opentaps.base.entities.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<parameter name="order" class="java.lang.Object" isForPrompting="false">
 		<parameterDescription><![CDATA[Instance of Order class that has to be appear in the subreport.]]></parameterDescription>
@@ -27,7 +27,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="11" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[((Order)$P{order}).getOrderType().getDescription() + " Order"]]></textFieldExpression>
 			</textField>
@@ -40,7 +40,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="11"/>
+					<font size="11" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OrderDateOrdered}]]></textFieldExpression>
 			</textField>
@@ -53,7 +53,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="11"/>
+					<font size="11" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[((Order)$P{order}).getOrderDate()]]></textFieldExpression>
 			</textField>
@@ -66,7 +66,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="11"/>
+					<font size="11" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OrderOrder} + " #"]]></textFieldExpression>
 			</textField>
@@ -79,7 +79,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="11"/>
+					<font size="11" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[((Order)$P{order}).getOrderId()]]></textFieldExpression>
 			</textField>
@@ -92,7 +92,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="11"/>
+					<font size="11" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsCustomer}]]></textFieldExpression>
 			</textField>
@@ -105,7 +105,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="11"/>
+					<font size="11" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[((Order)$P{order}).getBillToPartyId()]]></textFieldExpression>
 			</textField>
@@ -118,7 +118,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="11"/>
+					<font size="11" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OrderCurrentStatus}]]></textFieldExpression>
 			</textField>
@@ -131,7 +131,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font size="11" isBold="true" pdfFontName="DejaVuSans-Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[((Order)$P{order}).getStatus().getDescription()]]></textFieldExpression>
 			</textField>
@@ -146,7 +146,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="11"/>
+					<font size="11" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsPONumber}]]></textFieldExpression>
 			</textField>
@@ -161,7 +161,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font size="11"/>
+					<font size="11" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[((Order)$P{order}).getPrimaryPoNumber()]]></textFieldExpression>
 			</textField>
