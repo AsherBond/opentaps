@@ -868,13 +868,13 @@ public class RequestHandler {
         } else {
             StringBuilder queryString = new StringBuilder();
             queryString.append("?");
+            Map<String, Object> parameters = UtilHttp.getParameterMap(request);
             for (Map.Entry<String, String> entry: requestResponse.redirectParameterMap.entrySet()) {
                 String name = entry.getKey();
                 String from = entry.getValue();
-
                 Object value = request.getAttribute(from);
                 if (value == null) {
-                    value = request.getParameter(from);
+                    value = parameters.get(from);
                 }
 
                 if (UtilValidate.isNotEmpty(value)) {
