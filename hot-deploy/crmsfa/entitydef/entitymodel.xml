@@ -141,6 +141,7 @@
             <exclude field="comments"/>
             <exclude field="statusId"/>
         </alias-all>
+        <alias entity-alias="PR" name="roleTypeId" field="roleTypeIdFrom"/>
         <alias-all entity-alias="TN">
             <exclude field="contactMechId"/>
         </alias-all>

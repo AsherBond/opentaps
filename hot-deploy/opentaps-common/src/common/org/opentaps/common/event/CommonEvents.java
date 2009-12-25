@@ -91,19 +91,17 @@ public final class CommonEvents {
      * @return The donePage or DONE_PAGE parameter if it exists, otherwise "error"
      */
     public static String donePageRequestHelper(HttpServletRequest request, HttpServletResponse response) {
-
         Map<String, Object> parameters = UtilHttp.getParameterMap(request);
-
-        String donePage = UtilCommon.getParameter(request, "donePage");
+        String donePage = (String) parameters.get("donePage");
         if (donePage == null) {
-            donePage = UtilCommon.getParameter(request, "DONE_PAGE");
+            donePage = (String) parameters.get("DONE_PAGE");
         }
         if (donePage == null) {
             // special case after service-multi
             Set<String> keys = parameters.keySet();
             for (String current : keys) {
                 if (current.startsWith("donePage")) {
-                    donePage = UtilCommon.getParameter(request, current);
+                    donePage = (String) parameters.get(current);
                     break;
                 }
             }
@@ -112,7 +110,7 @@ public final class CommonEvents {
             donePage = "error";
         }
 
-        String errorPage = UtilCommon.getParameter(request, "errorPage");
+        String errorPage = (String) parameters.get("errorPage");
         if (errorPage != null && UtilCommon.hasError(request)) {
             Debug.logInfo("donePageRequestHelper: goto errorPage [" + errorPage + "]", MODULE);
             return errorPage;
