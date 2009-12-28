@@ -171,12 +171,7 @@
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/selectOrganization.bsh"/>
             </actions>
             <widgets>
-                <container style="subSection">
-                    <container style="screenlet-header">
-                        <label style="boxhead">${uiLabelMap.OpentapsSelectOrganization}</label>
-                    </container>
-                    <platform-specific><html><html-template location="component://opentaps-common/webapp/common/includes/selectOrganization.ftl"/></html></platform-specific>
-                </container>
+              <platform-specific><html><html-template location="component://opentaps-common/webapp/common/includes/selectOrganization.ftl"/></html></platform-specific>
             </widgets>
         </section>
     </screen>

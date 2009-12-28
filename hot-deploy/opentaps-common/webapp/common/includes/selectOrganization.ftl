@@ -17,11 +17,13 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl" />        
 
-<form action="setOrganization" method="POST">
-<table class="twoColumnForm">
-    <@inputSelectRow name="organizationPartyId" title=uiLabelMap.OpentapsSelectOrganization list=configuredOrganizations key="partyId"  ; option>
-    ${option.groupName} (${option.partyId})
-    </@inputSelectRow>
-    <@inputSubmitRow title=uiLabelMap.CommonSelect />
-</table>
-</form>
+<@frameSection title=uiLabelMap.OpentapsSelectOrganization>
+  <form action="setOrganization" method="POST">
+    <table>
+      <@inputSelectRow name="organizationPartyId" title=uiLabelMap.OpentapsSelectOrganization list=configuredOrganizations key="partyId" ; option>
+        ${option.groupName} (${option.partyId})
+      </@inputSelectRow>
+      <@inputSubmitRow title=uiLabelMap.CommonSelect />
+    </table>
+  </form>
+</@frameSection>
