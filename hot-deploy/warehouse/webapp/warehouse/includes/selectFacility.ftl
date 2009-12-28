@@ -15,30 +15,21 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<div class="subSection">
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl" />
 
-  <div class="subSectionBlock">
-    <div class="subSectionHeader">
-      <div class="subSectionTitle">${uiLabelMap.WarehouseChooseWarehouse}</div>
-    </div>
-    
-    <div class="form">
-    <#if facilities.size() != 0>
-      <form method="post" action="<@ofbizUrl>setFacility</@ofbizUrl>">
-        <select name="facilityId" class="selectBox">
-          <#list facilities as facility>
+<@frameSection title=uiLabelMap.WarehouseChooseWarehouse>
+  <#if facilities.size() != 0>
+    <form method="post" action="<@ofbizUrl>setFacility</@ofbizUrl>">
+      <select name="facilityId" class="selectBox">
+        <#list facilities as facility>
           <option value="${facility.facilityId}">${facility.facilityName}</option>
-          </#list>
-        </select>
-        <input type="submit" class="smallSubmit" value="${uiLabelMap.CommonSelect}"/>
-      </form>
-    </#if>
+        </#list>
+      </select>
+      <input type="submit" class="smallSubmit" value="${uiLabelMap.CommonSelect}"/>
+    </form>
+  </#if>
   
-    <#if hasCreateWarehousePermission>
+  <#if hasCreateWarehousePermission>
     <p><a href="<@ofbizUrl>createWarehouseForm</@ofbizUrl>" class="tabletext">${uiLabelMap.WarehouseCreateNewWarehouse}</a></p>
-    </#if>
-   </div>
-    
-  </div>
-  
-</div>
+  </#if>
+</@frameSection>

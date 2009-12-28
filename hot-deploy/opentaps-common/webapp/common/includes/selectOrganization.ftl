@@ -15,7 +15,7 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl" />        
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl" />
 
 <@frameSection title=uiLabelMap.OpentapsSelectOrganization>
   <form action="setOrganization" method="POST">
