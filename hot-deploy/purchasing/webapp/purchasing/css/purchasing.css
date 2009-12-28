@@ -2,22 +2,26 @@
 /* Section header images */
 
 div#sectionHeaderTitle_myHome {
-    background-image: url('/opentaps_images/openclipart.org/p2p_nicu_buculei_01.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/p2p_nicu_buculei_01.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
 }
 div#sectionHeaderTitle_supplier {
-    background-image: url('/opentaps_images/openclipart.org/truck_jarno_vasamaa_.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/truck_jarno_vasamaa_.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
 }
 div#sectionHeaderTitle_bom {
-    background-image: url('/opentaps_images/openclipart.org/ruota_dentata_2_architet_01.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/ruota_dentata_2_architet_01.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
 }
 div#sectionHeaderTitle_order {
-    background-image: url('/opentaps_images/openclipart.org/calcolatrice_architetto__01_24x24.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/calcolatrice_architetto__01_24x24.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
 }
 div#sectionHeaderTitle_planning {
-    background-image: url('/opentaps_images/openclipart.org/bussola_architetto_franc_01.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/bussola_architetto_franc_01.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
+}
+div#sectionHeaderTitle_reports {
+    background: transparent url('/opentaps_images/openclipart.org/inservice_presentation_01.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
 }
