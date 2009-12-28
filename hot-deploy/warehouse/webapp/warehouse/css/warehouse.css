@@ -3,18 +3,18 @@
 
 
 div#sectionHeaderTitle_shipping {
-    background-image: url('/opentaps_images/openclipart.org/cardboard_box_jarno_vasa_24x24.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/cardboard_box_jarno_vasa_24x24.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
 }
 div#sectionHeaderTitle_myHome {
-    background-image: url('/opentaps_images/openclipart.org/factory_gabrielle_nowick_24x24.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/factory_gabrielle_nowick_24x24.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
 }
 div#sectionHeaderTitle_manufacturing {
-    background-image: url('/opentaps_images/openclipart.org/blacksmith_anvil_ganson_24x24.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/blacksmith_anvil_ganson_24x24.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
 }
 div#sectionHeaderTitle_inventory {
-    background-image: url('/opentaps_images/openclipart.org/Montacarichi_24x24.png');
-    padding-left: 40px;
+    background: transparent url('/opentaps_images/openclipart.org/Montacarichi_24x24.png') no-repeat 0 5px;
+    padding:7px 0px 0px 35px;
 }
