@@ -1061,12 +1061,14 @@ fieldset.inputAutoCompleteQuick input.XdijitInputField {
 }
 
 .dijitComboBoxInput {
-    background:white none repeat scroll 0%;
     border:1px solid #999999;
     font-family:Verdana,Arial,Helvetica,sans-serif;
     font-size:8pt;
     font-weight:normal;
     padding:0pt;
+}
+.dijitComboBoxInput input {
+    background: #FFFFFF url("/opentaps_images/text-bg.gif") repeat-x scroll 0 0;
 }
 
   
