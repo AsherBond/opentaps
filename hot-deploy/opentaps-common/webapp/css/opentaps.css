@@ -26,7 +26,7 @@ ul.ofbizErrorMessagesList {
 
 /* Section tab buttons */
 ul.sectionTabBar a {
-    color: gray;
+    color: #444;
     text-decoration: none;
     padding-left: 2px;
     padding-right: 2px;
