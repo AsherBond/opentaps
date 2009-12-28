@@ -50,10 +50,10 @@
   </div>
 </#macro>
 
-<#macro frameSection title extra="" style="" headerClass="frameSectionHeader">
+<#macro frameSection title extra="" innerStyle="" style="" headerClass="frameSectionHeader">
 <div class="frameSection" style="${style}">
   <@frameSectionHeader title=title extra=extra class=headerClass/>
-  <div class="frameSectionBody">
+  <div class="frameSectionBody" style="${innerStyle}">
     <#nested/>
   </div>
 </div>

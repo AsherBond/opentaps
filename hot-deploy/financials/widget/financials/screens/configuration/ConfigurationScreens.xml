@@ -73,11 +73,9 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">  
-                            <platform-specific>
-                                <html><html-template location="component://financials/webapp/financials/configuration/glAccounts.ftl"/></html>
-                            </platform-specific>
-                        </container>
+                      <platform-specific>
+                        <html><html-template location="component://financials/webapp/financials/configuration/glAccounts.ftl"/></html>
+                      </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

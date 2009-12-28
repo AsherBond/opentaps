@@ -57,8 +57,9 @@ dojo.declare("opentaps.TrialBalanceAccountTree", opentaps.GLAccountTree, {
   <a class="buttontext" href="addNewGlAccountScreen">${uiLabelMap.FinancialsCreateNewAccount}</a><a class="buttontext" href="addExistingGlAccountScreen">${uiLabelMap.FinancialsAddExistingAccount}</a>
 </#assign>
 
-<@frameSectionHeader title="${uiLabelMap.FinancialsChartOfAccountsFor} ${parameters.organizationName}" extra=extraOptions />
 <@form name="removeGlAccountFromOrganizationForm" url="removeGlAccountFromOrganization" glAccountId="" />
-<#if chartOfAccountsTree?exists>
-  <@glAccountTree glAccountTree=chartOfAccountsTree treeId="chartOfAccounts" className="opentaps.TrialBalanceAccountTree" defaultState="collapsed"/>
-</#if>
+<@frameSection title="${uiLabelMap.FinancialsChartOfAccountsFor} ${parameters.organizationName}" extra=extraOptions innerStyle="padding:0">
+  <#if chartOfAccountsTree?exists>
+    <@glAccountTree glAccountTree=chartOfAccountsTree treeId="chartOfAccounts" className="opentaps.TrialBalanceAccountTree" defaultState="collapsed"/>
+  </#if>
+</@frameSection>
