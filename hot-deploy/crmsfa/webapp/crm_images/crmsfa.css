@@ -275,7 +275,8 @@ ul.shortcuts li a {
 html>body ul.shortcuts li a {
     width: auto;
 }
-ul.shortcuts a:hover, a:active {
+ul.shortcuts a:hover,
+ul.shortcuts a:active {
     color: black;
     background-color: #EEEEEE;
     border: solid 1px black;
