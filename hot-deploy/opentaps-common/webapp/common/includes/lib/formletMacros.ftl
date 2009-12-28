@@ -15,6 +15,8 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<@import location="component://opentaps-common/webapp/common/includes/lib/flexAreaMacros.ftl"/>
+
 <#-- 
 These macros are specific to formlets.  In particular, it provides
 ways to generate the navigation context, special pagination
@@ -27,12 +29,12 @@ requests, and similar things.
   </#if>
   <span class="pageNumber">Page ${pageNumber}/${totalPages}</span>
   <#assign args = "'${paginatorName}','${opentapsApplicationName}'" />
-  <input type="button" class="paginationButton paginationFirstPage" value="|<" onClick="opentaps.getFirstPage(${args})"/>
-  <input type="button" class="paginationButton paginationPreviousPage" value="<" onClick="opentaps.getPreviousPage(${args})"/>
-  <input type="button" class="paginationButton paginationShrinkPage" value="-" onClick="opentaps.changePaginationViewSize(${args},-5)"/>
-  <input type="button" class="paginationButton paginationGrowPage" value="+" onClick="opentaps.changePaginationViewSize(${args},5)"/>
-  <input type="button" class="paginationButton paginationNextPage" value=">" onClick="opentaps.getNextPage(${args})"/>
-  <input type="button" class="paginationButton paginationLastPage" value=">|" onClick="opentaps.getLastPage(${args})"/>
+  <input type="button" class="paginationButton paginationFirstPage" value="" title="${uiLabelMap.pagerFirstPage}" onClick="opentaps.getFirstPage(${args})"/>
+  <input type="button" class="paginationButton paginationPreviousPage" value="" title="${uiLabelMap.pagerPreviousPage}" onClick="opentaps.getPreviousPage(${args})"/>
+  <input type="button" class="paginationButton paginationShrinkPage" value="" title="${uiLabelMap.pagerShrinkPage}" onClick="opentaps.changePaginationViewSize(${args},-5)"/>
+  <input type="button" class="paginationButton paginationGrowPage" value="" title="${uiLabelMap.pagerGrowPage}" onClick="opentaps.changePaginationViewSize(${args},5)"/>
+  <input type="button" class="paginationButton paginationNextPage" value="" title="${uiLabelMap.pagerNextPage}" onClick="opentaps.getNextPage(${args})"/>
+  <input type="button" class="paginationButton paginationLastPage" value="" title="${uiLabelMap.pagerLastPage}" onClick="opentaps.getLastPage(${args})"/>
 </#macro>
 
 <#macro headerLink title orderBy orderByReverse="" blockClass="" linkClass="orderByHeaderLink">
@@ -48,10 +50,9 @@ requests, and similar things.
 </#macro>
 
 <#macro navigationHeader title="">
-  <div class="subSectionHeader">
-    <div class="subSectionTitle">${title}</div>
-    <div class="subMenuBar"><@paginationNavContext /></div>
-  </div>
+  <@sectionHeader title=title>
+    <@paginationNavContext />
+  </@sectionHeader>
 </#macro>
 
 <#macro navigationBar>

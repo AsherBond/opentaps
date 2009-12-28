@@ -64,7 +64,7 @@ div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${f
 div.sectionTabBorder {background: ${bgcolor} !important;}
 .x-panel-tl, .x-panel-tr, .titleBar .x-panel-br, .titleBar .x-panel-bl { background-image:url(/opentaps_images/panels/corners-sprite-${bgcolor?replace("#", "")}.gif) !important; }
 div.sectionTabBorder, .x-panel-tc, .titleBar .x-panel-bc { background-image:url(/opentaps_images/panels/top-bottom-${bgcolor?replace("#", "")}.gif) !important; }
-.x-panel-tl .x-panel-header {color: ${fgcolor} !important; }
+.x-panel-tl .x-panel-header, .frameSectionHeader .pageNumber {color: ${fgcolor} !important; }
 .x-panel-noborder .x-panel-header-noborder { border:none !important; }
 ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tl,
 ul.sectionTabBar li.sectionTabButtonUnselected .x-panel-tr { background-image:url(/opentaps_images/panels/corners-sprite-bw.gif) !important; }

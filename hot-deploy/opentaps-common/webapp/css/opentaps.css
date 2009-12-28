@@ -604,18 +604,49 @@ div.pagination a:hover {
 div.pagination a:active {
     border:none;
 }
-input.paginationButton { /* Pagination Navigatin Context button */
-    font: normal 0.5em Verdana, Arial, Helvetica, sans-serif;
-    text-decoration: none;
-    color: #33339F;
-    background: white;
-    border: #999999 solid 1px;
+
+input.paginationFirstPage {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll 0 -330px;
 }
-input.paginationButton:hover {
-    color: white;
-    background: #33339F; 
-    text-decoration: none;
+input.paginationFirstPage:hover {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll -15px -330px;
 }
+
+input.paginationPreviousPage {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll 0 -105px;
+}
+input.paginationPreviousPage:hover {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll -15px -105px;
+}
+
+input.paginationNextPage {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll 0 -120px;
+}
+input.paginationNextPage:hover {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll -15px -120px;
+}
+
+input.paginationLastPage {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll 0 -345px;
+}
+input.paginationLastPage:hover {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll -15px -345px;
+}
+
+input.paginationGrowPage {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll 0 -240px;
+}
+input.paginationGrowPage:hover {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll -15px -240px;
+}
+
+input.paginationShrinkPage:hover {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll -15px -255px;
+}
+input.paginationShrinkPage {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll 0 -255px;
+}
+
 .pageNumber {
     font: normal 0.8em Verdana, Arial, Helvetica, sans-serif;
     padding-right: 10px;
@@ -627,24 +658,11 @@ input.paginationButton:hover {
     border: 1px solid #AAAAAA;
     border-bottom: none;
 }
-a.exportExcelButton {
-    font: normal 0.7em Verdana, Arial, Helvetica, sans-serif;
-    text-decoration: none;
-    margin-right: 10px;
-    color: #33339F;
-    background-color: white;
-    border: #999999 1px solid;
-    padding: 6 6 1 3;
-}
 a.exportExcelButton img {
     border:none;
+    position:relative;
+    top:2px;
 }
-a.exportExcelButton:hover {
-    color: white;
-    background: #33339F; 
-    text-decoration: none;
-}
-
 /* Read only style for input elements.  This will gray-out all input elements in the container */
 .readOnly input {
     color: #777;
@@ -752,6 +770,7 @@ div.orderEntryHeaderSubmitRow {
     background-image: url('/opentaps_images/arrowSmallWhite_down.png');
 }
 
+input.paginationButton,
 .subSectionHeader_open .subSectionHeader_toggle,
 .subSectionHeader_closed .subSectionHeader_toggle {
 width:15px;
@@ -759,6 +778,7 @@ height:15px;
 display:inline-block;
 vertical-align:middle;
 cursor:pointer;
+border:none;
 }
 
 .subSectionHeader_open .subSectionHeader_toggle {
@@ -1275,6 +1295,7 @@ width: 120px;
 
 
 a.buttontext,
+a.exportExcelButton,
 .loginButton,
 .subMenuButton,
 .smallSubmit,
@@ -1287,15 +1308,17 @@ font-family:Tahoma,Verdana,Arial;
 font-size:11px;
 font-weight:normal;
 height:21px !important;
+border-left:1px solid #AAAAAA;
+border-right:1px solid #AAAAAA;
 border-top:0 none !important;
 border-bottom:0 none !important;
 cursor:pointer;
 line-height:21px !important;
 padding:0px 5px !important;
-
 }
 
 a.buttontext,
+a.exportExcelButton,
 .loginButton,
 .subMenuButton,
 .smallSubmit {
@@ -1312,6 +1335,8 @@ color:#000000 !important;
 
 a.buttontext:active,
 a.buttontext:hover,
+a.exportExcelButton:active,
+a.exportExcelButton:hover,
 .loginButton:active,
 .loginButton:hover,
 .subMenuButton:active,
