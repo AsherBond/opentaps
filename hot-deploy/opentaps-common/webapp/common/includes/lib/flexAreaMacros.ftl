@@ -37,8 +37,8 @@
 </div>
 </#macro>
 
-<#macro frameSectionHeader title extra="" titleId="" titleClass="" style="">
-  <div class="frameSectionHeader" style="${style}">
+<#macro frameSectionHeader title extra="" titleId="" class="frameSectionHeader" titleClass="" style="">
+  <div class="${class}" style="${style}">
     <div class="x-panel-tl">
       <div class="x-panel-tr">
         <div class="x-panel-tc">
@@ -50,9 +50,9 @@
   </div>
 </#macro>
 
-<#macro frameSection title extra="" style="">
+<#macro frameSection title extra="" style="" headerClass="frameSectionHeader">
 <div class="frameSection" style="${style}">
-  <@frameSectionHeader title=title extra=extra/>
+  <@frameSectionHeader title=title extra=extra class=headerClass/>
   <div class="frameSectionBody">
     <#nested/>
   </div>

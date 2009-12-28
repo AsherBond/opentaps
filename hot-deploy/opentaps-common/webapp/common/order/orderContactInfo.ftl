@@ -41,11 +41,8 @@ under the License.
 <#if order?exists>
 
 <#if order.mainExternalParty?has_content || orderContactMechValueMaps?has_content>
-  <div class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">&nbsp;${uiLabelMap.OrderContactInformation}</div>
-    </div>
-    <div class="screenlet-body">
+
+  <@frameSection title=uiLabelMap.OrderContactInformation>
       <table width="100%" border="0" cellpadding="1" cellspacing="0">
 
         <@infoRowNested title=uiLabelMap.CommonName>
@@ -156,8 +153,7 @@ under the License.
         <tr><td colspan="7">&nbsp;</td></tr>
       </table>
     </#if>
-  </div>
-</div>
+  </@frameSection>
 </#if> <#-- end of if order.mainExternalParty?exists -->
 
 </#if> <#-- end of if order?exists -->

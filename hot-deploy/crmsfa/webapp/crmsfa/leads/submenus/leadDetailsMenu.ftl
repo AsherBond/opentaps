@@ -59,8 +59,4 @@
 </#if>
 </#if>
 
-
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmLead}</div>
-    <div class="subMenuBar">${converted_options?if_exists}${create_option?if_exists}${update_options?if_exists}</div>
-</div>
+<@frameSectionHeader title=uiLabelMap.CrmLead extra="${converted_options?if_exists}${create_option?if_exists}${update_options?if_exists}" />

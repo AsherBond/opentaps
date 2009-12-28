@@ -100,32 +100,31 @@ under the License.
     }
   /*]]>*/
   </script>
+
+  <#assign sectionTitle>
+    <#if order.shipGroups?size gt 1>
+      <select id="shipGroupSelect" class="inputBox" onChange="switchToShipGroup()" onkeyup="switchToShipGroup()">
+        <#list order.shipGroups as sg>
+          <option value="${sg.shipGroupSeqId}" ${(parameters.shipGroupSeqId?exists && sg.shipGroupSeqId == parameters.shipGroupSeqId)?string('selected="selected"','')}>
+            <@expandLabel label="CrmOrderShipGroupTo" params={"shipGroupSeqId", sg.shipGroupSeqId} />
+            <#if sg.hasUnknownPostalAddress()>${uiLabelMap.CrmAddressUnknown}<#else/>${(sg.postalAddress.address1)?default("")} - ${sg.postalAddress.city?default("")}</#if>
+          </option>
+        </#list>
+      </select>
+    <#else>
+      <#assign sg = order.shipGroups[0] />
+      <@expandLabel label="CrmOrderShipGroupTo" params={"shipGroupSeqId", sg.shipGroupSeqId} />
+      <#if sg.hasUnknownPostalAddress()>${uiLabelMap.CrmAddressUnknown}<#else/>${(sg.postalAddress.address1)?default("")} - ${sg.postalAddress.city?default("")}</#if>
+    </#if>
+    <#if order.shipGroups?size gt 1>
+      <a href="#" onClick="return splitShipGroup()" class="buttontext">${uiLabelMap.CrmOrderSplitShipGroup}</a>
+    <#else>
+      <@displayLink href="newShipGroup?orderId=${order.orderId}&amp;shipGroupSeqId=${order.shipGroups[0].shipGroupSeqId}" text=uiLabelMap.CrmOrderSplitShipGroup class="buttontext" />
+    </#if>
+  </#assign>
   
-  <div class="screenlet">
-    <div class="screenlet-header">
-      <div class="boxhead">
-        &nbsp;
-        <#if order.shipGroups?size gt 1>
-          <select id="shipGroupSelect" class="inputBox" onChange="switchToShipGroup()" onkeyup="switchToShipGroup()">
-            <#list order.shipGroups as sg>
-              <option value="${sg.shipGroupSeqId}" ${(parameters.shipGroupSeqId?exists && sg.shipGroupSeqId == parameters.shipGroupSeqId)?string('selected="selected"','')}>
-                <@expandLabel label="CrmOrderShipGroupTo" params={"shipGroupSeqId", sg.shipGroupSeqId} />
-                <#if sg.hasUnknownPostalAddress()>${uiLabelMap.CrmAddressUnknown}<#else/>${(sg.postalAddress.address1)?default("")} - ${sg.postalAddress.city?default("")}</#if>
-              </option>
-            </#list>
-          </select>
-        <#else>
-          <#assign sg = order.shipGroups[0] />
-          <@expandLabel label="CrmOrderShipGroupTo" params={"shipGroupSeqId", sg.shipGroupSeqId} />
-          <#if sg.hasUnknownPostalAddress()>${uiLabelMap.CrmAddressUnknown}<#else/>${(sg.postalAddress.address1)?default("")} - ${sg.postalAddress.city?default("")}</#if>
-        </#if>
-        <#if order.shipGroups?size gt 1>
-          <a href="#" onClick="return splitShipGroup()" class="buttontext">${uiLabelMap.CrmOrderSplitShipGroup}</a>
-        <#else>
-          <@displayLink href="newShipGroup?orderId=${order.orderId}&amp;shipGroupSeqId=${order.shipGroups[0].shipGroupSeqId}" text=uiLabelMap.CrmOrderSplitShipGroup class="buttontext" />
-        </#if>
-      </div>
-    </div>
+  <@frameSection title=sectionTitle>
+
     <#assign firstShipGroup = true />
     <#list order.shipGroups as shipGroup>
       <div class="screenlet-body${firstShipGroup?string('',' hidden')}" id="shipGroupScreenlet-${shipGroup.shipGroupSeqId}">
@@ -315,7 +314,7 @@ under the License.
         </table>
       </div>
     </#list>
-  </div>
+  </@frameSection>
   <script type="text/javascript">
     switchToShipGroup();
   </script>

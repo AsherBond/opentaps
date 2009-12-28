@@ -63,57 +63,16 @@ var orderItemSeqId = null;
   <#include "orderview/orderitems.ftl"/>
 </div>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td colspan="3" style="padding-bottom: 15px">
-      <#assign newButton><a href="<@ofbizUrl>writeEmail?orderId=${order.orderId}&toEmail=${newEmailAddress?default({}).infoString?default("")}</@ofbizUrl>" class="buttontext">${uiLabelMap.CrmOrderSendNewEmail}</a></#assign>
-      <@flexAreaClassic targetId="orderEmails" title=uiLabelMap.CrmOrderEmails defaultState="open" headerContent=newButton style="margin:0; padding:0">
-        <#if emails?has_content>
-          <table class="listTable" style="border:none">
-            <tr class="listTableHeader" style="border:none">
-              <td class="titleCell" style="text-align:left">${uiLabelMap.CommonDate}</td>
-              <td class="titleCell" style="text-align:left">${uiLabelMap.CommonFrom}</td>
-              <td class="titleCell" style="text-align:left">${uiLabelMap.CommonTo}</td>
-              <td class="titleCell" style="text-align:left">${uiLabelMap.PartySubject}</td>
-              <td>&nbsp;</td>
-            </tr>
-            <#list emails as email>
-              <tr class="${tableRowClass(email_index)}">
-                <td width="15%"><#if email.datetimeEnded?has_content>${getLocalizedDate(email.datetimeEnded, "DATE")}<#else>${uiLabelMap.CrmPending}</#if></td>
-                <td width="15%">
-                  <#if email.partyIdFromUrl?exists>
-                    <a href="${email.partyIdFromUrl?if_exists}">${email.partyFromName?default("")} (${email.partyIdFrom})</a>
-                  <#else>
-                    ${email.fromString?default("")}
-                  </#if>
-                </td>
-                <td width="15%">
-                  <#if email.partyIdToUrl?exists>
-                    <a href="${email.partyIdToUrl?if_exists}">${email.partyToName?default("")} (${email.partyIdTo})</a>
-                  <#else>
-                    ${email.toAddressString?default("")}
-                  </#if>
-                </td>
-                <td width="45%"><@displayLink href="viewActivity?workEffortId=${email.workEffortId}" text=email.subject class="linktext"/></td>
-                <td width="10%" style="white-space: nowrap; text-align:right">
-                   <a href="<@ofbizUrl>writeEmail?workEffortId=${email.workEffortId}&amp;communicationEventId=${email.communicationEventId}&amp;action=reply</@ofbizUrl>"><img src="<@ofbizContentUrl>/opentaps_images/buttons/bb_mail_new_reply.png</@ofbizContentUrl>" alt="${uiLabelMap.PartyReply}" title="${uiLabelMap.PartyReply}" border="0"></a>
-                   <a href="<@ofbizUrl>writeEmail?workEffortId=${email.workEffortId}&amp;communicationEventId=${email.communicationEventId}&amp;action=forward</@ofbizUrl>"><img src="<@ofbizContentUrl>/opentaps_images/buttons/bb_mail_new_forward.png</@ofbizContentUrl>" alt="${uiLabelMap.OpentapsEmailForward}" title="${uiLabelMap.OpentapsEmailForward}" border="0"></a>
-                </td>
-              </tr>
-            </#list>
-          </table>
-        <#else>
-          <div class="tabletext">&nbsp;${uiLabelMap.CrmOrderNoEmails}.</div>
-        </#if>
-      </@flexAreaClassic>
-    </td>
-  </tr>
-</table>
+<div style="margin-bottom:15px">
+  <#include "orderview/orderemails.ftl"/>
+</div>
 
 <div style="margin-bottom:15px">
-<@include location="component://crmsfa/webapp/crmsfa/content/contentList.ftl"/>
+  <@include location="component://crmsfa/webapp/crmsfa/content/contentList.ftl"/>
 </div>
+
 <#include "orderview/ordernotes.ftl"/>
+
 <#include "orderview/transitions.ftl"/>
 
 <#else/>

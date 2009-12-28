@@ -45,20 +45,13 @@ under the License.
   <#assign updatable = true/>
 </#if>
 
-<div class="screenlet">
-  <div class="screenlet-header">
-    <div class="boxhead">
-      <div style="float: left">&nbsp;${uiLabelMap.AccountingPaymentInformation}</div>
-      <div class="subMenuBar">
-        <#if updatable && (order.totalMinusPaymentPrefs gt 0) >
-          <a href="<@ofbizUrl>receivepayment?${paramString}</@ofbizUrl>" class="subMenuButton">${uiLabelMap.AccountingReceivePayment}</a>
-        </#if>
-      </div>
-      <div class="spacer"></div>
-    </div>
+<#assign extraOptions>
+  <#if updatable && (order.totalMinusPaymentPrefs gt 0) >
+    <a href="<@ofbizUrl>receivepayment?${paramString}</@ofbizUrl>" class="subMenuButton">${uiLabelMap.AccountingReceivePayment}</a>
+  </#if>
+</#assign>
 
-  </div>
-  <div class="screenlet-body">
+<@frameSection title=uiLabelMap.AccountingPaymentInformation extra=extraOptions>
     <table width="100%" border="0" cellpadding="1" cellspacing="0">
       <#if order.nonCancelledPaymentPreferences?has_content || order.billingAccount?has_content || order.invoices?has_content>
         <#list order.nonCancelledPaymentPreferences as opp>
@@ -330,7 +323,6 @@ under the License.
         </form>
       </#if>
     </table>
-  </div>
-</div>
+</@frameSection>
 
 </#if> <#-- order?has_content -->

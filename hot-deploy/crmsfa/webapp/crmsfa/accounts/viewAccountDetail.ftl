@@ -17,20 +17,23 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<#if hasUpdatePermission?exists>
-  <#assign updateLink><a class='subMenuButton' href='updateAccountForm?partyId=${partySummary.partyId}'>${uiLabelMap.CommonEdit}</a></#assign>
-</#if>
+<#assign extraOptions>
+  <#if hasUpdatePermission?exists>
+    <#assign updateLink><a class='subMenuButton' href='updateAccountForm?partyId=${partySummary.partyId}'>${uiLabelMap.CommonEdit}</a></#assign>
+  </#if>
+  <#if hasDeactivatePermission?exists>
+    <@inputConfirm class="subMenuButtonDangerous" href="deactivateAccount?partyId=${partySummary.partyId}" title=uiLabelMap.CrmDeactivateAccount />
+  </#if>
+</#assign>
 
-<div class="subSectionBlock">
+<#assign title>
+  ${uiLabelMap.CrmAccount}
+  <#if accountDeactivated?exists><span class="subSectionWarning">${uiLabelMap.CrmAccountDeactivated} ${getLocalizedDate(accountDeactivatedDate, "DATE_TIME")}</span></#if>
+</#assign>
 
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmAccount}
-        <#if accountDeactivated?exists><span class="subSectionWarning">${uiLabelMap.CrmAccountDeactivated} ${getLocalizedDate(accountDeactivatedDate, "DATE_TIME")}</span></#if>
-    </div>
-    <div class="subMenuBar">${updateLink?if_exists}<#if hasDeactivatePermission?exists><@inputConfirm class="subMenuButtonDangerous" href="deactivateAccount?partyId=${partySummary.partyId}" title=uiLabelMap.CrmDeactivateAccount /></#if></div>
-</div>
+<@frameSection title=title extra=extraOptions>
 
-<table class="fourColumnForm">
+<table class="fourColumnForm" style="border:none">
   <tr>
     <@displayTitleCell title=uiLabelMap.CrmAccountName titleClass="requiredField" />
     <@displayCell text=partySummary.groupName />
@@ -140,4 +143,4 @@
 
 </table>
 
-</div>
+</@frameSection>

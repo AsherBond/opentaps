@@ -18,12 +18,4 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<#-- TODO: this can be refactored for all note creation (put in includes/, use ${uri} to call) -->
-
-<#assign extraOptions>
-  <#if hasUpdatePermission?exists>
-    <a class="subMenuButton" href="createLeadNoteForm?partyId=${partySummary.partyId}">${uiLabelMap.CrmCreateNew}</a>
-  </#if>
-</#assign>
-
-<@frameSectionHeader title=uiLabelMap.CrmNotes extra=extraOptions />
+<@frameSectionHeader title=uiLabelMap.CrmTeamMembersAssignedToAccount />

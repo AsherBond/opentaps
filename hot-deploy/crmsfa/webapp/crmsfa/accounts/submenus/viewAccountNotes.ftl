@@ -16,9 +16,12 @@
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmNotes}</div>
-    <#if hasUpdatePermission?exists>
-    <div class="subMenuBar"><a class="subMenuButton" href="createAccountNoteForm?partyId=${partySummary.partyId}">${uiLabelMap.CrmCreateNew}</a></div>
-    </#if>
-</div>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<#assign extraOptions>
+  <#if hasUpdatePermission?exists>
+    <a class="subMenuButton" href="createAccountNoteForm?partyId=${partySummary.partyId}">${uiLabelMap.CrmCreateNew}</a>
+  </#if>
+</#assign>
+
+<@frameSectionHeader title=uiLabelMap.CrmNotes extra=extraOptions />

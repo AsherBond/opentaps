@@ -78,24 +78,19 @@ under the License.
 <#if actionAction?has_content || completeOptionAction?has_content>  
   <#assign separatorLineAction><option value="">${uiLabelMap.OpentapsDefaultActionSeparator}</option></#assign>
 </#if>
-<div class="screenlet">
-  <div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.OrderOrder} #${order.orderId} ${externalOrder?if_exists} ${uiLabelMap.CommonInformation}</div>
-    
-    <div class="subMenuBar">
-      <@selectActionForm name="orderActions" prompt="${uiLabelMap.CommonSelectOne}">
-        ${actionAction?if_exists}
-        ${completeOptionAction?if_exists}
-        ${separatorLineAction?if_exists}
-        ${picklistAction?if_exists}
-        ${pdfAction?if_exists}
-        ${emailOrderAction?if_exists}
-      </@selectActionForm>
-    </div>
-    
-    <div class="subMenuBar">${picklistLink?if_exists}${pdfLink?if_exists}${emailOrderLink?if_exists}${actionLink?if_exists}${completeOption?if_exists}</div>
-  </div>
-  <div class="screenlet-body">
+
+<#assign extraOptions>
+  <@selectActionForm name="orderActions" prompt="${uiLabelMap.CommonSelectOne}">
+    ${actionAction?if_exists}
+    ${completeOptionAction?if_exists}
+    ${separatorLineAction?if_exists}
+    ${picklistAction?if_exists}
+    ${pdfAction?if_exists}
+    ${emailOrderAction?if_exists}
+  </@selectActionForm>
+</#assign>
+
+<@frameSection title="${uiLabelMap.OrderOrder} #${order.orderId} ${externalOrder?if_exists} ${uiLabelMap.CommonInformation}" extra=extraOptions>
     <table width="100%" border="0" cellpadding="1" cellspacing="0">
       <#-- order name -->
       <#if order.orderName?has_content>
@@ -172,7 +167,6 @@ under the License.
       </#if>
 
     </table>
-  </div>
-</div>
+</@frameSection>
 
 </#if> <#-- end of if order?exists -->
