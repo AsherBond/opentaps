@@ -754,17 +754,25 @@ div.orderEntryHeaderSubmitRow {
 
 .subSectionHeader_open .subSectionHeader_toggle,
 .subSectionHeader_closed .subSectionHeader_toggle {
-    padding-right: 20px;
-    background-position: center right;
-    background-repeat: no-repeat;
+width:15px;
+height:15px;
+display:inline-block;
+vertical-align:middle;
+cursor:pointer;
 }
 
 .subSectionHeader_open .subSectionHeader_toggle {
-    background-image: url('/opentaps_images/arrowRoundWhite_up.png');
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll 0 -60px;
+}
+.subSectionHeader_open:hover .subSectionHeader_toggle:hover {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll -15px -60px;
 }
 
 .subSectionHeader_closed .subSectionHeader_toggle {
-    background-image: url('/opentaps_images/arrowRoundWhite_down.png');
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll 0 -75px;
+}
+.subSectionHeader_closed:hover .subSectionHeader_toggle:hover {
+background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll -15px -75px;
 }
 
 .flexAreaControl_decorator {
