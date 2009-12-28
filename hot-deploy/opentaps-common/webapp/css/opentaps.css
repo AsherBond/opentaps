@@ -781,6 +781,11 @@ cursor:pointer;
 border:none;
 }
 
+.subSectionHeader_open .x-panel-header,
+.subSectionHeader_closed .x-panel-header {
+cursor:pointer;
+}
+
 .subSectionHeader_open .subSectionHeader_toggle {
 background:transparent url(/opentaps_images/panels/tool-sprites.gif) no-repeat scroll 0 -60px;
 }
