@@ -752,17 +752,18 @@ div.orderEntryHeaderSubmitRow {
     background-image: url('/opentaps_images/arrowSmallWhite_down.png');
 }
 
-.subSectionHeader_open, .subSectionHeader_closed {
-    padding-right: 30px;
+.subSectionHeader_open .subSectionHeader_toggle,
+.subSectionHeader_closed .subSectionHeader_toggle {
+    padding-right: 20px;
     background-position: center right;
     background-repeat: no-repeat;
 }
 
-.subSectionHeader_open {
+.subSectionHeader_open .subSectionHeader_toggle {
     background-image: url('/opentaps_images/arrowRoundWhite_up.png');
 }
 
-.subSectionHeader_closed {
+.subSectionHeader_closed .subSectionHeader_toggle {
     background-image: url('/opentaps_images/arrowRoundWhite_down.png');
 }
 

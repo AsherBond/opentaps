@@ -15,6 +15,56 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<#-- Sections and screenlet macros -->
+
+<#macro frameSectionTitleBar title extra="" titleId="" titleClass="" style="">
+<div class="titleBar">
+  <div class="frameSectionHeader" style="${style}">
+    <div class="x-panel-tl">
+      <div class="x-panel-tr">
+        <div class="x-panel-tc">
+          <div class="x-panel-header<#if titleClass?has_content> ${titleClass}</#if>" style="float:left" id="${titleId}">${title}</div>
+          <div class="frameSectionExtra">${extra}</div>
+        </div>
+      </div>
+    </div>
+    <div class="x-panel-bl">
+      <div class="x-panel-br">
+        <div class="x-panel-bc"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</#macro>
+
+<#macro frameSectionHeader title extra="" titleId="" titleClass="" style="">
+  <div class="frameSectionHeader" style="${style}">
+    <div class="x-panel-tl">
+      <div class="x-panel-tr">
+        <div class="x-panel-tc">
+          <div class="x-panel-header<#if titleClass?has_content> ${titleClass}</#if>" style="float:left" id="${titleId}">${title}</div>
+          <div class="frameSectionExtra">${extra}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</#macro>
+
+<#macro frameSection title extra="" style="">
+<div class="frameSection" style="${style}">
+  <@frameSectionHeader title=title extra=extra/>
+  <div class="frameSectionBody">
+    <#nested/>
+  </div>
+</div>
+</#macro>
+
+<#macro sectionHeader title headerClass="subSectionHeader" titleClass="subSectionTitle">
+  <#assign extra>
+    <#nested/>
+  </#assign>
+  <@frameSectionHeader title=title extra=extra/>
+</#macro>
 
 <#-- FlexAreas for public consumption -->
 
@@ -44,12 +94,20 @@
 </#macro>
 
 <#macro flexAreaHeaderClassic targetId title="" state="" defaultState="closed" save=false enabled=true content="">
-    <div ${flexAreaHeaderData(targetId, "subSectionHeader subSectionHeader_open", "subSectionHeader subSectionHeader_closed", "", state, defaultState, save, enabled)}>
-      <div class="subSectionTitle">
-        <span onclick="opentaps.expandCollapse('${targetId}')">${title}</span>
+  <div class="frameSectionHeader">
+    <div class="x-panel-tl">
+      <div class="x-panel-tr">
+        <div ${flexAreaHeaderData(targetId, "x-panel-tc subSectionHeader_open", "x-panel-tc subSectionHeader_closed", "", state, defaultState, save, enabled)}>
+          <div class="x-panel-header" style="float:left">
+            <span onclick="opentaps.expandCollapse('${targetId}')">${title}</span>
+          </div>
+          <div class="frameSectionExtra">${content}
+            <span onclick="opentaps.expandCollapse('${targetId}')" class="subSectionHeader_toggle">&nbsp;</span>
+          </div>
+        </div>
       </div>
-      <div class="subMenuBar">${content}</div>
     </div>
+  </div>
 </#macro>
 
 <#macro flexAreaBody targetId class="" style="" state="" defaultState="closed">
