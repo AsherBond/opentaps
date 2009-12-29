@@ -141,7 +141,6 @@
             <exclude field="comments"/>
             <exclude field="statusId"/>
         </alias-all>
-        <alias entity-alias="PR" name="roleTypeId" field="roleTypeIdFrom"/>
         <alias-all entity-alias="TN">
             <exclude field="contactMechId"/>
         </alias-all>
@@ -150,6 +149,7 @@
         </alias-all>
         <alias-all entity-alias="PC"/>
         <alias-all entity-alias="PCG"/>
+        <alias entity-alias="PR" name="roleTypeId" field="roleTypeIdFrom"/>
         <alias entity-alias="PR" name="relationshipStatusId" field="statusId"/>
         <alias entity-alias="PCM" name="partyContactMechFromDate" field="fromDate"/> 
         <alias entity-alias="PCM" name="partyContactMechThruDate" field="thruDate"/> 
