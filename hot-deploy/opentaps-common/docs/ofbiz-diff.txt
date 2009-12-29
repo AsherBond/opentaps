@@ -175,6 +175,15 @@ r13024 Set up font base URL
 framework/testtools/src/org/ofbiz/testtools/TestRunContainer.java
 r13832 r14077 Fix test html report, and add extra logging of Test progress.
 
+framework/widget/dtd/widget-screen.xsd
+framework/widget/src/org/ofbiz/widget/fo/FoScreenRenderer.java
+framework/widget/src/org/ofbiz/widget/html/HtmlScreenRenderer.java
+framework/widget/src/org/ofbiz/widget/screen/MacroScreenRenderer.java
+framework/widget/src/org/ofbiz/widget/screen/ModelScreenWidget.java
+framework/widget/src/org/ofbiz/widget/screen/ScreenStringRenderer.java
+framework/widget/src/org/ofbiz/widget/text/TextScreenRenderer.java
+framework/widget/templates/htmlScreenMacroLibrary.ftl
+Add screen XML node to render a simple frame section with styled header.
 
 Applications changes
 --------------------
