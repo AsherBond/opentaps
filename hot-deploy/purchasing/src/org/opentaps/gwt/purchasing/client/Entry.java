@@ -17,17 +17,16 @@
 
 package org.opentaps.gwt.purchasing.client;
 
+import com.google.gwt.user.client.ui.RootPanel;
 import org.opentaps.gwt.common.client.BaseEntry;
 import org.opentaps.gwt.common.client.form.MultiSearchForm;
 import org.opentaps.gwt.common.client.form.OrderItemsEditable;
+import org.opentaps.gwt.common.client.listviews.OrderItemsEditableListView.OrderType;
 import org.opentaps.gwt.common.client.listviews.PurchaseOrderSearchListView;
 import org.opentaps.gwt.common.client.listviews.SupplierSearchListView;
-import org.opentaps.gwt.common.client.listviews.OrderItemsEditableListView.OrderType;
 import org.opentaps.gwt.purchasing.client.orders.form.FindOrdersForm;
 import org.opentaps.gwt.purchasing.client.suppliers.form.FindSuppliersForm;
-
-
-import com.google.gwt.user.client.ui.RootPanel;
+import org.opentaps.gwt.purchasing.client.suppliers.listviews.SupplierOpenOrdersListView;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -38,19 +37,20 @@ public class Entry extends BaseEntry {
     private static final String OPEN_ORDERS_ID = "openOrders";
     private static final String FIND_ORDERS_ID = "findOrders";
     private static final String FIND_SUPPLIERS_ID = "findSuppliers";
+    private static final String SUPPLIER_ORDERS = "supplierOpenOrdersSubsection";
 
     private FindOrdersForm findOrdersForm;
     private FindOrdersForm openOrdersForm;
     private FindSuppliersForm findSuppliersForm;
-    
+
     private MultiSearchForm multiCrmsfaSearch;
-   
+
     /**
      * This is the entry point method.
      * It is loaded for page where the meta tag is found.
      */
     public void onModuleLoad() {
-    	loadOrdersWidgets();
+        loadOrdersWidgets();
         if (RootPanel.get(FIND_SUPPLIERS_ID) != null) {
             loadFindSuppliers();
         }
@@ -60,13 +60,17 @@ public class Entry extends BaseEntry {
             multiCrmsfaSearch.addResultsGrid(new PurchaseOrderSearchListView());
             RootPanel.get(SEARCH_ID).add(multiCrmsfaSearch);
         }
+
+        if (RootPanel.get(SUPPLIER_ORDERS) != null) {
+            loadSupplierOrders();
+        }
     }
-    
+
     private void loadOrderItems() {
         OrderItemsEditable orderItemsEditable = new OrderItemsEditable(OrderType.PURCHASE);
         RootPanel.get(ORDER_ITEMS_ID).add(orderItemsEditable.getMainPanel());
     }
-    
+
     private void loadOrdersWidgets() {
         if (RootPanel.get(OPEN_ORDERS_ID) != null) {
             loadOpenOrders();
@@ -78,12 +82,12 @@ public class Entry extends BaseEntry {
             loadOrderItems();
         }
     }
-    
+
     private void loadFindOrders() {
         findOrdersForm = new FindOrdersForm(true);
         RootPanel.get(FIND_ORDERS_ID).add(findOrdersForm.getMainPanel());
     }
-    
+
     private void loadOpenOrders() {
         openOrdersForm = new FindOrdersForm(false);
         openOrdersForm.hideFilters();
@@ -95,5 +99,17 @@ public class Entry extends BaseEntry {
         findSuppliersForm = new FindSuppliersForm();
         RootPanel.get(FIND_SUPPLIERS_ID).add(findSuppliersForm.getMainPanel());
     }
-    
+
+    private void loadSupplierOrders() {
+        SupplierOpenOrdersListView orders = new SupplierOpenOrdersListView(getPartyId());
+        RootPanel.get(SUPPLIER_ORDERS).add(orders);
+    }
+
+    /**
+     * Retrieve JS variable <code>partyId</code>.
+     * @return the <code>partyId</code>
+     */
+    private static native String getPartyId()/*-{
+        return $wnd.partyId;
+    }-*/;
 }

@@ -1,6 +1,6 @@
-<#--
+/*
  * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -13,19 +13,25 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
--->
+ */
+package org.opentaps.gwt.purchasing.client.suppliers.listviews;
 
-<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+import org.opentaps.gwt.common.client.listviews.PurchaseOrderListView;
 
-<#assign extraOptions>
-  <#if hasCreateOrderPermission?exists && hasCreateOrderPermission == true>
-    <a class="subMenuButton" href="orderentry?partyId=${supplierPartyId}">${uiLabelMap.OpentapsCreateOrder}</a>
-  </#if>
-</#assign>
+/**
+ * A list view of open purchase orders for a given supplier.
+ */
+public class SupplierOpenOrdersListView extends PurchaseOrderListView {
 
-<div class="subSectionBlock">
-  <@frameSectionHeader title=uiLabelMap.PurchOpenOrders extra=extraOptions/>
-  <#if hasViewOrderPermission?exists>
-    <@gwtWidget id="supplierOpenOrdersSubsection" partyId="${supplierPartyId}"/>
-  </#if>
-</div>
+    /**
+     * Public constructor.
+     * @param partyId related supplier party ID
+     */
+    public SupplierOpenOrdersListView(String partyId) {
+        super();
+        init();
+        filterBySupplierId(partyId);
+        applyFilters();
+    }
+
+}
