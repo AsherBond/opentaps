@@ -70,6 +70,7 @@ public class PurchasingRepository extends Repository implements PurchasingReposi
     /** {@inheritDoc} */
     public void createSupplierProduct(SupplierProduct supplierProduct) throws RepositoryException {
         CreateSupplierProductService service = new CreateSupplierProductService();
+        service.setInProductId(supplierProduct.getProductId());
         service.setInSupplierProductId(supplierProduct.getSupplierProductId());
         // contruct parameters for call service
         service.setInPartyId(supplierProduct.getPartyId());
