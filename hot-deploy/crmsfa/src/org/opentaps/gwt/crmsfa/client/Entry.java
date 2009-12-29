@@ -151,9 +151,9 @@ public class Entry extends BaseEntry {
     private static final String ASSIGN_CONTACT_WIDGET = "assignContactToAccount";
     /** List of related opportunities on view account page. */
     private static final String ACCOUNT_OPPORTUNITIES = "accountOpportunitiesSubListView";
-    /** List of open orders for an account */
+    /** List of open orders for an account. */
     private static final String ACCOUNT_ORDERS = "accountOpenOrdersSubsection";
-    /** List of cases for an account */
+    /** List of cases for an account. */
     private static final String ACCOUNT_CASES = "accountCasesSubsection";
 
     // CRMSFA/Cases widget identifiers

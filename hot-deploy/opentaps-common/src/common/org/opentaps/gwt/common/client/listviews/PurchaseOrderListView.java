@@ -26,13 +26,14 @@ import com.gwtext.client.data.StringFieldDef;
 import com.gwtext.client.widgets.grid.CellMetadata;
 import com.gwtext.client.widgets.grid.ColumnConfig;
 import com.gwtext.client.widgets.grid.Renderer;
+
 /**
  * Class for the Find purchase order form + list view pattern.
  */
 public class PurchaseOrderListView extends EntityListView {
 
     private static final String MODULE = PurchaseOrderListView.class.getName();
- 
+
     /**
      * Default constructor.
      */
@@ -78,7 +79,7 @@ public class PurchaseOrderListView extends EntityListView {
                 // bold priority field if record is updated
                 String supplierName = record.getAsString(PurchaseOrderLookupConfiguration.OUT_SUPPLIER_NAME);
                 String supplierPartyId = record.getAsString(PurchaseOrderLookupConfiguration.INOUT_PARTY_ID);
-                return supplierName + " (" + supplierPartyId + ")" ;
+                return supplierName + " (" + supplierPartyId + ")";
             }
         });
 
@@ -91,11 +92,9 @@ public class PurchaseOrderListView extends EntityListView {
         // a column for supplier party Id
         makeColumn("", new StringFieldDef(PurchaseOrderLookupConfiguration.INOUT_PARTY_ID)).setHidden(true);
         getColumn().setFixed(true);
-        
+
         configure(entityFindUrl, PurchaseOrderLookupConfiguration.INOUT_ORDER_DATE, SortDir.DESC);
     }
-
-
 
     /**
      * Filters the records of the list by order name matching the given order name.
@@ -116,7 +115,7 @@ public class PurchaseOrderListView extends EntityListView {
 
     /**
      * Filters the records of the list by supplier Id matching the given orderId.
-     * @param customerId a <code>String</code> value
+     * @param supplierId a <code>String</code> value
      */
     public void filterBySupplierId(String supplierId) {
         setFilter(PurchaseOrderLookupConfiguration.INOUT_PARTY_ID, supplierId);
@@ -130,7 +129,6 @@ public class PurchaseOrderListView extends EntityListView {
         setFilter(PurchaseOrderLookupConfiguration.INOUT_STATUS_ID, statusId);
     }
 
-
     /**
      * Filters the records of the list by from Date matching the given fromDate.
      * @param fromDate a <code>String</code> value
@@ -138,7 +136,6 @@ public class PurchaseOrderListView extends EntityListView {
     public void filterByFromDate(String fromDate) {
         setFilter(PurchaseOrderLookupConfiguration.IN_FROM_DATE, fromDate);
     }
-
 
     /**
      * Filters the records of the list by thru Date matching the given thruDate.
@@ -155,10 +152,10 @@ public class PurchaseOrderListView extends EntityListView {
     public void filterByCreatedBy(String createdBy) {
         setFilter(PurchaseOrderLookupConfiguration.IN_CREATED_BY, createdBy);
     }
-    
+
     /**
-     * Filters the records of the list by created by matching the given createdBy.
-     * @param createdBy a <code>String</code> value
+     * Filters the records of the list by given product pattern.
+     * @param productPattern a <code>String</code> value
      */
     public void filterByProductPattern(String productPattern) {
         setFilter(PurchaseOrderLookupConfiguration.IN_PRODUCT_PARTTERN, productPattern);
@@ -171,6 +168,5 @@ public class PurchaseOrderListView extends EntityListView {
     public void filterHasIncludeInactiveOrders(boolean findAll) {
         setFilter(PurchaseOrderLookupConfiguration.IN_FIND_ALL, findAll ? "Y" : "N");
     }
-
 
 }

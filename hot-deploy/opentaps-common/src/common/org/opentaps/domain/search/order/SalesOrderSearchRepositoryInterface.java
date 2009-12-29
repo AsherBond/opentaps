@@ -115,13 +115,13 @@ public interface SalesOrderSearchRepositoryInterface extends RepositoryInterface
 
     /**
      * Sets the find active orders only.
-     * @param findAll a <code>String</code> value
+     * @param findActiveOnly a <code>boolean</code> value
      */
     public void setFindActiveOnly(boolean findActiveOnly);
-    
+
     /**
      * Sets the find all desired orders only.
-     * @param findAll a <code>String</code> value
+     * @param findDesiredOnly a <code>boolean</code> value
      */
     public void setFindDesiredOnly(boolean findDesiredOnly);
 

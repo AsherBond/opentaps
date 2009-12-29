@@ -18,8 +18,8 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<#if hasUpdatePermission?exists>
-<#assign updateLink = "<a class='subMenuButton' href='updateSupplierForm?partyId=" + partySummary.partyId + "'>" + uiLabelMap.CommonEdit + "</a>">
+<#if hasUpdatePermission?exists && hasUpdatePermission == true>
+  <#assign updateLink = "<a class='subMenuButton' href='updateSupplierForm?partyId=" + partySummary.partyId + "'>" + uiLabelMap.CommonEdit + "</a>">
 </#if>
 
 <div class="subSectionBlock">

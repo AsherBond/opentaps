@@ -141,8 +141,8 @@ public class SalesOrderLookupService extends EntityLookupAndSuggestService {
             }
 
             // takes into account order statuses
-            // activeOnly & desired flags aren't mutually exclusive, activeOnly statuses is a superset 
-            // of desired statuses. 
+            // activeOnly & desired flags aren't mutually exclusive, activeOnly statuses is a superset
+            // of desired statuses.
             String isActiveOnly = getProvider().getParameter(SalesOrderLookupConfiguration.IN_FIND_ALL);
             if (UtilValidate.isNotEmpty(isActiveOnly) && "Y".equals(isActiveOnly)) {
                 salesOrderSearchRepository.setFindActiveOnly(true);
