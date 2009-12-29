@@ -1091,6 +1091,12 @@ under the License.
         <view-link entity-alias="I" rel-entity-alias="II">
             <key-map field-name="invoiceId"/>
         </view-link>
+        <relation type="one" rel-entity-name="StatusItem">
+            <key-map field-name="statusId" rel-field-name="statusId"/>
+        </relation>
+        <relation type="one" title="Processing" rel-entity-name="StatusItem">
+            <key-map field-name="processingStatusId" rel-field-name="statusId"/>
+        </relation>
     </view-entity>
 
     <view-entity entity-name="InvoiceAndPartyClassificationDisbursement"

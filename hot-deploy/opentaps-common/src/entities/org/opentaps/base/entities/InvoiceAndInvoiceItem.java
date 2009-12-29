@@ -347,6 +347,20 @@ fieldMapColumns.put("InvoiceAndInvoiceItem", fields);
    private String itemAcctgTagEnumId9;
     
    private String itemAcctgTagEnumId10;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private StatusItem statusItem = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PROCESSING_STATUS_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private StatusItem processingStatusItem = null;
 
   /**
    * Default constructor.
@@ -1149,7 +1163,43 @@ fieldMapColumns.put("InvoiceAndInvoiceItem", fields);
         return this.itemAcctgTagEnumId10;
     }
 
+    /**
+     * Auto generated method that gets the related <code>StatusItem</code> by the relation named <code>StatusItem</code>.
+     * @return the <code>StatusItem</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public StatusItem getStatusItem() throws RepositoryException {
+        if (this.statusItem == null) {
+            this.statusItem = getRelatedOne(StatusItem.class, "StatusItem");
+        }
+        return this.statusItem;
+    }
+    /**
+     * Auto generated method that gets the related <code>StatusItem</code> by the relation named <code>ProcessingStatusItem</code>.
+     * @return the <code>StatusItem</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public StatusItem getProcessingStatusItem() throws RepositoryException {
+        if (this.processingStatusItem == null) {
+            this.processingStatusItem = getRelatedOne(StatusItem.class, "ProcessingStatusItem");
+        }
+        return this.processingStatusItem;
+    }
 
+    /**
+     * Auto generated value setter.
+     * @param statusItem the statusItem to set
+    */
+    public void setStatusItem(StatusItem statusItem) {
+        this.statusItem = statusItem;
+    }
+    /**
+     * Auto generated value setter.
+     * @param processingStatusItem the processingStatusItem to set
+    */
+    public void setProcessingStatusItem(StatusItem processingStatusItem) {
+        this.processingStatusItem = processingStatusItem;
+    }
 
 
     /** {@inheritDoc} */
