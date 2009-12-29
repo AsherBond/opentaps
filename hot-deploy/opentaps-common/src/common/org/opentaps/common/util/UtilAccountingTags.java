@@ -218,6 +218,21 @@ public final class UtilAccountingTags {
      * @throws RepositoryException if an error occurs
      */
     public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, HttpServletRequest request, String prefix) throws RepositoryException {
+        return buildTagConditions(organizationPartyId, accountingTagUsageTypeId, delegator, request, prefix, "acctgTagEnumId");
+    }
+
+    /**
+     * Builds a list of <code>EntityExpr</code> from the accounting tag given in the request.
+     * @param organizationPartyId the organization party ID
+     * @param accountingTagUsageTypeId the usage type for the tags
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param request a <code>HttpServletRequest</code> value
+     * @param prefix the part of parameters before the index which holds the values for the accounting tags in the request
+     * @param entityPrefix the part of the field name before the index which holds the values for the accounting tags in the entity to query
+     * @return the list of <code>EntityExpr</code> from the accounting tag given in the request
+     * @throws RepositoryException if an error occurs
+     */
+    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, HttpServletRequest request, String prefix, String entityPrefix) throws RepositoryException {
         Map<Integer, String> tagTypes = getAccountingTagTypesForOrganization(organizationPartyId, accountingTagUsageTypeId, delegator);
         List<EntityCondition> conditions = new ArrayList<EntityCondition>();
 
@@ -234,9 +249,9 @@ public final class UtilAccountingTags {
                 if ("ANY".equals(value)) {
                     continue;
                 } else if ("NONE".equals(value)) {
-                    conditions.add(EntityCondition.makeCondition("acctgTagEnumId" + index, EntityOperator.EQUALS, null));
+                    conditions.add(EntityCondition.makeCondition(entityPrefix + index, EntityOperator.EQUALS, null));
                 } else {
-                    conditions.add(EntityCondition.makeCondition("acctgTagEnumId" + index, EntityOperator.EQUALS, value));
+                    conditions.add(EntityCondition.makeCondition(entityPrefix + index, EntityOperator.EQUALS, value));
                 }
             }
         }

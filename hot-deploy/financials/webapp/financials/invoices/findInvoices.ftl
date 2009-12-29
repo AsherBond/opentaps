@@ -56,10 +56,19 @@
       <@inputRangeRow title=uiLabelMap.OpentapsOpenAmount fromName="openAmountFrom" thruName="openAmountThru" size=10/>
 
       <@inputTextRow title=uiLabelMap.FinancialsReferenceNumber name="referenceNumber" size="30"/>
+      <@inputTextRow title=uiLabelMap.CommonMessage name="message" size="30"/>
 
       <#if enableFindByOrder>
         <@inputTextRow title=uiLabelMap.FinancialsRelatedOrderId name="orderId" size="20" maxlength="20"/>
       </#if>
+      
+      <@inputTextRow title=uiLabelMap.ProductItemDescription name="itemDescription" size="30"/>
+
+      <#list tagFilters as tag>
+        <@inputSelectRow title=tag.description name="tag${tag.index}" list=tag.tagValues key="enumId" required=true ; tagValue>
+          ${tagValue.description}
+        </@inputSelectRow>
+      </#list>
 
       <@inputSubmitRow title=uiLabelMap.CommonFind />
     </tbody>

@@ -19,6 +19,7 @@ package com.opensourcestrategies.financials.invoice;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -45,6 +46,7 @@ import org.ofbiz.party.party.PartyHelper;
 import org.opentaps.base.entities.BillingAccountAndRole;
 import org.opentaps.base.entities.GlAccountOrganizationAndClass;
 import org.opentaps.base.entities.InvoiceAdjustmentType;
+import org.opentaps.base.entities.InvoiceAndInvoiceItem;
 import org.opentaps.base.entities.InvoiceContactMech;
 import org.opentaps.base.entities.InvoiceType;
 import org.opentaps.base.entities.OrderItem;
@@ -371,20 +373,24 @@ public final class InvoiceActions {
         boolean isPayable = false;
         boolean isPartner = false;
         boolean enableFindByOrder = false;
+        String tagsType = null;
         if ("SALES_INVOICE".equals(invoiceTypeId)) {
             findFormTitle = ac.getUiLabel("FinancialsFindSalesInvoices");
             isReceivable = true;
             enableFindByOrder = true;
+            tagsType = UtilAccountingTags.SALES_INVOICES_TAG;
         } else if ("PURCHASE_INVOICE".equals(invoiceTypeId)) {
             findFormTitle = ac.getUiLabel("FinancialsFindPurchaseInvoices");
             isPayable = true;
             enableFindByOrder = true;
+            tagsType = UtilAccountingTags.PURCHASE_INVOICES_TAG;
         } else if ("CUST_RTN_INVOICE".equals(invoiceTypeId)) {
             findFormTitle = ac.getUiLabel("FinancialsFindCustomerReturnInvoices");
             isPayable = true;
         } else if ("COMMISSION_INVOICE".equals(invoiceTypeId)) {
             findFormTitle = ac.getUiLabel("FinancialsFindCommissionInvoices");
             isPayable = true;
+            tagsType = UtilAccountingTags.COMMISSION_INVOICES_TAG;
         } else if ("INTEREST_INVOICE".equals(invoiceTypeId)) {
             findFormTitle = ac.getUiLabel("FinancialsFindFinanceCharges");
             isReceivable = true;
@@ -424,6 +430,12 @@ public final class InvoiceActions {
         }
         ac.put("processingStatuses", processingStatusList);
 
+        // get the list of accounting tags for the current organization
+        String organizationPartyId = UtilCommon.getOrganizationPartyId(ac.getRequest());
+        if (tagsType != null) {
+            ac.put("tagFilters", UtilAccountingTags.getAccountingTagFiltersForOrganization(organizationPartyId, tagsType, ac.getDelegator(), locale));
+        }
+
         // now check if we want to actually do a find, which is triggered by performFind = Y
         if (!"Y".equals(ac.getParameter("performFind"))) {
             return;
@@ -446,84 +458,98 @@ public final class InvoiceActions {
         String openAmountFrom = ac.getParameter("openAmountFrom");
         String openAmountThru = ac.getParameter("openAmountThru");
         String referenceNumber = ac.getParameter("referenceNumber");
+        String message = ac.getParameter("message");
         String orderId = ac.getParameter("orderId");
+        String itemDescription = ac.getParameter("itemDescription");
 
         // build search conditions
         List<EntityCondition> search = new FastList<EntityCondition>();
         if (partyId != null) {
-            search.add(EntityCondition.makeCondition(Invoice.Fields.partyId.name(), EntityOperator.EQUALS, partyId.trim()));
+            search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.partyId.name(), EntityOperator.EQUALS, partyId.trim()));
         }
         if (partyIdFrom != null) {
-            search.add(EntityCondition.makeCondition(Invoice.Fields.partyIdFrom.name(), EntityOperator.EQUALS, partyIdFrom.trim()));
+            search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.partyIdFrom.name(), EntityOperator.EQUALS, partyIdFrom.trim()));
         }
         if (invoiceId != null) {
-            search.add(EntityCondition.makeCondition(Invoice.Fields.invoiceId.name(), EntityOperator.EQUALS, invoiceId.trim()));
+            search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.invoiceId.name(), EntityOperator.EQUALS, invoiceId.trim()));
         }
         if (statusId != null) {
-            search.add(EntityCondition.makeCondition(Invoice.Fields.statusId.name(), EntityOperator.EQUALS, statusId.trim()));
+            search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.statusId.name(), EntityOperator.EQUALS, statusId.trim()));
         }
         if (processingStatusId != null) {
             // this is a special case where we want an empty status
             if ("_NA_".equals(processingStatusId)) {
-                search.add(EntityCondition.makeCondition(Invoice.Fields.processingStatusId.name(), EntityOperator.EQUALS, null));
+                search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.processingStatusId.name(), EntityOperator.EQUALS, null));
             } else {
-                search.add(EntityCondition.makeCondition(Invoice.Fields.processingStatusId.name(), EntityOperator.EQUALS, processingStatusId.trim()));
+                search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.processingStatusId.name(), EntityOperator.EQUALS, processingStatusId.trim()));
             }
         }
         String dateFormat = UtilDateTime.getDateFormat(locale);
         if (invoiceDateFrom != null) {
-            search.add(EntityCondition.makeCondition(Invoice.Fields.invoiceDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(invoiceDateFrom, dateFormat, timeZone, locale), timeZone, locale)));
+            search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.invoiceDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(invoiceDateFrom, dateFormat, timeZone, locale), timeZone, locale)));
         }
         if (dueDateFrom != null) {
-            search.add(EntityCondition.makeCondition(Invoice.Fields.dueDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(dueDateFrom, dateFormat, timeZone, locale), timeZone, locale)));
+            search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.dueDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(dueDateFrom, dateFormat, timeZone, locale), timeZone, locale)));
         }
         if (paidDateFrom != null) {
-            search.add(EntityCondition.makeCondition(Invoice.Fields.paidDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(paidDateFrom, dateFormat, timeZone, locale), timeZone, locale)));
+            search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.paidDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(paidDateFrom, dateFormat, timeZone, locale), timeZone, locale)));
         }
         if (invoiceDateThru != null) {
-            search.add(EntityCondition.makeCondition(Invoice.Fields.invoiceDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(invoiceDateThru, dateFormat, timeZone, locale), timeZone, locale)));
+            search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.invoiceDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(invoiceDateThru, dateFormat, timeZone, locale), timeZone, locale)));
         }
         if (dueDateThru != null) {
-            search.add(EntityCondition.makeCondition(Invoice.Fields.dueDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(dueDateThru, dateFormat, timeZone, locale), timeZone, locale)));
+            search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.dueDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(dueDateThru, dateFormat, timeZone, locale), timeZone, locale)));
         }
         if (paidDateThru != null) {
-            search.add(EntityCondition.makeCondition(Invoice.Fields.paidDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(paidDateThru, dateFormat, timeZone, locale), timeZone, locale)));
+            search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.paidDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(paidDateThru, dateFormat, timeZone, locale), timeZone, locale)));
         }
         if (amountFrom != null) {
-            search.add(EntityCondition.makeCondition(Invoice.Fields.invoiceTotal.name(), EntityOperator.GREATER_THAN_EQUAL_TO, new BigDecimal(amountFrom)));
+            search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.invoiceTotal.name(), EntityOperator.GREATER_THAN_EQUAL_TO, new BigDecimal(amountFrom)));
         }
         if (amountThru != null) {
-            search.add(EntityCondition.makeCondition(Invoice.Fields.invoiceTotal.name(), EntityOperator.LESS_THAN_EQUAL_TO, new BigDecimal(amountThru)));
+            search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.invoiceTotal.name(), EntityOperator.LESS_THAN_EQUAL_TO, new BigDecimal(amountThru)));
         }
         if (openAmountFrom != null) {
-            search.add(EntityCondition.makeCondition(Invoice.Fields.openAmount.name(), EntityOperator.GREATER_THAN_EQUAL_TO, new BigDecimal(openAmountFrom)));
+            search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.openAmount.name(), EntityOperator.GREATER_THAN_EQUAL_TO, new BigDecimal(openAmountFrom)));
         }
         if (openAmountThru != null) {
-            search.add(EntityCondition.makeCondition(Invoice.Fields.openAmount.name(), EntityOperator.LESS_THAN_EQUAL_TO, new BigDecimal(openAmountThru)));
+            search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.openAmount.name(), EntityOperator.LESS_THAN_EQUAL_TO, new BigDecimal(openAmountThru)));
         }
         if (referenceNumber != null) {
-            search.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(Invoice.Fields.referenceNumber.name()), EntityOperator.LIKE, EntityFunction.UPPER("%" + referenceNumber + "%")));
+            search.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(InvoiceAndInvoiceItem.Fields.referenceNumber.name()), EntityOperator.LIKE, EntityFunction.UPPER("%" + referenceNumber + "%")));
+        }
+        if (message != null) {
+            search.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(InvoiceAndInvoiceItem.Fields.invoiceMessage.name()), EntityOperator.LIKE, EntityFunction.UPPER("%" + message + "%")));
+        }
+        if (itemDescription != null) {
+            search.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(InvoiceAndInvoiceItem.Fields.itemDescription.name()), EntityOperator.LIKE, EntityFunction.UPPER("%" + itemDescription + "%")));
         }
 
         if (enableFindByOrder && orderId != null) {
             List<OrderItemBilling> orderItemBillings = repository.findList(OrderItemBilling.class, repository.map(OrderItemBilling.Fields.orderId, orderId));
             if (UtilValidate.isNotEmpty(orderItemBillings)) {
                 Set<String> invoiceIds = Entity.getDistinctFieldValues(String.class, orderItemBillings, OrderItemBilling.Fields.invoiceId);
-                search.add(EntityCondition.makeCondition(Invoice.Fields.invoiceId.name(), EntityOperator.IN, invoiceIds));
+                search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.invoiceId.name(), EntityOperator.IN, invoiceIds));
             }
         }
 
+        if (tagsType != null) {
+            search.addAll(UtilAccountingTags.buildTagConditions(organizationPartyId, tagsType, ac.getDelegator(), ac.getRequest(), UtilAccountingTags.TAG_PARAM_PREFIX, "itemAcctgTagEnumId"));
+        }
+
         // required conditions
-        search.add(EntityCondition.makeCondition(Invoice.Fields.invoiceTypeId.name(), EntityOperator.EQUALS, invoiceTypeId.trim()));
+        search.add(EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.invoiceTypeId.name(), EntityOperator.EQUALS, invoiceTypeId.trim()));
 
 
         // Pagination
-        EntityListBuilder invoiceListBuilder = new EntityListBuilder(repository, Invoice.class, EntityCondition.makeCondition(search, EntityOperator.AND), UtilMisc.toList(Invoice.Fields.invoiceDate.desc()));
-        PageBuilder<Invoice> pageBuilder = new PageBuilder<Invoice>() {
-            public List<Map<String, Object>> build(List<Invoice> page) throws Exception {
+        Set<String> fieldsToSelect = new HashSet<String>(new Invoice().getAllFieldsNames());
+        fieldsToSelect.retainAll(new InvoiceAndInvoiceItem().getAllFieldsNames());
+        EntityListBuilder invoiceListBuilder = new EntityListBuilder(repository, InvoiceAndInvoiceItem.class, EntityCondition.makeCondition(search, EntityOperator.AND), fieldsToSelect, UtilMisc.toList(InvoiceAndInvoiceItem.Fields.invoiceDate.desc()));
+        PageBuilder<InvoiceAndInvoiceItem> pageBuilder = new PageBuilder<InvoiceAndInvoiceItem>() {
+            public List<Map<String, Object>> build(List<InvoiceAndInvoiceItem> page) throws Exception {
                 GenericDelegator delegator = ac.getDelegator();
                 List<Map<String, Object>> newPage = FastList.newInstance();
-                for (Invoice invoice : page) {
+                for (InvoiceAndInvoiceItem invoice : page) {
                     Map<String, Object> newRow = FastMap.newInstance();
                     newRow.putAll(invoice.toMap());
 
