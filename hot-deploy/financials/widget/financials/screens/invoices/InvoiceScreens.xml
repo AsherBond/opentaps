@@ -29,16 +29,11 @@
                 <java location="com.opensourcestrategies.financials.invoice.InvoiceActions" invoke="findInvoices"/>
             </actions>
             <widgets>
-                <container style="subSectionBlock">
-                    <container style="subSectionHeader">
-                        <label style="subSectionTitle" text="${findFormTitle}"/> <!-- this is set by findInvoices because of limitations with uiLabelMap -->
-                    </container>
-                    <container style="form">
-                        <platform-specific><html>
-                            <html-template location="component://financials/webapp/financials/invoices/findInvoices.ftl"/>
-                        </html></platform-specific>
-                    </container>
-                </container>
+                <frame-container title="${findFormTitle}">
+                  <platform-specific><html>
+                    <html-template location="component://financials/webapp/financials/invoices/findInvoices.ftl"/>
+                  </html></platform-specific>
+                </frame-container>
                 <platform-specific>
                     <html><html-template location="component://financials/webapp/financials/invoices/listInvoices.ftl"/></html>
                 </platform-specific>
