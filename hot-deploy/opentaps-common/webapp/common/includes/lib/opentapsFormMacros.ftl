@@ -888,6 +888,28 @@ For more information, please see documentation/opentapsFormMacros.html
   </tr>
 </#macro>
 
+
+<#macro dateRangeInputRow title fromName thruName titleClass="tableheadtext" ignoreParameters=false>
+  <tr>
+    <@displayTitleCell title=title titleClass=titleClass/>
+    <@dateRangeInputCell fromName=fromName thruName=thruName ignoreParameters=ignoreParameters/>
+  </tr>
+</#macro>
+
+<#macro dateRangeInputCell fromName thruName ignoreParameters=false>
+  <td><@dateRangeInput fromName=fromName thruName=thruName ignoreParameters=ignoreParameters/></td>
+</#macro>
+
+<#macro dateRangeInput fromName thruName ignoreParameters=false>
+  <span class="tabletext">
+    ${uiLabelMap.CommonFrom} 
+    <@inputDate name=fromName ignoreParameters=ignoreParameters/>
+    &nbsp;&nbsp;
+    ${uiLabelMap.CommonThru} 
+    <@inputDate name=thruName ignoreParameters=ignoreParameters/>
+  </span>
+</#macro>
+
 <#-- Enumeration Macros -->
 
 <#macro inputEnumeration name enumTypeId index=-1 required=false default="" onChange="" ignoreParameters=false>
