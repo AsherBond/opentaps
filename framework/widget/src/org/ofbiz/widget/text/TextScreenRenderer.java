@@ -59,6 +59,13 @@ public class TextScreenRenderer implements ScreenStringRenderer {
         appendWhitespace(writer);
     }
 
+    public void renderFrameContainerBegin(Appendable writer, Map<String, Object> context, ModelScreenWidget.FrameContainer container) throws IOException {
+        renderContainerBegin(writer, context, container);
+    }
+    public void renderFrameContainerEnd(Appendable writer, Map<String, Object> context, ModelScreenWidget.FrameContainer container) throws IOException {
+        renderContainerEnd(writer, context, container);
+    }
+
     public void renderLabel(Appendable writer, Map<String, Object> context, ModelScreenWidget.Label label) throws IOException {
         String labelText = label.getText(context);
         if (UtilValidate.isEmpty(labelText)) {

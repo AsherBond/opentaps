@@ -174,6 +174,43 @@ public class MacroScreenRenderer implements ScreenStringRenderer {
         executeMacro(sr.toString());
     }
 
+    public void renderFrameContainerBegin(Appendable writer, Map<String, Object> context, ModelScreenWidget.FrameContainer container) throws IOException {
+        String containerId = container.getId(context);
+        String autoUpdateTarget = container.getAutoUpdateTargetExdr(context);
+        String title = container.getTitle(context);
+        HttpServletRequest request = (HttpServletRequest) context.get("request");
+        String autoUpdateLink = "";
+        if (UtilValidate.isNotEmpty(autoUpdateTarget) && UtilHttp.isJavaScriptEnabled(request)) {
+            if (UtilValidate.isEmpty(containerId)) {
+                containerId = getNextElementId();
+            }
+            HttpServletResponse response = (HttpServletResponse) context.get("response");
+            ServletContext ctx = (ServletContext) request.getAttribute("servletContext");
+            RequestHandler rh = (RequestHandler) ctx.getAttribute("_REQUEST_HANDLER_");
+            autoUpdateLink = rh.makeLink(request, response, autoUpdateTarget);
+        }
+        StringWriter sr = new StringWriter();
+        sr.append("<@renderFrameContainerBegin ");
+        sr.append("id=\"");
+        sr.append(containerId);
+        sr.append("\" style=\"");
+        sr.append(container.getStyle(context));
+        sr.append("\" autoUpdateLink=\"");
+        sr.append(autoUpdateLink);
+        sr.append("\" autoUpdateInterval=\"");
+        sr.append(container.getAutoUpdateInterval());
+        sr.append("\" title=\"");
+        sr.append(title);
+        sr.append("\" />");
+        executeMacro(sr.toString());
+    }
+
+    public void renderFrameContainerEnd(Appendable writer, Map<String, Object> context, ModelScreenWidget.FrameContainer container) throws IOException {
+        StringWriter sr = new StringWriter();
+        sr.append("<@renderFrameContainerEnd/>");
+        executeMacro(sr.toString());
+    }
+
     public void renderLabel(Appendable writer, Map<String, Object> context, ModelScreenWidget.Label label) throws IOException {
         String labelText = label.getText(context);
         StringWriter sr = new StringWriter();

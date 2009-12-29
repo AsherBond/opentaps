@@ -763,6 +763,31 @@ under the License.
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="frame-container" substitutionGroup="AllWidgets">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="AllWidgets"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="attlist.frame-container"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:attributeGroup name="attlist.frame-container">
+        <xs:attribute type="xs:string" name="id"/>
+        <xs:attribute type="xs:string" name="style"/>
+        <xs:attribute type="xs:string" name="title"/>
+        <xs:attribute type="xs:string" name="auto-update-target">
+            <xs:annotation>
+                <xs:documentation>The URL to be called for periodic asynchronous area updates.
+                Some widget rendering environments support asynchronous updates.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:integer" name="auto-update-interval">
+            <xs:annotation>
+                <xs:documentation>The auto-update interval, in seconds.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+
     <xs:element name="container" substitutionGroup="AllWidgets">
         <xs:complexType>
             <xs:sequence>

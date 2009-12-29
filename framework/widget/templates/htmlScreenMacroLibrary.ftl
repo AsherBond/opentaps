@@ -37,6 +37,24 @@ under the License.
 </#if>
 </#macro>
 
+<#macro renderFrameContainerBegin id style autoUpdateLink autoUpdateInterval title>
+<#if autoUpdateLink?has_content>
+<script type="text/javascript">ajaxUpdateAreaPeriodic('${id}', '${autoUpdateLink}', '', '${autoUpdateInterval}');</script>
+</#if>
+<div class="frameSection"<#if id?has_content> id="${id}"</#if>>
+  <div class="frameSectionHeader">
+    <div class="x-panel-tl">
+      <div class="x-panel-tr">
+        <div class="x-panel-tc">
+          <div class="x-panel-header" style="float:left">${title}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="frameSectionBody">
+</#macro>
+<#macro renderFrameContainerEnd></div></div></#macro>
+
 <#macro renderContainerBegin id style autoUpdateLink autoUpdateInterval>
 <#if autoUpdateLink?has_content>
 <script type="text/javascript">ajaxUpdateAreaPeriodic('${id}', '${autoUpdateLink}', '', '${autoUpdateInterval}');</script>

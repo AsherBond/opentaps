@@ -94,6 +94,44 @@ public class HtmlScreenRenderer extends HtmlWidgetRenderer implements ScreenStri
         renderEndingBoundaryComment(writer, section.isMainSection?"Screen":"Section Widget", section);
     }
 
+    public void renderFrameContainerBegin(Appendable writer, Map<String, Object> context, ModelScreenWidget.FrameContainer container) throws IOException {
+        String containerId = container.getId(context);
+        String autoUpdateTarget = container.getAutoUpdateTargetExdr(context);
+        String title = container.getTitle(context);
+        HttpServletRequest request = (HttpServletRequest) context.get("request");
+        if (UtilValidate.isNotEmpty(autoUpdateTarget) && UtilHttp.isJavaScriptEnabled(request)) {
+            if (UtilValidate.isEmpty(containerId)) {
+                containerId = getNextElementId();
+            }
+            HttpServletResponse response = (HttpServletResponse) context.get("response");
+            ServletContext ctx = (ServletContext) request.getAttribute("servletContext");
+            RequestHandler rh = (RequestHandler) ctx.getAttribute("_REQUEST_HANDLER_");
+
+            writer.append("<script type=\"text/javascript\">ajaxUpdateAreaPeriodic('");
+            writer.append(containerId);
+            writer.append("', '");
+            writer.append(rh.makeLink(request, response, autoUpdateTarget));
+            writer.append("', '");
+            writer.append("', '" + container.getAutoUpdateInterval() + "');</script>");
+            appendWhitespace(writer);
+        }
+        writer.append("<div class=\"frameSection\"><div class=\"frameSectionHeader\"");
+
+        if (UtilValidate.isNotEmpty(containerId)) {
+            writer.append(" id=\"");
+            writer.append(containerId);
+            writer.append("\"");
+        }
+        writer.append(">");
+
+        writer.append("<div class=\"x-panel-tl\"><div class=\"x-panel-tr\"><div class=\"x-panel-tc\"><div class=\"x-panel-header\" style=\"float:left\">").append(title).append("</div></div></div></div></div><div class=\"frameSectionBody\">");
+        appendWhitespace(writer);
+    }
+    public void renderFrameContainerEnd(Appendable writer, Map<String, Object> context, ModelScreenWidget.FrameContainer container) throws IOException {
+        writer.append("</div></div>");
+        appendWhitespace(writer);
+    }
+
     public void renderContainerBegin(Appendable writer, Map<String, Object> context, ModelScreenWidget.Container container) throws IOException {
         String containerId = container.getId(context);
         String autoUpdateTarget = container.getAutoUpdateTargetExdr(context);

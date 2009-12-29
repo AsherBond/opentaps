@@ -88,6 +88,8 @@ public abstract class ModelScreenWidget extends ModelWidget implements Serializa
         for (Element subElement: subElementList) {
             if ("section".equals(subElement.getNodeName())) {
                 subWidgets.add(new Section(modelScreen, subElement));
+            } else if ("frame-container".equals(subElement.getNodeName())) {
+                subWidgets.add(new FrameContainer(modelScreen, subElement));
             } else if ("container".equals(subElement.getNodeName())) {
                 subWidgets.add(new Container(modelScreen, subElement));
             } else if ("screenlet".equals(subElement.getNodeName())) {
@@ -318,6 +320,38 @@ public abstract class ModelScreenWidget extends ModelWidget implements Serializa
 
         public String rawString() {
             return "<container id=\"" + this.idExdr.getOriginal() + "\" style=\"" + this.styleExdr.getOriginal() + "\" auto-update-target=\"" + this.autoUpdateTargetExdr.getOriginal() + "\">";
+        }
+    }
+
+    public static class FrameContainer extends Container {
+        protected FlexibleStringExpander titleExdr;
+
+        public FrameContainer(ModelScreen modelScreen, Element containerElement) {
+            super(modelScreen, containerElement);
+            this.titleExdr = FlexibleStringExpander.getInstance(containerElement.getAttribute("title"));
+        }
+
+        public void renderWidgetString(Appendable writer, Map<String, Object> context, ScreenStringRenderer screenStringRenderer) throws GeneralException, IOException {
+            try {
+                screenStringRenderer.renderFrameContainerBegin(writer, context, this);
+
+                // render sub-widgets
+                renderSubWidgetsString(this.subWidgets, writer, context, screenStringRenderer);
+
+                screenStringRenderer.renderFrameContainerEnd(writer, context, this);
+            } catch (IOException e) {
+                String errMsg = "Error rendering frame container in screen named [" + this.modelScreen.getName() + "]: " + e.toString();
+                Debug.logError(e, errMsg, module);
+                throw new RuntimeException(errMsg);
+            }
+        }
+
+        public String getTitle(Map<String, Object> context) {
+            return this.titleExdr.expandString(context);
+        }
+
+        public String rawString() {
+            return "<frame-container id=\"" + this.idExdr.getOriginal() + "\" style=\"" + this.styleExdr.getOriginal() + "\" auto-update-target=\"" + this.autoUpdateTargetExdr.getOriginal() + "\" title=\"" + this.titleExdr.getOriginal() + "\">";
         }
     }
 
