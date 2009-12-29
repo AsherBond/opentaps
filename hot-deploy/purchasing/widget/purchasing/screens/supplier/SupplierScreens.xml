@@ -80,16 +80,7 @@
 
                         <!-- Orders section -->
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader">
-                                <label style="subSectionTitle">${uiLabelMap.PurchOpenOrders}</label>
-                                <section><condition><if-compare field="hasCreateOrderPermission" operator="equals" value="true" type="Boolean"/></condition>
-                                    <widgets>
-                                        <container style="subMenuBar">
-                                            <link target="orderentry?partyId=${supplierPartyId}" text="${uiLabelMap.OpentapsCreateOrder}" style="subMenuButton"/>
-                                        </container>
-                                    </widgets>
-                                </section>
-                            </container>
+                            <platform-specific><html><html-template location="component://purchasing/webapp/purchasing/supplier/submenus/viewSupplierOrders.ftl"/></html></platform-specific>
                             <section>
                                 <condition><if-compare field="hasViewOrderPermission" operator="equals" value="true" type="Boolean"/></condition>
                                 <widgets>
@@ -100,12 +91,9 @@
                         
                         <!-- Agreements section -->
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader">
-                                <label style="subSectionTitle">${uiLabelMap.AccountingAgreements}</label>
-                                <platform-specific>
-                                    <html><html-template location="component://purchasing/webapp/purchasing/supplier/submenus/viewSupplierAgreements.ftl"/></html>
-                                </platform-specific>
-                            </container>
+                            <platform-specific>
+                                <html><html-template location="component://purchasing/webapp/purchasing/supplier/submenus/viewSupplierAgreements.ftl"/></html>
+                            </platform-specific>
                             <section>
                                 <condition>
                                     <if-compare field="hasViewOrderPermission" operator="equals" value="true" type="Boolean"/>

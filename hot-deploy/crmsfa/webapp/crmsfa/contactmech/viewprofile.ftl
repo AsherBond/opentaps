@@ -59,7 +59,7 @@
 </#if>
 
 <#assign extraOptions>
-  <#if hasUpdatePermission?exists>
+  <#if hasUpdatePermission?exists && hasUpdatePermission == true>
     <@selectAction name="createNewContactMechTarget" prompt="${uiLabelMap.CommonCreateNew}">
       <@action url="${editContactMechPage}?partyId=${partySummary.partyId}&amp;preContactMechTypeId=POSTAL_ADDRESS&amp;DONE_PAGE=${donePageEscaped}" text="${uiLabelMap.OpentapsAddress}"/>
       <@action url="${editContactMechPage}?partyId=${partySummary.partyId}&amp;preContactMechTypeId=TELECOM_NUMBER&amp;DONE_PAGE=${donePageEscaped}" text="${uiLabelMap.OpentapsPhoneNumber}"/>

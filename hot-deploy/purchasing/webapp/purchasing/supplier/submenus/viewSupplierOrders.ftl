@@ -1,5 +1,5 @@
 <#--
- * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.
  * 
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
@@ -14,14 +14,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<#-- Copyright (c) 2005-2007 Open Source Strategies, Inc. -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#assign extraOptions>
   <#if hasCreateOrderPermission?exists && hasCreateOrderPermission == true>
-    <a class="subMenuButton" href="createAgreement?partyId=${partySummary.partyId}">${uiLabelMap.CommonCreateNew}</a>
+    <a class="subMenuButton" href="orderentry?partyId=${supplierPartyId}">${uiLabelMap.OpentapsCreateOrder}</a>
   </#if>
 </#assign>
 
-<@frameSectionHeader title=uiLabelMap.AccountingAgreements extra=extraOptions />
+<@frameSectionHeader title=uiLabelMap.PurchOpenOrders extra=extraOptions />

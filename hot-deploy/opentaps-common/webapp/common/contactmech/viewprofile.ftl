@@ -57,22 +57,18 @@
 <#assign donePageEscaped = donePage + "?partyId%3d" + parameters.partyId>
 </#if>
 
-<div class="subSectionHeader">
-  <div class="subSectionTitle">${uiLabelMap.PartyContactInformation}</div>
-  <#if hasUpdatePermission?exists>
-  <#-- these have to be on one line to avoid space issues -->
-  <div class="subMenuBar">
+<#assign extraOptions>
+  <#if hasUpdatePermission?exists && hasUpdatePermission == true>
     <@selectAction name="createNewContactMechTarget" prompt="${uiLabelMap.CommonCreateNew}">
-        <@action url="${editContactMechPage}?partyId=${partySummary.partyId}&amp;preContactMechTypeId=POSTAL_ADDRESS&amp;DONE_PAGE=${donePageEscaped}" text="${uiLabelMap.OpentapsAddress}"/>
-        <@action url="${editContactMechPage}?partyId=${partySummary.partyId}&amp;preContactMechTypeId=TELECOM_NUMBER&amp;DONE_PAGE=${donePageEscaped}" text="${uiLabelMap.OpentapsPhoneNumber}"/>
-        <@action url="${editContactMechPage}?partyId=${partySummary.partyId}&amp;preContactMechTypeId=EMAIL_ADDRESS&amp;DONE_PAGE=${donePageEscaped}" text="${uiLabelMap.CommonEmail}"/>
-        <@action url="${editContactMechPage}?partyId=${partySummary.partyId}&amp;preContactMechTypeId=WEB_ADDRESS&amp;DONE_PAGE=${donePageEscaped}" text="${uiLabelMap.OpentapsWebUrl}"/>
+      <@action url="${editContactMechPage}?partyId=${partySummary.partyId}&amp;preContactMechTypeId=POSTAL_ADDRESS&amp;DONE_PAGE=${donePageEscaped}" text="${uiLabelMap.OpentapsAddress}"/>
+      <@action url="${editContactMechPage}?partyId=${partySummary.partyId}&amp;preContactMechTypeId=TELECOM_NUMBER&amp;DONE_PAGE=${donePageEscaped}" text="${uiLabelMap.OpentapsPhoneNumber}"/>
+      <@action url="${editContactMechPage}?partyId=${partySummary.partyId}&amp;preContactMechTypeId=EMAIL_ADDRESS&amp;DONE_PAGE=${donePageEscaped}" text="${uiLabelMap.CommonEmail}"/>
+      <@action url="${editContactMechPage}?partyId=${partySummary.partyId}&amp;preContactMechTypeId=WEB_ADDRESS&amp;DONE_PAGE=${donePageEscaped}" text="${uiLabelMap.OpentapsWebUrl}"/>
     </@selectAction>
-  </div>
   </#if>
-</div>
+</#assign>
 
-<div class="form">
+<@frameSection title=uiLabelMap.PartyContactInformation extra=extraOptions>
   <#if contactMeches?has_content>
 
     <table class="contactTable">
@@ -197,4 +193,4 @@
   <#else>
     <div class="tabletext">${uiLabelMap.PartyNoContactInformation}</div>
   </#if>
-</div>
+</@frameSection>
