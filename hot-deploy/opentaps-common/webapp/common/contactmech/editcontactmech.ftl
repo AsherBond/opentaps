@@ -270,12 +270,12 @@
        </#if>
     </#if>
     <a href="javascript:document.editcontactmechform.submit()" class="buttontext">${uiLabelMap.CommonSave}</a>
-    <a href="<@ofbizUrl>authview/${donePageFull}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonCancel}</a>
+    <a href="<@ofbizUrl>${donePageFull}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonCancel}</a>
   </div>
   </form>
   </div> <#-- div class="form" -->
 <#else>
   <div style="margin-left: 24%;">
-    <a href="<@ofbizUrl>authview/${donePageFull}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonGoBack}</a>
+    <a href="<@ofbizUrl>${donePageFull}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonGoBack}</a>
   </div>
 </#if>
