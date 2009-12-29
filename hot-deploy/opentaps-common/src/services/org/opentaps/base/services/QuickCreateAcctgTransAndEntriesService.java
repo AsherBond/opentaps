@@ -97,6 +97,7 @@ public class QuickCreateAcctgTransAndEntriesService extends ServiceWrapper {
         paymentApplicationId("paymentApplicationId"),
         paymentId("paymentId"),
         physicalInventoryId("physicalInventoryId"),
+        postedAmount("postedAmount"),
         postedDate("postedDate"),
         productId("productId"),
         receiptId("receiptId"),
@@ -190,6 +191,7 @@ public class QuickCreateAcctgTransAndEntriesService extends ServiceWrapper {
     private String inPaymentApplicationId;
     private String inPaymentId;
     private String inPhysicalInventoryId;
+    private BigDecimal inPostedAmount;
     private Timestamp inPostedDate;
     private String inProductId;
     private String inReceiptId;
@@ -540,6 +542,14 @@ public class QuickCreateAcctgTransAndEntriesService extends ServiceWrapper {
      */
     public String getInPhysicalInventoryId() {
         return this.inPhysicalInventoryId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInPostedAmount() {
+        return this.inPostedAmount;
     }
     /**
      * Auto generated value accessor.
@@ -1121,6 +1131,15 @@ public class QuickCreateAcctgTransAndEntriesService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inPostedAmount the inPostedAmount to set
+    */
+    public void setInPostedAmount(BigDecimal inPostedAmount) {
+        this.inParameters.add("postedAmount");
+        this.inPostedAmount = inPostedAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inPostedDate the inPostedDate to set
     */
     public void setInPostedDate(Timestamp inPostedDate) {
@@ -1425,6 +1444,7 @@ public class QuickCreateAcctgTransAndEntriesService extends ServiceWrapper {
         if (inParameters.contains("paymentApplicationId")) mapValue.put("paymentApplicationId", getInPaymentApplicationId());
         if (inParameters.contains("paymentId")) mapValue.put("paymentId", getInPaymentId());
         if (inParameters.contains("physicalInventoryId")) mapValue.put("physicalInventoryId", getInPhysicalInventoryId());
+        if (inParameters.contains("postedAmount")) mapValue.put("postedAmount", getInPostedAmount());
         if (inParameters.contains("postedDate")) mapValue.put("postedDate", getInPostedDate());
         if (inParameters.contains("productId")) mapValue.put("productId", getInProductId());
         if (inParameters.contains("receiptId")) mapValue.put("receiptId", getInReceiptId());
@@ -1505,6 +1525,7 @@ public class QuickCreateAcctgTransAndEntriesService extends ServiceWrapper {
         if (mapValue.containsKey("paymentApplicationId")) setInPaymentApplicationId((String) mapValue.get("paymentApplicationId"));
         if (mapValue.containsKey("paymentId")) setInPaymentId((String) mapValue.get("paymentId"));
         if (mapValue.containsKey("physicalInventoryId")) setInPhysicalInventoryId((String) mapValue.get("physicalInventoryId"));
+        if (mapValue.containsKey("postedAmount")) setInPostedAmount((BigDecimal) mapValue.get("postedAmount"));
         if (mapValue.containsKey("postedDate")) setInPostedDate((Timestamp) mapValue.get("postedDate"));
         if (mapValue.containsKey("productId")) setInProductId((String) mapValue.get("productId"));
         if (mapValue.containsKey("receiptId")) setInReceiptId((String) mapValue.get("receiptId"));

@@ -22,6 +22,7 @@ package org.opentaps.base.services;
 
 import org.opentaps.foundation.service.ServiceWrapper;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Locale;
@@ -94,6 +95,7 @@ public class CreateQuickAcctgTransService extends ServiceWrapper {
         paymentApplicationId("paymentApplicationId"),
         paymentId("paymentId"),
         physicalInventoryId("physicalInventoryId"),
+        postedAmount("postedAmount"),
         receiptId("receiptId"),
         roleTypeId("roleTypeId"),
         scheduledPostingDate("scheduledPostingDate"),
@@ -179,6 +181,7 @@ public class CreateQuickAcctgTransService extends ServiceWrapper {
     private String inPaymentApplicationId;
     private String inPaymentId;
     private String inPhysicalInventoryId;
+    private BigDecimal inPostedAmount;
     private String inReceiptId;
     private String inRoleTypeId;
     private Timestamp inScheduledPostingDate;
@@ -514,6 +517,14 @@ public class CreateQuickAcctgTransService extends ServiceWrapper {
      */
     public String getInPhysicalInventoryId() {
         return this.inPhysicalInventoryId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getInPostedAmount() {
+        return this.inPostedAmount;
     }
     /**
      * Auto generated value accessor.
@@ -1030,6 +1041,15 @@ public class CreateQuickAcctgTransService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inPostedAmount the inPostedAmount to set
+    */
+    public void setInPostedAmount(BigDecimal inPostedAmount) {
+        this.inParameters.add("postedAmount");
+        this.inPostedAmount = inPostedAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inReceiptId the inReceiptId to set
     */
     public void setInReceiptId(String inReceiptId) {
@@ -1270,6 +1290,7 @@ public class CreateQuickAcctgTransService extends ServiceWrapper {
         if (inParameters.contains("paymentApplicationId")) mapValue.put("paymentApplicationId", getInPaymentApplicationId());
         if (inParameters.contains("paymentId")) mapValue.put("paymentId", getInPaymentId());
         if (inParameters.contains("physicalInventoryId")) mapValue.put("physicalInventoryId", getInPhysicalInventoryId());
+        if (inParameters.contains("postedAmount")) mapValue.put("postedAmount", getInPostedAmount());
         if (inParameters.contains("receiptId")) mapValue.put("receiptId", getInReceiptId());
         if (inParameters.contains("roleTypeId")) mapValue.put("roleTypeId", getInRoleTypeId());
         if (inParameters.contains("scheduledPostingDate")) mapValue.put("scheduledPostingDate", getInScheduledPostingDate());
@@ -1342,6 +1363,7 @@ public class CreateQuickAcctgTransService extends ServiceWrapper {
         if (mapValue.containsKey("paymentApplicationId")) setInPaymentApplicationId((String) mapValue.get("paymentApplicationId"));
         if (mapValue.containsKey("paymentId")) setInPaymentId((String) mapValue.get("paymentId"));
         if (mapValue.containsKey("physicalInventoryId")) setInPhysicalInventoryId((String) mapValue.get("physicalInventoryId"));
+        if (mapValue.containsKey("postedAmount")) setInPostedAmount((BigDecimal) mapValue.get("postedAmount"));
         if (mapValue.containsKey("receiptId")) setInReceiptId((String) mapValue.get("receiptId"));
         if (mapValue.containsKey("roleTypeId")) setInRoleTypeId((String) mapValue.get("roleTypeId"));
         if (mapValue.containsKey("scheduledPostingDate")) setInScheduledPostingDate((Timestamp) mapValue.get("scheduledPostingDate"));
