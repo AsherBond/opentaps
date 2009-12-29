@@ -48,9 +48,12 @@
         ${status.statusDescription}
       </@inputSelectRow>
 
-      <@dateRangeInputRow title=uiLabelMap.AccountingInvoiceDate fromName="invoiceDateFrom" thruName="invoiceDateThru" />
-      <@dateRangeInputRow title=uiLabelMap.AccountingDueDate fromName="dueDateFrom" thruName="dueDateThru" />
-      <@dateRangeInputRow title=uiLabelMap.AccountingPaidDate fromName="paidDateFrom" thruName="paidDateThru" />
+      <@inputDateRangeRow title=uiLabelMap.AccountingInvoiceDate fromName="invoiceDateFrom" thruName="invoiceDateThru" />
+      <@inputDateRangeRow title=uiLabelMap.AccountingDueDate fromName="dueDateFrom" thruName="dueDateThru" />
+      <@inputDateRangeRow title=uiLabelMap.AccountingPaidDate fromName="paidDateFrom" thruName="paidDateThru" />
+
+      <@inputRangeRow title=uiLabelMap.CommonAmount fromName="amountFrom" thruName="amountThru" size=10/>
+      <@inputRangeRow title=uiLabelMap.OpentapsOpenAmount fromName="openAmountFrom" thruName="openAmountThru" size=10/>
 
       <@inputTextRow title=uiLabelMap.FinancialsReferenceNumber name="referenceNumber" size="30"/>
 

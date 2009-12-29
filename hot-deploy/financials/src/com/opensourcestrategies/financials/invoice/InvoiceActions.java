@@ -17,6 +17,7 @@
 
 package com.opensourcestrategies.financials.invoice;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
@@ -41,12 +42,6 @@ import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.party.party.PartyHelper;
-import org.opentaps.common.builder.EntityListBuilder;
-import org.opentaps.common.builder.PageBuilder;
-import org.opentaps.common.util.UtilAccountingTags;
-import org.opentaps.common.util.UtilCommon;
-import org.opentaps.common.util.UtilMessage;
-import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.base.entities.BillingAccountAndRole;
 import org.opentaps.base.entities.GlAccountOrganizationAndClass;
 import org.opentaps.base.entities.InvoiceAdjustmentType;
@@ -60,6 +55,12 @@ import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.base.entities.StatusItem;
 import org.opentaps.base.entities.TaxAuthorityAndDetail;
 import org.opentaps.base.entities.TermType;
+import org.opentaps.common.builder.EntityListBuilder;
+import org.opentaps.common.builder.PageBuilder;
+import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.billing.BillingDomainInterface;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
@@ -440,6 +441,10 @@ public final class InvoiceActions {
         String dueDateThru = ac.getParameter("dueDateThru");
         String paidDateFrom = ac.getParameter("paidDateFrom");
         String paidDateThru = ac.getParameter("paidDateThru");
+        String amountFrom = ac.getParameter("amountFrom");
+        String amountThru = ac.getParameter("amountThru");
+        String openAmountFrom = ac.getParameter("openAmountFrom");
+        String openAmountThru = ac.getParameter("openAmountThru");
         String referenceNumber = ac.getParameter("referenceNumber");
         String orderId = ac.getParameter("orderId");
 
@@ -483,6 +488,18 @@ public final class InvoiceActions {
         }
         if (paidDateThru != null) {
             search.add(EntityCondition.makeCondition(Invoice.Fields.paidDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(paidDateThru, dateFormat, timeZone, locale), timeZone, locale)));
+        }
+        if (amountFrom != null) {
+            search.add(EntityCondition.makeCondition(Invoice.Fields.invoiceTotal.name(), EntityOperator.GREATER_THAN_EQUAL_TO, new BigDecimal(amountFrom)));
+        }
+        if (amountThru != null) {
+            search.add(EntityCondition.makeCondition(Invoice.Fields.invoiceTotal.name(), EntityOperator.LESS_THAN_EQUAL_TO, new BigDecimal(amountThru)));
+        }
+        if (openAmountFrom != null) {
+            search.add(EntityCondition.makeCondition(Invoice.Fields.openAmount.name(), EntityOperator.GREATER_THAN_EQUAL_TO, new BigDecimal(openAmountFrom)));
+        }
+        if (openAmountThru != null) {
+            search.add(EntityCondition.makeCondition(Invoice.Fields.openAmount.name(), EntityOperator.LESS_THAN_EQUAL_TO, new BigDecimal(openAmountThru)));
         }
         if (referenceNumber != null) {
             search.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(Invoice.Fields.referenceNumber.name()), EntityOperator.LIKE, EntityFunction.UPPER("%" + referenceNumber + "%")));

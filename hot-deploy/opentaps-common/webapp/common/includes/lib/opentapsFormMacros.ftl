@@ -299,6 +299,28 @@ For more information, please see documentation/opentapsFormMacros.html
   </tr>
 </#macro>
 
+<#macro inputRangeRow title fromName thruName titleClass="tableheadtext" size=20 ignoreParameters=false>
+  <tr>
+    <@displayTitleCell title=title titleClass=titleClass/>
+    <@inputRangeCell fromName=fromName thruName=thruName size=size ignoreParameters=ignoreParameters/>
+  </tr>
+</#macro>
+
+<#macro inputRangeCell fromName thruName size=20 ignoreParameters=false>
+  <td><@inputRange fromName=fromName thruName=thruName size=size ignoreParameters=ignoreParameters/></td>
+</#macro>
+
+<#macro inputRange fromName thruName size=20 ignoreParameters=false>
+  <span class="tabletext">
+    ${uiLabelMap.CommonFrom} 
+    <@inputText name=fromName size=size ignoreParameters=ignoreParameters/>
+    &nbsp;&nbsp;
+    ${uiLabelMap.CommonThru} 
+    <@inputText name=thruName size=size ignoreParameters=ignoreParameters/>
+  </span>
+</#macro>
+
+
 <#macro inputCheckbox name value="Y" index=-1 onChange="" onClick="" id="" ignoreParameters=false errorField="" tabIndex="" default="">
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <input id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" type="checkbox" value="${value}" onChange="${onChange}" onClick="${onClick}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if value == getDefaultValue(name, default, index, ignoreParameters)>checked="checked"</#if>/>
@@ -889,18 +911,18 @@ For more information, please see documentation/opentapsFormMacros.html
 </#macro>
 
 
-<#macro dateRangeInputRow title fromName thruName titleClass="tableheadtext" ignoreParameters=false>
+<#macro inputDateRangeRow title fromName thruName titleClass="tableheadtext" ignoreParameters=false>
   <tr>
     <@displayTitleCell title=title titleClass=titleClass/>
-    <@dateRangeInputCell fromName=fromName thruName=thruName ignoreParameters=ignoreParameters/>
+    <@inputDateRangeCell fromName=fromName thruName=thruName ignoreParameters=ignoreParameters/>
   </tr>
 </#macro>
 
-<#macro dateRangeInputCell fromName thruName ignoreParameters=false>
-  <td><@dateRangeInput fromName=fromName thruName=thruName ignoreParameters=ignoreParameters/></td>
+<#macro inputDateRangeCell fromName thruName ignoreParameters=false>
+  <td><@inputDateRange fromName=fromName thruName=thruName ignoreParameters=ignoreParameters/></td>
 </#macro>
 
-<#macro dateRangeInput fromName thruName ignoreParameters=false>
+<#macro inputDateRange fromName thruName ignoreParameters=false>
   <span class="tabletext">
     ${uiLabelMap.CommonFrom} 
     <@inputDate name=fromName ignoreParameters=ignoreParameters/>
