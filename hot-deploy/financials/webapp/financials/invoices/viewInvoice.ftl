@@ -115,7 +115,7 @@ function notifyInvoiceItemsCount(n) {
 
 <#-- invoice details -->
 <@frameSection title="${title} ${uiLabelMap.OrderNbr}${invoice.invoiceId}" extra=stateChangeLinks?if_exists>
-  <table class="twoColumnForm" style="border:0">
+  <table class="twoColumnForm">
     <@displayRow title=whichPartyTitle text=partyField />
     <#if invoice.isPartnerInvoice()>
       <@displayRow title=uiLabelMap.AccountingToParty text=Static["org.ofbiz.party.party.PartyHelper"].getPartyName(delegator, invoice.partyId, false) />

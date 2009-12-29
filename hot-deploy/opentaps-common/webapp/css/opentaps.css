@@ -329,16 +329,16 @@ tr.rowWhite:hover, tr.rowLightGray:hover, tr.rowLightGreen:hover, tr.rowLightRed
 
 /* table styles */
 
-table.twoColumnForm { /* Use this for simple two-column forms where first column is for titles. */
+table.twoColumnForm, /* Use this for simple two-column forms where first column is for titles. */
+table.fourColumnForm /* Use this for simple four-column forms where first and third columns are for titles. */
+{
     width: 100%;
     border: 1px solid #AAAAAA;
     padding: 5px;
 }
-table.fourColumnForm { /* Use this for simple four-column forms where first and third columns are for titles. */
-    width: 100%;
-    border: 1px solid #AAAAAA;
-    padding: 5px;
-}
+
+.frameSectionBody table.twoColumnForm,
+.frameSectionBody table.fourColumnForm { border:none; }
 
 /* Use this style for lists of data with alternating row colors.  TODO: Replace crmsfaListTable and commonListTable. */
 table.listTable {
