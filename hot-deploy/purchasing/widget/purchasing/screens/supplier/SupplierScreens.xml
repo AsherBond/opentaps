@@ -79,15 +79,9 @@
                         </container>
 
                         <!-- Orders section -->
-                        <container style="subSectionBlock">
-                            <platform-specific><html><html-template location="component://purchasing/webapp/purchasing/supplier/submenus/viewSupplierOrders.ftl"/></html></platform-specific>
-                            <section>
-                                <condition><if-compare field="hasViewOrderPermission" operator="equals" value="true" type="Boolean"/></condition>
-                                <widgets>
-                                    <include-form name="ListOrders" location="component://purchasing/widget/purchasing/forms/supplier/SupplierForms.xml"/>
-                                </widgets>
-                            </section>
-                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://purchasing/webapp/purchasing/supplier/supplierOrders.ftl"/></html>
+                        </platform-specific>
                         
                         <!-- Agreements section -->
                         <container style="subSectionBlock">

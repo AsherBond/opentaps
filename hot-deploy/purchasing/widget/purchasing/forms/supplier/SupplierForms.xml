@@ -18,34 +18,6 @@
 
 <forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-form.xsd">
 
-    <form name="ListOrders" type="list"
-        title="Orders" default-title-style="tableheadtext" target=""
-        default-widget-style="tabletext" default-tooltip-style="tabletext"
-        default-table-style="listTable" header-row-style="listTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
-        paginate-target="${listSortTarget}" paginate-target-anchor="ListOrders" paginate-size-field="ordersSize" paginate-index-field="ordersIndex"
-        list-name="ordersListIt">
-        <field name="orderDate" title="${uiLabelMap.OrderOrderDate}">
-            <display description="${orderDate}"/>
-        </field>
-        <field name="orderId" title="${uiLabelMap.OpentapsOrderNameID}" widget-style="buttontext">
-            <hyperlink also-hidden="false" target-type="plain" description="${orderName} (${orderId})" target="orderview">
-                <parameter param-name="orderId" from-field="orderId"/>
-            </hyperlink>
-        </field>
-        <field name="partyId" title="${uiLabelMap.ProductSupplier}">
-            <display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, partyId, false)} (${partyId})"/>
-        </field>
-        <field name="statusId" title="${uiLabelMap.CommonStatus}">
-            <display-entity entity-name="StatusItem"/>
-        </field>
-        <field name="shipByDate" title="${uiLabelMap.OrderShipBeforeDate}">
-            <display description="${groovy:org.opentaps.common.order.UtilOrder.getEarliestShipByDate(delegator, orderId, timeZone, locale);}"/>
-        </field>
-        <field name="grandTotal" title="${uiLabelMap.OrderAmount}">
-            <display type="currency" currency="${currencyUomId}"/>
-        </field>
-    </form>
-
     <form name="createNoteForm" type="single" target="${createNoteFormTarget}" title=""
         default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
         <field name="note" title="${uiLabelMap.CommonNote}" widget-style="inputBox"><textarea/></field>

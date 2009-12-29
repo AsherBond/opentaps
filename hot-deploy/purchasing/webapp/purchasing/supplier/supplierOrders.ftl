@@ -23,4 +23,8 @@
   </#if>
 </#assign>
 
-<@frameSectionHeader title=uiLabelMap.PurchOpenOrders extra=extraOptions />
+<@frameSection title=uiLabelMap.PurchOpenOrders extra=extraOptions>
+  <#if hasViewOrderPermission?exists>
+    <@gwtWidget id="supplierOpenOrdersSubsection" partyId="${supplierPartyId}"/>
+  </#if>
+</@frameSection>
