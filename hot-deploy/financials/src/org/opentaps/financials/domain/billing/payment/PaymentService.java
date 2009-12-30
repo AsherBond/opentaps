@@ -76,21 +76,21 @@ public class PaymentService extends DomainService implements PaymentServiceInter
     }
 
     /** {@inheritDoc} */
-	public void recalcAllEmptyAmountsPayments() throws ServiceException {
-		try {
+    public void recalcAllEmptyAmountsPayments() throws ServiceException {
+        try {
             paymentRepository = getPaymentRepository();
             EntityCondition condition = EntityCondition.makeCondition(EntityOperator.OR,
-            		EntityCondition.makeCondition(Payment.Fields.openAmount.name(), EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition(Payment.Fields.openAmount.name(), EntityOperator.EQUALS, null),
                     EntityCondition.makeCondition(Payment.Fields.appliedAmount.name(), EntityOperator.EQUALS, null));
             List<Payment> payments = paymentRepository.findList(Payment.class, condition);
             for (Payment payment : payments) {
-            	RecalcPaymentAmountsService service = new RecalcPaymentAmountsService();
-	            service.setInPaymentId(payment.getPaymentId());
-	            runSync(service);
+                RecalcPaymentAmountsService service = new RecalcPaymentAmountsService();
+                service.setInPaymentId(payment.getPaymentId());
+                runSync(service);
             }
-            
-		} catch (Exception e) {
+
+        } catch (Exception e) {
             throw new ServiceException(e);
         }
-	}
+    }
 }

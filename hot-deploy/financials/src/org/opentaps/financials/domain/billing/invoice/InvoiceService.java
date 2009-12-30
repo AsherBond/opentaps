@@ -55,8 +55,6 @@ public class InvoiceService extends DomainService implements InvoiceServiceInter
     protected String invoiceAdjustmentId;
 
     private InvoiceRepositoryInterface invoiceRepository = null;
-    private LedgerSpecificationInterface ledgerSpecification = null;
-    private InvoiceLedgerServiceInterface invoiceLedgerService = null;
     private Invoice invoice = null;
 
     private static final String MODULE = InvoiceService.class.getName();
@@ -90,7 +88,7 @@ public class InvoiceService extends DomainService implements InvoiceServiceInter
 
     /** {@inheritDoc} */
     public void setComment(String comment) {
-       this.comment = comment;
+        this.comment = comment;
     }
 
     /** {@inheritDoc} */
@@ -248,30 +246,30 @@ public class InvoiceService extends DomainService implements InvoiceServiceInter
 
     /** {@inheritDoc} */
     public void recalcAllEmptyAmountsInvoices() throws ServiceException {
-    	try {
+        try {
             invoiceRepository = getInvoiceRepository();
             EntityCondition condition = EntityCondition.makeCondition(EntityOperator.OR,
                     EntityCondition.makeCondition(Invoice.Fields.invoiceTotal.name(), EntityOperator.EQUALS, null),
                     EntityCondition.makeCondition(Invoice.Fields.appliedAmount.name(), EntityOperator.EQUALS, null),
                     EntityCondition.makeCondition(Invoice.Fields.adjustedAmount.name(), EntityOperator.EQUALS, null),
-            		EntityCondition.makeCondition(Invoice.Fields.openAmount.name(), EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition(Invoice.Fields.openAmount.name(), EntityOperator.EQUALS, null),
                     EntityCondition.makeCondition(Invoice.Fields.pendingAppliedAmount.name(), EntityOperator.EQUALS, null),
                     EntityCondition.makeCondition(Invoice.Fields.pendingOpenAmount.name(), EntityOperator.EQUALS, null),
                     EntityCondition.makeCondition(Invoice.Fields.invoiceAdjustedTotal.name(), EntityOperator.EQUALS, null),
                     EntityCondition.makeCondition(Invoice.Fields.interestCharged.name(), EntityOperator.EQUALS, null)
-                    );
+            );
             List<Invoice> invoices = invoiceRepository.findList(Invoice.class, condition);
             for (Invoice invoice : invoices) {
-            	RecalcInvoiceAmountsService service = new RecalcInvoiceAmountsService();
-	            service.setInInvoiceId(invoice.getInvoiceId());
-	            runSync(service);
+                RecalcInvoiceAmountsService service = new RecalcInvoiceAmountsService();
+                service.setInInvoiceId(invoice.getInvoiceId());
+                runSync(service);
             }
         } catch (Exception e) {
             throw new ServiceException(e);
         }
     }
 
-    
+
     private InvoiceRepositoryInterface getInvoiceRepository() throws RepositoryException {
         return getDomainsDirectory().getBillingDomain().getInvoiceRepository();
     }
