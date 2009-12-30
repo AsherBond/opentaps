@@ -26,20 +26,26 @@ import org.opentaps.gwt.common.client.form.base.ScreenletFormPanel;
 import org.opentaps.gwt.common.client.suggest.AccountAutocomplete;
 import org.opentaps.gwt.crmsfa.client.cases.form.configuration.QuickNewCaseConfiguration;
 
+/**
+ * Form for quick creation of cases.
+ */
 public class QuickNewCaseForm extends ScreenletFormPanel {
 
     private TextField subjectInput;
     private AccountAutocomplete accountNameInput;
-    private static final Integer INPUT_LENGTH = 135;
 
     /**
      * Constructor.
      */
     public QuickNewCaseForm() {
-        this(INPUT_LENGTH, UtilUi.MSG.crmCreateCase());
+        this(UtilUi.MSG.crmCreateCase());
     }
 
-    public QuickNewCaseForm(Integer length, String title) {
+    /**
+     * Constructor specifying the title.
+     * @param title a <code>String</code> value
+     */
+    public QuickNewCaseForm(String title) {
 
         // label at the top
         super(Position.TOP, title);
@@ -48,7 +54,7 @@ public class QuickNewCaseForm extends ScreenletFormPanel {
         setUrl(QuickNewCaseConfiguration.URL);
 
         // subject is a required text input field
-        subjectInput = new TextField(UtilUi.MSG.opentapsSubject(), QuickNewCaseConfiguration.SUBJECT, length);
+        subjectInput = new TextField(UtilUi.MSG.opentapsSubject(), QuickNewCaseConfiguration.SUBJECT, getInputLength());
         addRequiredField(subjectInput);
 
         // this parameter is required for the crmsfa.createCase service
@@ -57,7 +63,7 @@ public class QuickNewCaseForm extends ScreenletFormPanel {
         addField(new Hidden(QuickNewCaseConfiguration.PRIORITY, QuickNewCaseConfiguration.DEFAULT_PRIORITY));
 
         // account is a required field and will be the account autocomplete
-        accountNameInput = new AccountAutocomplete(UtilUi.MSG.account(), QuickNewCaseConfiguration.ACCOUNT_PARTY_ID, length);
+        accountNameInput = new AccountAutocomplete(UtilUi.MSG.account(), QuickNewCaseConfiguration.ACCOUNT_PARTY_ID, getInputLength());
         addRequiredField(accountNameInput);
 
         // add the button with ui label

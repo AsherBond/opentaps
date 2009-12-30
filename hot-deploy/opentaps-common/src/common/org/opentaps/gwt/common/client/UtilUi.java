@@ -69,6 +69,8 @@ public abstract class UtilUi {
     public static final Integer LABEL_LENGTH = 150;
     /** Default input length used in the forms, in pixels. */
     public static final Integer INPUT_LENGTH = 220;
+    /** Default input length used in the forms in screenlet panels, in pixels. */
+    public static final Integer SCREENLET_INPUT_LENGTH = 120;
     /** Default width of the form containers, in pixels. */
     public static final Integer FORM_CONTAINER_WIDTH = 450;
     /** Needed to workaround panel bug. */

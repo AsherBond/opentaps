@@ -37,16 +37,19 @@ public class QuickNewOpportunityForm extends ScreenletFormPanel {
     private SalesOpportunityStageAutocomplete opportunityStageInput;
     private NumberField estimatedAmountInput;
     private DateField estimatedCloseDateInput;
-    private static final Integer INPUT_LENGTH = 135;
 
     /**
-     * Creates a new <code>QuickNewOpportunityForm</code> instance.
+     * Constructor.
      */
     public QuickNewOpportunityForm() {
-        this(INPUT_LENGTH, UtilUi.MSG.crmCreateOpportunity());
+        this(UtilUi.MSG.crmCreateOpportunity());
     }
 
-    public QuickNewOpportunityForm(Integer length, String title) {
+    /**
+     * Constructor specifying the title.
+     * @param title a <code>String</code> value
+     */
+    public QuickNewOpportunityForm(String title) {
 
         // label at the top
         super(Position.TOP, title);
@@ -55,25 +58,25 @@ public class QuickNewOpportunityForm extends ScreenletFormPanel {
         setUrl(QuickNewOpportunityConfiguration.URL);
 
         // accountOrLeadPartyId is a required field and will be the AccountOrLeadPartyAutocomplete
-        accountOrQualifiedLeadPartyIdInput = new AccountOrQualifiedLeadPartyAutocomplete(UtilUi.MSG.crmAccountOrLeadParty(), QuickNewOpportunityConfiguration.ACCOUNT_OR_LEAD_PARTY_ID, length);
+        accountOrQualifiedLeadPartyIdInput = new AccountOrQualifiedLeadPartyAutocomplete(UtilUi.MSG.crmAccountOrLeadParty(), QuickNewOpportunityConfiguration.ACCOUNT_OR_LEAD_PARTY_ID, getInputLength());
         addRequiredField(accountOrQualifiedLeadPartyIdInput);
 
         // opportunity name is a required text input field
-        opportunityNameInput = new TextField(UtilUi.MSG.crmOpportunityName(), QuickNewOpportunityConfiguration.OPPORTUNITY_NAME, length);
+        opportunityNameInput = new TextField(UtilUi.MSG.crmOpportunityName(), QuickNewOpportunityConfiguration.OPPORTUNITY_NAME, getInputLength());
         addRequiredField(opportunityNameInput);
 
         // opportunity stage is a required SalesOpportunityStageAutocomplete input field
-        opportunityStageInput = new SalesOpportunityStageAutocomplete(UtilUi.MSG.crmInitialStage(), QuickNewOpportunityConfiguration.OPPORTUNITY_STAGE_ID, length);
+        opportunityStageInput = new SalesOpportunityStageAutocomplete(UtilUi.MSG.crmInitialStage(), QuickNewOpportunityConfiguration.OPPORTUNITY_STAGE_ID, getInputLength());
         // set SOSTG_PROSPECT as default value
         opportunityStageInput.setValue("SOSTG_PROSPECT");
         addRequiredField(opportunityStageInput);
 
         // subject is a NumberField input field
-        estimatedAmountInput = new NumberField(UtilUi.MSG.crmOpportunityAmount(), QuickNewOpportunityConfiguration.ESTIMATED_AMOUNT, length);
+        estimatedAmountInput = new NumberField(UtilUi.MSG.crmOpportunityAmount(), QuickNewOpportunityConfiguration.ESTIMATED_AMOUNT, getInputLength());
         addField(estimatedAmountInput);
 
         // estimated closeDate is a required DateField input field
-        estimatedCloseDateInput = new DateField(UtilUi.MSG.crmEstimatedCloseDate(), QuickNewOpportunityConfiguration.ESTIMATED_CLOSE_DATE, length);
+        estimatedCloseDateInput = new DateField(UtilUi.MSG.crmEstimatedCloseDate(), QuickNewOpportunityConfiguration.ESTIMATED_CLOSE_DATE, getInputLength());
         addRequiredField(estimatedCloseDateInput);
 
         // add the button with ui label

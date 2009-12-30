@@ -33,6 +33,7 @@ public class ScreenletFormPanel extends BaseFormPanel {
     private static final String MODULE = ScreenletFormPanel.class.getName();
 
     private String lastSyncedState = null;
+    private Integer inputLength = UtilUi.SCREENLET_INPUT_LENGTH;
 
     /**
      * Constructor giving the <code>FormPanel</code> label position.
@@ -114,5 +115,21 @@ public class ScreenletFormPanel extends BaseFormPanel {
      */
     public String getPreferenceTypeId() {
         return null;
+    }
+
+    /**
+     * Sets the input length used in this widget.
+     * @param length the input length used in this widget
+     */
+    public void setInputLength(Integer length) {
+        inputLength = length;
+    }
+
+    /**
+     * Gets the input length used in this widget.
+     * @return the input length used in this widget
+     */
+    public Integer getInputLength() {
+        return inputLength;
     }
 }

@@ -38,16 +38,18 @@ public class QuickNewLeadForm extends ScreenletFormPanel {
     private TextField emailInput;
     private PhoneNumberField phoneInput;
 
-    private static final Integer INPUT_LENGTH = 135;
-
     /**
      * Constructor.
      */
     public QuickNewLeadForm() {
-        this(INPUT_LENGTH, UtilUi.MSG.createLead());
+        this(UtilUi.MSG.createLead());
     }
 
-    public QuickNewLeadForm(Integer length, String title) {
+    /**
+     * Constructor specifying the title.
+     * @param title a <code>String</code> value
+     */
+    public QuickNewLeadForm(String title) {
 
         super(Position.TOP, title);
 
@@ -56,19 +58,19 @@ public class QuickNewLeadForm extends ScreenletFormPanel {
         }
 
         setUrl(QuickNewLeadConfiguration.URL);     // this sets the action of the form
-        companyNameInput = new TextField(UtilUi.MSG.companyName(), QuickNewLeadConfiguration.IN_COMPANY_NAME, length);
+        companyNameInput = new TextField(UtilUi.MSG.companyName(), QuickNewLeadConfiguration.IN_COMPANY_NAME, getInputLength());
         addRequiredField(companyNameInput);
 
-        firstNameInput = new TextField(UtilUi.MSG.firstName(), QuickNewLeadConfiguration.IN_FIRST_NAME, length);
+        firstNameInput = new TextField(UtilUi.MSG.firstName(), QuickNewLeadConfiguration.IN_FIRST_NAME, getInputLength());
         addRequiredField(firstNameInput);
 
-        lastNameInput = new TextField(UtilUi.MSG.lastName(), QuickNewLeadConfiguration.IN_LAST_NAME, length);
+        lastNameInput = new TextField(UtilUi.MSG.lastName(), QuickNewLeadConfiguration.IN_LAST_NAME, getInputLength());
         addRequiredField(lastNameInput);
 
-        phoneInput = new PhoneNumberField(UtilUi.MSG.phoneNumber(), QuickNewLeadConfiguration.IN_PHONE_COUNTRY_CODE, QuickNewLeadConfiguration.IN_PHONE_AREA_CODE, QuickNewLeadConfiguration.IN_PHONE_NUMBER, length);
+        phoneInput = new PhoneNumberField(UtilUi.MSG.phoneNumber(), QuickNewLeadConfiguration.IN_PHONE_COUNTRY_CODE, QuickNewLeadConfiguration.IN_PHONE_AREA_CODE, QuickNewLeadConfiguration.IN_PHONE_NUMBER, getInputLength());
         addField(phoneInput);
 
-        emailInput = new TextField(UtilUi.MSG.emailAddress(), QuickNewLeadConfiguration.IN_EMAIL_ADDRESS, length);
+        emailInput = new TextField(UtilUi.MSG.emailAddress(), QuickNewLeadConfiguration.IN_EMAIL_ADDRESS, getInputLength());
         emailInput.setVtype(VType.EMAIL);
         addField(emailInput);
 

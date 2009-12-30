@@ -36,16 +36,18 @@ public class QuickNewAccountForm extends ScreenletFormPanel {
     private TextField emailInput;
     private PhoneNumberField phoneInput;
 
-    private static final Integer INPUT_LENGTH = 135;
-
     /**
      * Constructor.
      */
     public QuickNewAccountForm() {
-        this(INPUT_LENGTH, UtilUi.MSG.createAccount());
+        this(UtilUi.MSG.createAccount());
     }
 
-    public QuickNewAccountForm(Integer length, String title) {
+    /**
+     * Constructor specifying the title.
+     * @param title a <code>String</code> value
+     */
+    public QuickNewAccountForm(String title) {
 
         super(Position.TOP, title);
 
@@ -54,13 +56,13 @@ public class QuickNewAccountForm extends ScreenletFormPanel {
         }
 
         setUrl(QuickNewAccountConfiguration.URL);     // this sets the action of the form
-        accountNameInput = new TextField(UtilUi.MSG.accountName(), QuickNewAccountConfiguration.IN_ACCOUNT_NAME, length);
+        accountNameInput = new TextField(UtilUi.MSG.accountName(), QuickNewAccountConfiguration.IN_ACCOUNT_NAME, getInputLength());
         addRequiredField(accountNameInput);
 
-        phoneInput = new PhoneNumberField(UtilUi.MSG.phoneNumber(), QuickNewAccountConfiguration.IN_PHONE_COUNTRY_CODE, QuickNewAccountConfiguration.IN_PHONE_AREA_CODE, QuickNewAccountConfiguration.IN_PHONE_NUMBER, length);
+        phoneInput = new PhoneNumberField(UtilUi.MSG.phoneNumber(), QuickNewAccountConfiguration.IN_PHONE_COUNTRY_CODE, QuickNewAccountConfiguration.IN_PHONE_AREA_CODE, QuickNewAccountConfiguration.IN_PHONE_NUMBER, getInputLength());
         addField(phoneInput);
 
-        emailInput = new TextField(UtilUi.MSG.emailAddress(), QuickNewAccountConfiguration.IN_EMAIL_ADDRESS, length);
+        emailInput = new TextField(UtilUi.MSG.emailAddress(), QuickNewAccountConfiguration.IN_EMAIL_ADDRESS, getInputLength());
         emailInput.setVtype(VType.EMAIL);
         addField(emailInput);
 

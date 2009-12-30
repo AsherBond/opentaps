@@ -39,16 +39,18 @@ public class QuickNewContactForm extends ScreenletFormPanel {
     private AccountAutocomplete accountNameInput;
     private PhoneNumberField phoneInput;
 
-    private static final Integer INPUT_LENGTH = 135;
-
     /**
      * Constructor.
      */
     public QuickNewContactForm() {
-        this(INPUT_LENGTH, UtilUi.MSG.createContact());
+        this(UtilUi.MSG.createContact());
     }
 
-    public QuickNewContactForm(Integer length, String title) {
+    /**
+     * Constructor specifying the title.
+     * @param title a <code>String</code> value
+     */
+    public QuickNewContactForm(String title) {
 
         super(Position.TOP, title);
 
@@ -57,19 +59,19 @@ public class QuickNewContactForm extends ScreenletFormPanel {
         }
 
         setUrl(QuickNewContactConfiguration.URL);     // this sets the action of the form
-        firstNameInput = new TextField(UtilUi.MSG.firstName(), QuickNewContactConfiguration.IN_FIRST_NAME, length);
+        firstNameInput = new TextField(UtilUi.MSG.firstName(), QuickNewContactConfiguration.IN_FIRST_NAME, getInputLength());
         addRequiredField(firstNameInput);
 
-        lastNameInput = new TextField(UtilUi.MSG.lastName(), QuickNewContactConfiguration.IN_LAST_NAME, length);
+        lastNameInput = new TextField(UtilUi.MSG.lastName(), QuickNewContactConfiguration.IN_LAST_NAME, getInputLength());
         addRequiredField(lastNameInput);
 
-        accountNameInput = new AccountAutocomplete(UtilUi.MSG.account(), QuickNewContactConfiguration.IN_ACCOUNT_PARTY_ID, length);
+        accountNameInput = new AccountAutocomplete(UtilUi.MSG.account(), QuickNewContactConfiguration.IN_ACCOUNT_PARTY_ID, getInputLength());
         addField(accountNameInput);
 
-        phoneInput = new PhoneNumberField(UtilUi.MSG.phoneNumber(), QuickNewContactConfiguration.IN_PHONE_COUNTRY_CODE, QuickNewContactConfiguration.IN_PHONE_AREA_CODE, QuickNewContactConfiguration.IN_PHONE_NUMBER, length);
+        phoneInput = new PhoneNumberField(UtilUi.MSG.phoneNumber(), QuickNewContactConfiguration.IN_PHONE_COUNTRY_CODE, QuickNewContactConfiguration.IN_PHONE_AREA_CODE, QuickNewContactConfiguration.IN_PHONE_NUMBER, getInputLength());
         addField(phoneInput);
 
-        emailInput = new TextField(UtilUi.MSG.emailAddress(), QuickNewContactConfiguration.IN_EMAIL_ADDRESS, length);
+        emailInput = new TextField(UtilUi.MSG.emailAddress(), QuickNewContactConfiguration.IN_EMAIL_ADDRESS, getInputLength());
         emailInput.setVtype(VType.EMAIL);
         addField(emailInput);
 
