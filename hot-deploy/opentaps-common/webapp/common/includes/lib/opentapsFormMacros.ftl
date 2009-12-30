@@ -376,7 +376,7 @@ For more information, please see documentation/opentapsFormMacros.html
 
 <#macro inputSelectHash name hash required=true default="" index=-1 onChange="" ignoreParameters=false errorField="" tabIndex="">
  <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
- <select name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>>
+ <select name="${getIndexedName(name, index)}" class="selectBox" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>>
    <#if !required><option value=""></option></#if>
    <#assign keys = hash?keys />
    <#list keys as k>
@@ -397,7 +397,7 @@ For more information, please see documentation/opentapsFormMacros.html
  </tr>
 </#macro>
 
-<#macro inputSelect name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false class="inputBox">
+<#macro inputSelect name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false class="selectBox">
   <#if key == ""><#assign listKey = name><#else><#assign listKey = key></#if>
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
@@ -418,7 +418,7 @@ For more information, please see documentation/opentapsFormMacros.html
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
   <td>
-  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>disabled="disabled"</#if>>
+  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="selectBox" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>disabled="disabled"</#if>>
     <#if !required><option value="">${defaultOptionText}</option></#if>
     <#list list as option>
       <#if option.get(listKey) == defaultValue || listKey == defaultValue><#assign selected = "selected=\"selected\""><#else><#assign selected = ""></#if>
@@ -438,7 +438,7 @@ For more information, please see documentation/opentapsFormMacros.html
   <tr>
   <td class="titleCell"><span class="${titleClass}">${title}</span></td>
   <td>
-  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>disabled="disabled"</#if>>
+  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="selectBox" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>disabled="disabled"</#if>>
     <#if !required><option value="">${defaultOptionText}</option></#if>
     <#list list as option>
       <#if option.get(listKey) == defaultValue || listKey == defaultValue><#assign selected = "selected=\"selected\""><#else><#assign selected = ""></#if>
@@ -455,7 +455,7 @@ For more information, please see documentation/opentapsFormMacros.html
 <#macro inputMultiSelect title name list key="" displayField="" default=[] index=-1 defaultOptionText="" titleClass="tableheadtext" size=5 onChange="" id="" errorField="" tabIndex="">
   <#if key == ""><#assign listKey = name><#else><#assign listKey = key></#if>
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
-  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="inputBox" multiple="multiple" size="${size}" style="height:auto" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>>
+  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="selectBox" multiple="multiple" size="${size}" style="height:auto" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>>
     <#list list as option>
       <#if default?seq_contains(option.get(listKey))><#assign selected = "selected=\"selected\""><#else><#assign selected = ""></#if>
       <option ${selected} value="${option.get(listKey)}">
@@ -470,7 +470,7 @@ For more information, please see documentation/opentapsFormMacros.html
   <#if key == ""><#assign listKey = name><#else><#assign listKey = key></#if>
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <td>
-  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="inputBox" multiple="multiple" size="${size}" style="height:auto" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>>
+  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="selectBox" multiple="multiple" size="${size}" style="height:auto" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>>
     <#list list as option>
       <#if default?seq_contains(option.get(listKey))><#assign selected = "selected=\"selected\""><#else><#assign selected = ""></#if>
       <option ${selected} value="${option.get(listKey)}">
@@ -488,7 +488,7 @@ For more information, please see documentation/opentapsFormMacros.html
   <tr>
   <td class="titleCellTop"><span class="${titleClass}">${title}</span></td>
   <td>
-  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="inputBox" multiple="multiple" size="${size}" style="height:auto" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>>
+  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="selectBox" multiple="multiple" size="${size}" style="height:auto" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>>
     <#list list as option>
       <#if default?seq_contains(option.get(listKey))><#assign selected = "selected=\"selected\""><#else><#assign selected = ""></#if>
       <option ${selected} value="${option.get(listKey)}">
@@ -732,7 +732,7 @@ For more information, please see documentation/opentapsFormMacros.html
   </#if>
   <#assign currencies = list />
   <#if currencies?size == 0><#assign currencies = Static["org.opentaps.common.util.UtilCommon"].getCurrencies(delegator) /></#if>
-  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="inputBox">
+  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="selectBox">
     <#list currencies as option>
       <#if option.uomId == currencyDefault><#assign selected = "selected=\"selected\""><#else><#assign selected = ""></#if>
       <option ${selected} value="${option.uomId}">${option.abbreviation}<#if useDescription> - ${option.description}</#if></option>
@@ -753,7 +753,7 @@ For more information, please see documentation/opentapsFormMacros.html
 
 
 <#macro inputCurrency name list=[] currencyName="currencyUomId" default="" defaultCurrencyUomId="" disableCurrencySelect=false index=-1 ignoreParameters=false>
-  <input name="${getIndexedName(name, index)}" type="text" size="6" class="inputBox" value="${getDefaultValue(name, default, index, ignoreParameters)}"/>
+  <input name="${getIndexedName(name, index)}" type="text" size="6" class="selectBox" value="${getDefaultValue(name, default, index, ignoreParameters)}"/>
   <#if disableCurrencySelect && defaultCurrencyUomId?size != 0>
     <input type="hidden" name="${getIndexedName(currencyName, index)}" value="${defaultCurrencyUomId}"/>
     ${defaultCurrencyUomId}
@@ -816,7 +816,7 @@ For more information, please see documentation/opentapsFormMacros.html
 
 <#macro inputIndicator name required=true default="" index=-1 onChange="" ignoreParameters=false yesLabel=uiLabelMap.CommonYes noLabel=uiLabelMap.CommonNo>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
-  <select name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}">
+  <select name="${getIndexedName(name, index)}" class="selectBox" onChange="${onChange}">
     <#if !required><option value=""></option></#if>
     <option <#if defaultValue == "Y">selected="selected"</#if> value="Y">${yesLabel}</option>
     <option <#if defaultValue == "N">selected="selected"</#if> value="N">${noLabel}</option>
@@ -937,7 +937,7 @@ For more information, please see documentation/opentapsFormMacros.html
 <#macro inputEnumeration name enumTypeId index=-1 required=false default="" onChange="" ignoreParameters=false>
   <#assign enumerations = Static["org.opentaps.common.util.UtilCommon"].getEnumerations(enumTypeId, delegator)>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
-  <select name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}">
+  <select name="${getIndexedName(name, index)}" class="selectBox" onChange="${onChange}">
     <#if !required><option value=""></option></#if>
     <#list enumerations as enum>
       <option <#if defaultValue == enum.enumId>selected="selected"</#if> value="${enum.enumId}">${enum.get("description", locale)}</option>
@@ -982,18 +982,18 @@ For more information, please see documentation/opentapsFormMacros.html
       </#if>
       <a href="javascript:opentaps.toggleClass(document.getElementById('${name}-calendar-placeholder'), 'hidden');"><img id="${name}-button" src="/images/cal.gif" alt="View Calendar" title="View Calendar" border="0" height="16" width="16"/></a>
       &nbsp;
-      <select name="${name}_c_hour" class="inputBox">
+      <select name="${name}_c_hour" class="selectBox">
         <#list 1..12 as hour>
           <option <#if defaultTime.hour?default(12) == hour>selected="selected"</#if> value="${hour}">${hour}</option>
         </#list>
       </select>
       :
-      <select name="${name}_c_minutes" class="inputBox">
+      <select name="${name}_c_minutes" class="selectBox">
         <#list 0..59 as min>
           <option <#if defaultTime.minute?default(-1) == min>selected="selected"</#if> value="${min}">${min?string?left_pad(2,"0")}</option>
         </#list>
       </select>
-      <select name="${name}_c_ampm" class="inputBox">
+      <select name="${name}_c_ampm" class="selectBox">
         <option value="AM">AM</option>
         <option <#if defaultTime.ampm?default("") == "PM">selected="selected"</#if> value="PM">PM</option>
       </select>
@@ -1067,7 +1067,7 @@ For more information, please see documentation/opentapsFormMacros.html
 
 
 <#macro inputSelectTaxAuthority list defaultGeoId="" defaultPartyId="" required=false>
-    <select name="taxAuthGeoId" class="inputBox" onChange="opentaps.changeTaxParty(this.form.taxAuthGeoId, this.form.taxAuthPartyId)">
+    <select name="taxAuthGeoId" class="selectBox" onChange="opentaps.changeTaxParty(this.form.taxAuthGeoId, this.form.taxAuthPartyId)">
       <#if !required><option value=""></option></#if>
       <#list list as auth>
         <#if auth.taxAuthGeoId == defaultGeoId><#assign selected = "selected=\"selected\""><#else><#assign selected = ""></#if>
@@ -1075,7 +1075,7 @@ For more information, please see documentation/opentapsFormMacros.html
       </#list>
     </select>
 
-    <select name="taxAuthPartyId" class="inputBox">
+    <select name="taxAuthPartyId" class="selectBox">
       <#if !required><option value=""></option></#if>
       <#list list as auth>
         <#if auth.taxAuthPartyId == defaultPartyId><#assign selected = "selected=\"selected\""><#else><#assign selected = ""></#if>
@@ -1201,7 +1201,7 @@ For more information, please see documentation/opentapsFormMacros.html
 </#macro>
 
 <#macro selectAction name prompt=uiLabelMap.OpentapsDefaultActionPrompt>
-  <select id="${name}" name="${name}" class="inputBox" onchange="opentaps.changeLocation(null, '${name}');">
+  <select id="${name}" name="${name}" class="selectBox" onchange="opentaps.changeLocation(null, '${name}');">
     <option value="">${prompt}</option>
     <option value="">${uiLabelMap.OpentapsDefaultActionSeparator}</option>
     <#nested>
@@ -1224,7 +1224,7 @@ For more information, please see documentation/opentapsFormMacros.html
 </#macro>
 
 <#macro selectActionForm name prompt=uiLabelMap.OpentapsDefaultActionPrompt>
-  <select id="${name}" name="${name}" class="inputBox" onchange="opentaps.selectForm('${name}');">
+  <select id="${name}" name="${name}" class="selectBox" onchange="opentaps.selectForm('${name}');">
     <option value="">${prompt}</option>
     <option value="">${uiLabelMap.OpentapsDefaultActionSeparator}</option>
     <#nested>
