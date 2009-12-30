@@ -25,17 +25,20 @@ import java.util.List;
 import java.util.Map;
 
 import javolution.util.FastList;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.transaction.GenericTransactionException;
+import org.ofbiz.entity.transaction.TransactionUtil;
 import org.opentaps.common.util.ConvertMapToString;
 import org.opentaps.common.util.ICompositeValue;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.foundation.entity.EntityFieldInterface;
 import org.opentaps.foundation.entity.EntityInterface;
+import org.opentaps.foundation.entity.util.EntityListIterator;
+import org.opentaps.foundation.exception.FoundationException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 import org.opentaps.foundation.repository.ofbiz.Repository;
@@ -396,6 +399,35 @@ public abstract class EntityLookupService {
     }
 
     /**
+     * Extracts results from an entity list iterator according to the pagination settings.
+     * Sets the result total count according to the number of records in the list.
+     * Sets the results to be returned to the sub list of records which index in the list match the pagination parameters.
+     * For Excel exportation or if specifically said to, pagination is ignored and the whole data set is returned.
+     *
+     * This is the main method that service implementations must call.
+     *
+     * NOTE: This will close the iterator.
+     *
+     * @param <T> the entity class to return
+     * @param iterator an <code>EntityListIterator</code>
+     * @return the paginated list of entities
+     * @exception FoundationException if an error occurs
+     */
+    public <T extends EntityInterface> List<T> paginateResults(EntityListIterator<T> iterator) throws FoundationException {
+        results = new ArrayList<T>();
+        if (ignorePager()) {
+            setResults(iterator.getCompleteList());
+            setResultTotalCount(results.size());
+        } else {
+            // note +1 because the iterator starts at 1
+            setResults(iterator.getPartialList(pager.getPageStart() + 1, pager.getPageSize()));
+            setResultTotalCount(iterator.getResultsSizeAfterPartialList());
+        }
+        iterator.close();
+        return getResults();
+    }
+
+    /**
      * Extracts results from a list of entities according to the pagination settings.
      * Sets the result total count according to the number of records in the list.
      * Sets the results to be returned to the sub list of records which index in the list match the pagination parameters.
@@ -481,8 +513,17 @@ public abstract class EntityLookupService {
      */
     public <T extends EntityInterface> List<T> findList(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions) {
         try {
-            return paginateResults(getRepository().findList(entityName, conditions, getFields(), getOrderBy()));
+            boolean t = TransactionUtil.begin();
+            paginateResults(getRepository().findIterator(entityName, conditions, getFields(), getOrderBy()));
+            TransactionUtil.commit(t);
+            return getResults();
         } catch (RepositoryException e) {
+            storeException(e);
+            return null;
+        } catch (GenericTransactionException e) {
+            storeException(e);
+            return null;
+        } catch (FoundationException e) {
             storeException(e);
             return null;
         }
@@ -499,8 +540,17 @@ public abstract class EntityLookupService {
      */
     public <T extends EntityInterface> List<T> findList(Class<T> entityName, EntityCondition condition) {
         try {
-            return paginateResults(getRepository().findList(entityName, condition, getFields(), getOrderBy()));
+            boolean t = TransactionUtil.begin();
+            paginateResults(getRepository().findIterator(entityName, condition, getFields(), getOrderBy()));
+            TransactionUtil.commit(t);
+            return getResults();
         } catch (RepositoryException e) {
+            storeException(e);
+            return null;
+        } catch (GenericTransactionException e) {
+            storeException(e);
+            return null;
+        } catch (FoundationException e) {
             storeException(e);
             return null;
         }
