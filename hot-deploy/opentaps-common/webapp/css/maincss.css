@@ -886,6 +886,7 @@ background: #FFFFFF url("/opentaps_images/text-bg.gif") repeat-x scroll 0 0;
 font-size: 8pt;
 border: #999999 solid 1px;
 margin: 2px;
+padding:2px;
 }
 
 .selectBox {
