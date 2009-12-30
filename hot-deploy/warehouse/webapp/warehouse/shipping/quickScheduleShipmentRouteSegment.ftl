@@ -17,7 +17,7 @@
 
 <div class="spacer">&nbsp;</div>
 <div>
-    <form name="quickScheduleShipmentRouteSegment" action="<@ofbizUrl>quickScheduleShipmentRouteSegment</@ofbizUrl>">
+    <form name="quickScheduleShipmentRouteSegment" action="<@ofbizUrl>quickScheduleShipmentRouteSegment</@ofbizUrl>" method="post">
         <input type="hidden" name="clearAll" value="Y"/>
         <div class="tabletext">
             <span class="requiredFieldNormal">${uiLabelMap.ProductShipmentId}:</span>
