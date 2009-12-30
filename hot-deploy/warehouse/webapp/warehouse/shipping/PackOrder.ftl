@@ -168,7 +168,7 @@ under the License.
             </td>
             <td>&nbsp;&nbsp;</td>
             <td valign="top">
-              <div class="tableheadtext">${uiLabelMap.OrderShipping} ${uiLabelMap.ProductInstruction}:</div>
+              <div class="tableheadtext">${uiLabelMap.ProductShipping} ${uiLabelMap.ProductInstruction}:</div>
               <div class="tabletext">${orderItemShipGroup.shippingInstructions?default("(none)")}</div>
               <#if orderItemShipGroup.thirdPartyAccountNumber?has_content>
                 <div>&nbsp;</div>
