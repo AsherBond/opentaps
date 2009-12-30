@@ -928,7 +928,7 @@ ul.navHistory {
     float: left;
     border-top: 1px solid gray;
     border-bottom: 1px solid gray;
-    background-image:url(/opentaps_images/panels/top-bottom-bw.gif);
+    background: transparent url(/opentaps_images/panels/top-bottom-navbar.gif) repeat-x scroll 0 0;
 }
 
 ul.navHistory li {
@@ -946,7 +946,7 @@ ul.navHistory a {
 }
 ul.navHistory a:active,
 ul.navHistory a:hover {
-    background-image:url(/opentaps_images/panels/top-bottom.gif);
+    background: transparent url(/opentaps_images/panels/top-bottom-navbar.gif) repeat-x scroll 0 -25px;
 }
 
 span.navTitle {
