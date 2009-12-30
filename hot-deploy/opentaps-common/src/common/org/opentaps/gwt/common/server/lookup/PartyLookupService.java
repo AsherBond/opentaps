@@ -472,20 +472,20 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
             }
 
         }
-        
+
         /** Voip if enable formatter. */
         class VoipLinkEnableSortable extends ConvertMapToString implements ICompositeValue {
             /** {@inheritDoc} */
             @Override
             public String convert(Map<String, ?> value) {
-            	String voipEnabled = UtilProperties.getPropertyValue("voip.properties", "voip.enabled", "N");
-        		String phoneNumber = (String) value.get(PartyLookupConfiguration.INOUT_PHONE_NUMBER);
-            	if ("Y".equals(voipEnabled) && (phoneNumber != null && !"".equals(phoneNumber))) {
-            		return "Y";
-            	} else {
-            		return "N";
-            	}
-            	
+                String voipEnabled = UtilProperties.getPropertyValue("voip.properties", "voip.enabled", "N");
+                String phoneNumber = (String) value.get(PartyLookupConfiguration.INOUT_PHONE_NUMBER);
+                if ("Y".equals(voipEnabled) && (phoneNumber != null && !"".equals(phoneNumber))) {
+                    return "Y";
+                } else {
+                    return "N";
+                }
+
             }
 
             /** {@inheritDoc} */
@@ -495,7 +495,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                 return s;
             }
         }
-        
+
         // keep rules for calculated fields
         Map<String, ConvertMapToString> calcField = FastMap.<String, ConvertMapToString>newInstance();
         calcField.put(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER, new PhoneNumberSortable());
@@ -504,7 +504,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         calcField = FastMap.<String, ConvertMapToString>newInstance();
         calcField.put(PartyLookupConfiguration.INOUT_FRIENDLY_PARTY_NAME, new FriendlyPartyNameSortable());
         service.makeCalculatedField(calcField);
-        
+
         calcField = FastMap.<String, ConvertMapToString>newInstance();
         calcField.put(PartyLookupConfiguration.OUT_VOIP_ENABLED, new VoipLinkEnableSortable());
         service.makeCalculatedField(calcField);
@@ -573,7 +573,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
          */
         if (getProvider().parameterIsPresent(PartyLookupConfiguration.IN_PARTY_ID_TO)) {
             setActiveOnly(true);
-            return findPartiesBy(entity, 
+            return findPartiesBy(entity,
                     EntityCondition.makeCondition(
                             condition,
                             EntityCondition.makeCondition(PartyLookupConfiguration.IN_ROLE_TO, "ACCOUNT"),
@@ -647,7 +647,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                     storeException(e);
                     return null;
                 }
-                return findAllParties(entity, 
+                return findAllParties(entity,
                         EntityCondition.makeCondition(
                         condition,
                         EntityCondition.makeCondition(PartyLookupConfiguration.INOUT_PARTY_ID, EntityOperator.IN, contactIds)
@@ -766,8 +766,8 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
     public List<PartyFromByRelnAndContactInfoAndPartyClassification> suggestCustomers() {
         return suggestParties(CUSTOMER_CONDITIONS);
     }
-    
-    
+
+
     /**
      * AJAX event to suggest Supplier.
      * @param request a <code>HttpServletRequest</code> value
@@ -782,7 +782,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         service.suggestSuppliers();
         return json.makeSuggestResponse(PartyLookupConfiguration.INOUT_PARTY_ID, service);
     }
-    
+
     /**
      * Suggests a list of customers.
      * @return the list of <code>PartyRoleNameDetailSupplementalData</code>, or <code>null</code> if an error occurred
