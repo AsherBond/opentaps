@@ -19,7 +19,7 @@
 
 <form method="get" name="ApprovedTransferRequirements" action="<@ofbizUrl>ApprovedTransferRequirements</@ofbizUrl>">
   <div class="subSectionBlock">
-    <table class="listTable">
+    <table class="twoColumnForm">
       <@inputAutoCompleteProductRow title=uiLabelMap.ProductProduct name="productId" form="ApprovedTransferRequirements"/>
       <@inputSelectRow name="facilityId" title=uiLabelMap.CommonFrom list=facilities key="facilityId" displayField="facilityName" required=false />
       <@inputSelectRow name="facilityIdTo" title=uiLabelMap.CommonTo list=facilities key="facilityId" displayField="facilityName" required=false />

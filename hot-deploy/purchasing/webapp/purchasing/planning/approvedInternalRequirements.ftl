@@ -19,7 +19,7 @@
 
 <form method="get" name="ApprovedInternalRequirements" action="<@ofbizUrl>ApprovedInternalRequirements</@ofbizUrl>">
   <div class="subSectionBlock">
-    <table class="listTable">
+    <table class="twoColumnForm">
       <@inputAutoCompleteProductRow title=uiLabelMap.ProductProduct name="productId" form="ApprovedInternalRequirements"/>
       <@inputSelectRow name="facilityId" title=uiLabelMap.WarehouseProductionFacility list=facilities key="facilityId" displayField="facilityName" required=false />
       <@inputSubmitRow title=uiLabelMap.CommonFind />
