@@ -16,7 +16,7 @@
 -->
 
 <div class="messages">
-  <div class="errorMessageHeader">${uiLabelMap.CommonFollowingErrorOccurred}:</div>
+  <div class="errorMessageHeader">${uiLabelMap.CommonErrorMessage3}:</div>
   <ul class="errorList">
     <li class="errorMessage">${uiLabelMap.CrmErrorPartyNotFoundOrNotAccount}</li>
   </ul>
