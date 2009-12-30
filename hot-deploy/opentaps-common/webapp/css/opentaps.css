@@ -1328,8 +1328,15 @@ border-top:0 none !important;
 border-bottom:0 none !important;
 cursor:pointer;
 line-height:21px !important;
-padding:0px 5px !important;
+padding:0px 5px;
 }
+
+.loginButton,
+.smallSubmit
+{ 
+padding:0px 5px 3px;
+}
+
 
 a.buttontext,
 a.exportExcelButton,
