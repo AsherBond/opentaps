@@ -32,13 +32,14 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityFindOptions;
-import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.LocalDispatcher;
 import org.opentaps.foundation.entity.EntityException;
 import org.opentaps.foundation.entity.EntityFieldInterface;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
+import org.opentaps.foundation.entity.util.EntityListIterator;
+import org.opentaps.foundation.exception.FoundationException;
 import org.opentaps.foundation.infrastructure.DomainContextInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
@@ -749,6 +750,76 @@ public class Repository implements RepositoryInterface  {
         }
     }
 
+    /* findIterator */
+
+    // by Map
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions) throws RepositoryException {
+        return findIterator(entityName, conditions, null);
+    }
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> orderBy) throws RepositoryException {
+        return findIterator(entityName, getEntityBaseName(entityName), conditions, orderBy);
+    }
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> fields, List<String> orderBy) throws RepositoryException {
+        return findIterator(entityName, getEntityBaseName(entityName), conditions, fields, orderBy);
+    }
+
+    /**
+     * Find entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param conditions a Map of fields -> value that the entities must all match
+     * @return an <code>EntityListIterator</code> instance
+     * @throws RepositoryException if an error occurs
+     */
+    @SuppressWarnings("unused")
+    private <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, String genericValueName, Map<? extends EntityFieldInterface<? super T>, Object> conditions) throws RepositoryException {
+        return findIterator(entityName, genericValueName, conditions, null);
+    }
+
+    /**
+     * Find entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param conditions a Map of fields -> value that the entities must all match
+     * @param orderBy list of fields to order by
+     * @return an <code>EntityListIterator</code> instance
+     * @throws RepositoryException if an error occurs
+     */
+    private <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, String genericValueName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> orderBy) throws RepositoryException {
+        try {
+            return new EntityListIterator<T>(entityName, getDelegator().find(genericValueName, EntityCondition.makeCondition(toSimpleMap(conditions)), null, null, orderBy, PAGE_FIND_OPTIONS), this);
+        } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
+    /**
+     * Find entities by conditions. Only return a subset of the entity fields and filters out duplicates.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param conditions a Map of fields -> value that the entities must all match
+     * @param fields list of fields to select
+     * @param orderBy list of fields to order by
+     * @return an <code>EntityListIterator</code> instance
+     * @throws RepositoryException if an error occurs
+     */
+    private <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, String genericValueName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> fields, List<String> orderBy) throws RepositoryException {
+        try {
+            return new EntityListIterator<T>(entityName, getDelegator().find(genericValueName, EntityCondition.makeCondition(toSimpleMap(conditions)), null, new HashSet<String>(fields), orderBy, DISTINCT_FIND_OPTIONS), this);
+        } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
     /* findPage */
 
     // by Map
@@ -799,16 +870,18 @@ public class Repository implements RepositoryInterface  {
     private <T extends EntityInterface> List<T> findPage(Class<T> entityName, String genericValueName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
         try {
             boolean t = TransactionUtil.begin();
-            EntityListIterator it = getDelegator().find(genericValueName, EntityCondition.makeCondition(toSimpleMap(conditions)), null, null, orderBy, PAGE_FIND_OPTIONS);
-            List<GenericValue> gv = null;
+            EntityListIterator<T> it = findIterator(entityName, genericValueName, conditions, orderBy);
+            List<T> values = null;
             try {
-                gv = it.getPartialList(pageStart + 1, pageSize);
+                values = it.getPartialList(pageStart + 1, pageSize);
             } finally {
                 it.close();
             }
             TransactionUtil.commit(t);
-            return Repository.loadFromGeneric(entityName, gv, this);
+            return values;
         } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        } catch (FoundationException e) {
             throw new RepositoryException(e);
         }
     }
@@ -829,16 +902,18 @@ public class Repository implements RepositoryInterface  {
     private <T extends EntityInterface> List<T> findPage(Class<T> entityName, String genericValueName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> fields, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
         try {
             boolean t = TransactionUtil.begin();
-            EntityListIterator it = getDelegator().find(genericValueName, EntityCondition.makeCondition(toSimpleMap(conditions)), null, new HashSet<String>(fields), orderBy, DISTINCT_FIND_OPTIONS);
-            List<GenericValue> gv = null;
+            EntityListIterator<T> it = findIterator(entityName, genericValueName, conditions, fields, orderBy);
+            List<T> values = null;
             try {
-                gv = it.getPartialList(pageStart + 1, pageSize);
+                values = it.getPartialList(pageStart + 1, pageSize);
             } finally {
                 it.close();
             }
             TransactionUtil.commit(t);
-            return Repository.loadFromGeneric(entityName, gv, this);
+            return values;
         } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        } catch (FoundationException e) {
             throw new RepositoryException(e);
         }
     }
@@ -960,6 +1035,74 @@ public class Repository implements RepositoryInterface  {
         }
     }
 
+    // findIterator by List<EntityExpr>
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, List<? extends EntityCondition> conditions) throws RepositoryException {
+        return findIterator(entityName, conditions, null);
+    }
+
+    /**
+     * Find entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param conditions a List of EntityExpr the entities must all match
+     * @return an <code>EntityListIterator</code> instance
+     * @throws RepositoryException if an error occurs
+     */
+    @SuppressWarnings("unused")
+    private <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, String genericValueName, List<? extends EntityCondition> conditions) throws RepositoryException {
+        return findIterator(entityName, genericValueName, conditions, null);
+    }
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, List<? extends EntityCondition> conditions, List<String> orderBy) throws RepositoryException {
+        return findIterator(entityName, getEntityBaseName(entityName), conditions, orderBy);
+    }
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, List<? extends EntityCondition> conditions, List<String> fields, List<String> orderBy) throws RepositoryException {
+        return findIterator(entityName, getEntityBaseName(entityName), conditions, fields, orderBy);
+    }
+
+    /**
+     * Find entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param conditions a List of EntityExpr the entities must all match
+     * @param orderBy list of fields to order by
+     * @return an <code>EntityListIterator</code> instance
+     * @throws RepositoryException if an error occurs
+     */
+    private <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, String genericValueName, List<? extends EntityCondition> conditions, List<String> orderBy) throws RepositoryException {
+        try {
+            return new EntityListIterator<T>(entityName, getDelegator().find(genericValueName, EntityCondition.makeCondition(conditions), null, null, orderBy, PAGE_FIND_OPTIONS), this);
+        } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
+    /**
+     * Find entities by conditions. Only return a subset of the entity fields and filters out duplicates.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param conditions a List of EntityExpr the entities must all match
+     * @param fields the list of field to select
+     * @param orderBy list of fields to order by
+     * @return an <code>EntityListIterator</code> instance
+     * @throws RepositoryException if an error occurs
+     */
+    private <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, String genericValueName, List<? extends EntityCondition> conditions, List<String> fields, List<String> orderBy) throws RepositoryException {
+        try {
+            return new EntityListIterator<T>(entityName, getDelegator().find(genericValueName, EntityCondition.makeCondition(conditions), null, new HashSet<String>(fields), orderBy, DISTINCT_FIND_OPTIONS), this);
+        } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
     // findPage by List<EntityExpr>
 
     /** {@inheritDoc} */
@@ -1008,16 +1151,18 @@ public class Repository implements RepositoryInterface  {
     private <T extends EntityInterface> List<T> findPage(Class<T> entityName, String genericValueName, List<? extends EntityCondition> conditions, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
         try {
             boolean t = TransactionUtil.begin();
-            EntityListIterator it = getDelegator().find(genericValueName, EntityCondition.makeCondition(conditions), null, null, orderBy, PAGE_FIND_OPTIONS);
-            List<GenericValue> gv = null;
+            EntityListIterator<T> it = findIterator(entityName, genericValueName, conditions, orderBy);
+            List<T> values = null;
             try {
-                gv = it.getPartialList(pageStart + 1, pageSize);
+                values = it.getPartialList(pageStart + 1, pageSize);
             } finally {
                 it.close();
             }
             TransactionUtil.commit(t);
-            return Repository.loadFromGeneric(entityName, gv, this);
+            return values;
         } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        } catch (FoundationException e) {
             throw new RepositoryException(e);
         }
     }
@@ -1037,18 +1182,19 @@ public class Repository implements RepositoryInterface  {
      */
     private <T extends EntityInterface> List<T> findPage(Class<T> entityName, String genericValueName, List<? extends EntityCondition> conditions, List<String> fields, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
         try {
-            EntityConditionList<? extends EntityCondition> ecl = EntityCondition.makeCondition(conditions, EntityOperator.AND);
             boolean t = TransactionUtil.begin();
-            EntityListIterator it = getDelegator().find(genericValueName, ecl, null, new HashSet<String>(fields), orderBy, DISTINCT_FIND_OPTIONS);
-            List<GenericValue> gv = null;
+            EntityListIterator<T> it = findIterator(entityName, genericValueName, conditions, fields, orderBy);
+            List<T> values = null;
             try {
-                gv = it.getPartialList(pageStart + 1, pageSize);
+                values = it.getPartialList(pageStart + 1, pageSize);
             } finally {
                 it.close();
             }
             TransactionUtil.commit(t);
-            return Repository.loadFromGeneric(entityName, gv, this);
+            return values;
         } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        } catch (FoundationException e) {
             throw new RepositoryException(e);
         }
     }
@@ -1170,6 +1316,74 @@ public class Repository implements RepositoryInterface  {
         }
     }
 
+    // findIterator by EntityCondition
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, EntityCondition condition) throws RepositoryException {
+        return findIterator(entityName, condition, null);
+    }
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, EntityCondition condition, List<String> orderBy) throws RepositoryException {
+        return findIterator(entityName, getEntityBaseName(entityName), condition, orderBy);
+    }
+
+    /** {@inheritDoc} */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, EntityCondition condition, List<String> fields, List<String> orderBy) throws RepositoryException {
+        return findIterator(entityName, getEntityBaseName(entityName), condition, fields, orderBy);
+    }
+
+    /**
+     * Find entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param condition the EntityCondition used to find the entities
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    @SuppressWarnings("unused")
+    private <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, String genericValueName, EntityCondition condition) throws RepositoryException {
+        return findIterator(entityName, genericValueName, condition, null);
+    }
+
+    /**
+     * Find entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param condition the EntityCondition used to find the entities
+     * @param orderBy list of fields to order by
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    private <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, String genericValueName, EntityCondition condition, List<String> orderBy) throws RepositoryException {
+        try {
+            return new EntityListIterator<T>(entityName, getDelegator().find(genericValueName, condition, null, null, orderBy, PAGE_FIND_OPTIONS), this);
+        } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
+    /**
+     * Find entities by conditions. Only return a subset of the entity fields and filters out duplicates.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param genericValueName name of the entity in Ofbiz
+     * @param condition the EntityCondition used to find the entities
+     * @param fields the list of field to select
+     * @param orderBy list of fields to order by
+     * @return the partial list of entities found
+     * @throws RepositoryException if an error occurs
+     */
+    private <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, String genericValueName, EntityCondition condition, List<String> fields, List<String> orderBy) throws RepositoryException {
+        try {
+            return new EntityListIterator<T>(entityName, getDelegator().find(genericValueName, condition, null, new HashSet<String>(fields), orderBy, DISTINCT_FIND_OPTIONS), this);
+        } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
     // findPage by EntityCondition
 
     /** {@inheritDoc} */
@@ -1218,16 +1432,18 @@ public class Repository implements RepositoryInterface  {
     private <T extends EntityInterface> List<T> findPage(Class<T> entityName, String genericValueName, EntityCondition condition, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
         try {
             boolean t = TransactionUtil.begin();
-            EntityListIterator it = getDelegator().find(genericValueName, condition, null, null, orderBy, PAGE_FIND_OPTIONS);
-            List<GenericValue> gv = null;
+            EntityListIterator<T> it = findIterator(entityName, genericValueName, condition, orderBy);
+            List<T> values = null;
             try {
-                gv = it.getPartialList(pageStart + 1, pageSize);
+                values = it.getPartialList(pageStart + 1, pageSize);
             } finally {
                 it.close();
             }
             TransactionUtil.commit(t);
-            return Repository.loadFromGeneric(entityName, gv, this);
+            return values;
         } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        } catch (FoundationException e) {
             throw new RepositoryException(e);
         }
     }
@@ -1248,16 +1464,18 @@ public class Repository implements RepositoryInterface  {
     private <T extends EntityInterface> List<T> findPage(Class<T> entityName, String genericValueName, EntityCondition condition, List<String> fields, List<String> orderBy, int pageStart, int pageSize) throws RepositoryException {
         try {
             boolean t = TransactionUtil.begin();
-            EntityListIterator it = getDelegator().find(genericValueName, condition, null, new HashSet<String>(fields), orderBy, DISTINCT_FIND_OPTIONS);
-            List<GenericValue> gv = null;
+            EntityListIterator<T> it = findIterator(entityName, genericValueName, condition, fields, orderBy);
+            List<T> values = null;
             try {
-                gv = it.getPartialList(pageStart + 1, pageSize);
+                values = it.getPartialList(pageStart + 1, pageSize);
             } finally {
                 it.close();
             }
             TransactionUtil.commit(t);
-            return Repository.loadFromGeneric(entityName, gv, this);
+            return values;
         } catch (GenericEntityException e) {
+            throw new RepositoryException(e);
+        } catch (FoundationException e) {
             throw new RepositoryException(e);
         }
     }

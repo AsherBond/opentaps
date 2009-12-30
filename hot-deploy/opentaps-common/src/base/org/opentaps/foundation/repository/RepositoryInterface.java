@@ -24,6 +24,7 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.opentaps.foundation.entity.EntityFieldInterface;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
+import org.opentaps.foundation.entity.util.EntityListIterator;
 import org.opentaps.foundation.infrastructure.DomainContextInterface;
 
 /**
@@ -444,6 +445,41 @@ public interface RepositoryInterface extends DomainContextInterface {
      */
     public <T extends EntityInterface> List<T> findAllCache(Class<T> entityName, List<String> orderBy) throws RepositoryException;
 
+    /* findIterator by Map of Field: value */
+
+    /**
+     * Find a iterator of entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param conditions a Map of fields -> value that the entities must all match
+     * @return an <code>EntityListIterator</code> instance
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions) throws RepositoryException;
+
+    /**
+     * Find a iterator of entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param conditions a Map of fields -> value that the entities must all match
+     * @param orderBy list of fields to order by
+     * @return an <code>EntityListIterator</code> instance
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> orderBy) throws RepositoryException;
+
+    /**
+     * Find a iterator of entities by conditions. Only return a subset of the entity fields and filters out duplicates.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param conditions a Map of fields -> value that the entities must all match
+     * @param fields list of fields to select
+     * @param orderBy list of fields to order by
+     * @return an <code>EntityListIterator</code> instance
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> fields, List<String> orderBy) throws RepositoryException;
+
     /* findPage by Map of Field: value */
 
     /**
@@ -542,6 +578,74 @@ public interface RepositoryInterface extends DomainContextInterface {
      * @throws RepositoryException if an error occurs
      */
     public <T extends EntityInterface> List<T> findListCache(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> orderBy) throws RepositoryException;
+
+    /* findIterator by list of Conditions */
+
+    /**
+     * Find a iterator of entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param conditions a List of EntityExpr the entities must all match
+     * @return an <code>EntityListIterator</code> instance
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, List<? extends EntityCondition> conditions) throws RepositoryException;
+
+    /**
+     * Find a iterator of entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param conditions a List of EntityExpr the entities must all match
+     * @param orderBy list of fields to order by
+     * @return an <code>EntityListIterator</code> instance
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, List<? extends EntityCondition> conditions, List<String> orderBy) throws RepositoryException;
+
+    /**
+     * Find a iterator of entities by conditions. Only return a subset of the entity fields and filters out duplicates.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param conditions a List of EntityExpr the entities must all match
+     * @param fields list of fields to select
+     * @param orderBy list of fields to order by
+     * @return an <code>EntityListIterator</code> instance
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, List<? extends EntityCondition> conditions, List<String> fields, List<String> orderBy) throws RepositoryException;
+
+    /**
+     * Find a iterator of entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param condition the EntityCondition used to find the entities
+     * @return an <code>EntityListIterator</code> instance
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, EntityCondition condition) throws RepositoryException;
+
+    /**
+     * Find a iterator of entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param condition the EntityCondition used to find the entities
+     * @param orderBy list of fields to order by
+     * @return an <code>EntityListIterator</code> instance
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, EntityCondition condition, List<String> orderBy) throws RepositoryException;
+
+    /**
+     * Find a iterator of entities by conditions. Only return a subset of the entity fields and filters out duplicates.
+     * @param <T> the entity class
+     * @param entityName class to find
+     * @param condition the EntityCondition used to find the entities
+     * @param fields the list of field to select
+     * @param orderBy list of fields to order by
+     * @return an <code>EntityListIterator</code> instance
+     * @throws RepositoryException if an error occurs
+     */
+    public <T extends EntityInterface> EntityListIterator<T> findIterator(Class<T> entityName, EntityCondition condition, List<String> fields, List<String> orderBy) throws RepositoryException;
 
     /* findPage by list of Conditions */
 
