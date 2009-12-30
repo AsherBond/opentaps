@@ -94,6 +94,21 @@ public class HtmlScreenRenderer extends HtmlWidgetRenderer implements ScreenStri
         renderEndingBoundaryComment(writer, section.isMainSection?"Screen":"Section Widget", section);
     }
 
+    public void renderFrameContainerHeader(Appendable writer, Map<String, Object> context, ModelScreenWidget.FrameContainerHeader container) throws IOException {
+        String containerId = container.getId(context);
+        String title = container.getTitle(context);
+        writer.append("<div class=\"frameSectionHeader\"");
+
+        if (UtilValidate.isNotEmpty(containerId)) {
+            writer.append(" id=\"");
+            writer.append(containerId);
+            writer.append("\"");
+        }
+        writer.append(">");
+
+        writer.append("<div class=\"x-panel-tl\"><div class=\"x-panel-tr\"><div class=\"x-panel-tc\"><div class=\"x-panel-header\" style=\"float:left\">").append(title).append("</div></div></div></div></div>");
+        appendWhitespace(writer);
+    }
     public void renderFrameContainerBegin(Appendable writer, Map<String, Object> context, ModelScreenWidget.FrameContainer container) throws IOException {
         String containerId = container.getId(context);
         String autoUpdateTarget = container.getAutoUpdateTargetExdr(context);
@@ -115,14 +130,14 @@ public class HtmlScreenRenderer extends HtmlWidgetRenderer implements ScreenStri
             writer.append("', '" + container.getAutoUpdateInterval() + "');</script>");
             appendWhitespace(writer);
         }
-        writer.append("<div class=\"frameSection\"><div class=\"frameSectionHeader\"");
+        writer.append("<div class=\"frameSection\"");
 
         if (UtilValidate.isNotEmpty(containerId)) {
             writer.append(" id=\"");
             writer.append(containerId);
             writer.append("\"");
         }
-        writer.append(">");
+        writer.append("><div class=\"frameSectionHeader\">");
 
         writer.append("<div class=\"x-panel-tl\"><div class=\"x-panel-tr\"><div class=\"x-panel-tc\"><div class=\"x-panel-header\" style=\"float:left\">").append(title).append("</div></div></div></div></div><div class=\"frameSectionBody\">");
         appendWhitespace(writer);

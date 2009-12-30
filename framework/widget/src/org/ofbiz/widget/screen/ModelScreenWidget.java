@@ -88,6 +88,8 @@ public abstract class ModelScreenWidget extends ModelWidget implements Serializa
         for (Element subElement: subElementList) {
             if ("section".equals(subElement.getNodeName())) {
                 subWidgets.add(new Section(modelScreen, subElement));
+            } else if ("frame-container-header".equals(subElement.getNodeName())) {
+                subWidgets.add(new FrameContainerHeader(modelScreen, subElement));
             } else if ("frame-container".equals(subElement.getNodeName())) {
                 subWidgets.add(new FrameContainer(modelScreen, subElement));
             } else if ("container".equals(subElement.getNodeName())) {
@@ -352,6 +354,27 @@ public abstract class ModelScreenWidget extends ModelWidget implements Serializa
 
         public String rawString() {
             return "<frame-container id=\"" + this.idExdr.getOriginal() + "\" style=\"" + this.styleExdr.getOriginal() + "\" auto-update-target=\"" + this.autoUpdateTargetExdr.getOriginal() + "\" title=\"" + this.titleExdr.getOriginal() + "\">";
+        }
+    }
+
+    public static class FrameContainerHeader extends FrameContainer {
+
+        public FrameContainerHeader(ModelScreen modelScreen, Element containerElement) {
+            super(modelScreen, containerElement);
+        }
+
+        public void renderWidgetString(Appendable writer, Map<String, Object> context, ScreenStringRenderer screenStringRenderer) throws GeneralException, IOException {
+            try {
+                screenStringRenderer.renderFrameContainerHeader(writer, context, this);
+            } catch (IOException e) {
+                String errMsg = "Error rendering frame container header in screen named [" + this.modelScreen.getName() + "]: " + e.toString();
+                Debug.logError(e, errMsg, module);
+                throw new RuntimeException(errMsg);
+            }
+        }
+
+        public String rawString() {
+            return "<frame-container-header id=\"" + this.idExdr.getOriginal() + "\" style=\"" + this.styleExdr.getOriginal() + "\" auto-update-target=\"" + this.autoUpdateTargetExdr.getOriginal() + "\" title=\"" + this.titleExdr.getOriginal() + "\">";
         }
     }
 

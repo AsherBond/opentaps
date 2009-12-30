@@ -59,6 +59,8 @@ public class TextScreenRenderer implements ScreenStringRenderer {
         appendWhitespace(writer);
     }
 
+    public void renderFrameContainerHeader(Appendable writer, Map<String, Object> context, ModelScreenWidget.FrameContainerHeader container) throws IOException {
+    }
     public void renderFrameContainerBegin(Appendable writer, Map<String, Object> context, ModelScreenWidget.FrameContainer container) throws IOException {
         renderContainerBegin(writer, context, container);
     }

@@ -763,6 +763,12 @@ under the License.
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="frame-container-header" substitutionGroup="AllWidgets">
+        <xs:complexType>
+            <xs:attributeGroup ref="attlist.frame-container"/>
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="frame-container" substitutionGroup="AllWidgets">
         <xs:complexType>
             <xs:sequence>
