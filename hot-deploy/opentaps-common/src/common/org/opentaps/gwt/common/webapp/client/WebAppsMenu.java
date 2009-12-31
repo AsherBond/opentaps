@@ -86,7 +86,6 @@ public class WebAppsMenu extends BaseEntry {
 
        // More menu - vertical=true
         MenuBar menuMore = new MenuBar(true);
-        menuMore.addStyleName("moreMenu");
         
         for (int i=0; i < records.length; i++) {
             Record record = records[i];
@@ -122,7 +121,7 @@ public class WebAppsMenu extends BaseEntry {
         }
         // add "more" second level menu for contain more link 
         if (records.length > DISPLAY_MENU_ITEMS + 1) {
-            menuTop.addItem("<u>more</u>", true, menuMore);
+            menuTop.addItem("<span class=\"moreMenu\">more</span>", true, menuMore);
         }
         // add menu to the root panel.
         RootPanel.get(WEBAPPS_MENU_ID).add(menuTop);

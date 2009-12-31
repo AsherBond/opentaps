@@ -129,11 +129,14 @@
     text-decoration:underline !important;
     font-weight:normal !important;
     font-family:Verdana,Arial,Helvetica,sans-serif !important;
+    color:blue !important;
 }
 
 .moreMenu {
     text-decoration:underline !important;
+    font-weight:normal !important;
     font-family:Verdana,Arial,Helvetica,sans-serif !important;
+    color:blue !important;
 }
 
 .topMenu .gwt-MenuBar-horizontal {
