@@ -217,3 +217,10 @@ if (UtilValidate.isNotEmpty(mergeFormId)) {
     context.put("templateText", mergedOutput.get("mergeFormText"));
     if (UtilValidate.isEmpty(parameters.get("subject"))) parameters.put("subject", mergedOutput.get("subject"));
 }
+
+// if a internalPartyId or partyId is passed in, put it back in the context
+partyId = parameters.get("internalPartyId");
+if (UtilValidate.isEmpty(partyId)) {
+    partyId = parameters.get("partyId");
+}
+context.put("partyId", partyId);

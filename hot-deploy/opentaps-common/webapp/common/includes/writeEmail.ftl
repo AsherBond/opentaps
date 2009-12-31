@@ -70,7 +70,7 @@
 <div class="form">
 <form name="writeEmailForm" id="writeEmailForm" method="POST" action="<@ofbizUrl>${sendTarget}</@ofbizUrl>" ${marketingCampaigns?exists?string("","enctype=\"multipart/form-data\"")}>
   <@inputHidden name="contactMechIdTo" value=parameters.contactMechIdTo?if_exists />
-  <@inputHidden name="partyId" value=parameters.internalPartyId?if_exists /> <#-- for passing to viewAccount/viewContact/viewLead when form finishes -->
+  <@inputHidden name="partyId" value=partyId?if_exists /> <#-- for passing to viewAccount/viewContact/viewLead when form finishes -->
   <@inputHidden name="donePage" value=parameters.donePage?if_exists />
   <@inputHidden name="contentMimeTypeId" value=parameters.contentMimeTypeId?default("text/html") />
   <@inputHidden name="datetimeStarted" value=getLocalizedDate(Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp()) /> <#-- for now we hardcode the start time -->

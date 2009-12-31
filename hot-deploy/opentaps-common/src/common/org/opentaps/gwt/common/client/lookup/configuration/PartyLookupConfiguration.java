@@ -80,7 +80,6 @@ public abstract class PartyLookupConfiguration {
     public static final String IN_RELATIONSHIP_TYPE_ID = "partyRelationshipTypeId";
     public static final String IN_SALES_OPPORTUNITY_ID = "salesOpportunityId";
     public static final String OUT_VOIP_ENABLED = "voipEnabled";
-    public static final String OUT_ROLE_TYPE_ID = "roleTypeId";
 
     public static final List<String> LIST_OUT_FIELDS = Arrays.asList(
         INOUT_PARTY_ID,
@@ -100,7 +99,6 @@ public abstract class PartyLookupConfiguration {
         INOUT_ATTENTION_NAME,
         OUT_ADDRESS_2,
         OUT_POSTAL_CODE_EXT,
-        OUT_ROLE_TYPE_ID,
         OUT_EMAIL,
         OUT_EMAIL_CONTACT_MECH_ID,
         OUT_EMAIL_ID,

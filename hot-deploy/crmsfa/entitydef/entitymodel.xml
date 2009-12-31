@@ -149,7 +149,6 @@
         </alias-all>
         <alias-all entity-alias="PC"/>
         <alias-all entity-alias="PCG"/>
-        <alias entity-alias="PR" name="roleTypeId" field="roleTypeIdFrom"/>
         <alias entity-alias="PR" name="relationshipStatusId" field="statusId"/>
         <alias entity-alias="PCM" name="partyContactMechFromDate" field="fromDate"/> 
         <alias entity-alias="PCM" name="partyContactMechThruDate" field="thruDate"/> 

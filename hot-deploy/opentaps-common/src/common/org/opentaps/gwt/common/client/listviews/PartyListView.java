@@ -136,14 +136,12 @@ public abstract class PartyListView extends EntityListView {
                 String email = record.getAsString(PartyLookupConfiguration.OUT_EMAIL);
                 String contactMechIdTo = record.getAsString(PartyLookupConfiguration.OUT_EMAIL_CONTACT_MECH_ID);
                 String internalPartyId = record.getAsString(PartyLookupConfiguration.INOUT_PARTY_ID);
-                String roleTypeId = record.getAsString(PartyLookupConfiguration.OUT_ROLE_TYPE_ID);
+        		int actionPos = entityViewUrl.lastIndexOf("/");
+        		String viewAction = entityViewUrl.substring(actionPos + 1, entityViewUrl.indexOf("?"));
                 if (contactMechIdTo == null || "".equals(contactMechIdTo)) {
                     return email;
                 } else {
-                    UtilUi.logInfo("roleTypeId : " + roleTypeId, "init", "render");
-                    String donePage = "view" + roleTypeId.substring(0, 1).toUpperCase() + roleTypeId.substring(1).toLowerCase();
-                    UtilUi.logInfo("roleTypeId : " + roleTypeId, "init", "render");
-                    String url = "<a class=\"linktext\" href='writeEmail?contactMechIdTo=" + contactMechIdTo + "&internalPartyId=" + internalPartyId + "&donePage=" + donePage + "'>" + email + "</a>";
+                    String url = "<a class=\"linktext\" href='writeEmail?contactMechIdTo=" + contactMechIdTo + "&internalPartyId=" + internalPartyId + "&donePage=" + viewAction + "'>" + email + "</a>";
                     return Format.format(url, internalPartyId);                    
                 }
             }
@@ -164,8 +162,6 @@ public abstract class PartyListView extends EntityListView {
         makeColumn("", new StringFieldDef(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER)).setHidden(true);
         getColumn().setFixed(true);
         makeColumn("", new StringFieldDef(PartyLookupConfiguration.OUT_EMAIL)).setHidden(true);
-        getColumn().setFixed(true);
-        makeColumn("", new StringFieldDef(PartyLookupConfiguration.OUT_ROLE_TYPE_ID)).setHidden(true);
         getColumn().setFixed(true);
 
         configure(entityFindUrl, PartyLookupConfiguration.INOUT_PARTY_ID, SortDir.ASC);
