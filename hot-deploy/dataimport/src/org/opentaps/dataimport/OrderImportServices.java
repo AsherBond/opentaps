@@ -302,7 +302,13 @@ public class OrderImportServices {
         orderHeaderInput.put("orderTypeId", orderTypeId);
         orderHeaderInput.put("orderName", orderId);
         orderHeaderInput.put("externalId", orderId);
-        orderHeaderInput.put("salesChannelEnumId", "UNKNWN_SALES_CHANNEL");
+        String salesChannelEnumId = (String)externalOrderHeader.getString("salesChannelEnumId");
+        if(UtilValidate.isNotEmpty(salesChannelEnumId)){
+            orderHeaderInput.put("salesChannelEnumId", salesChannelEnumId); //todo we should validate the enum code against enumTypeId="ORDER_SALES_CHANNEL"
+        }else{
+            orderHeaderInput.put("salesChannelEnumId", "UNKNWN_SALES_CHANNEL");
+        }
+
         orderHeaderInput.put("orderDate", orderDate);
         orderHeaderInput.put("entryDate", UtilDateTime.nowTimestamp());
         orderHeaderInput.put("statusId", orderStatusId);
