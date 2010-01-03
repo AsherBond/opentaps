@@ -52,6 +52,7 @@
         <field name="adjustmentsTotal" type="currency-amount"></field>
         <field name="grandTotal" type="currency-amount"></field>
         <field name="comments" type="comment"></field>
+        <field name="productStoreId" type="id" />
         <field name="salesChannelEnumId" type="id"><description>The salesChannelEnumId maps to a specific the order type: store 1,pos, web etc</description></field>
         <field name="productStoreShipMethId" type="id"><description>The ProductStoreShipmentMeth corresponding to the shipment method the customer selected.</description></field>
         <field name="orderClosed" type="indicator"><description>If set to N or n, the order will be created in the Approved state.</description></field>

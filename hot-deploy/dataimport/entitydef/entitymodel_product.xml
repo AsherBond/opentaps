@@ -45,7 +45,7 @@
         <field name="brandName" type="name" />
         <field name="comments" type="comment" />
         <field name="productName" type="name" />
-        <field name="description" type="description"/>
+        <field name="description" type="very-long"/>
         <field name="longDescription" type="very-long" />
         <field name="weight" type="floating-point"/>
         <field name="weightUomId" type="id"/>
@@ -94,6 +94,7 @@
         <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
         <field name="processedTimestamp" type="date-time"/>
         <prim-key field="itemId"/>
+
         <relation type="one-nofk" rel-entity-name="Product">
           <key-map field-name="productId"/>
         </relation>

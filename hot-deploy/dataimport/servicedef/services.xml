@@ -112,7 +112,8 @@
                 field or calculated from orderItems and orderAdjustments
         </description>
         <attribute type="String" mode="IN" name="companyPartyId" optional="false"/>
-        <attribute type="String" mode="IN" name="productStoreId" optional="false"/>
+        <attribute type="Boolean" mode="IN" name="readProductStoreFromTable" optional="false"/>
+        <attribute type="String" mode="IN" name="productStoreId" optional="true"/>
         <attribute type="String" mode="IN" name="prodCatalogId" optional="true"/>
         <attribute type="String" mode="IN" name="purchaseOrderShipToContactMechId" optional="true"/>
         <attribute type="Boolean" mode="IN" name="importEmptyOrders" optional="false"/>

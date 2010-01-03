@@ -49,8 +49,8 @@ import org.opentaps.common.party.PartyContactHelper;
 /**
  * Import orders via intermediate DataImportOrderHeader and DataImportOrderItem entities.
  *
- * @author     <a href="mailto:cliberty@opensourcestrategies.com">Chris Liberty</a>
- * @version    $Rev$
+ * @author <a href="mailto:cliberty@opensourcestrategies.com">Chris Liberty</a>
+ * @version $Rev$
  */
 public class OrderImportServices {
 
@@ -65,7 +65,7 @@ public class OrderImportServices {
     /**
      * Describe <code>importOrders</code> method here.
      *
-     * @param dctx a <code>DispatchContext</code> value
+     * @param dctx    a <code>DispatchContext</code> value
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
@@ -76,6 +76,7 @@ public class OrderImportServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String companyPartyId = (String) context.get("companyPartyId");
+        Boolean readProductStoreFromTable = (Boolean) context.get("readProductStoreFromTable");
         String productStoreId = (String) context.get("productStoreId");
         String prodCatalogId = (String) context.get("prodCatalogId");
         // AG24012008: purchaseOrderShipToContactMechId is needed to get the MrpOrderInfo.shipGroupContactMechId used by the MRP run
@@ -91,15 +92,18 @@ public class OrderImportServices {
 
         // main try/catch block that traps errors related to obtaining data from delegator
         try {
+            GenericValue productStore = null;
+            if (!readProductStoreFromTable) {
+                // if We take the product store form service parameters we make sure the productStore exists
+                productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
 
-            // Make sure the productStore exists
-            GenericValue productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
-
-            if (UtilValidate.isEmpty(productStore)) {
-                String errMsg = "Error in importOrders service: product store [" + productStoreId + "] does not exist";
-                Debug.logError(errMsg, MODULE);
-                return ServiceUtil.returnError(errMsg);
+                if (UtilValidate.isEmpty(productStore)) {
+                    String errMsg = "Error in importOrders service: product store [" + productStoreId + "] does not exist";
+                    Debug.logError(errMsg, MODULE);
+                    return ServiceUtil.returnError(errMsg);
+                }
             }
+
 
             // Make sure the productCatalog exists
             if (UtilValidate.isNotEmpty(prodCatalogId)) {
@@ -133,9 +137,9 @@ public class OrderImportServices {
                     EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, StatusItemConstants.Dataimport.DATAIMP_FAILED),
                     EntityCondition.makeCondition("importStatusId", EntityOperator.EQUALS, null));
             EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                        EntityCondition.makeCondition("orderId", EntityOperator.NOT_EQUAL, null),
-                        statusCond   // leave out previously processed orders
-                        );
+                    EntityCondition.makeCondition("orderId", EntityOperator.NOT_EQUAL, null),
+                    statusCond   // leave out previously processed orders
+            );
             TransactionUtil.begin();   // since the service is not inside a transaction, this needs to be in its own transaction, or you'll get a harmless exception
             EntityListIterator importOrderHeaders = delegator.findListIteratorByCondition("DataImportOrderHeader", conditions, null, null);
             TransactionUtil.commit();
@@ -170,7 +174,7 @@ public class OrderImportServices {
                             }
 
                             // we have order item
-                            Debug.logInfo("Reserve order item [" + currentEntity.getString("orderItemSeqId") + "]" , MODULE);
+                            Debug.logInfo("Reserve order item [" + currentEntity.getString("orderItemSeqId") + "]", MODULE);
                             Map<String, Object> callCtxt = FastMap.newInstance();
                             callCtxt.put("productStoreId", productStoreId);
                             callCtxt.put("productId", currentEntity.getString("productId"));
@@ -200,13 +204,13 @@ public class OrderImportServices {
                     Debug.logError(e, "Failed to import orderHeader[" + orderHeader.get("orderId") + "]. Error stack follows.", MODULE);
                     // store the import error
                     String message = "Failed to import Order " + orderHeader.getPkShortValueString() + ": " + e.getMessage();
-                    storeImportError(orderHeader, message,delegator);
+                    storeImportError(orderHeader, message, delegator);
                 } catch (Exception e) {
                     TransactionUtil.rollback();
                     Debug.logError(e, "Import of orderHeader[" + orderHeader.get("orderId") + "] was unsuccessful. Error stack follows.", MODULE);
                     // store the import error
                     String message = "Failed to import Order " + orderHeader.getPkShortValueString() + ": " + e.getMessage();
-                    storeImportError(orderHeader, message,delegator);
+                    storeImportError(orderHeader, message, delegator);
                 }
             }
             importOrderHeaders.close();
@@ -224,10 +228,11 @@ public class OrderImportServices {
 
     /**
      * Helper method to store import error to DataImportOrderHeader/DataImportOrderItem entities.
+     *
      * @param dataImportOrderHeader a <code>GenericValue</code> value
-     * @param message a <code>String</code> value
-     * @param delegator a <code>GenericDelegator</code> value
-     * @exception GenericEntityException if an error occurs
+     * @param message               a <code>String</code> value
+     * @param delegator             a <code>GenericDelegator</code> value
+     * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
     private static void storeImportError(GenericValue dataImportOrderHeader, String message, GenericDelegator delegator) throws GenericEntityException {
@@ -251,27 +256,40 @@ public class OrderImportServices {
         dataImportOrderHeader.set("importError", message);
         dataImportOrderHeader.store();
     }
-    
+
     /**
      * Helper method to decode a DataImportOrderHeader/DataImportOrderItem into a List of GenericValues modeling that product in the OFBiz schema.
      * If for some reason obtaining data via the delegator fails, this service throws that exception.
      * Note that everything is done with the delegator for maximum efficiency.
+     *
      * @param externalOrderHeader a <code>GenericValue</code> value
-     * @param companyPartyId a <code>String</code> value
-     * @param productStore a <code>GenericValue</code> value
-     * @param prodCatalogId a <code>String</code> value
+     * @param companyPartyId      a <code>String</code> value
+     * @param productStore        a <code>GenericValue</code> value
+     * @param prodCatalogId       a <code>String</code> value
      * @param purchaseOrderShipToContactMechId
-     * @param importEmptyOrders a <code>boolean</code> value
+     *
+     * @param importEmptyOrders   a <code>boolean</code> value
      * @param calculateGrandTotal a <code>boolean</code> value
-     * @param reserveInventory a <code>boolean</code> value
-     * @param delegator a <code>GenericDelegator</code> value
-     * @param userLogin a <code>GenericValue</code> value
+     * @param reserveInventory    a <code>boolean</code> value
+     * @param delegator           a <code>GenericDelegator</code> value
+     * @param userLogin           a <code>GenericValue</code> value
      * @return a <code>List</code> value
-     * @exception GenericEntityException if an error occurs
-     * @exception Exception if an error occurs
+     * @throws GenericEntityException if an error occurs
+     * @throws Exception              if an error occurs
      */
     @SuppressWarnings("unchecked")
     private static List decodeOrder(GenericValue externalOrderHeader, String companyPartyId, GenericValue productStore, String prodCatalogId, String purchaseOrderShipToContactMechId, boolean importEmptyOrders, boolean calculateGrandTotal, boolean reserveInventory, GenericDelegator delegator, GenericValue userLogin) throws GenericEntityException, Exception {
+        //if the productStore is null we try to load it from the table if it does not exist we throw an error
+        if (productStore == null) {
+            String productStoreId = (String) externalOrderHeader.getString("productStoreId");
+            productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
+
+            if (UtilValidate.isEmpty(productStore)) {
+                String errMsg = "Error in importOrders service: product store [" + productStoreId + "] does not exist";
+                Debug.logError(errMsg, MODULE);
+               return FastList.newInstance();
+            }
+        }
         String orderId = externalOrderHeader.getString("orderId");
         String orderTypeId = externalOrderHeader.getString("orderTypeId");
         if (UtilValidate.isEmpty(orderTypeId)) {
@@ -302,10 +320,10 @@ public class OrderImportServices {
         orderHeaderInput.put("orderTypeId", orderTypeId);
         orderHeaderInput.put("orderName", orderId);
         orderHeaderInput.put("externalId", orderId);
-        String salesChannelEnumId = (String)externalOrderHeader.getString("salesChannelEnumId");
-        if(UtilValidate.isNotEmpty(salesChannelEnumId)){
+        String salesChannelEnumId = (String) externalOrderHeader.getString("salesChannelEnumId");
+        if (UtilValidate.isNotEmpty(salesChannelEnumId)) {
             orderHeaderInput.put("salesChannelEnumId", salesChannelEnumId); //todo we should validate the enum code against enumTypeId="ORDER_SALES_CHANNEL"
-        }else{
+        } else {
             orderHeaderInput.put("salesChannelEnumId", "UNKNWN_SALES_CHANNEL");
         }
 
@@ -433,7 +451,7 @@ public class OrderImportServices {
         List oisgAssocs = new ArrayList();
         for (int count = 0; count < externalOrderItems.size(); count++) {
             GenericValue externalOrderItem = (GenericValue) externalOrderItems.get(count);
-            
+
             String orderItemSeqId = UtilFormatOut.formatPaddedNumber(count + 1, 5);
             Double quantity = UtilValidate.isEmpty(externalOrderItem.get("quantity")) ? new Double(0) : externalOrderItem.getDouble("quantity");
 
@@ -580,7 +598,7 @@ public class OrderImportServices {
         externalOrderHeader.set("processedTimestamp", UtilDateTime.nowTimestamp());
         externalOrderHeader.set("importStatusId", StatusItemConstants.Dataimport.DATAIMP_IMPORTED);
         externalOrderHeader.set("importError", null); // clear this out in case it had an exception originally
-        
+
         // Add everything to the store list here to avoid problems with having to derive more values for order header, etc.
         List toStore = FastList.newInstance();
         toStore.add(delegator.makeValue("OrderHeader", orderHeaderInput));
