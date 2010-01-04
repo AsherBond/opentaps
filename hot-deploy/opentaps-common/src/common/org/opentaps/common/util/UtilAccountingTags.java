@@ -167,6 +167,22 @@ public final class UtilAccountingTags {
      */
     @SuppressWarnings("unchecked")
     public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, Map context, String prefix) throws RepositoryException {
+        return buildTagConditions(organizationPartyId, accountingTagUsageTypeId, delegator, context, prefix, "acctgTagEnumId");
+    }
+
+    /**
+     * Builds a list of <code>EntityExpr</code> from the accounting tag given in the context.
+     * @param organizationPartyId the organization party ID
+     * @param accountingTagUsageTypeId the usage type for the tags
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param context a context <code>Map</code>
+     * @param prefix the part of parameters before the index which holds the values for the accounting tags in the context
+     * @param entityPrefix the part of the field name before the index which holds the values for the accounting tags in the entity to query
+     * @return the list of <code>EntityExpr</code> from the accounting tag given in the context
+     * @throws RepositoryException if an error occurs
+     */
+    @SuppressWarnings("unchecked")
+    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, Map context, String prefix, String entityPrefix) throws RepositoryException {
         Map<Integer, String> tagTypes = getAccountingTagTypesForOrganization(organizationPartyId, accountingTagUsageTypeId, delegator);
         List<EntityCondition> conditions = new ArrayList<EntityCondition>();
 
@@ -183,9 +199,9 @@ public final class UtilAccountingTags {
                 if ("ANY".equals(value)) {
                     continue;
                 } else if ("NONE".equals(value)) {
-                    conditions.add(EntityCondition.makeCondition("acctgTagEnumId" + index, EntityOperator.EQUALS, null));
+                    conditions.add(EntityCondition.makeCondition(entityPrefix + index, EntityOperator.EQUALS, null));
                 } else {
-                    conditions.add(EntityCondition.makeCondition("acctgTagEnumId" + index, EntityOperator.EQUALS, value));
+                    conditions.add(EntityCondition.makeCondition(entityPrefix + index, EntityOperator.EQUALS, value));
                 }
 
             }
@@ -412,7 +428,7 @@ public final class UtilAccountingTags {
             map.put(mapPrefix + i, value.get(ENTITY_TAG_PREFIX + i));
         }
     }
-    
+
     /**
      * Copy all the acctgTagEnumId_ fields from a <code>GenericValue</code> to a <code>Map</code>.
      * @param value the input <code>GenericValue</code>
@@ -422,7 +438,7 @@ public final class UtilAccountingTags {
     public static void putAllAccountingTags(Entity value, Map map) {
         putAllAccountingTags(value, map, ENTITY_TAG_PREFIX);
     }
-    
+
     /**
      * Copy all the acctgTagEnumId_ fields from a <code>GenericValue</code> to a <code>Map</code>.
      * @param value the input <code>GenericValue</code>
