@@ -19,29 +19,6 @@
 
 <forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-form.xsd">
 
-    <!-- list accounting transactions -->
-    <form name="listAcctgTrans" type="list" target=""
-        default-title-style="boxhead" default-widget-style="tabletext" default-tooltip-style="tabletext"
-        default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1"
-        header-row-style="boxtop"
-        list-name="acctgTransListIt" paginate-target="transactions">
-        <field name="acctgTransId" title="${uiLabelMap.FinancialsTransactionId}" widget-style="linktext">
-            <hyperlink target="viewAcctgTrans" description="${acctgTransId}">
-                <parameter param-name="acctgTransId" from-field="acctgTransId"/>
-            </hyperlink>
-        </field>
-        <field name="acctgTransTypeId" title="${uiLabelMap.FinancialsTransactionType}">
-            <display-entity entity-name="AcctgTransType" cache="true"/>
-        </field>
-        <field name="isPosted" title="${uiLabelMap.FinancialsIsPosted}"><display/></field>
-        <field name="partyId" title="${uiLabelMap.PartyParty}">
-            <display-entity entity-name="PartyNameView" description="${groupName} ${firstName} ${lastName} (${partyId})"/>
-        </field>
-        <field name="transactionDate" title="${uiLabelMap.FinancialsTransactionDate}"><display/></field>
-        <field name="scheduledPostingDate" title="${uiLabelMap.FinancialsScheduledPostingDate}"><display/></field>
-        <field name="postedDate" title="${uiLabelMap.FinancialsPostedDate}"><display/></field>
-    </form>
-
      <form name="listUnpostedAcctgTrans" type="list" target=""
         default-title-style="boxhead" default-widget-style="tabletext" default-tooltip-style="tabletext"
         default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1"
@@ -66,39 +43,6 @@
                 <parameter param-name="acctgTransId" from-field="acctgTransId"/>
             </hyperlink>
         </field>
-    </form>
-
-    <form name="findAcctgTransForm" type="single" target=""
-        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
-        <field name="findAcctgTransId" title="${uiLabelMap.FinancialsTransactionId}"><text/></field>
-        <field name="acctgTransTypeId" title="${uiLabelMap.FinancialsTransactionType}">
-            <drop-down allow-empty="true" current="selected">
-                <entity-options description="${description}" entity-name="AcctgTransType" cache="true">
-                    <entity-order-by field-name="description"/>
-                </entity-options>
-            </drop-down>
-        </field>
-        <field name="partyId" title="${uiLabelMap.PartyPartyId}">
-            <!-- TODO: need lookup controller and maybe screen/form -->
-            <lookup target-form-name="LookupPartyName" size="20" maxlength="20"/>
-        </field>
-        <field name="glFiscalTypeId" title="${uiLabelMap.FinancialsGlFiscalType}">
-            <drop-down allow-empty="true" current="selected" no-current-selected-key="ACTUAL">
-                <entity-options description="${description}" entity-name="GlFiscalType" cache="true">
-                    <entity-order-by field-name="description"/>
-                </entity-options>
-            </drop-down>
-        </field>
-        <field name="isPosted" title="${uiLabelMap.FinancialsIsPosted}">
-            <drop-down allow-empty="true" no-current-selected-key="Y">
-                <option description="${uiLabelMap.CommonNo}" key="N"/>
-                <option description="${uiLabelMap.CommonYes}" key="Y"/>
-            </drop-down>
-        </field> 
-        <field name="performFind">
-            <hidden value="Y"/>
-        </field>
-        <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit button-type="button"/></field>
     </form>
 
     <!-- as above, but specify isPosted=N explicitly -->

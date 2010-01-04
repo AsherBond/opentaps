@@ -43,13 +43,14 @@ import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
 import java.lang.String;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
  * Auto generated base entity AcctgTransAndOrg.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectAcctgTransAndOrgs", query="SELECT ATR.TRANSACTION_DATE AS \"transactionDate\",ATR.ACCTG_TRANS_ID AS \"acctgTransId\",ATR.ACCTG_TRANS_TYPE_ID AS \"acctgTransTypeId\",ATR.IS_POSTED AS \"isPosted\",ATR.PARTY_ID AS \"partyId\",ATR.GL_FISCAL_TYPE_ID AS \"glFiscalTypeId\",ATR.SCHEDULED_POSTING_DATE AS \"scheduledPostingDate\",ATR.POSTED_DATE AS \"postedDate\",ATE.ORGANIZATION_PARTY_ID AS \"organizationPartyId\" FROM ACCTG_TRANS ATR LEFT JOIN ACCTG_TRANS_ENTRY ATE ON ATR.ACCTG_TRANS_ID = ATE.ACCTG_TRANS_ID", resultSetMapping="AcctgTransAndOrgMapping")
+@NamedNativeQuery(name="selectAcctgTransAndOrgs", query="SELECT ATR.TRANSACTION_DATE AS \"transactionDate\",ATR.ACCTG_TRANS_ID AS \"acctgTransId\",ATR.ACCTG_TRANS_TYPE_ID AS \"acctgTransTypeId\",ATR.IS_POSTED AS \"isPosted\",ATR.PARTY_ID AS \"partyId\",ATR.GL_FISCAL_TYPE_ID AS \"glFiscalTypeId\",ATR.SCHEDULED_POSTING_DATE AS \"scheduledPostingDate\",ATR.POSTED_DATE AS \"postedDate\",ATR.POSTED_AMOUNT AS \"postedAmount\",ATE.ORGANIZATION_PARTY_ID AS \"organizationPartyId\" FROM ACCTG_TRANS ATR LEFT JOIN ACCTG_TRANS_ENTRY ATE ON ATR.ACCTG_TRANS_ID = ATE.ACCTG_TRANS_ID", resultSetMapping="AcctgTransAndOrgMapping")
 @SqlResultSetMapping(name="AcctgTransAndOrgMapping", entities={
 @EntityResult(entityClass=AcctgTransAndOrg.class, fields = {
 @FieldResult(name="transactionDate", column="transactionDate")
@@ -60,6 +61,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="glFiscalTypeId", column="glFiscalTypeId")
 ,@FieldResult(name="scheduledPostingDate", column="scheduledPostingDate")
 ,@FieldResult(name="postedDate", column="postedDate")
+,@FieldResult(name="postedAmount", column="postedAmount")
 ,@FieldResult(name="organizationPartyId", column="organizationPartyId")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
@@ -75,6 +77,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("glFiscalTypeId", "ATR.GL_FISCAL_TYPE_ID");
         fields.put("scheduledPostingDate", "ATR.SCHEDULED_POSTING_DATE");
         fields.put("postedDate", "ATR.POSTED_DATE");
+        fields.put("postedAmount", "ATR.POSTED_AMOUNT");
         fields.put("organizationPartyId", "ATE.ORGANIZATION_PARTY_ID");
 fieldMapColumns.put("AcctgTransAndOrg", fields);
 }
@@ -87,6 +90,7 @@ fieldMapColumns.put("AcctgTransAndOrg", fields);
     glFiscalTypeId("glFiscalTypeId"),
     scheduledPostingDate("scheduledPostingDate"),
     postedDate("postedDate"),
+    postedAmount("postedAmount"),
     organizationPartyId("organizationPartyId");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
@@ -115,6 +119,8 @@ fieldMapColumns.put("AcctgTransAndOrg", fields);
     
    private Timestamp postedDate;
     
+   private BigDecimal postedAmount;
+    
    private String organizationPartyId;
 
   /**
@@ -128,7 +134,7 @@ fieldMapColumns.put("AcctgTransAndOrg", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("acctgTransId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransTypeId");this.allFieldsNames.add("isPosted");this.allFieldsNames.add("partyId");this.allFieldsNames.add("glFiscalTypeId");this.allFieldsNames.add("scheduledPostingDate");this.allFieldsNames.add("postedDate");this.allFieldsNames.add("organizationPartyId");
+      this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransTypeId");this.allFieldsNames.add("isPosted");this.allFieldsNames.add("partyId");this.allFieldsNames.add("glFiscalTypeId");this.allFieldsNames.add("scheduledPostingDate");this.allFieldsNames.add("postedDate");this.allFieldsNames.add("postedAmount");this.allFieldsNames.add("organizationPartyId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -204,6 +210,13 @@ fieldMapColumns.put("AcctgTransAndOrg", fields);
     }
     /**
      * Auto generated value setter.
+     * @param postedAmount the postedAmount to set
+     */
+    public void setPostedAmount(BigDecimal postedAmount) {
+        this.postedAmount = postedAmount;
+    }
+    /**
+     * Auto generated value setter.
      * @param organizationPartyId the organizationPartyId to set
      */
     public void setOrganizationPartyId(String organizationPartyId) {
@@ -268,6 +281,13 @@ fieldMapColumns.put("AcctgTransAndOrg", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getPostedAmount() {
+        return this.postedAmount;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>String</code>
      */
     public String getOrganizationPartyId() {
@@ -289,6 +309,7 @@ fieldMapColumns.put("AcctgTransAndOrg", fields);
         setGlFiscalTypeId((String) mapValue.get("glFiscalTypeId"));
         setScheduledPostingDate((Timestamp) mapValue.get("scheduledPostingDate"));
         setPostedDate((Timestamp) mapValue.get("postedDate"));
+        setPostedAmount(convertToBigDecimal(mapValue.get("postedAmount")));
         setOrganizationPartyId((String) mapValue.get("organizationPartyId"));
         postInit();
     }
@@ -305,6 +326,7 @@ fieldMapColumns.put("AcctgTransAndOrg", fields);
         mapValue.put("glFiscalTypeId", getGlFiscalTypeId());
         mapValue.put("scheduledPostingDate", getScheduledPostingDate());
         mapValue.put("postedDate", getPostedDate());
+        mapValue.put("postedAmount", getPostedAmount());
         mapValue.put("organizationPartyId", getOrganizationPartyId());
         return mapValue;
     }

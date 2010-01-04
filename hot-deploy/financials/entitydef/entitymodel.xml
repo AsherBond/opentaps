@@ -1271,6 +1271,7 @@ under the License.
        <alias name="glFiscalTypeId" entity-alias="ATR"/>
        <alias name="scheduledPostingDate" entity-alias="ATR"/>
        <alias name="postedDate" entity-alias="ATR"/>
+       <alias name="postedAmount" entity-alias="ATR"/>
        <alias name="organizationPartyId" entity-alias="ATE"/>
 
        <view-link entity-alias="ATR" rel-entity-alias="ATE" rel-optional="true">

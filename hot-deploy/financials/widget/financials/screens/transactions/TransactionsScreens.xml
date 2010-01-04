@@ -40,11 +40,7 @@
             <actions>
                 <set field="pageTitleLabel" value="AccountingTransactions"/>  
                 <set field="sectionHeaderUiLabel" value="AccountingTransactions"/>  
-                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/transactions.bsh"/>
-                <set field="parameters.listIteratorNameToUse" value="acctgTransListIt"/>
-                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/findAcctgTrans.bsh"/>
-                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
-                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="50"/>                
+                <java location="com.opensourcestrategies.financials.transactions.TransactionActions" invoke="findTransactions"/>                
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -53,18 +49,13 @@
                             <container style="screenlet-header">
                                 <label style="boxhead" text="${uiLabelMap.FinancialsFindTransactions}"/>
                             </container>
-                            <container style="screenlet-body">
-                                <include-form name="findAcctgTransForm" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
-                            </container>
+                            <platform-specific><html>
+                                <html-template location="component://financials/webapp/financials/transactions/findAcctgTrans.ftl"/>
+                            </html></platform-specific>
                         </container>
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.AccountingTransactions}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="listAcctgTrans" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
-                            </container>
-                        </container>
+                        <platform-specific>
+                           <html><html-template location="component://financials/webapp/financials/transactions/listAcctgTrans.ftl"/></html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
