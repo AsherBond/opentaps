@@ -153,47 +153,60 @@ public class CrmsfaSearchService extends CommonSearchService implements SearchSe
         int ps = getPageSize();
         int n = 0; // returned records
         int t = 0; // total records
-        accountSearch.setPageStart(s);
-        accountSearch.setPageSize(ps);
-        accountSearch.readSearchResults(results);
-        accounts = accountSearch.getAccounts();
-        t += accountSearch.getResultSize();
-        n += accounts.size();
 
-        contactSearch.setPageStart(Math.max(s - t, 0));
-        contactSearch.setPageSize(Math.max(ps - n, 0));
-        contactSearch.readSearchResults(results);
-        contacts = contactSearch.getContacts();
-        t += contactSearch.getResultSize();
-        n += contacts.size();
+        if (searchAccounts) {
+            accountSearch.setPageStart(s);
+            accountSearch.setPageSize(ps);
+            accountSearch.readSearchResults(results);
+            accounts = accountSearch.getAccounts();
+            t += accountSearch.getResultSize();
+            n += accounts.size();
+        }
 
-        leadSearch.setPageStart(Math.max(s - t, 0));
-        leadSearch.setPageSize(Math.max(ps - n, 0));
-        leadSearch.readSearchResults(results);
-        leads = leadSearch.getLeads();
-        t += leadSearch.getResultSize();
-        n += leads.size();
+        if (searchContacts) {
+            contactSearch.setPageStart(Math.max(s - t, 0));
+            contactSearch.setPageSize(Math.max(ps - n, 0));
+            contactSearch.readSearchResults(results);
+            contacts = contactSearch.getContacts();
+            t += contactSearch.getResultSize();
+            n += contacts.size();
+        }
 
-        salesOpportunitySearch.setPageStart(Math.max(s - t, 0));
-        salesOpportunitySearch.setPageSize(Math.max(ps - n, 0));
-        salesOpportunitySearch.readSearchResults(results);
-        salesOpportunities = salesOpportunitySearch.getSalesOpportunities();
-        t += salesOpportunitySearch.getResultSize();
-        n += salesOpportunities.size();
+        if (searchLeads) {
+            leadSearch.setPageStart(Math.max(s - t, 0));
+            leadSearch.setPageSize(Math.max(ps - n, 0));
+            leadSearch.readSearchResults(results);
+            leads = leadSearch.getLeads();
+            t += leadSearch.getResultSize();
+            n += leads.size();
+        }
 
-        salesOrderSearch.setPageStart(Math.max(s - t, 0));
-        salesOrderSearch.setPageSize(Math.max(ps - n, 0));
-        salesOrderSearch.readSearchResults(results);
-        salesOrders = salesOrderSearch.getOrders();
-        t += salesOrderSearch.getResultSize();
-        n += salesOrders.size();
+        if (searchSalesOpportunities) {
+            salesOpportunitySearch.setPageStart(Math.max(s - t, 0));
+            salesOpportunitySearch.setPageSize(Math.max(ps - n, 0));
+            salesOpportunitySearch.readSearchResults(results);
+            salesOpportunities = salesOpportunitySearch.getSalesOpportunities();
+            t += salesOpportunitySearch.getResultSize();
+            n += salesOpportunities.size();
+        }
 
-        caseSearch.setPageStart(Math.max(s - t, 0));
-        caseSearch.setPageSize(Math.max(ps - n, 0));
-        caseSearch.readSearchResults(results);
-        cases = caseSearch.getCases();
-        t += caseSearch.getResultSize();
-        n += cases.size();
+        if (searchSalesOrders) {
+            salesOrderSearch.setPageStart(Math.max(s - t, 0));
+            salesOrderSearch.setPageSize(Math.max(ps - n, 0));
+            salesOrderSearch.readSearchResults(results);
+            salesOrders = salesOrderSearch.getOrders();
+            t += salesOrderSearch.getResultSize();
+            n += salesOrders.size();
+        }
+
+        if (searchCases) {
+            caseSearch.setPageStart(Math.max(s - t, 0));
+            caseSearch.setPageSize(Math.max(ps - n, 0));
+            caseSearch.readSearchResults(results);
+            cases = caseSearch.getCases();
+            t += caseSearch.getResultSize();
+            n += cases.size();
+        }
 
         // set the total number of results
         setResultSize(t);

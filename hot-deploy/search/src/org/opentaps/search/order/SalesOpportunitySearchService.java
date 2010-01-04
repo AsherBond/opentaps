@@ -111,8 +111,14 @@ public class SalesOpportunitySearchService extends HibernateSearchService implem
 
             // apply pagination here
             setResultSize(salesOpportunityIds.size());
-            if (!salesOpportunityIds.isEmpty() && getPageStart() < salesOpportunityIds.size() && getPageSize() > 0) {
-                salesOpportunities = orderRepository.findPage(SalesOpportunity.class, EntityCondition.makeCondition(SalesOpportunity.Fields.salesOpportunityId.name(), EntityOperator.IN, salesOpportunityIds), getPageStart(), getPageSize());
+            if (!salesOpportunityIds.isEmpty()) {
+                if (!usePagination()) {
+                    salesOpportunities = orderRepository.findList(SalesOpportunity.class, EntityCondition.makeCondition(SalesOpportunity.Fields.salesOpportunityId.name(), EntityOperator.IN, salesOpportunityIds));
+                } else if (getPageStart() < salesOpportunityIds.size() && getPageSize() > 0) {
+                    salesOpportunities = orderRepository.findPage(SalesOpportunity.class, EntityCondition.makeCondition(SalesOpportunity.Fields.salesOpportunityId.name(), EntityOperator.IN, salesOpportunityIds), getPageStart(), getPageSize());
+                } else {
+                    salesOpportunities = new ArrayList<SalesOpportunity>();
+                }
             } else {
                 salesOpportunities = new ArrayList<SalesOpportunity>();
             }

@@ -50,6 +50,18 @@ public interface SearchServiceInterface extends ServiceInterface {
     public void setPagination(SearchServiceInterface service);
 
     /**
+     * Sets if the service should paginate the results, default to <code>true</code>.
+     * @param enable a <code>boolean</code> value
+     */
+    public void enablePagination(boolean enable);
+
+    /**
+     * Checks if the pagination is enabled for this service.
+     * @return a <code>boolean</code> value
+     */
+    public boolean usePagination();
+
+    /**
      * Sets the number of search results to return per page.
      * @param pageSize an <code>int</code> value
      */

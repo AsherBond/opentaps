@@ -89,8 +89,14 @@ public class ContactSearchService extends HibernateSearchService implements Cont
 
             // apply pagination here
             setResultSize(contactIds.size());
-            if (!contactIds.isEmpty() && getPageStart() < contactIds.size() && getPageSize() > 0) {
-                contacts = partyRepository.findPage(Contact.class, EntityCondition.makeCondition(Contact.Fields.partyId.name(), EntityOperator.IN, contactIds), getPageStart(), getPageSize());
+            if (!contactIds.isEmpty()) {
+                if (!usePagination()) {
+                    contacts = partyRepository.findList(Contact.class, EntityCondition.makeCondition(Contact.Fields.partyId.name(), EntityOperator.IN, contactIds));
+                } else if (getPageStart() < contactIds.size() && getPageSize() > 0) {
+                    contacts = partyRepository.findPage(Contact.class, EntityCondition.makeCondition(Contact.Fields.partyId.name(), EntityOperator.IN, contactIds), getPageStart(), getPageSize());
+                } else {
+                    contacts = new ArrayList<Contact>();
+                }
             } else {
                 contacts = new ArrayList<Contact>();
             }

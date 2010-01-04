@@ -116,8 +116,14 @@ public class SalesOrderSearchService extends HibernateSearchService implements S
 
             // apply pagination here
             setResultSize(orderIds.size());
-            if (!orderIds.isEmpty() && getPageStart() < orderIds.size() && getPageSize() > 0) {
-                orders = orderRepository.findPage(Order.class, EntityCondition.makeCondition(Order.Fields.orderId.name(), EntityOperator.IN, orderIds), getPageStart(), getPageSize());
+            if (!orderIds.isEmpty()) {
+                if (!usePagination()) {
+                    orders = orderRepository.findList(Order.class, EntityCondition.makeCondition(Order.Fields.orderId.name(), EntityOperator.IN, orderIds));
+                } else if (getPageStart() < orderIds.size() && getPageSize() > 0) {
+                    orders = orderRepository.findPage(Order.class, EntityCondition.makeCondition(Order.Fields.orderId.name(), EntityOperator.IN, orderIds), getPageStart(), getPageSize());
+                } else {
+                    orders = new ArrayList<Order>();
+                }
             } else {
                 orders = new ArrayList<Order>();
             }

@@ -89,8 +89,14 @@ public class SupplierSearchService extends HibernateSearchService implements Sup
 
             // apply pagination here
             setResultSize(supplierIds.size());
-            if (!supplierIds.isEmpty() && getPageStart() < supplierIds.size() && getPageSize() > 0) {
-                suppliers = partyRepository.findPage(PartyGroup.class, EntityCondition.makeCondition(PartyGroup.Fields.partyId.name(), EntityOperator.IN, supplierIds), getPageStart(), getPageSize());
+            if (!supplierIds.isEmpty()) {
+                if (!usePagination()) {
+                    suppliers = partyRepository.findList(PartyGroup.class, EntityCondition.makeCondition(PartyGroup.Fields.partyId.name(), EntityOperator.IN, supplierIds));
+                } else if (getPageStart() < supplierIds.size() && getPageSize() > 0) {
+                    suppliers = partyRepository.findPage(PartyGroup.class, EntityCondition.makeCondition(PartyGroup.Fields.partyId.name(), EntityOperator.IN, supplierIds), getPageStart(), getPageSize());
+                } else {
+                    suppliers = new ArrayList<PartyGroup>();
+                }
             } else {
                 suppliers = new ArrayList<PartyGroup>();
             }

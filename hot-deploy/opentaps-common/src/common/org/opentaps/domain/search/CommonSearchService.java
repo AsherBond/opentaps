@@ -31,6 +31,7 @@ public abstract class CommonSearchService extends DomainService implements Searc
 
     private int pageSize = SearchRepositoryInterface.DEFAULT_PAGE_SIZE;
     private int pageStart = 0;
+    private boolean usePagination = true;
     private String keywords;
 
     private List<SearchResult> results;
@@ -54,9 +55,20 @@ public abstract class CommonSearchService extends DomainService implements Searc
     }
 
     /** {@inheritDoc} */
+    public void enablePagination(boolean enable) {
+        this.usePagination = enable;
+    }
+
+    /** {@inheritDoc} */
+    public boolean usePagination() {
+        return usePagination;
+    }
+
+    /** {@inheritDoc} */
     public void setPagination(SearchServiceInterface service) {
         setPageStart(service.getPageStart());
         setPageSize(service.getPageSize());
+        enablePagination(service.usePagination());
     }
 
     /** {@inheritDoc} */

@@ -509,13 +509,21 @@ public abstract class EntityLookupService {
      * @param <T> the entity class
      * @param entityName class to find and return
      * @param conditions a Map of fields -> value that the entities must all match
+     * @param paginate if the results should be paginated
      * @return the list of entities found, <code>null</code> if an error occurs
      */
-    public <T extends EntityInterface> List<T> findList(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions) {
+    public <T extends EntityInterface> List<T> findList(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, boolean paginate) {
         try {
-            boolean t = TransactionUtil.begin();
-            paginateResults(getRepository().findIterator(entityName, conditions, getFields(), getOrderBy()));
-            TransactionUtil.commit(t);
+            if (paginate) {
+                boolean t = TransactionUtil.begin();
+                paginateResults(getRepository().findIterator(entityName, conditions, getFields(), getOrderBy()));
+                TransactionUtil.commit(t);
+            } else {
+                boolean p = noPager;
+                noPager = true;
+                setResults(getRepository().findList(entityName, conditions, getFields(), getOrderBy()));
+                noPager = p;
+            }
             return getResults();
         } catch (RepositoryException e) {
             storeException(e);
@@ -529,6 +537,17 @@ public abstract class EntityLookupService {
         }
     }
 
+    /**
+     * Find entities by conditions.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param conditions a Map of fields -> value that the entities must all match
+     * @return the list of entities found, <code>null</code> if an error occurs
+     */
+    public <T extends EntityInterface> List<T> findList(Class<T> entityName, Map<? extends EntityFieldInterface<? super T>, Object> conditions) {
+        return findList(entityName, conditions, true);
+    }
+
     /* findList by Conditions */
 
     /**
@@ -536,13 +555,21 @@ public abstract class EntityLookupService {
      * @param <T> the entity class
      * @param entityName class to find and return
      * @param condition the EntityCondition used to find the entities
+     * @param paginate if the results should be paginated
      * @return the list of entities found, <code>null</code> if an error occurs
      */
-    public <T extends EntityInterface> List<T> findList(Class<T> entityName, EntityCondition condition) {
+    public <T extends EntityInterface> List<T> findList(Class<T> entityName, EntityCondition condition, boolean paginate) {
         try {
-            boolean t = TransactionUtil.begin();
-            paginateResults(getRepository().findIterator(entityName, condition, getFields(), getOrderBy()));
-            TransactionUtil.commit(t);
+            if (paginate) {
+                boolean t = TransactionUtil.begin();
+                paginateResults(getRepository().findIterator(entityName, condition, getFields(), getOrderBy()));
+                TransactionUtil.commit(t);
+            } else {
+                boolean p = noPager;
+                noPager = true;
+                setResults(getRepository().findList(entityName, condition, getFields(), getOrderBy()));
+                noPager = p;
+            }
             return getResults();
         } catch (RepositoryException e) {
             storeException(e);
@@ -554,5 +581,17 @@ public abstract class EntityLookupService {
             storeException(e);
             return null;
         }
+
+    }
+
+    /**
+     * Find entities by conditions and paginate.
+     * @param <T> the entity class
+     * @param entityName class to find and return
+     * @param condition the EntityCondition used to find the entities
+     * @return the list of entities found, <code>null</code> if an error occurs
+     */
+    public <T extends EntityInterface> List<T> findList(Class<T> entityName, EntityCondition condition) {
+        return findList(entityName, condition, true);
     }
 }

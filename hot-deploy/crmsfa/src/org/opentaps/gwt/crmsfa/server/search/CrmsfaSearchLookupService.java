@@ -28,10 +28,11 @@ import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.entities.CustRequest;
 import org.opentaps.base.entities.CustRequestAndPartyRelationshipAndRole;
 import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
-import org.opentaps.base.entities.PartyFromByRelnAndContactInfoAndPartyClassification;
+import org.opentaps.base.entities.PartyRoleNameDetailSupplementalData;
 import org.opentaps.base.entities.SalesOpportunity;
 import org.opentaps.base.entities.SalesOpportunityAndPartyRelationshipAndStage;
 import org.opentaps.common.domain.order.OrderViewForListing;
@@ -333,6 +334,7 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
             prepareSearch(crmSearch);
             // we need to lookup OrderHeaderItemAndRolesAndInvPending and convert those into OrderViewForListing
             // to get the OrderHeaderItemAndRolesAndInvPending with the customer we filter by role
+            // pagination is still correct though as this only convert the entities
             List<OrderHeaderItemAndRolesAndInvPending> res = getRepository().findList(OrderHeaderItemAndRolesAndInvPending.class,
                             EntityCondition.makeCondition(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.roleTypeId.name(),
                                                                                         EntityOperator.EQUALS,
@@ -341,8 +343,10 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
                                                                                         EntityOperator.IN,
                                                                                         Entity.getDistinctFieldValues(String.class, crmSearch.getSalesOrders(), Order.Fields.orderId))),
                             SalesOrderLookupConfiguration.LIST_QUERY_FIELDS, getOrderBy());
-            // convert and paginate
-            return paginateResults(OrderViewForListing.makeOrderView(res, getProvider().getInfrastructure().getDelegator(), getProvider().getTimeZone(), getProvider().getLocale()));
+            // convert
+            setResultTotalCount(crmSearch.getResultSize());
+            setResults(OrderViewForListing.makeOrderView(res, getProvider().getInfrastructure().getDelegator(), getProvider().getTimeZone(), getProvider().getLocale()));
+            return getResults();
         } catch (ServiceException e) {
             storeException(e);
             return null;
@@ -372,7 +376,8 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
             return findList(CustRequestAndPartyRelationshipAndRole.class,
                         EntityCondition.makeCondition(CustRequestAndPartyRelationshipAndRole.Fields.custRequestId.name(),
                                                       EntityOperator.IN,
-                                                      Entity.getDistinctFieldValues(String.class, crmSearch.getCases(), CustRequest.Fields.custRequestId)));
+                                                      Entity.getDistinctFieldValues(String.class, crmSearch.getCases(), CustRequest.Fields.custRequestId))
+                            , false); // do not paginate as this was done by the search service already
         } catch (ServiceException e) {
             storeException(e);
             return null;
@@ -399,7 +404,8 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
             return findList(SalesOpportunityAndPartyRelationshipAndStage.class,
                         EntityCondition.makeCondition(SalesOpportunityAndPartyRelationshipAndStage.Fields.salesOpportunityId.name(),
                                                       EntityOperator.IN,
-                                                      Entity.getDistinctFieldValues(String.class, crmSearch.getSalesOpportunities(), SalesOpportunity.Fields.salesOpportunityId)));
+                                                      Entity.getDistinctFieldValues(String.class, crmSearch.getSalesOpportunities(), SalesOpportunity.Fields.salesOpportunityId))
+                            , false); // do not paginate as this was done by the search service already
         } catch (ServiceException e) {
             storeException(e);
             return null;
@@ -410,10 +416,10 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
      * Searches a List of Accounts.
      * @return a list of <code>PartyFromByRelnAndContactInfoAndPartyClassification</code>
      */
-    public List<PartyFromByRelnAndContactInfoAndPartyClassification> searchAccounts() {
+    public List<PartyRoleNameDetailSupplementalData> searchAccounts() {
 
         if (getSuggestQuery() == null || getSuggestQuery().trim().equals("")) {
-            List<PartyFromByRelnAndContactInfoAndPartyClassification> res = new ArrayList<PartyFromByRelnAndContactInfoAndPartyClassification>();
+            List<PartyRoleNameDetailSupplementalData> res = new ArrayList<PartyRoleNameDetailSupplementalData>();
             setResults(res);
             return res;
         }
@@ -425,7 +431,7 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
             // set options on what is searched
             crmSearch.setSearchAccounts(true);
             prepareSearch(crmSearch);
-            return extractPartiesResults(crmSearch.getAccounts());
+            return extractPartiesResults(crmSearch.getAccounts(), RoleTypeConstants.ACCOUNT);
         } catch (ServiceException e) {
             storeException(e);
             return null;
@@ -436,10 +442,10 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
      * Searches a List of Contacts.
      * @return a list of <code>PartyFromByRelnAndContactInfoAndPartyClassification</code>
      */
-    public List<PartyFromByRelnAndContactInfoAndPartyClassification> searchContacts() {
+    public List<PartyRoleNameDetailSupplementalData> searchContacts() {
 
         if (getSuggestQuery() == null || getSuggestQuery().trim().equals("")) {
-            List<PartyFromByRelnAndContactInfoAndPartyClassification> res = new ArrayList<PartyFromByRelnAndContactInfoAndPartyClassification>();
+            List<PartyRoleNameDetailSupplementalData> res = new ArrayList<PartyRoleNameDetailSupplementalData>();
             setResults(res);
             return res;
         }
@@ -451,7 +457,7 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
             // set options on what is searched
             crmSearch.setSearchContacts(true);
             prepareSearch(crmSearch);
-            return extractPartiesResults(crmSearch.getContacts());
+            return extractPartiesResults(crmSearch.getContacts(), RoleTypeConstants.CONTACT);
         } catch (ServiceException e) {
             storeException(e);
             return null;
@@ -462,10 +468,10 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
      * Searches a List of Leads.
      * @return a list of <code>PartyFromByRelnAndContactInfoAndPartyClassification</code>
      */
-    public List<PartyFromByRelnAndContactInfoAndPartyClassification> searchLeads() {
+    public List<PartyRoleNameDetailSupplementalData> searchLeads() {
 
         if (getSuggestQuery() == null || getSuggestQuery().trim().equals("")) {
-            List<PartyFromByRelnAndContactInfoAndPartyClassification> res = new ArrayList<PartyFromByRelnAndContactInfoAndPartyClassification>();
+            List<PartyRoleNameDetailSupplementalData> res = new ArrayList<PartyRoleNameDetailSupplementalData>();
             setResults(res);
             return res;
         }
@@ -477,7 +483,7 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
             // set options on what is searched
             crmSearch.setSearchLeads(true);
             prepareSearch(crmSearch);
-            return extractPartiesResults(crmSearch.getLeads());
+            return extractPartiesResults(crmSearch.getLeads(), RoleTypeConstants.PROSPECT);
         } catch (ServiceException e) {
             storeException(e);
             return null;
@@ -493,14 +499,19 @@ public final class CrmsfaSearchLookupService extends EntityLookupAndSuggestServi
         crmSearch.setPageStart(getPager().getPageStart());
         crmSearch.setPageSize(getPager().getPageSize());
         crmSearch.search();
+        // retrieve the number of hits
+        setResultTotalCount(crmSearch.getResultSize());
     }
 
-    private List<PartyFromByRelnAndContactInfoAndPartyClassification> extractPartiesResults(List<? extends Party> parties) {
+    private List<PartyRoleNameDetailSupplementalData> extractPartiesResults(List<? extends Party> parties, String roleTypeId) {
         // convert the list of Parties to PartyFromByRelnAndContactInfoAndPartyClassification
-        return findList(PartyFromByRelnAndContactInfoAndPartyClassification.class,
-                        EntityCondition.makeCondition(PartyFromByRelnAndContactInfoAndPartyClassification.Fields.partyId.name(),
-                                                      EntityOperator.IN,
-                                                      Entity.getDistinctFieldValues(String.class, parties, Party.Fields.partyId)));
+        return findList(PartyRoleNameDetailSupplementalData.class,
+                        EntityCondition.makeCondition(
+                            EntityCondition.makeCondition(PartyRoleNameDetailSupplementalData.Fields.partyId.name(),
+                                                          EntityOperator.IN,
+                                                          Entity.getDistinctFieldValues(String.class, parties, Party.Fields.partyId)),
+                            EntityCondition.makeCondition(PartyRoleNameDetailSupplementalData.Fields.roleTypeId.name(), roleTypeId))
+                        , false); // do not paginate as this was done by the search service already
     }
 
     @Override

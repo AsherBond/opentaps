@@ -89,8 +89,14 @@ public class AccountSearchService extends HibernateSearchService implements Acco
 
             // apply pagination here
             setResultSize(accountIds.size());
-            if (!accountIds.isEmpty() && getPageStart() < accountIds.size() && getPageSize() > 0) {
-                accounts = partyRepository.findPage(Account.class, EntityCondition.makeCondition(Account.Fields.partyId.name(), EntityOperator.IN, accountIds), getPageStart(), getPageSize());
+            if (!accountIds.isEmpty()) {
+                if (!usePagination()) {
+                    accounts = partyRepository.findList(Account.class, EntityCondition.makeCondition(Account.Fields.partyId.name(), EntityOperator.IN, accountIds));
+                } else if (getPageStart() < accountIds.size() && getPageSize() > 0) {
+                    accounts = partyRepository.findPage(Account.class, EntityCondition.makeCondition(Account.Fields.partyId.name(), EntityOperator.IN, accountIds), getPageStart(), getPageSize());
+                } else {
+                    accounts = new ArrayList<Account>();
+                }
             } else {
                 accounts = new ArrayList<Account>();
             }

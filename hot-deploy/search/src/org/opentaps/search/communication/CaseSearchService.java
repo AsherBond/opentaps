@@ -110,8 +110,14 @@ public class CaseSearchService extends HibernateSearchService implements CaseSea
 
             // apply pagination here
             setResultSize(caseIds.size());
-            if (!caseIds.isEmpty() && getPageStart() < caseIds.size() && getPageSize() > 0) {
-                cases = repository.findPage(CustRequest.class, EntityCondition.makeCondition(CustRequest.Fields.custRequestId.name(), EntityOperator.IN, caseIds), getPageStart(), getPageSize());
+            if (!caseIds.isEmpty()) {
+                if (!usePagination()) {
+                    cases = repository.findList(CustRequest.class, EntityCondition.makeCondition(CustRequest.Fields.custRequestId.name(), EntityOperator.IN, caseIds));
+                } else if (getPageStart() < caseIds.size() && getPageSize() > 0) {
+                    cases = repository.findPage(CustRequest.class, EntityCondition.makeCondition(CustRequest.Fields.custRequestId.name(), EntityOperator.IN, caseIds), getPageStart(), getPageSize());
+                } else {
+                    cases = new ArrayList<CustRequest>();
+                }
             } else {
                 cases = new ArrayList<CustRequest>();
             }
