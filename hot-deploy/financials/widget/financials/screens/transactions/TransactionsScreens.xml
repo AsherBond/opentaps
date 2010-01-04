@@ -45,14 +45,11 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsFindTransactions}"/>
-                            </container>
+                        <frame-container title="${uiLabelMap.FinancialsFindTransactions}">
                             <platform-specific><html>
                                 <html-template location="component://financials/webapp/financials/transactions/findAcctgTrans.ftl"/>
                             </html></platform-specific>
-                        </container>
+                        </frame-container>
                         <platform-specific>
                            <html><html-template location="component://financials/webapp/financials/transactions/listAcctgTrans.ftl"/></html>
                         </platform-specific>

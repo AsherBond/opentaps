@@ -22,7 +22,6 @@
 
 <@paginate name="listAcctgTrans" list=acctgTransListBuilder rememberPage=false>
     <#noparse>
-    <form name="listAcctgTrans" action="" method="POST" class="basic-form">
         <@navigationHeader/>
         <table class="listTable">
             <tr class="listTableHeader">
@@ -46,6 +45,5 @@
             </tr>
             </#list>
         </table>
-    </form>
     </#noparse>
 </@paginate>
