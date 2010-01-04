@@ -58,10 +58,7 @@ function notifyOrderItemsCount(n) {
 /*]]>*/
 </script>
 
-<div id="sectionHeaderTitle_orders" class="sectionHeader sectionHeaderTitle">
-  <span style="float:left;">${uiLabelMap.OrderOrders}</span>
-  <div class="subMenuBar" style="float:right; margin:0.4em">${newCustomerLink?if_exists}${quoteLink?if_exists}${finalizeLink?if_exists}</div>
-</div>
+<@frameSectionTitleBar title=uiLabelMap.OrderOrders titleClass="sectionHeaderTitle" titleId="sectionHeaderTitle_orders" extra="${newCustomerLink?if_exists}${quoteLink?if_exists}${finalizeLink?if_exists}" />
 
 <div style="float:right;padding:2px;"><span class="toggleButtonDisabled">${uiLabelMap.OpentapsGridView}</span><a class="toggleButton" href="createOrderMainScreen?useGwt=N">${uiLabelMap.OpentapsFullView}</a></div>
 <div class="cleaner">&nbsp;</div>

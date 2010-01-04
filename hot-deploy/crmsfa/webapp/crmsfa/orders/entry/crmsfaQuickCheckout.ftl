@@ -438,17 +438,12 @@
 
 <#assign initialContinueDisplay="none"/>
 <#if selectedPaymentMethodTypeId?has_content>
-  <#assign initialContinueDisplay="inline"/>
+  <#assign initialContinueDisplay="inline-block"/>
 </#if>
 
 <#if shippingApplies>
-  <div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmOrderShipToSettings}</div>
-    <div class="subMenuBar"><a class="subMenuButton" href="<@ofbizUrl>createOrderMainScreen</@ofbizUrl>">${uiLabelMap.OpentapsOrderReturnToOrder}</a>
-      <a id="continueLink" class="subMenuButton" href="<@ofbizUrl>finalizeOrder?finalizeMode=init&amp;finalizeReqShipInfo=false</@ofbizUrl>" style="display:${initialContinueDisplay}">${uiLabelMap.CrmOrderReviewOrder}</a>
-    </div>
-  </div>
-  <div class="form">
+  <#assign extraOption><a class="subMenuButton" href="<@ofbizUrl>createOrderMainScreen</@ofbizUrl>">${uiLabelMap.OpentapsOrderReturnToOrder}</a><a id="continueLink" class="subMenuButton" href="<@ofbizUrl>finalizeOrder?finalizeMode=init&amp;finalizeReqShipInfo=false</@ofbizUrl>" style="display:${initialContinueDisplay}">${uiLabelMap.CrmOrderReviewOrder}</a></#assign>
+  <@frameSection title=uiLabelMap.CrmOrderShipToSettings extra=extraOption>
     <form name="shipSetting" action="setShipmentOption" method="post">
       <#assign shipGroups = cart.getShipGroups()/>
       <#list shipGroups as shipGroup>
@@ -625,7 +620,7 @@
         <div style="clear:both">&nbsp;</div>
       </#list>
     </form>
-  </div>
+  </@frameSection>
 </#if>
 
 <script type="text/javascript">
@@ -635,15 +630,13 @@
     showOrHideThirdPartyAccounts(${shipGroupSeqId?if_exists});
 </script>
 
-<div class="subSectionHeader" style="margin-top:10px;">
-  <div class="subSectionTitle">${uiLabelMap.CrmOrderPaymentSettings}</div>
+<#assign extraOption>
   <#if ! shippingApplies>
-    <div class="subMenuBar"><a class="subMenuButton" href="<@ofbizUrl>createOrderMainScreen</@ofbizUrl>">${uiLabelMap.OpentapsOrderReturnToOrder}</a>
-      <a id="continueLink" class="subMenuButton" href="<@ofbizUrl>finalizeOrder?finalizeMode=init</@ofbizUrl>" style="display:${initialContinueDisplay}">${uiLabelMap.CrmOrderReviewOrder}</a>
-    </div>
+    <a class="subMenuButton" href="<@ofbizUrl>createOrderMainScreen</@ofbizUrl>">${uiLabelMap.OpentapsOrderReturnToOrder}</a>
+    <a id="continueLink" class="subMenuButton" href="<@ofbizUrl>finalizeOrder?finalizeMode=init</@ofbizUrl>" style="display:${initialContinueDisplay}">${uiLabelMap.CrmOrderReviewOrder}</a>
   </#if>
-</div>
-
+</#assign>
+<@frameSectionHeader title=uiLabelMap.CrmOrderPaymentSettings extra=extraOption/>
 <div class="form">
 <form name="paymentSetting" action="setBilling" method="post">
   <div class="quickPaymentSetting">

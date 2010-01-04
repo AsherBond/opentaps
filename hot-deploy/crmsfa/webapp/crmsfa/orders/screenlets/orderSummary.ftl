@@ -35,19 +35,16 @@ under the License.
 
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#assign shoppingCart = sessionAttributes.shoppingCart?if_exists>
 <#if shoppingCart?has_content>
-    <#assign shoppingCartSize = shoppingCart.size()>
+    <#assign shoppingCartSize = shoppingCart.size()/>
 <#else>
-    <#assign shoppingCartSize = 0>
+    <#assign shoppingCartSize = 0/>
 </#if>
 
-<div class="screenlet">
-    <div class="screenlet-header">
-        <div class='boxhead'><b>${uiLabelMap.CrmOrderSummary}</b></div>
-    </div>
-    <div class="screenlet-body">
+<@frameSection title=uiLabelMap.CrmOrderSummary>
         <#if (shoppingCartSize > 0)>
           <table width="100%" cellpadding="0" cellspacing="2">
             <tr>
@@ -89,5 +86,4 @@ under the License.
         <#else>
           <div class="tabletext">${uiLabelMap.CrmOrderNoItems}</div>
         </#if>
-    </div>
-</div>
+</@frameSection>

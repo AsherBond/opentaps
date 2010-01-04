@@ -39,78 +39,79 @@ under the License.
 <#-- This file provides catalog browsing and searching during order entry -->
 
 <#-- Only show if there is more than 1 (one) catalog, no sense selecting when there is only one option... -->
-<div class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">${uiLabelMap.OpentapsBrowseAndSearch}<a href="javascript:document.advancedsearchform.submit()" class="buttontext">${uiLabelMap.ProductAdvancedSearch}</a></div>
-    </div>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-   <#-- the keyword search box -->
-   <div class="screenlet-body" style="text-align: left;">
-       <form name="keywordsearchform" method="post" action="<@ofbizUrl>keywordsearch</@ofbizUrl>">
-          <input type="hidden" name="VIEW_SIZE" value="10"/>
-          <div class="tabletext">
-            <input type="text" class="inputBox" name="SEARCH_STRING" size="22" maxlength="50" value="${requestParameters.SEARCH_STRING?if_exists}"/>
-          <#if 0 < otherSearchProdCatalogCategories?size>
-            <div class="tabletext">
-              <select name="SEARCH_CATEGORY_ID" size="1" class="selectBox">
-                <option value="${searchCategoryId?if_exists}">${uiLabelMap.ProductEntireCatalog}</option>
-                <#list otherSearchProdCatalogCategories as otherSearchProdCatalogCategory>
-                  <#assign searchProductCategory = otherSearchProdCatalogCategory.getRelatedOneCache("ProductCategory")>
-                  <#if searchProductCategory?exists>
-                    <option value="${searchProductCategory.productCategoryId}">${searchProductCategory.description?default("No Description " + searchProductCategory.productCategoryId)}</option>
-                  </#if>
-                </#list>
-              </select>
-            </div>
-          <#else>
-            <input type="hidden" name="SEARCH_CATEGORY_ID" value="${searchCategoryId?if_exists}"/>
-          </#if>
-          <input type="hidden" name="SEARCH_OPERATOR" value="AND">
-          <a href="javascript:document.keywordsearchform.submit()" class="buttontext">${uiLabelMap.CommonSearch}</a></div>
-        </form>
-       </div>
+<#assign advancedButton>
+<a href="javascript:document.advancedsearchform.submit()" class="buttontext">${uiLabelMap.ProductAdvancedSearch}</a>
+</#assign>
 
-        <form name="advancedsearchform" method="post" action="<@ofbizUrl>advancedsearch</@ofbizUrl>">
-          <#if 0 < otherSearchProdCatalogCategories?size>
-            <div class="tabletext">${uiLabelMap.ProductAdvancedSearchIn}: </div>
-            <div class="tabletext">
-              <select name="SEARCH_CATEGORY_ID" size="1" class="selectBox">
-                <option value="${searchCategoryId?if_exists}">${uiLabelMap.ProductEntireCatalog}</option>
-                <#list otherSearchProdCatalogCategories as otherSearchProdCatalogCategory>
-                  <#assign searchProductCategory = otherSearchProdCatalogCategory.getRelatedOneCache("ProductCategory")>
-                  <#if searchProductCategory?exists>
-                    <option value="${searchProductCategory.productCategoryId}">${searchProductCategory.description?default("No Description " + searchProductCategory.productCategoryId)}</option>
-                  </#if>
-                </#list>
-              </select>
-            </div>
-          <#else>
-            <input type="hidden" name="SEARCH_CATEGORY_ID" value="${searchCategoryId?if_exists}"/>
-          </#if>
-        </form>
-
-   <hr class="sepbar"/>
-
-   <#-- the catalog selection box -->
-   <#if (catalogCol?size > 1)>
-     <div class="screenlet-body" style="text-align: left;">
-        <form name="choosecatalogform" method="post" action="<@ofbizUrl>choosecatalog</@ofbizUrl>" style='margin: 0;'>
-          <select name='CURRENT_CATALOG_ID' class='selectBox'>
-            <option value='${currentCatalogId}'>${currentCatalogName}</option>
-            <option value='${currentCatalogId}'></option>
-            <#list catalogCol as catalogId>
-              <#assign thisCatalogName = Static["org.ofbiz.product.catalog.CatalogWorker"].getCatalogName(request, catalogId)>
-              <option value='${catalogId}'>${thisCatalogName}</option>
+<@frameSection title=uiLabelMap.OpentapsBrowseAndSearch extra=advancedButton>
+  <form name="keywordsearchform" method="post" action="<@ofbizUrl>keywordsearch</@ofbizUrl>">
+    <input type="hidden" name="VIEW_SIZE" value="10"/>
+    <div class="tabletext">
+      <input type="text" class="inputBox" name="SEARCH_STRING" size="22" maxlength="50" value="${requestParameters.SEARCH_STRING?if_exists}"/>
+      <#if 0 lt otherSearchProdCatalogCategories?size>
+        <div class="tabletext">
+          <select name="SEARCH_CATEGORY_ID" size="1" class="selectBox">
+            <option value="${searchCategoryId?if_exists}">${uiLabelMap.ProductEntireCatalog}</option>
+            <#list otherSearchProdCatalogCategories as otherSearchProdCatalogCategory>
+              <#assign searchProductCategory = otherSearchProdCatalogCategory.getRelatedOneCache("ProductCategory")/>
+              <#if searchProductCategory?exists>
+                <option value="${searchProductCategory.productCategoryId}">${searchProductCategory.description?default("No Description " + searchProductCategory.productCategoryId)}</option>
+              </#if>
             </#list>
           </select>
-          <a href="javascript:document.choosecatalogform.submit()" class="buttontext">${uiLabelMap.CrmOrderChangeCatalog}</a>
-        </form>
+        </div>
+      <#else/>
+        <input type="hidden" name="SEARCH_CATEGORY_ID" value="${searchCategoryId?if_exists}"/>
+      </#if>
+      <input type="hidden" name="SEARCH_OPERATOR" value="AND">
+      <a href="javascript:document.keywordsearchform.submit()" class="buttontext">${uiLabelMap.CommonSearch}</a>
+    </div>
+  </form>
+
+  <form name="advancedsearchform" method="post" action="<@ofbizUrl>advancedsearch</@ofbizUrl>">
+    <#if 0 lt otherSearchProdCatalogCategories?size>
+      <div class="tabletext">${uiLabelMap.ProductAdvancedSearchIn}: </div>
+      <div class="tabletext">
+        <select name="SEARCH_CATEGORY_ID" size="1" class="selectBox">
+          <option value="${searchCategoryId?if_exists}">${uiLabelMap.ProductEntireCatalog}</option>
+          <#list otherSearchProdCatalogCategories as otherSearchProdCatalogCategory>
+            <#assign searchProductCategory = otherSearchProdCatalogCategory.getRelatedOneCache("ProductCategory")/>
+            <#if searchProductCategory?exists>
+              <option value="${searchProductCategory.productCategoryId}">${searchProductCategory.description?default("No Description " + searchProductCategory.productCategoryId)}</option>
+            </#if>
+          </#list>
+        </select>
       </div>
+    <#else/>
+      <input type="hidden" name="SEARCH_CATEGORY_ID" value="${searchCategoryId?if_exists}"/>
+    </#if>
+  </form>
+
+  <hr class="sepbar"/>
+
+   <#-- the catalog selection box -->
+
+  <#if (catalogCol?size gt 1)>
+    <div class="screenlet-body" style="text-align: left;">
+      <form name="choosecatalogform" method="post" action="<@ofbizUrl>choosecatalog</@ofbizUrl>" style="margin: 0;">
+        <select name="CURRENT_CATALOG_ID" class="selectBox">
+          <option value="${currentCatalogId}">${currentCatalogName}</option>
+          <option value="${currentCatalogId}"></option>
+          <#list catalogCol as catalogId>
+            <#assign thisCatalogName = Static["org.ofbiz.product.catalog.CatalogWorker"].getCatalogName(request, catalogId)/>
+            <option value="${catalogId}">${thisCatalogName}</option>
+          </#list>
+        </select>
+        <a href="javascript:document.choosecatalogform.submit()" class="buttontext">${uiLabelMap.CrmOrderChangeCatalog}</a>
+      </form>
+    </div>
   </#if>
 
-   <#-- the categories dropdown box -->
-<#if (requestAttributes.topLevelList)?exists><#assign topLevelList = requestAttributes.topLevelList></#if>
-<#if (requestAttributes.curCategoryId)?exists><#assign curCategoryId = requestAttributes.curCategoryId></#if>
+  <#-- the categories dropdown box -->
+  <#if (requestAttributes.topLevelList)?exists><#assign topLevelList = requestAttributes.topLevelList></#if>
+  <#if (requestAttributes.curCategoryId)?exists><#assign curCategoryId = requestAttributes.curCategoryId></#if>
 
 <#-- looping macro -->
 <#macro categoryList parentCategory category>
@@ -175,11 +176,12 @@ under the License.
   </#if>
 </#macro>
 
-<#if topLevelList?has_content>
-        <div style='margin-left: 10px;'>
-          <#list topLevelList as category>
-            <@categoryList parentCategory=category category=category/>
-          </#list>
-        </div>
-</#if>
-</div>
+  <#if topLevelList?has_content>
+    <div style="margin-left: 10px;">
+      <#list topLevelList as category>
+        <@categoryList parentCategory=category category=category/>
+      </#list>
+    </div>
+  </#if>
+
+</@frameSection>

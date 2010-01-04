@@ -17,7 +17,8 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<div class="subSectionHeader">
-  <div class="subSectionTitle">${uiLabelMap.OrderOrderItems}</div>
-  <div class="subMenuBar"><a class="subMenuButton" href="javascript:document.cartform.submit();">${uiLabelMap.CommonUpdate}</a><@inputConfirm title=uiLabelMap.OpentapsClearItems class="subMenuButtonDangerous" href="clearCart"/></div>
-</div>
+<#assign extraOption>
+<a class="subMenuButton" href="javascript:document.cartform.submit();">${uiLabelMap.CommonUpdate}</a><@inputConfirm title=uiLabelMap.OpentapsClearItems class="subMenuButtonDangerous" href="clearCart"/>
+</#assign>
+
+<@frameSectionHeader title=uiLabelMap.OrderOrderItems extra=extraOption/>

@@ -37,11 +37,8 @@ under the License.
 
 
 <#if shoppingCart.getOrderType() == "SALES_ORDER">
-<div class="screenlet">
-    <div class="screenlet-header">
-        <div class="boxhead">&nbsp;${uiLabelMap.OrderPromotionCouponCodes}</div>
-    </div>
-    <div class="screenlet-body">
+  <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+  <@frameSection title=uiLabelMap.OrderPromotionCouponCodes>
       <div class="tabletext">
         <form method="post" action="<@ofbizUrl>addpromocode</@ofbizUrl>" name="addpromocodeform" style="margin: 0;">
           <input type="text" class="inputBox" size="15" name="productPromoCodeId" value="">
@@ -57,6 +54,5 @@ under the License.
           </#if>
         </form>
       </div>
-    </div>
-</div>
+  </@frameSection>
 </#if>

@@ -25,37 +25,33 @@
   <#assign newCustomerLink = "<a class='subMenuButton' href='createOrderPartyForm'>${uiLabelMap.CrmCreateNewCustomer}</a>" />
 </#if>
 
-<div id="sectionHeaderTitle_orders" class="sectionHeader sectionHeaderTitle">
-  <span style="float:left;">${uiLabelMap.OrderOrders}</span>
-  <div class="subMenuBar" style="float:right; margin:0.4em">${newCustomerLink?if_exists}${quoteLink?if_exists}${finalizeLink?if_exists}</div>
-</div>
+<@frameSectionTitleBar title=uiLabelMap.OrderOrders titleClass="sectionHeaderTitle" titleId="sectionHeaderTitle_orders" extra="${newCustomerLink?if_exists}${quoteLink?if_exists}${finalizeLink?if_exists}" />
 
-<div class="subSectionHeader">
-  <div class="subSectionTitle">${uiLabelMap.OrderCreateOrder}</div>
-  <div class="subMenuBar"><a class="toggleButton" href="createOrderMainScreen?&amp;useGwt=Y">${uiLabelMap.OpentapsGridView}</a><span class="toggleButtonDisabled">${uiLabelMap.OpentapsFullView}</span></div>
-</div>
+<#assign createOrderExtraButtons>
+<a class="toggleButton" href="createOrderMainScreen?&amp;useGwt=Y">${uiLabelMap.OpentapsGridView}</a><span class="toggleButtonDisabled">${uiLabelMap.OpentapsFullView}</span>
+</#assign>
 
-<form name="addOrderItemForm" method="POST" action="<@ofbizUrl>addOrderItem</@ofbizUrl>" onsubmit="return addOrderItemFormSubmitHandler(document.addOrderItemForm.productId)">
-  <table class="fourColumnForm">
-    <tr>
-      <@displayTitleCell title=uiLabelMap.ProductProductId titleClass="requiredField"/>
-      <@inputAutoCompleteProductCell name="productId" errorField="productId" tabIndex="1" />
-      <td rowspan="4" valign="top">
-        <table>
-          <#if tagTypes?has_content>
-            <@accountingTagsSelectRows tags=tagTypes tabIndex=7 />
-          </#if>
-        </table>
-      </td>
-    </tr>
-    <@inputTextRow title=uiLabelMap.CommonQuantity titleClass="requiredField" name="quantity" size=10 default="1" errorField="quantity" tabIndex=2 />
-    <@inputDateRow title=uiLabelMap.OrderShipBeforeDate name="shipBeforeDate" errorField="shipBeforeDate" tabIndex=3 calendarTabIndex=4/>
-    <@inputTextareaRow title=uiLabelMap.CommonComment name="comments" cols=40 tabIndex=5 />
-    <@inputSubmitRow title=uiLabelMap.OrderAddToOrder tabIndex=100 />
-  </table>
-
-</form>
-
+<@frameSection title=uiLabelMap.OrderCreateOrder extra=createOrderExtraButtons>
+  <form name="addOrderItemForm" method="POST" action="<@ofbizUrl>addOrderItem</@ofbizUrl>" onsubmit="return addOrderItemFormSubmitHandler(document.addOrderItemForm.productId)">
+    <table class="fourColumnForm">
+      <tr>
+        <@displayTitleCell title=uiLabelMap.ProductProductId titleClass="requiredField"/>
+        <@inputAutoCompleteProductCell name="productId" errorField="productId" tabIndex="1" />
+        <td rowspan="4" valign="top">
+          <table>
+            <#if tagTypes?has_content>
+              <@accountingTagsSelectRows tags=tagTypes tabIndex=7 />
+            </#if>
+          </table>
+        </td>
+      </tr>
+      <@inputTextRow title=uiLabelMap.CommonQuantity titleClass="requiredField" name="quantity" size=10 default="1" errorField="quantity" tabIndex=2 />
+      <@inputDateRow title=uiLabelMap.OrderShipBeforeDate name="shipBeforeDate" errorField="shipBeforeDate" tabIndex=3 calendarTabIndex=4/>
+      <@inputTextareaRow title=uiLabelMap.CommonComment name="comments" cols=40 tabIndex=5 />
+      <@inputSubmitRow title=uiLabelMap.OrderAddToOrder tabIndex=100 />
+    </table>
+  </form>
+</@frameSection>
 
 <script type="text/javascript">
 

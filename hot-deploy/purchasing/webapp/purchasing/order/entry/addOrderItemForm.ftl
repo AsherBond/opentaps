@@ -21,16 +21,13 @@
   <#assign finalizeLink = "<a class='subMenuButton' href='finalizeOrder?finalizeMode=init'>${uiLabelMap.OpentapsFinalizeOrder}</a>" />
 </#if>
 
-<div id="sectionHeaderTitle_order" class="sectionHeader sectionHeaderTitle">
-  <span style="float:left;">${uiLabelMap.OrderOrders}</span>
-  <div class="subMenuBar" style="float:right; margin:0.4em">${finalizeLink?if_exists}</div>
-</div>
+<@frameSectionTitleBar title=uiLabelMap.OrderOrders titleClass="sectionHeaderTitle" titleId="sectionHeaderTitle_order" extra=finalizeLink! />
 
-<div class="subSectionHeader">
-  <div class="subSectionTitle">${uiLabelMap.OrderCreateOrder}</div>
-  <div class="subMenuBar"><a class="toggleButton" href="createOrderMainScreen?&amp;useGwt=Y">${uiLabelMap.OpentapsGridView}</a><span class="toggleButtonDisabled">${uiLabelMap.OpentapsFullView}</span></div>
-</div>
+<#assign createOrderExtraButtons>
+<a class="toggleButton" href="createOrderMainScreen?&amp;useGwt=Y">${uiLabelMap.OpentapsGridView}</a><span class="toggleButtonDisabled">${uiLabelMap.OpentapsFullView}</span>
+</#assign>
 
+<@frameSectionHeader title=uiLabelMap.OrderCreateOrder extra=createOrderExtraButtons />
 <form name="addOrderItemForm" method="POST" action="<@ofbizUrl>addOrderItem</@ofbizUrl>">
 
   <table class="fourColumnForm">

@@ -17,11 +17,10 @@
 
 <#if associatedProducts?exists && associatedProducts.size() != 0>
 
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 <#include "productDisplayMacros.ftl">
 
-<div class="subSectionHeader">
-  <div class="subSectionTitle">Cross-Sell and Upgrades</div>
-</div>
+<@frameSectionHeader title=uiLabelMap.ProductCrossSell/>
 
 <div class="form">
   <table width="70%">
