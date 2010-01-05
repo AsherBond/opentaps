@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.ofbiz.accounting.invoice.InvoiceServices;
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -47,6 +48,7 @@ import org.opentaps.base.entities.InvoiceItemType;
 import org.opentaps.base.entities.InvoiceItemTypeAndOrgGlAccount;
 import org.opentaps.base.entities.OrderItem;
 import org.opentaps.base.entities.PaymentAndApplication;
+import org.opentaps.base.entities.PaymentApplication;
 import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.base.entities.ProductInvoiceItemType;
 import org.opentaps.domain.billing.invoice.Invoice;
@@ -70,7 +72,7 @@ import org.opentaps.foundation.repository.ofbiz.Repository;
  * Repository for Invoices to handle interaction of Invoice-related domain with the entity engine (database) and the service engine.
  */
 public class InvoiceRepository extends Repository implements InvoiceRepositoryInterface {
-
+	 private static final String MODULE = InvoiceRepository.class.getName();
     private InvoiceSpecificationInterface invoiceSpecification = new InvoiceSpecification();
     private OrganizationRepositoryInterface organizationRepository;
 
@@ -207,6 +209,18 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
         // not using the ofbiz setInvoiceStatus right now because its checkPaymentApplications service would not
         // take InvoiceAdjustment into account, and also because the method is by design not required to check that
         // the invoice is fully paid
+    	// set paid date
+    	if (invoice.getPaymentApplications().size() > 0) {
+    		// set the last payment.effectiveDate as paid date
+        	Timestamp paidDate = null;
+        	for (PaymentApplication paymentApplication: invoice.getPaymentApplications()) {
+        		if (paidDate == null || paidDate.before(paymentApplication.getPayment().getEffectiveDate())) {
+        			paidDate = paymentApplication.getPayment().getEffectiveDate();
+        		}
+        	}
+        	invoice.setPaidDate(paidDate);
+            Debug.logInfo("set invoice paid date : [" + paidDate + "]", MODULE);
+        }
         invoice.setStatusId(InvoiceSpecification.InvoiceStatusEnum.PAID.getStatusId());
         update(invoice);
     }
