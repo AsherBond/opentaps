@@ -29,6 +29,7 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Transaction;
@@ -46,7 +47,6 @@ import org.ofbiz.entity.util.EntityCrypto;
 import org.opentaps.base.entities.SequenceValueItem;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.infrastructure.Infrastructure;
-
 
 /**
  * Hibernate Util Class.
@@ -631,5 +631,37 @@ public class HibernateUtil {
             }
             return entityPk;
         }
+    }
+
+    /**
+     * Sets the order by on a Criteria instance from a list of strings.
+     * Each orderBy element can be "field" or "field [asc/desc]" where
+     *  the direction flag can be any case.
+     * Without a direction flag it will default to desc.
+     * @param criteria a <code>Criteria</code> value
+     * @param orderBy a <code>List<String></code> value
+     * @return a <code>Criteria</code> value
+     */
+    public static Criteria setCriteriaOrder(Criteria criteria, List<String> orderBy) {
+        for (String ord : orderBy) {
+            boolean orderDesc = true;
+            String o = ord.toUpperCase();
+            int n = o.lastIndexOf("DESC");
+            if (n > 0) {
+                ord = ord.substring(0, n).trim();
+            } else {
+                n = o.lastIndexOf("ASC");
+                if (n > 0) {
+                    ord = ord.substring(0, n).trim();
+                    orderDesc = false;
+                }
+            }
+            if (orderDesc) {
+                criteria.addOrder(org.hibernate.criterion.Order.desc(ord));
+            } else {
+                criteria.addOrder(org.hibernate.criterion.Order.asc(ord));
+            }
+        }
+        return criteria;
     }
 }

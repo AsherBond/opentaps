@@ -107,23 +107,7 @@ public class OrderViewForListing extends Entity {
             o.initRepository(clone.getBaseRepository());
         }
         o.fromMap(clone.toMap());
-        if (o.getOrderDate() != null) {
-            o.setOrderDateString(UtilDateTime.timeStampToString(o.getOrderDate(), UtilDateTime.getDateTimeFormat(locale), timeZone, locale));
-        }
-        o.setShipByDateString(UtilOrder.getEarliestShipByDate(delegator, o.getOrderId(), timeZone, locale));
-        if (o.getPartyId() != null) {
-            o.setPartyName(PartyHelper.getPartyName(delegator, o.getPartyId(), false));
-        }
-        o.setOrderNameId(o.getOrderId() + (o.getOrderName() == null ? "" : ": " + o.getOrderName()));
-        if (o.getStatusId() != null) {
-            try {
-                GenericValue status = delegator.findByPrimaryKeyCache("StatusItem", UtilMisc.toMap(StatusItem.Fields.statusId.name(), o.getStatusId()));
-                o.setStatusDescription((String) status.get(StatusItem.Fields.description.name(), locale));
-            } catch (GenericEntityException e) {
-                throw new RepositoryException(e);
-            }
-
-        }
+        o.calculateExtraFields(delegator, timeZone, locale);
         return o;
     }
 
@@ -142,6 +126,26 @@ public class OrderViewForListing extends Entity {
             results.add(OrderViewForListing.makeOrderView(clone, delegator, timeZone, locale));
         }
         return results;
+    }
+
+    public void calculateExtraFields(GenericDelegator delegator, TimeZone timeZone, Locale locale) throws RepositoryException {
+        if (getOrderDate() != null) {
+            setOrderDateString(UtilDateTime.timeStampToString(getOrderDate(), UtilDateTime.getDateTimeFormat(locale), timeZone, locale));
+        }
+        setShipByDateString(UtilOrder.getEarliestShipByDate(delegator, getOrderId(), timeZone, locale));
+        if (getPartyId() != null) {
+            setPartyName(PartyHelper.getPartyName(delegator, getPartyId(), false));
+        }
+        setOrderNameId(getOrderId() + (getOrderName() == null ? "" : ": " + getOrderName()));
+        if (getStatusId() != null) {
+            try {
+                GenericValue status = delegator.findByPrimaryKeyCache("StatusItem", UtilMisc.toMap(StatusItem.Fields.statusId.name(), getStatusId()));
+                setStatusDescription((String) status.get(StatusItem.Fields.description.name(), locale));
+            } catch (GenericEntityException e) {
+                throw new RepositoryException(e);
+            }
+
+        }
     }
 
     /**

@@ -17,29 +17,35 @@
 package org.opentaps.common.domain.order;
 
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import javolution.util.FastList;
+import org.hibernate.Criteria;
+import org.hibernate.ScrollMode;
+import org.hibernate.ScrollableResults;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityFunction;
-import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.base.constants.OrderTypeConstants;
 import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
-import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvCompleted;
-import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
+import org.opentaps.base.entities.InventoryItem;
+import org.opentaps.base.entities.OrderHeader;
+import org.opentaps.base.entities.OrderItem;
+import org.opentaps.base.entities.OrderRole;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.domain.search.CommonLookupRepository;
 import org.opentaps.domain.search.order.SalesOrderLookupRepositoryInterface;
-import org.opentaps.foundation.entity.util.EntityComparator;
+import org.opentaps.foundation.entity.hibernate.HibernateUtil;
+import org.opentaps.foundation.entity.hibernate.Session;
+import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 
 /**
@@ -58,11 +64,13 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
     private String customerPartyId;
     private String externalOrderId;
     private String fromDate;
+    private Timestamp fromDateTimestamp;
+    private String thruDate;
+    private Timestamp thruDateTimestamp;
     private String lotId;
     private String productStoreId;
     private String purchaseOrderId;
     private String serialNumber;
-    private String thruDate;
     private String userLoginId;
     private String viewPref;
     private boolean findActiveOnly = false;
@@ -80,146 +88,173 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
 
     /** {@inheritDoc} */
     public List<OrderViewForListing> findOrders() throws RepositoryException {
-        List<EntityCondition> searchConditions = FastList.newInstance();
 
-        // convert fromDate into Timestamp and construct EntityExpr for searching
+        // convert fromDate / thruDate into Timestamps if the string versions were given
         if (UtilValidate.isNotEmpty(fromDate)) {
-            Timestamp fromDateTimestamp = UtilDate.toTimestamp(fromDate, timeZone, locale);
-            if (UtilValidate.isNotEmpty(fromDateTimestamp)) {
-                searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.orderDate.name(), EntityOperator.GREATER_THAN_EQUAL_TO, fromDateTimestamp));
-            }
+            fromDateTimestamp = UtilDate.toTimestamp(fromDate, timeZone, locale);
         }
-
-        // convert thruDate into Timestamp and construct EntityExpr for searching
         if (UtilValidate.isNotEmpty(thruDate)) {
-            Timestamp thruDateTimestamp = UtilDate.toTimestamp(thruDate, timeZone, locale);
-            if (UtilValidate.isNotEmpty(thruDateTimestamp)) {
-                searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.orderDate.name(), EntityOperator.LESS_THAN_EQUAL_TO, thruDateTimestamp));
+            thruDateTimestamp = UtilDate.toTimestamp(thruDate, timeZone, locale);
+        }
+
+        try {
+            // get a hibernate session
+            Session session = getInfrastructure().getSession();
+            Criteria criteria = session.createCriteria(OrderHeader.class);
+
+            // always filter by the current organization
+            criteria.add(Restrictions.eq(OrderHeader.Fields.billFromPartyId.name(), organizationPartyId));
+
+            // filters by order type, we only want sales order
+            criteria.add(Restrictions.eq(OrderHeader.Fields.orderTypeId.name(), OrderTypeConstants.SALES_ORDER));
+
+            // set the from/thru date filter if they were given
+            if (fromDateTimestamp != null) {
+                criteria.add(Restrictions.ge(OrderHeader.Fields.orderDate.name(), fromDateTimestamp));
             }
-        }
+            if (thruDateTimestamp != null) {
+                criteria.add(Restrictions.le(OrderHeader.Fields.orderDate.name(), thruDateTimestamp));
+            }
 
-        // restrict search results to the company set up for CRM
-        searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.billFromPartyId.name(), EntityOperator.EQUALS, organizationPartyId));
+            // filter the role assoc, there is only one customer role per order
+            Criteria roleCriteria = criteria.createAlias("orderRoles", "or");
+            roleCriteria.add(Restrictions.eq("or.id." + OrderRole.Fields.roleTypeId.name(), RoleTypeConstants.BILL_TO_CUSTOMER));
 
-        // other conditions to limit the list
-        searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.orderTypeId.name(), EntityOperator.EQUALS, OrderTypeConstants.SALES_ORDER));
-        searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.roleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.BILL_TO_CUSTOMER));
+            // filter orders created by the given user (TODO: what use is viewPref as a string here, should be a boolean flag instead ?)
+            if (UtilValidate.isNotEmpty(viewPref)) {
+                criteria.add(Restrictions.eq(OrderHeader.Fields.createdBy.name(), userLoginId));
+            }
 
-        // select parties assigned to current user or his team according to view preferences.
-        if (UtilValidate.isNotEmpty(viewPref)) {
-            EntityCondition additionalConditions = EntityCondition.makeCondition(EntityOperator.AND,
-                    EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.orderTypeId.name(), EntityOperator.EQUALS, OrderTypeConstants.SALES_ORDER),
-                    EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.createdBy.name(), EntityOperator.EQUALS, userLoginId),
-                    EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.roleTypeId.name(), EntityOperator.EQUALS, RoleTypeConstants.BILL_TO_CUSTOMER),
-                    EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.billFromPartyId.name(), EntityOperator.EQUALS, organizationPartyId));
-            searchConditions.add(additionalConditions);
-        }
-        if (findActiveOnly) {
-            searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name(), EntityOperator.IN, UtilMisc.toList(StatusItemConstants.OrderStatus.ORDER_APPROVED, StatusItemConstants.OrderStatus.ORDER_CREATED, StatusItemConstants.OrderStatus.ORDER_HOLD, StatusItemConstants.OrderStatus.ORDER_PROCESSING)));
-        }
-        if (findDesiredOnly) {
-            searchConditions.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name(), EntityOperator.IN, UtilMisc.toList(StatusItemConstants.OrderStatus.ORDER_APPROVED, StatusItemConstants.OrderStatus.ORDER_CREATED, StatusItemConstants.OrderStatus.ORDER_HOLD)));
-        }
-        EntityCondition searchConditionList = EntityCondition.makeCondition(searchConditions, EntityOperator.AND);
-        List<EntityCondition> conds = new ArrayList<EntityCondition>();
-        conds.add(searchConditionList);
-        return findOrderListWithFilters(conds);
-    }
+            // filter by order status
+            if (findActiveOnly || findDesiredOnly) {
+                List<String> statuses = UtilMisc.toList(StatusItemConstants.OrderStatus.ORDER_APPROVED, StatusItemConstants.OrderStatus.ORDER_CREATED, StatusItemConstants.OrderStatus.ORDER_HOLD);
+                if (findActiveOnly) {
+                    statuses.add(StatusItemConstants.OrderStatus.ORDER_PROCESSING);
+                }
 
-    /**
-     * Find the orders with conditions and filters.
-     * @param conds initial list of conditions
-     * @return the list of entities found, or <code>null</code> if an error occurred
-     * @throws RepositoryException if error occur
-     */
-    private List<OrderViewForListing> findOrderListWithFilters(List<EntityCondition> conds) throws RepositoryException {
-        if (UtilValidate.isNotEmpty(orderId)) {
-            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.orderId.name()), EntityOperator.LIKE, EntityFunction.UPPER(orderId + "%")));
-        }
-        if (UtilValidate.isNotEmpty(statusId)) {
-            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name()), EntityOperator.EQUALS, EntityFunction.UPPER(statusId)));
-        }
-        if (UtilValidate.isNotEmpty(productStoreId)) {
-            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.productStoreId.name()), EntityOperator.EQUALS, EntityFunction.UPPER(productStoreId)));
-        }
-        if (UtilValidate.isNotEmpty(createdBy)) {
-            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.createdBy.name()), EntityOperator.EQUALS, EntityFunction.UPPER(createdBy)));
-        }
-        if (UtilValidate.isNotEmpty(orderName)) {
-            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.orderName.name()), EntityOperator.LIKE, EntityFunction.UPPER(orderName + "%")));
-        }
-        if (UtilValidate.isNotEmpty(externalOrderId)) {
-            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.externalId.name()), EntityOperator.LIKE, EntityFunction.UPPER(externalOrderId + "%")));
-        }
-        if (UtilValidate.isNotEmpty(customerPartyId)) {
-            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.partyId.name()), EntityOperator.LIKE, EntityFunction.UPPER(customerPartyId + "%")));
-        }
-        if (UtilValidate.isNotEmpty(purchaseOrderId)) {
-            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.correspondingPoId.name()), EntityOperator.LIKE, EntityFunction.UPPER(purchaseOrderId + "%")));
-        }
-        if (UtilValidate.isNotEmpty(lotId)) {
-            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.lotId.name()), EntityOperator.LIKE, EntityFunction.UPPER(lotId + "%")));
-        }
-        if (UtilValidate.isNotEmpty(serialNumber)) {
-            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.serialNumber.name()), EntityOperator.LIKE, EntityFunction.UPPER(serialNumber + "%")));
-        }
-        if (UtilValidate.isNotEmpty(orderName)) {
-            conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(OrderHeaderItemAndRolesAndInvPending.Fields.orderName.name()), EntityOperator.LIKE, EntityFunction.UPPER(orderName + "%")));
-        }
-        // add special condition with complete order
-        return findOrdersByCondition(conds);
-    }
+                criteria.add(Restrictions.in(OrderHeader.Fields.statusId.name(), statuses));
+            }
 
-    /**
-     * Find the orders with special filter conditions.
-     * @param conds initial list of conditions
-     * @return the list of entities found, or <code>null</code> if an error occurred
-     * @throws RepositoryException if error occur
-     */
-    private List<OrderViewForListing> findOrdersByCondition(List<EntityCondition> conds) throws RepositoryException {
+            // filter by the given orderId string
+            if (UtilValidate.isNotEmpty(orderId)) {
+                criteria.add(Restrictions.ilike(OrderHeader.Fields.orderId.name(), orderId, MatchMode.START));
+            }
+            // filter by the given externalOrderId string
+            if (UtilValidate.isNotEmpty(externalOrderId)) {
+                criteria.add(Restrictions.ilike(OrderHeader.Fields.externalId.name(), externalOrderId, MatchMode.START));
+            }
 
-        // Note: this code relies on the fact that OrderHeaderItemAndRolesAndInvPending and OrderHeaderItemAndRolesAndInvCompleted entities
-        // share the same fields, so we can clone OrderHeaderItemAndRolesAndInvCompleted entity as OrderHeaderItemAndRolesAndInvPending entity
-        // later on
+            // filter by exact matching status, if a statusId was given
+            if (UtilValidate.isNotEmpty(statusId)) {
+                criteria.add(Restrictions.eq(OrderHeader.Fields.statusId.name(), statusId));
+            }
 
-        // must specify minimum required fields so that the distinct select works
-        List<String> fieldsToSelect = FastList.newInstance();
-        fieldsToSelect.add(OrderHeaderItemAndRolesAndInvPending.Fields.orderName.name());
-        fieldsToSelect.add(OrderHeaderItemAndRolesAndInvPending.Fields.orderId.name());
-        fieldsToSelect.add(OrderHeaderItemAndRolesAndInvPending.Fields.correspondingPoId.name());
-        fieldsToSelect.add(OrderHeaderItemAndRolesAndInvPending.Fields.statusId.name());
-        fieldsToSelect.add(OrderHeaderItemAndRolesAndInvPending.Fields.grandTotal.name());
-        fieldsToSelect.add(OrderHeaderItemAndRolesAndInvPending.Fields.partyId.name());
-        fieldsToSelect.add(OrderHeaderItemAndRolesAndInvPending.Fields.orderDate.name());
-        fieldsToSelect.add(OrderHeaderItemAndRolesAndInvPending.Fields.currencyUom.name());
-        List<String> queryOrderBy = new ArrayList<String>();
-        if (orderBy == null) {
-            orderBy = Arrays.asList(OrderHeaderItemAndRolesAndInvPending.Fields.orderDate.desc());
+            // filter by product store if given
+            if (UtilValidate.isNotEmpty(productStoreId)) {
+                criteria.add(Restrictions.eq(OrderHeader.Fields.productStoreId.name(), productStoreId));
+            }
+
+            // filter by the user who created the order if given
+            if (UtilValidate.isNotEmpty(createdBy)) {
+                criteria.add(Restrictions.eq(OrderHeader.Fields.createdBy.name(), createdBy));
+            }
+
+            // filter by the given orderName string
+            if (UtilValidate.isNotEmpty(orderName)) {
+                criteria.add(Restrictions.ilike(OrderHeader.Fields.orderName.name(), orderName, MatchMode.START));
+            }
+
+            // filter by the given customerPartyId string, from the OrderRole entity
+            if (UtilValidate.isNotEmpty(customerPartyId)) {
+                roleCriteria.add(Restrictions.ilike("or.id." + OrderRole.Fields.partyId.name(), customerPartyId, MatchMode.START));
+            }
+
+            // filter by the given purchaseOrderId string, from the OrderItem entity
+            criteria.createAlias("orderItems", "oi");
+            if (UtilValidate.isNotEmpty(purchaseOrderId)) {
+                criteria.add(Restrictions.ilike("oi." + OrderItem.Fields.correspondingPoId.name(), purchaseOrderId, MatchMode.START));
+            }
+
+            // filter by the given lotId and serialNumber, which may come either from
+            // OrderItemShipGrpInvRes -> InventoryItem
+            // or
+            // ItemIssuance -> InventoryItem
+            Criteria reservationCriteria = criteria.createCriteria("orderItemShipGrpInvReses", Criteria.LEFT_JOIN).createCriteria("inventoryItem", Criteria.LEFT_JOIN);
+            Criteria issuanceCriteria = criteria.createCriteria("itemIssuances", Criteria.LEFT_JOIN).createCriteria("inventoryItem", Criteria.LEFT_JOIN);
+            if (UtilValidate.isNotEmpty(lotId)) {
+                reservationCriteria.add(Restrictions.ilike(InventoryItem.Fields.lotId.name(), lotId, MatchMode.START));
+                issuanceCriteria.add(Restrictions.ilike(InventoryItem.Fields.lotId.name(), lotId, MatchMode.START));
+            }
+            if (UtilValidate.isNotEmpty(serialNumber)) {
+                reservationCriteria.add(Restrictions.ilike(InventoryItem.Fields.serialNumber.name(), serialNumber, MatchMode.START));
+                issuanceCriteria.add(Restrictions.ilike(InventoryItem.Fields.serialNumber.name(), serialNumber, MatchMode.START));
+            }
+
+            // specify the fields to return
+            criteria.setProjection(Projections.projectionList()
+                                   .add(Projections.distinct(Projections.property(OrderHeader.Fields.orderId.name())))
+                                   .add(Projections.property(OrderHeader.Fields.orderName.name()))
+                                   .add(Projections.property(OrderHeader.Fields.statusId.name()))
+                                   .add(Projections.property(OrderHeader.Fields.grandTotal.name()))
+                                   .add(Projections.property(OrderHeader.Fields.orderDate.name()))
+                                   .add(Projections.property(OrderHeader.Fields.currencyUom.name()))
+                                   .add(Projections.property("or.id." + OrderRole.Fields.partyId.name()))
+                                   .add(Projections.property("oi." + OrderItem.Fields.correspondingPoId.name())));
+
+            // set the order by
+            if (orderBy == null) {
+                orderBy = Arrays.asList(OrderHeader.Fields.orderDate.desc());
+            }
+            HibernateUtil.setCriteriaOrder(criteria, orderBy);
+
+            ScrollableResults results = null;
+            List<OrderViewForListing> results2 = new ArrayList<OrderViewForListing>();
+            try {
+                // fetch the paginated results
+                results = criteria.scroll(ScrollMode.SCROLL_INSENSITIVE);
+                if (usePagination()) {
+                    results.setRowNumber(getPageStart());
+                }
+
+                // convert them into OrderViewForListing objects which will also calculate or format some fields for display
+                Object[] o = results.get();
+                int n = 0; // number of results actually read
+                while (o != null) {
+                    OrderViewForListing r = new OrderViewForListing();
+                    r.initRepository(this);
+                    int i = 0;
+                    r.setOrderId((String) o[i++]);
+                    r.setOrderName((String) o[i++]);
+                    r.setStatusId((String) o[i++]);
+                    r.setGrandTotal((BigDecimal) o[i++]);
+                    r.setOrderDate((Timestamp) o[i++]);
+                    r.setCurrencyUom((String) o[i++]);
+                    r.setPartyId((String) o[i++]);
+                    r.setCorrespondingPoId((String) o[i++]);
+                    r.calculateExtraFields(getDelegator(), timeZone, locale);
+                    results2.add(r);
+                    n++;
+
+                    if (!results.next()) {
+                        break;
+                    }
+                    if (usePagination() && n >= getPageSize()) {
+                        break;
+                    }
+                    o = results.get();
+                }
+                results.last();
+                // note: row number starts at 0
+                setResultSize(results.getRowNumber() + 1);
+            } finally {
+                results.close();
+            }
+
+            return results2;
+
+        } catch (InfrastructureException e) {
+            throw new RepositoryException(e);
         }
-
-        List<OrderHeaderItemAndRolesAndInvPending> orders = FastList.newInstance();
-        List<OrderHeaderItemAndRolesAndInvCompleted> completedOrders = findList(OrderHeaderItemAndRolesAndInvCompleted.class, EntityCondition.makeCondition(conds, EntityOperator.AND), fieldsToSelect, queryOrderBy);
-        for (OrderHeaderItemAndRolesAndInvCompleted order : completedOrders) {
-            // clone OrderHeaderItemAndRolesAndInvCompleted entity as OrderHeaderItemAndRolesAndInvPending entity and put it to orders list
-            OrderHeaderItemAndRolesAndInvPending newOrder = new OrderHeaderItemAndRolesAndInvPending();
-            newOrder.setAllFields(order.toMap());
-            orders.add(newOrder);
-        }
-
-        List<String> orderIds = FastList.newInstance();
-        for (OrderHeaderItemAndRolesAndInvCompleted order : completedOrders) {
-            orderIds.add(order.getOrderId());
-        }
-        if (UtilValidate.isNotEmpty(orderIds)) {
-            conds.add(EntityCondition.makeCondition(OrderHeaderItemAndRolesAndInvPending.Fields.orderId.name(), EntityOperator.NOT_IN, orderIds));
-        }
-        List<OrderHeaderItemAndRolesAndInvPending> pendingOrderList = findList(OrderHeaderItemAndRolesAndInvPending.class, EntityCondition.makeCondition(conds, EntityOperator.AND), fieldsToSelect, queryOrderBy);
-        orders.addAll(pendingOrderList);
-
-        // add value for extra fields
-        List<OrderViewForListing> results = OrderViewForListing.makeOrderView(orders, getDelegator(), timeZone, locale);
-        Collections.sort(results, new EntityComparator(orderBy));
-        return results;
     }
 
     /** {@inheritDoc} */

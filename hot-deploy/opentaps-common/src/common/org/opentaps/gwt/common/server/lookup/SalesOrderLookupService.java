@@ -155,8 +155,15 @@ public class SalesOrderLookupService extends EntityLookupAndSuggestService {
             // set sort conditions
             salesOrderLookupRepository.setOrderBy(getOrderBy());
 
+            // set the pagination
+            salesOrderLookupRepository.setPageStart(getPager().getPageStart());
+            salesOrderLookupRepository.setPageSize(getPager().getPageSize());
+
             // return the matching result
-            return paginateResults(salesOrderLookupRepository.findOrders());
+            List<OrderViewForListing> results = salesOrderLookupRepository.findOrders();
+            setResults(results);
+            setResultTotalCount(salesOrderLookupRepository.getResultSize());
+            return results;
 
         } catch (RepositoryException e) {
             storeException(e);

@@ -22,7 +22,7 @@ import org.opentaps.foundation.repository.ofbiz.Repository;
  * Base class for the lookup repositories implementations.
  * Provides accessors for the pagination settings.
  */
-public abstract class CommonLookupRepository extends Repository {
+public abstract class CommonLookupRepository extends Repository implements CommonLookupRepositoryInterface {
 
     private int pageSize = SearchRepositoryInterface.DEFAULT_PAGE_SIZE;
     private int pageStart = 0;
@@ -36,66 +36,42 @@ public abstract class CommonLookupRepository extends Repository {
         super();
     }
 
-    /**
-     * Sets if the service should paginate the results, default to <code>true</code>.
-     * @param enable a <code>boolean</code> value
-     */
+    /** {@inheritDoc} */
     public void enablePagination(boolean enable) {
         this.usePagination = enable;
     }
 
-    /**
-     * Checks if the pagination is enabled for this service.
-     * @return a <code>boolean</code> value
-     */
+    /** {@inheritDoc} */
     public boolean usePagination() {
         return usePagination;
     }
 
-    /**
-     * Sets the number of search results to return per page.
-     * @param pageSize an <code>int</code> value
-     */
+    /** {@inheritDoc} */
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
 
-    /**
-     * Gets the number of search results to return per page.
-     * @return the number of search results to return per page
-     */
+    /** {@inheritDoc} */
     public int getPageSize() {
         return pageSize;
     }
 
-    /**
-     * Sets the starting index of the search results.
-     * @param pageStart an <code>int</code> value
-     */
+    /** {@inheritDoc} */
     public void setPageStart(int pageStart) {
         this.pageStart = pageStart;
     }
 
-    /**
-     * Gets the starting index of the search results.
-     * @return the starting index of the search results.
-     */
+    /** {@inheritDoc} */
     public int getPageStart() {
         return pageStart;
     }
 
-    /**
-     * Gets the ending index of the search results.
-     * @return the ending index of the search results.
-     */
+    /** {@inheritDoc} */
     public int getPageEnd() {
         return pageStart + pageSize;
     }
 
-    /**
-     * Gets the total number of results for the search.
-     * @return an <code>int</code> value
-     */
+    /** {@inheritDoc} */
     public int getResultSize() {
         return resultSize;
     }

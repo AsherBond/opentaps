@@ -22,12 +22,12 @@ import java.util.TimeZone;
 
 import org.opentaps.common.domain.order.OrderViewForListing;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.foundation.repository.RepositoryInterface;
+import org.opentaps.domain.search.CommonLookupRepositoryInterface;
 
 /**
  * Repository to lookup Sales Orders.
  */
-public interface SalesOrderLookupRepositoryInterface extends RepositoryInterface {
+public interface SalesOrderLookupRepositoryInterface extends CommonLookupRepositoryInterface {
 
     /**
      * Sets the order Id to search for.
