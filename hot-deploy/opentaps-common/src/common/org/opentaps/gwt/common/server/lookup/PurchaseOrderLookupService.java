@@ -26,7 +26,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.domain.order.OrderViewForListing;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
-import org.opentaps.domain.search.order.PurchaseOrderSearchRepositoryInterface;
+import org.opentaps.domain.search.order.PurchaseOrderLookupRepositoryInterface;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
@@ -36,10 +36,11 @@ import org.opentaps.gwt.common.server.HttpInputProvider;
 import org.opentaps.gwt.common.server.InputProviderInterface;
 
 /**
- * The RPC service used to populate the PurchaseOrderListView and PurchaseOrder autocompleters widgets.
+ * Repository to lookup Purchase Orders.
  */
 public class PurchaseOrderLookupService extends EntityLookupAndSuggestService {
 
+    @SuppressWarnings("unused")
     private static final String MODULE = PurchaseOrderLookupService.class.getName();
 
     /**
@@ -88,49 +89,49 @@ public class PurchaseOrderLookupService extends EntityLookupAndSuggestService {
      */
     public List<OrderViewForListing> findOrders(Locale locale, String organizationPartyId, String facilityId) {
         try {
-            PurchaseOrderSearchRepositoryInterface purchaseOrderSearchRepository = getDomainsDirectory().getOrderDomain().getPurchaseOrderSearchRepository();
+            PurchaseOrderLookupRepositoryInterface purchaseOrderLookupRepository = getDomainsDirectory().getOrderDomain().getPurchaseOrderLookupRepository();
             InventoryRepositoryInterface inventoryRepository = getDomainsDirectory().getInventoryDomain().getInventoryRepository();
             if (UtilValidate.isEmpty(organizationPartyId)) {
                 organizationPartyId = inventoryRepository.getFacilityById(facilityId).getOwnerPartyId();
             }
             // pass locale and timeZone instances for format the date string
-            purchaseOrderSearchRepository.setLocale(locale);
-            purchaseOrderSearchRepository.setTimeZone(getProvider().getTimeZone());
+            purchaseOrderLookupRepository.setLocale(locale);
+            purchaseOrderLookupRepository.setTimeZone(getProvider().getTimeZone());
             // pass parameters into repository
-            purchaseOrderSearchRepository.setOrganizationPartyId(organizationPartyId);
+            purchaseOrderLookupRepository.setOrganizationPartyId(organizationPartyId);
 
             if (UtilValidate.isNotEmpty(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_FROM_DATE))) {
-                purchaseOrderSearchRepository.setFromDate(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_FROM_DATE));
+                purchaseOrderLookupRepository.setFromDate(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_FROM_DATE));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_THRU_DATE))) {
-                purchaseOrderSearchRepository.setThruDate(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_THRU_DATE));
+                purchaseOrderLookupRepository.setThruDate(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_THRU_DATE));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(PurchaseOrderLookupConfiguration.INOUT_ORDER_ID))) {
-                purchaseOrderSearchRepository.setOrderId(getProvider().getParameter(PurchaseOrderLookupConfiguration.INOUT_ORDER_ID));
+                purchaseOrderLookupRepository.setOrderId(getProvider().getParameter(PurchaseOrderLookupConfiguration.INOUT_ORDER_ID));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(PurchaseOrderLookupConfiguration.INOUT_ORDER_NAME))) {
-                purchaseOrderSearchRepository.setOrderName(getProvider().getParameter(PurchaseOrderLookupConfiguration.INOUT_ORDER_NAME));
+                purchaseOrderLookupRepository.setOrderName(getProvider().getParameter(PurchaseOrderLookupConfiguration.INOUT_ORDER_NAME));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_PRODUCT_PARTTERN))) {
-                purchaseOrderSearchRepository.setProductPattern(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_PRODUCT_PARTTERN));
+                purchaseOrderLookupRepository.setProductPattern(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_PRODUCT_PARTTERN));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(PurchaseOrderLookupConfiguration.INOUT_PARTY_ID))) {
-                purchaseOrderSearchRepository.setSupplierPartyId(getProvider().getParameter(PurchaseOrderLookupConfiguration.INOUT_PARTY_ID));
+                purchaseOrderLookupRepository.setSupplierPartyId(getProvider().getParameter(PurchaseOrderLookupConfiguration.INOUT_PARTY_ID));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(PurchaseOrderLookupConfiguration.INOUT_STATUS_ID))) {
-                purchaseOrderSearchRepository.setStatusId(getProvider().getParameter(PurchaseOrderLookupConfiguration.INOUT_STATUS_ID));
+                purchaseOrderLookupRepository.setStatusId(getProvider().getParameter(PurchaseOrderLookupConfiguration.INOUT_STATUS_ID));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_CREATED_BY))) {
-                purchaseOrderSearchRepository.setCreatedBy(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_CREATED_BY));
+                purchaseOrderLookupRepository.setCreatedBy(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_CREATED_BY));
             }
             if (UtilValidate.isEmpty(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_FIND_ALL)) || "N".equals(getProvider().getParameter(PurchaseOrderLookupConfiguration.IN_FIND_ALL))) {
-                purchaseOrderSearchRepository.setFindDesiredOnly(true);
+                purchaseOrderLookupRepository.setFindDesiredOnly(true);
             }
 
             // set sort conditions
-            purchaseOrderSearchRepository.setOrderBy(getOrderBy());
+            purchaseOrderLookupRepository.setOrderBy(getOrderBy());
             // return the matching result
-            return paginateResults(purchaseOrderSearchRepository.findOrders());
+            return paginateResults(purchaseOrderLookupRepository.findOrders());
         } catch (RepositoryException e) {
             storeException(e);
             return null;

@@ -41,7 +41,7 @@ import org.opentaps.common.util.UtilDate;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.product.Product;
 import org.opentaps.domain.product.ProductRepositoryInterface;
-import org.opentaps.domain.search.order.PurchaseOrderSearchRepositoryInterface;
+import org.opentaps.domain.search.order.PurchaseOrderLookupRepositoryInterface;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.entity.util.EntityComparator;
@@ -51,10 +51,10 @@ import org.opentaps.foundation.repository.ofbiz.Repository;
 /**
  * This is the implement of the Purchase Order search interface.
  */
-public class PurchaseOrderSearchRepository  extends Repository implements PurchaseOrderSearchRepositoryInterface {
+public class PurchaseOrderLookupRepository  extends Repository implements PurchaseOrderLookupRepositoryInterface {
 
     @SuppressWarnings("unused")
-    private static final String MODULE = PurchaseOrderSearchRepository.class.getName();
+    private static final String MODULE = PurchaseOrderLookupRepository.class.getName();
 
     private String orderId;
     private String productPattern;
@@ -71,10 +71,11 @@ public class PurchaseOrderSearchRepository  extends Repository implements Purcha
     private List<String> orderBy;
 
     private ProductRepositoryInterface productRepository;
+
     /**
      * Default constructor.
      */
-    public PurchaseOrderSearchRepository() {
+    public PurchaseOrderLookupRepository() {
         super();
     }
 

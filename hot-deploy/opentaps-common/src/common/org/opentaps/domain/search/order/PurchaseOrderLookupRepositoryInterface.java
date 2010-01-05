@@ -25,16 +25,15 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 
 /**
- * Repository for Purchase Orders to handle interaction of Search orders domain with the entity engine (database) and the service engine.
+ * Repository to lookup Purchase Orders.
  */
-public interface PurchaseOrderSearchRepositoryInterface  extends RepositoryInterface {
+public interface PurchaseOrderLookupRepositoryInterface  extends RepositoryInterface {
 
     /**
      * Sets the order Id to search for.
      * @param orderId a <code>String</code> value
      */
     public void setOrderId(String orderId);
-
 
     /**
      * Sets the status Id to search for.
@@ -84,13 +83,11 @@ public interface PurchaseOrderSearchRepositoryInterface  extends RepositoryInter
      */
     public void setOrganizationPartyId(String organizationPartyId);
 
-
     /**
      * Sets the find all desired orders only.
-     * @param findAll a <code>String</code> value
+     * @param findDesiredOnly a <code>boolean</code> value
      */
     public void setFindDesiredOnly(boolean findDesiredOnly);
-
 
     /**
      * Sets the locale for format date string.

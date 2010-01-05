@@ -77,9 +77,9 @@ public class AmazonTests extends OpentapsTestCase {
     public void testImportAmazonOrders() throws Exception {
         OrderRepositoryInterface orderRepository = orderDomain.getOrderRepository();
 
-        // TODO: Use new SalesOrderSearchRepository
+        // TODO: Use new SalesOrderLookupRepository
         // TODO: also test inventory reservation (ATP decreases for these products
-        
+
         // based on hot-deploy/amazon/data/AmazonDemoSetup.xml
         List<GenericValue> orders = delegator.findByAnd("OrderHeader", UtilMisc.toMap("productStoreId", "AMAZON"));
         for (GenericValue orderGV : orders) {

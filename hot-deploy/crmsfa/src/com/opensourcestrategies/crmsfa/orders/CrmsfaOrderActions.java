@@ -29,7 +29,7 @@ import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.domain.order.OrderViewForListing;
 import org.opentaps.domain.DomainsDirectory;
-import org.opentaps.domain.search.order.SalesOrderSearchRepositoryInterface;
+import org.opentaps.domain.search.order.SalesOrderLookupRepositoryInterface;
 import org.opentaps.foundation.action.ActionContext;
 
 /**
@@ -78,52 +78,52 @@ public final class CrmsfaOrderActions {
         String  productStoreId = ac.getParameter("productStoreId");
 
         DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
-        SalesOrderSearchRepositoryInterface salesOrderSearchRepository = dd.getOrderDomain().getSalesOrderSearchRepository();
+        SalesOrderLookupRepositoryInterface salesOrderLookupRepository = dd.getOrderDomain().getSalesOrderLookupRepository();
         String organizationPartyId = UtilProperties.getPropertyValue("opentaps", "organizationPartyId");
         String userLoginId = ac.getUser().getOfbizUserLogin().getString("userLoginId");
         // pass locale and timeZone instances for format the date string
-        salesOrderSearchRepository.setLocale(locale);
-        salesOrderSearchRepository.setTimeZone(timeZone);
-        salesOrderSearchRepository.setUserLoginId(userLoginId);
-        salesOrderSearchRepository.setOrganizationPartyId(organizationPartyId);
+        salesOrderLookupRepository.setLocale(locale);
+        salesOrderLookupRepository.setTimeZone(timeZone);
+        salesOrderLookupRepository.setUserLoginId(userLoginId);
+        salesOrderLookupRepository.setOrganizationPartyId(organizationPartyId);
         if (UtilValidate.isNotEmpty(fromDate)) {
-            salesOrderSearchRepository.setFromDate(fromDate);
+            salesOrderLookupRepository.setFromDate(fromDate);
         }
         if (UtilValidate.isNotEmpty(thruDate)) {
-            salesOrderSearchRepository.setThruDate(thruDate);
+            salesOrderLookupRepository.setThruDate(thruDate);
         }
         if (UtilValidate.isNotEmpty(statusId)) {
-            salesOrderSearchRepository.setStatusId(statusId);
+            salesOrderLookupRepository.setStatusId(statusId);
         }
         if (UtilValidate.isNotEmpty(partyId)) {
-            salesOrderSearchRepository.setCustomerPartyId(partyId);
+            salesOrderLookupRepository.setCustomerPartyId(partyId);
         }
         if (UtilValidate.isNotEmpty(correspondingPoId)) {
-            salesOrderSearchRepository.setPurchaseOrderId(correspondingPoId);
+            salesOrderLookupRepository.setPurchaseOrderId(correspondingPoId);
         }
         if (UtilValidate.isNotEmpty(orderId)) {
-            salesOrderSearchRepository.setOrderId(orderId);
+            salesOrderLookupRepository.setOrderId(orderId);
         }
         if (UtilValidate.isNotEmpty(orderName)) {
-            salesOrderSearchRepository.setOrderName(orderName);
+            salesOrderLookupRepository.setOrderName(orderName);
         }
         if (UtilValidate.isNotEmpty(lotId)) {
-            salesOrderSearchRepository.setLotId(lotId);
+            salesOrderLookupRepository.setLotId(lotId);
         }
         if (UtilValidate.isNotEmpty(serialNumber)) {
-            salesOrderSearchRepository.setSerialNumber(serialNumber);
+            salesOrderLookupRepository.setSerialNumber(serialNumber);
         }
         if (UtilValidate.isNotEmpty(createdBy)) {
-            salesOrderSearchRepository.setCreatedBy(createdBy);
+            salesOrderLookupRepository.setCreatedBy(createdBy);
         }
         if (UtilValidate.isNotEmpty(externalId)) {
-            salesOrderSearchRepository.setExteralOrderId(externalId);
+            salesOrderLookupRepository.setExteralOrderId(externalId);
         }
         if (UtilValidate.isNotEmpty(productStoreId)) {
-            salesOrderSearchRepository.setProductStoreId(productStoreId);
+            salesOrderLookupRepository.setProductStoreId(productStoreId);
         }
-        salesOrderSearchRepository.setOrderBy(orderBy);
-        List<OrderViewForListing> orders = salesOrderSearchRepository.findOrders();
+        salesOrderLookupRepository.setOrderBy(orderBy);
+        List<OrderViewForListing> orders = salesOrderLookupRepository.findOrders();
         List<Map<String, Object>> orderMaps = FastList.<Map<String, Object>>newInstance();
         // return the map collection for the screen render
         for (OrderViewForListing order : orders) {

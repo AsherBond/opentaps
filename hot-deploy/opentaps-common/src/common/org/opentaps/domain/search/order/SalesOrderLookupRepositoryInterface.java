@@ -25,9 +25,9 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 
 /**
- * Repository for Orders to handle interaction of Search orders domain with the entity engine (database) and the service engine.
+ * Repository to lookup Sales Orders.
  */
-public interface SalesOrderSearchRepositoryInterface extends RepositoryInterface {
+public interface SalesOrderLookupRepositoryInterface extends RepositoryInterface {
 
     /**
      * Sets the order Id to search for.

@@ -37,18 +37,18 @@ import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvCompleted;
 import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
 import org.opentaps.common.util.UtilDate;
-import org.opentaps.domain.search.order.SalesOrderSearchRepositoryInterface;
+import org.opentaps.domain.search.CommonLookupRepository;
+import org.opentaps.domain.search.order.SalesOrderLookupRepositoryInterface;
 import org.opentaps.foundation.entity.util.EntityComparator;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.foundation.repository.ofbiz.Repository;
 
 /**
- * {@inheritDoc}.
+ * Repository to lookup Sales Orders.
  */
-public class SalesOrderSearchRepository extends Repository implements SalesOrderSearchRepositoryInterface {
+public class SalesOrderLookupRepository extends CommonLookupRepository implements SalesOrderLookupRepositoryInterface {
 
     @SuppressWarnings("unused")
-    private static final String MODULE = SalesOrderSearchRepository.class.getName();
+    private static final String MODULE = SalesOrderLookupRepository.class.getName();
 
     private String orderId;
     private String statusId;
@@ -74,7 +74,7 @@ public class SalesOrderSearchRepository extends Repository implements SalesOrder
     /**
      * Default constructor.
      */
-    public SalesOrderSearchRepository() {
+    public SalesOrderLookupRepository() {
         super();
     }
 

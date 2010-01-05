@@ -25,7 +25,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.domain.order.OrderViewForListing;
-import org.opentaps.domain.search.order.SalesOrderSearchRepositoryInterface;
+import org.opentaps.domain.search.order.SalesOrderLookupRepositoryInterface;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
@@ -80,7 +80,7 @@ public class SalesOrderLookupService extends EntityLookupAndSuggestService {
      */
     public List<OrderViewForListing> findOrders(Locale locale) {
         try {
-            SalesOrderSearchRepositoryInterface salesOrderSearchRepository = getDomainsDirectory().getOrderDomain().getSalesOrderSearchRepository();
+            SalesOrderLookupRepositoryInterface salesOrderLookupRepository = getDomainsDirectory().getOrderDomain().getSalesOrderLookupRepository();
 
             String organizationPartyId = UtilProperties.getPropertyValue("opentaps", "organizationPartyId");
 
@@ -93,51 +93,51 @@ public class SalesOrderLookupService extends EntityLookupAndSuggestService {
 
             // pass locale and timeZone instances for format the date string
             // use Locale.US for change gwt date input -- is this required to be US ??
-            salesOrderSearchRepository.setLocale(locale);
-            salesOrderSearchRepository.setTimeZone(getProvider().getTimeZone());
+            salesOrderLookupRepository.setLocale(locale);
+            salesOrderLookupRepository.setTimeZone(getProvider().getTimeZone());
 
             // pass parameters into repository
-            salesOrderSearchRepository.setUserLoginId(userLoginId);
-            salesOrderSearchRepository.setOrganizationPartyId(organizationPartyId);
+            salesOrderLookupRepository.setUserLoginId(userLoginId);
+            salesOrderLookupRepository.setOrganizationPartyId(organizationPartyId);
 
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_FROM_DATE))) {
-                salesOrderSearchRepository.setFromDate(getProvider().getParameter(SalesOrderLookupConfiguration.IN_FROM_DATE));
+                salesOrderLookupRepository.setFromDate(getProvider().getParameter(SalesOrderLookupConfiguration.IN_FROM_DATE));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_THRU_DATE))) {
-                salesOrderSearchRepository.setThruDate(getProvider().getParameter(SalesOrderLookupConfiguration.IN_THRU_DATE));
+                salesOrderLookupRepository.setThruDate(getProvider().getParameter(SalesOrderLookupConfiguration.IN_THRU_DATE));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_RESPONSIBILTY))) {
-                salesOrderSearchRepository.setViewPref(getProvider().getParameter(SalesOrderLookupConfiguration.IN_RESPONSIBILTY));
+                salesOrderLookupRepository.setViewPref(getProvider().getParameter(SalesOrderLookupConfiguration.IN_RESPONSIBILTY));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_ORDER_ID))) {
-                salesOrderSearchRepository.setOrderId(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_ORDER_ID));
+                salesOrderLookupRepository.setOrderId(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_ORDER_ID));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_EXTERNAL_ID))) {
-                salesOrderSearchRepository.setExteralOrderId(getProvider().getParameter(SalesOrderLookupConfiguration.IN_EXTERNAL_ID));
+                salesOrderLookupRepository.setExteralOrderId(getProvider().getParameter(SalesOrderLookupConfiguration.IN_EXTERNAL_ID));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_ORDER_NAME))) {
-                salesOrderSearchRepository.setOrderName(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_ORDER_NAME));
+                salesOrderLookupRepository.setOrderName(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_ORDER_NAME));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_PARTY_ID))) {
-                salesOrderSearchRepository.setCustomerPartyId(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_PARTY_ID));
+                salesOrderLookupRepository.setCustomerPartyId(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_PARTY_ID));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_PRODUCT_STORE_ID))) {
-                salesOrderSearchRepository.setProductStoreId(getProvider().getParameter(SalesOrderLookupConfiguration.IN_PRODUCT_STORE_ID));
+                salesOrderLookupRepository.setProductStoreId(getProvider().getParameter(SalesOrderLookupConfiguration.IN_PRODUCT_STORE_ID));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_STATUS_ID))) {
-                salesOrderSearchRepository.setStatusId(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_STATUS_ID));
+                salesOrderLookupRepository.setStatusId(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_STATUS_ID));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_CORRESPONDING_PO_ID))) {
-                salesOrderSearchRepository.setPurchaseOrderId(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_CORRESPONDING_PO_ID));
+                salesOrderLookupRepository.setPurchaseOrderId(getProvider().getParameter(SalesOrderLookupConfiguration.INOUT_CORRESPONDING_PO_ID));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_CREATED_BY))) {
-                salesOrderSearchRepository.setCreatedBy(getProvider().getParameter(SalesOrderLookupConfiguration.IN_CREATED_BY));
+                salesOrderLookupRepository.setCreatedBy(getProvider().getParameter(SalesOrderLookupConfiguration.IN_CREATED_BY));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_LOT_ID))) {
-                salesOrderSearchRepository.setLotId(getProvider().getParameter(SalesOrderLookupConfiguration.IN_LOT_ID));
+                salesOrderLookupRepository.setLotId(getProvider().getParameter(SalesOrderLookupConfiguration.IN_LOT_ID));
             }
             if (UtilValidate.isNotEmpty(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SERIAL_NUMBER))) {
-                salesOrderSearchRepository.setSerialNumber(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SERIAL_NUMBER));
+                salesOrderLookupRepository.setSerialNumber(getProvider().getParameter(SalesOrderLookupConfiguration.IN_SERIAL_NUMBER));
             }
 
             // takes into account order statuses
@@ -145,18 +145,18 @@ public class SalesOrderLookupService extends EntityLookupAndSuggestService {
             // of desired statuses.
             String isActiveOnly = getProvider().getParameter(SalesOrderLookupConfiguration.IN_FIND_ALL);
             if (UtilValidate.isNotEmpty(isActiveOnly) && "Y".equals(isActiveOnly)) {
-                salesOrderSearchRepository.setFindActiveOnly(true);
+                salesOrderLookupRepository.setFindActiveOnly(true);
             }
             String isDesired = getProvider().getParameter(SalesOrderLookupConfiguration.IN_DESIRED);
             if (UtilValidate.isNotEmpty(isDesired) && "Y".equals(isDesired)) {
-                salesOrderSearchRepository.setFindDesiredOnly(true);
+                salesOrderLookupRepository.setFindDesiredOnly(true);
             }
 
             // set sort conditions
-            salesOrderSearchRepository.setOrderBy(getOrderBy());
+            salesOrderLookupRepository.setOrderBy(getOrderBy());
 
             // return the matching result
-            return paginateResults(salesOrderSearchRepository.findOrders());
+            return paginateResults(salesOrderLookupRepository.findOrders());
 
         } catch (RepositoryException e) {
             storeException(e);
