@@ -186,6 +186,7 @@ public interface PartyRepositoryInterface extends RepositoryInterface {
      * @throws RepositoryException if an error occurs
      */
     public List<PartyNoteView> getNotes(Party party) throws RepositoryException;
+
     /**
      * Finds the first matched <code>PostalAddress</code> priority by GENERAL_LOCATION->BILLING_LOCATION->PAYMENT_LOCATION.
      * @return the <code>PostalAddress</code> matching the given <code>Party</code>

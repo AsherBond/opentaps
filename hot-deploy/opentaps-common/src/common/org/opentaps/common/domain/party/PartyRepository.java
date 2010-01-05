@@ -60,11 +60,12 @@ import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.foundation.service.ServiceException;
 import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
 
-/** {@inheritDoc} */
+/**
+ * Repository for Parties to handle interaction of Party-related domain with the entity engine (database) and the service engine.
+ */
 public class PartyRepository extends DomainRepository implements PartyRepositoryInterface {
 
     private static final String MODULE = PartyRepository.class.getName();
