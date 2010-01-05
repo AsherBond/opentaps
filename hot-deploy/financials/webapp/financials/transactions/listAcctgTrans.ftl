@@ -32,6 +32,7 @@
                 <@headerCell title=uiLabelMap.FinancialsTransactionDate orderBy="transactionDate DESC"/>
                 <@headerCell title=uiLabelMap.FinancialsScheduledPostingDate orderBy="scheduledPostingDate DESC"/>
                 <@headerCell title=uiLabelMap.FinancialsPostedDate orderBy="postedDate DESC"/>
+                <@headerCell title=uiLabelMap.FinancialsPostedAmount orderBy="postedAmount"/>
             </tr>
             <#list pageRows as row>
             <tr class="${tableRowClass(row_index)}">
@@ -42,6 +43,7 @@
                 <@displayDateCell date=row.transactionDate/>
                 <@displayDateCell date=row.scheduledPostingDate/>
                 <@displayDateCell date=row.postedDate/>
+                <@displayCell text=row.postedAmount />
             </tr>
             </#list>
         </table>

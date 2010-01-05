@@ -40,7 +40,6 @@ import org.opentaps.common.builder.EntityListBuilder;
 import org.opentaps.common.builder.PageBuilder;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.domain.DomainsDirectory;
-import org.opentaps.domain.ledger.GeneralLedgerAccount;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.foundation.action.ActionContext;
 
@@ -125,11 +124,12 @@ public class TransactionActions {
             	searchConditions.add(EntityCondition.makeCondition(AcctgTransAndOrg.Fields.postedAmount.name(), EntityOperator.GREATER_THAN_EQUAL_TO, new BigDecimal(postedAmountFrom)));
             }
             if (UtilValidate.isNotEmpty(postedAmountThru)) {
-            	searchConditions.add(EntityCondition.makeCondition(AcctgTransAndOrg.Fields.postedAmount.name(), EntityOperator.LESS_THAN_EQUAL_TO, new BigDecimal(postedAmountFrom)));
+            	searchConditions.add(EntityCondition.makeCondition(AcctgTransAndOrg.Fields.postedAmount.name(), EntityOperator.LESS_THAN_EQUAL_TO, new BigDecimal(postedAmountThru)));
             }
-
+            // fields to select
             List<String> fieldsToSelect = UtilMisc.toList("acctgTransId", "acctgTransTypeId", "isPosted", "partyId", "transactionDate", "scheduledPostingDate");
-            fieldsToSelect.add("postedDate"); // fields to select
+            fieldsToSelect.add("postedDate");
+            fieldsToSelect.add("postedAmount");
             Debug.logInfo("search conditions : " + EntityCondition.makeCondition(searchConditions, EntityOperator.AND).toString(), MODULE);
             EntityListBuilder acctgTransListBuilder = new EntityListBuilder(ledgerRepository, AcctgTransAndOrg.class, EntityCondition.makeCondition(searchConditions, EntityOperator.AND), fieldsToSelect, UtilMisc.toList(AcctgTransAndOrg.Fields.transactionDate.desc()));
             PageBuilder<AcctgTransAndOrg> pageBuilder = new PageBuilder<AcctgTransAndOrg>() {
