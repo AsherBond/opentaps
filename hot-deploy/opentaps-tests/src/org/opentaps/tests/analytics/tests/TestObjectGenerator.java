@@ -467,7 +467,7 @@ public class TestObjectGenerator {
                     callCtxt.put("productPricePurposeId", "PURCHASE");
                     callCtxt.put("currencyUomId", "USD");
                     callCtxt.put("fromDate", fromDate);
-                    callCtxt.put("price", new Double(getRandomIndex(200)));
+                    callCtxt.put("price", new BigDecimal(getRandomIndex(200)));
                     callCtxt.put("productStoreGroupId", "_NA_");
                     dispatcher.runSync("createProductPrice", callCtxt);
 
