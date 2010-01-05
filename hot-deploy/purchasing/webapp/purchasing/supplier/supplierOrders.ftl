@@ -25,7 +25,7 @@
 
 <div class="subSectionBlock">
   <@frameSectionHeader title=uiLabelMap.PurchOpenOrders extra=extraOptions/>
-  <#if hasViewOrderPermission?exists>
+  <#if hasViewOrderPermission?exists && hasViewOrderPermission == true>
     <@gwtWidget id="supplierOpenOrdersSubsection" partyId="${supplierPartyId}"/>
   </#if>
 </div>

@@ -63,7 +63,7 @@
                 <!-- target for order by and pagination links -->
                 <set field="listSortTarget" value="viewSupplier"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/includes/pagination.bsh"/>
-                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/supplier/viewSupplier.bsh"/>
+                <java location="org.opentaps.purchasing.supplier.SupplierActions" invoke="viewSupplier"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/supplier/purchasingAgreementPermissions.bsh"/>
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/contactmech/viewprofile.bsh"/>
             </actions>
@@ -93,7 +93,7 @@
                                     <if-compare field="hasViewOrderPermission" operator="equals" value="true" type="Boolean"/>
                                 </condition>
                                 <actions>
-                                    <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/supplier/SupplierPurchAgreements.bsh"/>
+                                    <java location="org.opentaps.purchasing.supplier.SupplierActions" invoke="supplierPurchasingAgreements"/>
                                 </actions>
                                 <widgets>
                                     <platform-specific>
@@ -176,7 +176,7 @@
             <actions>
                 <set field="sectionHeaderUiLabel" value="PurchUpdateSupplier"/>
                 <set field="requiredPermission" value="PRCH_SPLR_UPDATE"/>
-                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/supplier/viewSupplier.bsh"/>
+                <java location="org.opentaps.purchasing.supplier.SupplierActions" invoke="viewSupplier"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
