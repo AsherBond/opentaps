@@ -110,6 +110,19 @@ public class Entity implements EntityInterface {
     }
 
     /**
+     * Returns a <code>List</code> of <code>Map</code> from a List of entities by calling their <code>toMap()</code> method.
+     * @param entities a <code>Iterable<? extends EntityInterface></code> value
+     * @return a <code>List<Map<String,Object>></code> value
+     */
+    public static List<Map<String, Object>> toMaps(Iterable<? extends EntityInterface> entities) {
+        List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
+        for (EntityInterface e : entities) {
+            maps.add(e.toMap());
+        }
+        return maps;
+    }
+
+    /**
      * Returns a <code>Map</code> with only the listed fields.
      * One application is to build a Set of entities that have distinct values for a sub set of their fields
      * @param fields list of field names to include
