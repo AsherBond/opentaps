@@ -43,7 +43,7 @@
                 <@displayDateCell date=row.transactionDate/>
                 <@displayDateCell date=row.scheduledPostingDate/>
                 <@displayDateCell date=row.postedDate/>
-                <@displayCell text=row.postedAmount blockClass="textright"/>
+                <@displayCurrencyCell amount=row.postedAmount class="textright"/>
             </tr>
             </#list>
         </table>
