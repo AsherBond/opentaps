@@ -16,6 +16,12 @@
  */
 package org.opentaps.gwt.purchasing.client.orders.form;
 
+import com.gwtext.client.widgets.Panel;
+import com.gwtext.client.widgets.form.Field;
+import com.gwtext.client.widgets.form.TextField;
+import com.gwtext.client.widgets.form.event.FieldListenerAdapter;
+import com.gwtext.client.widgets.layout.ColumnLayout;
+import com.gwtext.client.widgets.layout.ColumnLayoutData;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.FindEntityForm;
 import org.opentaps.gwt.common.client.form.base.SubFormPanel;
@@ -25,11 +31,6 @@ import org.opentaps.gwt.common.client.listviews.PurchaseOrderListView;
 import org.opentaps.gwt.common.client.suggest.OrderStatusAutocomplete;
 import org.opentaps.gwt.common.client.suggest.ProductAutocomplete;
 import org.opentaps.gwt.common.client.suggest.SupplierAutocomplete;
-
-import com.gwtext.client.widgets.Panel;
-import com.gwtext.client.widgets.form.TextField;
-import com.gwtext.client.widgets.layout.ColumnLayout;
-import com.gwtext.client.widgets.layout.ColumnLayoutData;
 
 /**
  * Form class for find order in purchasing.
@@ -55,7 +56,7 @@ public class FindOrdersForm extends FindEntityForm<PurchaseOrderListView> {
     private final TextField createdByInput;
 
     private final PurchaseOrderListView orderListView;
-    
+
     // find all option
     private final CheckboxField findAllInput;
 
@@ -88,11 +89,29 @@ public class FindOrdersForm extends FindEntityForm<PurchaseOrderListView> {
         createdByInput = new TextField(UtilUi.MSG.commonCreatedBy(), "createdBy", getInputLength());
         findAllInput = new CheckboxField(UtilUi.MSG.commonFindAll(), "findAll");
 
+        // add a listener to disable the find all option if a status is specified
+        // since this option will be ignored
+        orderStatusInput.addListener(new FieldListenerAdapter() {
+                @Override public void onChange(Field field, Object newVal, Object oldVal) {
+                    if (orderStatusInput.getText() != null && !"".equals(orderStatusInput.getText())) {
+                        findAllInput.setValue(false);
+                    }
+                }
+            });
+        // and vice versa if find all is selected clear the status input
+        findAllInput.addListener(new FieldListenerAdapter() {
+                @Override public void onChange(Field field, Object newVal, Object oldVal) {
+                    if (findAllInput.getValue()) {
+                        orderStatusInput.setValue("");
+                    }
+                }
+            });
+
         // Build the filter tab
         filterPanel = getMainForm().addTab(UtilUi.MSG.crmFindOrders());
         // hide the tab bar since we only use one tab
         getMainForm().hideTabBar();
-        
+
         Panel mainPanel = new Panel();
         mainPanel.setLayout(new ColumnLayout());
 
@@ -110,19 +129,19 @@ public class FindOrdersForm extends FindEntityForm<PurchaseOrderListView> {
 
         columnOnePanel.addField(productPatternInput);
         columnTwoPanel.add(UtilUi.makeBlankFormCell());
-        
+
         columnOnePanel.addField(orderStatusInput);
         columnTwoPanel.add(UtilUi.makeBlankFormCell());
-        
+
         columnOnePanel.addField(fromDateInput);
         columnTwoPanel.addField(thruDateInput);
-        
+
         columnOnePanel.addField(createdByInput);
         columnTwoPanel.add(UtilUi.makeBlankFormCell());
-        
+
         columnOnePanel.addField(findAllInput);
         columnTwoPanel.add(UtilUi.makeBlankFormCell());
-        
+
         filterPanel.add(mainPanel);
 
         orderListView = new PurchaseOrderListView();
