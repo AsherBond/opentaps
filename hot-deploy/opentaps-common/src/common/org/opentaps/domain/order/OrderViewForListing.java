@@ -94,7 +94,7 @@ public class OrderViewForListing extends Entity {
 
     /**
      * Creates a new <code>OrderViewForListing</code> instance from an <code>EntityInterface</code>.
-     * @param clone an <code>OrderHeaderItemAndRolesAndInvPending</code> value
+     * @param clone an <code>EntityInterface</code> value
      * @param delegator a <code>GenericDelegator</code> value
      * @param timeZone a <code>TimeZone</code> value
      * @param locale a <code>Locale</code> value
@@ -363,6 +363,7 @@ public class OrderViewForListing extends Entity {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("orderId", getOrderId());
@@ -383,6 +384,7 @@ public class OrderViewForListing extends Entity {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void fromMap(Map<String, Object> mapValue) {
         setOrderId((String) mapValue.get("orderId"));
         setPartyId((String) mapValue.get("partyId"));
