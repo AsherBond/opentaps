@@ -14,15 +14,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.domain.search;
-
-import org.opentaps.foundation.repository.RepositoryInterface;
+package org.opentaps.foundation.repository;
 
 /**
- * Base class for the lookup repositories implementations.
+ * Base interface for the lookup repositories.
  * Provides accessors for the pagination settings.
  */
-public interface CommonLookupRepositoryInterface extends RepositoryInterface {
+public interface LookupRepositoryInterface extends RepositoryInterface {
 
     /**
      * Sets if the service should paginate the results, default to <code>true</code>.

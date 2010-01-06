@@ -14,21 +14,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.domain.search.order;
+package org.opentaps.domain.order;
 
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.opentaps.common.domain.order.OrderViewForListing;
-import org.opentaps.domain.search.CommonLookupRepositoryInterface;
+import org.opentaps.foundation.repository.LookupRepositoryInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 
 /**
  * Repository to lookup Sales Orders.
  */
-public interface SalesOrderLookupRepositoryInterface extends CommonLookupRepositoryInterface {
+public interface SalesOrderLookupRepositoryInterface extends LookupRepositoryInterface {
 
     /**
      * Sets the order Id to search for.

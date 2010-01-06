@@ -18,15 +18,14 @@ package org.opentaps.gwt.common.server.lookup;
 
 import java.util.List;
 import java.util.Locale;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.ofbiz.base.util.UtilValidate;
-import org.opentaps.common.domain.order.OrderViewForListing;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
-import org.opentaps.domain.search.order.PurchaseOrderLookupRepositoryInterface;
+import org.opentaps.domain.order.OrderViewForListing;
+import org.opentaps.domain.order.PurchaseOrderLookupRepositoryInterface;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.InfrastructureException;

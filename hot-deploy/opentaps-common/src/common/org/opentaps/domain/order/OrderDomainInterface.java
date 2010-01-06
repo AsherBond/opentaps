@@ -17,8 +17,6 @@
 package org.opentaps.domain.order;
 
 import org.opentaps.domain.inventory.OrderInventoryServiceInterface;
-import org.opentaps.domain.search.order.PurchaseOrderLookupRepositoryInterface;
-import org.opentaps.domain.search.order.SalesOrderLookupRepositoryInterface;
 import org.opentaps.foundation.domain.DomainInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;

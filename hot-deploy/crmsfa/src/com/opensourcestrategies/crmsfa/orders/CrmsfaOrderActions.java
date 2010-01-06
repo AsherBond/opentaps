@@ -22,14 +22,13 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import javolution.util.FastList;
-
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.opentaps.common.domain.order.OrderViewForListing;
 import org.opentaps.domain.DomainsDirectory;
-import org.opentaps.domain.search.order.SalesOrderLookupRepositoryInterface;
+import org.opentaps.domain.order.OrderViewForListing;
+import org.opentaps.domain.order.SalesOrderLookupRepositoryInterface;
 import org.opentaps.foundation.action.ActionContext;
 
 /**

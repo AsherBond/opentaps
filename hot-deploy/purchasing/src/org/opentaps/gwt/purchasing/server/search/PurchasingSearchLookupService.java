@@ -5,12 +5,10 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import javolution.util.FastMap;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
@@ -18,10 +16,10 @@ import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.entities.OrderHeaderItemAndRolesAndInvPending;
 import org.opentaps.base.entities.PartyGroup;
 import org.opentaps.base.entities.PartyRoleNameDetailSupplementalData;
-import org.opentaps.common.domain.order.OrderViewForListing;
 import org.opentaps.common.util.ConvertMapToString;
 import org.opentaps.common.util.ICompositeValue;
 import org.opentaps.domain.order.Order;
+import org.opentaps.domain.order.OrderViewForListing;
 import org.opentaps.domain.party.Party;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityInterface;

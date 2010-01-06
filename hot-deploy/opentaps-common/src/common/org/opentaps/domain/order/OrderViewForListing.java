@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.common.domain.order;
+package org.opentaps.domain.order;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -128,6 +128,13 @@ public class OrderViewForListing extends Entity {
         return results;
     }
 
+    /**
+     * Calculates the extra fields, normal fields should have set first.
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param timeZone a <code>TimeZone</code> value
+     * @param locale a <code>Locale</code> value
+     * @exception RepositoryException if an error occurs
+     */
     public void calculateExtraFields(GenericDelegator delegator, TimeZone timeZone, Locale locale) throws RepositoryException {
         if (getOrderDate() != null) {
             setOrderDateString(UtilDateTime.timeStampToString(getOrderDate(), UtilDateTime.getDateTimeFormat(locale), timeZone, locale));

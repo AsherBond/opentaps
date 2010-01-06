@@ -43,12 +43,13 @@ import org.opentaps.base.entities.OrderHeader;
 import org.opentaps.base.entities.OrderItem;
 import org.opentaps.base.entities.OrderRole;
 import org.opentaps.common.util.UtilDate;
-import org.opentaps.domain.search.CommonLookupRepository;
-import org.opentaps.domain.search.order.SalesOrderLookupRepositoryInterface;
+import org.opentaps.domain.order.OrderViewForListing;
+import org.opentaps.domain.order.SalesOrderLookupRepositoryInterface;
 import org.opentaps.foundation.entity.hibernate.HibernateUtil;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.foundation.repository.ofbiz.CommonLookupRepository;
 
 /**
  * Repository to lookup Sales Orders.

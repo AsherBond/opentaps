@@ -45,16 +45,17 @@ import org.opentaps.base.entities.OrderRole;
 import org.opentaps.base.entities.ProductAndGoodIdentification;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.domain.DomainsDirectory;
+import org.opentaps.domain.order.OrderViewForListing;
+import org.opentaps.domain.order.PurchaseOrderLookupRepositoryInterface;
 import org.opentaps.domain.product.Product;
 import org.opentaps.domain.product.ProductRepositoryInterface;
-import org.opentaps.domain.search.CommonLookupRepository;
-import org.opentaps.domain.search.order.PurchaseOrderLookupRepositoryInterface;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.entity.hibernate.HibernateUtil;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.foundation.repository.ofbiz.CommonLookupRepository;
 
 /**
  * Repository to lookup Purchase Orders.
