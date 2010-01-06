@@ -30,7 +30,7 @@
         <field name="securityGroupId" title="${uiLabelMap.PartyRole}">
             <display-entity entity-name="SecurityGroup" key-field-name="groupId"/>
         </field>
-        <field name=" " use-when="hasConfigPermission==true" widget-style="buttontext">
+        <field name="removeButton" use-when="hasConfigPermission==true" widget-style="buttontext">
             <hyperlink description="${uiLabelMap.CommonRemove}" target="removeFacilityTeamMember">
                 <parameter param-name="partyId" from-field="partyId"/>
                 <parameter param-name="facilityId" from-field="facilityId"/>
