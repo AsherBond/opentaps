@@ -116,10 +116,10 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
 
         columnOnePanel.addField(orderIdInput);
         columnTwoPanel.addField(externalIdInput);
-        
+
         columnOnePanel.addField(orderNameInput);
         columnTwoPanel.add(UtilUi.makeBlankFormCell());
-        
+
         columnOnePanel.addField(customerInput);
         columnTwoPanel.addField(productStoreInput);
 
@@ -137,7 +137,7 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
 
         columnOnePanel.addField(lotInput);
         columnTwoPanel.addField(serialNumberInput);
-        
+
         columnOnePanel.addField(findAllInput);
         columnTwoPanel.add(UtilUi.makeBlankFormCell());
 
@@ -164,9 +164,9 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
         getListView().filterByLotId(lotInput.getText());
         getListView().filterBySerialNumber(serialNumberInput.getText());
         if (orderStatusInput.getText() == null || "".equals(orderStatusInput.getText())) {
-            getListView().filterHasIncludeInactiveOrders(findAllInput.getValue());
+            getListView().filterIncludeInactiveOrders(findAllInput.getValue());
         } else {
-            getListView().filterHasIncludeInactiveOrders(true);
+            getListView().filterIncludeInactiveOrders(true);
         }
         getListView().applyFilters();
     }

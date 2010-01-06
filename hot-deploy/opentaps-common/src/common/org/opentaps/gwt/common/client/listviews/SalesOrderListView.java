@@ -196,7 +196,7 @@ public class SalesOrderListView extends EntityListView {
      * Filters the records of the list if include the inactive orders.
      * @param findAll a <code>boolean</code> value
      */
-    public void filterHasIncludeInactiveOrders(boolean findAll) {
+    public void filterIncludeInactiveOrders(boolean findAll) {
         setFilter(SalesOrderLookupConfiguration.IN_FIND_ALL, findAll ? "Y" : "N");
     }
 }
