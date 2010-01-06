@@ -16,6 +16,12 @@
  */
 package org.opentaps.gwt.crmsfa.client.orders.form;
 
+import com.gwtext.client.widgets.Panel;
+import com.gwtext.client.widgets.form.Field;
+import com.gwtext.client.widgets.form.TextField;
+import com.gwtext.client.widgets.form.event.FieldListenerAdapter;
+import com.gwtext.client.widgets.layout.ColumnLayout;
+import com.gwtext.client.widgets.layout.ColumnLayoutData;
 import org.opentaps.gwt.common.client.UtilUi;
 import org.opentaps.gwt.common.client.form.FindEntityForm;
 import org.opentaps.gwt.common.client.form.base.SubFormPanel;
@@ -26,11 +32,6 @@ import org.opentaps.gwt.common.client.suggest.CustomerAutocomplete;
 import org.opentaps.gwt.common.client.suggest.LotAutocomplete;
 import org.opentaps.gwt.common.client.suggest.OrderStatusAutocomplete;
 import org.opentaps.gwt.common.client.suggest.ProductStoreAutocomplete;
-
-import com.gwtext.client.widgets.Panel;
-import com.gwtext.client.widgets.form.TextField;
-import com.gwtext.client.widgets.layout.ColumnLayout;
-import com.gwtext.client.widgets.layout.ColumnLayoutData;
 
 /**
  * Form class for find order in crmsfa.
@@ -99,6 +100,24 @@ public class FindOrdersForm extends FindEntityForm<SalesOrderListView> {
         lotInput = new LotAutocomplete(UtilUi.MSG.productLotId(), "lotId", getInputLength());
         serialNumberInput = new TextField(UtilUi.MSG.productSerialNumber(), "serialNumber", getInputLength());
         findAllInput = new CheckboxField(UtilUi.MSG.commonFindAll(), "findAll");
+
+        // add a listener to disable the find all option if a status is specified
+        // since this option will be ignored
+        orderStatusInput.addListener(new FieldListenerAdapter() {
+                @Override public void onChange(Field field, Object newVal, Object oldVal) {
+                    if (orderStatusInput.getText() != null && !"".equals(orderStatusInput.getText())) {
+                        findAllInput.setValue(false);
+                    }
+                }
+            });
+        // and vice versa if find all is selected clear the status input
+        findAllInput.addListener(new FieldListenerAdapter() {
+                @Override public void onChange(Field field, Object newVal, Object oldVal) {
+                    if (findAllInput.getValue()) {
+                        orderStatusInput.setValue("");
+                    }
+                }
+            });
 
         // Build the filter tab
         filterPanel = getMainForm().addTab(UtilUi.MSG.crmFindOrders());
