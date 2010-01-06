@@ -22,18 +22,16 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import javolution.util.FastList;
-
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.base.entities.StatusItem;
-import org.opentaps.common.domain.order.OrderViewForListing;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
-import org.opentaps.domain.search.order.PurchaseOrderLookupRepositoryInterface;
+import org.opentaps.domain.order.OrderViewForListing;
+import org.opentaps.domain.order.PurchaseOrderLookupRepositoryInterface;
 import org.opentaps.foundation.action.ActionContext;
-
 
 
 /**
@@ -55,11 +53,11 @@ public final class PurchasingOrderActions {
         ActionContext ac = new ActionContext(context);
         Locale locale = ac.getLocale();
         TimeZone timeZone = ac.getTimeZone();
-        
+
         DomainsDirectory dd = DomainsDirectory.getDomainsDirectory(ac);
         PurchaseOrderLookupRepositoryInterface purchaseOrderLookupRepository = dd.getOrderDomain().getPurchaseOrderLookupRepository();
         InventoryRepositoryInterface inventoryRepository = dd.getInventoryDomain().getInventoryRepository();
-        
+
         // get the list of statuses for the parametrized form ftl
         List<StatusItem> statuses = purchaseOrderLookupRepository.findListCache(StatusItem.class, purchaseOrderLookupRepository.map(StatusItem.Fields.statusTypeId, "ORDER_STATUS"), UtilMisc.toList(StatusItem.Fields.sequenceId.name()));
         List<Map<String, Object>> statusList = new FastList<Map<String, Object>>();
@@ -70,7 +68,7 @@ public final class PurchasingOrderActions {
         }
         ac.put("statusItems", statusList);
 
-     // Initial values for the variables passed to the FTL script
+        // Initial values for the variables passed to the FTL script
         List<Map<String, Object>> resultList = FastList.<Map<String, Object>>newInstance();
         int resultTotalSize = 0;
         String extraParameters = "";
@@ -78,11 +76,11 @@ public final class PurchasingOrderActions {
         // populate the organization party which lookup purchase orders requires
         String organizationPartyId = UtilCommon.getOrganizationPartyId(ac.getRequest());
         String facilityId = (String) ac.getRequest().getSession().getAttribute("facilityId");
-    	if (UtilValidate.isEmpty(organizationPartyId)) {
+        if (UtilValidate.isEmpty(organizationPartyId)) {
             organizationPartyId = inventoryRepository.getFacilityById(facilityId).getOwnerPartyId();
         }
-        
-        
+
+
         // order by
         String orderParam = ac.getParameter("ordersOrderBy");
         if (UtilValidate.isEmpty(orderParam)) {
@@ -100,48 +98,48 @@ public final class PurchasingOrderActions {
         String orderId = ac.getParameter("orderId");
         String orderName = ac.getParameter("orderName");
         String performFind = ac.getParameter("performFind");
-        
+
         // We only perform a lookup if either this is the "Open Orders" form, or if the perform
         // lookup flag is either passed as a parameter or has already been passed in the context
         // (e.g. by setting it up in a screen)
-        if ("Y".equals(ac.getString("performFind")) ||
-        		"Y".equals(ac.getParameter("performFind")) || 
-        		"true".equals(ac.getString("onlyOpenOrders"))) {
-        	extraParameters = "&orderId=" + orderId + "&orderName=" + orderName + "&supplierPartyId=" + partyId + "&statusId=" + statusId + "&performFind=" + performFind;
-        	purchaseOrderLookupRepository.setLocale(locale);
-        	purchaseOrderLookupRepository.setTimeZone(timeZone);
+        if ("Y".equals(ac.getString("performFind")) || "Y".equals(ac.getParameter("performFind")) || "true".equals(ac.getString("onlyOpenOrders"))) {
+            extraParameters = "&orderId=" + orderId + "&orderName=" + orderName + "&supplierPartyId=" + partyId + "&statusId=" + statusId + "&performFind=" + performFind;
+            purchaseOrderLookupRepository.setLocale(locale);
+            purchaseOrderLookupRepository.setTimeZone(timeZone);
 
-        	purchaseOrderLookupRepository.setOrganizationPartyId(organizationPartyId);
-        	if (UtilValidate.isNotEmpty(statusId)) {
-        		purchaseOrderLookupRepository.setStatusId(statusId);
-        	}
-        	if (UtilValidate.isNotEmpty(partyId)) {
-        		purchaseOrderLookupRepository.setSupplierPartyId(partyId);
-        	}
-        	if (UtilValidate.isNotEmpty(orderId)) {
-        		purchaseOrderLookupRepository.setOrderId(orderId);
-        	}
-        	if (UtilValidate.isNotEmpty(orderName)) {
-        		purchaseOrderLookupRepository.setOrderName(orderName);
-        	}
-        	if ("true".equals(ac.getString("onlyOpenOrders"))) {
-        		purchaseOrderLookupRepository.setFindDesiredOnly(true);
-        	}
+            purchaseOrderLookupRepository.setOrganizationPartyId(organizationPartyId);
+            if (UtilValidate.isNotEmpty(statusId)) {
+                purchaseOrderLookupRepository.setStatusId(statusId);
+            }
 
+            if (UtilValidate.isNotEmpty(partyId)) {
+                purchaseOrderLookupRepository.setSupplierPartyId(partyId);
+            }
 
-        	purchaseOrderLookupRepository.setOrderBy(orderBy);
-        	List<OrderViewForListing> orders = purchaseOrderLookupRepository.findOrders();
-        	// return the map collection for the screen render
-        	for (OrderViewForListing order : orders) {
-        		resultList.add(order.toMap());
-        	}
-        	resultTotalSize = resultList.size();
+            if (UtilValidate.isNotEmpty(orderId)) {
+                purchaseOrderLookupRepository.setOrderId(orderId);
+            }
+
+            if (UtilValidate.isNotEmpty(orderName)) {
+                purchaseOrderLookupRepository.setOrderName(orderName);
+            }
+
+            if ("true".equals(ac.getString("onlyOpenOrders"))) {
+                purchaseOrderLookupRepository.setFindDesiredOnly(true);
+            }
+
+            purchaseOrderLookupRepository.setOrderBy(orderBy);
+            List<OrderViewForListing> orders = purchaseOrderLookupRepository.findOrders();
+            // return the map collection for the screen render
+            for (OrderViewForListing order : orders) {
+                resultList.add(order.toMap());
+            }
+            resultTotalSize = resultList.size();
         }
-
 
         ac.put("purchaseOrders", resultList);
         ac.put("purchaseOrdersTotalSize", resultTotalSize);
         ac.put("extraParameters", extraParameters);
-        
+
     }
 }
