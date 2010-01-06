@@ -173,24 +173,23 @@
             <actions>
                 <set field="pageTitleLabel" value="OpentapsFindPurch"/>
                 <set field="sectionHeaderUiLabel" value="OpentapsFindPurch"/>
-                <!-- <set field="pageTitlelabel" value="PurchFindPurchaseOrders"/> -->
-                <!-- <set field="sectionHeaderUiLabel" value="PurchFindPurchaseOrders"/> -->
-                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
-                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/>
-                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/order/findPurchaseOrdersForm.bsh"/>
-                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/order/findPurchaseOrders.bsh"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="1"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="50"/>                
+                <java location="org.opentaps.purchasing.order.PurchasingOrderActions" invoke="findOrders"/>
             </actions>
             <widgets>
                 <decorator-screen name="CommonLookup">
                     <decorator-section name="lookup-body">
                         <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.OpentapsFindPurch}</label></container>
                             <container style="form">
                                 <platform-specific>
                                     <html><html-template location="component://opentaps-common/webapp/common/lookups/LookupPurchaseOrder.ftl"/></html>
                                 </platform-specific>
                             </container>
-                        </container>
+                        </container>                    
                         <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.OrderOrders}</label></container>
                             <platform-specific>
                                 <html><html-template location="component://opentaps-common/webapp/common/order/findPurchaseOrders.ftl"/></html>
                             </platform-specific>

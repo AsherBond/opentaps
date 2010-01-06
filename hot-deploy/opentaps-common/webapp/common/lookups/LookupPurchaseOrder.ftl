@@ -16,12 +16,8 @@
 -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
-
-<@sectionHeader title=uiLabelMap.OpentapsFindPurch />
-
-<div class="subSectionBlock">
 <form method="post" target="" name="findOrdersForm">
-<table class="twoColumnForm">
+<table>
   <@inputTextRow name="orderId" title=uiLabelMap.OrderOrderId default=parameters.orderId?if_exists />
   <@inputTextRow name="orderName" title=uiLabelMap.OrderOrderName default=parameters.orderName?if_exists />
   <@inputTextRow name="supplierPartyId" title=uiLabelMap.ProductSupplier default=parameters.supplierPartyId?if_exists />
@@ -30,4 +26,3 @@
   <@inputSubmitRow title=uiLabelMap.CommonFind />
 </table>
 </form>
-</div>
