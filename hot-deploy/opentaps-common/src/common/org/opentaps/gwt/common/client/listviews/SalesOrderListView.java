@@ -77,6 +77,8 @@ public class SalesOrderListView extends EntityListView {
 
         ColumnConfig columnShipByDate = makeColumn(UtilUi.MSG.orderShipBeforeDate(), new StringFieldDef(SalesOrderLookupConfiguration.OUT_SHIP_BY_DATE_STRING));
         columnShipByDate.setWidth(100);
+        // the ship by date is not directly sortable
+        columnShipByDate.setSortable(false);
 
         ColumnConfig columnAmount = makeCurrencyColumn(UtilUi.MSG.orderAmount(), new StringFieldDef(SalesOrderLookupConfiguration.OUT_CURRENCY_UOM), new StringFieldDef(SalesOrderLookupConfiguration.OUT_GRAND_TOTAL));
         columnAmount.setWidth(100);
