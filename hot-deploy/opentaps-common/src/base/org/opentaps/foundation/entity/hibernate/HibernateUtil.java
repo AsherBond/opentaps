@@ -39,7 +39,6 @@ import org.ofbiz.entity.EntityCryptoException;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericEntityException;
-import org.ofbiz.entity.GenericPK;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.model.ModelField;
@@ -51,14 +50,18 @@ import org.opentaps.foundation.infrastructure.Infrastructure;
 /**
  * Hibernate Util Class.
  */
-public class HibernateUtil {
+public final class HibernateUtil {
+
     private static final String MODULE = HibernateUtil.class.getName();
+
     // define delimiter, for split words in hql
-    public static String DELIMITERS = " \t\n\r";
+    private static String DELIMITERS = " \t\n\r";
     // define word pattern
-    public static String WORD_PATTERN = "[\\w\\.]+";
+    private static String WORD_PATTERN = "[\\w\\.]+";
     // define logic sign pattern
-    public static String SIGN_PATTERN = "(like)|[>=<]+";
+    private static String SIGN_PATTERN = "(like)|[>=<]+";
+
+    private HibernateUtil() { }
 
     /**
      * Gets the next guaranteed unique seq id from the sequence with the given sequence name;
@@ -120,26 +123,23 @@ public class HibernateUtil {
     /**
      * refresh pojo properties by GenericValue.
      *
-     * @param entity
-     *            a <code>Entity</code> object
-     * @param value
-     *            a <code>GenericValue</code> object
-     * @throws GenericEntityException
-     *             if an error occurs
+     * @param entity a <code>Entity</code> object
+     * @param value a <code>GenericValue</code> object
+     * @throws GenericEntityException if an error occurs
      */
     public static void refreshPojoByGenericValue(Entity entity, GenericEntity value) throws GenericEntityException {
-        Map fields = value.getAllFields();
-        Iterator it = fields.entrySet().iterator();
+        Map<String, Object> fields = value.getAllFields();
+        Iterator<Entry<String, Object>> it = fields.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry entry = (Entry) it.next();
+            Entry<String, Object> entry = it.next();
             if (!entity.getPrimaryKeyNames().contains(entry.getKey())) {
-                entity.set((String) entry.getKey(), entry.getValue());
+                entity.set(entry.getKey(), entry.getValue());
             }
         }
     }
 
     /**
-     * Get if exist specific filed in object.
+     * Checks if the specific field exists in object the given object.
      *
      * @param object a <code>Object</code> value
      * @param fieldName field name
@@ -150,7 +150,7 @@ public class HibernateUtil {
      * @throws IllegalAccessException if an error occurs
      * @throws InvocationTargetException if an error occurs
      */
-    public static  boolean isExistField(Object object, String fieldName, Class classType) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    public static boolean fieldExists(Object object, String fieldName, Class classType) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         String getter = "get" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
         String setter = "set" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
         Method getMethod = object.getClass().getMethod(getter);
@@ -195,17 +195,17 @@ public class HibernateUtil {
             String setter = "set" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
             Method[] methods = object.getClass().getDeclaredMethods();
             for (Method method : methods) {
-            	if (method.getName().equals(setter) && method.getParameterTypes().length == 1) {
-            		// just work on find same method name in target class
-            		if (method.getParameterTypes()[0].equals(fieldValue.getClass())) {
+                if (method.getName().equals(setter) && method.getParameterTypes().length == 1) {
+                    // just work on find same method name in target class
+                    if (method.getParameterTypes()[0].equals(fieldValue.getClass())) {
                         method.invoke(object, fieldValue);
-            		} else {
-            			if (method.getParameterTypes()[0].equals(BigDecimal.class) && fieldValue.getClass().equals(Double.class)) {
-            				BigDecimal bigDecimalValue = new BigDecimal((Double) fieldValue);
-            			    method.invoke(object, bigDecimalValue);
-            			}
-            		}
-            	}
+                    } else {
+                        if (method.getParameterTypes()[0].equals(BigDecimal.class) && fieldValue.getClass().equals(Double.class)) {
+                            BigDecimal bigDecimalValue = new BigDecimal((Double) fieldValue);
+                            method.invoke(object, bigDecimalValue);
+                        }
+                    }
+                }
             }
         }
     }
@@ -289,10 +289,9 @@ public class HibernateUtil {
             Entity entity =  getEntityInstanceByClassName(className);
             GenericValue genericValue = entityToGenericValue(entity, delegator);
             ModelEntity model = genericValue.getModelEntity();
-            Map fields = genericValue.getAllFields();
-            Iterator i = model.getFieldsIterator();
+            Iterator<ModelField> i = model.getFieldsIterator();
             while (i.hasNext()) {
-                ModelField modelField = (ModelField) i.next();
+                ModelField modelField = i.next();
                 if (modelField.getEncrypt()) {
                     //write encrypt field value
                     encryptFields.add(modelField.getName());
@@ -322,8 +321,7 @@ public class HibernateUtil {
         while (stringTokenizer.hasMoreTokens()) {
             // iterate each token
             String token = stringTokenizer.nextToken();
-            if (token.equalsIgnoreCase("from")
-                    && stringTokenizer.hasMoreTokens()) {
+            if (token.equalsIgnoreCase("from") && stringTokenizer.hasMoreTokens()) {
                 // class name should be the token that after "from" keyword
                 String fromClass = stringTokenizer.nextToken();
                 return fromClass;
@@ -344,8 +342,7 @@ public class HibernateUtil {
         while (stringTokenizer.hasMoreTokens()) {
             // iterate each token
             String token = stringTokenizer.nextToken();
-            if (token.equalsIgnoreCase("from")
-                    && stringTokenizer.hasMoreTokens()) {
+            if (token.equalsIgnoreCase("from") && stringTokenizer.hasMoreTokens()) {
                 // class name should be the token that after "from" keyword
                 String fromClass = stringTokenizer.nextToken();
                 if (fromClass.indexOf(".") > 0) {
@@ -370,18 +367,15 @@ public class HibernateUtil {
         while (stringTokenizer.hasMoreTokens()) {
             // iterate each token
             String token = stringTokenizer.nextToken();
-            if (token.equalsIgnoreCase("from")
-                    && stringTokenizer.hasMoreTokens()) {
+            if (token.equalsIgnoreCase("from") && stringTokenizer.hasMoreTokens()) {
                 String fromClass = stringTokenizer.nextToken();
                 if (stringTokenizer.hasMoreTokens()) {
                     String nextToken = stringTokenizer.nextToken();
                     // if exist "as", class alias should be next token
-                    if (nextToken.equalsIgnoreCase("as")
-                            && stringTokenizer.hasMoreTokens()) {
+                    if (nextToken.equalsIgnoreCase("as") && stringTokenizer.hasMoreTokens()) {
                         String classAlias = stringTokenizer.nextToken();
                         return classAlias;
-                    } else if (!nextToken.equalsIgnoreCase("where")
-                            && !nextToken.equalsIgnoreCase("order")) {
+                    } else if (!nextToken.equalsIgnoreCase("where") && !nextToken.equalsIgnoreCase("order")) {
                         // if not "where"/"order", class alias should be this
                         // token
                         return nextToken;
@@ -640,22 +634,28 @@ public class HibernateUtil {
      * Without a direction flag it will default to desc.
      * @param criteria a <code>Criteria</code> value
      * @param orderBy a <code>List<String></code> value
+     * @param substitutions a <code>Map</code> of the field name given to the field name to use in the order by
      * @return a <code>Criteria</code> value
      */
-    public static Criteria setCriteriaOrder(Criteria criteria, List<String> orderBy) {
+    public static Criteria setCriteriaOrder(Criteria criteria, List<String> orderBy, Map<String, String> substitutions) {
         for (String ord : orderBy) {
             boolean orderDesc = true;
             String o = ord.toUpperCase();
-            int n = o.lastIndexOf("DESC");
-            if (n > 0) {
-                ord = ord.substring(0, n).trim();
-            } else {
-                n = o.lastIndexOf("ASC");
-                if (n > 0) {
-                    ord = ord.substring(0, n).trim();
-                    orderDesc = false;
+            if (o.endsWith(" DESC")) {
+                ord = ord.substring(0, ord.length() - 5).trim();
+            } else if (o.endsWith(" ASC")) {
+                ord = ord.substring(0, ord.length() - 4).trim();
+                orderDesc = false;
+            }
+
+            if (substitutions != null && substitutions.containsKey(ord)) {
+                ord = substitutions.get(ord);
+                // a null key indicates that not order by is possible
+                if (ord == null) {
+                    continue;
                 }
             }
+
             if (orderDesc) {
                 criteria.addOrder(org.hibernate.criterion.Order.desc(ord));
             } else {
@@ -663,5 +663,18 @@ public class HibernateUtil {
             }
         }
         return criteria;
+    }
+
+    /**
+     * Sets the order by on a Criteria instance from a list of strings.
+     * Each orderBy element can be "field" or "field [asc/desc]" where
+     *  the direction flag can be any case.
+     * Without a direction flag it will default to desc.
+     * @param criteria a <code>Criteria</code> value
+     * @param orderBy a <code>List<String></code> value
+     * @return a <code>Criteria</code> value
+     */
+    public static Criteria setCriteriaOrder(Criteria criteria, List<String> orderBy) {
+        return setCriteriaOrder(criteria, orderBy, null);
     }
 }

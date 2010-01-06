@@ -35,8 +35,12 @@ import org.opentaps.foundation.entity.Entity;
 /**
  * This is class which provide common eca event codes to other EventListener.
  */
-public class EcaCommonEvent {
-    private static String module = EcaCommonEvent.class.getName();
+public final class EcaCommonEvent {
+
+    private static final String MODULE = EcaCommonEvent.class.getName();
+
+    private EcaCommonEvent() { }
+
     /**
      * execute the eccas of before save event, and return GenericValue.
      * this method should be call before save event in EcaPersistEventListener\EcaSaveOrUpdateEventListener\EcaSaveEventListener
@@ -46,7 +50,9 @@ public class EcaCommonEvent {
      * @return GenericValue
      */
     public static GenericValue beforeSave(Entity entity, GenericDelegator delegator) throws GenericEntityException {
-        if (entity==null) return null;
+        if (entity == null) {
+            return null;
+        }
         GenericValue value = HibernateUtil.entityToGenericValue(entity, delegator);
         // get eca event map
         Map ecaEventMap = delegator.getEntityEcaHandler().getEntityEventMap(value.getEntityName());
@@ -81,39 +87,39 @@ public class EcaCommonEvent {
 
         // automatically stores for timestamps with every entity persisted to the database
         try {
-            if (HibernateUtil.isExistField(entity, ModelEntity.CREATE_STAMP_FIELD, Timestamp.class)) {
+            if (HibernateUtil.fieldExists(entity, ModelEntity.CREATE_STAMP_FIELD, Timestamp.class)) {
                 // just store it when save new Entity
                 if (HibernateUtil.getFieldValue(entity, ModelEntity.CREATE_STAMP_FIELD) == null) {
                     HibernateUtil.setFieldValue(entity, ModelEntity.CREATE_STAMP_FIELD, UtilDateTime.nowTimestamp());
                 }
             }
-            if (HibernateUtil.isExistField(entity, ModelEntity.CREATE_STAMP_TX_FIELD, Timestamp.class)) {
-             // just store it when save new Entity
+            if (HibernateUtil.fieldExists(entity, ModelEntity.CREATE_STAMP_TX_FIELD, Timestamp.class)) {
+                // just store it when save new Entity
                 if (HibernateUtil.getFieldValue(entity, ModelEntity.CREATE_STAMP_TX_FIELD) == null) {
                     HibernateUtil.setFieldValue(entity, ModelEntity.CREATE_STAMP_TX_FIELD, UtilDateTime.nowTimestamp());
                 }
             }
-            if (HibernateUtil.isExistField(entity, ModelEntity.STAMP_FIELD, Timestamp.class)) {
+            if (HibernateUtil.fieldExists(entity, ModelEntity.STAMP_FIELD, Timestamp.class)) {
                 HibernateUtil.setFieldValue(entity, ModelEntity.STAMP_FIELD, UtilDateTime.nowTimestamp());
             }
-            if (HibernateUtil.isExistField(entity, ModelEntity.STAMP_TX_FIELD, Timestamp.class)) {
+            if (HibernateUtil.fieldExists(entity, ModelEntity.STAMP_TX_FIELD, Timestamp.class)) {
                 HibernateUtil.setFieldValue(entity, ModelEntity.STAMP_TX_FIELD, UtilDateTime.nowTimestamp());
             }
         } catch (IllegalArgumentException e) {
             String errMsg = "Failure in update timestamps for entity [" + HibernateUtil.getEntityClassName(entity) + "]: " + e.toString() + ".";
-            Debug.logError(e, errMsg, module);
+            Debug.logError(e, errMsg, MODULE);
             throw new HibernateException(e.getMessage());
         } catch (NoSuchMethodException e) {
             String errMsg = "Failure in update timestamps for entity [" + HibernateUtil.getEntityClassName(entity) + "]: " + e.toString() + ".";
-            Debug.logError(e, errMsg, module);
+            Debug.logError(e, errMsg, MODULE);
             throw new HibernateException(e.getMessage());
         } catch (IllegalAccessException e) {
             String errMsg = "Failure in update timestamps for entity [" + HibernateUtil.getEntityClassName(entity) + "]: " + e.toString() + ".";
-            Debug.logError(e, errMsg, module);
+            Debug.logError(e, errMsg, MODULE);
             throw new HibernateException(e.getMessage());
         } catch (InvocationTargetException e) {
             String errMsg = "Failure in update timestamps for entity [" + HibernateUtil.getEntityClassName(entity) + "]: " + e.toString() + ".";
-            Debug.logError(e, errMsg, module);
+            Debug.logError(e, errMsg, MODULE);
             throw new HibernateException(e.getMessage());
         }
         return value;
@@ -130,9 +136,11 @@ public class EcaCommonEvent {
      * @return GenericValue
      */
     public static GenericValue afterSave(Entity entity, GenericDelegator delegator) throws GenericEntityException {
-        if (entity==null) return null;
+        if (entity == null) {
+            return null;
+        }
         GenericValue value = HibernateUtil.entityToGenericValue(entity, delegator);
-        
+
         // always clear cache before the operation
         delegator.clearCacheLine(value);
 
@@ -154,7 +162,9 @@ public class EcaCommonEvent {
      * @throws GenericEntityException if an error occurs
      */
     public static void beforeDelete(Entity entity, GenericDelegator delegator) throws GenericEntityException {
-        if (entity==null) return;
+        if (entity == null) {
+            return;
+        }
         try {
             GenericValue value = HibernateUtil.entityToGenericValue(entity, delegator);
             // get eca event map
@@ -179,7 +189,7 @@ public class EcaCommonEvent {
             }
         } catch (org.hibernate.ObjectNotFoundException e) {
             String errMsg = "Failure when run eca of beforeDelete [" + HibernateUtil.getEntityClassName(entity) + "]: " + e.toString() + ".";
-            Debug.logError(e, errMsg, module);
+            Debug.logError(e, errMsg, MODULE);
         }
     }
 
@@ -191,13 +201,15 @@ public class EcaCommonEvent {
      * @throws GenericEntityException if an error occurs
      */
     public static void afterDelete(Entity entity, GenericDelegator delegator) throws GenericEntityException {
-        if (entity==null) return;
+        if (entity == null) {
+            return;
+        }
         try {
             GenericValue value = HibernateUtil.entityToGenericValue(entity, delegator);
-            
+
             // always clear cache before the operation
             delegator.clearCacheLine(value);
-            
+
             // get eca event map
             Map ecaEventMap = delegator.getEntityEcaHandler().getEntityEventMap(value.getEntityName());
             if (ecaEventMap != null) {
@@ -207,7 +219,7 @@ public class EcaCommonEvent {
             }
         } catch (org.hibernate.ObjectNotFoundException e) {
             String errMsg = "Failure when run eca of afterDelete [" + HibernateUtil.getEntityClassName(entity) + "]: " + e.toString() + ".";
-            Debug.logError(e, errMsg, module);
+            Debug.logError(e, errMsg, MODULE);
         }
     }
 
@@ -219,7 +231,9 @@ public class EcaCommonEvent {
      * @throws GenericEntityException if an error occurs
      */
     public static void beforeLoad(GenericPK primaryKey, GenericDelegator delegator) throws GenericEntityException {
-        if (primaryKey==null) return;
+        if (primaryKey == null) {
+            return;
+        }
         // get eca event map
         Map ecaEventMap = delegator.getEntityEcaHandler().getEntityEventMap(primaryKey.getEntityName());
         // 1. first is validate event
@@ -242,12 +256,13 @@ public class EcaCommonEvent {
      * execute the eccas of after load event.
      * this method should be call after load event in EcaLoadEventListener
      * @param primaryKey an <code>GenericPK</code> value.
-     * @param entity an <code>Entity</code> value.
      * @param delegator an <code>GenericDelegator</code> value.
      * @throws GenericEntityException if an error occurs
      */
     public static void afterLoad(GenericPK primaryKey, GenericDelegator delegator) throws GenericEntityException {
-        if (primaryKey==null) return;
+        if (primaryKey == null) {
+            return;
+        }
         // get eca event map
         Map ecaEventMap = delegator.getEntityEcaHandler().getEntityEventMap(primaryKey.getEntityName());
         if (ecaEventMap != null) {
