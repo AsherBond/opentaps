@@ -47,7 +47,7 @@ public final class PurchasingOrderActions {
     private PurchasingOrderActions() { }
 
     /**
-     * Action for the lookup sales order screen.
+     * Action for the lookup purchasing order screen.
      * @param context the screen context
      * @throws GeneralException if an error occurs
      */
