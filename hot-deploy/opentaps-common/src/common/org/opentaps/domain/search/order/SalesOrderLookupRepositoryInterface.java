@@ -16,13 +16,14 @@
  */
 package org.opentaps.domain.search.order;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import org.opentaps.common.domain.order.OrderViewForListing;
-import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.domain.search.CommonLookupRepositoryInterface;
+import org.opentaps.foundation.repository.RepositoryException;
 
 /**
  * Repository to lookup Sales Orders.
@@ -78,10 +79,22 @@ public interface SalesOrderLookupRepositoryInterface extends CommonLookupReposit
     public void setFromDate(String fromDate);
 
     /**
+     * Sets the from date string to search for.
+     * @param fromDate a <code>Timestamp</code> value
+     */
+    public void setFromDate(Timestamp fromDate);
+
+    /**
      * Sets the thru date string to search for.
      * @param thruDate a <code>String</code> value
      */
     public void setThruDate(String thruDate);
+
+    /**
+     * Sets the thru date string to search for.
+     * @param thruDate a <code>Timestamp</code> value
+     */
+    public void setThruDate(Timestamp thruDate);
 
     /**
      * Sets the createdBy to search for.

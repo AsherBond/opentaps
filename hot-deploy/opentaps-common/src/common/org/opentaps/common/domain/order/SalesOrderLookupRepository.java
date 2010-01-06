@@ -65,10 +65,10 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
     private String createdBy;
     private String customerPartyId;
     private String externalOrderId;
-    private String fromDate;
-    private Timestamp fromDateTimestamp;
-    private String thruDate;
-    private Timestamp thruDateTimestamp;
+    private String fromDateStr;
+    private Timestamp fromDate;
+    private String thruDateStr;
+    private Timestamp thruDate;
     private String lotId;
     private String productStoreId;
     private String purchaseOrderId;
@@ -91,12 +91,12 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
     /** {@inheritDoc} */
     public List<OrderViewForListing> findOrders() throws RepositoryException {
 
-        // convert fromDate / thruDate into Timestamps if the string versions were given
-        if (UtilValidate.isNotEmpty(fromDate)) {
-            fromDateTimestamp = UtilDate.toTimestamp(fromDate, timeZone, locale);
+        // convert fromDateStr / thruDateStr into Timestamps if the string versions were given
+        if (UtilValidate.isNotEmpty(fromDateStr)) {
+            fromDate = UtilDate.toTimestamp(fromDateStr, timeZone, locale);
         }
-        if (UtilValidate.isNotEmpty(thruDate)) {
-            thruDateTimestamp = UtilDate.toTimestamp(thruDate, timeZone, locale);
+        if (UtilValidate.isNotEmpty(thruDateStr)) {
+            thruDate = UtilDate.toTimestamp(thruDateStr, timeZone, locale);
         }
 
         try {
@@ -111,11 +111,11 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
             criteria.add(Restrictions.eq(OrderHeader.Fields.orderTypeId.name(), OrderTypeConstants.SALES_ORDER));
 
             // set the from/thru date filter if they were given
-            if (fromDateTimestamp != null) {
-                criteria.add(Restrictions.ge(OrderHeader.Fields.orderDate.name(), fromDateTimestamp));
+            if (fromDate != null) {
+                criteria.add(Restrictions.ge(OrderHeader.Fields.orderDate.name(), fromDate));
             }
-            if (thruDateTimestamp != null) {
-                criteria.add(Restrictions.le(OrderHeader.Fields.orderDate.name(), thruDateTimestamp));
+            if (thruDate != null) {
+                criteria.add(Restrictions.le(OrderHeader.Fields.orderDate.name(), thruDate));
             }
 
             // filter the role assoc, there is only one customer role per order
@@ -293,7 +293,22 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
 
     /** {@inheritDoc} */
     public void setFromDate(String fromDate) {
+        this.fromDateStr = fromDate;
+    }
+
+    /** {@inheritDoc} */
+    public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
+    }
+
+    /** {@inheritDoc} */
+    public void setThruDate(String thruDate) {
+        this.thruDateStr = thruDate;
+    }
+
+    /** {@inheritDoc} */
+    public void setThruDate(Timestamp thruDate) {
+        this.thruDate = thruDate;
     }
 
     /** {@inheritDoc} */
@@ -334,11 +349,6 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
     /** {@inheritDoc} */
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
-    }
-
-    /** {@inheritDoc} */
-    public void setThruDate(String thruDate) {
-        this.thruDate = thruDate;
     }
 
     /** {@inheritDoc} */
