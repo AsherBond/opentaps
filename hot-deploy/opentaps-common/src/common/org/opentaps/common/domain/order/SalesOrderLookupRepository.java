@@ -181,15 +181,17 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
             // OrderItemShipGrpInvRes -> InventoryItem
             // or
             // ItemIssuance -> InventoryItem
-            Criteria reservationCriteria = criteria.createCriteria("orderItemShipGrpInvReses", Criteria.LEFT_JOIN).createCriteria("inventoryItem", Criteria.LEFT_JOIN);
-            Criteria issuanceCriteria = criteria.createCriteria("itemIssuances", Criteria.LEFT_JOIN).createCriteria("inventoryItem", Criteria.LEFT_JOIN);
+            criteria.createCriteria("orderItemShipGrpInvReses", Criteria.LEFT_JOIN).createCriteria("inventoryItem", "rii", Criteria.LEFT_JOIN);
+            criteria.createCriteria("itemIssuances", Criteria.LEFT_JOIN).createCriteria("inventoryItem", "iii", Criteria.LEFT_JOIN);
             if (UtilValidate.isNotEmpty(lotId)) {
-                reservationCriteria.add(Restrictions.ilike(InventoryItem.Fields.lotId.name(), lotId, MatchMode.START));
-                issuanceCriteria.add(Restrictions.ilike(InventoryItem.Fields.lotId.name(), lotId, MatchMode.START));
+                criteria.add(Restrictions.or(
+                                Restrictions.ilike("rii." + InventoryItem.Fields.lotId.name(), lotId, MatchMode.START),
+                                Restrictions.ilike("iii." + InventoryItem.Fields.lotId.name(), lotId, MatchMode.START)));
             }
             if (UtilValidate.isNotEmpty(serialNumber)) {
-                reservationCriteria.add(Restrictions.ilike(InventoryItem.Fields.serialNumber.name(), serialNumber, MatchMode.START));
-                issuanceCriteria.add(Restrictions.ilike(InventoryItem.Fields.serialNumber.name(), serialNumber, MatchMode.START));
+                criteria.add(Restrictions.or(
+                                Restrictions.ilike("rii." + InventoryItem.Fields.serialNumber.name(), serialNumber, MatchMode.START),
+                                Restrictions.ilike("iii." + InventoryItem.Fields.serialNumber.name(), serialNumber, MatchMode.START)));
             }
 
             // specify the fields to return
