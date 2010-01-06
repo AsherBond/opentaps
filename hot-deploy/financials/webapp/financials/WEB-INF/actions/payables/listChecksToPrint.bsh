@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
  *
  * Opentaps is free software: you can redistribute it and/or modify it
@@ -17,34 +17,43 @@
 
 // finds all cases for all accounts that the userLogin is a member of or all contacts that the user is responsible for
 
-import com.opensourcestrategies.financials.util.UtilFinancial;
+import java.math.BigDecimal;
 import javolution.util.FastList;
 import javolution.util.FastMap;
+
+import com.opensourcestrategies.financials.util.UtilFinancial;
 import org.ofbiz.accounting.payment.PaymentWorker;
 import org.ofbiz.accounting.util.UtilAccounting;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.party.party.PartyHelper;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
 
 organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 if (organizationPartyId == null) {
     return;
 }
+dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+organizationRepository = dl.loadDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
+organization = organizationRepository.getOrganizationById(organizationPartyId);
+context.put("allocatePaymentTagsToApplications", organization.allocatePaymentTagsToApplications());
+
 
 // find all check payment methods for this organization which are still current
 checkPaymentMethods = delegator.findByAnd("PaymentMethod", UtilMisc.toList(
-            new EntityExpr("partyId", EntityOperator.EQUALS, organizationPartyId),
-            new EntityExpr("paymentMethodTypeId", EntityOperator.EQUALS, "COMPANY_CHECK"),
+            EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, organizationPartyId),
+            EntityCondition.makeCondition("paymentMethodTypeId", EntityOperator.EQUALS, "COMPANY_CHECK"),
             EntityUtil.getFilterByDateExpr()));
 context.put("checkPaymentMethods", checkPaymentMethods);
 
-// find payments of paymentMethodType PERSONAL_CHECK or COMPANY_CHECK with statusId NOT_PAID 
+// find payments of paymentMethodType PERSONAL_CHECK or COMPANY_CHECK with statusId NOT_PAID
 
 if (!security.hasEntityPermission("ACCOUNTING", "_PRINT_CHECKS", userLogin)) {
     context.put("allowed", false);
@@ -61,37 +70,36 @@ if (paymentMethodId != null) {
 paymentsOrderBy = "effectiveDate";
 
 // condition to find all payments that are not receipts or paychecks
-paymentCond = new EntityConditionList(UtilMisc.toList(
-            new EntityExpr("partyIdFrom", EntityOperator.EQUALS, organizationPartyId), 
-            new EntityExpr("paymentMethodId", EntityOperator.EQUALS, paymentMethodId),
-            new EntityExpr("statusId", EntityOperator.EQUALS, "PMNT_NOT_PAID")            
-            ), EntityOperator.AND);
+paymentCond = EntityCondition.makeCondition(UtilMisc.toList(
+                EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, organizationPartyId),
+                EntityCondition.makeCondition("paymentMethodId", EntityOperator.EQUALS, paymentMethodId),
+                EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "PMNT_NOT_PAID")), EntityOperator.AND);
 
-paymentMethodTypeCond = new EntityConditionList(UtilMisc.toList(
-            new EntityExpr("paymentMethodTypeId", EntityOperator.EQUALS, "PERSONAL_CHECK"), 
-            new EntityExpr("paymentMethodTypeId", EntityOperator.EQUALS, "COMPANY_CHECK")
-            ), EntityOperator.OR);
+paymentMethodTypeCond = EntityCondition.makeCondition(UtilMisc.toList(
+            EntityCondition.makeCondition("paymentMethodTypeId", EntityOperator.EQUALS, "PERSONAL_CHECK"),
+            EntityCondition.makeCondition("paymentMethodTypeId", EntityOperator.EQUALS, "COMPANY_CHECK")), EntityOperator.OR);
 
-paymentTypeCond = null;        
-if ("Y".equals(isPaycheck)) {            
-    paymentTypeCond = new EntityConditionList(UtilMisc.toList(
-                    UtilFinancial.getPaymentTypeExpr(delegator, "PAY_CHECK")
-                    ), EntityOperator.AND);
+paymentTypeCond = null;
+if ("Y".equals(isPaycheck)) {
+    paymentTypeCond = UtilFinancial.getPaymentTypeExpr(delegator, "PAY_CHECK");
 } else {
-    paymentTypeCond = new EntityConditionList(UtilMisc.toList(
+    paymentTypeCond = EntityCondition.makeCondition(UtilMisc.toList(
                     UtilFinancial.getPaymentTypeExpr(delegator, "DISBURSEMENT"),
                     UtilFinancial.getPaymentTypeComplementExpr(delegator, "PAY_CHECK"),
-                    UtilFinancial.getPaymentTypeComplementExpr(delegator, "RECEIPT")                    
-                    ), EntityOperator.AND); 
+                    UtilFinancial.getPaymentTypeComplementExpr(delegator, "RECEIPT")), EntityOperator.AND);
 }
-            
+
 // build the main condition
-conditionList = new EntityConditionList(
-        UtilMisc.toList(
-               paymentCond,
-               paymentMethodTypeCond,
-               paymentTypeCond
-            ), EntityOperator.AND);
+conditionList = EntityCondition.makeCondition(UtilMisc.toList(
+                   paymentCond,
+                   paymentMethodTypeCond,
+                   paymentTypeCond), EntityOperator.AND);
+
+if (organization.allocatePaymentTagsToApplications()) {
+    conditionList = EntityCondition.makeCondition(UtilMisc.toList(
+                   conditionList,
+                   EntityCondition.makeCondition("openAmount", EntityOperator.EQUALS, BigDecimal.ZERO)), EntityOperator.AND);
+}
 
 // use a page builder to fetch the outstanding check list, because we need to filter receipts and paychecks
 buildPaymentList(delegator, conditions) {
@@ -99,13 +107,13 @@ buildPaymentList(delegator, conditions) {
     fieldsToSelect = UtilMisc.toList("paymentId");
     fieldsToSelect.add("paymentTypeId");
     fieldsToSelect.add("paymentMethodId");
-    fieldsToSelect.add("paymentRefNum");            
+    fieldsToSelect.add("paymentRefNum");
     fieldsToSelect.add("effectiveDate");
-    fieldsToSelect.add("partyIdTo");   
-    fieldsToSelect.add("amount");    
+    fieldsToSelect.add("partyIdTo");
+    fieldsToSelect.add("amount");
     orderBy = UtilMisc.toList(paymentsOrderBy);
     where = conditions;
-    
+
     build(page) {
         newPage = FastList.newInstance();
         for (iter = page.iterator(); iter.hasNext(); ) {
@@ -117,7 +125,7 @@ buildPaymentList(delegator, conditions) {
             if ("Y".equals(isPaycheck)) {
                 row.put("view", "viewPaycheck");
             } else {
-                row.put("view", "viewPayment");            
+                row.put("view", "viewPayment");
             }
             newPage.add(row);
         }
