@@ -21,17 +21,16 @@ import java.util.Collection;
 import java.util.List;
 
 import org.opentaps.base.entities.InvoiceAdjustment;
+import org.opentaps.base.entities.InvoiceAdjustmentType;
 import org.opentaps.base.entities.InvoiceAndInvoiceItem;
 import org.opentaps.base.entities.InvoiceItem;
 import org.opentaps.base.entities.InvoiceItemType;
-import org.opentaps.base.entities.InvoiceItemTypeMap;
 import org.opentaps.base.entities.OrderItem;
 import org.opentaps.base.entities.PaymentAndApplication;
 import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.product.Product;
-import org.opentaps.base.entities.InvoiceAdjustmentType;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
@@ -185,7 +184,8 @@ public interface InvoiceRepositoryInterface extends RepositoryInterface {
      *
      * @param invoice an <code>Invoice</code> value
      * @param product an <code>Product</code> value
-     * @throws RepositoryException if an error occurs
+     * @return the InvoiceItemType ID
+     * @exception RepositoryException if an error occurs
      */
     public String getInvoiceItemTypeIdForProduct(Invoice invoice, Product product) throws RepositoryException;
 
@@ -201,9 +201,9 @@ public interface InvoiceRepositoryInterface extends RepositoryInterface {
     /**
      * Returns invoice item type based on order item and invoice type.
      * @param orderItem An instance of <code>OrderItem</code>
-     * @return
-     *    An instance of <code>InvoiceItemType</code>
-     * @throws RepositoryException
+     * @param invoiceTypeId a <code>String</code> value
+     * @return an instance of <code>InvoiceItemType</code>
+     * @exception RepositoryException if an exception occurs
      */
     public InvoiceItemType getInvoiceItemType(OrderItem orderItem, String invoiceTypeId) throws RepositoryException;
 
