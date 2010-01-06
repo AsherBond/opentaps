@@ -21,8 +21,10 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.hibernate.Criteria;
@@ -205,7 +207,17 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
             if (orderBy == null) {
                 orderBy = Arrays.asList(OrderHeader.Fields.orderDate.desc());
             }
-            HibernateUtil.setCriteriaOrder(criteria, orderBy);
+            // some substitution is needed to fit the hibernate field names
+            // this also maps the calculated fields and indicates the non sortable fields
+            Map<String, String> subs = new HashMap<String, String>();
+            subs.put("partyId", "or.id.partyId");
+            subs.put("partyName", "or.id.partyId");
+            subs.put("orderDateString", "orderDate");
+            subs.put("shipByDateString", null);
+            subs.put("orderNameId", "orderId");
+            subs.put("statusDescription", "statusId");
+            subs.put("correspondingPoId", "oi.correspondingPoId");
+            HibernateUtil.setCriteriaOrder(criteria, orderBy, subs);
 
             ScrollableResults results = null;
             List<OrderViewForListing> results2 = new ArrayList<OrderViewForListing>();
