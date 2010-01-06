@@ -1332,7 +1332,7 @@ padding:0px 5px;
 }
 
 .loginButton,
-.smallSubmit
+input.smallSubmit
 { 
 padding:0px 5px 3px;
 }
