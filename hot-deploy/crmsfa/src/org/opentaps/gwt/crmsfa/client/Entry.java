@@ -65,6 +65,8 @@ import org.opentaps.gwt.crmsfa.client.orders.form.ProductReReservationForm;
 import org.opentaps.gwt.crmsfa.client.orders.form.SalesOrdersSublistView;
 import org.opentaps.gwt.crmsfa.client.partners.form.FindPartnersForm;
 
+import com.google.gwt.user.client.ui.Button;
+
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
@@ -110,9 +112,9 @@ public class Entry extends BaseEntry {
     private static final String CONTACT_ACCOUNTS = "contactAccountsSubListView";
     /** An ID where CONTACT_ACCOUNTS may place "Assign Account" button. */
     private static final String ASSIGN_ACCOUNT_TO_CONTACT = "assignAccountToContact";
-    /** List of open orders for a contact */
+    /** List of open orders for a contact. */
     private static final String CONTACT_ORDERS = "contactOpenOrdersSubsection";
-    /** List of cases for a contact */
+    /** List of cases for a contact. */
     private static final String CONTACT_CASES = "contactCasesSubsection";
 
     // CRMSFA/Leads widget identifiers
@@ -820,17 +822,14 @@ public class Entry extends BaseEntry {
         });
 
         // create hyperlink as submenu button
-        Hyperlink embedLink = new Hyperlink(UtilUi.MSG.crmAssignContact(), true, null);
-        embedLink.setStyleName("subMenuButton");
-
-        // show lookup window on click
-        embedLink.addClickHandler(new ClickHandler() {
+        Button embedLink = new Button(UtilUi.MSG.crmAssignContact(), new ClickHandler() {
 
             public void onClick(ClickEvent event) {
                 window.show();
             }
 
         });
+        embedLink.setStyleName("subMenuButton");
 
         // place [Assign Contact] button on page
         container.add(embedLink);

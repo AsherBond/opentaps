@@ -2388,9 +2388,10 @@ padding:0px 5px;
 }
 
 .loginButton,
-input.smallSubmit
+input.smallSubmit,
+button.subMenuButton
 { 
-padding:0px 5px 3px;
+padding:0px 5px 2px;
 }
 
 a.smallSubmit { 
@@ -2478,6 +2479,8 @@ border: 1px solid #999999;
 text-align:right;
 padding:5px 0 4px;
 }
+
+.frameSectionExtra .subMenuBar { padding:0; }
 
 .titleBar { margin-bottom:10px; }
 .titleBar .x-panel-br .x-panel-bc { height:3px; }
