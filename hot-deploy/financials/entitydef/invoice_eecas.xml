@@ -19,6 +19,10 @@
 <entity-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entity-eca.xsd">
     <!-- Keep the Invoice calculated fields in sync -->
+    <eca entity="Invoice" operation="create" event="return">
+        <condition field-name="invoiceId" operator="is-not-empty"/>
+        <action service="recalcInvoiceAmounts" mode="sync"/>
+    </eca>
     <eca entity="InvoiceItem" operation="create-store-remove" event="return">
         <condition field-name="invoiceId" operator="is-not-empty"/>
         <action service="recalcInvoiceAmounts" mode="sync"/>
