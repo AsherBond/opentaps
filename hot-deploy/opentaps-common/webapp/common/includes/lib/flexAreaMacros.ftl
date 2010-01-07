@@ -42,8 +42,8 @@
     <div class="x-panel-tl">
       <div class="x-panel-tr">
         <div class="x-panel-tc">
-          <div class="x-panel-header<#if titleClass?has_content> ${titleClass}</#if>" style="float:left" id="${titleId}">${title}</div>
-          <div class="frameSectionExtra">${extra}</div>
+          <div class="x-panel-header<#if titleClass?has_content> ${titleClass}</#if>" id="${titleId}">${title}</div>
+          <#if extra?has_content><div class="frameSectionExtra">${extra}</div></#if>
         </div>
       </div>
     </div>

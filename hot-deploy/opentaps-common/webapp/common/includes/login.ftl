@@ -54,16 +54,25 @@
   <#assign focusName = true/>
 </#if>
 
+<style type="text/css">
+<#assign fgcolor = "#FFFFFF"/>
+<#assign bgcolor = "#000099"/>
+.x-panel-tl, .x-panel-tr, .titleBar .x-panel-br, .titleBar .x-panel-bl { background-image:url(/opentaps_images/panels/corners-sprite-${bgcolor?replace("#", "")}.gif) !important; }
+.x-panel-tc, .titleBar .x-panel-bc { background-image:url(/opentaps_images/panels/top-bottom-${bgcolor?replace("#", "")}.gif) !important; }
+.x-panel-tl .x-panel-header, .frameSectionHeader .pageNumber {color: ${fgcolor} !important; }
+.x-panel-noborder .x-panel-header-noborder { border:none !important; }
+<#-- center the section titles -->
+.x-panel-header {float:none !important;}
+</style>
+
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
 <#assign greetingLabel = opentapsApplicationName?default("opentaps")?cap_first + "LoginGreeting"/>
 <#include "keyboard-shortcuts.ftl"/>
 <div class="form" style="padding-top: 125px; padding-bottom: 125px;">
 
   <div align="center">
-    <div class="screenlet" style="width: 300px; margin-left: auto; margin-right: auto;">
-      <div class="screenlet-header" style="background-color: #000099; text-align: center;">
-        <div class="boxhead">${uiLabelMap.get(greetingLabel)}</div>
-      </div>
-      <div class="screenlet-body" style="text-align: center;">
+    <@frameSection title="${uiLabelMap.get(greetingLabel)}" style="width: 300px; margin-left: auto; margin-right: auto;text-align: center;" innerStyle="text-align: center;">
         <form method="post" action="<@ofbizUrl>login${previousParams?if_exists}</@ofbizUrl>" name="loginform" style="margin: 0;">
           <table width="100%" border="0" cellpadding="0" cellspacing="2">
             <tr>
@@ -89,22 +98,16 @@
             </tr>
           </table>
         </form>
-      </div>
-    </div>
+    </@frameSection>
   </div>
 
   <div align="center">
-    <div class="screenlet" style="width: 300px; margin-left: auto; margin-right: auto; margin-top: 20px;">
-      <div class="screenlet-header" style="background-color: #000099; text-align: center;">
-        <div class="boxhead">${uiLabelMap.CommonForgotYourPassword}?</div>
-      </div>
-      <div class="screenlet-body" style="text-align: center;">
+    <@frameSection title="${uiLabelMap.CommonForgotYourPassword}?" style="width: 300px; margin-left: auto; margin-right: auto; margin-top: 20px;" innerStyle="text-align: center;">
         <form method="post" action="<@ofbizUrl>forgotpassword${previousParams}</@ofbizUrl>" name="forgotpassword" style="margin: 0;">
           <span class="tabletext">${uiLabelMap.CommonUsername}&nbsp;</span><input type="text" size="20" class="inputBox" name="USERNAME" value="<#if requestParameters.USERNAME?has_content>${requestParameters.USERNAME}<#elseif autoUserLogin?has_content>${autoUserLogin.userLoginId}</#if>"/>
           <div style="margin-top: 3px;"><input type="submit" name="EMAIL_PASSWORD" class="loginButton" value="${uiLabelMap.CommonEmailPassword}"/></div>
         </form>
-      </div>
-    </div>
+    </@frameSection>
   </div>
 
   <script type="text/javascript">

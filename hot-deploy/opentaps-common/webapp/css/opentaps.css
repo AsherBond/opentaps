@@ -2453,6 +2453,8 @@ border-bottom:0px none !important;
 margin-bottom:10px;
 }
 
+.frameSectionHeader .x-panel-header { float:left; }
+
 .allSubSectionBlocks .frameSectionHeader .x-panel-header
 { 
 font-size:11pt;
