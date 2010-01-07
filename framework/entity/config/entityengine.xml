@@ -299,7 +299,7 @@ access. For a detailed description see the core/docs/entityconfig.html file.
         <read-data reader-name="ext"/>
         <inline-jdbc
                 jdbc-driver="com.mysql.jdbc.Driver"
-                jdbc-uri="jdbc:mysql://127.0.0.1/ofbiz?autoReconnect=true"
+                jdbc-uri="jdbc:mysql://127.0.0.1/ofbiz?autoReconnect=true&amp;useOldAliasMetadataBehavior=true"
                 jdbc-username="ofbiz"
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
@@ -323,7 +323,7 @@ access. For a detailed description see the core/docs/entityconfig.html file.
         <read-data reader-name="seed"/>
         <inline-jdbc
                 jdbc-driver="com.mysql.jdbc.Driver"
-                jdbc-uri="jdbc:mysql://127.0.0.1/ofbiz_odbc?autoReconnect=true"
+                jdbc-uri="jdbc:mysql://127.0.0.1/ofbiz_odbc?autoReconnect=true&amp;useOldAliasMetadataBehavior=true"
                 jdbc-username="ofbiz"
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
@@ -349,7 +349,7 @@ access. For a detailed description see the core/docs/entityconfig.html file.
         <read-data reader-name="ext"/>
         <inline-jdbc
                 jdbc-driver="com.mysql.jdbc.Driver"
-                jdbc-uri="jdbc:mysql://127.0.0.1/opentaps_analytics?autoReconnect=true"
+                jdbc-uri="jdbc:mysql://127.0.0.1/opentaps_analytics?autoReconnect=true&amp;useOldAliasMetadataBehavior=true"
                 jdbc-username="opentaps"
                 jdbc-password="opentaps"
                 isolation-level="ReadCommitted"
@@ -375,7 +375,7 @@ access. For a detailed description see the core/docs/entityconfig.html file.
         <read-data reader-name="ext"/>
         <inline-jdbc
                 jdbc-driver="com.mysql.jdbc.Driver"
-                jdbc-uri="jdbc:mysql://127.0.0.1/opentaps_analytics_testing?autoReconnect=true"
+                jdbc-uri="jdbc:mysql://127.0.0.1/opentaps_analytics_testing?autoReconnect=true&amp;useOldAliasMetadataBehavior=true"
                 jdbc-username="opentaps"
                 jdbc-password="opentaps"
                 isolation-level="ReadCommitted"
