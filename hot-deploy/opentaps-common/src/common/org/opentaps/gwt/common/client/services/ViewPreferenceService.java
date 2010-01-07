@@ -41,6 +41,8 @@ public final class ViewPreferenceService extends Service {
 
     private ViewPreferenceService() {
         super();
+        // don't pop up error message-box automatically
+        setAutoPopupErrors(Boolean.FALSE);
     }
 
     /**
