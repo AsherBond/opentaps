@@ -113,9 +113,10 @@
         <relation type="one" fk-name="IMPT_ORDERITEM_HDR" rel-entity-name="DataImportOrderHeader">
           <key-map field-name="orderId"/>
         </relation>
-        <relation type="one" fk-name="IMPT_ORDERITEM_PRD" rel-entity-name="Product">
-          <key-map field-name="productId"/>
-        </relation>
+        <!--removing this as we may import a product in the same batch-->
+        <!--<relation type="one" fk-name="IMPT_ORDERITEM_PRD" rel-entity-name="Product">-->
+          <!--<key-map field-name="productId"/>-->
+        <!--</relation>-->
     </entity>
 
 

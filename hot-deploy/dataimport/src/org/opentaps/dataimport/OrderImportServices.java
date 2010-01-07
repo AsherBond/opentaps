@@ -461,8 +461,15 @@ public class OrderImportServices {
             orderItemInput.put("orderItemTypeId", "PRODUCT_ORDER_ITEM");
             if (UtilValidate.isNotEmpty(externalOrderItem.get("productId"))) {
                 orderItemInput.put("productId", externalOrderItem.getString("productId"));
-                GenericValue product = externalOrderItem.getRelatedOneCache("Product");
-                orderItemInput.put("itemDescription", product.getString("productName"));
+                //todo we remove foreign key association to product so this won't work
+               // GenericValue product = externalOrderItem.getRelatedOneCache("Product");
+               GenericValue product =  delegator.findByPrimaryKeyCache("Product",UtilMisc.toMap("productId", externalOrderItem.getString("productId")));
+                if(UtilValidate.isNotEmpty(product)){
+                    orderItemInput.put("itemDescription", product.getString("productName"));
+                }else{
+                     Debug.logError("Product [" +externalOrderItem.getString("productId")  + "] does not exist", MODULE);
+                    return FastList.newInstance();
+                }
             }
             if (isSalesOrder && UtilValidate.isNotEmpty(prodCatalogId)) {
                 orderItemInput.put("prodCatalogId", prodCatalogId);
