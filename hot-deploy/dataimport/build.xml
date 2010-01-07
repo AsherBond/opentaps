@@ -56,6 +56,8 @@
             <fileset dir="${ofbiz.dir}/applications/marketing/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/order/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/content/build/lib" includes="*.jar"/>
+            <!-- for poi -->
+            <fileset dir="${ofbiz.dir}/applications/content/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/accounting/build/lib" includes="*.jar"/>
     	    <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/lib/hibernate" includes="*.jar"/>
