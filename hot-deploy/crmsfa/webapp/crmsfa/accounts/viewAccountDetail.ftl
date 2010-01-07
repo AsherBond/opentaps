@@ -16,14 +16,13 @@
 -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
-
 <#if hasDeactivatePermission?exists>
   <@form name="deactivateAccountAction" url="deactivateAccount" partyId=partySummary.partyId />
 </#if>
 
 <#assign extraOptions>
   <#if hasUpdatePermission?exists>
-    <#assign updateLink><a class='subMenuButton' href='updateAccountForm?partyId=${partySummary.partyId}'>${uiLabelMap.CommonEdit}</a></#assign>
+    <@displayLink href="updateAccountForm?partyId=${partySummary.partyId}" text="${uiLabelMap.CommonEdit}" class="subMenuButton"/>
   </#if>
   <#if hasDeactivatePermission?exists>
     <@submitFormLinkConfirm form="deactivateAccountAction" text=uiLabelMap.CrmDeactivateAccount class="subMenuButtonDangerous" />
