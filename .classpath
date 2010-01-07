@@ -209,5 +209,16 @@
 	<classpathentry kind="lib" path="framework/base/lib/etl/kettle-core-3.2.0.jar"/>
 	<classpathentry kind="lib" path="framework/base/lib/etl/kettle-db-3.2.0.jar"/>
 	<classpathentry kind="lib" path="framework/base/lib/etl/kettle-engine-3.2.0.jar"/>
+	<classpathentry kind="lib" path="hot-deploy/funambol/lib/core/funambol-foundation-core-8.0.0.jar"/>
+	<classpathentry kind="lib" path="hot-deploy/funambol/lib/core/funambol-framework-8.0.1.jar"/>
+	<classpathentry kind="lib" path="hot-deploy/funambol/lib/core/funambol-server-8.0.0.jar"/>
+	<classpathentry kind="lib" path="hot-deploy/funambol/lib/core/funambol-server-framework-8.0.0.jar"/>
+	<classpathentry kind="lib" path="hot-deploy/funambol/lib/ext/siga-fwk-bsd.jar"/>
+	<classpathentry kind="lib" path="hot-deploy/funambol/lib/ext/xpp3-1.1.2a-fun.jar"/>
+	<classpathentry kind="lib" path="hot-deploy/funambol/lib/core/funambol-admin-libs.jar"/>
+	<classpathentry kind="lib" path="hot-deploy/funambol/lib/core/funambol-admin.jar"/>
+	<classpathentry kind="lib" path="hot-deploy/funambol/lib/modules/funambol-pim-framework-8.0.0.jar"/>
+	<classpathentry kind="lib" path="hot-deploy/funambol/lib/modules/funambol-pim-parsers-8.0.0.jar"/>
+	<classpathentry kind="lib" path="hot-deploy/amazon/lib/opentapsAmazon_Axis-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
