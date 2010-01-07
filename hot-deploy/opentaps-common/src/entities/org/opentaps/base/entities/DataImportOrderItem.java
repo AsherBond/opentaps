@@ -128,6 +128,8 @@ fieldMapColumns.put("DataImportOrderItem", fields);
    private BigDecimal itemTax;
    @Column(name="TAX_AUTH_PARTY_ID")
    private String taxAuthPartyId;
+   @Column(name="ITEM_ADJUSTMENTS_TOTAL")
+   private BigDecimal itemAdjustmentsTotal;
    @Column(name="CUSTOMER_PO")
    private String customerPo;
    @Column(name="COMMENTS")
@@ -172,7 +174,7 @@ fieldMapColumns.put("DataImportOrderItem", fields);
       this.isView = false;
       
       this.primaryKeyNames = new ArrayList<String>();
-      this.primaryKeyNames.add("orderId");this.primaryKeyNames.add("productId");this.primaryKeyNames.add("quantity");this.primaryKeyNames.add("price");this.primaryKeyNames.add("itemAdjustmentsTotal");
+      this.primaryKeyNames.add("orderId");this.primaryKeyNames.add("productId");this.primaryKeyNames.add("quantity");this.primaryKeyNames.add("price");
       this.allFieldsNames = new ArrayList<String>();
       this.allFieldsNames.add("orderId");this.allFieldsNames.add("productId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("quantityShipped");this.allFieldsNames.add("price");this.allFieldsNames.add("itemTax");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("itemAdjustmentsTotal");this.allFieldsNames.add("customerPo");this.allFieldsNames.add("comments");this.allFieldsNames.add("importStatusId");this.allFieldsNames.add("importError");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
@@ -243,7 +245,7 @@ fieldMapColumns.put("DataImportOrderItem", fields);
      * @param itemAdjustmentsTotal the itemAdjustmentsTotal to set
      */
     public void setItemAdjustmentsTotal(BigDecimal itemAdjustmentsTotal) {
-        id.setItemAdjustmentsTotal(itemAdjustmentsTotal);
+        this.itemAdjustmentsTotal = itemAdjustmentsTotal;
     }
     /**
      * Auto generated value setter.
@@ -370,7 +372,7 @@ fieldMapColumns.put("DataImportOrderItem", fields);
      * @return <code>BigDecimal</code>
      */
     public BigDecimal getItemAdjustmentsTotal() {
-        return this.id.getItemAdjustmentsTotal();
+        return this.itemAdjustmentsTotal;
     }
     /**
      * Auto generated value accessor.

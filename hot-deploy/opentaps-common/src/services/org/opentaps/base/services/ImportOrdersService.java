@@ -72,6 +72,7 @@ public class ImportOrdersService extends ServiceWrapper {
         prodCatalogId("prodCatalogId"),
         productStoreId("productStoreId"),
         purchaseOrderShipToContactMechId("purchaseOrderShipToContactMechId"),
+        readProductStoreFromTable("readProductStoreFromTable"),
         reserveInventory("reserveInventory"),
         timeZone("timeZone"),
         userLogin("userLogin");
@@ -110,6 +111,7 @@ public class ImportOrdersService extends ServiceWrapper {
     private String inProdCatalogId;
     private String inProductStoreId;
     private String inPurchaseOrderShipToContactMechId;
+    private Boolean inReadProductStoreFromTable;
     private Boolean inReserveInventory;
     private TimeZone inTimeZone;
     private GenericValue inUserLogin;
@@ -168,7 +170,7 @@ public class ImportOrdersService extends ServiceWrapper {
     }
     /**
      * Auto generated value accessor.
-     * This parameter is required.
+     * This parameter is optional.
      * @return <code>String</code>
      */
     public String getInProductStoreId() {
@@ -181,6 +183,14 @@ public class ImportOrdersService extends ServiceWrapper {
      */
     public String getInPurchaseOrderShipToContactMechId() {
         return this.inPurchaseOrderShipToContactMechId;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is required.
+     * @return <code>Boolean</code>
+     */
+    public Boolean getInReadProductStoreFromTable() {
+        return this.inReadProductStoreFromTable;
     }
     /**
      * Auto generated value accessor.
@@ -326,7 +336,7 @@ public class ImportOrdersService extends ServiceWrapper {
     }
     /**
      * Auto generated value setter.
-     * This parameter is required.
+     * This parameter is optional.
      * @param inProductStoreId the inProductStoreId to set
     */
     public void setInProductStoreId(String inProductStoreId) {
@@ -341,6 +351,15 @@ public class ImportOrdersService extends ServiceWrapper {
     public void setInPurchaseOrderShipToContactMechId(String inPurchaseOrderShipToContactMechId) {
         this.inParameters.add("purchaseOrderShipToContactMechId");
         this.inPurchaseOrderShipToContactMechId = inPurchaseOrderShipToContactMechId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is required.
+     * @param inReadProductStoreFromTable the inReadProductStoreFromTable to set
+    */
+    public void setInReadProductStoreFromTable(Boolean inReadProductStoreFromTable) {
+        this.inParameters.add("readProductStoreFromTable");
+        this.inReadProductStoreFromTable = inReadProductStoreFromTable;
     }
     /**
      * Auto generated value setter.
@@ -481,6 +500,7 @@ public class ImportOrdersService extends ServiceWrapper {
         if (inParameters.contains("prodCatalogId")) mapValue.put("prodCatalogId", getInProdCatalogId());
         if (inParameters.contains("productStoreId")) mapValue.put("productStoreId", getInProductStoreId());
         if (inParameters.contains("purchaseOrderShipToContactMechId")) mapValue.put("purchaseOrderShipToContactMechId", getInPurchaseOrderShipToContactMechId());
+        if (inParameters.contains("readProductStoreFromTable")) mapValue.put("readProductStoreFromTable", getInReadProductStoreFromTable());
         if (inParameters.contains("reserveInventory")) mapValue.put("reserveInventory", getInReserveInventory());
         if (inParameters.contains("timeZone")) mapValue.put("timeZone", getInTimeZone());
         if (inParameters.contains("userLogin")) mapValue.put("userLogin", getInUserLogin());
@@ -513,6 +533,7 @@ public class ImportOrdersService extends ServiceWrapper {
         if (mapValue.containsKey("prodCatalogId")) setInProdCatalogId((String) mapValue.get("prodCatalogId"));
         if (mapValue.containsKey("productStoreId")) setInProductStoreId((String) mapValue.get("productStoreId"));
         if (mapValue.containsKey("purchaseOrderShipToContactMechId")) setInPurchaseOrderShipToContactMechId((String) mapValue.get("purchaseOrderShipToContactMechId"));
+        if (mapValue.containsKey("readProductStoreFromTable")) setInReadProductStoreFromTable((Boolean) mapValue.get("readProductStoreFromTable"));
         if (mapValue.containsKey("reserveInventory")) setInReserveInventory((Boolean) mapValue.get("reserveInventory"));
         if (mapValue.containsKey("timeZone")) setInTimeZone((TimeZone) mapValue.get("timeZone"));
         if (mapValue.containsKey("userLogin")) setInUserLogin((GenericValue) mapValue.get("userLogin"));

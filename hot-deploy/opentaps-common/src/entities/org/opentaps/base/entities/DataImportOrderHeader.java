@@ -66,6 +66,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("adjustmentsTotal", "ADJUSTMENTS_TOTAL");
         fields.put("grandTotal", "GRAND_TOTAL");
         fields.put("comments", "COMMENTS");
+        fields.put("productStoreId", "PRODUCT_STORE_ID");
+        fields.put("salesChannelEnumId", "SALES_CHANNEL_ENUM_ID");
         fields.put("productStoreShipMethId", "PRODUCT_STORE_SHIP_METH_ID");
         fields.put("orderClosed", "ORDER_CLOSED");
         fields.put("importStatusId", "IMPORT_STATUS_ID");
@@ -90,6 +92,8 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
     adjustmentsTotal("adjustmentsTotal"),
     grandTotal("grandTotal"),
     comments("comments"),
+    productStoreId("productStoreId"),
+    salesChannelEnumId("salesChannelEnumId"),
     productStoreShipMethId("productStoreShipMethId"),
     orderClosed("orderClosed"),
     importStatusId("importStatusId"),
@@ -136,6 +140,10 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
    private BigDecimal grandTotal;
    @Column(name="COMMENTS")
    private String comments;
+   @Column(name="PRODUCT_STORE_ID")
+   private String productStoreId;
+   @Column(name="SALES_CHANNEL_ENUM_ID")
+   private String salesChannelEnumId;
    @Column(name="PRODUCT_STORE_SHIP_METH_ID")
    private String productStoreShipMethId;
    @Column(name="ORDER_CLOSED")
@@ -205,7 +213,7 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("customerPartyId");this.allFieldsNames.add("supplierPartyId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("shippingTotal");this.allFieldsNames.add("orderTax");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("adjustmentsTotal");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("comments");this.allFieldsNames.add("productStoreShipMethId");this.allFieldsNames.add("orderClosed");this.allFieldsNames.add("importStatusId");this.allFieldsNames.add("importError");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("customerPartyId");this.allFieldsNames.add("supplierPartyId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("shippingTotal");this.allFieldsNames.add("orderTax");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("adjustmentsTotal");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("comments");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("productStoreShipMethId");this.allFieldsNames.add("orderClosed");this.allFieldsNames.add("importStatusId");this.allFieldsNames.add("importError");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -303,6 +311,20 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
      */
     public void setComments(String comments) {
         this.comments = comments;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productStoreId the productStoreId to set
+     */
+    public void setProductStoreId(String productStoreId) {
+        this.productStoreId = productStoreId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param salesChannelEnumId the salesChannelEnumId to set
+     */
+    public void setSalesChannelEnumId(String salesChannelEnumId) {
+        this.salesChannelEnumId = salesChannelEnumId;
     }
     /**
      * Auto generated value setter.
@@ -451,6 +473,20 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
      */
     public String getComments() {
         return this.comments;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getProductStoreId() {
+        return this.productStoreId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSalesChannelEnumId() {
+        return this.salesChannelEnumId;
     }
     /**
      * Auto generated value accessor.
@@ -670,6 +706,8 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
         setAdjustmentsTotal(convertToBigDecimal(mapValue.get("adjustmentsTotal")));
         setGrandTotal(convertToBigDecimal(mapValue.get("grandTotal")));
         setComments((String) mapValue.get("comments"));
+        setProductStoreId((String) mapValue.get("productStoreId"));
+        setSalesChannelEnumId((String) mapValue.get("salesChannelEnumId"));
         setProductStoreShipMethId((String) mapValue.get("productStoreShipMethId"));
         setOrderClosed((String) mapValue.get("orderClosed"));
         setImportStatusId((String) mapValue.get("importStatusId"));
@@ -698,6 +736,8 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
         mapValue.put("adjustmentsTotal", getAdjustmentsTotal());
         mapValue.put("grandTotal", getGrandTotal());
         mapValue.put("comments", getComments());
+        mapValue.put("productStoreId", getProductStoreId());
+        mapValue.put("salesChannelEnumId", getSalesChannelEnumId());
         mapValue.put("productStoreShipMethId", getProductStoreShipMethId());
         mapValue.put("orderClosed", getOrderClosed());
         mapValue.put("importStatusId", getImportStatusId());

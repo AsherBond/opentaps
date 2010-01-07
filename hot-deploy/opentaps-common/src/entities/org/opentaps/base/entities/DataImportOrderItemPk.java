@@ -40,8 +40,6 @@ public class DataImportOrderItemPk implements Serializable {
     private BigDecimal quantity;
     @Column(name="PRICE")
     private BigDecimal price;
-    @Column(name="ITEM_ADJUSTMENTS_TOTAL")
-    private BigDecimal itemAdjustmentsTotal;
 
     /**
      * Auto generated value setter.
@@ -70,13 +68,6 @@ public class DataImportOrderItemPk implements Serializable {
      */
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-    /**
-     * Auto generated value setter.
-     * @param itemAdjustmentsTotal the itemAdjustmentsTotal to set
-     */
-    public void setItemAdjustmentsTotal(BigDecimal itemAdjustmentsTotal) {
-        this.itemAdjustmentsTotal = itemAdjustmentsTotal;
     }
 
     /**
@@ -107,13 +98,6 @@ public class DataImportOrderItemPk implements Serializable {
     public BigDecimal getPrice() {
         return this.price;
     }
-    /**
-     * Auto generated value accessor.
-     * @return <code>BigDecimal</code>
-     */
-    public BigDecimal getItemAdjustmentsTotal() {
-        return this.itemAdjustmentsTotal;
-    }
 
     @Override
     public int hashCode() {
@@ -123,7 +107,6 @@ public class DataImportOrderItemPk implements Serializable {
             sb.append(productId).append("*");
             sb.append(quantity).append("*");
             sb.append(price).append("*");
-            sb.append(itemAdjustmentsTotal).append("*");
             _cached_hc = sb.toString().hashCode();
         }
         return _cached_hc;

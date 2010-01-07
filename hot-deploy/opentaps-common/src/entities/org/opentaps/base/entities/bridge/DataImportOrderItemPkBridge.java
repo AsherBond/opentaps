@@ -56,8 +56,6 @@ public class DataImportOrderItemPkBridge implements TwoWayFieldBridge {
         id.setQuantity((BigDecimal) (new BigDecimalBridge()).stringToObject(field.stringValue()));
         field = document.getField(name + ".price");
         id.setPrice((BigDecimal) (new BigDecimalBridge()).stringToObject(field.stringValue()));
-        field = document.getField(name + ".itemAdjustmentsTotal");
-        id.setItemAdjustmentsTotal((BigDecimal) (new BigDecimalBridge()).stringToObject(field.stringValue()));
         return id;
     }
 
@@ -76,8 +74,6 @@ public class DataImportOrderItemPkBridge implements TwoWayFieldBridge {
         sb.append(id.getQuantity());
         sb.append("_");
         sb.append(id.getPrice());
-        sb.append("_");
-        sb.append(id.getItemAdjustmentsTotal());
         return sb.toString();
     }
 
@@ -106,9 +102,6 @@ public class DataImportOrderItemPkBridge implements TwoWayFieldBridge {
         field.setBoost(boost);
         document.add(field);
         field = new Field(name + ".price", id.getPrice().toString(), store, index, termVector);
-        field.setBoost(boost);
-        document.add(field);
-        field = new Field(name + ".itemAdjustmentsTotal", id.getItemAdjustmentsTotal().toString(), store, index, termVector);
         field.setBoost(boost);
         document.add(field);
 
