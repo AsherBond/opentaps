@@ -145,8 +145,8 @@ function notifyInvoiceItemsCount(n) {
         <@inputTextareaRow name="invoiceMessage" title=uiLabelMap.CommonMessage default=invoice.invoiceMessage />
         <@inputForceCompleteRow title=uiLabelMap.CommonUpdate forceTitle=uiLabelMap.OpentapsForceUpdate form="updateInvoice" />
       </form>
-      <!-- allow update descriptive fields when allowDescriptiveEditOnly is true -->
-    <#elseif allowDescriptiveEditOnly>
+      <!-- allow limited updated when the invoice is marked as ready -->
+    <#elseif limitedEditOnly>
       <#if invoiceAddress?has_content>
         <#assign displayAddress = invoiceAddress.address1?default("") +", "+ invoiceAddress.city?default("") +", "+ invoiceAddress.stateProvinceGeoId?default("") +" "+ invoiceAddress.postalCode?default("")/>
       </#if>
@@ -161,10 +161,12 @@ function notifyInvoiceItemsCount(n) {
             <td class="tabletext"><@displayCurrency amount=invoice.getOpenAmount() currencyUomId=invoice.currencyUomId /></td>
           </tr>
         </#if>
-        <@displayDateRow title=uiLabelMap.AccountingInvoiceDate date=invoice.invoiceDate />
-        <@displayDateRow title=uiLabelMap.AccountingDueDate date=invoice.dueDate />
+        <@inputDateTimeRow name="invoiceDate" title=uiLabelMap.AccountingInvoiceDate default=invoice.invoiceDate form="updateInvoice" />
+        <@inputDateTimeRow name="dueDate" title=uiLabelMap.AccountingDueDate default=invoice.dueDate form="updateInvoice" />
         <@displayDateRow title=uiLabelMap.AccountingPaidDate date=invoice.paidDate />
-        <@displayRow title=uiLabelMap.AccountingBillingAddress text=displayAddress?if_exists />
+        <@inputSelectRow name="contactMechId" title=uiLabelMap.AccountingBillingAddress list=addresses default=invoiceContactMechId required=false ; address>
+          ${address.address1?default("")}, ${address.city?default("")}, ${address.stateProvinceGeoId?default("")} ${address.postalCode?default("")}
+        </@inputSelectRow>
         <@inputTextRow name="referenceNumber" title=uiLabelMap.FinancialsReferenceNumber size=60 default=invoice.referenceNumber />
         <@displayRow title="${uiLabelMap.OpentapsOrders}" text=ordersList?if_exists />
         <@inputTextRow name="description" title=uiLabelMap.CommonDescription size=60 default=invoice.description />

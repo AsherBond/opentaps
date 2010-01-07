@@ -231,7 +231,7 @@ public final class InvoiceActions {
 
         // update permissions
         boolean hasDescriptiveUpdatePermission = false;
-        boolean allowDescriptiveEditOnly = false;
+        boolean limitedEditOnly = false;
 
         boolean hasUpdatePermission = false;
         boolean hasAdjustmentPermission = false;
@@ -239,12 +239,12 @@ public final class InvoiceActions {
             hasUpdatePermission = invoice.isInProcess();
             hasAdjustmentPermission = invoice.isAdjustable();
             // allow update descriptive fields
-            allowDescriptiveEditOnly = (invoice.isReady() && "edit".equals(ac.getParameter("op")));
+            limitedEditOnly = (invoice.isReady() && "edit".equals(ac.getParameter("op")));
             hasDescriptiveUpdatePermission = invoice.isReady();
         }
         ac.put("hasUpdatePermission", hasUpdatePermission);
         ac.put("hasAdjustmentPermission", hasAdjustmentPermission);
-        ac.put("allowDescriptiveEditOnly", allowDescriptiveEditOnly);
+        ac.put("limitedEditOnly", limitedEditOnly);
         ac.put("hasDescriptiveUpdatePermission", hasDescriptiveUpdatePermission);
 
         // create permission
@@ -261,7 +261,7 @@ public final class InvoiceActions {
         ac.put("hasWriteoffPermission", hasWriteoffPermission);
 
         // update permission implies that the header and items are editable, so get some data for the forms
-        if (hasUpdatePermission) {
+        if (hasUpdatePermission || limitedEditOnly) {
             List<GlAccountOrganizationAndClass> glAccounts = invoiceRepository.findListCache(GlAccountOrganizationAndClass.class, invoiceRepository.map(GlAccountOrganizationAndClass.Fields.organizationPartyId, organizationPartyId), UtilMisc.toList(GlAccountOrganizationAndClass.Fields.accountCode.name()));
             ac.put("glAccounts", glAccounts);
             ac.put("invoiceItemTypes", invoice.getApplicableInvoiceItemTypes());
@@ -274,8 +274,7 @@ public final class InvoiceActions {
                                    EntityCondition.makeCondition(PartyContactMechPurpose.Fields.partyId.name(), EntityOperator.EQUALS, invoice.getTransactionPartyId()),
                                    EntityUtil.getFilterByDateExpr());
             List<PartyContactMechPurpose> purposes = invoiceRepository.findList(PartyContactMechPurpose.class, conditions);
-            List<PostalAddress> addresses = Entity.getRelated(PostalAddress.class, purposes);
-            ac.put("addresses", addresses);
+            ac.put("addresses", Entity.getRelated(PostalAddress.class, purposes));
 
             // available tax authorities
             List<TaxAuthorityAndDetail> taxAuthorities = invoiceRepository.findAllCache(TaxAuthorityAndDetail.class, UtilMisc.toList(TaxAuthorityAndDetail.Fields.abbreviation.name(), TaxAuthorityAndDetail.Fields.groupName.name()));
