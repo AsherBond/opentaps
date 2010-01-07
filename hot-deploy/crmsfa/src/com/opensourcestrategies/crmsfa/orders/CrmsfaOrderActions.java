@@ -122,12 +122,15 @@ public final class CrmsfaOrderActions {
             salesOrderLookupRepository.setProductStoreId(productStoreId);
         }
         salesOrderLookupRepository.setOrderBy(orderBy);
+        salesOrderLookupRepository.enablePagination(false);
+
         List<OrderViewForListing> orders = salesOrderLookupRepository.findOrders();
         List<Map<String, Object>> orderMaps = FastList.<Map<String, Object>>newInstance();
         // return the map collection for the screen render
         for (OrderViewForListing order : orders) {
             orderMaps.add(order.toMap());
         }
+
         ac.put("ordersListIt", orderMaps);
     }
 }

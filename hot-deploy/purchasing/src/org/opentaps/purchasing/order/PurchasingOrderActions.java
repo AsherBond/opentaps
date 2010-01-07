@@ -129,6 +129,7 @@ public final class PurchasingOrderActions {
             }
 
             purchaseOrderLookupRepository.setOrderBy(orderBy);
+            purchaseOrderLookupRepository.enablePagination(false);
             List<OrderViewForListing> orders = purchaseOrderLookupRepository.findOrders();
             // return the map collection for the screen render
             for (OrderViewForListing order : orders) {
