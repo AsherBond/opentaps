@@ -1337,6 +1337,11 @@ input.smallSubmit
 padding:0px 5px 3px;
 }
 
+a.smallSubmit { 
+padding-top:0px !important;
+padding-bottom:0px !important;
+}
+
 
 a.buttontext,
 a.exportExcelButton,
