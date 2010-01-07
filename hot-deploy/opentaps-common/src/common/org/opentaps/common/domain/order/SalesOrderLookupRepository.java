@@ -229,6 +229,8 @@ public class SalesOrderLookupRepository extends CommonLookupRepository implement
                 results = criteria.scroll(ScrollMode.SCROLL_INSENSITIVE);
                 if (usePagination()) {
                     results.setRowNumber(getPageStart());
+                } else {
+                    results.first();
                 }
 
                 // convert them into OrderViewForListing objects which will also calculate or format some fields for display
