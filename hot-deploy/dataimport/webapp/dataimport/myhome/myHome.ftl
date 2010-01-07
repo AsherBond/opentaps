@@ -83,5 +83,31 @@
   	    <@displayCell text="${uiLabelMap.DataImportOrderItemLines}:"/>
 	    <@displayCell text="${orderItemsProcessed}"/>
 	    <@displayCell text="${orderItemsNotProcessed}"/>
-	</tr>	
+	</tr>
+	<tr>
+	    <form name="RunImportProductsFormExcel" method="post" action="setServiceParameters">
+	        <@inputHidden name="SERVICE_NAME" value="importProductFromExcel"/>
+	        <@inputHidden name="POOL_NAME" value="pool"/>
+	        <@inputHidden name="sectionHeaderUiLabel" value="Import Products from Excel"/>
+	    	<@displayCell text="${uiLabelMap.ProductProductsExcel}:"/>
+		    <@displayCell text="$"/>
+		    <@displayCell text="$"/>
+		    <#if hasDIAdminPermissions?default(false)>
+		        <@inputSubmitCell title="${uiLabelMap.DataImportProducts}"/>
+		    </#if>
+		</form>
+	</tr>
+	<tr>
+	    <form name="RunImportSuppliersForm" method="post" action="setServiceParameters">
+	        <@inputHidden name="SERVICE_NAME" value="importSuppliersFromExcel"/>
+	        <@inputHidden name="POOL_NAME" value="pool"/>
+	        <@inputHidden name="sectionHeaderUiLabel" value="Import Suppliers from Excel"/>
+	    	<@displayCell text="${uiLabelMap.SuppliersExcel}:"/>
+		    <@displayCell text="$"/>
+		    <@displayCell text="$"/>
+		    <#if hasDIAdminPermissions?default(false)>
+		        <@inputSubmitCell title="${uiLabelMap.DataImportSuppliers}"/>
+		    </#if>
+		</form>
+	</tr>		
 </table>
