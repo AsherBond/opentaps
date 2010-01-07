@@ -41,6 +41,14 @@
         <override name="amount" optional="false"/>
     </service>
 
+    <service name="financials.updateSentOrReceivedPayment" engine="java" default-entity-name="Payment"
+        location="com.opensourcestrategies.financials.payment.PaymentServices" invoke="updateSentOrReceivedPayment" auth="true">
+        <description>Limitied update service for Sent or Received payments.</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <override name="paymentId" mode="INOUT" optional="false" />
+    </service>
+
     <service name="financials.updatePayment" engine="java" default-entity-name="Payment"
         location="com.opensourcestrategies.financials.payment.PaymentServices" invoke="updatePayment" auth="true">
         <description>Wrapper service for OFBiz updatePayment, to ensure that the paymentMethodTypeId parameter is overridden by the

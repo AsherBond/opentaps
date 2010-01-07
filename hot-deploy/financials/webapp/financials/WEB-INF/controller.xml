@@ -1538,6 +1538,15 @@
         </response>  
         <response name="error" type="view" value="editPayment" /> 
     </request-map>
+	
+    <request-map uri="updateSentOrReceivedPayment">
+        <security https="true" auth="true" /> 
+        <event type="service" invoke="financials.updateSentOrReceivedPayment" /> 
+        <response name="success" type="request-redirect" value="viewPayment">
+          <redirect-parameter name="paymentId"/>
+        </response>  
+        <response name="error" type="view" value="editPayment" /> 
+    </request-map>
 			
     <request-map uri="setPaymentStatus">
         <security https="true" auth="true"/>

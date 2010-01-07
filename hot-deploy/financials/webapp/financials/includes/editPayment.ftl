@@ -74,8 +74,17 @@
   <div class="subMenuBar">${paymentStatusChangeAction?if_exists}</div>
 </div>
 
+<#-- set as true if there is a payment and its status only allow comments / reference number to be updated -->
+<#assign limitiedUpdate = false/>
+
 <#if payment?has_content>
-  <#assign formName = "updatePayment"/>
+  <#if payment.isSent() || payment.isReceived()>
+    <#-- this only allows a limited update -->
+    <#assign formName = "updateSentOrReceivedPayment"/>
+    <#assign limitiedUpdate = true/>
+  <#else>
+    <#assign formName = "updatePayment"/>
+  </#if>
 <#else>
   <#assign formName = "createPayment"/>
 </#if>
@@ -97,14 +106,19 @@
   <#-- this is for not losing the original payment type when creating a payment, as it must be DISBURSEMENT or RECEIPT, but it will change when the form is submitted -->
   <@inputHidden name="paymentType" value=(paymentType)! />
 
-  <@inputSelectRow title=uiLabelMap.AccountingPaymentType name="paymentTypeId" ignoreParameters=true default=defaultPaymentTypeId?default("CUSTOMER_PAYMENT") list=paymentTypeList key="paymentTypeId" displayField="description" />
+  <#if limitiedUpdate>
+    <@displayRow title=uiLabelMap.AccountingPaymentType text=(payment.paymentType.description)! />
+  <#else>
+    <@inputSelectRow title=uiLabelMap.AccountingPaymentType name="paymentTypeId" ignoreParameters=true default=defaultPaymentTypeId?default("CUSTOMER_PAYMENT") list=paymentTypeList key="paymentTypeId" displayField="description" />
+  </#if>
+
   <tr>
     <#if isDisbursement>
       <@displayTitleCell title=uiLabelMap.FinancialsPayToParty />
       <#if toParty?exists>
         <@inputHidden name="partyIdTo" value="${toParty.partyId}"/>
         <@displayCell text="${Static['org.ofbiz.party.party.PartyHelper'].getPartyName(delegator, toParty.partyId, false)} (${toParty.partyId})"/>
-      <#else/>
+      <#elseif !limitiedUpdate/>
         <@inputAutoCompletePartyCell name="partyIdTo" id="autoCompletePartyIdTo" />
       </#if>
     <#else/>
@@ -112,7 +126,7 @@
       <#if fromParty?exists>
         <@inputHidden name="partyIdFrom" value="${fromParty.partyId}"/>
         <@displayCell text="${Static['org.ofbiz.party.party.PartyHelper'].getPartyName(delegator, fromParty.partyId, false)} (${fromParty.partyId})"/>
-      <#else/>
+      <#elseif !limitiedUpdate/>
         <@inputAutoCompletePartyCell name="partyIdFrom" id="autoCompletePartyIdFrom" />
       </#if>
     </#if>
@@ -127,63 +141,79 @@
   <#if paymentMethodList?exists && paymentMethodList?has_content && ( fromParty?exists || isDisbursement )>
     <tr>
       <@displayTitleCell title=uiLabelMap.FinancialsPaymentMethod />
-      <td nowrap="nowrap">
-        <select name="paymentMethodId" id="paymentMethodId" class="selectBox" onchange="checkPaymentMethodTypeId()">
-          <#if ! isDisbursement><option value=""></option></#if>
-          <#list paymentMethodList as paymentMethod>
-            <#-- default to the current payment paymentMethodId, unless it has no value, in which case use the default -->
-            <option value="${paymentMethod.get("paymentMethodId")?if_exists}"  <#if paymentValue?has_content && paymentValue.paymentMethodId?default("") == paymentMethod.paymentMethodId>selected="selected"<#elseif !(paymentValue?has_content) && (paymentMethod.paymentMethodId == defaultPaymentMethodId?default(""))>selected="selected"</#if>>
-              <#-- assign and check that credit card/eft account actually exists.  if so, use them in the description -->
-              <#assign creditCard = paymentMethod.getRelatedOne("CreditCard")?if_exists/>
-              <#assign eftAccount = paymentMethod.getRelatedOne("EftAccount")?if_exists/>
-              <#if creditCard?has_content> 
-                ${creditCard.cardType} ${creditCard.cardNumber[creditCard.cardNumber?length-4..creditCard.cardNumber?length-1]} ${creditCard.expireDate}
-              <#elseif eftAccount?has_content> 
-                ${uiLabelMap.AccountingEFTAccount} ${eftAccount.accountNumber[eftAccount.accountNumber?length-4..eftAccount.accountNumber?length-1]}
-              <#else>
-                ${paymentMethod.description?if_exists} (${paymentMethod.paymentMethodId})
-              </#if>
-            </option>
-          </#list>
-        </select>
-      </td>
+      <#if limitiedUpdate>
+        <@displayCell text=(payment.paymentMethod.description)! />
+      <#else>
+        <td nowrap="nowrap">
+          <select name="paymentMethodId" id="paymentMethodId" class="selectBox" onchange="checkPaymentMethodTypeId()">
+            <#if ! isDisbursement><option value=""></option></#if>
+            <#list paymentMethodList as paymentMethod>
+              <#-- default to the current payment paymentMethodId, unless it has no value, in which case use the default -->
+              <option value="${paymentMethod.get("paymentMethodId")?if_exists}"  <#if paymentValue?has_content && paymentValue.paymentMethodId?default("") == paymentMethod.paymentMethodId>selected="selected"<#elseif !(paymentValue?has_content) && (paymentMethod.paymentMethodId == defaultPaymentMethodId?default(""))>selected="selected"</#if>>
+                <#-- assign and check that credit card/eft account actually exists.  if so, use them in the description -->
+                <#assign creditCard = paymentMethod.getRelatedOne("CreditCard")?if_exists/>
+                <#assign eftAccount = paymentMethod.getRelatedOne("EftAccount")?if_exists/>
+                <#if creditCard?has_content> 
+                  ${creditCard.cardType} ${creditCard.cardNumber[creditCard.cardNumber?length-4..creditCard.cardNumber?length-1]} ${creditCard.expireDate}
+                <#elseif eftAccount?has_content> 
+                  ${uiLabelMap.AccountingEFTAccount} ${eftAccount.accountNumber[eftAccount.accountNumber?length-4..eftAccount.accountNumber?length-1]}
+                <#else>
+                  ${paymentMethod.description?if_exists} (${paymentMethod.paymentMethodId})
+                </#if>
+              </option>
+            </#list>
+          </select>
+        </td>
+      </#if>
     </tr>
   </#if>
 
   <#if ! isDisbursement >
     <tr>
       <@displayTitleCell title=uiLabelMap.CommonPaymentMethodType />
-      <td nowrap="nowrap">
-        <select name="paymentMethodTypeId" id="paymentMethodTypeId" class="selectBox">
-          <#list paymentMethodTypeList as paymentMethodType>
-            <option value="${paymentMethodType.get("paymentMethodTypeId")?if_exists}"  <#if paymentValue?has_content && paymentValue.paymentMethodTypeId?default("") == paymentMethodType.paymentMethodTypeId>selected="selected"</#if>>${paymentMethodType.get("description")}</option>
-          </#list>
-        </select>
-      </td>
+      <#if limitiedUpdate>
+        <@displayCell text=(payment.paymentMethodType.description)! />
+      <#else>
+        <td nowrap="nowrap">
+          <select name="paymentMethodTypeId" id="paymentMethodTypeId" class="selectBox">
+            <#list paymentMethodTypeList as paymentMethodType>
+              <option value="${paymentMethodType.get("paymentMethodTypeId")?if_exists}"  <#if paymentValue?has_content && paymentValue.paymentMethodTypeId?default("") == paymentMethodType.paymentMethodTypeId>selected="selected"</#if>>${paymentMethodType.get("description")}</option>
+            </#list>
+          </select>
+        </td>
+      </#if>
     </tr>
   </#if>
 
   <tr>
     <@displayTitleCell title=uiLabelMap.AccountingAmount />
-    <td nowrap="nowrap">
-      <input type="text" class="inputBox" name="amount" value="<#if paymentValue?has_content>${paymentValue.amount?if_exists}<#elseif parameters.amount?exists>${parameters.amount}</#if>"/>
-      <select name="currencyUomId" class="selectBox">
-	<#list currencyUoms as currencyUom>
-	  <option value="${currencyUom.uomId}" <#if currencyUomId == currencyUom.uomId>selected="selected"</#if>>${currencyUom.abbreviation}</option>
-	</#list>
-      </select>
-    </td>
+    <#if limitiedUpdate>
+      <@displayCurrencyCell amount=(payment.amount)!0 currencyUomId=(payment.currencyUomId)! />
+    <#else>
+      <td nowrap="nowrap">
+        <input type="text" class="inputBox" name="amount" value="<#if paymentValue?has_content>${paymentValue.amount?if_exists}<#elseif parameters.amount?exists>${parameters.amount}</#if>"/>
+        <select name="currencyUomId" class="selectBox">
+          <#list currencyUoms as currencyUom>
+            <option value="${currencyUom.uomId}" <#if currencyUomId == currencyUom.uomId>selected="selected"</#if>>${currencyUom.abbreviation}</option>
+          </#list>
+        </select>
+      </td>
+    </#if>
   </tr>
 
   <tr>
     <@displayTitleCell title=uiLabelMap.AccountingEffectiveDate />
-    <td nowrap="nowrap">
-      <#if paymentValue?has_content>
-        <@inputDateTime name="effectiveDate" default=paymentValue.effectiveDate?if_exists/>
-      <#else>
-        <@inputDateTime name="effectiveDate"/>
-      </#if>
-    </td>
+    <#if limitiedUpdate>
+      <@displayDateCell date=(paymentValue.effectiveDate)! />
+    <#else>
+      <td nowrap="nowrap">
+        <#if paymentValue?has_content>
+          <@inputDateTime name="effectiveDate" default=paymentValue.effectiveDate?if_exists/>
+        <#else>
+          <@inputDateTime name="effectiveDate"/>
+        </#if>
+      </td>
+    </#if>
   </tr>
 
   <tr>
@@ -196,8 +226,12 @@
     <td nowrap="nowrap"><input type="text" class="inputBox" name="paymentRefNum" value="<#if paymentValue?has_content>${paymentValue.paymentRefNum?if_exists}</#if>"/></td>
   </tr>
 
-  <#if tagTypes?has_content && !allocatePaymentTagsToApplications>
-    <@accountingTagsSelectRows tags=tagTypes prefix="acctgTagEnumId" entity=paymentValue! />
+  <#if tagTypes?has_content>
+    <#if limitiedUpdate>
+      <@accountingTagsDisplayRows tags=tagTypes entity=paymentValue! />
+    <#elseif !allocatePaymentTagsToApplications>
+      <@accountingTagsSelectRows tags=tagTypes prefix="acctgTagEnumId" entity=paymentValue! />
+    </#if>
   </#if>
 
   <#if paymentId?has_content>

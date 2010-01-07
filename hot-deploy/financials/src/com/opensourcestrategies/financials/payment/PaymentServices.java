@@ -73,6 +73,8 @@ import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
+import org.opentaps.domain.billing.payment.Payment;
+import org.opentaps.domain.billing.payment.PaymentRepositoryInterface;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
@@ -245,6 +247,48 @@ public final class PaymentServices {
             GenericValue parentPaymentType = paymentType.getRelatedOneCache("ParentPaymentType");
             return getRootPaymentType(parentPaymentType);
         }
+    }
+
+    /**
+     * Limitied update service for Sent or Received payments.
+     * Only the Comments or Reference number may be changed at this point.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
+     */
+    public static Map<String, Object> updateSentOrReceivedPayment(DispatchContext dctx, Map<String, Object> context) {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        Locale locale = UtilCommon.getLocale(context);
+        Security security = dctx.getSecurity();
+
+        String paymentId = (String) context.get("paymentId");
+        String comments = (String) context.get("comments");
+        String paymentRefNum = (String) context.get("paymentRefNum");
+
+        if (!(security.hasEntityPermission("FINANCIALS", "_AP_PUPDT", userLogin) || security.hasEntityPermission("FINANCIALS", "_AR_PUPDT", userLogin))) {
+            return ServiceUtil.returnError(UtilProperties.getMessage("FinancialsUiLabels", "FinancialsServiceErrorNoPermission", locale));
+        }
+
+        try {
+            DomainsLoader domainLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+            DomainsDirectory domains = domainLoader.loadDomainsDirectory();
+            PaymentRepositoryInterface repository =  domains.getBillingDomain().getPaymentRepository();
+            Payment payment = repository.getPaymentById(paymentId);
+
+            payment.setComments(comments);
+            payment.setPaymentRefNum(paymentRefNum);
+            repository.update(payment);
+
+        } catch (EntityNotFoundException e) {
+            return ServiceUtil.returnError(e.getMessage());
+        } catch (RepositoryException e) {
+            return ServiceUtil.returnError(e.getMessage());
+        }
+
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        result.put("paymentId", paymentId);
+        return result;
     }
 
     /**

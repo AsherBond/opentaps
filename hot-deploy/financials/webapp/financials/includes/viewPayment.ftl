@@ -28,7 +28,7 @@ If you have come this far, payment should be a valid Payment Object.
   <#assign paymentStatusChangeAction><a class="subMenuButton" href="<@ofbizUrl>editPayment?paymentTypeId=${addPaymentTypeId}</@ofbizUrl>">${uiLabelMap.CommonCreateNew}</a></#assign>
 </#if>
 <#if hasUpdatePermission>
-  <#if payment.isNotPaid()>
+  <#if payment.isNotPaid() || payment.isSent() || payment.isReceived()>
     <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<a class="subMenuButton" href="<@ofbizUrl>editPayment?paymentId=${payment.paymentId}</@ofbizUrl>">${uiLabelMap.CommonEdit}</a></#assign>
   </#if>
   <#if isDisbursement && payment.isNotPaid() && payment.isReadyToPost()>
