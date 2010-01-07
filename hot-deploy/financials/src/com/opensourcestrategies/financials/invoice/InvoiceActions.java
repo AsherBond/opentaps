@@ -43,6 +43,7 @@ import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.base.constants.ContactMechPurposeTypeConstants;
 import org.opentaps.base.entities.BillingAccountAndRole;
 import org.opentaps.base.entities.GlAccountOrganizationAndClass;
 import org.opentaps.base.entities.InvoiceAdjustmentType;
@@ -73,7 +74,6 @@ import org.opentaps.foundation.action.ActionContext;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.exception.FoundationException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
-
 
 /**
  * InvoiceActions - Java Actions for invoices.
@@ -268,13 +268,19 @@ public final class InvoiceActions {
 
             // party's billing and payment locations
             conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                                   EntityCondition.makeCondition(EntityOperator.OR,
-                                       EntityCondition.makeCondition(PartyContactMechPurpose.Fields.contactMechPurposeTypeId.name(), EntityOperator.EQUALS, "BILLING_LOCATION"),
-                                       EntityCondition.makeCondition(PartyContactMechPurpose.Fields.contactMechPurposeTypeId.name(), EntityOperator.EQUALS, "PAYMENT_LOCATION")),
+                                   EntityCondition.makeCondition(PartyContactMechPurpose.Fields.contactMechPurposeTypeId.name(),
+                                                                 EntityOperator.IN,
+                                                                 UtilMisc.toList(ContactMechPurposeTypeConstants.BILLING_LOCATION,
+                                                                                 ContactMechPurposeTypeConstants.PAYMENT_LOCATION,
+                                                                                 ContactMechPurposeTypeConstants.GENERAL_LOCATION)),
                                    EntityCondition.makeCondition(PartyContactMechPurpose.Fields.partyId.name(), EntityOperator.EQUALS, invoice.getTransactionPartyId()),
                                    EntityUtil.getFilterByDateExpr());
             List<PartyContactMechPurpose> purposes = invoiceRepository.findList(PartyContactMechPurpose.class, conditions);
-            ac.put("addresses", Entity.getRelated(PostalAddress.class, purposes));
+            Set<String> contactMechIds = Entity.getDistinctFieldValues(String.class, purposes, PartyContactMechPurpose.Fields.contactMechId);
+            ac.put("addresses", invoiceRepository.findList(PostalAddress.class,
+                                                           EntityCondition.makeCondition(PostalAddress.Fields.contactMechId.name(),
+                                                                                         EntityOperator.IN,
+                                                                                         contactMechIds)));
 
             // available tax authorities
             List<TaxAuthorityAndDetail> taxAuthorities = invoiceRepository.findAllCache(TaxAuthorityAndDetail.class, UtilMisc.toList(TaxAuthorityAndDetail.Fields.abbreviation.name(), TaxAuthorityAndDetail.Fields.groupName.name()));
