@@ -148,5 +148,21 @@
         <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
         <attribute name="importedRecords" type="Integer" mode="OUT" optional="true"/>
     </service>
-
+	
+	<service name="importProductFromExcel" engine="java" use-transaction="false"
+        location="org.opentaps.dataimport.ProductImportFromExcelServices" invoke="importProductFromExcel">
+        <description>
+            Imports products from Excel sheet in DataImportProduct. 
+        </description>
+        <attribute name="importedRecords" type="Integer" mode="OUT" optional="true"/>
+    </service>
+	
+	<service name="importSuppliersFromExcel" engine="java" use-transaction="false"
+        location="org.opentaps.dataimport.SupplierImportFromExcelServices" invoke="importSuppliersFromExcel">
+        <description>
+            Imports suppliers from Excel sheet in DataImportSupplier. 
+        </description>
+        <attribute name="importedRecords" type="Integer" mode="OUT" optional="true"/>
+    </service>  
+	  
 </services>
