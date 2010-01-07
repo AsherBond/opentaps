@@ -39,12 +39,7 @@
 </#if>
 
 
-<div class="screenlet">
-
-  <div class="screenlet-header">
-    <div class="boxhead">${createInvoiceTitle}</div>
-  </div>
-  <div class="screenlet-body">
+<@frameSection title=createInvoiceTitle>
     <table border="0" cellpadding="2" cellspacing="0" width="100%">
       <form method="post" action="<@ofbizUrl>createInvoice</@ofbizUrl>" name="createInvoiceForm">
         <@inputHidden name="invoiceTypeId" value="${invoiceTypeId}"/>
@@ -61,6 +56,4 @@
         <@inputForceCompleteRow title=uiLabelMap.CommonCreate forceTitle=uiLabelMap.OpentapsForceCreate form="createInvoiceForm" /></td>
       </form>
     </table>
-  </div>
-
-</div>
+</@frameSection>
