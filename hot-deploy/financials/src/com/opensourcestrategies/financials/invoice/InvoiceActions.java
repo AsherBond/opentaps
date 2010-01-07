@@ -52,7 +52,7 @@ import org.opentaps.base.entities.InvoiceContactMech;
 import org.opentaps.base.entities.InvoiceType;
 import org.opentaps.base.entities.OrderItem;
 import org.opentaps.base.entities.OrderItemBilling;
-import org.opentaps.base.entities.PartyContactMechPurpose;
+import org.opentaps.base.entities.PartyContactWithPurpose;
 import org.opentaps.base.entities.PaymentApplication;
 import org.opentaps.base.entities.PostalAddress;
 import org.opentaps.base.entities.StatusItem;
@@ -268,15 +268,22 @@ public final class InvoiceActions {
 
             // party's billing and payment locations
             conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                                   EntityCondition.makeCondition(PartyContactMechPurpose.Fields.contactMechPurposeTypeId.name(),
+                                   EntityCondition.makeCondition(PartyContactWithPurpose.Fields.contactMechPurposeTypeId.name(),
                                                                  EntityOperator.IN,
                                                                  UtilMisc.toList(ContactMechPurposeTypeConstants.BILLING_LOCATION,
                                                                                  ContactMechPurposeTypeConstants.PAYMENT_LOCATION,
                                                                                  ContactMechPurposeTypeConstants.GENERAL_LOCATION)),
-                                   EntityCondition.makeCondition(PartyContactMechPurpose.Fields.partyId.name(), EntityOperator.EQUALS, invoice.getTransactionPartyId()),
-                                   EntityUtil.getFilterByDateExpr());
-            List<PartyContactMechPurpose> purposes = invoiceRepository.findList(PartyContactMechPurpose.class, conditions);
-            Set<String> contactMechIds = Entity.getDistinctFieldValues(String.class, purposes, PartyContactMechPurpose.Fields.contactMechId);
+                                   EntityCondition.makeCondition(PartyContactWithPurpose.Fields.partyId.name(), EntityOperator.EQUALS, invoice.getTransactionPartyId()),
+                                   EntityUtil.getFilterByDateExpr(PartyContactWithPurpose.Fields.contactFromDate.name(), PartyContactWithPurpose.Fields.contactThruDate.name()),
+                                   EntityUtil.getFilterByDateExpr(PartyContactWithPurpose.Fields.purposeFromDate.name(), PartyContactWithPurpose.Fields.purposeThruDate.name()));
+            List<PartyContactWithPurpose> purposes = invoiceRepository.findList(PartyContactWithPurpose.class, conditions);
+            Set<String> contactMechIds = Entity.getDistinctFieldValues(String.class, purposes, PartyContactWithPurpose.Fields.contactMechId);
+
+            // make sure the current billing address is also listed (it may have been changed / expired for the account)
+            if (UtilValidate.isNotEmpty(invoice.getContactMechId())) {
+                contactMechIds.add(invoice.getContactMechId());
+            }
+
             ac.put("addresses", invoiceRepository.findList(PostalAddress.class,
                                                            EntityCondition.makeCondition(PostalAddress.Fields.contactMechId.name(),
                                                                                          EntityOperator.IN,
