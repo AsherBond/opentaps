@@ -107,12 +107,10 @@
             <widgets>
                 <decorator-screen name="main-section-decorator" location="${decoratorLocation}">
                     <decorator-section name="section-body">
-                            <container style="screenlet">
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/includes/findPayment.ftl"/></html>
-                                </platform-specific>
-                            </container>
-                            <include-form name="ListPayments" location="component://financials/widget/financials/forms/common/PaymentForms.xml"/>
+                      <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/findPayment.ftl"/></html>
+                      </platform-specific>
+                      <include-form name="ListPayments" location="component://financials/widget/financials/forms/common/PaymentForms.xml"/>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
