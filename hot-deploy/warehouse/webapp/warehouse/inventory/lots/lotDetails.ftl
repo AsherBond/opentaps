@@ -25,7 +25,6 @@
     </#if>
   </@sectionHeader>
 
-  <div class="form">
     <table border="0" class="fourColumnForm">
       <tr>
         <td class="formWidth300"><span class="tableheadtext">${uiLabelMap.ProductLotId}</span></td>
@@ -71,7 +70,6 @@
       </tr>
       </#if>
     </table>
-  </div>
 <#else>
   ${uiLabelMap.OpentapsError_PermissionDenied}
 </#if>
