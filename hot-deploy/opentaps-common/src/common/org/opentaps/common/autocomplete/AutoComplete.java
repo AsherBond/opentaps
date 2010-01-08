@@ -60,6 +60,7 @@ public final class AutoComplete {
         // get active clients (but can be related to another user)
         EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
                                    EntityUtil.getFilterByDateExpr(),
+                                   ac_activePartyCondition,
                                    ac_crmPartyRoleCondition);
         return autocompletePartyIdsByCondition(condition, "PartyFromSummaryByRelationship", request, response);
     }
@@ -74,6 +75,7 @@ public final class AutoComplete {
         // get active clients (but can be related to another user)
         EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
                                    EntityUtil.getFilterByDateExpr(),
+                                   ac_activePartyCondition,
                                    ac_clientRoleCondition);
         return autocompletePartyIdsByCondition(condition, "PartyFromSummaryByRelationship", request, response);
     }
@@ -88,6 +90,7 @@ public final class AutoComplete {
         // get active accounts (but can be related to another user)
         EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
                                    EntityUtil.getFilterByDateExpr(),
+                                   ac_activePartyCondition,
                                    ac_accountRoleCondition);
         return autocompletePartyIdsByCondition(condition, "PartyFromSummaryByRelationship", request, response);
     }
@@ -101,7 +104,8 @@ public final class AutoComplete {
     public static String getAutoCompleteSupplierPartyIds(HttpServletRequest request, HttpServletResponse response) {
         // get suppliers (but can be related to another user)
         EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
-                    EntityCondition.makeCondition("roleTypeId", "SUPPLIER"));
+                                   ac_activePartyCondition,
+                                   EntityCondition.makeCondition("roleTypeId", "SUPPLIER"));
         return autocompletePartyIdsByCondition(condition, "PartyRoleNameDetail", request, response);
     }
 
@@ -112,7 +116,7 @@ public final class AutoComplete {
      * @return a <code>String</code> value
      */
     public static String getAutoCompletePartyIds(HttpServletRequest request, HttpServletResponse response) {
-        return autocompletePartyIdsByCondition(null, "PartySummaryCRMView", request, response);
+        return autocompletePartyIdsByCondition(ac_activePartyCondition, "PartySummaryCRMView", request, response);
     }
 
     /**
@@ -122,7 +126,10 @@ public final class AutoComplete {
      * @return a <code>String</code> value
      */
     public static String getAutoCompletePartyGroupIds(HttpServletRequest request, HttpServletResponse response) {
-        return autocompletePartyIdsByCondition(EntityCondition.makeCondition("partyTypeId", "PARTY_GROUP"), "PartySummaryCRMView", request, response);
+        EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
+                                   ac_activePartyCondition,
+                                   EntityCondition.makeCondition("partyTypeId", "PARTY_GROUP"));
+        return autocompletePartyIdsByCondition(condition, "PartySummaryCRMView", request, response);
     }
 
     /**
@@ -132,7 +139,10 @@ public final class AutoComplete {
      * @return a <code>String</code> value
      */
     public static String getAutoCompletePersonIds(HttpServletRequest request, HttpServletResponse response) {
-        return autocompletePartyIdsByCondition(EntityCondition.makeCondition("partyTypeId", "PERSON"), "PartySummaryCRMView", request, response);
+        EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
+                                   ac_activePartyCondition,
+                                   EntityCondition.makeCondition("partyTypeId", "PERSON"));
+        return autocompletePartyIdsByCondition(condition, "PartySummaryCRMView", request, response);
     }
 
     /**
@@ -142,7 +152,7 @@ public final class AutoComplete {
      * @return a <code>String</code> value
      */
     public static String getAutoCompleteUserLoginPartyIds(HttpServletRequest request, HttpServletResponse response) {
-        return autocompletePartyIdsByCondition(null, "UserLoginAndPartyDetails", request, response);
+        return autocompletePartyIdsByCondition(ac_activePartyCondition, "UserLoginAndPartyDetails", request, response);
     }
 
     private static String autocompletePartyIdsByCondition(EntityCondition condition, String entityName, HttpServletRequest request, HttpServletResponse response) {
