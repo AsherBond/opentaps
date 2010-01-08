@@ -42,8 +42,7 @@ under the License.
   <div class="errorMessage">${illegalInventoryItem}</div>
 </#if>
 
-<div class="head1">${uiLabelMap.ProductInventoryTransfer} <span class="head2">${uiLabelMap.CommonFrom}&nbsp;<#if facility?exists>${(facility.facilityName)!}</#if> [${uiLabelMap.CommonId}:${facilityId!}]</span></div>
-<br/>
+<@frameSection title="${uiLabelMap.ProductInventoryTransfer} ${uiLabelMap.CommonFrom}&nbsp;${facility?exists?string((facility.facilityName)!,'')}&nbsp;[${uiLabelMap.CommonId}:${facilityId!}]">
 
 <#if !(inventoryItem?exists)>
   <form method="post" action="<@ofbizUrl>TransferInventoryItem</@ofbizUrl>" name="TransferInventoryItem">
@@ -183,3 +182,5 @@ under the License.
   </table>
 </form>
 </#if>
+
+</@frameSection>
