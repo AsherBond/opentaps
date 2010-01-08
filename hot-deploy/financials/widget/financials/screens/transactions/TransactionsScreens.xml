@@ -70,16 +70,11 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsCreateQuickTransaction}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific><html>
-                                        <html-template location="component://financials/webapp/financials/transactions/createQuickAcctgTransForm.ftl"/></html>
-                                </platform-specific>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsCreateQuickTransaction}">
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/transactions/createQuickAcctgTransForm.ftl"/></html>
+                          </platform-specific>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -95,16 +90,11 @@
             <widgets>   
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsSettlePayments}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific><html>
-                                        <html-template location="component://financials/webapp/financials/transactions/settlePaymentsOptions.ftl"/></html>
-                                </platform-specific>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsSettlePayments}">
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/transactions/settlePaymentsOptions.ftl"/></html>
+                          </platform-specific>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -173,14 +163,9 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsCreateTransaction}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="createAcctgTransForm" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsCreateTransaction}">
+                            <include-form name="createAcctgTransForm" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -319,14 +304,9 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsUnpostedTransactions}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="listUnpostedAcctgTrans" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsUnpostedTransactions}">
+                          <include-form name="listUnpostedAcctgTrans" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -347,9 +327,7 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet-header">
-                            <label style="boxhead" text="${uiLabelMap.CommonFor} ${parameters.organizationName}"/>
-                        </container>
+                        <frame-container-header title="${uiLabelMap.CommonFor} ${parameters.organizationName}"/>
                         <platform-specific>
                             <html><html-template location="component://financials/webapp/financials/transactions/reconcileAccounts.ftl"/></html>
                         </platform-specific>
@@ -471,20 +449,12 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsExchangeRates}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="listExchangeRates" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
-                            </container>
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsExchangeRatesUpdate}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <include-form name="updateExchangeRate" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsExchangeRates}">
+                          <include-form name="listExchangeRates" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                        </frame-container>
+                        <frame-container title="${uiLabelMap.FinancialsExchangeRatesUpdate}">
+                          <include-form name="updateExchangeRate" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -501,13 +471,10 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsRecurringInvoices}"/>
-                            </container>
-                            <include-form name="ListInvoicesForRecurrence" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
-                            <include-form name="AddInvoiceRecurrence" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsRecurringInvoices}">
+                          <include-form name="ListInvoicesForRecurrence" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                          <include-form name="AddInvoiceRecurrence" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

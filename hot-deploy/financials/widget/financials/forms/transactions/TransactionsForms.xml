@@ -275,7 +275,7 @@
     </form>
     
     <form name="updateExchangeRate" type="single" target="updateExchangeRate" default-service-name="updateFXConversion"
-            default-table-style="listTable" default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+            default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
         <field name="organizationPartyId"><hidden value="${organizationPartyId}"/></field>
         <field name="uomId" title="${uiLabelMap.CommonFrom} ${uiLabelMap.CommonCurrency}">
             <drop-down no-current-selected-key="USD">
@@ -348,7 +348,7 @@
     </form>
     
     <form name="AddInvoiceRecurrence" type="single" default-title-style="tableheadtext" default-tooltip-style="tabletext" default-widget-style="tabletext"
-        default-table-style="listTable" target="updateInvoiceRecurrence">
+         target="updateInvoiceRecurrence">
         <field name="invoiceId" title="${uiLabelMap.AccountingInvoiceID}" widget-style="linktext" position="1"><text size="15"/></field>
         <field name="recurrenceRuleId" title="${uiLabelMap.FinancialsRecurrence}" position="2">
             <drop-down allow-empty="false" current="selected">

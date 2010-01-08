@@ -50,10 +50,7 @@
 /*]]>*/
 </script>
 
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.FinancialsAdjustInventoryValues}</div>
-</div>
-<div class="subSectionBlock ">
+<@frameSection title=uiLabelMap.FinancialsAdjustInventoryValues>
   <form method="post" action="<@ofbizUrl>adjustInventoryValues</@ofbizUrl>" name="findForm">
     <@inputHidden name="performFind" value="Y"/>
     <table class="twoColumnForm">
@@ -67,7 +64,8 @@
       <@inputSubmitRow title=uiLabelMap.CommonFind />
     </table>
   </form>
-</div>
+</@frameSection>
+
 <form name="updateInventoryItems" method="post" action="<@ofbizUrl>updateInventoryItemValues</@ofbizUrl>">
   <@paginate name="adjustInventoryValues" list=inventoryItems>
     <#noparse>
