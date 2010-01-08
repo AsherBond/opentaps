@@ -18,12 +18,7 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<div class="subSectionBlock">
-
-    <div class="subSectionHeader">
-        <div class="subSectionTitle">${uiLabelMap.FinancialsSalesTaxStatement}</div>
-    </div>
-    
+<@frameSection title=uiLabelMap.FinancialsSalesTaxStatement>
     <form method="post" name="SalesTaxReportSetupForm" action="<@ofbizUrl>SalesTaxReportPrepareData</@ofbizUrl>">
         <table class="twoColumnForm">
             <@inputHidden name="organizationPartyId" value="${parameters.organizationPartyId}"/>
@@ -54,4 +49,4 @@
             <@inputSubmitRow title="${uiLabelMap.OpentapsReport}" onClick=""/>
         </table>
     </form>
-</div>
+</@frameSection>

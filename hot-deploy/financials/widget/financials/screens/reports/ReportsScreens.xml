@@ -70,19 +70,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.AccountingBalanceSheet}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/>
-                                </html></platform-specific>
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/reports/balanceSheet.ftl"/>
-                                </html></platform-specific>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.AccountingBalanceSheet}">
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/>
+                          </html></platform-specific>
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/reports/balanceSheet.ftl"/>
+                          </html></platform-specific>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -99,16 +94,11 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsPostedBalancesByGlAccount}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/reports/postedBalances.ftl"/>
-                                </html></platform-specific>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsPostedBalancesByGlAccount}">
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/reports/postedBalances.ftl"/>
+                          </html></platform-specific>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -131,19 +121,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.AccountingTrialBalance}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/>
-                                </html></platform-specific>
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/reports/trialBalance.ftl"/>
-                                </html></platform-specific>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.AccountingTrialBalance}">
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/>
+                          </html></platform-specific>
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/reports/trialBalance.ftl"/>
+                          </html></platform-specific>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -159,16 +144,11 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsTransactionSummary}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/reports/transactionSummary.ftl"/>
-                                </html></platform-specific>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsTransactionSummary}">
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/reports/transactionSummary.ftl"/>
+                          </html></platform-specific>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -190,19 +170,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsComparativeBalance}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/includes/comparativeStateReportOptions.ftl"/>
-                                </html></platform-specific>
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/reports/comparativeBalance.ftl"/>
-                                </html></platform-specific>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsComparativeBalance}">
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/includes/comparativeStateReportOptions.ftl"/>
+                          </html></platform-specific>
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/reports/comparativeBalance.ftl"/>
+                          </html></platform-specific>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -224,19 +199,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsComparativeIncomeStatement}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/includes/comparativeFlowReportOptions.ftl"/>
-                                </html></platform-specific>
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/reports/comparativeIncomeStatement.ftl"/>
-                                </html></platform-specific>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsComparativeIncomeStatement}">
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/includes/comparativeFlowReportOptions.ftl"/>
+                          </html></platform-specific>
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/reports/comparativeIncomeStatement.ftl"/>
+                          </html></platform-specific>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -259,19 +229,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.AccountingIncomeStatement}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/includes/flowReportOptions.ftl"/>
-                                </html></platform-specific>
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/reports/incomeStatement.ftl"/>
-                                </html></platform-specific>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.AccountingIncomeStatement}">
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/includes/flowReportOptions.ftl"/>
+                          </html></platform-specific>
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/reports/incomeStatement.ftl"/>
+                          </html></platform-specific>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -293,19 +258,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsCashFlowStatement}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/includes/flowReportOptions.ftl"/>
-                                </html></platform-specific>
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/reports/cashFlowStatement.ftl"/>
-                                </html></platform-specific>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsCashFlowStatement}">
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/includes/flowReportOptions.ftl"/>
+                          </html></platform-specific>
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/reports/cashFlowStatement.ftl"/>
+                          </html></platform-specific>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -327,19 +287,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsComparativeCashFlowStatement}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/includes/comparativeFlowReportOptions.ftl"/>
-                                </html></platform-specific>
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/reports/comparativeCashFlowStatement.ftl"/>
-                                </html></platform-specific>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsComparativeCashFlowStatement}">
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/includes/comparativeFlowReportOptions.ftl"/>
+                          </html></platform-specific>
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/reports/comparativeCashFlowStatement.ftl"/>
+                          </html></platform-specific>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -359,19 +314,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsEquityStatement}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/includes/comparativeStateReportOptions.ftl"/>
-                                </html></platform-specific>
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/reports/equityStatement.ftl"/>
-                                </html></platform-specific>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsEquityStatement}">
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/includes/comparativeStateReportOptions.ftl"/>
+                          </html></platform-specific>
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/reports/equityStatement.ftl"/>
+                          </html></platform-specific>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -411,19 +361,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsSalesTaxDetailReport}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/includes/flowReportOptions.ftl"/>
-                                </html></platform-specific>
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/includes/glAccountStatement.ftl"/>
-                                </html></platform-specific>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsSalesTaxDetailReport}">
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/includes/flowReportOptions.ftl"/>
+                          </html></platform-specific>
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/includes/glAccountStatement.ftl"/>
+                          </html></platform-specific>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -466,19 +411,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsInventoryValuationReport}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/>
-                                </html></platform-specific>
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/reports/inventoryValuationReport.ftl"/>
-                                </html></platform-specific>
-                            </container>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsInventoryValuationReport}">
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/>
+                          </html></platform-specific>
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/reports/inventoryValuationReport.ftl"/>
+                          </html></platform-specific>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -498,24 +438,20 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsInventoryValueDetail}"/>
-                            </container>
-                            <!-- I have to put a section here so that main-decorator.bsh runs before the inventoryValuationReport.bsh script (for orgCurrencyUomId) -->
-                            <section>
-                                <actions>
-                                    <script location="component://financials/webapp/financials/WEB-INF/actions/reports/inventoryValueDetail.bsh"/>
-                                </actions>
-                                <widgets>
-                                    <container style="screenlet-body">
-                                        <platform-specific><html>
-                                           <html-template location="component://financials/webapp/financials/reports/inventoryValueDetail.ftl"/>
-                                        </html></platform-specific>
-                                    </container>
-                                </widgets>
-                            </section>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsInventoryValueDetail}">
+                          <section>
+                            <actions>
+                              <script location="component://financials/webapp/financials/WEB-INF/actions/reports/inventoryValueDetail.bsh"/>
+                            </actions>
+                            <widgets>
+                              <container style="screenlet-body">
+                                <platform-specific><html>
+                                  <html-template location="component://financials/webapp/financials/reports/inventoryValueDetail.ftl"/>
+                                </html></platform-specific>
+                              </container>
+                            </widgets>
+                          </section>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -537,14 +473,11 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsSalesAndInventory}"/>
-                            </container>
-                            <platform-specific><html>
-                                <html-template location="component://financials/webapp/financials/includes/flowReportOptions.ftl"/>
-                            </html></platform-specific>
-                        </container>
+                        <frame-container title="${uiLabelMap.FinancialsSalesAndInventory}">
+                          <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/includes/flowReportOptions.ftl"/>
+                          </html></platform-specific>
+                        </frame-container>
                         <container style="screenlet">
                             <platform-specific><html>
                                 <html-template location="component://financials/webapp/financials/reports/SalesAndInventory.ftl"/>
@@ -564,14 +497,11 @@
                 <script location="component://financials/webapp/financials/WEB-INF/actions/reports/AverageDSOReport.bsh"/>
             </actions>
             <widgets>
-                <container style="screenlet">
-                    <container style="screenlet-header">
-                        <label style="boxhead" text="${groovy:uiLabelMap.get(reportTitle)}"/>
-                    </container>
-                    <platform-specific><html>
-                        <html-template location="component://financials/webapp/financials/includes/flowReportOptions.ftl"/>
-                    </html></platform-specific>
-                </container>
+                <frame-container title="${groovy:uiLabelMap.get(reportTitle)}">
+                  <platform-specific><html>
+                    <html-template location="component://financials/webapp/financials/includes/flowReportOptions.ftl"/>
+                  </html></platform-specific>
+                </frame-container>
                 <container style="screenlet">
                     <platform-specific><html>
                         <html-template location="component://financials/webapp/financials/reports/AverageDSOReport.ftl"/>

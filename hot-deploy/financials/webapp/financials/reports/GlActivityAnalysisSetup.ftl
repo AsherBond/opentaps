@@ -18,12 +18,7 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<div class="subSectionBlock">
-
-    <div class="subSectionHeader">
-        <div class="subSectionTitle">${uiLabelMap.FinancialsGlActivitySetupTitle}</div>
-    </div>
-    
+<@frameSection title=uiLabelMap.FinancialsGlActivitySetupTitle>
     <form method="post" name="GlActivityAnalysisSetupForm" action="<@ofbizUrl>GlActivityAnalysisPrepareData</@ofbizUrl>">
         <table class="twoColumnForm">
             <@inputHidden name="organizationPartyId" value="${parameters.organizationPartyId}"/>
@@ -70,4 +65,4 @@
             </#if>
         </table>
     </form>
-</div>
+</@frameSection>
