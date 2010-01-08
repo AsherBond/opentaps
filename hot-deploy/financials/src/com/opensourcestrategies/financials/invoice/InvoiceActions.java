@@ -390,19 +390,19 @@ public final class InvoiceActions {
             findFormTitle = ac.getUiLabel("FinancialsFindSalesInvoices");
             isReceivable = true;
             enableFindByOrder = true;
-            tagsType = UtilAccountingTags.SALES_INVOICES_TAG;
+            tagsType = UtilAccountingTags.LOOKUP_SALES_INVOICES_TAG;
         } else if ("PURCHASE_INVOICE".equals(invoiceTypeId)) {
             findFormTitle = ac.getUiLabel("FinancialsFindPurchaseInvoices");
             isPayable = true;
             enableFindByOrder = true;
-            tagsType = UtilAccountingTags.PURCHASE_INVOICES_TAG;
+            tagsType = UtilAccountingTags.LOOKUP_PURCHASE_INVOICES_TAG;
         } else if ("CUST_RTN_INVOICE".equals(invoiceTypeId)) {
             findFormTitle = ac.getUiLabel("FinancialsFindCustomerReturnInvoices");
             isPayable = true;
         } else if ("COMMISSION_INVOICE".equals(invoiceTypeId)) {
             findFormTitle = ac.getUiLabel("FinancialsFindCommissionInvoices");
             isPayable = true;
-            tagsType = UtilAccountingTags.COMMISSION_INVOICES_TAG;
+            tagsType = UtilAccountingTags.LOOKUP_COMMISSION_INVOICES_TAG;
         } else if ("INTEREST_INVOICE".equals(invoiceTypeId)) {
             findFormTitle = ac.getUiLabel("FinancialsFindFinanceCharges");
             isReceivable = true;

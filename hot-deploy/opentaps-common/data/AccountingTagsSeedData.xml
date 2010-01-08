@@ -29,6 +29,9 @@
     <AcctgTagUsageType acctgTagUsageTypeId="PRCH_INV_ITEMS" description="Purchase invoice"/>
     <AcctgTagUsageType acctgTagUsageTypeId="SALES_INV_ITEMS" description="Sales invoice items"/>
     <AcctgTagUsageType acctgTagUsageTypeId="COMM_INV_ITEMS" description="Commission invoice items"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="PRCH_INV_L_ITEMS" description="Lookup Purchase invoice"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="SALES_INV_L_ITEMS" description="Lookup Sales invoice items"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="COMM_INV_L_ITEMS" description="Lookup Commission invoice items"/>
     <AcctgTagUsageType acctgTagUsageTypeId="PRCH_ORDER_ITEMS" description="Purchase order items"/>
     <AcctgTagUsageType acctgTagUsageTypeId="SALES_ORDER_ITEMS" description="Sales order items"/>
     <AcctgTagUsageType acctgTagUsageTypeId="DISBURSEMENT" description="Payments which are of type Disbursement"/>

@@ -68,6 +68,12 @@ public final class UtilAccountingTags {
     public static final String SALES_INVOICES_TAG = "SALES_INV_ITEMS";
     /** Tags for commission invoices. */
     public static final String COMMISSION_INVOICES_TAG = "COMM_INV_ITEMS";
+    /** Tags for lookup purchase invoices. */
+    public static final String LOOKUP_PURCHASE_INVOICES_TAG = "PRCH_INV_L_ITEMS";
+    /** Tags for lookup sales invoices. */
+    public static final String LOOKUP_SALES_INVOICES_TAG = "SALES_INV_L_ITEMS";
+    /** Tags for lookup commission invoices. */
+    public static final String LOOKUP_COMMISSION_INVOICES_TAG = "COMM_INV_L_ITEMS";
     /** Tags for purchase order. */
     public static final String PURCHASE_ORDER_TAG = "PRCH_ORDER_ITEMS";
     /** Tags for sales order. */
