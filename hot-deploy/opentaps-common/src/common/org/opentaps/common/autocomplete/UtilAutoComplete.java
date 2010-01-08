@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,6 +36,8 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.base.constants.RoleTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.common.event.AjaxEvents;
+
+import org.opentaps.common.util.UtilMessage;
 
 /**
  * Auto Complete constants and utility methods.
@@ -93,7 +96,7 @@ public final class UtilAutoComplete {
      * @param builder a <code>SelectionBuilder</code> value
      * @return a <code>String</code> value
      */
-    public static String makeSelectionJSONResponse(HttpServletResponse response, Collection collection, String objectKey, SelectionBuilder builder) {
+    public static String makeSelectionJSONResponse(HttpServletResponse response, Collection collection, String objectKey, SelectionBuilder builder, Locale locale) {
         JSONArray jsonArray = new JSONArray();
         if (collection != null) {
             for (Object element : collection) {
@@ -104,6 +107,13 @@ public final class UtilAutoComplete {
                 }
                 jsonArray.element(jsonObject.toString());
             }
+        }
+
+        if (collection == null || collection.isEmpty()) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("name", UtilMessage.expandLabel("OpentapsAutocompletionNoMatch", locale));
+            jsonObject.put(objectKey, "");
+            jsonArray.element(jsonObject.toString());
         }
 
         Map<String, Object> retval = new HashMap<String, Object>();

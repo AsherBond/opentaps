@@ -190,7 +190,7 @@ public final class AutoComplete {
         }
 
         // write the JSON data to the response stream
-        return makeSelectionJSONResponse(response, parties, "partyId", new PartySelectionBuilder());
+        return makeSelectionJSONResponse(response, parties, "partyId", new PartySelectionBuilder(), UtilCommon.getLocale(request));
     }
 
     /**
@@ -282,7 +282,7 @@ public final class AutoComplete {
         }
 
         // write the JSON data to the response stream
-        return makeSelectionJSONResponse(response, accounts, "glAccountId", new GlAccountSelectionBuilder());
+        return makeSelectionJSONResponse(response, accounts, "glAccountId", new GlAccountSelectionBuilder(), UtilCommon.getLocale(request));
     }
 
     /**
@@ -343,7 +343,7 @@ public final class AutoComplete {
         }
 
         // write the JSON data to the response stream
-        return makeSelectionJSONResponse(response, products, "productId", new ProductSelectionBuilder());
+        return makeSelectionJSONResponse(response, products, "productId", new ProductSelectionBuilder(), UtilCommon.getLocale(request));
     }
 
     public static class PartySelectionBuilder implements SelectionBuilder {
