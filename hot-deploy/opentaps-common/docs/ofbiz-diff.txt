@@ -185,6 +185,9 @@ framework/widget/src/org/ofbiz/widget/text/TextScreenRenderer.java
 framework/widget/templates/htmlScreenMacroLibrary.ftl
 Add screen XML node to render a simple frame section with styled header.
 
+framework/entity/config/entityengine.xml
+r14503 add useOldAliasMetadataBehavior parameter in mysql jdbc url for avoid hibernate got not found column on search view entity 
+
 Applications changes
 --------------------
 
