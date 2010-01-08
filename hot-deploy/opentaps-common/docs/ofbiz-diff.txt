@@ -185,6 +185,9 @@ framework/widget/src/org/ofbiz/widget/text/TextScreenRenderer.java
 framework/widget/templates/htmlScreenMacroLibrary.ftl
 Add screen XML node to render a simple frame section with styled header.
 
+framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
+r14376 fix the add redirect parameter of request-redirect which after multipart/form-data form submit
+
 framework/entity/config/entityengine.xml
 r14503 add useOldAliasMetadataBehavior parameter in mysql jdbc url for avoid hibernate got not found column on search view entity 
 
@@ -313,9 +316,6 @@ r13899 Fix reservation and cancelOrderItem did not account for already issued qu
 
 applications/workeffort/src/org/ofbiz/workeffort/workeffort/WorkEffortServices.java
 r14110 exclude cancelled task on filter out cancel event is true
-
-framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
-r14376 fix the add redirect parameter of request-redirect which after multipart/form-data form submit
 
 Other API Changes
 -----------------
