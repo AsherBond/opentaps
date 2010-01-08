@@ -58,13 +58,7 @@ If you have come this far, payment should be a valid Payment Object.
 
 <#-- entry form -->
 
-<div class="screenlet">
-  <div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.AccountingPayment} <#if payment?has_content>#${payment.paymentId}</#if></div>
-    <div class="subMenuBar">${paymentStatusChangeAction?if_exists}</div>
-  </div>
-
-  <div class="screenlet-body">
+<@frameSection title="${uiLabelMap.AccountingPayment} ${payment?has_content?string(payment.paymentId,'')}" extra=paymentStatusChangeAction?if_exists>
     <table class="twoColumnForm" style="border:0">
       <@displayRow title=uiLabelMap.AccountingPaymentType text=paymentType.getDescription() />
       <#if isDisbursement>
@@ -72,7 +66,7 @@ If you have come this far, payment should be a valid Payment Object.
       <#else/>
         <@displayLinkRow title=uiLabelMap.FinancialsReceiveFromParty text="${partyNameFrom} (${payment.partyIdFrom})" href="${statementLink?default('customerStatement')}?partyId=${payment.partyIdFrom}"/>
       </#if>
-   
+
       <#if payment?has_content>
         <@inputHidden name="statusId" value="${payment.statusId?if_exists}"/>
         <#assign statusValue = payment.getStatusItem()/>
@@ -84,24 +78,24 @@ If you have come this far, payment should be a valid Payment Object.
         <#assign creditCard = paymentMethod.getCreditCard()?if_exists/>
         <#assign eftAccount = paymentMethod.getEftAccount()?if_exists/>
         <#assign paymentMethodDesc>
-          ${paymentMethod.description?if_exists} 
-          <#if creditCard?has_content> 
+          ${paymentMethod.description?if_exists}
+          <#if creditCard?has_content>
             ${creditCard.cardType} ${creditCard.cardNumber[creditCard.cardNumber?length-4..creditCard.cardNumber?length-1]} ${creditCard.expireDate}
           <#elseif eftAccount?has_content>
             ${eftAccount.bankName?default("")} ${eftAccount.accountNumber[eftAccount.accountNumber?length-4..eftAccount.accountNumber?length-1]}
-          </#if> 
+          </#if>
           (${paymentMethod.paymentMethodId})
         </#assign>
         <@displayRow title=uiLabelMap.FinancialsPaymentMethod text=paymentMethodDesc />
       <#else/>
         <@displayRow title=uiLabelMap.FinancialsPaymentMethodType text=(paymentMethodType.get("description", locale))?if_exists />
       </#if>
-   
+
       <@displayCurrencyRow title=uiLabelMap.AccountingAmount amount=payment.amount?default("0.0") currencyUomId=payment.currencyUomId />
       <@displayCurrencyRow title=uiLabelMap.AccountingAmountNotApplied amount=amountToApply?default("0.0") currencyUomId=payment.currencyUomId />
 
       <@displayDateRow title=uiLabelMap.AccountingEffectiveDate date=payment.effectiveDate />
-   
+
       <@displayRow title=uiLabelMap.CommonComments text=payment.comments?if_exists />
       <@displayRow title=uiLabelMap.FinancialsPaymentRefNum text=payment.paymentRefNum?if_exists />
 
@@ -109,15 +103,12 @@ If you have come this far, payment should be a valid Payment Object.
         <@accountingTagsDisplayRows tags=tagTypes entity=payment />
       </#if>
     </table>
-  </div>
-</div>
+</@frameSection>
 
 
 <#-- list of payment applications -->
 <#if paymentApplications?has_content && (paymentApplicationsList?has_content || paymentApplicationsListGlAccounts?has_content)>
-  <div class="screenlet">
-    <@sectionHeader title=uiLabelMap.FinancialsPaymentApplications headerClass="screenlet-header" titleClass="boxhead" />
-    <div class="screenlet-body">
+  <@frameSection title=uiLabelMap.FinancialsPaymentApplications>
       <#if paymentApplicationsList?has_content>
         <#if hasApplyPermission && !(allocatePaymentTagsToApplications && (payment.isReceived() || payment.isSent()))>
           <#if isTaxPayment>
@@ -141,14 +132,11 @@ If you have come this far, payment should be a valid Payment Object.
           ${screens.render("component://financials/widget/financials/screens/common/PaymentScreens.xml#ViewPaymentApplicationsGl")}
         </#if>
       </#if>
-    </div>
-  </div>
+  </@frameSection>
 </#if>
 
 <#if adjustments?exists && adjustments.size() != 0>
-  <div class="screenlet">
-      <@sectionHeader title="Adjustments" headerClass="screenlet-header" titleClass="boxhead" />
-      <div class="screenlet-body">
+  <@frameSection title="Adjustments">
      <table class="listTable" cellspacing="0">
         <tbody>
           <tr class="boxtop">
@@ -176,16 +164,14 @@ If you have come this far, payment should be a valid Payment Object.
           </#list>
         </tbody>
       </table>
-      </div>
-  </div>
+  </@frameSection>
 </#if>
 
-
 <#if hasAmountToApply && hasApplyPermission && !(allocatePaymentTagsToApplications && (payment.isReceived() || payment.isSent()))>
-  <div class="screenlet">
     <#if isTaxPayment>
-      <@sectionHeader title=uiLabelMap.FinancialsApplyPaymentToTaxAuth headerClass="screenlet-header" titleClass="boxhead" />
-      <div class="screenlet-body">${screens.render("component://financials/widget/financials/screens/common/PaymentScreens.xml#AddPaymentApplicationTax")}</div>
+      <@frameSection title=uiLabelMap.FinancialsApplyPaymentToTaxAuth>
+        ${screens.render("component://financials/widget/financials/screens/common/PaymentScreens.xml#AddPaymentApplicationTax")}
+      </@frameSection>
     <#else>
       <#if hasChildAccountsToShow >
         <@sectionHeader title=uiLabelMap.FinancialsApplyPaymentToInvoice headerClass="screenlet-header" titleClass="boxhead-left" >
@@ -200,15 +186,14 @@ If you have come this far, payment should be a valid Payment Object.
       <#else/>
         <@sectionHeader title=uiLabelMap.FinancialsApplyPaymentToInvoice headerClass="screenlet-header" titleClass="boxhead" />
       </#if>
-      <div class="screenlet-body">${screens.render("component://financials/widget/financials/screens/common/PaymentScreens.xml#InvoicePaymentApplicationList")}</div>
-    </#if>  
-  </div>
-</#if>  
+      <div class="frameSectionBody">${screens.render("component://financials/widget/financials/screens/common/PaymentScreens.xml#InvoicePaymentApplicationList")}</div>
+      <br/>
+    </#if>
+</#if>
 <#if hasAmountToApply && hasApplyPermission && !(allocatePaymentTagsToApplications && (payment.isReceived() || payment.isSent()))>
-  <div class="screenlet">  
-    <@sectionHeader title=uiLabelMap.FinancialsApplyPaymentToGlAccount headerClass="screenlet-header" titleClass="boxhead" />
-    <div class="screenlet-body">${screens.render("component://financials/widget/financials/screens/common/PaymentScreens.xml#AddPaymentApplicationGl")}</div>
-  </div>
+  <@frameSection title=uiLabelMap.FinancialsApplyPaymentToGlAccount >
+    ${screens.render("component://financials/widget/financials/screens/common/PaymentScreens.xml#AddPaymentApplicationGl")}
+  </@frameSection>
 </#if>
 
 </#if>
