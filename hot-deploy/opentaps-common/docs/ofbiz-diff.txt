@@ -317,6 +317,9 @@ r13899 Fix reservation and cancelOrderItem did not account for already issued qu
 applications/workeffort/src/org/ofbiz/workeffort/workeffort/WorkEffortServices.java
 r14110 exclude cancelled task on filter out cancel event is true
 
+applications/product/webapp/facility/inventory/InventoryForms.xml
+fix styles on the edit inventory item screen (inventory item reservations and Physical Inventory Variances list headers)
+
 Other API Changes
 -----------------
 

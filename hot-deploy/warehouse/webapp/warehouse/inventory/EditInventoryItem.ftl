@@ -43,11 +43,7 @@ under the License.
   <#assign actionLinks><a href="<@ofbizUrl>TransferInventoryItem?inventoryItemId=${inventoryItemId}<#if facilityId?exists>&facilityId=${facilityId}</#if></@ofbizUrl>" class="subMenuButton">${uiLabelMap.ProductTransferItem}</a><a href="<@ofbizUrl>ViewInventoryItemDetail?inventoryItemId=${inventoryItemId}<#if facilityId?exists>&facilityId=${facilityId}</#if></@ofbizUrl>" class="subMenuButton">${uiLabelMap.ProductInventoryDetails}</a></#assign>
 </#if>
 
-<div class="screenlet">
-  <div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.ProductEditInventoryItemWithId} [${inventoryItemId?if_exists}]</div>
-    <div class="subMenuBar">${actionLinks?if_exists}</div>
-  </div>
+<@frameSection title="${uiLabelMap.ProductEditInventoryItemWithId} [${inventoryItemId?if_exists}]" extra=actionLinks?if_exists>
 
 <#if inventoryItem?exists>
   <form action="<@ofbizUrl>UpdateInventoryItem</@ofbizUrl>" method="post" style="margin: 0;" name="inventoryItemForm">
@@ -181,3 +177,4 @@ under the License.
       <@inputSubmitRow title=uiLabelMap.CommonUpdate />
    </table>
 </form>
+</@frameSection>

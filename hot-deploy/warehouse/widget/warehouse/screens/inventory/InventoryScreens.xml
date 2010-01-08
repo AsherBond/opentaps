@@ -285,20 +285,18 @@ under the License.
                         <platform-specific>
                             <html><html-template location="component://warehouse/webapp/warehouse/inventory/EditInventoryItem.ftl"/></html>
                         </platform-specific>
-                        <container>
-                            <label style="head2">${uiLabelMap.WarehouseInventoryItemReservations}</label>
-                        </container>
-                        <include-form name="InventoryItemReservations" location="component://product/webapp/facility/inventory/InventoryForms.xml"/>
+                        <frame-container title="${uiLabelMap.WarehouseInventoryItemReservations}">
+                          <include-form name="InventoryItemReservations" location="component://product/webapp/facility/inventory/InventoryForms.xml"/>
+                        </frame-container>
                         <section> 
                             <condition>
                                 <if-compare field="inventoryItem.inventoryItemTypeId" operator="equals" value="NON_SERIAL_INV_ITEM"/>
                             </condition>
                             <widgets>
-                                <container>
-                                    <label style="head2">${uiLabelMap.WarehousePhysicalInventoryVariances}</label>
-                                </container>
+                              <frame-container title="${uiLabelMap.WarehousePhysicalInventoryVariances}">
                                 <include-form name="CreatePhysicalInventoryAndVariance" location="component://product/webapp/facility/inventory/InventoryForms.xml"/>
                                 <include-form name="ViewPhysicalInventoryAndVariance" location="component://product/webapp/facility/inventory/InventoryForms.xml"/>
+                              </frame-container>
                             </widgets>
                         </section>
                     </decorator-section>
