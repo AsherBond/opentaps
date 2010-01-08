@@ -69,10 +69,11 @@
   </#if>
 </#if>
 
-<div class="subSectionHeader">
-  <div class="subSectionTitle"><#if payment?has_content>${uiLabelMap.AccountingPayment} #${payment.paymentId}<#else><#if isDisbursement>${uiLabelMap.FinancialsPayablesPayment}<#else>${uiLabelMap.FinancialsReceivablesPayment}</#if></#if></div>
-  <div class="subMenuBar">${paymentStatusChangeAction?if_exists}</div>
-</div>
+<#assign sectionTitle>
+  <#if payment?has_content>${uiLabelMap.AccountingPayment} #${payment.paymentId}<#else><#if isDisbursement>${uiLabelMap.FinancialsPayablesPayment}<#else>${uiLabelMap.FinancialsReceivablesPayment}</#if></#if>
+</#assign>
+
+<@frameSection title=sectionTitle extra=paymentStatusChangeAction?if_exists>
 
 <#-- set as true if there is a payment and its status only allow comments / reference number to be updated -->
 <#assign limitiedUpdate = false/>
@@ -242,4 +243,6 @@
 
 </table>
 </form>
+</@frameSection>
+
 </#if> <#-- if isDisbursement exists -->

@@ -57,12 +57,10 @@
                                 </or>
                             </condition>
                             <widgets>
-                                <container style="screenlet">
                                     <platform-specific><html>
                                         <html-template location="component://financials/webapp/financials/includes/editPayment.ftl"/></html>
                                     </platform-specific>
                                     <!--include-screen name="EditPaymentApplications"/-->
-                                </container>
                             </widgets>
                             <fail-widgets>
                                 <include-screen name="PermissionErrorScreen" location="component://financials/widget/financials/screens/common/CommonScreens.xml"/>
