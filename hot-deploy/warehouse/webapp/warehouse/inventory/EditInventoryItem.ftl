@@ -40,7 +40,7 @@ under the License.
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#if inventoryItemId?exists>
-  <#assign actionLinks><a href="<@ofbizUrl>TransferInventoryItem?inventoryItemId=${inventoryItemId}<#if facilityId?exists>&facilityId=${facilityId}</#if></@ofbizUrl>" class="subMenuButton">${uiLabelMap.ProductTransferItem}</a><a href="<@ofbizUrl>ViewInventoryItemDetail?inventoryItemId=${inventoryItemId}<#if facilityId?exists>&facilityId=${facilityId}</#if></@ofbizUrl>" class="subMenuButton">${uiLabelMap.ProductInventoryDetails}</a></#assign>
+  <#assign actionLinks><a href="<@ofbizUrl>traceInventory?inventoryItemId=${inventoryItemId}&performFind=Y&traceDirection=FORWARD</@ofbizUrl>" class="subMenuButton">${uiLabelMap.WarehouseTraceInventory}</a><a href="<@ofbizUrl>TransferInventoryItem?inventoryItemId=${inventoryItemId}<#if facilityId?exists>&facilityId=${facilityId}</#if></@ofbizUrl>" class="subMenuButton">${uiLabelMap.ProductTransferItem}</a><a href="<@ofbizUrl>ViewInventoryItemDetail?inventoryItemId=${inventoryItemId}<#if facilityId?exists>&facilityId=${facilityId}</#if></@ofbizUrl>" class="subMenuButton">${uiLabelMap.ProductInventoryDetails}</a></#assign>
 </#if>
 
 <@frameSection title="${uiLabelMap.ProductEditInventoryItemWithId} [${inventoryItemId?if_exists}]" extra=actionLinks?if_exists>
