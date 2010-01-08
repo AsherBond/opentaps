@@ -1163,21 +1163,7 @@ white-space: nowrap;
 
 .basic-table tr .smallSubmit,
 .basic-table tr .smallSubmit:visited {
-background-color: #ffffff;
-border: #999999 solid 1px;
-color: #000099;
-font-size: 1em;
-margin: 0.2em;
-padding: 0.1em 0.2em 0.1em 0.2em;
 white-space: nowrap;
-}
-
-.basic-table tr .button-col a:hover,
-.basic-table tr .button-col a:active,
-.basic-table tr .smallSubmit:hover,
-.basic-table tr .smallSubmit:active {
-color: #ff0000;
-text-decoration: none;
 }
 
 /* ===== Table decorator - Hover bar ===== */
