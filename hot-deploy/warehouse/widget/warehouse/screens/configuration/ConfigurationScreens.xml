@@ -92,7 +92,6 @@
         <section>
             <actions>
                 <set field="pageTitleLabel" value="PartyEditContactInformation"/>  
-                <set field="sectionHeaderUiLabel" value="PartyEditContactInformation"/>  
                 <script location="component://product/webapp/facility/WEB-INF/actions/facility/EditContactMech.groovy"/>
             </actions>
             <widgets>
@@ -111,13 +110,15 @@
         <section>
             <actions>
                 <set field="pageTitleLabel" value="ProductFindLocation"/>  
-                <set field="sectionHeaderUiLabel" value="ProductFindLocation"/>  
-                <set field="parameters.commonFacilityDecoratorLocation" value="component://warehouse/widget/warehouse/screens/common/IntegrationScreens.xml"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/facility/FindFacilityLocation.groovy"/>
+                <entity-one entity-name="Facility" value-field="facility"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <include-screen name="FindFacilityLocation" location="component://product/widget/facility/FacilityScreens.xml"/>
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/configuration/FindFacilityLocation.ftl"/></html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -127,14 +128,16 @@
     <screen name="EditFacilityLocation">
         <section>
             <actions>
-                <set field="pageTitleLabel" value="ProductCreateLocation"/>  
-                <set field="sectionHeaderUiLabel" value="WarehouseCreateLocation"/>  
-                <set field="parameters.commonFacilityDecoratorLocation" value="component://warehouse/widget/warehouse/screens/common/IntegrationScreens.xml"/>
+                <set field="pageTitleLabel" value="ProductFacilityLocation"/>  
+                <script location="component://product/webapp/facility/WEB-INF/actions/facility/EditFacilityLocation.groovy"/>
+                <entity-one entity-name="Facility" value-field="facility"/> 
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <include-screen name="EditFacilityLocation" location="component://product/widget/facility/FacilityScreens.xml"/>
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/configuration/EditFacilityLocation.ftl"/></html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

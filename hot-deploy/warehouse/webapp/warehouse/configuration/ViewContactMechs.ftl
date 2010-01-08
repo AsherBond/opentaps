@@ -23,18 +23,14 @@ under the License.
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#if session.getAttribute("facilityId")?exists>
-<div class="subSectionHeader">
-  <div class="subSectionTitle">${uiLabelMap.PartyContactInformation}</div>
-  <div class="subMenuBar"><a href="<@ofbizUrl>EditContactMech</@ofbizUrl>" class="subMenuButton">${uiLabelMap.CommonAddNew}</a></div>
-</div>
+
+<#assign extraOptions>
+<a href="<@ofbizUrl>EditContactMech</@ofbizUrl>" class="subMenuButton">${uiLabelMap.CommonAddNew}</a>
+</#assign>
+
+<@frameSection title=uiLabelMap.PartyContactInformation extra=extraOptions>
 
 <#if contactMeches?has_content>
-
-<div class="form">
-
-<table width='100%' border='0' cellspacing='0' cellpadding='0'>
-  <tr>
-    <td>
     <table width="100%" border="0" cellpadding="0">
       <#list contactMeches as contactMechMap>
           <#assign contactMech = contactMechMap.contactMech>
@@ -87,45 +83,41 @@ under the License.
               <#elseif "EMAIL_ADDRESS" = contactMech.contactMechTypeId>
                   <div class="tabletext">
                     ${contactMech.infoString?if_exists}
-                    <a href='mailto:${contactMech.infoString?if_exists}' class='buttontext'>(${uiLabelMap.CommonSendEmail})</a>
+                    <a href="mailto:${contactMech.infoString?if_exists}" class="buttontext">${uiLabelMap.CommonSendEmail}</a>
                   </div>
               <#elseif "WEB_ADDRESS" = contactMech.contactMechTypeId>
                   <div class="tabletext">
                     ${contactMech.infoString?if_exists}
                     <#assign openAddress = contactMech.infoString?default("")>
                     <#if !openAddress?starts_with("http") && !openAddress?starts_with("HTTP")><#assign openAddress = "http://" + openAddress></#if>
-                    <a target='_blank' href='${openAddress}' class='buttontext'>((${uiLabelMap.CommonOpenPageNewWindow})</a>
+                    <a target="_blank" href="${openAddress}" class="buttontext">${uiLabelMap.CommonOpenPageNewWindow}</a>
                   </div>
               <#else>
                   <div class="tabletext">
                     ${contactMech.infoString?if_exists}
                   </div>
               </#if>
-              <#if facilityContactMech.thruDate?has_content><div class='tabletext'><b>${uiLabelMap.CommonUpdatedEffectiveThru}:&nbsp;${getLocalizedDate(facilityContactMech.thruDate)}</b></div></#if>
+              <#if facilityContactMech.thruDate?has_content><div class="tabletext"><b>${uiLabelMap.CommonUpdatedEffectiveThru}:&nbsp;${getLocalizedDate(facilityContactMech.thruDate)}</b></div></#if>
             </td>
             <td width="5">&nbsp;</td>
             <#if security.hasEntityPermission("PARTYMGR", "_UPDATE", session)>
-            <td align="right" valign="top" nowrap width="1%">
-              <div><a href='<@ofbizUrl>EditContactMech?facilityId=${facilityId}&contactMechId=${contactMech.contactMechId}</@ofbizUrl>' class="buttontext">
-              [${uiLabelMap.CommonUpdate}]</a>&nbsp;</div>
-            </td>
+              <td align="right" valign="top">
+                <a href="<@ofbizUrl>EditContactMech?facilityId=${facilityId}&contactMechId=${contactMech.contactMechId}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonUpdate}</a>
+              </td>
             </#if>
             <#if security.hasEntityPermission("PARTYMGR", "_DELETE", session)>
-            <td align="right" valign="top" width="1%">
-              <div><a href='<@ofbizUrl>deleteFacilityContactMech/ViewContactMechs?facilityId=${facilityId}&contactMechId=${contactMech.contactMechId}</@ofbizUrl>' class="buttontext">
-              [${uiLabelMap.CommonExpire}]</a>&nbsp;&nbsp;</div>
-            </td>
+              <td align="right" valign="top">
+                <a href="<@ofbizUrl>deleteFacilityContactMech/ViewContactMechs?facilityId=${facilityId}&contactMechId=${contactMech.contactMechId}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonExpire}</a>
+              </td>
             </#if>
           </tr>
-          <tr><td colspan="7"><hr class='sepbar'></td></tr>          
+          <tr><td colspan="7"><hr class="sepbar"></td></tr>          
       </#list>
     </table>
-    </td>
-  </tr>
-</table>
-</div>
-  <#else>
-    <div class="tabletext">${uiLabelMap.CommonNoContactInformationOnFile}.</div>
+<#else>
+  <div class="tabletext">${uiLabelMap.CommonNoContactInformationOnFile}.</div>
 </#if>
+
+</@frameSection>
 
 </#if>

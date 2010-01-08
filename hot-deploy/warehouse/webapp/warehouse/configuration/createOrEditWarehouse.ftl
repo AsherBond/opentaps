@@ -27,7 +27,7 @@
   <#assign submitName = uiLabelMap.CommonCreate />
 </#if>
 
-<div class="subSectionHeader"><span class="subSectionTitle">${title}</span></div>
+<@frameSectionHeader title=title />
 
 <form name="createOrEditWarehouse" method="post" action="<@ofbizUrl>${target}</@ofbizUrl>">
   <#if facility.facilityId?exists>
