@@ -259,7 +259,7 @@ if (! payment.isVoided()) {
                 ArrayList invoicesList = new ArrayList();  // to pass back to the screeen list of unapplied invoices
                 for (Invoice invoice : invoicesDomain) {
                     outstandingAmount = invoice.getPendingOpenAmount();
-                    if (outstandingAmount.signum() != 0) {
+                    if (outstandingAmount != null && outstandingAmount.signum() != 0) {
                         // put in the map
                         Map invoiceMap = new HashMap();
                         invoiceMap.put("invoiceId", invoice.getInvoiceId());
