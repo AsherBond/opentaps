@@ -165,12 +165,26 @@ under the License.
             <actions>
                 <set field="pageTitleLabel" value="WarehouseStockMoves"/>
                 <set field="sectionHeaderUiLabel" value="WarehouseStockMoves"/>  
-                <set field="parameters.commonFacilityDecoratorLocation" value="component://warehouse/widget/warehouse/screens/common/IntegrationScreens.xml"/>
+                <set field="headerItem" value="facility"/>
+                <set field="tabButtonItem" value="PickMoveStock"/>
+
+                <set field="facilityId" from-field="parameters.facilityId"/>
+                <service service-name="findStockMovesNeeded">
+                    <field-map field-name="facilityId"/>
+                </service>
+                <set field="oiirWarningMessageList" from-field="warningMessageList"/>
+                <service service-name="findStockMovesRecommended">
+                    <field-map field-name="facilityId"/>
+                    <field-map field-name="stockMoveHandled"/>
+                </service>
+                <set field="pflWarningMessageList" from-field="warningMessageList"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <include-screen name="PickMoveStock" location="component://product/widget/facility/FacilityScreens.xml"/>
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/inventory/PickMoveStock.ftl"/></html>
+                        </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

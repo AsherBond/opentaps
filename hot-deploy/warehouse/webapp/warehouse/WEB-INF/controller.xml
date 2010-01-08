@@ -438,6 +438,12 @@ under the License.
         <response name="success" type="view" value="stockMoves"/>
         <response name="error" type="view" value="stockMoves"/>
     </request-map>
+    <request-map uri="processQuickStockMove">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="processPhysicalStockMove"/>
+        <response name="success" type="view" value="stockMoves"/>
+        <response name="error" type="view" value="stockMoves"/>
+    </request-map>
 
     <!-- Inventory Transfer -->
     <request-map uri="FindFacilityTransfers">
