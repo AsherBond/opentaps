@@ -295,16 +295,12 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">  
-                            <platform-specific>
-                                <html><html-template location="component://financials/webapp/financials/configuration/accountingTags.ftl"/></html>
-                            </platform-specific>
-                        </container>
-                        <container style="screenlet">  
-                            <platform-specific>
-                                <html><html-template location="component://financials/webapp/financials/configuration/createAccountingTag.ftl"/></html>
-                            </platform-specific>
-                        </container>
+                      <platform-specific>
+                        <html><html-template location="component://financials/webapp/financials/configuration/accountingTags.ftl"/></html>
+                      </platform-specific>
+                      <platform-specific>
+                        <html><html-template location="component://financials/webapp/financials/configuration/createAccountingTag.ftl"/></html>
+                      </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -321,16 +317,12 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">  
-                            <platform-specific>
-                                <html><html-template location="component://financials/webapp/financials/configuration/accountingTagsPostingCheck.ftl"/></html>
-                            </platform-specific>
-                        </container>
-                        <container style="screenlet">  
-                            <platform-specific>
-                                <html><html-template location="component://financials/webapp/financials/configuration/accountingTagsUsage.ftl"/></html>
-                            </platform-specific>
-                        </container>
+                      <platform-specific>
+                        <html><html-template location="component://financials/webapp/financials/configuration/accountingTagsPostingCheck.ftl"/></html>
+                      </platform-specific>
+                      <platform-specific>
+                        <html><html-template location="component://financials/webapp/financials/configuration/accountingTagsUsage.ftl"/></html>
+                      </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

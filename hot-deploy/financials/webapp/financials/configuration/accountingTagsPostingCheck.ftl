@@ -19,8 +19,7 @@
 
 <#assign mustBalanceSelectValues = {"Y": uiLabelMap.CommonYes, "N": uiLabelMap.CommonNo} />
 
-<@sectionHeader title=uiLabelMap.FinancialsAccountingTagsPostingChecks />
-<div class="screenlet-body">
+<@frameSection title=uiLabelMap.FinancialsAccountingTagsPostingChecks>
   <form method="post" action="<@ofbizUrl>updateAccountingTagPostingCheck</@ofbizUrl>" name="updateAccountingTagPostingCheck">
     <@inputHidden name="organizationPartyId" value=organizationPartyId />
     <table class="listTable" style="border:0">
@@ -47,4 +46,4 @@
       <@inputSubmitRow title=uiLabelMap.CommonUpdate />
     </table>
   </form>
-</div>
+</@frameSection>

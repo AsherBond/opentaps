@@ -17,8 +17,7 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<@sectionHeader title=uiLabelMap.FinancialsCreateAccountingTag />
-<div class="screenlet-body">
+<@frameSection title=uiLabelMap.FinancialsCreateAccountingTag>
   <form method="post" action="<@ofbizUrl>createAccountingTag</@ofbizUrl>" name="createAccountingTag">
     <table class="twoColumnForm" style="border:0">
       <@inputSelectRow title=uiLabelMap.CommonType name="enumTypeId" list=tagTypes key="enumTypeId" ; tag>
@@ -31,4 +30,4 @@
       <@inputSubmitRow title=uiLabelMap.CommonCreate />
     </table>
   </form>
-</div>
+</@frameSection>

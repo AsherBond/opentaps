@@ -19,8 +19,7 @@
 
 <#assign disableSelectValues = {"Y": uiLabelMap.CommonDisabled, "N": uiLabelMap.CommonEnabled} />
 
-<@sectionHeader title=uiLabelMap.FinancialsAccountingTags />
-<div class="screenlet-body">
+<@frameSection title=uiLabelMap.FinancialsAccountingTags>
   <#list tagsByType.keySet() as type>
     <div class="screenlet">
       <div class="screenlet-header"><span class="boxhead">${type.description}</span></div>
@@ -57,4 +56,4 @@
       </form>
     </div>
   </#list>
-</div>
+</@frameSection>

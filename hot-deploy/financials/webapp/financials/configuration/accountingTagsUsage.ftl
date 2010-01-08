@@ -19,8 +19,7 @@
 
 <#assign requiredSelectValues = {"Y": uiLabelMap.CommonRequired, "N": uiLabelMap.PartyOptional} />
 
-<@sectionHeader title=uiLabelMap.FinancialsAccountingTagUsage />
-<div class="screenlet-body">
+<@frameSection title=uiLabelMap.FinancialsAccountingTagUsage>
   <#list usages as usage>
     <#-- might be null if the usage is not configured yet -->
     <#assign configuration = usageConfigurations.get(usage)! />
@@ -61,4 +60,4 @@
       </form>
     </div>
   </#list>
-</div>
+</@frameSection>
