@@ -459,7 +459,6 @@ fieldMapColumns.put("OrderItem", fields);
    )
    
    private Enumeration tag10Enumeration = null;
-   private transient List<AmazonOrderItemImport> amazonOrderItemImports = null;
    private transient List<FinAccountTrans> finAccountTranses = null;
    private transient List<FixedAsset> acquireFixedAssets = null;
    private transient List<FixedAssetMaintOrder> fixedAssetMaintOrders = null;
@@ -1613,17 +1612,6 @@ fieldMapColumns.put("OrderItem", fields);
         return this.tag10Enumeration;
     }
     /**
-     * Auto generated method that gets the related <code>AmazonOrderItemImport</code> by the relation named <code>AmazonOrderItemImport</code>.
-     * @return the list of <code>AmazonOrderItemImport</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends AmazonOrderItemImport> getAmazonOrderItemImports() throws RepositoryException {
-        if (this.amazonOrderItemImports == null) {
-            this.amazonOrderItemImports = getRelated(AmazonOrderItemImport.class, "AmazonOrderItemImport");
-        }
-        return this.amazonOrderItemImports;
-    }
-    /**
      * Auto generated method that gets the related <code>FinAccountTrans</code> by the relation named <code>FinAccountTrans</code>.
      * @return the list of <code>FinAccountTrans</code>
      * @throws RepositoryException if an error occurs
@@ -2194,13 +2182,6 @@ fieldMapColumns.put("OrderItem", fields);
     */
     public void settag10Enumeration(Enumeration tag10Enumeration) {
         this.tag10Enumeration = tag10Enumeration;
-    }
-    /**
-     * Auto generated value setter.
-     * @param amazonOrderItemImports the amazonOrderItemImports to set
-    */
-    public void setAmazonOrderItemImports(List<AmazonOrderItemImport> amazonOrderItemImports) {
-        this.amazonOrderItemImports = amazonOrderItemImports;
     }
     /**
      * Auto generated value setter.

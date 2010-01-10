@@ -101,10 +101,6 @@ fieldMapColumns.put("ShipmentMethodType", fields);
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   private List<AmazonOrderItemFulfillment> amazonOrderItemFulfillments = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
-   
    private List<CarrierReturnService> carrierReturnServices = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipmentMethodType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
@@ -266,17 +262,6 @@ fieldMapColumns.put("ShipmentMethodType", fields);
     }
 
     /**
-     * Auto generated method that gets the related <code>AmazonOrderItemFulfillment</code> by the relation named <code>AmazonOrderItemFulfillment</code>.
-     * @return the list of <code>AmazonOrderItemFulfillment</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends AmazonOrderItemFulfillment> getAmazonOrderItemFulfillments() throws RepositoryException {
-        if (this.amazonOrderItemFulfillments == null) {
-            this.amazonOrderItemFulfillments = getRelated(AmazonOrderItemFulfillment.class, "AmazonOrderItemFulfillment");
-        }
-        return this.amazonOrderItemFulfillments;
-    }
-    /**
      * Auto generated method that gets the related <code>CarrierReturnService</code> by the relation named <code>CarrierReturnService</code>.
      * @return the list of <code>CarrierReturnService</code>
      * @throws RepositoryException if an error occurs
@@ -376,13 +361,6 @@ fieldMapColumns.put("ShipmentMethodType", fields);
         return this.shipmentRouteSegments;
     }
 
-    /**
-     * Auto generated value setter.
-     * @param amazonOrderItemFulfillments the amazonOrderItemFulfillments to set
-    */
-    public void setAmazonOrderItemFulfillments(List<AmazonOrderItemFulfillment> amazonOrderItemFulfillments) {
-        this.amazonOrderItemFulfillments = amazonOrderItemFulfillments;
-    }
     /**
      * Auto generated value setter.
      * @param carrierReturnServices the carrierReturnServices to set

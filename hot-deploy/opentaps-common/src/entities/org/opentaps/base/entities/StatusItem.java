@@ -124,26 +124,6 @@ fieldMapColumns.put("StatusItem", fields);
    @JoinColumn(name="STATUS_ID")
    
    private List<Agreement> agreements = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="STATUS_ID")
-   
-   private List<AmazonOrder> amazonOrders = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="ACK_STATUS_ID")
-   
-   private List<AmazonOrder> ackAmazonOrders = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="STATUS_ID")
-   
-   private List<AmazonOrderDocument> amazonOrderDocuments = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="ACK_STATUS_ID")
-   
-   private List<AmazonOrderDocument> ackAmazonOrderDocuments = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="STATUS_ID")
-   
-   private List<AmazonProduct> amazonProducts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="statusItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="STATUS_ID")
    
@@ -674,61 +654,6 @@ fieldMapColumns.put("StatusItem", fields);
             this.agreements = getRelated(Agreement.class, "Agreement");
         }
         return this.agreements;
-    }
-    /**
-     * Auto generated method that gets the related <code>AmazonOrder</code> by the relation named <code>AmazonOrder</code>.
-     * @return the list of <code>AmazonOrder</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends AmazonOrder> getAmazonOrders() throws RepositoryException {
-        if (this.amazonOrders == null) {
-            this.amazonOrders = getRelated(AmazonOrder.class, "AmazonOrder");
-        }
-        return this.amazonOrders;
-    }
-    /**
-     * Auto generated method that gets the related <code>AmazonOrder</code> by the relation named <code>AckAmazonOrder</code>.
-     * @return the list of <code>AmazonOrder</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends AmazonOrder> getAckAmazonOrders() throws RepositoryException {
-        if (this.ackAmazonOrders == null) {
-            this.ackAmazonOrders = getRelated(AmazonOrder.class, "AckAmazonOrder");
-        }
-        return this.ackAmazonOrders;
-    }
-    /**
-     * Auto generated method that gets the related <code>AmazonOrderDocument</code> by the relation named <code>AmazonOrderDocument</code>.
-     * @return the list of <code>AmazonOrderDocument</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends AmazonOrderDocument> getAmazonOrderDocuments() throws RepositoryException {
-        if (this.amazonOrderDocuments == null) {
-            this.amazonOrderDocuments = getRelated(AmazonOrderDocument.class, "AmazonOrderDocument");
-        }
-        return this.amazonOrderDocuments;
-    }
-    /**
-     * Auto generated method that gets the related <code>AmazonOrderDocument</code> by the relation named <code>AckAmazonOrderDocument</code>.
-     * @return the list of <code>AmazonOrderDocument</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends AmazonOrderDocument> getAckAmazonOrderDocuments() throws RepositoryException {
-        if (this.ackAmazonOrderDocuments == null) {
-            this.ackAmazonOrderDocuments = getRelated(AmazonOrderDocument.class, "AckAmazonOrderDocument");
-        }
-        return this.ackAmazonOrderDocuments;
-    }
-    /**
-     * Auto generated method that gets the related <code>AmazonProduct</code> by the relation named <code>AmazonProduct</code>.
-     * @return the list of <code>AmazonProduct</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends AmazonProduct> getAmazonProducts() throws RepositoryException {
-        if (this.amazonProducts == null) {
-            this.amazonProducts = getRelated(AmazonProduct.class, "AmazonProduct");
-        }
-        return this.amazonProducts;
     }
     /**
      * Auto generated method that gets the related <code>BudgetStatus</code> by the relation named <code>BudgetStatus</code>.
@@ -1671,41 +1596,6 @@ fieldMapColumns.put("StatusItem", fields);
     */
     public void setAgreements(List<Agreement> agreements) {
         this.agreements = agreements;
-    }
-    /**
-     * Auto generated value setter.
-     * @param amazonOrders the amazonOrders to set
-    */
-    public void setAmazonOrders(List<AmazonOrder> amazonOrders) {
-        this.amazonOrders = amazonOrders;
-    }
-    /**
-     * Auto generated value setter.
-     * @param ackAmazonOrders the ackAmazonOrders to set
-    */
-    public void setAckAmazonOrders(List<AmazonOrder> ackAmazonOrders) {
-        this.ackAmazonOrders = ackAmazonOrders;
-    }
-    /**
-     * Auto generated value setter.
-     * @param amazonOrderDocuments the amazonOrderDocuments to set
-    */
-    public void setAmazonOrderDocuments(List<AmazonOrderDocument> amazonOrderDocuments) {
-        this.amazonOrderDocuments = amazonOrderDocuments;
-    }
-    /**
-     * Auto generated value setter.
-     * @param ackAmazonOrderDocuments the ackAmazonOrderDocuments to set
-    */
-    public void setAckAmazonOrderDocuments(List<AmazonOrderDocument> ackAmazonOrderDocuments) {
-        this.ackAmazonOrderDocuments = ackAmazonOrderDocuments;
-    }
-    /**
-     * Auto generated value setter.
-     * @param amazonProducts the amazonProducts to set
-    */
-    public void setAmazonProducts(List<AmazonProduct> amazonProducts) {
-        this.amazonProducts = amazonProducts;
     }
     /**
      * Auto generated value setter.

@@ -111,10 +111,6 @@ fieldMapColumns.put("ProductContentType", fields);
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productContentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CONTENT_TYPE_ID")
    
-   private List<AmazonProductImageAck> amazonProductImageAcks = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="productContentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_CONTENT_TYPE_ID")
-   
    private List<ProductContent> productContents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
@@ -273,17 +269,6 @@ fieldMapColumns.put("ProductContentType", fields);
         return this.parentProductContentType;
     }
     /**
-     * Auto generated method that gets the related <code>AmazonProductImageAck</code> by the relation named <code>AmazonProductImageAck</code>.
-     * @return the list of <code>AmazonProductImageAck</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends AmazonProductImageAck> getAmazonProductImageAcks() throws RepositoryException {
-        if (this.amazonProductImageAcks == null) {
-            this.amazonProductImageAcks = getRelated(AmazonProductImageAck.class, "AmazonProductImageAck");
-        }
-        return this.amazonProductImageAcks;
-    }
-    /**
      * Auto generated method that gets the related <code>ProductContent</code> by the relation named <code>ProductContent</code>.
      * @return the list of <code>ProductContent</code>
      * @throws RepositoryException if an error occurs
@@ -315,13 +300,6 @@ fieldMapColumns.put("ProductContentType", fields);
     }
     /**
      * Auto generated value setter.
-     * @param amazonProductImageAcks the amazonProductImageAcks to set
-    */
-    public void setAmazonProductImageAcks(List<AmazonProductImageAck> amazonProductImageAcks) {
-        this.amazonProductImageAcks = amazonProductImageAcks;
-    }
-    /**
-     * Auto generated value setter.
      * @param productContents the productContents to set
     */
     public void setProductContents(List<ProductContent> productContents) {
@@ -335,33 +313,6 @@ fieldMapColumns.put("ProductContentType", fields);
         this.childProductContentTypes = childProductContentTypes;
     }
 
-    /**
-     * Auto generated method that add item to collection.
-     */
-    public void addAmazonProductImageAck(AmazonProductImageAck amazonProductImageAck) {
-        if (this.amazonProductImageAcks == null) {
-            this.amazonProductImageAcks = new ArrayList<AmazonProductImageAck>();
-        }
-        this.amazonProductImageAcks.add(amazonProductImageAck);
-    }
-    /**
-     * Auto generated method that remove item from collection.
-     */
-    public void removeAmazonProductImageAck(AmazonProductImageAck amazonProductImageAck) {
-        if (this.amazonProductImageAcks == null) {
-            return;
-        }
-        this.amazonProductImageAcks.remove(amazonProductImageAck);
-    }
-    /**
-     * Auto generated method that clear items from collection.
-     */
-    public void clearAmazonProductImageAck() {
-        if (this.amazonProductImageAcks == null) {
-            return;
-        }
-        this.amazonProductImageAcks.clear();
-    }
     /**
      * Auto generated method that add item to collection.
      */

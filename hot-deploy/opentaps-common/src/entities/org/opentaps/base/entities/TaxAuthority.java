@@ -131,7 +131,6 @@ fieldMapColumns.put("TaxAuthority", fields);
    )
    
    private Party taxAuthParty = null;
-   private transient List<AmazonOrderTaxJurisToAuth> amazonOrderTaxJurisToAuths = null;
    private transient List<OrderAdjustment> orderAdjustments = null;
    private transient List<PartyTaxAuthInfo> partyTaxAuthInfoes = null;
    private transient List<ProductStore> vatProductStores = null;
@@ -320,17 +319,6 @@ fieldMapColumns.put("TaxAuthority", fields);
         return this.taxAuthParty;
     }
     /**
-     * Auto generated method that gets the related <code>AmazonOrderTaxJurisToAuth</code> by the relation named <code>AmazonOrderTaxJurisToAuth</code>.
-     * @return the list of <code>AmazonOrderTaxJurisToAuth</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends AmazonOrderTaxJurisToAuth> getAmazonOrderTaxJurisToAuths() throws RepositoryException {
-        if (this.amazonOrderTaxJurisToAuths == null) {
-            this.amazonOrderTaxJurisToAuths = getRelated(AmazonOrderTaxJurisToAuth.class, "AmazonOrderTaxJurisToAuth");
-        }
-        return this.amazonOrderTaxJurisToAuths;
-    }
-    /**
      * Auto generated method that gets the related <code>OrderAdjustment</code> by the relation named <code>OrderAdjustment</code>.
      * @return the list of <code>OrderAdjustment</code>
      * @throws RepositoryException if an error occurs
@@ -454,13 +442,6 @@ fieldMapColumns.put("TaxAuthority", fields);
     */
     public void setTaxAuthParty(Party taxAuthParty) {
         this.taxAuthParty = taxAuthParty;
-    }
-    /**
-     * Auto generated value setter.
-     * @param amazonOrderTaxJurisToAuths the amazonOrderTaxJurisToAuths to set
-    */
-    public void setAmazonOrderTaxJurisToAuths(List<AmazonOrderTaxJurisToAuth> amazonOrderTaxJurisToAuths) {
-        this.amazonOrderTaxJurisToAuths = amazonOrderTaxJurisToAuths;
     }
     /**
      * Auto generated value setter.

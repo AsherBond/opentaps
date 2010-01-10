@@ -479,13 +479,6 @@ fieldMapColumns.put("Product", fields);
    @JoinColumn(name="PRODUCT_ID")
    
    private List<AgreementTerm> agreementTerms = null;
-   @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
-   @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
-   @org.hibernate.annotations.Generated(
-      org.hibernate.annotations.GenerationTime.ALWAYS
-   )
-   
-   private AmazonProduct amazonProduct = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
@@ -506,10 +499,6 @@ fieldMapColumns.put("Product", fields);
    @JoinColumn(name="PRODUCT_ID")
    
    private List<DataImportInventory> dataImportInventorys = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<DataImportOrderItem> dataImportOrderItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_ID")
    
@@ -1969,17 +1958,6 @@ fieldMapColumns.put("Product", fields);
         return this.agreementTerms;
     }
     /**
-     * Auto generated method that gets the related <code>AmazonProduct</code> by the relation named <code>AmazonProduct</code>.
-     * @return the <code>AmazonProduct</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public AmazonProduct getAmazonProduct() throws RepositoryException {
-        if (this.amazonProduct == null) {
-            this.amazonProduct = getRelatedOne(AmazonProduct.class, "AmazonProduct");
-        }
-        return this.amazonProduct;
-    }
-    /**
      * Auto generated method that gets the related <code>CartAbandonedLine</code> by the relation named <code>CartAbandonedLine</code>.
      * @return the list of <code>CartAbandonedLine</code>
      * @throws RepositoryException if an error occurs
@@ -2033,17 +2011,6 @@ fieldMapColumns.put("Product", fields);
             this.dataImportInventorys = getRelated(DataImportInventory.class, "DataImportInventory");
         }
         return this.dataImportInventorys;
-    }
-    /**
-     * Auto generated method that gets the related <code>DataImportOrderItem</code> by the relation named <code>DataImportOrderItem</code>.
-     * @return the list of <code>DataImportOrderItem</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends DataImportOrderItem> getDataImportOrderItems() throws RepositoryException {
-        if (this.dataImportOrderItems == null) {
-            this.dataImportOrderItems = getRelated(DataImportOrderItem.class, "DataImportOrderItem");
-        }
-        return this.dataImportOrderItems;
     }
     /**
      * Auto generated method that gets the related <code>DataImportShoppingListItem</code> by the relation named <code>DataImportShoppingListItem</code>.
@@ -2840,13 +2807,6 @@ fieldMapColumns.put("Product", fields);
     }
     /**
      * Auto generated value setter.
-     * @param amazonProduct the amazonProduct to set
-    */
-    public void setAmazonProduct(AmazonProduct amazonProduct) {
-        this.amazonProduct = amazonProduct;
-    }
-    /**
-     * Auto generated value setter.
      * @param cartAbandonedLines the cartAbandonedLines to set
     */
     public void setCartAbandonedLines(List<CartAbandonedLine> cartAbandonedLines) {
@@ -2879,13 +2839,6 @@ fieldMapColumns.put("Product", fields);
     */
     public void setDataImportInventorys(List<DataImportInventory> dataImportInventorys) {
         this.dataImportInventorys = dataImportInventorys;
-    }
-    /**
-     * Auto generated value setter.
-     * @param dataImportOrderItems the dataImportOrderItems to set
-    */
-    public void setDataImportOrderItems(List<DataImportOrderItem> dataImportOrderItems) {
-        this.dataImportOrderItems = dataImportOrderItems;
     }
     /**
      * Auto generated value setter.
@@ -3347,33 +3300,6 @@ fieldMapColumns.put("Product", fields);
             return;
         }
         this.communicationEventProducts.clear();
-    }
-    /**
-     * Auto generated method that add item to collection.
-     */
-    public void addDataImportOrderItem(DataImportOrderItem dataImportOrderItem) {
-        if (this.dataImportOrderItems == null) {
-            this.dataImportOrderItems = new ArrayList<DataImportOrderItem>();
-        }
-        this.dataImportOrderItems.add(dataImportOrderItem);
-    }
-    /**
-     * Auto generated method that remove item from collection.
-     */
-    public void removeDataImportOrderItem(DataImportOrderItem dataImportOrderItem) {
-        if (this.dataImportOrderItems == null) {
-            return;
-        }
-        this.dataImportOrderItems.remove(dataImportOrderItem);
-    }
-    /**
-     * Auto generated method that clear items from collection.
-     */
-    public void clearDataImportOrderItem() {
-        if (this.dataImportOrderItems == null) {
-            return;
-        }
-        this.dataImportOrderItems.clear();
     }
     /**
      * Auto generated method that add item to collection.

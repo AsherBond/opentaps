@@ -70,6 +70,16 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("salesChannelEnumId", "SALES_CHANNEL_ENUM_ID");
         fields.put("productStoreShipMethId", "PRODUCT_STORE_SHIP_METH_ID");
         fields.put("orderClosed", "ORDER_CLOSED");
+        fields.put("shippingFirstName", "SHIPPING_FIRST_NAME");
+        fields.put("shippingLastName", "SHIPPING_LAST_NAME");
+        fields.put("shippingCompanyName", "SHIPPING_COMPANY_NAME");
+        fields.put("shippingStreet", "SHIPPING_STREET");
+        fields.put("shippingCity", "SHIPPING_CITY");
+        fields.put("shippingRegion", "SHIPPING_REGION");
+        fields.put("shippingPostcode", "SHIPPING_POSTCODE");
+        fields.put("shippingCountry", "SHIPPING_COUNTRY");
+        fields.put("shippingPhone", "SHIPPING_PHONE");
+        fields.put("shippingFax", "SHIPPING_FAX");
         fields.put("importStatusId", "IMPORT_STATUS_ID");
         fields.put("importError", "IMPORT_ERROR");
         fields.put("processedTimestamp", "PROCESSED_TIMESTAMP");
@@ -96,6 +106,16 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
     salesChannelEnumId("salesChannelEnumId"),
     productStoreShipMethId("productStoreShipMethId"),
     orderClosed("orderClosed"),
+    shippingFirstName("shippingFirstName"),
+    shippingLastName("shippingLastName"),
+    shippingCompanyName("shippingCompanyName"),
+    shippingStreet("shippingStreet"),
+    shippingCity("shippingCity"),
+    shippingRegion("shippingRegion"),
+    shippingPostcode("shippingPostcode"),
+    shippingCountry("shippingCountry"),
+    shippingPhone("shippingPhone"),
+    shippingFax("shippingFax"),
     importStatusId("importStatusId"),
     importError("importError"),
     processedTimestamp("processedTimestamp"),
@@ -148,6 +168,26 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
    private String productStoreShipMethId;
    @Column(name="ORDER_CLOSED")
    private String orderClosed;
+   @Column(name="SHIPPING_FIRST_NAME")
+   private String shippingFirstName;
+   @Column(name="SHIPPING_LAST_NAME")
+   private String shippingLastName;
+   @Column(name="SHIPPING_COMPANY_NAME")
+   private String shippingCompanyName;
+   @Column(name="SHIPPING_STREET")
+   private String shippingStreet;
+   @Column(name="SHIPPING_CITY")
+   private String shippingCity;
+   @Column(name="SHIPPING_REGION")
+   private String shippingRegion;
+   @Column(name="SHIPPING_POSTCODE")
+   private String shippingPostcode;
+   @Column(name="SHIPPING_COUNTRY")
+   private String shippingCountry;
+   @Column(name="SHIPPING_PHONE")
+   private String shippingPhone;
+   @Column(name="SHIPPING_FAX")
+   private String shippingFax;
    @Column(name="IMPORT_STATUS_ID")
    private String importStatusId;
    @Column(name="IMPORT_ERROR")
@@ -213,7 +253,7 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("customerPartyId");this.allFieldsNames.add("supplierPartyId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("shippingTotal");this.allFieldsNames.add("orderTax");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("adjustmentsTotal");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("comments");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("productStoreShipMethId");this.allFieldsNames.add("orderClosed");this.allFieldsNames.add("importStatusId");this.allFieldsNames.add("importError");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("customerPartyId");this.allFieldsNames.add("supplierPartyId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("shippingTotal");this.allFieldsNames.add("orderTax");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("adjustmentsTotal");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("comments");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("productStoreShipMethId");this.allFieldsNames.add("orderClosed");this.allFieldsNames.add("shippingFirstName");this.allFieldsNames.add("shippingLastName");this.allFieldsNames.add("shippingCompanyName");this.allFieldsNames.add("shippingStreet");this.allFieldsNames.add("shippingCity");this.allFieldsNames.add("shippingRegion");this.allFieldsNames.add("shippingPostcode");this.allFieldsNames.add("shippingCountry");this.allFieldsNames.add("shippingPhone");this.allFieldsNames.add("shippingFax");this.allFieldsNames.add("importStatusId");this.allFieldsNames.add("importError");this.allFieldsNames.add("processedTimestamp");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -339,6 +379,76 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
      */
     public void setOrderClosed(String orderClosed) {
         this.orderClosed = orderClosed;
+    }
+    /**
+     * Auto generated value setter.
+     * @param shippingFirstName the shippingFirstName to set
+     */
+    public void setShippingFirstName(String shippingFirstName) {
+        this.shippingFirstName = shippingFirstName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param shippingLastName the shippingLastName to set
+     */
+    public void setShippingLastName(String shippingLastName) {
+        this.shippingLastName = shippingLastName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param shippingCompanyName the shippingCompanyName to set
+     */
+    public void setShippingCompanyName(String shippingCompanyName) {
+        this.shippingCompanyName = shippingCompanyName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param shippingStreet the shippingStreet to set
+     */
+    public void setShippingStreet(String shippingStreet) {
+        this.shippingStreet = shippingStreet;
+    }
+    /**
+     * Auto generated value setter.
+     * @param shippingCity the shippingCity to set
+     */
+    public void setShippingCity(String shippingCity) {
+        this.shippingCity = shippingCity;
+    }
+    /**
+     * Auto generated value setter.
+     * @param shippingRegion the shippingRegion to set
+     */
+    public void setShippingRegion(String shippingRegion) {
+        this.shippingRegion = shippingRegion;
+    }
+    /**
+     * Auto generated value setter.
+     * @param shippingPostcode the shippingPostcode to set
+     */
+    public void setShippingPostcode(String shippingPostcode) {
+        this.shippingPostcode = shippingPostcode;
+    }
+    /**
+     * Auto generated value setter.
+     * @param shippingCountry the shippingCountry to set
+     */
+    public void setShippingCountry(String shippingCountry) {
+        this.shippingCountry = shippingCountry;
+    }
+    /**
+     * Auto generated value setter.
+     * @param shippingPhone the shippingPhone to set
+     */
+    public void setShippingPhone(String shippingPhone) {
+        this.shippingPhone = shippingPhone;
+    }
+    /**
+     * Auto generated value setter.
+     * @param shippingFax the shippingFax to set
+     */
+    public void setShippingFax(String shippingFax) {
+        this.shippingFax = shippingFax;
     }
     /**
      * Auto generated value setter.
@@ -501,6 +611,76 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
      */
     public String getOrderClosed() {
         return this.orderClosed;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getShippingFirstName() {
+        return this.shippingFirstName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getShippingLastName() {
+        return this.shippingLastName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getShippingCompanyName() {
+        return this.shippingCompanyName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getShippingStreet() {
+        return this.shippingStreet;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getShippingCity() {
+        return this.shippingCity;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getShippingRegion() {
+        return this.shippingRegion;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getShippingPostcode() {
+        return this.shippingPostcode;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getShippingCountry() {
+        return this.shippingCountry;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getShippingPhone() {
+        return this.shippingPhone;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getShippingFax() {
+        return this.shippingFax;
     }
     /**
      * Auto generated value accessor.
@@ -710,6 +890,16 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
         setSalesChannelEnumId((String) mapValue.get("salesChannelEnumId"));
         setProductStoreShipMethId((String) mapValue.get("productStoreShipMethId"));
         setOrderClosed((String) mapValue.get("orderClosed"));
+        setShippingFirstName((String) mapValue.get("shippingFirstName"));
+        setShippingLastName((String) mapValue.get("shippingLastName"));
+        setShippingCompanyName((String) mapValue.get("shippingCompanyName"));
+        setShippingStreet((String) mapValue.get("shippingStreet"));
+        setShippingCity((String) mapValue.get("shippingCity"));
+        setShippingRegion((String) mapValue.get("shippingRegion"));
+        setShippingPostcode((String) mapValue.get("shippingPostcode"));
+        setShippingCountry((String) mapValue.get("shippingCountry"));
+        setShippingPhone((String) mapValue.get("shippingPhone"));
+        setShippingFax((String) mapValue.get("shippingFax"));
         setImportStatusId((String) mapValue.get("importStatusId"));
         setImportError((String) mapValue.get("importError"));
         setProcessedTimestamp((Timestamp) mapValue.get("processedTimestamp"));
@@ -740,6 +930,16 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
         mapValue.put("salesChannelEnumId", getSalesChannelEnumId());
         mapValue.put("productStoreShipMethId", getProductStoreShipMethId());
         mapValue.put("orderClosed", getOrderClosed());
+        mapValue.put("shippingFirstName", getShippingFirstName());
+        mapValue.put("shippingLastName", getShippingLastName());
+        mapValue.put("shippingCompanyName", getShippingCompanyName());
+        mapValue.put("shippingStreet", getShippingStreet());
+        mapValue.put("shippingCity", getShippingCity());
+        mapValue.put("shippingRegion", getShippingRegion());
+        mapValue.put("shippingPostcode", getShippingPostcode());
+        mapValue.put("shippingCountry", getShippingCountry());
+        mapValue.put("shippingPhone", getShippingPhone());
+        mapValue.put("shippingFax", getShippingFax());
         mapValue.put("importStatusId", getImportStatusId());
         mapValue.put("importError", getImportError());
         mapValue.put("processedTimestamp", getProcessedTimestamp());

@@ -157,13 +157,6 @@ fieldMapColumns.put("DataImportOrderItem", fields);
    )
    
    private DataImportOrderHeader dataImportOrderHeader = null;
-   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
-   @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
-   @org.hibernate.annotations.Generated(
-      org.hibernate.annotations.GenerationTime.ALWAYS
-   )
-   
-   private Product product = null;
 
   /**
    * Default constructor.
@@ -456,17 +449,6 @@ fieldMapColumns.put("DataImportOrderItem", fields);
         }
         return this.dataImportOrderHeader;
     }
-    /**
-     * Auto generated method that gets the related <code>Product</code> by the relation named <code>Product</code>.
-     * @return the <code>Product</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public Product getProduct() throws RepositoryException {
-        if (this.product == null) {
-            this.product = getRelatedOne(Product.class, "Product");
-        }
-        return this.product;
-    }
 
     /**
      * Auto generated value setter.
@@ -474,13 +456,6 @@ fieldMapColumns.put("DataImportOrderItem", fields);
     */
     public void setDataImportOrderHeader(DataImportOrderHeader dataImportOrderHeader) {
         this.dataImportOrderHeader = dataImportOrderHeader;
-    }
-    /**
-     * Auto generated value setter.
-     * @param product the product to set
-    */
-    public void setProduct(Product product) {
-        this.product = product;
     }
 
 

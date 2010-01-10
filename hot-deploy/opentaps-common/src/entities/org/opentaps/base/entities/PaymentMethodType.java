@@ -107,6 +107,10 @@ fieldMapColumns.put("PaymentMethodType", fields);
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID")
    
+   private List<DataImportOrderPayment> dataImportOrderPayments = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PAYMENT_METHOD_TYPE_ID")
+   
    private List<OrderPaymentPreference> orderPaymentPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID")
@@ -279,6 +283,17 @@ fieldMapColumns.put("PaymentMethodType", fields);
         return this.defaultGlAccount;
     }
     /**
+     * Auto generated method that gets the related <code>DataImportOrderPayment</code> by the relation named <code>DataImportOrderPayment</code>.
+     * @return the list of <code>DataImportOrderPayment</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends DataImportOrderPayment> getDataImportOrderPayments() throws RepositoryException {
+        if (this.dataImportOrderPayments == null) {
+            this.dataImportOrderPayments = getRelated(DataImportOrderPayment.class, "DataImportOrderPayment");
+        }
+        return this.dataImportOrderPayments;
+    }
+    /**
      * Auto generated method that gets the related <code>OrderPaymentPreference</code> by the relation named <code>OrderPaymentPreference</code>.
      * @return the list of <code>OrderPaymentPreference</code>
      * @throws RepositoryException if an error occurs
@@ -384,6 +399,13 @@ fieldMapColumns.put("PaymentMethodType", fields);
     */
     public void setDefaultGlAccount(GlAccount defaultGlAccount) {
         this.defaultGlAccount = defaultGlAccount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param dataImportOrderPayments the dataImportOrderPayments to set
+    */
+    public void setDataImportOrderPayments(List<DataImportOrderPayment> dataImportOrderPayments) {
+        this.dataImportOrderPayments = dataImportOrderPayments;
     }
     /**
      * Auto generated value setter.
