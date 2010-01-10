@@ -37,7 +37,6 @@ import org.hibernate.LockMode;
 import org.hibernate.ReplicationMode;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.jdbc.Work;
 import org.hibernate.stat.SessionStatistics;
 import org.ofbiz.base.util.Debug;
@@ -144,7 +143,7 @@ public class Session implements org.hibernate.Session {
     }
 
     public Transaction beginTransaction() throws HibernateException {
-        return hibernateSession.beginTransaction();
+        return new Transaction(hibernateSession.beginTransaction());
     }
 
     public void cancelQuery() throws HibernateException {
@@ -376,7 +375,7 @@ public class Session implements org.hibernate.Session {
     }
 
     public Transaction getTransaction() {
-        return hibernateSession.getTransaction();
+        return new Transaction(hibernateSession.getTransaction());
     }
 
     public boolean isConnected() {

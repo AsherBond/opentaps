@@ -22,8 +22,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Transaction;
 import org.ofbiz.base.util.UtilDateTime;
 import org.opentaps.domain.DomainService;
 import org.opentaps.base.constants.EncumbranceDetailTypeConstants;
@@ -43,8 +41,9 @@ import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
-import org.opentaps.foundation.entity.hibernate.HibernateUtil;
+import org.opentaps.foundation.entity.hibernate.Query;
 import org.opentaps.foundation.entity.hibernate.Session;
+import org.opentaps.foundation.entity.hibernate.Transaction;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
@@ -199,10 +198,7 @@ public class FinancialReportServices extends DomainService implements FinancialR
         } catch (InfrastructureException e) {
             throw new ServiceException(e.getMessage());
         } catch (HibernateException e) {
-            if (tx != null && tx.isActive()) {
-                tx.rollback();
-            }
-            throw new ServiceException(HibernateUtil.getHibernateExceptionCause(e));
+            throw new ServiceException(e);
         } catch (EntityNotFoundException e) {
             throw new ServiceException(e.getMessage());
         } catch (LedgerException e) {
@@ -248,15 +244,9 @@ public class FinancialReportServices extends DomainService implements FinancialR
             tx.commit();
 
         } catch (InfrastructureException e) {
-            if (tx != null && tx.isActive()) {
-                tx.rollback();
-            }
             throw new ServiceException(e);
         } catch (HibernateException e) {
-            if (tx != null && tx.isActive()) {
-                tx.rollback();
-            }
-            throw new ServiceException(HibernateUtil.getHibernateExceptionCause(e));
+        	throw new ServiceException(e);
         } finally {
             if (session != null) {
                 session.close();
