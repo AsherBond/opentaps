@@ -143,7 +143,7 @@ public class OrderImportServices {
 
                 try {
 
-                    List<GenericValue> toStore = OrderImportServices.decodeOrder(orderHeader, companyPartyId, productStore, prodCatalogId, purchaseOrderShipToContactMechId, importEmptyOrders.booleanValue(), calculateGrandTotal.booleanValue(), readShippingAddressFromTable.booleanValue(), reserveInventory, delegator, dispatcher, userLogin);
+                    List<GenericValue> toStore = OrderImportServices.decodeOrder(orderHeader, companyPartyId, productStore, prodCatalogId, purchaseOrderShipToContactMechId, importEmptyOrders.booleanValue(), calculateGrandTotal.booleanValue(),reserveInventory ,readShippingAddressFromTable.booleanValue(),  delegator, dispatcher, userLogin);
                     if (toStore == null) {
                         Debug.logWarning("Import of orderHeader[" + orderHeader.get("orderId") + "] was unsuccessful.", MODULE);
                     }
@@ -201,6 +201,10 @@ public class OrderImportServices {
                         String paymentId = currentEntity.getString("paymentId");
                         Debug.logInfo("Changing payment status for [" + paymentId + "]", MODULE);
                         Map results = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap("userLogin", userLogin, "paymentId", paymentId, "statusId", "PMNT_RECEIVED"));
+                        if(ServiceUtil.isError(results)){
+                             Debug.logWarning("cahngePaymentStatus returned error " + ServiceUtil.getErrorMessage(results), MODULE);
+                             TransactionUtil.rollback();
+                        }
                     }
 
 
@@ -403,6 +407,26 @@ public class OrderImportServices {
                 contactMech.setContactMechTypeId(ContactMechTypeConstants.POSTAL_ADDRESS);
                 GenericValue contactMechEntity = delegator.makeValue(contactMech.getBaseEntityName(), contactMech.toMap());
                 //todo should we check if the contactMech is empty?
+
+                //GEO look ups
+
+                 EntityCondition geoCond = EntityCondition.makeCondition(EntityOperator.AND,
+                    EntityCondition.makeCondition("geoCode", EntityOperator.EQUALS, dataImportOrderHeader.getShippingCountry()),
+                    EntityCondition.makeCondition("geoTypeId", EntityOperator.EQUALS, "COUNTRY"));
+
+                //Country codes
+                List<GenericValue> geoCountries = delegator.findByCondition("Geo",geoCond,null,null);
+                if(UtilValidate.isEmpty(geoCountries)){
+                    //todo log error
+                    Debug.logError("Couldn't find geoId for "+dataImportOrderHeader.getShippingCountry(),MODULE);
+                    return FastList.newInstance();
+                }
+                GenericValue geoCountry = EntityUtil.getFirst(geoCountries);
+                String countryGeoId = geoCountry.getString("geoId");
+
+
+
+
                 PostalAddress postalAddress = new PostalAddress();
                 postalAddress.setContactMechId(contactMech.getContactMechId());
                 String toName = dataImportOrderHeader.getShippingFirstName() + " " + dataImportOrderHeader.getShippingLastName();
@@ -410,9 +434,17 @@ public class OrderImportServices {
                 postalAddress.setAttnName(dataImportOrderHeader.getShippingCompanyName());
                 postalAddress.setAddress1(dataImportOrderHeader.getShippingStreet());
                 postalAddress.setCity(dataImportOrderHeader.getShippingCity());
-                postalAddress.setCountryGeoId(dataImportOrderHeader.getShippingCountry());
+                postalAddress.setCountryGeoId(countryGeoId);
                 postalAddress.setPostalCode(dataImportOrderHeader.getShippingPostcode());
-                postalAddress.setStateProvinceGeoId(dataImportOrderHeader.getShippingRegion());
+
+                List<GenericValue> provinceIds = delegator.findByCondition("Geo", EntityCondition.makeCondition("geoName", dataImportOrderHeader.getShippingRegion()), null, null);
+                String provinceId=null;
+                if(UtilValidate.isNotEmpty(provinceIds)){
+                    GenericValue value = EntityUtil.getFirst(provinceIds);                    
+                    postalAddress.setStateProvinceGeoId(value.getString("geoId"));
+                }
+
+
                 GenericValue postalAddressEntity = delegator.makeValue(postalAddress.getBaseEntityName(), postalAddress.toMap());
                 if (UtilValidate.isEmpty(postalAddressEntity)) {
                     Debug.logError("Error creating PostalAddress Entity", MODULE);
@@ -726,6 +758,7 @@ public class OrderImportServices {
         List toStore = FastList.newInstance();
         toStore.add(delegator.makeValue("OrderHeader", orderHeaderInput));
         toStore.add(delegator.makeValue("OrderStatus", orderStatusInput));
+        toStore.addAll(postalAddressEntities);        
         if (oisg != null) {
             toStore.add(oisg);
         }
@@ -736,7 +769,6 @@ public class OrderImportServices {
         toStore.addAll(roles);
         toStore.addAll(notes);
         toStore.addAll(orderPayments);
-        toStore.addAll(postalAddressEntities);
         toStore.add(externalOrderHeader);
 
 
