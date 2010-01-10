@@ -86,18 +86,6 @@ public class OrderImportServices {
 
         // main try/catch block that traps errors related to obtaining data from delegator
         try {
-            GenericValue productStore = null;
-            if (!readProductStoreFromTable) {
-                // if We take the product store form service parameters we make sure the productStore exists
-                productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
-
-                if (UtilValidate.isEmpty(productStore)) {
-                    String errMsg = "Error in importOrders service: product store [" + productStoreId + "] does not exist";
-                    Debug.logError(errMsg, MODULE);
-                    return ServiceUtil.returnError(errMsg);
-                }
-            }
-
 
             // Make sure the productCatalog exists
             if (UtilValidate.isNotEmpty(prodCatalogId)) {
@@ -142,8 +130,22 @@ public class OrderImportServices {
             while ((orderHeader = importOrderHeaders.next()) != null) {
 
                 try {
+                    GenericValue productStore = null;
 
-                    List<GenericValue> toStore = OrderImportServices.decodeOrder(orderHeader, companyPartyId, productStore, prodCatalogId, purchaseOrderShipToContactMechId, importEmptyOrders.booleanValue(), calculateGrandTotal.booleanValue(),reserveInventory ,readShippingAddressFromTable.booleanValue(),  delegator, dispatcher, userLogin);
+                    // if the product store is null we retrieve it form the dataorderdheader table
+                    if (productStoreId == null) {
+                        productStoreId = (String) orderHeader.getString("productStoreId");
+                    }
+
+                    productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
+
+                    if (UtilValidate.isEmpty(productStore)) {
+                        String errMsg = "Error in importOrders service: product store [" + productStoreId + "] does not exist";
+                        Debug.logError(errMsg, MODULE);
+                        return ServiceUtil.returnError(errMsg);
+                    }
+
+                    List<GenericValue> toStore = OrderImportServices.decodeOrder(orderHeader, companyPartyId, productStore, prodCatalogId, purchaseOrderShipToContactMechId, importEmptyOrders.booleanValue(), calculateGrandTotal.booleanValue(), reserveInventory, readShippingAddressFromTable.booleanValue(), delegator, dispatcher, userLogin);
                     if (toStore == null) {
                         Debug.logWarning("Import of orderHeader[" + orderHeader.get("orderId") + "] was unsuccessful.", MODULE);
                     }
@@ -175,7 +177,7 @@ public class OrderImportServices {
                             callCtxt.put("orderId", currentEntity.getString("orderId"));
                             callCtxt.put("orderItemSeqId", currentEntity.getString("orderItemSeqId"));
                             callCtxt.put("shipGroupSeqId", defaultShipGroupSeqId);
-                            callCtxt.put("quantity", currentEntity.getDouble("quantity"));
+                            callCtxt.put("quantity", currentEntity.getBigDecimal("quantity"));
                             callCtxt.put("userLogin", userLogin);
 
                             Map<String, Object> callResult = dispatcher.runSync("reserveStoreInventory", callCtxt);
@@ -201,9 +203,9 @@ public class OrderImportServices {
                         String paymentId = currentEntity.getString("paymentId");
                         Debug.logInfo("Changing payment status for [" + paymentId + "]", MODULE);
                         Map results = dispatcher.runSync("setPaymentStatus", UtilMisc.toMap("userLogin", userLogin, "paymentId", paymentId, "statusId", "PMNT_RECEIVED"));
-                        if(ServiceUtil.isError(results)){
-                             Debug.logWarning("cahngePaymentStatus returned error " + ServiceUtil.getErrorMessage(results), MODULE);
-                             TransactionUtil.rollback();
+                        if (ServiceUtil.isError(results)) {
+                            Debug.logWarning("cahngePaymentStatus returned error " + ServiceUtil.getErrorMessage(results), MODULE);
+                            TransactionUtil.rollback();
                         }
                     }
 
@@ -296,18 +298,7 @@ public class OrderImportServices {
         //todo move this at the beginning of the class
         DataImportOrderHeader dataImportOrderHeader = new DataImportOrderHeader();
         dataImportOrderHeader.fromMap(externalOrderHeader);
-
-        //if the productStore is null we try to load it from the table if it does not exist we throw an error
-        if (productStore == null) {
-            String productStoreId = (String) externalOrderHeader.getString("productStoreId");
-            productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
-
-            if (UtilValidate.isEmpty(productStore)) {
-                String errMsg = "Error in importOrders service: product store [" + productStoreId + "] does not exist";
-                Debug.logError(errMsg, MODULE);
-                return FastList.newInstance();
-            }
-        }
+       
         String orderId = externalOrderHeader.getString("orderId");
         String orderTypeId = externalOrderHeader.getString("orderTypeId");
         if (UtilValidate.isEmpty(orderTypeId)) {
@@ -381,7 +372,7 @@ public class OrderImportServices {
         }
 
         // create a ship group for the sales order
-         List postalAddressEntities = FastList.newInstance();
+        List postalAddressEntities = FastList.newInstance();
         if (isSalesOrder) {
             // get requested shipping method
             String productStoreShipMethId = externalOrderHeader.getString("productStoreShipMethId");
@@ -410,21 +401,19 @@ public class OrderImportServices {
 
                 //GEO look ups
 
-                 EntityCondition geoCond = EntityCondition.makeCondition(EntityOperator.AND,
-                    EntityCondition.makeCondition("geoCode", EntityOperator.EQUALS, dataImportOrderHeader.getShippingCountry()),
-                    EntityCondition.makeCondition("geoTypeId", EntityOperator.EQUALS, "COUNTRY"));
+                EntityCondition geoCond = EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("geoCode", EntityOperator.EQUALS, dataImportOrderHeader.getShippingCountry()),
+                        EntityCondition.makeCondition("geoTypeId", EntityOperator.EQUALS, "COUNTRY"));
 
                 //Country codes
-                List<GenericValue> geoCountries = delegator.findByCondition("Geo",geoCond,null,null);
-                if(UtilValidate.isEmpty(geoCountries)){
+                List<GenericValue> geoCountries = delegator.findByCondition("Geo", geoCond, null, null);
+                if (UtilValidate.isEmpty(geoCountries)) {
                     //todo log error
-                    Debug.logError("Couldn't find geoId for "+dataImportOrderHeader.getShippingCountry(),MODULE);
+                    Debug.logError("Couldn't find geoId for " + dataImportOrderHeader.getShippingCountry(), MODULE);
                     return FastList.newInstance();
                 }
                 GenericValue geoCountry = EntityUtil.getFirst(geoCountries);
                 String countryGeoId = geoCountry.getString("geoId");
-
-
 
 
                 PostalAddress postalAddress = new PostalAddress();
@@ -438,9 +427,9 @@ public class OrderImportServices {
                 postalAddress.setPostalCode(dataImportOrderHeader.getShippingPostcode());
 
                 List<GenericValue> provinceIds = delegator.findByCondition("Geo", EntityCondition.makeCondition("geoName", dataImportOrderHeader.getShippingRegion()), null, null);
-                String provinceId=null;
-                if(UtilValidate.isNotEmpty(provinceIds)){
-                    GenericValue value = EntityUtil.getFirst(provinceIds);                    
+                String provinceId = null;
+                if (UtilValidate.isNotEmpty(provinceIds)) {
+                    GenericValue value = EntityUtil.getFirst(provinceIds);
                     postalAddress.setStateProvinceGeoId(value.getString("geoId"));
                 }
 
@@ -758,7 +747,7 @@ public class OrderImportServices {
         List toStore = FastList.newInstance();
         toStore.add(delegator.makeValue("OrderHeader", orderHeaderInput));
         toStore.add(delegator.makeValue("OrderStatus", orderStatusInput));
-        toStore.addAll(postalAddressEntities);        
+        toStore.addAll(postalAddressEntities);
         if (oisg != null) {
             toStore.add(oisg);
         }
