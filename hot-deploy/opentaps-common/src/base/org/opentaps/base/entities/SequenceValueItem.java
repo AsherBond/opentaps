@@ -69,7 +69,7 @@ fieldMapColumns.put("SequenceValueItem", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -81,17 +81,17 @@ fieldMapColumns.put("SequenceValueItem", fields);
 
    @Id
    @Column(name="SEQ_NAME")
-   private String seqName;
+   protected String seqName;
    @Column(name="SEQ_ID")
-   private Long seqId;
+   protected Long seqId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

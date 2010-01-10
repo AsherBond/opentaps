@@ -1253,6 +1253,7 @@
   <mapping class="org.opentaps.base.entities.DataImportSupplier"/>
   <mapping class="org.opentaps.base.entities.DataImportOrderHeader"/>
   <mapping class="org.opentaps.base.entities.DataImportOrderItem"/>
+  <mapping class="org.opentaps.base.entities.DataImportOrderPayment"/>
   <mapping class="org.opentaps.base.entities.DataImportProduct"/>
   <mapping class="org.opentaps.base.entities.DataImportInventory"/>
   <mapping class="org.opentaps.base.entities.DataImportShoppingList"/>
