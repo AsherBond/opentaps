@@ -17,10 +17,10 @@
 -->
 
 <entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
-  <!-- ========================================================= -->
-  <!-- ======================== Defaults ======================= -->
-  <!-- ========================================================= -->
+             xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+    <!-- ========================================================= -->
+    <!-- ======================== Defaults ======================= -->
+    <!-- ========================================================= -->
     <title>Order Data Import Entities</title>
     <description>Defines intermediate entities for importing order data</description>
     <copyright>Copyright (c) 2006 - 2007 Open Source Strategies, Inc.</copyright>
@@ -28,14 +28,14 @@
     <version>1.0</version>
 
     <!-- ================================= -->
-    <!-- org.opentaps.dataimport.orders -->  
+    <!-- org.opentaps.dataimport.orders -->
     <!-- ================================= -->
 
     <!-- for precise definitions of the field types see the file framework/entity/fieldtype/fieldtypeXXX.xml for your database XXX -->
 
     <entity entity-name="DataImportOrderHeader"
-        package-name="org.opentaps.dataimport.orders"
-        title="Intermediate import entity for order header data.">
+            package-name="org.opentaps.dataimport.orders"
+            title="Intermediate import entity for order header data.">
         <field name="orderId" type="id-ne"></field>
         <field name="orderTypeId" type="id"></field>
         <field name="customerPartyId" type="id"></field>
@@ -44,79 +44,154 @@
         <field name="currencyUomId" type="id"></field>
         <field name="shippingTotal" type="currency-amount"></field>
         <field name="orderTax" type="currency-amount">
-            <description>Whole order tax.  The total order tax is the sum of this and the line item taxes.</description>
+            <description>Whole order tax. The total order tax is the sum of this and the line item taxes.</description>
         </field>
         <field name="taxAuthPartyId" type="id">
-            <description>The partyId of the tax authority in TaxAuthority.  Recommended for invoicing and financials.</description>
+            <description>The partyId of the tax authority in TaxAuthority. Recommended for invoicing and financials.
+            </description>
         </field>
         <field name="adjustmentsTotal" type="currency-amount"></field>
         <field name="grandTotal" type="currency-amount"></field>
         <field name="comments" type="comment"></field>
-        <field name="productStoreId" type="id" />
-        <field name="salesChannelEnumId" type="id"><description>The salesChannelEnumId maps to a specific the order type: store 1,pos, web etc</description></field>
-        <field name="productStoreShipMethId" type="id"><description>The ProductStoreShipmentMeth corresponding to the shipment method the customer selected.</description></field>
-        <field name="orderClosed" type="indicator"><description>If set to N or n, the order will be created in the Approved state.</description></field>
-        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
-        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <field name="productStoreId" type="id"/>
+        <field name="salesChannelEnumId" type="id">
+            <description>The salesChannelEnumId maps to a specific the order type: store 1,pos, web etc</description>
+        </field>
+        <field name="productStoreShipMethId" type="id">
+            <description>The ProductStoreShipmentMeth corresponding to the shipment method the customer selected.
+            </description>
+        </field>
+        <field name="orderClosed" type="indicator">
+            <description>If set to N or n, the order will be created in the Approved state.</description>
+        </field>
+        <field name="shippingFirstName" type="name"/>
+        <field name="shippingLastName" type="name"/>
+        <field name="shippingCompanyName" type="name"/>
+        <field name="shippingStreet" type="long-varchar"/>
+        <field name="shippingCity" type="name"/>
+        <field name="shippingRegion" type="id"/>
+        <field name="shippingPostcode" type="short-varchar"/>
+        <field name="shippingCountry" type="id"/>
+        <field name="shippingPhone" type="short-varchar"/>
+        <field name="shippingFax" type="short-varchar"/>
+                                       
+        <field name="importStatusId" type="id-ne">
+            <description>Status of record import. Null is the same as DATAIMP_NOT_PROC.</description>
+        </field>
+        <field name="importError" type="very-long">
+            <description>Error report for failed imports.</description>
+        </field>
         <field name="processedTimestamp" type="date-time">
-            <description>Special field for system to record when entry was successfully imported.  
-                Do not use for any other purpose.</description>
+            <description>Special field for system to record when entry was successfully imported.
+                Do not use for any other purpose.
+            </description>
         </field>
         <prim-key field="orderId"/>
         <relation type="one" fk-name="IMPT_ORDERHDR_TYPE" rel-entity-name="OrderType">
-          <key-map field-name="orderTypeId"/>
+            <key-map field-name="orderTypeId"/>
         </relation>
         <relation type="one" fk-name="IMPT_ORDERHDR_PTY" rel-entity-name="Party" title="Customer">
-          <key-map field-name="customerPartyId" rel-field-name="partyId"/>
+            <key-map field-name="customerPartyId" rel-field-name="partyId"/>
         </relation>
         <relation type="one" fk-name="IMPT_ORDERHDR_SUPL" rel-entity-name="Party" title="Supplier">
-          <key-map field-name="supplierPartyId" rel-field-name="partyId"/>
+            <key-map field-name="supplierPartyId" rel-field-name="partyId"/>
         </relation>
         <relation type="one" fk-name="IMPT_ORDERHDR_CUOM" rel-entity-name="Uom">
-          <key-map field-name="currencyUomId" rel-field-name="uomId"/>
+            <key-map field-name="currencyUomId" rel-field-name="uomId"/>
         </relation>
         <relation type="one" fk-name="IMPT_ORDERHDR_PSSM" rel-entity-name="ProductStoreShipmentMeth">
-          <key-map field-name="productStoreShipMethId"/>
+            <key-map field-name="productStoreShipMethId"/>
         </relation>
     </entity>
 
     <entity entity-name="DataImportOrderItem"
-        package-name="org.opentaps.dataimport.orders"
-        title="Intermediate import entity for order item data.">
+            package-name="org.opentaps.dataimport.orders"
+            title="Intermediate import entity for order item data.">
         <field name="orderId" type="id-ne"></field>
         <field name="productId" type="id"></field>
         <field name="quantity" type="floating-point"></field>
-        <field name="quantityShipped" type="floating-point"><description>Quantity of this order item already shipped, meaningful only for not closed orders.</description></field>
+        <field name="quantityShipped" type="floating-point">
+            <description>Quantity of this order item already shipped, meaningful only for not closed orders.
+            </description>
+        </field>
         <field name="price" type="currency-amount"></field>
-        <field name="itemTax" type="currency-amount"><description>Line item tax.  Recommended for invoicing and financials.</description></field>
+        <field name="itemTax" type="currency-amount">
+            <description>Line item tax. Recommended for invoicing and financials.</description>
+        </field>
         <field name="taxAuthPartyId" type="id">
-            <description>The partyId of the tax authority in TaxAuthority.  Recommended for invoicing and financials.</description>
+            <description>The partyId of the tax authority in TaxAuthority. Recommended for invoicing and financials.
+            </description>
         </field>
         <field name="itemAdjustmentsTotal" type="currency-amount"></field>
         <field name="customerPo" type="id"></field>
         <field name="comments" type="comment"></field>
-        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
-        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <field name="importStatusId" type="id-ne">
+            <description>Status of record import. Null is the same as DATAIMP_NOT_PROC.</description>
+        </field>
+        <field name="importError" type="very-long">
+            <description>Error report for failed imports.</description>
+        </field>
         <field name="processedTimestamp" type="date-time">
-            <description>Special field for system to record when entry was successfully imported.  
-                Do not use for any other purpose.</description>
+            <description>Special field for system to record when entry was successfully imported.
+                Do not use for any other purpose.
+            </description>
         </field>
         <field name="orderItemSeqId" type="id">
-            <description>Special field for system to record the primary orderItemSeqId created against this order item record. 
-                Do not use for any other purpose.</description>
+            <description>Special field for system to record the primary orderItemSeqId created against this order item
+                record.
+                Do not use for any other purpose.
+            </description>
         </field>
-        <prim-key field="orderId"/> 
-        <prim-key field="productId"/> 
-        <prim-key field="quantity"/> 
-        <prim-key field="price"/> 
-        <!--<prim-key field="itemAdjustmentsTotal"/>  This field is not on the service. what does it do ?--> 
+        <prim-key field="orderId"/>
+        <prim-key field="productId"/>
+        <prim-key field="quantity"/>
+        <prim-key field="price"/>
+        <!--<prim-key field="itemAdjustmentsTotal"/>  This field is not on the service. what does it do ?-->
         <relation type="one" fk-name="IMPT_ORDERITEM_HDR" rel-entity-name="DataImportOrderHeader">
-          <key-map field-name="orderId"/>
+            <key-map field-name="orderId"/>
         </relation>
         <!--removing this as we may import a product in the same batch-->
         <!--<relation type="one" fk-name="IMPT_ORDERITEM_PRD" rel-entity-name="Product">-->
-          <!--<key-map field-name="productId"/>-->
+        <!--<key-map field-name="productId"/>-->
         <!--</relation>-->
+    </entity>
+
+    <entity entity-name="DataImportOrderPayment"
+            package-name="org.opentaps.dataimport.orders"
+            title="Intermediate import entity for order payment data.">
+        <field name="orderPaymentPreferenceId" type="id-ne"></field>
+        <field name="orderId" type="id"></field>
+        <field name="paymentMethodTypeId" type="id"></field>
+        <field name="maxAmount" type="currency-amount"></field>
+        <field name="statusId" type="id"></field>
+
+        <field name="paymentTypeId" type="id-ne"></field>
+        <field name="effectiveDate" type="date-time"></field>
+        <field name="paymentRefNum" type="short-varchar"></field>
+        <field name="amount" type="currency-amount"></field>
+        <field name="currencyUomId" type="id"></field>
+        <field name="comments" type="comment"></field>
+
+        <field name="importStatusId" type="id-ne">
+            <description>Status of record import. Null is the same as DATAIMP_NOT_PROC.</description>
+        </field>
+        <field name="importError" type="very-long">
+            <description>Error report for failed imports.</description>
+        </field>
+        <field name="processedTimestamp" type="date-time">
+            <description>Special field for system to record when entry was successfully imported.
+                Do not use for any other purpose.
+            </description>
+        </field>
+
+        <prim-key field="orderId"/>
+        <prim-key field="orderPaymentPreferenceId"/>
+
+        <relation type="one" fk-name="PAYMENT_PMETH_TP" rel-entity-name="PaymentMethodType">
+            <key-map field-name="paymentMethodTypeId"/>
+        </relation>
+
+
     </entity>
 
 

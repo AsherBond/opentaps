@@ -17,12 +17,6 @@
 
 package org.opentaps.dataimport;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.*;
@@ -39,9 +33,14 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.base.constants.StatusItemConstants;
-import org.opentaps.base.services.SafeAddProductToCategoryService;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.foundation.infrastructure.Infrastructure;
+
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Import products via intermediate DataImportProduct entity.

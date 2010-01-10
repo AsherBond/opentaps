@@ -53,6 +53,7 @@
 
   <entity-group group="org.ofbiz" entity="DataImportOrderHeader"/>
   <entity-group group="org.ofbiz" entity="DataImportOrderItem"/>
+  <entity-group group="org.ofbiz" entity="DataImportOrderPayment"/>
 
   <!-- =================================== -->
   <!-- org.opentaps.dataimport.tax         -->
