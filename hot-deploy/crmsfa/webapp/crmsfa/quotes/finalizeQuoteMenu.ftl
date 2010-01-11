@@ -14,18 +14,23 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<div class="subSectionHeader">
-  <div class="subSectionTitle"><#if quote?exists>${quote.quoteName?if_exists} (${quote.quoteId})</#if></div>
-  <div class="subMenuBar">
-    <#if quote?exists>
-      <a href="<@ofbizUrl>ViewQuote?quoteId=${quote.quoteId}</@ofbizUrl>" class="buttontext">${uiLabelMap.OrderViewQuote}</a>
-      <#if canEditQuote>
-        <a href="<@ofbizUrl>EditQuote?quoteId=${quote.quoteId}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonEdit}</a>
-      </#if>
-      <a href="<@ofbizUrl>quote.pdf?quoteId=${quote.quoteId}</@ofbizUrl>" class="buttontext">${uiLabelMap.AccountingInvoicePDF}</a>
-      <a href="<@ofbizUrl>writeQuoteEmail?quoteId=${quote.quoteId}&amp;emailType=PRDS_QUO_CONFIRM</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonEmail}</a>          
-      <a href="<@ofbizUrl>QuoteMiniCatalog.pdf?quoteId=${quote.quoteId}</@ofbizUrl>" class="buttontext">${uiLabelMap.OpentapsMiniCatalog}</a>
-    </#if>
-  </div>
-</div>
+<#assign quoteStatusChangeAction = "">
+<#if quote?exists>
+  <#assign quoteStatusChangeAction>${quoteStatusChangeAction}<a href="<@ofbizUrl>ViewQuote?quoteId=${quote.quoteId}</@ofbizUrl>" class="buttontext">${uiLabelMap.OrderViewQuote}</a></#assign>
+  
+  <#if canEditQuote>
+    <@form name="editQuote" url="EditQuote" quoteId="${quote.quoteId}" />
+    <#assign quoteStatusChangeAction>${quoteStatusChangeAction}<@submitFormLink form="editQuote" text=uiLabelMap.CommonEdit class="buttontext" /></#assign>
+  </#if>
+
+  <@form name="toQuotePdf" url="quote.pdf" quoteId="${quote.quoteId}" reportId="SALESQUOTE" reportType="application/pdf" />
+  <#assign quoteStatusChangeAction>${quoteStatusChangeAction}<@submitFormLink form="toQuotePdf" text=uiLabelMap.AccountingInvoicePDF class="buttontext" /></#assign>
+  <@form name="writeQuoteEmail" url="writeQuoteEmail" quoteId="${quote.quoteId}" emailType="PRDS_QUO_CONFIRM" />
+  <#assign quoteStatusChangeAction>${quoteStatusChangeAction}<@submitFormLink form="writeQuoteEmail" text=uiLabelMap.CommonEmail class="buttontext" /></#assign>
+  <@form name="toCatalogPdf" url="QuoteMiniCatalog.pdf" quoteId="${quote.quoteId}" />
+  <#assign quoteStatusChangeAction>${quoteStatusChangeAction}<@submitFormLink form="toCatalogPdf" text=uiLabelMap.OpentapsMiniCatalog class="buttontext" /></#assign>
+</#if>
+
+<@frameSectionHeader title="${quote?exists?string(\"${uiLabelMap.OrderQuote} ${uiLabelMap.OrderNbr}${quote.quoteId}\", '')}" extra=quoteStatusChangeAction! />

@@ -33,10 +33,7 @@ function setFinalizeQuoteItemOption(/*String*/ quoteId, /*String*/ quoteItemSeqI
 
 <#if quote?exists>
 <#assign readyToFinalize = true />
-<div class="screenlet">
-  <div class="screenlet-header">
-    <div class="boxhead">${uiLabelMap.OrderOrderQuoteItems}</div>
-  </div>
+<@frameSection title=uiLabelMap.OrderOrderQuoteItems>
   <!-- add for javascript function setFinalizeQuoteItemOption -->
   <@form name="processingQuoteItemOptionForm" url="" quoteId="" quoteItemSeqId="" quoteItemOptionSeqId="" />
   <div class="screenlet-body">
@@ -174,7 +171,6 @@ function setFinalizeQuoteItemOption(/*String*/ quoteId, /*String*/ quoteItemSeqI
       </#if>
 
     </table>
-  </div>
-</div>
+</@frameSection>
 
 </#if>

@@ -1565,7 +1565,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="CreateQuoteNote">
         <security https="true" auth="true"/>
         <event type="service" invoke="createQuoteNote"/>
-        <response name="success" type="view" value="ViewQuote"/>
+        <response name="success" type="request-redirect" value="ViewQuote">
+          <redirect-parameter name="quoteId"/>
+        </response>
         <response name="error" type="view" value="AddQuoteNote"/>
     </request-map>
     <request-map uri="copyQuote">

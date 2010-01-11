@@ -23,18 +23,24 @@ under the License.
 
 <#if security.hasEntityPermission("ORDERMGR", "_VIEW", session)>  
 
-  <div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.OrderAddNote}</div>
-  </div>
+  <@frameSection title=uiLabelMap.OrderAddNote>
 
-  <form method="post" action="<@ofbizUrl>CreateQuoteNote/ViewQuote</@ofbizUrl>" name="createnoteform">
-      <input type="hidden" name="internalNote" value="N"/>
-      <@inputHidden name="quoteId" value=quoteId />
-      <textarea name="note" class="textAreaBox" rows="5" cols="70"></textarea>
-      <br/>
-      <a href="javascript:document.createnoteform.submit()" class="buttontext">${uiLabelMap.CommonCreate}</a>
-      <a href="<@ofbizUrl>ViewQuote?quoteId=${quoteId}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonCancel}</a>
-  </form>
+    <form method="post" action="<@ofbizUrl>CreateQuoteNote</@ofbizUrl>" name="createnoteform">
+      <table class="twoColumnForm">
+        <@inputHidden name="internalNote" value="N"/>
+        <@inputHidden name="quoteId" value=quoteId />
+        <@inputTextareaRow title=uiLabelMap.OrderNote name="note" cols=70 />
+        <tr>
+          <td/>
+          <td>
+            <@inputSubmit title=uiLabelMap.CommonCreate />
+            <@displayLink text=uiLabelMap.CommonCancel href="ViewQuote?quoteId=${quoteId}" class="buttontext" />
+          </td>
+        </tr>
+      </table>
+    </form>
+
+  </@frameSection>
 
 <#else>
   <h3>${uiLabelMap.OrderViewPermissionError}</h3>

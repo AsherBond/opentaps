@@ -56,11 +56,8 @@ function removeQuantityRow(/*String*/ id) {
 }
 </script>
 
-<div class="screenlet">
-  <div class="screenlet-header">
-    <div class="boxhead">${uiLabelMap.CrmAddItems}</div>
-  </div>
-  <div class="screenlet-body">
+
+<@frameSection title=uiLabelMap.CrmAddItems>
     <form method="post" action="<@ofbizUrl>createQuoteItem</@ofbizUrl>" name="addItemToQuote">
       <@inputHidden name="quoteId" value="${quote.quoteId}"/>
       <@inputHidden name="rowCount" value="1"/>
@@ -104,7 +101,6 @@ function removeQuantityRow(/*String*/ id) {
         </tbody>
       </table>
     </form>
-  </div>
-</div>
+</@frameSection>
 
 </#if>

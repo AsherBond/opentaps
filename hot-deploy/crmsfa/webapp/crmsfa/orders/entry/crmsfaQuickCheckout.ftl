@@ -326,7 +326,7 @@
         </#if>
       }
 
-    document.getElementById('continueLink').style.display = 'inline';
+    document.getElementById('continueLink').style.display = 'inline-block';
   }
 
   function expandCVVInput(/*String*/ paymentMethodId) {

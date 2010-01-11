@@ -20,8 +20,6 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<div class="subSectionHeader">
-  <div class="subSectionTitle">${uiLabelMap.OrderReviewOrder}</div>
-  <div class="subMenuBar"><@inputConfirm href="clearCart" title=uiLabelMap.OpentapsClearItems class="subMenuButtonDangerous"/><a class="subMenuButton" href="<@ofbizUrl>createOrderMainScreen</@ofbizUrl>">${uiLabelMap.OpentapsOrderReturnToOrder}</a><a class="subMenuButton" href="<@ofbizUrl>crmsfaQuickCheckout</@ofbizUrl>">${uiLabelMap.CommonOptions}</a><a class="subMenuButton" href="#" onclick="redirectUrlAndDisableLink('<@ofbizUrl>processorder</@ofbizUrl>',this,'${uiLabelMap.OpentapsOrderSubmittingLabel}')">${uiLabelMap.OrderCreateOrder}</a></div>
-</div>
+<#assign extraOptions><@inputConfirm href="clearCart" title=uiLabelMap.OpentapsClearItems class="subMenuButtonDangerous"/><a class="subMenuButton" href="<@ofbizUrl>createOrderMainScreen</@ofbizUrl>">${uiLabelMap.OpentapsOrderReturnToOrder}</a><a class="subMenuButton" href="<@ofbizUrl>crmsfaQuickCheckout</@ofbizUrl>">${uiLabelMap.CommonOptions}</a><a class="subMenuButton" href="#" onclick="redirectUrlAndDisableLink('<@ofbizUrl>processorder</@ofbizUrl>',this,'${uiLabelMap.OpentapsOrderSubmittingLabel}')">${uiLabelMap.OrderCreateOrder}</a></#assign>
 
+<@frameSectionHeader title=uiLabelMap.OrderReviewOrder extra=extraOptions />

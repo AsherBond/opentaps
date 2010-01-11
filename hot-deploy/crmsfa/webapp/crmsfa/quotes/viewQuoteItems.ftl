@@ -63,11 +63,7 @@ function removeQuoteItem(/*String*/ quoteId, /*String*/ quoteItemSeqId) {
 
 <#if quote?exists>
 
-<div class="screenlet">
-  <div class="screenlet-header">
-    <div class="boxhead">${uiLabelMap.OrderOrderQuoteItems}</div>
-  </div>
-  <div class="screenlet-body">
+<@frameSection title=uiLabelMap.OrderOrderQuoteItems>
     <table width="100%" border="0" cellpadding="0">
       <tr align="left" valign="bottom">
         <td width="10%" align="left"><span class="tableheadtext"><b>${uiLabelMap.ProductItem}</b></span></td>
@@ -252,7 +248,6 @@ function removeQuoteItem(/*String*/ quoteId, /*String*/ quoteItemSeqId) {
         </td>
       </tr>
     </table>
-  </div>
-</div>
+</@frameSection>
 
 </#if>

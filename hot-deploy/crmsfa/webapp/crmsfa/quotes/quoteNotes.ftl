@@ -1,6 +1,6 @@
 <#--
  * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
- * 
+ *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -36,62 +36,42 @@ under the License.
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#-- This file has been modified by Open Source Strategies, Inc. -->
-        
+
 <#if quote?has_content>
 
-<table border="0" width='100%' cellspacing='0' cellpadding='0' class='boxoutside'>
-  <tr>
-    <td width='100%'>
-      <table width='100%' border='0' cellspacing='0' cellpadding='0' class='boxtop'>
+<#assign extraOptions>
+  <#if security.hasEntityPermission("ORDERMGR", "_NOTE", session)>
+    <a href="<@ofbizUrl>AddQuoteNote?quoteId=${quote.quoteId}</@ofbizUrl>" class="buttontext">${uiLabelMap.OrderNotesCreateNew}</a>
+  </#if>
+</#assign>
+
+<@frameSection title=uiLabelMap.OrderNote extra=extraOptions>
+  <#if quoteNotes?has_content>
+    <table class="listTable" style="border:0">
+      <#list quoteNotes as note>
         <tr>
-          <td valign="middle" align="left">
-            <div class="boxhead">&nbsp;${uiLabelMap.OrderNotes}</div>
-          </td>
-          <td valign="middle" align="right">
-            <#if security.hasEntityPermission("ORDERMGR", "_NOTE", session)>  
-              <a href="<@ofbizUrl>AddQuoteNote?quoteId=${quote.quoteId}</@ofbizUrl>" class="buttontext">${uiLabelMap.OrderNotesCreateNew}</a>
+          <td align="left" valign="top" width="35%">
+            <#if note.noteParty?has_content>
+              <div class="tabletext">&nbsp;<b>${uiLabelMap.CommonBy}: </b>${Static["org.ofbiz.party.party.PartyHelper"].getPartyName(delegator, note.noteParty, true)}</div>
+              <div class="tabletext">&nbsp;<b>${uiLabelMap.CommonAt}: </b>${getLocalizedDate(note.noteDateTime)}</div>
+            <#else>
+              ${uiLabelMap.PartyUnknown}
             </#if>
           </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td width='100%'>
-      <table width='100%' border='0' cellspacing='0' cellpadding='0' class='boxbottom'>
-        <tr>
-          <td>
-            <#if quoteNotes?has_content>
-            <table width="100%" border="0" cellpadding="1">
-              <#list quoteNotes as note>
-                <tr>
-                  <td align="left" valign="top" width="35%">
-                    <#if note.noteParty?has_content>
-                      <div class="tabletext">&nbsp;<b>${uiLabelMap.CommonBy}: </b>${Static["org.ofbiz.party.party.PartyHelper"].getPartyName(delegator, note.noteParty, true)}</div>
-                      <div class="tabletext">&nbsp;<b>${uiLabelMap.CommonAt}: </b>${getLocalizedDate(note.noteDateTime)}</div>
-                    <#else>
-                      ${uiLabelMap.PartyUnknown}
-                    </#if> 
-                  </td>
-                  <td align="left" valign="top" width="50%">
-                    <div class="tabletext">${note.noteInfo?replace("(\r\n|\r|\n|\n\r)", "<br/>", "r")?if_exists}</div>
-                  </td>
-                  <td align="right" valign="top" width="15%">
-                  </td>
-                </tr>
-                <#if note_has_next>          
-                  <tr><td colspan="3"><hr class="sepbar"></td></tr>
-                </#if>
-              </#list>
-            </table>
-            <#else>            
-              <div class="tabletext">&nbsp;${uiLabelMap.CrmNoQuoteNotes}.</div>
-            </#if>
+          <td align="left" valign="top" width="50%">
+            <div class="tabletext">${note.noteInfo?replace("(\r\n|\r|\n|\n\r)", "<br/>", "r")?if_exists}</div>
+          </td>
+          <td align="right" valign="top" width="15%">
           </td>
         </tr>
-      </table>
-    </td>
-  </tr>
-</table>
+        <#if note_has_next>
+          <tr><td colspan="3"><hr class="sepbar"></td></tr>
+        </#if>
+        </#list>
+    </table>
+  <#else>
+    <div class="tabletext">&nbsp;${uiLabelMap.CrmNoQuoteNotes}.</div>
+  </#if>
+</@frameSection>
 
 </#if>
