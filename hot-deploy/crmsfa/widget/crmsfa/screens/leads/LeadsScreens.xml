@@ -286,9 +286,11 @@
                         <include-screen name="completedActivities" location="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml"/>
                         
                         <!-- Catalog requests -->
-                        <platform-specific>
+                        <container style="subSectionBlock">
+                          <platform-specific>
                             <html><html-template location="component://crmsfa/webapp/crmsfa/includes/catalogRequests.ftl"/></html>
-                        </platform-specific>
+                          </platform-specific>
+                        </container>
 
                         <!-- attached content -->
                         <include-screen name="contentList" location="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml"/>
