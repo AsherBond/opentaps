@@ -15,11 +15,10 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
 <#if hasUpdatePermission?exists>
 <#assign updateLink = "<a class='subMenuButton' href='updateContactListForm?contactListId=" + contactList.contactListId + "'>" + uiLabelMap.CommonEdit + "</a>">
 </#if>
 
-<div class="subSectionHeader">
-  <div class="subSectionTitle">${uiLabelMap.CrmContactList}</div>
-  <div class="subMenuBar">${updateLink?if_exists}</div>
-</div>
+<@frameSectionHeader title=uiLabelMap.CrmContactList extra="${updateLink?if_exists}" />

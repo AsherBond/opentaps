@@ -28,7 +28,4 @@
 </#if>
 
 <a name="ListContactListParties"></a>
-<div class="subSectionHeader">
-  <div class="subSectionTitle">${uiLabelMap.CrmContactListParties}</div>
-  <div class="subMenuBar">${addLink?if_exists}${addDomestic?if_exists}${addForeign?if_exists}</div>
-</div>
+<@frameSectionHeader title=uiLabelMap.CrmContactListParties extra="${addLink?if_exists}${addDomestic?if_exists}${addForeign?if_exists}" />

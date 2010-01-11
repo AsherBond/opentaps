@@ -15,6 +15,6 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<div class="subSectionHeader">
-  <div class="subSectionTitle">${uiLabelMap.CrmMarketingSurveys}</div>
-</div>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<@frameSectionHeader title=uiLabelMap.CrmMarketingSurveys/>

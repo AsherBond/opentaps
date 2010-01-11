@@ -45,7 +45,7 @@
                             </container>
                         </container>
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmFindContactListParties}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmFindContactListParties}"/>
                             <container style="form">
                                 <include-form name="FindContactListParties" location="component://crmsfa/widget/crmsfa/forms/marketing/ContactListForms.xml"/>
                             </container>
@@ -134,7 +134,7 @@
                             </container>
                         </container>
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmContactLists}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmContactLists}"/>
                             <include-form name="ListContactLists" location="component://crmsfa/widget/crmsfa/forms/marketing/ContactListForms.xml"/>
                         </container>
                     </decorator-section>
@@ -166,7 +166,7 @@
                             </container>
                         </container>
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmAvailableToAdd}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmAvailableToAdd}"/>
                             <include-form name="ListContactListParties" location="component://crmsfa/widget/crmsfa/forms/marketing/ContactListForms.xml"/>
                         </container>
                     </decorator-section>
@@ -179,7 +179,7 @@
         <section>
             <widgets>
                 <container style="subSectionBlock">
-                    <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmReportUSPSHeader}</label></container>
+                    <frame-container-header title="${uiLabelMap.CrmReportUSPSHeader}"/>
                     <container style="form">
                         <include-form name="viewUSPSHeader" location="component://crmsfa/widget/crmsfa/forms/marketing/ContactListForms.xml"/>
                     </container>
@@ -208,7 +208,7 @@
                     <decorator-section name="section-body">
                         <include-screen name="viewUSPSHeader"/>
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmReportUSPSSortResults}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmReportUSPSSortResults}"/>
                             <include-form name="ListUSPSSortBySortResult" location="component://crmsfa/widget/crmsfa/forms/marketing/ContactListForms.xml"/>
                         </container>
                     </decorator-section>
@@ -230,7 +230,7 @@
                     <decorator-section name="section-body">
                         <include-screen name="viewUSPSHeader"/>
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmReportUSPSZip5}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmReportUSPSZip5}"/>
                             <include-form name="ListUSPSSortByZip5" location="component://crmsfa/widget/crmsfa/forms/marketing/ContactListForms.xml"/>
                         </container>
                     </decorator-section>
@@ -252,7 +252,7 @@
                     <decorator-section name="section-body">
                         <include-screen name="viewUSPSHeader"/>
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmReportUSPSZip3}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmReportUSPSZip3}"/>
                             <include-form name="ListUSPSSortByZip3" location="component://crmsfa/widget/crmsfa/forms/marketing/ContactListForms.xml"/>
                         </container>
                     </decorator-section>
@@ -274,7 +274,7 @@
                     <decorator-section name="section-body">
                         <include-screen name="viewUSPSHeader"/>
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmReportUSPSBMC}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmReportUSPSBMC}"/>
                             <include-form name="ListUSPSSortByBMC" location="component://crmsfa/widget/crmsfa/forms/marketing/ContactListForms.xml"/>
                         </container>
                     </decorator-section>
@@ -296,7 +296,7 @@
                     <decorator-section name="section-body">
                         <include-screen name="viewUSPSHeader"/>
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmReportUSPSOther}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmReportUSPSOther}"/>
                             <include-form name="ListUSPSSortByBMC" location="component://crmsfa/widget/crmsfa/forms/marketing/ContactListForms.xml"/>
                         </container>
                     </decorator-section>
@@ -331,7 +331,7 @@
                 <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/marketing/MarketingScreens.xml">
                     <decorator-section name="section-body">
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmReportUSPSHeader}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmReportUSPSHeader}"/>
                             <container style="form">
                                 <include-form name="viewUSPSHeader" location="component://crmsfa/widget/crmsfa/forms/marketing/ContactListForms.xml"/>
                             </container>

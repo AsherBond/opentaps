@@ -15,6 +15,8 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
 <#if hasUpdatePermission?exists>
 <#if marketingCampaign.statusId == "MKTG_CAMP_INPROGRESS">
 <#assign writeEmail = "<a class='subMenuButton' href='writeEmail?emailType=MKTG_CAMPAIGN&marketingCampaignId=" + marketingCampaign.marketingCampaignId + "&donePage=viewMarketingCampaign'>" + uiLabelMap.CrmWriteEmail + "</a>">
@@ -22,7 +24,4 @@
 <#assign updateLink = "<a class='subMenuButton' href='updateMarketingCampaignForm?marketingCampaignId=" + marketingCampaign.marketingCampaignId + "'>" + uiLabelMap.CommonEdit + "</a>">
 </#if>
 
-<div class="subSectionHeader">
-  <div class="subSectionTitle">${uiLabelMap.CrmMarketingCampaign}</div>
-  <div class="subMenuBar">${writeEmail?if_exists}${updateLink?if_exists}</div>
-</div>
+<@frameSectionHeader title=uiLabelMap.CrmMarketingCampaign extra="${writeEmail?if_exists}${updateLink?if_exists}" />

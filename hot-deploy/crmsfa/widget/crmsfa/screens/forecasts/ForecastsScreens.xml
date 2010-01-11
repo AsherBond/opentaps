@@ -96,7 +96,7 @@
 
                         <!-- quarterly forecasts -->
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmForecastQuarters}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmForecastQuarters}"/>
                             <include-form name="ListForecasts" location="component://crmsfa/widget/crmsfa/forms/forecasts/ForecastsForms.xml"/>
                         </container>
 
@@ -113,7 +113,7 @@
             <condition><not><if-empty field="teamForecasts"/></not></condition>
             <widgets>
                 <container style="subSectionBlock">
-                    <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmTeamForecastQuarters}</label></container>
+                    <frame-container-header title="${uiLabelMap.CrmTeamForecastQuarters}"/>
                     <include-form name="ListTeamForecasts" location="component://crmsfa/widget/crmsfa/forms/forecasts/ForecastsForms.xml"/>
                 </container>
             </widgets>
@@ -138,7 +138,7 @@
                             </container>
                         </container>
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmForecasts}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmForecasts}"/>
                             <include-form name="ListForecasts" location="component://crmsfa/widget/crmsfa/forms/forecasts/ForecastsForms.xml"/>
                         </container>
                     </decorator-section>
@@ -199,7 +199,7 @@
                             <condition><not><if-empty field="forecasts"/></not></condition>
                             <widgets>
                                 <container style="subSectionBlock">
-                                    <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmForecastSubPeriods}</label></container>
+                                    <frame-container-header title="${uiLabelMap.CrmForecastSubPeriods}"/>
                                     <include-form name="ListForecasts" location="component://crmsfa/widget/crmsfa/forms/forecasts/ForecastsForms.xml"/>
                                 </container>
                             </widgets>
@@ -219,7 +219,7 @@
 
                         <!-- show the forecast history -->
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmForecastChangeHistory}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmForecastChangeHistory}"/>
                             <include-form name="ListForecastHistory" location="component://crmsfa/widget/crmsfa/forms/forecasts/ForecastsForms.xml"/>
                         </container>
                     </decorator-section>

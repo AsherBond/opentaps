@@ -15,9 +15,12 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<div class="subSectionHeader">
-  <div class="subSectionTitle">${uiLabelMap.CrmFindPartyContactInfo}</div>
-   <#if (parameters.contactListId)?exists>
-    <div class="subMenuBar"><a class="subMenuButton" href="viewContactList?contactListId=${parameters.contactListId}">${uiLabelMap.CommonBack}</a></div>
-   </#if>
-</div>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<#assign extraOptions>
+  <#if (parameters.contactListId)?exists>
+    <a class="subMenuButton" href="viewContactList?contactListId=${parameters.contactListId}">${uiLabelMap.CommonBack}</a>
+  </#if>
+</#assign>
+
+<@frameSectionHeader title=uiLabelMap.CrmFindPartyContactInfo extra=extraOptions />

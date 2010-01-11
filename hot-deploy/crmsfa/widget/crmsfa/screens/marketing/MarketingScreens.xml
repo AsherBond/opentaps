@@ -182,7 +182,7 @@
                             </container>
                         </container>
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmMarketingCampaigns}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmMarketingCampaigns}"/>
                             <include-form name="ListMarketingCampaigns" location="component://crmsfa/widget/crmsfa/forms/marketing/MarketingForms.xml"/>
                         </container>
                     </decorator-section>
@@ -273,13 +273,13 @@
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmMarketingCampaignReport}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmMarketingCampaignReport}"/>
                             <container style="form">
                                 <include-form name="marketingCampaignReportForm" location="component://crmsfa/widget/crmsfa/forms/marketing/MarketingForms.xml"/>
                             </container>
                         </container>
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmTrackingCodeReport}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmTrackingCodeReport}"/>
                             <container style="form">
                                 <include-form name="trackingCodeReportForm" location="component://crmsfa/widget/crmsfa/forms/marketing/MarketingForms.xml"/>
                             </container>
@@ -301,7 +301,7 @@
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmMarketingCampaignReport}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmMarketingCampaignReport}"/>
                             <container style="form">
                                 <include-form name="MarketCampaignReport" location="component://marketing/widget/ReportForms.xml"/>
                             </container>
@@ -323,7 +323,7 @@
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmTrackingCodeReport}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmTrackingCodeReport}"/>
                             <container style="form">
                                 <include-form name="TrackingCodeReport" location="component://marketing/widget/ReportForms.xml"/>
                             </container>

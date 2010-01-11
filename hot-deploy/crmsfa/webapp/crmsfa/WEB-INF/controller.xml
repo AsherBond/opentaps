@@ -1686,7 +1686,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         <security https="true" auth="true"/>
         <event type="service" invoke="createContactList"/>
         <response name="error" type="view" value="createContactListForm"/>
-        <response name="success" type="request-redirect-noparam" value="viewContactList" />
+        <response name="success" type="request-redirect" value="viewContactList">
+          <redirect-parameter name="contactListId"/>
+        </response>
     </request-map>
     <request-map uri="updateContactListForm">
         <security https="true" auth="true"/>

@@ -15,12 +15,11 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
 <#if hasUpdatePermission?exists && marketingCampaign.statusId != "MKTG_CAMP_COMPLETED" && marketingCampaign.statusId != "MKTG_CAMP_CANCELLED">
 <#assign createLink = "<a class='subMenuButton' href='createContactListForm?marketingCampaignId=" + marketingCampaign.marketingCampaignId + "'>" + uiLabelMap.CrmCreateNew + "</a>">
 </#if>
 
 <a name="ListContactLists"></a>
-<div class="subSectionHeader">
-  <div class="subSectionTitle">${uiLabelMap.CrmContactLists}</div>
-  <div class="subMenuBar">${createLink?if_exists}</div>
-</div>
+<@frameSectionHeader title=uiLabelMap.CrmContactLists extra="${createLink?if_exists}" />
