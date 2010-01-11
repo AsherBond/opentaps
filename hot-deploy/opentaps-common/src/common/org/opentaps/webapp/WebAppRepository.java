@@ -43,7 +43,7 @@ public class WebAppRepository  extends Repository implements WebAppRepositoryInt
     /** {@inheritDoc}
      * @throws RepositoryException */
     public List<? extends OpentapsWebApps> getWebApps(User user) throws RepositoryException {
-        List<OpentapsWebApps> opentapsWebapps =  findAllCache(OpentapsWebApps.class, Arrays.asList(OpentapsWebApps.Fields.sequenceNum.asc()));
+        List<OpentapsWebApps> opentapsWebapps = findAllCache(OpentapsWebApps.class, Arrays.asList(OpentapsWebApps.Fields.sequenceNum.asc()));
         //get all webapps defined in all the ofbiz-components
         List<WebappInfo> webapps = ComponentConfig.getAllWebappResourceInfos();
         Debug.logVerbose("number of webapps found = " + webapps.size(), MODULE);
@@ -75,7 +75,7 @@ public class WebAppRepository  extends Repository implements WebAppRepositoryInt
                         }
                     }
                     if (permitted) {
-			Debug.logVerbose("Webapp [" + webapp.getApplicationId() + "] is enabled for user [" + user + "]", MODULE);
+                        Debug.logVerbose("Webapp [" + webapp.getApplicationId() + "] is enabled for user [" + user + "]", MODULE);
                         apps.add(webapp);
                     }
                 } else {
@@ -83,15 +83,15 @@ public class WebAppRepository  extends Repository implements WebAppRepositoryInt
                     if (permissions == null) {
                         // if there are no permissions required for the application, or if it is an external link,
                         apps.add(webapp);
-                    } else if (permissions.length > 0){
+                    } else if (permissions.length > 0) {
                         //  or, if the application is defined with permission of "NONE",  such as the ofbiz e-commerce store
-                        if("NONE".equals(permissions[0])){
+                        if ("NONE".equals(permissions[0])) {
                             //permissions[0] will always exists
                             apps.add(webapp);
                         }
                     }
                 }
-            } 
+            }
 
         }
         return apps;
