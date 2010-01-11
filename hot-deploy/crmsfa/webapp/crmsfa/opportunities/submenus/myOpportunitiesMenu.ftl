@@ -30,7 +30,8 @@
 
 <@form name="PrefChangeForm" url="setViewPreference" viewPrefValue="${prefValue}" donePage="myOpportunities" viewPrefTypeId="MY_OR_TEAM_OPPS"/>
 
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${title?if_exists}</div>
-    <div class="subMenuBar"><@submitFormLink form="PrefChangeForm" text="${prefButtonLabel}" /></div>
-</div>
+<#assign extraOptions>
+  <@submitFormLink form="PrefChangeForm" text="${prefButtonLabel}" />
+</#assign>
+
+<@frameSectionHeader title=title! extra=extraOptions/>

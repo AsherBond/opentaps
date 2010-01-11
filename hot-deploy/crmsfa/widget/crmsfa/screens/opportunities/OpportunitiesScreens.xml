@@ -182,7 +182,7 @@
 
                         <!-- list of quotes -->
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><container style="subSectionTitle"><label>${uiLabelMap.OrderOrderQuotes}</label></container></container>
+                            <frame-container-header title="${uiLabelMap.OrderOrderQuotes}"/>
                             <include-form name="ListQuotes" location="component://crmsfa/widget/crmsfa/forms/quotes/QuotesForms.xml"/>
                             <!-- If the user can update opportunities, include the relevant form -->
                             <section>
@@ -201,7 +201,7 @@
 
                         <!-- History section -->
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><container style="subSectionTitle"><label>${uiLabelMap.CrmOpportunityHistory}</label></container></container>
+                            <frame-container-header title="${uiLabelMap.CrmOpportunityHistory}"/>
                             <include-form name="listOpportunityHistory" location="component://crmsfa/widget/crmsfa/forms/opportunities/OpportunitiesForms.xml"/>
                         </container>
                         

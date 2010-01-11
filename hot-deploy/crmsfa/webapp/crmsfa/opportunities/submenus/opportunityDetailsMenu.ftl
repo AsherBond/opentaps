@@ -15,11 +15,13 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
-<#-- TODO: There used to be this attached to the edit link for an unknown reason: &accountPartyId=${opportunityAndParty.accountPartyId} -->
 
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmOpportunity}</div>
-    <#if (hasUpdatePermission?exists) && (opportunityAndParty?exists)>
-    <div class="subMenuBar"><a class="subMenuButton" href="updateOpportunityForm?salesOpportunityId=${opportunityAndParty.salesOpportunityId}">${uiLabelMap.CommonEdit}</a></div>
-    </#if>
-</div>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<#assign extraOptions>
+  <#if (hasUpdatePermission?exists) && (opportunityAndParty?exists)>
+    <a class="subMenuButton" href="updateOpportunityForm?salesOpportunityId=${opportunityAndParty.salesOpportunityId}">${uiLabelMap.CommonEdit}</a>
+  </#if>
+</#assign>
+
+<@frameSectionHeader title=uiLabelMap.CrmOpportunity extra=extraOptions/>
