@@ -22,12 +22,9 @@
 
 <div class="subSectionBlock">
     <#if hasUpdatePermission?exists>
-        <#assign updateLink><a class='subMenuButton' href='updatePartnerForm?partyId=${partySummary.partyId}'>${uiLabelMap.CommonEdit}</a></#assign>
+        <#assign partnerLinks><a class="subMenuButton" href="updatePartnerForm?partyId=${partySummary.partyId}">${uiLabelMap.CommonEdit}</a></#assign>
     </#if>
-    <div class="subSectionHeader">
-        <div class="subSectionTitle">${uiLabelMap.OpentapsPartner}</div>
-        <div class="subMenuBar">${updateLink?if_exists}</div>
-    </div>
+    <@frameSectionHeader title=uiLabelMap.OpentapsPartner extra=partnerLinks?if_exists />
     <div class="form">
         ${screens.render("component://crmsfa/widget/crmsfa/screens/partners/PartnerScreens.xml#viewPartnerForm")}
     </div>
@@ -38,12 +35,10 @@
 </div>
 
 <div class="subSectionBlock">
-  <div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.AccountingAgreements}</div>
-    <#if hasCreateAgreementPermission?default(false)>
-      <div class="subMenuBar"><a class="subMenuButton" href="createPartnerAgreement?partyIdFrom=${partySummary.partyId}">${uiLabelMap.CommonCreateNew}</a></div>
-    </#if>
-  </div>
+  <#if hasCreateAgreementPermission?default(false)>
+    <#assign agreementLinks><a class="subMenuButton" href="createPartnerAgreement?partyIdFrom=${partySummary.partyId}">${uiLabelMap.CommonCreateNew}</a></#assign>
+  </#if>
+  <@frameSectionHeader title=uiLabelMap.AccountingAgreements extra=agreementLinks?if_exists />
   <@include location="component://opentaps-common/webapp/common/agreements/listAgreements.ftl"/>
 </div>
 
@@ -54,13 +49,11 @@ ${screens.render("component://crmsfa/widget/crmsfa/screens/activities/Activities
 ${screens.render("component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#contentList")}
 
 <div class="subSectionBlock">
-    <div class="subSectionHeader">
-        <div class="subSectionTitle">${uiLabelMap.CrmNotes}</div>
-        <#if hasUpdatePermission?exists>
-        <div class="subMenuBar"><a class="subMenuButton" href="createPartnerNoteForm?partyId=${partySummary.partyId}">${uiLabelMap.CrmCreateNew}</a></div>
-        </#if>
-    </div>
-    ${screens.render("component://crmsfa/widget/crmsfa/screens/common/NoteScreens.xml#listNotesForm")}
+  <#if hasUpdatePermission?exists>
+    <#assign noteLinks><a class="subMenuButton" href="createPartnerNoteForm?partyId=${partySummary.partyId}">${uiLabelMap.CrmCreateNew}</a></#assign>
+  </#if>
+  <@frameSectionHeader title=uiLabelMap.CrmNotes extra=noteLinks?if_exists />
+  ${screens.render("component://crmsfa/widget/crmsfa/screens/common/NoteScreens.xml#listNotesForm")}
 </div>
 
 </#if> <#-- end validView check -->
