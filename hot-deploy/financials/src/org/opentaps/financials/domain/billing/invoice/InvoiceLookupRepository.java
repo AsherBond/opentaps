@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.opentaps.common.domain.order;
+package org.opentaps.financials.domain.billing.invoice;
 
 
 import java.math.BigDecimal;
@@ -38,8 +38,8 @@ import org.opentaps.base.entities.Invoice;
 import org.opentaps.base.entities.InvoiceItem;
 import org.opentaps.base.entities.OrderItemBilling;
 import org.opentaps.common.util.UtilDate;
-import org.opentaps.domain.billing.InvoiceLookupRepositoryInterface;
-import org.opentaps.domain.billing.InvoiceViewForListing;
+import org.opentaps.domain.billing.invoice.InvoiceLookupRepositoryInterface;
+import org.opentaps.domain.billing.invoice.InvoiceViewForListing;
 import org.opentaps.foundation.entity.hibernate.HibernateUtil;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
