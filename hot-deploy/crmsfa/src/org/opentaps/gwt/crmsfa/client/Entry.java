@@ -581,17 +581,14 @@ public class Entry extends BaseEntry {
         });
 
         // create hyperlink as submenu button
-        Hyperlink embedLink = new Hyperlink(UtilUi.MSG.crmAssignAccount(), true, null);
-        embedLink.setStyleName("subMenuButton");
-
-        // show lookup window on click
-        embedLink.addClickHandler(new ClickHandler() {
+        Button embedLink = new Button(UtilUi.MSG.crmAssignAccount(), new ClickHandler() {
 
             public void onClick(ClickEvent event) {
                 window.show();
             }
 
         });
+        embedLink.setStyleName("subMenuButton");
 
         // place [Assign Contact] button on page
         container.add(embedLink);
@@ -725,17 +722,14 @@ public class Entry extends BaseEntry {
         });
 
         // create hyperlink as submenu button
-        Hyperlink embedLink = new Hyperlink(UtilUi.MSG.crmAssignContact(), true, null);
-        embedLink.setStyleName("subMenuButton");
-
-        // show lookup window on click
-        embedLink.addClickHandler(new ClickHandler() {
+        Button embedLink = new Button(UtilUi.MSG.crmAssignContact(), new ClickHandler() {
 
             public void onClick(ClickEvent event) {
                 window.show();
             }
 
         });
+        embedLink.setStyleName("subMenuButton");
 
         // place [Assign Contact] button on page
         container.add(embedLink);
