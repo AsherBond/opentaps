@@ -75,7 +75,7 @@
         </section>
     </screen>
 
-    <!-- main is the default screen of the sectoin -->
+    <!-- main is the default screen of the section -->
     <screen name="main">
         <section>
             <actions>

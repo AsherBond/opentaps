@@ -16,7 +16,6 @@
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
-<#-- This is re-used everywhere for pending activities so it is one standard page.  Whichever page calls it should put in the activityValueParams, be they party, case, or opportunity ids -->
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmActivities}</div>
-</div>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<@frameSectionHeader title=uiLabelMap.CrmActivities/>
