@@ -40,9 +40,7 @@
                     <decorator-section name="section-body">
                         <container style="subSectionBlock">
                             <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/marketing/submenus/viewContactListMenu.ftl"/></html></platform-specific>
-                            <container style="form">
-                                <include-form name="viewContactList" location="component://crmsfa/widget/crmsfa/forms/marketing/ContactListForms.xml"/>
-                            </container>
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/marketing/viewContactList.ftl"/></html></platform-specific>
                         </container>
                         <container style="subSectionBlock">
                             <frame-container-header title="${uiLabelMap.CrmFindContactListParties}"/>
@@ -198,6 +196,7 @@
     <screen name="viewUSPSSortResult">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="CrmReportUSPSHeader"/>
                 <set field="reportField" value="sortResult"/>
                 <set field="listSortTarget" value="viewUSPSSortResult"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
@@ -220,6 +219,7 @@
     <screen name="viewUSPSZip5">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="CrmReportUSPSHeader"/>
                 <set field="reportField" value="zip5"/>
                 <set field="listSortTarget" value="viewUSPSZip5"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
@@ -242,6 +242,7 @@
     <screen name="viewUSPSZip3">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="CrmReportUSPSHeader"/>
                 <set field="reportField" value="zip3"/>
                 <set field="listSortTarget" value="viewUSPSZip3"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
@@ -264,6 +265,7 @@
     <screen name="viewUSPSBMC">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="CrmReportUSPSHeader"/>
                 <set field="reportField" value="bmcCode"/>
                 <set field="listSortTarget" value="viewUSPSBMC"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
@@ -286,6 +288,7 @@
     <screen name="viewUSPSOther">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="CrmReportUSPSHeader"/>
                 <set field="reportField" value="OTHER"/>
                 <set field="listSortTarget" value="viewUSPSOTHER"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
@@ -325,6 +328,7 @@
     <screen name="calculate3605Postage">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="CrmCalculate3605Postage"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/marketing/calculate3605Postage.bsh"/>
             </actions>
             <widgets>

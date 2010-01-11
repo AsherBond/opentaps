@@ -1,6 +1,6 @@
 <#--
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -16,11 +16,11 @@
 -->
 
 <#macro displayAddress member>
-  <fo:block text-align="right" font-size="6pt">${member.sortResult}</fo:block>  
+  <fo:block text-align="right" font-size="6pt">${member.sortResult}</fo:block>
   <fo:block>${member.toName}</fo:block>
   <#if member.attnName?exists>
   <fo:block>${member.attnName}</fo:block>
-  </#if>  
+  </#if>
   <fo:block>${member.address1}</fo:block>
   <#if member.address2?exists>
   <fo:block>${member.address2}</fo:block>
@@ -56,33 +56,36 @@
         </#list>
 
         <fo:table-body>
-          <#assign index = 0>
-          <#assign row = 0>
-
-          <#list members as member>
-            <#if (index % pageColumns) == 0> <#-- is it the first cell of this column? -->
-              <fo:table-row height="${labelHeight}${uom}"> <#-- note: height maps onto block-progression-dimension.maximum, optimum and minimum -->
-            </#if>
-            <fo:table-cell>
-              <fo:block margin="0.0625in">
-              <@displayAddress member=member/>
-              </fo:block>
-            </fo:table-cell>
-            <#if (index % pageColumns) == (pageColumns-1)>  <#-- row break -->
-              <#assign row=row+1>
-              </fo:table-row>
-              <#if heightBtwLabel != 0>
-              <fo:table-row height="${heightBtwLabel}${uom}"><fo:table-cell><fo:block/></fo:table-cell></fo:table-row>
+          <#assign index = 0/>
+          <#assign row = 0/>
+          <#if members?has_content>
+            <#list members as member>
+              <#if (index % pageColumns) == 0> <#-- is it the first cell of this column? -->
+                <fo:table-row height="${labelHeight}${uom}"> <#-- note: height maps onto block-progression-dimension.maximum, optimum and minimum -->
               </#if>
-            <#else>  <#-- otherwise insert a spacing column -->
-              <fo:table-cell><fo:block/></fo:table-cell>
-            </#if>
-            <#assign index = index + 1>
-          </#list>
+              <fo:table-cell>
+                <fo:block margin="0.0625in">
+                  <@displayAddress member=member/>
+                </fo:block>
+              </fo:table-cell>
+              <#if (index % pageColumns) == (pageColumns-1)>  <#-- row break -->
+                <#assign row=row+1 />
+                </fo:table-row>
+                <#if heightBtwLabel != 0>
+                  <fo:table-row height="${heightBtwLabel}${uom}"><fo:table-cell><fo:block/></fo:table-cell></fo:table-row>
+                </#if>
+              <#else>  <#-- otherwise insert a spacing column -->
+                <fo:table-cell><fo:block/></fo:table-cell>
+              </#if>
+              <#assign index = index + 1/>
+            </#list>
 
-          <#if index != 0 && index % pageColumns != 0> <#-- row break on the final row if say we have 2 final columns -->
-            <#assign row=row+1>                       
-            </fo:table-row>
+            <#if index != 0 && index % pageColumns != 0> <#-- row break on the final row if say we have 2 final columns -->
+              <#assign row=row+1 />
+              </fo:table-row>
+            </#if>
+          <#else>
+            <fo:table-row height="${labelHeight}${uom}"><fo:table-cell><fo:block margin="0.0625in">No members to print.</fo:block></fo:table-cell></fo:table-row>
           </#if>
         </fo:table-body>
       </fo:table>

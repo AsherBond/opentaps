@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
- * 
+ *
  * Opentaps is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
@@ -26,66 +26,25 @@ options = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE,
 // get the contact list members for printing
 // TODO: re-factor all of these into a method, instead of this copy-pasted code to lookup zip 5, zip3, and bmc like this
 contactListId = parameters.get("contactListId");
-conditions = new EntityConditionList( UtilMisc.toList(
-      new EntityExpr("contactListId", EntityOperator.EQUALS, contactListId),
-      new EntityExpr("processedTimestamp", EntityOperator.NOT_EQUAL, null),
-      new EntityExpr("sortResult", EntityOperator.LIKE, "5%")
-      ), EntityOperator.AND);
 orderBy = UtilMisc.toList("postalCode","toName");
 
-membersZip5 = delegator.findByCondition("UspsContactListSortAndPostalAddressView", conditions, null, null, orderBy, options); 
-if(membersZip5!=null && membersZip5.size()>0) {
-members.addAll(membersZip5);
-}
-
+findMembers(sortResultCond) {
 conditions = new EntityConditionList( UtilMisc.toList(
       new EntityExpr("contactListId", EntityOperator.EQUALS, contactListId),
       new EntityExpr("processedTimestamp", EntityOperator.NOT_EQUAL, null),
-      new EntityExpr("sortResult", EntityOperator.LIKE, "3%")
+      new EntityExpr("sortResult", EntityOperator.LIKE, sortResultCond)
       ), EntityOperator.AND);
-membersZip3 = delegator.findByCondition("UspsContactListSortAndPostalAddressView", conditions, null, null, orderBy, options); 
-
-if(membersZip3!=null && membersZip3.size()>0) {
-members.addAll(membersZip3);
+  found = delegator.findByCondition("UspsContactListSortAndPostalAddressView", conditions, null, null, orderBy, options);
+  if (found != null && found.size() > 0) {
+      members.addAll(found);
+  }
 }
 
-
-conditions = new EntityConditionList( UtilMisc.toList(
-      new EntityExpr("contactListId", EntityOperator.EQUALS, contactListId),
-      new EntityExpr("processedTimestamp", EntityOperator.NOT_EQUAL, null),
-      new EntityExpr("sortResult", EntityOperator.LIKE, "B%")
-      ), EntityOperator.AND);
-
-membersBulk = delegator.findByCondition("UspsContactListSortAndPostalAddressView", conditions, null, null, orderBy, options); 
-
-if(membersBulk!=null && membersBulk.size()>0) {
-members.addAll(membersBulk);
-}
-
-
-conditions = new EntityConditionList( UtilMisc.toList(
-      new EntityExpr("contactListId", EntityOperator.EQUALS, contactListId),
-      new EntityExpr("processedTimestamp", EntityOperator.NOT_EQUAL, null),
-      new EntityExpr("sortResult", EntityOperator.LIKE, "M%")
-      ), EntityOperator.AND);
-membersMixed = delegator.findByCondition("UspsContactListSortAndPostalAddressView", conditions, null, null, orderBy, options); 
-if(membersMixed!=null && membersMixed.size()>0) {
-   members.addAll(membersMixed);
-}
-
-
-conditions = new EntityConditionList( UtilMisc.toList(
-      new EntityExpr("contactListId", EntityOperator.EQUALS, contactListId),
-      new EntityExpr("processedTimestamp", EntityOperator.NOT_EQUAL, null),
-      new EntityExpr("sortResult", EntityOperator.EQUALS, "OTHER")
-      ), EntityOperator.AND);
-membersOther = delegator.findByCondition("UspsContactListSortAndPostalAddressView", conditions, null, null, orderBy, options); 
-if(membersOther!=null && membersOther.size()>0) {
-   members.addAll(membersOther);
-}
-
-
-// end of list getting
+findMembers("5%");
+findMembers("3%");
+findMembers("B%");
+findMembers("M%");
+findMembers("OTHER");
 
 context.put("members", members);
 

@@ -1714,7 +1714,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.sortUSPSBusinessMail"/>
         <response name="error" type="view" value="viewContactList"/>
-        <response name="success" type="request-redirect" value="viewUSPSSortResult"/>
+        <response name="success" type="request-redirect" value="viewUSPSSortResult">
+          <redirect-parameter name="contactListId"/>
+        </response>
     </request-map>
     <request-map uri="viewUSPSSortResult">
         <security https="true" auth="true"/>
@@ -1743,7 +1745,6 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="completeCatalogMailing">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.completeCatalogMailing"/>
-        <response name="success" type="view" value="viewUSPSSortResult"/>
         <response name="success" type="view" value="viewUSPSSortResult"/>
     </request-map>
 

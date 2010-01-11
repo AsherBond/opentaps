@@ -17,19 +17,14 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<div class="subSectionBlock">
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmCalculate3605Postage}</div>
-</div>
+<@frameSection title=uiLabelMap.CrmCalculate3605Postage>
 
-<form action="calculate3605Postage" method="POST">
-    <div class="form">
-        <@inputHidden name="contactListId" value=parameters.contactListId />
-        <span class="tabletext">${uiLabelMap.CrmWeightPerPiece}:</span> <@inputText name="weightPerPiece" size="5"/>
-        <@inputSubmit title="Calculate"/>
-    </div>
-</form>
-</div>
+  <form action="calculate3605Postage" method="POST">
+    <@inputHidden name="contactListId" value=parameters.contactListId />
+    <span class="tabletext">${uiLabelMap.CrmWeightPerPiece}:</span> <@inputText name="weightPerPiece" size="5"/>
+    <@inputSubmit title="Calculate"/>
+  </form>
+</@frameSection>
 
 <#if report?exists>
  <table class="crmsfaListTable">

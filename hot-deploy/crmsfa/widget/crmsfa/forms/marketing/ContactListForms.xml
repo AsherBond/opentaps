@@ -36,7 +36,7 @@
         </field>
         <field name="sortUSPSBusinessMail" title="" widget-style="buttontext"
             use-when="&quot;POSTAL_ADDRESS&quot;.equals(contactList.get(&quot;contactMechTypeId&quot;))">
-            <hyperlink description="${uiLabelMap.CrmSortUSPSBusinessMail}" target="sortUSPSBusinessMail">
+            <hyperlink description="${uiLabelMap.CrmSortUSPSBusinessMail}" target="sortUSPSBusinessMail" link-type="hidden-form">
                 <parameter param-name="contactListId" from-field="contactList.contactListId"/>
             </hyperlink>
         </field>
