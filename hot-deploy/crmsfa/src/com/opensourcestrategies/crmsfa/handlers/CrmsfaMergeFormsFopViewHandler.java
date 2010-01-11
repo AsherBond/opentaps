@@ -1,4 +1,20 @@
 /*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * Opentaps is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Opentaps is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
  * $Id: FormsFopViewHandler.java,v 1.2 2007/03/23 17:56:31 Richard Coss Exp $
  *
  * Copyright (c) 2003-2005 The Open For Business Project - www.ofbiz.org
@@ -27,24 +43,29 @@ package com.opensourcestrategies.crmsfa.handlers;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+
 import javax.servlet.http.HttpServletRequest;
 
-import com.opensourcestrategies.crmsfa.party.PartyHelper;
-import org.ofbiz.base.util.*;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.webapp.view.MergeFormsFopViewHandler;
+
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
 
 /**
  *
  * @author     <a href="mailto:richard.a.coss@state.or.us">Richard Coss</a>
  */
 public class CrmsfaMergeFormsFopViewHandler extends MergeFormsFopViewHandler {
-    
+
     public static final String module = CrmsfaMergeFormsFopViewHandler.class.getName();
     public static String crmsfaResource = "crmsfa";
 
-    public Map getFormMergeContext(HttpServletRequest request) {
+    public Map<String, Object> getFormMergeContext(HttpServletRequest request) {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Locale locale = UtilMisc.ensureLocale(UtilHttp.getLocale(request));
         TimeZone timeZone = UtilCommon.getTimeZone(request);
@@ -68,6 +89,6 @@ public class CrmsfaMergeFormsFopViewHandler extends MergeFormsFopViewHandler {
     }
 
     public void setName(String name) {
- 
+
     }
 }

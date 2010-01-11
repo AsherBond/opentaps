@@ -46,16 +46,14 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import freemarker.ext.dom.NodeModel;
-import freemarker.template.TemplateException;
 import javolution.util.FastList;
+
 import org.ofbiz.base.location.ComponentLocationResolver;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
@@ -85,6 +83,9 @@ import org.opentaps.common.util.UtilMessage;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import freemarker.ext.dom.NodeModel;
+import freemarker.template.TemplateException;
+
 /**
  * Common product services.
  */
@@ -95,7 +96,7 @@ public final class ProductServices {
     private static final String MODULE = ProductServices.class.getName();
     public static final String errorResource = "OpentapsErrorLabels";
 
-    public static Map getProductByComprehensiveSearch(DispatchContext dctx, Map context) {
+    public static Map<String, Object> getProductByComprehensiveSearch(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
 
@@ -156,7 +157,7 @@ public final class ProductServices {
         }
     }
 
-    public static Map removeProduct(DispatchContext dctx, Map context) {
+    public static Map<String, Object> removeProduct(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
 
@@ -197,7 +198,7 @@ public final class ProductServices {
     }
 
 
-     public static Map removeProductCategory(DispatchContext dctx, Map context) {
+    public static Map<String, Object> removeProductCategory(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
 
@@ -231,7 +232,7 @@ public final class ProductServices {
      * @param context
      * @return
      */
-    public static Map checkGoodIdentifierUniqueness(DispatchContext dctx, Map context) {
+    public static Map<String, Object> checkGoodIdentifierUniqueness(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
 
@@ -245,10 +246,10 @@ public final class ProductServices {
 
         try {
             EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                        EntityCondition.makeCondition("goodIdentificationTypeId", goodIdentificationTypeId),
-                        EntityCondition.makeCondition("idValue", idValue),
-                        EntityCondition.makeCondition("productId", EntityOperator.NOT_EQUAL, productId)
-                    );
+                    EntityCondition.makeCondition("goodIdentificationTypeId", goodIdentificationTypeId),
+                    EntityCondition.makeCondition("idValue", idValue),
+                    EntityCondition.makeCondition("productId", EntityOperator.NOT_EQUAL, productId)
+            );
             List<GenericValue> products = delegator.findByCondition("GoodIdentification", conditions, null, null);
             if (UtilValidate.isNotEmpty(products)) {
                 GenericValue product = EntityUtil.getFirst(products);
@@ -270,7 +271,7 @@ public final class ProductServices {
      * @param Map context
      * @return Map
      */
-    public static Map generateSiteMapFile(DispatchContext dctx, Map context) {
+    public static Map<String, Object> generateSiteMapFile(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
@@ -292,8 +293,8 @@ public final class ProductServices {
             fileOutputLocation = String.format("%1$s%2$s%3$s%4$shtml",
                     System.getProperty("ofbiz.home"),
                     defaultDir.startsWith("/") ? defaultDir : ("/" + defaultDir),
-                    templateLocation.substring(templateLocation.lastIndexOf('/'), templateLocation.lastIndexOf('.')),
-                    outputLocale.equals(Locale.getDefault()) ? "." : ("_" + outputLocale.toString() + ".")
+                            templateLocation.substring(templateLocation.lastIndexOf('/'), templateLocation.lastIndexOf('.')),
+                            outputLocale.equals(Locale.getDefault()) ? "." : ("_" + outputLocale.toString() + ".")
             );
         }
 
@@ -385,9 +386,9 @@ public final class ProductServices {
         Set<String> childCategoryIds = new LinkedHashSet<String>();
 
         List<GenericValue> productCategoryRollups = delegator.findByCondition("ProductCategoryRollup", EntityCondition.makeCondition(EntityOperator.AND,
-                                                                     EntityCondition.makeCondition("parentProductCategoryId", EntityOperator.EQUALS, parentCategoryId),
-                                                                     EntityUtil.getFilterByDateExpr()),
-                                                                              Arrays.asList("productCategoryId"), Arrays.asList("sequenceNum"));
+                EntityCondition.makeCondition("parentProductCategoryId", EntityOperator.EQUALS, parentCategoryId),
+                EntityUtil.getFilterByDateExpr()),
+                Arrays.asList("productCategoryId"), Arrays.asList("sequenceNum"));
         childCategoryIds.addAll(EntityUtil.<String>getFieldListFromEntityList(productCategoryRollups, "productCategoryId", true));
 
         List<GenericValue> productCategories = delegator.findByAnd("ProductCategory", UtilMisc.toMap("productCategoryTypeId", "CATALOG_CATEGORY", "primaryParentCategoryId", parentCategoryId));
@@ -453,9 +454,9 @@ public final class ProductServices {
         // collect IDs of category products
         Set<String> productIds = new LinkedHashSet<String>();
         List<GenericValue> productCategoryMembers = delegator.findByCondition("ProductCategoryMember", EntityCondition.makeCondition(EntityOperator.AND,
-                                                                                EntityCondition.makeCondition("productCategoryId", productCategoryId),
-                                                                                EntityUtil.getFilterByDateExpr()),
-                                                                              Arrays.asList("productId"), null);
+                EntityCondition.makeCondition("productCategoryId", productCategoryId),
+                EntityUtil.getFilterByDateExpr()),
+                Arrays.asList("productId"), null);
         productIds.addAll(EntityUtil.<String>getFieldListFromEntityList(productCategoryMembers, "productId", true));
         List<GenericValue> products = delegator.findByAnd("Product", UtilMisc.toMap("primaryProductCategoryId", productCategoryId));
         productIds.addAll(EntityUtil.<String>getFieldListFromEntityList(products, "productId", true));
@@ -465,9 +466,9 @@ public final class ProductServices {
 
         // get list of products
         EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                                                                   EntityCondition.makeCondition("productId", EntityOperator.IN, new ArrayList<String>(productIds)),
-                                                                   EntityCondition.makeCondition("isVirtual", "N"),
-                                                                   EntityUtil.getFilterByDateExpr(UtilDateTime.nowTimestamp(), "introductionDate", "salesDiscontinuationDate"));
+                EntityCondition.makeCondition("productId", EntityOperator.IN, new ArrayList<String>(productIds)),
+                EntityCondition.makeCondition("isVirtual", "N"),
+                EntityUtil.getFilterByDateExpr(UtilDateTime.nowTimestamp(), "introductionDate", "salesDiscontinuationDate"));
         if (excludeProducts) {
             return (int) delegator.findCountByCondition("Product", conditions, null);
         }
@@ -510,10 +511,10 @@ public final class ProductServices {
      * @param Map context
      * @return Map
      */
-    public static Map calculateProductPrice(DispatchContext dctx, Map context) {
+    public static Map<String, Object> calculateProductPrice(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Map result = null;
+        Map<String, Object> result = null;
         Timestamp nowTimestamp = UtilDateTime.nowTimestamp();
 
         try {
@@ -664,12 +665,10 @@ public final class ProductServices {
                 //use the cache to find the variant with the lowest min adv price
                 try {
                     List<GenericValue> variantAssocList = EntityUtil.filterByDate(delegator.findByAndCache("ProductAssoc", UtilMisc.toMap("productId", product.get("productId"), "productAssocTypeId", "PRODUCT_VARIANT"), UtilMisc.toList("-fromDate")));
-                    Iterator<GenericValue> variantAssocIter = variantAssocList.iterator();
                     double minDefaultPrice = Double.MAX_VALUE;
                     List<GenericValue> variantProductPrices = null;
                     String variantProductId = null;
-                    while (variantAssocIter.hasNext()) {
-                        GenericValue variantAssoc = variantAssocIter.next();
+                    for (GenericValue variantAssoc : variantAssocList) {
                         String curVariantProductId = variantAssoc.getString("productIdTo");
                         List<GenericValue> curVariantPriceList = EntityUtil.filterByDate(delegator.findByAndCache("ProductPrice", UtilMisc.toMap("productId", curVariantProductId), UtilMisc.toList("-fromDate")), nowTimestamp);
                         List<GenericValue> tempDefaultPriceList = EntityUtil.filterByAnd(curVariantPriceList, UtilMisc.toMap("productPriceTypeId", "MIN_ADV_PRICE"));

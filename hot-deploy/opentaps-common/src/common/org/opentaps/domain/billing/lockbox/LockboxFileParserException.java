@@ -23,6 +23,7 @@ import org.opentaps.foundation.exception.FoundationException;
 /**
  * Exception related to the parsing of Lockbox files.
  */
+@SuppressWarnings("serial")
 public class LockboxFileParserException extends FoundationException {
 
     /**

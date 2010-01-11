@@ -24,6 +24,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.ofbiz.base.util.UtilHttp;
@@ -33,10 +34,10 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.opentaps.common.domain.organization.OrganizationRepository;
 import org.opentaps.base.entities.AcctgTagEnumType;
 import org.opentaps.base.entities.Enumeration;
 import org.opentaps.base.entities.EnumerationType;
+import org.opentaps.common.domain.organization.OrganizationRepository;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityInterface;
@@ -502,10 +503,9 @@ public final class UtilAccountingTags {
      * @param value the output <code>EntityInterface</code>
      * @param mapPrefix the prefix used in the input map, defaults to ENTITY_TAG_PREFIX
      */
-    @SuppressWarnings("unchecked")
-    public static void putAllAccountingTags(Map map, EntityInterface value, String mapPrefix) {
+    public static void putAllAccountingTags(Map<String, String> map, EntityInterface value, String mapPrefix) {
         for (int i = 1; i <= TAG_COUNT; i++) {
-            String tag = (String) map.get(mapPrefix + i);
+            String tag = map.get(mapPrefix + i);
             // make sure not to set empty strings
             if (UtilValidate.isEmpty(tag)) {
                 tag = null;
@@ -521,9 +521,9 @@ public final class UtilAccountingTags {
      * @param mapPrefix the prefix used in the map
      * @return <code>true</code> if all tags are equal
      */
-    public static boolean sameAccountingTags(GenericValue value, Map map, String mapPrefix) {
+    public static boolean sameAccountingTags(GenericValue value, Map<String, String> map, String mapPrefix) {
         for (int i = 1; i <= TAG_COUNT; i++) {
-            String mapValue = (String) map.get(mapPrefix + i);
+            String mapValue = map.get(mapPrefix + i);
             String entityValue = value.getString(ENTITY_TAG_PREFIX + i);
             // we do not use UtilObject.equalsHelper has we can consider empty and null as the same
             // both empty or null:

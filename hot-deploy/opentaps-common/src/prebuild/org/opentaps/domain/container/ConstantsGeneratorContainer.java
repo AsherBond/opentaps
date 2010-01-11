@@ -54,7 +54,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
 
-import freemarker.template.TemplateException;
 import org.apache.commons.io.FileUtils;
 import org.ofbiz.base.container.Container;
 import org.ofbiz.base.container.ContainerConfig;
@@ -70,6 +69,8 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.service.ServiceDispatcher;
+
+import freemarker.template.TemplateException;
 
 /**
  * Some utility routines for loading seed data.
@@ -345,7 +346,7 @@ public class ConstantsGeneratorContainer implements Container {
 
         public void setClassName(String className) {
             if (className == null) {
-               this.className = entityName + "Constants";
+                this.className = entityName + "Constants";
             } else {
                 this.className = className;
             }
@@ -456,6 +457,7 @@ public class ConstantsGeneratorContainer implements Container {
 
     }
 
+    @SuppressWarnings("serial")
     private static class ConstantException extends Exception {
         public ConstantException(String message) { super(message); }
     }
@@ -496,19 +498,19 @@ public class ConstantsGeneratorContainer implements Container {
     }
 
     private static String filterChar(String name, String filter) {
-            int idx = -1;
-            String newName = name;
-            while ((idx = newName.indexOf(filter)) >= 0) {
-                String temp = newName.substring(0, idx);
-                if (newName.length() > (idx + 1)) {
-                    temp += Character.toUpperCase(newName.charAt(idx + 1));
-                }
-                if (newName.length() > (idx + 2)) {
-                    temp += newName.substring(idx + 2);
-                }
-                newName = temp;
+        int idx = -1;
+        String newName = name;
+        while ((idx = newName.indexOf(filter)) >= 0) {
+            String temp = newName.substring(0, idx);
+            if (newName.length() > (idx + 1)) {
+                temp += Character.toUpperCase(newName.charAt(idx + 1));
             }
-            return newName;
+            if (newName.length() > (idx + 2)) {
+                temp += newName.substring(idx + 2);
+            }
+            newName = temp;
+        }
+        return newName;
     }
 
 }

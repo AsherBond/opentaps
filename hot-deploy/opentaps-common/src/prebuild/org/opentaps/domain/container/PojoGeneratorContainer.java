@@ -58,7 +58,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import freemarker.template.TemplateException;
 import org.apache.commons.io.FileUtils;
 import org.jvnet.inflector.Noun;
 import org.ofbiz.base.container.Container;
@@ -90,6 +89,8 @@ import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelParam;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceDispatcher;
+
+import freemarker.template.TemplateException;
 
 /**
  * Some utility routines for loading seed data.
@@ -290,8 +291,6 @@ public class PojoGeneratorContainer implements Container {
 
         // record errors for summary
         List<String> errorEntities = new LinkedList<String>();
-        // record view entities
-        List<String> viewEntities = new LinkedList<String>();
 
         int totalGeneratedClasses = 0;
         if (serviceNames != null && serviceNames.size() > 0) {
@@ -912,14 +911,14 @@ public class PojoGeneratorContainer implements Container {
                             // get all the pk fields of the first entity which become members of the class
                             try {
                                 ModelEntity firstEntity = modelReader.getModelEntity(modelMemberEntity.getEntityName());
-                                 Iterator<ModelField> it = firstEntity.getPksIterator();
-                                 while (it.hasNext()) {
-                                     ModelField field = it.next();
-                                     //just need one pk, else secondary pk would be null
-                                     if (fieldMapAlias.containsKey(field.getName()) && viewEntityPks.size()==0) {
-                                         viewEntityPks.add(field.getName());
-                                     }
-                                 }
+                                Iterator<ModelField> it = firstEntity.getPksIterator();
+                                while (it.hasNext()) {
+                                    ModelField field = it.next();
+                                    //just need one pk, else secondary pk would be null
+                                    if (fieldMapAlias.containsKey(field.getName()) && viewEntityPks.size()==0) {
+                                        viewEntityPks.add(field.getName());
+                                    }
+                                }
                             } catch (GenericEntityException e) {
                                 Debug.logError(e, MODULE);
                             }
@@ -1058,7 +1057,7 @@ public class PojoGeneratorContainer implements Container {
                     pkInfo.put("columnNames", columnNames);
                 }
                 if (pkInfo != null) {
-                 // render pk class as FTL
+                    // render pk class as FTL
                     Writer pkWriter = new StringWriter();
                     try {
                         FreeMarkerWorker.renderTemplateAtLocation(pkTemplate, pkInfo, pkWriter);
@@ -1090,7 +1089,7 @@ public class PojoGeneratorContainer implements Container {
                         break;
                     }
 
-                 // render pk bridge class as FTL
+                    // render pk bridge class as FTL
                     Writer pkBridgeWriter = new StringWriter();
                     try {
                         FreeMarkerWorker.renderTemplateAtLocation(pkBridgeTemplate, pkInfo, pkBridgeWriter);
@@ -1192,19 +1191,19 @@ public class PojoGeneratorContainer implements Container {
     }
 
     private static String filterChar(String name, String filter) {
-            int idx = -1;
-            String newName = name;
-            while ((idx = newName.indexOf(filter)) >= 0) {
-                String temp = newName.substring(0, idx);
-                if (newName.length() > (idx + 1)) {
-                    temp += Character.toUpperCase(newName.charAt(idx + 1));
-                }
-                if (newName.length() > (idx + 2)) {
-                    temp += newName.substring(idx + 2);
-                }
-                newName = temp;
+        int idx = -1;
+        String newName = name;
+        while ((idx = newName.indexOf(filter)) >= 0) {
+            String temp = newName.substring(0, idx);
+            if (newName.length() > (idx + 1)) {
+                temp += Character.toUpperCase(newName.charAt(idx + 1));
             }
-            return newName;
+            if (newName.length() > (idx + 2)) {
+                temp += newName.substring(idx + 2);
+            }
+            newName = temp;
+        }
+        return newName;
     }
 
     /**

@@ -49,31 +49,28 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import javolution.util.FastList;
 import org.apache.commons.io.FileUtils;
 import org.ofbiz.base.container.Container;
-import org.ofbiz.base.container.ContainerConfig;
 import org.ofbiz.base.container.ContainerException;
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.service.ServiceDispatcher;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-import org.ofbiz.base.util.Debug;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 
 
 /**
@@ -112,6 +109,7 @@ import org.ofbiz.base.util.Debug;
 public final class GwtLabelsGeneratorContainer implements Container {
 
     private static final String MODULE = GwtLabelsGeneratorContainer.class.getName();
+    @SuppressWarnings("unused")
     private static final String CONTAINER_NAME = "gwtlabels-generator-container";
 
     // the default locale is the locale of the properties file that do no specify the local, IE: CommonUiLabels.properties
@@ -119,6 +117,7 @@ public final class GwtLabelsGeneratorContainer implements Container {
     private static final String DEFAULT_LOCALE = "en";
 
     /** Config file. */
+    @SuppressWarnings("unused")
     private String configFile = null;
 
     /**
@@ -143,7 +142,6 @@ public final class GwtLabelsGeneratorContainer implements Container {
     public void stop() throws ContainerException { }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public boolean start() throws ContainerException {
 
         // *** Configuration
@@ -196,9 +194,8 @@ public final class GwtLabelsGeneratorContainer implements Container {
                     TreeMap<String, GwtLabelDefinition> gwtLabelDefinitionsMaps = new TreeMap<String, GwtLabelDefinition>();
 
                     // iterate through the list of source properties files defined in LabelConfiguration.properties
-                    Iterator<Entry <Object, Object>> it = sources.entrySet().iterator();
-                    while (it.hasNext()) {
-                        Entry<Object, Object> entry = it.next();
+                    Set<Entry <Object, Object>> entries = sources.entrySet();
+                    for (Entry <Object, Object> entry : entries) {
                         try {
                             String fileName = (String) entry.getValue();
                             readLabelsFromSourcePropertiesFile(fileName, locale, gwtLabelDefinitionsMaps);
@@ -297,6 +294,7 @@ public final class GwtLabelsGeneratorContainer implements Container {
         }
         return props;
     }
+
     /**
      * Gets locale properties file name.
      * @param fileName the properties file name
@@ -306,12 +304,12 @@ public final class GwtLabelsGeneratorContainer implements Container {
     private static String getPropertiesFileName(String fileName, String locale) {
         String propertiesFileName = fileName;
         if (!locale.equals(DEFAULT_LOCALE)) {
-            propertiesFileName = propertiesFileName.substring(0, propertiesFileName.indexOf(".properties"))
-                                + "_" + locale
-                                + ".properties";
+            propertiesFileName =
+                propertiesFileName.substring(0, propertiesFileName.indexOf(".properties")) + "_" + locale + ".properties";
         }
         return propertiesFileName;
     }
+
     /**
      * Reads a source properties file, and adds all its labels.
      * @param fileName the properties file name to load
@@ -360,9 +358,8 @@ public final class GwtLabelsGeneratorContainer implements Container {
         Pattern fakePlaceholderPattern = Pattern.compile(fakePlaceholderRegex);
 
         // loop over each labels from the loaded file
-        Iterator<Entry<Object, Object>> it = properties.entrySet().iterator();
-        while (it.hasNext()) {
-            Entry<Object, Object> entry = it.next();
+        Set<Entry<Object, Object>> entries = properties.entrySet();
+        for (Entry<Object, Object> entry : entries) {
 
             try {
 

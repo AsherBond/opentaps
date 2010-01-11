@@ -41,7 +41,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -99,7 +98,9 @@ public class HibernateCfgGeneratorContainer implements Container {
         DIALECTS.put("axion", "");      //not exist mapping Dialect
         DIALECTS.put("advantage", "");  //not exist mapping Dialect
     }
+
     /** Config file. */
+    @SuppressWarnings("unused")
     private String configFile = null;
 
     /**
@@ -155,16 +156,12 @@ public class HibernateCfgGeneratorContainer implements Container {
      * @throws TransformerException if an error occurs
      *
      */
-    @SuppressWarnings("unchecked")
     public static void generateHibernateCfg() throws ParserConfigurationException, SAXException, IOException, TransformerFactoryConfigurationError, TransformerException {
 
         // get the current configuration as defined in framework/entity/config/entityengine.xml
         // and create the configuration for each defined datasource
-        Iterator iter = EntityConfigUtil.getDatasourceInfos().entrySet().iterator();
+        for (Map.Entry<String, DatasourceInfo> entry : EntityConfigUtil.getDatasourceInfos().entrySet()) {
 
-        while (iter.hasNext()) {
-
-            Map.Entry<String, DatasourceInfo> entry = (Map.Entry<String, DatasourceInfo>) iter.next();
             DatasourceInfo datasourceInfo = entry.getValue();
 
             // get jdbc parameters from datasourceInfo

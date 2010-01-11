@@ -16,14 +16,15 @@
  */
 package org.opentaps.domain.ledger;
 
-import org.opentaps.foundation.exception.FoundationException;
-
 import java.util.Locale;
 import java.util.Map;
+
+import org.opentaps.foundation.exception.FoundationException;
 
 /**
  * Thrown whern there are issues with the ledger. 
  */
+@SuppressWarnings("serial")
 public class LedgerException extends FoundationException {
 
     public LedgerException() {
@@ -42,11 +43,11 @@ public class LedgerException extends FoundationException {
         super(messageLabel, locale);
     }
 
-    public LedgerException(String messageLabel, Map messageContext) {
+    public LedgerException(String messageLabel, Map<String, ?> messageContext) {
         super(messageLabel, messageContext);
     }
 
-    public LedgerException(String messageLabel, Map messageContext, Locale locale) {
+    public LedgerException(String messageLabel, Map<String, ?> messageContext, Locale locale) {
         super(messageLabel, messageContext, locale);
     }
 }
