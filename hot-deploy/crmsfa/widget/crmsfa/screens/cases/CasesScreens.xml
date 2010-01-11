@@ -198,8 +198,8 @@
 
                         <!-- status change history -->
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmCaseHistory}</label></container>
-                            <include-form name="listCaseHistory" location="component://crmsfa/widget/crmsfa/forms/cases/CasesForms.xml"/>
+                          <frame-container-header title="${uiLabelMap.CrmCaseHistory}"/>
+                          <include-form name="listCaseHistory" location="component://crmsfa/widget/crmsfa/forms/cases/CasesForms.xml"/>
                         </container>
 
                         <!-- pending activities -->

@@ -15,19 +15,20 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
+
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
 <#if hasUpdatePermission?exists>
-<#assign updateLink = "<a class='subMenuButton' href='updateCaseForm?custRequestId=" + case.custRequestId + "'>" + uiLabelMap.CommonEdit + "</a>">
-<#if hasClosePermission?exists>
+  <#assign updateLink = "<a class='subMenuButton' href='updateCaseForm?custRequestId=" + case.custRequestId + "'>" + uiLabelMap.CommonEdit + "</a>"/>
+  <#if hasClosePermission?exists>
     <@form name="closeActionForm" url="closeCase" custRequestId=case.custRequestId />
     <#assign closeLink><@submitFormLinkConfirm form="closeActionForm" text=uiLabelMap.CrmCloseCase class="subMenuButtonDangerous" /></#assign>
-   
-</#if>
+  </#if>
 </#if>
 
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmCase}
-        <#if caseClosed?exists><span class="subSectionWarning">${uiLabelMap.CrmCaseClosed}</span></#if>
-    </div>
-    <div class="subMenuBar">${updateLink?if_exists}${closeLink?if_exists}</div>
-</div>
+<#assign title>
+  ${uiLabelMap.CrmCase}
+  <#if caseClosed?exists><span class="subSectionWarning">${uiLabelMap.CrmCaseClosed}</span></#if>
+</#assign>
+
+<@frameSectionHeader title=title extra="${updateLink?if_exists}${closeLink?if_exists}" />

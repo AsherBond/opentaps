@@ -52,7 +52,7 @@
                 </entity-options>
             </drop-down>
         </field>
-        <field name="custRequestName" title="${uiLabelMap.PartySubject}" position="1" title-style="requiredField"><text/></field>
+        <field name="custRequestName" title="${uiLabelMap.PartySubject}" position="1" title-style="requiredField"><text size="60"/></field>
         <field name="description" title="${uiLabelMap.CommonDescription}" position="1"><textarea/></field>
         <field name="note" title="${uiLabelMap.CrmInternalNote}" position="1"><textarea/></field>
         <field name="workEffortId"><hidden /></field>
@@ -103,7 +103,7 @@
                 </entity-options>
             </drop-down>
         </field>
-        <field name="custRequestName" title="${uiLabelMap.PartySubject}" title-style="requiredField" position="1"><text/></field>
+        <field name="custRequestName" title="${uiLabelMap.PartySubject}" title-style="requiredField" position="1"><text size="60"/></field>
         <field name="description" title="${uiLabelMap.CommonDescription}" position="1"><textarea/></field>
         <field name="note" title="${uiLabelMap.CrmChangeNote}" position="1"><textarea/></field>
 
