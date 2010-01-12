@@ -15,12 +15,11 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<div class="screenlet">
-    <div class="screenlet-header"><div class="boxhead">${uiLabelMap.CrmShortcuts}</div></div>
-    <div class="screenlet-body">
-      <ul class="shortcuts">
-        <li><a href="<@ofbizUrl>findTeams</@ofbizUrl>">${uiLabelMap.CrmFindTeams}</a></li>
-        <li><a href="<@ofbizUrl>createTeamForm</@ofbizUrl>">${uiLabelMap.CrmCreateTeam}</a></li>
-      </ul>
-    </div>
-</div>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<@frameSection title=uiLabelMap.CrmShortcuts>
+  <ul class="shortcuts">
+    <li><a href="<@ofbizUrl>findTeams</@ofbizUrl>">${uiLabelMap.CrmFindTeams}</a></li>
+    <li><a href="<@ofbizUrl>createTeamForm</@ofbizUrl>">${uiLabelMap.CrmCreateTeam}</a></li>
+  </ul>
+</@frameSection>

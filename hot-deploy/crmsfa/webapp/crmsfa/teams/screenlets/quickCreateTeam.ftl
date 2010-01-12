@@ -15,15 +15,14 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
 <#if (security.hasEntityPermission("CRMSFA_TEAM", "_CREATE", session))>
 <form method="post" action="<@ofbizUrl>createTeam</@ofbizUrl>">
-<div class="screenlet">
-    <div class="screenlet-header"><div class="boxhead">${uiLabelMap.CrmNewTeam}</div></div>
-    <div class="screenlet-body">
-        <span class="tabletext">${uiLabelMap.CommonName}</span><br/>
-        <input name="groupName" type="text" class="inputBox" size="15" maxlength="60"><br/>
-        <input name="submitButton" type="submit" class="smallSubmit" value="${uiLabelMap.CommonCreate}" onClick="submitFormWithSingleClick(this)"/>
-    </div>
-</div>
+<@frameSection title=uiLabelMap.CrmNewTeam>
+  <span class="tabletext">${uiLabelMap.CommonName}</span><br/>
+  <input name="groupName" type="text" class="inputBox" size="15" maxlength="60"><br/>
+  <input name="submitButton" type="submit" class="smallSubmit" value="${uiLabelMap.CommonCreate}" onClick="submitFormWithSingleClick(this)"/>
+</@frameSection>
 </form>
 </#if>

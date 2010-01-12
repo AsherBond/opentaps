@@ -53,6 +53,7 @@
     <screen name="findTeams">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="CrmFindTeams"/>
                 <set field="sectionHeaderUiLabel" value="CrmFindTeams"/>
                 <set field="listSortTarget" value="findTeams"/>
                 <set field="findTeamsTarget" value="findTeams"/>
@@ -68,7 +69,7 @@
                             </container>
                         </container>
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmTeams}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmTeams}"/>
                             <include-form name="ListTeams" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
                         </container>
                     </decorator-section>
@@ -80,6 +81,7 @@
     <screen name="viewTeam">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="CrmViewTeam"/>
                 <set field="sectionHeaderUiLabel" value="CrmViewTeam"/>
                 <set field="listSortTarget" value="viewTeam"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/teams/viewTeam.bsh"/>
@@ -94,7 +96,7 @@
                             </container>
                         </container>
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmTeamMembers}</label></container>
+                            <frame-container-header title="${uiLabelMap.CrmTeamMembers}"/>
                             <include-form name="ListTeamMembers" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
                             <!-- If the user can add team members, include the relevant form -->
                             <section>

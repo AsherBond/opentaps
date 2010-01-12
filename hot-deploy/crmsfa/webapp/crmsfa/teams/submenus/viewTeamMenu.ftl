@@ -25,9 +25,8 @@
 <#assign updateLink = "<a class='subMenuButton' href='updateTeamForm?partyId=" + team.partyId + "'>" + uiLabelMap.CommonEdit + "</a>">
 </#if>
 
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmTeam}
-        <#if teamDeactivated?exists><span class="subSectionWarning">${uiLabelMap.CrmTeamDeactivated}</span></#if>
-    </div>
-    <div class="subMenuBar">${updateLink?if_exists}${deactivateLink?if_exists}</div>
-</div>
+<#assign title>
+${uiLabelMap.CrmTeam} <#if teamDeactivated?exists><span class="subSectionWarning">${uiLabelMap.CrmTeamDeactivated}</span></#if>
+</#assign>
+
+<@frameSectionHeader title=title extra="${updateLink?if_exists}${deactivateLink?if_exists}" />
