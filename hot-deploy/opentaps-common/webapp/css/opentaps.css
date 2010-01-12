@@ -2431,7 +2431,7 @@ background:transparent url(/opentaps_images/buttons/btn-sprite.gif) repeat-x scr
 border-left:1px solid #568bc4 !important;
 border-right:1px solid #568bc4 !important;
 color:#000000 !important;
-text-decoration:none;
+text-decoration:none !important;
 }
 
 .subMenuButtonDangerous:active,

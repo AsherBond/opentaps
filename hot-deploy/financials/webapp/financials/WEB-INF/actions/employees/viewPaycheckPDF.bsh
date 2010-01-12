@@ -63,7 +63,7 @@ for (iter = deductions.iterator(); iter.hasNext(); ) {
 
     amount = deduction.getBigDecimal("amount");
     if (amount == null) {
-        amount = UtilFinancial.ZERO;
+        amount = BigDecimal.ZERO;
     } else {
         amount = amount.multiply(new BigDecimal("-1")).setScale(2, rounding);
     }

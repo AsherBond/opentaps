@@ -104,6 +104,7 @@
     <screen name="payablesBalancesReport">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="FinancialsPayablesBalancesReport"/>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
                 <set field="reportType" value="VENDOR"/>  <!-- this configures the bsh report to get the right data -->
                 <set field="returnPage" value="payables"/>
@@ -114,19 +115,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsPayablesBalancesReport}"/>
-                            </container>
-                            <container style="screenlet-body">
+                        <frame-container title="${uiLabelMap.FinancialsPayablesBalancesReport}">
                                 <platform-specific><html>
                                     <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/>
                                 </html></platform-specific>
                                 <platform-specific><html>
                                     <html-template location="component://financials/webapp/financials/includes/customerVendorBalances.ftl"/></html>
                                 </platform-specific>
-                            </container>
-                        </container>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -136,6 +132,7 @@
     <screen name="commissionBalancesReport">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="FinancialsCommissionBalancesReport"/>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
                 <set field="reportType" value="COMMISSION"/>  <!-- this configures the bsh report to get the right data -->
                 <set field="returnPage" value="payables"/>
@@ -146,19 +143,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsCommissionBalancesReport}"/>
-                            </container>
-                            <container style="screenlet-body">
+                        <frame-container title="${uiLabelMap.FinancialsCommissionBalancesReport}">
                                 <platform-specific><html>
                                     <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/>
                                 </html></platform-specific>
                                 <platform-specific><html>
                                     <html-template location="component://financials/webapp/financials/includes/customerVendorBalances.ftl"/></html>
                                 </platform-specific>
-                            </container>
-                        </container>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -168,6 +160,7 @@
     <screen name="payablesAgingReport">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="FinancialsPayablesAgingReport"/>
                 <set field="reportType" value="ACCOUNTS_PAYABLE"/>  <!-- this configures the bsh report to get the right data -->
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
                 <set field="returnPage" value="payables"/>
@@ -178,19 +171,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsPayablesAgingReport}"/>
-                            </container>
-                            <container style="screenlet-body">
+                        <frame-container title="${uiLabelMap.FinancialsPayablesAgingReport}">
                                 <platform-specific><html>
                                     <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/>
                                 </html></platform-specific>
                                 <platform-specific><html>
                                     <html-template location="component://financials/webapp/financials/includes/customerVendorAging.ftl"/></html>
                                 </platform-specific>
-                            </container>
-                        </container>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -200,6 +188,7 @@
     <screen name="vendorStatement">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="FinancialsVendorStatement"/>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
                 <set field="reportType" value="VENDOR"/> 
                 <set field="returnPage" value="payables"/>
@@ -210,19 +199,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsVendorStatement}"/>
-                            </container>
-                            <container style="screenlet-body">
+                      <frame-container title="${uiLabelMap.FinancialsVendorStatement}">
                                 <platform-specific><html>
                                     <html-template location="component://financials/webapp/financials/includes/flowReportOptions.ftl"/>
                                 </html></platform-specific>
                                 <platform-specific><html>
                                     <html-template location="component://financials/webapp/financials/includes/customerVendorStatement.ftl"/>
                                 </html></platform-specific>
-                            </container>
-                        </container>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -232,6 +216,7 @@
     <screen name="commissionsStatement">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="FinancialsCommissionsStatement"/>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
                 <set field="reportType" value="COMMISSIONS"/> 
                 <set field="returnPage" value="payables"/>
@@ -242,19 +227,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsCommissionsStatement}"/>
-                            </container>
-                            <container style="screenlet-body">
+                        <frame-container title="${uiLabelMap.FinancialsCommissionsStatement}">
                                 <platform-specific><html>
                                     <html-template location="component://financials/webapp/financials/includes/flowReportOptions.ftl"/>
                                 </html></platform-specific>
                                 <platform-specific><html>
                                     <html-template location="component://financials/webapp/financials/includes/customerVendorStatement.ftl"/>
                                 </html></platform-specific>
-                            </container>
-                        </container>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -264,6 +244,7 @@
     <screen name="AverageDSOReportPayables">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="FinancialsAverageDSOReportPayables"/>
                 <set field="invoiceTypeId" value="PURCHASE_INVOICE"/>
                 <set field="returnPage" value="payables"/>
                 <set field="returnLabel" value="FinancialsReturnToPayables"/>

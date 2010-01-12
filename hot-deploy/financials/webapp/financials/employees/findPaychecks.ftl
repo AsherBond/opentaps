@@ -51,7 +51,7 @@
     <@paginate name="paychecks" list=paymentListBuilder rememberPage=false>
     <#noparse>
 
-        <@navigationHeader title=uiLabelMap.AccountingPayments />
+        <@navigationHeader title=uiLabelMap.AccountingPaymentsFound />
         <table class="listTable">
             <tr class="listTableHeader">
                 <@headerCell title=uiLabelMap.FinancialsPaymentId orderBy="paymentId" />

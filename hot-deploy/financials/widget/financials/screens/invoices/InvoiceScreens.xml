@@ -95,6 +95,7 @@
     <screen name="findCustomerReturnInvoices">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="FinancialsFindCustomerReturnInvoices"/>
                 <set field="invoiceTypeId" value="CUST_RTN_INVOICE"/>
                 <set field="formTarget" value="findCustomerReturnInvoices"/>
             </actions>

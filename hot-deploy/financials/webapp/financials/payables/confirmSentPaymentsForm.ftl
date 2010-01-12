@@ -17,9 +17,7 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<div class="subSectionHeader">
-  <div class="subSectionTitle">${uiLabelMap.FinancialsPaymentsToConfirm}</div>
-</div>
+<@frameSectionHeader title=uiLabelMap.FinancialsPaymentsToConfirm />
 
 <@paginate name="listChecksToConfirm" list=paymentListBuilder formAction=formAction>
 <#noparse>
