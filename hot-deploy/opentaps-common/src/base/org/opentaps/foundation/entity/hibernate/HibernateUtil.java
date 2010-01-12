@@ -576,7 +576,9 @@ public final class HibernateUtil {
      */
     public static Throwable getHibernateExceptionCause(HibernateException e) {
         Throwable cause = getExceptionCause(e);
-        if (cause instanceof java.sql.SQLException) {
+        if (cause instanceof java.sql.BatchUpdateException) {
+            return cause;
+        } else if (cause instanceof java.sql.SQLException) {
             return ((java.sql.SQLException) cause).getNextException();
         } else {
             return cause;
@@ -590,10 +592,14 @@ public final class HibernateUtil {
      * @return a <code>Throwable</code> instance
      */
     public static Throwable getExceptionCause(Throwable e) {
-        if (e.getCause() != null) {
-            return getExceptionCause(e.getCause());
+       if (e instanceof java.sql.SQLException) {
+          return e;
+        } else if (e instanceof java.sql.BatchUpdateException) {
+          return e;
+        } else if (e.getCause() != null) {
+          return getExceptionCause(e.getCause());
         } else {
-            return e;
+          return e;
         }
     }
 
