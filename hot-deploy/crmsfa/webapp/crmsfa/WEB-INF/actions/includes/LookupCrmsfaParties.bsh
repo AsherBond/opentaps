@@ -31,20 +31,20 @@
  *   null   -  gets all matching parties in any of these roles
  */
  
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import javolution.util.FastList;
 import javolution.util.FastMap; 
- 
-import java.util.Arrays;
-import java.util.ArrayList;
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.entity.model.ModelKeyMap;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.common.util.UtilCommon;
-
-import com.opensourcestrategies.crmsfa.party.PartyHelper;
 
 // provide default properties from crmsfa.properties
  configProperties = UtilProperties.getProperties("crmsfa.properties");
@@ -185,6 +185,12 @@ if (searchByPhone) {
       searchConditions.add(new EntityExpr("partyClassificationGroupId", true, EntityOperator.LIKE, "%" + partyClassificationGroupId + "%", true));
   }
 }
+
+// filter out deactivated parties
+searchConditions.add(new EntityConditionList(UtilMisc.toList(
+                         new EntityExpr("statusId", EntityOperator.NOT_EQUAL, StatusItemConstants.PartyStatus.PARTY_DISABLED),
+                         new EntityExpr("statusId", EntityOperator.EQUALS, null)),
+                         EntityOperator.OR));
 
 if (searchConditions.size() == 0) {
     if (roleTypeIdFrom == null) return;

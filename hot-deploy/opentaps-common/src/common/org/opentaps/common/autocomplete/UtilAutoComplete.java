@@ -70,7 +70,9 @@ public final class UtilAutoComplete {
     /** Some role conditions used by the autocompleters. */
     public static final EntityCondition ac_accountRoleCondition, ac_contactRoleCondition, ac_prospectRoleCondition, ac_clientRoleCondition, ac_crmPartyRoleCondition, ac_accountOrProspectRoleCondition, ac_activePartyCondition;
     static {
-        ac_activePartyCondition = EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, StatusItemConstants.PartyStatus.PARTY_DISABLED);
+        ac_activePartyCondition = EntityCondition.makeCondition(EntityOperator.OR,
+                                                                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, StatusItemConstants.PartyStatus.PARTY_DISABLED),
+                                                                EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, null));
         ac_accountRoleCondition = EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, RoleTypeConstants.ACCOUNT);
         ac_contactRoleCondition = EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, RoleTypeConstants.CONTACT);
         ac_prospectRoleCondition = EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, RoleTypeConstants.PROSPECT);

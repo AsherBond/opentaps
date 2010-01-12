@@ -79,6 +79,7 @@ public abstract class PartyLookupConfiguration {
     public static final String IN_ROLE_TO = "roleTypeIdTo";
     public static final String IN_RELATIONSHIP_TYPE_ID = "partyRelationshipTypeId";
     public static final String IN_SALES_OPPORTUNITY_ID = "salesOpportunityId";
+    public static final String IN_ACTIVE_PARTIES_ONLY = "activeOnly";
     public static final String OUT_VOIP_ENABLED = "voipEnabled";
 
     public static final List<String> LIST_OUT_FIELDS = Arrays.asList(

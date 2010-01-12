@@ -23,12 +23,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import javolution.util.FastMap;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
@@ -39,6 +37,7 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.base.constants.PartyRelationshipTypeConstants;
 import org.opentaps.base.constants.RoleTypeConstants;
+import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.PartyFromByRelnAndContactInfoAndPartyClassification;
 import org.opentaps.base.entities.PartyRoleNameDetailSupplementalData;
 import org.opentaps.base.entities.PartyToSummaryByRelationship;
@@ -547,6 +546,10 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
             }
         }
 
+        if ("Y".equals(getProvider().getParameter(PartyLookupConfiguration.IN_ACTIVE_PARTIES_ONLY))) {
+            setActiveOnly(true);
+        }
+
         if (getProvider().oneParameterIsPresent(BY_ID_FILTERS)) {
             return findPartiesBy(entity, condition, BY_ID_FILTERS);
         }
@@ -662,17 +665,23 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         List<EntityCondition> conditions = UtilMisc.toList(roleCondition);
         if (activeOnly) {
             conditions.add(EntityUtil.getFilterByDateExpr());
+            conditions.add(EntityCondition.makeCondition(EntityOperator.OR,
+                                                         EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, StatusItemConstants.PartyStatus.PARTY_DISABLED),
+                                                         EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, null)));
         }
         return findList(entity, EntityCondition.makeCondition(conditions, EntityOperator.AND));
     }
 
     private <T extends EntityInterface> List<T> findPartiesBy(Class<T> entity, EntityCondition roleCondition, List<String> filters) {
-        List<EntityCondition> conds = new ArrayList<EntityCondition>();
+        List<EntityCondition> conditions = new ArrayList<EntityCondition>();
         if (activeOnly) {
-            conds.add(EntityUtil.getFilterByDateExpr());
+            conditions.add(EntityUtil.getFilterByDateExpr());
+            conditions.add(EntityCondition.makeCondition(EntityOperator.OR,
+                                                         EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, StatusItemConstants.PartyStatus.PARTY_DISABLED),
+                                                         EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, null)));
         }
-        conds.add(roleCondition);
-        return findListWithFilters(entity, conds, filters);
+        conditions.add(roleCondition);
+        return findListWithFilters(entity, conditions, filters);
     }
 
     /**

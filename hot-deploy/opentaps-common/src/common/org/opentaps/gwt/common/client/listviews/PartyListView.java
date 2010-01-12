@@ -108,9 +108,7 @@ public abstract class PartyListView extends EntityListView {
         makeColumn(UtilUi.MSG.country(), new StringFieldDef(PartyLookupConfiguration.INOUT_COUNTRY));
         makeColumn(UtilUi.MSG.postalCode(), new StringFieldDef(PartyLookupConfiguration.INOUT_POSTAL_CODE));
         makeColumn(UtilUi.MSG.postalCodeExt(), new StringFieldDef(PartyLookupConfiguration.OUT_POSTAL_CODE_EXT));
-        
 
-        
         ColumnConfig columnPhone = makeLinkColumn(UtilUi.MSG.phoneNumber(), idDefinition, new StringFieldDef(PartyLookupConfiguration.INOUT_FORMATED_PHONE_NUMBER), entityViewUrl, true);
         columnPhone.setRenderer(new Renderer() {
             public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
@@ -122,13 +120,13 @@ public abstract class PartyListView extends EntityListView {
                 String primaryContactNumber = record.getAsString(PartyLookupConfiguration.INOUT_PHONE_NUMBER);
                 if ("Y".equals(voipEnabled)) {
                     String link = "<a class=\"linktext\" href=\"javascript:opentaps.makeOutgoingCall('" + primaryCountryCode + "','" + primaryAreaCode + "','" + primaryContactNumber + "');\">" + formatedPrimaryPhone + "</a>";
-                    return link;                    
+                    return link;
                 } else {
                     return formatedPrimaryPhone;
                 }
             }
         });
-        
+
         ColumnConfig columnEmail = makeLinkColumn(UtilUi.MSG.emailAddress(), idDefinition, new StringFieldDef(PartyLookupConfiguration.OUT_EMAIL), entityViewUrl, true);
         columnEmail.setRenderer(new Renderer() {
             public String render(Object value, CellMetadata cellMetadata, Record record, int rowIndex, int colNum, Store store) {
@@ -136,18 +134,18 @@ public abstract class PartyListView extends EntityListView {
                 String email = record.getAsString(PartyLookupConfiguration.OUT_EMAIL);
                 String contactMechIdTo = record.getAsString(PartyLookupConfiguration.OUT_EMAIL_CONTACT_MECH_ID);
                 String internalPartyId = record.getAsString(PartyLookupConfiguration.INOUT_PARTY_ID);
-        		int actionPos = entityViewUrl.lastIndexOf("/");
-        		String viewAction = entityViewUrl.substring(actionPos + 1, entityViewUrl.indexOf("?"));
+                int actionPos = entityViewUrl.lastIndexOf("/");
+                String viewAction = entityViewUrl.substring(actionPos + 1, entityViewUrl.indexOf("?"));
                 if (contactMechIdTo == null || "".equals(contactMechIdTo)) {
                     return email;
                 } else {
                     String url = "<a class=\"linktext\" href='writeEmail?contactMechIdTo=" + contactMechIdTo + "&internalPartyId=" + internalPartyId + "&donePage=" + viewAction + "'>" + email + "</a>";
-                    return Format.format(url, internalPartyId);                    
+                    return Format.format(url, internalPartyId);
                 }
             }
         });
 
-        
+
         // hidden columns
         makeColumn("", new StringFieldDef(PartyLookupConfiguration.INOUT_PHONE_COUNTRY_CODE)).setHidden(true);
         getColumn().setFixed(true);
@@ -174,7 +172,7 @@ public abstract class PartyListView extends EntityListView {
         setColumnHidden(PartyLookupConfiguration.OUT_ADDRESS_2, true);
         setColumnHidden(PartyLookupConfiguration.INOUT_POSTAL_CODE, true);
         setColumnHidden(PartyLookupConfiguration.OUT_POSTAL_CODE_EXT, true);
-        
+
     }
 
     /**
@@ -289,6 +287,14 @@ public abstract class PartyListView extends EntityListView {
      */
     public void filterByAttnName(String attnName) {
         setFilter(PartyLookupConfiguration.INOUT_ATTENTION_NAME, attnName);
+    }
+
+    /**
+     * Filters out the disabled parties, default to <code>false</code>.
+     * @param filter a <code>boolean</code> value
+     */
+    public void filterOutDisabledParties(boolean filter) {
+        setFilter(PartyLookupConfiguration.IN_ACTIVE_PARTIES_ONLY, filter ? "Y" : "N", true);
     }
 
 }

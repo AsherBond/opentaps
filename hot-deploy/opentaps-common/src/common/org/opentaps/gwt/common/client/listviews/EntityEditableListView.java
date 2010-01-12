@@ -89,6 +89,7 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
     private PagingToolbar pagingToolbar;
     private ColumnModel columnModel;
     private Map<String, String> filters = new HashMap<String, String>();
+    private Map<String, String> stickyFilters = new HashMap<String, String>();
 
     private HttpProxy proxy;
     private JsonReader reader;
@@ -429,13 +430,31 @@ public abstract class EntityEditableListView extends EditorGridPanel implements 
      * Clears the filters of this grid.
      */
     public void clearFilters() {
+        clearFilters(false);
+    }
+
+    /**
+     * Clears the filters of this grid.
+     * @param clearStickyFilters set to true in order to also clear the sticky filters
+     */
+    public void clearFilters(boolean clearStickyFilters) {
         for (String k : filters.keySet()) {
             filters.put(k, "");
+        }
+        if (!clearStickyFilters) {
+            for (String k : stickyFilters.keySet()) {
+                filters.put(k, stickyFilters.get(k));
+            }
         }
     }
 
     protected void setFilter(String columnName, String value) {
         filters.put(columnName, value);
+    }
+
+    protected void setFilter(String columnName, String value, boolean sticky) {
+        setFilter(columnName, value);
+        stickyFilters.put(columnName, value);
     }
 
     /**

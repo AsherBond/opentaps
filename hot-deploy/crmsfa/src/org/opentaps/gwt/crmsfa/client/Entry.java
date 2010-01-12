@@ -427,6 +427,8 @@ public class Entry extends BaseEntry {
     private void loadLookupLeads() {
         findLeadsForm = new FindLeadsForm();
         findLeadsForm.getListView().setLookupMode();
+        findLeadsForm.getListView().filterOutDisabledParties(true);
+        findLeadsForm.getListView().applyFilters();
         RootPanel.get(LOOKUP_LEADS_ID).add(findLeadsForm.getMainPanel());
     }
 
@@ -467,6 +469,8 @@ public class Entry extends BaseEntry {
     private void loadLookupContacts() {
         findContactsForm = new FindContactsForm();
         findContactsForm.getListView().setLookupMode();
+        findContactsForm.getListView().filterOutDisabledParties(true);
+        findContactsForm.getListView().applyFilters();
         RootPanel.get(LOOKUP_CONTACTS_ID).add(findContactsForm.getMainPanel());
     }
 
@@ -881,6 +885,8 @@ public class Entry extends BaseEntry {
     private void loadLookupAccounts() {
         findAccountsForm = new FindAccountsForm();
         findAccountsForm.getListView().setLookupMode();
+        findAccountsForm.getListView().filterOutDisabledParties(true);
+        findAccountsForm.getListView().applyFilters();
         RootPanel.get(LOOKUP_ACCOUNTS_ID).add(findAccountsForm.getMainPanel());
     }
 
