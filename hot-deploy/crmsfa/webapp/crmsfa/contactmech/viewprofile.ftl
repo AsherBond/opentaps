@@ -222,7 +222,7 @@
                   <a href="<@ofbizUrl>${editContactMechPage}?partyId=${partySummary.partyId}&contactMechId=${contactMech.contactMechId}&DONE_PAGE=${donePageEscaped}</@ofbizUrl>"><img src="<@ofbizContentUrl>/opentaps_images/edit.gif</@ofbizContentUrl>" width="22" height="21" border="0" alt="${uiLabelMap.CommonUpdate}"/></a>&nbsp;
                   <a href="javascript:document.deleteContactMechForm${contactMechMap_index}.submit()"><img src="<@ofbizContentUrl>/images/dojo/src/widget/templates/buttons/delete.gif</@ofbizContentUrl>" width="18" height="18" border="0" alt="${uiLabelMap.CommonExpire}"/></a>&nbsp;&nbsp;
                </#if>
-               <#if "POSTAL_ADDRESS" == contactMech.contactMechTypeId && contactMechMap.postalAddress?exists>
+               <#if "POSTAL_ADDRESS" == contactMech.contactMechTypeId && contactMechMap.postalAddress?exists && !("Y" == disableRequestCatalog!)>
                   <br/><br/>
                   <@form name="createCatalogRequestForPartyForm_${contactMechMap_index}" url="createCatalogRequestForParty" partyId="${partySummary.partyId}" fromPartyId="${partySummary.partyId}" fulfillContactMechId="${contactMech.contactMechId}" custRequestTypeId="RF_CATALOG" statusId="CRQ_SUBMITTED" donePage=donePage! />
                   <@submitFormLink form="createCatalogRequestForPartyForm_${contactMechMap_index}" text="${uiLabelMap.CrmCreateCatalogRequest}" class="buttontext"/>

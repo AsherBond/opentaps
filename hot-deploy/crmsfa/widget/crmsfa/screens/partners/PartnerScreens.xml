@@ -65,6 +65,7 @@
                 <set field="findActivitiesKey" value="partyId"/>  <!-- we want activities based on the partyId parameter -->
                 <set field="listSortTarget" value="viewPartner"/>
                 <set field="agreementViewer" value="viewPartnerAgreement"/>
+                <set field="disableRequestCatalog" value="Y"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexSecurity.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/partners/viewPartner.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/contactmech/viewprofile.bsh"/>
