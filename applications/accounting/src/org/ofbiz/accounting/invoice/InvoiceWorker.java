@@ -156,32 +156,52 @@ public class InvoiceWorker {
     public static BigDecimal getInvoiceTotal(GenericValue invoice, Boolean actualCurrency) {
         BigDecimal invoiceTotal = ZERO;
         BigDecimal invoiceTaxTotal = ZERO;
-        List invoiceItems = null;
+        List<GenericValue> invoiceItems = null;
+        List<GenericValue> invoiceAdjustments = null;
         try {
             invoiceItems = invoice.getRelated("InvoiceItem");
         } catch (GenericEntityException e) {
             Debug.logError(e, "Trouble getting InvoiceItem list", module);
         }
         if (UtilValidate.isNotEmpty(invoiceItems)) {
-            Iterator invoiceItemsIter = invoiceItems.iterator();
+            Iterator<GenericValue> invoiceItemsIter = invoiceItems.iterator();
             while (invoiceItemsIter.hasNext()) {
-                GenericValue invoiceItem = (GenericValue) invoiceItemsIter.next();
+                GenericValue invoiceItem = invoiceItemsIter.next();
                 BigDecimal amount = invoiceItem.getBigDecimal("amount");
                 BigDecimal quantity = invoiceItem.getBigDecimal("quantity");
-                if (amount == null)
+                if (amount == null) {
                     amount = ZERO;
-                if (quantity == null)
-                    quantity = BigDecimal.ONE;
-                if ("ITM_SALES_TAX".equals(invoiceItem.get("invoiceItemTypeId"))) {
-                    invoiceTaxTotal = invoiceTaxTotal.add( amount.multiply(quantity)).setScale(taxDecimals, taxRounding);
-                } else {
-                    invoiceTotal = invoiceTotal.add( amount.multiply(quantity)).setScale(decimals,rounding);
                 }
+                if (quantity == null) {
+                    quantity = BigDecimal.ONE;
+                }
+                if ("ITM_SALES_TAX".equals(invoiceItem.get("invoiceItemTypeId"))) {
+                    invoiceTaxTotal = invoiceTaxTotal.add(amount.multiply(quantity)).setScale(taxDecimals, taxRounding);
+                } else {
+                    invoiceTotal = invoiceTotal.add(amount.multiply(quantity)).setScale(decimals, rounding);
+                }
+            }
+        }
+        // include invoice adjustments in the total
+        try {
+            invoiceAdjustments = invoice.getRelated("InvoiceAdjustment");
+        } catch (GenericEntityException e) {
+            Debug.logError(e, "Trouble getting InvoiceAdustment list", module);
+        }
+        if (UtilValidate.isNotEmpty(invoiceAdjustments)) {
+            Iterator<GenericValue> invoiceAdjsIter = invoiceAdjustments.iterator();
+            while (invoiceAdjsIter.hasNext()) {
+                GenericValue invoiceAdj = invoiceAdjsIter.next();
+                BigDecimal amount = invoiceAdj.getBigDecimal("amount");
+                if (amount == null) {
+                    amount = ZERO;
+                }
+                invoiceTotal = invoiceTotal.add(amount).setScale(decimals, rounding);
             }
         }
         invoiceTotal = invoiceTotal.add(invoiceTaxTotal).setScale(decimals, rounding);
         if (UtilValidate.isNotEmpty(invoiceTotal) && !actualCurrency) {
-            invoiceTotal = invoiceTotal.multiply(getInvoiceCurrencyConversionRate(invoice)).setScale(decimals,rounding);
+            invoiceTotal = invoiceTotal.multiply(getInvoiceCurrencyConversionRate(invoice)).setScale(decimals, rounding);
         }
         return invoiceTotal;
     }

@@ -1762,7 +1762,7 @@ public final class PaymentServices {
                     errorMessageList.add(UtilProperties.getMessage(ACCOUNTING_RESOURCE, "AccountingInvoiceCancelledCannotApplyTo", UtilMisc.toMap("invoiceId", invoiceId), locale));
                 }
                 // check if the invoice already covered by payments
-                BigDecimal invoiceTotal = getInvoiceTotalBd(invoice);
+                BigDecimal invoiceTotal = InvoiceWorker.getInvoiceTotal(invoice);
                 invoiceApplyAvailable = InvoiceWorker.getInvoiceNotApplied(invoice);
 
                 // adjust the amountAppliedMax value if required....
@@ -2388,37 +2388,6 @@ public final class PaymentServices {
             }
         }
         return paymentApplied;
-    }
-
-    private static BigDecimal getInvoiceTotalBd(GenericValue invoice) {
-        BigDecimal invoiceTotal = BigDecimal.ZERO;
-        BigDecimal invoiceTaxTotal = BigDecimal.ZERO;
-        List<GenericValue> invoiceItems = null;
-        try {
-            invoiceItems = invoice.getRelated("InvoiceItem");
-        } catch (GenericEntityException e) {
-            Debug.logError(e, "Trouble getting InvoiceItem list", MODULE);
-        }
-        if (invoiceItems != null && invoiceItems.size() > 0) {
-            Iterator<GenericValue> invoiceItemsIter = invoiceItems.iterator();
-            while (invoiceItemsIter.hasNext()) {
-                GenericValue invoiceItem = invoiceItemsIter.next();
-                BigDecimal amount = invoiceItem.getBigDecimal("amount");
-                BigDecimal quantity = invoiceItem.getBigDecimal("quantity");
-                if (amount == null) {
-                    amount = BigDecimal.ZERO;
-                }
-                if (quantity == null) {
-                    quantity = BigDecimal.ONE;
-                }
-                if ("ITM_SALES_TAX".equals(invoiceItem.get("invoiceItemTypeId"))) {
-                    invoiceTaxTotal = invoiceTaxTotal.add(amount.multiply(quantity)).setScale(TAX_DECIMALS, TAX_ROUNDING);
-                } else {
-                    invoiceTotal = invoiceTotal.add(amount.multiply(quantity)).setScale(DECIMALS, ROUNDING);
-                }
-            }
-        }
-        return invoiceTotal.add(invoiceTaxTotal).setScale(DECIMALS, ROUNDING);
     }
 
 }
