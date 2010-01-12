@@ -51,9 +51,9 @@ under the License.
                          <span class="requiredField"><#if partyTaxAuthInfo.isExempt == "Y" >${uiLabelMap.CrmExempt}<#else>${uiLabelMap.CrmNotExempt}</#if></span>
                        </#if>.<#if partyTaxAuthInfo.partyTaxId?exists> ${uiLabelMap.OpentapsTaxAuthPartyId}: ${partyTaxAuthInfo.partyTaxId}</#if>
                      </td>
-                     <td class="button-col align-float">
+                     <td>
                      <#if hasPaymentUpdatePermission>
-                         <a href="<@ofbizUrl>${editTaxAuthPartyInfo}?partyId=${parameters.partyId}&taxAuthGeoId=${partyTaxAuthInfo.taxAuthGeoId}&taxAuthPartyId=${partyTaxAuthInfo.taxAuthPartyId}&fromDate=${partyTaxAuthInfo.fromDate}</@ofbizUrl>">${uiLabelMap.CommonUpdate}</a>
+                         <a href="<@ofbizUrl>${editTaxAuthPartyInfo}?partyId=${parameters.partyId}&taxAuthGeoId=${partyTaxAuthInfo.taxAuthGeoId}&taxAuthPartyId=${partyTaxAuthInfo.taxAuthPartyId}&fromDate=${partyTaxAuthInfo.fromDate}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonUpdate}</a>
                      </#if> 
                      </td>                                        
                   </tr>
@@ -88,9 +88,9 @@ under the License.
                     <#if paymentMethod.fromDate?has_content>(${uiLabelMap.CommonUpdated}:&nbsp;${getLocalizedDate(paymentMethod.fromDate)})</#if>
                     <#if paymentMethod.thruDate?has_content><b>(${uiLabelMap.PartyContactEffectiveThru}:&nbsp;${getLocalizedDate(paymentMethod.thruDate)})</#if>
                   </td>
-                  <td class="button-col align-float">
+                  <td>
                     <#if security.hasEntityPermission("PAY_INFO", "_UPDATE", session)>
-                      <a href="<@ofbizUrl>${editCreditCardPage}?partyId=${parameters.partyId}&paymentMethodId=${paymentMethod.paymentMethodId}</@ofbizUrl>">${uiLabelMap.CommonUpdate}</a>
+                      <a href="<@ofbizUrl>${editCreditCardPage}?partyId=${parameters.partyId}&paymentMethodId=${paymentMethod.paymentMethodId}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonUpdate}</a>
                     </#if>
                   <#-- </td> -->
                 <#elseif "GIFT_CARD" == paymentMethod.paymentMethodTypeId>
@@ -124,9 +124,9 @@ under the License.
                     <#if paymentMethod.fromDate?has_content>(${uiLabelMap.CommonUpdated}:&nbsp;${getLocalizedDate(paymentMethod.fromDate)})</#if>
                     <#if paymentMethod.thruDate?has_content><b>(${uiLabelMap.PartyContactEffectiveThru}:&nbsp;${getLocalizedDate(paymentMethod.thruDate)}</b></#if>
                   </td>
-                  <td class="button-col align-float">
+                  <td>
                     <#if security.hasEntityPermission("PAY_INFO", "_UPDATE", session)>
-                      <a href="<@ofbizUrl>${editGiftCardPage}?partyId=${parameters.partyId}&paymentMethodId=${paymentMethod.paymentMethodId}</@ofbizUrl>">${uiLabelMap.CommonUpdate}</a>
+                      <a href="<@ofbizUrl>${editGiftCardPage}?partyId=${parameters.partyId}&paymentMethodId=${paymentMethod.paymentMethodId}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonUpdate}</a>
                     </#if>
                   <#-- </td> -->
                 <#elseif "EFT_ACCOUNT" == paymentMethod.paymentMethodTypeId>
@@ -140,9 +140,9 @@ under the License.
                     <#if paymentMethod.fromDate?has_content>(${uiLabelMap.CommonUpdated}:&nbsp;${getLocalizedDate(paymentMethod.fromDate)})</#if>
                     <#if paymentMethod.thruDate?has_content><b>(${uiLabelMap.PartyContactEffectiveThru}:&nbsp;${getLocalizedDate(paymentMethod.thruDate)}</#if>
                   </td>
-                  <td class="button-col align-float">
+                  <td>
                     <#if security.hasEntityPermission("PAY_INFO", "_UPDATE", session)>
-                      <a href="<@ofbizUrl>${editEftAccountPage}?partyId=${parameters.partyId}&paymentMethodId=${paymentMethod.paymentMethodId}</@ofbizUrl>">${uiLabelMap.CommonUpdate}</a>
+                      <a href="<@ofbizUrl>${editEftAccountPage}?partyId=${parameters.partyId}&paymentMethodId=${paymentMethod.paymentMethodId}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonUpdate}</a>
                     </#if>
                   <#-- </td> -->
                 <#elseif "COMPANY_CHECK" == paymentMethod.paymentMethodTypeId>
@@ -168,10 +168,11 @@ under the License.
                     <#if paymentMethod.description?has_content>(${paymentMethod.description})</#if>
                     <#if paymentMethod.fromDate?has_content>(${uiLabelMap.CommonUpdated}:&nbsp;${getLocalizedDate(paymentMethod.fromDate)})</#if>
                     <#if paymentMethod.thruDate?has_content><b>(${uiLabelMap.PartyContactEffectiveThru}:&nbsp;${getLocalizedDate(paymentMethod.thruDate)})</#if>
-                    <td class="button-col align-float">
+                  </td>
+                  <td>
                 </#if>
                 <#if security.hasEntityPermission("PAY_INFO", "_DELETE", session)>
-                  <a href="<@ofbizUrl>deletePaymentMethod?partyId=${parameters.partyId}&paymentMethodId=${paymentMethod.paymentMethodId}&amp;donePage=${parameters.thisRequestUri}</@ofbizUrl>">${uiLabelMap.CommonExpire}</a>
+                  <a href="<@ofbizUrl>deletePaymentMethod?partyId=${parameters.partyId}&paymentMethodId=${paymentMethod.paymentMethodId}&amp;donePage=${parameters.thisRequestUri}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonExpire}</a>
                 <#else>
                   &nbsp;
                 </#if>
@@ -189,9 +190,9 @@ under the License.
                     (${partyCarrierAccount.postalCode?if_exists} ${partyCarrierAccount.countryGeoCode?if_exists})<#if partyCarrierAccount.isDefault?default("N") == "Y"> -- (${uiLabelMap.OpentapsDefault})</#if>
                   </#if>
                 </td>
-                <td class="button-col align-float">
-                  <a href="<@ofbizUrl>${editShippingAccount}?partyId=${parameters.partyId}&carrierPartyId=${partyCarrierAccount.carrierPartyId}&fromDate=${partyCarrierAccount.fromDate}&donePage=${parameters.thisRequestUri}</@ofbizUrl>">${uiLabelMap.CommonUpdate}</a>
-                  <a href="<@ofbizUrl>updatePartyCarrierAccount?partyId=${parameters.partyId}&carrierPartyId=${partyCarrierAccount.carrierPartyId}&fromDate=${partyCarrierAccount.fromDate}&thruDate=${now}&donePage=${parameters.thisRequestUri}</@ofbizUrl>">${uiLabelMap.CommonExpire}</a>
+                <td>
+                  <a href="<@ofbizUrl>${editShippingAccount}?partyId=${parameters.partyId}&carrierPartyId=${partyCarrierAccount.carrierPartyId}&fromDate=${partyCarrierAccount.fromDate}&donePage=${parameters.thisRequestUri}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonUpdate}</a>
+                  <a href="<@ofbizUrl>updatePartyCarrierAccount?partyId=${parameters.partyId}&carrierPartyId=${partyCarrierAccount.carrierPartyId}&fromDate=${partyCarrierAccount.fromDate}&thruDate=${now}&donePage=${parameters.thisRequestUri}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonExpire}</a>
                 </td>
               </tr>
             </#list>
