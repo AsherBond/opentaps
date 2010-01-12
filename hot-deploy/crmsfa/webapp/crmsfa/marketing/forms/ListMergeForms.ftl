@@ -1,5 +1,5 @@
 <#--
- * Copyright (C) 2006  Open Source Strategies, Inc.
+ * Copyright (C) 2006 - 2010  Open Source Strategies, Inc.
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,18 +19,17 @@
  
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<div class="subSectionHeader">
-  <div class="subSectionTitle">${uiLabelMap.CrmFormLetterTemplates}</div>
+<#assign extraOptions>
   <#if security.hasEntityPermission("CRMSFA_CAMP", "_CREATE", userLogin)>
-    <div class="subMenuBar">
-      <a class="subMenuButton" href="EditMergeFormCategory" title="${uiLabelMap.CrmCreateNewTemplateCategory}">${uiLabelMap.CrmCreateNewTemplateCategory}</a>
-      <a class="subMenuButton" href="EditMergeForm" title="${uiLabelMap.CrmCreateNewTemplate}">${uiLabelMap.CrmCreateNewTemplate}</a>
-    </div>
+    <a class="subMenuButton" href="EditMergeFormCategory" title="${uiLabelMap.CrmCreateNewTemplateCategory}">${uiLabelMap.CrmCreateNewTemplateCategory}</a>
+    <a class="subMenuButton" href="EditMergeForm" title="${uiLabelMap.CrmCreateNewTemplate}">${uiLabelMap.CrmCreateNewTemplate}</a>
   </#if>
-</div>
+</#assign>
+
+<@frameSectionHeader title=uiLabelMap.CrmFormLetterTemplates extra=extraOptions/>
 
 <#if templates?has_content>
-  <table class="listTable" style="border:none">
+  <table class="listTable">
     <tr class="listTableHeader" style="border:none">
       <td class="titleCell" style="text-align:left">${uiLabelMap.OpentapsTemplateName}</td>
       <td class="titleCell" style="text-align:left">${uiLabelMap.FormFieldTitle_categoryName}</td>
@@ -46,7 +45,7 @@
           <td>&nbsp;</td>
         </#if>
         <td>${template.description?default("")}</td>
-        <td style="text-align:right"><@displayLink href="EditMergeForm?mergeFormId=${template.mergeFormId}" text=uiLabelMap.CommonEdit/></td>
+        <td style="text-align:right"><@displayLink href="EditMergeForm?mergeFormId=${template.mergeFormId}" class="buttontext" text=uiLabelMap.CommonEdit/></td>
       </tr>
     </#list>
   </table>

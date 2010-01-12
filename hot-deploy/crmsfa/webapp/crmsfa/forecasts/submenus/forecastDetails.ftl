@@ -16,8 +16,11 @@
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
-<div class="subSectionHeader">
-    <div class="subSectionTitle">${uiLabelMap.CrmForecast}
-      <#if isClosed?exists && isClosed == true><span class="subSectionWarning">${uiLabelMap.CrmForecastClosed}</span></#if>
-    </div>
-</div>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<#assign title>
+  ${uiLabelMap.CrmForecast}
+  <#if isClosed?exists && isClosed == true><span class="subSectionWarning">${uiLabelMap.CrmForecastClosed}</span></#if>
+</#assign>
+
+<@frameSectionHeader title=title />
