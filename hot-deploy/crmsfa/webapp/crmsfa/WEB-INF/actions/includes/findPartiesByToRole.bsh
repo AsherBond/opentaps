@@ -63,8 +63,14 @@ if (lastName != null && !lastName.equals("")) {
 if (firstName != null && !firstName.equals("")) {
     searchConditions.add(new EntityExpr("firstName", true, EntityOperator.LIKE, "%" + firstName + "%", true));
 }
-if (searchConditions.size() == 0) return;
-searchConditionList = new EntityConditionList(searchConditions, EntityOperator.OR);
+
+// remove disabled parties
+searchConditions.add(new EntityConditionList(UtilMisc.toList(
+                         new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PARTY_DISABLED"),
+                         new EntityExpr("statusId", EntityOperator.EQUALS, null))
+                         , EntityOperator.OR));
+
+searchConditionList = new EntityConditionList(searchConditions, EntityOperator.AND);
 
 // these conditions are specified to negate certain results
 negateConditions = new ArrayList();
