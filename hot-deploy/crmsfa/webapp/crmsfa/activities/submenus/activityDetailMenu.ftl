@@ -63,7 +63,7 @@ opentaps.addOnLoad(setInterval('updateTime()', 1000*60 /*1 min*/));
 <@form name="cancelActivityForm" url="updateActivityWithoutAssoc" workEffortId=workEffort.workEffortId currentStatusId="${workEffort.workEffortTypeId}_CANCELLED"/>
 
 <#assign extraOptions>
-  <#if hasUpdatePermission == true>
+  <#if true == (hasUpdatePermission)!false>
     <a class="subMenuButton" href="${updateTarget}?${activityValueParams}">${uiLabelMap.CommonEdit}</a><@submitFormLink form="cancelActivityForm" text=uiLabelMap.CommonCancel/>
   </#if>
 </#assign>

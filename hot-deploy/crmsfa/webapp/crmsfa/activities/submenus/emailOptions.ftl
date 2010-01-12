@@ -29,7 +29,7 @@
     <div class="subMenuBar">
       <@submitFormLink form="replyEmailAction" text=uiLabelMap.PartyReply class="subMenuButton" />
       <@submitFormLink form="forwardEmailAction" text=uiLabelMap.OpentapsEmailForward class="subMenuButton" />
-      <#if hasUpdatePermission == true>
+      <#if (hasUpdatePermission)!false == true>
         <#if "TASK_COMPLETED" != workEffort.currentStatusId?default("")>
           <@submitFormLink form="completeEmailAction" text=uiLabelMap.OpentapsComplete class="subMenuButton" />
         </#if>
