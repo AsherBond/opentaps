@@ -27,9 +27,7 @@
 <#if salesOpportunity?has_content><#assign salesOpportunityId = salesOpportunity.salesOpportunityId/></#if>
 <#if orderHeader?has_content><#assign orderId = orderHeader.orderId/></#if>
 
-<div class="screenlet">
-    <div class="screenlet-header"><div class="boxhead">${uiLabelMap.CrmActivityLinks}</div></div>
-    <div class="screenlet-body">
+<@frameSection title=uiLabelMap.CrmActivityLinks>
     <#-- if event/task is completed then no more updating -->
      <#if !(isActive)>
         <#if salesOpportunity?exists>
@@ -82,6 +80,5 @@
         </form>
       </#if>
      </table>
-    </div>
-</div>
+</@frameSection>
 </#if>

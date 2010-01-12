@@ -344,7 +344,7 @@
 
                                 <!-- list of associated parties -->
                                 <container style="subSectionBlock">
-                                    <container style="subSectionHeader"><container style="subSectionTitle"><label>${uiLabelMap.CrmActivityParticipants}</label></container></container>
+                                    <frame-container-header title="${uiLabelMap.CrmActivityParticipants}"/>
                                     <include-form name="ListAssociatedParties" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
                                     <section>
                                         <condition><if-compare field="hasUpdatePartiesPermission" operator="equals" value="true" type="Boolean"/></condition>
