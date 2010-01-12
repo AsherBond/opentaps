@@ -407,7 +407,7 @@ public class FinancialAsserts extends OpentapsTestCase {
 
     /**
      * Creates sales tax invoice item.
-     * 
+     *
      * @param invoiceId an invoice identifier
      * @param parentItemSeqId an product invoice item on which taxes are calculated
      * @param taxAuthPartyId tax authority geographical location
@@ -757,7 +757,7 @@ public class FinancialAsserts extends OpentapsTestCase {
     /**
      * Verify summary gross sales, discounts, taxable and tax amount values in TaxInvoiceItemFact entity
      * for an organization or for particular invoice.
-     * 
+     *
      * @param invoiceId a <code>String</code> value
      * @param authPartyId a <code>String</code> value
      * @param authGeoId a <code>String</code> value

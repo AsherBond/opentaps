@@ -194,7 +194,7 @@ public class AccountingTagTests extends FinancialsTestCase {
         Map halfBalances = fa.getFinancialBalances(UtilDateTime.nowTimestamp());
         Map initialBalances_CONSUMER = fa.getFinancialBalances(start, UtilMisc.toMap("tag1", "DIV_CONSUMER"));
         Map initialBalances_GOV = fa.getFinancialBalances(start, UtilMisc.toMap("tag1", "DIV_GOV"));
-        
+
         // apply $1000 of payment to PI1 with tags DIV_CONSUMER
         fa.updatePaymentApplication(new BigDecimal("1000.0"), paymentId, pi1, UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"));
         // verify that Payment.isReadyToPost() is false
@@ -214,7 +214,7 @@ public class AccountingTagTests extends FinancialsTestCase {
         Timestamp finish = UtilDateTime.nowTimestamp();
         Map finalBalances_CONSUMER = fa.getFinancialBalances(finish, UtilMisc.toMap("tag1", "DIV_CONSUMER"));
         Map finalBalances_GOV = fa.getFinancialBalances(finish, UtilMisc.toMap("tag1", "DIV_GOV"));
-        
+
         // verify correct changes in balances.  See comment in PaymentTests.testVendorPaymentWithCheckingAccount: liabilities are always negative,
         // so a decrease in accounts payable is a positive amount.
         // ACCOUNTS_PAYABLE for DIV_CONSUMER, +1000
@@ -233,10 +233,10 @@ public class AccountingTagTests extends FinancialsTestCase {
         accountMap = UtilFinancial.replaceGlAccountTypeWithGlAccountForOrg(organizationPartyId, expectedBalanceChanges, delegator);
         assertMapDifferenceCorrect(halfBalances, finalBalances, accountMap);
    }
-    
+
     /**
-     * Tests that if payments are at the GL account allocation level, the accounting tags are correctly associated with sales tax
-     * @throws GeneralException
+     * Tests that if payments are at the GL account allocation level, the accounting tags are correctly associated with sales tax.
+     * @throws GeneralException if an error occurs
      */
     public void testSalesTaxPaymentAccountingTagsAtAllocation() throws GeneralException {
         //create a copy of the Company organization
@@ -270,7 +270,7 @@ public class AccountingTagTests extends FinancialsTestCase {
         PaymentRepositoryInterface paymentRepository = billingDomain.getPaymentRepository();
         Payment payment = paymentRepository.getPaymentById(paymentId);
         assertTrue("Payment with ID [" + paymentId + "] should ready to post now.", payment.isReadyToPost());
-        
+
         // set payment to sent and cause it to be posted
         fa.updatePaymentStatus(paymentId, "PMNT_SENT");
         Timestamp finish = UtilDateTime.nowTimestamp();
@@ -284,7 +284,7 @@ public class AccountingTagTests extends FinancialsTestCase {
         assertMapDifferenceCorrect(initialBalances_CONSUMER, finalBalances_CONSUMER, UtilMisc.toMap(taxAuthGlAccount.getString("glAccountId"), amount));
         assertMapDifferenceCorrect(initialBalances_GOV, finalBalances_GOV, UtilMisc.toMap(taxAuthGlAccount.getString("glAccountId"), BigDecimal.ZERO));
     }
-    
+
     /**
      * This test verifies that the correct accounting tag and GL account postings take place
      * when payments have accounting tags for payment applications,
@@ -328,7 +328,7 @@ public class AccountingTagTests extends FinancialsTestCase {
         PaymentRepositoryInterface paymentRepository = billingDomain.getPaymentRepository();
         Payment payment = paymentRepository.getPaymentById(paymentId);
         assertFalse("Payment with ID [" + paymentId + "] should not ready to post.", payment.isReadyToPost());
-        
+
         // apply $1500 to 600000 with tag DIV_GOV
         String overrideGlAccountId = "600000";
         Map<String, Object> ctxt = FastMap.newInstance();
@@ -342,7 +342,7 @@ public class AccountingTagTests extends FinancialsTestCase {
         // verify that now Payment.isReadyToPost() is true
         payment = paymentRepository.getPaymentById(paymentId);
         assertTrue("Payment with ID [" + paymentId + "] should ready to post now.", payment.isReadyToPost());
-         
+
         // post the payment
         fa.updatePaymentStatus(paymentId, "PMNT_SENT");
 
@@ -366,7 +366,7 @@ public class AccountingTagTests extends FinancialsTestCase {
         expectedChange = UtilFinancial.replaceGlAccountTypeWithGlAccountForOrg(organizationPartyId, UtilMisc.toMap("ACCOUNTS_PAYABLE", BigDecimal.ZERO), delegator);
         expectedChange.put(overrideGlAccountId, overrideAmount);
         assertMapDifferenceCorrect(initialBalances_GOV, finalBalances_GOV, expectedChange);
-        
+
         // for DIV_ENTERPRISE, ACCOUNTS_PAYABLE and 600000 should be unchanged
         expectedChange = UtilFinancial.replaceGlAccountTypeWithGlAccountForOrg(organizationPartyId, UtilMisc.toMap("ACCOUNTS_PAYABLE", BigDecimal.ZERO), delegator);
         expectedChange.put(overrideGlAccountId, BigDecimal.ZERO);

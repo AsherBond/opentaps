@@ -164,7 +164,7 @@ public class FinancialsTests extends FinancialsTestCase {
         // verify AcctgTrans.getPostedAmount() is 300.00
         ledgerTestTrans = ledgerRepository.getAccountingTransaction(testLedgerTransId);
         assertEquals("AcctgTrans.getPostedAmount() should be 300.00", new BigDecimal("300.0"), ledgerTestTrans.getPostedAmount());
-        
+
         // the test transaction should only post to these time periods
         List timePeriodsWithPosting = UtilMisc.toList("LT2008", "LT2008Q1", "LT2008FEB");
 
