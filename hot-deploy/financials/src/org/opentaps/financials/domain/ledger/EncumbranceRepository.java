@@ -17,7 +17,6 @@
 package org.opentaps.financials.domain.ledger;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;

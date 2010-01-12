@@ -198,7 +198,7 @@ public class FinancialReportServices extends DomainService implements FinancialR
         } catch (InfrastructureException e) {
             throw new ServiceException(e.getMessage());
         } catch (HibernateException e) {
-            throw new ServiceException(e);
+            throw new ServiceException(e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ServiceException(e.getMessage());
         } catch (LedgerException e) {
@@ -244,9 +244,9 @@ public class FinancialReportServices extends DomainService implements FinancialR
             tx.commit();
 
         } catch (InfrastructureException e) {
-            throw new ServiceException(e);
+            throw new ServiceException(e.getMessage());
         } catch (HibernateException e) {
-        	throw new ServiceException(e);
+        	throw new ServiceException(e.getMessage());
         } finally {
             if (session != null) {
                 session.close();

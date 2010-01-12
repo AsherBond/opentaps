@@ -26,7 +26,6 @@ import java.util.Map.Entry;
 import com.opensourcestrategies.financials.accounts.AccountsHelper;
 import javolution.util.FastList;
 import org.hibernate.HibernateException;
-import org.hibernate.Transaction;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
@@ -37,6 +36,7 @@ import org.opentaps.domain.billing.financials.AccountBalanceHistoryServiceInterf
 import org.opentaps.domain.organization.Organization;
 import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.foundation.entity.hibernate.Session;
+import org.opentaps.foundation.entity.hibernate.Transaction;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.service.ServiceException;
@@ -95,9 +95,6 @@ public class AccountBalanceHistoryService extends DomainService implements Accou
             Debug.logError(e, MODULE);
             throw new ServiceException(e);
         } catch (HibernateException e) {
-            if (tx != null && tx.isActive()) {
-                tx.rollback();
-            }
             throw new ServiceException(e.getMessage());
         } finally {
             if (session != null) {

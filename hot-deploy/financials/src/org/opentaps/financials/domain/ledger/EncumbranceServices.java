@@ -21,15 +21,13 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import javolution.util.FastList;
+
 import org.hibernate.HibernateException;
-import org.hibernate.Transaction;
 import org.ofbiz.accounting.util.UtilAccounting;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericEntityException;
-import org.opentaps.common.domain.order.OrderSpecification;
-import org.opentaps.domain.DomainService;
 import org.opentaps.base.constants.EncumbranceDetailTypeConstants;
 import org.opentaps.base.constants.InvoiceTypeConstants;
 import org.opentaps.base.entities.AcctgTransEntry;
@@ -37,6 +35,8 @@ import org.opentaps.base.entities.EncumbranceDetail;
 import org.opentaps.base.entities.EncumbranceSnapshot;
 import org.opentaps.base.entities.InvoiceItemType;
 import org.opentaps.base.entities.InvoiceItemTypeGlAccount;
+import org.opentaps.common.domain.order.OrderSpecification;
+import org.opentaps.domain.DomainService;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.domain.ledger.AccountingTransaction;
 import org.opentaps.domain.ledger.EncumbranceRepositoryInterface;
@@ -47,12 +47,14 @@ import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderItem;
 import org.opentaps.domain.order.OrderRepositoryInterface;
 import org.opentaps.foundation.entity.hibernate.Session;
+import org.opentaps.foundation.entity.hibernate.Transaction;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.foundation.service.ServiceException;
 
 public class EncumbranceServices extends DomainService implements EncumbranceServiceInterface {
+	private static final String MODULE = EncumbranceServices.class.getName();
 
     private String organizationPartyId;
     private Timestamp startDatetime = null;
@@ -222,9 +224,6 @@ public class EncumbranceServices extends DomainService implements EncumbranceSer
         } catch (InfrastructureException e) {
             throw new ServiceException(e.getMessage());
         } catch (HibernateException e) {
-            if (tx != null && tx.isActive()) {
-                tx.rollback();
-            }
             throw new ServiceException(e.getMessage());
         } finally {
             if (session != null) {
