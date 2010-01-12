@@ -16,20 +16,13 @@
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
-<#if session.getAttribute("shoppingCart")?exists>
-    <#assign orderLabel = uiLabelMap.OpentapsResumeOrder>
-<#else>
-    <#assign orderLabel = uiLabelMap.OpentapsCreateOrder>
-</#if>
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<div class="screenlet">
-    <div class="screenlet-header"><div class="boxhead">${uiLabelMap.CrmShortcuts}</div></div>
-    <div class="screenlet-body">
-      <ul class="shortcuts">
-        <#if (security.hasEntityPermission("CRMSFA_RPT", "_VIEW", session))>
-        <li><a href="<@ofbizUrl>viewDashboard</@ofbizUrl>">${uiLabelMap.CrmDashboard}</a></li>
-        <li><a href="<@ofbizUrl>manageReports</@ofbizUrl>">${uiLabelMap.OpentapsReports}</a></li>
-        </#if>
-      </ul>
-    </div>
-</div>
+<@frameSection title=uiLabelMap.CrmShortcuts>
+  <ul class="shortcuts">
+    <#if (security.hasEntityPermission("CRMSFA_RPT", "_VIEW", session))>
+      <li><a href="<@ofbizUrl>viewDashboard</@ofbizUrl>">${uiLabelMap.CrmDashboard}</a></li>
+      <li><a href="<@ofbizUrl>manageReports</@ofbizUrl>">${uiLabelMap.OpentapsReports}</a></li>
+    </#if>
+  </ul>
+</@frameSection>
