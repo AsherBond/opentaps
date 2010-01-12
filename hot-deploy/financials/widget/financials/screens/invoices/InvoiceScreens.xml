@@ -61,6 +61,7 @@
     <screen name="findFinanceCharges">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="FinancialsFindFinanceCharges"/>
                 <set field="invoiceTypeId" value="INTEREST_INVOICE"/>
                 <set field="formTarget" value="findFinanceCharges"/>
             </actions>

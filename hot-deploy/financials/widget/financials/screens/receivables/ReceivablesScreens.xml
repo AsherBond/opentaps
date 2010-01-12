@@ -199,6 +199,7 @@
     <screen name="PaymentReceiptsDetail">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="FinancialsPaymentReceiptsDetail"/>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
                 <set field="returnPage" value="receivables"/>
                 <set field="returnLabel" value="FinancialsReturnToReceivables"/>
@@ -211,16 +212,11 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsPaymentReceiptsDetail}"/>
-                            </container>
-                            <container style="screenlet-body">
-                                <platform-specific><html>
-                                    <html-template location="component://financials/webapp/financials/receivables/PaymentReceiptsDetail.ftl"/>
-                                </html></platform-specific>
-                            </container>
-                        </container>
+                      <frame-container title="${uiLabelMap.FinancialsPaymentReceiptsDetail}">
+                        <platform-specific>
+                          <html><html-template location="component://financials/webapp/financials/receivables/PaymentReceiptsDetail.ftl"/></html>
+                        </platform-specific>
+                      </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -254,6 +250,7 @@
     <screen name="assessFinanceChargesForm">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="FinancialsAssessFinanceCharges"/>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/receivables/assessFinanceChargesForm.bsh"/>
                 <set field="partyId" from-field="parameters.partyId"/>
@@ -269,13 +266,10 @@
                                 </or>
                             </condition>
                             <widgets>
-                                <container style="screenlet">
-                                    <container style="screenlet-header">
-                                        <label style="boxhead" text="${uiLabelMap.FinancialsAssessFinanceCharges}"/>
-                                    </container>
+                                <frame-container title="${uiLabelMap.FinancialsAssessFinanceCharges}">
                                     <include-form name="FindInvoicesForInterest" location="component://financials/widget/financials/forms/receivables/ReceivablesForms.xml"/>
                                     <include-form name="ListInvoicesForInterest" location="component://financials/widget/financials/forms/receivables/ReceivablesForms.xml"/>
-                                </container>
+                                </frame-container>
                             </widgets>
                             <fail-widgets>
                                 <include-screen name="PermissionErrorScreen" location="component://financials/widget/financials/screens/common/CommonScreens.xml"/>
@@ -428,9 +422,7 @@
                             <html><html-template location="component://financials/webapp/financials/receivables/findAgreements.ftl"/></html>
                         </platform-specific>
                         <container style="subSectionBlock">
-                            <container style="subSectionHeader">
-                                <label style="subSectionTitle">${uiLabelMap.AccountingAgreements}</label>
-                            </container>
+                            <frame-container-header title="${uiLabelMap.AccountingAgreements}" />
                             <section>
                                 <widgets>
                                     <platform-specific>
@@ -475,6 +467,7 @@
     <screen name="ViewSalesAgreement">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="AccountingAgreement"/>
                 <set field="screenMode" value="VIEW"/>
                 <set field="editAction" value="editSalesAgreement"/>
                 <set field="changeStatusAction" value="changeSalesAgreementStatus"/>

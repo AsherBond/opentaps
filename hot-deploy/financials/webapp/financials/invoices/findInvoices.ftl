@@ -64,11 +64,13 @@
       
       <@inputTextRow title=uiLabelMap.ProductItemDescription name="itemDescription" size="30"/>
 
-      <#list tagFilters as tag>
-        <@inputSelectRow title=tag.description name="tag${tag.index}" list=tag.tagValues key="enumId" required=true ; tagValue>
-          ${tagValue.description}
-        </@inputSelectRow>
-      </#list>
+      <#if tagFilters?has_content>
+        <#list tagFilters as tag>
+          <@inputSelectRow title=tag.description name="tag${tag.index}" list=tag.tagValues key="enumId" required=true ; tagValue>
+            ${tagValue.description}
+          </@inputSelectRow>
+        </#list>
+      </#if>
 
       <@inputSubmitRow title=uiLabelMap.CommonFind />
     </tbody>

@@ -17,17 +17,14 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<div class="screenlet">
-  <div class="screenlet-header"><div class="boxhead">${uiLabelMap.FinancialsReceiveCODStatement}</div></div>
-  <div class="screenlet-body">
-    <form method="post" action="<@ofbizUrl>CODReceipt</@ofbizUrl>" name="FindInvoicesForCODReceipt">
-      <table>
-        <@inputSelectRow title=uiLabelMap.ProductCarrier list=carriers?sort_by("partyName") name="carrierPartyId" key="partyId" displayField="partyName"/>
-        <@inputSubmitRow title=uiLabelMap.CommonFind />
-      </table>
-    </form>
-  </div>
-</div>
+<@frameSection title=uiLabelMap.FinancialsReceiveCODStatement>
+  <form method="post" action="<@ofbizUrl>CODReceipt</@ofbizUrl>" name="FindInvoicesForCODReceipt">
+    <table>
+      <@inputSelectRow title=uiLabelMap.ProductCarrier list=carriers?sort_by("partyName") name="carrierPartyId" key="partyId" displayField="partyName"/>
+      <@inputSubmitRow title=uiLabelMap.CommonFind />
+    </table>
+  </form>
+</@frameSection>
   
 <#if codInvoices?default([])?has_content>
     <form method="post" action="<@ofbizUrl>processCODReceipt</@ofbizUrl>" name="processCODReceipt">
