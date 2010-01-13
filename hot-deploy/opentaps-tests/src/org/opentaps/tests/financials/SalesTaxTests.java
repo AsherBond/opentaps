@@ -36,8 +36,8 @@ public class SalesTaxTests extends FinancialsTestCase {
     /**
      * These tests verify that created (and canceled) invoice doesn't affect sales tax facts
      * because these invoices should not be taken into account calculating taxes.
-     * 
-     * @throws GeneralException
+     *
+     * @throws GeneralException if an error occurs
      */
     public void testTaxTransformationForInProcessAndCanceledInvoice() throws GeneralException {
 
@@ -125,8 +125,8 @@ public class SalesTaxTests extends FinancialsTestCase {
 
     /**
      * Verify sales tax facts changed correctly after an invoice is made ready and paid.
-     * 
-     * @throws GeneralException
+     *
+     * @throws GeneralException if an error occurs
      */
     public void testTaxTransformationForReadyConfirmedAndPaidInvoice() throws GeneralException {
         String customerPartyId = createPartyFromTemplate("DemoAccount1", "Test customer");
@@ -246,8 +246,8 @@ public class SalesTaxTests extends FinancialsTestCase {
     /**
      * These tests verify that voided invoice doesn't affect sales tax facts
      * because these invoices should not be taken into account calculating taxes.
-     * 
-     * @throws GeneralException
+     *
+     * @throws GeneralException if an error occurs
      */
     public void testTaxTransformationForVoidedInvoice() throws GeneralException {
         String customerPartyId = createPartyFromTemplate("DemoAccount1", "Test customer");
@@ -328,8 +328,8 @@ public class SalesTaxTests extends FinancialsTestCase {
     /**
      * These tests verify that written off invoice doesn't affect sales tax facts
      * because these invoices should not be taken into account calculating taxes.
-     * 
-     * @throws GeneralException
+     *
+     * @throws GeneralException if an error occurs
      */
     public void testTaxTransformationForWrittenOffInvoice() throws GeneralException {
 
@@ -406,7 +406,7 @@ public class SalesTaxTests extends FinancialsTestCase {
     /**
      * Test checks if the sales invoice item and tax invoice item fact table
      * contains correct discounts value that should follow created invoice adjustment.
-     * @throws GeneralException 
+     * @throws GeneralException if an error occurs
      */
     public void testSalesTaxTransformationForInvoiceAdjustments() throws GeneralException {
         String customerPartyId = createPartyFromTemplate("DemoAccount1", "Test customer");
@@ -445,7 +445,7 @@ public class SalesTaxTests extends FinancialsTestCase {
         );
         runAndAssertServiceSuccess("createInvoiceAdjustment", callCtxt);
 
-        // 6. run sales tax transformation again 
+        // 6. run sales tax transformation again
         runAndAssertServiceSuccess("loadSalesTaxData", UtilMisc.toMap("userLogin", admin));
 
         // 7. verify discounts value increased for 6.99 for both sales and tax fact tables
@@ -458,11 +458,11 @@ public class SalesTaxTests extends FinancialsTestCase {
 
     /**
      * Finds tax authority dimension identifier for given geo and party.
-     * 
+     *
      * @param session Hibernate session
      * @param taxAuthGeoId Tax authority geographical unit
      * @param taxAuthPartyId Tax authority party
-     * @return
+     * @return the tax authority dimension ID or null
      */
     @SuppressWarnings("unchecked")
     public Long findTaxAuthDimension(Session session, String taxAuthGeoId, String taxAuthPartyId) {
