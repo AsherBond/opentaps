@@ -198,6 +198,7 @@ public class FinancialReportServices extends DomainService implements FinancialR
         } catch (InfrastructureException e) {
             throw new ServiceException(e.getMessage());
         } catch (HibernateException e) {
+        	// return the ServiceException with the message of exception
             throw new ServiceException(e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ServiceException(e.getMessage());

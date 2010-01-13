@@ -155,6 +155,7 @@ public class EncumbranceRepository extends Repository implements  EncumbranceRep
         } catch (InfrastructureException e) {
             throw new RepositoryException(e.getMessage());
         } catch (HibernateException e) {
+        	// return the RepositoryException with the message of exception
             throw new RepositoryException(e.getMessage());
         } finally {
             session.close();

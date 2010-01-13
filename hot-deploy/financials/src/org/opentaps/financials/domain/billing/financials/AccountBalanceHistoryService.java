@@ -83,6 +83,7 @@ public class AccountBalanceHistoryService extends DomainService implements Accou
                 Map<String, BigDecimal> balances = (Map<String, BigDecimal>) balancesMap.get("balances");
                 createSnapshotForBalance(organizationPartyId, balanceTypeEnumId, balances);
             }
+
             session.flush();
             tx.commit();
         } catch (RepositoryException e) {
@@ -95,6 +96,7 @@ public class AccountBalanceHistoryService extends DomainService implements Accou
             Debug.logError(e, MODULE);
             throw new ServiceException(e);
         } catch (HibernateException e) {
+        	// return the ServiceException with the message of exception
             throw new ServiceException(e.getMessage());
         } finally {
             if (session != null) {

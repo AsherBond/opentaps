@@ -224,6 +224,7 @@ public class EncumbranceServices extends DomainService implements EncumbranceSer
         } catch (InfrastructureException e) {
             throw new ServiceException(e.getMessage());
         } catch (HibernateException e) {
+        	// return the ServiceException with the message of exception
             throw new ServiceException(e.getMessage());
         } finally {
             if (session != null) {
