@@ -183,7 +183,7 @@ framework/widget/src/org/ofbiz/widget/screen/ModelScreenWidget.java
 framework/widget/src/org/ofbiz/widget/screen/ScreenStringRenderer.java
 framework/widget/src/org/ofbiz/widget/text/TextScreenRenderer.java
 framework/widget/templates/htmlScreenMacroLibrary.ftl
-Add screen XML node to render a simple frame section with styled header.
+r14407 r14434 Add screen XML node to render a simple frame section with styled header.
 
 framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
 r14376 fix the add redirect parameter of request-redirect which after multipart/form-data form submit
@@ -318,7 +318,10 @@ applications/workeffort/src/org/ofbiz/workeffort/workeffort/WorkEffortServices.j
 r14110 exclude cancelled task on filter out cancel event is true
 
 applications/product/webapp/facility/inventory/InventoryForms.xml
-fix styles on the edit inventory item screen (inventory item reservations and Physical Inventory Variances list headers)
+r14521 fix styles on the edit inventory item screen (inventory item reservations and Physical Inventory Variances list headers)
+
+applications/accounting/src/org/ofbiz/accounting/invoice/InvoiceWorker.java
+r14557 Fix InvoiceWorker and payment application services to account for invoice adjustments.
 
 Other API Changes
 -----------------
