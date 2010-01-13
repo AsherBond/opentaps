@@ -70,7 +70,7 @@ fieldMapColumns.put("CurrencyDimension", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,19 +84,19 @@ fieldMapColumns.put("CurrencyDimension", fields);
    @GeneratedValue(generator="CurrencyDimension_GEN")
    @Id
    @Column(name="DIMENSION_ID")
-   private String dimensionId;
+   protected String dimensionId;
    @Column(name="CURRENCY_ID")
-   private String currencyId;
+   protected String currencyId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

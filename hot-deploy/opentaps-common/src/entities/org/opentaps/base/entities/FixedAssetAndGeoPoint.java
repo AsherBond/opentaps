@@ -92,7 +92,7 @@ fieldMapColumns.put("FixedAssetAndGeoPoint", fields);
     elevation("elevation"),
     elevationUomId("elevationUomId"),
     information("information");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -129,14 +129,14 @@ fieldMapColumns.put("FixedAssetAndGeoPoint", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private FixedAsset fixedAsset = null;
+   protected FixedAsset fixedAsset = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_POINT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GeoPoint geoPoint = null;
+   protected GeoPoint geoPoint = null;
 
   /**
    * Default constructor.

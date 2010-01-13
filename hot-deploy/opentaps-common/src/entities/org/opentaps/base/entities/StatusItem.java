@@ -74,7 +74,7 @@ fieldMapColumns.put("StatusItem", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,374 +88,394 @@ fieldMapColumns.put("StatusItem", fields);
    @GeneratedValue(generator="StatusItem_GEN")
    @Id
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="STATUS_TYPE_ID")
-   private String statusTypeId;
+   protected String statusTypeId;
    @Column(name="STATUS_CODE")
-   private String statusCode;
+   protected String statusCode;
    @Column(name="SEQUENCE_ID")
-   private String sequenceId;
+   protected String sequenceId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusType statusType = null;
+   protected StatusType statusType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GROUP_STATUS_ID")
    
-   private List<AcctgTrans> acctgTranses = null;
+   protected List<AcctgTrans> acctgTranses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RECONCILE_STATUS_ID")
    
-   private List<AcctgTransEntry> acctgTransEntrys = null;
+   protected List<AcctgTransEntry> acctgTransEntrys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<Agreement> agreements = null;
+   protected List<Agreement> agreements = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="STATUS_ID")
+   
+   protected List<AmazonOrder> amazonOrders = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ACK_STATUS_ID")
+   
+   protected List<AmazonOrder> ackAmazonOrders = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="STATUS_ID")
+   
+   protected List<AmazonOrderDocument> amazonOrderDocuments = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ACK_STATUS_ID")
+   
+   protected List<AmazonOrderDocument> ackAmazonOrderDocuments = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="STATUS_ID")
+   
+   protected List<AmazonProduct> amazonProducts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="statusItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="STATUS_ID")
    
-   private List<BudgetStatus> budgetStatuses = null;
+   protected List<BudgetStatus> budgetStatuses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<CommunicationEvent> communicationEvents = null;
+   protected List<CommunicationEvent> communicationEvents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<CommunicationEventRole> communicationEventRoles = null;
+   protected List<CommunicationEventRole> communicationEventRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<ContactListCommStatus> contactListCommStatuses = null;
+   protected List<ContactListCommStatus> contactListCommStatuses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<ContactListParty> contactListPartys = null;
+   protected List<ContactListParty> contactListPartys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<Content> contents = null;
+   protected List<Content> contents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="APPROVAL_STATUS_ID")
    
-   private List<ContentApproval> approvalContentApprovals = null;
+   protected List<ContentApproval> approvalContentApprovals = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="statusItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="STATUS_ID")
    
-   private List<ContentPurposeOperation> contentPurposeOperations = null;
+   protected List<ContentPurposeOperation> contentPurposeOperations = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<CustRequest> custRequests = null;
+   protected List<CustRequest> custRequests = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<CustRequestItem> custRequestItems = null;
+   protected List<CustRequestItem> custRequestItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<CustRequestStatus> custRequestStatuses = null;
+   protected List<CustRequestStatus> custRequestStatuses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<DataResource> dataResources = null;
+   protected List<DataResource> dataResources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<EmplPosition> emplPositions = null;
+   protected List<EmplPosition> emplPositions = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<EmploymentApp> employmentApps = null;
+   protected List<EmploymentApp> employmentApps = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<Example> examples = null;
+   protected List<Example> examples = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<ExampleStatus> exampleStatuses = null;
+   protected List<ExampleStatus> exampleStatuses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="statusItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="STATUS_ID")
    
-   private List<FinAccountStatus> finAccountStatuses = null;
+   protected List<FinAccountStatus> finAccountStatuses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<FixedAssetMaint> fixedAssetMaints = null;
+   protected List<FixedAssetMaint> fixedAssetMaints = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<InventoryItem> inventoryItems = null;
+   protected List<InventoryItem> inventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="statusItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="STATUS_ID")
    
-   private List<InventoryItemStatus> inventoryItemStatuses = null;
+   protected List<InventoryItemStatus> inventoryItemStatuses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fromStatusItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="STATUS_ID_FROM")
    
-   private List<InventoryStatusGlAccountType> fromInventoryStatusGlAccountTypes = null;
+   protected List<InventoryStatusGlAccountType> fromInventoryStatusGlAccountTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="toStatusItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="STATUS_ID_TO")
    
-   private List<InventoryStatusGlAccountType> toInventoryStatusGlAccountTypes = null;
+   protected List<InventoryStatusGlAccountType> toInventoryStatusGlAccountTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<InventoryTransfer> inventoryTransfers = null;
+   protected List<InventoryTransfer> inventoryTransfers = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<Invoice> invoices = null;
+   protected List<Invoice> invoices = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PROCESSING_STATUS_ID")
    
-   private List<Invoice> processingInvoices = null;
+   protected List<Invoice> processingInvoices = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="statusItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="STATUS_ID")
    
-   private List<InvoiceStatus> invoiceStatuses = null;
+   protected List<InvoiceStatus> invoiceStatuses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<JobSandbox> jobSandboxes = null;
+   protected List<JobSandbox> jobSandboxes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<MarketingCampaign> marketingCampaigns = null;
+   protected List<MarketingCampaign> marketingCampaigns = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PROCESSING_STATUS_ID")
    
-   private List<OagisMessageInfo> processingOagisMessageInfoes = null;
+   protected List<OagisMessageInfo> processingOagisMessageInfoes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<OrderDeliverySchedule> orderDeliverySchedules = null;
+   protected List<OrderDeliverySchedule> orderDeliverySchedules = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<OrderHeader> orderHeaders = null;
+   protected List<OrderHeader> orderHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SYNC_STATUS_ID")
    
-   private List<OrderHeader> syncOrderHeaders = null;
+   protected List<OrderHeader> syncOrderHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<OrderItem> orderItems = null;
+   protected List<OrderItem> orderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SYNC_STATUS_ID")
    
-   private List<OrderItem> syncOrderItems = null;
+   protected List<OrderItem> syncOrderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<OrderItemShipGroup> orderItemShipGroups = null;
+   protected List<OrderItemShipGroup> orderItemShipGroups = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<OrderPaymentPreference> orderPaymentPreferences = null;
+   protected List<OrderPaymentPreference> orderPaymentPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<OrderStatus> orderStatuses = null;
+   protected List<OrderStatus> orderStatuses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<Party> partys = null;
+   protected List<Party> partys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<PartyFixedAssetAssignment> partyFixedAssetAssignments = null;
+   protected List<PartyFixedAssetAssignment> partyFixedAssetAssignments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<PartyInvitation> partyInvitations = null;
+   protected List<PartyInvitation> partyInvitations = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<PartyQual> partyQuals = null;
+   protected List<PartyQual> partyQuals = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="VERIF_STATUS_ID")
    
-   private List<PartyQual> verificationPartyQuals = null;
+   protected List<PartyQual> verificationPartyQuals = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<PartyRelationship> partyRelationships = null;
+   protected List<PartyRelationship> partyRelationships = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="statusItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="STATUS_ID")
    
-   private List<PartyStatus> partyStatuses = null;
+   protected List<PartyStatus> partyStatuses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<Payment> payments = null;
+   protected List<Payment> payments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<Picklist> picklists = null;
+   protected List<Picklist> picklists = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ITEM_STATUS_ID")
    
-   private List<PicklistItem> picklistItems = null;
+   protected List<PicklistItem> picklistItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<PicklistStatusHistory> picklistStatusHistorys = null;
+   protected List<PicklistStatusHistory> picklistStatusHistorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID_TO")
    
-   private List<PicklistStatusHistory> toPicklistStatusHistorys = null;
+   protected List<PicklistStatusHistory> toPicklistStatusHistorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<PosTerminalLog> posTerminalLogs = null;
+   protected List<PosTerminalLog> posTerminalLogs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<ProductReview> productReviews = null;
+   protected List<ProductReview> productReviews = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="HEADER_APPROVED_STATUS")
    
-   private List<ProductStore> headerApprovedProductStores = null;
+   protected List<ProductStore> headerApprovedProductStores = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ITEM_APPROVED_STATUS")
    
-   private List<ProductStore> itemApprovedProductStores = null;
+   protected List<ProductStore> itemApprovedProductStores = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DIGITAL_ITEM_APPROVED_STATUS")
    
-   private List<ProductStore> digitalItemApprovedProductStores = null;
+   protected List<ProductStore> digitalItemApprovedProductStores = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="HEADER_DECLINED_STATUS")
    
-   private List<ProductStore> headerDeclinedProductStores = null;
+   protected List<ProductStore> headerDeclinedProductStores = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ITEM_DECLINED_STATUS")
    
-   private List<ProductStore> itemDeclinedProductStores = null;
+   protected List<ProductStore> itemDeclinedProductStores = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="HEADER_CANCEL_STATUS")
    
-   private List<ProductStore> headerCancelProductStores = null;
+   protected List<ProductStore> headerCancelProductStores = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ITEM_CANCEL_STATUS")
    
-   private List<ProductStore> itemCancelProductStores = null;
+   protected List<ProductStore> itemCancelProductStores = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<Quote> quotes = null;
+   protected List<Quote> quotes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<Requirement> requirements = null;
+   protected List<Requirement> requirements = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="statusItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="STATUS_ID")
    
-   private List<RequirementStatus> requirementStatuses = null;
+   protected List<RequirementStatus> requirementStatuses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<ReturnHeader> returnHeaders = null;
+   protected List<ReturnHeader> returnHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<ReturnItem> returnItems = null;
+   protected List<ReturnItem> returnItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="EXPECTED_ITEM_STATUS")
    
-   private List<ReturnItem> inventoryReturnItems = null;
+   protected List<ReturnItem> inventoryReturnItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<ReturnStatus> returnStatuses = null;
+   protected List<ReturnStatus> returnStatuses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<ServerHit> serverHits = null;
+   protected List<ServerHit> serverHits = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<Shipment> shipments = null;
+   protected List<Shipment> shipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CARRIER_SERVICE_STATUS_ID")
    
-   private List<ShipmentRouteSegment> carrierServiceShipmentRouteSegments = null;
+   protected List<ShipmentRouteSegment> carrierServiceShipmentRouteSegments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="statusItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="STATUS_ID")
    
-   private List<ShipmentStatus> shipmentStatuses = null;
+   protected List<ShipmentStatus> shipmentStatuses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="mainStatusItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="STATUS_ID")
    
-   private List<StatusValidChange> mainStatusValidChanges = null;
+   protected List<StatusValidChange> mainStatusValidChanges = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="toStatusItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="STATUS_ID_TO")
    
-   private List<StatusValidChange> toStatusValidChanges = null;
+   protected List<StatusValidChange> toStatusValidChanges = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<SurveyResponse> surveyResponses = null;
+   protected List<SurveyResponse> surveyResponses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<Timesheet> timesheets = null;
+   protected List<Timesheet> timesheets = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<UnemploymentClaim> unemploymentClaims = null;
+   protected List<UnemploymentClaim> unemploymentClaims = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENT_STATUS_ID")
    
-   private List<WorkEffort> currentWorkEfforts = null;
+   protected List<WorkEffort> currentWorkEfforts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<WorkEffortFixedAssetAssign> workEffortFixedAssetAssigns = null;
+   protected List<WorkEffortFixedAssetAssign> workEffortFixedAssetAssigns = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AVAILABILITY_STATUS_ID")
    
-   private List<WorkEffortFixedAssetAssign> availabilityWorkEffortFixedAssetAssigns = null;
+   protected List<WorkEffortFixedAssetAssign> availabilityWorkEffortFixedAssetAssigns = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<WorkEffortGoodStandard> workEffortGoodStandards = null;
+   protected List<WorkEffortGoodStandard> workEffortGoodStandards = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<WorkEffortInventoryAssign> workEffortInventoryAssigns = null;
+   protected List<WorkEffortInventoryAssign> workEffortInventoryAssigns = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<WorkEffortPartyAssignment> assignmentWorkEffortPartyAssignments = null;
+   protected List<WorkEffortPartyAssignment> assignmentWorkEffortPartyAssignments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AVAILABILITY_STATUS_ID")
    
-   private List<WorkEffortPartyAssignment> availabilityWorkEffortPartyAssignments = null;
+   protected List<WorkEffortPartyAssignment> availabilityWorkEffortPartyAssignments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
-   private List<WorkEffortReview> workEffortReviews = null;
+   protected List<WorkEffortReview> workEffortReviews = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="statusItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="STATUS_ID")
    
-   private List<WorkEffortStatus> workEffortStatuses = null;
+   protected List<WorkEffortStatus> workEffortStatuses = null;
 
   /**
    * Default constructor.
@@ -654,6 +674,61 @@ fieldMapColumns.put("StatusItem", fields);
             this.agreements = getRelated(Agreement.class, "Agreement");
         }
         return this.agreements;
+    }
+    /**
+     * Auto generated method that gets the related <code>AmazonOrder</code> by the relation named <code>AmazonOrder</code>.
+     * @return the list of <code>AmazonOrder</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AmazonOrder> getAmazonOrders() throws RepositoryException {
+        if (this.amazonOrders == null) {
+            this.amazonOrders = getRelated(AmazonOrder.class, "AmazonOrder");
+        }
+        return this.amazonOrders;
+    }
+    /**
+     * Auto generated method that gets the related <code>AmazonOrder</code> by the relation named <code>AckAmazonOrder</code>.
+     * @return the list of <code>AmazonOrder</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AmazonOrder> getAckAmazonOrders() throws RepositoryException {
+        if (this.ackAmazonOrders == null) {
+            this.ackAmazonOrders = getRelated(AmazonOrder.class, "AckAmazonOrder");
+        }
+        return this.ackAmazonOrders;
+    }
+    /**
+     * Auto generated method that gets the related <code>AmazonOrderDocument</code> by the relation named <code>AmazonOrderDocument</code>.
+     * @return the list of <code>AmazonOrderDocument</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AmazonOrderDocument> getAmazonOrderDocuments() throws RepositoryException {
+        if (this.amazonOrderDocuments == null) {
+            this.amazonOrderDocuments = getRelated(AmazonOrderDocument.class, "AmazonOrderDocument");
+        }
+        return this.amazonOrderDocuments;
+    }
+    /**
+     * Auto generated method that gets the related <code>AmazonOrderDocument</code> by the relation named <code>AckAmazonOrderDocument</code>.
+     * @return the list of <code>AmazonOrderDocument</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AmazonOrderDocument> getAckAmazonOrderDocuments() throws RepositoryException {
+        if (this.ackAmazonOrderDocuments == null) {
+            this.ackAmazonOrderDocuments = getRelated(AmazonOrderDocument.class, "AckAmazonOrderDocument");
+        }
+        return this.ackAmazonOrderDocuments;
+    }
+    /**
+     * Auto generated method that gets the related <code>AmazonProduct</code> by the relation named <code>AmazonProduct</code>.
+     * @return the list of <code>AmazonProduct</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AmazonProduct> getAmazonProducts() throws RepositoryException {
+        if (this.amazonProducts == null) {
+            this.amazonProducts = getRelated(AmazonProduct.class, "AmazonProduct");
+        }
+        return this.amazonProducts;
     }
     /**
      * Auto generated method that gets the related <code>BudgetStatus</code> by the relation named <code>BudgetStatus</code>.
@@ -1596,6 +1671,41 @@ fieldMapColumns.put("StatusItem", fields);
     */
     public void setAgreements(List<Agreement> agreements) {
         this.agreements = agreements;
+    }
+    /**
+     * Auto generated value setter.
+     * @param amazonOrders the amazonOrders to set
+    */
+    public void setAmazonOrders(List<AmazonOrder> amazonOrders) {
+        this.amazonOrders = amazonOrders;
+    }
+    /**
+     * Auto generated value setter.
+     * @param ackAmazonOrders the ackAmazonOrders to set
+    */
+    public void setAckAmazonOrders(List<AmazonOrder> ackAmazonOrders) {
+        this.ackAmazonOrders = ackAmazonOrders;
+    }
+    /**
+     * Auto generated value setter.
+     * @param amazonOrderDocuments the amazonOrderDocuments to set
+    */
+    public void setAmazonOrderDocuments(List<AmazonOrderDocument> amazonOrderDocuments) {
+        this.amazonOrderDocuments = amazonOrderDocuments;
+    }
+    /**
+     * Auto generated value setter.
+     * @param ackAmazonOrderDocuments the ackAmazonOrderDocuments to set
+    */
+    public void setAckAmazonOrderDocuments(List<AmazonOrderDocument> ackAmazonOrderDocuments) {
+        this.ackAmazonOrderDocuments = ackAmazonOrderDocuments;
+    }
+    /**
+     * Auto generated value setter.
+     * @param amazonProducts the amazonProducts to set
+    */
+    public void setAmazonProducts(List<AmazonProduct> amazonProducts) {
+        this.amazonProducts = amazonProducts;
     }
     /**
      * Auto generated value setter.

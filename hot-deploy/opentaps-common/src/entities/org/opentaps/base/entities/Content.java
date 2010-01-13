@@ -111,7 +111,7 @@ fieldMapColumns.put("Content", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     classificationEnumId("classificationEnumId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -125,158 +125,158 @@ fieldMapColumns.put("Content", fields);
    @GeneratedValue(generator="Content_GEN")
    @Id
    @Column(name="CONTENT_ID")
-   private String contentId;
+   protected String contentId;
    @Column(name="CONTENT_TYPE_ID")
-   private String contentTypeId;
+   protected String contentTypeId;
    @Column(name="OWNER_CONTENT_ID")
-   private String ownerContentId;
+   protected String ownerContentId;
    @Column(name="DECORATOR_CONTENT_ID")
-   private String decoratorContentId;
+   protected String decoratorContentId;
    @Column(name="INSTANCE_OF_CONTENT_ID")
-   private String instanceOfContentId;
+   protected String instanceOfContentId;
    @Column(name="DATA_RESOURCE_ID")
-   private String dataResourceId;
+   protected String dataResourceId;
    @Column(name="TEMPLATE_DATA_RESOURCE_ID")
-   private String templateDataResourceId;
+   protected String templateDataResourceId;
    @Column(name="DATA_SOURCE_ID")
-   private String dataSourceId;
+   protected String dataSourceId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="PRIVILEGE_ENUM_ID")
-   private String privilegeEnumId;
+   protected String privilegeEnumId;
    @Column(name="SERVICE_NAME")
-   private String serviceName;
+   protected String serviceName;
    @Column(name="CONTENT_NAME")
-   private String contentName;
+   protected String contentName;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LOCALE_STRING")
-   private String localeString;
+   protected String localeString;
    @Column(name="MIME_TYPE_ID")
-   private String mimeTypeId;
+   protected String mimeTypeId;
    @Column(name="CHARACTER_SET_ID")
-   private String characterSetId;
+   protected String characterSetId;
    @Column(name="CHILD_LEAF_COUNT")
-   private Long childLeafCount;
+   protected Long childLeafCount;
    @Column(name="CHILD_BRANCH_COUNT")
-   private Long childBranchCount;
+   protected Long childBranchCount;
    @Column(name="CREATED_DATE")
-   private Timestamp createdDate;
+   protected Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   private String createdByUserLogin;
+   protected String createdByUserLogin;
    @Column(name="LAST_MODIFIED_DATE")
-   private Timestamp lastModifiedDate;
+   protected Timestamp lastModifiedDate;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   private String lastModifiedByUserLogin;
+   protected String lastModifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="CLASSIFICATION_ENUM_ID")
-   private String classificationEnumId;
+   protected String classificationEnumId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContentType contentType = null;
+   protected ContentType contentType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private DataResource dataResource = null;
+   protected DataResource dataResource = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TEMPLATE_DATA_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private DataResource templateDataResource = null;
+   protected DataResource templateDataResource = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRIVILEGE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration privilegeEnumeration = null;
+   protected Enumeration privilegeEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MIME_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private MimeType mimeType = null;
+   protected MimeType mimeType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CHARACTER_SET_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CharacterSet characterSet = null;
+   protected CharacterSet characterSet = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_TYPE_ID")
    
-   private List<ContentTypeAttr> contentTypeAttrs = null;
+   protected List<ContentTypeAttr> contentTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin relatedCreatedByUserLogin = null;
+   protected UserLogin relatedCreatedByUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin relatedLastModifiedByUserLogin = null;
+   protected UserLogin relatedLastModifiedByUserLogin = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_RESOURCE_ID")
    
-   private List<ProductFeatureDataResource> productFeatureDataResources = null;
+   protected List<ProductFeatureDataResource> productFeatureDataResources = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_SOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private DataSource dataSource = null;
+   protected DataSource dataSource = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DECORATOR_CONTENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Content decoratorContent = null;
+   protected Content decoratorContent = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="OWNER_CONTENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Content ownerContent = null;
+   protected Content ownerContent = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INSTANCE_OF_CONTENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Content instanceOfContent = null;
+   protected Content instanceOfContent = null;
    private transient List<ContentAssocDataResourceViewFrom> contentAssocDataResourceViewFroms = null;
    private transient List<ContentAssocDataResourceViewTo> contentAssocDataResourceViewToes = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -285,122 +285,122 @@ fieldMapColumns.put("Content", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration classificationEnumeration = null;
+   protected Enumeration classificationEnumeration = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fromContent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<CommEventContentAssoc> fromCommEventContentAssocs = null;
+   protected List<CommEventContentAssoc> fromCommEventContentAssocs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID")
    
-   private List<ContentApproval> contentApprovals = null;
+   protected List<ContentApproval> contentApprovals = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fromContent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<ContentAssoc> fromContentAssocs = null;
+   protected List<ContentAssoc> fromContentAssocs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="toContent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID_TO")
    
-   private List<ContentAssoc> toContentAssocs = null;
+   protected List<ContentAssoc> toContentAssocs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="content", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<ContentAttribute> contentAttributes = null;
+   protected List<ContentAttribute> contentAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="content", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<ContentMetaData> contentMetaDatas = null;
+   protected List<ContentMetaData> contentMetaDatas = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="content", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<ContentPurpose> contentPurposes = null;
+   protected List<ContentPurpose> contentPurposes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="content", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<ContentRevision> contentRevisions = null;
+   protected List<ContentRevision> contentRevisions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="content", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<ContentRole> contentRoles = null;
+   protected List<ContentRole> contentRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="content", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<CustRequestContent> custRequestContents = null;
+   protected List<CustRequestContent> custRequestContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="content", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<OrderContent> orderContents = null;
+   protected List<OrderContent> orderContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="content", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<OrderHeaderContent> orderHeaderContents = null;
+   protected List<OrderHeaderContent> orderHeaderContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="content", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<PartyContent> partyContents = null;
+   protected List<PartyContent> partyContents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID")
    
-   private List<PartyResume> partyResumes = null;
+   protected List<PartyResume> partyResumes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="content", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<ProdConfItemContent> prodConfItemContents = null;
+   protected List<ProdConfItemContent> prodConfItemContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="content", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<ProductCategoryContent> productCategoryContents = null;
+   protected List<ProductCategoryContent> productCategoryContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="content", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<ProductContent> productContents = null;
+   protected List<ProductContent> productContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="content", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<QuoteContent> quoteContents = null;
+   protected List<QuoteContent> quoteContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="content", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<SalesOpportunityContent> salesOpportunityContents = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="INTERNAL_CONTENT_ID")
-   
-   private List<ServerHit> serverHits = null;
+   protected List<SalesOpportunityContent> salesOpportunityContents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INTERNAL_CONTENT_ID")
    
-   private List<ServerHitBin> serverHitBins = null;
+   protected List<ServerHit> serverHits = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="INTERNAL_CONTENT_ID")
+   
+   protected List<ServerHitBin> serverHitBins = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID")
    
-   private List<SubscriptionResource> subscriptionResources = null;
+   protected List<SubscriptionResource> subscriptionResources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID")
    
-   private List<SurveyResponseAnswer> surveyResponseAnswers = null;
+   protected List<SurveyResponseAnswer> surveyResponseAnswers = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID")
    
-   private List<WebPage> webPages = null;
+   protected List<WebPage> webPages = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="content", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<WebSiteContent> webSiteContents = null;
+   protected List<WebSiteContent> webSiteContents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID")
    
-   private List<WebSitePathAlias> webSitePathAliases = null;
+   protected List<WebSitePathAlias> webSitePathAliases = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WebSitePublishPoint webSitePublishPoint = null;
+   protected WebSitePublishPoint webSitePublishPoint = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="content", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
-   private List<WorkEffortContent> workEffortContents = null;
+   protected List<WorkEffortContent> workEffortContents = null;
 
   /**
    * Default constructor.

@@ -83,7 +83,7 @@ fieldMapColumns.put("UspsBPMRateZoneCount", fields);
     sortResult("sortResult"),
     contactMechId("contactMechId"),
     contactListId("contactListId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

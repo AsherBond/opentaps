@@ -106,7 +106,7 @@ fieldMapColumns.put("PartyAndStatus", fields);
     statusTypeId("statusTypeId"),
     statusCode("statusCode"),
     sequenceId("sequenceId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

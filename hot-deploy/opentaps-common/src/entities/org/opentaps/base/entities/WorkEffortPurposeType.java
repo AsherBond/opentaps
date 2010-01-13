@@ -68,7 +68,7 @@ fieldMapColumns.put("WorkEffortPurposeType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,21 +82,21 @@ fieldMapColumns.put("WorkEffortPurposeType", fields);
    @GeneratedValue(generator="WorkEffortPurposeType_GEN")
    @Id
    @Column(name="WORK_EFFORT_PURPOSE_TYPE_ID")
-   private String workEffortPurposeTypeId;
+   protected String workEffortPurposeTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_PURPOSE_TYPE_ID")
    
-   private List<WorkEffort> workEfforts = null;
+   protected List<WorkEffort> workEfforts = null;
 
   /**
    * Default constructor.

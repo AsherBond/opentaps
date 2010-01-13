@@ -72,7 +72,7 @@ fieldMapColumns.put("PosTerminal", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,29 +86,29 @@ fieldMapColumns.put("PosTerminal", fields);
    @GeneratedValue(generator="PosTerminal_GEN")
    @Id
    @Column(name="POS_TERMINAL_ID")
-   private String posTerminalId;
+   protected String posTerminalId;
    @Column(name="FACILITY_ID")
-   private String facilityId;
+   protected String facilityId;
    @Column(name="PUSH_ENTITY_SYNC_ID")
-   private String pushEntitySyncId;
+   protected String pushEntitySyncId;
    @Column(name="TERMINAL_NAME")
-   private String terminalName;
+   protected String terminalName;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="POS_TERMINAL_ID")
    
-   private List<PosTerminalLog> posTerminalLogs = null;
+   protected List<PosTerminalLog> posTerminalLogs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="posTerminal", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="POS_TERMINAL_ID")
    
-   private List<PosTerminalState> posTerminalStates = null;
+   protected List<PosTerminalState> posTerminalStates = null;
 
   /**
    * Default constructor.

@@ -78,7 +78,7 @@ fieldMapColumns.put("WebslingerServer", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,42 +92,42 @@ fieldMapColumns.put("WebslingerServer", fields);
    @GeneratedValue(generator="WebslingerServer_GEN")
    @Id
    @Column(name="WEBSLINGER_SERVER_ID")
-   private String webslingerServerId;
+   protected String webslingerServerId;
    @Column(name="DELEGATOR_NAME")
-   private String delegatorName;
+   protected String delegatorName;
    @Column(name="DISPATCHER_NAME")
-   private String dispatcherName;
+   protected String dispatcherName;
    @Column(name="SERVER_NAME")
-   private String serverName;
+   protected String serverName;
    @Column(name="WEB_SITE_ID")
-   private String webSiteId;
+   protected String webSiteId;
    @Column(name="TARGET")
-   private String target;
+   protected String target;
    @Column(name="LOAD_AT_START")
-   private String loadAtStart;
+   protected String loadAtStart;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WEB_SITE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WebSite webSite = null;
+   protected WebSite webSite = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WEBSLINGER_SERVER_ID")
    
-   private List<WebslingerHostMapping> webslingerHostMappings = null;
+   protected List<WebslingerHostMapping> webslingerHostMappings = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="webslingerServer", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WEBSLINGER_SERVER_ID")
    
-   private List<WebslingerServerBase> webslingerServerBases = null;
+   protected List<WebslingerServerBase> webslingerServerBases = null;
 
   /**
    * Default constructor.

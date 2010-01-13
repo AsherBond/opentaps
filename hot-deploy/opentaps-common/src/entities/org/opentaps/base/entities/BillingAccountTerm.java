@@ -78,7 +78,7 @@ fieldMapColumns.put("BillingAccountTerm", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,50 +92,50 @@ fieldMapColumns.put("BillingAccountTerm", fields);
    @GeneratedValue(generator="BillingAccountTerm_GEN")
    @Id
    @Column(name="BILLING_ACCOUNT_TERM_ID")
-   private String billingAccountTermId;
+   protected String billingAccountTermId;
    @Column(name="BILLING_ACCOUNT_ID")
-   private String billingAccountId;
+   protected String billingAccountId;
    @Column(name="TERM_TYPE_ID")
-   private String termTypeId;
+   protected String termTypeId;
    @Column(name="TERM_VALUE")
-   private BigDecimal termValue;
+   protected BigDecimal termValue;
    @Column(name="TERM_DAYS")
-   private Long termDays;
+   protected Long termDays;
    @Column(name="UOM_ID")
-   private String uomId;
+   protected String uomId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom uom = null;
+   protected Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TERM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TermType termType = null;
+   protected TermType termType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BILLING_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private BillingAccount billingAccount = null;
+   protected BillingAccount billingAccount = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="billingAccountTerm", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BILLING_ACCOUNT_TERM_ID")
    
-   private List<BillingAccountTermAttr> billingAccountTermAttrs = null;
+   protected List<BillingAccountTermAttr> billingAccountTermAttrs = null;
 
   /**
    * Default constructor.

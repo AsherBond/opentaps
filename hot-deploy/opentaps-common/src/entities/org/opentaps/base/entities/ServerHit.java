@@ -97,7 +97,7 @@ fieldMapColumns.put("ServerHit", fields);
     partyId("partyId"),
     idByIpContactMechId("idByIpContactMechId"),
     refByWebContactMechId("refByWebContactMechId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -110,7 +110,7 @@ fieldMapColumns.put("ServerHit", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ServerHitPkBridge.class)
-     private ServerHitPk id = new ServerHitPk();
+     protected ServerHitPk id = new ServerHitPk();
    
     /**
      * Auto generated Id accessor.
@@ -127,93 +127,93 @@ fieldMapColumns.put("ServerHit", fields);
          this.id = id;
       }
    @Column(name="NUM_OF_BYTES")
-   private Long numOfBytes;
+   protected Long numOfBytes;
    @Column(name="RUNNING_TIME_MILLIS")
-   private Long runningTimeMillis;
+   protected Long runningTimeMillis;
    @Column(name="USER_LOGIN_ID")
-   private String userLoginId;
+   protected String userLoginId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="REQUEST_URL")
-   private String requestUrl;
+   protected String requestUrl;
    @Column(name="REFERRER_URL")
-   private String referrerUrl;
+   protected String referrerUrl;
    @Column(name="SERVER_IP_ADDRESS")
-   private String serverIpAddress;
+   protected String serverIpAddress;
    @Column(name="SERVER_HOST_NAME")
-   private String serverHostName;
+   protected String serverHostName;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="INTERNAL_CONTENT_ID")
-   private String internalContentId;
+   protected String internalContentId;
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @Column(name="ID_BY_IP_CONTACT_MECH_ID")
-   private String idByIpContactMechId;
+   protected String idByIpContactMechId;
    @Column(name="REF_BY_WEB_CONTACT_MECH_ID")
-   private String refByWebContactMechId;
+   protected String refByWebContactMechId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="HIT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ServerHitType serverHitType = null;
+   protected ServerHitType serverHitType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="VISIT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Visit visit = null;
+   protected Visit visit = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="USER_LOGIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin userLogin = null;
+   protected UserLogin userLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ID_BY_IP_CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMech idByIpContactMech = null;
+   protected ContactMech idByIpContactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REF_BY_WEB_CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMech refByWebContactMech = null;
+   protected ContactMech refByWebContactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INTERNAL_CONTENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Content content = null;
+   protected Content content = null;
 
   /**
    * Default constructor.

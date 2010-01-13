@@ -294,7 +294,7 @@ fieldMapColumns.put("WorkEffortPartyAssignByGroup", fields);
     partyRelationshipTypeId("partyRelationshipTypeId"),
     permissionsEnumId("permissionsEnumId"),
     positionTitle("positionTitle");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -464,7 +464,7 @@ fieldMapColumns.put("WorkEffortPartyAssignByGroup", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort workEffort = null;
+   protected WorkEffort workEffort = null;
    private transient WorkEffortPartyAssignment workEffortPartyAssignment = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
@@ -472,7 +472,7 @@ fieldMapColumns.put("WorkEffortPartyAssignByGroup", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    private transient Person person = null;
    private transient PartyRole partyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -481,7 +481,7 @@ fieldMapColumns.put("WorkEffortPartyAssignByGroup", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RoleType roleType = null;
+   protected RoleType roleType = null;
 
   /**
    * Default constructor.

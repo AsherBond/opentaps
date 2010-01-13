@@ -72,7 +72,7 @@ fieldMapColumns.put("DesiredFeature", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -85,7 +85,7 @@ fieldMapColumns.put("DesiredFeature", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.DesiredFeaturePkBridge.class)
-     private DesiredFeaturePk id = new DesiredFeaturePk();
+     protected DesiredFeaturePk id = new DesiredFeaturePk();
    
     /**
      * Auto generated Id accessor.
@@ -102,31 +102,31 @@ fieldMapColumns.put("DesiredFeature", fields);
          this.id = id;
       }
    @Column(name="PRODUCT_FEATURE_ID")
-   private String productFeatureId;
+   protected String productFeatureId;
    @Column(name="OPTIONAL_IND")
-   private String optionalInd;
+   protected String optionalInd;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REQUIREMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Requirement requirement = null;
+   protected Requirement requirement = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_FEATURE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductFeature productFeature = null;
+   protected ProductFeature productFeature = null;
 
   /**
    * Default constructor.

@@ -70,7 +70,7 @@ fieldMapColumns.put("InvoiceTermAttribute", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -83,7 +83,7 @@ fieldMapColumns.put("InvoiceTermAttribute", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.InvoiceTermAttributePkBridge.class)
-     private InvoiceTermAttributePk id = new InvoiceTermAttributePk();
+     protected InvoiceTermAttributePk id = new InvoiceTermAttributePk();
    
     /**
      * Auto generated Id accessor.
@@ -100,23 +100,23 @@ fieldMapColumns.put("InvoiceTermAttribute", fields);
          this.id = id;
       }
    @Column(name="ATTR_VALUE")
-   private String attrValue;
+   protected String attrValue;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_TERM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private InvoiceTerm invoiceTerm = null;
-   private transient List<TermTypeAttr> termTypeAttrs = null;
+   protected InvoiceTerm invoiceTerm = null;
+   protected transient List<TermTypeAttr> termTypeAttrs = null;
 
   /**
    * Default constructor.

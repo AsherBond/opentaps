@@ -68,7 +68,7 @@ fieldMapColumns.put("DeliverableType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,25 +82,25 @@ fieldMapColumns.put("DeliverableType", fields);
    @GeneratedValue(generator="DeliverableType_GEN")
    @Id
    @Column(name="DELIVERABLE_TYPE_ID")
-   private String deliverableTypeId;
+   protected String deliverableTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DELIVERABLE_TYPE_ID")
    
-   private List<Deliverable> deliverables = null;
+   protected List<Deliverable> deliverables = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DELIVERABLE_TYPE_ID")
    
-   private List<QuoteItem> quoteItems = null;
+   protected List<QuoteItem> quoteItems = null;
 
   /**
    * Default constructor.

@@ -70,7 +70,7 @@ fieldMapColumns.put("PaymentMethodType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,66 +84,66 @@ fieldMapColumns.put("PaymentMethodType", fields);
    @GeneratedValue(generator="PaymentMethodType_GEN")
    @Id
    @Column(name="PAYMENT_METHOD_TYPE_ID")
-   private String paymentMethodTypeId;
+   protected String paymentMethodTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="DEFAULT_GL_ACCOUNT_ID")
-   private String defaultGlAccountId;
+   protected String defaultGlAccountId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_GL_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GlAccount defaultGlAccount = null;
+   protected GlAccount defaultGlAccount = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID")
    
-   private List<DataImportOrderPayment> dataImportOrderPayments = null;
+   protected List<DataImportOrderPayment> dataImportOrderPayments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID")
    
-   private List<OrderPaymentPreference> orderPaymentPreferences = null;
+   protected List<OrderPaymentPreference> orderPaymentPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID")
    
-   private List<Payment> payments = null;
+   protected List<Payment> payments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID")
    
-   private List<PaymentGatewayResponse> paymentGatewayResponses = null;
+   protected List<PaymentGatewayResponse> paymentGatewayResponses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID")
    
-   private List<PaymentMethod> paymentMethods = null;
+   protected List<PaymentMethod> paymentMethods = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="paymentMethodType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID")
    
-   private List<PaymentMethodTypeGlAccount> paymentMethodTypeGlAccounts = null;
+   protected List<PaymentMethodTypeGlAccount> paymentMethodTypeGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID")
    
-   private List<PayrollPreference> payrollPreferences = null;
+   protected List<PayrollPreference> payrollPreferences = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="paymentMethodType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID")
    
-   private List<ProductPaymentMethodType> productPaymentMethodTypes = null;
+   protected List<ProductPaymentMethodType> productPaymentMethodTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="paymentMethodType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID")
    
-   private List<ProductStorePaymentSetting> productStorePaymentSettings = null;
+   protected List<ProductStorePaymentSetting> productStorePaymentSettings = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="paymentMethodType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID")
    
-   private List<ProductStoreVendorPayment> productStoreVendorPayments = null;
+   protected List<ProductStoreVendorPayment> productStoreVendorPayments = null;
 
   /**
    * Default constructor.

@@ -89,7 +89,7 @@ fieldMapColumns.put("AcctgTransEntryProdSums", fields);
     isPosted("isPosted"),
     glFiscalTypeId("glFiscalTypeId"),
     transactionDate("transactionDate");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

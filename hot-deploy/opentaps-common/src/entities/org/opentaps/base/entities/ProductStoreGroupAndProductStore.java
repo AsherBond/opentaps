@@ -326,7 +326,7 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
     defaultShipmentMethodTypeId("defaultShipmentMethodTypeId"),
     defaultShippingCarrierPartyId("defaultShippingCarrierPartyId"),
     billToThirdPartyId("billToThirdPartyId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -518,14 +518,14 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductStoreGroup productStoreGroup = null;
+   protected ProductStoreGroup productStoreGroup = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductStore productStore = null;
+   protected ProductStore productStore = null;
 
   /**
    * Default constructor.

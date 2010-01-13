@@ -81,7 +81,7 @@ fieldMapColumns.put("TemporalExpression", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -95,45 +95,45 @@ fieldMapColumns.put("TemporalExpression", fields);
    @GeneratedValue(generator="TemporalExpression_GEN")
    @Id
    @Column(name="TEMP_EXPR_ID")
-   private String tempExprId;
+   protected String tempExprId;
    @Column(name="TEMP_EXPR_TYPE_ID")
-   private String tempExprTypeId;
+   protected String tempExprTypeId;
    @Column(name="DATE1")
-   private Timestamp date1;
+   protected Timestamp date1;
    @Column(name="DATE2")
-   private Timestamp date2;
+   protected Timestamp date2;
    @Column(name="INTEGER1")
-   private Long integer1;
+   protected Long integer1;
    @Column(name="INTEGER2")
-   private Long integer2;
+   protected Long integer2;
    @Column(name="STRING1")
-   private String string1;
+   protected String string1;
    @Column(name="STRING2")
-   private String string2;
+   protected String string2;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TEMP_EXPR_ID")
    
-   private List<JobSandbox> jobSandboxes = null;
+   protected List<JobSandbox> jobSandboxes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fromTemporalExpression", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FROM_TEMP_EXPR_ID")
    
-   private List<TemporalExpressionAssoc> fromTemporalExpressionAssocs = null;
+   protected List<TemporalExpressionAssoc> fromTemporalExpressionAssocs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="toTemporalExpression", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TO_TEMP_EXPR_ID")
    
-   private List<TemporalExpressionAssoc> toTemporalExpressionAssocs = null;
+   protected List<TemporalExpressionAssoc> toTemporalExpressionAssocs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TEMP_EXPR_ID")
    
-   private List<WorkEffort> workEfforts = null;
+   protected List<WorkEffort> workEfforts = null;
 
   /**
    * Default constructor.

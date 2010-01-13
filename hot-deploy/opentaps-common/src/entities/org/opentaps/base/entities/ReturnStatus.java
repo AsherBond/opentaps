@@ -74,7 +74,7 @@ fieldMapColumns.put("ReturnStatus", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,37 +88,37 @@ fieldMapColumns.put("ReturnStatus", fields);
    @GeneratedValue(generator="ReturnStatus_GEN")
    @Id
    @Column(name="RETURN_STATUS_ID")
-   private String returnStatusId;
+   protected String returnStatusId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="RETURN_ID")
-   private String returnId;
+   protected String returnId;
    @Column(name="RETURN_ITEM_SEQ_ID")
-   private String returnItemSeqId;
+   protected String returnItemSeqId;
    @Column(name="STATUS_DATETIME")
-   private Timestamp statusDatetime;
+   protected Timestamp statusDatetime;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ReturnHeader returnHeader = null;
+   protected ReturnHeader returnHeader = null;
    private transient ReturnItem returnItem = null;
 
   /**

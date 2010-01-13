@@ -70,7 +70,7 @@ fieldMapColumns.put("SurveyMultiResp", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -83,7 +83,7 @@ fieldMapColumns.put("SurveyMultiResp", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.SurveyMultiRespPkBridge.class)
-     private SurveyMultiRespPk id = new SurveyMultiRespPk();
+     protected SurveyMultiRespPk id = new SurveyMultiRespPk();
    
     /**
      * Auto generated Id accessor.
@@ -100,22 +100,22 @@ fieldMapColumns.put("SurveyMultiResp", fields);
          this.id = id;
       }
    @Column(name="MULTI_RESP_TITLE")
-   private String multiRespTitle;
+   protected String multiRespTitle;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Survey survey = null;
+   protected Survey survey = null;
    private transient List<SurveyMultiRespColumn> surveyMultiRespColumns = null;
    private transient List<SurveyQuestionAppl> surveyQuestionAppls = null;
 

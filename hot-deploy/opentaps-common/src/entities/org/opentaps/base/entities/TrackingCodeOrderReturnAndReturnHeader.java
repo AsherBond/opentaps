@@ -85,7 +85,7 @@ fieldMapColumns.put("TrackingCodeOrderReturnAndReturnHeader", fields);
     hasExported("hasExported"),
     affiliateReferredTimeStamp("affiliateReferredTimeStamp"),
     statusId("statusId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -117,7 +117,7 @@ fieldMapColumns.put("TrackingCodeOrderReturnAndReturnHeader", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ReturnHeader returnHeader = null;
+   protected ReturnHeader returnHeader = null;
 
   /**
    * Default constructor.

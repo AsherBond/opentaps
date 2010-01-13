@@ -164,7 +164,7 @@ fieldMapColumns.put("ShipGroupRouteSegAndInvoice", fields);
     pendingOpenAmount("pendingOpenAmount"),
     pendingAppliedAmount("pendingAppliedAmount"),
     processingStatusId("processingStatusId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -248,7 +248,7 @@ fieldMapColumns.put("ShipGroupRouteSegAndInvoice", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Invoice invoice = null;
+   protected Invoice invoice = null;
 
   /**
    * Default constructor.

@@ -167,7 +167,7 @@ fieldMapColumns.put("PaymentAndType", fields);
     hasTable("hasTable"),
     description("description"),
     systemUse("systemUse");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -250,11 +250,11 @@ fieldMapColumns.put("PaymentAndType", fields);
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID")
    
-   private transient List<PaymentApplication> paymentApplications = null;
+   protected transient List<PaymentApplication> paymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TO_PAYMENT_ID")
    
-   private transient List<PaymentApplication> toPaymentApplications = null;
+   protected transient List<PaymentApplication> toPaymentApplications = null;
 
   /**
    * Default constructor.

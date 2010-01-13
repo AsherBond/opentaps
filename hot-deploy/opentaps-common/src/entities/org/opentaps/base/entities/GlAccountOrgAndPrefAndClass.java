@@ -113,7 +113,7 @@ fieldMapColumns.put("GlAccountOrgAndPrefAndClass", fields);
     accountName("accountName"),
     description("description"),
     productId("productId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -163,7 +163,7 @@ fieldMapColumns.put("GlAccountOrgAndPrefAndClass", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GlAccount glAccount = null;
+   protected GlAccount glAccount = null;
    private transient GlAccountOrganization glAccountOrganization = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID", insertable=false, updatable=false)
@@ -171,7 +171,7 @@ fieldMapColumns.put("GlAccountOrgAndPrefAndClass", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PartyAcctgPreference partyAcctgPreference = null;
+   protected PartyAcctgPreference partyAcctgPreference = null;
 
   /**
    * Default constructor.

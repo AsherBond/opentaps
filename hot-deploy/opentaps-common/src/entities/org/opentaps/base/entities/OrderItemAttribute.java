@@ -72,7 +72,7 @@ fieldMapColumns.put("OrderItemAttribute", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -85,7 +85,7 @@ fieldMapColumns.put("OrderItemAttribute", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.OrderItemAttributePkBridge.class)
-     private OrderItemAttributePk id = new OrderItemAttributePk();
+     protected OrderItemAttributePk id = new OrderItemAttributePk();
    
     /**
      * Auto generated Id accessor.
@@ -102,17 +102,17 @@ fieldMapColumns.put("OrderItemAttribute", fields);
          this.id = id;
       }
    @Column(name="ATTR_VALUE")
-   private String attrValue;
+   protected String attrValue;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    private transient OrderItem orderItem = null;
-   private transient List<OrderItemTypeAttr> orderItemTypeAttrs = null;
+   protected transient List<OrderItemTypeAttr> orderItemTypeAttrs = null;
 
   /**
    * Default constructor.

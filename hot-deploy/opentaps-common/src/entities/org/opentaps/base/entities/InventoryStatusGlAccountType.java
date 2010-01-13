@@ -72,7 +72,7 @@ fieldMapColumns.put("InventoryStatusGlAccountType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -85,7 +85,7 @@ fieldMapColumns.put("InventoryStatusGlAccountType", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.InventoryStatusGlAccountTypePkBridge.class)
-     private InventoryStatusGlAccountTypePk id = new InventoryStatusGlAccountTypePk();
+     protected InventoryStatusGlAccountTypePk id = new InventoryStatusGlAccountTypePk();
    
     /**
      * Auto generated Id accessor.
@@ -102,45 +102,45 @@ fieldMapColumns.put("InventoryStatusGlAccountType", fields);
          this.id = id;
       }
    @Column(name="DEBIT_GL_ACCOUNT_TYPE_ID")
-   private String debitGlAccountTypeId;
+   protected String debitGlAccountTypeId;
    @Column(name="CREDIT_GL_ACCOUNT_TYPE_ID")
-   private String creditGlAccountTypeId;
+   protected String creditGlAccountTypeId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID_FROM", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem fromStatusItem = null;
+   protected StatusItem fromStatusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem toStatusItem = null;
+   protected StatusItem toStatusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEBIT_GL_ACCOUNT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GlAccountType debitGlAccountType = null;
+   protected GlAccountType debitGlAccountType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREDIT_GL_ACCOUNT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GlAccountType creditGlAccountType = null;
+   protected GlAccountType creditGlAccountType = null;
 
   /**
    * Default constructor.

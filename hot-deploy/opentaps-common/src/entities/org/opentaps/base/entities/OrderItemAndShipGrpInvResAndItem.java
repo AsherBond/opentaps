@@ -327,7 +327,7 @@ fieldMapColumns.put("OrderItemAndShipGrpInvResAndItem", fields);
     unitCost("unitCost"),
     currencyUomId("currencyUomId"),
     parentInventoryItemId("parentInventoryItemId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

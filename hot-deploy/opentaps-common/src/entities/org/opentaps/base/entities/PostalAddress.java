@@ -92,7 +92,7 @@ fieldMapColumns.put("PostalAddress", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -106,147 +106,147 @@ fieldMapColumns.put("PostalAddress", fields);
    @GeneratedValue(generator="PostalAddress_GEN")
    @Id
    @Column(name="CONTACT_MECH_ID")
-   private String contactMechId;
+   protected String contactMechId;
    @Column(name="TO_NAME")
-   private String toName;
+   protected String toName;
    @Column(name="ATTN_NAME")
-   private String attnName;
+   protected String attnName;
    @Column(name="ADDRESS1")
-   private String address1;
+   protected String address1;
    @Column(name="ADDRESS2")
-   private String address2;
+   protected String address2;
    @Column(name="DIRECTIONS")
-   private String directions;
+   protected String directions;
    @Column(name="CITY")
-   private String city;
+   protected String city;
    @Column(name="POSTAL_CODE")
-   private String postalCode;
+   protected String postalCode;
    @Column(name="POSTAL_CODE_EXT")
-   private String postalCodeExt;
+   protected String postalCodeExt;
    @Column(name="COUNTRY_GEO_ID")
-   private String countryGeoId;
+   protected String countryGeoId;
    @Column(name="STATE_PROVINCE_GEO_ID")
-   private String stateProvinceGeoId;
+   protected String stateProvinceGeoId;
    @Column(name="COUNTY_GEO_ID")
-   private String countyGeoId;
+   protected String countyGeoId;
    @Column(name="POSTAL_CODE_GEO_ID")
-   private String postalCodeGeoId;
+   protected String postalCodeGeoId;
    @Column(name="GEO_POINT_ID")
-   private String geoPointId;
+   protected String geoPointId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMech contactMech = null;
+   protected ContactMech contactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COUNTRY_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo countryGeo = null;
+   protected Geo countryGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATE_PROVINCE_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo stateProvinceGeo = null;
+   protected Geo stateProvinceGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COUNTY_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo countyGeo = null;
+   protected Geo countyGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="POSTAL_CODE_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo postalCodeGeo = null;
+   protected Geo postalCodeGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_POINT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GeoPoint geoPoint = null;
+   protected GeoPoint geoPoint = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID")
    
-   private List<BillingAccount> billingAccounts = null;
+   protected List<BillingAccount> billingAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID")
    
-   private List<CreditCard> creditCards = null;
+   protected List<CreditCard> creditCards = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID")
    
-   private List<EftAccount> eftAccounts = null;
+   protected List<EftAccount> eftAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID")
    
-   private List<GiftCard> giftCards = null;
+   protected List<GiftCard> giftCards = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID")
    
-   private List<OrderItemShipGroup> orderItemShipGroups = null;
+   protected List<OrderItemShipGroup> orderItemShipGroups = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="postalAddress", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_MECH_ID")
    
-   private List<PartyContactMech> partyContactMeches = null;
+   protected List<PartyContactMech> partyContactMeches = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="postalAddress", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_MECH_ID")
    
-   private List<PartyContactMechPurpose> partyContactMechPurposes = null;
+   protected List<PartyContactMechPurpose> partyContactMechPurposes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="postalAddress", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_MECH_ID")
    
-   private List<PostalAddressBoundary> postalAddressBoundarys = null;
+   protected List<PostalAddressBoundary> postalAddressBoundarys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="postalAddress", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_MECH_ID")
    
-   private List<ProductStoreFacilityByAddress> productStoreFacilityByAddresses = null;
+   protected List<ProductStoreFacilityByAddress> productStoreFacilityByAddresses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_CONTACT_MECH_ID")
    
-   private List<ReturnHeader> returnHeaders = null;
+   protected List<ReturnHeader> returnHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_CONTACT_MECH_ID")
    
-   private List<Shipment> originShipments = null;
+   protected List<Shipment> originShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DESTINATION_CONTACT_MECH_ID")
    
-   private List<Shipment> destinationShipments = null;
+   protected List<Shipment> destinationShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_CONTACT_MECH_ID")
    
-   private List<ShipmentRouteSegment> originShipmentRouteSegments = null;
+   protected List<ShipmentRouteSegment> originShipmentRouteSegments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEST_CONTACT_MECH_ID")
    
-   private List<ShipmentRouteSegment> destShipmentRouteSegments = null;
+   protected List<ShipmentRouteSegment> destShipmentRouteSegments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID")
    
-   private List<ShoppingList> shoppingLists = null;
+   protected List<ShoppingList> shoppingLists = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID")
    
-   private List<UspsContactListSort> uspsContactListSorts = null;
+   protected List<UspsContactListSort> uspsContactListSorts = null;
 
   /**
    * Default constructor.

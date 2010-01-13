@@ -89,7 +89,7 @@ fieldMapColumns.put("Party", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -109,951 +109,951 @@ fieldMapColumns.put("Party", fields);
    } )
    @Boost(10f)
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @org.hibernate.search.annotations.Fields( {
        @Field(index=Index.TOKENIZED, store=Store.NO),
      @Field(index=Index.UN_TOKENIZED, store=Store.YES)
    } )
    @Boost(1f)
    @Column(name="PARTY_TYPE_ID")
-   private String partyTypeId;
+   protected String partyTypeId;
    @Column(name="EXTERNAL_ID")
-   private String externalId;
+   protected String externalId;
    @Column(name="PREFERRED_CURRENCY_UOM_ID")
-   private String preferredCurrencyUomId;
+   protected String preferredCurrencyUomId;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(1f)
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="CREATED_DATE")
-   private Timestamp createdDate;
+   protected Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   private String createdByUserLogin;
+   protected String createdByUserLogin;
    @Column(name="LAST_MODIFIED_DATE")
-   private Timestamp lastModifiedDate;
+   protected Timestamp lastModifiedDate;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   private String lastModifiedByUserLogin;
+   protected String lastModifiedByUserLogin;
    @Column(name="DATA_SOURCE_ID")
-   private String dataSourceId;
+   protected String dataSourceId;
    @Column(name="IS_UNREAD")
-   private String isUnread;
+   protected String isUnread;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PartyType partyType = null;
+   protected PartyType partyType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin relatedCreatedByUserLogin = null;
+   protected UserLogin relatedCreatedByUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin relatedLastModifiedByUserLogin = null;
+   protected UserLogin relatedLastModifiedByUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PREFERRED_CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom uom = null;
+   protected Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_TYPE_ID")
    
-   private List<PartyTypeAttr> partyTypeAttrs = null;
+   protected List<PartyTypeAttr> partyTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_SOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private DataSource dataSource = null;
+   protected DataSource dataSource = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<AccountBalanceHistory> organizationAccountBalanceHistorys = null;
+   protected List<AccountBalanceHistory> organizationAccountBalanceHistorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<AccountBalanceHistory> accountBalanceHistorys = null;
+   protected List<AccountBalanceHistory> accountBalanceHistorys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<AcctgTagEnumType> acctgTagEnumTypes = null;
+   protected List<AcctgTagEnumType> acctgTagEnumTypes = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AcctgTagPostingCheck acctgTagPostingCheck = null;
+   protected AcctgTagPostingCheck acctgTagPostingCheck = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<AcctgTrans> acctgTranses = null;
+   protected List<AcctgTrans> acctgTranses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<AcctgTransEntry> acctgTransEntrys = null;
+   protected List<AcctgTransEntry> acctgTransEntrys = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Affiliate affiliate = null;
+   protected Affiliate affiliate = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_FROM")
    
-   private List<Agreement> fromAgreements = null;
+   protected List<Agreement> fromAgreements = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_TO")
    
-   private List<Agreement> toAgreements = null;
+   protected List<Agreement> toAgreements = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<AgreementPartyApplic> agreementPartyApplics = null;
+   protected List<AgreementPartyApplic> agreementPartyApplics = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<AgreementRole> agreementRoles = null;
+   protected List<AgreementRole> agreementRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<AgreementTerm> agreementTerms = null;
+   protected List<AgreementTerm> agreementTerms = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AGENT_PARTY_ID")
    
-   private List<AgreementTermBilling> agreementTermBillings = null;
+   protected List<AgreementTermBilling> agreementTermBillings = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<AgreementTypeForRoleType> agreementTypeForRoleTypes = null;
+   protected List<AgreementTypeForRoleType> agreementTypeForRoleTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<BillingAccountRole> billingAccountRoles = null;
+   protected List<BillingAccountRole> billingAccountRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<BudgetReview> budgetReviews = null;
+   protected List<BudgetReview> budgetReviews = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<BudgetRole> budgetRoles = null;
+   protected List<BudgetRole> budgetRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CARRIER_PARTY_ID")
    
-   private List<CarrierReturnService> carrierReturnServices = null;
+   protected List<CarrierReturnService> carrierReturnServices = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<CarrierShipmentBoxType> carrierShipmentBoxTypes = null;
+   protected List<CarrierShipmentBoxType> carrierShipmentBoxTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<CarrierShipmentMethod> carrierShipmentMethods = null;
+   protected List<CarrierShipmentMethod> carrierShipmentMethods = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_TO")
    
-   private List<CommunicationEvent> toCommunicationEvents = null;
+   protected List<CommunicationEvent> toCommunicationEvents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_FROM")
    
-   private List<CommunicationEvent> fromCommunicationEvents = null;
+   protected List<CommunicationEvent> fromCommunicationEvents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<CommunicationEventRole> communicationEventRoles = null;
+   protected List<CommunicationEventRole> communicationEventRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OWNER_PARTY_ID")
    
-   private List<ContactList> ownerContactLists = null;
+   protected List<ContactList> ownerContactLists = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<ContactListParty> contactListPartys = null;
+   protected List<ContactListParty> contactListPartys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<ContentApproval> contentApprovals = null;
+   protected List<ContentApproval> contentApprovals = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="COMMITTED_BY_PARTY_ID")
    
-   private List<ContentRevision> committedByContentRevisions = null;
+   protected List<ContentRevision> committedByContentRevisions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<ContentRole> contentRoles = null;
+   protected List<ContentRole> contentRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<CostComponent> costComponents = null;
+   protected List<CostComponent> costComponents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FROM_PARTY_ID")
    @ContainedIn
-   private List<CustRequest> fromCustRequests = null;
+   protected List<CustRequest> fromCustRequests = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<CustRequestParty> custRequestPartys = null;
+   protected List<CustRequestParty> custRequestPartys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    @ContainedIn
-   private List<CustRequestRole> custRequestRoles = null;
+   protected List<CustRequestRole> custRequestRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<CustRequestType> custRequestTypes = null;
+   protected List<CustRequestType> custRequestTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<CustomTimePeriod> organizationCustomTimePeriods = null;
+   protected List<CustomTimePeriod> organizationCustomTimePeriods = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CUSTOMER_PARTY_ID")
    
-   private List<DataImportOrderHeader> customerDataImportOrderHeaders = null;
+   protected List<DataImportOrderHeader> customerDataImportOrderHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SUPPLIER_PARTY_ID")
    
-   private List<DataImportOrderHeader> supplierDataImportOrderHeaders = null;
+   protected List<DataImportOrderHeader> supplierDataImportOrderHeaders = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private DataImportShoppingList dataImportShoppingList = null;
+   protected DataImportShoppingList dataImportShoppingList = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<DataImportShoppingListItem> dataImportShoppingListItems = null;
+   protected List<DataImportShoppingListItem> dataImportShoppingListItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<DataResourceRole> dataResourceRoles = null;
+   protected List<DataResourceRole> dataResourceRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<EmplLeave> emplLeaves = null;
+   protected List<EmplLeave> emplLeaves = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<EmplPosition> emplPositions = null;
+   protected List<EmplPosition> emplPositions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<EmplPositionFulfillment> emplPositionFulfillments = null;
+   protected List<EmplPositionFulfillment> emplPositionFulfillments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="organizationParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<EmployeePaycheckType> organizationEmployeePaycheckTypes = null;
+   protected List<EmployeePaycheckType> organizationEmployeePaycheckTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="employeeParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EMPLOYEE_PARTY_ID")
    
-   private List<EmployeePaycheckType> employeeEmployeePaycheckTypes = null;
+   protected List<EmployeePaycheckType> employeeEmployeePaycheckTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="toParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID_TO")
    
-   private List<Employment> toEmployments = null;
+   protected List<Employment> toEmployments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fromParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID_FROM")
    
-   private List<Employment> fromEmployments = null;
+   protected List<Employment> fromEmployments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="APPLYING_PARTY_ID")
    
-   private List<EmploymentApp> applyingEmploymentApps = null;
+   protected List<EmploymentApp> applyingEmploymentApps = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REFERRED_BY_PARTY_ID")
    
-   private List<EmploymentApp> referredByEmploymentApps = null;
+   protected List<EmploymentApp> referredByEmploymentApps = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OWNER_PARTY_ID")
    
-   private List<Facility> ownerFacilitys = null;
+   protected List<Facility> ownerFacilitys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<FacilityCarrierShipment> facilityCarrierShipments = null;
+   protected List<FacilityCarrierShipment> facilityCarrierShipments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<FacilityGroupRole> facilityGroupRoles = null;
+   protected List<FacilityGroupRole> facilityGroupRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<FacilityParty> facilityPartys = null;
+   protected List<FacilityParty> facilityPartys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<FacilityPartyPermission> facilityPartyPermissions = null;
+   protected List<FacilityPartyPermission> facilityPartyPermissions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<FacilityRole> facilityRoles = null;
+   protected List<FacilityRole> facilityRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<FinAccount> organizationFinAccounts = null;
+   protected List<FinAccount> organizationFinAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OWNER_PARTY_ID")
    
-   private List<FinAccount> ownerFinAccounts = null;
+   protected List<FinAccount> ownerFinAccounts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<FinAccountRole> finAccountRoles = null;
+   protected List<FinAccountRole> finAccountRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<FinAccountTrans> finAccountTranses = null;
+   protected List<FinAccountTrans> finAccountTranses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PERFORMED_BY_PARTY_ID")
    
-   private List<FinAccountTrans> performedByFinAccountTranses = null;
+   protected List<FinAccountTrans> performedByFinAccountTranses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="organizationParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<FinAccountTypeGlAccount> organizationFinAccountTypeGlAccounts = null;
+   protected List<FinAccountTypeGlAccount> organizationFinAccountTypeGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<FixedAsset> fixedAssets = null;
+   protected List<FixedAsset> fixedAssets = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GOV_AGENCY_PARTY_ID")
    
-   private List<FixedAssetRegistration> govAgencyFixedAssetRegistrations = null;
+   protected List<FixedAssetRegistration> govAgencyFixedAssetRegistrations = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<GiftCardFulfillment> giftCardFulfillments = null;
+   protected List<GiftCardFulfillment> giftCardFulfillments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<GlAccountHistory> glAccountHistorys = null;
+   protected List<GlAccountHistory> glAccountHistorys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<GlAccountOrganization> glAccountOrganizations = null;
+   protected List<GlAccountOrganization> glAccountOrganizations = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<GlAccountRole> glAccountRoles = null;
+   protected List<GlAccountRole> glAccountRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="organizationParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<GlAccountTypeDefault> organizationGlAccountTypeDefaults = null;
+   protected List<GlAccountTypeDefault> organizationGlAccountTypeDefaults = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<GlJournal> glJournals = null;
+   protected List<GlJournal> glJournals = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<GlReconciliation> glReconciliations = null;
+   protected List<GlReconciliation> glReconciliations = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<InventoryItem> inventoryItems = null;
+   protected List<InventoryItem> inventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OWNER_PARTY_ID")
    
-   private List<InventoryItem> ownerInventoryItems = null;
+   protected List<InventoryItem> ownerInventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_FROM")
    
-   private List<Invoice> fromInvoices = null;
+   protected List<Invoice> fromInvoices = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<Invoice> invoices = null;
+   protected List<Invoice> invoices = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<InvoiceAdjustmentGlAccount> invoiceAdjustmentGlAccounts = null;
+   protected List<InvoiceAdjustmentGlAccount> invoiceAdjustmentGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<InvoiceGlAccountType> invoiceGlAccountTypes = null;
+   protected List<InvoiceGlAccountType> invoiceGlAccountTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TAX_AUTH_PARTY_ID")
    
-   private List<InvoiceItem> taxAuthorityInvoiceItems = null;
+   protected List<InvoiceItem> taxAuthorityInvoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OVERRIDE_ORG_PARTY_ID")
    
-   private List<InvoiceItem> overrideOrgInvoiceItems = null;
+   protected List<InvoiceItem> overrideOrgInvoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="organizationParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<InvoiceItemTypeGlAccount> organizationInvoiceItemTypeGlAccounts = null;
+   protected List<InvoiceItemTypeGlAccount> organizationInvoiceItemTypeGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<InvoiceRole> invoiceRoles = null;
+   protected List<InvoiceRole> invoiceRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<ItemIssuanceRole> itemIssuanceRoles = null;
+   protected List<ItemIssuanceRole> itemIssuanceRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SUPPLIER_PARTY_ID")
    
-   private List<Lot> lots = null;
+   protected List<Lot> lots = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<MarketingCampaignRole> marketingCampaignRoles = null;
+   protected List<MarketingCampaignRole> marketingCampaignRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="NOTE_PARTY")
    
-   private List<NoteData> noteNoteDatas = null;
+   protected List<NoteData> noteNoteDatas = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CARRIER_PARTY_ID")
    
-   private List<OldOrderShipmentPreference> carrierOldOrderShipmentPreferences = null;
+   protected List<OldOrderShipmentPreference> carrierOldOrderShipmentPreferences = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<OldPartyRate> oldPartyRates = null;
+   protected List<OldPartyRate> oldPartyRates = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<OldPartyTaxInfo> oldPartyTaxInfoes = null;
+   protected List<OldPartyTaxInfo> oldPartyTaxInfoes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<OldValueLinkFulfillment> oldValueLinkFulfillments = null;
+   protected List<OldValueLinkFulfillment> oldValueLinkFulfillments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<OldWorkEffortAssignmentRate> oldWorkEffortAssignmentRates = null;
+   protected List<OldWorkEffortAssignmentRate> oldWorkEffortAssignmentRates = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BILL_FROM_PARTY_ID")
    @ContainedIn
-   private List<OrderHeader> billFromVendorOrderHeaders = null;
+   protected List<OrderHeader> billFromVendorOrderHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BILL_TO_PARTY_ID")
    @ContainedIn
-   private List<OrderHeader> billToCustomerOrderHeaders = null;
+   protected List<OrderHeader> billToCustomerOrderHeaders = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<OrderItemRole> orderItemRoles = null;
+   protected List<OrderItemRole> orderItemRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SUPPLIER_PARTY_ID")
    
-   private List<OrderItemShipGroup> supplierOrderItemShipGroups = null;
+   protected List<OrderItemShipGroup> supplierOrderItemShipGroups = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="VENDOR_PARTY_ID")
    
-   private List<OrderItemShipGroup> vendorOrderItemShipGroups = null;
+   protected List<OrderItemShipGroup> vendorOrderItemShipGroups = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CARRIER_PARTY_ID")
    
-   private List<OrderItemShipGroup> carrierOrderItemShipGroups = null;
+   protected List<OrderItemShipGroup> carrierOrderItemShipGroups = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    @ContainedIn
-   private List<OrderRole> orderRoles = null;
+   protected List<OrderRole> orderRoles = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PartyAcctgPreference partyAcctgPreference = null;
+   protected PartyAcctgPreference partyAcctgPreference = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyAttribute> partyAttributes = null;
+   protected List<PartyAttribute> partyAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="toParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID_TO")
    
-   private List<PartyBenefit> toPartyBenefits = null;
+   protected List<PartyBenefit> toPartyBenefits = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fromParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID_FROM")
    
-   private List<PartyBenefit> fromPartyBenefits = null;
+   protected List<PartyBenefit> fromPartyBenefits = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyCarrierAccount> partyCarrierAccounts = null;
+   protected List<PartyCarrierAccount> partyCarrierAccounts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="carrierParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CARRIER_PARTY_ID")
    
-   private List<PartyCarrierAccount> carrierPartyCarrierAccounts = null;
+   protected List<PartyCarrierAccount> carrierPartyCarrierAccounts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyClassification> partyClassifications = null;
+   protected List<PartyClassification> partyClassifications = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyContactMech> partyContactMeches = null;
+   protected List<PartyContactMech> partyContactMeches = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyContactMechPurpose> partyContactMechPurposes = null;
+   protected List<PartyContactMechPurpose> partyContactMechPurposes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyContent> partyContents = null;
+   protected List<PartyContent> partyContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyDataSource> partyDataSources = null;
+   protected List<PartyDataSource> partyDataSources = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyFixedAssetAssignment> partyFixedAssetAssignments = null;
+   protected List<PartyFixedAssetAssignment> partyFixedAssetAssignments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyGeoPoint> partyGeoPoints = null;
+   protected List<PartyGeoPoint> partyGeoPoints = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="organizationParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<PartyGlAccount> organizationPartyGlAccounts = null;
+   protected List<PartyGlAccount> organizationPartyGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyGlAccount> partyGlAccounts = null;
+   protected List<PartyGlAccount> partyGlAccounts = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    @IndexedEmbedded(depth = 2)
-   private PartyGroup partyGroup = null;
+   protected PartyGroup partyGroup = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PartyIcsAvsOverride partyIcsAvsOverride = null;
+   protected PartyIcsAvsOverride partyIcsAvsOverride = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_FROM")
    
-   private List<PartyInvitation> partyInvitations = null;
+   protected List<PartyInvitation> partyInvitations = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="toParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID_TO")
    
-   private List<PartyInvitationGroupAssoc> toPartyInvitationGroupAssocs = null;
+   protected List<PartyInvitationGroupAssoc> toPartyInvitationGroupAssocs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyNameHistory> partyNameHistorys = null;
+   protected List<PartyNameHistory> partyNameHistorys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyNeed> partyNeeds = null;
+   protected List<PartyNeed> partyNeeds = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyNote> partyNotes = null;
+   protected List<PartyNote> partyNotes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyProfileDefault> partyProfileDefaults = null;
+   protected List<PartyProfileDefault> partyProfileDefaults = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyQual> partyQuals = null;
+   protected List<PartyQual> partyQuals = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyRate> partyRates = null;
+   protected List<PartyRate> partyRates = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fromParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID_FROM")
    
-   private List<PartyRelationship> fromPartyRelationships = null;
+   protected List<PartyRelationship> fromPartyRelationships = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="toParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID_TO")
    
-   private List<PartyRelationship> toPartyRelationships = null;
+   protected List<PartyRelationship> toPartyRelationships = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyResume> partyResumes = null;
+   protected List<PartyResume> partyResumes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    @ContainedIn
-   private List<PartyRole> partyRoles = null;
+   protected List<PartyRole> partyRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartySkill> partySkills = null;
+   protected List<PartySkill> partySkills = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyStatus> partyStatuses = null;
+   protected List<PartyStatus> partyStatuses = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    @IndexedEmbedded(depth = 2)
-   private PartySupplementalData partySupplementalData = null;
+   protected PartySupplementalData partySupplementalData = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_PARTY_ID")
    @ContainedIn
-   private List<PartySupplementalData> parentPartySupplementalDatas = null;
+   protected List<PartySupplementalData> parentPartySupplementalDatas = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PartyTaxAuthInfo> partyTaxAuthInfoes = null;
+   protected List<PartyTaxAuthInfo> partyTaxAuthInfoes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<PaycheckItem> paycheckItems = null;
+   protected List<PaycheckItem> paycheckItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="organizationParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<PaycheckItemTypeGlAccount> organizationPaycheckItemTypeGlAccounts = null;
+   protected List<PaycheckItemTypeGlAccount> organizationPaycheckItemTypeGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_DUE_TO_PARTY_ID")
    
-   private List<PaycheckItemTypeGlAccount> defaultDueToPaycheckItemTypeGlAccounts = null;
+   protected List<PaycheckItemTypeGlAccount> defaultDueToPaycheckItemTypeGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_FROM")
    
-   private List<Payment> fromPayments = null;
+   protected List<Payment> fromPayments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_TO")
    
-   private List<Payment> toPayments = null;
+   protected List<Payment> toPayments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<PaymentGlAccountTypeMap> paymentGlAccountTypeMaps = null;
+   protected List<PaymentGlAccountTypeMap> paymentGlAccountTypeMaps = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<PaymentMethod> paymentMethods = null;
+   protected List<PaymentMethod> paymentMethods = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="organizationParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<PaymentMethodTypeGlAccount> organizationPaymentMethodTypeGlAccounts = null;
+   protected List<PaymentMethodTypeGlAccount> organizationPaymentMethodTypeGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PayrollPreference> payrollPreferences = null;
+   protected List<PayrollPreference> payrollPreferences = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="employeeParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EMPLOYEE_PARTY_ID")
    
-   private List<PerfReview> employeePerfReviews = null;
+   protected List<PerfReview> employeePerfReviews = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MANAGER_PARTY_ID")
    
-   private List<PerfReview> managerPerfReviews = null;
+   protected List<PerfReview> managerPerfReviews = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="employeeParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EMPLOYEE_PARTY_ID")
    
-   private List<PerfReviewItem> employeePerfReviewItems = null;
+   protected List<PerfReviewItem> employeePerfReviewItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PerformanceNote> performanceNotes = null;
+   protected List<PerformanceNote> performanceNotes = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    @IndexedEmbedded(depth = 2)
-   private Person person = null;
+   protected Person person = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<PersonTraining> personTrainings = null;
+   protected List<PersonTraining> personTrainings = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<ProdCatalogRole> prodCatalogRoles = null;
+   protected List<ProdCatalogRole> prodCatalogRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MANUFACTURER_PARTY_ID")
    
-   private List<Product> manufacturerProducts = null;
+   protected List<Product> manufacturerProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<ProductAverageCost> productAverageCosts = null;
+   protected List<ProductAverageCost> productAverageCosts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<ProductCategoryGlAccount> productCategoryGlAccounts = null;
+   protected List<ProductCategoryGlAccount> productCategoryGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<ProductCategoryRole> productCategoryRoles = null;
+   protected List<ProductCategoryRole> productCategoryRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<ProductGlAccount> productGlAccounts = null;
+   protected List<ProductGlAccount> productGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OVERRIDE_ORG_PARTY_ID")
    
-   private List<ProductPromo> productPromoes = null;
+   protected List<ProductPromo> productPromoes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<ProductPromoCodeParty> productPromoCodePartys = null;
+   protected List<ProductPromoCodeParty> productPromoCodePartys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<ProductPromoUse> productPromoUses = null;
+   protected List<ProductPromoUse> productPromoUses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<ProductRole> productRoles = null;
+   protected List<ProductRole> productRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAY_TO_PARTY_ID")
    
-   private List<ProductStore> productStores = null;
+   protected List<ProductStore> productStores = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_SHIP_CARRIER_PARTY_ID")
    
-   private List<ProductStore> defaultCarrierProductStores = null;
+   protected List<ProductStore> defaultCarrierProductStores = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BILL_TO_THIRD_PARTY_ID")
    
-   private List<ProductStore> billToThirdPartyProductStores = null;
+   protected List<ProductStore> billToThirdPartyProductStores = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<ProductStoreGroupRole> productStoreGroupRoles = null;
+   protected List<ProductStoreGroupRole> productStoreGroupRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<ProductStoreRole> productStoreRoles = null;
+   protected List<ProductStoreRole> productStoreRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="COMPANY_PARTY_ID")
    
-   private List<ProductStoreShipmentMeth> productStoreShipmentMeths = null;
+   protected List<ProductStoreShipmentMeth> productStoreShipmentMeths = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="vendorParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="VENDOR_PARTY_ID")
    
-   private List<ProductStoreVendorPayment> vendorProductStoreVendorPayments = null;
+   protected List<ProductStoreVendorPayment> vendorProductStoreVendorPayments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="vendorParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="VENDOR_PARTY_ID")
    
-   private List<ProductStoreVendorShipment> vendorProductStoreVendorShipments = null;
+   protected List<ProductStoreVendorShipment> vendorProductStoreVendorShipments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="carrierParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CARRIER_PARTY_ID")
    
-   private List<ProductStoreVendorShipment> carrierProductStoreVendorShipments = null;
+   protected List<ProductStoreVendorShipment> carrierProductStoreVendorShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<Quote> quotes = null;
+   protected List<Quote> quotes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_PARTY_ID")
    
-   private List<Quote> createdByQuotes = null;
+   protected List<Quote> createdByQuotes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_PARTY_ID")
    
-   private List<Quote> contactQuotes = null;
+   protected List<Quote> contactQuotes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<QuoteRole> quoteRoles = null;
+   protected List<QuoteRole> quoteRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<RateAmount> rateAmounts = null;
+   protected List<RateAmount> rateAmounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<ReorderGuideline> reorderGuidelines = null;
+   protected List<ReorderGuideline> reorderGuidelines = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<RequirementRole> requirementRoles = null;
+   protected List<RequirementRole> requirementRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<RespondingParty> respondingPartys = null;
+   protected List<RespondingParty> respondingPartys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FROM_PARTY_ID")
    
-   private List<ReturnHeader> returnHeaders = null;
+   protected List<ReturnHeader> returnHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TO_PARTY_ID")
    
-   private List<ReturnHeader> toReturnHeaders = null;
+   protected List<ReturnHeader> toReturnHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<SalesForecast> organizationSalesForecasts = null;
+   protected List<SalesForecast> organizationSalesForecasts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INTERNAL_PARTY_ID")
    
-   private List<SalesForecast> internalSalesForecasts = null;
+   protected List<SalesForecast> internalSalesForecasts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<SalesForecastHistory> organizationSalesForecastHistorys = null;
+   protected List<SalesForecastHistory> organizationSalesForecastHistorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INTERNAL_PARTY_ID")
    
-   private List<SalesForecastHistory> internalSalesForecastHistorys = null;
+   protected List<SalesForecastHistory> internalSalesForecastHistorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<SalesForecastItem> salesForecastItems = null;
+   protected List<SalesForecastItem> salesForecastItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    @ContainedIn
-   private List<SalesOpportunityRole> salesOpportunityRoles = null;
+   protected List<SalesOpportunityRole> salesOpportunityRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<SegmentGroupRole> segmentGroupRoles = null;
+   protected List<SegmentGroupRole> segmentGroupRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<ServerHit> serverHits = null;
+   protected List<ServerHit> serverHits = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_TO")
    
-   private List<Shipment> toShipments = null;
+   protected List<Shipment> toShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_FROM")
    
-   private List<Shipment> fromShipments = null;
+   protected List<Shipment> fromShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<ShipmentCostEstimate> shipmentCostEstimates = null;
+   protected List<ShipmentCostEstimate> shipmentCostEstimates = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<ShipmentReceiptRole> shipmentReceiptRoles = null;
+   protected List<ShipmentReceiptRole> shipmentReceiptRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CARRIER_PARTY_ID")
    
-   private List<ShipmentRouteSegment> carrierShipmentRouteSegments = null;
+   protected List<ShipmentRouteSegment> carrierShipmentRouteSegments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<ShoppingList> shoppingLists = null;
+   protected List<ShoppingList> shoppingLists = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<Subscription> subscriptions = null;
+   protected List<Subscription> subscriptions = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGINATED_FROM_PARTY_ID")
    
-   private List<Subscription> originatedFromSubscriptions = null;
+   protected List<Subscription> originatedFromSubscriptions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<SupplierProduct> supplierProducts = null;
+   protected List<SupplierProduct> supplierProducts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<SupplierProductFeature> supplierProductFeatures = null;
+   protected List<SupplierProductFeature> supplierProductFeatures = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<SurveyResponse> surveyResponses = null;
+   protected List<SurveyResponse> surveyResponses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="taxAuthParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TAX_AUTH_PARTY_ID")
    
-   private List<TaxAuthority> taxAuthTaxAuthoritys = null;
+   protected List<TaxAuthority> taxAuthTaxAuthoritys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="organizationParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<TaxAuthorityGlAccount> organizationTaxAuthorityGlAccounts = null;
+   protected List<TaxAuthorityGlAccount> organizationTaxAuthorityGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<TimeEntry> timeEntrys = null;
+   protected List<TimeEntry> timeEntrys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<Timesheet> timesheets = null;
+   protected List<Timesheet> timesheets = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CLIENT_PARTY_ID")
    
-   private List<Timesheet> clientTimesheets = null;
+   protected List<Timesheet> clientTimesheets = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<TimesheetRole> timesheetRoles = null;
+   protected List<TimesheetRole> timesheetRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<UserLogin> userLogins = null;
+   protected List<UserLogin> userLogins = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<UserLoginHistory> userLoginHistorys = null;
+   protected List<UserLoginHistory> userLoginHistorys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="organizationParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
-   private List<VarianceReasonGlAccount> organizationVarianceReasonGlAccounts = null;
+   protected List<VarianceReasonGlAccount> organizationVarianceReasonGlAccounts = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Vendor vendor = null;
+   protected Vendor vendor = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="vendorParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="VENDOR_PARTY_ID")
    
-   private List<VendorProduct> vendorVendorProducts = null;
+   protected List<VendorProduct> vendorVendorProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<Visit> visits = null;
+   protected List<Visit> visits = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<Visitor> visitors = null;
+   protected List<Visitor> visitors = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<WebSiteRole> webSiteRoles = null;
+   protected List<WebSiteRole> webSiteRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<WebUserPreference> webUserPreferences = null;
+   protected List<WebUserPreference> webUserPreferences = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<WorkEffortPartyAssignment> workEffortPartyAssignments = null;
+   protected List<WorkEffortPartyAssignment> workEffortPartyAssignments = null;
 
   /**
    * Default constructor.

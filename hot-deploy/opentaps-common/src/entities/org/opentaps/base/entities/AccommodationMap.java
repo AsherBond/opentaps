@@ -75,7 +75,7 @@ fieldMapColumns.put("AccommodationMap", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -89,48 +89,48 @@ fieldMapColumns.put("AccommodationMap", fields);
    @GeneratedValue(generator="AccommodationMap_GEN")
    @Id
    @Column(name="ACCOMMODATION_MAP_ID")
-   private String accommodationMapId;
+   protected String accommodationMapId;
    @Column(name="ACCOMMODATION_CLASS_ID")
-   private String accommodationClassId;
+   protected String accommodationClassId;
    @Column(name="FIXED_ASSET_ID")
-   private String fixedAssetId;
+   protected String fixedAssetId;
    @Column(name="ACCOMMODATION_MAP_TYPE_ID")
-   private String accommodationMapTypeId;
+   protected String accommodationMapTypeId;
    @Column(name="NUMBER_OF_SPACES")
-   private Long numberOfSpaces;
+   protected Long numberOfSpaces;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCOMMODATION_CLASS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AccommodationClass accommodationClass = null;
+   protected AccommodationClass accommodationClass = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private FixedAsset fixedAsset = null;
+   protected FixedAsset fixedAsset = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCOMMODATION_MAP_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AccommodationMapType accommodationMapType = null;
+   protected AccommodationMapType accommodationMapType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCOMMODATION_MAP_ID")
    
-   private List<WorkEffort> workEfforts = null;
+   protected List<WorkEffort> workEfforts = null;
 
   /**
    * Default constructor.

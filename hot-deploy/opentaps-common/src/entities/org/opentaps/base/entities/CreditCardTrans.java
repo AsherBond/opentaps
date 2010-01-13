@@ -101,7 +101,7 @@ fieldMapColumns.put("CreditCardTrans", fields);
     gatewayCode("gatewayCode"),
     paymentMethodId("paymentMethodId"),
     orderId("orderId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -143,7 +143,7 @@ fieldMapColumns.put("CreditCardTrans", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CreditCard creditCard = null;
+   protected CreditCard creditCard = null;
 
   /**
    * Default constructor.

@@ -200,7 +200,7 @@ fieldMapColumns.put("WorkEffortContentAndInfo", fields);
     drCreatedByUserLogin("drCreatedByUserLogin"),
     drLastModifiedDate("drLastModifiedDate"),
     drLastModifiedByUserLogin("drLastModifiedByUserLogin");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -308,21 +308,21 @@ fieldMapColumns.put("WorkEffortContentAndInfo", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ElectronicText electronicText = null;
+   protected ElectronicText electronicText = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ImageDataResource imageDataResource = null;
+   protected ImageDataResource imageDataResource = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OtherDataResource otherDataResource = null;
+   protected OtherDataResource otherDataResource = null;
    private transient List<ContentAssocDataResourceViewFrom> contentAssocDataResourceViewFroms = null;
    private transient List<ContentAssocDataResourceViewTo> contentAssocDataResourceViewToes = null;
 

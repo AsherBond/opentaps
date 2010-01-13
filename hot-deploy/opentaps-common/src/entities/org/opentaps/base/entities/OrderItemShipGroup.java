@@ -110,7 +110,7 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
     thirdPartyPostalCode("thirdPartyPostalCode"),
     thirdPartyCountryGeoCode("thirdPartyCountryGeoCode"),
     statusId("statusId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -123,7 +123,7 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.OrderItemShipGroupPkBridge.class)
-     private OrderItemShipGroupPk id = new OrderItemShipGroupPk();
+     protected OrderItemShipGroupPk id = new OrderItemShipGroupPk();
    
     /**
      * Auto generated Id accessor.
@@ -140,76 +140,76 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
          this.id = id;
       }
    @Column(name="SHIPMENT_METHOD_TYPE_ID")
-   private String shipmentMethodTypeId;
+   protected String shipmentMethodTypeId;
    @Column(name="SUPPLIER_PARTY_ID")
-   private String supplierPartyId;
+   protected String supplierPartyId;
    @Column(name="VENDOR_PARTY_ID")
-   private String vendorPartyId;
+   protected String vendorPartyId;
    @Column(name="CARRIER_PARTY_ID")
-   private String carrierPartyId;
+   protected String carrierPartyId;
    @Column(name="CARRIER_ROLE_TYPE_ID")
-   private String carrierRoleTypeId;
+   protected String carrierRoleTypeId;
    @Column(name="FACILITY_ID")
-   private String facilityId;
+   protected String facilityId;
    @Column(name="CONTACT_MECH_ID")
-   private String contactMechId;
+   protected String contactMechId;
    @Column(name="TELECOM_CONTACT_MECH_ID")
-   private String telecomContactMechId;
+   protected String telecomContactMechId;
    @Column(name="TRACKING_NUMBER")
-   private String trackingNumber;
+   protected String trackingNumber;
    @Column(name="SHIPPING_INSTRUCTIONS")
-   private String shippingInstructions;
+   protected String shippingInstructions;
    @Column(name="MAY_SPLIT")
-   private String maySplit;
+   protected String maySplit;
    @Column(name="GIFT_MESSAGE")
-   private String giftMessage;
+   protected String giftMessage;
    @Column(name="IS_GIFT")
-   private String isGift;
+   protected String isGift;
    @Column(name="SHIP_AFTER_DATE")
-   private Timestamp shipAfterDate;
+   protected Timestamp shipAfterDate;
    @Column(name="SHIP_BY_DATE")
-   private Timestamp shipByDate;
+   protected Timestamp shipByDate;
    @Column(name="ESTIMATED_SHIP_DATE")
-   private Timestamp estimatedShipDate;
+   protected Timestamp estimatedShipDate;
    @Column(name="ESTIMATED_DELIVERY_DATE")
-   private Timestamp estimatedDeliveryDate;
+   protected Timestamp estimatedDeliveryDate;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="THIRD_PARTY_ACCOUNT_NUMBER")
-   private String thirdPartyAccountNumber;
+   protected String thirdPartyAccountNumber;
    @Column(name="THIRD_PARTY_POSTAL_CODE")
-   private String thirdPartyPostalCode;
+   protected String thirdPartyPostalCode;
    @Column(name="THIRD_PARTY_COUNTRY_GEO_CODE")
-   private String thirdPartyCountryGeoCode;
+   protected String thirdPartyCountryGeoCode;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SUPPLIER_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party supplierParty = null;
+   protected Party supplierParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="VENDOR_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party vendorParty = null;
+   protected Party vendorParty = null;
    private transient CarrierShipmentMethod carrierShipmentMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CARRIER_PARTY_ID", insertable=false, updatable=false)
@@ -217,7 +217,7 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party carrierParty = null;
+   protected Party carrierParty = null;
    private transient PartyRole carrierPartyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID", insertable=false, updatable=false)
@@ -225,49 +225,49 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Facility facility = null;
+   protected Facility facility = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ShipmentMethodType shipmentMethodType = null;
+   protected ShipmentMethodType shipmentMethodType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMech contactMech = null;
+   protected ContactMech contactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PostalAddress postalAddress = null;
+   protected PostalAddress postalAddress = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TELECOM_CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMech telecomContactMech = null;
+   protected ContactMech telecomContactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TELECOM_CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TelecomNumber telecomTelecomNumber = null;
+   protected TelecomNumber telecomTelecomNumber = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    private transient List<OrderAdjustment> orderAdjustments = null;
    private transient List<OrderItemAssoc> fromOrderItemAssocs = null;
    private transient List<OrderItemAssoc> toOrderItemAssocs = null;

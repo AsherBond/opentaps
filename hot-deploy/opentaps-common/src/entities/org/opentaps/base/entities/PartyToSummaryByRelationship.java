@@ -295,7 +295,7 @@ fieldMapColumns.put("PartyToSummaryByRelationship", fields);
     partyRelationshipTypeId("partyRelationshipTypeId"),
     permissionsEnumId("permissionsEnumId"),
     positionTitle("positionTitle");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

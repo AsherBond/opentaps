@@ -74,7 +74,7 @@ fieldMapColumns.put("ViewPreference", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -87,7 +87,7 @@ fieldMapColumns.put("ViewPreference", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ViewPreferencePkBridge.class)
-     private ViewPreferencePk id = new ViewPreferencePk();
+     protected ViewPreferencePk id = new ViewPreferencePk();
    
     /**
      * Auto generated Id accessor.
@@ -104,47 +104,47 @@ fieldMapColumns.put("ViewPreference", fields);
          this.id = id;
       }
    @Column(name="VIEW_PREF_VALUE_TYPE_ID")
-   private String viewPrefValueTypeId;
+   protected String viewPrefValueTypeId;
    @Column(name="VIEW_PREF_ENUM_ID")
-   private String viewPrefEnumId;
+   protected String viewPrefEnumId;
    @Column(name="VIEW_PREF_STRING")
-   private String viewPrefString;
+   protected String viewPrefString;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="VIEW_PREF_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ViewPrefType viewPrefType = null;
+   protected ViewPrefType viewPrefType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="VIEW_PREF_VALUE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ViewPrefValueType viewPrefValueType = null;
+   protected ViewPrefValueType viewPrefValueType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="USER_LOGIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin userLogin = null;
+   protected UserLogin userLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="VIEW_PREF_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration enumeration = null;
+   protected Enumeration enumeration = null;
 
   /**
    * Default constructor.

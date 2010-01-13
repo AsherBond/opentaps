@@ -75,7 +75,7 @@ fieldMapColumns.put("WorkEffortContactMechView", fields);
     comments("comments"),
     contactMechTypeId("contactMechTypeId"),
     infoString("infoString");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

@@ -164,7 +164,7 @@ fieldMapColumns.put("CustRequestAndPartyRelationshipAndRole", fields);
     lastModifiedDate("lastModifiedDate"),
     lastModifiedByUserLogin("lastModifiedByUserLogin"),
     fulfilledDateTime("fulfilledDateTime");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

@@ -76,7 +76,7 @@ fieldMapColumns.put("AmazonOrderImport", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -90,39 +90,39 @@ fieldMapColumns.put("AmazonOrderImport", fields);
    @GeneratedValue(generator="AmazonOrderImport_GEN")
    @Id
    @Column(name="AMAZON_ORDER_ID")
-   private String amazonOrderId;
+   protected String amazonOrderId;
    @Column(name="BUYER_PARTY_ID")
-   private String buyerPartyId;
+   protected String buyerPartyId;
    @Column(name="BUYER_PHONE_CONTACT_MECH_ID")
-   private String buyerPhoneContactMechId;
+   protected String buyerPhoneContactMechId;
    @Column(name="ADDRESS_POSTAL_CONTACT_MECH_ID")
-   private String addressPostalContactMechId;
+   protected String addressPostalContactMechId;
    @Column(name="ADDRESS_PHONE_CONTACT_MECH_ID")
-   private String addressPhoneContactMechId;
+   protected String addressPhoneContactMechId;
    @Column(name="ORDER_ID")
-   private String orderId;
+   protected String orderId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AMAZON_ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AmazonOrder amazonOrder = null;
+   protected AmazonOrder amazonOrder = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
 
   /**
    * Default constructor.

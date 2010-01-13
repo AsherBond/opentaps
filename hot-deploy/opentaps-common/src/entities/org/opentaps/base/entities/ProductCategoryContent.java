@@ -84,7 +84,7 @@ fieldMapColumns.put("ProductCategoryContent", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -97,7 +97,7 @@ fieldMapColumns.put("ProductCategoryContent", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductCategoryContentPkBridge.class)
-     private ProductCategoryContentPk id = new ProductCategoryContentPk();
+     protected ProductCategoryContentPk id = new ProductCategoryContentPk();
    
     /**
      * Auto generated Id accessor.
@@ -114,44 +114,44 @@ fieldMapColumns.put("ProductCategoryContent", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="PURCHASE_FROM_DATE")
-   private Timestamp purchaseFromDate;
+   protected Timestamp purchaseFromDate;
    @Column(name="PURCHASE_THRU_DATE")
-   private Timestamp purchaseThruDate;
+   protected Timestamp purchaseThruDate;
    @Column(name="USE_COUNT_LIMIT")
-   private Long useCountLimit;
+   protected Long useCountLimit;
    @Column(name="USE_DAYS_LIMIT")
-   private BigDecimal useDaysLimit;
+   protected BigDecimal useDaysLimit;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductCategory productCategory = null;
+   protected ProductCategory productCategory = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Content content = null;
+   protected Content content = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PROD_CAT_CONTENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductCategoryContentType productCategoryContentType = null;
+   protected ProductCategoryContentType productCategoryContentType = null;
 
   /**
    * Default constructor.

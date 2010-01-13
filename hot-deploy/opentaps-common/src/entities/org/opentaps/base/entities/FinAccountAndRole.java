@@ -125,7 +125,7 @@ fieldMapColumns.put("FinAccountAndRole", fields);
     replenishLevel("replenishLevel"),
     actualBalance("actualBalance"),
     availableBalance("availableBalance");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

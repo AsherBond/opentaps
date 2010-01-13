@@ -375,7 +375,7 @@ fieldMapColumns.put("InventoryItemAndLocation", fields);
     sectionId("sectionId"),
     levelId("levelId"),
     positionId("positionId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -601,11 +601,11 @@ fieldMapColumns.put("InventoryItemAndLocation", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private InventoryItem inventoryItem = null;
+   protected InventoryItem inventoryItem = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="inventoryItemAndLocation", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVENTORY_ITEM_ID")
    
-   private transient List<PicklistItem> picklistItems = null;
+   protected transient List<PicklistItem> picklistItems = null;
 
   /**
    * Default constructor.

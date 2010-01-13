@@ -90,7 +90,7 @@ fieldMapColumns.put("OrderHeaderAndRoleSummary", fields);
     totalGrandAmount("totalGrandAmount"),
     totalSubRemainingAmount("totalSubRemainingAmount"),
     totalOrders("totalOrders");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

@@ -76,7 +76,7 @@ fieldMapColumns.put("AgreementItem", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -89,7 +89,7 @@ fieldMapColumns.put("AgreementItem", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.AgreementItemPkBridge.class)
-     private AgreementItemPk id = new AgreementItemPk();
+     protected AgreementItemPk id = new AgreementItemPk();
    
     /**
      * Auto generated Id accessor.
@@ -106,36 +106,36 @@ fieldMapColumns.put("AgreementItem", fields);
          this.id = id;
       }
    @Column(name="AGREEMENT_ITEM_TYPE_ID")
-   private String agreementItemTypeId;
+   protected String agreementItemTypeId;
    @Column(name="CURRENCY_UOM_ID")
-   private String currencyUomId;
+   protected String currencyUomId;
    @Column(name="AGREEMENT_TEXT")
-   private String agreementText;
+   protected String agreementText;
    @Column(name="AGREEMENT_IMAGE")
-   private byte[] agreementImage;
+   protected byte[] agreementImage;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AGREEMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Agreement agreement = null;
+   protected Agreement agreement = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AGREEMENT_ITEM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AgreementItemType agreementItemType = null;
-   private transient List<AgreementItemTypeAttr> agreementItemTypeAttrs = null;
+   protected AgreementItemType agreementItemType = null;
+   protected transient List<AgreementItemTypeAttr> agreementItemTypeAttrs = null;
    private transient List<Addendum> addendums = null;
    private transient List<AgreementCategoryAppl> agreementCategoryAppls = null;
    private transient List<AgreementEmploymentAppl> agreementEmploymentAppls = null;

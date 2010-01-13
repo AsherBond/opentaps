@@ -84,7 +84,7 @@ fieldMapColumns.put("Survey", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -98,65 +98,65 @@ fieldMapColumns.put("Survey", fields);
    @GeneratedValue(generator="Survey_GEN")
    @Id
    @Column(name="SURVEY_ID")
-   private String surveyId;
+   protected String surveyId;
    @Column(name="SURVEY_NAME")
-   private String surveyName;
+   protected String surveyName;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="SUBMIT_CAPTION")
-   private String submitCaption;
+   protected String submitCaption;
    @Column(name="RESPONSE_SERVICE")
-   private String responseService;
+   protected String responseService;
    @Column(name="IS_ANONYMOUS")
-   private String isAnonymous;
+   protected String isAnonymous;
    @Column(name="ALLOW_MULTIPLE")
-   private String allowMultiple;
+   protected String allowMultiple;
    @Column(name="ALLOW_UPDATE")
-   private String allowUpdate;
+   protected String allowUpdate;
    @Column(name="ACRO_FORM_CONTENT_ID")
-   private String acroFormContentId;
+   protected String acroFormContentId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_ID")
    
-   private List<DataResource> dataResources = null;
+   protected List<DataResource> dataResources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PURCHASE_SURVEY_ID")
    
-   private List<ProductStoreFinActSetting> productStoreFinActSettings = null;
+   protected List<ProductStoreFinActSetting> productStoreFinActSettings = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_ID")
    
-   private List<ProductStoreSurveyAppl> productStoreSurveyAppls = null;
+   protected List<ProductStoreSurveyAppl> productStoreSurveyAppls = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="survey", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SURVEY_ID")
    
-   private List<SurveyMultiResp> surveyMultiResps = null;
+   protected List<SurveyMultiResp> surveyMultiResps = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="survey", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SURVEY_ID")
    
-   private List<SurveyPage> surveyPages = null;
+   protected List<SurveyPage> surveyPages = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="survey", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SURVEY_ID")
    
-   private List<SurveyQuestionAppl> surveyQuestionAppls = null;
+   protected List<SurveyQuestionAppl> surveyQuestionAppls = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_ID")
    
-   private List<SurveyResponse> surveyResponses = null;
+   protected List<SurveyResponse> surveyResponses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="survey", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SURVEY_ID")
    
-   private List<SurveyTrigger> surveyTriggers = null;
+   protected List<SurveyTrigger> surveyTriggers = null;
 
   /**
    * Default constructor.

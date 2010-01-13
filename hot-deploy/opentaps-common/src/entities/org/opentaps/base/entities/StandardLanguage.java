@@ -78,7 +78,7 @@ fieldMapColumns.put("StandardLanguage", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,27 +92,27 @@ fieldMapColumns.put("StandardLanguage", fields);
    @GeneratedValue(generator="StandardLanguage_GEN")
    @Id
    @Column(name="STANDARD_LANGUAGE_ID")
-   private String standardLanguageId;
+   protected String standardLanguageId;
    @Column(name="LANG_CODE3T")
-   private String langCode3t;
+   protected String langCode3t;
    @Column(name="LANG_CODE3B")
-   private String langCode3b;
+   protected String langCode3b;
    @Column(name="LANG_CODE2")
-   private String langCode2;
+   protected String langCode2;
    @Column(name="LANG_NAME")
-   private String langName;
+   protected String langName;
    @Column(name="LANG_FAMILY")
-   private String langFamily;
+   protected String langFamily;
    @Column(name="LANG_CHARSET")
-   private String langCharset;
+   protected String langCharset;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

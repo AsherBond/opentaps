@@ -80,7 +80,7 @@ fieldMapColumns.put("Employment", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -93,7 +93,7 @@ fieldMapColumns.put("Employment", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.EmploymentPkBridge.class)
-     private EmploymentPk id = new EmploymentPk();
+     protected EmploymentPk id = new EmploymentPk();
    
     /**
      * Auto generated Id accessor.
@@ -110,26 +110,26 @@ fieldMapColumns.put("Employment", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="TERMINATION_REASON_ID")
-   private String terminationReasonId;
+   protected String terminationReasonId;
    @Column(name="TERMINATION_TYPE_ID")
-   private String terminationTypeId;
+   protected String terminationTypeId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party toParty = null;
+   protected Party toParty = null;
    private transient PartyRole toPartyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_FROM", insertable=false, updatable=false)
@@ -137,7 +137,7 @@ fieldMapColumns.put("Employment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party fromParty = null;
+   protected Party fromParty = null;
    private transient PartyRole fromPartyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TERMINATION_REASON_ID", insertable=false, updatable=false)
@@ -145,14 +145,14 @@ fieldMapColumns.put("Employment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TerminationReason terminationReason = null;
+   protected TerminationReason terminationReason = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TERMINATION_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TerminationType terminationType = null;
+   protected TerminationType terminationType = null;
    private transient List<Agreement> agreements = null;
    private transient List<AgreementEmploymentAppl> agreementEmploymentAppls = null;
    private transient PayHistory payHistory = null;

@@ -73,7 +73,7 @@ fieldMapColumns.put("WorkOrderItemFulfillment", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     quantityFulfilled("quantityFulfilled");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,7 +86,7 @@ fieldMapColumns.put("WorkOrderItemFulfillment", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.WorkOrderItemFulfillmentPkBridge.class)
-     private WorkOrderItemFulfillmentPk id = new WorkOrderItemFulfillmentPk();
+     protected WorkOrderItemFulfillmentPk id = new WorkOrderItemFulfillmentPk();
    
     /**
      * Auto generated Id accessor.
@@ -103,22 +103,22 @@ fieldMapColumns.put("WorkOrderItemFulfillment", fields);
          this.id = id;
       }
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="QUANTITY_FULFILLED")
-   private BigDecimal quantityFulfilled;
+   protected BigDecimal quantityFulfilled;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
    private transient OrderItem orderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID", insertable=false, updatable=false)
@@ -126,7 +126,7 @@ fieldMapColumns.put("WorkOrderItemFulfillment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort workEffort = null;
+   protected WorkEffort workEffort = null;
 
   /**
    * Default constructor.

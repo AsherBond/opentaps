@@ -95,7 +95,7 @@ fieldMapColumns.put("ShipmentReceipt", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -109,57 +109,57 @@ fieldMapColumns.put("ShipmentReceipt", fields);
    @GeneratedValue(generator="ShipmentReceipt_GEN")
    @Id
    @Column(name="RECEIPT_ID")
-   private String receiptId;
+   protected String receiptId;
    @Column(name="INVENTORY_ITEM_ID")
-   private String inventoryItemId;
+   protected String inventoryItemId;
    @Column(name="PRODUCT_ID")
-   private String productId;
+   protected String productId;
    @Column(name="SHIPMENT_ID")
-   private String shipmentId;
+   protected String shipmentId;
    @Column(name="SHIPMENT_PACKAGE_SEQ_ID")
-   private String shipmentPackageSeqId;
+   protected String shipmentPackageSeqId;
    @Column(name="ORDER_ID")
-   private String orderId;
+   protected String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   private String orderItemSeqId;
+   protected String orderItemSeqId;
    @Column(name="RETURN_ID")
-   private String returnId;
+   protected String returnId;
    @Column(name="RETURN_ITEM_SEQ_ID")
-   private String returnItemSeqId;
+   protected String returnItemSeqId;
    @Column(name="REJECTION_ID")
-   private String rejectionId;
+   protected String rejectionId;
    @Column(name="RECEIVED_BY_USER_LOGIN_ID")
-   private String receivedByUserLoginId;
+   protected String receivedByUserLoginId;
    @Column(name="DATETIME_RECEIVED")
-   private Timestamp datetimeReceived;
+   protected Timestamp datetimeReceived;
    @Column(name="ITEM_DESCRIPTION")
-   private String itemDescription;
+   protected String itemDescription;
    @Column(name="QUANTITY_ACCEPTED")
-   private BigDecimal quantityAccepted;
+   protected BigDecimal quantityAccepted;
    @Column(name="QUANTITY_REJECTED")
-   private BigDecimal quantityRejected;
+   protected BigDecimal quantityRejected;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_ITEM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private InventoryItem inventoryItem = null;
+   protected InventoryItem inventoryItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
    private transient ShipmentPackage shipmentPackage = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
@@ -167,7 +167,7 @@ fieldMapColumns.put("ShipmentReceipt", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
    private transient OrderItem orderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REJECTION_ID", insertable=false, updatable=false)
@@ -175,42 +175,42 @@ fieldMapColumns.put("ShipmentReceipt", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RejectionReason rejectionReason = null;
+   protected RejectionReason rejectionReason = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RECEIVED_BY_USER_LOGIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin userLogin = null;
+   protected UserLogin userLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Shipment shipment = null;
+   protected Shipment shipment = null;
    private transient ReturnItem returnItem = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RECEIPT_ID")
    
-   private List<AcctgTrans> acctgTranses = null;
+   protected List<AcctgTrans> acctgTranses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RECEIPT_ID")
    
-   private List<InventoryItemDetail> inventoryItemDetails = null;
+   protected List<InventoryItemDetail> inventoryItemDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_RECEIPT_ID")
    
-   private List<OrderItemBilling> orderItemBillings = null;
+   protected List<OrderItemBilling> orderItemBillings = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_RECEIPT_ID")
    
-   private List<ReturnItemBilling> returnItemBillings = null;
+   protected List<ReturnItemBilling> returnItemBillings = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipmentReceipt", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="RECEIPT_ID")
    
-   private List<ShipmentReceiptRole> shipmentReceiptRoles = null;
+   protected List<ShipmentReceiptRole> shipmentReceiptRoles = null;
 
   /**
    * Default constructor.

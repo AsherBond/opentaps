@@ -68,7 +68,7 @@ fieldMapColumns.put("QuoteTypeAttr", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -81,7 +81,7 @@ fieldMapColumns.put("QuoteTypeAttr", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.QuoteTypeAttrPkBridge.class)
-     private QuoteTypeAttrPk id = new QuoteTypeAttrPk();
+     protected QuoteTypeAttrPk id = new QuoteTypeAttrPk();
    
     /**
      * Auto generated Id accessor.
@@ -98,22 +98,22 @@ fieldMapColumns.put("QuoteTypeAttr", fields);
          this.id = id;
       }
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="QUOTE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private QuoteType quoteType = null;
-   private transient List<QuoteAttribute> quoteAttributes = null;
-   private transient List<Quote> quotes = null;
+   protected QuoteType quoteType = null;
+   protected transient List<QuoteAttribute> quoteAttributes = null;
+   protected transient List<Quote> quotes = null;
 
   /**
    * Default constructor.

@@ -70,7 +70,7 @@ fieldMapColumns.put("AccommodationClass", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,38 +84,38 @@ fieldMapColumns.put("AccommodationClass", fields);
    @GeneratedValue(generator="AccommodationClass_GEN")
    @Id
    @Column(name="ACCOMMODATION_CLASS_ID")
-   private String accommodationClassId;
+   protected String accommodationClassId;
    @Column(name="PARENT_CLASS_ID")
-   private String parentClassId;
+   protected String parentClassId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_CLASS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AccommodationClass parentAccommodationClass = null;
+   protected AccommodationClass parentAccommodationClass = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_CLASS_ID")
    
-   private List<AccommodationClass> childAccommodationClasses = null;
+   protected List<AccommodationClass> childAccommodationClasses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCOMMODATION_CLASS_ID")
    
-   private List<AccommodationMap> accommodationMaps = null;
+   protected List<AccommodationMap> accommodationMaps = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCOMMODATION_CLASS_ID")
    
-   private List<AccommodationSpot> accommodationSpots = null;
+   protected List<AccommodationSpot> accommodationSpots = null;
 
   /**
    * Default constructor.

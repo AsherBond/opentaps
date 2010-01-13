@@ -93,7 +93,7 @@ fieldMapColumns.put("DataImportOrderItem", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -106,7 +106,7 @@ fieldMapColumns.put("DataImportOrderItem", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.DataImportOrderItemPkBridge.class)
-     private DataImportOrderItemPk id = new DataImportOrderItemPk();
+     protected DataImportOrderItemPk id = new DataImportOrderItemPk();
    
     /**
      * Auto generated Id accessor.
@@ -123,40 +123,40 @@ fieldMapColumns.put("DataImportOrderItem", fields);
          this.id = id;
       }
    @Column(name="QUANTITY_SHIPPED")
-   private BigDecimal quantityShipped;
+   protected BigDecimal quantityShipped;
    @Column(name="ITEM_TAX")
-   private BigDecimal itemTax;
+   protected BigDecimal itemTax;
    @Column(name="TAX_AUTH_PARTY_ID")
-   private String taxAuthPartyId;
+   protected String taxAuthPartyId;
    @Column(name="ITEM_ADJUSTMENTS_TOTAL")
-   private BigDecimal itemAdjustmentsTotal;
+   protected BigDecimal itemAdjustmentsTotal;
    @Column(name="CUSTOMER_PO")
-   private String customerPo;
+   protected String customerPo;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="IMPORT_STATUS_ID")
-   private String importStatusId;
+   protected String importStatusId;
    @Column(name="IMPORT_ERROR")
-   private String importError;
+   protected String importError;
    @Column(name="PROCESSED_TIMESTAMP")
-   private Timestamp processedTimestamp;
+   protected Timestamp processedTimestamp;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   private String orderItemSeqId;
+   protected String orderItemSeqId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private DataImportOrderHeader dataImportOrderHeader = null;
+   protected DataImportOrderHeader dataImportOrderHeader = null;
 
   /**
    * Default constructor.

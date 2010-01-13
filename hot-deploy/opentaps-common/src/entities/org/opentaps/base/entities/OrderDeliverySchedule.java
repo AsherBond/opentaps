@@ -88,7 +88,7 @@ fieldMapColumns.put("OrderDeliverySchedule", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -101,7 +101,7 @@ fieldMapColumns.put("OrderDeliverySchedule", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.OrderDeliverySchedulePkBridge.class)
-     private OrderDeliverySchedulePk id = new OrderDeliverySchedulePk();
+     protected OrderDeliverySchedulePk id = new OrderDeliverySchedulePk();
    
     /**
      * Auto generated Id accessor.
@@ -118,38 +118,38 @@ fieldMapColumns.put("OrderDeliverySchedule", fields);
          this.id = id;
       }
    @Column(name="ESTIMATED_READY_DATE")
-   private Timestamp estimatedReadyDate;
+   protected Timestamp estimatedReadyDate;
    @Column(name="CARTONS")
-   private Long cartons;
+   protected Long cartons;
    @Column(name="SKIDS_PALLETS")
-   private Long skidsPallets;
+   protected Long skidsPallets;
    @Column(name="UNITS_PIECES")
-   private BigDecimal unitsPieces;
+   protected BigDecimal unitsPieces;
    @Column(name="TOTAL_CUBIC_SIZE")
-   private BigDecimal totalCubicSize;
+   protected BigDecimal totalCubicSize;
    @Column(name="TOTAL_CUBIC_UOM_ID")
-   private String totalCubicUomId;
+   protected String totalCubicUomId;
    @Column(name="TOTAL_WEIGHT")
-   private BigDecimal totalWeight;
+   protected BigDecimal totalWeight;
    @Column(name="TOTAL_WEIGHT_UOM_ID")
-   private String totalWeightUomId;
+   protected String totalWeightUomId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
    private transient OrderItem orderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TOTAL_CUBIC_UOM_ID", insertable=false, updatable=false)
@@ -157,21 +157,21 @@ fieldMapColumns.put("OrderDeliverySchedule", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom totalCubicUom = null;
+   protected Uom totalCubicUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TOTAL_WEIGHT_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom totalWeightUom = null;
+   protected Uom totalWeightUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
 
   /**
    * Default constructor.

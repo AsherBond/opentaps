@@ -76,7 +76,7 @@ fieldMapColumns.put("PartyProfileDefault", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -89,7 +89,7 @@ fieldMapColumns.put("PartyProfileDefault", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.PartyProfileDefaultPkBridge.class)
-     private PartyProfileDefaultPk id = new PartyProfileDefaultPk();
+     protected PartyProfileDefaultPk id = new PartyProfileDefaultPk();
    
     /**
      * Auto generated Id accessor.
@@ -106,35 +106,35 @@ fieldMapColumns.put("PartyProfileDefault", fields);
          this.id = id;
       }
    @Column(name="DEFAULT_SHIP_ADDR")
-   private String defaultShipAddr;
+   protected String defaultShipAddr;
    @Column(name="DEFAULT_BILL_ADDR")
-   private String defaultBillAddr;
+   protected String defaultBillAddr;
    @Column(name="DEFAULT_PAY_METH")
-   private String defaultPayMeth;
+   protected String defaultPayMeth;
    @Column(name="DEFAULT_SHIP_METH")
-   private String defaultShipMeth;
+   protected String defaultShipMeth;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductStore productStore = null;
+   protected ProductStore productStore = null;
 
   /**
    * Default constructor.

@@ -86,7 +86,7 @@ fieldMapColumns.put("AcctgTransEntryProdSum", fields);
     debitCreditFlag("debitCreditFlag"),
     transactionDate("transactionDate"),
     glAccountClassId("glAccountClassId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

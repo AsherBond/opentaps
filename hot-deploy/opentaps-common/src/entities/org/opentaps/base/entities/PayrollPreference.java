@@ -91,7 +91,7 @@ fieldMapColumns.put("PayrollPreference", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -104,7 +104,7 @@ fieldMapColumns.put("PayrollPreference", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.PayrollPreferencePkBridge.class)
-     private PayrollPreferencePk id = new PayrollPreferencePk();
+     protected PayrollPreferencePk id = new PayrollPreferencePk();
    
     /**
      * Auto generated Id accessor.
@@ -121,40 +121,40 @@ fieldMapColumns.put("PayrollPreference", fields);
          this.id = id;
       }
    @Column(name="DEDUCTION_TYPE_ID")
-   private String deductionTypeId;
+   protected String deductionTypeId;
    @Column(name="PAYMENT_METHOD_TYPE_ID")
-   private String paymentMethodTypeId;
+   protected String paymentMethodTypeId;
    @Column(name="PERIOD_TYPE_ID")
-   private String periodTypeId;
+   protected String periodTypeId;
    @Column(name="FROM_DATE")
-   private Timestamp fromDate;
+   protected Timestamp fromDate;
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="PERCENTAGE")
-   private BigDecimal percentage;
+   protected BigDecimal percentage;
    @Column(name="FLAT_AMOUNT")
-   private BigDecimal flatAmount;
+   protected BigDecimal flatAmount;
    @Column(name="ROUTING_NUMBER")
-   private String routingNumber;
+   protected String routingNumber;
    @Column(name="ACCOUNT_NUMBER")
-   private String accountNumber;
+   protected String accountNumber;
    @Column(name="BANK_NAME")
-   private String bankName;
+   protected String bankName;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    private transient PartyRole partyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEDUCTION_TYPE_ID", insertable=false, updatable=false)
@@ -162,21 +162,21 @@ fieldMapColumns.put("PayrollPreference", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private DeductionType deductionType = null;
+   protected DeductionType deductionType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentMethodType paymentMethodType = null;
+   protected PaymentMethodType paymentMethodType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PERIOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PeriodType periodType = null;
+   protected PeriodType periodType = null;
 
   /**
    * Default constructor.

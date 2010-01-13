@@ -102,7 +102,7 @@ fieldMapColumns.put("RequirementCustRequestView", fields);
     statusId("statusId"),
     priority("priority"),
     maximumAmount("maximumAmount");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

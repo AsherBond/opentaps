@@ -85,7 +85,7 @@ fieldMapColumns.put("ProductPromoUseCheck", fields);
     partyId("partyId"),
     totalDiscountAmount("totalDiscountAmount"),
     quantityLeftInActions("quantityLeftInActions");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

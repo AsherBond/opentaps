@@ -72,7 +72,7 @@ fieldMapColumns.put("PartyType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,48 +86,48 @@ fieldMapColumns.put("PartyType", fields);
    @GeneratedValue(generator="PartyType_GEN")
    @Id
    @Column(name="PARTY_TYPE_ID")
-   private String partyTypeId;
+   protected String partyTypeId;
    @Column(name="PARENT_TYPE_ID")
-   private String parentTypeId;
+   protected String parentTypeId;
    @Column(name="HAS_TABLE")
-   private String hasTable;
+   protected String hasTable;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PartyType parentPartyType = null;
+   protected PartyType parentPartyType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   private List<PartyType> siblingPartyTypes = null;
+   protected List<PartyType> siblingPartyTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_TYPE_ID")
    
-   private List<Party> partys = null;
+   protected List<Party> partys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_TYPE_ID")
    
-   private List<PartyNeed> partyNeeds = null;
+   protected List<PartyNeed> partyNeeds = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   private List<PartyType> childPartyTypes = null;
+   protected List<PartyType> childPartyTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="partyType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_TYPE_ID")
    
-   private List<PartyTypeAttr> partyTypeAttrs = null;
+   protected List<PartyTypeAttr> partyTypeAttrs = null;
 
   /**
    * Default constructor.

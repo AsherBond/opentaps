@@ -96,7 +96,7 @@ fieldMapColumns.put("ProductStoreFinActSetting", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -109,7 +109,7 @@ fieldMapColumns.put("ProductStoreFinActSetting", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductStoreFinActSettingPkBridge.class)
-     private ProductStoreFinActSettingPk id = new ProductStoreFinActSettingPk();
+     protected ProductStoreFinActSettingPk id = new ProductStoreFinActSettingPk();
    
     /**
      * Auto generated Id accessor.
@@ -126,67 +126,67 @@ fieldMapColumns.put("ProductStoreFinActSetting", fields);
          this.id = id;
       }
    @Column(name="REQUIRE_PIN_CODE")
-   private String requirePinCode;
+   protected String requirePinCode;
    @Column(name="VALIDATE_G_C_FIN_ACCT")
-   private String validateGCFinAcct;
+   protected String validateGCFinAcct;
    @Column(name="ACCOUNT_CODE_LENGTH")
-   private Long accountCodeLength;
+   protected Long accountCodeLength;
    @Column(name="PIN_CODE_LENGTH")
-   private Long pinCodeLength;
+   protected Long pinCodeLength;
    @Column(name="ACCOUNT_VALID_DAYS")
-   private Long accountValidDays;
+   protected Long accountValidDays;
    @Column(name="AUTH_VALID_DAYS")
-   private Long authValidDays;
+   protected Long authValidDays;
    @Column(name="PURCHASE_SURVEY_ID")
-   private String purchaseSurveyId;
+   protected String purchaseSurveyId;
    @Column(name="PURCH_SURVEY_SEND_TO")
-   private String purchSurveySendTo;
+   protected String purchSurveySendTo;
    @Column(name="PURCH_SURVEY_COPY_ME")
-   private String purchSurveyCopyMe;
+   protected String purchSurveyCopyMe;
    @Column(name="ALLOW_AUTH_TO_NEGATIVE")
-   private String allowAuthToNegative;
+   protected String allowAuthToNegative;
    @Column(name="MIN_BALANCE")
-   private BigDecimal minBalance;
+   protected BigDecimal minBalance;
    @Column(name="REPLENISH_THRESHOLD")
-   private BigDecimal replenishThreshold;
+   protected BigDecimal replenishThreshold;
    @Column(name="REPLENISH_METHOD_ENUM_ID")
-   private String replenishMethodEnumId;
+   protected String replenishMethodEnumId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductStore productStore = null;
+   protected ProductStore productStore = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private FinAccountType finAccountType = null;
+   protected FinAccountType finAccountType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PURCHASE_SURVEY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Survey survey = null;
+   protected Survey survey = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REPLENISH_METHOD_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration replenishMethodEnumeration = null;
+   protected Enumeration replenishMethodEnumeration = null;
 
   /**
    * Default constructor.

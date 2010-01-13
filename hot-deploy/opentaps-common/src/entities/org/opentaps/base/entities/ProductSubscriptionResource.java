@@ -99,7 +99,7 @@ fieldMapColumns.put("ProductSubscriptionResource", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -112,7 +112,7 @@ fieldMapColumns.put("ProductSubscriptionResource", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductSubscriptionResourcePkBridge.class)
-     private ProductSubscriptionResourcePk id = new ProductSubscriptionResourcePk();
+     protected ProductSubscriptionResourcePk id = new ProductSubscriptionResourcePk();
    
     /**
      * Auto generated Id accessor.
@@ -129,90 +129,90 @@ fieldMapColumns.put("ProductSubscriptionResource", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="PURCHASE_FROM_DATE")
-   private Timestamp purchaseFromDate;
+   protected Timestamp purchaseFromDate;
    @Column(name="PURCHASE_THRU_DATE")
-   private Timestamp purchaseThruDate;
+   protected Timestamp purchaseThruDate;
    @Column(name="MAX_LIFE_TIME")
-   private Long maxLifeTime;
+   protected Long maxLifeTime;
    @Column(name="MAX_LIFE_TIME_UOM_ID")
-   private String maxLifeTimeUomId;
+   protected String maxLifeTimeUomId;
    @Column(name="AVAILABLE_TIME")
-   private Long availableTime;
+   protected Long availableTime;
    @Column(name="AVAILABLE_TIME_UOM_ID")
-   private String availableTimeUomId;
+   protected String availableTimeUomId;
    @Column(name="USE_COUNT_LIMIT")
-   private Long useCountLimit;
+   protected Long useCountLimit;
    @Column(name="USE_TIME")
-   private Long useTime;
+   protected Long useTime;
    @Column(name="USE_TIME_UOM_ID")
-   private String useTimeUomId;
+   protected String useTimeUomId;
    @Column(name="USE_ROLE_TYPE_ID")
-   private String useRoleTypeId;
+   protected String useRoleTypeId;
    @Column(name="AUTOMATIC_EXTEND")
-   private String automaticExtend;
+   protected String automaticExtend;
    @Column(name="CANCL_AUTM_EXT_TIME")
-   private Long canclAutmExtTime;
+   protected Long canclAutmExtTime;
    @Column(name="CANCL_AUTM_EXT_TIME_UOM_ID")
-   private String canclAutmExtTimeUomId;
+   protected String canclAutmExtTimeUomId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SUBSCRIPTION_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private SubscriptionResource subscriptionResource = null;
+   protected SubscriptionResource subscriptionResource = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="USE_ROLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RoleType useRoleType = null;
+   protected RoleType useRoleType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="USE_TIME_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom useTimeUom = null;
+   protected Uom useTimeUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CANCL_AUTM_EXT_TIME_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom cancelTimeUom = null;
+   protected Uom cancelTimeUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AVAILABLE_TIME_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom availableTimeUom = null;
+   protected Uom availableTimeUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MAX_LIFE_TIME_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom maxLifeTimeUom = null;
+   protected Uom maxLifeTimeUom = null;
 
   /**
    * Default constructor.

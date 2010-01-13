@@ -120,7 +120,7 @@ fieldMapColumns.put("ProductStoreShipmentMeth", fields);
     codSurcharge("codSurcharge"),
     userDescription("userDescription"),
     minimumRate("minimumRate");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -134,92 +134,92 @@ fieldMapColumns.put("ProductStoreShipmentMeth", fields);
    @GeneratedValue(generator="ProductStoreShipmentMeth_GEN")
    @Id
    @Column(name="PRODUCT_STORE_SHIP_METH_ID")
-   private String productStoreShipMethId;
+   protected String productStoreShipMethId;
    @Column(name="PRODUCT_STORE_ID")
-   private String productStoreId;
+   protected String productStoreId;
    @Column(name="SHIPMENT_METHOD_TYPE_ID")
-   private String shipmentMethodTypeId;
+   protected String shipmentMethodTypeId;
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @Column(name="ROLE_TYPE_ID")
-   private String roleTypeId;
+   protected String roleTypeId;
    @Column(name="COMPANY_PARTY_ID")
-   private String companyPartyId;
+   protected String companyPartyId;
    @Column(name="MIN_WEIGHT")
-   private BigDecimal minWeight;
+   protected BigDecimal minWeight;
    @Column(name="MAX_WEIGHT")
-   private BigDecimal maxWeight;
+   protected BigDecimal maxWeight;
    @Column(name="MIN_SIZE")
-   private BigDecimal minSize;
+   protected BigDecimal minSize;
    @Column(name="MAX_SIZE")
-   private BigDecimal maxSize;
+   protected BigDecimal maxSize;
    @Column(name="MIN_TOTAL")
-   private BigDecimal minTotal;
+   protected BigDecimal minTotal;
    @Column(name="MAX_TOTAL")
-   private BigDecimal maxTotal;
+   protected BigDecimal maxTotal;
    @Column(name="ALLOW_USPS_ADDR")
-   private String allowUspsAddr;
+   protected String allowUspsAddr;
    @Column(name="REQUIRE_USPS_ADDR")
-   private String requireUspsAddr;
+   protected String requireUspsAddr;
    @Column(name="ALLOW_COMPANY_ADDR")
-   private String allowCompanyAddr;
+   protected String allowCompanyAddr;
    @Column(name="REQUIRE_COMPANY_ADDR")
-   private String requireCompanyAddr;
+   protected String requireCompanyAddr;
    @Column(name="INCLUDE_NO_CHARGE_ITEMS")
-   private String includeNoChargeItems;
+   protected String includeNoChargeItems;
    @Column(name="INCLUDE_FEATURE_GROUP")
-   private String includeFeatureGroup;
+   protected String includeFeatureGroup;
    @Column(name="EXCLUDE_FEATURE_GROUP")
-   private String excludeFeatureGroup;
+   protected String excludeFeatureGroup;
    @Column(name="INCLUDE_GEO_ID")
-   private String includeGeoId;
+   protected String includeGeoId;
    @Column(name="EXCLUDE_GEO_ID")
-   private String excludeGeoId;
+   protected String excludeGeoId;
    @Column(name="SERVICE_NAME")
-   private String serviceName;
+   protected String serviceName;
    @Column(name="CONFIG_PROPS")
-   private String configProps;
+   protected String configProps;
    @Column(name="SEQUENCE_NUMBER")
-   private Long sequenceNumber;
+   protected Long sequenceNumber;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="COD_SURCHARGE")
-   private BigDecimal codSurcharge;
+   protected BigDecimal codSurcharge;
    @Column(name="USER_DESCRIPTION")
-   private String userDescription;
+   protected String userDescription;
    @Column(name="MINIMUM_RATE")
-   private BigDecimal minimumRate;
+   protected BigDecimal minimumRate;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COMPANY_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INCLUDE_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo includeGeo = null;
+   protected Geo includeGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EXCLUDE_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo excludeGeo = null;
+   protected Geo excludeGeo = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_SHIP_METH_ID")
    
-   private List<DataImportOrderHeader> dataImportOrderHeaders = null;
+   protected List<DataImportOrderHeader> dataImportOrderHeaders = null;
 
   /**
    * Default constructor.

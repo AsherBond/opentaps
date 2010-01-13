@@ -99,7 +99,7 @@ fieldMapColumns.put("CreditCard", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -113,76 +113,76 @@ fieldMapColumns.put("CreditCard", fields);
    @GeneratedValue(generator="CreditCard_GEN")
    @Id
    @Column(name="PAYMENT_METHOD_ID")
-   private String paymentMethodId;
+   protected String paymentMethodId;
    @Column(name="CARD_TYPE")
-   private String cardType;
+   protected String cardType;
    @Column(name="CARD_NUMBER")
-   private String cardNumber;
+   protected String cardNumber;
    @Column(name="VALID_FROM_DATE")
-   private String validFromDate;
+   protected String validFromDate;
    @Column(name="EXPIRE_DATE")
-   private String expireDate;
+   protected String expireDate;
    @Column(name="ISSUE_NUMBER")
-   private String issueNumber;
+   protected String issueNumber;
    @Column(name="COMPANY_NAME_ON_CARD")
-   private String companyNameOnCard;
+   protected String companyNameOnCard;
    @Column(name="TITLE_ON_CARD")
-   private String titleOnCard;
+   protected String titleOnCard;
    @Column(name="FIRST_NAME_ON_CARD")
-   private String firstNameOnCard;
+   protected String firstNameOnCard;
    @Column(name="MIDDLE_NAME_ON_CARD")
-   private String middleNameOnCard;
+   protected String middleNameOnCard;
    @Column(name="LAST_NAME_ON_CARD")
-   private String lastNameOnCard;
+   protected String lastNameOnCard;
    @Column(name="SUFFIX_ON_CARD")
-   private String suffixOnCard;
+   protected String suffixOnCard;
    @Column(name="CONTACT_MECH_ID")
-   private String contactMechId;
+   protected String contactMechId;
    @Column(name="CONSECUTIVE_FAILED_AUTHS")
-   private Long consecutiveFailedAuths;
+   protected Long consecutiveFailedAuths;
    @Column(name="LAST_FAILED_AUTH_DATE")
-   private Timestamp lastFailedAuthDate;
+   protected Timestamp lastFailedAuthDate;
    @Column(name="CONSECUTIVE_FAILED_NSF")
-   private Long consecutiveFailedNsf;
+   protected Long consecutiveFailedNsf;
    @Column(name="LAST_FAILED_NSF_DATE")
-   private Timestamp lastFailedNsfDate;
+   protected Timestamp lastFailedNsfDate;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentMethod paymentMethod = null;
+   protected PaymentMethod paymentMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMech contactMech = null;
+   protected ContactMech contactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PostalAddress postalAddress = null;
+   protected PostalAddress postalAddress = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID")
    
-   private List<OrderPaymentPreference> orderPaymentPreferences = null;
+   protected List<OrderPaymentPreference> orderPaymentPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID")
    
-   private List<Payment> payments = null;
+   protected List<Payment> payments = null;
 
   /**
    * Default constructor.

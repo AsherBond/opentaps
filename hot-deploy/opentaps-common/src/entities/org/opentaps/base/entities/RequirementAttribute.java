@@ -70,7 +70,7 @@ fieldMapColumns.put("RequirementAttribute", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -83,7 +83,7 @@ fieldMapColumns.put("RequirementAttribute", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.RequirementAttributePkBridge.class)
-     private RequirementAttributePk id = new RequirementAttributePk();
+     protected RequirementAttributePk id = new RequirementAttributePk();
    
     /**
      * Auto generated Id accessor.
@@ -100,23 +100,23 @@ fieldMapColumns.put("RequirementAttribute", fields);
          this.id = id;
       }
    @Column(name="ATTR_VALUE")
-   private String attrValue;
+   protected String attrValue;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REQUIREMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Requirement requirement = null;
-   private transient List<RequirementTypeAttr> requirementTypeAttrs = null;
+   protected Requirement requirement = null;
+   protected transient List<RequirementTypeAttr> requirementTypeAttrs = null;
 
   /**
    * Default constructor.

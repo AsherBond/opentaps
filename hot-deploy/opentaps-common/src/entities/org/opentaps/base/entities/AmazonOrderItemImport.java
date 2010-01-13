@@ -74,7 +74,7 @@ fieldMapColumns.put("AmazonOrderItemImport", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -87,7 +87,7 @@ fieldMapColumns.put("AmazonOrderItemImport", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.AmazonOrderItemImportPkBridge.class)
-     private AmazonOrderItemImportPk id = new AmazonOrderItemImportPk();
+     protected AmazonOrderItemImportPk id = new AmazonOrderItemImportPk();
    
     /**
      * Auto generated Id accessor.
@@ -104,26 +104,26 @@ fieldMapColumns.put("AmazonOrderItemImport", fields);
          this.id = id;
       }
    @Column(name="ORDER_ID")
-   private String orderId;
+   protected String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   private String orderItemSeqId;
+   protected String orderItemSeqId;
    @Column(name="PRODUCT_ID")
-   private String productId;
+   protected String productId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AMAZON_ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AmazonOrder amazonOrder = null;
+   protected AmazonOrder amazonOrder = null;
    private transient AmazonOrderItem amazonOrderItem = null;
    private transient OrderItem orderItem = null;
 

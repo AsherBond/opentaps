@@ -81,7 +81,7 @@ fieldMapColumns.put("MrpEvent", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -94,7 +94,7 @@ fieldMapColumns.put("MrpEvent", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.MrpEventPkBridge.class)
-     private MrpEventPk id = new MrpEventPk();
+     protected MrpEventPk id = new MrpEventPk();
    
     /**
      * Auto generated Id accessor.
@@ -111,42 +111,42 @@ fieldMapColumns.put("MrpEvent", fields);
          this.id = id;
       }
    @Column(name="FACILITY_ID")
-   private String facilityId;
+   protected String facilityId;
    @Column(name="QUANTITY")
-   private BigDecimal quantity;
+   protected BigDecimal quantity;
    @Column(name="EVENT_NAME")
-   private String eventName;
+   protected String eventName;
    @Column(name="IS_LATE")
-   private String isLate;
+   protected String isLate;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MRP_EVENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private MrpEventType mrpEventType = null;
+   protected MrpEventType mrpEventType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Facility facility = null;
+   protected Facility facility = null;
 
   /**
    * Default constructor.

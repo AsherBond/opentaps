@@ -74,7 +74,7 @@ fieldMapColumns.put("GlJournal", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,38 +88,38 @@ fieldMapColumns.put("GlJournal", fields);
    @GeneratedValue(generator="GlJournal_GEN")
    @Id
    @Column(name="GL_JOURNAL_ID")
-   private String glJournalId;
+   protected String glJournalId;
    @Column(name="GL_JOURNAL_NAME")
-   private String glJournalName;
+   protected String glJournalName;
    @Column(name="ORGANIZATION_PARTY_ID")
-   private String organizationPartyId;
+   protected String organizationPartyId;
    @Column(name="IS_POSTED")
-   private String isPosted;
+   protected String isPosted;
    @Column(name="POSTED_DATE")
-   private Timestamp postedDate;
+   protected Timestamp postedDate;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GL_JOURNAL_ID")
    
-   private List<AcctgTrans> acctgTranses = null;
+   protected List<AcctgTrans> acctgTranses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ERROR_GL_JOURNAL_ID")
    
-   private List<PartyAcctgPreference> partyAcctgPreferences = null;
+   protected List<PartyAcctgPreference> partyAcctgPreferences = null;
 
   /**
    * Default constructor.

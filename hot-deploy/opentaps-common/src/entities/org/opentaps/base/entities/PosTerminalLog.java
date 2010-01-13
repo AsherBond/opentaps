@@ -85,7 +85,7 @@ fieldMapColumns.put("PosTerminalLog", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -99,68 +99,68 @@ fieldMapColumns.put("PosTerminalLog", fields);
    @GeneratedValue(generator="PosTerminalLog_GEN")
    @Id
    @Column(name="POS_TERMINAL_LOG_ID")
-   private String posTerminalLogId;
+   protected String posTerminalLogId;
    @Column(name="POS_TERMINAL_ID")
-   private String posTerminalId;
+   protected String posTerminalId;
    @Column(name="TRANSACTION_ID")
-   private String transactionId;
+   protected String transactionId;
    @Column(name="ITEM_COUNT")
-   private Long itemCount;
+   protected Long itemCount;
    @Column(name="ORDER_ID")
-   private String orderId;
+   protected String orderId;
    @Column(name="RETURN_ID")
-   private String returnId;
+   protected String returnId;
    @Column(name="USER_LOGIN_ID")
-   private String userLoginId;
+   protected String userLoginId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="LOG_START_DATE_TIME")
-   private Timestamp logStartDateTime;
+   protected Timestamp logStartDateTime;
    @Column(name="LOG_END_DATE_TIME")
-   private Timestamp logEndDateTime;
+   protected Timestamp logEndDateTime;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="POS_TERMINAL_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PosTerminal posTerminal = null;
+   protected PosTerminal posTerminal = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ReturnHeader returnHeader = null;
+   protected ReturnHeader returnHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="POS_TERMINAL_LOG_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PosTerminalInternTx posTerminalInternTx = null;
+   protected PosTerminalInternTx posTerminalInternTx = null;
 
   /**
    * Default constructor.

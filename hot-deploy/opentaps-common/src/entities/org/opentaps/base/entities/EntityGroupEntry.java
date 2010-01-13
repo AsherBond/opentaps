@@ -70,7 +70,7 @@ fieldMapColumns.put("EntityGroupEntry", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -83,7 +83,7 @@ fieldMapColumns.put("EntityGroupEntry", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.EntityGroupEntryPkBridge.class)
-     private EntityGroupEntryPk id = new EntityGroupEntryPk();
+     protected EntityGroupEntryPk id = new EntityGroupEntryPk();
    
     /**
      * Auto generated Id accessor.
@@ -100,22 +100,22 @@ fieldMapColumns.put("EntityGroupEntry", fields);
          this.id = id;
       }
    @Column(name="APPL_ENUM_ID")
-   private String applEnumId;
+   protected String applEnumId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ENTITY_GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EntityGroup entityGroup = null;
+   protected EntityGroup entityGroup = null;
 
   /**
    * Default constructor.

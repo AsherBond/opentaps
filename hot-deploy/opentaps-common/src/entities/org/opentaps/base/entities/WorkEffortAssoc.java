@@ -77,7 +77,7 @@ fieldMapColumns.put("WorkEffortAssoc", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -90,7 +90,7 @@ fieldMapColumns.put("WorkEffortAssoc", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.WorkEffortAssocPkBridge.class)
-     private WorkEffortAssocPk id = new WorkEffortAssocPk();
+     protected WorkEffortAssocPk id = new WorkEffortAssocPk();
    
     /**
      * Auto generated Id accessor.
@@ -107,39 +107,39 @@ fieldMapColumns.put("WorkEffortAssoc", fields);
          this.id = id;
       }
    @Column(name="SEQUENCE_NUM")
-   private Long sequenceNum;
+   protected Long sequenceNum;
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ASSOC_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffortAssocType workEffortAssocType = null;
-   private transient List<WorkEffortAssocTypeAttr> workEffortAssocTypeAttrs = null;
+   protected WorkEffortAssocType workEffortAssocType = null;
+   protected transient List<WorkEffortAssocTypeAttr> workEffortAssocTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID_FROM", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort fromWorkEffort = null;
+   protected WorkEffort fromWorkEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort toWorkEffort = null;
+   protected WorkEffort toWorkEffort = null;
    private transient List<WorkEffortAssocAttribute> workEffortAssocAttributes = null;
 
   /**

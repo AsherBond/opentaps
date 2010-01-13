@@ -81,7 +81,7 @@ fieldMapColumns.put("OrderItemBilling", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -94,7 +94,7 @@ fieldMapColumns.put("OrderItemBilling", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.OrderItemBillingPkBridge.class)
-     private OrderItemBillingPk id = new OrderItemBillingPk();
+     protected OrderItemBillingPk id = new OrderItemBillingPk();
    
     /**
      * Auto generated Id accessor.
@@ -111,28 +111,28 @@ fieldMapColumns.put("OrderItemBilling", fields);
          this.id = id;
       }
    @Column(name="ITEM_ISSUANCE_ID")
-   private String itemIssuanceId;
+   protected String itemIssuanceId;
    @Column(name="SHIPMENT_RECEIPT_ID")
-   private String shipmentReceiptId;
+   protected String shipmentReceiptId;
    @Column(name="QUANTITY")
-   private BigDecimal quantity;
+   protected BigDecimal quantity;
    @Column(name="AMOUNT")
-   private BigDecimal amount;
+   protected BigDecimal amount;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
    private transient OrderItem orderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ID", insertable=false, updatable=false)
@@ -140,7 +140,7 @@ fieldMapColumns.put("OrderItemBilling", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Invoice invoice = null;
+   protected Invoice invoice = null;
    private transient InvoiceItem invoiceItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_RECEIPT_ID", insertable=false, updatable=false)
@@ -148,14 +148,14 @@ fieldMapColumns.put("OrderItemBilling", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ShipmentReceipt shipmentReceipt = null;
+   protected ShipmentReceipt shipmentReceipt = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ITEM_ISSUANCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ItemIssuance itemIssuance = null;
+   protected ItemIssuance itemIssuance = null;
 
   /**
    * Default constructor.

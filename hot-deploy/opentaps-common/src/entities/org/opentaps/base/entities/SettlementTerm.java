@@ -73,7 +73,7 @@ fieldMapColumns.put("SettlementTerm", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -87,25 +87,25 @@ fieldMapColumns.put("SettlementTerm", fields);
    @GeneratedValue(generator="SettlementTerm_GEN")
    @Id
    @Column(name="SETTLEMENT_TERM_ID")
-   private String settlementTermId;
+   protected String settlementTermId;
    @Column(name="TERM_NAME")
-   private String termName;
+   protected String termName;
    @Column(name="TERM_VALUE")
-   private Long termValue;
+   protected Long termValue;
    @Column(name="UOM_ID")
-   private String uomId;
+   protected String uomId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SETTLEMENT_TERM_ID")
    
-   private List<AcctgTransEntry> acctgTransEntrys = null;
+   protected List<AcctgTransEntry> acctgTransEntrys = null;
 
   /**
    * Default constructor.

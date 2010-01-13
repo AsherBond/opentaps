@@ -82,7 +82,7 @@ fieldMapColumns.put("WorkEffortNoteAndData", fields);
     noteInfo("noteInfo"),
     noteParty("noteParty"),
     noteDateTime("noteDateTime");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -112,21 +112,21 @@ fieldMapColumns.put("WorkEffortNoteAndData", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private NoteData noteData = null;
+   protected NoteData noteData = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort workEffort = null;
+   protected WorkEffort workEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="NOTE_PARTY", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    private transient Person person = null;
 
   /**

@@ -70,7 +70,7 @@ fieldMapColumns.put("WorkEffortViewHistory", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -83,7 +83,7 @@ fieldMapColumns.put("WorkEffortViewHistory", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.WorkEffortViewHistoryPkBridge.class)
-     private WorkEffortViewHistoryPk id = new WorkEffortViewHistoryPk();
+     protected WorkEffortViewHistoryPk id = new WorkEffortViewHistoryPk();
    
     /**
      * Auto generated Id accessor.
@@ -100,15 +100,15 @@ fieldMapColumns.put("WorkEffortViewHistory", fields);
          this.id = id;
       }
    @Column(name="VIEWED_TIMESTAMP")
-   private Timestamp viewedTimestamp;
+   protected Timestamp viewedTimestamp;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

@@ -77,7 +77,7 @@ fieldMapColumns.put("ExampleFeatureAppl", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -90,7 +90,7 @@ fieldMapColumns.put("ExampleFeatureAppl", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ExampleFeatureApplPkBridge.class)
-     private ExampleFeatureApplPk id = new ExampleFeatureApplPk();
+     protected ExampleFeatureApplPk id = new ExampleFeatureApplPk();
    
     /**
      * Auto generated Id accessor.
@@ -107,40 +107,40 @@ fieldMapColumns.put("ExampleFeatureAppl", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="EXAMPLE_FEATURE_APPL_TYPE_ID")
-   private String exampleFeatureApplTypeId;
+   protected String exampleFeatureApplTypeId;
    @Column(name="SEQUENCE_NUM")
-   private Long sequenceNum;
+   protected Long sequenceNum;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EXAMPLE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Example example = null;
+   protected Example example = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EXAMPLE_FEATURE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ExampleFeature exampleFeature = null;
+   protected ExampleFeature exampleFeature = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EXAMPLE_FEATURE_APPL_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ExampleFeatureApplType exampleFeatureApplType = null;
+   protected ExampleFeatureApplType exampleFeatureApplType = null;
 
   /**
    * Default constructor.

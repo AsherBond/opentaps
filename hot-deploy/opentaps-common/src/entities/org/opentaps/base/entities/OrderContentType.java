@@ -72,7 +72,7 @@ fieldMapColumns.put("OrderContentType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,36 +86,36 @@ fieldMapColumns.put("OrderContentType", fields);
    @GeneratedValue(generator="OrderContentType_GEN")
    @Id
    @Column(name="ORDER_CONTENT_TYPE_ID")
-   private String orderContentTypeId;
+   protected String orderContentTypeId;
    @Column(name="PARENT_TYPE_ID")
-   private String parentTypeId;
+   protected String parentTypeId;
    @Column(name="HAS_TABLE")
-   private String hasTable;
+   protected String hasTable;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderContentType parentOrderContentType = null;
+   protected OrderContentType parentOrderContentType = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderContentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_CONTENT_TYPE_ID")
    
-   private List<OrderContent> orderContents = null;
+   protected List<OrderContent> orderContents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   private List<OrderContentType> childOrderContentTypes = null;
+   protected List<OrderContentType> childOrderContentTypes = null;
 
   /**
    * Default constructor.

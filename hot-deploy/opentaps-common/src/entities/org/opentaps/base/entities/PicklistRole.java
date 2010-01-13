@@ -78,7 +78,7 @@ fieldMapColumns.put("PicklistRole", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -91,7 +91,7 @@ fieldMapColumns.put("PicklistRole", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.PicklistRolePkBridge.class)
-     private PicklistRolePk id = new PicklistRolePk();
+     protected PicklistRolePk id = new PicklistRolePk();
    
     /**
      * Auto generated Id accessor.
@@ -108,26 +108,26 @@ fieldMapColumns.put("PicklistRole", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   private String createdByUserLogin;
+   protected String createdByUserLogin;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   private String lastModifiedByUserLogin;
+   protected String lastModifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PICKLIST_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Picklist picklist = null;
+   protected Picklist picklist = null;
    private transient PartyRole partyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)
@@ -135,7 +135,7 @@ fieldMapColumns.put("PicklistRole", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RoleType roleType = null;
+   protected RoleType roleType = null;
    private transient PartyNameView partyNameView = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN", insertable=false, updatable=false)
@@ -143,14 +143,14 @@ fieldMapColumns.put("PicklistRole", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin relatedCreatedByUserLogin = null;
+   protected UserLogin relatedCreatedByUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin relatedLastModifiedByUserLogin = null;
+   protected UserLogin relatedLastModifiedByUserLogin = null;
 
   /**
    * Default constructor.

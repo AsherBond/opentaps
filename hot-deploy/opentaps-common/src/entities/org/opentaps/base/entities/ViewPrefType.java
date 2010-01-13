@@ -78,7 +78,7 @@ fieldMapColumns.put("ViewPrefType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,31 +92,31 @@ fieldMapColumns.put("ViewPrefType", fields);
    @GeneratedValue(generator="ViewPrefType_GEN")
    @Id
    @Column(name="VIEW_PREF_TYPE_ID")
-   private String viewPrefTypeId;
+   protected String viewPrefTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="APPLICATION")
-   private String application;
+   protected String application;
    @Column(name="APPLICATION_SECTION")
-   private String applicationSection;
+   protected String applicationSection;
    @Column(name="SCREEN_NAME")
-   private String screenName;
+   protected String screenName;
    @Column(name="FORM_NAME")
-   private String formName;
+   protected String formName;
    @Column(name="DOM_ID")
-   private String domId;
+   protected String domId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="viewPrefType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="VIEW_PREF_TYPE_ID")
    
-   private List<ViewPreference> viewPreferences = null;
+   protected List<ViewPreference> viewPreferences = null;
 
   /**
    * Default constructor.

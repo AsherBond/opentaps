@@ -93,7 +93,7 @@ fieldMapColumns.put("ViewPrefAndLocation", fields);
     screenName("screenName"),
     formName("formName"),
     domId("domId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -132,14 +132,14 @@ fieldMapColumns.put("ViewPrefAndLocation", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ViewPrefType viewPrefType = null;
+   protected ViewPrefType viewPrefType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="USER_LOGIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin userLogin = null;
+   protected UserLogin userLogin = null;
 
   /**
    * Default constructor.

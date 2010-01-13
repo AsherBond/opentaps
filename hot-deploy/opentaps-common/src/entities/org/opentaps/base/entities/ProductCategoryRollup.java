@@ -75,7 +75,7 @@ fieldMapColumns.put("ProductCategoryRollup", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,7 +88,7 @@ fieldMapColumns.put("ProductCategoryRollup", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductCategoryRollupPkBridge.class)
-     private ProductCategoryRollupPk id = new ProductCategoryRollupPk();
+     protected ProductCategoryRollupPk id = new ProductCategoryRollupPk();
    
     /**
      * Auto generated Id accessor.
@@ -105,34 +105,34 @@ fieldMapColumns.put("ProductCategoryRollup", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="SEQUENCE_NUM")
-   private Long sequenceNum;
+   protected Long sequenceNum;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductCategory currentProductCategory = null;
+   protected ProductCategory currentProductCategory = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_PRODUCT_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductCategory parentProductCategory = null;
-   private transient List<ProductCategoryRollup> childProductCategoryRollups = null;
-   private transient List<ProductCategoryRollup> parentProductCategoryRollups = null;
-   private transient List<ProductCategoryRollup> siblingProductCategoryRollups = null;
+   protected ProductCategory parentProductCategory = null;
+   protected transient List<ProductCategoryRollup> childProductCategoryRollups = null;
+   protected transient List<ProductCategoryRollup> parentProductCategoryRollups = null;
+   protected transient List<ProductCategoryRollup> siblingProductCategoryRollups = null;
 
   /**
    * Default constructor.

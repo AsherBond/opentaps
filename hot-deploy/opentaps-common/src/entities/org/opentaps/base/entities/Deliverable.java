@@ -72,7 +72,7 @@ fieldMapColumns.put("Deliverable", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,36 +86,36 @@ fieldMapColumns.put("Deliverable", fields);
    @GeneratedValue(generator="Deliverable_GEN")
    @Id
    @Column(name="DELIVERABLE_ID")
-   private String deliverableId;
+   protected String deliverableId;
    @Column(name="DELIVERABLE_TYPE_ID")
-   private String deliverableTypeId;
+   protected String deliverableTypeId;
    @Column(name="DELIVERABLE_NAME")
-   private String deliverableName;
+   protected String deliverableName;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DELIVERABLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private DeliverableType deliverableType = null;
+   protected DeliverableType deliverableType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DELIVERABLE_ID")
    
-   private List<Requirement> requirements = null;
+   protected List<Requirement> requirements = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="deliverable", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="DELIVERABLE_ID")
    
-   private List<WorkEffortDeliverableProd> workEffortDeliverableProds = null;
+   protected List<WorkEffortDeliverableProd> workEffortDeliverableProds = null;
 
   /**
    * Default constructor.

@@ -75,7 +75,7 @@ fieldMapColumns.put("ProductConfigConfig", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,7 +88,7 @@ fieldMapColumns.put("ProductConfigConfig", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductConfigConfigPkBridge.class)
-     private ProductConfigConfigPk id = new ProductConfigConfigPk();
+     protected ProductConfigConfigPk id = new ProductConfigConfigPk();
    
     /**
      * Auto generated Id accessor.
@@ -105,22 +105,22 @@ fieldMapColumns.put("ProductConfigConfig", fields);
          this.id = id;
       }
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONFIG_ITEM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductConfigItem configItemProductConfigItem = null;
+   protected ProductConfigItem configItemProductConfigItem = null;
    private transient ProductConfigOption configOptionProductConfigOption = null;
    private transient List<ConfigOptionProductOption> configConfigOptionProductOptions = null;
 

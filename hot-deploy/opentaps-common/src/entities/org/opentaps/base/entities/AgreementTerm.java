@@ -108,7 +108,7 @@ fieldMapColumns.put("AgreementTerm", fields);
     valueEnumId("valueEnumId"),
     currencyUomId("currencyUomId"),
     uomId("uomId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -122,69 +122,69 @@ fieldMapColumns.put("AgreementTerm", fields);
    @GeneratedValue(generator="AgreementTerm_GEN")
    @Id
    @Column(name="AGREEMENT_TERM_ID")
-   private String agreementTermId;
+   protected String agreementTermId;
    @Column(name="TERM_TYPE_ID")
-   private String termTypeId;
+   protected String termTypeId;
    @Column(name="AGREEMENT_ID")
-   private String agreementId;
+   protected String agreementId;
    @Column(name="AGREEMENT_ITEM_SEQ_ID")
-   private String agreementItemSeqId;
+   protected String agreementItemSeqId;
    @Column(name="INVOICE_ITEM_TYPE_ID")
-   private String invoiceItemTypeId;
+   protected String invoiceItemTypeId;
    @Column(name="FROM_DATE")
-   private Timestamp fromDate;
+   protected Timestamp fromDate;
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="TERM_VALUE")
-   private BigDecimal termValue;
+   protected BigDecimal termValue;
    @Column(name="TERM_DAYS")
-   private Long termDays;
+   protected Long termDays;
    @Column(name="TEXT_VALUE")
-   private String textValue;
+   protected String textValue;
    @Column(name="MIN_QUANTITY")
-   private BigDecimal minQuantity;
+   protected BigDecimal minQuantity;
    @Column(name="MAX_QUANTITY")
-   private BigDecimal maxQuantity;
+   protected BigDecimal maxQuantity;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="PRODUCT_ID")
-   private String productId;
+   protected String productId;
    @Column(name="PRODUCT_CATEGORY_ID")
-   private String productCategoryId;
+   protected String productCategoryId;
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @Column(name="ROLE_TYPE_ID")
-   private String roleTypeId;
+   protected String roleTypeId;
    @Column(name="PARTY_CLASSIFICATION_GROUP_ID")
-   private String partyClassificationGroupId;
+   protected String partyClassificationGroupId;
    @Column(name="VALUE_ENUM_ID")
-   private String valueEnumId;
+   protected String valueEnumId;
    @Column(name="CURRENCY_UOM_ID")
-   private String currencyUomId;
+   protected String currencyUomId;
    @Column(name="UOM_ID")
-   private String uomId;
+   protected String uomId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TERM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TermType termType = null;
+   protected TermType termType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AGREEMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Agreement agreement = null;
+   protected Agreement agreement = null;
    private transient AgreementItem agreementItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ITEM_TYPE_ID", insertable=false, updatable=false)
@@ -192,71 +192,71 @@ fieldMapColumns.put("AgreementTerm", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private InvoiceItemType invoiceItemType = null;
+   protected InvoiceItemType invoiceItemType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductCategory productCategory = null;
+   protected ProductCategory productCategory = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RoleType roleType = null;
+   protected RoleType roleType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_CLASSIFICATION_GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PartyClassificationGroup partyClassificationGroup = null;
+   protected PartyClassificationGroup partyClassificationGroup = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="VALUE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration enumeration = null;
+   protected Enumeration enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom currencyUom = null;
+   protected Uom currencyUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom uom = null;
+   protected Uom uom = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="agreementTerm", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="AGREEMENT_TERM_ID")
    
-   private List<AgreementTermAttribute> agreementTermAttributes = null;
+   protected List<AgreementTermAttribute> agreementTermAttributes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AGREEMENT_TERM_ID")
    
-   private List<AgreementTermBilling> agreementTermBillings = null;
+   protected List<AgreementTermBilling> agreementTermBillings = null;
 
   /**
    * Default constructor.

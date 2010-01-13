@@ -73,7 +73,7 @@ fieldMapColumns.put("PeriodType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -87,56 +87,56 @@ fieldMapColumns.put("PeriodType", fields);
    @GeneratedValue(generator="PeriodType_GEN")
    @Id
    @Column(name="PERIOD_TYPE_ID")
-   private String periodTypeId;
+   protected String periodTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="PERIOD_LENGTH")
-   private Long periodLength;
+   protected Long periodLength;
    @Column(name="UOM_ID")
-   private String uomId;
+   protected String uomId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom uom = null;
+   protected Uom uom = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PERIOD_TYPE_ID")
    
-   private List<CustomTimePeriod> customTimePeriods = null;
+   protected List<CustomTimePeriod> customTimePeriods = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="periodType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PERIOD_TYPE_ID")
    
-   private List<OldEmplPositionTypeRate> oldEmplPositionTypeRates = null;
+   protected List<OldEmplPositionTypeRate> oldEmplPositionTypeRates = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PERIOD_TYPE_ID")
    
-   private List<PartyBenefit> partyBenefits = null;
+   protected List<PartyBenefit> partyBenefits = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PERIOD_TYPE_ID")
    
-   private List<PayHistory> payHistorys = null;
+   protected List<PayHistory> payHistorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PERIOD_TYPE_ID")
    
-   private List<PayrollPreference> payrollPreferences = null;
+   protected List<PayrollPreference> payrollPreferences = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="periodType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PERIOD_TYPE_ID")
    
-   private List<RateAmount> rateAmounts = null;
+   protected List<RateAmount> rateAmounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PERIOD_TYPE_ID")
    
-   private List<StandardTimePeriod> standardTimePeriods = null;
+   protected List<StandardTimePeriod> standardTimePeriods = null;
 
   /**
    * Default constructor.

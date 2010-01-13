@@ -68,7 +68,7 @@ fieldMapColumns.put("ProductCategoryTypeAttr", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -81,7 +81,7 @@ fieldMapColumns.put("ProductCategoryTypeAttr", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductCategoryTypeAttrPkBridge.class)
-     private ProductCategoryTypeAttrPk id = new ProductCategoryTypeAttrPk();
+     protected ProductCategoryTypeAttrPk id = new ProductCategoryTypeAttrPk();
    
     /**
      * Auto generated Id accessor.
@@ -98,22 +98,22 @@ fieldMapColumns.put("ProductCategoryTypeAttr", fields);
          this.id = id;
       }
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductCategoryType productCategoryType = null;
-   private transient List<ProductCategoryAttribute> productCategoryAttributes = null;
-   private transient List<ProductCategory> productCategorys = null;
+   protected ProductCategoryType productCategoryType = null;
+   protected transient List<ProductCategoryAttribute> productCategoryAttributes = null;
+   protected transient List<ProductCategory> productCategorys = null;
 
   /**
    * Default constructor.

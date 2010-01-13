@@ -70,7 +70,7 @@ fieldMapColumns.put("AmazonProductFeedProcessing", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -81,22 +81,22 @@ fieldMapColumns.put("AmazonProductFeedProcessing", fields);
   }
 
    @Column(name="PROCESSING_DOCUMENT_ID")
-   private String processingDocumentId;
+   protected String processingDocumentId;
    @org.hibernate.annotations.GenericGenerator(name="AmazonProductFeedProcessing_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
    @GeneratedValue(generator="AmazonProductFeedProcessing_GEN")
    @Id
    @Column(name="FEED_TYPE")
-   private String feedType;
+   protected String feedType;
    @Column(name="ACKNOWLEDGE_TIMESTAMP")
-   private Timestamp acknowledgeTimestamp;
+   protected Timestamp acknowledgeTimestamp;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

@@ -75,7 +75,7 @@ fieldMapColumns.put("ProductPriceAction", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,7 +88,7 @@ fieldMapColumns.put("ProductPriceAction", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductPriceActionPkBridge.class)
-     private ProductPriceActionPk id = new ProductPriceActionPk();
+     protected ProductPriceActionPk id = new ProductPriceActionPk();
    
     /**
      * Auto generated Id accessor.
@@ -105,33 +105,33 @@ fieldMapColumns.put("ProductPriceAction", fields);
          this.id = id;
       }
    @Column(name="PRODUCT_PRICE_ACTION_TYPE_ID")
-   private String productPriceActionTypeId;
+   protected String productPriceActionTypeId;
    @Column(name="AMOUNT")
-   private BigDecimal amount;
+   protected BigDecimal amount;
    @Column(name="RATE_CODE")
-   private String rateCode;
+   protected String rateCode;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PRICE_ACTION_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductPriceActionType productPriceActionType = null;
+   protected ProductPriceActionType productPriceActionType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PRICE_RULE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductPriceRule productPriceRule = null;
+   protected ProductPriceRule productPriceRule = null;
    private transient List<OrderItemPriceInfo> orderItemPriceInfoes = null;
 
   /**

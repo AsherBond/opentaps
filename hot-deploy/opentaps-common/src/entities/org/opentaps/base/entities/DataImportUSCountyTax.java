@@ -79,7 +79,7 @@ fieldMapColumns.put("DataImportUSCountyTax", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,7 +92,7 @@ fieldMapColumns.put("DataImportUSCountyTax", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.DataImportUSCountyTaxPkBridge.class)
-     private DataImportUSCountyTaxPk id = new DataImportUSCountyTaxPk();
+     protected DataImportUSCountyTaxPk id = new DataImportUSCountyTaxPk();
    
     /**
      * Auto generated Id accessor.
@@ -109,23 +109,23 @@ fieldMapColumns.put("DataImportUSCountyTax", fields);
          this.id = id;
       }
    @Column(name="TAX_RATE")
-   private BigDecimal taxRate;
+   protected BigDecimal taxRate;
    @Column(name="INHERIT_EXEMPTIONS")
-   private String inheritExemptions;
+   protected String inheritExemptions;
    @Column(name="IMPORT_STATUS_ID")
-   private String importStatusId;
+   protected String importStatusId;
    @Column(name="PROCESSED_TIMESTAMP")
-   private Timestamp processedTimestamp;
+   protected Timestamp processedTimestamp;
    @Column(name="IMPORT_ERROR")
-   private String importError;
+   protected String importError;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

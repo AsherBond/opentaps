@@ -74,7 +74,7 @@ fieldMapColumns.put("FacilityGroup", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,57 +88,57 @@ fieldMapColumns.put("FacilityGroup", fields);
    @GeneratedValue(generator="FacilityGroup_GEN")
    @Id
    @Column(name="FACILITY_GROUP_ID")
-   private String facilityGroupId;
+   protected String facilityGroupId;
    @Column(name="FACILITY_GROUP_TYPE_ID")
-   private String facilityGroupTypeId;
+   protected String facilityGroupTypeId;
    @Column(name="PRIMARY_PARENT_GROUP_ID")
-   private String primaryParentGroupId;
+   protected String primaryParentGroupId;
    @Column(name="FACILITY_GROUP_NAME")
-   private String facilityGroupName;
+   protected String facilityGroupName;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_GROUP_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private FacilityGroupType facilityGroupType = null;
+   protected FacilityGroupType facilityGroupType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_PARENT_GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private FacilityGroup primaryParentFacilityGroup = null;
+   protected FacilityGroup primaryParentFacilityGroup = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_FACILITY_GROUP_ID")
    
-   private List<Facility> facilitys = null;
+   protected List<Facility> facilitys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="facilityGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_GROUP_ID")
    
-   private List<FacilityGroupMember> facilityGroupMembers = null;
+   protected List<FacilityGroupMember> facilityGroupMembers = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="facilityGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_GROUP_ID")
    
-   private List<FacilityGroupRole> facilityGroupRoles = null;
+   protected List<FacilityGroupRole> facilityGroupRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="currentFacilityGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_GROUP_ID")
    
-   private List<FacilityGroupRollup> currentFacilityGroupRollups = null;
+   protected List<FacilityGroupRollup> currentFacilityGroupRollups = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="parentFacilityGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARENT_FACILITY_GROUP_ID")
    
-   private List<FacilityGroupRollup> parentFacilityGroupRollups = null;
+   protected List<FacilityGroupRollup> parentFacilityGroupRollups = null;
 
   /**
    * Default constructor.

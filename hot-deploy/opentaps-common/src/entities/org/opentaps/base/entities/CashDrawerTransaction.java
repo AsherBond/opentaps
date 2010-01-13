@@ -70,7 +70,7 @@ fieldMapColumns.put("CashDrawerTransaction", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -83,7 +83,7 @@ fieldMapColumns.put("CashDrawerTransaction", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.CashDrawerTransactionPkBridge.class)
-     private CashDrawerTransactionPk id = new CashDrawerTransactionPk();
+     protected CashDrawerTransactionPk id = new CashDrawerTransactionPk();
    
     /**
      * Auto generated Id accessor.
@@ -100,29 +100,29 @@ fieldMapColumns.put("CashDrawerTransaction", fields);
          this.id = id;
       }
    @Column(name="PAYMENT_ID")
-   private String paymentId;
+   protected String paymentId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CASH_DRAWER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CashDrawer cashDrawer = null;
+   protected CashDrawer cashDrawer = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Payment payment = null;
+   protected Payment payment = null;
 
   /**
    * Default constructor.

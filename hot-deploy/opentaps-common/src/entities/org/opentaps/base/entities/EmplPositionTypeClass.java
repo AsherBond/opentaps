@@ -75,7 +75,7 @@ fieldMapColumns.put("EmplPositionTypeClass", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,7 +88,7 @@ fieldMapColumns.put("EmplPositionTypeClass", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.EmplPositionTypeClassPkBridge.class)
-     private EmplPositionTypeClassPk id = new EmplPositionTypeClassPk();
+     protected EmplPositionTypeClassPk id = new EmplPositionTypeClassPk();
    
     /**
      * Auto generated Id accessor.
@@ -105,31 +105,31 @@ fieldMapColumns.put("EmplPositionTypeClass", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="STANDARD_HOURS_PER_WEEK")
-   private BigDecimal standardHoursPerWeek;
+   protected BigDecimal standardHoursPerWeek;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EMPL_POSITION_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EmplPositionType emplPositionType = null;
+   protected EmplPositionType emplPositionType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EMPL_POSITION_CLASS_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EmplPositionClassType emplPositionClassType = null;
+   protected EmplPositionClassType emplPositionClassType = null;
 
   /**
    * Default constructor.

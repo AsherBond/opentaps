@@ -76,7 +76,7 @@ fieldMapColumns.put("CarrierAndShipmentMethod", fields);
     roleTypeId("roleTypeId"),
     sequenceNumber("sequenceNumber"),
     description("description");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

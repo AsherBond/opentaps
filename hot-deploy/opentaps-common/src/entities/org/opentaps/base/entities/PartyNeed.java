@@ -86,7 +86,7 @@ fieldMapColumns.put("PartyNeed", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -99,7 +99,7 @@ fieldMapColumns.put("PartyNeed", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.PartyNeedPkBridge.class)
-     private PartyNeedPk id = new PartyNeedPk();
+     protected PartyNeedPk id = new PartyNeedPk();
    
     /**
      * Auto generated Id accessor.
@@ -116,50 +116,50 @@ fieldMapColumns.put("PartyNeed", fields);
          this.id = id;
       }
    @Column(name="PARTY_TYPE_ID")
-   private String partyTypeId;
+   protected String partyTypeId;
    @Column(name="NEED_TYPE_ID")
-   private String needTypeId;
+   protected String needTypeId;
    @Column(name="COMMUNICATION_EVENT_ID")
-   private String communicationEventId;
+   protected String communicationEventId;
    @Column(name="PRODUCT_ID")
-   private String productId;
+   protected String productId;
    @Column(name="PRODUCT_CATEGORY_ID")
-   private String productCategoryId;
+   protected String productCategoryId;
    @Column(name="VISIT_ID")
-   private String visitId;
+   protected String visitId;
    @Column(name="DATETIME_RECORDED")
-   private Timestamp datetimeRecorded;
+   protected Timestamp datetimeRecorded;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="NEED_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private NeedType needType = null;
+   protected NeedType needType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RoleType roleType = null;
+   protected RoleType roleType = null;
    private transient PartyRole partyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_TYPE_ID", insertable=false, updatable=false)
@@ -167,35 +167,35 @@ fieldMapColumns.put("PartyNeed", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PartyType partyType = null;
+   protected PartyType partyType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COMMUNICATION_EVENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CommunicationEvent communicationEvent = null;
+   protected CommunicationEvent communicationEvent = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductCategory productCategory = null;
+   protected ProductCategory productCategory = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="VISIT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Visit visit = null;
+   protected Visit visit = null;
    private transient List<Subscription> subscriptions = null;
 
   /**

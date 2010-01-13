@@ -92,7 +92,7 @@ fieldMapColumns.put("InvoiceItemProductSummary", fields);
     productId("productId"),
     quantityTotal("quantityTotal"),
     amountTotal("amountTotal");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

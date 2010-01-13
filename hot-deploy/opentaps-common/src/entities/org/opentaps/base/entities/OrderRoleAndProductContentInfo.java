@@ -330,7 +330,7 @@ fieldMapColumns.put("OrderRoleAndProductContentInfo", fields);
     lastModifiedDate("lastModifiedDate"),
     lastModifiedByUserLogin("lastModifiedByUserLogin"),
     classificationEnumId("classificationEnumId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -524,7 +524,7 @@ fieldMapColumns.put("OrderRoleAndProductContentInfo", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
 
   /**
    * Default constructor.

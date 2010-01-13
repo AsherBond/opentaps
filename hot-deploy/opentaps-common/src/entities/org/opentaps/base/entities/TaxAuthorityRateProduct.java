@@ -95,7 +95,7 @@ fieldMapColumns.put("TaxAuthorityRateProduct", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -109,43 +109,43 @@ fieldMapColumns.put("TaxAuthorityRateProduct", fields);
    @GeneratedValue(generator="TaxAuthorityRateProduct_GEN")
    @Id
    @Column(name="TAX_AUTHORITY_RATE_SEQ_ID")
-   private String taxAuthorityRateSeqId;
+   protected String taxAuthorityRateSeqId;
    @Column(name="TAX_AUTH_GEO_ID")
-   private String taxAuthGeoId;
+   protected String taxAuthGeoId;
    @Column(name="TAX_AUTH_PARTY_ID")
-   private String taxAuthPartyId;
+   protected String taxAuthPartyId;
    @Column(name="TAX_AUTHORITY_RATE_TYPE_ID")
-   private String taxAuthorityRateTypeId;
+   protected String taxAuthorityRateTypeId;
    @Column(name="PRODUCT_STORE_ID")
-   private String productStoreId;
+   protected String productStoreId;
    @Column(name="PRODUCT_CATEGORY_ID")
-   private String productCategoryId;
+   protected String productCategoryId;
    @Column(name="TITLE_TRANSFER_ENUM_ID")
-   private String titleTransferEnumId;
+   protected String titleTransferEnumId;
    @Column(name="MIN_ITEM_PRICE")
-   private BigDecimal minItemPrice;
+   protected BigDecimal minItemPrice;
    @Column(name="MIN_PURCHASE")
-   private BigDecimal minPurchase;
+   protected BigDecimal minPurchase;
    @Column(name="TAX_SHIPPING")
-   private String taxShipping;
+   protected String taxShipping;
    @Column(name="TAX_PERCENTAGE")
-   private BigDecimal taxPercentage;
+   protected BigDecimal taxPercentage;
    @Column(name="TAX_PROMOTIONS")
-   private String taxPromotions;
+   protected String taxPromotions;
    @Column(name="FROM_DATE")
-   private Timestamp fromDate;
+   protected Timestamp fromDate;
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    private transient TaxAuthority taxAuthority = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TAX_AUTHORITY_RATE_TYPE_ID", insertable=false, updatable=false)
@@ -153,33 +153,33 @@ fieldMapColumns.put("TaxAuthorityRateProduct", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TaxAuthorityRateType taxAuthorityRateType = null;
+   protected TaxAuthorityRateType taxAuthorityRateType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductStore productStore = null;
+   protected ProductStore productStore = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductCategory productCategory = null;
+   protected ProductCategory productCategory = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TAX_AUTHORITY_RATE_SEQ_ID")
    
-   private List<InvoiceItem> invoiceItems = null;
+   protected List<InvoiceItem> invoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TAX_AUTHORITY_RATE_SEQ_ID")
    
-   private List<OrderAdjustment> orderAdjustments = null;
+   protected List<OrderAdjustment> orderAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TAX_AUTHORITY_RATE_SEQ_ID")
    
-   private List<ReturnAdjustment> returnAdjustments = null;
+   protected List<ReturnAdjustment> returnAdjustments = null;
 
   /**
    * Default constructor.

@@ -89,7 +89,7 @@ fieldMapColumns.put("CostComponent", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -103,101 +103,101 @@ fieldMapColumns.put("CostComponent", fields);
    @GeneratedValue(generator="CostComponent_GEN")
    @Id
    @Column(name="COST_COMPONENT_ID")
-   private String costComponentId;
+   protected String costComponentId;
    @Column(name="COST_COMPONENT_TYPE_ID")
-   private String costComponentTypeId;
+   protected String costComponentTypeId;
    @Column(name="PRODUCT_ID")
-   private String productId;
+   protected String productId;
    @Column(name="PRODUCT_FEATURE_ID")
-   private String productFeatureId;
+   protected String productFeatureId;
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @Column(name="GEO_ID")
-   private String geoId;
+   protected String geoId;
    @Column(name="WORK_EFFORT_ID")
-   private String workEffortId;
+   protected String workEffortId;
    @Column(name="COST_COMPONENT_CALC_ID")
-   private String costComponentCalcId;
+   protected String costComponentCalcId;
    @Column(name="FROM_DATE")
-   private Timestamp fromDate;
+   protected Timestamp fromDate;
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="COST")
-   private BigDecimal cost;
+   protected BigDecimal cost;
    @Column(name="COST_UOM_ID")
-   private String costUomId;
+   protected String costUomId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COST_COMPONENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CostComponentType costComponentType = null;
+   protected CostComponentType costComponentType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="COST_COMPONENT_TYPE_ID")
    
-   private List<CostComponentTypeAttr> costComponentTypeAttrs = null;
+   protected List<CostComponentTypeAttr> costComponentTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_FEATURE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductFeature productFeature = null;
+   protected ProductFeature productFeature = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo geo = null;
+   protected Geo geo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort workEffort = null;
+   protected WorkEffort workEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COST_COMPONENT_CALC_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CostComponentCalc costComponentCalc = null;
+   protected CostComponentCalc costComponentCalc = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COST_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom currencyUom = null;
+   protected Uom currencyUom = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="costComponent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="COST_COMPONENT_ID")
    
-   private List<CostComponentAttribute> costComponentAttributes = null;
+   protected List<CostComponentAttribute> costComponentAttributes = null;
 
   /**
    * Default constructor.

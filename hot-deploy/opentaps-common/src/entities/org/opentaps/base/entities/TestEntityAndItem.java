@@ -111,7 +111,7 @@ fieldMapColumns.put("TestEntityAndItem", fields);
     testTelphoneField("testTelphoneField"),
     enumId("enumId"),
     testEncrypt("testEncrypt");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

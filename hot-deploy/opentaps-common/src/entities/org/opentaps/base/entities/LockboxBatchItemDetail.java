@@ -87,7 +87,7 @@ fieldMapColumns.put("LockboxBatchItemDetail", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -100,7 +100,7 @@ fieldMapColumns.put("LockboxBatchItemDetail", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.LockboxBatchItemDetailPkBridge.class)
-     private LockboxBatchItemDetailPk id = new LockboxBatchItemDetailPk();
+     protected LockboxBatchItemDetailPk id = new LockboxBatchItemDetailPk();
    
     /**
      * Auto generated Id accessor.
@@ -117,36 +117,36 @@ fieldMapColumns.put("LockboxBatchItemDetail", fields);
          this.id = id;
       }
    @Column(name="INVOICE_NUMBER")
-   private String invoiceNumber;
+   protected String invoiceNumber;
    @Column(name="INVOICE_AMOUNT")
-   private BigDecimal invoiceAmount;
+   protected BigDecimal invoiceAmount;
    @Column(name="CUSTOMER_ID")
-   private String customerId;
+   protected String customerId;
    @Column(name="PAYMENT_ID")
-   private String paymentId;
+   protected String paymentId;
    @Column(name="PAYMENT_APPLICATION_ID")
-   private String paymentApplicationId;
+   protected String paymentApplicationId;
    @Column(name="IS_USER_ENTERED")
-   private String isUserEntered;
+   protected String isUserEntered;
    @Column(name="AMOUNT_TO_APPLY")
-   private BigDecimal amountToApply;
+   protected BigDecimal amountToApply;
    @Column(name="CASH_DISCOUNT")
-   private BigDecimal cashDiscount;
+   protected BigDecimal cashDiscount;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="LOCKBOX_BATCH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private LockboxBatch lockboxBatch = null;
+   protected LockboxBatch lockboxBatch = null;
    private transient LockboxBatchItem lockboxBatchItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_APPLICATION_ID", insertable=false, updatable=false)
@@ -154,14 +154,14 @@ fieldMapColumns.put("LockboxBatchItemDetail", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentApplication paymentApplication = null;
+   protected PaymentApplication paymentApplication = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Payment payment = null;
+   protected Payment payment = null;
 
   /**
    * Default constructor.

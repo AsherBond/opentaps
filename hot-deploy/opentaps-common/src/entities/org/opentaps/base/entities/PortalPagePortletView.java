@@ -103,7 +103,7 @@ fieldMapColumns.put("PortalPagePortletView", fields);
     screenshot("screenshot"),
     securityServiceName("securityServiceName"),
     securityMainAction("securityMainAction");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

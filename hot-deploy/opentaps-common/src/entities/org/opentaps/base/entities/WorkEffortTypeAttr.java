@@ -68,7 +68,7 @@ fieldMapColumns.put("WorkEffortTypeAttr", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -81,7 +81,7 @@ fieldMapColumns.put("WorkEffortTypeAttr", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.WorkEffortTypeAttrPkBridge.class)
-     private WorkEffortTypeAttrPk id = new WorkEffortTypeAttrPk();
+     protected WorkEffortTypeAttrPk id = new WorkEffortTypeAttrPk();
    
     /**
      * Auto generated Id accessor.
@@ -98,22 +98,22 @@ fieldMapColumns.put("WorkEffortTypeAttr", fields);
          this.id = id;
       }
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffortType workEffortType = null;
-   private transient List<WorkEffortAttribute> workEffortAttributes = null;
-   private transient List<WorkEffort> workEfforts = null;
+   protected WorkEffortType workEffortType = null;
+   protected transient List<WorkEffortAttribute> workEffortAttributes = null;
+   protected transient List<WorkEffort> workEfforts = null;
 
   /**
    * Default constructor.

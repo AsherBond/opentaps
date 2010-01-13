@@ -84,7 +84,7 @@ fieldMapColumns.put("SurveyResponse", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -98,40 +98,40 @@ fieldMapColumns.put("SurveyResponse", fields);
    @GeneratedValue(generator="SurveyResponse_GEN")
    @Id
    @Column(name="SURVEY_RESPONSE_ID")
-   private String surveyResponseId;
+   protected String surveyResponseId;
    @Column(name="SURVEY_ID")
-   private String surveyId;
+   protected String surveyId;
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @Column(name="RESPONSE_DATE")
-   private Timestamp responseDate;
+   protected Timestamp responseDate;
    @Column(name="LAST_MODIFIED_DATE")
-   private Timestamp lastModifiedDate;
+   protected Timestamp lastModifiedDate;
    @Column(name="REFERENCE_ID")
-   private String referenceId;
+   protected String referenceId;
    @Column(name="GENERAL_FEEDBACK")
-   private String generalFeedback;
+   protected String generalFeedback;
    @Column(name="ORDER_ID")
-   private String orderId;
+   protected String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   private String orderItemSeqId;
+   protected String orderItemSeqId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    private transient OrderItem orderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
@@ -139,41 +139,41 @@ fieldMapColumns.put("SurveyResponse", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Survey survey = null;
+   protected Survey survey = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_RESPONSE_ID")
    
-   private List<DataResource> dataResources = null;
+   protected List<DataResource> dataResources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_RESPONSE_ID")
    
-   private List<GiftCardFulfillment> giftCardFulfillments = null;
+   protected List<GiftCardFulfillment> giftCardFulfillments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_RESPONSE_ID")
    
-   private List<OldValueLinkFulfillment> oldValueLinkFulfillments = null;
+   protected List<OldValueLinkFulfillment> oldValueLinkFulfillments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="surveyResponse", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SURVEY_RESPONSE_ID")
    
-   private List<ShoppingListItemSurvey> shoppingListItemSurveys = null;
+   protected List<ShoppingListItemSurvey> shoppingListItemSurveys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="surveyResponse", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SURVEY_RESPONSE_ID")
    
-   private List<SurveyResponseAnswer> surveyResponseAnswers = null;
+   protected List<SurveyResponseAnswer> surveyResponseAnswers = null;
 
   /**
    * Default constructor.

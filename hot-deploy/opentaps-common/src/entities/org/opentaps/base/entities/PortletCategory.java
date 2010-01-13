@@ -68,7 +68,7 @@ fieldMapColumns.put("PortletCategory", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,21 +82,21 @@ fieldMapColumns.put("PortletCategory", fields);
    @GeneratedValue(generator="PortletCategory_GEN")
    @Id
    @Column(name="PORTLET_CATEGORY_ID")
-   private String portletCategoryId;
+   protected String portletCategoryId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="portletCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PORTLET_CATEGORY_ID")
    
-   private List<PortletPortletCategory> portletPortletCategorys = null;
+   protected List<PortletPortletCategory> portletPortletCategorys = null;
 
   /**
    * Default constructor.

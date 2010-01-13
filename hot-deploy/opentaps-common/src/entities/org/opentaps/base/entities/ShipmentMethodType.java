@@ -71,7 +71,7 @@ fieldMapColumns.put("ShipmentMethodType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -85,55 +85,59 @@ fieldMapColumns.put("ShipmentMethodType", fields);
    @GeneratedValue(generator="ShipmentMethodType_GEN")
    @Id
    @Column(name="SHIPMENT_METHOD_TYPE_ID")
-   private String shipmentMethodTypeId;
+   protected String shipmentMethodTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="SEQUENCE_NUM")
-   private Long sequenceNum;
+   protected Long sequenceNum;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   private List<CarrierReturnService> carrierReturnServices = null;
+   protected List<AmazonOrderItemFulfillment> amazonOrderItemFulfillments = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
+   
+   protected List<CarrierReturnService> carrierReturnServices = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipmentMethodType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   private List<CarrierShipmentMethod> carrierShipmentMethods = null;
+   protected List<CarrierShipmentMethod> carrierShipmentMethods = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipmentMethodType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   private List<FacilityCarrierShipment> facilityCarrierShipments = null;
+   protected List<FacilityCarrierShipment> facilityCarrierShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   private List<OldOrderShipmentPreference> oldOrderShipmentPreferences = null;
+   protected List<OldOrderShipmentPreference> oldOrderShipmentPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   private List<OrderItemShipGroup> orderItemShipGroups = null;
+   protected List<OrderItemShipGroup> orderItemShipGroups = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   private List<Picklist> picklists = null;
+   protected List<Picklist> picklists = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_SHIP_METHOD_ID")
    
-   private List<ProductStore> productStores = null;
+   protected List<ProductStore> productStores = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipmentMethodType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   private List<ProductStoreVendorShipment> productStoreVendorShipments = null;
+   protected List<ProductStoreVendorShipment> productStoreVendorShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   private List<ShipmentRouteSegment> shipmentRouteSegments = null;
+   protected List<ShipmentRouteSegment> shipmentRouteSegments = null;
 
   /**
    * Default constructor.
@@ -262,6 +266,17 @@ fieldMapColumns.put("ShipmentMethodType", fields);
     }
 
     /**
+     * Auto generated method that gets the related <code>AmazonOrderItemFulfillment</code> by the relation named <code>AmazonOrderItemFulfillment</code>.
+     * @return the list of <code>AmazonOrderItemFulfillment</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AmazonOrderItemFulfillment> getAmazonOrderItemFulfillments() throws RepositoryException {
+        if (this.amazonOrderItemFulfillments == null) {
+            this.amazonOrderItemFulfillments = getRelated(AmazonOrderItemFulfillment.class, "AmazonOrderItemFulfillment");
+        }
+        return this.amazonOrderItemFulfillments;
+    }
+    /**
      * Auto generated method that gets the related <code>CarrierReturnService</code> by the relation named <code>CarrierReturnService</code>.
      * @return the list of <code>CarrierReturnService</code>
      * @throws RepositoryException if an error occurs
@@ -361,6 +376,13 @@ fieldMapColumns.put("ShipmentMethodType", fields);
         return this.shipmentRouteSegments;
     }
 
+    /**
+     * Auto generated value setter.
+     * @param amazonOrderItemFulfillments the amazonOrderItemFulfillments to set
+    */
+    public void setAmazonOrderItemFulfillments(List<AmazonOrderItemFulfillment> amazonOrderItemFulfillments) {
+        this.amazonOrderItemFulfillments = amazonOrderItemFulfillments;
+    }
     /**
      * Auto generated value setter.
      * @param carrierReturnServices the carrierReturnServices to set

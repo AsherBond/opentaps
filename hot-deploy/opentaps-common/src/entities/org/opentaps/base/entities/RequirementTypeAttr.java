@@ -68,7 +68,7 @@ fieldMapColumns.put("RequirementTypeAttr", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -81,7 +81,7 @@ fieldMapColumns.put("RequirementTypeAttr", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.RequirementTypeAttrPkBridge.class)
-     private RequirementTypeAttrPk id = new RequirementTypeAttrPk();
+     protected RequirementTypeAttrPk id = new RequirementTypeAttrPk();
    
     /**
      * Auto generated Id accessor.
@@ -98,22 +98,22 @@ fieldMapColumns.put("RequirementTypeAttr", fields);
          this.id = id;
       }
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REQUIREMENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RequirementType requirementType = null;
-   private transient List<RequirementAttribute> requirementAttributes = null;
-   private transient List<Requirement> requirements = null;
+   protected RequirementType requirementType = null;
+   protected transient List<RequirementAttribute> requirementAttributes = null;
+   protected transient List<Requirement> requirements = null;
 
   /**
    * Default constructor.

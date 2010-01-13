@@ -70,7 +70,7 @@ fieldMapColumns.put("SubscriptionActivity", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,23 +84,23 @@ fieldMapColumns.put("SubscriptionActivity", fields);
    @GeneratedValue(generator="SubscriptionActivity_GEN")
    @Id
    @Column(name="SUBSCRIPTION_ACTIVITY_ID")
-   private String subscriptionActivityId;
+   protected String subscriptionActivityId;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="DATE_SENT")
-   private Timestamp dateSent;
+   protected Timestamp dateSent;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="subscriptionActivity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SUBSCRIPTION_ACTIVITY_ID")
    
-   private List<SubscriptionFulfillmentPiece> subscriptionFulfillmentPieces = null;
+   protected List<SubscriptionFulfillmentPiece> subscriptionFulfillmentPieces = null;
 
   /**
    * Default constructor.

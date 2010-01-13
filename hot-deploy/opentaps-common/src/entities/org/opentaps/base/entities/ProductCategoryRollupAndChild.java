@@ -103,7 +103,7 @@ fieldMapColumns.put("ProductCategoryRollupAndChild", fields);
     linkTwoImageUrl("linkTwoImageUrl"),
     detailScreen("detailScreen"),
     showInSelect("showInSelect");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

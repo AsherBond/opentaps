@@ -109,7 +109,7 @@ fieldMapColumns.put("PartyRelationshipAndPermission", fields);
     comments("comments"),
     groupId("groupId"),
     permissionId("permissionId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

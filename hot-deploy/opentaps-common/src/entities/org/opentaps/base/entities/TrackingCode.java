@@ -109,7 +109,7 @@ fieldMapColumns.put("TrackingCode", fields);
     contactListId("contactListId"),
     campaignListId("campaignListId"),
     dnis("dnis");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -123,97 +123,97 @@ fieldMapColumns.put("TrackingCode", fields);
    @GeneratedValue(generator="TrackingCode_GEN")
    @Id
    @Column(name="TRACKING_CODE_ID")
-   private String trackingCodeId;
+   protected String trackingCodeId;
    @Column(name="TRACKING_CODE_TYPE_ID")
-   private String trackingCodeTypeId;
+   protected String trackingCodeTypeId;
    @Column(name="MARKETING_CAMPAIGN_ID")
-   private String marketingCampaignId;
+   protected String marketingCampaignId;
    @Column(name="REDIRECT_URL")
-   private String redirectUrl;
+   protected String redirectUrl;
    @Column(name="OVERRIDE_LOGO")
-   private String overrideLogo;
+   protected String overrideLogo;
    @Column(name="OVERRIDE_CSS")
-   private String overrideCss;
+   protected String overrideCss;
    @Column(name="PROD_CATALOG_ID")
-   private String prodCatalogId;
+   protected String prodCatalogId;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="TRACKABLE_LIFETIME")
-   private Long trackableLifetime;
+   protected Long trackableLifetime;
    @Column(name="BILLABLE_LIFETIME")
-   private Long billableLifetime;
+   protected Long billableLifetime;
    @Column(name="FROM_DATE")
-   private Timestamp fromDate;
+   protected Timestamp fromDate;
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="GROUP_ID")
-   private String groupId;
+   protected String groupId;
    @Column(name="SUBGROUP_ID")
-   private String subgroupId;
+   protected String subgroupId;
    @Column(name="CREATED_DATE")
-   private Timestamp createdDate;
+   protected Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   private String createdByUserLogin;
+   protected String createdByUserLogin;
    @Column(name="LAST_MODIFIED_DATE")
-   private Timestamp lastModifiedDate;
+   protected Timestamp lastModifiedDate;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   private String lastModifiedByUserLogin;
+   protected String lastModifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="CONTACT_LIST_ID")
-   private String contactListId;
+   protected String contactListId;
    @Column(name="CAMPAIGN_LIST_ID")
-   private String campaignListId;
+   protected String campaignListId;
    @Column(name="DNIS")
-   private String dnis;
+   protected String dnis;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MARKETING_CAMPAIGN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private MarketingCampaign marketingCampaign = null;
+   protected MarketingCampaign marketingCampaign = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TRACKING_CODE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TrackingCodeType trackingCodeType = null;
+   protected TrackingCodeType trackingCodeType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CAMPAIGN_LIST_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private MarketingCampaignContactList marketingCampaignContactList = null;
+   protected MarketingCampaignContactList marketingCampaignContactList = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_LIST_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactList contactList = null;
+   protected ContactList contactList = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TRACKING_CODE_ID")
    
-   private List<TrackingCodeOrder> trackingCodeOrders = null;
+   protected List<TrackingCodeOrder> trackingCodeOrders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TRACKING_CODE_ID")
    
-   private List<TrackingCodeOrderReturn> trackingCodeOrderReturns = null;
+   protected List<TrackingCodeOrderReturn> trackingCodeOrderReturns = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="trackingCode", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TRACKING_CODE_ID")
    
-   private List<TrackingCodeVisit> trackingCodeVisits = null;
+   protected List<TrackingCodeVisit> trackingCodeVisits = null;
 
   /**
    * Default constructor.

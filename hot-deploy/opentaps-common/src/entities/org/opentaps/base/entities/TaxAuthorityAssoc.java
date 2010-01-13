@@ -78,7 +78,7 @@ fieldMapColumns.put("TaxAuthorityAssoc", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -91,7 +91,7 @@ fieldMapColumns.put("TaxAuthorityAssoc", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.TaxAuthorityAssocPkBridge.class)
-     private TaxAuthorityAssocPk id = new TaxAuthorityAssocPk();
+     protected TaxAuthorityAssocPk id = new TaxAuthorityAssocPk();
    
     /**
      * Auto generated Id accessor.
@@ -108,17 +108,17 @@ fieldMapColumns.put("TaxAuthorityAssoc", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="TAX_AUTHORITY_ASSOC_TYPE_ID")
-   private String taxAuthorityAssocTypeId;
+   protected String taxAuthorityAssocTypeId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    private transient TaxAuthority taxAuthority = null;
    private transient TaxAuthority toTaxAuthority = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -127,7 +127,7 @@ fieldMapColumns.put("TaxAuthorityAssoc", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TaxAuthorityAssocType taxAuthorityAssocType = null;
+   protected TaxAuthorityAssocType taxAuthorityAssocType = null;
 
   /**
    * Default constructor.

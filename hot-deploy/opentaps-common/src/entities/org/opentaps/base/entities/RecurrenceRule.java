@@ -97,7 +97,7 @@ fieldMapColumns.put("RecurrenceRule", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -111,53 +111,53 @@ fieldMapColumns.put("RecurrenceRule", fields);
    @GeneratedValue(generator="RecurrenceRule_GEN")
    @Id
    @Column(name="RECURRENCE_RULE_ID")
-   private String recurrenceRuleId;
+   protected String recurrenceRuleId;
    @Column(name="FREQUENCY")
-   private String frequency;
+   protected String frequency;
    @Column(name="UNTIL_DATE_TIME")
-   private Timestamp untilDateTime;
+   protected Timestamp untilDateTime;
    @Column(name="COUNT_NUMBER")
-   private Long countNumber;
+   protected Long countNumber;
    @Column(name="INTERVAL_NUMBER")
-   private Long intervalNumber;
+   protected Long intervalNumber;
    @Column(name="BY_SECOND_LIST")
-   private String bySecondList;
+   protected String bySecondList;
    @Column(name="BY_MINUTE_LIST")
-   private String byMinuteList;
+   protected String byMinuteList;
    @Column(name="BY_HOUR_LIST")
-   private String byHourList;
+   protected String byHourList;
    @Column(name="BY_DAY_LIST")
-   private String byDayList;
+   protected String byDayList;
    @Column(name="BY_MONTH_DAY_LIST")
-   private String byMonthDayList;
+   protected String byMonthDayList;
    @Column(name="BY_YEAR_DAY_LIST")
-   private String byYearDayList;
+   protected String byYearDayList;
    @Column(name="BY_WEEK_NO_LIST")
-   private String byWeekNoList;
+   protected String byWeekNoList;
    @Column(name="BY_MONTH_LIST")
-   private String byMonthList;
+   protected String byMonthList;
    @Column(name="BY_SET_POS_LIST")
-   private String bySetPosList;
+   protected String bySetPosList;
    @Column(name="WEEK_START")
-   private String weekStart;
+   protected String weekStart;
    @Column(name="X_NAME")
-   private String xName;
+   protected String xName;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RECURRENCE_RULE_ID")
    
-   private List<RecurrenceInfo> recurrenceInfoes = null;
+   protected List<RecurrenceInfo> recurrenceInfoes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="EXCEPTION_RULE_ID")
    
-   private List<RecurrenceInfo> exceptionRecurrenceInfoes = null;
+   protected List<RecurrenceInfo> exceptionRecurrenceInfoes = null;
 
   /**
    * Default constructor.

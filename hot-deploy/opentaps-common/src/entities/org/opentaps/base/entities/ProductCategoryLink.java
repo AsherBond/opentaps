@@ -91,7 +91,7 @@ fieldMapColumns.put("ProductCategoryLink", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -104,7 +104,7 @@ fieldMapColumns.put("ProductCategoryLink", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductCategoryLinkPkBridge.class)
-     private ProductCategoryLinkPk id = new ProductCategoryLinkPk();
+     protected ProductCategoryLinkPk id = new ProductCategoryLinkPk();
    
     /**
      * Auto generated Id accessor.
@@ -121,47 +121,47 @@ fieldMapColumns.put("ProductCategoryLink", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="SEQUENCE_NUM")
-   private Long sequenceNum;
+   protected Long sequenceNum;
    @Column(name="TITLE_TEXT")
-   private String titleText;
+   protected String titleText;
    @Column(name="DETAIL_TEXT")
-   private String detailText;
+   protected String detailText;
    @Column(name="IMAGE_URL")
-   private String imageUrl;
+   protected String imageUrl;
    @Column(name="IMAGE_TWO_URL")
-   private String imageTwoUrl;
+   protected String imageTwoUrl;
    @Column(name="LINK_TYPE_ENUM_ID")
-   private String linkTypeEnumId;
+   protected String linkTypeEnumId;
    @Column(name="LINK_INFO")
-   private String linkInfo;
+   protected String linkInfo;
    @Column(name="DETAIL_SUB_SCREEN")
-   private String detailSubScreen;
+   protected String detailSubScreen;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductCategory productCategory = null;
+   protected ProductCategory productCategory = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="LINK_TYPE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration linkTypeEnumeration = null;
+   protected Enumeration linkTypeEnumeration = null;
 
   /**
    * Default constructor.

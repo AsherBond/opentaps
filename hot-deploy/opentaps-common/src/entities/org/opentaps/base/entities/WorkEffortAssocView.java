@@ -111,7 +111,7 @@ fieldMapColumns.put("WorkEffortAssocView", fields);
     sequenceNum("sequenceNum"),
     fromDate("fromDate"),
     thruDate("thruDate");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -159,7 +159,7 @@ fieldMapColumns.put("WorkEffortAssocView", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort fromWorkEffort = null;
+   protected WorkEffort fromWorkEffort = null;
 
   /**
    * Default constructor.

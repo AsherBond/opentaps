@@ -68,7 +68,7 @@ fieldMapColumns.put("SecurityGroup", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,51 +82,51 @@ fieldMapColumns.put("SecurityGroup", fields);
    @GeneratedValue(generator="SecurityGroup_GEN")
    @Id
    @Column(name="GROUP_ID")
-   private String groupId;
+   protected String groupId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private FacilityTeamRoleSecurity facilityTeamRoleSecurity = null;
+   protected FacilityTeamRoleSecurity facilityTeamRoleSecurity = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SECURITY_GROUP_ID")
    
-   private List<PartyRelationship> partyRelationships = null;
+   protected List<PartyRelationship> partyRelationships = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SECURITY_GROUP_ID")
    
-   private List<PortalPage> portalPages = null;
+   protected List<PortalPage> portalPages = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="securityGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GROUP_ID")
    
-   private List<ProtectedView> protectedViews = null;
+   protected List<ProtectedView> protectedViews = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private SalesTeamRoleSecurity salesTeamRoleSecurity = null;
+   protected SalesTeamRoleSecurity salesTeamRoleSecurity = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="securityGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GROUP_ID")
    
-   private List<SecurityGroupPermission> securityGroupPermissions = null;
+   protected List<SecurityGroupPermission> securityGroupPermissions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="securityGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GROUP_ID")
    
-   private List<UserLoginSecurityGroup> userLoginSecurityGroups = null;
+   protected List<UserLoginSecurityGroup> userLoginSecurityGroups = null;
 
   /**
    * Default constructor.

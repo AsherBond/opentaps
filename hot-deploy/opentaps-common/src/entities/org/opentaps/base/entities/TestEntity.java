@@ -94,7 +94,7 @@ fieldMapColumns.put("TestEntity", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -108,52 +108,52 @@ fieldMapColumns.put("TestEntity", fields);
    @GeneratedValue(generator="TestEntity_GEN")
    @Id
    @Column(name="TEST_ID")
-   private String testId;
+   protected String testId;
    @Column(name="TEST_STRING_FIELD")
-   private String testStringField;
+   protected String testStringField;
    @Column(name="TEST_DATE_TIME_FIELD")
-   private Timestamp testDateTimeField;
+   protected Timestamp testDateTimeField;
    @Column(name="TEST_BLOB_FIELD")
-   private byte[] testBlobField;
+   protected byte[] testBlobField;
    @Column(name="TEST_NUMERIC_FIELD")
-   private Long testNumericField;
+   protected Long testNumericField;
    @Column(name="TEST_FLOATING_POINT_FIELD")
-   private BigDecimal testFloatingPointField;
+   protected BigDecimal testFloatingPointField;
    @Column(name="TEST_CURRENCY_PRECISE_FIELD")
-   private BigDecimal testCurrencyPreciseField;
+   protected BigDecimal testCurrencyPreciseField;
    @Column(name="TEST_CREDIT_CARD_NUMBER_FIELD")
-   private String testCreditCardNumberField;
+   protected String testCreditCardNumberField;
    @Column(name="TEST_CREDIT_CARD_DATE_FIELD")
-   private String testCreditCardDateField;
+   protected String testCreditCardDateField;
    @Column(name="TEST_EMAIL_FIELD")
-   private String testEmailField;
+   protected String testEmailField;
    @Column(name="TEST_URL_FIELD")
-   private String testUrlField;
+   protected String testUrlField;
    @Column(name="TEST_TELPHONE_FIELD")
-   private String testTelphoneField;
+   protected String testTelphoneField;
    @Column(name="ENUM_ID")
-   private String enumId;
+   protected String enumId;
    @Column(name="TEST_ENCRYPT")
-   private String testEncrypt;
+   protected String testEncrypt;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration enumeration = null;
+   protected Enumeration enumeration = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="testEntity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TEST_ENTITY_ID")
    
-   private List<TestEntityItem> testEntityItems = null;
+   protected List<TestEntityItem> testEntityItems = null;
 
   /**
    * Default constructor.

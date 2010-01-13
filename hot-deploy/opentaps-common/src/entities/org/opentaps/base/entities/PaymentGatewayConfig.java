@@ -70,7 +70,7 @@ fieldMapColumns.put("PaymentGatewayConfig", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,51 +84,51 @@ fieldMapColumns.put("PaymentGatewayConfig", fields);
    @GeneratedValue(generator="PaymentGatewayConfig_GEN")
    @Id
    @Column(name="PAYMENT_GATEWAY_CONFIG_ID")
-   private String paymentGatewayConfigId;
+   protected String paymentGatewayConfigId;
    @Column(name="PAYMENT_GATEWAY_CONFIG_TYPE_ID")
-   private String paymentGatewayConfigTypeId;
+   protected String paymentGatewayConfigTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_GATEWAY_CONFIG_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentGatewayConfigType paymentGatewayConfigType = null;
+   protected PaymentGatewayConfigType paymentGatewayConfigType = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_GATEWAY_CONFIG_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentGatewayClearCommerce paymentGatewayClearCommerce = null;
+   protected PaymentGatewayClearCommerce paymentGatewayClearCommerce = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_GATEWAY_CONFIG_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentGatewayPayPal paymentGatewayPayPal = null;
+   protected PaymentGatewayPayPal paymentGatewayPayPal = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_GATEWAY_CONFIG_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentGatewayPayflowPro paymentGatewayPayflowPro = null;
+   protected PaymentGatewayPayflowPro paymentGatewayPayflowPro = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_GATEWAY_CONFIG_ID")
    
-   private List<ProductStorePaymentSetting> productStorePaymentSettings = null;
+   protected List<ProductStorePaymentSetting> productStorePaymentSettings = null;
 
   /**
    * Default constructor.

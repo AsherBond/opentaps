@@ -219,7 +219,7 @@ fieldMapColumns.put("CustRequestAndWorkEffort", fields);
     createdByUserLogin("createdByUserLogin"),
     lastModifiedDate("lastModifiedDate"),
     lastModifiedByUserLogin("lastModifiedByUserLogin");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -339,14 +339,14 @@ fieldMapColumns.put("CustRequestAndWorkEffort", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CustRequest custRequest = null;
+   protected CustRequest custRequest = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort workEffort = null;
+   protected WorkEffort workEffort = null;
 
   /**
    * Default constructor.

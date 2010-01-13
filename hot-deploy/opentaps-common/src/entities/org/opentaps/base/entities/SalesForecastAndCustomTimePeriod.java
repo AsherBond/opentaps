@@ -129,7 +129,7 @@ fieldMapColumns.put("SalesForecastAndCustomTimePeriod", fields);
     fromDate("fromDate"),
     thruDate("thruDate"),
     isClosed("isClosed");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

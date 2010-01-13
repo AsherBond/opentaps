@@ -77,7 +77,7 @@ fieldMapColumns.put("InventoryItemVariance", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -90,7 +90,7 @@ fieldMapColumns.put("InventoryItemVariance", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.InventoryItemVariancePkBridge.class)
-     private InventoryItemVariancePk id = new InventoryItemVariancePk();
+     protected InventoryItemVariancePk id = new InventoryItemVariancePk();
    
     /**
      * Auto generated Id accessor.
@@ -107,42 +107,42 @@ fieldMapColumns.put("InventoryItemVariance", fields);
          this.id = id;
       }
    @Column(name="VARIANCE_REASON_ID")
-   private String varianceReasonId;
+   protected String varianceReasonId;
    @Column(name="AVAILABLE_TO_PROMISE_VAR")
-   private BigDecimal availableToPromiseVar;
+   protected BigDecimal availableToPromiseVar;
    @Column(name="QUANTITY_ON_HAND_VAR")
-   private BigDecimal quantityOnHandVar;
+   protected BigDecimal quantityOnHandVar;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PHYSICAL_INVENTORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PhysicalInventory physicalInventory = null;
+   protected PhysicalInventory physicalInventory = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="VARIANCE_REASON_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private VarianceReason varianceReason = null;
+   protected VarianceReason varianceReason = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_ITEM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private InventoryItem inventoryItem = null;
+   protected InventoryItem inventoryItem = null;
    private transient List<AcctgTrans> acctgTranses = null;
    private transient List<InventoryItemDetail> inventoryItemDetails = null;
    private transient List<InventoryItemTraceDetail> inventoryItemTraceDetails = null;

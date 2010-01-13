@@ -200,7 +200,7 @@ fieldMapColumns.put("NetSuiteItem", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -211,150 +211,150 @@ fieldMapColumns.put("NetSuiteItem", fields);
   }
 
    @Column(name="ALLOW_DROP_SHIP")
-   private String allowDropShip;
+   protected String allowDropShip;
    @Column(name="ASSET_ACCOUNT_ID")
-   private String assetAccountId;
+   protected String assetAccountId;
    @Column(name="AVERAGECOST")
-   private BigDecimal averagecost;
+   protected BigDecimal averagecost;
    @Column(name="BUILD_SUB_ASSEMBLIES")
-   private String buildSubAssemblies;
+   protected String buildSubAssemblies;
    @Column(name="CLASS_ID")
-   private String classId;
+   protected String classId;
    @Column(name="COST_0")
-   private BigDecimal cost_0;
+   protected BigDecimal cost_0;
    @Column(name="COSTING_METHOD")
-   private String costingMethod;
+   protected String costingMethod;
    @Column(name="CREATED")
-   private Timestamp created;
+   protected Timestamp created;
    @Column(name="CURRENT_ON_ORDER_COUNT")
-   private BigDecimal currentOnOrderCount;
+   protected BigDecimal currentOnOrderCount;
    @Column(name="DATE_OF_LAST_TRANSACTION")
-   private Timestamp dateOfLastTransaction;
+   protected Timestamp dateOfLastTransaction;
    @Column(name="DEPARTMENT_ID")
-   private String departmentId;
+   protected String departmentId;
    @Column(name="DEPOSIT")
-   private String deposit;
+   protected String deposit;
    @Column(name="DISPLAYNAME")
-   private String displayname;
+   protected String displayname;
    @Column(name="EXPENSE_ACCOUNT_ID")
-   private String expenseAccountId;
+   protected String expenseAccountId;
    @Column(name="FEATUREDDESCRIPTION")
-   private String featureddescription;
+   protected String featureddescription;
    @Column(name="FEATUREDITEM")
-   private String featureditem;
+   protected String featureditem;
    @Column(name="FULL_NAME")
-   private String fullName;
+   protected String fullName;
    @Column(name="HANDLING_COST")
-   private String handlingCost;
+   protected String handlingCost;
    @Column(name="INCOME_ACCOUNT_ID")
-   private String incomeAccountId;
+   protected String incomeAccountId;
    @Column(name="ISINACTIVE")
-   private String isinactive;
+   protected String isinactive;
    @Column(name="ISONLINE")
-   private String isonline;
+   protected String isonline;
    @Column(name="ISTAXABLE")
-   private String istaxable;
+   protected String istaxable;
    @Column(name="ITEM_EXTID")
-   private String itemExtid;
+   protected String itemExtid;
    @org.hibernate.annotations.GenericGenerator(name="NetSuiteItem_GEN",  strategy="increment")
    @GeneratedValue(generator="NetSuiteItem_GEN")
    @Id
    @Column(name="ITEM_ID")
-   private Long itemId;
+   protected Long itemId;
    @Column(name="LAST_COGS_CORRECTION")
-   private BigDecimal lastCogsCorrection;
+   protected BigDecimal lastCogsCorrection;
    @Column(name="LAST_PURCHASE_PRICE")
-   private BigDecimal lastPurchasePrice;
+   protected BigDecimal lastPurchasePrice;
    @Column(name="LOCATION_ID")
-   private String locationId;
+   protected String locationId;
    @Column(name="MODIFIED")
-   private Timestamp modified;
+   protected Timestamp modified;
    @Column(name="ITEM_NAME")
-   private String itemName;
+   protected String itemName;
    @Column(name="OFFERSUPPORT")
-   private String offersupport;
+   protected String offersupport;
    @Column(name="ONSPECIAL")
-   private String onspecial;
+   protected String onspecial;
    @Column(name="PARENT_ID")
-   private String parentId;
+   protected String parentId;
    @Column(name="PAYMENT_METHOD_ID")
-   private String paymentMethodId;
+   protected String paymentMethodId;
    @Column(name="PREF_PURCHASE_TAX_ID")
-   private String prefPurchaseTaxId;
+   protected String prefPurchaseTaxId;
    @Column(name="PREF_SALE_TAX_ID")
-   private String prefSaleTaxId;
+   protected String prefSaleTaxId;
    @Column(name="PRINT_SUB_ITEMS")
-   private String printSubItems;
+   protected String printSubItems;
    @Column(name="PURCHASEDESCRIPTION")
-   private String purchasedescription;
+   protected String purchasedescription;
    @Column(name="QUANTITYAVAILABLE")
-   private BigDecimal quantityavailable;
+   protected BigDecimal quantityavailable;
    @Column(name="QUANTITYONHAND")
-   private BigDecimal quantityonhand;
+   protected BigDecimal quantityonhand;
    @Column(name="REORDERPOINT")
-   private String reorderpoint;
+   protected String reorderpoint;
    @Column(name="RESALABLE")
-   private String resalable;
+   protected String resalable;
    @Column(name="SALESDESCRIPTION")
-   private String salesdescription;
+   protected String salesdescription;
    @Column(name="SALESPRICE")
-   private BigDecimal salesprice;
+   protected BigDecimal salesprice;
    @Column(name="SHIPPINGCOST")
-   private String shippingcost;
+   protected String shippingcost;
    @Column(name="SPECIALSDESCRIPTION")
-   private String specialsdescription;
+   protected String specialsdescription;
    @Column(name="SPECIAL_WORK_ORDER_ITEM")
-   private String specialWorkOrderItem;
+   protected String specialWorkOrderItem;
    @Column(name="STOREDESCRIPTION")
-   private String storedescription;
+   protected String storedescription;
    @Column(name="STOREDETAILEDDESCRIPTION")
-   private String storedetaileddescription;
+   protected String storedetaileddescription;
    @Column(name="STOREDISPLAYNAME")
-   private String storedisplayname;
+   protected String storedisplayname;
    @Column(name="ITEM_SUBTYPE")
-   private String itemSubtype;
+   protected String itemSubtype;
    @Column(name="TAX_ITEM_ID")
-   private String taxItemId;
+   protected String taxItemId;
    @Column(name="TOTALVALUE")
-   private String totalvalue;
+   protected String totalvalue;
    @Column(name="TYPE_NAME")
-   private String typeName;
+   protected String typeName;
    @Column(name="UPC_CODE")
-   private String upcCode;
+   protected String upcCode;
    @Column(name="VENDORNAME")
-   private String vendorname;
+   protected String vendorname;
    @Column(name="VENDOR_ID")
-   private String vendorId;
+   protected String vendorId;
    @Column(name="VSOE_DEFERRAL")
-   private String vsoeDeferral;
+   protected String vsoeDeferral;
    @Column(name="VSOE_DELIVERED")
-   private String vsoeDelivered;
+   protected String vsoeDelivered;
    @Column(name="VSOE_DISCOUNT")
-   private String vsoeDiscount;
+   protected String vsoeDiscount;
    @Column(name="VSOE_PRICE")
-   private String vsoePrice;
+   protected String vsoePrice;
    @Column(name="WEIGHT")
-   private BigDecimal weight;
+   protected BigDecimal weight;
    @Column(name="WEIGHT_UNIT_INDEX")
-   private String weightUnitIndex;
+   protected String weightUnitIndex;
    @Column(name="PRODUCT_CATAGORY")
-   private String productCatagory;
+   protected String productCatagory;
    @Column(name="UPCITEM_CODE")
-   private String upcitemCode;
+   protected String upcitemCode;
    @Column(name="IMPORT_STATUS_ID")
-   private String importStatusId;
+   protected String importStatusId;
    @Column(name="IMPORT_ERROR")
-   private String importError;
+   protected String importError;
    @Column(name="PROCESSED_TIMESTAMP")
-   private Timestamp processedTimestamp;
+   protected Timestamp processedTimestamp;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

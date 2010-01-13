@@ -146,7 +146,7 @@ fieldMapColumns.put("ProductStoreShipMethAndCarrier", fields);
     minimumRate("minimumRate"),
     description("description"),
     carrierServiceCode("carrierServiceCode");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -218,21 +218,21 @@ fieldMapColumns.put("ProductStoreShipMethAndCarrier", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INCLUDE_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo includeGeo = null;
+   protected Geo includeGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EXCLUDE_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo excludeGeo = null;
+   protected Geo excludeGeo = null;
    private transient PartyGroup partyGroup = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID", insertable=false, updatable=false)
@@ -240,7 +240,7 @@ fieldMapColumns.put("ProductStoreShipMethAndCarrier", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ShipmentMethodType shipmentMethodType = null;
+   protected ShipmentMethodType shipmentMethodType = null;
 
   /**
    * Default constructor.

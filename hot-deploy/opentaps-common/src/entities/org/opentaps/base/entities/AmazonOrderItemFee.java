@@ -75,7 +75,7 @@ fieldMapColumns.put("AmazonOrderItemFee", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,7 +88,7 @@ fieldMapColumns.put("AmazonOrderItemFee", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.AmazonOrderItemFeePkBridge.class)
-     private AmazonOrderItemFeePk id = new AmazonOrderItemFeePk();
+     protected AmazonOrderItemFeePk id = new AmazonOrderItemFeePk();
    
     /**
      * Auto generated Id accessor.
@@ -105,17 +105,17 @@ fieldMapColumns.put("AmazonOrderItemFee", fields);
          this.id = id;
       }
    @Column(name="FEE_CURRENCY")
-   private String feeCurrency;
+   protected String feeCurrency;
    @Column(name="FEE_AMOUNT")
-   private BigDecimal feeAmount;
+   protected BigDecimal feeAmount;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    private transient AmazonOrderItem amazonOrderItem = null;
 
   /**

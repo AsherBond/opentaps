@@ -84,7 +84,7 @@ fieldMapColumns.put("TermTypeFields", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -98,40 +98,40 @@ fieldMapColumns.put("TermTypeFields", fields);
    @GeneratedValue(generator="TermTypeFields_GEN")
    @Id
    @Column(name="TERM_TYPE_ID")
-   private String termTypeId;
+   protected String termTypeId;
    @Column(name="FIELD1")
-   private String field1;
+   protected String field1;
    @Column(name="FIELD2")
-   private String field2;
+   protected String field2;
    @Column(name="FIELD3")
-   private String field3;
+   protected String field3;
    @Column(name="FIELD4")
-   private String field4;
+   protected String field4;
    @Column(name="FIELD5")
-   private String field5;
+   protected String field5;
    @Column(name="FIELD6")
-   private String field6;
+   protected String field6;
    @Column(name="FIELD7")
-   private String field7;
+   protected String field7;
    @Column(name="FIELD8")
-   private String field8;
+   protected String field8;
    @Column(name="FIELD9")
-   private String field9;
+   protected String field9;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TERM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TermType termType = null;
+   protected TermType termType = null;
 
   /**
    * Default constructor.

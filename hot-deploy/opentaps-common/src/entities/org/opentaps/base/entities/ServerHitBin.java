@@ -89,7 +89,7 @@ fieldMapColumns.put("ServerHitBin", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     internalContentId("internalContentId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -103,51 +103,51 @@ fieldMapColumns.put("ServerHitBin", fields);
    @GeneratedValue(generator="ServerHitBin_GEN")
    @Id
    @Column(name="SERVER_HIT_BIN_ID")
-   private String serverHitBinId;
+   protected String serverHitBinId;
    @Column(name="CONTENT_ID")
-   private String contentId;
+   protected String contentId;
    @Column(name="HIT_TYPE_ID")
-   private String hitTypeId;
+   protected String hitTypeId;
    @Column(name="SERVER_IP_ADDRESS")
-   private String serverIpAddress;
+   protected String serverIpAddress;
    @Column(name="SERVER_HOST_NAME")
-   private String serverHostName;
+   protected String serverHostName;
    @Column(name="BIN_START_DATE_TIME")
-   private Timestamp binStartDateTime;
+   protected Timestamp binStartDateTime;
    @Column(name="BIN_END_DATE_TIME")
-   private Timestamp binEndDateTime;
+   protected Timestamp binEndDateTime;
    @Column(name="NUMBER_HITS")
-   private Long numberHits;
+   protected Long numberHits;
    @Column(name="TOTAL_TIME_MILLIS")
-   private Long totalTimeMillis;
+   protected Long totalTimeMillis;
    @Column(name="MIN_TIME_MILLIS")
-   private Long minTimeMillis;
+   protected Long minTimeMillis;
    @Column(name="MAX_TIME_MILLIS")
-   private Long maxTimeMillis;
+   protected Long maxTimeMillis;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="INTERNAL_CONTENT_ID")
-   private String internalContentId;
+   protected String internalContentId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="HIT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ServerHitType serverHitType = null;
+   protected ServerHitType serverHitType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INTERNAL_CONTENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Content content = null;
+   protected Content content = null;
 
   /**
    * Default constructor.

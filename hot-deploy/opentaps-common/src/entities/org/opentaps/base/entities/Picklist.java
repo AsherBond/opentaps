@@ -80,7 +80,7 @@ fieldMapColumns.put("Picklist", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -94,63 +94,63 @@ fieldMapColumns.put("Picklist", fields);
    @GeneratedValue(generator="Picklist_GEN")
    @Id
    @Column(name="PICKLIST_ID")
-   private String picklistId;
+   protected String picklistId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="FACILITY_ID")
-   private String facilityId;
+   protected String facilityId;
    @Column(name="SHIPMENT_METHOD_TYPE_ID")
-   private String shipmentMethodTypeId;
+   protected String shipmentMethodTypeId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="PICKLIST_DATE")
-   private Timestamp picklistDate;
+   protected Timestamp picklistDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   private String createdByUserLogin;
+   protected String createdByUserLogin;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   private String lastModifiedByUserLogin;
+   protected String lastModifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Facility facility = null;
+   protected Facility facility = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ShipmentMethodType shipmentMethodType = null;
+   protected ShipmentMethodType shipmentMethodType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    private transient List<StatusValidChangeToDetail> statusValidChangeToDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PICKLIST_ID")
    
-   private List<PicklistBin> picklistBins = null;
+   protected List<PicklistBin> picklistBins = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="picklist", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PICKLIST_ID")
    
-   private List<PicklistRole> picklistRoles = null;
+   protected List<PicklistRole> picklistRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="picklist", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PICKLIST_ID")
    
-   private List<PicklistStatusHistory> picklistStatusHistorys = null;
+   protected List<PicklistStatusHistory> picklistStatusHistorys = null;
 
   /**
    * Default constructor.

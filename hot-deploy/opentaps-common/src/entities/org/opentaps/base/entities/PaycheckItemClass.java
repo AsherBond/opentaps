@@ -68,7 +68,7 @@ fieldMapColumns.put("PaycheckItemClass", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,21 +82,21 @@ fieldMapColumns.put("PaycheckItemClass", fields);
    @GeneratedValue(generator="PaycheckItemClass_GEN")
    @Id
    @Column(name="PAYCHECK_ITEM_CLASS_ID")
-   private String paycheckItemClassId;
+   protected String paycheckItemClassId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYCHECK_ITEM_CLASS_ID")
    
-   private List<PaycheckItemType> paycheckItemTypes = null;
+   protected List<PaycheckItemType> paycheckItemTypes = null;
 
   /**
    * Default constructor.

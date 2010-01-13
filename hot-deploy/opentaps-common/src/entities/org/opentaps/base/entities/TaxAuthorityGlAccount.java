@@ -72,7 +72,7 @@ fieldMapColumns.put("TaxAuthorityGlAccount", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -85,7 +85,7 @@ fieldMapColumns.put("TaxAuthorityGlAccount", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.TaxAuthorityGlAccountPkBridge.class)
-     private TaxAuthorityGlAccountPk id = new TaxAuthorityGlAccountPk();
+     protected TaxAuthorityGlAccountPk id = new TaxAuthorityGlAccountPk();
    
     /**
      * Auto generated Id accessor.
@@ -102,15 +102,15 @@ fieldMapColumns.put("TaxAuthorityGlAccount", fields);
          this.id = id;
       }
    @Column(name="GL_ACCOUNT_ID")
-   private String glAccountId;
+   protected String glAccountId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    private transient TaxAuthority taxAuthority = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID", insertable=false, updatable=false)
@@ -118,14 +118,14 @@ fieldMapColumns.put("TaxAuthorityGlAccount", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party organizationParty = null;
+   protected Party organizationParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GlAccount glAccount = null;
+   protected GlAccount glAccount = null;
 
   /**
    * Default constructor.

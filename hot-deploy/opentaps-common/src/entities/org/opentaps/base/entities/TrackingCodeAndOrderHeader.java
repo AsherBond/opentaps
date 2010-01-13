@@ -75,7 +75,7 @@ fieldMapColumns.put("TrackingCodeAndOrderHeader", fields);
     orderId("orderId"),
     orderDate("orderDate"),
     trackingCodeId("trackingCodeId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

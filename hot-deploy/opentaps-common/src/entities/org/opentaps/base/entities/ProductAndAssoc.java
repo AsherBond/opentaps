@@ -80,7 +80,7 @@ fieldMapColumns.put("ProductAndAssoc", fields);
     productAssocTypeId("productAssocTypeId"),
     quantity("quantity"),
     fromDate("fromDate");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

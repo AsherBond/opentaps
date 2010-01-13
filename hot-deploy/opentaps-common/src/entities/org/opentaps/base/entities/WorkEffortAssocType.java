@@ -72,7 +72,7 @@ fieldMapColumns.put("WorkEffortAssocType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,40 +86,40 @@ fieldMapColumns.put("WorkEffortAssocType", fields);
    @GeneratedValue(generator="WorkEffortAssocType_GEN")
    @Id
    @Column(name="WORK_EFFORT_ASSOC_TYPE_ID")
-   private String workEffortAssocTypeId;
+   protected String workEffortAssocTypeId;
    @Column(name="PARENT_TYPE_ID")
-   private String parentTypeId;
+   protected String parentTypeId;
    @Column(name="HAS_TABLE")
-   private String hasTable;
+   protected String hasTable;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffortAssocType parentWorkEffortAssocType = null;
+   protected WorkEffortAssocType parentWorkEffortAssocType = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffortAssocType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ASSOC_TYPE_ID")
    
-   private List<WorkEffortAssoc> workEffortAssocs = null;
+   protected List<WorkEffortAssoc> workEffortAssocs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   private List<WorkEffortAssocType> childWorkEffortAssocTypes = null;
+   protected List<WorkEffortAssocType> childWorkEffortAssocTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffortAssocType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ASSOC_TYPE_ID")
    
-   private List<WorkEffortAssocTypeAttr> workEffortAssocTypeAttrs = null;
+   protected List<WorkEffortAssocTypeAttr> workEffortAssocTypeAttrs = null;
 
   /**
    * Default constructor.

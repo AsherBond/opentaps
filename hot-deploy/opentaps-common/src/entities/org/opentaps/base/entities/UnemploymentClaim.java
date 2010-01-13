@@ -84,7 +84,7 @@ fieldMapColumns.put("UnemploymentClaim", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -98,33 +98,33 @@ fieldMapColumns.put("UnemploymentClaim", fields);
    @GeneratedValue(generator="UnemploymentClaim_GEN")
    @Id
    @Column(name="UNEMPLOYMENT_CLAIM_ID")
-   private String unemploymentClaimId;
+   protected String unemploymentClaimId;
    @Column(name="UNEMPLOYMENT_CLAIM_DATE")
-   private Timestamp unemploymentClaimDate;
+   protected Timestamp unemploymentClaimDate;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="PARTY_ID_FROM")
-   private String partyIdFrom;
+   protected String partyIdFrom;
    @Column(name="PARTY_ID_TO")
-   private String partyIdTo;
+   protected String partyIdTo;
    @Column(name="ROLE_TYPE_ID_FROM")
-   private String roleTypeIdFrom;
+   protected String roleTypeIdFrom;
    @Column(name="ROLE_TYPE_ID_TO")
-   private String roleTypeIdTo;
+   protected String roleTypeIdTo;
    @Column(name="FROM_DATE")
-   private Timestamp fromDate;
+   protected Timestamp fromDate;
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    private transient Employment employment = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
@@ -132,7 +132,7 @@ fieldMapColumns.put("UnemploymentClaim", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
 
   /**
    * Default constructor.

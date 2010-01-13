@@ -123,7 +123,7 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -137,110 +137,110 @@ fieldMapColumns.put("DataImportOrderHeader", fields);
    @GeneratedValue(generator="DataImportOrderHeader_GEN")
    @Id
    @Column(name="ORDER_ID")
-   private String orderId;
+   protected String orderId;
    @Column(name="ORDER_TYPE_ID")
-   private String orderTypeId;
+   protected String orderTypeId;
    @Column(name="CUSTOMER_PARTY_ID")
-   private String customerPartyId;
+   protected String customerPartyId;
    @Column(name="SUPPLIER_PARTY_ID")
-   private String supplierPartyId;
+   protected String supplierPartyId;
    @Column(name="ORDER_DATE")
-   private Timestamp orderDate;
+   protected Timestamp orderDate;
    @Column(name="CURRENCY_UOM_ID")
-   private String currencyUomId;
+   protected String currencyUomId;
    @Column(name="SHIPPING_TOTAL")
-   private BigDecimal shippingTotal;
+   protected BigDecimal shippingTotal;
    @Column(name="ORDER_TAX")
-   private BigDecimal orderTax;
+   protected BigDecimal orderTax;
    @Column(name="TAX_AUTH_PARTY_ID")
-   private String taxAuthPartyId;
+   protected String taxAuthPartyId;
    @Column(name="ADJUSTMENTS_TOTAL")
-   private BigDecimal adjustmentsTotal;
+   protected BigDecimal adjustmentsTotal;
    @Column(name="GRAND_TOTAL")
-   private BigDecimal grandTotal;
+   protected BigDecimal grandTotal;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="PRODUCT_STORE_ID")
-   private String productStoreId;
+   protected String productStoreId;
    @Column(name="SALES_CHANNEL_ENUM_ID")
-   private String salesChannelEnumId;
+   protected String salesChannelEnumId;
    @Column(name="PRODUCT_STORE_SHIP_METH_ID")
-   private String productStoreShipMethId;
+   protected String productStoreShipMethId;
    @Column(name="ORDER_CLOSED")
-   private String orderClosed;
+   protected String orderClosed;
    @Column(name="SHIPPING_FIRST_NAME")
-   private String shippingFirstName;
+   protected String shippingFirstName;
    @Column(name="SHIPPING_LAST_NAME")
-   private String shippingLastName;
+   protected String shippingLastName;
    @Column(name="SHIPPING_COMPANY_NAME")
-   private String shippingCompanyName;
+   protected String shippingCompanyName;
    @Column(name="SHIPPING_STREET")
-   private String shippingStreet;
+   protected String shippingStreet;
    @Column(name="SHIPPING_CITY")
-   private String shippingCity;
+   protected String shippingCity;
    @Column(name="SHIPPING_REGION")
-   private String shippingRegion;
+   protected String shippingRegion;
    @Column(name="SHIPPING_POSTCODE")
-   private String shippingPostcode;
+   protected String shippingPostcode;
    @Column(name="SHIPPING_COUNTRY")
-   private String shippingCountry;
+   protected String shippingCountry;
    @Column(name="SHIPPING_PHONE")
-   private String shippingPhone;
+   protected String shippingPhone;
    @Column(name="SHIPPING_FAX")
-   private String shippingFax;
+   protected String shippingFax;
    @Column(name="IMPORT_STATUS_ID")
-   private String importStatusId;
+   protected String importStatusId;
    @Column(name="IMPORT_ERROR")
-   private String importError;
+   protected String importError;
    @Column(name="PROCESSED_TIMESTAMP")
-   private Timestamp processedTimestamp;
+   protected Timestamp processedTimestamp;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderType orderType = null;
+   protected OrderType orderType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CUSTOMER_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party customerParty = null;
+   protected Party customerParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SUPPLIER_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party supplierParty = null;
+   protected Party supplierParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom uom = null;
+   protected Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_SHIP_METH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductStoreShipmentMeth productStoreShipmentMeth = null;
+   protected ProductStoreShipmentMeth productStoreShipmentMeth = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="dataImportOrderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<DataImportOrderItem> dataImportOrderItems = null;
+   protected List<DataImportOrderItem> dataImportOrderItems = null;
 
   /**
    * Default constructor.

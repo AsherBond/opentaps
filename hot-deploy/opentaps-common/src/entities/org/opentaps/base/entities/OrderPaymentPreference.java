@@ -110,7 +110,7 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -124,64 +124,64 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
    @GeneratedValue(generator="OrderPaymentPreference_GEN")
    @Id
    @Column(name="ORDER_PAYMENT_PREFERENCE_ID")
-   private String orderPaymentPreferenceId;
+   protected String orderPaymentPreferenceId;
    @Column(name="ORDER_ID")
-   private String orderId;
+   protected String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   private String orderItemSeqId;
+   protected String orderItemSeqId;
    @Column(name="SHIP_GROUP_SEQ_ID")
-   private String shipGroupSeqId;
+   protected String shipGroupSeqId;
    @Column(name="PRODUCT_PRICE_PURPOSE_ID")
-   private String productPricePurposeId;
+   protected String productPricePurposeId;
    @Column(name="PAYMENT_METHOD_TYPE_ID")
-   private String paymentMethodTypeId;
+   protected String paymentMethodTypeId;
    @Column(name="PAYMENT_METHOD_ID")
-   private String paymentMethodId;
+   protected String paymentMethodId;
    @Column(name="FIN_ACCOUNT_ID")
-   private String finAccountId;
+   protected String finAccountId;
    @Column(name="SECURITY_CODE")
-   private String securityCode;
+   protected String securityCode;
    @Column(name="TRACK2")
-   private String track2;
+   protected String track2;
    @Column(name="PRESENT_FLAG")
-   private String presentFlag;
+   protected String presentFlag;
    @Column(name="SWIPED_FLAG")
-   private String swipedFlag;
+   protected String swipedFlag;
    @Column(name="OVERFLOW_FLAG")
-   private String overflowFlag;
+   protected String overflowFlag;
    @Column(name="MAX_AMOUNT")
-   private BigDecimal maxAmount;
+   protected BigDecimal maxAmount;
    @Column(name="PROCESS_ATTEMPT")
-   private Long processAttempt;
+   protected Long processAttempt;
    @Column(name="BILLING_POSTAL_CODE")
-   private String billingPostalCode;
+   protected String billingPostalCode;
    @Column(name="MANUAL_AUTH_CODE")
-   private String manualAuthCode;
+   protected String manualAuthCode;
    @Column(name="MANUAL_REF_NUM")
-   private String manualRefNum;
+   protected String manualRefNum;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="NEEDS_NSF_RETRY")
-   private String needsNsfRetry;
+   protected String needsNsfRetry;
    @Column(name="CREATED_DATE")
-   private Timestamp createdDate;
+   protected Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   private String createdByUserLogin;
+   protected String createdByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
    private transient OrderItem orderItem = null;
    private transient OrderItemShipGroup orderItemShipGroup = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -190,79 +190,79 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductPricePurpose productPricePurpose = null;
+   protected ProductPricePurpose productPricePurpose = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentMethodType paymentMethodType = null;
+   protected PaymentMethodType paymentMethodType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentMethod paymentMethod = null;
+   protected PaymentMethod paymentMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private FinAccount finAccount = null;
+   protected FinAccount finAccount = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin userLogin = null;
+   protected UserLogin userLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CreditCard creditCard = null;
+   protected CreditCard creditCard = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EftAccount eftAccount = null;
+   protected EftAccount eftAccount = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GiftCard giftCard = null;
+   protected GiftCard giftCard = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_PAYMENT_PREFERENCE_ID")
    
-   private List<OrderStatus> orderStatuses = null;
+   protected List<OrderStatus> orderStatuses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_PREFERENCE_ID")
    
-   private List<Payment> payments = null;
+   protected List<Payment> payments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_PAYMENT_PREFERENCE_ID")
    
-   private List<PaymentGatewayResponse> paymentGatewayResponses = null;
+   protected List<PaymentGatewayResponse> paymentGatewayResponses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_PAYMENT_PREFERENCE_ID")
    
-   private List<ReturnItemResponse> returnItemResponses = null;
+   protected List<ReturnItemResponse> returnItemResponses = null;
 
   /**
    * Default constructor.

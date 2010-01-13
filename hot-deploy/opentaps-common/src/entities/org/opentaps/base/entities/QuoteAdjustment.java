@@ -115,7 +115,7 @@ fieldMapColumns.put("QuoteAdjustment", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -129,84 +129,84 @@ fieldMapColumns.put("QuoteAdjustment", fields);
    @GeneratedValue(generator="QuoteAdjustment_GEN")
    @Id
    @Column(name="QUOTE_ADJUSTMENT_ID")
-   private String quoteAdjustmentId;
+   protected String quoteAdjustmentId;
    @Column(name="QUOTE_ADJUSTMENT_TYPE_ID")
-   private String quoteAdjustmentTypeId;
+   protected String quoteAdjustmentTypeId;
    @Column(name="QUOTE_ID")
-   private String quoteId;
+   protected String quoteId;
    @Column(name="QUOTE_ITEM_SEQ_ID")
-   private String quoteItemSeqId;
+   protected String quoteItemSeqId;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="AMOUNT")
-   private BigDecimal amount;
+   protected BigDecimal amount;
    @Column(name="PRODUCT_PROMO_ID")
-   private String productPromoId;
+   protected String productPromoId;
    @Column(name="PRODUCT_PROMO_RULE_ID")
-   private String productPromoRuleId;
+   protected String productPromoRuleId;
    @Column(name="PRODUCT_PROMO_ACTION_SEQ_ID")
-   private String productPromoActionSeqId;
+   protected String productPromoActionSeqId;
    @Column(name="PRODUCT_FEATURE_ID")
-   private String productFeatureId;
+   protected String productFeatureId;
    @Column(name="CORRESPONDING_PRODUCT_ID")
-   private String correspondingProductId;
+   protected String correspondingProductId;
    @Column(name="SOURCE_REFERENCE_ID")
-   private String sourceReferenceId;
+   protected String sourceReferenceId;
    @Column(name="SOURCE_PERCENTAGE")
-   private BigDecimal sourcePercentage;
+   protected BigDecimal sourcePercentage;
    @Column(name="CUSTOMER_REFERENCE_ID")
-   private String customerReferenceId;
+   protected String customerReferenceId;
    @Column(name="PRIMARY_GEO_ID")
-   private String primaryGeoId;
+   protected String primaryGeoId;
    @Column(name="SECONDARY_GEO_ID")
-   private String secondaryGeoId;
+   protected String secondaryGeoId;
    @Column(name="EXEMPT_AMOUNT")
-   private BigDecimal exemptAmount;
+   protected BigDecimal exemptAmount;
    @Column(name="TAX_AUTH_GEO_ID")
-   private String taxAuthGeoId;
+   protected String taxAuthGeoId;
    @Column(name="TAX_AUTH_PARTY_ID")
-   private String taxAuthPartyId;
+   protected String taxAuthPartyId;
    @Column(name="OVERRIDE_GL_ACCOUNT_ID")
-   private String overrideGlAccountId;
+   protected String overrideGlAccountId;
    @Column(name="INCLUDE_IN_TAX")
-   private String includeInTax;
+   protected String includeInTax;
    @Column(name="INCLUDE_IN_SHIPPING")
-   private String includeInShipping;
+   protected String includeInShipping;
    @Column(name="CREATED_DATE")
-   private Timestamp createdDate;
+   protected Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   private String createdByUserLogin;
+   protected String createdByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="QUOTE_ADJUSTMENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderAdjustmentType orderAdjustmentType = null;
+   protected OrderAdjustmentType orderAdjustmentType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="QUOTE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Quote quote = null;
+   protected Quote quote = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin userLogin = null;
+   protected UserLogin userLogin = null;
    private transient QuoteItem quoteItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PROMO_ID", insertable=false, updatable=false)
@@ -214,7 +214,7 @@ fieldMapColumns.put("QuoteAdjustment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductPromo productPromo = null;
+   protected ProductPromo productPromo = null;
    private transient ProductPromoRule productPromoRule = null;
    private transient ProductPromoAction productPromoAction = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -223,14 +223,14 @@ fieldMapColumns.put("QuoteAdjustment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo primaryGeo = null;
+   protected Geo primaryGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SECONDARY_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo secondaryGeo = null;
+   protected Geo secondaryGeo = null;
    private transient TaxAuthority taxAuthority = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="OVERRIDE_GL_ACCOUNT_ID", insertable=false, updatable=false)
@@ -238,7 +238,7 @@ fieldMapColumns.put("QuoteAdjustment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GlAccount overrideGlAccount = null;
+   protected GlAccount overrideGlAccount = null;
 
   /**
    * Default constructor.

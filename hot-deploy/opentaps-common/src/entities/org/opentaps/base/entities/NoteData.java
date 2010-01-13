@@ -74,7 +74,7 @@ fieldMapColumns.put("NoteData", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     noteParty("noteParty");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,62 +88,62 @@ fieldMapColumns.put("NoteData", fields);
    @GeneratedValue(generator="NoteData_GEN")
    @Id
    @Column(name="NOTE_ID")
-   private String noteId;
+   protected String noteId;
    @Column(name="NOTE_NAME")
-   private String noteName;
+   protected String noteName;
    @Column(name="NOTE_INFO")
-   private String noteInfo;
+   protected String noteInfo;
    @Column(name="NOTE_DATE_TIME")
-   private Timestamp noteDateTime;
+   protected Timestamp noteDateTime;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="NOTE_PARTY")
-   private String noteParty;
+   protected String noteParty;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="NOTE_PARTY", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party relatedNoteParty = null;
+   protected Party relatedNoteParty = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="noteData", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="NOTE_ID")
    
-   private List<CustRequestItemNote> custRequestItemNotes = null;
+   protected List<CustRequestItemNote> custRequestItemNotes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="noteData", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="NOTE_ID")
    
-   private List<CustRequestNote> custRequestNotes = null;
+   protected List<CustRequestNote> custRequestNotes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="noteData", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="NOTE_ID")
    
-   private List<MarketingCampaignNote> marketingCampaignNotes = null;
+   protected List<MarketingCampaignNote> marketingCampaignNotes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="noteData", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="NOTE_ID")
    
-   private List<OrderHeaderNote> orderHeaderNotes = null;
+   protected List<OrderHeaderNote> orderHeaderNotes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="noteData", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="NOTE_ID")
    
-   private List<PartyNote> partyNotes = null;
+   protected List<PartyNote> partyNotes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="noteData", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="NOTE_ID")
    
-   private List<QuoteNote> quoteNotes = null;
+   protected List<QuoteNote> quoteNotes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="NOTE_ID")
    
-   private List<WorkEffort> workEfforts = null;
+   protected List<WorkEffort> workEfforts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="noteData", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="NOTE_ID")
    
-   private List<WorkEffortNote> workEffortNotes = null;
+   protected List<WorkEffortNote> workEffortNotes = null;
 
   /**
    * Default constructor.

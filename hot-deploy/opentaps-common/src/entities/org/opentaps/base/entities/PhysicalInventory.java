@@ -72,7 +72,7 @@ fieldMapColumns.put("PhysicalInventory", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,33 +86,33 @@ fieldMapColumns.put("PhysicalInventory", fields);
    @GeneratedValue(generator="PhysicalInventory_GEN")
    @Id
    @Column(name="PHYSICAL_INVENTORY_ID")
-   private String physicalInventoryId;
+   protected String physicalInventoryId;
    @Column(name="PHYSICAL_INVENTORY_DATE")
-   private Timestamp physicalInventoryDate;
+   protected Timestamp physicalInventoryDate;
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @Column(name="GENERAL_COMMENTS")
-   private String generalComments;
+   protected String generalComments;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PHYSICAL_INVENTORY_ID")
    
-   private List<AcctgTrans> acctgTranses = null;
+   protected List<AcctgTrans> acctgTranses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PHYSICAL_INVENTORY_ID")
    
-   private List<InventoryItemDetail> inventoryItemDetails = null;
+   protected List<InventoryItemDetail> inventoryItemDetails = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="physicalInventory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PHYSICAL_INVENTORY_ID")
    
-   private List<InventoryItemVariance> inventoryItemVariances = null;
+   protected List<InventoryItemVariance> inventoryItemVariances = null;
 
   /**
    * Default constructor.

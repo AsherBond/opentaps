@@ -73,7 +73,7 @@ fieldMapColumns.put("PosTerminalInternTx", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -87,35 +87,35 @@ fieldMapColumns.put("PosTerminalInternTx", fields);
    @GeneratedValue(generator="PosTerminalInternTx_GEN")
    @Id
    @Column(name="POS_TERMINAL_LOG_ID")
-   private String posTerminalLogId;
+   protected String posTerminalLogId;
    @Column(name="PAID_AMOUNT")
-   private BigDecimal paidAmount;
+   protected BigDecimal paidAmount;
    @Column(name="REASON_COMMENT")
-   private String reasonComment;
+   protected String reasonComment;
    @Column(name="REASON_ENUM_ID")
-   private String reasonEnumId;
+   protected String reasonEnumId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="POS_TERMINAL_LOG_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PosTerminalLog posTerminalLog = null;
+   protected PosTerminalLog posTerminalLog = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REASON_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration enumeration = null;
+   protected Enumeration enumeration = null;
 
   /**
    * Default constructor.

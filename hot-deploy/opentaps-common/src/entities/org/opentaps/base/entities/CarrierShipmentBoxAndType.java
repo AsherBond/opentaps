@@ -94,7 +94,7 @@ fieldMapColumns.put("CarrierShipmentBoxAndType", fields);
     boxHeight("boxHeight"),
     weightUomId("weightUomId"),
     boxWeight("boxWeight");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

@@ -75,7 +75,7 @@ fieldMapColumns.put("CarrierShipmentMethod", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,7 +88,7 @@ fieldMapColumns.put("CarrierShipmentMethod", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.CarrierShipmentMethodPkBridge.class)
-     private CarrierShipmentMethodPk id = new CarrierShipmentMethodPk();
+     protected CarrierShipmentMethodPk id = new CarrierShipmentMethodPk();
    
     /**
      * Auto generated Id accessor.
@@ -105,31 +105,31 @@ fieldMapColumns.put("CarrierShipmentMethod", fields);
          this.id = id;
       }
    @Column(name="SEQUENCE_NUMBER")
-   private Long sequenceNumber;
+   protected Long sequenceNumber;
    @Column(name="CARRIER_SERVICE_CODE")
-   private String carrierServiceCode;
+   protected String carrierServiceCode;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ShipmentMethodType shipmentMethodType = null;
+   protected ShipmentMethodType shipmentMethodType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    private transient PartyRole partyRole = null;
    private transient List<FacilityCarrierShipment> facilityCarrierShipments = null;
    private transient List<OldOrderShipmentPreference> oldOrderShipmentPreferences = null;

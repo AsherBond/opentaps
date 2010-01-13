@@ -86,7 +86,7 @@ fieldMapColumns.put("WorkEffortSearchConstraint", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -99,7 +99,7 @@ fieldMapColumns.put("WorkEffortSearchConstraint", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.WorkEffortSearchConstraintPkBridge.class)
-     private WorkEffortSearchConstraintPk id = new WorkEffortSearchConstraintPk();
+     protected WorkEffortSearchConstraintPk id = new WorkEffortSearchConstraintPk();
    
     /**
      * Auto generated Id accessor.
@@ -116,38 +116,38 @@ fieldMapColumns.put("WorkEffortSearchConstraint", fields);
          this.id = id;
       }
    @Column(name="CONSTRAINT_NAME")
-   private String constraintName;
+   protected String constraintName;
    @Column(name="INFO_STRING")
-   private String infoString;
+   protected String infoString;
    @Column(name="INCLUDE_SUB_WORK_EFFORTS")
-   private String includeSubWorkEfforts;
+   protected String includeSubWorkEfforts;
    @Column(name="IS_AND")
-   private String isAnd;
+   protected String isAnd;
    @Column(name="ANY_PREFIX")
-   private String anyPrefix;
+   protected String anyPrefix;
    @Column(name="ANY_SUFFIX")
-   private String anySuffix;
+   protected String anySuffix;
    @Column(name="REMOVE_STEMS")
-   private String removeStems;
+   protected String removeStems;
    @Column(name="LOW_VALUE")
-   private String lowValue;
+   protected String lowValue;
    @Column(name="HIGH_VALUE")
-   private String highValue;
+   protected String highValue;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_SEARCH_RESULT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffortSearchResult workEffortSearchResult = null;
+   protected WorkEffortSearchResult workEffortSearchResult = null;
 
   /**
    * Default constructor.

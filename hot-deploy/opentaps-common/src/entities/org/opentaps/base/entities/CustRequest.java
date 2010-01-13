@@ -114,7 +114,7 @@ fieldMapColumns.put("CustRequest", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     fulfilledDateTime("fulfilledDateTime");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -134,184 +134,184 @@ fieldMapColumns.put("CustRequest", fields);
    } )
    @Boost(10f)
    @Column(name="CUST_REQUEST_ID")
-   private String custRequestId;
+   protected String custRequestId;
    @Column(name="CUST_REQUEST_TYPE_ID")
-   private String custRequestTypeId;
+   protected String custRequestTypeId;
    @Column(name="CUST_REQUEST_CATEGORY_ID")
-   private String custRequestCategoryId;
+   protected String custRequestCategoryId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="FROM_PARTY_ID")
-   private String fromPartyId;
+   protected String fromPartyId;
    @Column(name="PRIORITY")
-   private Long priority;
+   protected Long priority;
    @Column(name="CUST_REQUEST_DATE")
-   private Timestamp custRequestDate;
+   protected Timestamp custRequestDate;
    @Column(name="RESPONSE_REQUIRED_DATE")
-   private Timestamp responseRequiredDate;
+   protected Timestamp responseRequiredDate;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(5f)
    @Column(name="CUST_REQUEST_NAME")
-   private String custRequestName;
+   protected String custRequestName;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(1f)
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="MAXIMUM_AMOUNT_UOM_ID")
-   private String maximumAmountUomId;
+   protected String maximumAmountUomId;
    @Column(name="PRODUCT_STORE_ID")
-   private String productStoreId;
+   protected String productStoreId;
    @Column(name="SALES_CHANNEL_ENUM_ID")
-   private String salesChannelEnumId;
+   protected String salesChannelEnumId;
    @Column(name="FULFILL_CONTACT_MECH_ID")
-   private String fulfillContactMechId;
+   protected String fulfillContactMechId;
    @Column(name="CURRENCY_UOM_ID")
-   private String currencyUomId;
+   protected String currencyUomId;
    @Column(name="OPEN_DATE_TIME")
-   private Timestamp openDateTime;
+   protected Timestamp openDateTime;
    @Column(name="CLOSED_DATE_TIME")
-   private Timestamp closedDateTime;
+   protected Timestamp closedDateTime;
    @Column(name="INTERNAL_COMMENT")
-   private String internalComment;
+   protected String internalComment;
    @Column(name="REASON")
-   private String reason;
+   protected String reason;
    @Column(name="CREATED_DATE")
-   private Timestamp createdDate;
+   protected Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   private String createdByUserLogin;
+   protected String createdByUserLogin;
    @Column(name="LAST_MODIFIED_DATE")
-   private Timestamp lastModifiedDate;
+   protected Timestamp lastModifiedDate;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   private String lastModifiedByUserLogin;
+   protected String lastModifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="FULFILLED_DATE_TIME")
-   private Timestamp fulfilledDateTime;
+   protected Timestamp fulfilledDateTime;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CustRequestType custRequestType = null;
+   protected CustRequestType custRequestType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CustRequestCategory custRequestCategory = null;
+   protected CustRequestCategory custRequestCategory = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FROM_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    @IndexedEmbedded(depth = 2)
-   private Party fromParty = null;
+   protected Party fromParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MAXIMUM_AMOUNT_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom maximumAmountUom = null;
+   protected Uom maximumAmountUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductStore productStore = null;
+   protected ProductStore productStore = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SALES_CHANNEL_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration salesChannelEnumeration = null;
+   protected Enumeration salesChannelEnumeration = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_TYPE_ID")
    
-   private List<CustRequestTypeAttr> custRequestTypeAttrs = null;
+   protected List<CustRequestTypeAttr> custRequestTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FULFILL_CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMech fulfillContactMech = null;
+   protected ContactMech fulfillContactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom currencyUom = null;
+   protected Uom currencyUom = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="custRequest", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CUST_REQUEST_ID")
    
-   private List<CustRequestAttribute> custRequestAttributes = null;
+   protected List<CustRequestAttribute> custRequestAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="custRequest", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CUST_REQUEST_ID")
    
-   private List<CustRequestCommEvent> custRequestCommEvents = null;
+   protected List<CustRequestCommEvent> custRequestCommEvents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="custRequest", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CUST_REQUEST_ID")
    
-   private List<CustRequestContent> custRequestContents = null;
+   protected List<CustRequestContent> custRequestContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="custRequest", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CUST_REQUEST_ID")
    
-   private List<CustRequestItem> custRequestItems = null;
+   protected List<CustRequestItem> custRequestItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="custRequest", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CUST_REQUEST_ID")
    
-   private List<CustRequestItemWorkEffort> custRequestItemWorkEfforts = null;
+   protected List<CustRequestItemWorkEffort> custRequestItemWorkEfforts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="custRequest", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CUST_REQUEST_ID")
    
-   private List<CustRequestParty> custRequestPartys = null;
+   protected List<CustRequestParty> custRequestPartys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="custRequest", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CUST_REQUEST_ID")
    @ContainedIn
-   private List<CustRequestRole> custRequestRoles = null;
+   protected List<CustRequestRole> custRequestRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_ID")
    
-   private List<CustRequestStatus> custRequestStatuses = null;
+   protected List<CustRequestStatus> custRequestStatuses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="custRequest", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CUST_REQUEST_ID")
    
-   private List<CustRequestWorkEffort> custRequestWorkEfforts = null;
+   protected List<CustRequestWorkEffort> custRequestWorkEfforts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_ID")
    
-   private List<QuoteItem> quoteItems = null;
+   protected List<QuoteItem> quoteItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="custRequest", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CUST_REQUEST_ID")
    
-   private List<RequirementCustRequest> requirementCustRequests = null;
+   protected List<RequirementCustRequest> requirementCustRequests = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="custRequest", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CUST_REQUEST_ID")
    
-   private List<RespondingParty> respondingPartys = null;
+   protected List<RespondingParty> respondingPartys = null;
 
   /**
    * Default constructor.

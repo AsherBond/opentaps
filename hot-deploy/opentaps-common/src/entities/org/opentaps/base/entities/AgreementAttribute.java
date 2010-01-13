@@ -70,7 +70,7 @@ fieldMapColumns.put("AgreementAttribute", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -83,7 +83,7 @@ fieldMapColumns.put("AgreementAttribute", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.AgreementAttributePkBridge.class)
-     private AgreementAttributePk id = new AgreementAttributePk();
+     protected AgreementAttributePk id = new AgreementAttributePk();
    
     /**
      * Auto generated Id accessor.
@@ -100,23 +100,23 @@ fieldMapColumns.put("AgreementAttribute", fields);
          this.id = id;
       }
    @Column(name="ATTR_VALUE")
-   private String attrValue;
+   protected String attrValue;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AGREEMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Agreement agreement = null;
-   private transient List<AgreementTypeAttr> agreementTypeAttrs = null;
+   protected Agreement agreement = null;
+   protected transient List<AgreementTypeAttr> agreementTypeAttrs = null;
 
   /**
    * Default constructor.

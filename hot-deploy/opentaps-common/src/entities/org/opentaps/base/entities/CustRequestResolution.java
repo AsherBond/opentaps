@@ -70,7 +70,7 @@ fieldMapColumns.put("CustRequestResolution", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,30 +84,30 @@ fieldMapColumns.put("CustRequestResolution", fields);
    @GeneratedValue(generator="CustRequestResolution_GEN")
    @Id
    @Column(name="CUST_REQUEST_RESOLUTION_ID")
-   private String custRequestResolutionId;
+   protected String custRequestResolutionId;
    @Column(name="CUST_REQUEST_TYPE_ID")
-   private String custRequestTypeId;
+   protected String custRequestTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CustRequestType custRequestType = null;
+   protected CustRequestType custRequestType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_RESOLUTION_ID")
    
-   private List<CustRequestItem> custRequestItems = null;
+   protected List<CustRequestItem> custRequestItems = null;
 
   /**
    * Default constructor.

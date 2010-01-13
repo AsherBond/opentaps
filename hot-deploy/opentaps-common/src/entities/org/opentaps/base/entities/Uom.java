@@ -72,7 +72,7 @@ fieldMapColumns.put("Uom", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,376 +86,376 @@ fieldMapColumns.put("Uom", fields);
    @GeneratedValue(generator="Uom_GEN")
    @Id
    @Column(name="UOM_ID")
-   private String uomId;
+   protected String uomId;
    @Column(name="UOM_TYPE_ID")
-   private String uomTypeId;
+   protected String uomTypeId;
    @Column(name="ABBREVIATION")
-   private String abbreviation;
+   protected String abbreviation;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UomType uomType = null;
+   protected UomType uomType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<AcctgTransEntry> currencyAcctgTransEntrys = null;
+   protected List<AcctgTransEntry> currencyAcctgTransEntrys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORIG_CURRENCY_UOM_ID")
    
-   private List<AcctgTransEntry> origCurrencyAcctgTransEntrys = null;
+   protected List<AcctgTransEntry> origCurrencyAcctgTransEntrys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<AgreementTerm> currencyAgreementTerms = null;
+   protected List<AgreementTerm> currencyAgreementTerms = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID")
    
-   private List<AgreementTerm> agreementTerms = null;
+   protected List<AgreementTerm> agreementTerms = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCOUNT_CURRENCY_UOM_ID")
    
-   private List<BillingAccount> billingAccounts = null;
+   protected List<BillingAccount> billingAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID")
    
-   private List<BillingAccountTerm> billingAccountTerms = null;
+   protected List<BillingAccountTerm> billingAccountTerms = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<CashDrawer> cashDrawers = null;
+   protected List<CashDrawer> cashDrawers = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="COST_UOM_ID")
    
-   private List<CostComponent> currencyCostComponents = null;
+   protected List<CostComponent> currencyCostComponents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<CostComponentCalc> costComponentCalcs = null;
+   protected List<CostComponentCalc> costComponentCalcs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MAXIMUM_AMOUNT_UOM_ID")
    
-   private List<CustRequest> maximumAmountCustRequests = null;
+   protected List<CustRequest> maximumAmountCustRequests = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<CustRequest> currencyCustRequests = null;
+   protected List<CustRequest> currencyCustRequests = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<DataImportOrderHeader> dataImportOrderHeaders = null;
+   protected List<DataImportOrderHeader> dataImportOrderHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AMOUNT_UOM_ID")
    
-   private List<ExampleItem> amountExampleItems = null;
+   protected List<ExampleItem> amountExampleItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_WEIGHT_UOM_ID")
    
-   private List<Facility> facilitys = null;
+   protected List<Facility> facilitys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<FinAccount> currencyFinAccounts = null;
+   protected List<FinAccount> currencyFinAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID")
    
-   private List<FixedAsset> fixedAssets = null;
+   protected List<FixedAsset> fixedAssets = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INTERVAL_UOM_ID")
    
-   private List<FixedAssetMaint> intervalFixedAssetMaints = null;
+   protected List<FixedAssetMaint> intervalFixedAssetMaints = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="QUANTITY_UOM_ID")
    
-   private List<FixedAssetProduct> fixedAssetProducts = null;
+   protected List<FixedAssetProduct> fixedAssetProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AMOUNT_UOM_ID")
    
-   private List<FixedAssetStdCost> fixedAssetStdCosts = null;
+   protected List<FixedAssetStdCost> fixedAssetStdCosts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ELEVATION_UOM_ID")
    
-   private List<GeoPoint> elevationGeoPoints = null;
+   protected List<GeoPoint> elevationGeoPoints = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID")
    
-   private List<InventoryItem> inventoryItems = null;
+   protected List<InventoryItem> inventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<InventoryItem> currencyInventoryItems = null;
+   protected List<InventoryItem> currencyInventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<Invoice> currencyInvoices = null;
+   protected List<Invoice> currencyInvoices = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID")
    
-   private List<InvoiceItem> invoiceItems = null;
+   protected List<InvoiceItem> invoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID")
    
-   private List<Lot> lots = null;
+   protected List<Lot> lots = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<MarketingCampaign> marketingCampaigns = null;
+   protected List<MarketingCampaign> marketingCampaigns = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="currencyUom", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<OldPartyRate> currencyOldPartyRates = null;
+   protected List<OldPartyRate> currencyOldPartyRates = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TOTAL_CUBIC_UOM_ID")
    
-   private List<OrderDeliverySchedule> totalCubicOrderDeliverySchedules = null;
+   protected List<OrderDeliverySchedule> totalCubicOrderDeliverySchedules = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TOTAL_WEIGHT_UOM_ID")
    
-   private List<OrderDeliverySchedule> totalWeightOrderDeliverySchedules = null;
+   protected List<OrderDeliverySchedule> totalWeightOrderDeliverySchedules = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM")
    
-   private List<OrderHeader> orderHeaders = null;
+   protected List<OrderHeader> orderHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RECURRING_FREQ_UOM_ID")
    
-   private List<OrderItem> recurringFreqOrderItems = null;
+   protected List<OrderItem> recurringFreqOrderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID")
    
-   private List<OrderTerm> orderTerms = null;
+   protected List<OrderTerm> orderTerms = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PREFERRED_CURRENCY_UOM_ID")
    
-   private List<Party> partys = null;
+   protected List<Party> partys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BASE_CURRENCY_UOM_ID")
    
-   private List<PartyAcctgPreference> partyAcctgPreferences = null;
+   protected List<PartyAcctgPreference> partyAcctgPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<PartySupplementalData> partySupplementalDatas = null;
+   protected List<PartySupplementalData> partySupplementalDatas = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<Payment> currencyPayments = null;
+   protected List<Payment> currencyPayments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACTUAL_CURRENCY_UOM_ID")
    
-   private List<Payment> actualCurrencyPayments = null;
+   protected List<Payment> actualCurrencyPayments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<PaymentGatewayResponse> paymentGatewayResponses = null;
+   protected List<PaymentGatewayResponse> paymentGatewayResponses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID")
    
-   private List<PeriodType> periodTypes = null;
+   protected List<PeriodType> periodTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="QUANTITY_UOM_ID")
    
-   private List<Product> quantityProducts = null;
+   protected List<Product> quantityProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WEIGHT_UOM_ID")
    
-   private List<Product> weightProducts = null;
+   protected List<Product> weightProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="HEIGHT_UOM_ID")
    
-   private List<Product> heightProducts = null;
+   protected List<Product> heightProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WIDTH_UOM_ID")
    
-   private List<Product> widthProducts = null;
+   protected List<Product> widthProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEPTH_UOM_ID")
    
-   private List<Product> depthProducts = null;
+   protected List<Product> depthProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="USE_TIME_UOM_ID")
    
-   private List<ProductContent> useTimeProductContents = null;
+   protected List<ProductContent> useTimeProductContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="currencyUom", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<ProductFeaturePrice> currencyProductFeaturePrices = null;
+   protected List<ProductFeaturePrice> currencyProductFeaturePrices = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INTERVAL_UOM_ID")
    
-   private List<ProductMaint> intervalProductMaints = null;
+   protected List<ProductMaint> intervalProductMaints = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="METER_UOM_ID")
    
-   private List<ProductMeter> meterProductMeters = null;
+   protected List<ProductMeter> meterProductMeters = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_UOM_ID")
    
-   private List<ProductMeterType> defaultProductMeterTypes = null;
+   protected List<ProductMeterType> defaultProductMeterTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="currencyUom", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<ProductPrice> currencyProductPrices = null;
+   protected List<ProductPrice> currencyProductPrices = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TERM_UOM_ID")
    
-   private List<ProductPrice> termProductPrices = null;
+   protected List<ProductPrice> termProductPrices = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_CURRENCY_UOM_ID")
    
-   private List<ProductStore> productStores = null;
+   protected List<ProductStore> productStores = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="USE_TIME_UOM_ID")
    
-   private List<ProductSubscriptionResource> useTimeProductSubscriptionResources = null;
+   protected List<ProductSubscriptionResource> useTimeProductSubscriptionResources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CANCL_AUTM_EXT_TIME_UOM_ID")
    
-   private List<ProductSubscriptionResource> cancelTimeProductSubscriptionResources = null;
+   protected List<ProductSubscriptionResource> cancelTimeProductSubscriptionResources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AVAILABLE_TIME_UOM_ID")
    
-   private List<ProductSubscriptionResource> availableTimeProductSubscriptionResources = null;
+   protected List<ProductSubscriptionResource> availableTimeProductSubscriptionResources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MAX_LIFE_TIME_UOM_ID")
    
-   private List<ProductSubscriptionResource> maxLifeTimeProductSubscriptionResources = null;
+   protected List<ProductSubscriptionResource> maxLifeTimeProductSubscriptionResources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<Quote> quotes = null;
+   protected List<Quote> quotes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID")
    
-   private List<QuoteItem> quoteItems = null;
+   protected List<QuoteItem> quoteItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="uom", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="RATE_CURRENCY_UOM_ID")
    
-   private List<RateAmount> rateAmounts = null;
+   protected List<RateAmount> rateAmounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<ReturnHeader> returnHeaders = null;
+   protected List<ReturnHeader> returnHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<SalesForecast> salesForecasts = null;
+   protected List<SalesForecast> salesForecasts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="QUANTITY_UOM_ID")
    
-   private List<SalesForecastDetail> quantitySalesForecastDetails = null;
+   protected List<SalesForecastDetail> quantitySalesForecastDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<SalesForecastHistory> salesForecastHistorys = null;
+   protected List<SalesForecastHistory> salesForecastHistorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<SalesOpportunity> salesOpportunitys = null;
+   protected List<SalesOpportunity> salesOpportunitys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<SalesOpportunityHistory> salesOpportunityHistorys = null;
+   protected List<SalesOpportunityHistory> salesOpportunityHistorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<Shipment> currencyShipments = null;
+   protected List<Shipment> currencyShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DIMENSION_UOM_ID")
    
-   private List<ShipmentBoxType> dimensionShipmentBoxTypes = null;
+   protected List<ShipmentBoxType> dimensionShipmentBoxTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WEIGHT_UOM_ID")
    
-   private List<ShipmentBoxType> weightShipmentBoxTypes = null;
+   protected List<ShipmentBoxType> weightShipmentBoxTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WEIGHT_UOM_ID")
    
-   private List<ShipmentCostEstimate> weightShipmentCostEstimates = null;
+   protected List<ShipmentCostEstimate> weightShipmentCostEstimates = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="QUANTITY_UOM_ID")
    
-   private List<ShipmentCostEstimate> quantityShipmentCostEstimates = null;
+   protected List<ShipmentCostEstimate> quantityShipmentCostEstimates = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRICE_UOM_ID")
    
-   private List<ShipmentCostEstimate> priceShipmentCostEstimates = null;
+   protected List<ShipmentCostEstimate> priceShipmentCostEstimates = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WEIGHT_UOM_ID")
    
-   private List<ShipmentPackage> weightShipmentPackages = null;
+   protected List<ShipmentPackage> weightShipmentPackages = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<ShipmentPackageRouteSeg> currencyShipmentPackageRouteSegs = null;
+   protected List<ShipmentPackageRouteSeg> currencyShipmentPackageRouteSegs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<ShipmentRouteSegment> currencyShipmentRouteSegments = null;
+   protected List<ShipmentRouteSegment> currencyShipmentRouteSegments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BILLING_WEIGHT_UOM_ID")
    
-   private List<ShipmentRouteSegment> billingWeightShipmentRouteSegments = null;
+   protected List<ShipmentRouteSegment> billingWeightShipmentRouteSegments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="USE_TIME_UOM_ID")
    
-   private List<Subscription> useTimeSubscriptions = null;
+   protected List<Subscription> useTimeSubscriptions = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CANCL_AUTM_EXT_TIME_UOM_ID")
    
-   private List<Subscription> cancelTimeSubscriptions = null;
+   protected List<Subscription> cancelTimeSubscriptions = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AVAILABLE_TIME_UOM_ID")
    
-   private List<Subscription> availableTimeSubscriptions = null;
+   protected List<Subscription> availableTimeSubscriptions = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MAX_LIFE_TIME_UOM_ID")
    
-   private List<Subscription> maxLifeTimeSubscriptions = null;
+   protected List<Subscription> maxLifeTimeSubscriptions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="currencyUom", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CURRENCY_UOM_ID")
    
-   private List<SupplierProduct> currencySupplierProducts = null;
+   protected List<SupplierProduct> currencySupplierProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="QUANTITY_UOM_ID")
    
-   private List<SupplierProduct> quantitySupplierProducts = null;
+   protected List<SupplierProduct> quantitySupplierProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID")
    
-   private List<SupplierProductFeature> supplierProductFeatures = null;
+   protected List<SupplierProductFeature> supplierProductFeatures = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="mainUom", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="UOM_ID")
    
-   private List<UomConversion> mainUomConversions = null;
+   protected List<UomConversion> mainUomConversions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="convToUom", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="UOM_ID_TO")
    
-   private List<UomConversion> convToUomConversions = null;
+   protected List<UomConversion> convToUomConversions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="datedMainUom", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="UOM_ID")
    
-   private List<UomConversionDated> datedMainUomConversionDateds = null;
+   protected List<UomConversionDated> datedMainUomConversionDateds = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="datedConvToUom", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="UOM_ID_TO")
    
-   private List<UomConversionDated> datedConvToUomConversionDateds = null;
+   protected List<UomConversionDated> datedConvToUomConversionDateds = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MONEY_UOM_ID")
    
-   private List<WorkEffort> moneyWorkEfforts = null;
+   protected List<WorkEffort> moneyWorkEfforts = null;
 
   /**
    * Default constructor.

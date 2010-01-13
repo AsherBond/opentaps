@@ -68,7 +68,7 @@ fieldMapColumns.put("AcctgTransTypeAttr", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -81,7 +81,7 @@ fieldMapColumns.put("AcctgTransTypeAttr", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.AcctgTransTypeAttrPkBridge.class)
-     private AcctgTransTypeAttrPk id = new AcctgTransTypeAttrPk();
+     protected AcctgTransTypeAttrPk id = new AcctgTransTypeAttrPk();
    
     /**
      * Auto generated Id accessor.
@@ -98,22 +98,22 @@ fieldMapColumns.put("AcctgTransTypeAttr", fields);
          this.id = id;
       }
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TRANS_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AcctgTransType acctgTransType = null;
-   private transient List<AcctgTransAttribute> acctgTransAttributes = null;
-   private transient List<AcctgTrans> acctgTranses = null;
+   protected AcctgTransType acctgTransType = null;
+   protected transient List<AcctgTransAttribute> acctgTransAttributes = null;
+   protected transient List<AcctgTrans> acctgTranses = null;
 
   /**
    * Default constructor.

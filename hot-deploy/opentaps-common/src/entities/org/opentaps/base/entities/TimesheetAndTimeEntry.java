@@ -107,7 +107,7 @@ fieldMapColumns.put("TimesheetAndTimeEntry", fields);
     invoiceId("invoiceId"),
     invoiceItemSeqId("invoiceItemSeqId"),
     hours("hours");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -153,14 +153,14 @@ fieldMapColumns.put("TimesheetAndTimeEntry", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort workEffort = null;
+   protected WorkEffort workEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Invoice invoice = null;
+   protected Invoice invoice = null;
    private transient InvoiceItem invoiceItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RATE_TYPE_ID", insertable=false, updatable=false)
@@ -168,7 +168,7 @@ fieldMapColumns.put("TimesheetAndTimeEntry", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RateType rateType = null;
+   protected RateType rateType = null;
 
   /**
    * Default constructor.

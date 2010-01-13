@@ -84,7 +84,7 @@ fieldMapColumns.put("StatusValidChangeToDetail", fields);
     statusCode("statusCode"),
     sequenceId("sequenceId"),
     description("description");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -117,7 +117,7 @@ fieldMapColumns.put("StatusValidChangeToDetail", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
 
   /**
    * Default constructor.

@@ -117,7 +117,7 @@ fieldMapColumns.put("Invoice", fields);
     pendingOpenAmount("pendingOpenAmount"),
     pendingAppliedAmount("pendingAppliedAmount"),
     processingStatusId("processingStatusId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -131,97 +131,97 @@ fieldMapColumns.put("Invoice", fields);
    @GeneratedValue(generator="Invoice_GEN")
    @Id
    @Column(name="INVOICE_ID")
-   private String invoiceId;
+   protected String invoiceId;
    @Column(name="INVOICE_TYPE_ID")
-   private String invoiceTypeId;
+   protected String invoiceTypeId;
    @Column(name="PARTY_ID_FROM")
-   private String partyIdFrom;
+   protected String partyIdFrom;
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @Column(name="ROLE_TYPE_ID")
-   private String roleTypeId;
+   protected String roleTypeId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="BILLING_ACCOUNT_ID")
-   private String billingAccountId;
+   protected String billingAccountId;
    @Column(name="CONTACT_MECH_ID")
-   private String contactMechId;
+   protected String contactMechId;
    @Column(name="INVOICE_DATE")
-   private Timestamp invoiceDate;
+   protected Timestamp invoiceDate;
    @Column(name="DUE_DATE")
-   private Timestamp dueDate;
+   protected Timestamp dueDate;
    @Column(name="PAID_DATE")
-   private Timestamp paidDate;
+   protected Timestamp paidDate;
    @Column(name="INVOICE_MESSAGE")
-   private String invoiceMessage;
+   protected String invoiceMessage;
    @Column(name="REFERENCE_NUMBER")
-   private String referenceNumber;
+   protected String referenceNumber;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="CURRENCY_UOM_ID")
-   private String currencyUomId;
+   protected String currencyUomId;
    @Column(name="RECURRENCE_INFO_ID")
-   private String recurrenceInfoId;
+   protected String recurrenceInfoId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="INVOICE_ADJUSTED_TOTAL")
-   private BigDecimal invoiceAdjustedTotal;
+   protected BigDecimal invoiceAdjustedTotal;
    @Column(name="INVOICE_TOTAL")
-   private BigDecimal invoiceTotal;
+   protected BigDecimal invoiceTotal;
    @Column(name="INTEREST_CHARGED")
-   private BigDecimal interestCharged;
+   protected BigDecimal interestCharged;
    @Column(name="SALES_TAX_TOTAL")
-   private BigDecimal salesTaxTotal;
+   protected BigDecimal salesTaxTotal;
    @Column(name="ADJUSTED_AMOUNT")
-   private BigDecimal adjustedAmount;
+   protected BigDecimal adjustedAmount;
    @Column(name="APPLIED_AMOUNT")
-   private BigDecimal appliedAmount;
+   protected BigDecimal appliedAmount;
    @Column(name="OPEN_AMOUNT")
-   private BigDecimal openAmount;
+   protected BigDecimal openAmount;
    @Column(name="PENDING_OPEN_AMOUNT")
-   private BigDecimal pendingOpenAmount;
+   protected BigDecimal pendingOpenAmount;
    @Column(name="PENDING_APPLIED_AMOUNT")
-   private BigDecimal pendingAppliedAmount;
+   protected BigDecimal pendingAppliedAmount;
    @Column(name="PROCESSING_STATUS_ID")
-   private String processingStatusId;
+   protected String processingStatusId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private InvoiceType invoiceType = null;
+   protected InvoiceType invoiceType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_TYPE_ID")
    
-   private List<InvoiceTypeAttr> invoiceTypeAttrs = null;
+   protected List<InvoiceTypeAttr> invoiceTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_FROM", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party fromParty = null;
+   protected Party fromParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RoleType roleType = null;
+   protected RoleType roleType = null;
    private transient PartyRole partyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
@@ -229,114 +229,114 @@ fieldMapColumns.put("Invoice", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BILLING_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private BillingAccount billingAccount = null;
+   protected BillingAccount billingAccount = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMech contactMech = null;
+   protected ContactMech contactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom currencyUom = null;
+   protected Uom currencyUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RECURRENCE_INFO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RecurrenceInfo recurrenceInfo = null;
+   protected RecurrenceInfo recurrenceInfo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PROCESSING_STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem processingStatusItem = null;
+   protected StatusItem processingStatusItem = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ID")
    
-   private List<AcctgTrans> acctgTranses = null;
+   protected List<AcctgTrans> acctgTranses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ID")
    
-   private List<AgreementTermBilling> agreementTermBillings = null;
+   protected List<AgreementTermBilling> agreementTermBillings = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORIG_INVOICE_ID")
    
-   private List<AgreementTermBilling> originalAgreementTermBillings = null;
+   protected List<AgreementTermBilling> originalAgreementTermBillings = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ID")
    
-   private List<InvoiceAdjustment> invoiceAdjustments = null;
+   protected List<InvoiceAdjustment> invoiceAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="invoice", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVOICE_ID")
    
-   private List<InvoiceAttribute> invoiceAttributes = null;
+   protected List<InvoiceAttribute> invoiceAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="invoice", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVOICE_ID")
    
-   private List<InvoiceContactMech> invoiceContactMeches = null;
+   protected List<InvoiceContactMech> invoiceContactMeches = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="invoice", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVOICE_ID")
    
-   private List<InvoiceItem> invoiceItems = null;
+   protected List<InvoiceItem> invoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="invoice", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVOICE_ID")
    
-   private List<InvoiceRecurrence> invoiceRecurrences = null;
+   protected List<InvoiceRecurrence> invoiceRecurrences = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="invoice", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVOICE_ID")
    
-   private List<InvoiceRole> invoiceRoles = null;
+   protected List<InvoiceRole> invoiceRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="invoice", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVOICE_ID")
    
-   private List<InvoiceStatus> invoiceStatuses = null;
+   protected List<InvoiceStatus> invoiceStatuses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ID")
    
-   private List<InvoiceTerm> invoiceTerms = null;
+   protected List<InvoiceTerm> invoiceTerms = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="invoice", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVOICE_ID")
    
-   private List<OrderAdjustmentBilling> orderAdjustmentBillings = null;
+   protected List<OrderAdjustmentBilling> orderAdjustmentBillings = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="invoice", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVOICE_ID")
    
-   private List<OrderItemBilling> orderItemBillings = null;
+   protected List<OrderItemBilling> orderItemBillings = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ID")
    
-   private List<PaymentApplication> paymentApplications = null;
+   protected List<PaymentApplication> paymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="invoice", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVOICE_ID")
    
-   private List<ReturnItemBilling> returnItemBillings = null;
+   protected List<ReturnItemBilling> returnItemBillings = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="invoice", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVOICE_ID")
    
-   private List<ShipmentItemBilling> shipmentItemBillings = null;
+   protected List<ShipmentItemBilling> shipmentItemBillings = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ID")
    
-   private List<TimeEntry> timeEntrys = null;
+   protected List<TimeEntry> timeEntrys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="invoice", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVOICE_ID")
    
-   private List<WorkEffortBilling> workEffortBillings = null;
+   protected List<WorkEffortBilling> workEffortBillings = null;
 
   /**
    * Default constructor.

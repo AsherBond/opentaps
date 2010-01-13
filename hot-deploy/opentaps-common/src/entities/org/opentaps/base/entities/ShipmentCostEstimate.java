@@ -121,7 +121,7 @@ fieldMapColumns.put("ShipmentCostEstimate", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -135,69 +135,69 @@ fieldMapColumns.put("ShipmentCostEstimate", fields);
    @GeneratedValue(generator="ShipmentCostEstimate_GEN")
    @Id
    @Column(name="SHIPMENT_COST_ESTIMATE_ID")
-   private String shipmentCostEstimateId;
+   protected String shipmentCostEstimateId;
    @Column(name="SHIPMENT_METHOD_TYPE_ID")
-   private String shipmentMethodTypeId;
+   protected String shipmentMethodTypeId;
    @Column(name="CARRIER_PARTY_ID")
-   private String carrierPartyId;
+   protected String carrierPartyId;
    @Column(name="CARRIER_ROLE_TYPE_ID")
-   private String carrierRoleTypeId;
+   protected String carrierRoleTypeId;
    @Column(name="PRODUCT_STORE_SHIP_METH_ID")
-   private String productStoreShipMethId;
+   protected String productStoreShipMethId;
    @Column(name="PRODUCT_STORE_ID")
-   private String productStoreId;
+   protected String productStoreId;
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @Column(name="ROLE_TYPE_ID")
-   private String roleTypeId;
+   protected String roleTypeId;
    @Column(name="GEO_ID_TO")
-   private String geoIdTo;
+   protected String geoIdTo;
    @Column(name="GEO_ID_FROM")
-   private String geoIdFrom;
+   protected String geoIdFrom;
    @Column(name="WEIGHT_BREAK_ID")
-   private String weightBreakId;
+   protected String weightBreakId;
    @Column(name="WEIGHT_UOM_ID")
-   private String weightUomId;
+   protected String weightUomId;
    @Column(name="WEIGHT_UNIT_PRICE")
-   private BigDecimal weightUnitPrice;
+   protected BigDecimal weightUnitPrice;
    @Column(name="QUANTITY_BREAK_ID")
-   private String quantityBreakId;
+   protected String quantityBreakId;
    @Column(name="QUANTITY_UOM_ID")
-   private String quantityUomId;
+   protected String quantityUomId;
    @Column(name="QUANTITY_UNIT_PRICE")
-   private BigDecimal quantityUnitPrice;
+   protected BigDecimal quantityUnitPrice;
    @Column(name="PRICE_BREAK_ID")
-   private String priceBreakId;
+   protected String priceBreakId;
    @Column(name="PRICE_UOM_ID")
-   private String priceUomId;
+   protected String priceUomId;
    @Column(name="PRICE_UNIT_PRICE")
-   private BigDecimal priceUnitPrice;
+   protected BigDecimal priceUnitPrice;
    @Column(name="ORDER_FLAT_PRICE")
-   private BigDecimal orderFlatPrice;
+   protected BigDecimal orderFlatPrice;
    @Column(name="ORDER_PRICE_PERCENT")
-   private BigDecimal orderPricePercent;
+   protected BigDecimal orderPricePercent;
    @Column(name="ORDER_ITEM_FLAT_PRICE")
-   private BigDecimal orderItemFlatPrice;
+   protected BigDecimal orderItemFlatPrice;
    @Column(name="SHIPPING_PRICE_PERCENT")
-   private BigDecimal shippingPricePercent;
+   protected BigDecimal shippingPricePercent;
    @Column(name="PRODUCT_FEATURE_GROUP_ID")
-   private String productFeatureGroupId;
+   protected String productFeatureGroupId;
    @Column(name="OVERSIZE_UNIT")
-   private BigDecimal oversizeUnit;
+   protected BigDecimal oversizeUnit;
    @Column(name="OVERSIZE_PRICE")
-   private BigDecimal oversizePrice;
+   protected BigDecimal oversizePrice;
    @Column(name="FEATURE_PERCENT")
-   private BigDecimal featurePercent;
+   protected BigDecimal featurePercent;
    @Column(name="FEATURE_PRICE")
-   private BigDecimal featurePrice;
+   protected BigDecimal featurePrice;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    private transient CarrierShipmentMethod carrierShipmentMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
@@ -205,14 +205,14 @@ fieldMapColumns.put("ShipmentCostEstimate", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RoleType roleType = null;
+   protected RoleType roleType = null;
    private transient PartyRole partyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WEIGHT_UOM_ID", insertable=false, updatable=false)
@@ -220,56 +220,56 @@ fieldMapColumns.put("ShipmentCostEstimate", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom weightUom = null;
+   protected Uom weightUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="QUANTITY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom quantityUom = null;
+   protected Uom quantityUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRICE_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom priceUom = null;
+   protected Uom priceUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo toGeo = null;
+   protected Geo toGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_ID_FROM", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo fromGeo = null;
+   protected Geo fromGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WEIGHT_BREAK_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private QuantityBreak weightQuantityBreak = null;
+   protected QuantityBreak weightQuantityBreak = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="QUANTITY_BREAK_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private QuantityBreak quantityQuantityBreak = null;
+   protected QuantityBreak quantityQuantityBreak = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRICE_BREAK_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private QuantityBreak priceQuantityBreak = null;
+   protected QuantityBreak priceQuantityBreak = null;
 
   /**
    * Default constructor.

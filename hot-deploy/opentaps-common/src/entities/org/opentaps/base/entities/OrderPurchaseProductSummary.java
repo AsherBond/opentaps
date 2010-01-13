@@ -107,7 +107,7 @@ fieldMapColumns.put("OrderPurchaseProductSummary", fields);
     orderTypeId("orderTypeId"),
     orderDate("orderDate"),
     itemStatusId("itemStatusId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

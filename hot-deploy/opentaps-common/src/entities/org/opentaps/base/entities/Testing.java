@@ -79,7 +79,7 @@ fieldMapColumns.put("Testing", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -93,38 +93,38 @@ fieldMapColumns.put("Testing", fields);
    @GeneratedValue(generator="Testing_GEN")
    @Id
    @Column(name="TESTING_ID")
-   private String testingId;
+   protected String testingId;
    @Column(name="TESTING_TYPE_ID")
-   private String testingTypeId;
+   protected String testingTypeId;
    @Column(name="TESTING_NAME")
-   private String testingName;
+   protected String testingName;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="TESTING_SIZE")
-   private Long testingSize;
+   protected Long testingSize;
    @Column(name="TESTING_DATE")
-   private Timestamp testingDate;
+   protected Timestamp testingDate;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TESTING_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TestingType testingType = null;
+   protected TestingType testingType = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="testing", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TESTING_ID")
    
-   private List<TestingNodeMember> testingNodeMembers = null;
+   protected List<TestingNodeMember> testingNodeMembers = null;
 
   /**
    * Default constructor.

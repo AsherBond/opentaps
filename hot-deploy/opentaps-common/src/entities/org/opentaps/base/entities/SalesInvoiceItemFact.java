@@ -90,7 +90,7 @@ fieldMapColumns.put("SalesInvoiceItemFact", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -104,37 +104,37 @@ fieldMapColumns.put("SalesInvoiceItemFact", fields);
    @GeneratedValue(generator="SalesInvoiceItemFact_GEN")
    @Id
    @Column(name="SALES_INV_ITEM_FACT_ID")
-   private Long salesInvItemFactId;
+   protected Long salesInvItemFactId;
    @Column(name="DATE_DIM_ID")
-   private Long dateDimId;
+   protected Long dateDimId;
    @Column(name="STORE_DIM_ID")
-   private Long storeDimId;
+   protected Long storeDimId;
    @Column(name="CURRENCY_DIM_ID")
-   private Long currencyDimId;
+   protected Long currencyDimId;
    @Column(name="ORGANIZATION_DIM_ID")
-   private Long organizationDimId;
+   protected Long organizationDimId;
    @Column(name="INVOICE_ID")
-   private String invoiceId;
+   protected String invoiceId;
    @Column(name="INVOICE_ITEM_SEQ_ID")
-   private String invoiceItemSeqId;
+   protected String invoiceItemSeqId;
    @Column(name="INVOICE_ADJUSTMENT_ID")
-   private String invoiceAdjustmentId;
+   protected String invoiceAdjustmentId;
    @Column(name="GROSS_AMOUNT")
-   private BigDecimal grossAmount;
+   protected BigDecimal grossAmount;
    @Column(name="DISCOUNTS")
-   private BigDecimal discounts;
+   protected BigDecimal discounts;
    @Column(name="REFUNDS")
-   private BigDecimal refunds;
+   protected BigDecimal refunds;
    @Column(name="NET_AMOUNT")
-   private BigDecimal netAmount;
+   protected BigDecimal netAmount;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

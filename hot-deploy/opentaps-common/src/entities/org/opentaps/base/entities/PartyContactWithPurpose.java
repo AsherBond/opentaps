@@ -100,7 +100,7 @@ fieldMapColumns.put("PartyContactWithPurpose", fields);
     extension("extension"),
     allowSolicitation("allowSolicitation"),
     purposeDescription("purposeDescription");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -143,28 +143,28 @@ fieldMapColumns.put("PartyContactWithPurpose", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMechPurposeType contactMechPurposeType = null;
+   protected ContactMechPurposeType contactMechPurposeType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMech contactMech = null;
+   protected ContactMech contactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TelecomNumber telecomNumber = null;
+   protected TelecomNumber telecomNumber = null;
 
   /**
    * Default constructor.

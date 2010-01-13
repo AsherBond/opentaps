@@ -82,7 +82,7 @@ fieldMapColumns.put("OrderTerm", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -95,7 +95,7 @@ fieldMapColumns.put("OrderTerm", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.OrderTermPkBridge.class)
-     private OrderTermPk id = new OrderTermPk();
+     protected OrderTermPk id = new OrderTermPk();
    
     /**
      * Auto generated Id accessor.
@@ -112,37 +112,37 @@ fieldMapColumns.put("OrderTerm", fields);
          this.id = id;
       }
    @Column(name="TERM_VALUE")
-   private BigDecimal termValue;
+   protected BigDecimal termValue;
    @Column(name="TERM_DAYS")
-   private Long termDays;
+   protected Long termDays;
    @Column(name="TEXT_VALUE")
-   private String textValue;
+   protected String textValue;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="UOM_ID")
-   private String uomId;
+   protected String uomId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom uom = null;
+   protected Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
    private transient OrderItem orderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TERM_TYPE_ID", insertable=false, updatable=false)
@@ -150,7 +150,7 @@ fieldMapColumns.put("OrderTerm", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TermType termType = null;
+   protected TermType termType = null;
    private transient List<OrderTermAttribute> orderTermAttributes = null;
 
   /**

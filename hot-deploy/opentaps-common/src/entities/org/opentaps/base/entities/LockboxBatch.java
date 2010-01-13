@@ -82,7 +82,7 @@ fieldMapColumns.put("LockboxBatch", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -96,44 +96,44 @@ fieldMapColumns.put("LockboxBatch", fields);
    @GeneratedValue(generator="LockboxBatch_GEN")
    @Id
    @Column(name="LOCKBOX_BATCH_ID")
-   private String lockboxBatchId;
+   protected String lockboxBatchId;
    @Column(name="BATCH_ID")
-   private String batchId;
+   protected String batchId;
    @Column(name="FILE_HASH_MARK")
-   private String fileHashMark;
+   protected String fileHashMark;
    @Column(name="DATETIME_ENTERED")
-   private Timestamp datetimeEntered;
+   protected Timestamp datetimeEntered;
    @Column(name="BATCH_COUNT")
-   private Long batchCount;
+   protected Long batchCount;
    @Column(name="BATCH_AMOUNT")
-   private BigDecimal batchAmount;
+   protected BigDecimal batchAmount;
    @Column(name="OUTSTANDING_AMOUNT")
-   private BigDecimal outstandingAmount;
+   protected BigDecimal outstandingAmount;
    @Column(name="CREATED_BY_USER_LOGIN_ID")
-   private String createdByUserLoginId;
+   protected String createdByUserLoginId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin userLogin = null;
+   protected UserLogin userLogin = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="lockboxBatch", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="LOCKBOX_BATCH_ID")
    
-   private List<LockboxBatchItem> lockboxBatchItems = null;
+   protected List<LockboxBatchItem> lockboxBatchItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="lockboxBatch", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="LOCKBOX_BATCH_ID")
    
-   private List<LockboxBatchItemDetail> lockboxBatchItemDetails = null;
+   protected List<LockboxBatchItemDetail> lockboxBatchItemDetails = null;
 
   /**
    * Default constructor.

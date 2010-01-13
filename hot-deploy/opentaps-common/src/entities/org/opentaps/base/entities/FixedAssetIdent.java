@@ -70,7 +70,7 @@ fieldMapColumns.put("FixedAssetIdent", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -83,7 +83,7 @@ fieldMapColumns.put("FixedAssetIdent", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.FixedAssetIdentPkBridge.class)
-     private FixedAssetIdentPk id = new FixedAssetIdentPk();
+     protected FixedAssetIdentPk id = new FixedAssetIdentPk();
    
     /**
      * Auto generated Id accessor.
@@ -100,29 +100,29 @@ fieldMapColumns.put("FixedAssetIdent", fields);
          this.id = id;
       }
    @Column(name="ID_VALUE")
-   private String idValue;
+   protected String idValue;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private FixedAsset fixedAsset = null;
+   protected FixedAsset fixedAsset = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_IDENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private FixedAssetIdentType fixedAssetIdentType = null;
+   protected FixedAssetIdentType fixedAssetIdentType = null;
 
   /**
    * Default constructor.

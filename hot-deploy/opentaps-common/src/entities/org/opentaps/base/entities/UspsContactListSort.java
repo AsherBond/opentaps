@@ -80,7 +80,7 @@ fieldMapColumns.put("UspsContactListSort", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -94,36 +94,36 @@ fieldMapColumns.put("UspsContactListSort", fields);
    @GeneratedValue(generator="UspsContactListSort_GEN")
    @Id
    @Column(name="USPS_CONTACT_LIST_SORT_ID")
-   private String uspsContactListSortId;
+   protected String uspsContactListSortId;
    @Column(name="CONTACT_LIST_ID")
-   private String contactListId;
+   protected String contactListId;
    @Column(name="CONTACT_MECH_ID")
-   private String contactMechId;
+   protected String contactMechId;
    @Column(name="ZIP5")
-   private String zip5;
+   protected String zip5;
    @Column(name="ZIP3")
-   private String zip3;
+   protected String zip3;
    @Column(name="BMC_CODE")
-   private String bmcCode;
+   protected String bmcCode;
    @Column(name="SORT_RESULT")
-   private String sortResult;
+   protected String sortResult;
    @Column(name="PROCESSED_TIMESTAMP")
-   private Timestamp processedTimestamp;
+   protected Timestamp processedTimestamp;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PostalAddress postalAddress = null;
+   protected PostalAddress postalAddress = null;
 
   /**
    * Default constructor.

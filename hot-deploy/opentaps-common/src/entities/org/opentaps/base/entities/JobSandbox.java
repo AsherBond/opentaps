@@ -107,7 +107,7 @@ fieldMapColumns.put("JobSandbox", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -121,97 +121,97 @@ fieldMapColumns.put("JobSandbox", fields);
    @GeneratedValue(generator="JobSandbox_GEN")
    @Id
    @Column(name="JOB_ID")
-   private String jobId;
+   protected String jobId;
    @Column(name="JOB_NAME")
-   private String jobName;
+   protected String jobName;
    @Column(name="RUN_TIME")
-   private Timestamp runTime;
+   protected Timestamp runTime;
    @Column(name="POOL_ID")
-   private String poolId;
+   protected String poolId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="PARENT_JOB_ID")
-   private String parentJobId;
+   protected String parentJobId;
    @Column(name="PREVIOUS_JOB_ID")
-   private String previousJobId;
+   protected String previousJobId;
    @Column(name="SERVICE_NAME")
-   private String serviceName;
+   protected String serviceName;
    @Column(name="LOADER_NAME")
-   private String loaderName;
+   protected String loaderName;
    @Column(name="MAX_RETRY")
-   private Long maxRetry;
+   protected Long maxRetry;
    @Column(name="AUTH_USER_LOGIN_ID")
-   private String authUserLoginId;
+   protected String authUserLoginId;
    @Column(name="RUN_AS_USER")
-   private String runAsUser;
+   protected String runAsUser;
    @Column(name="RUNTIME_DATA_ID")
-   private String runtimeDataId;
+   protected String runtimeDataId;
    @Column(name="RECURRENCE_INFO_ID")
-   private String recurrenceInfoId;
+   protected String recurrenceInfoId;
    @Column(name="TEMP_EXPR_ID")
-   private String tempExprId;
+   protected String tempExprId;
    @Column(name="CURRENT_RECURRENCE_COUNT")
-   private Long currentRecurrenceCount;
+   protected Long currentRecurrenceCount;
    @Column(name="MAX_RECURRENCE_COUNT")
-   private Long maxRecurrenceCount;
+   protected Long maxRecurrenceCount;
    @Column(name="RUN_BY_INSTANCE_ID")
-   private String runByInstanceId;
+   protected String runByInstanceId;
    @Column(name="START_DATE_TIME")
-   private Timestamp startDateTime;
+   protected Timestamp startDateTime;
    @Column(name="FINISH_DATE_TIME")
-   private Timestamp finishDateTime;
+   protected Timestamp finishDateTime;
    @Column(name="CANCEL_DATE_TIME")
-   private Timestamp cancelDateTime;
+   protected Timestamp cancelDateTime;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RECURRENCE_INFO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RecurrenceInfo recurrenceInfo = null;
+   protected RecurrenceInfo recurrenceInfo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TEMP_EXPR_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TemporalExpression temporalExpression = null;
+   protected TemporalExpression temporalExpression = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RUNTIME_DATA_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RuntimeData runtimeData = null;
+   protected RuntimeData runtimeData = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AUTH_USER_LOGIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin authUserLogin = null;
+   protected UserLogin authUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RUN_AS_USER", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin runAsUserLogin = null;
+   protected UserLogin runAsUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
 
   /**
    * Default constructor.

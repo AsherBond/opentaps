@@ -98,7 +98,7 @@ fieldMapColumns.put("PartyAndUserLoginAndPerson", fields);
     successiveFailedLogins("successiveFailedLogins"),
     lastName("lastName"),
     firstName("firstName");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -138,14 +138,14 @@ fieldMapColumns.put("PartyAndUserLoginAndPerson", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="USER_LOGIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin userLogin = null;
+   protected UserLogin userLogin = null;
 
   /**
    * Default constructor.

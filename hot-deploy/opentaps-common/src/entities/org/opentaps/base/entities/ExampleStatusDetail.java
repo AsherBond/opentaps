@@ -107,7 +107,7 @@ fieldMapColumns.put("ExampleStatusDetail", fields);
     statusDate("statusDate"),
     statusEndDate("statusEndDate"),
     statusId("statusId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

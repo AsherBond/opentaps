@@ -82,7 +82,7 @@ fieldMapColumns.put("ProductStoreEmailSetting", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -95,7 +95,7 @@ fieldMapColumns.put("ProductStoreEmailSetting", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductStoreEmailSettingPkBridge.class)
-     private ProductStoreEmailSettingPk id = new ProductStoreEmailSettingPk();
+     protected ProductStoreEmailSettingPk id = new ProductStoreEmailSettingPk();
    
     /**
      * Auto generated Id accessor.
@@ -112,41 +112,41 @@ fieldMapColumns.put("ProductStoreEmailSetting", fields);
          this.id = id;
       }
    @Column(name="BODY_SCREEN_LOCATION")
-   private String bodyScreenLocation;
+   protected String bodyScreenLocation;
    @Column(name="XSLFO_ATTACH_SCREEN_LOCATION")
-   private String xslfoAttachScreenLocation;
+   protected String xslfoAttachScreenLocation;
    @Column(name="FROM_ADDRESS")
-   private String fromAddress;
+   protected String fromAddress;
    @Column(name="CC_ADDRESS")
-   private String ccAddress;
+   protected String ccAddress;
    @Column(name="BCC_ADDRESS")
-   private String bccAddress;
+   protected String bccAddress;
    @Column(name="SUBJECT")
-   private String subject;
+   protected String subject;
    @Column(name="CONTENT_TYPE")
-   private String contentType;
+   protected String contentType;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductStore productStore = null;
+   protected ProductStore productStore = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EMAIL_TYPE", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration enumeration = null;
+   protected Enumeration enumeration = null;
 
   /**
    * Default constructor.

@@ -72,7 +72,7 @@ fieldMapColumns.put("PaycheckItemType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,36 +86,36 @@ fieldMapColumns.put("PaycheckItemType", fields);
    @GeneratedValue(generator="PaycheckItemType_GEN")
    @Id
    @Column(name="PAYCHECK_ITEM_TYPE_ID")
-   private String paycheckItemTypeId;
+   protected String paycheckItemTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="PAYCHECK_ITEM_CLASS_ID")
-   private String paycheckItemClassId;
+   protected String paycheckItemClassId;
    @Column(name="DEFAULT_SEQ_NUM")
-   private String defaultSeqNum;
+   protected String defaultSeqNum;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYCHECK_ITEM_CLASS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaycheckItemClass paycheckItemClass = null;
+   protected PaycheckItemClass paycheckItemClass = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYCHECK_ITEM_TYPE_ID")
    
-   private List<PaycheckItem> paycheckItems = null;
+   protected List<PaycheckItem> paycheckItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="paycheckItemType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PAYCHECK_ITEM_TYPE_ID")
    
-   private List<PaycheckTypeItemTypeAssoc> paycheckTypeItemTypeAssocs = null;
+   protected List<PaycheckTypeItemTypeAssoc> paycheckTypeItemTypeAssocs = null;
 
   /**
    * Default constructor.

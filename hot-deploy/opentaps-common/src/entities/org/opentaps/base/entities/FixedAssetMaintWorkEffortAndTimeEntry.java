@@ -273,7 +273,7 @@ fieldMapColumns.put("FixedAssetMaintWorkEffortAndTimeEntry", fields);
     invoiceItemSeqId("invoiceItemSeqId"),
     hours("hours"),
     comments("comments");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -429,8 +429,8 @@ fieldMapColumns.put("FixedAssetMaintWorkEffortAndTimeEntry", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort workEffort = null;
-   private transient List<TimeEntry> timeEntrys = null;
+   protected WorkEffort workEffort = null;
+   protected transient List<TimeEntry> timeEntrys = null;
 
   /**
    * Default constructor.

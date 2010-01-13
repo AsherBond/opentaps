@@ -75,7 +75,7 @@ fieldMapColumns.put("FacilityGroupRollup", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,7 +88,7 @@ fieldMapColumns.put("FacilityGroupRollup", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.FacilityGroupRollupPkBridge.class)
-     private FacilityGroupRollupPk id = new FacilityGroupRollupPk();
+     protected FacilityGroupRollupPk id = new FacilityGroupRollupPk();
    
     /**
      * Auto generated Id accessor.
@@ -105,34 +105,34 @@ fieldMapColumns.put("FacilityGroupRollup", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="SEQUENCE_NUM")
-   private Long sequenceNum;
+   protected Long sequenceNum;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private FacilityGroup currentFacilityGroup = null;
+   protected FacilityGroup currentFacilityGroup = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_FACILITY_GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private FacilityGroup parentFacilityGroup = null;
-   private transient List<FacilityGroupRollup> childFacilityGroupRollups = null;
-   private transient List<FacilityGroupRollup> parentFacilityGroupRollups = null;
-   private transient List<FacilityGroupRollup> siblingFacilityGroupRollups = null;
+   protected FacilityGroup parentFacilityGroup = null;
+   protected transient List<FacilityGroupRollup> childFacilityGroupRollups = null;
+   protected transient List<FacilityGroupRollup> parentFacilityGroupRollups = null;
+   protected transient List<FacilityGroupRollup> siblingFacilityGroupRollups = null;
 
   /**
    * Default constructor.

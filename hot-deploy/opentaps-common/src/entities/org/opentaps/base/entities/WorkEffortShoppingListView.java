@@ -127,7 +127,7 @@ fieldMapColumns.put("WorkEffortShoppingListView", fields);
     lastOrderedDate("lastOrderedDate"),
     lastAdminModified("lastAdminModified"),
     productPromoCodeId("productPromoCodeId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -187,14 +187,14 @@ fieldMapColumns.put("WorkEffortShoppingListView", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort workEffort = null;
+   protected WorkEffort workEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHOPPING_LIST_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ShoppingList shoppingList = null;
+   protected ShoppingList shoppingList = null;
 
   /**
    * Default constructor.

@@ -270,7 +270,7 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
     thruDate("thruDate"),
     sequenceNum("sequenceNum"),
     quantity("quantity");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -425,7 +425,7 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
 
   /**
    * Default constructor.

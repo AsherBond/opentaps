@@ -68,7 +68,7 @@ fieldMapColumns.put("SurveyApplType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,25 +82,25 @@ fieldMapColumns.put("SurveyApplType", fields);
    @GeneratedValue(generator="SurveyApplType_GEN")
    @Id
    @Column(name="SURVEY_APPL_TYPE_ID")
-   private String surveyApplTypeId;
+   protected String surveyApplTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_APPL_TYPE_ID")
    
-   private List<ProductStoreSurveyAppl> productStoreSurveyAppls = null;
+   protected List<ProductStoreSurveyAppl> productStoreSurveyAppls = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="surveyApplType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SURVEY_APPL_TYPE_ID")
    
-   private List<SurveyTrigger> surveyTriggers = null;
+   protected List<SurveyTrigger> surveyTriggers = null;
 
   /**
    * Default constructor.

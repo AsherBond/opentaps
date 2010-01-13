@@ -74,7 +74,7 @@ fieldMapColumns.put("MarketingCampaignContactList", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,41 +88,41 @@ fieldMapColumns.put("MarketingCampaignContactList", fields);
    @GeneratedValue(generator="MarketingCampaignContactList_GEN")
    @Id
    @Column(name="CAMPAIGN_LIST_ID")
-   private String campaignListId;
+   protected String campaignListId;
    @Column(name="MARKETING_CAMPAIGN_ID")
-   private String marketingCampaignId;
+   protected String marketingCampaignId;
    @Column(name="CONTACT_LIST_ID")
-   private String contactListId;
+   protected String contactListId;
    @Column(name="FROM_DATE")
-   private Timestamp fromDate;
+   protected Timestamp fromDate;
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MARKETING_CAMPAIGN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private MarketingCampaign marketingCampaign = null;
+   protected MarketingCampaign marketingCampaign = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_LIST_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactList contactList = null;
+   protected ContactList contactList = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CAMPAIGN_LIST_ID")
    
-   private List<TrackingCode> trackingCodes = null;
+   protected List<TrackingCode> trackingCodes = null;
 
   /**
    * Default constructor.

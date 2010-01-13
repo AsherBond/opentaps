@@ -187,7 +187,7 @@ fieldMapColumns.put("PartyAndPerson", fields);
     yearsWithEmployer("yearsWithEmployer"),
     monthsWithEmployer("monthsWithEmployer"),
     existingCustomer("existingCustomer");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

@@ -79,7 +79,7 @@ fieldMapColumns.put("PaycheckItemAndType", fields);
     paycheckItemClassId("paycheckItemClassId"),
     amount("amount"),
     partyId("partyId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -107,7 +107,7 @@ fieldMapColumns.put("PaycheckItemAndType", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaycheckItemType paycheckItemType = null;
+   protected PaycheckItemType paycheckItemType = null;
 
   /**
    * Default constructor.

@@ -144,7 +144,7 @@ fieldMapColumns.put("ProductFacilityAndPostalAddress", fields);
     countyGeoId("countyGeoId"),
     postalCodeGeoId("postalCodeGeoId"),
     geoPointId("geoPointId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

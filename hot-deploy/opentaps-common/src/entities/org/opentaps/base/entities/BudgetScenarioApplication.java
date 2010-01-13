@@ -77,7 +77,7 @@ fieldMapColumns.put("BudgetScenarioApplication", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -90,7 +90,7 @@ fieldMapColumns.put("BudgetScenarioApplication", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.BudgetScenarioApplicationPkBridge.class)
-     private BudgetScenarioApplicationPk id = new BudgetScenarioApplicationPk();
+     protected BudgetScenarioApplicationPk id = new BudgetScenarioApplicationPk();
    
     /**
      * Auto generated Id accessor.
@@ -107,35 +107,35 @@ fieldMapColumns.put("BudgetScenarioApplication", fields);
          this.id = id;
       }
    @Column(name="BUDGET_ID")
-   private String budgetId;
+   protected String budgetId;
    @Column(name="BUDGET_ITEM_SEQ_ID")
-   private String budgetItemSeqId;
+   protected String budgetItemSeqId;
    @Column(name="AMOUNT_CHANGE")
-   private BigDecimal amountChange;
+   protected BigDecimal amountChange;
    @Column(name="PERCENTAGE_CHANGE")
-   private BigDecimal percentageChange;
+   protected BigDecimal percentageChange;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BUDGET_SCENARIO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private BudgetScenario budgetScenario = null;
+   protected BudgetScenario budgetScenario = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BUDGET_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Budget budget = null;
+   protected Budget budget = null;
    private transient BudgetItem budgetItem = null;
 
   /**

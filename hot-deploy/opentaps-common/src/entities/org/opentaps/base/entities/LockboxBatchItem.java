@@ -79,7 +79,7 @@ fieldMapColumns.put("LockboxBatchItem", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,7 +92,7 @@ fieldMapColumns.put("LockboxBatchItem", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.LockboxBatchItemPkBridge.class)
-     private LockboxBatchItemPk id = new LockboxBatchItemPk();
+     protected LockboxBatchItemPk id = new LockboxBatchItemPk();
    
     /**
      * Auto generated Id accessor.
@@ -109,30 +109,30 @@ fieldMapColumns.put("LockboxBatchItem", fields);
          this.id = id;
       }
    @Column(name="ROUTING_NUMBER")
-   private String routingNumber;
+   protected String routingNumber;
    @Column(name="ACCOUNT_NUMBER")
-   private String accountNumber;
+   protected String accountNumber;
    @Column(name="PAYMENT_DATE")
-   private Timestamp paymentDate;
+   protected Timestamp paymentDate;
    @Column(name="CHECK_NUMBER")
-   private String checkNumber;
+   protected String checkNumber;
    @Column(name="CHECK_AMOUNT")
-   private BigDecimal checkAmount;
+   protected BigDecimal checkAmount;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="LOCKBOX_BATCH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private LockboxBatch lockboxBatch = null;
+   protected LockboxBatch lockboxBatch = null;
    private transient List<LockboxBatchItemDetail> lockboxBatchItemDetails = null;
 
   /**

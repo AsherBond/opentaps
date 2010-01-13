@@ -72,7 +72,7 @@ fieldMapColumns.put("ContactMechType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,56 +86,56 @@ fieldMapColumns.put("ContactMechType", fields);
    @GeneratedValue(generator="ContactMechType_GEN")
    @Id
    @Column(name="CONTACT_MECH_TYPE_ID")
-   private String contactMechTypeId;
+   protected String contactMechTypeId;
    @Column(name="PARENT_TYPE_ID")
-   private String parentTypeId;
+   protected String parentTypeId;
    @Column(name="HAS_TABLE")
-   private String hasTable;
+   protected String hasTable;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMechType parentContactMechType = null;
+   protected ContactMechType parentContactMechType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_TYPE_ID")
    
-   private List<CommunicationEvent> communicationEvents = null;
+   protected List<CommunicationEvent> communicationEvents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_TYPE_ID")
    
-   private List<ContactList> contactLists = null;
+   protected List<ContactList> contactLists = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_TYPE_ID")
    
-   private List<ContactMech> contactMeches = null;
+   protected List<ContactMech> contactMeches = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   private List<ContactMechType> childContactMechTypes = null;
+   protected List<ContactMechType> childContactMechTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="contactMechType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_MECH_TYPE_ID")
    
-   private List<ContactMechTypeAttr> contactMechTypeAttrs = null;
+   protected List<ContactMechTypeAttr> contactMechTypeAttrs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="contactMechType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_MECH_TYPE_ID")
    
-   private List<ContactMechTypePurpose> contactMechTypePurposes = null;
+   protected List<ContactMechTypePurpose> contactMechTypePurposes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="contactMechType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_MECH_TYPE_ID")
    
-   private List<ValidContactMechRole> validContactMechRoles = null;
+   protected List<ValidContactMechRole> validContactMechRoles = null;
 
   /**
    * Default constructor.

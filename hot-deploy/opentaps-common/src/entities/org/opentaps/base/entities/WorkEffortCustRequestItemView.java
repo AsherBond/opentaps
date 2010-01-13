@@ -120,7 +120,7 @@ fieldMapColumns.put("WorkEffortCustRequestItemView", fields);
     configId("configId"),
     description("description"),
     story("story");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -174,7 +174,7 @@ fieldMapColumns.put("WorkEffortCustRequestItemView", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort workEffort = null;
+   protected WorkEffort workEffort = null;
    private transient CustRequestItem custRequestItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
@@ -182,7 +182,7 @@ fieldMapColumns.put("WorkEffortCustRequestItemView", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
 
   /**
    * Default constructor.

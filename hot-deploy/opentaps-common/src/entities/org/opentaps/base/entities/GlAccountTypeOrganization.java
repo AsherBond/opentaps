@@ -107,7 +107,7 @@ fieldMapColumns.put("GlAccountTypeOrganization", fields);
     accountName("accountName"),
     description("description"),
     productId("productId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

@@ -70,7 +70,7 @@ fieldMapColumns.put("ReturnItemTypeMap", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -83,7 +83,7 @@ fieldMapColumns.put("ReturnItemTypeMap", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ReturnItemTypeMapPkBridge.class)
-     private ReturnItemTypeMapPk id = new ReturnItemTypeMapPk();
+     protected ReturnItemTypeMapPk id = new ReturnItemTypeMapPk();
    
     /**
      * Auto generated Id accessor.
@@ -100,36 +100,36 @@ fieldMapColumns.put("ReturnItemTypeMap", fields);
          this.id = id;
       }
    @Column(name="RETURN_ITEM_TYPE_ID")
-   private String returnItemTypeId;
+   protected String returnItemTypeId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_ITEM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ReturnItemType returnItemType = null;
+   protected ReturnItemType returnItemType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_HEADER_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ReturnHeaderType returnHeaderType = null;
+   protected ReturnHeaderType returnHeaderType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_ITEM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ReturnAdjustmentType returnAdjustmentType = null;
+   protected ReturnAdjustmentType returnAdjustmentType = null;
 
   /**
    * Default constructor.

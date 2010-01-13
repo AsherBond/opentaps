@@ -91,7 +91,7 @@ fieldMapColumns.put("CashDrawer", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -105,71 +105,71 @@ fieldMapColumns.put("CashDrawer", fields);
    @GeneratedValue(generator="CashDrawer_GEN")
    @Id
    @Column(name="CASH_DRAWER_ID")
-   private String cashDrawerId;
+   protected String cashDrawerId;
    @Column(name="OPEN_USER_LOGIN_ID")
-   private String openUserLoginId;
+   protected String openUserLoginId;
    @Column(name="OPERATOR_USER_LOGIN_ID")
-   private String operatorUserLoginId;
+   protected String operatorUserLoginId;
    @Column(name="CLOSE_USER_LOGIN_ID")
-   private String closeUserLoginId;
+   protected String closeUserLoginId;
    @Column(name="OPEN_TIMESTAMP")
-   private Timestamp openTimestamp;
+   protected Timestamp openTimestamp;
    @Column(name="CLOSE_TIMESTAMP")
-   private Timestamp closeTimestamp;
+   protected Timestamp closeTimestamp;
    @Column(name="CURRENCY_UOM_ID")
-   private String currencyUomId;
+   protected String currencyUomId;
    @Column(name="INITIAL_AMOUNT")
-   private BigDecimal initialAmount;
+   protected BigDecimal initialAmount;
    @Column(name="FINAL_AMOUNT")
-   private BigDecimal finalAmount;
+   protected BigDecimal finalAmount;
    @Column(name="CLOSING_VARIANCE_AMOUNT")
-   private BigDecimal closingVarianceAmount;
+   protected BigDecimal closingVarianceAmount;
    @Column(name="OPENING_COMMENTS")
-   private String openingComments;
+   protected String openingComments;
    @Column(name="CLOSING_COMMENTS")
-   private String closingComments;
+   protected String closingComments;
    @Column(name="FORCED_CLOSE")
-   private String forcedClose;
+   protected String forcedClose;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="OPEN_USER_LOGIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin openUserLogin = null;
+   protected UserLogin openUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="OPERATOR_USER_LOGIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin operatorUserLogin = null;
+   protected UserLogin operatorUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CLOSE_USER_LOGIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin closeUserLogin = null;
+   protected UserLogin closeUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom uom = null;
+   protected Uom uom = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="cashDrawer", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CASH_DRAWER_ID")
    
-   private List<CashDrawerTransaction> cashDrawerTransactions = null;
+   protected List<CashDrawerTransaction> cashDrawerTransactions = null;
 
   /**
    * Default constructor.

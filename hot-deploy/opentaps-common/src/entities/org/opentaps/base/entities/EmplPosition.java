@@ -92,7 +92,7 @@ fieldMapColumns.put("EmplPosition", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -106,55 +106,55 @@ fieldMapColumns.put("EmplPosition", fields);
    @GeneratedValue(generator="EmplPosition_GEN")
    @Id
    @Column(name="EMPL_POSITION_ID")
-   private String emplPositionId;
+   protected String emplPositionId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @Column(name="BUDGET_ID")
-   private String budgetId;
+   protected String budgetId;
    @Column(name="BUDGET_ITEM_SEQ_ID")
-   private String budgetItemSeqId;
+   protected String budgetItemSeqId;
    @Column(name="EMPL_POSITION_TYPE_ID")
-   private String emplPositionTypeId;
+   protected String emplPositionTypeId;
    @Column(name="ESTIMATED_FROM_DATE")
-   private Timestamp estimatedFromDate;
+   protected Timestamp estimatedFromDate;
    @Column(name="ESTIMATED_THRU_DATE")
-   private Timestamp estimatedThruDate;
+   protected Timestamp estimatedThruDate;
    @Column(name="SALARY_FLAG")
-   private String salaryFlag;
+   protected String salaryFlag;
    @Column(name="EXEMPT_FLAG")
-   private String exemptFlag;
+   protected String exemptFlag;
    @Column(name="FULLTIME_FLAG")
-   private String fulltimeFlag;
+   protected String fulltimeFlag;
    @Column(name="TEMPORARY_FLAG")
-   private String temporaryFlag;
+   protected String temporaryFlag;
    @Column(name="ACTUAL_FROM_DATE")
-   private Timestamp actualFromDate;
+   protected Timestamp actualFromDate;
    @Column(name="ACTUAL_THRU_DATE")
-   private Timestamp actualThruDate;
+   protected Timestamp actualThruDate;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    private transient BudgetItem budgetItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EMPL_POSITION_TYPE_ID", insertable=false, updatable=false)
@@ -162,31 +162,31 @@ fieldMapColumns.put("EmplPosition", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EmplPositionType emplPositionType = null;
+   protected EmplPositionType emplPositionType = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="emplPosition", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EMPL_POSITION_ID")
    
-   private List<EmplPositionFulfillment> emplPositionFulfillments = null;
+   protected List<EmplPositionFulfillment> emplPositionFulfillments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="reportingToEmplPosition", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EMPL_POSITION_ID_REPORTING_TO")
    
-   private List<EmplPositionReportingStruct> reportingToEmplPositionReportingStructs = null;
+   protected List<EmplPositionReportingStruct> reportingToEmplPositionReportingStructs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="managedByEmplPosition", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EMPL_POSITION_ID_MANAGED_BY")
    
-   private List<EmplPositionReportingStruct> managedByEmplPositionReportingStructs = null;
+   protected List<EmplPositionReportingStruct> managedByEmplPositionReportingStructs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="emplPosition", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EMPL_POSITION_ID")
    
-   private List<EmplPositionResponsibility> emplPositionResponsibilitys = null;
+   protected List<EmplPositionResponsibility> emplPositionResponsibilitys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="EMPL_POSITION_ID")
    
-   private List<EmploymentApp> employmentApps = null;
+   protected List<EmploymentApp> employmentApps = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="EMPL_POSITION_ID")
    
-   private List<PerfReview> perfReviews = null;
+   protected List<PerfReview> perfReviews = null;
 
   /**
    * Default constructor.

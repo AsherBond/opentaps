@@ -74,7 +74,7 @@ fieldMapColumns.put("Vendor", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,30 +88,30 @@ fieldMapColumns.put("Vendor", fields);
    @GeneratedValue(generator="Vendor_GEN")
    @Id
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @Column(name="MANIFEST_COMPANY_NAME")
-   private String manifestCompanyName;
+   protected String manifestCompanyName;
    @Column(name="MANIFEST_COMPANY_TITLE")
-   private String manifestCompanyTitle;
+   protected String manifestCompanyTitle;
    @Column(name="MANIFEST_LOGO_URL")
-   private String manifestLogoUrl;
+   protected String manifestLogoUrl;
    @Column(name="MANIFEST_POLICIES")
-   private String manifestPolicies;
+   protected String manifestPolicies;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
 
   /**
    * Default constructor.

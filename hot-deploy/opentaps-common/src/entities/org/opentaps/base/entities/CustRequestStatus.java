@@ -74,7 +74,7 @@ fieldMapColumns.put("CustRequestStatus", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,37 +88,37 @@ fieldMapColumns.put("CustRequestStatus", fields);
    @GeneratedValue(generator="CustRequestStatus_GEN")
    @Id
    @Column(name="CUST_REQUEST_STATUS_ID")
-   private String custRequestStatusId;
+   protected String custRequestStatusId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="CUST_REQUEST_ID")
-   private String custRequestId;
+   protected String custRequestId;
    @Column(name="CUST_REQUEST_ITEM_SEQ_ID")
-   private String custRequestItemSeqId;
+   protected String custRequestItemSeqId;
    @Column(name="STATUS_DATETIME")
-   private Timestamp statusDatetime;
+   protected Timestamp statusDatetime;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CustRequest custRequest = null;
+   protected CustRequest custRequest = null;
    private transient CustRequestItem custRequestItem = null;
 
   /**

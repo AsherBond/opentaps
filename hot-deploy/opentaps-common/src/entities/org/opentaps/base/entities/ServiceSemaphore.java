@@ -70,7 +70,7 @@ fieldMapColumns.put("ServiceSemaphore", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,19 +84,19 @@ fieldMapColumns.put("ServiceSemaphore", fields);
    @GeneratedValue(generator="ServiceSemaphore_GEN")
    @Id
    @Column(name="SERVICE_NAME")
-   private String serviceName;
+   protected String serviceName;
    @Column(name="LOCK_THREAD")
-   private String lockThread;
+   protected String lockThread;
    @Column(name="LOCK_TIME")
-   private Timestamp lockTime;
+   protected Timestamp lockTime;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

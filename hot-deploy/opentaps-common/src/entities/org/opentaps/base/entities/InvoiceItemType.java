@@ -77,7 +77,7 @@ fieldMapColumns.put("InvoiceItemType", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     defaultSequenceNum("defaultSequenceNum");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -91,71 +91,71 @@ fieldMapColumns.put("InvoiceItemType", fields);
    @GeneratedValue(generator="InvoiceItemType_GEN")
    @Id
    @Column(name="INVOICE_ITEM_TYPE_ID")
-   private String invoiceItemTypeId;
+   protected String invoiceItemTypeId;
    @Column(name="PARENT_TYPE_ID")
-   private String parentTypeId;
+   protected String parentTypeId;
    @Column(name="HAS_TABLE")
-   private String hasTable;
+   protected String hasTable;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="DEFAULT_GL_ACCOUNT_ID")
-   private String defaultGlAccountId;
+   protected String defaultGlAccountId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="DEFAULT_SEQUENCE_NUM")
-   private Long defaultSequenceNum;
+   protected Long defaultSequenceNum;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private InvoiceItemType parentInvoiceItemType = null;
+   protected InvoiceItemType parentInvoiceItemType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_GL_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GlAccount defaultGlAccount = null;
+   protected GlAccount defaultGlAccount = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fromInvoiceItemType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVOICE_ITEM_TYPE_ID_FROM")
    
-   private List<AgreementInvoiceItemType> fromAgreementInvoiceItemTypes = null;
+   protected List<AgreementInvoiceItemType> fromAgreementInvoiceItemTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="toInvoiceItemType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVOICE_ITEM_TYPE_ID_TO")
    
-   private List<AgreementInvoiceItemType> toAgreementInvoiceItemTypes = null;
+   protected List<AgreementInvoiceItemType> toAgreementInvoiceItemTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ITEM_TYPE_ID")
    
-   private List<AgreementTerm> agreementTerms = null;
+   protected List<AgreementTerm> agreementTerms = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ITEM_TYPE_ID")
    
-   private List<InvoiceItem> invoiceItems = null;
+   protected List<InvoiceItem> invoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   private List<InvoiceItemType> childInvoiceItemTypes = null;
+   protected List<InvoiceItemType> childInvoiceItemTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="invoiceItemType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVOICE_ITEM_TYPE_ID")
    
-   private List<InvoiceItemTypeAttr> invoiceItemTypeAttrs = null;
+   protected List<InvoiceItemTypeAttr> invoiceItemTypeAttrs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="invoiceItemType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVOICE_ITEM_TYPE_ID")
    
-   private List<InvoiceItemTypeGlAccount> invoiceItemTypeGlAccounts = null;
+   protected List<InvoiceItemTypeGlAccount> invoiceItemTypeGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ITEM_TYPE_ID")
    
-   private List<InvoiceItemTypeMap> invoiceItemTypeMaps = null;
+   protected List<InvoiceItemTypeMap> invoiceItemTypeMaps = null;
 
   /**
    * Default constructor.

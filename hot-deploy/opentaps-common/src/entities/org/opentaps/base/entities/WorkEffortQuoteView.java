@@ -109,7 +109,7 @@ fieldMapColumns.put("WorkEffortQuoteView", fields);
     description("description"),
     contactPartyId("contactPartyId"),
     createdByPartyId("createdByPartyId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -157,14 +157,14 @@ fieldMapColumns.put("WorkEffortQuoteView", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort workEffort = null;
+   protected WorkEffort workEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="QUOTE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Quote quote = null;
+   protected Quote quote = null;
 
   /**
    * Default constructor.

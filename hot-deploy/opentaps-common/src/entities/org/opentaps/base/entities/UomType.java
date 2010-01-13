@@ -72,7 +72,7 @@ fieldMapColumns.put("UomType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,44 +86,44 @@ fieldMapColumns.put("UomType", fields);
    @GeneratedValue(generator="UomType_GEN")
    @Id
    @Column(name="UOM_TYPE_ID")
-   private String uomTypeId;
+   protected String uomTypeId;
    @Column(name="PARENT_TYPE_ID")
-   private String parentTypeId;
+   protected String parentTypeId;
    @Column(name="HAS_TABLE")
-   private String hasTable;
+   protected String hasTable;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UomType parentUomType = null;
+   protected UomType parentUomType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AMOUNT_UOM_TYPE_ID")
    
-   private List<Product> amountProducts = null;
+   protected List<Product> amountProducts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="uomType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="UOM_TYPE_ID")
    
-   private List<TermTypeToUomTypeMap> termTypeToUomTypeMaps = null;
+   protected List<TermTypeToUomTypeMap> termTypeToUomTypeMaps = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_TYPE_ID")
    
-   private List<Uom> uoms = null;
+   protected List<Uom> uoms = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   private List<UomType> childUomTypes = null;
+   protected List<UomType> childUomTypes = null;
 
   /**
    * Default constructor.

@@ -70,7 +70,7 @@ fieldMapColumns.put("PaymentGatewayRespMsg", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,26 +84,26 @@ fieldMapColumns.put("PaymentGatewayRespMsg", fields);
    @GeneratedValue(generator="PaymentGatewayRespMsg_GEN")
    @Id
    @Column(name="PAYMENT_GATEWAY_RESP_MSG_ID")
-   private String paymentGatewayRespMsgId;
+   protected String paymentGatewayRespMsgId;
    @Column(name="PAYMENT_GATEWAY_RESPONSE_ID")
-   private String paymentGatewayResponseId;
+   protected String paymentGatewayResponseId;
    @Column(name="PGR_MESSAGE")
-   private String pgrMessage;
+   protected String pgrMessage;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_GATEWAY_RESPONSE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentGatewayResponse paymentGatewayResponse = null;
+   protected PaymentGatewayResponse paymentGatewayResponse = null;
 
   /**
    * Default constructor.

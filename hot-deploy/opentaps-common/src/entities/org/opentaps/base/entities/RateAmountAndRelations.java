@@ -113,7 +113,7 @@ fieldMapColumns.put("RateAmountAndRelations", fields);
     fromDate("fromDate"),
     thruDate("thruDate"),
     rateAmount("rateAmount");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

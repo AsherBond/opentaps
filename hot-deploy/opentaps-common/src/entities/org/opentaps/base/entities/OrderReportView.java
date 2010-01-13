@@ -110,7 +110,7 @@ fieldMapColumns.put("OrderReportView", fields);
     itemStatus("itemStatus"),
     quantity("quantity"),
     unitPrice("unitPrice");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

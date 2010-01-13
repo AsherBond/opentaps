@@ -145,7 +145,7 @@ fieldMapColumns.put("SubscriptionAndCommEvent", fields);
     ccString("ccString"),
     bccString("bccString"),
     messageId("messageId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

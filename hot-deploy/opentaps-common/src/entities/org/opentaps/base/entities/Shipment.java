@@ -127,7 +127,7 @@ fieldMapColumns.put("Shipment", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     returnId("returnId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -141,199 +141,199 @@ fieldMapColumns.put("Shipment", fields);
    @GeneratedValue(generator="Shipment_GEN")
    @Id
    @Column(name="SHIPMENT_ID")
-   private String shipmentId;
+   protected String shipmentId;
    @Column(name="SHIPMENT_TYPE_ID")
-   private String shipmentTypeId;
+   protected String shipmentTypeId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="PRIMARY_ORDER_ID")
-   private String primaryOrderId;
+   protected String primaryOrderId;
    @Column(name="PRIMARY_RETURN_ID")
-   private String primaryReturnId;
+   protected String primaryReturnId;
    @Column(name="PRIMARY_SHIP_GROUP_SEQ_ID")
-   private String primaryShipGroupSeqId;
+   protected String primaryShipGroupSeqId;
    @Column(name="PICKLIST_BIN_ID")
-   private String picklistBinId;
+   protected String picklistBinId;
    @Column(name="ESTIMATED_READY_DATE")
-   private Timestamp estimatedReadyDate;
+   protected Timestamp estimatedReadyDate;
    @Column(name="ESTIMATED_SHIP_DATE")
-   private Timestamp estimatedShipDate;
+   protected Timestamp estimatedShipDate;
    @Column(name="ESTIMATED_SHIP_WORK_EFF_ID")
-   private String estimatedShipWorkEffId;
+   protected String estimatedShipWorkEffId;
    @Column(name="ESTIMATED_ARRIVAL_DATE")
-   private Timestamp estimatedArrivalDate;
+   protected Timestamp estimatedArrivalDate;
    @Column(name="ESTIMATED_ARRIVAL_WORK_EFF_ID")
-   private String estimatedArrivalWorkEffId;
+   protected String estimatedArrivalWorkEffId;
    @Column(name="LATEST_CANCEL_DATE")
-   private Timestamp latestCancelDate;
+   protected Timestamp latestCancelDate;
    @Column(name="ESTIMATED_SHIP_COST")
-   private BigDecimal estimatedShipCost;
+   protected BigDecimal estimatedShipCost;
    @Column(name="CURRENCY_UOM_ID")
-   private String currencyUomId;
+   protected String currencyUomId;
    @Column(name="HANDLING_INSTRUCTIONS")
-   private String handlingInstructions;
+   protected String handlingInstructions;
    @Column(name="ORIGIN_FACILITY_ID")
-   private String originFacilityId;
+   protected String originFacilityId;
    @Column(name="DESTINATION_FACILITY_ID")
-   private String destinationFacilityId;
+   protected String destinationFacilityId;
    @Column(name="ORIGIN_CONTACT_MECH_ID")
-   private String originContactMechId;
+   protected String originContactMechId;
    @Column(name="ORIGIN_TELECOM_NUMBER_ID")
-   private String originTelecomNumberId;
+   protected String originTelecomNumberId;
    @Column(name="DESTINATION_CONTACT_MECH_ID")
-   private String destinationContactMechId;
+   protected String destinationContactMechId;
    @Column(name="DESTINATION_TELECOM_NUMBER_ID")
-   private String destinationTelecomNumberId;
+   protected String destinationTelecomNumberId;
    @Column(name="PARTY_ID_TO")
-   private String partyIdTo;
+   protected String partyIdTo;
    @Column(name="PARTY_ID_FROM")
-   private String partyIdFrom;
+   protected String partyIdFrom;
    @Column(name="ADDITIONAL_SHIPPING_CHARGE")
-   private BigDecimal additionalShippingCharge;
+   protected BigDecimal additionalShippingCharge;
    @Column(name="ADDTL_SHIPPING_CHARGE_DESC")
-   private String addtlShippingChargeDesc;
+   protected String addtlShippingChargeDesc;
    @Column(name="CREATED_DATE")
-   private Timestamp createdDate;
+   protected Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   private String createdByUserLogin;
+   protected String createdByUserLogin;
    @Column(name="LAST_MODIFIED_DATE")
-   private Timestamp lastModifiedDate;
+   protected Timestamp lastModifiedDate;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   private String lastModifiedByUserLogin;
+   protected String lastModifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="RETURN_ID")
-   private String returnId;
+   protected String returnId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ShipmentType shipmentType = null;
+   protected ShipmentType shipmentType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ESTIMATED_SHIP_WORK_EFF_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort estimatedShipWorkEffort = null;
+   protected WorkEffort estimatedShipWorkEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ESTIMATED_ARRIVAL_WORK_EFF_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort estimatedArrivalWorkEffort = null;
+   protected WorkEffort estimatedArrivalWorkEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom currencyUom = null;
+   protected Uom currencyUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Facility originFacility = null;
+   protected Facility originFacility = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DESTINATION_FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Facility destinationFacility = null;
+   protected Facility destinationFacility = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMech originContactMech = null;
+   protected ContactMech originContactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DESTINATION_CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMech destContactMech = null;
+   protected ContactMech destContactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PostalAddress originPostalAddress = null;
+   protected PostalAddress originPostalAddress = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_TELECOM_NUMBER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TelecomNumber originTelecomNumber = null;
+   protected TelecomNumber originTelecomNumber = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DESTINATION_CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PostalAddress destinationPostalAddress = null;
+   protected PostalAddress destinationPostalAddress = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DESTINATION_TELECOM_NUMBER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TelecomNumber destinationTelecomNumber = null;
+   protected TelecomNumber destinationTelecomNumber = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader primaryOrderHeader = null;
+   protected OrderHeader primaryOrderHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_RETURN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ReturnHeader primaryReturnHeader = null;
+   protected ReturnHeader primaryReturnHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PICKLIST_BIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PicklistBin picklistBin = null;
+   protected PicklistBin picklistBin = null;
    private transient OrderItemShipGroup primaryOrderItemShipGroup = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_TYPE_ID")
    
-   private List<ShipmentTypeAttr> shipmentTypeAttrs = null;
+   protected List<ShipmentTypeAttr> shipmentTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party toParty = null;
+   protected Party toParty = null;
    private transient Person toPerson = null;
    private transient PartyGroup toPartyGroup = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -342,7 +342,7 @@ fieldMapColumns.put("Shipment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party fromParty = null;
+   protected Party fromParty = null;
    private transient Person fromPerson = null;
    private transient PartyGroup fromPartyGroup = null;
    private transient List<ShipmentManifestView> shipmentManifestViews = null;
@@ -352,67 +352,67 @@ fieldMapColumns.put("Shipment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ReturnHeader returnHeader = null;
+   protected ReturnHeader returnHeader = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_ID")
    
-   private List<AcctgTrans> acctgTranses = null;
+   protected List<AcctgTrans> acctgTranses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_ID")
    
-   private List<ItemIssuance> itemIssuances = null;
+   protected List<ItemIssuance> itemIssuances = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipment", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_ID")
    
-   private List<OrderShipment> orderShipments = null;
+   protected List<OrderShipment> orderShipments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipment", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_ID")
    
-   private List<ReturnItemShipment> returnItemShipments = null;
+   protected List<ReturnItemShipment> returnItemShipments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipment", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_ID")
    
-   private List<ShipmentAttribute> shipmentAttributes = null;
+   protected List<ShipmentAttribute> shipmentAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipment", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_ID")
    
-   private List<ShipmentContactMech> shipmentContactMeches = null;
+   protected List<ShipmentContactMech> shipmentContactMeches = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipment", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_ID")
    
-   private List<ShipmentItem> shipmentItems = null;
+   protected List<ShipmentItem> shipmentItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipment", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_ID")
    
-   private List<ShipmentItemBilling> shipmentItemBillings = null;
+   protected List<ShipmentItemBilling> shipmentItemBillings = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipment", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_ID")
    
-   private List<ShipmentItemFeature> shipmentItemFeatures = null;
+   protected List<ShipmentItemFeature> shipmentItemFeatures = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipment", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_ID")
    
-   private List<ShipmentPackage> shipmentPackages = null;
+   protected List<ShipmentPackage> shipmentPackages = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipment", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_ID")
    
-   private List<ShipmentPackageContent> shipmentPackageContents = null;
+   protected List<ShipmentPackageContent> shipmentPackageContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipment", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_ID")
    
-   private List<ShipmentPackageRouteSeg> shipmentPackageRouteSegs = null;
+   protected List<ShipmentPackageRouteSeg> shipmentPackageRouteSegs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_ID")
    
-   private List<ShipmentReceipt> shipmentReceipts = null;
+   protected List<ShipmentReceipt> shipmentReceipts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipment", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_ID")
    
-   private List<ShipmentRouteSegment> shipmentRouteSegments = null;
+   protected List<ShipmentRouteSegment> shipmentRouteSegments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipment", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_ID")
    
-   private List<ShipmentStatus> shipmentStatuses = null;
+   protected List<ShipmentStatus> shipmentStatuses = null;
 
   /**
    * Default constructor.

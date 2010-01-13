@@ -80,7 +80,7 @@ fieldMapColumns.put("FacilityLocation", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -93,7 +93,7 @@ fieldMapColumns.put("FacilityLocation", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.FacilityLocationPkBridge.class)
-     private FacilityLocationPk id = new FacilityLocationPk();
+     protected FacilityLocationPk id = new FacilityLocationPk();
    
     /**
      * Auto generated Id accessor.
@@ -110,39 +110,39 @@ fieldMapColumns.put("FacilityLocation", fields);
          this.id = id;
       }
    @Column(name="LOCATION_TYPE_ENUM_ID")
-   private String locationTypeEnumId;
+   protected String locationTypeEnumId;
    @Column(name="AREA_ID")
-   private String areaId;
+   protected String areaId;
    @Column(name="AISLE_ID")
-   private String aisleId;
+   protected String aisleId;
    @Column(name="SECTION_ID")
-   private String sectionId;
+   protected String sectionId;
    @Column(name="LEVEL_ID")
-   private String levelId;
+   protected String levelId;
    @Column(name="POSITION_ID")
-   private String positionId;
+   protected String positionId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Facility facility = null;
+   protected Facility facility = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="LOCATION_TYPE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration typeEnumeration = null;
+   protected Enumeration typeEnumeration = null;
    private transient List<FacilityLocationGeoPoint> facilityLocationGeoPoints = null;
    private transient List<FixedAsset> locatedAtFixedAssets = null;
    private transient List<InventoryItem> inventoryItems = null;

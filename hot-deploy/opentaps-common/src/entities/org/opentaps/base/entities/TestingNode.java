@@ -70,7 +70,7 @@ fieldMapColumns.put("TestingNode", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,34 +84,34 @@ fieldMapColumns.put("TestingNode", fields);
    @GeneratedValue(generator="TestingNode_GEN")
    @Id
    @Column(name="TESTING_NODE_ID")
-   private String testingNodeId;
+   protected String testingNodeId;
    @Column(name="PRIMARY_PARENT_NODE_ID")
-   private String primaryParentNodeId;
+   protected String primaryParentNodeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_PARENT_NODE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TestingNode primaryParentTestingNode = null;
+   protected TestingNode primaryParentTestingNode = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_PARENT_NODE_ID")
    
-   private List<TestingNode> primaryChildTestingNodes = null;
+   protected List<TestingNode> primaryChildTestingNodes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="testingNode", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TESTING_NODE_ID")
    
-   private List<TestingNodeMember> testingNodeMembers = null;
+   protected List<TestingNodeMember> testingNodeMembers = null;
 
   /**
    * Default constructor.

@@ -84,7 +84,7 @@ fieldMapColumns.put("UomConversionDated", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -97,7 +97,7 @@ fieldMapColumns.put("UomConversionDated", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.UomConversionDatedPkBridge.class)
-     private UomConversionDatedPk id = new UomConversionDatedPk();
+     protected UomConversionDatedPk id = new UomConversionDatedPk();
    
     /**
      * Auto generated Id accessor.
@@ -114,53 +114,53 @@ fieldMapColumns.put("UomConversionDated", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="CONVERSION_FACTOR")
-   private BigDecimal conversionFactor;
+   protected BigDecimal conversionFactor;
    @Column(name="CUSTOM_METHOD_ID")
-   private String customMethodId;
+   protected String customMethodId;
    @Column(name="DECIMAL_SCALE")
-   private Long decimalScale;
+   protected Long decimalScale;
    @Column(name="ROUNDING_MODE")
-   private String roundingMode;
+   protected String roundingMode;
    @Column(name="PURPOSE_ENUM_ID")
-   private String purposeEnumId;
+   protected String purposeEnumId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom datedMainUom = null;
+   protected Uom datedMainUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom datedConvToUom = null;
+   protected Uom datedConvToUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CUSTOM_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CustomMethod uomCustomMethodCustomMethod = null;
+   protected CustomMethod uomCustomMethodCustomMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PURPOSE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration purposeEnumeration = null;
+   protected Enumeration purposeEnumeration = null;
 
   /**
    * Default constructor.

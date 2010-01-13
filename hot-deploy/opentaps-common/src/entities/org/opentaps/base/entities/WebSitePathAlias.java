@@ -74,7 +74,7 @@ fieldMapColumns.put("WebSitePathAlias", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -87,7 +87,7 @@ fieldMapColumns.put("WebSitePathAlias", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.WebSitePathAliasPkBridge.class)
-     private WebSitePathAliasPk id = new WebSitePathAliasPk();
+     protected WebSitePathAliasPk id = new WebSitePathAliasPk();
    
     /**
      * Auto generated Id accessor.
@@ -104,33 +104,33 @@ fieldMapColumns.put("WebSitePathAlias", fields);
          this.id = id;
       }
    @Column(name="ALIAS_TO")
-   private String aliasTo;
+   protected String aliasTo;
    @Column(name="CONTENT_ID")
-   private String contentId;
+   protected String contentId;
    @Column(name="MAP_KEY")
-   private String mapKey;
+   protected String mapKey;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WEB_SITE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WebSite webSite = null;
+   protected WebSite webSite = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Content content = null;
+   protected Content content = null;
 
   /**
    * Default constructor.

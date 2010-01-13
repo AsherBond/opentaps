@@ -72,7 +72,7 @@ fieldMapColumns.put("ProductContentType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,36 +86,40 @@ fieldMapColumns.put("ProductContentType", fields);
    @GeneratedValue(generator="ProductContentType_GEN")
    @Id
    @Column(name="PRODUCT_CONTENT_TYPE_ID")
-   private String productContentTypeId;
+   protected String productContentTypeId;
    @Column(name="PARENT_TYPE_ID")
-   private String parentTypeId;
+   protected String parentTypeId;
    @Column(name="HAS_TABLE")
-   private String hasTable;
+   protected String hasTable;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductContentType parentProductContentType = null;
+   protected ProductContentType parentProductContentType = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productContentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CONTENT_TYPE_ID")
    
-   private List<ProductContent> productContents = null;
+   protected List<AmazonProductImageAck> amazonProductImageAcks = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="productContentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_CONTENT_TYPE_ID")
+   
+   protected List<ProductContent> productContents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   private List<ProductContentType> childProductContentTypes = null;
+   protected List<ProductContentType> childProductContentTypes = null;
 
   /**
    * Default constructor.
@@ -269,6 +273,17 @@ fieldMapColumns.put("ProductContentType", fields);
         return this.parentProductContentType;
     }
     /**
+     * Auto generated method that gets the related <code>AmazonProductImageAck</code> by the relation named <code>AmazonProductImageAck</code>.
+     * @return the list of <code>AmazonProductImageAck</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AmazonProductImageAck> getAmazonProductImageAcks() throws RepositoryException {
+        if (this.amazonProductImageAcks == null) {
+            this.amazonProductImageAcks = getRelated(AmazonProductImageAck.class, "AmazonProductImageAck");
+        }
+        return this.amazonProductImageAcks;
+    }
+    /**
      * Auto generated method that gets the related <code>ProductContent</code> by the relation named <code>ProductContent</code>.
      * @return the list of <code>ProductContent</code>
      * @throws RepositoryException if an error occurs
@@ -300,6 +315,13 @@ fieldMapColumns.put("ProductContentType", fields);
     }
     /**
      * Auto generated value setter.
+     * @param amazonProductImageAcks the amazonProductImageAcks to set
+    */
+    public void setAmazonProductImageAcks(List<AmazonProductImageAck> amazonProductImageAcks) {
+        this.amazonProductImageAcks = amazonProductImageAcks;
+    }
+    /**
+     * Auto generated value setter.
      * @param productContents the productContents to set
     */
     public void setProductContents(List<ProductContent> productContents) {
@@ -313,6 +335,33 @@ fieldMapColumns.put("ProductContentType", fields);
         this.childProductContentTypes = childProductContentTypes;
     }
 
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addAmazonProductImageAck(AmazonProductImageAck amazonProductImageAck) {
+        if (this.amazonProductImageAcks == null) {
+            this.amazonProductImageAcks = new ArrayList<AmazonProductImageAck>();
+        }
+        this.amazonProductImageAcks.add(amazonProductImageAck);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeAmazonProductImageAck(AmazonProductImageAck amazonProductImageAck) {
+        if (this.amazonProductImageAcks == null) {
+            return;
+        }
+        this.amazonProductImageAcks.remove(amazonProductImageAck);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearAmazonProductImageAck() {
+        if (this.amazonProductImageAcks == null) {
+            return;
+        }
+        this.amazonProductImageAcks.clear();
+    }
     /**
      * Auto generated method that add item to collection.
      */

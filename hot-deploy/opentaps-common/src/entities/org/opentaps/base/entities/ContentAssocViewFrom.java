@@ -185,7 +185,7 @@ fieldMapColumns.put("ContentAssocViewFrom", fields);
     caCreatedByUserLogin("caCreatedByUserLogin"),
     caLastModifiedDate("caLastModifiedDate"),
     caLastModifiedByUserLogin("caLastModifiedByUserLogin");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

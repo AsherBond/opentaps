@@ -82,7 +82,7 @@ fieldMapColumns.put("ProdCatalog", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -96,51 +96,51 @@ fieldMapColumns.put("ProdCatalog", fields);
    @GeneratedValue(generator="ProdCatalog_GEN")
    @Id
    @Column(name="PROD_CATALOG_ID")
-   private String prodCatalogId;
+   protected String prodCatalogId;
    @Column(name="CATALOG_NAME")
-   private String catalogName;
+   protected String catalogName;
    @Column(name="USE_QUICK_ADD")
-   private String useQuickAdd;
+   protected String useQuickAdd;
    @Column(name="STYLE_SHEET")
-   private String styleSheet;
+   protected String styleSheet;
    @Column(name="HEADER_LOGO")
-   private String headerLogo;
+   protected String headerLogo;
    @Column(name="CONTENT_PATH_PREFIX")
-   private String contentPathPrefix;
+   protected String contentPathPrefix;
    @Column(name="TEMPLATE_PATH_PREFIX")
-   private String templatePathPrefix;
+   protected String templatePathPrefix;
    @Column(name="VIEW_ALLOW_PERM_REQD")
-   private String viewAllowPermReqd;
+   protected String viewAllowPermReqd;
    @Column(name="PURCHASE_ALLOW_PERM_REQD")
-   private String purchaseAllowPermReqd;
+   protected String purchaseAllowPermReqd;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PROD_CATALOG_ID")
    
-   private List<CartAbandonedLine> cartAbandonedLines = null;
+   protected List<CartAbandonedLine> cartAbandonedLines = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="prodCatalog", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PROD_CATALOG_ID")
    
-   private List<ProdCatalogCategory> prodCatalogCategorys = null;
+   protected List<ProdCatalogCategory> prodCatalogCategorys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="prodCatalog", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PROD_CATALOG_ID")
    
-   private List<ProdCatalogInvFacility> prodCatalogInvFacilitys = null;
+   protected List<ProdCatalogInvFacility> prodCatalogInvFacilitys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="prodCatalog", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PROD_CATALOG_ID")
    
-   private List<ProdCatalogRole> prodCatalogRoles = null;
+   protected List<ProdCatalogRole> prodCatalogRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="prodCatalog", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PROD_CATALOG_ID")
    
-   private List<ProductStoreCatalog> productStoreCatalogs = null;
+   protected List<ProductStoreCatalog> productStoreCatalogs = null;
 
   /**
    * Default constructor.

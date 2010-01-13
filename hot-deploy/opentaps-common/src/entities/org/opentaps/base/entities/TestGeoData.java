@@ -74,7 +74,7 @@ fieldMapColumns.put("TestGeoData", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,37 +88,37 @@ fieldMapColumns.put("TestGeoData", fields);
    @GeneratedValue(generator="TestGeoData_GEN")
    @Id
    @Column(name="GEO_ROW_ID")
-   private String geoRowId;
+   protected String geoRowId;
    @Column(name="CITY")
-   private String city;
+   protected String city;
    @Column(name="STATE_GEO_ID")
-   private String stateGeoId;
+   protected String stateGeoId;
    @Column(name="POSTAL_CODE")
-   private String postalCode;
+   protected String postalCode;
    @Column(name="COUNTRY_GEO_ID")
-   private String countryGeoId;
+   protected String countryGeoId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATE_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo stateGeo = null;
+   protected Geo stateGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COUNTRY_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo countryGeo = null;
+   protected Geo countryGeo = null;
 
   /**
    * Default constructor.

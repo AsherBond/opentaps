@@ -86,7 +86,7 @@ fieldMapColumns.put("ProductStorePromoAndAppl", fields);
     thruDate("thruDate"),
     sequenceNum("sequenceNum"),
     manualOnly("manualOnly");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

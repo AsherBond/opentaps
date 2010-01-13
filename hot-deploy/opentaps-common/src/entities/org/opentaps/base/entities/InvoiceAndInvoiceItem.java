@@ -227,7 +227,7 @@ fieldMapColumns.put("InvoiceAndInvoiceItem", fields);
     itemAcctgTagEnumId8("itemAcctgTagEnumId8"),
     itemAcctgTagEnumId9("itemAcctgTagEnumId9"),
     itemAcctgTagEnumId10("itemAcctgTagEnumId10");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -353,14 +353,14 @@ fieldMapColumns.put("InvoiceAndInvoiceItem", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PROCESSING_STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem processingStatusItem = null;
+   protected StatusItem processingStatusItem = null;
 
   /**
    * Default constructor.

@@ -95,7 +95,7 @@ fieldMapColumns.put("BillingAccountAndRole", fields);
     roleTypeId("roleTypeId"),
     fromDate("fromDate"),
     thruDate("thruDate");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -127,38 +127,38 @@ fieldMapColumns.put("BillingAccountAndRole", fields);
    private Timestamp fromDate;
     
    private Timestamp thruDate;
-   private transient List<OrderHeader> orderHeaders = null;
-   private transient List<BillingAccountRole> billingAccountRoles = null;
-   private transient List<Invoice> invoices = null;
-   private transient List<PaymentApplication> paymentApplications = null;
+   protected transient List<OrderHeader> orderHeaders = null;
+   protected transient List<BillingAccountRole> billingAccountRoles = null;
+   protected transient List<Invoice> invoices = null;
+   protected transient List<PaymentApplication> paymentApplications = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMech contactMech = null;
+   protected ContactMech contactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PostalAddress postalAddress = null;
+   protected PostalAddress postalAddress = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RoleType roleType = null;
+   protected RoleType roleType = null;
    private transient PartyRole partyRole = null;
 
   /**

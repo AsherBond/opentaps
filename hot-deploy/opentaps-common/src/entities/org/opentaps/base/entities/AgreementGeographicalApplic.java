@@ -70,7 +70,7 @@ fieldMapColumns.put("AgreementGeographicalApplic", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -83,7 +83,7 @@ fieldMapColumns.put("AgreementGeographicalApplic", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.AgreementGeographicalApplicPkBridge.class)
-     private AgreementGeographicalApplicPk id = new AgreementGeographicalApplicPk();
+     protected AgreementGeographicalApplicPk id = new AgreementGeographicalApplicPk();
    
     /**
      * Auto generated Id accessor.
@@ -100,20 +100,20 @@ fieldMapColumns.put("AgreementGeographicalApplic", fields);
          this.id = id;
       }
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AGREEMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Agreement agreement = null;
+   protected Agreement agreement = null;
    private transient AgreementItem agreementItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_ID", insertable=false, updatable=false)
@@ -121,7 +121,7 @@ fieldMapColumns.put("AgreementGeographicalApplic", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo geo = null;
+   protected Geo geo = null;
 
   /**
    * Default constructor.

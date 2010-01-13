@@ -78,7 +78,7 @@ fieldMapColumns.put("Document", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,46 +92,46 @@ fieldMapColumns.put("Document", fields);
    @GeneratedValue(generator="Document_GEN")
    @Id
    @Column(name="DOCUMENT_ID")
-   private String documentId;
+   protected String documentId;
    @Column(name="DOCUMENT_TYPE_ID")
-   private String documentTypeId;
+   protected String documentTypeId;
    @Column(name="DATE_CREATED")
-   private Timestamp dateCreated;
+   protected Timestamp dateCreated;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="DOCUMENT_LOCATION")
-   private String documentLocation;
+   protected String documentLocation;
    @Column(name="DOCUMENT_TEXT")
-   private String documentText;
+   protected String documentText;
    @Column(name="IMAGE_DATA")
-   private byte[] imageData;
+   protected byte[] imageData;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DOCUMENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private DocumentType documentType = null;
+   protected DocumentType documentType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DOCUMENT_TYPE_ID")
    
-   private List<DocumentTypeAttr> documentTypeAttrs = null;
+   protected List<DocumentTypeAttr> documentTypeAttrs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="document", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="DOCUMENT_ID")
    
-   private List<ShippingDocument> shippingDocuments = null;
+   protected List<ShippingDocument> shippingDocuments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="document", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="DOCUMENT_ID")
    
-   private List<DocumentAttribute> documentAttributes = null;
+   protected List<DocumentAttribute> documentAttributes = null;
 
   /**
    * Default constructor.

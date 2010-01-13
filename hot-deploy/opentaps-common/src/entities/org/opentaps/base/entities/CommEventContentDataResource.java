@@ -203,7 +203,7 @@ fieldMapColumns.put("CommEventContentDataResource", fields);
     drCreatedByUserLogin("drCreatedByUserLogin"),
     drLastModifiedDate("drLastModifiedDate"),
     drLastModifiedByUserLogin("drLastModifiedByUserLogin");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -313,34 +313,34 @@ fieldMapColumns.put("CommEventContentDataResource", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ElectronicText electronicText = null;
+   protected ElectronicText electronicText = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COMMUNICATION_EVENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CommunicationEvent communicationEvent = null;
+   protected CommunicationEvent communicationEvent = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ImageDataResource imageDataResource = null;
+   protected ImageDataResource imageDataResource = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OtherDataResource otherDataResource = null;
+   protected OtherDataResource otherDataResource = null;
    private transient List<ContentAssocDataResourceViewFrom> contentAssocDataResourceViewFroms = null;
    private transient List<ContentAssocDataResourceViewTo> contentAssocDataResourceViewToes = null;
-   private transient List<ContentAssoc> fromContentAssocs = null;
-   private transient List<ContentAssoc> toContentAssocs = null;
-   private transient List<ContentPurpose> contentPurposes = null;
-   private transient List<ContentRole> contentRoles = null;
+   protected transient List<ContentAssoc> fromContentAssocs = null;
+   protected transient List<ContentAssoc> toContentAssocs = null;
+   protected transient List<ContentPurpose> contentPurposes = null;
+   protected transient List<ContentRole> contentRoles = null;
 
   /**
    * Default constructor.

@@ -91,7 +91,7 @@ fieldMapColumns.put("KeyboardShortcutAndHandler", fields);
     description("description"),
     sequenceNum("sequenceNum"),
     shortcutHandler("shortcutHandler");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

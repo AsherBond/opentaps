@@ -148,7 +148,7 @@ fieldMapColumns.put("WorkEffortCommunicationEventView", fields);
     ccString("ccString"),
     bccString("bccString"),
     messageId("messageId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -222,14 +222,14 @@ fieldMapColumns.put("WorkEffortCommunicationEventView", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort workEffort = null;
+   protected WorkEffort workEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COMMUNICATION_EVENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CommunicationEvent communicationEvent = null;
+   protected CommunicationEvent communicationEvent = null;
 
   /**
    * Default constructor.

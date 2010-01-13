@@ -194,7 +194,7 @@ fieldMapColumns.put("Product", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -208,257 +208,257 @@ fieldMapColumns.put("Product", fields);
    @GeneratedValue(generator="Product_GEN")
    @Id
    @Column(name="PRODUCT_ID")
-   private String productId;
+   protected String productId;
    @Column(name="PRODUCT_TYPE_ID")
-   private String productTypeId;
+   protected String productTypeId;
    @Column(name="PRIMARY_PRODUCT_CATEGORY_ID")
-   private String primaryProductCategoryId;
+   protected String primaryProductCategoryId;
    @Column(name="MANUFACTURER_PARTY_ID")
-   private String manufacturerPartyId;
+   protected String manufacturerPartyId;
    @Column(name="FACILITY_ID")
-   private String facilityId;
+   protected String facilityId;
    @Column(name="INTRODUCTION_DATE")
-   private Timestamp introductionDate;
+   protected Timestamp introductionDate;
    @Column(name="SUPPORT_DISCONTINUATION_DATE")
-   private Timestamp supportDiscontinuationDate;
+   protected Timestamp supportDiscontinuationDate;
    @Column(name="SALES_DISCONTINUATION_DATE")
-   private Timestamp salesDiscontinuationDate;
+   protected Timestamp salesDiscontinuationDate;
    @Column(name="SALES_DISC_WHEN_NOT_AVAIL")
-   private String salesDiscWhenNotAvail;
+   protected String salesDiscWhenNotAvail;
    @Column(name="INTERNAL_NAME")
-   private String internalName;
+   protected String internalName;
    @Column(name="BRAND_NAME")
-   private String brandName;
+   protected String brandName;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="PRODUCT_NAME")
-   private String productName;
+   protected String productName;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LONG_DESCRIPTION")
-   private String longDescription;
+   protected String longDescription;
    @Column(name="PRICE_DETAIL_TEXT")
-   private String priceDetailText;
+   protected String priceDetailText;
    @Column(name="SMALL_IMAGE_URL")
-   private String smallImageUrl;
+   protected String smallImageUrl;
    @Column(name="MEDIUM_IMAGE_URL")
-   private String mediumImageUrl;
+   protected String mediumImageUrl;
    @Column(name="LARGE_IMAGE_URL")
-   private String largeImageUrl;
+   protected String largeImageUrl;
    @Column(name="DETAIL_IMAGE_URL")
-   private String detailImageUrl;
+   protected String detailImageUrl;
    @Column(name="ORIGINAL_IMAGE_URL")
-   private String originalImageUrl;
+   protected String originalImageUrl;
    @Column(name="DETAIL_SCREEN")
-   private String detailScreen;
+   protected String detailScreen;
    @Column(name="INVENTORY_MESSAGE")
-   private String inventoryMessage;
+   protected String inventoryMessage;
    @Column(name="REQUIRE_INVENTORY")
-   private String requireInventory;
+   protected String requireInventory;
    @Column(name="QUANTITY_UOM_ID")
-   private String quantityUomId;
+   protected String quantityUomId;
    @Column(name="QUANTITY_INCLUDED")
-   private BigDecimal quantityIncluded;
+   protected BigDecimal quantityIncluded;
    @Column(name="PIECES_INCLUDED")
-   private Long piecesIncluded;
+   protected Long piecesIncluded;
    @Column(name="REQUIRE_AMOUNT")
-   private String requireAmount;
+   protected String requireAmount;
    @Column(name="FIXED_AMOUNT")
-   private BigDecimal fixedAmount;
+   protected BigDecimal fixedAmount;
    @Column(name="AMOUNT_UOM_TYPE_ID")
-   private String amountUomTypeId;
+   protected String amountUomTypeId;
    @Column(name="WEIGHT_UOM_ID")
-   private String weightUomId;
+   protected String weightUomId;
    @Column(name="WEIGHT")
-   private BigDecimal weight;
+   protected BigDecimal weight;
    @Column(name="HEIGHT_UOM_ID")
-   private String heightUomId;
+   protected String heightUomId;
    @Column(name="PRODUCT_HEIGHT")
-   private BigDecimal productHeight;
+   protected BigDecimal productHeight;
    @Column(name="SHIPPING_HEIGHT")
-   private BigDecimal shippingHeight;
+   protected BigDecimal shippingHeight;
    @Column(name="WIDTH_UOM_ID")
-   private String widthUomId;
+   protected String widthUomId;
    @Column(name="PRODUCT_WIDTH")
-   private BigDecimal productWidth;
+   protected BigDecimal productWidth;
    @Column(name="SHIPPING_WIDTH")
-   private BigDecimal shippingWidth;
+   protected BigDecimal shippingWidth;
    @Column(name="DEPTH_UOM_ID")
-   private String depthUomId;
+   protected String depthUomId;
    @Column(name="PRODUCT_DEPTH")
-   private BigDecimal productDepth;
+   protected BigDecimal productDepth;
    @Column(name="SHIPPING_DEPTH")
-   private BigDecimal shippingDepth;
+   protected BigDecimal shippingDepth;
    @Column(name="PRODUCT_RATING")
-   private BigDecimal productRating;
+   protected BigDecimal productRating;
    @Column(name="RATING_TYPE_ENUM")
-   private String ratingTypeEnum;
+   protected String ratingTypeEnum;
    @Column(name="RETURNABLE")
-   private String returnable;
+   protected String returnable;
    @Column(name="TAXABLE")
-   private String taxable;
+   protected String taxable;
    @Column(name="CHARGE_SHIPPING")
-   private String chargeShipping;
+   protected String chargeShipping;
    @Column(name="AUTO_CREATE_KEYWORDS")
-   private String autoCreateKeywords;
+   protected String autoCreateKeywords;
    @Column(name="INCLUDE_IN_PROMOTIONS")
-   private String includeInPromotions;
+   protected String includeInPromotions;
    @Column(name="IS_VIRTUAL")
-   private String isVirtual;
+   protected String isVirtual;
    @Column(name="IS_VARIANT")
-   private String isVariant;
+   protected String isVariant;
    @Column(name="VIRTUAL_VARIANT_METHOD_ENUM")
-   private String virtualVariantMethodEnum;
+   protected String virtualVariantMethodEnum;
    @Column(name="ORIGIN_GEO_ID")
-   private String originGeoId;
+   protected String originGeoId;
    @Column(name="REQUIREMENT_METHOD_ENUM_ID")
-   private String requirementMethodEnumId;
+   protected String requirementMethodEnumId;
    @Column(name="BILL_OF_MATERIAL_LEVEL")
-   private Long billOfMaterialLevel;
+   protected Long billOfMaterialLevel;
    @Column(name="RESERV_MAX_PERSONS")
-   private BigDecimal reservMaxPersons;
+   protected BigDecimal reservMaxPersons;
    @Column(name="RESERV2ND_P_P_PERC")
-   private BigDecimal reserv2ndPPPerc;
+   protected BigDecimal reserv2ndPPPerc;
    @Column(name="RESERV_NTH_P_P_PERC")
-   private BigDecimal reservNthPPPerc;
+   protected BigDecimal reservNthPPPerc;
    @Column(name="CONFIG_ID")
-   private String configId;
+   protected String configId;
    @Column(name="CREATED_DATE")
-   private Timestamp createdDate;
+   protected Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   private String createdByUserLogin;
+   protected String createdByUserLogin;
    @Column(name="LAST_MODIFIED_DATE")
-   private Timestamp lastModifiedDate;
+   protected Timestamp lastModifiedDate;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   private String lastModifiedByUserLogin;
+   protected String lastModifiedByUserLogin;
    @Column(name="IN_SHIPPING_BOX")
-   private String inShippingBox;
+   protected String inShippingBox;
    @Column(name="DEFAULT_SHIPMENT_BOX_TYPE_ID")
-   private String defaultShipmentBoxTypeId;
+   protected String defaultShipmentBoxTypeId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductType productType = null;
+   protected ProductType productType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_TYPE_ID")
    
-   private List<ProductTypeAttr> productTypeAttrs = null;
+   protected List<ProductTypeAttr> productTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_PRODUCT_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductCategory primaryProductCategory = null;
+   protected ProductCategory primaryProductCategory = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Facility facility = null;
+   protected Facility facility = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MANUFACTURER_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party manufacturerParty = null;
+   protected Party manufacturerParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="QUANTITY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom quantityUom = null;
+   protected Uom quantityUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AMOUNT_UOM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UomType amountUomType = null;
+   protected UomType amountUomType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WEIGHT_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom weightUom = null;
+   protected Uom weightUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="HEIGHT_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom heightUom = null;
+   protected Uom heightUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WIDTH_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom widthUom = null;
+   protected Uom widthUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEPTH_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom depthUom = null;
+   protected Uom depthUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="VIRTUAL_VARIANT_METHOD_ENUM", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration vitualVariantMethodEnumeration = null;
+   protected Enumeration vitualVariantMethodEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RATING_TYPE_ENUM", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration ratingEnumeration = null;
+   protected Enumeration ratingEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REQUIREMENT_METHOD_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration requirementMethodEnumeration = null;
+   protected Enumeration requirementMethodEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo originGeo = null;
+   protected Geo originGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin relatedCreatedByUserLogin = null;
+   protected UserLogin relatedCreatedByUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin relatedLastModifiedByUserLogin = null;
+   protected UserLogin relatedLastModifiedByUserLogin = null;
    private transient List<ProductFeatureAndAppl> productFeatureAndAppls = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_SHIPMENT_BOX_TYPE_ID", insertable=false, updatable=false)
@@ -466,274 +466,281 @@ fieldMapColumns.put("Product", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ShipmentBoxType defaultShipmentBoxType = null;
+   protected ShipmentBoxType defaultShipmentBoxType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<Agreement> agreements = null;
+   protected List<Agreement> agreements = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<AgreementProductAppl> agreementProductAppls = null;
+   protected List<AgreementProductAppl> agreementProductAppls = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<AgreementTerm> agreementTerms = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<CartAbandonedLine> cartAbandonedLines = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<CommunicationEventProduct> communicationEventProducts = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<CostComponent> costComponents = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<CustRequestItem> custRequestItems = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<DataImportInventory> dataImportInventorys = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<DataImportShoppingListItem> dataImportShoppingListItems = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="INSTANCE_OF_PRODUCT_ID")
-   
-   private List<FixedAsset> instanceOfFixedAssets = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<FixedAssetProduct> fixedAssetProducts = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<GoodIdentification> goodIdentifications = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<InventoryEventPlanned> inventoryEventPlanneds = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<InventoryItem> inventoryItems = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<InventoryItemTempRes> inventoryItemTempReses = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<InvoiceItem> invoiceItems = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<MrpEvent> mrpEvents = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<MrpInventoryEvent> mrpInventoryEvents = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<OrderItem> orderItems = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<OrderSummaryEntry> orderSummaryEntrys = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<PartyNeed> partyNeeds = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="mainProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<ProductAssoc> mainProductAssocs = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="assocProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID_TO")
-   
-   private List<ProductAssoc> assocProductAssocs = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<ProductAttribute> productAttributes = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<ProductAverageCost> productAverageCosts = null;
+   protected List<AgreementTerm> agreementTerms = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductCalculatedInfo productCalculatedInfo = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<ProductCategoryMember> productCategoryMembers = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="productProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<ProductConfig> productProductConfigs = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="productProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<ProductConfigProduct> productProductConfigProducts = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="productProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<ProductConfigStats> productProductConfigStatses = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<ProductContent> productContents = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<ProductFacility> productFacilitys = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<ProductFacilityLocation> productFacilityLocations = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<ProductFeatureAppl> productFeatureAppls = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<ProductFeatureApplAttr> productFeatureApplAttrs = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<ProductGeo> productGeos = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<ProductGlAccount> productGlAccounts = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<ProductKeyword> productKeywords = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PRODUCT_ID")
-   
-   private List<ProductMaint> productMaints = null;
+   protected AmazonProduct amazonProduct = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<ProductManufacturingRule> productManufacturingRules = null;
+   protected List<CartAbandonedLine> cartAbandonedLines = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<CommunicationEventProduct> communicationEventProducts = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<CostComponent> costComponents = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<CustRequestItem> custRequestItems = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<DataImportInventory> dataImportInventorys = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<DataImportShoppingListItem> dataImportShoppingListItems = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="INSTANCE_OF_PRODUCT_ID")
+   
+   protected List<FixedAsset> instanceOfFixedAssets = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<FixedAssetProduct> fixedAssetProducts = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<GoodIdentification> goodIdentifications = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<InventoryEventPlanned> inventoryEventPlanneds = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<InventoryItem> inventoryItems = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<InventoryItemTempRes> inventoryItemTempReses = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<InvoiceItem> invoiceItems = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<MrpEvent> mrpEvents = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<MrpInventoryEvent> mrpInventoryEvents = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<OrderItem> orderItems = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<OrderSummaryEntry> orderSummaryEntrys = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<PartyNeed> partyNeeds = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="mainProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<ProductAssoc> mainProductAssocs = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="assocProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID_TO")
+   
+   protected List<ProductAssoc> assocProductAssocs = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<ProductAttribute> productAttributes = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<ProductAverageCost> productAverageCosts = null;
+   @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   protected ProductCalculatedInfo productCalculatedInfo = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<ProductCategoryMember> productCategoryMembers = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="productProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<ProductConfig> productProductConfigs = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="productProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<ProductConfigProduct> productProductConfigProducts = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="productProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<ProductConfigStats> productProductConfigStatses = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<ProductContent> productContents = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<ProductFacility> productFacilitys = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<ProductFacilityLocation> productFacilityLocations = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<ProductFeatureAppl> productFeatureAppls = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<ProductFeatureApplAttr> productFeatureApplAttrs = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<ProductGeo> productGeos = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<ProductGlAccount> productGlAccounts = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<ProductKeyword> productKeywords = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<ProductMaint> productMaints = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PRODUCT_ID")
+   
+   protected List<ProductManufacturingRule> productManufacturingRules = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID_FOR")
    
-   private List<ProductManufacturingRule> productForProductManufacturingRules = null;
+   protected List<ProductManufacturingRule> productForProductManufacturingRules = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID_IN")
    
-   private List<ProductManufacturingRule> productInProductManufacturingRules = null;
+   protected List<ProductManufacturingRule> productInProductManufacturingRules = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID_IN_SUBST")
    
-   private List<ProductManufacturingRule> productSubstProductManufacturingRules = null;
+   protected List<ProductManufacturingRule> productSubstProductManufacturingRules = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<ProductMeter> productMeters = null;
+   protected List<ProductMeter> productMeters = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<ProductOrderItem> productOrderItems = null;
+   protected List<ProductOrderItem> productOrderItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<ProductPaymentMethodType> productPaymentMethodTypes = null;
+   protected List<ProductPaymentMethodType> productPaymentMethodTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<ProductPrice> productPrices = null;
+   protected List<ProductPrice> productPrices = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<ProductPromoProduct> productPromoProducts = null;
+   protected List<ProductPromoProduct> productPromoProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<ProductReview> productReviews = null;
+   protected List<ProductReview> productReviews = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<ProductRole> productRoles = null;
+   protected List<ProductRole> productRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<ProductStoreSurveyAppl> productStoreSurveyAppls = null;
+   protected List<ProductStoreSurveyAppl> productStoreSurveyAppls = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<ProductSubscriptionResource> productSubscriptionResources = null;
+   protected List<ProductSubscriptionResource> productSubscriptionResources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<QuoteItem> quoteItems = null;
+   protected List<QuoteItem> quoteItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<ReorderGuideline> reorderGuidelines = null;
+   protected List<ReorderGuideline> reorderGuidelines = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<Requirement> requirements = null;
+   protected List<Requirement> requirements = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<ReturnItem> returnItems = null;
+   protected List<ReturnItem> returnItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<SalesForecastDetail> salesForecastDetails = null;
+   protected List<SalesForecastDetail> salesForecastDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<SalesForecastItem> salesForecastItems = null;
+   protected List<SalesForecastItem> salesForecastItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<ShipmentItem> shipmentItems = null;
+   protected List<ShipmentItem> shipmentItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SUB_PRODUCT_ID")
    
-   private List<ShipmentPackageContent> subShipmentPackageContents = null;
+   protected List<ShipmentPackageContent> subShipmentPackageContents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<ShipmentReceipt> shipmentReceipts = null;
+   protected List<ShipmentReceipt> shipmentReceipts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<ShoppingListItem> shoppingListItems = null;
+   protected List<ShoppingListItem> shoppingListItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<Subscription> subscriptions = null;
+   protected List<Subscription> subscriptions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<SupplierProduct> supplierProducts = null;
+   protected List<SupplierProduct> supplierProducts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<VendorProduct> vendorProducts = null;
+   protected List<VendorProduct> vendorProducts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<WorkEffortGoodStandard> workEffortGoodStandards = null;
+   protected List<WorkEffortGoodStandard> workEffortGoodStandards = null;
 
   /**
    * Default constructor.
@@ -1958,6 +1965,17 @@ fieldMapColumns.put("Product", fields);
         return this.agreementTerms;
     }
     /**
+     * Auto generated method that gets the related <code>AmazonProduct</code> by the relation named <code>AmazonProduct</code>.
+     * @return the <code>AmazonProduct</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public AmazonProduct getAmazonProduct() throws RepositoryException {
+        if (this.amazonProduct == null) {
+            this.amazonProduct = getRelatedOne(AmazonProduct.class, "AmazonProduct");
+        }
+        return this.amazonProduct;
+    }
+    /**
      * Auto generated method that gets the related <code>CartAbandonedLine</code> by the relation named <code>CartAbandonedLine</code>.
      * @return the list of <code>CartAbandonedLine</code>
      * @throws RepositoryException if an error occurs
@@ -2804,6 +2822,13 @@ fieldMapColumns.put("Product", fields);
     */
     public void setAgreementTerms(List<AgreementTerm> agreementTerms) {
         this.agreementTerms = agreementTerms;
+    }
+    /**
+     * Auto generated value setter.
+     * @param amazonProduct the amazonProduct to set
+    */
+    public void setAmazonProduct(AmazonProduct amazonProduct) {
+        this.amazonProduct = amazonProduct;
     }
     /**
      * Auto generated value setter.

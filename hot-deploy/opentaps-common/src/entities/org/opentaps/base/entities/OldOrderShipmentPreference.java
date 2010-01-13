@@ -88,7 +88,7 @@ fieldMapColumns.put("OldOrderShipmentPreference", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -101,7 +101,7 @@ fieldMapColumns.put("OldOrderShipmentPreference", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.OldOrderShipmentPreferencePkBridge.class)
-     private OldOrderShipmentPreferencePk id = new OldOrderShipmentPreferencePk();
+     protected OldOrderShipmentPreferencePk id = new OldOrderShipmentPreferencePk();
    
     /**
      * Auto generated Id accessor.
@@ -118,33 +118,33 @@ fieldMapColumns.put("OldOrderShipmentPreference", fields);
          this.id = id;
       }
    @Column(name="SHIPMENT_METHOD_TYPE_ID")
-   private String shipmentMethodTypeId;
+   protected String shipmentMethodTypeId;
    @Column(name="CARRIER_PARTY_ID")
-   private String carrierPartyId;
+   protected String carrierPartyId;
    @Column(name="CARRIER_ROLE_TYPE_ID")
-   private String carrierRoleTypeId;
+   protected String carrierRoleTypeId;
    @Column(name="TRACKING_NUMBER")
-   private String trackingNumber;
+   protected String trackingNumber;
    @Column(name="SHIPPING_INSTRUCTIONS")
-   private String shippingInstructions;
+   protected String shippingInstructions;
    @Column(name="MAY_SPLIT")
-   private String maySplit;
+   protected String maySplit;
    @Column(name="GIFT_MESSAGE")
-   private String giftMessage;
+   protected String giftMessage;
    @Column(name="IS_GIFT")
-   private String isGift;
+   protected String isGift;
    @Column(name="SHIP_AFTER_DATE")
-   private Timestamp shipAfterDate;
+   protected Timestamp shipAfterDate;
    @Column(name="SHIP_BEFORE_DATE")
-   private Timestamp shipBeforeDate;
+   protected Timestamp shipBeforeDate;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    private transient CarrierShipmentMethod carrierShipmentMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
@@ -152,7 +152,7 @@ fieldMapColumns.put("OldOrderShipmentPreference", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
    private transient OrderItem orderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CARRIER_PARTY_ID", insertable=false, updatable=false)
@@ -160,7 +160,7 @@ fieldMapColumns.put("OldOrderShipmentPreference", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party carrierParty = null;
+   protected Party carrierParty = null;
    private transient PartyRole carrierPartyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID", insertable=false, updatable=false)
@@ -168,7 +168,7 @@ fieldMapColumns.put("OldOrderShipmentPreference", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ShipmentMethodType shipmentMethodType = null;
+   protected ShipmentMethodType shipmentMethodType = null;
 
   /**
    * Default constructor.

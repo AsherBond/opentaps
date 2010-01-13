@@ -91,7 +91,7 @@ fieldMapColumns.put("PartyGroup", fields);
     isIncorporated("isIncorporated"),
     federalTaxId("federalTaxId"),
     requires1099("requires1099");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -111,59 +111,59 @@ fieldMapColumns.put("PartyGroup", fields);
    } )
    @Boost(10f)
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(5f)
    @Column(name="GROUP_NAME")
-   private String groupName;
+   protected String groupName;
    @Column(name="GROUP_NAME_LOCAL")
-   private String groupNameLocal;
+   protected String groupNameLocal;
    @Column(name="OFFICE_SITE_NAME")
-   private String officeSiteName;
+   protected String officeSiteName;
    @Column(name="ANNUAL_REVENUE")
-   private BigDecimal annualRevenue;
+   protected BigDecimal annualRevenue;
    @Column(name="NUM_EMPLOYEES")
-   private Long numEmployees;
+   protected Long numEmployees;
    @Column(name="TICKER_SYMBOL")
-   private String tickerSymbol;
+   protected String tickerSymbol;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(1f)
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="LOGO_IMAGE_URL")
-   private String logoImageUrl;
+   protected String logoImageUrl;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="IS_INCORPORATED")
-   private String isIncorporated;
+   protected String isIncorporated;
    @Column(name="FEDERAL_TAX_ID")
-   private String federalTaxId;
+   protected String federalTaxId;
    @Column(name="REQUIRES1099")
-   private String requires1099;
+   protected String requires1099;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    @IndexedEmbedded(depth = 2)
-   private Party party = null;
+   protected Party party = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Affiliate affiliate = null;
+   protected Affiliate affiliate = null;
    private transient List<PartyContactMech> partyContactMeches = null;
    private transient List<PartyContactMechPurpose> partyContactMechPurposes = null;
    private transient List<PartyInvitationGroupAssoc> toPartyInvitationGroupAssocs = null;

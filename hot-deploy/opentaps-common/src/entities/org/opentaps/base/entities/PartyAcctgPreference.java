@@ -111,7 +111,7 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
     salesInvoiceFooterText("salesInvoiceFooterText"),
     groupSalesTaxOnInvoicePdf("groupSalesTaxOnInvoicePdf"),
     allocPaymentTagsToAppl("allocPaymentTagsToAppl");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -125,129 +125,129 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
    @GeneratedValue(generator="PartyAcctgPreference_GEN")
    @Id
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @Column(name="FISCAL_YEAR_START_MONTH")
-   private Long fiscalYearStartMonth;
+   protected Long fiscalYearStartMonth;
    @Column(name="FISCAL_YEAR_START_DAY")
-   private Long fiscalYearStartDay;
+   protected Long fiscalYearStartDay;
    @Column(name="TAX_FORM_ID")
-   private String taxFormId;
+   protected String taxFormId;
    @Column(name="COGS_METHOD_ID")
-   private String cogsMethodId;
+   protected String cogsMethodId;
    @Column(name="BASE_CURRENCY_UOM_ID")
-   private String baseCurrencyUomId;
+   protected String baseCurrencyUomId;
    @Column(name="INVOICE_SEQUENCE_ENUM_ID")
-   private String invoiceSequenceEnumId;
+   protected String invoiceSequenceEnumId;
    @Column(name="INVOICE_ID_PREFIX")
-   private String invoiceIdPrefix;
+   protected String invoiceIdPrefix;
    @Column(name="LAST_INVOICE_NUMBER")
-   private Long lastInvoiceNumber;
+   protected Long lastInvoiceNumber;
    @Column(name="LAST_INVOICE_RESTART_DATE")
-   private Timestamp lastInvoiceRestartDate;
+   protected Timestamp lastInvoiceRestartDate;
    @Column(name="USE_INVOICE_ID_FOR_RETURNS")
-   private String useInvoiceIdForReturns;
+   protected String useInvoiceIdForReturns;
    @Column(name="QUOTE_SEQUENCE_ENUM_ID")
-   private String quoteSequenceEnumId;
+   protected String quoteSequenceEnumId;
    @Column(name="QUOTE_ID_PREFIX")
-   private String quoteIdPrefix;
+   protected String quoteIdPrefix;
    @Column(name="LAST_QUOTE_NUMBER")
-   private Long lastQuoteNumber;
+   protected Long lastQuoteNumber;
    @Column(name="ORDER_SEQUENCE_ENUM_ID")
-   private String orderSequenceEnumId;
+   protected String orderSequenceEnumId;
    @Column(name="ORDER_ID_PREFIX")
-   private String orderIdPrefix;
+   protected String orderIdPrefix;
    @Column(name="LAST_ORDER_NUMBER")
-   private Long lastOrderNumber;
+   protected Long lastOrderNumber;
    @Column(name="REFUND_PAYMENT_METHOD_ID")
-   private String refundPaymentMethodId;
+   protected String refundPaymentMethodId;
    @Column(name="ERROR_GL_JOURNAL_ID")
-   private String errorGlJournalId;
+   protected String errorGlJournalId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="COSTING_METHOD_ID")
-   private String costingMethodId;
+   protected String costingMethodId;
    @Column(name="SALES_INVOICE_FOOTER_TEXT")
-   private String salesInvoiceFooterText;
+   protected String salesInvoiceFooterText;
    @Column(name="GROUP_SALES_TAX_ON_INVOICE_PDF")
-   private String groupSalesTaxOnInvoicePdf;
+   protected String groupSalesTaxOnInvoicePdf;
    @Column(name="ALLOC_PAYMENT_TAGS_TO_APPL")
-   private String allocPaymentTagsToAppl;
+   protected String allocPaymentTagsToAppl;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TAX_FORM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration taxFormEnumeration = null;
+   protected Enumeration taxFormEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COGS_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration cogsEnumeration = null;
+   protected Enumeration cogsEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BASE_CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom uom = null;
+   protected Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_SEQUENCE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration invoiceSequenceEnumeration = null;
+   protected Enumeration invoiceSequenceEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="QUOTE_SEQUENCE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration quoteSequenceEnumeration = null;
+   protected Enumeration quoteSequenceEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_SEQUENCE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration orderSequenceEnumeration = null;
+   protected Enumeration orderSequenceEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REFUND_PAYMENT_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentMethod paymentMethod = null;
+   protected PaymentMethod paymentMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ERROR_GL_JOURNAL_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GlJournal glJournal = null;
+   protected GlJournal glJournal = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COSTING_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration costingMethodEnumeration = null;
+   protected Enumeration costingMethodEnumeration = null;
 
   /**
    * Default constructor.

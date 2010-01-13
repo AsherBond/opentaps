@@ -74,7 +74,7 @@ fieldMapColumns.put("PaycheckItemTypeGlAccount", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -87,7 +87,7 @@ fieldMapColumns.put("PaycheckItemTypeGlAccount", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.PaycheckItemTypeGlAccountPkBridge.class)
-     private PaycheckItemTypeGlAccountPk id = new PaycheckItemTypeGlAccountPk();
+     protected PaycheckItemTypeGlAccountPk id = new PaycheckItemTypeGlAccountPk();
    
     /**
      * Auto generated Id accessor.
@@ -104,47 +104,47 @@ fieldMapColumns.put("PaycheckItemTypeGlAccount", fields);
          this.id = id;
       }
    @Column(name="DEBIT_GL_ACCOUNT_ID")
-   private String debitGlAccountId;
+   protected String debitGlAccountId;
    @Column(name="CREDIT_GL_ACCOUNT_ID")
-   private String creditGlAccountId;
+   protected String creditGlAccountId;
    @Column(name="DEFAULT_DUE_TO_PARTY_ID")
-   private String defaultDueToPartyId;
+   protected String defaultDueToPartyId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party organizationParty = null;
+   protected Party organizationParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEBIT_GL_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GlAccount debitGlAccount = null;
+   protected GlAccount debitGlAccount = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREDIT_GL_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GlAccount creditGlAccount = null;
+   protected GlAccount creditGlAccount = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_DUE_TO_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party defaultDueToParty = null;
+   protected Party defaultDueToParty = null;
 
   /**
    * Default constructor.

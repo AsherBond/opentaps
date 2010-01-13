@@ -79,7 +79,7 @@ fieldMapColumns.put("InvoiceItemAssoc", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -93,27 +93,27 @@ fieldMapColumns.put("InvoiceItemAssoc", fields);
    @GeneratedValue(generator="InvoiceItemAssoc_GEN")
    @Id
    @Column(name="INVOICE_ITEM_ASSOC_ID")
-   private String invoiceItemAssocId;
+   protected String invoiceItemAssocId;
    @Column(name="INVOICE_ID_FROM")
-   private String invoiceIdFrom;
+   protected String invoiceIdFrom;
    @Column(name="INVOICE_ITEM_SEQ_ID_FROM")
-   private String invoiceItemSeqIdFrom;
+   protected String invoiceItemSeqIdFrom;
    @Column(name="INVOICE_ID_TO")
-   private String invoiceIdTo;
+   protected String invoiceIdTo;
    @Column(name="INVOICE_ITEM_SEQ_ID_TO")
-   private String invoiceItemSeqIdTo;
+   protected String invoiceItemSeqIdTo;
    @Column(name="AGREEMENT_ID")
-   private String agreementId;
+   protected String agreementId;
    @Column(name="AMOUNT")
-   private BigDecimal amount;
+   protected BigDecimal amount;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    private transient InvoiceItem fromInvoiceItem = null;
    private transient InvoiceItem toInvoiceItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -122,7 +122,7 @@ fieldMapColumns.put("InvoiceItemAssoc", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Agreement agreement = null;
+   protected Agreement agreement = null;
 
   /**
    * Default constructor.

@@ -94,7 +94,7 @@ fieldMapColumns.put("ProductAssoc", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     specificRoutingWorkEffortId("specificRoutingWorkEffortId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -107,7 +107,7 @@ fieldMapColumns.put("ProductAssoc", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductAssocPkBridge.class)
-     private ProductAssocPk id = new ProductAssocPk();
+     protected ProductAssocPk id = new ProductAssocPk();
    
     /**
      * Auto generated Id accessor.
@@ -124,82 +124,82 @@ fieldMapColumns.put("ProductAssoc", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="SEQUENCE_NUM")
-   private Long sequenceNum;
+   protected Long sequenceNum;
    @Column(name="REASON")
-   private String reason;
+   protected String reason;
    @Column(name="QUANTITY")
-   private BigDecimal quantity;
+   protected BigDecimal quantity;
    @Column(name="SCRAP_FACTOR")
-   private BigDecimal scrapFactor;
+   protected BigDecimal scrapFactor;
    @Column(name="INSTRUCTION")
-   private String instruction;
+   protected String instruction;
    @Column(name="ROUTING_WORK_EFFORT_ID")
-   private String routingWorkEffortId;
+   protected String routingWorkEffortId;
    @Column(name="ESTIMATE_CALC_METHOD")
-   private String estimateCalcMethod;
+   protected String estimateCalcMethod;
    @Column(name="RECURRENCE_INFO_ID")
-   private String recurrenceInfoId;
+   protected String recurrenceInfoId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="SPEC_ROU_WEFF_ID")
-   private String specificRoutingWorkEffortId;
+   protected String specificRoutingWorkEffortId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ASSOC_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductAssocType productAssocType = null;
+   protected ProductAssocType productAssocType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product mainProduct = null;
+   protected Product mainProduct = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product assocProduct = null;
+   protected Product assocProduct = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROUTING_WORK_EFFORT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort routingWorkEffort = null;
+   protected WorkEffort routingWorkEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ESTIMATE_CALC_METHOD", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CustomMethod customMethod = null;
+   protected CustomMethod customMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RECURRENCE_INFO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RecurrenceInfo recurrenceInfo = null;
+   protected RecurrenceInfo recurrenceInfo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SPEC_ROU_WEFF_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort workEffort = null;
+   protected WorkEffort workEffort = null;
 
   /**
    * Default constructor.

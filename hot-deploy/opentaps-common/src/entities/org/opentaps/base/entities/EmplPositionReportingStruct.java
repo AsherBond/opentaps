@@ -76,7 +76,7 @@ fieldMapColumns.put("EmplPositionReportingStruct", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -89,7 +89,7 @@ fieldMapColumns.put("EmplPositionReportingStruct", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.EmplPositionReportingStructPkBridge.class)
-     private EmplPositionReportingStructPk id = new EmplPositionReportingStructPk();
+     protected EmplPositionReportingStructPk id = new EmplPositionReportingStructPk();
    
     /**
      * Auto generated Id accessor.
@@ -106,33 +106,33 @@ fieldMapColumns.put("EmplPositionReportingStruct", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="PRIMARY_FLAG")
-   private String primaryFlag;
+   protected String primaryFlag;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EMPL_POSITION_ID_REPORTING_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EmplPosition reportingToEmplPosition = null;
+   protected EmplPosition reportingToEmplPosition = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EMPL_POSITION_ID_MANAGED_BY", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EmplPosition managedByEmplPosition = null;
+   protected EmplPosition managedByEmplPosition = null;
 
   /**
    * Default constructor.

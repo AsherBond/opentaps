@@ -114,7 +114,7 @@ fieldMapColumns.put("MrpFacilityInventoryEventPlanned", fields);
     netQoh("netQoh"),
     eventName("eventName"),
     isLate("isLate");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -164,7 +164,7 @@ fieldMapColumns.put("MrpFacilityInventoryEventPlanned", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
    private transient MrpInventoryEvent mrpInventoryEvent = null;
    private transient List<MrpInventoryEventDetail> mrpInventoryEventDetails = null;
 

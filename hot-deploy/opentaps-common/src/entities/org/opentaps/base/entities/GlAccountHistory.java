@@ -77,7 +77,7 @@ fieldMapColumns.put("GlAccountHistory", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -90,7 +90,7 @@ fieldMapColumns.put("GlAccountHistory", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.GlAccountHistoryPkBridge.class)
-     private GlAccountHistoryPk id = new GlAccountHistoryPk();
+     protected GlAccountHistoryPk id = new GlAccountHistoryPk();
    
     /**
      * Auto generated Id accessor.
@@ -107,40 +107,40 @@ fieldMapColumns.put("GlAccountHistory", fields);
          this.id = id;
       }
    @Column(name="POSTED_DEBITS")
-   private BigDecimal postedDebits;
+   protected BigDecimal postedDebits;
    @Column(name="POSTED_CREDITS")
-   private BigDecimal postedCredits;
+   protected BigDecimal postedCredits;
    @Column(name="ENDING_BALANCE")
-   private BigDecimal endingBalance;
+   protected BigDecimal endingBalance;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GlAccount glAccount = null;
+   protected GlAccount glAccount = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CUSTOM_TIME_PERIOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CustomTimePeriod customTimePeriod = null;
+   protected CustomTimePeriod customTimePeriod = null;
 
   /**
    * Default constructor.

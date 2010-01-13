@@ -282,7 +282,7 @@ fieldMapColumns.put("ProductLookup", fields);
     defaultShipmentBoxTypeId("defaultShipmentBoxTypeId"),
     goodIdentificationTypeId("goodIdentificationTypeId"),
     idValue("idValue");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

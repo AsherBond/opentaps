@@ -84,7 +84,7 @@ fieldMapColumns.put("ProductMaint", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -97,7 +97,7 @@ fieldMapColumns.put("ProductMaint", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductMaintPkBridge.class)
-     private ProductMaintPk id = new ProductMaintPk();
+     protected ProductMaintPk id = new ProductMaintPk();
    
     /**
      * Auto generated Id accessor.
@@ -114,62 +114,62 @@ fieldMapColumns.put("ProductMaint", fields);
          this.id = id;
       }
    @Column(name="PRODUCT_MAINT_TYPE_ID")
-   private String productMaintTypeId;
+   protected String productMaintTypeId;
    @Column(name="MAINT_NAME")
-   private String maintName;
+   protected String maintName;
    @Column(name="MAINT_TEMPLATE_WORK_EFFORT_ID")
-   private String maintTemplateWorkEffortId;
+   protected String maintTemplateWorkEffortId;
    @Column(name="INTERVAL_QUANTITY")
-   private BigDecimal intervalQuantity;
+   protected BigDecimal intervalQuantity;
    @Column(name="INTERVAL_UOM_ID")
-   private String intervalUomId;
+   protected String intervalUomId;
    @Column(name="INTERVAL_METER_TYPE_ID")
-   private String intervalMeterTypeId;
+   protected String intervalMeterTypeId;
    @Column(name="REPEAT_COUNT")
-   private Long repeatCount;
+   protected Long repeatCount;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_MAINT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductMaintType productMaintType = null;
+   protected ProductMaintType productMaintType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MAINT_TEMPLATE_WORK_EFFORT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort maintTemplateWorkEffort = null;
+   protected WorkEffort maintTemplateWorkEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INTERVAL_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom intervalUom = null;
+   protected Uom intervalUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INTERVAL_METER_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductMeterType intervalProductMeterType = null;
+   protected ProductMeterType intervalProductMeterType = null;
    private transient ProductMeter intervalProductMeter = null;
 
   /**

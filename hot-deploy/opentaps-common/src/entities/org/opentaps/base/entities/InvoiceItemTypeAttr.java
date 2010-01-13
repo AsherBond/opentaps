@@ -68,7 +68,7 @@ fieldMapColumns.put("InvoiceItemTypeAttr", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -81,7 +81,7 @@ fieldMapColumns.put("InvoiceItemTypeAttr", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.InvoiceItemTypeAttrPkBridge.class)
-     private InvoiceItemTypeAttrPk id = new InvoiceItemTypeAttrPk();
+     protected InvoiceItemTypeAttrPk id = new InvoiceItemTypeAttrPk();
    
     /**
      * Auto generated Id accessor.
@@ -98,22 +98,22 @@ fieldMapColumns.put("InvoiceItemTypeAttr", fields);
          this.id = id;
       }
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ITEM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private InvoiceItemType invoiceItemType = null;
-   private transient List<InvoiceItemAttribute> invoiceItemAttributes = null;
-   private transient List<InvoiceItem> invoiceItems = null;
+   protected InvoiceItemType invoiceItemType = null;
+   protected transient List<InvoiceItemAttribute> invoiceItemAttributes = null;
+   protected transient List<InvoiceItem> invoiceItems = null;
 
   /**
    * Default constructor.

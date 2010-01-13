@@ -70,7 +70,7 @@ fieldMapColumns.put("PayGrade", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,27 +84,27 @@ fieldMapColumns.put("PayGrade", fields);
    @GeneratedValue(generator="PayGrade_GEN")
    @Id
    @Column(name="PAY_GRADE_ID")
-   private String payGradeId;
+   protected String payGradeId;
    @Column(name="PAY_GRADE_NAME")
-   private String payGradeName;
+   protected String payGradeName;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAY_GRADE_ID")
    
-   private List<PayHistory> payHistorys = null;
+   protected List<PayHistory> payHistorys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="payGrade", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PAY_GRADE_ID")
    
-   private List<SalaryStep> salarySteps = null;
+   protected List<SalaryStep> salarySteps = null;
 
   /**
    * Default constructor.

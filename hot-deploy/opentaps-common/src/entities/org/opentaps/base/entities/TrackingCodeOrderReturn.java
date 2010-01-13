@@ -82,7 +82,7 @@ fieldMapColumns.put("TrackingCodeOrderReturn", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -95,7 +95,7 @@ fieldMapColumns.put("TrackingCodeOrderReturn", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.TrackingCodeOrderReturnPkBridge.class)
-     private TrackingCodeOrderReturnPk id = new TrackingCodeOrderReturnPk();
+     protected TrackingCodeOrderReturnPk id = new TrackingCodeOrderReturnPk();
    
     /**
      * Auto generated Id accessor.
@@ -112,53 +112,53 @@ fieldMapColumns.put("TrackingCodeOrderReturn", fields);
          this.id = id;
       }
    @Column(name="ORDER_ITEM_SEQ_ID")
-   private String orderItemSeqId;
+   protected String orderItemSeqId;
    @Column(name="TRACKING_CODE_ID")
-   private String trackingCodeId;
+   protected String trackingCodeId;
    @Column(name="IS_BILLABLE")
-   private String isBillable;
+   protected String isBillable;
    @Column(name="SITE_ID")
-   private String siteId;
+   protected String siteId;
    @Column(name="HAS_EXPORTED")
-   private String hasExported;
+   protected String hasExported;
    @Column(name="AFFILIATE_REFERRED_TIME_STAMP")
-   private Timestamp affiliateReferredTimeStamp;
+   protected Timestamp affiliateReferredTimeStamp;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ReturnHeader returnHeader = null;
+   protected ReturnHeader returnHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TRACKING_CODE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TrackingCode trackingCode = null;
+   protected TrackingCode trackingCode = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TRACKING_CODE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TrackingCodeType trackingCodeType = null;
+   protected TrackingCodeType trackingCodeType = null;
 
   /**
    * Default constructor.

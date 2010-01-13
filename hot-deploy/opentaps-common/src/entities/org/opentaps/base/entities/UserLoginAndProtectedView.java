@@ -86,7 +86,7 @@ fieldMapColumns.put("UserLoginAndProtectedView", fields);
     maxHits("maxHits"),
     maxHitsDuration("maxHitsDuration"),
     tarpitDuration("tarpitDuration");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

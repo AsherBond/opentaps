@@ -72,7 +72,7 @@ fieldMapColumns.put("OrderItemGroup", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -85,7 +85,7 @@ fieldMapColumns.put("OrderItemGroup", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.OrderItemGroupPkBridge.class)
-     private OrderItemGroupPk id = new OrderItemGroupPk();
+     protected OrderItemGroupPk id = new OrderItemGroupPk();
    
     /**
      * Auto generated Id accessor.
@@ -102,24 +102,24 @@ fieldMapColumns.put("OrderItemGroup", fields);
          this.id = id;
       }
    @Column(name="PARENT_GROUP_SEQ_ID")
-   private String parentGroupSeqId;
+   protected String parentGroupSeqId;
    @Column(name="GROUP_NAME")
-   private String groupName;
+   protected String groupName;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
    private transient OrderItemGroup parentOrderItemGroup = null;
    private transient List<OrderItem> orderItems = null;
    private transient List<OrderItemGroup> childOrderItemGroups = null;

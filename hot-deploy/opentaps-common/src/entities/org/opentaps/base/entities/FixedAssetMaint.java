@@ -85,7 +85,7 @@ fieldMapColumns.put("FixedAssetMaint", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -98,7 +98,7 @@ fieldMapColumns.put("FixedAssetMaint", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.FixedAssetMaintPkBridge.class)
-     private FixedAssetMaintPk id = new FixedAssetMaintPk();
+     protected FixedAssetMaintPk id = new FixedAssetMaintPk();
    
     /**
      * Auto generated Id accessor.
@@ -115,78 +115,78 @@ fieldMapColumns.put("FixedAssetMaint", fields);
          this.id = id;
       }
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="PRODUCT_MAINT_TYPE_ID")
-   private String productMaintTypeId;
+   protected String productMaintTypeId;
    @Column(name="PRODUCT_MAINT_SEQ_ID")
-   private String productMaintSeqId;
+   protected String productMaintSeqId;
    @Column(name="SCHEDULE_WORK_EFFORT_ID")
-   private String scheduleWorkEffortId;
+   protected String scheduleWorkEffortId;
    @Column(name="INTERVAL_QUANTITY")
-   private BigDecimal intervalQuantity;
+   protected BigDecimal intervalQuantity;
    @Column(name="INTERVAL_UOM_ID")
-   private String intervalUomId;
+   protected String intervalUomId;
    @Column(name="INTERVAL_METER_TYPE_ID")
-   private String intervalMeterTypeId;
+   protected String intervalMeterTypeId;
    @Column(name="PURCHASE_ORDER_ID")
-   private String purchaseOrderId;
+   protected String purchaseOrderId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private FixedAsset fixedAsset = null;
+   protected FixedAsset fixedAsset = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_MAINT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductMaintType productMaintType = null;
+   protected ProductMaintType productMaintType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SCHEDULE_WORK_EFFORT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort scheduleWorkEffort = null;
+   protected WorkEffort scheduleWorkEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INTERVAL_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom intervalUom = null;
+   protected Uom intervalUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INTERVAL_METER_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductMeterType intervalProductMeterType = null;
+   protected ProductMeterType intervalProductMeterType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PURCHASE_ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader purchaseOrderHeader = null;
+   protected OrderHeader purchaseOrderHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    private transient List<FixedAssetMaintMeter> fixedAssetMaintMeters = null;
    private transient List<FixedAssetMeter> fixedAssetMeters = null;
    private transient List<InventoryItemDetail> inventoryItemDetails = null;

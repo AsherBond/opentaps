@@ -72,7 +72,7 @@ fieldMapColumns.put("SegmentGroup", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,47 +86,47 @@ fieldMapColumns.put("SegmentGroup", fields);
    @GeneratedValue(generator="SegmentGroup_GEN")
    @Id
    @Column(name="SEGMENT_GROUP_ID")
-   private String segmentGroupId;
+   protected String segmentGroupId;
    @Column(name="SEGMENT_GROUP_TYPE_ID")
-   private String segmentGroupTypeId;
+   protected String segmentGroupTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="PRODUCT_STORE_ID")
-   private String productStoreId;
+   protected String productStoreId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SEGMENT_GROUP_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private SegmentGroupType segmentGroupType = null;
+   protected SegmentGroupType segmentGroupType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductStore productStore = null;
+   protected ProductStore productStore = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="segmentGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SEGMENT_GROUP_ID")
    
-   private List<SegmentGroupClassification> segmentGroupClassifications = null;
+   protected List<SegmentGroupClassification> segmentGroupClassifications = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="segmentGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SEGMENT_GROUP_ID")
    
-   private List<SegmentGroupGeo> segmentGroupGeos = null;
+   protected List<SegmentGroupGeo> segmentGroupGeos = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="segmentGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SEGMENT_GROUP_ID")
    
-   private List<SegmentGroupRole> segmentGroupRoles = null;
+   protected List<SegmentGroupRole> segmentGroupRoles = null;
 
   /**
    * Default constructor.

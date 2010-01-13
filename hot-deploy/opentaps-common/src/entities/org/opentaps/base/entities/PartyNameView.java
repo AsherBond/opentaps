@@ -99,7 +99,7 @@ fieldMapColumns.put("PartyNameView", fields);
     suffix("suffix"),
     groupName("groupName"),
     groupNameLocal("groupNameLocal");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -141,11 +141,11 @@ fieldMapColumns.put("PartyNameView", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="partyNameView", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private transient List<PicklistRole> picklistRoles = null;
+   protected transient List<PicklistRole> picklistRoles = null;
 
   /**
    * Default constructor.

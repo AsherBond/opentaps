@@ -89,7 +89,7 @@ fieldMapColumns.put("WarehouseSummaryData", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -103,37 +103,37 @@ fieldMapColumns.put("WarehouseSummaryData", fields);
    @GeneratedValue(generator="WarehouseSummaryData_GEN")
    @Id
    @Column(name="FACILITY_ID")
-   private String facilityId;
+   protected String facilityId;
    @Column(name="REQUIRED_STOCK_MOVES")
-   private Long RequiredStockMoves;
+   protected Long RequiredStockMoves;
    @Column(name="REQUESTED_INVENTORY_TRANSFERS")
-   private Long RequestedInventoryTransfers;
+   protected Long RequestedInventoryTransfers;
    @Column(name="NUMBER_BACK_ORDERS")
-   private Long NumberBackOrders;
+   protected Long NumberBackOrders;
    @Column(name="NUMBER_PRODUCTS_BACK_ORDERED")
-   private Long NumberProductsBackOrdered;
+   protected Long NumberProductsBackOrdered;
    @Column(name="ORDERS_READY_SHIP")
-   private Long OrdersReadyShip;
+   protected Long OrdersReadyShip;
    @Column(name="OPEN_PICKLISTS")
-   private Long OpenPicklists;
+   protected Long OpenPicklists;
    @Column(name="PICKLISTS_SHIPPED")
-   private Long PicklistsShipped;
+   protected Long PicklistsShipped;
    @Column(name="NEW_PRODUCT_RUNS")
-   private Long NewProductRuns;
+   protected Long NewProductRuns;
    @Column(name="SCHEDULED_PRODUCTION_RUNS")
-   private Long ScheduledProductionRuns;
+   protected Long ScheduledProductionRuns;
    @Column(name="CONFIRMED_PRODUCTION_RUNS")
-   private Long ConfirmedProductionRuns;
+   protected Long ConfirmedProductionRuns;
    @Column(name="ACTIVE_PRODUCTION_RUNS")
-   private Long ActiveProductionRuns;
+   protected Long ActiveProductionRuns;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

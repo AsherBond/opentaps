@@ -87,7 +87,7 @@ fieldMapColumns.put("OldOrderItemInventoryRes", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -100,7 +100,7 @@ fieldMapColumns.put("OldOrderItemInventoryRes", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.OldOrderItemInventoryResPkBridge.class)
-     private OldOrderItemInventoryResPk id = new OldOrderItemInventoryResPk();
+     protected OldOrderItemInventoryResPk id = new OldOrderItemInventoryResPk();
    
     /**
      * Auto generated Id accessor.
@@ -117,36 +117,36 @@ fieldMapColumns.put("OldOrderItemInventoryRes", fields);
          this.id = id;
       }
    @Column(name="RESERVE_ORDER_ENUM_ID")
-   private String reserveOrderEnumId;
+   protected String reserveOrderEnumId;
    @Column(name="QUANTITY")
-   private BigDecimal quantity;
+   protected BigDecimal quantity;
    @Column(name="QUANTITY_NOT_AVAILABLE")
-   private BigDecimal quantityNotAvailable;
+   protected BigDecimal quantityNotAvailable;
    @Column(name="RESERVED_DATETIME")
-   private Timestamp reservedDatetime;
+   protected Timestamp reservedDatetime;
    @Column(name="CREATED_DATETIME")
-   private Timestamp createdDatetime;
+   protected Timestamp createdDatetime;
    @Column(name="PROMISED_DATETIME")
-   private Timestamp promisedDatetime;
+   protected Timestamp promisedDatetime;
    @Column(name="CURRENT_PROMISED_DATE")
-   private Timestamp currentPromisedDate;
+   protected Timestamp currentPromisedDate;
    @Column(name="PICK_START_DATE")
-   private Timestamp pickStartDate;
+   protected Timestamp pickStartDate;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
    private transient OrderItem orderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_ITEM_ID", insertable=false, updatable=false)
@@ -154,7 +154,7 @@ fieldMapColumns.put("OldOrderItemInventoryRes", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private InventoryItem inventoryItem = null;
+   protected InventoryItem inventoryItem = null;
 
   /**
    * Default constructor.

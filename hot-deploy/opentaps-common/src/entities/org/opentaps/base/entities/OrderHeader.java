@@ -122,7 +122,7 @@ fieldMapColumns.put("OrderHeader", fields);
     createdTxStamp("createdTxStamp"),
     billFromPartyId("billFromPartyId"),
     billToPartyId("billToPartyId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -142,162 +142,162 @@ fieldMapColumns.put("OrderHeader", fields);
    } )
    @Boost(10f)
    @Column(name="ORDER_ID")
-   private String orderId;
+   protected String orderId;
    @org.hibernate.search.annotations.Fields( {
        @Field(index=Index.TOKENIZED, store=Store.NO),
      @Field(index=Index.UN_TOKENIZED, store=Store.YES)
    } )
    @Boost(1f)
    @Column(name="ORDER_TYPE_ID")
-   private String orderTypeId;
+   protected String orderTypeId;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(5f)
    @Column(name="ORDER_NAME")
-   private String orderName;
+   protected String orderName;
    @Column(name="EXTERNAL_ID")
-   private String externalId;
+   protected String externalId;
    @org.hibernate.search.annotations.Fields( {
        @Field(index=Index.TOKENIZED, store=Store.NO),
      @Field(index=Index.UN_TOKENIZED, store=Store.YES)
    } )
    @Boost(1f)
    @Column(name="SALES_CHANNEL_ENUM_ID")
-   private String salesChannelEnumId;
+   protected String salesChannelEnumId;
    @Column(name="ORDER_DATE")
-   private Timestamp orderDate;
+   protected Timestamp orderDate;
    @Column(name="PRIORITY")
-   private String priority;
+   protected String priority;
    @Column(name="ENTRY_DATE")
-   private Timestamp entryDate;
+   protected Timestamp entryDate;
    @Column(name="VISIT_ID")
-   private String visitId;
+   protected String visitId;
    @org.hibernate.search.annotations.Fields( {
        @Field(index=Index.TOKENIZED, store=Store.NO),
      @Field(index=Index.UN_TOKENIZED, store=Store.YES)
    } )
    @Boost(1f)
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="CREATED_BY")
-   private String createdBy;
+   protected String createdBy;
    @Column(name="FIRST_ATTEMPT_ORDER_ID")
-   private String firstAttemptOrderId;
+   protected String firstAttemptOrderId;
    @Column(name="CURRENCY_UOM")
-   private String currencyUom;
+   protected String currencyUom;
    @Column(name="SYNC_STATUS_ID")
-   private String syncStatusId;
+   protected String syncStatusId;
    @Column(name="BILLING_ACCOUNT_ID")
-   private String billingAccountId;
+   protected String billingAccountId;
    @Column(name="ORIGIN_FACILITY_ID")
-   private String originFacilityId;
+   protected String originFacilityId;
    @Column(name="WEB_SITE_ID")
-   private String webSiteId;
+   protected String webSiteId;
    @Column(name="PRODUCT_STORE_ID")
-   private String productStoreId;
+   protected String productStoreId;
    @Column(name="TERMINAL_ID")
-   private String terminalId;
+   protected String terminalId;
    @Column(name="TRANSACTION_ID")
-   private String transactionId;
+   protected String transactionId;
    @Column(name="AUTO_ORDER_SHOPPING_LIST_ID")
-   private String autoOrderShoppingListId;
+   protected String autoOrderShoppingListId;
    @Column(name="NEEDS_INVENTORY_ISSUANCE")
-   private String needsInventoryIssuance;
+   protected String needsInventoryIssuance;
    @Column(name="IS_RUSH_ORDER")
-   private String isRushOrder;
+   protected String isRushOrder;
    @Column(name="INTERNAL_CODE")
-   private String internalCode;
+   protected String internalCode;
    @Column(name="REMAINING_SUB_TOTAL")
-   private BigDecimal remainingSubTotal;
+   protected BigDecimal remainingSubTotal;
    @Column(name="GRAND_TOTAL")
-   private BigDecimal grandTotal;
+   protected BigDecimal grandTotal;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="BILL_FROM_PARTY_ID")
-   private String billFromPartyId;
+   protected String billFromPartyId;
    @Column(name="BILL_TO_PARTY_ID")
-   private String billToPartyId;
+   protected String billToPartyId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderType orderType = null;
+   protected OrderType orderType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SALES_CHANNEL_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration salesChannelEnumeration = null;
+   protected Enumeration salesChannelEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Facility originFacility = null;
+   protected Facility originFacility = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_TYPE_ID")
    
-   private List<OrderTypeAttr> orderTypeAttrs = null;
+   protected List<OrderTypeAttr> orderTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BILLING_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private BillingAccount billingAccount = null;
+   protected BillingAccount billingAccount = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductStore productStore = null;
+   protected ProductStore productStore = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AUTO_ORDER_SHOPPING_LIST_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ShoppingList autoOrderShoppingList = null;
+   protected ShoppingList autoOrderShoppingList = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin createdByUserLogin = null;
+   protected UserLogin createdByUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SYNC_STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem syncStatusItem = null;
+   protected StatusItem syncStatusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom uom = null;
+   protected Uom uom = null;
    private transient List<OrderHeaderNoteView> orderHeaderNoteViews = null;
    private transient List<OrderItemAndShipGroupAssoc> orderItemAndShipGroupAssocs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -306,234 +306,238 @@ fieldMapColumns.put("OrderHeader", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    @IndexedEmbedded(depth = 2)
-   private Party billFromVendorParty = null;
+   protected Party billFromVendorParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BILL_TO_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    @IndexedEmbedded(depth = 2)
-   private Party billToCustomerParty = null;
+   protected Party billToCustomerParty = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ORDER_ID")
+   
+   protected List<AmazonOrderImport> amazonOrderImports = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<CommunicationEventOrder> communicationEventOrders = null;
+   protected List<CommunicationEventOrder> communicationEventOrders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACQUIRE_ORDER_ID")
    
-   private List<FixedAsset> acquireFixedAssets = null;
+   protected List<FixedAsset> acquireFixedAssets = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PURCHASE_ORDER_ID")
    
-   private List<FixedAssetMaint> purchaseFixedAssetMaints = null;
+   protected List<FixedAssetMaint> purchaseFixedAssetMaints = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<FixedAssetMaintOrder> fixedAssetMaintOrders = null;
+   protected List<FixedAssetMaintOrder> fixedAssetMaintOrders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private List<GiftCardFulfillment> giftCardFulfillments = null;
+   protected List<GiftCardFulfillment> giftCardFulfillments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private List<ItemIssuance> itemIssuances = null;
+   protected List<ItemIssuance> itemIssuances = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="salesOrderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SALES_ORDER_ID")
    
-   private List<OldOrderItemAssociation> salesOldOrderItemAssociations = null;
+   protected List<OldOrderItemAssociation> salesOldOrderItemAssociations = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="purchaseOrderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PURCHASE_ORDER_ID")
    
-   private List<OldOrderItemAssociation> purchaseOldOrderItemAssociations = null;
+   protected List<OldOrderItemAssociation> purchaseOldOrderItemAssociations = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OldOrderItemInventoryRes> oldOrderItemInventoryReses = null;
+   protected List<OldOrderItemInventoryRes> oldOrderItemInventoryReses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OldOrderShipmentPreference> oldOrderShipmentPreferences = null;
+   protected List<OldOrderShipmentPreference> oldOrderShipmentPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private List<OldValueLinkFulfillment> oldValueLinkFulfillments = null;
+   protected List<OldValueLinkFulfillment> oldValueLinkFulfillments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderAdjustment> orderAdjustments = null;
+   protected List<OrderAdjustment> orderAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderAttribute> orderAttributes = null;
+   protected List<OrderAttribute> orderAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderContactMech> orderContactMeches = null;
+   protected List<OrderContactMech> orderContactMeches = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderContent> orderContents = null;
+   protected List<OrderContent> orderContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderDeliverySchedule> orderDeliverySchedules = null;
+   protected List<OrderDeliverySchedule> orderDeliverySchedules = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderHeaderContent> orderHeaderContents = null;
+   protected List<OrderHeaderContent> orderHeaderContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderHeaderNote> orderHeaderNotes = null;
+   protected List<OrderHeaderNote> orderHeaderNotes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderHeaderWorkEffort> orderHeaderWorkEfforts = null;
+   protected List<OrderHeaderWorkEffort> orderHeaderWorkEfforts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderItem> orderItems = null;
+   protected List<OrderItem> orderItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fromOrderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderItemAssoc> fromOrderItemAssocs = null;
+   protected List<OrderItemAssoc> fromOrderItemAssocs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="toOrderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TO_ORDER_ID")
    
-   private List<OrderItemAssoc> toOrderItemAssocs = null;
+   protected List<OrderItemAssoc> toOrderItemAssocs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderItemBilling> orderItemBillings = null;
+   protected List<OrderItemBilling> orderItemBillings = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderItemChange> orderItemChanges = null;
+   protected List<OrderItemChange> orderItemChanges = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderItemContactMech> orderItemContactMeches = null;
+   protected List<OrderItemContactMech> orderItemContactMeches = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderItemGroup> orderItemGroups = null;
+   protected List<OrderItemGroup> orderItemGroups = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderItemPriceInfo> orderItemPriceInfoes = null;
+   protected List<OrderItemPriceInfo> orderItemPriceInfoes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderItemRole> orderItemRoles = null;
+   protected List<OrderItemRole> orderItemRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderItemShipGroup> orderItemShipGroups = null;
+   protected List<OrderItemShipGroup> orderItemShipGroups = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderItemShipGroupAssoc> orderItemShipGroupAssocs = null;
+   protected List<OrderItemShipGroupAssoc> orderItemShipGroupAssocs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderItemShipGrpInvRes> orderItemShipGrpInvReses = null;
+   protected List<OrderItemShipGrpInvRes> orderItemShipGrpInvReses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderNotification> orderNotifications = null;
+   protected List<OrderNotification> orderNotifications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderPaymentPreference> orderPaymentPreferences = null;
+   protected List<OrderPaymentPreference> orderPaymentPreferences = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderProductPromoCode> orderProductPromoCodes = null;
+   protected List<OrderProductPromoCode> orderProductPromoCodes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderRequirementCommitment> orderRequirementCommitments = null;
+   protected List<OrderRequirementCommitment> orderRequirementCommitments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    @ContainedIn
-   private List<OrderRole> orderRoles = null;
+   protected List<OrderRole> orderRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderShipGroupPriority> orderShipGroupPrioritys = null;
+   protected List<OrderShipGroupPriority> orderShipGroupPrioritys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderShipment> orderShipments = null;
+   protected List<OrderShipment> orderShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderStatus> orderStatuses = null;
+   protected List<OrderStatus> orderStatuses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderTerm> orderTerms = null;
+   protected List<OrderTerm> orderTerms = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_ORDER_ID")
    
-   private List<PicklistBin> primaryPicklistBins = null;
+   protected List<PicklistBin> primaryPicklistBins = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<PicklistItem> picklistItems = null;
+   protected List<PicklistItem> picklistItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private List<PosTerminalLog> posTerminalLogs = null;
+   protected List<PosTerminalLog> posTerminalLogs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<ProductOrderItem> productOrderItems = null;
+   protected List<ProductOrderItem> productOrderItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="engagementOrderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ENGAGEMENT_ID")
    
-   private List<ProductOrderItem> engagementProductOrderItems = null;
+   protected List<ProductOrderItem> engagementProductOrderItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<ProductPromoUse> productPromoUses = null;
+   protected List<ProductPromoUse> productPromoUses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private List<ReturnItem> returnItems = null;
+   protected List<ReturnItem> returnItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REPLACEMENT_ORDER_ID")
    
-   private List<ReturnItemResponse> replacementReturnItemResponses = null;
+   protected List<ReturnItemResponse> replacementReturnItemResponses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_ORDER_ID")
    
-   private List<Shipment> primaryShipments = null;
+   protected List<Shipment> primaryShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private List<ShipmentReceipt> shipmentReceipts = null;
+   protected List<ShipmentReceipt> shipmentReceipts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private List<Subscription> subscriptions = null;
+   protected List<Subscription> subscriptions = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private List<SurveyResponse> surveyResponses = null;
+   protected List<SurveyResponse> surveyResponses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<TrackingCodeOrder> trackingCodeOrders = null;
+   protected List<TrackingCodeOrder> trackingCodeOrders = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<TrackingCodeOrderReturn> trackingCodeOrderReturns = null;
+   protected List<TrackingCodeOrderReturn> trackingCodeOrderReturns = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
-   private List<WorkOrderItemFulfillment> workOrderItemFulfillments = null;
+   protected List<WorkOrderItemFulfillment> workOrderItemFulfillments = null;
 
   /**
    * Default constructor.
@@ -1175,6 +1179,17 @@ fieldMapColumns.put("OrderHeader", fields);
             this.billToCustomerParty = getRelatedOne(Party.class, "BillToCustomerParty");
         }
         return this.billToCustomerParty;
+    }
+    /**
+     * Auto generated method that gets the related <code>AmazonOrderImport</code> by the relation named <code>AmazonOrderImport</code>.
+     * @return the list of <code>AmazonOrderImport</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AmazonOrderImport> getAmazonOrderImports() throws RepositoryException {
+        if (this.amazonOrderImports == null) {
+            this.amazonOrderImports = getRelated(AmazonOrderImport.class, "AmazonOrderImport");
+        }
+        return this.amazonOrderImports;
     }
     /**
      * Auto generated method that gets the related <code>CommunicationEventOrder</code> by the relation named <code>CommunicationEventOrder</code>.
@@ -1886,6 +1901,13 @@ fieldMapColumns.put("OrderHeader", fields);
     */
     public void setBillToCustomerParty(Party billToCustomerParty) {
         this.billToCustomerParty = billToCustomerParty;
+    }
+    /**
+     * Auto generated value setter.
+     * @param amazonOrderImports the amazonOrderImports to set
+    */
+    public void setAmazonOrderImports(List<AmazonOrderImport> amazonOrderImports) {
+        this.amazonOrderImports = amazonOrderImports;
     }
     /**
      * Auto generated value setter.

@@ -72,7 +72,7 @@ fieldMapColumns.put("ContentType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,40 +86,40 @@ fieldMapColumns.put("ContentType", fields);
    @GeneratedValue(generator="ContentType_GEN")
    @Id
    @Column(name="CONTENT_TYPE_ID")
-   private String contentTypeId;
+   protected String contentTypeId;
    @Column(name="PARENT_TYPE_ID")
-   private String parentTypeId;
+   protected String parentTypeId;
    @Column(name="HAS_TABLE")
-   private String hasTable;
+   protected String hasTable;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContentType parentContentType = null;
+   protected ContentType parentContentType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_TYPE_ID")
    
-   private List<Content> contents = null;
+   protected List<Content> contents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   private List<ContentType> childContentTypes = null;
+   protected List<ContentType> childContentTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="contentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_TYPE_ID")
    
-   private List<ContentTypeAttr> contentTypeAttrs = null;
+   protected List<ContentTypeAttr> contentTypeAttrs = null;
 
   /**
    * Default constructor.

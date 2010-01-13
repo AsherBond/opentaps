@@ -72,7 +72,7 @@ fieldMapColumns.put("StatusValidChange", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -85,7 +85,7 @@ fieldMapColumns.put("StatusValidChange", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.StatusValidChangePkBridge.class)
-     private StatusValidChangePk id = new StatusValidChangePk();
+     protected StatusValidChangePk id = new StatusValidChangePk();
    
     /**
      * Auto generated Id accessor.
@@ -102,31 +102,31 @@ fieldMapColumns.put("StatusValidChange", fields);
          this.id = id;
       }
    @Column(name="CONDITION_EXPRESSION")
-   private String conditionExpression;
+   protected String conditionExpression;
    @Column(name="TRANSITION_NAME")
-   private String transitionName;
+   protected String transitionName;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem mainStatusItem = null;
+   protected StatusItem mainStatusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem toStatusItem = null;
+   protected StatusItem toStatusItem = null;
    private transient List<PicklistStatusHistory> picklistStatusHistorys = null;
 
   /**

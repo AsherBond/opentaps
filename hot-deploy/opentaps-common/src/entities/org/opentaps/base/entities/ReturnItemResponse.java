@@ -79,7 +79,7 @@ fieldMapColumns.put("ReturnItemResponse", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -93,59 +93,59 @@ fieldMapColumns.put("ReturnItemResponse", fields);
    @GeneratedValue(generator="ReturnItemResponse_GEN")
    @Id
    @Column(name="RETURN_ITEM_RESPONSE_ID")
-   private String returnItemResponseId;
+   protected String returnItemResponseId;
    @Column(name="ORDER_PAYMENT_PREFERENCE_ID")
-   private String orderPaymentPreferenceId;
+   protected String orderPaymentPreferenceId;
    @Column(name="REPLACEMENT_ORDER_ID")
-   private String replacementOrderId;
+   protected String replacementOrderId;
    @Column(name="PAYMENT_ID")
-   private String paymentId;
+   protected String paymentId;
    @Column(name="BILLING_ACCOUNT_ID")
-   private String billingAccountId;
+   protected String billingAccountId;
    @Column(name="RESPONSE_AMOUNT")
-   private BigDecimal responseAmount;
+   protected BigDecimal responseAmount;
    @Column(name="RESPONSE_DATE")
-   private Timestamp responseDate;
+   protected Timestamp responseDate;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_PAYMENT_PREFERENCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderPaymentPreference orderPaymentPreference = null;
+   protected OrderPaymentPreference orderPaymentPreference = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REPLACEMENT_ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader replacementOrderHeader = null;
+   protected OrderHeader replacementOrderHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Payment payment = null;
+   protected Payment payment = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BILLING_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private BillingAccount billingAccount = null;
+   protected BillingAccount billingAccount = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_ITEM_RESPONSE_ID")
    
-   private List<ReturnItem> returnItems = null;
+   protected List<ReturnItem> returnItems = null;
 
   /**
    * Default constructor.

@@ -68,7 +68,7 @@ fieldMapColumns.put("RoleTypeAttr", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -81,7 +81,7 @@ fieldMapColumns.put("RoleTypeAttr", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.RoleTypeAttrPkBridge.class)
-     private RoleTypeAttrPk id = new RoleTypeAttrPk();
+     protected RoleTypeAttrPk id = new RoleTypeAttrPk();
    
     /**
      * Auto generated Id accessor.
@@ -98,24 +98,24 @@ fieldMapColumns.put("RoleTypeAttr", fields);
          this.id = id;
       }
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RoleType roleType = null;
-   private transient List<PartyAttribute> partyAttributes = null;
-   private transient List<PartyRole> partyRoles = null;
-   private transient List<PartyRelationshipType> validFromPartyRelationshipTypes = null;
-   private transient List<PartyRelationshipType> validToPartyRelationshipTypes = null;
+   protected RoleType roleType = null;
+   protected transient List<PartyAttribute> partyAttributes = null;
+   protected transient List<PartyRole> partyRoles = null;
+   protected transient List<PartyRelationshipType> validFromPartyRelationshipTypes = null;
+   protected transient List<PartyRelationshipType> validToPartyRelationshipTypes = null;
 
   /**
    * Default constructor.

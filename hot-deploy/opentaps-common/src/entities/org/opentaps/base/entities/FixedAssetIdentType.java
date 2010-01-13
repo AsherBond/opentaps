@@ -68,7 +68,7 @@ fieldMapColumns.put("FixedAssetIdentType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,21 +82,21 @@ fieldMapColumns.put("FixedAssetIdentType", fields);
    @GeneratedValue(generator="FixedAssetIdentType_GEN")
    @Id
    @Column(name="FIXED_ASSET_IDENT_TYPE_ID")
-   private String fixedAssetIdentTypeId;
+   protected String fixedAssetIdentTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fixedAssetIdentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIXED_ASSET_IDENT_TYPE_ID")
    
-   private List<FixedAssetIdent> fixedAssetIdents = null;
+   protected List<FixedAssetIdent> fixedAssetIdents = null;
 
   /**
    * Default constructor.

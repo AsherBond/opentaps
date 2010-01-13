@@ -225,7 +225,7 @@ fieldMapColumns.put("ProductStore", fields);
     defaultShipmentMethodTypeId("defaultShipmentMethodTypeId"),
     defaultShippingCarrierPartyId("defaultShippingCarrierPartyId"),
     billToThirdPartyId("billToThirdPartyId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -239,271 +239,271 @@ fieldMapColumns.put("ProductStore", fields);
    @GeneratedValue(generator="ProductStore_GEN")
    @Id
    @Column(name="PRODUCT_STORE_ID")
-   private String productStoreId;
+   protected String productStoreId;
    @Column(name="PRIMARY_STORE_GROUP_ID")
-   private String primaryStoreGroupId;
+   protected String primaryStoreGroupId;
    @Column(name="STORE_NAME")
-   private String storeName;
+   protected String storeName;
    @Column(name="COMPANY_NAME")
-   private String companyName;
+   protected String companyName;
    @Column(name="TITLE")
-   private String title;
+   protected String title;
    @Column(name="SUBTITLE")
-   private String subtitle;
+   protected String subtitle;
    @Column(name="PAY_TO_PARTY_ID")
-   private String payToPartyId;
+   protected String payToPartyId;
    @Column(name="DAYS_TO_CANCEL_NON_PAY")
-   private Long daysToCancelNonPay;
+   protected Long daysToCancelNonPay;
    @Column(name="MANUAL_AUTH_IS_CAPTURE")
-   private String manualAuthIsCapture;
+   protected String manualAuthIsCapture;
    @Column(name="PRORATE_SHIPPING")
-   private String prorateShipping;
+   protected String prorateShipping;
    @Column(name="PRORATE_TAXES")
-   private String prorateTaxes;
+   protected String prorateTaxes;
    @Column(name="VIEW_CART_ON_ADD")
-   private String viewCartOnAdd;
+   protected String viewCartOnAdd;
    @Column(name="AUTO_SAVE_CART")
-   private String autoSaveCart;
+   protected String autoSaveCart;
    @Column(name="AUTO_APPROVE_REVIEWS")
-   private String autoApproveReviews;
+   protected String autoApproveReviews;
    @Column(name="IS_DEMO_STORE")
-   private String isDemoStore;
+   protected String isDemoStore;
    @Column(name="IS_IMMEDIATELY_FULFILLED")
-   private String isImmediatelyFulfilled;
+   protected String isImmediatelyFulfilled;
    @Column(name="INVENTORY_FACILITY_ID")
-   private String inventoryFacilityId;
+   protected String inventoryFacilityId;
    @Column(name="ONE_INVENTORY_FACILITY")
-   private String oneInventoryFacility;
+   protected String oneInventoryFacility;
    @Column(name="CHECK_INVENTORY")
-   private String checkInventory;
+   protected String checkInventory;
    @Column(name="RESERVE_INVENTORY")
-   private String reserveInventory;
+   protected String reserveInventory;
    @Column(name="RESERVE_ORDER_ENUM_ID")
-   private String reserveOrderEnumId;
+   protected String reserveOrderEnumId;
    @Column(name="REQUIRE_INVENTORY")
-   private String requireInventory;
+   protected String requireInventory;
    @Column(name="BALANCE_RES_ON_ORDER_CREATION")
-   private String balanceResOnOrderCreation;
+   protected String balanceResOnOrderCreation;
    @Column(name="REQUIREMENT_METHOD_ENUM_ID")
-   private String requirementMethodEnumId;
+   protected String requirementMethodEnumId;
    @Column(name="ORDER_NUMBER_PREFIX")
-   private String orderNumberPrefix;
+   protected String orderNumberPrefix;
    @Column(name="DEFAULT_LOCALE_STRING")
-   private String defaultLocaleString;
+   protected String defaultLocaleString;
    @Column(name="DEFAULT_CURRENCY_UOM_ID")
-   private String defaultCurrencyUomId;
+   protected String defaultCurrencyUomId;
    @Column(name="DEFAULT_SALES_CHANNEL_ENUM_ID")
-   private String defaultSalesChannelEnumId;
+   protected String defaultSalesChannelEnumId;
    @Column(name="ALLOW_PASSWORD")
-   private String allowPassword;
+   protected String allowPassword;
    @Column(name="DEFAULT_PASSWORD")
-   private String defaultPassword;
+   protected String defaultPassword;
    @Column(name="EXPLODE_ORDER_ITEMS")
-   private String explodeOrderItems;
+   protected String explodeOrderItems;
    @Column(name="CHECK_GC_BALANCE")
-   private String checkGcBalance;
+   protected String checkGcBalance;
    @Column(name="RETRY_FAILED_AUTHS")
-   private String retryFailedAuths;
+   protected String retryFailedAuths;
    @Column(name="HEADER_APPROVED_STATUS")
-   private String headerApprovedStatus;
+   protected String headerApprovedStatus;
    @Column(name="ITEM_APPROVED_STATUS")
-   private String itemApprovedStatus;
+   protected String itemApprovedStatus;
    @Column(name="DIGITAL_ITEM_APPROVED_STATUS")
-   private String digitalItemApprovedStatus;
+   protected String digitalItemApprovedStatus;
    @Column(name="HEADER_DECLINED_STATUS")
-   private String headerDeclinedStatus;
+   protected String headerDeclinedStatus;
    @Column(name="ITEM_DECLINED_STATUS")
-   private String itemDeclinedStatus;
+   protected String itemDeclinedStatus;
    @Column(name="HEADER_CANCEL_STATUS")
-   private String headerCancelStatus;
+   protected String headerCancelStatus;
    @Column(name="ITEM_CANCEL_STATUS")
-   private String itemCancelStatus;
+   protected String itemCancelStatus;
    @Column(name="AUTH_DECLINED_MESSAGE")
-   private String authDeclinedMessage;
+   protected String authDeclinedMessage;
    @Column(name="AUTH_FRAUD_MESSAGE")
-   private String authFraudMessage;
+   protected String authFraudMessage;
    @Column(name="AUTH_ERROR_MESSAGE")
-   private String authErrorMessage;
+   protected String authErrorMessage;
    @Column(name="VISUAL_THEME_ID")
-   private String visualThemeId;
+   protected String visualThemeId;
    @Column(name="STYLE_SHEET")
-   private String oldStyleSheet;
+   protected String oldStyleSheet;
    @Column(name="HEADER_LOGO")
-   private String oldHeaderLogo;
+   protected String oldHeaderLogo;
    @Column(name="HEADER_MIDDLE_BACKGROUND")
-   private String oldHeaderMiddleBackground;
+   protected String oldHeaderMiddleBackground;
    @Column(name="HEADER_RIGHT_BACKGROUND")
-   private String oldHeaderRightBackground;
+   protected String oldHeaderRightBackground;
    @Column(name="USE_PRIMARY_EMAIL_USERNAME")
-   private String usePrimaryEmailUsername;
+   protected String usePrimaryEmailUsername;
    @Column(name="REQUIRE_CUSTOMER_ROLE")
-   private String requireCustomerRole;
+   protected String requireCustomerRole;
    @Column(name="AUTO_INVOICE_DIGITAL_ITEMS")
-   private String autoInvoiceDigitalItems;
+   protected String autoInvoiceDigitalItems;
    @Column(name="REQ_SHIP_ADDR_FOR_DIG_ITEMS")
-   private String reqShipAddrForDigItems;
+   protected String reqShipAddrForDigItems;
    @Column(name="SHOW_CHECKOUT_GIFT_OPTIONS")
-   private String showCheckoutGiftOptions;
+   protected String showCheckoutGiftOptions;
    @Column(name="SELECT_PAYMENT_TYPE_PER_ITEM")
-   private String selectPaymentTypePerItem;
+   protected String selectPaymentTypePerItem;
    @Column(name="SHOW_PRICES_WITH_VAT_TAX")
-   private String showPricesWithVatTax;
+   protected String showPricesWithVatTax;
    @Column(name="SHOW_TAX_IS_EXEMPT")
-   private String showTaxIsExempt;
+   protected String showTaxIsExempt;
    @Column(name="VAT_TAX_AUTH_GEO_ID")
-   private String vatTaxAuthGeoId;
+   protected String vatTaxAuthGeoId;
    @Column(name="VAT_TAX_AUTH_PARTY_ID")
-   private String vatTaxAuthPartyId;
+   protected String vatTaxAuthPartyId;
    @Column(name="ENABLE_AUTO_SUGGESTION_LIST")
-   private String enableAutoSuggestionList;
+   protected String enableAutoSuggestionList;
    @Column(name="ENABLE_DIG_PROD_UPLOAD")
-   private String enableDigProdUpload;
+   protected String enableDigProdUpload;
    @Column(name="PROD_SEARCH_EXCLUDE_VARIANTS")
-   private String prodSearchExcludeVariants;
+   protected String prodSearchExcludeVariants;
    @Column(name="DIG_PROD_UPLOAD_CATEGORY_ID")
-   private String digProdUploadCategoryId;
+   protected String digProdUploadCategoryId;
    @Column(name="AUTO_ORDER_CC_TRY_EXP")
-   private String autoOrderCcTryExp;
+   protected String autoOrderCcTryExp;
    @Column(name="AUTO_ORDER_CC_TRY_OTHER_CARDS")
-   private String autoOrderCcTryOtherCards;
+   protected String autoOrderCcTryOtherCards;
    @Column(name="AUTO_ORDER_CC_TRY_LATER_NSF")
-   private String autoOrderCcTryLaterNsf;
+   protected String autoOrderCcTryLaterNsf;
    @Column(name="AUTO_ORDER_CC_TRY_LATER_MAX")
-   private Long autoOrderCcTryLaterMax;
+   protected Long autoOrderCcTryLaterMax;
    @Column(name="STORE_CREDIT_VALID_DAYS")
-   private Long storeCreditValidDays;
+   protected Long storeCreditValidDays;
    @Column(name="AUTO_APPROVE_INVOICE")
-   private String autoApproveInvoice;
+   protected String autoApproveInvoice;
    @Column(name="AUTO_APPROVE_ORDER")
-   private String autoApproveOrder;
+   protected String autoApproveOrder;
    @Column(name="SHIP_IF_CAPTURE_FAILS")
-   private String shipIfCaptureFails;
+   protected String shipIfCaptureFails;
    @Column(name="SET_OWNER_UPON_ISSUANCE")
-   private String setOwnerUponIssuance;
+   protected String setOwnerUponIssuance;
    @Column(name="REQ_RETURN_INVENTORY_RECEIVE")
-   private String reqReturnInventoryReceive;
+   protected String reqReturnInventoryReceive;
    @Column(name="ADD_TO_CART_REMOVE_INCOMPAT")
-   private String addToCartRemoveIncompat;
+   protected String addToCartRemoveIncompat;
    @Column(name="ADD_TO_CART_REPLACE_UPSELL")
-   private String addToCartReplaceUpsell;
+   protected String addToCartReplaceUpsell;
    @Column(name="SPLIT_PAY_PREF_PER_SHP_GRP")
-   private String splitPayPrefPerShpGrp;
+   protected String splitPayPrefPerShpGrp;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="NO_SHIP_ON_DROP_SHIP_GROUPS")
-   private String noShipOnDropShipGroups;
+   protected String noShipOnDropShipGroups;
    @Column(name="ALLOW_DO_NOT_SHIP_ORDERS")
-   private String allowDoNotShipOrders;
+   protected String allowDoNotShipOrders;
    @Column(name="DEFAULT_SHIP_METHOD_ID")
-   private String defaultShipmentMethodTypeId;
+   protected String defaultShipmentMethodTypeId;
    @Column(name="DEFAULT_SHIP_CARRIER_PARTY_ID")
-   private String defaultShippingCarrierPartyId;
+   protected String defaultShippingCarrierPartyId;
    @Column(name="BILL_TO_THIRD_PARTY_ID")
-   private String billToThirdPartyId;
+   protected String billToThirdPartyId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_STORE_GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductStoreGroup primaryProductStoreGroup = null;
+   protected ProductStoreGroup primaryProductStoreGroup = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Facility facility = null;
+   protected Facility facility = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RESERVE_ORDER_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration reserveOrderEnumeration = null;
+   protected Enumeration reserveOrderEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REQUIREMENT_METHOD_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration requirementMethodEnumeration = null;
+   protected Enumeration requirementMethodEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAY_TO_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom uom = null;
+   protected Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_SALES_CHANNEL_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration defaultSalesChannelEnumeration = null;
+   protected Enumeration defaultSalesChannelEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="HEADER_APPROVED_STATUS", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem headerApprovedStatusItem = null;
+   protected StatusItem headerApprovedStatusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ITEM_APPROVED_STATUS", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem itemApprovedStatusItem = null;
+   protected StatusItem itemApprovedStatusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DIGITAL_ITEM_APPROVED_STATUS", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem digitalItemApprovedStatusItem = null;
+   protected StatusItem digitalItemApprovedStatusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="HEADER_DECLINED_STATUS", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem headerDeclinedStatusItem = null;
+   protected StatusItem headerDeclinedStatusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ITEM_DECLINED_STATUS", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem itemDeclinedStatusItem = null;
+   protected StatusItem itemDeclinedStatusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="HEADER_CANCEL_STATUS", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem headerCancelStatusItem = null;
+   protected StatusItem headerCancelStatusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ITEM_CANCEL_STATUS", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem itemCancelStatusItem = null;
+   protected StatusItem itemCancelStatusItem = null;
    private transient TaxAuthority vatTaxAuthority = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_SHIP_METHOD_ID", insertable=false, updatable=false)
@@ -511,121 +511,121 @@ fieldMapColumns.put("ProductStore", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ShipmentMethodType shipmentMethodType = null;
+   protected ShipmentMethodType shipmentMethodType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_SHIP_CARRIER_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party defaultCarrierParty = null;
+   protected Party defaultCarrierParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BILL_TO_THIRD_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party billToThirdPartyParty = null;
+   protected Party billToThirdPartyParty = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<CustRequest> custRequests = null;
+   protected List<CustRequest> custRequests = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStore", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<InventoryItemTempRes> inventoryItemTempReses = null;
+   protected List<InventoryItemTempRes> inventoryItemTempReses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStore", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<MrpProductStoreGroupMember> mrpProductStoreGroupMembers = null;
+   protected List<MrpProductStoreGroupMember> mrpProductStoreGroupMembers = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<OrderHeader> orderHeaders = null;
+   protected List<OrderHeader> orderHeaders = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStore", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<PartyProfileDefault> partyProfileDefaults = null;
+   protected List<PartyProfileDefault> partyProfileDefaults = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<ProductReview> productReviews = null;
+   protected List<ProductReview> productReviews = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStore", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<ProductStoreCatalog> productStoreCatalogs = null;
+   protected List<ProductStoreCatalog> productStoreCatalogs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStore", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<ProductStoreEmailSetting> productStoreEmailSettings = null;
+   protected List<ProductStoreEmailSetting> productStoreEmailSettings = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStore", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<ProductStoreFacility> productStoreFacilitys = null;
+   protected List<ProductStoreFacility> productStoreFacilitys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStore", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<ProductStoreFacilityByAddress> productStoreFacilityByAddresses = null;
+   protected List<ProductStoreFacilityByAddress> productStoreFacilityByAddresses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStore", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<ProductStoreFinActSetting> productStoreFinActSettings = null;
+   protected List<ProductStoreFinActSetting> productStoreFinActSettings = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStore", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<ProductStoreGroupMember> productStoreGroupMembers = null;
+   protected List<ProductStoreGroupMember> productStoreGroupMembers = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStore", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<ProductStoreKeywordOvrd> productStoreKeywordOvrds = null;
+   protected List<ProductStoreKeywordOvrd> productStoreKeywordOvrds = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStore", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<ProductStorePaymentSetting> productStorePaymentSettings = null;
+   protected List<ProductStorePaymentSetting> productStorePaymentSettings = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStore", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<ProductStorePromoAppl> productStorePromoAppls = null;
+   protected List<ProductStorePromoAppl> productStorePromoAppls = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStore", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<ProductStoreRole> productStoreRoles = null;
+   protected List<ProductStoreRole> productStoreRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<ProductStoreSurveyAppl> productStoreSurveyAppls = null;
+   protected List<ProductStoreSurveyAppl> productStoreSurveyAppls = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStore", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<ProductStoreVendorPayment> productStoreVendorPayments = null;
+   protected List<ProductStoreVendorPayment> productStoreVendorPayments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStore", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<ProductStoreVendorShipment> productStoreVendorShipments = null;
+   protected List<ProductStoreVendorShipment> productStoreVendorShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<Quote> quotes = null;
+   protected List<Quote> quotes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<SalesForecastItem> salesForecastItems = null;
+   protected List<SalesForecastItem> salesForecastItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<SegmentGroup> segmentGroups = null;
+   protected List<SegmentGroup> segmentGroups = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<ShoppingList> shoppingLists = null;
+   protected List<ShoppingList> shoppingLists = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<TaxAuthorityRateProduct> taxAuthorityRateProducts = null;
+   protected List<TaxAuthorityRateProduct> taxAuthorityRateProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID")
    
-   private List<WebSite> webSites = null;
+   protected List<WebSite> webSites = null;
 
   /**
    * Default constructor.

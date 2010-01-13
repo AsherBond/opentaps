@@ -79,7 +79,7 @@ fieldMapColumns.put("ServiceTestRecord", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,7 +92,7 @@ fieldMapColumns.put("ServiceTestRecord", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ServiceTestRecordPkBridge.class)
-     private ServiceTestRecordPk id = new ServiceTestRecordPk();
+     protected ServiceTestRecordPk id = new ServiceTestRecordPk();
    
     /**
      * Auto generated Id accessor.
@@ -109,37 +109,37 @@ fieldMapColumns.put("ServiceTestRecord", fields);
          this.id = id;
       }
    @Column(name="VALUE1")
-   private BigDecimal value1;
+   protected BigDecimal value1;
    @Column(name="VALUE2")
-   private BigDecimal value2;
+   protected BigDecimal value2;
    @Column(name="TEST_TIMESTAMP")
-   private Timestamp testTimestamp;
+   protected Timestamp testTimestamp;
    @Column(name="CREATED_BY_USER_LOGIN")
-   private String createdByUserLogin;
+   protected String createdByUserLogin;
    @Column(name="MODIFIED_BY_USER_LOGIN")
-   private String modifiedByUserLogin;
+   protected String modifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin relatedCreatedByUserLogin = null;
+   protected UserLogin relatedCreatedByUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MODIFIED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin relatedModifiedByUserLogin = null;
+   protected UserLogin relatedModifiedByUserLogin = null;
 
   /**
    * Default constructor.

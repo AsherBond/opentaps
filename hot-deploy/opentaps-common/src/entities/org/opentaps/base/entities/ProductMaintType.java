@@ -70,7 +70,7 @@ fieldMapColumns.put("ProductMaintType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,38 +84,38 @@ fieldMapColumns.put("ProductMaintType", fields);
    @GeneratedValue(generator="ProductMaintType_GEN")
    @Id
    @Column(name="PRODUCT_MAINT_TYPE_ID")
-   private String productMaintTypeId;
+   protected String productMaintTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="PARENT_TYPE_ID")
-   private String parentTypeId;
+   protected String parentTypeId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductMaintType parentProductMaintType = null;
+   protected ProductMaintType parentProductMaintType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_MAINT_TYPE_ID")
    
-   private List<FixedAssetMaint> fixedAssetMaints = null;
+   protected List<FixedAssetMaint> fixedAssetMaints = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_MAINT_TYPE_ID")
    
-   private List<ProductMaint> productMaints = null;
+   protected List<ProductMaint> productMaints = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   private List<ProductMaintType> childProductMaintTypes = null;
+   protected List<ProductMaintType> childProductMaintTypes = null;
 
   /**
    * Default constructor.

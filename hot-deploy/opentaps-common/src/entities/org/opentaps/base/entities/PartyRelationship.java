@@ -92,7 +92,7 @@ fieldMapColumns.put("PartyRelationship", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -105,7 +105,7 @@ fieldMapColumns.put("PartyRelationship", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.PartyRelationshipPkBridge.class)
-     private PartyRelationshipPk id = new PartyRelationshipPk();
+     protected PartyRelationshipPk id = new PartyRelationshipPk();
    
     /**
      * Auto generated Id accessor.
@@ -122,59 +122,59 @@ fieldMapColumns.put("PartyRelationship", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="RELATIONSHIP_NAME")
-   private String relationshipName;
+   protected String relationshipName;
    @Column(name="SECURITY_GROUP_ID")
-   private String securityGroupId;
+   protected String securityGroupId;
    @Column(name="PRIORITY_TYPE_ID")
-   private String priorityTypeId;
+   protected String priorityTypeId;
    @Column(name="PARTY_RELATIONSHIP_TYPE_ID")
-   private String partyRelationshipTypeId;
+   protected String partyRelationshipTypeId;
    @Column(name="PERMISSIONS_ENUM_ID")
-   private String permissionsEnumId;
+   protected String permissionsEnumId;
    @Column(name="POSITION_TITLE")
-   private String positionTitle;
+   protected String positionTitle;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_FROM", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party fromParty = null;
+   protected Party fromParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party toParty = null;
+   protected Party toParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID_FROM", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RoleType fromRoleType = null;
+   protected RoleType fromRoleType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RoleType toRoleType = null;
+   protected RoleType toRoleType = null;
    private transient PartyRole fromPartyRole = null;
    private transient PartyRole toPartyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -183,28 +183,28 @@ fieldMapColumns.put("PartyRelationship", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRIORITY_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PriorityType priorityType = null;
+   protected PriorityType priorityType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_RELATIONSHIP_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PartyRelationshipType partyRelationshipType = null;
+   protected PartyRelationshipType partyRelationshipType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SECURITY_GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private SecurityGroup securityGroup = null;
+   protected SecurityGroup securityGroup = null;
 
   /**
    * Default constructor.

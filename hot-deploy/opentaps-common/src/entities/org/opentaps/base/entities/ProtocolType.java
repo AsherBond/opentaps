@@ -68,7 +68,7 @@ fieldMapColumns.put("ProtocolType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,21 +82,21 @@ fieldMapColumns.put("ProtocolType", fields);
    @GeneratedValue(generator="ProtocolType_GEN")
    @Id
    @Column(name="PROTOCOL_TYPE_ID")
-   private String protocolTypeId;
+   protected String protocolTypeId;
    @Column(name="PROTOCOL_NAME")
-   private String protocolName;
+   protected String protocolName;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PROTOCOL_TYPE_ID")
    
-   private List<UserAgent> userAgents = null;
+   protected List<UserAgent> userAgents = null;
 
   /**
    * Default constructor.

@@ -68,7 +68,7 @@ fieldMapColumns.put("AudioDataResource", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,24 +82,24 @@ fieldMapColumns.put("AudioDataResource", fields);
    @GeneratedValue(generator="AudioDataResource_GEN")
    @Id
    @Column(name="DATA_RESOURCE_ID")
-   private String dataResourceId;
+   protected String dataResourceId;
    @Column(name="AUDIO_DATA")
-   private byte[] audioData;
+   protected byte[] audioData;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private DataResource dataResource = null;
+   protected DataResource dataResource = null;
 
   /**
    * Default constructor.

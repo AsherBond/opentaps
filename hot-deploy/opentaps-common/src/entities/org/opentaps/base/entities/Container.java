@@ -72,7 +72,7 @@ fieldMapColumns.put("Container", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,51 +86,51 @@ fieldMapColumns.put("Container", fields);
    @GeneratedValue(generator="Container_GEN")
    @Id
    @Column(name="CONTAINER_ID")
-   private String containerId;
+   protected String containerId;
    @Column(name="CONTAINER_TYPE_ID")
-   private String containerTypeId;
+   protected String containerTypeId;
    @Column(name="FACILITY_ID")
-   private String facilityId;
+   protected String facilityId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTAINER_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContainerType containerType = null;
+   protected ContainerType containerType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Facility facility = null;
+   protected Facility facility = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="container", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTAINER_ID")
    
-   private List<ContainerGeoPoint> containerGeoPoints = null;
+   protected List<ContainerGeoPoint> containerGeoPoints = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTAINER_ID")
    
-   private List<InventoryItem> inventoryItems = null;
+   protected List<InventoryItem> inventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTAINER_ID")
    
-   private List<InventoryTransfer> inventoryTransfers = null;
+   protected List<InventoryTransfer> inventoryTransfers = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTAINER_ID_TO")
    
-   private List<InventoryTransfer> toInventoryTransfers = null;
+   protected List<InventoryTransfer> toInventoryTransfers = null;
 
   /**
    * Default constructor.

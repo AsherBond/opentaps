@@ -68,7 +68,7 @@ fieldMapColumns.put("NeedType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,25 +82,25 @@ fieldMapColumns.put("NeedType", fields);
    @GeneratedValue(generator="NeedType_GEN")
    @Id
    @Column(name="NEED_TYPE_ID")
-   private String needTypeId;
+   protected String needTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="NEED_TYPE_ID")
    
-   private List<PartyNeed> partyNeeds = null;
+   protected List<PartyNeed> partyNeeds = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="NEED_TYPE_ID")
    
-   private List<Subscription> subscriptions = null;
+   protected List<Subscription> subscriptions = null;
 
   /**
    * Default constructor.

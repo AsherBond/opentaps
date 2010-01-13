@@ -70,7 +70,7 @@ fieldMapColumns.put("CommunicationEventSum", fields);
     communicationEventId("communicationEventId"),
     statusId("statusId"),
     partyIdTo("partyIdTo");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

@@ -70,7 +70,7 @@ fieldMapColumns.put("ProductOrderItemType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -83,7 +83,7 @@ fieldMapColumns.put("ProductOrderItemType", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductOrderItemTypePkBridge.class)
-     private ProductOrderItemTypePk id = new ProductOrderItemTypePk();
+     protected ProductOrderItemTypePk id = new ProductOrderItemTypePk();
    
     /**
      * Auto generated Id accessor.
@@ -100,15 +100,15 @@ fieldMapColumns.put("ProductOrderItemType", fields);
          this.id = id;
       }
    @Column(name="ORDER_ITEM_TYPE_ID")
-   private String orderItemTypeId;
+   protected String orderItemTypeId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

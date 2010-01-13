@@ -70,7 +70,7 @@ fieldMapColumns.put("SubscriptionAttribute", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -83,7 +83,7 @@ fieldMapColumns.put("SubscriptionAttribute", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.SubscriptionAttributePkBridge.class)
-     private SubscriptionAttributePk id = new SubscriptionAttributePk();
+     protected SubscriptionAttributePk id = new SubscriptionAttributePk();
    
     /**
      * Auto generated Id accessor.
@@ -100,23 +100,23 @@ fieldMapColumns.put("SubscriptionAttribute", fields);
          this.id = id;
       }
    @Column(name="ATTR_VALUE")
-   private String attrValue;
+   protected String attrValue;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SUBSCRIPTION_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Subscription subscription = null;
-   private transient List<SubscriptionTypeAttr> subscriptionTypeAttrs = null;
+   protected Subscription subscription = null;
+   protected transient List<SubscriptionTypeAttr> subscriptionTypeAttrs = null;
 
   /**
    * Default constructor.

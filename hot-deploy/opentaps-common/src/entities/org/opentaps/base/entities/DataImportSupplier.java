@@ -139,7 +139,7 @@ fieldMapColumns.put("DataImportSupplier", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -153,87 +153,87 @@ fieldMapColumns.put("DataImportSupplier", fields);
    @GeneratedValue(generator="DataImportSupplier_GEN")
    @Id
    @Column(name="SUPPLIER_ID")
-   private String supplierId;
+   protected String supplierId;
    @Column(name="SUPPLIER_NAME")
-   private String supplierName;
+   protected String supplierName;
    @Column(name="ATTN_NAME")
-   private String attnName;
+   protected String attnName;
    @Column(name="ADDRESS1")
-   private String address1;
+   protected String address1;
    @Column(name="ADDRESS2")
-   private String address2;
+   protected String address2;
    @Column(name="CITY")
-   private String city;
+   protected String city;
    @Column(name="STATE_PROVINCE_GEO_ID")
-   private String stateProvinceGeoId;
+   protected String stateProvinceGeoId;
    @Column(name="POSTAL_CODE")
-   private String postalCode;
+   protected String postalCode;
    @Column(name="POSTAL_CODE_EXT")
-   private String postalCodeExt;
+   protected String postalCodeExt;
    @Column(name="STATE_PROVINCE_GEO_NAME")
-   private String stateProvinceGeoName;
+   protected String stateProvinceGeoName;
    @Column(name="COUNTRY_GEO_ID")
-   private String countryGeoId;
+   protected String countryGeoId;
    @Column(name="PRIMARY_PHONE_COUNTRY_CODE")
-   private String primaryPhoneCountryCode;
+   protected String primaryPhoneCountryCode;
    @Column(name="PRIMARY_PHONE_AREA_CODE")
-   private String primaryPhoneAreaCode;
+   protected String primaryPhoneAreaCode;
    @Column(name="PRIMARY_PHONE_NUMBER")
-   private String primaryPhoneNumber;
+   protected String primaryPhoneNumber;
    @Column(name="PRIMARY_PHONE_EXTENSION")
-   private String primaryPhoneExtension;
+   protected String primaryPhoneExtension;
    @Column(name="SECONDARY_PHONE_COUNTRY_CODE")
-   private String secondaryPhoneCountryCode;
+   protected String secondaryPhoneCountryCode;
    @Column(name="SECONDARY_PHONE_AREA_CODE")
-   private String secondaryPhoneAreaCode;
+   protected String secondaryPhoneAreaCode;
    @Column(name="SECONDARY_PHONE_NUMBER")
-   private String secondaryPhoneNumber;
+   protected String secondaryPhoneNumber;
    @Column(name="SECONDARY_PHONE_EXTENSION")
-   private String secondaryPhoneExtension;
+   protected String secondaryPhoneExtension;
    @Column(name="FAX_COUNTRY_CODE")
-   private String faxCountryCode;
+   protected String faxCountryCode;
    @Column(name="FAX_AREA_CODE")
-   private String faxAreaCode;
+   protected String faxAreaCode;
    @Column(name="FAX_NUMBER")
-   private String faxNumber;
+   protected String faxNumber;
    @Column(name="DID_COUNTRY_CODE")
-   private String didCountryCode;
+   protected String didCountryCode;
    @Column(name="DID_AREA_CODE")
-   private String didAreaCode;
+   protected String didAreaCode;
    @Column(name="DID_NUMBER")
-   private String didNumber;
+   protected String didNumber;
    @Column(name="DID_EXTENSION")
-   private String didExtension;
+   protected String didExtension;
    @Column(name="EMAIL_ADDRESS")
-   private String emailAddress;
+   protected String emailAddress;
    @Column(name="WEB_ADDRESS")
-   private String webAddress;
+   protected String webAddress;
    @Column(name="NOTE")
-   private String note;
+   protected String note;
    @Column(name="NET_PAYMENT_DAYS")
-   private Long netPaymentDays;
+   protected Long netPaymentDays;
    @Column(name="IS_INCORPORATED")
-   private String isIncorporated;
+   protected String isIncorporated;
    @Column(name="FEDERAL_TAX_ID")
-   private String federalTaxId;
+   protected String federalTaxId;
    @Column(name="REQUIRES1099")
-   private String requires1099;
+   protected String requires1099;
    @Column(name="IMPORT_STATUS_ID")
-   private String importStatusId;
+   protected String importStatusId;
    @Column(name="IMPORT_ERROR")
-   private String importError;
+   protected String importError;
    @Column(name="PROCESSED_TIMESTAMP")
-   private Timestamp processedTimestamp;
+   protected Timestamp processedTimestamp;
    @Column(name="PRIMARY_PARTY_ID")
-   private String primaryPartyId;
+   protected String primaryPartyId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

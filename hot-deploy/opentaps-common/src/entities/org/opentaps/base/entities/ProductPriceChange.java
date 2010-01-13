@@ -89,7 +89,7 @@ fieldMapColumns.put("ProductPriceChange", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -103,37 +103,37 @@ fieldMapColumns.put("ProductPriceChange", fields);
    @GeneratedValue(generator="ProductPriceChange_GEN")
    @Id
    @Column(name="PRODUCT_PRICE_CHANGE_ID")
-   private String productPriceChangeId;
+   protected String productPriceChangeId;
    @Column(name="PRODUCT_ID")
-   private String productId;
+   protected String productId;
    @Column(name="PRODUCT_PRICE_TYPE_ID")
-   private String productPriceTypeId;
+   protected String productPriceTypeId;
    @Column(name="PRODUCT_PRICE_PURPOSE_ID")
-   private String productPricePurposeId;
+   protected String productPricePurposeId;
    @Column(name="CURRENCY_UOM_ID")
-   private String currencyUomId;
+   protected String currencyUomId;
    @Column(name="PRODUCT_STORE_GROUP_ID")
-   private String productStoreGroupId;
+   protected String productStoreGroupId;
    @Column(name="FROM_DATE")
-   private Timestamp fromDate;
+   protected Timestamp fromDate;
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="PRICE")
-   private BigDecimal price;
+   protected BigDecimal price;
    @Column(name="OLD_PRICE")
-   private BigDecimal oldPrice;
+   protected BigDecimal oldPrice;
    @Column(name="CHANGED_DATE")
-   private Timestamp changedDate;
+   protected Timestamp changedDate;
    @Column(name="CHANGED_BY_USER_LOGIN")
-   private String changedByUserLogin;
+   protected String changedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    private transient ProductPrice productPrice = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CHANGED_BY_USER_LOGIN", insertable=false, updatable=false)
@@ -141,7 +141,7 @@ fieldMapColumns.put("ProductPriceChange", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin relatedChangedByUserLogin = null;
+   protected UserLogin relatedChangedByUserLogin = null;
 
   /**
    * Default constructor.

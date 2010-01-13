@@ -90,7 +90,7 @@ fieldMapColumns.put("InventoryTransfer", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -104,60 +104,60 @@ fieldMapColumns.put("InventoryTransfer", fields);
    @GeneratedValue(generator="InventoryTransfer_GEN")
    @Id
    @Column(name="INVENTORY_TRANSFER_ID")
-   private String inventoryTransferId;
+   protected String inventoryTransferId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="INVENTORY_ITEM_ID")
-   private String inventoryItemId;
+   protected String inventoryItemId;
    @Column(name="FACILITY_ID")
-   private String facilityId;
+   protected String facilityId;
    @Column(name="LOCATION_SEQ_ID")
-   private String locationSeqId;
+   protected String locationSeqId;
    @Column(name="CONTAINER_ID")
-   private String containerId;
+   protected String containerId;
    @Column(name="FACILITY_ID_TO")
-   private String facilityIdTo;
+   protected String facilityIdTo;
    @Column(name="LOCATION_SEQ_ID_TO")
-   private String locationSeqIdTo;
+   protected String locationSeqIdTo;
    @Column(name="CONTAINER_ID_TO")
-   private String containerIdTo;
+   protected String containerIdTo;
    @Column(name="ITEM_ISSUANCE_ID")
-   private String itemIssuanceId;
+   protected String itemIssuanceId;
    @Column(name="SEND_DATE")
-   private Timestamp sendDate;
+   protected Timestamp sendDate;
    @Column(name="RECEIVE_DATE")
-   private Timestamp receiveDate;
+   protected Timestamp receiveDate;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_ITEM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private InventoryItem inventoryItem = null;
+   protected InventoryItem inventoryItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Facility facility = null;
+   protected Facility facility = null;
    private transient FacilityLocation facilityLocation = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTAINER_ID", insertable=false, updatable=false)
@@ -165,14 +165,14 @@ fieldMapColumns.put("InventoryTransfer", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Container container = null;
+   protected Container container = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Facility toFacility = null;
+   protected Facility toFacility = null;
    private transient FacilityLocation toFacilityLocation = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTAINER_ID_TO", insertable=false, updatable=false)
@@ -180,14 +180,14 @@ fieldMapColumns.put("InventoryTransfer", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Container toContainer = null;
+   protected Container toContainer = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ITEM_ISSUANCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ItemIssuance itemIssuance = null;
+   protected ItemIssuance itemIssuance = null;
 
   /**
    * Default constructor.

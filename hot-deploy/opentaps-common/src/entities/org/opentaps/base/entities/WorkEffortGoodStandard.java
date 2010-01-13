@@ -85,7 +85,7 @@ fieldMapColumns.put("WorkEffortGoodStandard", fields);
     createdTxStamp("createdTxStamp"),
     minQuantity("minQuantity"),
     maxQuantity("maxQuantity");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -98,7 +98,7 @@ fieldMapColumns.put("WorkEffortGoodStandard", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.WorkEffortGoodStandardPkBridge.class)
-     private WorkEffortGoodStandardPk id = new WorkEffortGoodStandardPk();
+     protected WorkEffortGoodStandardPk id = new WorkEffortGoodStandardPk();
    
     /**
      * Auto generated Id accessor.
@@ -115,53 +115,53 @@ fieldMapColumns.put("WorkEffortGoodStandard", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="ESTIMATED_QUANTITY")
-   private BigDecimal estimatedQuantity;
+   protected BigDecimal estimatedQuantity;
    @Column(name="ESTIMATED_COST")
-   private BigDecimal estimatedCost;
+   protected BigDecimal estimatedCost;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="MIN_QUANTITY")
-   private BigDecimal minQuantity;
+   protected BigDecimal minQuantity;
    @Column(name="MAX_QUANTITY")
-   private BigDecimal maxQuantity;
+   protected BigDecimal maxQuantity;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort workEffort = null;
+   protected WorkEffort workEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_GOOD_STD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffortGoodStandardType workEffortGoodStandardType = null;
+   protected WorkEffortGoodStandardType workEffortGoodStandardType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
 
   /**
    * Default constructor.

@@ -113,7 +113,7 @@ fieldMapColumns.put("UserLoginAndSecurityGroup", fields);
     successiveFailedLogins("successiveFailedLogins"),
     userLdapDn("userLdapDn"),
     partyId("partyId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

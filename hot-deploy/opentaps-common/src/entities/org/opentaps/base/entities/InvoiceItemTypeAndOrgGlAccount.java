@@ -85,7 +85,7 @@ fieldMapColumns.put("InvoiceItemTypeAndOrgGlAccount", fields);
     invoiceItemMapKey("invoiceItemMapKey"),
     invoiceTypeId("invoiceTypeId"),
     invoiceItemTypeId("invoiceItemTypeId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

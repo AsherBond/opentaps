@@ -76,7 +76,7 @@ fieldMapColumns.put("WorkEffortAssocAttribute", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -89,7 +89,7 @@ fieldMapColumns.put("WorkEffortAssocAttribute", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.WorkEffortAssocAttributePkBridge.class)
-     private WorkEffortAssocAttributePk id = new WorkEffortAssocAttributePk();
+     protected WorkEffortAssocAttributePk id = new WorkEffortAssocAttributePk();
    
     /**
      * Auto generated Id accessor.
@@ -106,19 +106,19 @@ fieldMapColumns.put("WorkEffortAssocAttribute", fields);
          this.id = id;
       }
    @Column(name="FROM_DATE")
-   private Timestamp fromDate;
+   protected Timestamp fromDate;
    @Column(name="ATTR_VALUE")
-   private String attrValue;
+   protected String attrValue;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    private transient WorkEffortAssoc workEffortAssoc = null;
-   private transient List<WorkEffortAssocTypeAttr> workEffortAssocTypeAttrs = null;
+   protected transient List<WorkEffortAssocTypeAttr> workEffortAssocTypeAttrs = null;
 
   /**
    * Default constructor.

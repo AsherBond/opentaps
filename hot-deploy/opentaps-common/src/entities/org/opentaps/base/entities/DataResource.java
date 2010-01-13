@@ -102,7 +102,7 @@ fieldMapColumns.put("DataResource", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -116,203 +116,203 @@ fieldMapColumns.put("DataResource", fields);
    @GeneratedValue(generator="DataResource_GEN")
    @Id
    @Column(name="DATA_RESOURCE_ID")
-   private String dataResourceId;
+   protected String dataResourceId;
    @Column(name="DATA_RESOURCE_TYPE_ID")
-   private String dataResourceTypeId;
+   protected String dataResourceTypeId;
    @Column(name="DATA_TEMPLATE_TYPE_ID")
-   private String dataTemplateTypeId;
+   protected String dataTemplateTypeId;
    @Column(name="DATA_CATEGORY_ID")
-   private String dataCategoryId;
+   protected String dataCategoryId;
    @Column(name="DATA_SOURCE_ID")
-   private String dataSourceId;
+   protected String dataSourceId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="DATA_RESOURCE_NAME")
-   private String dataResourceName;
+   protected String dataResourceName;
    @Column(name="LOCALE_STRING")
-   private String localeString;
+   protected String localeString;
    @Column(name="MIME_TYPE_ID")
-   private String mimeTypeId;
+   protected String mimeTypeId;
    @Column(name="CHARACTER_SET_ID")
-   private String characterSetId;
+   protected String characterSetId;
    @Column(name="OBJECT_INFO")
-   private String objectInfo;
+   protected String objectInfo;
    @Column(name="SURVEY_ID")
-   private String surveyId;
+   protected String surveyId;
    @Column(name="SURVEY_RESPONSE_ID")
-   private String surveyResponseId;
+   protected String surveyResponseId;
    @Column(name="RELATED_DETAIL_ID")
-   private String relatedDetailId;
+   protected String relatedDetailId;
    @Column(name="IS_PUBLIC")
-   private String isPublic;
+   protected String isPublic;
    @Column(name="CREATED_DATE")
-   private Timestamp createdDate;
+   protected Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   private String createdByUserLogin;
+   protected String createdByUserLogin;
    @Column(name="LAST_MODIFIED_DATE")
-   private Timestamp lastModifiedDate;
+   protected Timestamp lastModifiedDate;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   private String lastModifiedByUserLogin;
+   protected String lastModifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_RESOURCE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private DataResourceType dataResourceType = null;
+   protected DataResourceType dataResourceType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_TEMPLATE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private DataTemplateType dataTemplateType = null;
+   protected DataTemplateType dataTemplateType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private DataCategory dataCategory = null;
+   protected DataCategory dataCategory = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_SOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private DataSource dataSource = null;
+   protected DataSource dataSource = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MIME_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private MimeType mimeType = null;
+   protected MimeType mimeType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CHARACTER_SET_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CharacterSet characterSet = null;
+   protected CharacterSet characterSet = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_RESOURCE_TYPE_ID")
    
-   private List<DataResourceTypeAttr> dataResourceTypeAttrs = null;
+   protected List<DataResourceTypeAttr> dataResourceTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin relatedCreatedByUserLogin = null;
+   protected UserLogin relatedCreatedByUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin relatedLastModifiedByUserLogin = null;
+   protected UserLogin relatedLastModifiedByUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Survey survey = null;
+   protected Survey survey = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_RESPONSE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private SurveyResponse surveyResponse = null;
+   protected SurveyResponse surveyResponse = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AudioDataResource audioDataResource = null;
+   protected AudioDataResource audioDataResource = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_RESOURCE_ID")
    
-   private List<Content> contents = null;
+   protected List<Content> contents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TEMPLATE_DATA_RESOURCE_ID")
    
-   private List<Content> templateContents = null;
+   protected List<Content> templateContents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OLD_DATA_RESOURCE_ID")
    
-   private List<ContentRevisionItem> oldContentRevisionItems = null;
+   protected List<ContentRevisionItem> oldContentRevisionItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="NEW_DATA_RESOURCE_ID")
    
-   private List<ContentRevisionItem> newContentRevisionItems = null;
+   protected List<ContentRevisionItem> newContentRevisionItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="dataResource", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="DATA_RESOURCE_ID")
    
-   private List<DataResourceAttribute> dataResourceAttributes = null;
+   protected List<DataResourceAttribute> dataResourceAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="dataResource", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="DATA_RESOURCE_ID")
    
-   private List<DataResourceMetaData> dataResourceMetaDatas = null;
+   protected List<DataResourceMetaData> dataResourceMetaDatas = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="dataResource", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="DATA_RESOURCE_ID")
    
-   private List<DataResourcePurpose> dataResourcePurposes = null;
+   protected List<DataResourcePurpose> dataResourcePurposes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="dataResource", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="DATA_RESOURCE_ID")
    
-   private List<DataResourceRole> dataResourceRoles = null;
+   protected List<DataResourceRole> dataResourceRoles = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ElectronicText electronicText = null;
+   protected ElectronicText electronicText = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ImageDataResource imageDataResource = null;
+   protected ImageDataResource imageDataResource = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OtherDataResource otherDataResource = null;
+   protected OtherDataResource otherDataResource = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="dataResource", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="DATA_RESOURCE_ID")
    
-   private List<ProductFeatureDataResource> productFeatureDataResources = null;
+   protected List<ProductFeatureDataResource> productFeatureDataResources = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private VideoDataResource videoDataResource = null;
+   protected VideoDataResource videoDataResource = null;
 
   /**
    * Default constructor.

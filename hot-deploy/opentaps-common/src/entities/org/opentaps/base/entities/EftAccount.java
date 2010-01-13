@@ -83,7 +83,7 @@ fieldMapColumns.put("EftAccount", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -97,60 +97,60 @@ fieldMapColumns.put("EftAccount", fields);
    @GeneratedValue(generator="EftAccount_GEN")
    @Id
    @Column(name="PAYMENT_METHOD_ID")
-   private String paymentMethodId;
+   protected String paymentMethodId;
    @Column(name="BANK_NAME")
-   private String bankName;
+   protected String bankName;
    @Column(name="ROUTING_NUMBER")
-   private String routingNumber;
+   protected String routingNumber;
    @Column(name="ACCOUNT_TYPE")
-   private String accountType;
+   protected String accountType;
    @Column(name="ACCOUNT_NUMBER")
-   private String accountNumber;
+   protected String accountNumber;
    @Column(name="NAME_ON_ACCOUNT")
-   private String nameOnAccount;
+   protected String nameOnAccount;
    @Column(name="COMPANY_NAME_ON_ACCOUNT")
-   private String companyNameOnAccount;
+   protected String companyNameOnAccount;
    @Column(name="CONTACT_MECH_ID")
-   private String contactMechId;
+   protected String contactMechId;
    @Column(name="YEARS_AT_BANK")
-   private Long yearsAtBank;
+   protected Long yearsAtBank;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentMethod paymentMethod = null;
+   protected PaymentMethod paymentMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMech contactMech = null;
+   protected ContactMech contactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PostalAddress postalAddress = null;
+   protected PostalAddress postalAddress = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID")
    
-   private List<OrderPaymentPreference> orderPaymentPreferences = null;
+   protected List<OrderPaymentPreference> orderPaymentPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID")
    
-   private List<Payment> payments = null;
+   protected List<Payment> payments = null;
 
   /**
    * Default constructor.

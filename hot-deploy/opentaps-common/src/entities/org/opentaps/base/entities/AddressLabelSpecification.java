@@ -97,7 +97,7 @@ fieldMapColumns.put("AddressLabelSpecification", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -111,45 +111,45 @@ fieldMapColumns.put("AddressLabelSpecification", fields);
    @GeneratedValue(generator="AddressLabelSpecification_GEN")
    @Id
    @Column(name="ADDRESS_LABEL_ID")
-   private String addressLabelId;
+   protected String addressLabelId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="TOP_MARGIN")
-   private BigDecimal topMargin;
+   protected BigDecimal topMargin;
    @Column(name="BOTTOM_MARGIN")
-   private BigDecimal bottomMargin;
+   protected BigDecimal bottomMargin;
    @Column(name="LEFT_MARGIN")
-   private BigDecimal leftMargin;
+   protected BigDecimal leftMargin;
    @Column(name="RIGHT_MARGIN")
-   private BigDecimal rightMargin;
+   protected BigDecimal rightMargin;
    @Column(name="PAGE_COLUMNS")
-   private BigDecimal pageColumns;
+   protected BigDecimal pageColumns;
    @Column(name="PAGE_ROWS")
-   private BigDecimal pageRows;
+   protected BigDecimal pageRows;
    @Column(name="LABEL_HEIGHT")
-   private BigDecimal labelHeight;
+   protected BigDecimal labelHeight;
    @Column(name="LABEL_WIDTH")
-   private BigDecimal labelWidth;
+   protected BigDecimal labelWidth;
    @Column(name="HEIGHT_BTW_LABEL")
-   private BigDecimal heightBtwLabel;
+   protected BigDecimal heightBtwLabel;
    @Column(name="WIDTH_BTW_LABEL")
-   private BigDecimal widthBtwLabel;
+   protected BigDecimal widthBtwLabel;
    @Column(name="PAGE_WIDTH")
-   private BigDecimal pageWidth;
+   protected BigDecimal pageWidth;
    @Column(name="PAGE_HEIGHT")
-   private BigDecimal pageHeight;
+   protected BigDecimal pageHeight;
    @Column(name="CONTINUOUS_FEED")
-   private String continuousFeed;
+   protected String continuousFeed;
    @Column(name="UOM_ID")
-   private String uomId;
+   protected String uomId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

@@ -266,7 +266,7 @@ fieldMapColumns.put("ShipmentManifestView", fields);
     carrierLastName("carrierLastName"),
     carrierGroupName("carrierGroupName"),
     shipmentMethodDescription("shipmentMethodDescription");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

@@ -90,7 +90,7 @@ fieldMapColumns.put("WebSite", fields);
     createdTxStamp("createdTxStamp"),
     productStoreId("productStoreId"),
     allowProductStoreChange("allowProductStoreChange");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -104,77 +104,77 @@ fieldMapColumns.put("WebSite", fields);
    @GeneratedValue(generator="WebSite_GEN")
    @Id
    @Column(name="WEB_SITE_ID")
-   private String webSiteId;
+   protected String webSiteId;
    @Column(name="SITE_NAME")
-   private String siteName;
+   protected String siteName;
    @Column(name="HTTP_HOST")
-   private String httpHost;
+   protected String httpHost;
    @Column(name="HTTP_PORT")
-   private String httpPort;
+   protected String httpPort;
    @Column(name="HTTPS_HOST")
-   private String httpsHost;
+   protected String httpsHost;
    @Column(name="HTTPS_PORT")
-   private String httpsPort;
+   protected String httpsPort;
    @Column(name="ENABLE_HTTPS")
-   private String enableHttps;
+   protected String enableHttps;
    @Column(name="STANDARD_CONTENT_PREFIX")
-   private String standardContentPrefix;
+   protected String standardContentPrefix;
    @Column(name="SECURE_CONTENT_PREFIX")
-   private String secureContentPrefix;
+   protected String secureContentPrefix;
    @Column(name="COOKIE_DOMAIN")
-   private String cookieDomain;
+   protected String cookieDomain;
    @Column(name="VISUAL_THEME_SET_ID")
-   private String visualThemeSetId;
+   protected String visualThemeSetId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="PRODUCT_STORE_ID")
-   private String productStoreId;
+   protected String productStoreId;
    @Column(name="ALLOW_PRODUCT_STORE_CHANGE")
-   private String allowProductStoreChange;
+   protected String allowProductStoreChange;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="VISUAL_THEME_SET_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private VisualThemeSet visualThemeSet = null;
+   protected VisualThemeSet visualThemeSet = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductStore productStore = null;
+   protected ProductStore productStore = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WEB_SITE_ID")
    
-   private List<SubscriptionResource> subscriptionResources = null;
+   protected List<SubscriptionResource> subscriptionResources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WEB_SITE_ID")
    
-   private List<WebPage> webPages = null;
+   protected List<WebPage> webPages = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="webSite", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WEB_SITE_ID")
    
-   private List<WebSiteContent> webSiteContents = null;
+   protected List<WebSiteContent> webSiteContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="webSite", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WEB_SITE_ID")
    
-   private List<WebSitePathAlias> webSitePathAliases = null;
+   protected List<WebSitePathAlias> webSitePathAliases = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="webSite", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WEB_SITE_ID")
    
-   private List<WebSiteRole> webSiteRoles = null;
+   protected List<WebSiteRole> webSiteRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WEB_SITE_ID")
    
-   private List<WebslingerServer> webslingerServers = null;
+   protected List<WebslingerServer> webslingerServers = null;
 
   /**
    * Default constructor.

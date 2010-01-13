@@ -86,7 +86,7 @@ fieldMapColumns.put("ProductFeature", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -100,99 +100,99 @@ fieldMapColumns.put("ProductFeature", fields);
    @GeneratedValue(generator="ProductFeature_GEN")
    @Id
    @Column(name="PRODUCT_FEATURE_ID")
-   private String productFeatureId;
+   protected String productFeatureId;
    @Column(name="PRODUCT_FEATURE_TYPE_ID")
-   private String productFeatureTypeId;
+   protected String productFeatureTypeId;
    @Column(name="PRODUCT_FEATURE_CATEGORY_ID")
-   private String productFeatureCategoryId;
+   protected String productFeatureCategoryId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="UOM_ID")
-   private String uomId;
+   protected String uomId;
    @Column(name="NUMBER_SPECIFIED")
-   private BigDecimal numberSpecified;
+   protected BigDecimal numberSpecified;
    @Column(name="DEFAULT_AMOUNT")
-   private BigDecimal defaultAmount;
+   protected BigDecimal defaultAmount;
    @Column(name="DEFAULT_SEQUENCE_NUM")
-   private Long defaultSequenceNum;
+   protected Long defaultSequenceNum;
    @Column(name="ABBREV")
-   private String abbrev;
+   protected String abbrev;
    @Column(name="ID_CODE")
-   private String idCode;
+   protected String idCode;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_FEATURE_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductFeatureCategory productFeatureCategory = null;
+   protected ProductFeatureCategory productFeatureCategory = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_FEATURE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductFeatureType productFeatureType = null;
+   protected ProductFeatureType productFeatureType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_FEATURE_ID")
    
-   private List<CostComponent> costComponents = null;
+   protected List<CostComponent> costComponents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_FEATURE_ID")
    
-   private List<DesiredFeature> desiredFeatures = null;
+   protected List<DesiredFeature> desiredFeatures = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_FEATURE_ID")
    
-   private List<InvoiceItem> invoiceItems = null;
+   protected List<InvoiceItem> invoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productFeature", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_FEATURE_ID")
    
-   private List<ProductFeatureAppl> productFeatureAppls = null;
+   protected List<ProductFeatureAppl> productFeatureAppls = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productFeature", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_FEATURE_ID")
    
-   private List<ProductFeatureApplAttr> productFeatureApplAttrs = null;
+   protected List<ProductFeatureApplAttr> productFeatureApplAttrs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productFeature", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_FEATURE_ID")
    
-   private List<ProductFeatureDataResource> productFeatureDataResources = null;
+   protected List<ProductFeatureDataResource> productFeatureDataResources = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productFeature", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_FEATURE_ID")
    
-   private List<ProductFeatureGroupAppl> productFeatureGroupAppls = null;
+   protected List<ProductFeatureGroupAppl> productFeatureGroupAppls = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="mainProductFeature", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_FEATURE_ID")
    
-   private List<ProductFeatureIactn> mainProductFeatureIactns = null;
+   protected List<ProductFeatureIactn> mainProductFeatureIactns = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="assocProductFeature", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_FEATURE_ID_TO")
    
-   private List<ProductFeatureIactn> assocProductFeatureIactns = null;
+   protected List<ProductFeatureIactn> assocProductFeatureIactns = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_FEATURE")
    
-   private List<ProductManufacturingRule> productManufacturingRules = null;
+   protected List<ProductManufacturingRule> productManufacturingRules = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_FEATURE_ID")
    
-   private List<QuoteItem> quoteItems = null;
+   protected List<QuoteItem> quoteItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productFeature", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_FEATURE_ID")
    
-   private List<ShipmentItemFeature> shipmentItemFeatures = null;
+   protected List<ShipmentItemFeature> shipmentItemFeatures = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productFeature", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_FEATURE_ID")
    
-   private List<SupplierProductFeature> supplierProductFeatures = null;
+   protected List<SupplierProductFeature> supplierProductFeatures = null;
 
   /**
    * Default constructor.

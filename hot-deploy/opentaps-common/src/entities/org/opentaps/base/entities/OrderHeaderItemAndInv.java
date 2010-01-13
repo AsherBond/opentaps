@@ -134,7 +134,7 @@ fieldMapColumns.put("OrderHeaderItemAndInv", fields);
     autoCancelDate("autoCancelDate"),
     correspondingPoId("correspondingPoId"),
     quantityNotAvailable("quantityNotAvailable");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -198,81 +198,81 @@ fieldMapColumns.put("OrderHeaderItemAndInv", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderType orderType = null;
+   protected OrderType orderType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Facility originFacility = null;
+   protected Facility originFacility = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_TYPE_ID")
    
-   private transient List<OrderTypeAttr> orderTypeAttrs = null;
+   protected transient List<OrderTypeAttr> orderTypeAttrs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private transient List<OrderAttribute> orderAttributes = null;
+   protected transient List<OrderAttribute> orderAttributes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private transient List<OrderAdjustment> orderAdjustments = null;
+   protected transient List<OrderAdjustment> orderAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private transient List<OrderItem> orderItems = null;
+   protected transient List<OrderItem> orderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private transient List<OrderContactMech> orderContactMeches = null;
+   protected transient List<OrderContactMech> orderContactMeches = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private transient List<OrderItemBilling> orderItemBillings = null;
+   protected transient List<OrderItemBilling> orderItemBillings = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private transient List<OrderItemContactMech> orderItemContactMeches = null;
+   protected transient List<OrderItemContactMech> orderItemContactMeches = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private transient List<OrderItemRole> orderItemRoles = null;
+   protected transient List<OrderItemRole> orderItemRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private transient List<OrderRole> orderRoles = null;
+   protected transient List<OrderRole> orderRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private transient List<OrderShipment> orderShipments = null;
+   protected transient List<OrderShipment> orderShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private transient List<OrderStatus> orderStatuses = null;
+   protected transient List<OrderStatus> orderStatuses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private transient List<OrderTerm> orderTerms = null;
+   protected transient List<OrderTerm> orderTerms = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private transient List<WorkOrderItemFulfillment> workOrderItemFulfillments = null;
+   protected transient List<WorkOrderItemFulfillment> workOrderItemFulfillments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private transient List<ProductOrderItem> productOrderItems = null;
+   protected transient List<ProductOrderItem> productOrderItems = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BILLING_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private BillingAccount billingAccount = null;
+   protected BillingAccount billingAccount = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private transient List<OrderPaymentPreference> orderPaymentPreferences = null;
+   protected transient List<OrderPaymentPreference> orderPaymentPreferences = null;
    private transient List<OrderHeaderNoteView> orderHeaderNoteViews = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY", insertable=false, updatable=false)
@@ -280,29 +280,29 @@ fieldMapColumns.put("OrderHeaderItemAndInv", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin userLogin = null;
+   protected UserLogin userLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SYNC_STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem syncStatusItem = null;
+   protected StatusItem syncStatusItem = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private transient List<OrderRequirementCommitment> orderRequirementCommitments = null;
+   protected transient List<OrderRequirementCommitment> orderRequirementCommitments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private transient List<ShipmentReceipt> shipmentReceipts = null;
+   protected transient List<ShipmentReceipt> shipmentReceipts = null;
 
   /**
    * Default constructor.

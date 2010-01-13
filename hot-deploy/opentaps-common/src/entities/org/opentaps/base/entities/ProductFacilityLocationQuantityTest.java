@@ -85,7 +85,7 @@ fieldMapColumns.put("ProductFacilityLocationQuantityTest", fields);
     locationTypeEnumId("locationTypeEnumId"),
     availableToPromiseTotal("availableToPromiseTotal"),
     quantityOnHandTotal("quantityOnHandTotal");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -117,7 +117,7 @@ fieldMapColumns.put("ProductFacilityLocationQuantityTest", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
    private transient FacilityLocation facilityLocation = null;
    private transient ProductFacilityLocation productFacilityLocation = null;
 

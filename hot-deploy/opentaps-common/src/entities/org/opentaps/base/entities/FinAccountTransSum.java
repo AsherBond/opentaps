@@ -74,7 +74,7 @@ fieldMapColumns.put("FinAccountTransSum", fields);
     finAccountTransTypeId("finAccountTransTypeId"),
     transactionDate("transactionDate"),
     amount("amount");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

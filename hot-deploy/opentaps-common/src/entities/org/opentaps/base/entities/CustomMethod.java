@@ -72,7 +72,7 @@ fieldMapColumns.put("CustomMethod", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,60 +86,60 @@ fieldMapColumns.put("CustomMethod", fields);
    @GeneratedValue(generator="CustomMethod_GEN")
    @Id
    @Column(name="CUSTOM_METHOD_ID")
-   private String customMethodId;
+   protected String customMethodId;
    @Column(name="CUSTOM_METHOD_TYPE_ID")
-   private String customMethodTypeId;
+   protected String customMethodTypeId;
    @Column(name="CUSTOM_METHOD_NAME")
-   private String customMethodName;
+   protected String customMethodName;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CUSTOM_METHOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CustomMethodType customMethodType = null;
+   protected CustomMethodType customMethodType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="COST_CUSTOM_METHOD_ID")
    
-   private List<CostComponentCalc> costComponentCalcs = null;
+   protected List<CostComponentCalc> costComponentCalcs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="customMethod", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="DEPRECIATION_CUSTOM_METHOD_ID")
    
-   private List<FixedAssetDepMethod> fixedAssetDepMethods = null;
+   protected List<FixedAssetDepMethod> fixedAssetDepMethods = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ESTIMATE_CALC_METHOD")
    
-   private List<ProductAssoc> productAssocs = null;
+   protected List<ProductAssoc> productAssocs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CUSTOM_PRICE_CALC_SERVICE")
    
-   private List<ProductPrice> productPrices = null;
+   protected List<ProductPrice> productPrices = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_CUSTOM_METHOD_ID")
    
-   private List<ProductStorePaymentSetting> productStorePaymentSettings = null;
+   protected List<ProductStorePaymentSetting> productStorePaymentSettings = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CUSTOM_METHOD_ID")
    
-   private List<UomConversion> uomCustomMethodUomConversions = null;
+   protected List<UomConversion> uomCustomMethodUomConversions = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CUSTOM_METHOD_ID")
    
-   private List<UomConversionDated> uomCustomMethodUomConversionDateds = null;
+   protected List<UomConversionDated> uomCustomMethodUomConversionDateds = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ESTIMATE_CALC_METHOD")
    
-   private List<WorkEffort> workEfforts = null;
+   protected List<WorkEffort> workEfforts = null;
 
   /**
    * Default constructor.

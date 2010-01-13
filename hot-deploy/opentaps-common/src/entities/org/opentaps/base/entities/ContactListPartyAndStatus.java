@@ -94,7 +94,7 @@ fieldMapColumns.put("ContactListPartyAndStatus", fields);
     statusCode("statusCode"),
     sequenceId("sequenceId"),
     description("description");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

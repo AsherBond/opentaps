@@ -84,7 +84,7 @@ fieldMapColumns.put("NetSuitePaymentTerm", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -98,31 +98,31 @@ fieldMapColumns.put("NetSuitePaymentTerm", fields);
    @GeneratedValue(generator="NetSuitePaymentTerm_GEN")
    @Id
    @Column(name="PAYMENT_TERMS_ID")
-   private String paymentTermsId;
+   protected String paymentTermsId;
    @Column(name="DATE_DRIVEN")
-   private String dateDriven;
+   protected String dateDriven;
    @Column(name="DAYS_UNTIL_DUE")
-   private Long daysUntilDue;
+   protected Long daysUntilDue;
    @Column(name="DISCOUNT_DAYS")
-   private Long discountDays;
+   protected Long discountDays;
    @Column(name="IS_INACTIVE")
-   private String isInactive;
+   protected String isInactive;
    @Column(name="MINIMUM_DAYS")
-   private Long minimumDays;
+   protected Long minimumDays;
    @Column(name="TERM_NAME")
-   private String termName;
+   protected String termName;
    @Column(name="PAYMENT_TERMS_EXTID")
-   private String paymentTermsExtid;
+   protected String paymentTermsExtid;
    @Column(name="PERCENTAGE_DISCOUNT")
-   private BigDecimal percentageDiscount;
+   protected BigDecimal percentageDiscount;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

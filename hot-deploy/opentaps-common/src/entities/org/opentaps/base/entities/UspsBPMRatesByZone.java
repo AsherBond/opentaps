@@ -71,7 +71,7 @@ fieldMapColumns.put("UspsBPMRatesByZone", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -85,23 +85,23 @@ fieldMapColumns.put("UspsBPMRatesByZone", fields);
    @GeneratedValue(generator="UspsBPMRatesByZone_GEN")
    @Id
    @Column(name="USPS_B_P_M_RATE_ZONE")
-   private String uspsBPMRateZone;
+   protected String uspsBPMRateZone;
    @Column(name="RATE_PER_PIECE")
-   private BigDecimal ratePerPiece;
+   protected BigDecimal ratePerPiece;
    @Column(name="RATE_PER_POUND")
-   private BigDecimal ratePerPound;
+   protected BigDecimal ratePerPound;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="USPS_B_P_M_RATE_ZONE")
    
-   private List<UspsBPMZoneMap> uspsBPMZoneMaps = null;
+   protected List<UspsBPMZoneMap> uspsBPMZoneMaps = null;
 
   /**
    * Default constructor.

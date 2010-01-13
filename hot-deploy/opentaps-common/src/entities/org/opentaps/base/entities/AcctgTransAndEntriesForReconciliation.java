@@ -101,7 +101,7 @@ fieldMapColumns.put("AcctgTransAndEntriesForReconciliation", fields);
     reconcileStatusId("reconcileStatusId"),
     refNum("refNum"),
     paymentTypeId("paymentTypeId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -143,21 +143,21 @@ fieldMapColumns.put("AcctgTransAndEntriesForReconciliation", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AcctgTransType acctgTransType = null;
+   protected AcctgTransType acctgTransType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Payment payment = null;
+   protected Payment payment = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentType paymentType = null;
+   protected PaymentType paymentType = null;
 
   /**
    * Default constructor.

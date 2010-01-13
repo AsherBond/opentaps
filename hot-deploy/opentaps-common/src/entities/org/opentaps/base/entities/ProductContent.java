@@ -87,7 +87,7 @@ fieldMapColumns.put("ProductContent", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -100,7 +100,7 @@ fieldMapColumns.put("ProductContent", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductContentPkBridge.class)
-     private ProductContentPk id = new ProductContentPk();
+     protected ProductContentPk id = new ProductContentPk();
    
     /**
      * Auto generated Id accessor.
@@ -117,62 +117,62 @@ fieldMapColumns.put("ProductContent", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="PURCHASE_FROM_DATE")
-   private Timestamp purchaseFromDate;
+   protected Timestamp purchaseFromDate;
    @Column(name="PURCHASE_THRU_DATE")
-   private Timestamp purchaseThruDate;
+   protected Timestamp purchaseThruDate;
    @Column(name="USE_COUNT_LIMIT")
-   private Long useCountLimit;
+   protected Long useCountLimit;
    @Column(name="USE_TIME")
-   private Long useTime;
+   protected Long useTime;
    @Column(name="USE_TIME_UOM_ID")
-   private String useTimeUomId;
+   protected String useTimeUomId;
    @Column(name="USE_ROLE_TYPE_ID")
-   private String useRoleTypeId;
+   protected String useRoleTypeId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Content content = null;
+   protected Content content = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CONTENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductContentType productContentType = null;
+   protected ProductContentType productContentType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="USE_ROLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RoleType useRoleType = null;
+   protected RoleType useRoleType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="USE_TIME_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom useTimeUom = null;
+   protected Uom useTimeUom = null;
 
   /**
    * Default constructor.

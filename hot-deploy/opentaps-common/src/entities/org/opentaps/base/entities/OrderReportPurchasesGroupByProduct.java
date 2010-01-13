@@ -98,7 +98,7 @@ fieldMapColumns.put("OrderReportPurchasesGroupByProduct", fields);
     fromRoleTypeId("fromRoleTypeId"),
     quantity("quantity"),
     unitPrice("unitPrice");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

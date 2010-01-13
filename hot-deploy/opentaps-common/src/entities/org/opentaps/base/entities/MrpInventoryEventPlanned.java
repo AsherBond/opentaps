@@ -90,7 +90,7 @@ fieldMapColumns.put("MrpInventoryEventPlanned", fields);
     facilityId("facilityId"),
     eventName("eventName"),
     isLate("isLate");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -124,7 +124,7 @@ fieldMapColumns.put("MrpInventoryEventPlanned", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
 
   /**
    * Default constructor.

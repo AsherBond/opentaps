@@ -82,7 +82,7 @@ fieldMapColumns.put("CustRequestAndAddress", fields);
     fromPartyId("fromPartyId"),
     contactMechId("contactMechId"),
     countryGeoId("countryGeoId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -112,7 +112,7 @@ fieldMapColumns.put("CustRequestAndAddress", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CustRequest custRequest = null;
+   protected CustRequest custRequest = null;
 
   /**
    * Default constructor.

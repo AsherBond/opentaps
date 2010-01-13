@@ -78,7 +78,7 @@ fieldMapColumns.put("ProductPromoCond", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -91,7 +91,7 @@ fieldMapColumns.put("ProductPromoCond", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductPromoCondPkBridge.class)
-     private ProductPromoCondPk id = new ProductPromoCondPk();
+     protected ProductPromoCondPk id = new ProductPromoCondPk();
    
     /**
      * Auto generated Id accessor.
@@ -108,28 +108,28 @@ fieldMapColumns.put("ProductPromoCond", fields);
          this.id = id;
       }
    @Column(name="INPUT_PARAM_ENUM_ID")
-   private String inputParamEnumId;
+   protected String inputParamEnumId;
    @Column(name="OPERATOR_ENUM_ID")
-   private String operatorEnumId;
+   protected String operatorEnumId;
    @Column(name="COND_VALUE")
-   private String condValue;
+   protected String condValue;
    @Column(name="OTHER_VALUE")
-   private String otherValue;
+   protected String otherValue;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PROMO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductPromo productPromo = null;
+   protected ProductPromo productPromo = null;
    private transient ProductPromoRule productPromoRule = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INPUT_PARAM_ENUM_ID", insertable=false, updatable=false)
@@ -137,14 +137,14 @@ fieldMapColumns.put("ProductPromoCond", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration inputParamEnumeration = null;
+   protected Enumeration inputParamEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="OPERATOR_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration operatorEnumeration = null;
+   protected Enumeration operatorEnumeration = null;
    private transient List<ProductPromoCategory> productPromoCategorys = null;
    private transient List<ProductPromoProduct> productPromoProducts = null;
 

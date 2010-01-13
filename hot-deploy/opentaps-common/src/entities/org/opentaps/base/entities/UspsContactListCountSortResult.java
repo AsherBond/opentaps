@@ -74,7 +74,7 @@ fieldMapColumns.put("UspsContactListCountSortResult", fields);
     contactMechId("contactMechId"),
     sortResult("sortResult"),
     processedTimestamp("processedTimestamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

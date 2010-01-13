@@ -74,7 +74,7 @@ fieldMapColumns.put("TaxAuthority", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -87,7 +87,7 @@ fieldMapColumns.put("TaxAuthority", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.TaxAuthorityPkBridge.class)
-     private TaxAuthorityPk id = new TaxAuthorityPk();
+     protected TaxAuthorityPk id = new TaxAuthorityPk();
    
     /**
      * Auto generated Id accessor.
@@ -104,33 +104,34 @@ fieldMapColumns.put("TaxAuthority", fields);
          this.id = id;
       }
    @Column(name="REQUIRE_TAX_ID_FOR_EXEMPTION")
-   private String requireTaxIdForExemption;
+   protected String requireTaxIdForExemption;
    @Column(name="TAX_ID_FORMAT_PATTERN")
-   private String taxIdFormatPattern;
+   protected String taxIdFormatPattern;
    @Column(name="INCLUDE_TAX_IN_PRICE")
-   private String includeTaxInPrice;
+   protected String includeTaxInPrice;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TAX_AUTH_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo taxAuthGeo = null;
+   protected Geo taxAuthGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TAX_AUTH_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party taxAuthParty = null;
+   protected Party taxAuthParty = null;
+   private transient List<AmazonOrderTaxJurisToAuth> amazonOrderTaxJurisToAuths = null;
    private transient List<OrderAdjustment> orderAdjustments = null;
    private transient List<PartyTaxAuthInfo> partyTaxAuthInfoes = null;
    private transient List<ProductStore> vatProductStores = null;
@@ -319,6 +320,17 @@ fieldMapColumns.put("TaxAuthority", fields);
         return this.taxAuthParty;
     }
     /**
+     * Auto generated method that gets the related <code>AmazonOrderTaxJurisToAuth</code> by the relation named <code>AmazonOrderTaxJurisToAuth</code>.
+     * @return the list of <code>AmazonOrderTaxJurisToAuth</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AmazonOrderTaxJurisToAuth> getAmazonOrderTaxJurisToAuths() throws RepositoryException {
+        if (this.amazonOrderTaxJurisToAuths == null) {
+            this.amazonOrderTaxJurisToAuths = getRelated(AmazonOrderTaxJurisToAuth.class, "AmazonOrderTaxJurisToAuth");
+        }
+        return this.amazonOrderTaxJurisToAuths;
+    }
+    /**
      * Auto generated method that gets the related <code>OrderAdjustment</code> by the relation named <code>OrderAdjustment</code>.
      * @return the list of <code>OrderAdjustment</code>
      * @throws RepositoryException if an error occurs
@@ -442,6 +454,13 @@ fieldMapColumns.put("TaxAuthority", fields);
     */
     public void setTaxAuthParty(Party taxAuthParty) {
         this.taxAuthParty = taxAuthParty;
+    }
+    /**
+     * Auto generated value setter.
+     * @param amazonOrderTaxJurisToAuths the amazonOrderTaxJurisToAuths to set
+    */
+    public void setAmazonOrderTaxJurisToAuths(List<AmazonOrderTaxJurisToAuth> amazonOrderTaxJurisToAuths) {
+        this.amazonOrderTaxJurisToAuths = amazonOrderTaxJurisToAuths;
     }
     /**
      * Auto generated value setter.

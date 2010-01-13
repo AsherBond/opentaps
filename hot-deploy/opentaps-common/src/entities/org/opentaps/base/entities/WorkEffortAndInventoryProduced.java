@@ -76,7 +76,7 @@ fieldMapColumns.put("WorkEffortAndInventoryProduced", fields);
     unitCost("unitCost"),
     workEffortId("workEffortId"),
     inventoryItemId("inventoryItemId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

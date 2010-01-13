@@ -114,7 +114,7 @@ fieldMapColumns.put("ProductFeatureAndAppl", fields);
     sequenceNum("sequenceNum"),
     amount("amount"),
     recurringAmount("recurringAmount");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -164,22 +164,22 @@ fieldMapColumns.put("ProductFeatureAndAppl", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductFeatureType productFeatureType = null;
+   protected ProductFeatureType productFeatureType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_FEATURE_APPL_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductFeatureApplType productFeatureApplType = null;
+   protected ProductFeatureApplType productFeatureApplType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_FEATURE_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductFeatureCategory productFeatureCategory = null;
-   private transient List<SupplierProductFeature> supplierProductFeatures = null;
+   protected ProductFeatureCategory productFeatureCategory = null;
+   protected transient List<SupplierProductFeature> supplierProductFeatures = null;
 
   /**
    * Default constructor.

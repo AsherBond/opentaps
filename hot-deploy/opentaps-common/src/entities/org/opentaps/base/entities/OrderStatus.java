@@ -80,7 +80,7 @@ fieldMapColumns.put("OrderStatus", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -94,43 +94,43 @@ fieldMapColumns.put("OrderStatus", fields);
    @GeneratedValue(generator="OrderStatus_GEN")
    @Id
    @Column(name="ORDER_STATUS_ID")
-   private String orderStatusId;
+   protected String orderStatusId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="ORDER_ID")
-   private String orderId;
+   protected String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   private String orderItemSeqId;
+   protected String orderItemSeqId;
    @Column(name="ORDER_PAYMENT_PREFERENCE_ID")
-   private String orderPaymentPreferenceId;
+   protected String orderPaymentPreferenceId;
    @Column(name="STATUS_DATETIME")
-   private Timestamp statusDatetime;
+   protected Timestamp statusDatetime;
    @Column(name="STATUS_USER_LOGIN")
-   private String statusUserLogin;
+   protected String statusUserLogin;
    @Column(name="CHANGE_REASON")
-   private String changeReason;
+   protected String changeReason;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
    private transient OrderItem orderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_PAYMENT_PREFERENCE_ID", insertable=false, updatable=false)
@@ -138,14 +138,14 @@ fieldMapColumns.put("OrderStatus", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderPaymentPreference orderPaymentPreference = null;
+   protected OrderPaymentPreference orderPaymentPreference = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin userLogin = null;
+   protected UserLogin userLogin = null;
 
   /**
    * Default constructor.

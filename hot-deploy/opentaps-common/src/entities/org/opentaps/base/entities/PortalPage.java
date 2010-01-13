@@ -81,7 +81,7 @@ fieldMapColumns.put("PortalPage", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -95,55 +95,55 @@ fieldMapColumns.put("PortalPage", fields);
    @GeneratedValue(generator="PortalPage_GEN")
    @Id
    @Column(name="PORTAL_PAGE_ID")
-   private String portalPageId;
+   protected String portalPageId;
    @Column(name="PORTAL_PAGE_NAME")
-   private String portalPageName;
+   protected String portalPageName;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="OWNER_USER_LOGIN_ID")
-   private String ownerUserLoginId;
+   protected String ownerUserLoginId;
    @Column(name="ORIGINAL_PORTAL_PAGE_ID")
-   private String originalPortalPageId;
+   protected String originalPortalPageId;
    @Column(name="PARENT_PORTAL_PAGE_ID")
-   private String parentPortalPageId;
+   protected String parentPortalPageId;
    @Column(name="SEQUENCE_NUM")
-   private Long sequenceNum;
+   protected Long sequenceNum;
    @Column(name="SECURITY_GROUP_ID")
-   private String securityGroupId;
+   protected String securityGroupId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_PORTAL_PAGE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PortalPage parentPortalPage = null;
+   protected PortalPage parentPortalPage = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SECURITY_GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private SecurityGroup securityGroup = null;
+   protected SecurityGroup securityGroup = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_PORTAL_PAGE_ID")
    
-   private List<PortalPage> childPortalPages = null;
+   protected List<PortalPage> childPortalPages = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="portalPage", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PORTAL_PAGE_ID")
    
-   private List<PortalPageColumn> portalPageColumns = null;
+   protected List<PortalPageColumn> portalPageColumns = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="portalPage", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PORTAL_PAGE_ID")
    
-   private List<PortalPagePortlet> portalPagePortlets = null;
+   protected List<PortalPagePortlet> portalPagePortlets = null;
 
   /**
    * Default constructor.

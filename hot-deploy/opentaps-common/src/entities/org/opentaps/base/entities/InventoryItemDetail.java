@@ -107,7 +107,7 @@ fieldMapColumns.put("InventoryItemDetail", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -120,7 +120,7 @@ fieldMapColumns.put("InventoryItemDetail", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.InventoryItemDetailPkBridge.class)
-     private InventoryItemDetailPk id = new InventoryItemDetailPk();
+     protected InventoryItemDetailPk id = new InventoryItemDetailPk();
    
     /**
      * Auto generated Id accessor.
@@ -137,65 +137,65 @@ fieldMapColumns.put("InventoryItemDetail", fields);
          this.id = id;
       }
    @Column(name="EFFECTIVE_DATE")
-   private Timestamp effectiveDate;
+   protected Timestamp effectiveDate;
    @Column(name="QUANTITY_ON_HAND_DIFF")
-   private BigDecimal quantityOnHandDiff;
+   protected BigDecimal quantityOnHandDiff;
    @Column(name="AVAILABLE_TO_PROMISE_DIFF")
-   private BigDecimal availableToPromiseDiff;
+   protected BigDecimal availableToPromiseDiff;
    @Column(name="UNIT_COST")
-   private BigDecimal unitCost;
+   protected BigDecimal unitCost;
    @Column(name="ORDER_ID")
-   private String orderId;
+   protected String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   private String orderItemSeqId;
+   protected String orderItemSeqId;
    @Column(name="SHIP_GROUP_SEQ_ID")
-   private String shipGroupSeqId;
+   protected String shipGroupSeqId;
    @Column(name="SHIPMENT_ID")
-   private String shipmentId;
+   protected String shipmentId;
    @Column(name="SHIPMENT_ITEM_SEQ_ID")
-   private String shipmentItemSeqId;
+   protected String shipmentItemSeqId;
    @Column(name="RETURN_ID")
-   private String returnId;
+   protected String returnId;
    @Column(name="RETURN_ITEM_SEQ_ID")
-   private String returnItemSeqId;
+   protected String returnItemSeqId;
    @Column(name="WORK_EFFORT_ID")
-   private String workEffortId;
+   protected String workEffortId;
    @Column(name="FIXED_ASSET_ID")
-   private String fixedAssetId;
+   protected String fixedAssetId;
    @Column(name="MAINT_HIST_SEQ_ID")
-   private String maintHistSeqId;
+   protected String maintHistSeqId;
    @Column(name="ITEM_ISSUANCE_ID")
-   private String itemIssuanceId;
+   protected String itemIssuanceId;
    @Column(name="RECEIPT_ID")
-   private String receiptId;
+   protected String receiptId;
    @Column(name="PHYSICAL_INVENTORY_ID")
-   private String physicalInventoryId;
+   protected String physicalInventoryId;
    @Column(name="REASON_ENUM_ID")
-   private String reasonEnumId;
+   protected String reasonEnumId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_ITEM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private InventoryItem inventoryItem = null;
+   protected InventoryItem inventoryItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffort workEffort = null;
+   protected WorkEffort workEffort = null;
    private transient OrderItemShipGrpInvRes orderItemShipGrpInvRes = null;
    private transient FixedAssetMaint fixedAssetMaint = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -204,7 +204,7 @@ fieldMapColumns.put("InventoryItemDetail", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ItemIssuance itemIssuance = null;
+   protected ItemIssuance itemIssuance = null;
    private transient WorkEffortInventoryAssign workEffortInventoryAssign = null;
    private transient WorkEffortInventoryProduced workEffortInventoryProduced = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -213,21 +213,21 @@ fieldMapColumns.put("InventoryItemDetail", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ShipmentReceipt shipmentReceipt = null;
+   protected ShipmentReceipt shipmentReceipt = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PHYSICAL_INVENTORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PhysicalInventory physicalInventory = null;
+   protected PhysicalInventory physicalInventory = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REASON_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration reasonEnumeration = null;
+   protected Enumeration reasonEnumeration = null;
    private transient InventoryItemVariance inventoryItemVariance = null;
 
   /**

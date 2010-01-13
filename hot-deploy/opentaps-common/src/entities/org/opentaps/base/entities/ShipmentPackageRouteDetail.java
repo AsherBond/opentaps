@@ -87,7 +87,7 @@ fieldMapColumns.put("ShipmentPackageRouteDetail", fields);
     shipmentMethodTypeId("shipmentMethodTypeId"),
     statusId("statusId"),
     primaryOrderId("primaryOrderId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

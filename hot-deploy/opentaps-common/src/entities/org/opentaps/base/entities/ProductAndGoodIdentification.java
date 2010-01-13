@@ -267,7 +267,7 @@ fieldMapColumns.put("ProductAndGoodIdentification", fields);
     idValue("idValue"),
     keyword("keyword"),
     relevancyWeight("relevancyWeight");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

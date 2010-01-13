@@ -72,7 +72,7 @@ fieldMapColumns.put("EmploymentAppSourceType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,36 +86,36 @@ fieldMapColumns.put("EmploymentAppSourceType", fields);
    @GeneratedValue(generator="EmploymentAppSourceType_GEN")
    @Id
    @Column(name="EMPLOYMENT_APP_SOURCE_TYPE_ID")
-   private String employmentAppSourceTypeId;
+   protected String employmentAppSourceTypeId;
    @Column(name="PARENT_TYPE_ID")
-   private String parentTypeId;
+   protected String parentTypeId;
    @Column(name="HAS_TABLE")
-   private String hasTable;
+   protected String hasTable;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EmploymentAppSourceType parentEmploymentAppSourceType = null;
+   protected EmploymentAppSourceType parentEmploymentAppSourceType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="EMPLOYMENT_APP_SOURCE_TYPE_ID")
    
-   private List<EmploymentApp> employmentApps = null;
+   protected List<EmploymentApp> employmentApps = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   private List<EmploymentAppSourceType> childEmploymentAppSourceTypes = null;
+   protected List<EmploymentAppSourceType> childEmploymentAppSourceTypes = null;
 
   /**
    * Default constructor.

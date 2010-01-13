@@ -72,7 +72,7 @@ fieldMapColumns.put("CommunicationEventPrpTyp", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,36 +86,36 @@ fieldMapColumns.put("CommunicationEventPrpTyp", fields);
    @GeneratedValue(generator="CommunicationEventPrpTyp_GEN")
    @Id
    @Column(name="COMMUNICATION_EVENT_PRP_TYP_ID")
-   private String communicationEventPrpTypId;
+   protected String communicationEventPrpTypId;
    @Column(name="PARENT_TYPE_ID")
-   private String parentTypeId;
+   protected String parentTypeId;
    @Column(name="HAS_TABLE")
-   private String hasTable;
+   protected String hasTable;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CommunicationEventPrpTyp parentCommunicationEventPrpTyp = null;
+   protected CommunicationEventPrpTyp parentCommunicationEventPrpTyp = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   private List<CommunicationEventPrpTyp> childCommunicationEventPrpTyps = null;
+   protected List<CommunicationEventPrpTyp> childCommunicationEventPrpTyps = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="communicationEventPrpTyp", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="COMMUNICATION_EVENT_PRP_TYP_ID")
    
-   private List<CommunicationEventPurpose> communicationEventPurposes = null;
+   protected List<CommunicationEventPurpose> communicationEventPurposes = null;
 
   /**
    * Default constructor.

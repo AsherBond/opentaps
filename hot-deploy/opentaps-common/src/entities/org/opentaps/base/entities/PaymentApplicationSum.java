@@ -98,7 +98,7 @@ fieldMapColumns.put("PaymentApplicationSum", fields);
     amount("amount"),
     currencyUomId("currencyUomId"),
     amountApplied("amountApplied");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -138,7 +138,7 @@ fieldMapColumns.put("PaymentApplicationSum", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentMethod paymentMethod = null;
+   protected PaymentMethod paymentMethod = null;
 
   /**
    * Default constructor.

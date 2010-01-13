@@ -248,7 +248,7 @@ fieldMapColumns.put("ProductInventoryItemAndItemIssuance", fields);
     acctgTagEnumId9("acctgTagEnumId9"),
     acctgTagEnumId10("acctgTagEnumId10"),
     parentInventoryItemId("parentInventoryItemId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -382,8 +382,8 @@ fieldMapColumns.put("ProductInventoryItemAndItemIssuance", fields);
    private String acctgTagEnumId10;
     
    private String parentInventoryItemId;
-   private transient List<InventoryItem> inventoryItems = null;
-   private transient List<ItemIssuance> itemIssuances = null;
+   protected transient List<InventoryItem> inventoryItems = null;
+   protected transient List<ItemIssuance> itemIssuances = null;
 
   /**
    * Default constructor.

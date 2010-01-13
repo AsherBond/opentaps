@@ -68,7 +68,7 @@ fieldMapColumns.put("FinAccountTransTypeAttr", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -81,7 +81,7 @@ fieldMapColumns.put("FinAccountTransTypeAttr", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.FinAccountTransTypeAttrPkBridge.class)
-     private FinAccountTransTypeAttrPk id = new FinAccountTransTypeAttrPk();
+     protected FinAccountTransTypeAttrPk id = new FinAccountTransTypeAttrPk();
    
     /**
      * Auto generated Id accessor.
@@ -98,22 +98,22 @@ fieldMapColumns.put("FinAccountTransTypeAttr", fields);
          this.id = id;
       }
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_TRANS_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private FinAccountTransType finAccountTransType = null;
-   private transient List<FinAccountTransAttribute> finAccountTransAttributes = null;
-   private transient List<FinAccountTrans> finAccountTranses = null;
+   protected FinAccountTransType finAccountTransType = null;
+   protected transient List<FinAccountTransAttribute> finAccountTransAttributes = null;
+   protected transient List<FinAccountTrans> finAccountTranses = null;
 
   /**
    * Default constructor.

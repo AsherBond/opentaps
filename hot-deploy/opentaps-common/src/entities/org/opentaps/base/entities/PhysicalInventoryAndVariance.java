@@ -89,7 +89,7 @@ fieldMapColumns.put("PhysicalInventoryAndVariance", fields);
     availableToPromiseVar("availableToPromiseVar"),
     quantityOnHandVar("quantityOnHandVar"),
     comments("comments");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -123,21 +123,21 @@ fieldMapColumns.put("PhysicalInventoryAndVariance", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private VarianceReason varianceReason = null;
+   protected VarianceReason varianceReason = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_ITEM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private InventoryItem inventoryItem = null;
+   protected InventoryItem inventoryItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    private transient Person person = null;
    private transient PartyGroup partyGroup = null;
 

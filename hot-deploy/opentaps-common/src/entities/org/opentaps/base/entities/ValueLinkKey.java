@@ -85,7 +85,7 @@ fieldMapColumns.put("ValueLinkKey", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -99,33 +99,33 @@ fieldMapColumns.put("ValueLinkKey", fields);
    @GeneratedValue(generator="ValueLinkKey_GEN")
    @Id
    @Column(name="MERCHANT_ID")
-   private String merchantId;
+   protected String merchantId;
    @Column(name="PUBLIC_KEY")
-   private String publicKey;
+   protected String publicKey;
    @Column(name="PRIVATE_KEY")
-   private String privateKey;
+   protected String privateKey;
    @Column(name="EXCHANGE_KEY")
-   private String exchangeKey;
+   protected String exchangeKey;
    @Column(name="WORKING_KEY")
-   private String workingKey;
+   protected String workingKey;
    @Column(name="WORKING_KEY_INDEX")
-   private Long workingKeyIndex;
+   protected Long workingKeyIndex;
    @Column(name="LAST_WORKING_KEY")
-   private String lastWorkingKey;
+   protected String lastWorkingKey;
    @Column(name="LAST_MODIFIED_DATE")
-   private Timestamp lastModifiedDate;
+   protected Timestamp lastModifiedDate;
    @Column(name="LAST_MODIFIED_BY_TERMINAL")
-   private String lastModifiedByTerminal;
+   protected String lastModifiedByTerminal;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   private String lastModifiedByUserLogin;
+   protected String lastModifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

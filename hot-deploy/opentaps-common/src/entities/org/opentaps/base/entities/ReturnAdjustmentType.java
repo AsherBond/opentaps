@@ -72,7 +72,7 @@ fieldMapColumns.put("ReturnAdjustmentType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,40 +86,40 @@ fieldMapColumns.put("ReturnAdjustmentType", fields);
    @GeneratedValue(generator="ReturnAdjustmentType_GEN")
    @Id
    @Column(name="RETURN_ADJUSTMENT_TYPE_ID")
-   private String returnAdjustmentTypeId;
+   protected String returnAdjustmentTypeId;
    @Column(name="PARENT_TYPE_ID")
-   private String parentTypeId;
+   protected String parentTypeId;
    @Column(name="HAS_TABLE")
-   private String hasTable;
+   protected String hasTable;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ReturnAdjustmentType parentReturnAdjustmentType = null;
+   protected ReturnAdjustmentType parentReturnAdjustmentType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_ADJUSTMENT_TYPE_ID")
    
-   private List<ReturnAdjustment> returnAdjustments = null;
+   protected List<ReturnAdjustment> returnAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   private List<ReturnAdjustmentType> childReturnAdjustmentTypes = null;
+   protected List<ReturnAdjustmentType> childReturnAdjustmentTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_ITEM_TYPE_ID")
    
-   private List<ReturnItemTypeMap> returnItemTypeMaps = null;
+   protected List<ReturnItemTypeMap> returnItemTypeMaps = null;
 
   /**
    * Default constructor.

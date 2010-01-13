@@ -128,7 +128,7 @@ fieldMapColumns.put("Person", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -148,118 +148,119 @@ fieldMapColumns.put("Person", fields);
    } )
    @Boost(10f)
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @Column(name="SALUTATION")
-   private String salutation;
+   protected String salutation;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(5f)
    @Column(name="FIRST_NAME")
-   private String firstName;
+   protected String firstName;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(5f)
    @Column(name="MIDDLE_NAME")
-   private String middleName;
+   protected String middleName;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(5f)
    @Column(name="LAST_NAME")
-   private String lastName;
+   protected String lastName;
    @Column(name="PERSONAL_TITLE")
-   private String personalTitle;
+   protected String personalTitle;
    @Column(name="SUFFIX")
-   private String suffix;
+   protected String suffix;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(1f)
    @Column(name="NICKNAME")
-   private String nickname;
+   protected String nickname;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(5f)
    @Column(name="FIRST_NAME_LOCAL")
-   private String firstNameLocal;
+   protected String firstNameLocal;
    @Column(name="MIDDLE_NAME_LOCAL")
-   private String middleNameLocal;
+   protected String middleNameLocal;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(5f)
    @Column(name="LAST_NAME_LOCAL")
-   private String lastNameLocal;
+   protected String lastNameLocal;
    @Column(name="OTHER_LOCAL")
-   private String otherLocal;
+   protected String otherLocal;
    @Column(name="MEMBER_ID")
-   private String memberId;
+   protected String memberId;
    @Column(name="GENDER")
-   private String gender;
+   protected String gender;
    @Column(name="BIRTH_DATE")
-   private Date birthDate;
+   protected Date birthDate;
    @Column(name="HEIGHT")
-   private BigDecimal height;
+   protected BigDecimal height;
    @Column(name="WEIGHT")
-   private BigDecimal weight;
+   protected BigDecimal weight;
    @Column(name="MOTHERS_MAIDEN_NAME")
-   private String mothersMaidenName;
+   protected String mothersMaidenName;
    @Column(name="MARITAL_STATUS")
-   private String maritalStatus;
+   protected String maritalStatus;
    @Column(name="SOCIAL_SECURITY_NUMBER")
-   private String socialSecurityNumber;
+   protected String socialSecurityNumber;
    @Column(name="PASSPORT_NUMBER")
-   private String passportNumber;
+   protected String passportNumber;
    @Column(name="PASSPORT_EXPIRE_DATE")
-   private Date passportExpireDate;
+   protected Date passportExpireDate;
    @Column(name="TOTAL_YEARS_WORK_EXPERIENCE")
-   private BigDecimal totalYearsWorkExperience;
+   protected BigDecimal totalYearsWorkExperience;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="EMPLOYMENT_STATUS_ENUM_ID")
-   private String employmentStatusEnumId;
+   protected String employmentStatusEnumId;
    @Column(name="RESIDENCE_STATUS_ENUM_ID")
-   private String residenceStatusEnumId;
+   protected String residenceStatusEnumId;
    @Column(name="OCCUPATION")
-   private String occupation;
+   protected String occupation;
    @Column(name="YEARS_WITH_EMPLOYER")
-   private Long yearsWithEmployer;
+   protected Long yearsWithEmployer;
    @Column(name="MONTHS_WITH_EMPLOYER")
-   private Long monthsWithEmployer;
+   protected Long monthsWithEmployer;
    @Column(name="EXISTING_CUSTOMER")
-   private String existingCustomer;
+   protected String existingCustomer;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    @IndexedEmbedded(depth = 2)
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EMPLOYMENT_STATUS_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration employmentStatusEnumeration = null;
+   protected Enumeration employmentStatusEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RESIDENCE_STATUS_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration residenceStatusEnumeration = null;
+   protected Enumeration residenceStatusEnumeration = null;
+   private transient List<AmazonParty> amazonPartys = null;
    private transient List<PartyContactMech> partyContactMeches = null;
    private transient List<PartyContactMechPurpose> partyContactMechPurposes = null;
    private transient List<ProdCatalogRole> prodCatalogRoles = null;
@@ -809,6 +810,17 @@ fieldMapColumns.put("Person", fields);
         return this.residenceStatusEnumeration;
     }
     /**
+     * Auto generated method that gets the related <code>AmazonParty</code> by the relation named <code>AmazonParty</code>.
+     * @return the list of <code>AmazonParty</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AmazonParty> getAmazonPartys() throws RepositoryException {
+        if (this.amazonPartys == null) {
+            this.amazonPartys = getRelated(AmazonParty.class, "AmazonParty");
+        }
+        return this.amazonPartys;
+    }
+    /**
      * Auto generated method that gets the related <code>PartyContactMech</code> by the relation named <code>PartyContactMech</code>.
      * @return the list of <code>PartyContactMech</code>
      * @throws RepositoryException if an error occurs
@@ -939,6 +951,13 @@ fieldMapColumns.put("Person", fields);
     */
     public void setResidenceStatusEnumeration(Enumeration residenceStatusEnumeration) {
         this.residenceStatusEnumeration = residenceStatusEnumeration;
+    }
+    /**
+     * Auto generated value setter.
+     * @param amazonPartys the amazonPartys to set
+    */
+    public void setAmazonPartys(List<AmazonParty> amazonPartys) {
+        this.amazonPartys = amazonPartys;
     }
     /**
      * Auto generated value setter.

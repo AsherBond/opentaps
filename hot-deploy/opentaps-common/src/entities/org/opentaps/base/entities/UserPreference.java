@@ -74,7 +74,7 @@ fieldMapColumns.put("UserPreference", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -87,7 +87,7 @@ fieldMapColumns.put("UserPreference", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.UserPreferencePkBridge.class)
-     private UserPreferencePk id = new UserPreferencePk();
+     protected UserPreferencePk id = new UserPreferencePk();
    
     /**
      * Auto generated Id accessor.
@@ -104,19 +104,19 @@ fieldMapColumns.put("UserPreference", fields);
          this.id = id;
       }
    @Column(name="USER_PREF_GROUP_TYPE_ID")
-   private String userPrefGroupTypeId;
+   protected String userPrefGroupTypeId;
    @Column(name="USER_PREF_VALUE")
-   private String userPrefValue;
+   protected String userPrefValue;
    @Column(name="USER_PREF_DATA_TYPE")
-   private String userPrefDataType;
+   protected String userPrefDataType;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

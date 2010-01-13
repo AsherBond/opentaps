@@ -79,7 +79,7 @@ fieldMapColumns.put("RecurrenceInfo", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -93,65 +93,65 @@ fieldMapColumns.put("RecurrenceInfo", fields);
    @GeneratedValue(generator="RecurrenceInfo_GEN")
    @Id
    @Column(name="RECURRENCE_INFO_ID")
-   private String recurrenceInfoId;
+   protected String recurrenceInfoId;
    @Column(name="START_DATE_TIME")
-   private Timestamp startDateTime;
+   protected Timestamp startDateTime;
    @Column(name="EXCEPTION_DATE_TIMES")
-   private String exceptionDateTimes;
+   protected String exceptionDateTimes;
    @Column(name="RECURRENCE_DATE_TIMES")
-   private String recurrenceDateTimes;
+   protected String recurrenceDateTimes;
    @Column(name="EXCEPTION_RULE_ID")
-   private String exceptionRuleId;
+   protected String exceptionRuleId;
    @Column(name="RECURRENCE_RULE_ID")
-   private String recurrenceRuleId;
+   protected String recurrenceRuleId;
    @Column(name="RECURRENCE_COUNT")
-   private Long recurrenceCount;
+   protected Long recurrenceCount;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RECURRENCE_RULE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RecurrenceRule recurrenceRule = null;
+   protected RecurrenceRule recurrenceRule = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EXCEPTION_RULE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RecurrenceRule exceptionRecurrenceRule = null;
+   protected RecurrenceRule exceptionRecurrenceRule = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RECURRENCE_INFO_ID")
    
-   private List<Invoice> invoices = null;
+   protected List<Invoice> invoices = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="recurrenceInfo", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="RECURRENCE_INFO_ID")
    
-   private List<InvoiceRecurrence> invoiceRecurrences = null;
+   protected List<InvoiceRecurrence> invoiceRecurrences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RECURRENCE_INFO_ID")
    
-   private List<JobSandbox> jobSandboxes = null;
+   protected List<JobSandbox> jobSandboxes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RECURRENCE_INFO_ID")
    
-   private List<ProductAssoc> productAssocs = null;
+   protected List<ProductAssoc> productAssocs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RECURRENCE_INFO_ID")
    
-   private List<ShoppingList> shoppingLists = null;
+   protected List<ShoppingList> shoppingLists = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RECURRENCE_INFO_ID")
    
-   private List<WorkEffort> workEfforts = null;
+   protected List<WorkEffort> workEfforts = null;
 
   /**
    * Default constructor.

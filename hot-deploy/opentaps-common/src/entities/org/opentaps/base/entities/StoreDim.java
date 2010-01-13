@@ -77,7 +77,7 @@ fieldMapColumns.put("StoreDim", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -91,25 +91,25 @@ fieldMapColumns.put("StoreDim", fields);
    @GeneratedValue(generator="StoreDim_GEN")
    @Id
    @Column(name="STORE_DIM_ID")
-   private Long storeDimId;
+   protected Long storeDimId;
    @Column(name="DIM_VERSION")
-   private Long dimVersion;
+   protected Long dimVersion;
    @Column(name="DATE_FROM")
-   private Timestamp dateFrom;
+   protected Timestamp dateFrom;
    @Column(name="DATE_TO")
-   private Timestamp dateTo;
+   protected Timestamp dateTo;
    @Column(name="PRODUCT_STORE_ID")
-   private String productStoreId;
+   protected String productStoreId;
    @Column(name="STORE_DIM_NAME")
-   private String storeDimName;
+   protected String storeDimName;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

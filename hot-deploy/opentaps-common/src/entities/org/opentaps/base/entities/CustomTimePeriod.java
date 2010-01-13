@@ -84,7 +84,7 @@ fieldMapColumns.put("CustomTimePeriod", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     organizationPartyId("organizationPartyId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -98,72 +98,72 @@ fieldMapColumns.put("CustomTimePeriod", fields);
    @GeneratedValue(generator="CustomTimePeriod_GEN")
    @Id
    @Column(name="CUSTOM_TIME_PERIOD_ID")
-   private String customTimePeriodId;
+   protected String customTimePeriodId;
    @Column(name="PARENT_PERIOD_ID")
-   private String parentPeriodId;
+   protected String parentPeriodId;
    @Column(name="PERIOD_TYPE_ID")
-   private String periodTypeId;
+   protected String periodTypeId;
    @Column(name="PERIOD_NUM")
-   private Long periodNum;
+   protected Long periodNum;
    @Column(name="PERIOD_NAME")
-   private String periodName;
+   protected String periodName;
    @Column(name="FROM_DATE")
-   private Date fromDate;
+   protected Date fromDate;
    @Column(name="THRU_DATE")
-   private Date thruDate;
+   protected Date thruDate;
    @Column(name="IS_CLOSED")
-   private String isClosed;
+   protected String isClosed;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="ORGANIZATION_PARTY_ID")
-   private String organizationPartyId;
+   protected String organizationPartyId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_PERIOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CustomTimePeriod parentCustomTimePeriod = null;
+   protected CustomTimePeriod parentCustomTimePeriod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PERIOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PeriodType periodType = null;
+   protected PeriodType periodType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party organizationParty = null;
+   protected Party organizationParty = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CUSTOM_TIME_PERIOD_ID")
    
-   private List<Budget> budgets = null;
+   protected List<Budget> budgets = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_PERIOD_ID")
    
-   private List<CustomTimePeriod> childCustomTimePeriods = null;
+   protected List<CustomTimePeriod> childCustomTimePeriods = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="customTimePeriod", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CUSTOM_TIME_PERIOD_ID")
    
-   private List<GlAccountHistory> glAccountHistorys = null;
+   protected List<GlAccountHistory> glAccountHistorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CUSTOM_TIME_PERIOD_ID")
    
-   private List<SalesForecast> salesForecasts = null;
+   protected List<SalesForecast> salesForecasts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CUSTOM_TIME_PERIOD_ID")
    
-   private List<SalesForecastHistory> salesForecastHistorys = null;
+   protected List<SalesForecastHistory> salesForecastHistorys = null;
 
   /**
    * Default constructor.

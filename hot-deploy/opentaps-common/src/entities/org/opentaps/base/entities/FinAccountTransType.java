@@ -72,7 +72,7 @@ fieldMapColumns.put("FinAccountTransType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,40 +86,40 @@ fieldMapColumns.put("FinAccountTransType", fields);
    @GeneratedValue(generator="FinAccountTransType_GEN")
    @Id
    @Column(name="FIN_ACCOUNT_TRANS_TYPE_ID")
-   private String finAccountTransTypeId;
+   protected String finAccountTransTypeId;
    @Column(name="PARENT_TYPE_ID")
-   private String parentTypeId;
+   protected String parentTypeId;
    @Column(name="HAS_TABLE")
-   private String hasTable;
+   protected String hasTable;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private FinAccountTransType parentFinAccountTransType = null;
+   protected FinAccountTransType parentFinAccountTransType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_TRANS_TYPE_ID")
    
-   private List<FinAccountTrans> finAccountTranses = null;
+   protected List<FinAccountTrans> finAccountTranses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   private List<FinAccountTransType> childFinAccountTransTypes = null;
+   protected List<FinAccountTransType> childFinAccountTransTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="finAccountTransType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIN_ACCOUNT_TRANS_TYPE_ID")
    
-   private List<FinAccountTransTypeAttr> finAccountTransTypeAttrs = null;
+   protected List<FinAccountTransTypeAttr> finAccountTransTypeAttrs = null;
 
   /**
    * Default constructor.

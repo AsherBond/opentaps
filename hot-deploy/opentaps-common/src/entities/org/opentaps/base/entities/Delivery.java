@@ -87,7 +87,7 @@ fieldMapColumns.put("Delivery", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -101,60 +101,60 @@ fieldMapColumns.put("Delivery", fields);
    @GeneratedValue(generator="Delivery_GEN")
    @Id
    @Column(name="DELIVERY_ID")
-   private String deliveryId;
+   protected String deliveryId;
    @Column(name="ORIGIN_FACILITY_ID")
-   private String originFacilityId;
+   protected String originFacilityId;
    @Column(name="DEST_FACILITY_ID")
-   private String destFacilityId;
+   protected String destFacilityId;
    @Column(name="ACTUAL_START_DATE")
-   private Timestamp actualStartDate;
+   protected Timestamp actualStartDate;
    @Column(name="ACTUAL_ARRIVAL_DATE")
-   private Timestamp actualArrivalDate;
+   protected Timestamp actualArrivalDate;
    @Column(name="ESTIMATED_START_DATE")
-   private Timestamp estimatedStartDate;
+   protected Timestamp estimatedStartDate;
    @Column(name="ESTIMATED_ARRIVAL_DATE")
-   private Timestamp estimatedArrivalDate;
+   protected Timestamp estimatedArrivalDate;
    @Column(name="FIXED_ASSET_ID")
-   private String fixedAssetId;
+   protected String fixedAssetId;
    @Column(name="START_MILEAGE")
-   private BigDecimal startMileage;
+   protected BigDecimal startMileage;
    @Column(name="END_MILEAGE")
-   private BigDecimal endMileage;
+   protected BigDecimal endMileage;
    @Column(name="FUEL_USED")
-   private BigDecimal fuelUsed;
+   protected BigDecimal fuelUsed;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private FixedAsset fixedAsset = null;
+   protected FixedAsset fixedAsset = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Facility originFacility = null;
+   protected Facility originFacility = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEST_FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Facility destFacility = null;
+   protected Facility destFacility = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DELIVERY_ID")
    
-   private List<ShipmentRouteSegment> shipmentRouteSegments = null;
+   protected List<ShipmentRouteSegment> shipmentRouteSegments = null;
 
   /**
    * Default constructor.

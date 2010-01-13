@@ -110,7 +110,7 @@ fieldMapColumns.put("GlAccountOrganizationAndClass", fields);
     accountName("accountName"),
     description("description"),
     productId("productId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -158,7 +158,7 @@ fieldMapColumns.put("GlAccountOrganizationAndClass", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GlAccount glAccount = null;
+   protected GlAccount glAccount = null;
    private transient GlAccountOrganization glAccountOrganization = null;
 
   /**

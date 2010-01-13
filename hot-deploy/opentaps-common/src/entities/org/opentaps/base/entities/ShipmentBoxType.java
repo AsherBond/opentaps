@@ -81,7 +81,7 @@ fieldMapColumns.put("ShipmentBoxType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -95,55 +95,55 @@ fieldMapColumns.put("ShipmentBoxType", fields);
    @GeneratedValue(generator="ShipmentBoxType_GEN")
    @Id
    @Column(name="SHIPMENT_BOX_TYPE_ID")
-   private String shipmentBoxTypeId;
+   protected String shipmentBoxTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="DIMENSION_UOM_ID")
-   private String dimensionUomId;
+   protected String dimensionUomId;
    @Column(name="BOX_LENGTH")
-   private BigDecimal boxLength;
+   protected BigDecimal boxLength;
    @Column(name="BOX_WIDTH")
-   private BigDecimal boxWidth;
+   protected BigDecimal boxWidth;
    @Column(name="BOX_HEIGHT")
-   private BigDecimal boxHeight;
+   protected BigDecimal boxHeight;
    @Column(name="WEIGHT_UOM_ID")
-   private String weightUomId;
+   protected String weightUomId;
    @Column(name="BOX_WEIGHT")
-   private BigDecimal boxWeight;
+   protected BigDecimal boxWeight;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DIMENSION_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom dimensionUom = null;
+   protected Uom dimensionUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WEIGHT_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom weightUom = null;
+   protected Uom weightUom = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipmentBoxType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_BOX_TYPE_ID")
    
-   private List<CarrierShipmentBoxType> carrierShipmentBoxTypes = null;
+   protected List<CarrierShipmentBoxType> carrierShipmentBoxTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_SHIPMENT_BOX_TYPE_ID")
    
-   private List<Product> defaultProducts = null;
+   protected List<Product> defaultProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_BOX_TYPE_ID")
    
-   private List<ShipmentPackage> shipmentPackages = null;
+   protected List<ShipmentPackage> shipmentPackages = null;
 
   /**
    * Default constructor.

@@ -91,7 +91,7 @@ fieldMapColumns.put("PosTerminalState", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -104,7 +104,7 @@ fieldMapColumns.put("PosTerminalState", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.PosTerminalStatePkBridge.class)
-     private PosTerminalStatePk id = new PosTerminalStatePk();
+     protected PosTerminalStatePk id = new PosTerminalStatePk();
    
     /**
      * Auto generated Id accessor.
@@ -121,42 +121,42 @@ fieldMapColumns.put("PosTerminalState", fields);
          this.id = id;
       }
    @Column(name="CLOSED_DATE")
-   private Timestamp closedDate;
+   protected Timestamp closedDate;
    @Column(name="STARTING_TX_ID")
-   private String startingTxId;
+   protected String startingTxId;
    @Column(name="ENDING_TX_ID")
-   private String endingTxId;
+   protected String endingTxId;
    @Column(name="OPENED_BY_USER_LOGIN_ID")
-   private String openedByUserLoginId;
+   protected String openedByUserLoginId;
    @Column(name="CLOSED_BY_USER_LOGIN_ID")
-   private String closedByUserLoginId;
+   protected String closedByUserLoginId;
    @Column(name="STARTING_DRAWER_AMOUNT")
-   private BigDecimal startingDrawerAmount;
+   protected BigDecimal startingDrawerAmount;
    @Column(name="ACTUAL_ENDING_CASH")
-   private BigDecimal actualEndingCash;
+   protected BigDecimal actualEndingCash;
    @Column(name="ACTUAL_ENDING_CHECK")
-   private BigDecimal actualEndingCheck;
+   protected BigDecimal actualEndingCheck;
    @Column(name="ACTUAL_ENDING_CC")
-   private BigDecimal actualEndingCc;
+   protected BigDecimal actualEndingCc;
    @Column(name="ACTUAL_ENDING_GC")
-   private BigDecimal actualEndingGc;
+   protected BigDecimal actualEndingGc;
    @Column(name="ACTUAL_ENDING_OTHER")
-   private BigDecimal actualEndingOther;
+   protected BigDecimal actualEndingOther;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="POS_TERMINAL_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PosTerminal posTerminal = null;
+   protected PosTerminal posTerminal = null;
 
   /**
    * Default constructor.

@@ -85,7 +85,7 @@ fieldMapColumns.put("CustRequestNoteView", fields);
     noteParty("noteParty"),
     firstName("firstName"),
     lastName("lastName");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

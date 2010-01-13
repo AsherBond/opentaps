@@ -123,7 +123,7 @@ fieldMapColumns.put("AmazonOrder", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -134,117 +134,117 @@ fieldMapColumns.put("AmazonOrder", fields);
   }
 
    @Column(name="DOCUMENT_ID")
-   private String documentId;
+   protected String documentId;
    @Column(name="DOCUMENT_MESSAGE_ID")
-   private String documentMessageId;
+   protected String documentMessageId;
    @org.hibernate.annotations.GenericGenerator(name="AmazonOrder_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
    @GeneratedValue(generator="AmazonOrder_GEN")
    @Id
    @Column(name="AMAZON_ORDER_ID")
-   private String amazonOrderId;
+   protected String amazonOrderId;
    @Column(name="AMAZON_SESSION_ID")
-   private String amazonSessionId;
+   protected String amazonSessionId;
    @Column(name="ORDER_DATE")
-   private Timestamp orderDate;
+   protected Timestamp orderDate;
    @Column(name="ORDER_POSTED_DATE")
-   private Timestamp orderPostedDate;
+   protected Timestamp orderPostedDate;
    @Column(name="BUYER_EMAIL_ADDRESS")
-   private String buyerEmailAddress;
+   protected String buyerEmailAddress;
    @Column(name="BUYER_NAME")
-   private String buyerName;
+   protected String buyerName;
    @Column(name="BUYER_PHONE_NUMBER")
-   private String buyerPhoneNumber;
+   protected String buyerPhoneNumber;
    @Column(name="FULFILLMENT_METHOD")
-   private String fulfillmentMethod;
+   protected String fulfillmentMethod;
    @Column(name="FULFILLMENT_SERVICE_LEVEL")
-   private String fulfillmentServiceLevel;
+   protected String fulfillmentServiceLevel;
    @Column(name="ADDRESS_NAME")
-   private String addressName;
+   protected String addressName;
    @Column(name="ADDRESS_FIELD_ONE")
-   private String addressFieldOne;
+   protected String addressFieldOne;
    @Column(name="ADDRESS_FIELD_TWO")
-   private String addressFieldTwo;
+   protected String addressFieldTwo;
    @Column(name="ADDRESS_FIELD_THREE")
-   private String addressFieldThree;
+   protected String addressFieldThree;
    @Column(name="ADDRESS_CITY")
-   private String addressCity;
+   protected String addressCity;
    @Column(name="ADDRESS_STATE_OR_REGION")
-   private String addressStateOrRegion;
+   protected String addressStateOrRegion;
    @Column(name="ADDRESS_POSTAL_CODE")
-   private String addressPostalCode;
+   protected String addressPostalCode;
    @Column(name="ADDRESS_COUNTRY_CODE")
-   private String addressCountryCode;
+   protected String addressCountryCode;
    @Column(name="ADDRESS_PHONE_NUMBER")
-   private String addressPhoneNumber;
+   protected String addressPhoneNumber;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="ACK_STATUS_ID")
-   private String ackStatusId;
+   protected String ackStatusId;
    @Column(name="IMPORT_TIMESTAMP")
-   private Timestamp importTimestamp;
+   protected Timestamp importTimestamp;
    @Column(name="IMPORT_FAILURES")
-   private Long importFailures;
+   protected Long importFailures;
    @Column(name="IMPORT_ERROR_MESSAGE")
-   private String importErrorMessage;
+   protected String importErrorMessage;
    @Column(name="ACKNOWLEDGE_TIMESTAMP")
-   private Timestamp acknowledgeTimestamp;
+   protected Timestamp acknowledgeTimestamp;
    @Column(name="ACKNOWLEDGE_ERROR_MESSAGE")
-   private String acknowledgeErrorMessage;
+   protected String acknowledgeErrorMessage;
    @Column(name="PROCESSING_DOCUMENT_ID")
-   private Long processingDocumentId;
+   protected Long processingDocumentId;
    @Column(name="ACKNOWLEDGE_MESSAGE_ID")
-   private String acknowledgeMessageId;
+   protected String acknowledgeMessageId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DOCUMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AmazonOrderDocument amazonOrderDocument = null;
+   protected AmazonOrderDocument amazonOrderDocument = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BUYER_EMAIL_ADDRESS", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AmazonParty amazonParty = null;
+   protected AmazonParty amazonParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACK_STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem ackStatusItem = null;
+   protected StatusItem ackStatusItem = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AMAZON_ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AmazonOrderImport amazonOrderImport = null;
+   protected AmazonOrderImport amazonOrderImport = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="amazonOrder", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="AMAZON_ORDER_ID")
    
-   private List<AmazonOrderItem> amazonOrderItems = null;
+   protected List<AmazonOrderItem> amazonOrderItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="amazonOrder", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="AMAZON_ORDER_ID")
    
-   private List<AmazonOrderItemImport> amazonOrderItemImports = null;
+   protected List<AmazonOrderItemImport> amazonOrderItemImports = null;
 
   /**
    * Default constructor.

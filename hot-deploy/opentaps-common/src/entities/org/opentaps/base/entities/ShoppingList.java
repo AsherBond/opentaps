@@ -104,7 +104,7 @@ fieldMapColumns.put("ShoppingList", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -118,92 +118,92 @@ fieldMapColumns.put("ShoppingList", fields);
    @GeneratedValue(generator="ShoppingList_GEN")
    @Id
    @Column(name="SHOPPING_LIST_ID")
-   private String shoppingListId;
+   protected String shoppingListId;
    @Column(name="SHOPPING_LIST_TYPE_ID")
-   private String shoppingListTypeId;
+   protected String shoppingListTypeId;
    @Column(name="PARENT_SHOPPING_LIST_ID")
-   private String parentShoppingListId;
+   protected String parentShoppingListId;
    @Column(name="PRODUCT_STORE_ID")
-   private String productStoreId;
+   protected String productStoreId;
    @Column(name="VISITOR_ID")
-   private String visitorId;
+   protected String visitorId;
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @Column(name="LIST_NAME")
-   private String listName;
+   protected String listName;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="IS_PUBLIC")
-   private String isPublic;
+   protected String isPublic;
    @Column(name="IS_ACTIVE")
-   private String isActive;
+   protected String isActive;
    @Column(name="CURRENCY_UOM")
-   private String currencyUom;
+   protected String currencyUom;
    @Column(name="SHIPMENT_METHOD_TYPE_ID")
-   private String shipmentMethodTypeId;
+   protected String shipmentMethodTypeId;
    @Column(name="CARRIER_PARTY_ID")
-   private String carrierPartyId;
+   protected String carrierPartyId;
    @Column(name="CARRIER_ROLE_TYPE_ID")
-   private String carrierRoleTypeId;
+   protected String carrierRoleTypeId;
    @Column(name="CONTACT_MECH_ID")
-   private String contactMechId;
+   protected String contactMechId;
    @Column(name="PAYMENT_METHOD_ID")
-   private String paymentMethodId;
+   protected String paymentMethodId;
    @Column(name="RECURRENCE_INFO_ID")
-   private String recurrenceInfoId;
+   protected String recurrenceInfoId;
    @Column(name="LAST_ORDERED_DATE")
-   private Timestamp lastOrderedDate;
+   protected Timestamp lastOrderedDate;
    @Column(name="LAST_ADMIN_MODIFIED")
-   private Timestamp lastAdminModified;
+   protected Timestamp lastAdminModified;
    @Column(name="PRODUCT_PROMO_CODE_ID")
-   private String productPromoCodeId;
+   protected String productPromoCodeId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_SHOPPING_LIST_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ShoppingList parentShoppingList = null;
+   protected ShoppingList parentShoppingList = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_SHOPPING_LIST_ID")
    
-   private List<ShoppingList> siblingShoppingLists = null;
+   protected List<ShoppingList> siblingShoppingLists = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHOPPING_LIST_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ShoppingListType shoppingListType = null;
+   protected ShoppingListType shoppingListType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductStore productStore = null;
+   protected ProductStore productStore = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="VISITOR_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Visitor visitor = null;
+   protected Visitor visitor = null;
    private transient List<ProductStoreShipmentMeth> productStoreShipmentMeths = null;
    private transient CarrierShipmentMethod carrierShipmentMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -212,55 +212,55 @@ fieldMapColumns.put("ShoppingList", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMech contactMech = null;
+   protected ContactMech contactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PostalAddress postalAddress = null;
+   protected PostalAddress postalAddress = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentMethod paymentMethod = null;
+   protected PaymentMethod paymentMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RECURRENCE_INFO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RecurrenceInfo recurrenceInfo = null;
+   protected RecurrenceInfo recurrenceInfo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PROMO_CODE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductPromoCode productPromoCode = null;
+   protected ProductPromoCode productPromoCode = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AUTO_ORDER_SHOPPING_LIST_ID")
    
-   private List<OrderHeader> autoOrderOrderHeaders = null;
+   protected List<OrderHeader> autoOrderOrderHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_SHOPPING_LIST_ID")
    
-   private List<ShoppingList> childShoppingLists = null;
+   protected List<ShoppingList> childShoppingLists = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shoppingList", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHOPPING_LIST_ID")
    
-   private List<ShoppingListItem> shoppingListItems = null;
+   protected List<ShoppingListItem> shoppingListItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shoppingList", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHOPPING_LIST_ID")
    
-   private List<ShoppingListItemSurvey> shoppingListItemSurveys = null;
+   protected List<ShoppingListItemSurvey> shoppingListItemSurveys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shoppingList", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHOPPING_LIST_ID")
    
-   private List<ShoppingListWorkEffort> shoppingListWorkEfforts = null;
+   protected List<ShoppingListWorkEffort> shoppingListWorkEfforts = null;
 
   /**
    * Default constructor.

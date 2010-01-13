@@ -89,7 +89,7 @@ fieldMapColumns.put("ProductPromoCode", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -103,78 +103,78 @@ fieldMapColumns.put("ProductPromoCode", fields);
    @GeneratedValue(generator="ProductPromoCode_GEN")
    @Id
    @Column(name="PRODUCT_PROMO_CODE_ID")
-   private String productPromoCodeId;
+   protected String productPromoCodeId;
    @Column(name="PRODUCT_PROMO_ID")
-   private String productPromoId;
+   protected String productPromoId;
    @Column(name="USER_ENTERED")
-   private String userEntered;
+   protected String userEntered;
    @Column(name="REQUIRE_EMAIL_OR_PARTY")
-   private String requireEmailOrParty;
+   protected String requireEmailOrParty;
    @Column(name="USE_LIMIT_PER_CODE")
-   private Long useLimitPerCode;
+   protected Long useLimitPerCode;
    @Column(name="USE_LIMIT_PER_CUSTOMER")
-   private Long useLimitPerCustomer;
+   protected Long useLimitPerCustomer;
    @Column(name="FROM_DATE")
-   private Timestamp fromDate;
+   protected Timestamp fromDate;
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="CREATED_DATE")
-   private Timestamp createdDate;
+   protected Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   private String createdByUserLogin;
+   protected String createdByUserLogin;
    @Column(name="LAST_MODIFIED_DATE")
-   private Timestamp lastModifiedDate;
+   protected Timestamp lastModifiedDate;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   private String lastModifiedByUserLogin;
+   protected String lastModifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PROMO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductPromo productPromo = null;
+   protected ProductPromo productPromo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin relatedCreatedByUserLogin = null;
+   protected UserLogin relatedCreatedByUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin relatedLastModifiedByUserLogin = null;
+   protected UserLogin relatedLastModifiedByUserLogin = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productPromoCode", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_PROMO_CODE_ID")
    
-   private List<OrderProductPromoCode> orderProductPromoCodes = null;
+   protected List<OrderProductPromoCode> orderProductPromoCodes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productPromoCode", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_PROMO_CODE_ID")
    
-   private List<ProductPromoCodeEmail> productPromoCodeEmails = null;
+   protected List<ProductPromoCodeEmail> productPromoCodeEmails = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productPromoCode", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_PROMO_CODE_ID")
    
-   private List<ProductPromoCodeParty> productPromoCodePartys = null;
+   protected List<ProductPromoCodeParty> productPromoCodePartys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PROMO_CODE_ID")
    
-   private List<ProductPromoUse> productPromoUses = null;
+   protected List<ProductPromoUse> productPromoUses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PROMO_CODE_ID")
    
-   private List<ShoppingList> shoppingLists = null;
+   protected List<ShoppingList> shoppingLists = null;
 
   /**
    * Default constructor.

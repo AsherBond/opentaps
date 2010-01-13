@@ -233,7 +233,7 @@ fieldMapColumns.put("OrderItemAndShipGroupAssoc", fields);
     shipGroupSeqId("shipGroupSeqId"),
     quantity("quantity"),
     cancelQuantity("cancelQuantity");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -363,14 +363,14 @@ fieldMapColumns.put("OrderItemAndShipGroupAssoc", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    private transient List<ItemIssuance> itemIssuances = null;
    private transient List<OrderItemShipGrpInvRes> orderItemShipGrpInvReses = null;
    private transient List<OrderItemShipGrpInvResAndItem> orderItemShipGrpInvResAndItems = null;

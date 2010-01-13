@@ -95,7 +95,7 @@ fieldMapColumns.put("FacilityLocationAndGeoPoint", fields);
     elevation("elevation"),
     elevationUomId("elevationUomId"),
     information("information");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -135,7 +135,7 @@ fieldMapColumns.put("FacilityLocationAndGeoPoint", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GeoPoint geoPoint = null;
+   protected GeoPoint geoPoint = null;
 
   /**
    * Default constructor.

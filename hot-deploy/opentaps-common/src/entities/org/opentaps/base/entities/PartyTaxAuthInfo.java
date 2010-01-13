@@ -80,7 +80,7 @@ fieldMapColumns.put("PartyTaxAuthInfo", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -93,7 +93,7 @@ fieldMapColumns.put("PartyTaxAuthInfo", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.PartyTaxAuthInfoPkBridge.class)
-     private PartyTaxAuthInfoPk id = new PartyTaxAuthInfoPk();
+     protected PartyTaxAuthInfoPk id = new PartyTaxAuthInfoPk();
    
     /**
      * Auto generated Id accessor.
@@ -110,28 +110,28 @@ fieldMapColumns.put("PartyTaxAuthInfo", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="PARTY_TAX_ID")
-   private String partyTaxId;
+   protected String partyTaxId;
    @Column(name="IS_EXEMPT")
-   private String isExempt;
+   protected String isExempt;
    @Column(name="IS_NEXUS")
-   private String isNexus;
+   protected String isNexus;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    private transient TaxAuthority taxAuthority = null;
 
   /**

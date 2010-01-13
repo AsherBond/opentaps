@@ -74,7 +74,7 @@ fieldMapColumns.put("OrderNotification", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,41 +88,41 @@ fieldMapColumns.put("OrderNotification", fields);
    @GeneratedValue(generator="OrderNotification_GEN")
    @Id
    @Column(name="ORDER_NOTIFICATION_ID")
-   private String orderNotificationId;
+   protected String orderNotificationId;
    @Column(name="ORDER_ID")
-   private String orderId;
+   protected String orderId;
    @Column(name="EMAIL_TYPE")
-   private String emailType;
+   protected String emailType;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="NOTIFICATION_DATE")
-   private Timestamp notificationDate;
+   protected Timestamp notificationDate;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID")
    
-   private List<OrderItem> orderItems = null;
+   protected List<OrderItem> orderItems = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EMAIL_TYPE", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration enumeration = null;
+   protected Enumeration enumeration = null;
 
   /**
    * Default constructor.

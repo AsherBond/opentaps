@@ -86,7 +86,7 @@ fieldMapColumns.put("AcctgTagPostingCheck", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -100,42 +100,42 @@ fieldMapColumns.put("AcctgTagPostingCheck", fields);
    @GeneratedValue(generator="AcctgTagPostingCheck_GEN")
    @Id
    @Column(name="ORGANIZATION_PARTY_ID")
-   private String organizationPartyId;
+   protected String organizationPartyId;
    @Column(name="TAG_ENUM1_MUST_BALANCE")
-   private String tagEnum1MustBalance;
+   protected String tagEnum1MustBalance;
    @Column(name="TAG_ENUM2_MUST_BALANCE")
-   private String tagEnum2MustBalance;
+   protected String tagEnum2MustBalance;
    @Column(name="TAG_ENUM3_MUST_BALANCE")
-   private String tagEnum3MustBalance;
+   protected String tagEnum3MustBalance;
    @Column(name="TAG_ENUM4_MUST_BALANCE")
-   private String tagEnum4MustBalance;
+   protected String tagEnum4MustBalance;
    @Column(name="TAG_ENUM5_MUST_BALANCE")
-   private String tagEnum5MustBalance;
+   protected String tagEnum5MustBalance;
    @Column(name="TAG_ENUM6_MUST_BALANCE")
-   private String tagEnum6MustBalance;
+   protected String tagEnum6MustBalance;
    @Column(name="TAG_ENUM7_MUST_BALANCE")
-   private String tagEnum7MustBalance;
+   protected String tagEnum7MustBalance;
    @Column(name="TAG_ENUM8_MUST_BALANCE")
-   private String tagEnum8MustBalance;
+   protected String tagEnum8MustBalance;
    @Column(name="TAG_ENUM9_MUST_BALANCE")
-   private String tagEnum9MustBalance;
+   protected String tagEnum9MustBalance;
    @Column(name="TAG_ENUM10_MUST_BALANCE")
-   private String tagEnum10MustBalance;
+   protected String tagEnum10MustBalance;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
 
   /**
    * Default constructor.

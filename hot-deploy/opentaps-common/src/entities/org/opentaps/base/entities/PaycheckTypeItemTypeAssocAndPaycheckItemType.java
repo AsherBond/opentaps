@@ -75,7 +75,7 @@ fieldMapColumns.put("PaycheckTypeItemTypeAssocAndPaycheckItemType", fields);
     description("description"),
     paycheckItemClassId("paycheckItemClassId"),
     defaultSeqNum("defaultSeqNum");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

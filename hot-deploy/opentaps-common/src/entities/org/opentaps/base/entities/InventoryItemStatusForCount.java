@@ -82,7 +82,7 @@ fieldMapColumns.put("InventoryItemStatusForCount", fields);
     statusId("statusId"),
     statusDatetime("statusDatetime"),
     statusEndDatetime("statusEndDatetime");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

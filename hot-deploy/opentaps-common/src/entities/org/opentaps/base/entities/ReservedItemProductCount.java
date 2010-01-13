@@ -80,7 +80,7 @@ fieldMapColumns.put("ReservedItemProductCount", fields);
     orderItemStatusId("orderItemStatusId"),
     quantityNotAvailable("quantityNotAvailable"),
     facilityId("facilityId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

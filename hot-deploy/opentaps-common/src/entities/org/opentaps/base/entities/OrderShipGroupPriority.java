@@ -71,7 +71,7 @@ fieldMapColumns.put("OrderShipGroupPriority", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,7 +84,7 @@ fieldMapColumns.put("OrderShipGroupPriority", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.OrderShipGroupPriorityPkBridge.class)
-     private OrderShipGroupPriorityPk id = new OrderShipGroupPriorityPk();
+     protected OrderShipGroupPriorityPk id = new OrderShipGroupPriorityPk();
    
     /**
      * Auto generated Id accessor.
@@ -101,22 +101,22 @@ fieldMapColumns.put("OrderShipGroupPriority", fields);
          this.id = id;
       }
    @Column(name="PRIORITY_VALUE")
-   private BigDecimal priorityValue;
+   protected BigDecimal priorityValue;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
    private transient OrderItemShipGroup orderItemShipGroup = null;
 
   /**

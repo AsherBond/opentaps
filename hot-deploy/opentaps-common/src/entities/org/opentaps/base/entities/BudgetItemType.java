@@ -72,7 +72,7 @@ fieldMapColumns.put("BudgetItemType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,48 +86,48 @@ fieldMapColumns.put("BudgetItemType", fields);
    @GeneratedValue(generator="BudgetItemType_GEN")
    @Id
    @Column(name="BUDGET_ITEM_TYPE_ID")
-   private String budgetItemTypeId;
+   protected String budgetItemTypeId;
    @Column(name="PARENT_TYPE_ID")
-   private String parentTypeId;
+   protected String parentTypeId;
    @Column(name="HAS_TABLE")
-   private String hasTable;
+   protected String hasTable;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private BudgetItemType parentBudgetItemType = null;
+   protected BudgetItemType parentBudgetItemType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BUDGET_ITEM_TYPE_ID")
    
-   private List<BudgetItem> budgetItems = null;
+   protected List<BudgetItem> budgetItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   private List<BudgetItemType> childBudgetItemTypes = null;
+   protected List<BudgetItemType> childBudgetItemTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="budgetItemType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BUDGET_ITEM_TYPE_ID")
    
-   private List<BudgetItemTypeAttr> budgetItemTypeAttrs = null;
+   protected List<BudgetItemTypeAttr> budgetItemTypeAttrs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="budgetItemType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BUDGET_ITEM_TYPE_ID")
    
-   private List<BudgetScenarioRule> budgetScenarioRules = null;
+   protected List<BudgetScenarioRule> budgetScenarioRules = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="budgetItemType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BUDGET_ITEM_TYPE_ID")
    
-   private List<GlBudgetXref> glBudgetXrefs = null;
+   protected List<GlBudgetXref> glBudgetXrefs = null;
 
   /**
    * Default constructor.

@@ -78,7 +78,7 @@ fieldMapColumns.put("ContextHelpResource", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,27 +92,27 @@ fieldMapColumns.put("ContextHelpResource", fields);
    @GeneratedValue(generator="ContextHelpResource_GEN")
    @Id
    @Column(name="CONTEXT_HELP_RESOURCE_ID")
-   private String contextHelpResourceId;
+   protected String contextHelpResourceId;
    @Column(name="SCREEN_NAME")
-   private String screenName;
+   protected String screenName;
    @Column(name="APPLICATION_NAME")
-   private String applicationName;
+   protected String applicationName;
    @Column(name="SCREEN_STATE")
-   private String screenState;
+   protected String screenState;
    @Column(name="REMOTE_PAGE_NAME")
-   private String remotePageName;
+   protected String remotePageName;
    @Column(name="REMOTE_PAGE_VERSION")
-   private String remotePageVersion;
+   protected String remotePageVersion;
    @Column(name="OVERRIDE_URL_PATTERN")
-   private String overrideUrlPattern;
+   protected String overrideUrlPattern;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

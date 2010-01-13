@@ -88,7 +88,7 @@ fieldMapColumns.put("InvoiceTerm", fields);
     createdTxStamp("createdTxStamp"),
     minQuantity("minQuantity"),
     maxQuantity("maxQuantity");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -102,54 +102,54 @@ fieldMapColumns.put("InvoiceTerm", fields);
    @GeneratedValue(generator="InvoiceTerm_GEN")
    @Id
    @Column(name="INVOICE_TERM_ID")
-   private String invoiceTermId;
+   protected String invoiceTermId;
    @Column(name="TERM_TYPE_ID")
-   private String termTypeId;
+   protected String termTypeId;
    @Column(name="INVOICE_ID")
-   private String invoiceId;
+   protected String invoiceId;
    @Column(name="INVOICE_ITEM_SEQ_ID")
-   private String invoiceItemSeqId;
+   protected String invoiceItemSeqId;
    @Column(name="TERM_VALUE")
-   private BigDecimal termValue;
+   protected BigDecimal termValue;
    @Column(name="TERM_DAYS")
-   private Long termDays;
+   protected Long termDays;
    @Column(name="TEXT_VALUE")
-   private String textValue;
+   protected String textValue;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="UOM_ID")
-   private String uomId;
+   protected String uomId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="MIN_QUANTITY")
-   private BigDecimal minQuantity;
+   protected BigDecimal minQuantity;
    @Column(name="MAX_QUANTITY")
-   private BigDecimal maxQuantity;
+   protected BigDecimal maxQuantity;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TERM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TermType termType = null;
+   protected TermType termType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Invoice invoice = null;
+   protected Invoice invoice = null;
    private transient InvoiceItem invoiceItem = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="invoiceTerm", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVOICE_TERM_ID")
    
-   private List<InvoiceTermAttribute> invoiceTermAttributes = null;
+   protected List<InvoiceTermAttribute> invoiceTermAttributes = null;
 
   /**
    * Default constructor.

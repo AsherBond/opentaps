@@ -82,7 +82,7 @@ fieldMapColumns.put("EntityAuditLog", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -96,31 +96,31 @@ fieldMapColumns.put("EntityAuditLog", fields);
    @GeneratedValue(generator="EntityAuditLog_GEN")
    @Id
    @Column(name="AUDIT_HISTORY_SEQ_ID")
-   private String auditHistorySeqId;
+   protected String auditHistorySeqId;
    @Column(name="CHANGED_ENTITY_NAME")
-   private String changedEntityName;
+   protected String changedEntityName;
    @Column(name="CHANGED_FIELD_NAME")
-   private String changedFieldName;
+   protected String changedFieldName;
    @Column(name="PK_COMBINED_VALUE_TEXT")
-   private String pkCombinedValueText;
+   protected String pkCombinedValueText;
    @Column(name="OLD_VALUE_TEXT")
-   private String oldValueText;
+   protected String oldValueText;
    @Column(name="NEW_VALUE_TEXT")
-   private String newValueText;
+   protected String newValueText;
    @Column(name="CHANGED_DATE")
-   private Timestamp changedDate;
+   protected Timestamp changedDate;
    @Column(name="CHANGED_BY_INFO")
-   private String changedByInfo;
+   protected String changedByInfo;
    @Column(name="CHANGED_SESSION_INFO")
-   private String changedSessionInfo;
+   protected String changedSessionInfo;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

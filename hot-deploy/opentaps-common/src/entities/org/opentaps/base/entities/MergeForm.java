@@ -78,7 +78,7 @@ fieldMapColumns.put("MergeForm", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,35 +92,35 @@ fieldMapColumns.put("MergeForm", fields);
    @GeneratedValue(generator="MergeForm_GEN")
    @Id
    @Column(name="MERGE_FORM_ID")
-   private String mergeFormId;
+   protected String mergeFormId;
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @Column(name="MERGE_FORM_NAME")
-   private String mergeFormName;
+   protected String mergeFormName;
    @Column(name="SUBJECT")
-   private String subject;
+   protected String subject;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="MERGE_FORM_TEXT")
-   private String mergeFormText;
+   protected String mergeFormText;
    @Column(name="SHOW_IN_SELECT")
-   private String showInSelect;
+   protected String showInSelect;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   private List<Party> partys = null;
+   protected List<Party> partys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="mergeForm", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="MERGE_FORM_ID")
    
-   private List<MergeFormToCategory> mergeFormToCategorys = null;
+   protected List<MergeFormToCategory> mergeFormToCategorys = null;
 
   /**
    * Default constructor.

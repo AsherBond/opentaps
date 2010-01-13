@@ -81,7 +81,7 @@ fieldMapColumns.put("MrpInventoryEventDetail", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -94,7 +94,7 @@ fieldMapColumns.put("MrpInventoryEventDetail", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.MrpInventoryEventDetailPkBridge.class)
-     private MrpInventoryEventDetailPk id = new MrpInventoryEventDetailPk();
+     protected MrpInventoryEventDetailPk id = new MrpInventoryEventDetailPk();
    
     /**
      * Auto generated Id accessor.
@@ -111,19 +111,19 @@ fieldMapColumns.put("MrpInventoryEventDetail", fields);
          this.id = id;
       }
    @Column(name="ORDER_ID")
-   private String orderId;
+   protected String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   private String orderItemSeqId;
+   protected String orderItemSeqId;
    @Column(name="QUANTITY")
-   private BigDecimal quantity;
+   protected BigDecimal quantity;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    private transient OrderItem orderItem = null;
 
   /**

@@ -118,7 +118,7 @@ fieldMapColumns.put("CommunicationEvent", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -132,88 +132,88 @@ fieldMapColumns.put("CommunicationEvent", fields);
    @GeneratedValue(generator="CommunicationEvent_GEN")
    @Id
    @Column(name="COMMUNICATION_EVENT_ID")
-   private String communicationEventId;
+   protected String communicationEventId;
    @Column(name="COMMUNICATION_EVENT_TYPE_ID")
-   private String communicationEventTypeId;
+   protected String communicationEventTypeId;
    @Column(name="ORIG_COMM_EVENT_ID")
-   private String origCommEventId;
+   protected String origCommEventId;
    @Column(name="PARENT_COMM_EVENT_ID")
-   private String parentCommEventId;
+   protected String parentCommEventId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="CONTACT_MECH_TYPE_ID")
-   private String contactMechTypeId;
+   protected String contactMechTypeId;
    @Column(name="CONTACT_MECH_ID_FROM")
-   private String contactMechIdFrom;
+   protected String contactMechIdFrom;
    @Column(name="CONTACT_MECH_ID_TO")
-   private String contactMechIdTo;
+   protected String contactMechIdTo;
    @Column(name="ROLE_TYPE_ID_FROM")
-   private String roleTypeIdFrom;
+   protected String roleTypeIdFrom;
    @Column(name="ROLE_TYPE_ID_TO")
-   private String roleTypeIdTo;
+   protected String roleTypeIdTo;
    @Column(name="PARTY_ID_FROM")
-   private String partyIdFrom;
+   protected String partyIdFrom;
    @Column(name="PARTY_ID_TO")
-   private String partyIdTo;
+   protected String partyIdTo;
    @Column(name="ENTRY_DATE")
-   private Timestamp entryDate;
+   protected Timestamp entryDate;
    @Column(name="DATETIME_STARTED")
-   private Timestamp datetimeStarted;
+   protected Timestamp datetimeStarted;
    @Column(name="DATETIME_ENDED")
-   private Timestamp datetimeEnded;
+   protected Timestamp datetimeEnded;
    @Column(name="SUBJECT")
-   private String subject;
+   protected String subject;
    @Column(name="CONTENT_MIME_TYPE_ID")
-   private String contentMimeTypeId;
+   protected String contentMimeTypeId;
    @Column(name="CONTENT")
-   private String content;
+   protected String content;
    @Column(name="NOTE")
-   private String note;
+   protected String note;
    @Column(name="REASON_ENUM_ID")
-   private String reasonEnumId;
+   protected String reasonEnumId;
    @Column(name="CONTACT_LIST_ID")
-   private String contactListId;
+   protected String contactListId;
    @Column(name="HEADER_STRING")
-   private String headerString;
+   protected String headerString;
    @Column(name="FROM_STRING")
-   private String fromString;
+   protected String fromString;
    @Column(name="TO_STRING")
-   private String toString;
+   protected String toString;
    @Column(name="CC_STRING")
-   private String ccString;
+   protected String ccString;
    @Column(name="BCC_STRING")
-   private String bccString;
+   protected String bccString;
    @Column(name="MESSAGE_ID")
-   private String messageId;
+   protected String messageId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COMMUNICATION_EVENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CommunicationEventType communicationEventType = null;
+   protected CommunicationEventType communicationEventType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party toParty = null;
+   protected Party toParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RoleType toRoleType = null;
+   protected RoleType toRoleType = null;
    private transient PartyRole toPartyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_FROM", insertable=false, updatable=false)
@@ -221,14 +221,14 @@ fieldMapColumns.put("CommunicationEvent", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party fromParty = null;
+   protected Party fromParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID_FROM", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RoleType fromRoleType = null;
+   protected RoleType fromRoleType = null;
    private transient PartyRole fromPartyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
@@ -236,89 +236,89 @@ fieldMapColumns.put("CommunicationEvent", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMechType contactMechType = null;
+   protected ContactMechType contactMechType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID_FROM", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMech fromContactMech = null;
+   protected ContactMech fromContactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMech toContactMech = null;
+   protected ContactMech toContactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_LIST_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactList contactList = null;
+   protected ContactList contactList = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_MIME_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private MimeType mimeType = null;
+   protected MimeType mimeType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REASON_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration enumeration = null;
+   protected Enumeration enumeration = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="communicationEvent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="COMMUNICATION_EVENT_ID")
    
-   private List<CommEventContentAssoc> commEventContentAssocs = null;
+   protected List<CommEventContentAssoc> commEventContentAssocs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="communicationEvent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="COMMUNICATION_EVENT_ID")
    
-   private List<CommunicationEventOrder> communicationEventOrders = null;
+   protected List<CommunicationEventOrder> communicationEventOrders = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="communicationEvent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="COMMUNICATION_EVENT_ID")
    
-   private List<CommunicationEventProduct> communicationEventProducts = null;
+   protected List<CommunicationEventProduct> communicationEventProducts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="communicationEvent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="COMMUNICATION_EVENT_ID")
    
-   private List<CommunicationEventPurpose> communicationEventPurposes = null;
+   protected List<CommunicationEventPurpose> communicationEventPurposes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="communicationEvent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="COMMUNICATION_EVENT_ID")
    
-   private List<CommunicationEventRole> communicationEventRoles = null;
+   protected List<CommunicationEventRole> communicationEventRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="communicationEvent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="COMMUNICATION_EVENT_ID")
    
-   private List<CommunicationEventWorkEff> communicationEventWorkEffs = null;
+   protected List<CommunicationEventWorkEff> communicationEventWorkEffs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="communicationEvent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="COMMUNICATION_EVENT_ID")
    
-   private List<ContactListCommStatus> contactListCommStatuses = null;
+   protected List<ContactListCommStatus> contactListCommStatuses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="communicationEvent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="COMMUNICATION_EVENT_ID")
    
-   private List<CustRequestCommEvent> custRequestCommEvents = null;
+   protected List<CustRequestCommEvent> custRequestCommEvents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="COMMUNICATION_EVENT_ID")
    
-   private List<PartyNeed> partyNeeds = null;
+   protected List<PartyNeed> partyNeeds = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="communicationEvent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="COMMUNICATION_EVENT_ID")
    
-   private List<SubscriptionCommEvent> subscriptionCommEvents = null;
+   protected List<SubscriptionCommEvent> subscriptionCommEvents = null;
 
   /**
    * Default constructor.

@@ -127,7 +127,7 @@ fieldMapColumns.put("Payment", fields);
     acctgTagEnumId8("acctgTagEnumId8"),
     acctgTagEnumId9("acctgTagEnumId9"),
     acctgTagEnumId10("acctgTagEnumId10");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -141,170 +141,170 @@ fieldMapColumns.put("Payment", fields);
    @GeneratedValue(generator="Payment_GEN")
    @Id
    @Column(name="PAYMENT_ID")
-   private String paymentId;
+   protected String paymentId;
    @Column(name="PAYMENT_TYPE_ID")
-   private String paymentTypeId;
+   protected String paymentTypeId;
    @Column(name="PAYMENT_METHOD_TYPE_ID")
-   private String paymentMethodTypeId;
+   protected String paymentMethodTypeId;
    @Column(name="PAYMENT_METHOD_ID")
-   private String paymentMethodId;
+   protected String paymentMethodId;
    @Column(name="PAYMENT_GATEWAY_RESPONSE_ID")
-   private String paymentGatewayResponseId;
+   protected String paymentGatewayResponseId;
    @Column(name="PAYMENT_PREFERENCE_ID")
-   private String paymentPreferenceId;
+   protected String paymentPreferenceId;
    @Column(name="PARTY_ID_FROM")
-   private String partyIdFrom;
+   protected String partyIdFrom;
    @Column(name="PARTY_ID_TO")
-   private String partyIdTo;
+   protected String partyIdTo;
    @Column(name="ROLE_TYPE_ID_TO")
-   private String roleTypeIdTo;
+   protected String roleTypeIdTo;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="EFFECTIVE_DATE")
-   private Timestamp effectiveDate;
+   protected Timestamp effectiveDate;
    @Column(name="PAYMENT_REF_NUM")
-   private String paymentRefNum;
+   protected String paymentRefNum;
    @Column(name="AMOUNT")
-   private BigDecimal amount;
+   protected BigDecimal amount;
    @Column(name="CURRENCY_UOM_ID")
-   private String currencyUomId;
+   protected String currencyUomId;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="FIN_ACCOUNT_TRANS_ID")
-   private String finAccountTransId;
+   protected String finAccountTransId;
    @Column(name="OVERRIDE_GL_ACCOUNT_ID")
-   private String overrideGlAccountId;
+   protected String overrideGlAccountId;
    @Column(name="ACTUAL_CURRENCY_AMOUNT")
-   private BigDecimal actualCurrencyAmount;
+   protected BigDecimal actualCurrencyAmount;
    @Column(name="ACTUAL_CURRENCY_UOM_ID")
-   private String actualCurrencyUomId;
+   protected String actualCurrencyUomId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="APPLIED_AMOUNT")
-   private BigDecimal appliedAmount;
+   protected BigDecimal appliedAmount;
    @Column(name="OPEN_AMOUNT")
-   private BigDecimal openAmount;
+   protected BigDecimal openAmount;
    @Column(name="ACCTG_TAG_ENUM_ID1")
-   private String acctgTagEnumId1;
+   protected String acctgTagEnumId1;
    @Column(name="ACCTG_TAG_ENUM_ID2")
-   private String acctgTagEnumId2;
+   protected String acctgTagEnumId2;
    @Column(name="ACCTG_TAG_ENUM_ID3")
-   private String acctgTagEnumId3;
+   protected String acctgTagEnumId3;
    @Column(name="ACCTG_TAG_ENUM_ID4")
-   private String acctgTagEnumId4;
+   protected String acctgTagEnumId4;
    @Column(name="ACCTG_TAG_ENUM_ID5")
-   private String acctgTagEnumId5;
+   protected String acctgTagEnumId5;
    @Column(name="ACCTG_TAG_ENUM_ID6")
-   private String acctgTagEnumId6;
+   protected String acctgTagEnumId6;
    @Column(name="ACCTG_TAG_ENUM_ID7")
-   private String acctgTagEnumId7;
+   protected String acctgTagEnumId7;
    @Column(name="ACCTG_TAG_ENUM_ID8")
-   private String acctgTagEnumId8;
+   protected String acctgTagEnumId8;
    @Column(name="ACCTG_TAG_ENUM_ID9")
-   private String acctgTagEnumId9;
+   protected String acctgTagEnumId9;
    @Column(name="ACCTG_TAG_ENUM_ID10")
-   private String acctgTagEnumId10;
+   protected String acctgTagEnumId10;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentType paymentType = null;
+   protected PaymentType paymentType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_TYPE_ID")
    
-   private List<PaymentTypeAttr> paymentTypeAttrs = null;
+   protected List<PaymentTypeAttr> paymentTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentMethodType paymentMethodType = null;
+   protected PaymentMethodType paymentMethodType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentMethod paymentMethod = null;
+   protected PaymentMethod paymentMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom currencyUom = null;
+   protected Uom currencyUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACTUAL_CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom actualCurrencyUom = null;
+   protected Uom actualCurrencyUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private CreditCard creditCard = null;
+   protected CreditCard creditCard = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EftAccount eftAccount = null;
+   protected EftAccount eftAccount = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GiftCard giftCard = null;
+   protected GiftCard giftCard = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_PREFERENCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderPaymentPreference orderPaymentPreference = null;
+   protected OrderPaymentPreference orderPaymentPreference = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_GATEWAY_RESPONSE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentGatewayResponse paymentGatewayResponse = null;
+   protected PaymentGatewayResponse paymentGatewayResponse = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_FROM", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party fromParty = null;
+   protected Party fromParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party toParty = null;
+   protected Party toParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RoleType toRoleType = null;
+   protected RoleType toRoleType = null;
    private transient PartyRole toPartyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
@@ -312,139 +312,139 @@ fieldMapColumns.put("Payment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_TRANS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private FinAccountTrans finAccountTrans = null;
+   protected FinAccountTrans finAccountTrans = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="OVERRIDE_GL_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GlAccount glAccount = null;
+   protected GlAccount glAccount = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID1", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag1Enumeration = null;
+   protected Enumeration tag1Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID2", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag2Enumeration = null;
+   protected Enumeration tag2Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID3", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag3Enumeration = null;
+   protected Enumeration tag3Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID4", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag4Enumeration = null;
+   protected Enumeration tag4Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID5", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag5Enumeration = null;
+   protected Enumeration tag5Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID6", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag6Enumeration = null;
+   protected Enumeration tag6Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID7", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag7Enumeration = null;
+   protected Enumeration tag7Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID8", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag8Enumeration = null;
+   protected Enumeration tag8Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID9", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag9Enumeration = null;
+   protected Enumeration tag9Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID10", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag10Enumeration = null;
+   protected Enumeration tag10Enumeration = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID")
    
-   private List<AcctgTrans> acctgTranses = null;
+   protected List<AcctgTrans> acctgTranses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID")
    
-   private List<CashDrawerTransaction> cashDrawerTransactions = null;
+   protected List<CashDrawerTransaction> cashDrawerTransactions = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID")
    
-   private List<Deduction> deductions = null;
+   protected List<Deduction> deductions = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID")
    
-   private List<InvoiceAdjustment> invoiceAdjustments = null;
+   protected List<InvoiceAdjustment> invoiceAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID")
    
-   private List<LockboxBatchItemDetail> lockboxBatchItemDetails = null;
+   protected List<LockboxBatchItemDetail> lockboxBatchItemDetails = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="payment", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PAYMENT_ID")
    
-   private List<PaycheckItem> paycheckItems = null;
+   protected List<PaycheckItem> paycheckItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID")
    
-   private List<PaymentApplication> paymentApplications = null;
+   protected List<PaymentApplication> paymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TO_PAYMENT_ID")
    
-   private List<PaymentApplication> toPaymentApplications = null;
+   protected List<PaymentApplication> toPaymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="payment", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PAYMENT_ID")
    
-   private List<PaymentAttribute> paymentAttributes = null;
+   protected List<PaymentAttribute> paymentAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="payment", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PAYMENT_ID")
    
-   private List<PaymentBudgetAllocation> paymentBudgetAllocations = null;
+   protected List<PaymentBudgetAllocation> paymentBudgetAllocations = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID")
    
-   private List<PerfReview> perfReviews = null;
+   protected List<PerfReview> perfReviews = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID")
    
-   private List<ReturnItemResponse> returnItemResponses = null;
+   protected List<ReturnItemResponse> returnItemResponses = null;
 
   /**
    * Default constructor.

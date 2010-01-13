@@ -83,7 +83,7 @@ fieldMapColumns.put("OldProductKeywordResult", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -97,45 +97,45 @@ fieldMapColumns.put("OldProductKeywordResult", fields);
    @GeneratedValue(generator="OldProductKeywordResult_GEN")
    @Id
    @Column(name="PRODUCT_KEYWORD_RESULT_ID")
-   private String productKeywordResultId;
+   protected String productKeywordResultId;
    @Column(name="VISIT_ID")
-   private String visitId;
+   protected String visitId;
    @Column(name="PRODUCT_CATEGORY_ID")
-   private String productCategoryId;
+   protected String productCategoryId;
    @Column(name="SEARCH_STRING")
-   private String searchString;
+   protected String searchString;
    @Column(name="INTRA_KEYWORD_OPERATOR")
-   private String intraKeywordOperator;
+   protected String intraKeywordOperator;
    @Column(name="ANY_PREFIX")
-   private String anyPrefix;
+   protected String anyPrefix;
    @Column(name="ANY_SUFFIX")
-   private String anySuffix;
+   protected String anySuffix;
    @Column(name="REMOVE_STEMS")
-   private String removeStems;
+   protected String removeStems;
    @Column(name="NUM_RESULTS")
-   private Long numResults;
+   protected Long numResults;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="VISIT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Visit visit = null;
+   protected Visit visit = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductCategory productCategory = null;
+   protected ProductCategory productCategory = null;
 
   /**
    * Default constructor.

@@ -83,7 +83,7 @@ fieldMapColumns.put("TaxAuthorityDim", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -97,31 +97,31 @@ fieldMapColumns.put("TaxAuthorityDim", fields);
    @GeneratedValue(generator="TaxAuthorityDim_GEN")
    @Id
    @Column(name="TAX_AUTHORITY_DIM_ID")
-   private Long taxAuthorityDimId;
+   protected Long taxAuthorityDimId;
    @Column(name="DIM_VERSION")
-   private Long dimVersion;
+   protected Long dimVersion;
    @Column(name="DATE_FROM")
-   private Timestamp dateFrom;
+   protected Timestamp dateFrom;
    @Column(name="DATE_TO")
-   private Timestamp dateTo;
+   protected Timestamp dateTo;
    @Column(name="TAX_AUTH_PARTY_ID")
-   private String taxAuthPartyId;
+   protected String taxAuthPartyId;
    @Column(name="TAX_AUTH_GEO_ID")
-   private String taxAuthGeoId;
+   protected String taxAuthGeoId;
    @Column(name="GROUP_NAME")
-   private String groupName;
+   protected String groupName;
    @Column(name="GEO_NAME")
-   private String geoName;
+   protected String geoName;
    @Column(name="GEO_CODE")
-   private String geoCode;
+   protected String geoCode;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

@@ -75,7 +75,7 @@ fieldMapColumns.put("CurrencyDim", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -89,23 +89,23 @@ fieldMapColumns.put("CurrencyDim", fields);
    @GeneratedValue(generator="CurrencyDim_GEN")
    @Id
    @Column(name="CURRENCY_DIM_ID")
-   private Long currencyDimId;
+   protected Long currencyDimId;
    @Column(name="DIM_VERSION")
-   private Long dimVersion;
+   protected Long dimVersion;
    @Column(name="DATE_FROM")
-   private Timestamp dateFrom;
+   protected Timestamp dateFrom;
    @Column(name="DATE_TO")
-   private Timestamp dateTo;
+   protected Timestamp dateTo;
    @Column(name="UOM_ID")
-   private String uomId;
+   protected String uomId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

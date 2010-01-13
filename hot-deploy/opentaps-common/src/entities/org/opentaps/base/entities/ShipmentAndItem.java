@@ -122,7 +122,7 @@ fieldMapColumns.put("ShipmentAndItem", fields);
     productId("productId"),
     quantity("quantity"),
     shipmentContentDescription("shipmentContentDescription");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -178,7 +178,7 @@ fieldMapColumns.put("ShipmentAndItem", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Shipment shipment = null;
+   protected Shipment shipment = null;
    private transient ShipmentItem shipmentItem = null;
 
   /**

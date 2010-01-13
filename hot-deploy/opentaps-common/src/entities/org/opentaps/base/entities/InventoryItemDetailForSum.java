@@ -77,7 +77,7 @@ fieldMapColumns.put("InventoryItemDetailForSum", fields);
     facilityId("facilityId"),
     productId("productId"),
     effectiveDate("effectiveDate");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

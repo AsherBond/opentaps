@@ -72,7 +72,7 @@ fieldMapColumns.put("MaxRevisionItemView", fields);
     itemContentId("itemContentId"),
     contentRevisionSeqId("contentRevisionSeqId"),
     maxRevisionSeqId("maxRevisionSeqId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

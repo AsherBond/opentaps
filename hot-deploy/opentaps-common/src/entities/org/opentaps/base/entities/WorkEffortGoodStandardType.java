@@ -72,7 +72,7 @@ fieldMapColumns.put("WorkEffortGoodStandardType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,36 +86,36 @@ fieldMapColumns.put("WorkEffortGoodStandardType", fields);
    @GeneratedValue(generator="WorkEffortGoodStandardType_GEN")
    @Id
    @Column(name="WORK_EFFORT_GOOD_STD_TYPE_ID")
-   private String workEffortGoodStdTypeId;
+   protected String workEffortGoodStdTypeId;
    @Column(name="PARENT_TYPE_ID")
-   private String parentTypeId;
+   protected String parentTypeId;
    @Column(name="HAS_TABLE")
-   private String hasTable;
+   protected String hasTable;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WorkEffortGoodStandardType parentWorkEffortGoodStandardType = null;
+   protected WorkEffortGoodStandardType parentWorkEffortGoodStandardType = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffortGoodStandardType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_GOOD_STD_TYPE_ID")
    
-   private List<WorkEffortGoodStandard> workEffortGoodStandards = null;
+   protected List<WorkEffortGoodStandard> workEffortGoodStandards = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   private List<WorkEffortGoodStandardType> childWorkEffortGoodStandardTypes = null;
+   protected List<WorkEffortGoodStandardType> childWorkEffortGoodStandardTypes = null;
 
   /**
    * Default constructor.

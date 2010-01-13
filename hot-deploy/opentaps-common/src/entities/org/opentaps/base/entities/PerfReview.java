@@ -84,7 +84,7 @@ fieldMapColumns.put("PerfReview", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -97,7 +97,7 @@ fieldMapColumns.put("PerfReview", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.PerfReviewPkBridge.class)
-     private PerfReviewPk id = new PerfReviewPk();
+     protected PerfReviewPk id = new PerfReviewPk();
    
     /**
      * Auto generated Id accessor.
@@ -114,34 +114,34 @@ fieldMapColumns.put("PerfReview", fields);
          this.id = id;
       }
    @Column(name="MANAGER_PARTY_ID")
-   private String managerPartyId;
+   protected String managerPartyId;
    @Column(name="MANAGER_ROLE_TYPE_ID")
-   private String managerRoleTypeId;
+   protected String managerRoleTypeId;
    @Column(name="PAYMENT_ID")
-   private String paymentId;
+   protected String paymentId;
    @Column(name="EMPL_POSITION_ID")
-   private String emplPositionId;
+   protected String emplPositionId;
    @Column(name="FROM_DATE")
-   private Timestamp fromDate;
+   protected Timestamp fromDate;
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EMPLOYEE_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party employeeParty = null;
+   protected Party employeeParty = null;
    private transient PartyRole employeePartyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MANAGER_PARTY_ID", insertable=false, updatable=false)
@@ -149,7 +149,7 @@ fieldMapColumns.put("PerfReview", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party managerParty = null;
+   protected Party managerParty = null;
    private transient PartyRole managerPartyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID", insertable=false, updatable=false)
@@ -157,14 +157,14 @@ fieldMapColumns.put("PerfReview", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Payment payment = null;
+   protected Payment payment = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EMPL_POSITION_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EmplPosition emplPosition = null;
+   protected EmplPosition emplPosition = null;
    private transient List<PerfReviewItem> perfReviewItems = null;
 
   /**

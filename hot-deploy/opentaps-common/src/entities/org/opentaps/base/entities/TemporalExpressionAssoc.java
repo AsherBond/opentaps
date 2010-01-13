@@ -70,7 +70,7 @@ fieldMapColumns.put("TemporalExpressionAssoc", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -83,7 +83,7 @@ fieldMapColumns.put("TemporalExpressionAssoc", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.TemporalExpressionAssocPkBridge.class)
-     private TemporalExpressionAssocPk id = new TemporalExpressionAssocPk();
+     protected TemporalExpressionAssocPk id = new TemporalExpressionAssocPk();
    
     /**
      * Auto generated Id accessor.
@@ -100,29 +100,29 @@ fieldMapColumns.put("TemporalExpressionAssoc", fields);
          this.id = id;
       }
    @Column(name="EXPR_ASSOC_TYPE")
-   private String exprAssocType;
+   protected String exprAssocType;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FROM_TEMP_EXPR_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TemporalExpression fromTemporalExpression = null;
+   protected TemporalExpression fromTemporalExpression = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TO_TEMP_EXPR_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private TemporalExpression toTemporalExpression = null;
+   protected TemporalExpression toTemporalExpression = null;
 
   /**
    * Default constructor.

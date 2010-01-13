@@ -74,7 +74,7 @@ fieldMapColumns.put("UspsContactListCountBmc", fields);
     contactMechId("contactMechId"),
     bmcCode("bmcCode"),
     processedTimestamp("processedTimestamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

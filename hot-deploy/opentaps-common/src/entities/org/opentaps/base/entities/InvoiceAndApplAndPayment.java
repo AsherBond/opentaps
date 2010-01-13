@@ -287,7 +287,7 @@ fieldMapColumns.put("InvoiceAndApplAndPayment", fields);
     pmAcctgTagEnumId8("pmAcctgTagEnumId8"),
     pmAcctgTagEnumId9("pmAcctgTagEnumId9"),
     pmAcctgTagEnumId10("pmAcctgTagEnumId10");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

@@ -96,7 +96,7 @@ fieldMapColumns.put("ProdFeaGrpAppAndProdFeaApp", fields);
     sequenceNum("sequenceNum"),
     amount("amount"),
     recurringAmount("recurringAmount");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

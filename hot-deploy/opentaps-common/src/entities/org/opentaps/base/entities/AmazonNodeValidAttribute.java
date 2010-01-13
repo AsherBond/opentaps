@@ -82,7 +82,7 @@ fieldMapColumns.put("AmazonNodeValidAttribute", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -95,7 +95,7 @@ fieldMapColumns.put("AmazonNodeValidAttribute", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.AmazonNodeValidAttributePkBridge.class)
-     private AmazonNodeValidAttributePk id = new AmazonNodeValidAttributePk();
+     protected AmazonNodeValidAttributePk id = new AmazonNodeValidAttributePk();
    
     /**
      * Auto generated Id accessor.
@@ -112,25 +112,25 @@ fieldMapColumns.put("AmazonNodeValidAttribute", fields);
          this.id = id;
       }
    @Column(name="NODE_MAPPING_TYPE_ID")
-   private String nodeMappingTypeId;
+   protected String nodeMappingTypeId;
    @Column(name="RELATED_TO_ID")
-   private String relatedToId;
+   protected String relatedToId;
    @Column(name="RELATED_TO1_ID")
-   private String relatedTo1Id;
+   protected String relatedTo1Id;
    @Column(name="RELATED_TO2_ID")
-   private String relatedTo2Id;
+   protected String relatedTo2Id;
    @Column(name="RELATED_TO3_ID")
-   private String relatedTo3Id;
+   protected String relatedTo3Id;
    @Column(name="RELATED_TO4_ID")
-   private String relatedTo4Id;
+   protected String relatedTo4Id;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
 
   /**
    * Default constructor.

@@ -117,7 +117,7 @@ fieldMapColumns.put("AmazonProduct", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -131,138 +131,138 @@ fieldMapColumns.put("AmazonProduct", fields);
    @GeneratedValue(generator="AmazonProduct_GEN")
    @Id
    @Column(name="PRODUCT_ID")
-   private String productId;
+   protected String productId;
    @Column(name="STATUS_ID")
-   private String statusId;
+   protected String statusId;
    @Column(name="PRODUCT_TAX_CODE")
-   private String productTaxCode;
+   protected String productTaxCode;
    @Column(name="RELEASE_DATE")
-   private Timestamp releaseDate;
+   protected Timestamp releaseDate;
    @Column(name="ITEM_TYPE_ID")
-   private String itemTypeId;
+   protected String itemTypeId;
    @Column(name="NODE_ID")
-   private String nodeId;
+   protected String nodeId;
    @Column(name="PRIORITY")
-   private Long priority;
+   protected Long priority;
    @Column(name="BROWSE_EXCLUSION")
-   private String browseExclusion;
+   protected String browseExclusion;
    @Column(name="RECOMMENDATION_EXCLUSION")
-   private String recommendationExclusion;
+   protected String recommendationExclusion;
    @Column(name="TIER")
-   private Long tier;
+   protected Long tier;
    @Column(name="PURCHASING_CATEGORY")
-   private String purchasingCategory;
+   protected String purchasingCategory;
    @Column(name="PURCHASING_SUB_CATEGORY")
-   private String purchasingSubCategory;
+   protected String purchasingSubCategory;
    @Column(name="PACKAGING_TYPE")
-   private String packagingType;
+   protected String packagingType;
    @Column(name="UNDERLYING_AVAILABILITY")
-   private String underlyingAvailability;
+   protected String underlyingAvailability;
    @Column(name="REPLENISHMENT_CATEGORY")
-   private String replenishmentCategory;
+   protected String replenishmentCategory;
    @Column(name="DROP_SHIP_STATUS")
-   private String dropShipStatus;
+   protected String dropShipStatus;
    @Column(name="OUT_OF_STOCK_WEBSITE_MESSAGE")
-   private String outOfStockWebsiteMessage;
+   protected String outOfStockWebsiteMessage;
    @Column(name="REGISTERED_PARAMETER")
-   private String registeredParameter;
+   protected String registeredParameter;
    @Column(name="PROCESSING_DOCUMENT_ID")
-   private Long processingDocumentId;
+   protected Long processingDocumentId;
    @Column(name="POST_TIMESTAMP")
-   private Timestamp postTimestamp;
+   protected Timestamp postTimestamp;
    @Column(name="POST_ERROR_MESSAGE")
-   private String postErrorMessage;
+   protected String postErrorMessage;
    @Column(name="POST_FAILURES")
-   private Long postFailures;
+   protected Long postFailures;
    @Column(name="ACK_STATUS_ID")
-   private String ackStatusId;
+   protected String ackStatusId;
    @Column(name="ACKNOWLEDGE_TIMESTAMP")
-   private Timestamp acknowledgeTimestamp;
+   protected Timestamp acknowledgeTimestamp;
    @Column(name="ACKNOWLEDGE_ERROR_MESSAGE")
-   private String acknowledgeErrorMessage;
+   protected String acknowledgeErrorMessage;
    @Column(name="ACKNOWLEDGE_MESSAGE_ID")
-   private String acknowledgeMessageId;
+   protected String acknowledgeMessageId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<GoodIdentification> goodIdentifications = null;
+   protected List<GoodIdentification> goodIdentifications = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="NODE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AmazonProductBrowseNode amazonProductBrowseNode = null;
+   protected AmazonProductBrowseNode amazonProductBrowseNode = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ITEM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AmazonProductItemType amazonProductItemType = null;
+   protected AmazonProductItemType amazonProductItemType = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="amazonProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<AmazonOtherItemAttrValue> amazonOtherItemAttrValues = null;
+   protected List<AmazonOtherItemAttrValue> amazonOtherItemAttrValues = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="amazonProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<AmazonProductBulletPoint> amazonProductBulletPoints = null;
+   protected List<AmazonProductBulletPoint> amazonProductBulletPoints = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AmazonProductImage amazonProductImage = null;
+   protected AmazonProductImage amazonProductImage = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AmazonProductInventory amazonProductInventory = null;
+   protected AmazonProductInventory amazonProductInventory = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AmazonProductPrice amazonProductPrice = null;
+   protected AmazonProductPrice amazonProductPrice = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="amazonProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<AmazonProductSearchTerms> amazonProductSearchTermses = null;
+   protected List<AmazonProductSearchTerms> amazonProductSearchTermses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="amazonProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<AmazonTargetAudienceValue> amazonTargetAudienceValues = null;
+   protected List<AmazonTargetAudienceValue> amazonTargetAudienceValues = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="amazonProduct", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_ID")
    
-   private List<AmazonUsedForValue> amazonUsedForValues = null;
+   protected List<AmazonUsedForValue> amazonUsedForValues = null;
 
   /**
    * Default constructor.

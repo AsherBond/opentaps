@@ -79,7 +79,7 @@ fieldMapColumns.put("ProductConfigOptionIactn", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,7 +92,7 @@ fieldMapColumns.put("ProductConfigOptionIactn", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductConfigOptionIactnPkBridge.class)
-     private ProductConfigOptionIactnPk id = new ProductConfigOptionIactnPk();
+     protected ProductConfigOptionIactnPk id = new ProductConfigOptionIactnPk();
    
     /**
      * Auto generated Id accessor.
@@ -109,24 +109,24 @@ fieldMapColumns.put("ProductConfigOptionIactn", fields);
          this.id = id;
       }
    @Column(name="CONFIG_IACTN_TYPE_ID")
-   private String configIactnTypeId;
+   protected String configIactnTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONFIG_ITEM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductConfigItem configItemProductConfigItem = null;
+   protected ProductConfigItem configItemProductConfigItem = null;
    private transient ProductConfigOption configOptionProductConfigOption = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONFIG_ITEM_ID_TO", insertable=false, updatable=false)
@@ -134,7 +134,7 @@ fieldMapColumns.put("ProductConfigOptionIactn", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductConfigItem configItemToProductConfigItem = null;
+   protected ProductConfigItem configItemToProductConfigItem = null;
    private transient ProductConfigOption configOptionToProductConfigOption = null;
 
   /**

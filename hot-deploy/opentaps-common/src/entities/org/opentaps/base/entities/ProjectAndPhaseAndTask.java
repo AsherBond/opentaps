@@ -228,7 +228,7 @@ fieldMapColumns.put("ProjectAndPhaseAndTask", fields);
     createdByUserLogin("createdByUserLogin"),
     lastModifiedDate("lastModifiedDate"),
     lastModifiedByUserLogin("lastModifiedByUserLogin");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -348,9 +348,9 @@ fieldMapColumns.put("ProjectAndPhaseAndTask", fields);
    private Timestamp lastModifiedDate;
     
    private String lastModifiedByUserLogin;
-   private transient List<TimeEntry> timeEntrys = null;
-   private transient List<WorkEffortSkillStandard> workEffortSkillStandards = null;
-   private transient List<WorkEffortPartyAssignment> workEffortPartyAssignments = null;
+   protected transient List<TimeEntry> timeEntrys = null;
+   protected transient List<WorkEffortSkillStandard> workEffortSkillStandards = null;
+   protected transient List<WorkEffortPartyAssignment> workEffortPartyAssignments = null;
 
   /**
    * Default constructor.

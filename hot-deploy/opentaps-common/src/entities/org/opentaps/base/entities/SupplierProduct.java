@@ -105,7 +105,7 @@ fieldMapColumns.put("SupplierProduct", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -118,7 +118,7 @@ fieldMapColumns.put("SupplierProduct", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.SupplierProductPkBridge.class)
-     private SupplierProductPk id = new SupplierProductPk();
+     protected SupplierProductPk id = new SupplierProductPk();
    
     /**
      * Auto generated Id accessor.
@@ -135,85 +135,85 @@ fieldMapColumns.put("SupplierProduct", fields);
          this.id = id;
       }
    @Column(name="AVAILABLE_THRU_DATE")
-   private Timestamp availableThruDate;
+   protected Timestamp availableThruDate;
    @Column(name="SUPPLIER_PREF_ORDER_ID")
-   private String supplierPrefOrderId;
+   protected String supplierPrefOrderId;
    @Column(name="SUPPLIER_RATING_TYPE_ID")
-   private String supplierRatingTypeId;
+   protected String supplierRatingTypeId;
    @Column(name="STANDARD_LEAD_TIME_DAYS")
-   private BigDecimal standardLeadTimeDays;
+   protected BigDecimal standardLeadTimeDays;
    @Column(name="ORDER_QTY_INCREMENTS")
-   private BigDecimal orderQtyIncrements;
+   protected BigDecimal orderQtyIncrements;
    @Column(name="UNITS_INCLUDED")
-   private BigDecimal unitsIncluded;
+   protected BigDecimal unitsIncluded;
    @Column(name="QUANTITY_UOM_ID")
-   private String quantityUomId;
+   protected String quantityUomId;
    @Column(name="AGREEMENT_ID")
-   private String agreementId;
+   protected String agreementId;
    @Column(name="AGREEMENT_ITEM_SEQ_ID")
-   private String agreementItemSeqId;
+   protected String agreementItemSeqId;
    @Column(name="LAST_PRICE")
-   private BigDecimal lastPrice;
+   protected BigDecimal lastPrice;
    @Column(name="SUPPLIER_PRODUCT_NAME")
-   private String supplierProductName;
+   protected String supplierProductName;
    @Column(name="SUPPLIER_PRODUCT_ID")
-   private String supplierProductId;
+   protected String supplierProductId;
    @Column(name="CAN_DROP_SHIP")
-   private String canDropShip;
+   protected String canDropShip;
    @Column(name="SUPPLIER_COMMISSION_PERC")
-   private BigDecimal supplierCommissionPerc;
+   protected BigDecimal supplierCommissionPerc;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SUPPLIER_PREF_ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private SupplierPrefOrder supplierPrefOrder = null;
+   protected SupplierPrefOrder supplierPrefOrder = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SUPPLIER_RATING_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private SupplierRatingType supplierRatingType = null;
+   protected SupplierRatingType supplierRatingType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom currencyUom = null;
+   protected Uom currencyUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="QUANTITY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom quantityUom = null;
+   protected Uom quantityUom = null;
    private transient AgreementItem agreementItem = null;
 
   /**

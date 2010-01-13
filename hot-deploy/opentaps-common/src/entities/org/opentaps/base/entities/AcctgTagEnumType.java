@@ -128,7 +128,7 @@ fieldMapColumns.put("AcctgTagEnumType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -141,7 +141,7 @@ fieldMapColumns.put("AcctgTagEnumType", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.AcctgTagEnumTypePkBridge.class)
-     private AcctgTagEnumTypePk id = new AcctgTagEnumTypePk();
+     protected AcctgTagEnumTypePk id = new AcctgTagEnumTypePk();
    
     /**
      * Auto generated Id accessor.
@@ -158,227 +158,227 @@ fieldMapColumns.put("AcctgTagEnumType", fields);
          this.id = id;
       }
    @Column(name="ENUM_TYPE_ID1")
-   private String enumTypeId1;
+   protected String enumTypeId1;
    @Column(name="ENUM_TYPE_ID2")
-   private String enumTypeId2;
+   protected String enumTypeId2;
    @Column(name="ENUM_TYPE_ID3")
-   private String enumTypeId3;
+   protected String enumTypeId3;
    @Column(name="ENUM_TYPE_ID4")
-   private String enumTypeId4;
+   protected String enumTypeId4;
    @Column(name="ENUM_TYPE_ID5")
-   private String enumTypeId5;
+   protected String enumTypeId5;
    @Column(name="ENUM_TYPE_ID6")
-   private String enumTypeId6;
+   protected String enumTypeId6;
    @Column(name="ENUM_TYPE_ID7")
-   private String enumTypeId7;
+   protected String enumTypeId7;
    @Column(name="ENUM_TYPE_ID8")
-   private String enumTypeId8;
+   protected String enumTypeId8;
    @Column(name="ENUM_TYPE_ID9")
-   private String enumTypeId9;
+   protected String enumTypeId9;
    @Column(name="ENUM_TYPE_ID10")
-   private String enumTypeId10;
+   protected String enumTypeId10;
    @Column(name="IS_TAG_ENUM1_REQUIRED")
-   private String isTagEnum1Required;
+   protected String isTagEnum1Required;
    @Column(name="IS_TAG_ENUM2_REQUIRED")
-   private String isTagEnum2Required;
+   protected String isTagEnum2Required;
    @Column(name="IS_TAG_ENUM3_REQUIRED")
-   private String isTagEnum3Required;
+   protected String isTagEnum3Required;
    @Column(name="IS_TAG_ENUM4_REQUIRED")
-   private String isTagEnum4Required;
+   protected String isTagEnum4Required;
    @Column(name="IS_TAG_ENUM5_REQUIRED")
-   private String isTagEnum5Required;
+   protected String isTagEnum5Required;
    @Column(name="IS_TAG_ENUM6_REQUIRED")
-   private String isTagEnum6Required;
+   protected String isTagEnum6Required;
    @Column(name="IS_TAG_ENUM7_REQUIRED")
-   private String isTagEnum7Required;
+   protected String isTagEnum7Required;
    @Column(name="IS_TAG_ENUM8_REQUIRED")
-   private String isTagEnum8Required;
+   protected String isTagEnum8Required;
    @Column(name="IS_TAG_ENUM9_REQUIRED")
-   private String isTagEnum9Required;
+   protected String isTagEnum9Required;
    @Column(name="IS_TAG_ENUM10_REQUIRED")
-   private String isTagEnum10Required;
+   protected String isTagEnum10Required;
    @Column(name="DEFAULT_TAG_ENUM_ID1")
-   private String defaultTagEnumId1;
+   protected String defaultTagEnumId1;
    @Column(name="DEFAULT_TAG_ENUM_ID2")
-   private String defaultTagEnumId2;
+   protected String defaultTagEnumId2;
    @Column(name="DEFAULT_TAG_ENUM_ID3")
-   private String defaultTagEnumId3;
+   protected String defaultTagEnumId3;
    @Column(name="DEFAULT_TAG_ENUM_ID4")
-   private String defaultTagEnumId4;
+   protected String defaultTagEnumId4;
    @Column(name="DEFAULT_TAG_ENUM_ID5")
-   private String defaultTagEnumId5;
+   protected String defaultTagEnumId5;
    @Column(name="DEFAULT_TAG_ENUM_ID6")
-   private String defaultTagEnumId6;
+   protected String defaultTagEnumId6;
    @Column(name="DEFAULT_TAG_ENUM_ID7")
-   private String defaultTagEnumId7;
+   protected String defaultTagEnumId7;
    @Column(name="DEFAULT_TAG_ENUM_ID8")
-   private String defaultTagEnumId8;
+   protected String defaultTagEnumId8;
    @Column(name="DEFAULT_TAG_ENUM_ID9")
-   private String defaultTagEnumId9;
+   protected String defaultTagEnumId9;
    @Column(name="DEFAULT_TAG_ENUM_ID10")
-   private String defaultTagEnumId10;
+   protected String defaultTagEnumId10;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_USAGE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AcctgTagUsageType acctgTagUsageType = null;
+   protected AcctgTagUsageType acctgTagUsageType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID1", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EnumerationType tag1EnumerationType = null;
+   protected EnumerationType tag1EnumerationType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID2", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EnumerationType tag2EnumerationType = null;
+   protected EnumerationType tag2EnumerationType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID3", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EnumerationType tag3EnumerationType = null;
+   protected EnumerationType tag3EnumerationType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID4", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EnumerationType tag4EnumerationType = null;
+   protected EnumerationType tag4EnumerationType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID5", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EnumerationType tag5EnumerationType = null;
+   protected EnumerationType tag5EnumerationType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID6", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EnumerationType tag6EnumerationType = null;
+   protected EnumerationType tag6EnumerationType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID7", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EnumerationType tag7EnumerationType = null;
+   protected EnumerationType tag7EnumerationType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID8", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EnumerationType tag8EnumerationType = null;
+   protected EnumerationType tag8EnumerationType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID9", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EnumerationType tag9EnumerationType = null;
+   protected EnumerationType tag9EnumerationType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID10", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private EnumerationType tag10EnumerationType = null;
+   protected EnumerationType tag10EnumerationType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID1", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag1Enumeration = null;
+   protected Enumeration tag1Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID2", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag2Enumeration = null;
+   protected Enumeration tag2Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID3", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag3Enumeration = null;
+   protected Enumeration tag3Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID4", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag4Enumeration = null;
+   protected Enumeration tag4Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID5", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag5Enumeration = null;
+   protected Enumeration tag5Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID6", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag6Enumeration = null;
+   protected Enumeration tag6Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID7", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag7Enumeration = null;
+   protected Enumeration tag7Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID8", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag8Enumeration = null;
+   protected Enumeration tag8Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID9", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag9Enumeration = null;
+   protected Enumeration tag9Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID10", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Enumeration tag10Enumeration = null;
+   protected Enumeration tag10Enumeration = null;
 
   /**
    * Default constructor.

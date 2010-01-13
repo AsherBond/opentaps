@@ -98,7 +98,7 @@ fieldMapColumns.put("OrderHeaderAndPaymentPref", fields);
     orderStatusId("orderStatusId"),
     paymentStatusId("paymentStatusId"),
     maxAmount("maxAmount");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -138,14 +138,14 @@ fieldMapColumns.put("OrderHeaderAndPaymentPref", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   protected OrderHeader orderHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_PAYMENT_PREFERENCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderPaymentPreference orderPaymentPreference = null;
+   protected OrderPaymentPreference orderPaymentPreference = null;
 
   /**
    * Default constructor.

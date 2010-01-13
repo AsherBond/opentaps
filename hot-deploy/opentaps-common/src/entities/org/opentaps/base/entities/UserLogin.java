@@ -93,7 +93,7 @@ fieldMapColumns.put("UserLogin", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     partyId("partyId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -107,321 +107,321 @@ fieldMapColumns.put("UserLogin", fields);
    @GeneratedValue(generator="UserLogin_GEN")
    @Id
    @Column(name="USER_LOGIN_ID")
-   private String userLoginId;
+   protected String userLoginId;
    @Column(name="CURRENT_PASSWORD")
-   private String currentPassword;
+   protected String currentPassword;
    @Column(name="PASSWORD_HINT")
-   private String passwordHint;
+   protected String passwordHint;
    @Column(name="IS_SYSTEM")
-   private String isSystem;
+   protected String isSystem;
    @Column(name="ENABLED")
-   private String enabled;
+   protected String enabled;
    @Column(name="HAS_LOGGED_OUT")
-   private String hasLoggedOut;
+   protected String hasLoggedOut;
    @Column(name="REQUIRE_PASSWORD_CHANGE")
-   private String requirePasswordChange;
+   protected String requirePasswordChange;
    @Column(name="LAST_CURRENCY_UOM")
-   private String lastCurrencyUom;
+   protected String lastCurrencyUom;
    @Column(name="LAST_LOCALE")
-   private String lastLocale;
+   protected String lastLocale;
    @Column(name="LAST_TIME_ZONE")
-   private String lastTimeZone;
+   protected String lastTimeZone;
    @Column(name="DISABLED_DATE_TIME")
-   private Timestamp disabledDateTime;
+   protected Timestamp disabledDateTime;
    @Column(name="SUCCESSIVE_FAILED_LOGINS")
-   private Long successiveFailedLogins;
+   protected Long successiveFailedLogins;
    @Column(name="USER_LDAP_DN")
-   private String userLdapDn;
+   protected String userLdapDn;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    private transient Person person = null;
    private transient PartyGroup partyGroup = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OPEN_USER_LOGIN_ID")
    
-   private List<CashDrawer> openCashDrawers = null;
+   protected List<CashDrawer> openCashDrawers = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OPERATOR_USER_LOGIN_ID")
    
-   private List<CashDrawer> operatorCashDrawers = null;
+   protected List<CashDrawer> operatorCashDrawers = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CLOSE_USER_LOGIN_ID")
    
-   private List<CashDrawer> closeCashDrawers = null;
+   protected List<CashDrawer> closeCashDrawers = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<ContactList> createdByContactLists = null;
+   protected List<ContactList> createdByContactLists = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN")
    
-   private List<ContactList> lastModifiedByContactLists = null;
+   protected List<ContactList> lastModifiedByContactLists = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<Content> createdByContents = null;
+   protected List<Content> createdByContents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN")
    
-   private List<Content> lastModifiedByContents = null;
+   protected List<Content> lastModifiedByContents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<ContentAssoc> createdByContentAssocs = null;
+   protected List<ContentAssoc> createdByContentAssocs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN")
    
-   private List<ContentAssoc> lastModifiedByContentAssocs = null;
+   protected List<ContentAssoc> lastModifiedByContentAssocs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<DataResource> createdByDataResources = null;
+   protected List<DataResource> createdByDataResources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN")
    
-   private List<DataResource> lastModifiedByDataResources = null;
+   protected List<DataResource> lastModifiedByDataResources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="USER_LOGIN_ID")
    
-   private List<DataWarehouseTransform> dataWarehouseTransforms = null;
+   protected List<DataWarehouseTransform> dataWarehouseTransforms = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="userLogin", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="USER_LOGIN_ID")
    
-   private List<EntityViewHistory> entityViewHistorys = null;
+   protected List<EntityViewHistory> entityViewHistorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RUN_BY_USER_LOGIN")
    
-   private List<InventoryItemTrace> inventoryItemTraces = null;
+   protected List<InventoryItemTrace> inventoryItemTraces = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SET_BY_USER_LOGIN")
    
-   private List<InventoryItemValueHistory> inventoryItemValueHistorys = null;
+   protected List<InventoryItemValueHistory> inventoryItemValueHistorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<InvoiceAdjustment> invoiceAdjustments = null;
+   protected List<InvoiceAdjustment> invoiceAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ISSUED_BY_USER_LOGIN_ID")
    
-   private List<ItemIssuance> issuedByItemIssuances = null;
+   protected List<ItemIssuance> issuedByItemIssuances = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AUTH_USER_LOGIN_ID")
    
-   private List<JobSandbox> authJobSandboxes = null;
+   protected List<JobSandbox> authJobSandboxes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RUN_AS_USER")
    
-   private List<JobSandbox> runAsJobSandboxes = null;
+   protected List<JobSandbox> runAsJobSandboxes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="USER_LOGIN_ID")
    
-   private List<KeyboardShortcut> keyboardShortcuts = null;
+   protected List<KeyboardShortcut> keyboardShortcuts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN_ID")
    
-   private List<LockboxBatch> lockboxBatches = null;
+   protected List<LockboxBatch> lockboxBatches = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<OrderAdjustment> orderAdjustments = null;
+   protected List<OrderAdjustment> orderAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY")
    
-   private List<OrderHeader> createdByOrderHeaders = null;
+   protected List<OrderHeader> createdByOrderHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DONT_CANCEL_SET_USER_LOGIN")
    
-   private List<OrderItem> dontCancelSetOrderItems = null;
+   protected List<OrderItem> dontCancelSetOrderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CHANGE_USER_LOGIN")
    
-   private List<OrderItemChange> orderItemChanges = null;
+   protected List<OrderItemChange> orderItemChanges = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<OrderPaymentPreference> orderPaymentPreferences = null;
+   protected List<OrderPaymentPreference> orderPaymentPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_USER_LOGIN")
    
-   private List<OrderStatus> orderStatuses = null;
+   protected List<OrderStatus> orderStatuses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<Party> createdByPartys = null;
+   protected List<Party> createdByPartys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN")
    
-   private List<Party> lastModifiedByPartys = null;
+   protected List<Party> lastModifiedByPartys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<PicklistRole> createdByPicklistRoles = null;
+   protected List<PicklistRole> createdByPicklistRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN")
    
-   private List<PicklistRole> lastModifiedByPicklistRoles = null;
+   protected List<PicklistRole> lastModifiedByPicklistRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CHANGE_USER_LOGIN_ID")
    
-   private List<PicklistStatusHistory> changePicklistStatusHistorys = null;
+   protected List<PicklistStatusHistory> changePicklistStatusHistorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<Product> createdByProducts = null;
+   protected List<Product> createdByProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN")
    
-   private List<Product> lastModifiedByProducts = null;
+   protected List<Product> lastModifiedByProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<ProductFeaturePrice> createdByProductFeaturePrices = null;
+   protected List<ProductFeaturePrice> createdByProductFeaturePrices = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN")
    
-   private List<ProductFeaturePrice> lastModifiedByProductFeaturePrices = null;
+   protected List<ProductFeaturePrice> lastModifiedByProductFeaturePrices = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<ProductPrice> createdByProductPrices = null;
+   protected List<ProductPrice> createdByProductPrices = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN")
    
-   private List<ProductPrice> lastModifiedByProductPrices = null;
+   protected List<ProductPrice> lastModifiedByProductPrices = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CHANGED_BY_USER_LOGIN")
    
-   private List<ProductPriceChange> changedByProductPriceChanges = null;
+   protected List<ProductPriceChange> changedByProductPriceChanges = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<ProductPromo> createdByProductPromoes = null;
+   protected List<ProductPromo> createdByProductPromoes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN")
    
-   private List<ProductPromo> lastModifiedByProductPromoes = null;
+   protected List<ProductPromo> lastModifiedByProductPromoes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<ProductPromoCode> createdByProductPromoCodes = null;
+   protected List<ProductPromoCode> createdByProductPromoCodes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN")
    
-   private List<ProductPromoCode> lastModifiedByProductPromoCodes = null;
+   protected List<ProductPromoCode> lastModifiedByProductPromoCodes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="USER_LOGIN_ID")
    
-   private List<ProductReview> productReviews = null;
+   protected List<ProductReview> productReviews = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<QuoteAdjustment> quoteAdjustments = null;
+   protected List<QuoteAdjustment> quoteAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<ReturnAdjustment> returnAdjustments = null;
+   protected List<ReturnAdjustment> returnAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY")
    
-   private List<ReturnHeader> returnHeaders = null;
+   protected List<ReturnHeader> returnHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN_ID")
    
-   private List<SalesForecast> createdBySalesForecasts = null;
+   protected List<SalesForecast> createdBySalesForecasts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MODIFIED_BY_USER_LOGIN_ID")
    
-   private List<SalesForecast> modifiedBySalesForecasts = null;
+   protected List<SalesForecast> modifiedBySalesForecasts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MODIFIED_BY_USER_LOGIN_ID")
    
-   private List<SalesForecastHistory> modifiedBySalesForecastHistorys = null;
+   protected List<SalesForecastHistory> modifiedBySalesForecastHistorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<SalesOpportunity> salesOpportunitys = null;
+   protected List<SalesOpportunity> salesOpportunitys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MODIFIED_BY_USER_LOGIN")
    
-   private List<SalesOpportunityHistory> salesOpportunityHistorys = null;
+   protected List<SalesOpportunityHistory> salesOpportunityHistorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="USER_LOGIN_ID")
    
-   private List<ServerHit> serverHits = null;
+   protected List<ServerHit> serverHits = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
-   private List<ServiceTestRecord> createdByServiceTestRecords = null;
+   protected List<ServiceTestRecord> createdByServiceTestRecords = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MODIFIED_BY_USER_LOGIN")
    
-   private List<ServiceTestRecord> modifiedByServiceTestRecords = null;
+   protected List<ServiceTestRecord> modifiedByServiceTestRecords = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RECEIVED_BY_USER_LOGIN_ID")
    
-   private List<ShipmentReceipt> shipmentReceipts = null;
+   protected List<ShipmentReceipt> shipmentReceipts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="APPROVED_BY_USER_LOGIN_ID")
    
-   private List<Timesheet> approvedByTimesheets = null;
+   protected List<Timesheet> approvedByTimesheets = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="userLogin", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="USER_LOGIN_ID")
    
-   private List<UserLoginHistory> userLoginHistorys = null;
+   protected List<UserLoginHistory> userLoginHistorys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="userLogin", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="USER_LOGIN_ID")
    
-   private List<UserLoginPasswordHistory> userLoginPasswordHistorys = null;
+   protected List<UserLoginPasswordHistory> userLoginPasswordHistorys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="userLogin", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="USER_LOGIN_ID")
    
-   private List<UserLoginSecurityGroup> userLoginSecurityGroups = null;
+   protected List<UserLoginSecurityGroup> userLoginSecurityGroups = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="USER_LOGIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLoginSession userLoginSession = null;
+   protected UserLoginSession userLoginSession = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="userLogin", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="USER_LOGIN_ID")
    
-   private List<ViewPreference> viewPreferences = null;
+   protected List<ViewPreference> viewPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="USER_LOGIN_ID")
    
-   private List<Visitor> visitors = null;
+   protected List<Visitor> visitors = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="userLogin", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="USER_LOGIN_ID")
    
-   private List<WebUserPreference> webUserPreferences = null;
+   protected List<WebUserPreference> webUserPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ASSIGNED_BY_USER_LOGIN_ID")
    
-   private List<WorkEffortPartyAssignment> assignedByWorkEffortPartyAssignments = null;
+   protected List<WorkEffortPartyAssignment> assignedByWorkEffortPartyAssignments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="userLogin", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="USER_LOGIN_ID")
    
-   private List<WorkEffortReview> workEffortReviews = null;
+   protected List<WorkEffortReview> workEffortReviews = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SET_BY_USER_LOGIN")
    
-   private List<WorkEffortStatus> setByWorkEffortStatuses = null;
+   protected List<WorkEffortStatus> setByWorkEffortStatuses = null;
 
   /**
    * Default constructor.

@@ -89,7 +89,7 @@ fieldMapColumns.put("SalesOpportunityHistory", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -103,65 +103,65 @@ fieldMapColumns.put("SalesOpportunityHistory", fields);
    @GeneratedValue(generator="SalesOpportunityHistory_GEN")
    @Id
    @Column(name="SALES_OPPORTUNITY_HISTORY_ID")
-   private String salesOpportunityHistoryId;
+   protected String salesOpportunityHistoryId;
    @Column(name="SALES_OPPORTUNITY_ID")
-   private String salesOpportunityId;
+   protected String salesOpportunityId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="NEXT_STEP")
-   private String nextStep;
+   protected String nextStep;
    @Column(name="ESTIMATED_AMOUNT")
-   private BigDecimal estimatedAmount;
+   protected BigDecimal estimatedAmount;
    @Column(name="ESTIMATED_PROBABILITY")
-   private BigDecimal estimatedProbability;
+   protected BigDecimal estimatedProbability;
    @Column(name="CURRENCY_UOM_ID")
-   private String currencyUomId;
+   protected String currencyUomId;
    @Column(name="ESTIMATED_CLOSE_DATE")
-   private Timestamp estimatedCloseDate;
+   protected Timestamp estimatedCloseDate;
    @Column(name="OPPORTUNITY_STAGE_ID")
-   private String opportunityStageId;
+   protected String opportunityStageId;
    @Column(name="CHANGE_NOTE")
-   private String changeNote;
+   protected String changeNote;
    @Column(name="MODIFIED_BY_USER_LOGIN")
-   private String modifiedByUserLogin;
+   protected String modifiedByUserLogin;
    @Column(name="MODIFIED_TIMESTAMP")
-   private Timestamp modifiedTimestamp;
+   protected Timestamp modifiedTimestamp;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom uom = null;
+   protected Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="OPPORTUNITY_STAGE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private SalesOpportunityStage salesOpportunityStage = null;
+   protected SalesOpportunityStage salesOpportunityStage = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SALES_OPPORTUNITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private SalesOpportunity salesOpportunity = null;
+   protected SalesOpportunity salesOpportunity = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MODIFIED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin userLogin = null;
+   protected UserLogin userLogin = null;
 
   /**
    * Default constructor.

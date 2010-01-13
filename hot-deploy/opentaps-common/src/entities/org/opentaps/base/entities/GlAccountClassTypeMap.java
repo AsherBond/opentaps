@@ -72,7 +72,7 @@ fieldMapColumns.put("GlAccountClassTypeMap", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,35 +86,35 @@ fieldMapColumns.put("GlAccountClassTypeMap", fields);
    @GeneratedValue(generator="GlAccountClassTypeMap_GEN")
    @Id
    @Column(name="GL_ACCOUNT_CLASS_TYPE_KEY")
-   private String glAccountClassTypeKey;
+   protected String glAccountClassTypeKey;
    @Column(name="GL_ACCOUNT_CLASS_ID")
-   private String glAccountClassId;
+   protected String glAccountClassId;
    @Column(name="GL_ACCOUNT_TYPE_ID")
-   private String glAccountTypeId;
+   protected String glAccountTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_CLASS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GlAccountClass glAccountClass = null;
+   protected GlAccountClass glAccountClass = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private GlAccountType glAccountType = null;
+   protected GlAccountType glAccountType = null;
 
   /**
    * Default constructor.

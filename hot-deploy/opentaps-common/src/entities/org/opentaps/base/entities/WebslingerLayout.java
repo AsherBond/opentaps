@@ -87,7 +87,7 @@ fieldMapColumns.put("WebslingerLayout", fields);
     loadAtStart("loadAtStart"),
     hostName("hostName"),
     contextPath("contextPath");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -121,8 +121,8 @@ fieldMapColumns.put("WebslingerLayout", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WebslingerServer webslingerServer = null;
-   private transient List<WebslingerServerBase> webslingerServerBases = null;
+   protected WebslingerServer webslingerServer = null;
+   protected transient List<WebslingerServerBase> webslingerServerBases = null;
    private transient WebslingerHostMapping webslingerHostMapping = null;
 
   /**

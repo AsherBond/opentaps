@@ -182,7 +182,7 @@ fieldMapColumns.put("DataImportCustomer", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -196,144 +196,144 @@ fieldMapColumns.put("DataImportCustomer", fields);
    @GeneratedValue(generator="DataImportCustomer_GEN")
    @Id
    @Column(name="CUSTOMER_ID")
-   private String customerId;
+   protected String customerId;
    @Column(name="COMPANY_NAME")
-   private String companyName;
+   protected String companyName;
    @Column(name="FIRST_NAME")
-   private String firstName;
+   protected String firstName;
    @Column(name="LAST_NAME")
-   private String lastName;
+   protected String lastName;
    @Column(name="ATTN_NAME")
-   private String attnName;
+   protected String attnName;
    @Column(name="ADDRESS1")
-   private String address1;
+   protected String address1;
    @Column(name="ADDRESS2")
-   private String address2;
+   protected String address2;
    @Column(name="CITY")
-   private String city;
+   protected String city;
    @Column(name="STATE_PROVINCE_GEO_ID")
-   private String stateProvinceGeoId;
+   protected String stateProvinceGeoId;
    @Column(name="POSTAL_CODE")
-   private String postalCode;
+   protected String postalCode;
    @Column(name="POSTAL_CODE_EXT")
-   private String postalCodeExt;
+   protected String postalCodeExt;
    @Column(name="STATE_PROVINCE_GEO_NAME")
-   private String stateProvinceGeoName;
+   protected String stateProvinceGeoName;
    @Column(name="COUNTRY_GEO_ID")
-   private String countryGeoId;
+   protected String countryGeoId;
    @Column(name="PRIMARY_PHONE_COUNTRY_CODE")
-   private String primaryPhoneCountryCode;
+   protected String primaryPhoneCountryCode;
    @Column(name="PRIMARY_PHONE_AREA_CODE")
-   private String primaryPhoneAreaCode;
+   protected String primaryPhoneAreaCode;
    @Column(name="PRIMARY_PHONE_NUMBER")
-   private String primaryPhoneNumber;
+   protected String primaryPhoneNumber;
    @Column(name="PRIMARY_PHONE_EXTENSION")
-   private String primaryPhoneExtension;
+   protected String primaryPhoneExtension;
    @Column(name="SECONDARY_PHONE_COUNTRY_CODE")
-   private String secondaryPhoneCountryCode;
+   protected String secondaryPhoneCountryCode;
    @Column(name="SECONDARY_PHONE_AREA_CODE")
-   private String secondaryPhoneAreaCode;
+   protected String secondaryPhoneAreaCode;
    @Column(name="SECONDARY_PHONE_NUMBER")
-   private String secondaryPhoneNumber;
+   protected String secondaryPhoneNumber;
    @Column(name="SECONDARY_PHONE_EXTENSION")
-   private String secondaryPhoneExtension;
+   protected String secondaryPhoneExtension;
    @Column(name="FAX_COUNTRY_CODE")
-   private String faxCountryCode;
+   protected String faxCountryCode;
    @Column(name="FAX_AREA_CODE")
-   private String faxAreaCode;
+   protected String faxAreaCode;
    @Column(name="FAX_NUMBER")
-   private String faxNumber;
+   protected String faxNumber;
    @Column(name="DID_COUNTRY_CODE")
-   private String didCountryCode;
+   protected String didCountryCode;
    @Column(name="DID_AREA_CODE")
-   private String didAreaCode;
+   protected String didAreaCode;
    @Column(name="DID_NUMBER")
-   private String didNumber;
+   protected String didNumber;
    @Column(name="DID_EXTENSION")
-   private String didExtension;
+   protected String didExtension;
    @Column(name="EMAIL_ADDRESS")
-   private String emailAddress;
+   protected String emailAddress;
    @Column(name="WEB_ADDRESS")
-   private String webAddress;
+   protected String webAddress;
    @Column(name="DISCOUNT")
-   private BigDecimal discount;
+   protected BigDecimal discount;
    @Column(name="PARTY_CLASSIFICATION_TYPE_ID")
-   private String partyClassificationTypeId;
+   protected String partyClassificationTypeId;
    @Column(name="CREDIT_CARD_NUMBER")
-   private String creditCardNumber;
+   protected String creditCardNumber;
    @Column(name="CREDIT_CARD_EXP_DATE")
-   private String creditCardExpDate;
+   protected String creditCardExpDate;
    @Column(name="OUTSTANDING_BALANCE")
-   private BigDecimal outstandingBalance;
+   protected BigDecimal outstandingBalance;
    @Column(name="CREDIT_LIMIT")
-   private BigDecimal creditLimit;
+   protected BigDecimal creditLimit;
    @Column(name="CURRENCY_UOM_ID")
-   private String currencyUomId;
+   protected String currencyUomId;
    @Column(name="DISABLE_SHIPPING")
-   private String disableShipping;
+   protected String disableShipping;
    @Column(name="NET_PAYMENT_DAYS")
-   private Long netPaymentDays;
+   protected Long netPaymentDays;
    @Column(name="SHIP_TO_COMPANY_NAME")
-   private String shipToCompanyName;
+   protected String shipToCompanyName;
    @Column(name="SHIP_TO_FIRST_NAME")
-   private String shipToFirstName;
+   protected String shipToFirstName;
    @Column(name="SHIP_TO_LAST_NAME")
-   private String shipToLastName;
+   protected String shipToLastName;
    @Column(name="SHIP_TO_ATTN_NAME")
-   private String shipToAttnName;
+   protected String shipToAttnName;
    @Column(name="SHIP_TO_ADDRESS1")
-   private String shipToAddress1;
+   protected String shipToAddress1;
    @Column(name="SHIP_TO_ADDRESS2")
-   private String shipToAddress2;
+   protected String shipToAddress2;
    @Column(name="SHIP_TO_CITY")
-   private String shipToCity;
+   protected String shipToCity;
    @Column(name="SHIP_TO_STATE_PROVINCE_GEO_ID")
-   private String shipToStateProvinceGeoId;
+   protected String shipToStateProvinceGeoId;
    @Column(name="SHIP_TO_POSTAL_CODE")
-   private String shipToPostalCode;
+   protected String shipToPostalCode;
    @Column(name="SHIP_TO_POSTAL_CODE_EXT")
-   private String shipToPostalCodeExt;
+   protected String shipToPostalCodeExt;
    @Column(name="SHIP_TO_STATE_PROV_GEO_NAME")
-   private String shipToStateProvGeoName;
+   protected String shipToStateProvGeoName;
    @Column(name="SHIP_TO_COUNTRY_GEO_ID")
-   private String shipToCountryGeoId;
+   protected String shipToCountryGeoId;
    @Column(name="NOTE")
-   private String note;
+   protected String note;
    @Column(name="IMPORT_STATUS_ID")
-   private String importStatusId;
+   protected String importStatusId;
    @Column(name="IMPORT_ERROR")
-   private String importError;
+   protected String importError;
    @Column(name="PROCESSED_TIMESTAMP")
-   private Timestamp processedTimestamp;
+   protected Timestamp processedTimestamp;
    @Column(name="PRIMARY_PARTY_ID")
-   private String primaryPartyId;
+   protected String primaryPartyId;
    @Column(name="COMPANY_PARTY_ID")
-   private String companyPartyId;
+   protected String companyPartyId;
    @Column(name="PERSON_PARTY_ID")
-   private String personPartyId;
+   protected String personPartyId;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="agentDataImportCustomer", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CUSTOMER_ID")
    
-   private List<DataImportCommissionCustomers> agentDataImportCommissionCustomerses = null;
+   protected List<DataImportCommissionCustomers> agentDataImportCommissionCustomerses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="customerDataImportCustomer", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TO_CUSTOMER_ID")
    
-   private List<DataImportCommissionCustomers> customerDataImportCommissionCustomerses = null;
+   protected List<DataImportCommissionCustomers> customerDataImportCommissionCustomerses = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CUSTOMER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private DataImportCommissionRates dataImportCommissionRates = null;
+   protected DataImportCommissionRates dataImportCommissionRates = null;
 
   /**
    * Default constructor.

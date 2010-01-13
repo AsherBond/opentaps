@@ -119,7 +119,7 @@ fieldMapColumns.put("PartyRelationshipAndSalesOpportunity", fields);
     opportunityStageId("opportunityStageId"),
     typeEnumId("typeEnumId"),
     createdByUserLogin("createdByUserLogin");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -167,7 +167,7 @@ fieldMapColumns.put("PartyRelationshipAndSalesOpportunity", fields);
    private String typeEnumId;
     
    private String createdByUserLogin;
-   private transient List<SalesOpportunityQuote> salesOpportunityQuotes = null;
+   protected transient List<SalesOpportunityQuote> salesOpportunityQuotes = null;
 
   /**
    * Default constructor.

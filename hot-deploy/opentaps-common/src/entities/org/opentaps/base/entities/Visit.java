@@ -116,7 +116,7 @@ fieldMapColumns.put("Visit", fields);
     contactMechId("contactMechId"),
     partyId("partyId"),
     roleTypeId("roleTypeId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -130,151 +130,151 @@ fieldMapColumns.put("Visit", fields);
    @GeneratedValue(generator="Visit_GEN")
    @Id
    @Column(name="VISIT_ID")
-   private String visitId;
+   protected String visitId;
    @Column(name="VISITOR_ID")
-   private String visitorId;
+   protected String visitorId;
    @Column(name="USER_LOGIN_ID")
-   private String userLoginId;
+   protected String userLoginId;
    @Column(name="USER_CREATED")
-   private String userCreated;
+   protected String userCreated;
    @Column(name="SESSION_ID")
-   private String sessionId;
+   protected String sessionId;
    @Column(name="SERVER_IP_ADDRESS")
-   private String serverIpAddress;
+   protected String serverIpAddress;
    @Column(name="SERVER_HOST_NAME")
-   private String serverHostName;
+   protected String serverHostName;
    @Column(name="WEBAPP_NAME")
-   private String webappName;
+   protected String webappName;
    @Column(name="INITIAL_LOCALE")
-   private String initialLocale;
+   protected String initialLocale;
    @Column(name="INITIAL_REQUEST")
-   private String initialRequest;
+   protected String initialRequest;
    @Column(name="INITIAL_REFERRER")
-   private String initialReferrer;
+   protected String initialReferrer;
    @Column(name="INITIAL_USER_AGENT")
-   private String initialUserAgent;
+   protected String initialUserAgent;
    @Column(name="USER_AGENT_ID")
-   private String userAgentId;
+   protected String userAgentId;
    @Column(name="CLIENT_IP_ADDRESS")
-   private String clientIpAddress;
+   protected String clientIpAddress;
    @Column(name="CLIENT_HOST_NAME")
-   private String clientHostName;
+   protected String clientHostName;
    @Column(name="CLIENT_USER")
-   private String clientUser;
+   protected String clientUser;
    @Column(name="CLIENT_IP_ISP_NAME")
-   private String clientIpIspName;
+   protected String clientIpIspName;
    @Column(name="CLIENT_IP_POSTAL_CODE")
-   private String clientIpPostalCode;
+   protected String clientIpPostalCode;
    @Column(name="CLIENT_IP_STATE_PROV_GEO_ID")
-   private String clientIpStateProvGeoId;
+   protected String clientIpStateProvGeoId;
    @Column(name="CLIENT_IP_COUNTRY_GEO_ID")
-   private String clientIpCountryGeoId;
+   protected String clientIpCountryGeoId;
    @Column(name="COOKIE")
-   private String cookie;
+   protected String cookie;
    @Column(name="FROM_DATE")
-   private Timestamp fromDate;
+   protected Timestamp fromDate;
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="CONTACT_MECH_ID")
-   private String contactMechId;
+   protected String contactMechId;
    @Column(name="PARTY_ID")
-   private String partyId;
+   protected String partyId;
    @Column(name="ROLE_TYPE_ID")
-   private String roleTypeId;
+   protected String roleTypeId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="VISITOR_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Visitor visitor = null;
+   protected Visitor visitor = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="USER_AGENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserAgent userAgent = null;
+   protected UserAgent userAgent = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CLIENT_IP_STATE_PROV_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo clientIpStateProvGeo = null;
+   protected Geo clientIpStateProvGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CLIENT_IP_COUNTRY_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Geo clientIpCountryGeo = null;
+   protected Geo clientIpCountryGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ContactMech contactMech = null;
+   protected ContactMech contactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private RoleType roleType = null;
+   protected RoleType roleType = null;
    private transient PartyRole partyRole = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="visit", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="VISIT_ID")
    
-   private List<CartAbandonedLine> cartAbandonedLines = null;
+   protected List<CartAbandonedLine> cartAbandonedLines = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="visit", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="VISIT_ID")
    
-   private List<InventoryItemTempRes> inventoryItemTempReses = null;
+   protected List<InventoryItemTempRes> inventoryItemTempReses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="VISIT_ID")
    
-   private List<OldProductKeywordResult> oldProductKeywordResults = null;
+   protected List<OldProductKeywordResult> oldProductKeywordResults = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="VISIT_ID")
    
-   private List<PartyDataSource> partyDataSources = null;
+   protected List<PartyDataSource> partyDataSources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="VISIT_ID")
    
-   private List<PartyNeed> partyNeeds = null;
+   protected List<PartyNeed> partyNeeds = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="VISIT_ID")
    
-   private List<ProductSearchResult> productSearchResults = null;
+   protected List<ProductSearchResult> productSearchResults = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="visit", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="VISIT_ID")
    
-   private List<ServerHit> serverHits = null;
+   protected List<ServerHit> serverHits = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="visit", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="VISIT_ID")
    
-   private List<TrackingCodeVisit> trackingCodeVisits = null;
+   protected List<TrackingCodeVisit> trackingCodeVisits = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="VISIT_ID")
    
-   private List<WorkEffortSearchResult> workEffortSearchResults = null;
+   protected List<WorkEffortSearchResult> workEffortSearchResults = null;
 
   /**
    * Default constructor.

@@ -234,7 +234,7 @@ fieldMapColumns.put("OrderItemShipGrpInvResAndItemLocation", fields);
     sectionId("sectionId"),
     levelId("levelId"),
     positionId("positionId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -364,7 +364,7 @@ fieldMapColumns.put("OrderItemShipGrpInvResAndItemLocation", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Product product = null;
+   protected Product product = null;
    private transient FacilityLocation facilityLocation = null;
    private transient OrderItemShipGrpInvRes orderItemShipGrpInvRes = null;
 

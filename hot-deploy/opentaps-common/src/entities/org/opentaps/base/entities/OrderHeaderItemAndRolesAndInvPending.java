@@ -155,7 +155,7 @@ fieldMapColumns.put("OrderHeaderItemAndRolesAndInvPending", fields);
     correspondingPoId("correspondingPoId"),
     serialNumber("serialNumber"),
     lotId("lotId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -233,36 +233,36 @@ fieldMapColumns.put("OrderHeaderItemAndRolesAndInvPending", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderType orderType = null;
+   protected OrderType orderType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Facility originFacility = null;
-   private transient List<OrderTypeAttr> orderTypeAttrs = null;
-   private transient List<OrderAttribute> orderAttributes = null;
-   private transient List<OrderAdjustment> orderAdjustments = null;
-   private transient List<OrderItem> orderItems = null;
-   private transient List<OrderContactMech> orderContactMeches = null;
-   private transient List<OrderItemBilling> orderItemBillings = null;
-   private transient List<OrderItemContactMech> orderItemContactMeches = null;
-   private transient List<OrderItemRole> orderItemRoles = null;
-   private transient List<OrderRole> orderRoles = null;
-   private transient List<OrderShipment> orderShipments = null;
-   private transient List<OrderStatus> orderStatuses = null;
-   private transient List<OrderTerm> orderTerms = null;
-   private transient List<WorkOrderItemFulfillment> workOrderItemFulfillments = null;
-   private transient List<ProductOrderItem> productOrderItems = null;
+   protected Facility originFacility = null;
+   protected transient List<OrderTypeAttr> orderTypeAttrs = null;
+   protected transient List<OrderAttribute> orderAttributes = null;
+   protected transient List<OrderAdjustment> orderAdjustments = null;
+   protected transient List<OrderItem> orderItems = null;
+   protected transient List<OrderContactMech> orderContactMeches = null;
+   protected transient List<OrderItemBilling> orderItemBillings = null;
+   protected transient List<OrderItemContactMech> orderItemContactMeches = null;
+   protected transient List<OrderItemRole> orderItemRoles = null;
+   protected transient List<OrderRole> orderRoles = null;
+   protected transient List<OrderShipment> orderShipments = null;
+   protected transient List<OrderStatus> orderStatuses = null;
+   protected transient List<OrderTerm> orderTerms = null;
+   protected transient List<WorkOrderItemFulfillment> workOrderItemFulfillments = null;
+   protected transient List<ProductOrderItem> productOrderItems = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BILLING_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private BillingAccount billingAccount = null;
-   private transient List<OrderPaymentPreference> orderPaymentPreferences = null;
+   protected BillingAccount billingAccount = null;
+   protected transient List<OrderPaymentPreference> orderPaymentPreferences = null;
    private transient List<OrderHeaderNoteView> orderHeaderNoteViews = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY", insertable=false, updatable=false)
@@ -270,23 +270,23 @@ fieldMapColumns.put("OrderHeaderItemAndRolesAndInvPending", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private UserLogin userLogin = null;
+   protected UserLogin userLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem statusItem = null;
+   protected StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SYNC_STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private StatusItem syncStatusItem = null;
-   private transient List<OrderRequirementCommitment> orderRequirementCommitments = null;
-   private transient List<ShipmentReceipt> shipmentReceipts = null;
+   protected StatusItem syncStatusItem = null;
+   protected transient List<OrderRequirementCommitment> orderRequirementCommitments = null;
+   protected transient List<ShipmentReceipt> shipmentReceipts = null;
 
   /**
    * Default constructor.

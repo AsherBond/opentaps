@@ -72,7 +72,7 @@ fieldMapColumns.put("ProductFeatureIactnType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,36 +86,36 @@ fieldMapColumns.put("ProductFeatureIactnType", fields);
    @GeneratedValue(generator="ProductFeatureIactnType_GEN")
    @Id
    @Column(name="PRODUCT_FEATURE_IACTN_TYPE_ID")
-   private String productFeatureIactnTypeId;
+   protected String productFeatureIactnTypeId;
    @Column(name="PARENT_TYPE_ID")
-   private String parentTypeId;
+   protected String parentTypeId;
    @Column(name="HAS_TABLE")
-   private String hasTable;
+   protected String hasTable;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private ProductFeatureIactnType parentProductFeatureIactnType = null;
+   protected ProductFeatureIactnType parentProductFeatureIactnType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_FEATURE_IACTN_TYPE_ID")
    
-   private List<ProductFeatureIactn> productFeatureIactns = null;
+   protected List<ProductFeatureIactn> productFeatureIactns = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   private List<ProductFeatureIactnType> childProductFeatureIactnTypes = null;
+   protected List<ProductFeatureIactnType> childProductFeatureIactnTypes = null;
 
   /**
    * Default constructor.

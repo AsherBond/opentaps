@@ -71,7 +71,7 @@ fieldMapColumns.put("WebslingerServerBase", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,7 +84,7 @@ fieldMapColumns.put("WebslingerServerBase", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.WebslingerServerBasePkBridge.class)
-     private WebslingerServerBasePk id = new WebslingerServerBasePk();
+     protected WebslingerServerBasePk id = new WebslingerServerBasePk();
    
     /**
      * Auto generated Id accessor.
@@ -101,22 +101,22 @@ fieldMapColumns.put("WebslingerServerBase", fields);
          this.id = id;
       }
    @Column(name="SEQ_NUM")
-   private Long seqNum;
+   protected Long seqNum;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WEBSLINGER_SERVER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private WebslingerServer webslingerServer = null;
+   protected WebslingerServer webslingerServer = null;
 
   /**
    * Default constructor.

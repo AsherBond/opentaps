@@ -93,7 +93,7 @@ fieldMapColumns.put("AgreementTermBilling", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -107,62 +107,62 @@ fieldMapColumns.put("AgreementTermBilling", fields);
    @GeneratedValue(generator="AgreementTermBilling_GEN")
    @Id
    @Column(name="AGREEMENT_TERM_BILLING_ID")
-   private String agreementTermBillingId;
+   protected String agreementTermBillingId;
    @Column(name="AGREEMENT_ID")
-   private String agreementId;
+   protected String agreementId;
    @Column(name="AGREEMENT_TERM_ID")
-   private String agreementTermId;
+   protected String agreementTermId;
    @Column(name="INVOICE_ID")
-   private String invoiceId;
+   protected String invoiceId;
    @Column(name="INVOICE_ITEM_SEQ_ID")
-   private String invoiceItemSeqId;
+   protected String invoiceItemSeqId;
    @Column(name="AMOUNT")
-   private BigDecimal amount;
+   protected BigDecimal amount;
    @Column(name="ORIG_INVOICE_ID")
-   private String origInvoiceId;
+   protected String origInvoiceId;
    @Column(name="ORIG_INVOICE_ITEM_SEQ_ID")
-   private String origInvoiceItemSeqId;
+   protected String origInvoiceItemSeqId;
    @Column(name="ORIG_PAYMENT_APPLICATION_ID")
-   private String origPaymentApplicationId;
+   protected String origPaymentApplicationId;
    @Column(name="ORIG_PAYMENT_AMOUNT")
-   private BigDecimal origPaymentAmount;
+   protected BigDecimal origPaymentAmount;
    @Column(name="ORIG_AMOUNT")
-   private BigDecimal origAmount;
+   protected BigDecimal origAmount;
    @Column(name="ORIG_COMMISSION_RATE")
-   private BigDecimal origCommissionRate;
+   protected BigDecimal origCommissionRate;
    @Column(name="AGENT_PARTY_ID")
-   private String agentPartyId;
+   protected String agentPartyId;
    @Column(name="BILLING_DATETIME")
-   private Timestamp billingDatetime;
+   protected Timestamp billingDatetime;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AGREEMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Agreement agreement = null;
+   protected Agreement agreement = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AGREEMENT_TERM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private AgreementTerm agreementTerm = null;
+   protected AgreementTerm agreementTerm = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Invoice invoice = null;
+   protected Invoice invoice = null;
    private transient InvoiceItem invoiceItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORIG_INVOICE_ID", insertable=false, updatable=false)
@@ -170,7 +170,7 @@ fieldMapColumns.put("AgreementTermBilling", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Invoice originalInvoice = null;
+   protected Invoice originalInvoice = null;
    private transient InvoiceItem originalInvoiceItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORIG_PAYMENT_APPLICATION_ID", insertable=false, updatable=false)
@@ -178,14 +178,14 @@ fieldMapColumns.put("AgreementTermBilling", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private PaymentApplication paymentApplication = null;
+   protected PaymentApplication paymentApplication = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AGENT_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
 
   /**
    * Default constructor.

@@ -79,7 +79,7 @@ fieldMapColumns.put("Lot", fields);
     comments("comments"),
     uomId("uomId"),
     supplierPartyId("supplierPartyId");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -93,49 +93,49 @@ fieldMapColumns.put("Lot", fields);
    @GeneratedValue(generator="Lot_GEN")
    @Id
    @Column(name="LOT_ID")
-   private String lotId;
+   protected String lotId;
    @Column(name="CREATION_DATE")
-   private Timestamp creationDate;
+   protected Timestamp creationDate;
    @Column(name="QUANTITY")
-   private BigDecimal quantity;
+   protected BigDecimal quantity;
    @Column(name="EXPIRATION_DATE")
-   private Timestamp expirationDate;
+   protected Timestamp expirationDate;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @Column(name="COMMENTS")
-   private String comments;
+   protected String comments;
    @Column(name="UOM_ID")
-   private String uomId;
+   protected String uomId;
    @Column(name="SUPPLIER_PARTY_ID")
-   private String supplierPartyId;
+   protected String supplierPartyId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SUPPLIER_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
+   protected Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom uom = null;
+   protected Uom uom = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="LOT_ID")
    
-   private List<InventoryItem> inventoryItems = null;
+   protected List<InventoryItem> inventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="LOT_ID")
    
-   private List<InventoryItemTrace> inventoryItemTraces = null;
+   protected List<InventoryItemTrace> inventoryItemTraces = null;
 
   /**
    * Default constructor.

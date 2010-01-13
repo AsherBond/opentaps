@@ -68,7 +68,7 @@ fieldMapColumns.put("RateType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,45 +82,45 @@ fieldMapColumns.put("RateType", fields);
    @GeneratedValue(generator="RateType_GEN")
    @Id
    @Column(name="RATE_TYPE_ID")
-   private String rateTypeId;
+   protected String rateTypeId;
    @Column(name="DESCRIPTION")
-   private String description;
+   protected String description;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="rateType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="RATE_TYPE_ID")
    
-   private List<EmplPositionTypeRate> emplPositionTypeRates = null;
+   protected List<EmplPositionTypeRate> emplPositionTypeRates = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RATE_TYPE_ID")
    
-   private List<OldEmplPositionTypeRate> oldEmplPositionTypeRates = null;
+   protected List<OldEmplPositionTypeRate> oldEmplPositionTypeRates = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="rateType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="RATE_TYPE_ID")
    
-   private List<OldPartyRate> oldPartyRates = null;
+   protected List<OldPartyRate> oldPartyRates = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="rateType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="RATE_TYPE_ID")
    
-   private List<OldWorkEffortAssignmentRate> oldWorkEffortAssignmentRates = null;
+   protected List<OldWorkEffortAssignmentRate> oldWorkEffortAssignmentRates = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="rateType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="RATE_TYPE_ID")
    
-   private List<PartyRate> partyRates = null;
+   protected List<PartyRate> partyRates = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="rateType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="RATE_TYPE_ID")
    
-   private List<RateAmount> rateAmounts = null;
+   protected List<RateAmount> rateAmounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RATE_TYPE_ID")
    
-   private List<TimeEntry> timeEntrys = null;
+   protected List<TimeEntry> timeEntrys = null;
 
   /**
    * Default constructor.

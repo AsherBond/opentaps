@@ -78,7 +78,7 @@ fieldMapColumns.put("FixedAssetRegistration", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -91,7 +91,7 @@ fieldMapColumns.put("FixedAssetRegistration", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.FixedAssetRegistrationPkBridge.class)
-     private FixedAssetRegistrationPk id = new FixedAssetRegistrationPk();
+     protected FixedAssetRegistrationPk id = new FixedAssetRegistrationPk();
    
     /**
      * Auto generated Id accessor.
@@ -108,37 +108,37 @@ fieldMapColumns.put("FixedAssetRegistration", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   private Timestamp thruDate;
+   protected Timestamp thruDate;
    @Column(name="REGISTRATION_DATE")
-   private Timestamp registrationDate;
+   protected Timestamp registrationDate;
    @Column(name="GOV_AGENCY_PARTY_ID")
-   private String govAgencyPartyId;
+   protected String govAgencyPartyId;
    @Column(name="REGISTRATION_NUMBER")
-   private String registrationNumber;
+   protected String registrationNumber;
    @Column(name="LICENSE_NUMBER")
-   private String licenseNumber;
+   protected String licenseNumber;
    @Column(name="LAST_UPDATED_STAMP")
-   private Timestamp lastUpdatedStamp;
+   protected Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   private Timestamp lastUpdatedTxStamp;
+   protected Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   private Timestamp createdStamp;
+   protected Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   private Timestamp createdTxStamp;
+   protected Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private FixedAsset fixedAsset = null;
+   protected FixedAsset fixedAsset = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GOV_AGENCY_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party govAgencyParty = null;
+   protected Party govAgencyParty = null;
 
   /**
    * Default constructor.

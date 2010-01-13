@@ -89,7 +89,7 @@ fieldMapColumns.put("TaxAuthorityGlAccountBalance", fields);
     fromDate("fromDate"),
     thruDate("thruDate"),
     postedBalance("postedBalance");
-    private final String fieldName;
+    protected final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
