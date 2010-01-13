@@ -1428,7 +1428,7 @@
     <request-map uri="updatePartyAcctgPreference">
         <security https="true" auth="true"/>
         <event type="service" invoke="financials.updatePartyAcctgPreference"/>
-        <response name="success" type="request-redirect-noparam" value="listPaymentMethods"/>
+        <response name="success" type="request-redirect-noparam" value="configureOrganization"/>
         <response name="error" type="view" value="listPaymentMethods"/>
     </request-map>
 
