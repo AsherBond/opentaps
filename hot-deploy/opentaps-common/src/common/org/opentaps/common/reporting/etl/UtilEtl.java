@@ -341,10 +341,11 @@ public final class UtilEtl {
 
     /**
      * Runs an ETL transformation.
-     * 
-     * @param transUrl transformation file, should be in component url format.
-     * @throws KettleException
-     * @throws MalformedURLException 
+     *
+     * @param location transformation file, should be in component url format.
+     * @param arguments a <code>String</code> value
+     * @exception KettleException if an error occurs
+     * @exception MalformedURLException if an error occurs
      */
     public static void runTrans(String location, String[] arguments) throws KettleException, MalformedURLException {
 
@@ -371,11 +372,11 @@ public final class UtilEtl {
 
     /**
      * This method allow look up surrogate key in dimension entity under certain conditions.
-     * 
+     *
      * @param entityName Entity name
      * @param surrogateKeyName Name of dimension key field
      * @param lookupConditions Conditions to use together with <code>GenericDelegator</code> methods
-     * @param <code>GenericDelegator</code> instance
+     * @param delegator <code>GenericDelegator</code> instance
      * @return
      *   surrogate key value - if only record found under the conditions<br>
      *   0 - in all other cases
@@ -402,20 +403,20 @@ public final class UtilEtl {
      * Creates DateDim entity and fill it with initial values.<br>
      * Each row represents a day from 100 year time span starting from 1/1/1970.
      * This method is valid for one occasion only, every time it run date dimension is cleared
-     * and filled with the same data. 
+     * and filled with the same data.
      *
      * @param delegator An instance of <tt>GenericDelegator</tt>
      * @param timeZone Context timezone
      * @param locale Context locale
-     * @throws GenericEntityException
+     * @throws GenericEntityException if an error occurs
      */
     public static void setupDateDimension(GenericDelegator delegator, TimeZone timeZone, Locale locale) throws GenericEntityException {
         // time range covered by date dimension
-        int YEARS = 100;
+        final int years = 100;
 
         // calculate start and end dates of time range
         Timestamp startDate = UtilDate.toTimestamp("1970-01-01 00:00:00.0", timeZone, locale);
-        Timestamp endDate = UtilDateTime.adjustTimestamp(startDate, Calendar.YEAR, YEARS, timeZone, locale);
+        Timestamp endDate = UtilDateTime.adjustTimestamp(startDate, Calendar.YEAR, years, timeZone, locale);
 
         long sequentialKey = 1L;
         Timestamp current = startDate;
