@@ -39,6 +39,7 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.service.GenericServiceException;
 import org.opentaps.common.util.UtilDate;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.Result;
@@ -344,29 +345,37 @@ public final class UtilEtl {
      *
      * @param location transformation file, should be in component url format.
      * @param arguments a <code>String</code> value
-     * @exception KettleException if an error occurs
-     * @exception MalformedURLException if an error occurs
+     * @exception GenericServiceException if an error occurs
      */
-    public static void runTrans(String location, String[] arguments) throws KettleException, MalformedURLException {
+    public static void runTrans(String location, String[] arguments) throws GenericServiceException {
 
-        String path = ComponentLocationResolver.getBaseLocation(location).toString();
-        Debug.logInfo("Starting transformation at location" + path, MODULE);
+        try {
+            String path = ComponentLocationResolver.getBaseLocation(location).toString();
+            Debug.logInfo("Starting transformation at location" + path, MODULE);
 
-        EnvUtil.environmentInit();
-        StepLoader.init();
+            EnvUtil.environmentInit();
+            StepLoader.init();
 
-        TransMeta transMeta = new TransMeta(path);
-        transMeta.setArguments(arguments);
+            TransMeta transMeta = new TransMeta(path);
+            transMeta.setArguments(arguments);
 
-        Trans trans = new Trans(transMeta);
+            Trans trans = new Trans(transMeta);
 
-        trans.prepareExecution(transMeta.getArguments());
-        trans.startThreads();
-        trans.waitUntilFinished();
-        trans.endProcessing("end");
+            trans.prepareExecution(transMeta.getArguments());
+            trans.startThreads();
+            trans.waitUntilFinished();
+            trans.endProcessing("end");
 
-        if (trans.getErrors() > 0) {
-            Debug.logError("There were errors during transformation execution.", MODULE);
+            int errs = trans.getErrors();
+            if (errs > 0) {
+                String msg = "There were " + errs + " errors during transformation execution [" + location + "].";
+                Debug.logError(msg, MODULE);
+                throw new GenericServiceException(msg);
+            }
+        } catch (KettleException e) {
+            throw new GenericServiceException(e);
+        } catch (MalformedURLException e) {
+            throw new GenericServiceException(e);
         }
     }
 

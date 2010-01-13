@@ -1843,10 +1843,6 @@ public final class FinancialReports {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         } catch (NamingException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
-        } catch (KettleException e) {
-            return UtilMessage.createAndLogServiceError(e, MODULE);
-        } catch (MalformedURLException e) {
-            return UtilMessage.createAndLogServiceError(e, MODULE);
         } catch (InfrastructureException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
