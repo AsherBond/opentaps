@@ -115,4 +115,11 @@
     <!-- configuration screens -->
     <ContextHelpResource contextHelpResourceId="FINCONFIG1" screenName="accountingTags" applicationName="financials" remotePageName="Accounting_Tags_Screen" remotePageVersion="0" />
     <ContextHelpResource contextHelpResourceId="FINCONFIG2" screenName="accountingTagsUsage" applicationName="financials" remotePageName="Accounting_Tags_Usage_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="FINCONFIG3" screenName="listGlAccounts" applicationName="financials" remotePageName="Chart_of_Accounts_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="FINCONFIG4" screenName="listGlAccountTypes" applicationName="financials" remotePageName="Configure_Ledger_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="FINCONFIG5" screenName="listPaymentMethods" applicationName="financials" remotePageName="Payment_Methods_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="FINCONFIG6" screenName="organizationTimePeriods" applicationName="financials" remotePageName="Time_Period_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="FINCONFIG7" screenName="configureOrganization" applicationName="financials" remotePageName="View_Configuration_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="FINCONFIG8" screenName="configurationMain" applicationName="financials" remotePageName="Chart_of_Accounts_Screen" remotePageVersion="0" />
+    
 </entity-engine-xml>
