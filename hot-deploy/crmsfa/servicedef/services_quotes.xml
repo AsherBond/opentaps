@@ -35,6 +35,7 @@
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
         <attribute name="quantities" type="Map" mode="IN" optional="true" string-map-prefix="quantities_o_"/>
         <attribute name="unitPrices" type="Map" mode="IN" optional="true" string-map-prefix="unitPrices_o_"/>
+        <attribute name="partyId" mode="IN" type="String" optional="true"/>
     </service>
     <service name="updateQuoteItem" default-entity-name="QuoteItem" engine="java"
                 location="com.opensourcestrategies.crmsfa.quotes.QuoteServices" invoke="updateQuoteItem" auth="true">
