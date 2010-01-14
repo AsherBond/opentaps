@@ -60,6 +60,7 @@ function removeQuantityRow(/*String*/ id) {
 <@frameSection title=uiLabelMap.CrmAddItems>
     <form method="post" action="<@ofbizUrl>createQuoteItem</@ofbizUrl>" name="addItemToQuote">
       <@inputHidden name="quoteId" value="${quote.quoteId}"/>
+      <@inputHidden name="partyId" value=quote.partyId/>
       <@inputHidden name="rowCount" value="1"/>
       <table class="twoColumn">
         <tbody id="addItemTable">
