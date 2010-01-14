@@ -1196,6 +1196,7 @@
   <mapping class="org.opentaps.base.entities.AcctgTransAndOrg"/>
   <mapping class="org.opentaps.base.entities.InvoiceItemAssoc"/>
   <mapping class="org.opentaps.base.entities.PaymentApplicationSum"/>
+  <mapping class="org.opentaps.base.entities.PaymentAndPaymentApplication"/>
   <mapping class="org.opentaps.base.entities.PaycheckItemType"/>
   <mapping class="org.opentaps.base.entities.PaycheckItemClass"/>
   <mapping class="org.opentaps.base.entities.PaycheckItem"/>

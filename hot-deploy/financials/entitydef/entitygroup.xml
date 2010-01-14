@@ -82,6 +82,7 @@
   <!-- =========================================== -->
 
   <entity-group group="org.ofbiz" entity="PaymentAndApplication"/>
+  <entity-group group="org.ofbiz" entity="PaymentAndPaymentApplication"/>
   <entity-group group="org.ofbiz" entity="PaymentApplicationSum"/>
 
 </entitygroup>

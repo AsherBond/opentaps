@@ -1420,6 +1420,47 @@ under the License.
       </relation>
     </view-entity>
 
+    <view-entity entity-name="PaymentAndPaymentApplication"
+            package-name="org.ofbiz.accounting.payment"
+            never-cache="true"
+            title="Payment and Payment Applications View Entity (differ from PaymentAndApplication as the rel is optional here)">
+      <member-entity entity-alias="PY" entity-name="Payment"/>
+      <member-entity entity-alias="PA" entity-name="PaymentApplication"/>
+      <alias-all entity-alias="PY"/>
+      <alias-all entity-alias="PA" prefix="appl"/>
+      <view-link entity-alias="PY" rel-entity-alias="PA" rel-optional="true">
+        <key-map field-name="paymentId"/>
+      </view-link>
+      <relation type="one-nofk" rel-entity-name="Payment">
+        <key-map field-name="paymentId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="PaymentApplication">
+        <key-map field-name="applPaymentApplicationId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="StatusItem">
+        <key-map field-name="statusId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="PaymentType">
+        <key-map field-name="paymentTypeId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="PaymentMethodType">
+        <key-map field-name="paymentMethodTypeId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="PaymentGatewayResponse">
+        <key-map field-name="paymentGatewayResponseId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="Geo">
+        <key-map field-name="applTaxAuthGeoId" rel-field-name="geoId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="Invoice">
+        <key-map field-name="applInvoiceId" rel-field-name="invoiceId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="InvoiceItem">
+        <key-map field-name="applInvoiceId" rel-field-name="invoiceId"/>
+        <key-map field-name="applInvoiceItemSeqId" rel-field-name="invoiceItemSeqId"/>
+      </relation>
+    </view-entity>
+
     <!-- These entities are to refactor the entity which defined in ofbiz. in this new entity we will use productAverageCostId auto sequenced as primary key
     -->
     <entity entity-name="ProductAverageCost" package-name="com.opensourcestrategies.financials.ledger"
