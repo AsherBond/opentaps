@@ -20,7 +20,7 @@
 <form method="post" action="<@ofbizUrl>${formTarget}</@ofbizUrl>" name="findInvoiceForm" style="margin: 0pt;">
   <@inputHidden name="invoiceTypeId" value="${invoiceTypeId}"/>
   <@inputHidden name="performFind" value="Y"/>
-  <table class="twoColumnForm">
+  <table class="fourColumnForm">
     <tbody>
       <@inputTextRow title=uiLabelMap.FinancialsInvoiceId name="invoiceId" size="20" maxlength="20"/>
 
@@ -40,28 +40,47 @@
         </@inputSelectRow>
       </#if>
 
-      <@inputSelectRow title=uiLabelMap.CommonStatus name="statusId" list=statuses key="statusId" required=false ; status >
-        ${status.statusDescription}
-      </@inputSelectRow>
+      <tr>
+        <@displayTitleCell title=uiLabelMap.CommonStatus />
+        <@inputSelectCell name="statusId" list=statuses key="statusId" required=false ; status >
+          ${status.statusDescription}
+        </@inputSelectCell>
 
-      <@inputSelectRow title=uiLabelMap.FinancialsProcessingStatus name="processingStatusId" list=processingStatuses key="statusId" required=false ; status >
-        ${status.statusDescription}
-      </@inputSelectRow>
+        <@displayTitleCell title=uiLabelMap.FinancialsProcessingStatus />
+        <@inputSelectCell name="processingStatusId" list=processingStatuses key="statusId" required=false ; status >
+          ${status.statusDescription}
+        </@inputSelectCell>
+      </tr>
 
       <@inputDateRangeRow title=uiLabelMap.AccountingInvoiceDate fromName="invoiceDateFrom" thruName="invoiceDateThru" />
-      <@inputDateRangeRow title=uiLabelMap.AccountingDueDate fromName="dueDateFrom" thruName="dueDateThru" />
-      <@inputDateRangeRow title=uiLabelMap.AccountingPaidDate fromName="paidDateFrom" thruName="paidDateThru" />
 
-      <@inputRangeRow title=uiLabelMap.CommonAmount fromName="amountFrom" thruName="amountThru" size=10/>
-      <@inputRangeRow title=uiLabelMap.OpentapsOpenAmount fromName="openAmountFrom" thruName="openAmountThru" size=10/>
+      <tr>
+        <@displayTitleCell title=uiLabelMap.AccountingDueDate />
+        <@inputDateRangeCell fromName="dueDateFrom" thruName="dueDateThru" />
 
-      <@inputTextRow title=uiLabelMap.FinancialsReferenceNumber name="referenceNumber" size="30"/>
+        <@displayTitleCell title=uiLabelMap.AccountingPaidDate />
+        <@inputDateRangeCell fromName="paidDateFrom" thruName="paidDateThru" />
+      </tr>
+
+      <tr>
+        <@displayTitleCell title=uiLabelMap.CommonAmount />
+        <@inputRangeCell fromName="amountFrom" thruName="amountThru" size=10/>
+
+        <@displayTitleCell title=uiLabelMap.OpentapsOpenAmount />
+        <@inputRangeCell fromName="openAmountFrom" thruName="openAmountThru" size=10/>
+      </tr>
+
+      <tr>
+        <@displayTitleCell title=uiLabelMap.FinancialsReferenceNumber />
+        <@inputTextCell name="referenceNumber" size="30"/>
+
+        <#if enableFindByOrder>
+          <@displayTitleCell title=uiLabelMap.FinancialsRelatedOrderId />
+          <@inputTextCell name="orderId" size="20" maxlength="20"/>
+        </#if>
+      </tr>
+
       <@inputTextRow title=uiLabelMap.CommonMessage name="message" size="30"/>
-
-      <#if enableFindByOrder>
-        <@inputTextRow title=uiLabelMap.FinancialsRelatedOrderId name="orderId" size="20" maxlength="20"/>
-      </#if>
-      
       <@inputTextRow title=uiLabelMap.ProductItemDescription name="itemDescription" size="30"/>
 
       <#if tagFilters?has_content>
