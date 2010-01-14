@@ -31,7 +31,7 @@
 </#if>
 
 <#assign frameTitle>
-  ${uiLabelMap.CrmContact}
+  ${uiLabelMap.CrmContact} (${partySummary.partyId})
   <#if contactDeactivated?exists><span class="subSectionWarning">${uiLabelMap.CrmContactDeactivated} ${getLocalizedDate(contactDeactivatedDate, "DATE_TIME")}</span></#if>
 </#assign>
 

@@ -30,7 +30,7 @@
 </#assign>
 
 <#assign title>
-  ${uiLabelMap.CrmAccount}
+  ${uiLabelMap.CrmAccount} (${partySummary.partyId})
   <#if accountDeactivated?exists><span class="subSectionWarning">${uiLabelMap.CrmAccountDeactivated} ${getLocalizedDate(accountDeactivatedDate, "DATE_TIME")}</span></#if>
 </#assign>
 
