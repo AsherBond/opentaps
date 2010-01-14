@@ -19,11 +19,11 @@
 	<field name="partyId" class="java.lang.String"/>
 	<field name="origInvoiceId" class="java.lang.String"/>
 	<field name="customerName" class="java.lang.String"/>
-	<field name="amount" class="java.lang.Double"/>
+	<field name="amount" class="java.math.BigDecimal"/>
 	<field name="agentName" class="java.lang.String"/>
-	<field name="origAmount" class="java.lang.Double"/>
+	<field name="origAmount" class="java.math.BigDecimal"/>
 	<field name="invoiceDate" class="java.sql.Timestamp"/>
-	<field name="origPaymentAmount" class="java.lang.Double"/>
+	<field name="origPaymentAmount" class="java.math.BigDecimal"/>
 	<field name="billingDatetime" class="java.sql.Timestamp"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -178,7 +178,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{origAmount}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{origAmount}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
 				<reportElement key="textField" x="430" y="0" width="80" height="16"/>
@@ -221,7 +221,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{origPaymentAmount}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{origPaymentAmount}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement key="textField" x="660" y="0" width="70" height="16"/>
@@ -234,7 +234,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{amount}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{amount}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
