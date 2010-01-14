@@ -15,6 +15,8 @@
  * along with Opentaps.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
 <#if validView?default(false) && !accountDeactivated?exists>
 
 <#if hasViewOrderPermission?exists>
@@ -25,21 +27,18 @@
 	</#if>
 </#if>
 
-<div class="screenlet">
-    <div class="screenlet-header"><div class="boxhead">${uiLabelMap.CrmAccountShortcuts}</div></div>
-    <div class="screenlet-body">
-      <ul class="shortcuts">
-        <#if orderLink?exists>
-          <li>${orderLink}</li>
-        </#if>
-        <li>
-            <a href='findQuotes?partyId=${parameters.partyId}'>${uiLabelMap.OrderOrderQuotes}</a>
-        </li>
-        <li>
-            <a href='EditQuote?partyId=${parameters.partyId}'>${uiLabelMap.CrmCreateQuote}</a>
-        </li>
-      </ul>
-    </div>
-</div>
+<@frameSection title=uiLabelMap.CrmAccountShortcuts>
+  <ul class="shortcuts">
+    <#if orderLink?exists>
+      <li>${orderLink}</li>
+    </#if>
+    <li>
+      <a href='findQuotes?partyId=${parameters.partyId}'>${uiLabelMap.OrderOrderQuotes}</a>
+    </li>
+    <li>
+      <a href='EditQuote?partyId=${parameters.partyId}'>${uiLabelMap.CrmCreateQuote}</a>
+    </li>
+  </ul>
+</@frameSection>
         
 </#if>
