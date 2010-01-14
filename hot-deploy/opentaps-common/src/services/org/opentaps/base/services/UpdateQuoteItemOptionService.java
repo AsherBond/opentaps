@@ -98,7 +98,7 @@ public class UpdateQuoteItemOptionService extends ServiceWrapper {
     }
 
     private Locale inLocale;
-    private Double inQuantity;
+    private BigDecimal inQuantity;
     private String inQuoteId;
     private String inQuoteItemOptionSeqId;
     private String inQuoteItemSeqId;
@@ -128,9 +128,9 @@ public class UpdateQuoteItemOptionService extends ServiceWrapper {
     /**
      * Auto generated value accessor.
      * This parameter is optional.
-     * @return <code>Double</code>
+     * @return <code>BigDecimal</code>
      */
-    public Double getInQuantity() {
+    public BigDecimal getInQuantity() {
         return this.inQuantity;
     }
     /**
@@ -260,7 +260,7 @@ public class UpdateQuoteItemOptionService extends ServiceWrapper {
      * This parameter is optional.
      * @param inQuantity the inQuantity to set
     */
-    public void setInQuantity(Double inQuantity) {
+    public void setInQuantity(BigDecimal inQuantity) {
         this.inParameters.add("quantity");
         this.inQuantity = inQuantity;
     }
@@ -444,7 +444,7 @@ public class UpdateQuoteItemOptionService extends ServiceWrapper {
     /** {@inheritDoc} */
     public void putAllInput(Map<String, Object> mapValue) {
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
-        if (mapValue.containsKey("quantity")) setInQuantity((Double) mapValue.get("quantity"));
+        if (mapValue.containsKey("quantity")) setInQuantity((BigDecimal) mapValue.get("quantity"));
         if (mapValue.containsKey("quoteId")) setInQuoteId((String) mapValue.get("quoteId"));
         if (mapValue.containsKey("quoteItemOptionSeqId")) setInQuoteItemOptionSeqId((String) mapValue.get("quoteItemOptionSeqId"));
         if (mapValue.containsKey("quoteItemSeqId")) setInQuoteItemSeqId((String) mapValue.get("quoteItemSeqId"));

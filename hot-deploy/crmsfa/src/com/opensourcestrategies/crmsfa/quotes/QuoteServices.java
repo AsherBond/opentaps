@@ -127,7 +127,7 @@ public final class QuoteServices {
                         return UtilMessage.createAndLogServiceError(qtyStr + " is not a valid quantity.", MODULE);
                     }
 
-                    option.set("quantity", quantity.doubleValue());
+                    option.set("quantity", quantity);
 
                     String priceStr = unitPrices.get(key);
                     if (UtilValidate.isNotEmpty(priceStr)) {
@@ -447,8 +447,8 @@ public final class QuoteServices {
                     CalculateProductPriceService service = new CalculateProductPriceService();
                     service.setInProduct(product);
                     service.setInPartyId(quote.getString("partyId"));
-                    Double quantity = (Double) context.get("quantity");
-                    service.setInQuantity(BigDecimal.valueOf(quantity.doubleValue()));
+                    BigDecimal quantity = (BigDecimal) context.get("quantity");
+                    service.setInQuantity(quantity);
                     service.runSync(new Infrastructure(dctx.getDispatcher()));
 
                     // use calculated price
@@ -519,9 +519,9 @@ public final class QuoteServices {
             List<GenericValue> options = item.getRelated("QuoteItemOption", UtilMisc.toList("quoteItemOptionSeqId"));
             boolean found = false;
             for (GenericValue o : options) {
-                Double quantity = o.getDouble("quantity");
+                BigDecimal quantity = o.getBigDecimal("quantity");
                 BigDecimal unitPrice = o.getBigDecimal("quoteUnitPrice");
-                if (UtilObject.equalsHelper(quantity, item.getDouble("quantity")) && UtilObject.equalsHelper(unitPrice, item.getBigDecimal("quoteUnitPrice"))) {
+                if (UtilObject.equalsHelper(quantity, item.getBigDecimal("quantity")) && UtilObject.equalsHelper(unitPrice, item.getBigDecimal("quoteUnitPrice"))) {
                     found = true;
                     break;
                 }
@@ -571,9 +571,9 @@ public final class QuoteServices {
             List<GenericValue> options = item.getRelated("QuoteItemOption", UtilMisc.toList("quoteItemOptionSeqId"));
             boolean found = false;
             for (GenericValue option : options) {
-                Double quantity = option.getDouble("quantity");
+                BigDecimal quantity = option.getBigDecimal("quantity");
                 BigDecimal unitPrice = option.getBigDecimal("quoteUnitPrice");
-                if (UtilObject.equalsHelper(quantity, item.getDouble("quantity")) && UtilObject.equalsHelper(unitPrice, item.getBigDecimal("quoteUnitPrice"))) {
+                if (UtilObject.equalsHelper(quantity, item.getBigDecimal("quantity")) && UtilObject.equalsHelper(unitPrice, item.getBigDecimal("quoteUnitPrice"))) {
                     found = true;
                     break;
                 }
