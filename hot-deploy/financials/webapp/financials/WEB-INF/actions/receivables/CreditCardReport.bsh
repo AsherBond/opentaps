@@ -90,7 +90,7 @@ for (iter = sumResults.iterator(); iter.hasNext(); ) {
     sum = iter.next();
     cc = sum.getRelatedOneCache("CreditCard");
     ccType = (cc == null ? unknownType : cc.get("cardType"));
-    previousAmount = 0;
+    previousAmount = BigDecimal.ZERO;
 
     // get the last row keyed to the cardType, and its amount (which we will merge)
     row = sumReport.get(ccType);
@@ -99,17 +99,17 @@ for (iter = sumResults.iterator(); iter.hasNext(); ) {
         row.putAll(sum.getAllFields());
         row.put("cardType", ccType);
     } else {
-        previousAmount = ((Double) row.get("amount")).doubleValue();
+        previousAmount = row.get("amount");
     }
 
     // convert current results
     amount = sum.get("amount");
     currencyUomId = sum.get("currencyUomId");
     asOf = sum.getTimestamp("effectiveDate");
-    amountConverted = amount * UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, currencyUomId, asOf);
+    amountConverted = amount.multiply(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, currencyUomId, asOf));
 
     // store the merged results
-    row.put("amount", amountConverted + previousAmount);
+    row.put("amount", amountConverted.add(previousAmount));
     sumReport.put(ccType, row);
 }
 
