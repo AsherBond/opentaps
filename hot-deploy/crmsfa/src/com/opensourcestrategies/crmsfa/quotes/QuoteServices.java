@@ -66,7 +66,7 @@ public final class QuoteServices {
      * @return the service result <code>Map</code>
      */
     @SuppressWarnings("unchecked")
-    public static Map createQuoteItem(DispatchContext dctx, Map context) {
+    public static Map<String, Object> createQuoteItem(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -171,7 +171,7 @@ public final class QuoteServices {
                 // set the first valid quantity as the main quantity / unitPrice
                 // unless there are multiple options
                 if (!hasMultipleOptions && optionToSet != null) {
-                    Map input = UtilMisc.toMap("userLogin", userLogin);
+                    Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
                     input.put("quoteId", quoteId);
                     input.put("quoteItemSeqId", quoteItemSeqId);
                     input.put("quoteItemOptionSeqId", optionToSet.get("quoteItemOptionSeqId"));
@@ -196,8 +196,7 @@ public final class QuoteServices {
      * @param context a <code>Map</code> value
      * @return the service result <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map updateQuoteItem(DispatchContext dctx, Map context) {
+    public static Map<String, Object> updateQuoteItem(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -259,8 +258,7 @@ public final class QuoteServices {
      * @param context a <code>Map</code> value
      * @return the service result <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map removeQuoteItem(DispatchContext dctx, Map context) {
+    public static Map<String, Object> removeQuoteItem(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -297,8 +295,7 @@ public final class QuoteServices {
      * @param context a <code>Map</code> value
      * @return the service result <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map setQuoteStatus(DispatchContext dctx, Map context) {
+    public static Map<String, Object> setQuoteStatus(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -338,8 +335,7 @@ public final class QuoteServices {
      * @param context a <code>Map</code> value
      * @return the service result <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map setQuoteItemOption(DispatchContext dctx, Map context) {
+    public static Map<String, Object> setQuoteItemOption(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -383,8 +379,7 @@ public final class QuoteServices {
      * @param context a <code>Map</code> value
      * @return the service result <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map unsetQuoteItemOption(DispatchContext dctx, Map context) {
+    public static Map<String, Object> unsetQuoteItemOption(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -422,8 +417,7 @@ public final class QuoteServices {
      * @param context a <code>Map</code> value
      * @return the service result <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map addQuoteItemOption(DispatchContext dctx, Map context) {
+    public static Map<String, Object> addQuoteItemOption(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -497,8 +491,7 @@ public final class QuoteServices {
      * @param context a <code>Map</code> value
      * @return the service result <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map updateQuoteItemOption(DispatchContext dctx, Map context) {
+    public static Map<String, Object> updateQuoteItemOption(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -536,7 +529,7 @@ public final class QuoteServices {
 
             // unset the current values if the option has been changed
             if (!found) {
-                Map input = UtilMisc.toMap("userLogin", userLogin);
+                Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
                 input.put("quoteId", quoteId);
                 input.put("quoteItemSeqId", quoteItemSeqId);
                 dispatcher.runSync("unsetQuoteItemOption", input);
@@ -555,8 +548,7 @@ public final class QuoteServices {
      * @param context a <code>Map</code> value
      * @return the service result <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map removeQuoteItemOption(DispatchContext dctx, Map context) {
+    public static Map<String, Object> removeQuoteItemOption(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -589,7 +581,7 @@ public final class QuoteServices {
 
             // unset the current values if the option has been removed
             if (!found) {
-                Map input = UtilMisc.toMap("userLogin", userLogin);
+                Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
                 input.put("quoteId", quoteId);
                 input.put("quoteItemSeqId", quoteItemSeqId);
                 dispatcher.runSync("unsetQuoteItemOption", input);
@@ -608,8 +600,7 @@ public final class QuoteServices {
      * @param context a <code>Map</code> value
      * @return the service result <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map copyQuote(DispatchContext dctx, Map context) {
+    public static Map<String, Object> copyQuote(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -629,7 +620,7 @@ public final class QuoteServices {
             }
 
             // create a new Quote
-            Map input = UtilMisc.toMap("userLogin", userLogin);
+            Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
             input.putAll(quote.getAllFields());
             if (UtilValidate.isNotEmpty(quote.get("quoteName"))) {
                 input.put("quoteName", "Copy of " + quote.get("quoteName"));
@@ -641,7 +632,7 @@ public final class QuoteServices {
             }
             input.put("statusId", "QUO_CREATED");
 
-            Map result = dispatcher.runSync("createQuote", input);
+            Map<String, Object> result = dispatcher.runSync("createQuote", input);
             if (!UtilCommon.isSuccess(result)) {
                 return UtilMessage.createAndLogServiceError(result, "Cannot copy Quote [" + quoteId + "]", locale, MODULE);
             }
@@ -651,7 +642,7 @@ public final class QuoteServices {
             if ("Y".equals(context.get("copyQuoteItems"))) {
                 List<GenericValue> quoteItems = quote.getRelated("QuoteItem");
                 for (GenericValue item : quoteItems) {
-                    input = UtilMisc.toMap("userLogin", userLogin);
+                    input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
                     input.putAll(item.getAllFields());
                     for (String str : STAMPS) {
                         input.remove(str);
@@ -669,7 +660,7 @@ public final class QuoteServices {
             if ("Y".equals(context.get("copyQuoteAdjustments"))) {
                 List<GenericValue> adjs = quote.getRelated("QuoteAdjustment");
                 for (GenericValue adj : adjs) {
-                    input = UtilMisc.toMap("userLogin", userLogin);
+                    input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
                     input.putAll(adj.getAllFields());
                     for (String str : STAMPS) {
                         input.remove(str);
@@ -690,7 +681,7 @@ public final class QuoteServices {
                         continue;
                     }
 
-                    input = UtilMisc.toMap("userLogin", userLogin);
+                    input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
                     input.putAll(role.getAllFields());
                     for (String str : STAMPS) {
                         input.remove(str);
@@ -706,7 +697,7 @@ public final class QuoteServices {
             if ("Y".equals(context.get("copyQuoteCoefficients"))) {
                 List<GenericValue> coeffs = quote.getRelated("QuoteCoefficient");
                 for (GenericValue coeff : coeffs) {
-                    input = UtilMisc.toMap("userLogin", userLogin);
+                    input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
                     input.putAll(coeff.getAllFields());
                     for (String str : STAMPS) {
                         input.remove(str);
@@ -735,8 +726,7 @@ public final class QuoteServices {
      * @param context a <code>Map</code> value
      * @return the service result <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map copyQuoteItem(DispatchContext dctx, Map context) {
+    public static Map<String, Object> copyQuoteItem(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -757,7 +747,7 @@ public final class QuoteServices {
             }
 
             // create a new Quote
-            Map input = UtilMisc.toMap("userLogin", userLogin);
+            Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
             input.putAll(quoteItem.getAllFields());
             for (String str : STAMPS) {
                 input.remove(str);
@@ -769,7 +759,7 @@ public final class QuoteServices {
                 input.remove("quoteItemSeqId");
             }
 
-            Map result = dispatcher.runSync("createQuoteItem", input);
+            Map<String, Object> result = dispatcher.runSync("createQuoteItem", input);
             if (!UtilCommon.isSuccess(result)) {
                 return UtilMessage.createAndLogServiceError(result, "Cannot copy Quote Item [" + quoteId + "]", locale, MODULE);
             }
@@ -779,7 +769,7 @@ public final class QuoteServices {
             if ("Y".equals(context.get("copyQuoteAdjustments"))) {
                 List<GenericValue> adjs = quoteItem.getRelated("QuoteAdjustment");
                 for (GenericValue adj : adjs) {
-                    input = UtilMisc.toMap("userLogin", userLogin);
+                    input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
                     input.putAll(adj.getAllFields());
                     for (String str : STAMPS) {
                         input.remove(str);
@@ -796,7 +786,7 @@ public final class QuoteServices {
             if ("Y".equals(context.get("copyQuoteItemOptions"))) {
                 List<GenericValue> options = quoteItem.getRelated("QuoteItemOption");
                 for (GenericValue option : options) {
-                    input = UtilMisc.toMap("userLogin", userLogin);
+                    input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
                     input.putAll(option.getAllFields());
                     for (String str : STAMPS) {
                         input.remove(str);
@@ -827,8 +817,7 @@ public final class QuoteServices {
      * @param context a <code>Map</code> value
      * @return the service result <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map finalizeQuote(DispatchContext dctx, Map context) {
+    public static Map<String, Object> finalizeQuote(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
