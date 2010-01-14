@@ -8,7 +8,7 @@
 	<style name="alternateBackground" isDefault="false" mode="Opaque" backcolor="#FFCCCC">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue() % 2 == 0)]]></conditionExpression>
-			<style isDefault="false" style="alternateBackground" mode="Opaque" backcolor="#FFCCCC"/>
+			<style isDefault="false" style="alternateBackground" mode="Opaque" backcolor="#CCCCCC"/>
 		</conditionalStyle>
 	</style>
 	<parameter name="reportFromDate" class="java.lang.String" isForPrompting="false"/>
@@ -58,7 +58,7 @@
 	<columnHeader>
 		<band height="18" splitType="Stretch">
 			<rectangle>
-				<reportElement key="rectangle-1" x="0" y="0" width="731" height="18" backcolor="#9999FF"/>
+				<reportElement key="rectangle-1" x="0" y="0" width="731" height="18" backcolor="#FFFFFF"/>
 			</rectangle>
 			<textField isBlankWhenNull="true">
 				<reportElement key="staticText-1" x="0" y="0" width="145" height="18"/>
@@ -121,7 +121,7 @@
 	<detail>
 		<band height="16" splitType="Stretch">
 			<rectangle>
-				<reportElement key="rectangle-2" x="0" y="0" width="732" height="16" backcolor="#FF99FF">
+				<reportElement key="rectangle-2" x="0" y="0" width="732" height="16" backcolor="#DDDDDD">
 					<printWhenExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue() % 2 == 0)]]></printWhenExpression>
 				</reportElement>
 				<graphicElement fill="Solid">
