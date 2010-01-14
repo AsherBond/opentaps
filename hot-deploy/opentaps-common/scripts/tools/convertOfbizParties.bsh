@@ -6,7 +6,7 @@
  */
 
 // provide the user login of a sales manager who will be assigned all of the converted parties
-assignToUserLoginId = "sichen";
+assignToUserLoginId = "admin";
  
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.service.GenericDispatcher;
