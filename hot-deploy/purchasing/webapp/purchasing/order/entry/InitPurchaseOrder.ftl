@@ -78,7 +78,7 @@ function handleAgreements(/*Array*/ data) {
   Send AJAX request if supplier id is changed.
 */
 function supplierChanged() {
-    var supplierInput = document.getElementById("supplierPartyIdComboBox");
+    var supplierInput = document.getElementById("ComboBox_supplierPartyId");
     if (!supplierInput) return;
 
     if (skipReqForAgreements) {
@@ -87,6 +87,8 @@ function supplierChanged() {
     }
 
     prevSupplierId = supplierInput.value;
+
+    
     opentaps.sendRequest('getSupplierAgreementsJSON', {'partyId' : supplierInput.value, 'organizationPartyId' : '${organizationPartyId}'}, handleAgreements);
 }
 
