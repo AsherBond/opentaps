@@ -50,10 +50,20 @@ import java.sql.Timestamp;
  * Auto generated base entity PaymentAndApplication.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectPaymentAndApplications", query="SELECT PY.PAYMENT_ID AS \"paymentId\",PY.PAYMENT_TYPE_ID AS \"paymentTypeId\",PY.PAYMENT_METHOD_TYPE_ID AS \"paymentMethodTypeId\",PY.PAYMENT_METHOD_ID AS \"paymentMethodId\",PY.PAYMENT_GATEWAY_RESPONSE_ID AS \"paymentGatewayResponseId\",PY.PAYMENT_PREFERENCE_ID AS \"paymentPreferenceId\",PY.PARTY_ID_FROM AS \"partyIdFrom\",PY.PARTY_ID_TO AS \"partyIdTo\",PY.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PY.STATUS_ID AS \"statusId\",PY.EFFECTIVE_DATE AS \"effectiveDate\",PY.PAYMENT_REF_NUM AS \"paymentRefNum\",PY.AMOUNT AS \"amount\",PY.CURRENCY_UOM_ID AS \"currencyUomId\",PY.COMMENTS AS \"comments\",PY.FIN_ACCOUNT_TRANS_ID AS \"finAccountTransId\",PY.ACTUAL_CURRENCY_AMOUNT AS \"actualCurrencyAmount\",PY.ACTUAL_CURRENCY_UOM_ID AS \"actualCurrencyUomId\",PY.APPLIED_AMOUNT AS \"appliedAmount\",PY.OPEN_AMOUNT AS \"openAmount\",PY.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",PY.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",PY.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",PY.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",PY.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",PY.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",PY.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",PY.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",PY.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",PY.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",PA.PAYMENT_APPLICATION_ID AS \"paymentApplicationId\",PA.INVOICE_ID AS \"invoiceId\",PA.INVOICE_ITEM_SEQ_ID AS \"invoiceItemSeqId\",PA.BILLING_ACCOUNT_ID AS \"billingAccountId\",PA.OVERRIDE_GL_ACCOUNT_ID AS \"overrideGlAccountId\",PA.TO_PAYMENT_ID AS \"toPaymentId\",PA.TAX_AUTH_GEO_ID AS \"taxAuthGeoId\",PA.AMOUNT_APPLIED AS \"amountApplied\",PA.NOTE AS \"note\" FROM PAYMENT PY INNER JOIN PAYMENT_APPLICATION PA ON PY.PAYMENT_ID = PA.PAYMENT_ID", resultSetMapping="PaymentAndApplicationMapping")
+@NamedNativeQuery(name="selectPaymentAndApplications", query="SELECT PA.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",PA.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",PA.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",PA.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",PA.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",PA.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",PA.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",PA.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",PA.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",PA.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",PY.PAYMENT_ID AS \"paymentId\",PY.PAYMENT_TYPE_ID AS \"paymentTypeId\",PY.PAYMENT_METHOD_TYPE_ID AS \"paymentMethodTypeId\",PY.PAYMENT_METHOD_ID AS \"paymentMethodId\",PY.PAYMENT_GATEWAY_RESPONSE_ID AS \"paymentGatewayResponseId\",PY.PAYMENT_PREFERENCE_ID AS \"paymentPreferenceId\",PY.PARTY_ID_FROM AS \"partyIdFrom\",PY.PARTY_ID_TO AS \"partyIdTo\",PY.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PY.STATUS_ID AS \"statusId\",PY.EFFECTIVE_DATE AS \"effectiveDate\",PY.PAYMENT_REF_NUM AS \"paymentRefNum\",PY.AMOUNT AS \"amount\",PY.CURRENCY_UOM_ID AS \"currencyUomId\",PY.COMMENTS AS \"comments\",PY.FIN_ACCOUNT_TRANS_ID AS \"finAccountTransId\",PY.ACTUAL_CURRENCY_AMOUNT AS \"actualCurrencyAmount\",PY.ACTUAL_CURRENCY_UOM_ID AS \"actualCurrencyUomId\",PY.APPLIED_AMOUNT AS \"appliedAmount\",PY.OPEN_AMOUNT AS \"openAmount\",PY.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",PY.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",PY.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",PY.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",PY.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",PY.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",PY.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",PY.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",PY.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",PY.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",PA.PAYMENT_APPLICATION_ID AS \"paymentApplicationId\",PA.INVOICE_ID AS \"invoiceId\",PA.INVOICE_ITEM_SEQ_ID AS \"invoiceItemSeqId\",PA.BILLING_ACCOUNT_ID AS \"billingAccountId\",PA.OVERRIDE_GL_ACCOUNT_ID AS \"overrideGlAccountId\",PA.TO_PAYMENT_ID AS \"toPaymentId\",PA.TAX_AUTH_GEO_ID AS \"taxAuthGeoId\",PA.AMOUNT_APPLIED AS \"amountApplied\",PA.NOTE AS \"note\" FROM PAYMENT PY INNER JOIN PAYMENT_APPLICATION PA ON PY.PAYMENT_ID = PA.PAYMENT_ID", resultSetMapping="PaymentAndApplicationMapping")
 @SqlResultSetMapping(name="PaymentAndApplicationMapping", entities={
 @EntityResult(entityClass=PaymentAndApplication.class, fields = {
-@FieldResult(name="paymentId", column="paymentId")
+@FieldResult(name="applAcctgTagEnumId1", column="applAcctgTagEnumId1")
+,@FieldResult(name="applAcctgTagEnumId2", column="applAcctgTagEnumId2")
+,@FieldResult(name="applAcctgTagEnumId3", column="applAcctgTagEnumId3")
+,@FieldResult(name="applAcctgTagEnumId4", column="applAcctgTagEnumId4")
+,@FieldResult(name="applAcctgTagEnumId5", column="applAcctgTagEnumId5")
+,@FieldResult(name="applAcctgTagEnumId6", column="applAcctgTagEnumId6")
+,@FieldResult(name="applAcctgTagEnumId7", column="applAcctgTagEnumId7")
+,@FieldResult(name="applAcctgTagEnumId8", column="applAcctgTagEnumId8")
+,@FieldResult(name="applAcctgTagEnumId9", column="applAcctgTagEnumId9")
+,@FieldResult(name="applAcctgTagEnumId10", column="applAcctgTagEnumId10")
+,@FieldResult(name="paymentId", column="paymentId")
 ,@FieldResult(name="paymentTypeId", column="paymentTypeId")
 ,@FieldResult(name="paymentMethodTypeId", column="paymentMethodTypeId")
 ,@FieldResult(name="paymentMethodId", column="paymentMethodId")
@@ -98,6 +108,16 @@ import java.sql.Timestamp;
 public class PaymentAndApplication extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
+        fields.put("applAcctgTagEnumId1", "PA.ACCTG_TAG_ENUM_ID1");
+        fields.put("applAcctgTagEnumId2", "PA.ACCTG_TAG_ENUM_ID2");
+        fields.put("applAcctgTagEnumId3", "PA.ACCTG_TAG_ENUM_ID3");
+        fields.put("applAcctgTagEnumId4", "PA.ACCTG_TAG_ENUM_ID4");
+        fields.put("applAcctgTagEnumId5", "PA.ACCTG_TAG_ENUM_ID5");
+        fields.put("applAcctgTagEnumId6", "PA.ACCTG_TAG_ENUM_ID6");
+        fields.put("applAcctgTagEnumId7", "PA.ACCTG_TAG_ENUM_ID7");
+        fields.put("applAcctgTagEnumId8", "PA.ACCTG_TAG_ENUM_ID8");
+        fields.put("applAcctgTagEnumId9", "PA.ACCTG_TAG_ENUM_ID9");
+        fields.put("applAcctgTagEnumId10", "PA.ACCTG_TAG_ENUM_ID10");
         fields.put("paymentId", "PY.PAYMENT_ID");
         fields.put("paymentTypeId", "PY.PAYMENT_TYPE_ID");
         fields.put("paymentMethodTypeId", "PY.PAYMENT_METHOD_TYPE_ID");
@@ -140,6 +160,16 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
 fieldMapColumns.put("PaymentAndApplication", fields);
 }
   public static enum Fields implements EntityFieldInterface<PaymentAndApplication> {
+    applAcctgTagEnumId1("applAcctgTagEnumId1"),
+    applAcctgTagEnumId2("applAcctgTagEnumId2"),
+    applAcctgTagEnumId3("applAcctgTagEnumId3"),
+    applAcctgTagEnumId4("applAcctgTagEnumId4"),
+    applAcctgTagEnumId5("applAcctgTagEnumId5"),
+    applAcctgTagEnumId6("applAcctgTagEnumId6"),
+    applAcctgTagEnumId7("applAcctgTagEnumId7"),
+    applAcctgTagEnumId8("applAcctgTagEnumId8"),
+    applAcctgTagEnumId9("applAcctgTagEnumId9"),
+    applAcctgTagEnumId10("applAcctgTagEnumId10"),
     paymentId("paymentId"),
     paymentTypeId("paymentTypeId"),
     paymentMethodTypeId("paymentMethodTypeId"),
@@ -189,6 +219,26 @@ fieldMapColumns.put("PaymentAndApplication", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
+    
+   private String applAcctgTagEnumId1;
+    
+   private String applAcctgTagEnumId2;
+    
+   private String applAcctgTagEnumId3;
+    
+   private String applAcctgTagEnumId4;
+    
+   private String applAcctgTagEnumId5;
+    
+   private String applAcctgTagEnumId6;
+    
+   private String applAcctgTagEnumId7;
+    
+   private String applAcctgTagEnumId8;
+    
+   private String applAcctgTagEnumId9;
+    
+   private String applAcctgTagEnumId10;
     @Id
    private String paymentId;
     
@@ -316,6 +366,14 @@ fieldMapColumns.put("PaymentAndApplication", fields);
    )
    
    protected Geo geo = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="INVOICE_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   protected Invoice invoice = null;
+   private transient InvoiceItem invoiceItem = null;
 
   /**
    * Default constructor.
@@ -328,7 +386,7 @@ fieldMapColumns.put("PaymentAndApplication", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("paymentId");this.primaryKeyNames.add("paymentApplicationId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("paymentId");this.allFieldsNames.add("paymentTypeId");this.allFieldsNames.add("paymentMethodTypeId");this.allFieldsNames.add("paymentMethodId");this.allFieldsNames.add("paymentGatewayResponseId");this.allFieldsNames.add("paymentPreferenceId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("statusId");this.allFieldsNames.add("effectiveDate");this.allFieldsNames.add("paymentRefNum");this.allFieldsNames.add("amount");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("comments");this.allFieldsNames.add("finAccountTransId");this.allFieldsNames.add("actualCurrencyAmount");this.allFieldsNames.add("actualCurrencyUomId");this.allFieldsNames.add("appliedAmount");this.allFieldsNames.add("openAmount");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");this.allFieldsNames.add("paymentApplicationId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("toPaymentId");this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("amountApplied");this.allFieldsNames.add("note");
+      this.allFieldsNames.add("applAcctgTagEnumId1");this.allFieldsNames.add("applAcctgTagEnumId2");this.allFieldsNames.add("applAcctgTagEnumId3");this.allFieldsNames.add("applAcctgTagEnumId4");this.allFieldsNames.add("applAcctgTagEnumId5");this.allFieldsNames.add("applAcctgTagEnumId6");this.allFieldsNames.add("applAcctgTagEnumId7");this.allFieldsNames.add("applAcctgTagEnumId8");this.allFieldsNames.add("applAcctgTagEnumId9");this.allFieldsNames.add("applAcctgTagEnumId10");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("paymentTypeId");this.allFieldsNames.add("paymentMethodTypeId");this.allFieldsNames.add("paymentMethodId");this.allFieldsNames.add("paymentGatewayResponseId");this.allFieldsNames.add("paymentPreferenceId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("statusId");this.allFieldsNames.add("effectiveDate");this.allFieldsNames.add("paymentRefNum");this.allFieldsNames.add("amount");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("comments");this.allFieldsNames.add("finAccountTransId");this.allFieldsNames.add("actualCurrencyAmount");this.allFieldsNames.add("actualCurrencyUomId");this.allFieldsNames.add("appliedAmount");this.allFieldsNames.add("openAmount");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");this.allFieldsNames.add("paymentApplicationId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("toPaymentId");this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("amountApplied");this.allFieldsNames.add("note");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -346,6 +404,76 @@ fieldMapColumns.put("PaymentAndApplication", fields);
     /**
      * This is a view-entity, so the setter methods will be private to this class and for use in its fromMap constructor only
      */
+    /**
+     * Auto generated value setter.
+     * @param applAcctgTagEnumId1 the applAcctgTagEnumId1 to set
+     */
+    public void setApplAcctgTagEnumId1(String applAcctgTagEnumId1) {
+        this.applAcctgTagEnumId1 = applAcctgTagEnumId1;
+    }
+    /**
+     * Auto generated value setter.
+     * @param applAcctgTagEnumId2 the applAcctgTagEnumId2 to set
+     */
+    public void setApplAcctgTagEnumId2(String applAcctgTagEnumId2) {
+        this.applAcctgTagEnumId2 = applAcctgTagEnumId2;
+    }
+    /**
+     * Auto generated value setter.
+     * @param applAcctgTagEnumId3 the applAcctgTagEnumId3 to set
+     */
+    public void setApplAcctgTagEnumId3(String applAcctgTagEnumId3) {
+        this.applAcctgTagEnumId3 = applAcctgTagEnumId3;
+    }
+    /**
+     * Auto generated value setter.
+     * @param applAcctgTagEnumId4 the applAcctgTagEnumId4 to set
+     */
+    public void setApplAcctgTagEnumId4(String applAcctgTagEnumId4) {
+        this.applAcctgTagEnumId4 = applAcctgTagEnumId4;
+    }
+    /**
+     * Auto generated value setter.
+     * @param applAcctgTagEnumId5 the applAcctgTagEnumId5 to set
+     */
+    public void setApplAcctgTagEnumId5(String applAcctgTagEnumId5) {
+        this.applAcctgTagEnumId5 = applAcctgTagEnumId5;
+    }
+    /**
+     * Auto generated value setter.
+     * @param applAcctgTagEnumId6 the applAcctgTagEnumId6 to set
+     */
+    public void setApplAcctgTagEnumId6(String applAcctgTagEnumId6) {
+        this.applAcctgTagEnumId6 = applAcctgTagEnumId6;
+    }
+    /**
+     * Auto generated value setter.
+     * @param applAcctgTagEnumId7 the applAcctgTagEnumId7 to set
+     */
+    public void setApplAcctgTagEnumId7(String applAcctgTagEnumId7) {
+        this.applAcctgTagEnumId7 = applAcctgTagEnumId7;
+    }
+    /**
+     * Auto generated value setter.
+     * @param applAcctgTagEnumId8 the applAcctgTagEnumId8 to set
+     */
+    public void setApplAcctgTagEnumId8(String applAcctgTagEnumId8) {
+        this.applAcctgTagEnumId8 = applAcctgTagEnumId8;
+    }
+    /**
+     * Auto generated value setter.
+     * @param applAcctgTagEnumId9 the applAcctgTagEnumId9 to set
+     */
+    public void setApplAcctgTagEnumId9(String applAcctgTagEnumId9) {
+        this.applAcctgTagEnumId9 = applAcctgTagEnumId9;
+    }
+    /**
+     * Auto generated value setter.
+     * @param applAcctgTagEnumId10 the applAcctgTagEnumId10 to set
+     */
+    public void setApplAcctgTagEnumId10(String applAcctgTagEnumId10) {
+        this.applAcctgTagEnumId10 = applAcctgTagEnumId10;
+    }
     /**
      * Auto generated value setter.
      * @param paymentId the paymentId to set
@@ -620,6 +748,76 @@ fieldMapColumns.put("PaymentAndApplication", fields);
         this.note = note;
     }
 
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getApplAcctgTagEnumId1() {
+        return this.applAcctgTagEnumId1;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getApplAcctgTagEnumId2() {
+        return this.applAcctgTagEnumId2;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getApplAcctgTagEnumId3() {
+        return this.applAcctgTagEnumId3;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getApplAcctgTagEnumId4() {
+        return this.applAcctgTagEnumId4;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getApplAcctgTagEnumId5() {
+        return this.applAcctgTagEnumId5;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getApplAcctgTagEnumId6() {
+        return this.applAcctgTagEnumId6;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getApplAcctgTagEnumId7() {
+        return this.applAcctgTagEnumId7;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getApplAcctgTagEnumId8() {
+        return this.applAcctgTagEnumId8;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getApplAcctgTagEnumId9() {
+        return this.applAcctgTagEnumId9;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getApplAcctgTagEnumId10() {
+        return this.applAcctgTagEnumId10;
+    }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
@@ -971,6 +1169,28 @@ fieldMapColumns.put("PaymentAndApplication", fields);
         }
         return this.geo;
     }
+    /**
+     * Auto generated method that gets the related <code>Invoice</code> by the relation named <code>Invoice</code>.
+     * @return the <code>Invoice</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Invoice getInvoice() throws RepositoryException {
+        if (this.invoice == null) {
+            this.invoice = getRelatedOne(Invoice.class, "Invoice");
+        }
+        return this.invoice;
+    }
+    /**
+     * Auto generated method that gets the related <code>InvoiceItem</code> by the relation named <code>InvoiceItem</code>.
+     * @return the <code>InvoiceItem</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public InvoiceItem getInvoiceItem() throws RepositoryException {
+        if (this.invoiceItem == null) {
+            this.invoiceItem = getRelatedOne(InvoiceItem.class, "InvoiceItem");
+        }
+        return this.invoiceItem;
+    }
 
     /**
      * Auto generated value setter.
@@ -1021,12 +1241,36 @@ fieldMapColumns.put("PaymentAndApplication", fields);
     public void setGeo(Geo geo) {
         this.geo = geo;
     }
+    /**
+     * Auto generated value setter.
+     * @param invoice the invoice to set
+    */
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
+    }
+    /**
+     * Auto generated value setter.
+     * @param invoiceItem the invoiceItem to set
+    */
+    public void setInvoiceItem(InvoiceItem invoiceItem) {
+        this.invoiceItem = invoiceItem;
+    }
 
 
     /** {@inheritDoc} */
     @Override
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
+        setApplAcctgTagEnumId1((String) mapValue.get("applAcctgTagEnumId1"));
+        setApplAcctgTagEnumId2((String) mapValue.get("applAcctgTagEnumId2"));
+        setApplAcctgTagEnumId3((String) mapValue.get("applAcctgTagEnumId3"));
+        setApplAcctgTagEnumId4((String) mapValue.get("applAcctgTagEnumId4"));
+        setApplAcctgTagEnumId5((String) mapValue.get("applAcctgTagEnumId5"));
+        setApplAcctgTagEnumId6((String) mapValue.get("applAcctgTagEnumId6"));
+        setApplAcctgTagEnumId7((String) mapValue.get("applAcctgTagEnumId7"));
+        setApplAcctgTagEnumId8((String) mapValue.get("applAcctgTagEnumId8"));
+        setApplAcctgTagEnumId9((String) mapValue.get("applAcctgTagEnumId9"));
+        setApplAcctgTagEnumId10((String) mapValue.get("applAcctgTagEnumId10"));
         setPaymentId((String) mapValue.get("paymentId"));
         setPaymentTypeId((String) mapValue.get("paymentTypeId"));
         setPaymentMethodTypeId((String) mapValue.get("paymentMethodTypeId"));
@@ -1073,6 +1317,16 @@ fieldMapColumns.put("PaymentAndApplication", fields);
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
+        mapValue.put("applAcctgTagEnumId1", getApplAcctgTagEnumId1());
+        mapValue.put("applAcctgTagEnumId2", getApplAcctgTagEnumId2());
+        mapValue.put("applAcctgTagEnumId3", getApplAcctgTagEnumId3());
+        mapValue.put("applAcctgTagEnumId4", getApplAcctgTagEnumId4());
+        mapValue.put("applAcctgTagEnumId5", getApplAcctgTagEnumId5());
+        mapValue.put("applAcctgTagEnumId6", getApplAcctgTagEnumId6());
+        mapValue.put("applAcctgTagEnumId7", getApplAcctgTagEnumId7());
+        mapValue.put("applAcctgTagEnumId8", getApplAcctgTagEnumId8());
+        mapValue.put("applAcctgTagEnumId9", getApplAcctgTagEnumId9());
+        mapValue.put("applAcctgTagEnumId10", getApplAcctgTagEnumId10());
         mapValue.put("paymentId", getPaymentId());
         mapValue.put("paymentTypeId", getPaymentTypeId());
         mapValue.put("paymentMethodTypeId", getPaymentMethodTypeId());

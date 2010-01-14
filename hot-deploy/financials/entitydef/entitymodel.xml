@@ -1356,6 +1356,70 @@ under the License.
        </relation>
     </view-entity>
 
+    <view-entity entity-name="PaymentAndApplication"
+            package-name="org.ofbiz.accounting.payment"
+            never-cache="true"
+            title="Payment and Application View Entity, redefined to properly prefix the PA accounting tags">
+      <member-entity entity-alias="PY" entity-name="Payment"/>
+      <member-entity entity-alias="PA" entity-name="PaymentApplication"/>
+      <alias-all entity-alias="PY">
+        <exclude field="overrideGlAccountId"/><!-- already existing in PaymentApplication -->
+      </alias-all>
+      <alias-all entity-alias="PA">
+        <exclude field="acctgTagEnumId1"/>
+        <exclude field="acctgTagEnumId2"/>
+        <exclude field="acctgTagEnumId3"/>
+        <exclude field="acctgTagEnumId4"/>
+        <exclude field="acctgTagEnumId5"/>
+        <exclude field="acctgTagEnumId6"/>
+        <exclude field="acctgTagEnumId7"/>
+        <exclude field="acctgTagEnumId8"/>
+        <exclude field="acctgTagEnumId9"/>
+        <exclude field="acctgTagEnumId10"/>
+      </alias-all>
+      <alias name="applAcctgTagEnumId1" entity-alias="PA" field="acctgTagEnumId1"/>
+      <alias name="applAcctgTagEnumId2" entity-alias="PA" field="acctgTagEnumId2"/>
+      <alias name="applAcctgTagEnumId3" entity-alias="PA" field="acctgTagEnumId3"/>
+      <alias name="applAcctgTagEnumId4" entity-alias="PA" field="acctgTagEnumId4"/>
+      <alias name="applAcctgTagEnumId5" entity-alias="PA" field="acctgTagEnumId5"/>
+      <alias name="applAcctgTagEnumId6" entity-alias="PA" field="acctgTagEnumId6"/>
+      <alias name="applAcctgTagEnumId7" entity-alias="PA" field="acctgTagEnumId7"/>
+      <alias name="applAcctgTagEnumId8" entity-alias="PA" field="acctgTagEnumId8"/>
+      <alias name="applAcctgTagEnumId9" entity-alias="PA" field="acctgTagEnumId9"/>
+      <alias name="applAcctgTagEnumId10" entity-alias="PA" field="acctgTagEnumId10"/>
+      <view-link entity-alias="PY" rel-entity-alias="PA">
+        <key-map field-name="paymentId"/>
+      </view-link>
+      <relation type="one-nofk" rel-entity-name="Payment">
+        <key-map field-name="paymentId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="PaymentApplication">
+        <key-map field-name="paymentApplicationId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="StatusItem">
+        <key-map field-name="statusId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="PaymentType">
+        <key-map field-name="paymentTypeId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="PaymentMethodType">
+        <key-map field-name="paymentMethodTypeId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="PaymentGatewayResponse">
+        <key-map field-name="paymentGatewayResponseId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="Geo">
+        <key-map field-name="taxAuthGeoId" rel-field-name="geoId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="Invoice">
+        <key-map field-name="invoiceId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="InvoiceItem">
+        <key-map field-name="invoiceId"/>
+        <key-map field-name="invoiceItemSeqId"/>
+      </relation>
+    </view-entity>
+
     <!-- These entities are to refactor the entity which defined in ofbiz. in this new entity we will use productAverageCostId auto sequenced as primary key
     -->
     <entity entity-name="ProductAverageCost" package-name="com.opensourcestrategies.financials.ledger"

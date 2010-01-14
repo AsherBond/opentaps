@@ -81,6 +81,7 @@
   <!-- com.opensourcestrategies.financials.payment -->  
   <!-- =========================================== -->
 
+  <entity-group group="org.ofbiz" entity="PaymentAndApplication"/>
   <entity-group group="org.ofbiz" entity="PaymentApplicationSum"/>
 
 </entitygroup>
