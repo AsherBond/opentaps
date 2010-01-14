@@ -172,6 +172,7 @@
     <screen name="CreditCardReport">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="FinancialsCreditCardReport"/>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
                 <set field="returnPage" value="receivables"/>
                 <set field="returnLabel" value="FinancialsReturnToReceivables"/>
@@ -180,16 +181,11 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsCreditCardReport}"/>
-                            </container>
-                            <container style="screenlet-body">
+                        <frame-container title="${uiLabelMap.FinancialsCreditCardReport}">
                                 <platform-specific><html>
                                     <html-template location="component://financials/webapp/financials/receivables/CreditCardReport.ftl"/>
                                 </html></platform-specific>
-                            </container>
-                        </container>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
