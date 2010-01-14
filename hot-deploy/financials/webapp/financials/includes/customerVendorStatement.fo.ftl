@@ -47,7 +47,7 @@
                     <fo:table-row>
                       <fo:table-cell number-columns-spanned="4">
                          <fo:block font-weight="bold" wrap-option="no-wrap" text-align="center">
-                           ${uiLabelMap.FinancialsStatementFor} ${Static['org.ofbiz.party.party.PartyHelper'].getPartyName(delegator, partyId, false)}
+                           ${uiLabelMap.FinancialsStatementFor} ${Static['org.ofbiz.party.party.PartyHelper'].getPartyName(delegator, partyId, false)} (${partyId})
                          </fo:block>
                       </fo:table-cell>
                     </fo:table-row>
