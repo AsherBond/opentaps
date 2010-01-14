@@ -92,6 +92,9 @@ public final class QuoteServices {
             item.setNonPKFields(context);
             if (UtilValidate.isNotEmpty(item.getString("productId")) && UtilValidate.isEmpty(item.getString("description"))) {
                 GenericValue product = item.getRelatedOne("Product");
+                if (product == null) {
+                    return UtilMessage.createAndLogServiceError(UtilMessage.expandLabel("CrmErrorProductNotFound", locale), MODULE);
+                }
                 item.set("description", product.getString("productName"));
             }
 
