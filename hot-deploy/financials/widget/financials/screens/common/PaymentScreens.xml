@@ -96,13 +96,8 @@
     <screen name="FindPayment">
         <section>
             <actions>
-                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
-                <property-to-field field="defaultCurrencyUomId" resource="general" property="currency.uom.id.default" default="USD" />
-                <script location="component://financials/webapp/financials/WEB-INF/actions/includes/findPayment.bsh"/>
-                <set field="headerItem" from-field="parameters.headerItem"/>
-                <set field="partyId" from-field="parameters.headerItem"/>
-                <set field="paginateSortTarget" value="findPayment"/>
-                <script location="component://financials/webapp/financials/WEB-INF/actions/includes/pagination.bsh"/>
+                <set field="pageTitleLabel" value="FinancialsFindPayment"/>
+                <java location="com.opensourcestrategies.financials.payment.PaymentActions" invoke="findPayments"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator" location="${decoratorLocation}">
@@ -110,7 +105,9 @@
                       <platform-specific><html>
                         <html-template location="component://financials/webapp/financials/includes/findPayment.ftl"/></html>
                       </platform-specific>
-                      <include-form name="ListPayments" location="component://financials/widget/financials/forms/common/PaymentForms.xml"/>
+                      <platform-specific><html>
+                        <html-template location="component://financials/webapp/financials/includes/listPayments.ftl"/></html>
+                      </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>

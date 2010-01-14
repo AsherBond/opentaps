@@ -27,7 +27,6 @@
     </#if>
     <table class="twoColumnForm">
       <@inputTextRow title=uiLabelMap.FinancialsPaymentId name="paymentId" />
-      <@inputSelectRow title=uiLabelMap.AccountingPaymentType name="paymentTypeId" list=paymentTypeList key="paymentTypeId" displayField="description" required=false/>
       
       <#if findDisbursement>
         <@inputAutoCompletePartyRow title=uiLabelMap.FinancialsPayToParty name="partyIdTo" id="findPaymentFormPartyId" />
@@ -37,11 +36,26 @@
 
       <@inputSelectRow title=uiLabelMap.FinancialsStatusId name="statusId" list=statusList key="statusId" displayField="description" required=false/>
       
-      <#if findDisbursement>
-        <@inputSelectRow title=uiLabelMap.FinancialsPaymentMethod name="paymentMethodId" list=paymentMethodList key="paymentMethodId" displayField="description" required=false/>
-      <#else>
-        <@inputSelectRow title=uiLabelMap.FinancialsPaymentMethodType name="paymentMethodTypeId" list=paymentMethodTypeList key="paymentMethodTypeId" displayField="description" required=false/>
-      </#if>
+      <tr>
+        <@displayTitleCell title=uiLabelMap.AccountingPaymentType />
+        <@inputSelectCell name="paymentTypeId" list=paymentTypeList key="paymentTypeId" displayField="description" required=false/>
+
+        <#if findDisbursement>
+          <@displayTitleCell title=uiLabelMap.FinancialsPaymentMethod />
+          <@inputSelectCell name="paymentMethodId" list=paymentMethodList key="paymentMethodId" displayField="description" required=false/>
+        <#else>
+          <@displayTitleCell title=uiLabelMap.FinancialsPaymentMethodType />
+          <@inputSelectCell name="paymentMethodTypeId" list=paymentMethodTypeList key="paymentMethodTypeId" displayField="description" required=false/>
+        </#if>
+      </tr>
+
+      <tr>
+        <@displayTitleCell title=uiLabelMap.CommonAmount />
+        <@inputRangeCell fromName="amountFrom" thruName="amountThru" size=10/>
+
+        <@displayTitleCell title=uiLabelMap.OpentapsOpenAmount />
+        <@inputRangeCell fromName="openAmountFrom" thruName="openAmountThru" size=10/>
+      </tr>
 
       <@inputDateRangeRow title=uiLabelMap.AccountingEffectiveDate fromName="fromDate" thruName="thruDate" />
 
