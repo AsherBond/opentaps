@@ -120,6 +120,7 @@
     <screen name="customerStatement">
         <section>
             <actions>
+                <set field="pageTitleLabel" value="FinancialsCustomerStatement"/>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
                 <set field="reportType" value="CUSTOMER"/> 
                 <set field="returnPage" value="receivables"/>
@@ -131,19 +132,14 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <container style="screenlet">
-                            <container style="screenlet-header">
-                                <label style="boxhead" text="${uiLabelMap.FinancialsCustomerStatement}"/>
-                            </container>
-                            <container style="screenlet-body">
+                        <frame-container title="${uiLabelMap.FinancialsCustomerStatement}">
                                 <platform-specific><html>
                                     <html-template location="component://financials/webapp/financials/includes/flowReportOptions.ftl"/>
                                 </html></platform-specific>
                                 <platform-specific><html>
                                     <html-template location="component://financials/webapp/financials/includes/customerVendorStatement.ftl"/>
                                 </html></platform-specific>
-                            </container>
-                        </container>
+                        </frame-container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
