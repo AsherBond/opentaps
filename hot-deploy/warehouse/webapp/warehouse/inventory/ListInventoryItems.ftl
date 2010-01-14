@@ -47,12 +47,15 @@
         <#if tagTypesPerOrg?has_content>
           <#assign tagTypes = tagTypesPerOrg.get(item.ownerPartyId) />
           <#if tagTypes?has_content>
+          <#assign hasSetAccountingTags = Static["org.opentaps.common.util.UtilAccountingTags"].hasSetAccountingTags(item,tagTypes)>
+           <#if hasSetAccountingTags>
             <tr class="${tableRowClass(item_index)}">
               <td>&nbsp;</td>
               <td colspan="8">
                 <i><@accountingTagsDisplay tags=tagTypes entity=item /></i>
               </td>
             </tr>
+           </#if>
           </#if>
         </#if>
       </#list>

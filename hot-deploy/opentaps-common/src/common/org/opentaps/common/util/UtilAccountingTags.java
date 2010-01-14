@@ -639,4 +639,22 @@ public final class UtilAccountingTags {
         List<Enumeration> enumerations = repository.findList(Enumeration.class, EntityCondition.makeCondition(Enumeration.Fields.enumTypeId.name(), EntityOperator.IN, typeIds), Arrays.asList(Enumeration.Fields.sequenceId.asc()));
         return Entity.groupByFieldValues(EnumerationType.class, enumerations, Enumeration.Fields.enumTypeId, enumerationTypes, EnumerationType.Fields.enumTypeId);
     }
+    
+
+    /**
+     * Return if set any accounting tag on the entity
+     * @param entity a <code>Map</code> value
+     * @param tags a <code>List<AccountingTagConfigurationForOrganizationAndUsage></code> value
+     * @return a <code>boolean</code> value
+     */
+    public static boolean hasSetAccountingTags(Map entity, List<AccountingTagConfigurationForOrganizationAndUsage> tags) {
+    	for (AccountingTagConfigurationForOrganizationAndUsage tag : tags) {
+            if(UtilValidate.isNotEmpty(entity.get("acctgTagEnumId" + tag.getIndex()))) {
+            	// find a tag was set, then return true
+            	return true;
+            }
+        }
+    	// return false when not found any tag was set
+    	return false;
+    }
 }
