@@ -65,6 +65,7 @@ public class CreateQuoteItemService extends ServiceWrapper {
         estimatedDeliveryDate("estimatedDeliveryDate"),
         isPromo("isPromo"),
         locale("locale"),
+        partyId("partyId"),
         productFeatureId("productFeatureId"),
         productId("productId"),
         quantities("quantities"),
@@ -127,6 +128,7 @@ public class CreateQuoteItemService extends ServiceWrapper {
     private Timestamp inEstimatedDeliveryDate;
     private String inIsPromo;
     private Locale inLocale;
+    private String inPartyId;
     private String inProductFeatureId;
     private String inProductId;
     private Map inQuantities;
@@ -229,6 +231,14 @@ public class CreateQuoteItemService extends ServiceWrapper {
      */
     public Locale getInLocale() {
         return this.inLocale;
+    }
+    /**
+     * Auto generated value accessor.
+     * This parameter is optional.
+     * @return <code>String</code>
+     */
+    public String getInPartyId() {
+        return this.inPartyId;
     }
     /**
      * Auto generated value accessor.
@@ -531,6 +541,15 @@ public class CreateQuoteItemService extends ServiceWrapper {
     /**
      * Auto generated value setter.
      * This parameter is optional.
+     * @param inPartyId the inPartyId to set
+    */
+    public void setInPartyId(String inPartyId) {
+        this.inParameters.add("partyId");
+        this.inPartyId = inPartyId;
+    }
+    /**
+     * Auto generated value setter.
+     * This parameter is optional.
      * @param inProductFeatureId the inProductFeatureId to set
     */
     public void setInProductFeatureId(String inProductFeatureId) {
@@ -804,6 +823,7 @@ public class CreateQuoteItemService extends ServiceWrapper {
         if (inParameters.contains("estimatedDeliveryDate")) mapValue.put("estimatedDeliveryDate", getInEstimatedDeliveryDate());
         if (inParameters.contains("isPromo")) mapValue.put("isPromo", getInIsPromo());
         if (inParameters.contains("locale")) mapValue.put("locale", getInLocale());
+        if (inParameters.contains("partyId")) mapValue.put("partyId", getInPartyId());
         if (inParameters.contains("productFeatureId")) mapValue.put("productFeatureId", getInProductFeatureId());
         if (inParameters.contains("productId")) mapValue.put("productId", getInProductId());
         if (inParameters.contains("quantities")) mapValue.put("quantities", getInQuantities());
@@ -853,6 +873,7 @@ public class CreateQuoteItemService extends ServiceWrapper {
         if (mapValue.containsKey("estimatedDeliveryDate")) setInEstimatedDeliveryDate((Timestamp) mapValue.get("estimatedDeliveryDate"));
         if (mapValue.containsKey("isPromo")) setInIsPromo((String) mapValue.get("isPromo"));
         if (mapValue.containsKey("locale")) setInLocale((Locale) mapValue.get("locale"));
+        if (mapValue.containsKey("partyId")) setInPartyId((String) mapValue.get("partyId"));
         if (mapValue.containsKey("productFeatureId")) setInProductFeatureId((String) mapValue.get("productFeatureId"));
         if (mapValue.containsKey("productId")) setInProductId((String) mapValue.get("productId"));
         if (mapValue.containsKey("quantities")) setInQuantities((Map) mapValue.get("quantities"));
