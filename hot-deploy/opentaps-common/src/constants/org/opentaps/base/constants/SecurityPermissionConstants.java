@@ -134,26 +134,26 @@ public final class SecurityPermissionConstants {
     public static final String CRMSFA_4C_VIEW = "CRMSFA_4C_VIEW";
     /** View all forecasts. */
     public static final String CRMSFA_4C_VIEWALL = "CRMSFA_4C_VIEWALL";
+    /** Access to the Accounts function of the application.. */
+    public static final String CRMSFA_ACCOUNTS_VIEW = "CRMSFA_ACCOUNTS_VIEW";
     /** Create a new account.. */
     public static final String CRMSFA_ACCOUNT_CREATE = "CRMSFA_ACCOUNT_CREATE";
     /** Deactivate any existing account.. */
     public static final String CRMSFA_ACCOUNT_DEACTIVATE = "CRMSFA_ACCOUNT_DEACTIVATE";
     /** Reassign owner of an existing account.. */
     public static final String CRMSFA_ACCOUNT_REASSIGN = "CRMSFA_ACCOUNT_REASSIGN";
-    /** Access to the Accounts function of the application.. */
-    public static final String CRMSFA_ACCOUNTS_VIEW = "CRMSFA_ACCOUNTS_VIEW";
     /** Update any existing account.. */
     public static final String CRMSFA_ACCOUNT_UPDATE = "CRMSFA_ACCOUNT_UPDATE";
     /** View any Account.. */
     public static final String CRMSFA_ACCOUNT_VIEW = "CRMSFA_ACCOUNT_VIEW";
+    /** Access to the Activities function of the application.. */
+    public static final String CRMSFA_ACTS_VIEW = "CRMSFA_ACTS_VIEW";
     /** View and set scope for public, private and confidential activities.. */
     public static final String CRMSFA_ACT_ADMIN = "CRMSFA_ACT_ADMIN";
     /** Close an existing Activity: Event or Task.. */
     public static final String CRMSFA_ACT_CLOSE = "CRMSFA_ACT_CLOSE";
     /** Create a new Activity: Event or Task.. */
     public static final String CRMSFA_ACT_CREATE = "CRMSFA_ACT_CREATE";
-    /** Access to the Activities function of the application.. */
-    public static final String CRMSFA_ACTS_VIEW = "CRMSFA_ACTS_VIEW";
     /** Update an existing Activity: Event or Task.. */
     public static final String CRMSFA_ACT_UPDATE = "CRMSFA_ACT_UPDATE";
     /** View an Activity: Event or Task.. */
@@ -162,30 +162,32 @@ public final class SecurityPermissionConstants {
     public static final String CRMSFA_CAMP_CREATE = "CRMSFA_CAMP_CREATE";
     /** Update marketing campaigns in CRMSFA and add, update or remove contact lists to them.. */
     public static final String CRMSFA_CAMP_UPDATE = "CRMSFA_CAMP_UPDATE";
+    /** Access to the Cases function of the application.. */
+    public static final String CRMSFA_CASES_VIEW = "CRMSFA_CASES_VIEW";
     /** Close an existing Case.. */
     public static final String CRMSFA_CASE_CLOSE = "CRMSFA_CASE_CLOSE";
     /** Create a new Case.. */
     public static final String CRMSFA_CASE_CREATE = "CRMSFA_CASE_CREATE";
-    /** Access to the Cases function of the application.. */
-    public static final String CRMSFA_CASES_VIEW = "CRMSFA_CASES_VIEW";
     /** Update an existing Case.. */
     public static final String CRMSFA_CASE_UPDATE = "CRMSFA_CASE_UPDATE";
     /** View a Case.. */
     public static final String CRMSFA_CASE_VIEW = "CRMSFA_CASE_VIEW";
+    /** Access to the Contacts function of the application.. */
+    public static final String CRMSFA_CONTACTS_VIEW = "CRMSFA_CONTACTS_VIEW";
     /** Create a new Contact.. */
     public static final String CRMSFA_CONTACT_CREATE = "CRMSFA_CONTACT_CREATE";
     /** Deactivate any existing Contact.. */
     public static final String CRMSFA_CONTACT_DEACTIVATE = "CRMSFA_CONTACT_DEACTIVATE";
     /** Reassign owner of an existing contact.. */
     public static final String CRMSFA_CONTACT_REASSIGN = "CRMSFA_CONTACT_REASSIGN";
-    /** Access to the Contacts function of the application.. */
-    public static final String CRMSFA_CONTACTS_VIEW = "CRMSFA_CONTACTS_VIEW";
     /** Update any existing Contact.. */
     public static final String CRMSFA_CONTACT_UPDATE = "CRMSFA_CONTACT_UPDATE";
     /** View any Contact.. */
     public static final String CRMSFA_CONTACT_VIEW = "CRMSFA_CONTACT_VIEW";
     /** View an invoice.. */
     public static final String CRMSFA_INVOICE_VIEW = "CRMSFA_INVOICE_VIEW";
+    /** Access to the Leads function of the application.. */
+    public static final String CRMSFA_LEADS_VIEW = "CRMSFA_LEADS_VIEW";
     /** Create a new Lead.. */
     public static final String CRMSFA_LEAD_CREATE = "CRMSFA_LEAD_CREATE";
     /** Deactivate any existing Lead.. */
@@ -194,28 +196,26 @@ public final class SecurityPermissionConstants {
     public static final String CRMSFA_LEAD_DELETE = "CRMSFA_LEAD_DELETE";
     /** Reassign owner of an existing lead.. */
     public static final String CRMSFA_LEAD_REASSIGN = "CRMSFA_LEAD_REASSIGN";
-    /** Access to the Leads function of the application.. */
-    public static final String CRMSFA_LEADS_VIEW = "CRMSFA_LEADS_VIEW";
     /** Update any existing Lead.. */
     public static final String CRMSFA_LEAD_UPDATE = "CRMSFA_LEAD_UPDATE";
     /** View any Lead.. */
     public static final String CRMSFA_LEAD_VIEW = "CRMSFA_LEAD_VIEW";
     /** Access to the Marketing function of the application. */
     public static final String CRMSFA_MKTG_VIEW = "CRMSFA_MKTG_VIEW";
+    /** Access to the Opportunities function of the application.. */
+    public static final String CRMSFA_OPPS_VIEW = "CRMSFA_OPPS_VIEW";
     /** Create a new Opportunity.. */
     public static final String CRMSFA_OPP_CREATE = "CRMSFA_OPP_CREATE";
     /** Deactivate any existing Opportunity.. */
     public static final String CRMSFA_OPP_DEACTIVATE = "CRMSFA_OPP_DEACTIVATE";
-    /** Access to the Opportunities function of the application.. */
-    public static final String CRMSFA_OPPS_VIEW = "CRMSFA_OPPS_VIEW";
     /** Update any existing Opportunity.. */
     public static final String CRMSFA_OPP_UPDATE = "CRMSFA_OPP_UPDATE";
     /** View any Opportunity.. */
     public static final String CRMSFA_OPP_VIEW = "CRMSFA_OPP_VIEW";
-    /** Create a new Order.. */
-    public static final String CRMSFA_ORDER_CREATE = "CRMSFA_ORDER_CREATE";
     /** Access to the Orders function of the application.. */
     public static final String CRMSFA_ORDERS_VIEW = "CRMSFA_ORDERS_VIEW";
+    /** Create a new Order.. */
+    public static final String CRMSFA_ORDER_CREATE = "CRMSFA_ORDER_CREATE";
     /** View any Order.. */
     public static final String CRMSFA_ORDER_VIEW = "CRMSFA_ORDER_VIEW";
     /** Create a new Partner.. */
@@ -230,10 +230,10 @@ public final class SecurityPermissionConstants {
     public static final String CRMSFA_PAY_UPDATE = "CRMSFA_PAY_UPDATE";
     /** View payment methods of a party.. */
     public static final String CRMSFA_PAY_VIEW = "CRMSFA_PAY_VIEW";
-    /** Create a new Quote.. */
-    public static final String CRMSFA_QUOTE_CREATE = "CRMSFA_QUOTE_CREATE";
     /** Access to the Quotes function of the application.. */
     public static final String CRMSFA_QUOTES_VIEW = "CRMSFA_QUOTES_VIEW";
+    /** Create a new Quote.. */
+    public static final String CRMSFA_QUOTE_CREATE = "CRMSFA_QUOTE_CREATE";
     /** Update any existing Quote.. */
     public static final String CRMSFA_QUOTE_UPDATE = "CRMSFA_QUOTE_UPDATE";
     /** View any Quote.. */
@@ -494,10 +494,6 @@ public final class SecurityPermissionConstants {
     public static final String ORDERMGR_VIEW = "ORDERMGR_VIEW";
     /** ALL operations in the Party Manager.. */
     public static final String PARTYMGR_ADMIN = "PARTYMGR_ADMIN";
-    /** Create communication event, any from/to party.. */
-    public static final String PARTYMGR_CME_CREATE = "PARTYMGR_CME_CREATE";
-    /** Delete communication event, any from/to party.. */
-    public static final String PARTYMGR_CME_DELETE = "PARTYMGR_CME_DELETE";
     /** Can create Email communication events for logged-in user.. */
     public static final String PARTYMGR_CME_EMAIL_CREATE = "PARTYMGR_CME-EMAIL_CREATE";
     /** Can delete Email communication events for logged-in user.. */
@@ -506,6 +502,10 @@ public final class SecurityPermissionConstants {
     public static final String PARTYMGR_CME_EMAIL_UPDATE = "PARTYMGR_CME-EMAIL_UPDATE";
     /** Can create Internal note communication event for logged-in user.. */
     public static final String PARTYMGR_CME_NOTE_CREATE = "PARTYMGR_CME-NOTE_CREATE";
+    /** Create communication event, any from/to party.. */
+    public static final String PARTYMGR_CME_CREATE = "PARTYMGR_CME_CREATE";
+    /** Delete communication event, any from/to party.. */
+    public static final String PARTYMGR_CME_DELETE = "PARTYMGR_CME_DELETE";
     /** Update communication event, any from/to party.. */
     public static final String PARTYMGR_CME_UPDATE = "PARTYMGR_CME_UPDATE";
     /** Create operations in the Party Manager.. */
@@ -546,6 +546,14 @@ public final class SecurityPermissionConstants {
     public static final String PARTYMGR_UPDATE = "PARTYMGR_UPDATE";
     /** View operations in the Party Manager.. */
     public static final String PARTYMGR_VIEW = "PARTYMGR_VIEW";
+    /** ALL operations in the Payment Processors Setup.. */
+    public static final String PAYPROC_ADMIN = "PAYPROC_ADMIN";
+    /** Create operations in the Payment Processors Setup.. */
+    public static final String PAYPROC_CREATE = "PAYPROC_CREATE";
+    /** Delete operations in the Payment Processors Setup.. */
+    public static final String PAYPROC_DELETE = "PAYPROC_DELETE";
+    /** View operations in the Payment Processors Setup.. */
+    public static final String PAYPROC_VIEW = "PAYPROC_VIEW";
     /** ALL Payment Information Operations.. */
     public static final String PAY_INFO_ADMIN = "PAY_INFO_ADMIN";
     /** Create Payment Information.. */
@@ -556,14 +564,6 @@ public final class SecurityPermissionConstants {
     public static final String PAY_INFO_UPDATE = "PAY_INFO_UPDATE";
     /** View Payment Information.. */
     public static final String PAY_INFO_VIEW = "PAY_INFO_VIEW";
-    /** ALL operations in the Payment Processors Setup.. */
-    public static final String PAYPROC_ADMIN = "PAYPROC_ADMIN";
-    /** Create operations in the Payment Processors Setup.. */
-    public static final String PAYPROC_CREATE = "PAYPROC_CREATE";
-    /** Delete operations in the Payment Processors Setup.. */
-    public static final String PAYPROC_DELETE = "PAYPROC_DELETE";
-    /** View operations in the Payment Processors Setup.. */
-    public static final String PAYPROC_VIEW = "PAYPROC_VIEW";
     /** Use the Period Maintenance pages.. */
     public static final String PERIOD_MAINT = "PERIOD_MAINT";
     /** Basic permission to create and update Manufacturing. */
@@ -684,14 +684,14 @@ public final class SecurityPermissionConstants {
     public static final String WRHS_CONFIG = "WRHS_CONFIG";
     /** Permission to use the config tab. */
     public static final String WRHS_CONFIG_VIEW = "WRHS_CONFIG_VIEW";
+    /** Permission to view invoices of packed orders. */
+    public static final String WRHS_INVOICE_VIEW = "WRHS_INVOICE_VIEW";
     /** Permission to create new lot. */
     public static final String WRHS_INV_LOT_CREATE = "WRHS_INV_LOT_CREATE";
     /** Permission to update a lot. */
     public static final String WRHS_INV_LOT_UPDATE = "WRHS_INV_LOT_UPDATE";
     /** Permission to view lot level screens. */
     public static final String WRHS_INV_LOT_VIEW = "WRHS_INV_LOT_VIEW";
-    /** Permission to view invoices of packed orders. */
-    public static final String WRHS_INVOICE_VIEW = "WRHS_INVOICE_VIEW";
     /** Permission to modify physical inventory. */
     public static final String WRHS_INV_PHINV = "WRHS_INV_PHINV";
     /** Permission to receive Purchase Orders. */

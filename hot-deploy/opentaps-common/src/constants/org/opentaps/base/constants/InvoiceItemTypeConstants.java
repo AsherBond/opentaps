@@ -72,6 +72,10 @@ public final class InvoiceItemTypeConstants {
     public static final String CRT_WE_ITEM = "CRT_WE_ITEM";
     /** Fee. */
     public static final String FEE = "FEE";
+    /** Adjustment. */
+    public static final String INVOICE_ADJ = "INVOICE_ADJ";
+    /** Adjustment Item. */
+    public static final String INVOICE_ITM_ADJ = "INVOICE_ITM_ADJ";
     /** Additional Feature. */
     public static final String INV_ADD_FEATURE = "INV_ADD_FEATURE";
     /** Discount. */
@@ -88,10 +92,6 @@ public final class InvoiceItemTypeConstants {
     public static final String INV_LOST_ITEM_CLAIM = "INV_LOST_ITEM_CLAIM";
     /** Miscellaneous Charges. */
     public static final String INV_MISC_CHARGE = "INV_MISC_CHARGE";
-    /** Adjustment. */
-    public static final String INVOICE_ADJ = "INVOICE_ADJ";
-    /** Adjustment Item. */
-    public static final String INVOICE_ITM_ADJ = "INVOICE_ITM_ADJ";
     /** Product-Feature. */
     public static final String INV_PROD_FEATR_ITEM = "INV_PROD_FEATR_ITEM";
     /** Product. */
@@ -212,8 +212,10 @@ public final class InvoiceItemTypeConstants {
     public static final String PAYROL_TAX_MD_WITHOL = "PAYROL_TAX_MD_WITHOL";
     /** Medicare Employee. */
     public static final String PAYROL_TAX_MED_EMPL = "PAYROL_TAX_MED_EMPL";
-    /** Fee. */
-    public static final String P_FEE = "P_FEE";
+    /** Adjustment. */
+    public static final String PINVOICE_ADJ = "PINVOICE_ADJ";
+    /** Adjustment Item. */
+    public static final String PINVOICE_ITM_ADJ = "PINVOICE_ITM_ADJ";
     /** Additional Feature. */
     public static final String PINV_ADD_FEATURE = "PINV_ADD_FEATURE";
     /** Shipping Charge from Carrier. */
@@ -234,10 +236,6 @@ public final class InvoiceItemTypeConstants {
     public static final String PINV_MFG_CONTRACT = "PINV_MFG_CONTRACT";
     /** Miscellaneous Charges. */
     public static final String PINV_MISC_CHARGE = "PINV_MISC_CHARGE";
-    /** Adjustment. */
-    public static final String PINVOICE_ADJ = "PINVOICE_ADJ";
-    /** Adjustment Item. */
-    public static final String PINVOICE_ITM_ADJ = "PINVOICE_ITM_ADJ";
     /** Product-Feature. */
     public static final String PINV_PROD_FEATR_ITEM = "PINV_PROD_FEATR_ITEM";
     /** Product. */
@@ -282,6 +280,8 @@ public final class InvoiceItemTypeConstants {
     public static final String PITM_SURCHARGE_ADJ = "PITM_SURCHARGE_ADJ";
     /** Warranty Item. */
     public static final String PITM_WARRANTY_ADJ = "PITM_WARRANTY_ADJ";
+    /** Fee. */
+    public static final String P_FEE = "P_FEE";
     /** Return Additional Feature. */
     public static final String SRT_ADD_FEATURE_ADJ = "SRT_ADD_FEATURE_ADJ";
     /** Return Discount. */

@@ -60,12 +60,12 @@ public final class RoleTypeConstants {
     public static final String BULK_CUSTOMER = "BULK_CUSTOMER";
     /** Buyer. */
     public static final String BUYER = "BUYER";
+    /** Calendar. */
+    public static final String CALENDAR_ROLE = "CALENDAR_ROLE";
     /** Calendar Attendee. */
     public static final String CAL_ATTENDEE = "CAL_ATTENDEE";
     /** Calendar Delegate. */
     public static final String CAL_DELEGATE = "CAL_DELEGATE";
-    /** Calendar. */
-    public static final String CALENDAR_ROLE = "CALENDAR_ROLE";
     /** Calendar Host. */
     public static final String CAL_HOST = "CAL_HOST";
     /** Calendar Organizer. */
@@ -140,10 +140,10 @@ public final class RoleTypeConstants {
     public static final String EMPLOYEE = "EMPLOYEE";
     /** End-User Customer. */
     public static final String END_USER_CUSTOMER = "END_USER_CUSTOMER";
-    /** Fixed Asset Maint Assignee. */
-    public static final String FAM_ASSIGNEE = "FAM_ASSIGNEE";
     /** Family Member. */
     public static final String FAMILY_MEMBER = "FAMILY_MEMBER";
+    /** Fixed Asset Maint Assignee. */
+    public static final String FAM_ASSIGNEE = "FAM_ASSIGNEE";
     /** Maintenance Manager or Supervisor. */
     public static final String FAM_MANAGER = "FAM_MANAGER";
     /** Maintenance Supplier or Service. */
@@ -168,8 +168,6 @@ public final class RoleTypeConstants {
     public static final String MANAGER = "MANAGER";
     /** Manufacturer. */
     public static final String MANUFACTURER = "MANUFACTURER";
-    /** Not Applicable. */
-    public static final String _NA_ = "_NA_";
     /** Order Clerk. */
     public static final String ORDER_CLERK = "ORDER_CLERK";
     /** Organization. */
@@ -234,10 +232,10 @@ public final class RoleTypeConstants {
     public static final String SALES_REP = "SALES_REP";
     /** Shareholder. */
     public static final String SHAREHOLDER = "SHAREHOLDER";
-    /** Ship-From Vendor. */
-    public static final String SHIP_FROM_VENDOR = "SHIP_FROM_VENDOR";
     /** Shipment Clerk. */
     public static final String SHIPMENT_CLERK = "SHIPMENT_CLERK";
+    /** Ship-From Vendor. */
+    public static final String SHIP_FROM_VENDOR = "SHIP_FROM_VENDOR";
     /** Ship-To Customer. */
     public static final String SHIP_TO_CUSTOMER = "SHIP_TO_CUSTOMER";
     /** Sponsor. */
@@ -270,5 +268,7 @@ public final class RoleTypeConstants {
     public static final String WORKER = "WORKER";
     /** Workflow. */
     public static final String WORKFLOW_ROLE = "WORKFLOW_ROLE";
+    /** Not Applicable. */
+    public static final String _NA_ = "_NA_";
 
 }
