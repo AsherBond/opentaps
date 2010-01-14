@@ -44,6 +44,12 @@ under the License.
     <load-component component-location="pentaho"/>        
     -->
     
+    <!-- These two modules are required for integrating opentaps with Magento.
+    See http://www.opentaps.org/docs/index.php/Opentaps_Magento_Integration
+    You can uncomment them if you have installed the required modules
+    <load-component component-location="dal"/>
+    <load-component component-location="magento-integration"/>
+    -->
 
 
 
