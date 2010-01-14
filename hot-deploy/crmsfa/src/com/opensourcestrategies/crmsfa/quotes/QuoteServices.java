@@ -36,8 +36,16 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.base.services.CalculateProductPriceService;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
+import org.opentaps.domain.DomainsDirectory;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.product.Product;
+import org.opentaps.domain.product.ProductRepositoryInterface;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.foundation.service.ServiceException;
 
 /**
  * Accounts services. The service documentation is in services_quotes.xml.
@@ -63,8 +71,12 @@ public final class QuoteServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
+        DomainsDirectory ddir =  new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin)).loadDomainsDirectory();
+        ProductRepositoryInterface productRepository = null;
         Locale locale = UtilCommon.getLocale(context);
+
         String quoteId = (String) context.get("quoteId");
+        String partyId = (String) context.get("partyId");
 
         if (!security.hasEntityPermission("ORDERMGR", "_CREATE", userLogin)) {
             return UtilMessage.createAndLogServiceError("OrderSecurityErrorToRunCreateQuoteItem", locale, MODULE);
@@ -122,6 +134,25 @@ public final class QuoteServices {
                             return UtilMessage.createAndLogServiceError(priceStr + " is not a valid unit price.", MODULE);
                         }
                         option.set("quoteUnitPrice", unitPrice);
+                    } else {
+                        //user doesn't provide a price, try to calculate in standard way
+                        if (productRepository == null) {
+                            productRepository = ddir.getProductDomain().getProductRepository();
+                        }
+
+                        Product product = productRepository.getProductById((String) context.get("productId"));
+                        if (product != null) {
+                            CalculateProductPriceService service = new CalculateProductPriceService();
+                            service.setInProduct(delegator.makeValue("Product", product.toMap()));
+                            service.setInPartyId(partyId);
+                            service.setInQuantity(quantity);
+                            service.runSync(new Infrastructure(dispatcher));
+
+                            BigDecimal price = service.getOutPrice();
+                            if (price != null) {
+                                option.set("quoteUnitPrice", price);
+                            }
+                        }
                     }
 
                     delegator.create(option);
@@ -402,14 +433,39 @@ public final class QuoteServices {
         }
 
         try {
+            GenericValue item = null;
+
             // get the QuoteItemOption
             GenericValue option = delegator.makeValue("QuoteItemOption");
             option.setPKFields(context);
             option.setNonPKFields(context);
             delegator.setNextSubSeqId(option, "quoteItemOptionSeqId", 5, 1);
+            BigDecimal quoteUnitPrice = (BigDecimal) context.get("quoteUnitPrice");
+            if (quoteUnitPrice == null) {
+                // calculate price in standard way
+                GenericValue quote = delegator.findByPrimaryKey("Quote", UtilMisc.toMap("quoteId", quoteId));
+                item = delegator.findByPrimaryKey("QuoteItem", UtilMisc.toMap("quoteId", quoteId, "quoteItemSeqId", quoteItemSeqId));
+                GenericValue product = item.getRelatedOne("Product");
+                if (product != null) {
+                    CalculateProductPriceService service = new CalculateProductPriceService();
+                    service.setInProduct(product);
+                    service.setInPartyId(quote.getString("partyId"));
+                    Double quantity = (Double) context.get("quantity");
+                    service.setInQuantity(BigDecimal.valueOf(quantity.doubleValue()));
+                    service.runSync(new Infrastructure(dctx.getDispatcher()));
+
+                    // use calculated price
+                    BigDecimal price = service.getOutPrice();
+                    if (price != null) {
+                        option.set("quoteUnitPrice", price);
+                    }
+                }
+            }
             delegator.create(option);
 
-            GenericValue item = option.getRelatedOne("QuoteItem");
+            if (item == null) {
+                item = option.getRelatedOne("QuoteItem");
+            }
             if (item.get("quantity") == null && item.get("quoteUnitPrice") == null) {
                 item.set("quantity", option.get("quantity"));
                 item.set("quoteUnitPrice", option.get("quoteUnitPrice"));
@@ -424,6 +480,10 @@ public final class QuoteServices {
 
         } catch (GenericEntityException ex) {
             return UtilMessage.createAndLogServiceError("Cannot add QuoteItemOption for QuoteItem [" + quoteId + "/" + quoteItemSeqId + "] " + ex.getMessage(), MODULE);
+        } catch (ServiceException e) {
+            return UtilMessage.createAndLogServiceError(e, MODULE);
+        } catch (IllegalArgumentException e) {
+            return UtilMessage.createAndLogServiceError(e, MODULE);
         }
     }
 
