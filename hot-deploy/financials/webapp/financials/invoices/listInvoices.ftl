@@ -66,8 +66,8 @@ function showButtons() {
                 <@headerCell title=uiLabelMap.FinancialsProcessingStatus orderBy="processingStatusId"/>
                 <@headerCell title=uiLabelMap.AccountingFromParty orderBy="partyIdFrom, invoiceDate DESC"/>
                 <@headerCell title=uiLabelMap.AccountingToParty orderBy="partyId, invoiceDate DESC"/>
-                <@headerCell title=uiLabelMap.AccountingAmount orderBy="invoiceTotal, invoiceDate DESC"/>
-                <@headerCell title=uiLabelMap.OrderOutstanding orderBy="openAmount, invoiceDate DESC"/>
+                <@headerCell title=uiLabelMap.AccountingAmount orderBy="invoiceTotal, invoiceDate DESC" blockClass="textright"/>
+                <@headerCell title=uiLabelMap.OrderOutstanding orderBy="openAmount, invoiceDate DESC" blockClass="textright"/>
                 <td><input type="checkbox" name="selectAll" value="N" onclick="javascript:toggleAll(this, 'listInvoices'); showButtons();"></td>
             </tr>
             <#list pageRows as row>
