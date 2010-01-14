@@ -240,6 +240,7 @@ public final class PaymentActions {
 
         // Pagination
         Set<String> fieldsToSelect = new HashSet<String>(new Payment().getAllFieldsNames());
+        fieldsToSelect.retainAll(new PaymentAndPaymentApplication().getAllFieldsNames());
         EntityListBuilder paymentListBuilder = new EntityListBuilder(paymentRepository, PaymentAndPaymentApplication.class, EntityCondition.makeCondition(searchConditions, EntityOperator.AND), fieldsToSelect, UtilMisc.toList(PaymentAndPaymentApplication.Fields.effectiveDate.desc()));
         PageBuilder<PaymentAndPaymentApplication> pageBuilder = new PageBuilder<PaymentAndPaymentApplication>() {
             public List<Map<String, Object>> build(List<PaymentAndPaymentApplication> page) throws Exception {
