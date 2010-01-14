@@ -63,6 +63,8 @@
     <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="SALES_ORDER_ITEMS" enumTypeId1="DIVISION_TAG" enumTypeId2="DEPARTMENT_TAG" enumTypeId3="ACTIVITY_TAG" isTagEnum1Required="N" isTagEnum2Required="N" isTagEnum3Required="N"/>
     <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="DISBURSEMENT" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
     <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="RECEIPT" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
+    <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="L_DISBURSEMENT" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
+    <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="L_RECEIPT" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
     <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="ACCOUNTS_PAYABLE" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
     <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="ACCOUNTS_RECEIVABLE" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
     <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="COMMISSIONS_PAYABLE" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>

@@ -36,6 +36,8 @@
     <AcctgTagUsageType acctgTagUsageTypeId="SALES_ORDER_ITEMS" description="Sales order items"/>
     <AcctgTagUsageType acctgTagUsageTypeId="DISBURSEMENT" description="Payments which are of type Disbursement"/>
     <AcctgTagUsageType acctgTagUsageTypeId="RECEIPT" description="Payments which are of type Receipt"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="L_DISBURSEMENT" description="Lookup Payments which are of type Disbursement"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="L_RECEIPT" description="Lookup Payments which are of type Receipt"/>
     <AcctgTagUsageType acctgTagUsageTypeId="ACCOUNTS_PAYABLE" description="Accounts payable posting"/>
     <AcctgTagUsageType acctgTagUsageTypeId="ACCOUNTS_RECEIVABLE" description="Accounts Receivable posting"/>
     <AcctgTagUsageType acctgTagUsageTypeId="COMMISSIONS_PAYABLE" description="Commissions Payable posting"/>

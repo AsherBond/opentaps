@@ -83,6 +83,10 @@ public final class UtilAccountingTags {
     public static final String DISBURSEMENT_PAYMENT_TAG = "DISBURSEMENT";
     /** Tags for receipt payment. */
     public static final String RECEIPT_PAYMENT_TAG = "RECEIPT";
+    /** Tags for lookup receipt payment. */
+    public static final String LOOKUP_RECEIPT_PAYMENT_TAG = "L_RECEIPT";
+    /** Tags for lookup disbursement payment. */
+    public static final String LOOKUP_DISBURSEMENT_PAYMENT_TAG = "L_DISBURSEMENT";
     /** Tags for transaction entries. */
     public static final String TRANSACTION_ENTRY_TAG = "TRANSACTION_ENTRY";
     /** Tags for check run feature. */
