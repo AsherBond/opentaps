@@ -2,9 +2,10 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrderContactMeches" columnCount="2" printOrder="Horizontal" pageWidth="540" pageHeight="100" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="260" columnSpacing="20" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="org.opentaps.common.reporting.UtilReports"/>
 	<import value="net.sf.jasperreports.engine.*"/>
-	<import value="java.util.*"/>
 	<import value="org.opentaps.base.entities.*"/>
+	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<field name="toName" class="java.lang.String"/>
 	<field name="attnName" class="java.lang.String"/>
@@ -42,7 +43,7 @@
 				<textElement>
 					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{PartyAddrAttnName} + " : " + $F{attnName}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[UtilReports.emptyIfNull($F{attnName}, $R{PartyAddrAttnName} + " : ", null)]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="textField-2" x="4" y="42" width="248" height="13" isRemoveLineWhenBlank="true">
@@ -102,7 +103,7 @@
 				<textElement>
 					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{city} + ($F{stateProvinceGeoId}==null ? "" : " " + $F{stateProvinceGeoId}) + " " + $F{postalCode}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{city} + UtilReports.emptyIfNull($F{stateProvinceGeoId}, " ", null) + " " + $F{postalCode}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="textField-6" x="4" y="81" width="248" height="13" isRemoveLineWhenBlank="true">
