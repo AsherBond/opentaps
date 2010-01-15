@@ -20,7 +20,7 @@
     background-image: url('/opentaps_js/dojo_0.90/dijit/themes/tundra/images/treeExpand_plus.gif');
 }
 .TreeExpandoLeaf {
-    background-image: url('/opentaps_js/dojo_0.90/dijit/themes/tundra/images/treeExpand_leaf.gif');
+    background-image: url('/images/dojo/src/widget/templates/images/Tree/treenode_grid_x.gif');
 }
 .TreeExpandoLoading {
     background-image: url('/opentaps_js/dojo_0.90/dijit/themes/tundra/images/treeExpand_loading.gif');
