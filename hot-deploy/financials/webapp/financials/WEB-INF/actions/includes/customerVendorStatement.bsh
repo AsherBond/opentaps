@@ -252,8 +252,8 @@ context.put("organizationPartyId",organizationPartyId);
        //set number format
        numberAxis = plot.getRangeAxis();
        numberAxis.setNumberFormatOverride(new DecimalFormat("0.000"));
-       //set data point visible
-       plot.getRenderer().setBaseShapesVisible(true);
+       //set data point not visible
+       plot.getRenderer().setBaseShapesVisible(false);
        //generate output graph
        String chartImage = ServletUtilities.saveChartAsPNG(chart, 500, 200, null);
        context{"chartImage"} = chartImage;
