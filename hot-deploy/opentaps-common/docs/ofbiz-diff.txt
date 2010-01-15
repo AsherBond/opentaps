@@ -323,6 +323,9 @@ r14521 fix styles on the edit inventory item screen (inventory item reservations
 applications/accounting/src/org/ofbiz/accounting/invoice/InvoiceWorker.java
 r14557 Fix InvoiceWorker and payment application services to account for invoice adjustments.
 
+applications/manufacturing/webapp/manufacturing/jobshopmgt/ProductionRun.fo.ftl
+r14616 fix the ui label for production run report
+
 Other API Changes
 -----------------
 
