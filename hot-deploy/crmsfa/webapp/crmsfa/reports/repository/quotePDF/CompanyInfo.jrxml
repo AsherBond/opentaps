@@ -2,6 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CompanyInfo" pageWidth="500" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="500" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="org.opentaps.common.reporting.UtilReports"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -81,7 +82,7 @@
 				<textElement>
 					<font size="10" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{organizationCity} + ", " + $P{stateProvinceAbbrv} + " " + $P{organizationPostalCode} + ", " + $P{countryName}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{organizationCity} + UtilReports.emptyIfNull($P{stateProvinceAbbrv}, ", ", null) + ", " + $P{organizationPostalCode} + UtilReports.emptyIfNull($P{countryName}, ", ", null)]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="textField-5" x="96" y="54" width="151" height="13" isRemoveLineWhenBlank="true"/>

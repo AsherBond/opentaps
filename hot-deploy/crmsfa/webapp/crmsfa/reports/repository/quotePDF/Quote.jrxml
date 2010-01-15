@@ -2,10 +2,10 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quote" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="541" leftMargin="43" rightMargin="28" topMargin="28" bottomMargin="28">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
-	<import value="org.opentaps.common.reporting.UtilReports"/>
 	<import value="net.sf.jasperreports.engine.*"/>
-	<import value="org.ofbiz.content.report.*"/>
+	<import value="org.opentaps.common.reporting.UtilReports"/>
 	<import value="java.util.*"/>
+	<import value="org.ofbiz.content.report.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<parameter name="chargeList" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
 	<parameter name="quoteId" class="java.lang.String" isForPrompting="false"/>
@@ -400,11 +400,11 @@
 				<reportElement key="subreport-3" x="0" y="0" width="540" height="48" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
 					<printWhenExpression><![CDATA[new Boolean($P{chargeList} != null)]]></printWhenExpression>
 				</reportElement>
-				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
-					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
-				</subreportParameter>
 				<subreportParameter name="REPORT_DATA_SOURCE">
 					<subreportParameterExpression><![CDATA[$P{chargeList}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
+					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://crmsfa/webapp/crmsfa/reports/repository/quotePDF/QuoteCharges.jrxml")]]></subreportExpression>
 			</subreport>
