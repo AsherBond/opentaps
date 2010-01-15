@@ -19,6 +19,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.condition.*;
 import javolution.util.FastList;
 import javolution.util.FastMap;
+import org.ofbiz.base.util.UtilValidate;
 
 // make a list builder of segments to be printed
 
@@ -38,12 +39,14 @@ labelsListBuilder() {
           newRow = FastMap.newInstance();
           newRow.putAll(row.getAllFields());
           carrier = delegator.findByPrimaryKeyCache("PartyGroup", UtilMisc.toMap("partyId", row{"carrierPartyId"}));
-          newRow{"carrierName"} = carrier{"groupName"};
-          shipmethod = delegator.findByPrimaryKeyCache("ShipmentMethodType", UtilMisc.toMap("shipmentMethodTypeId", row{"shipmentMethodTypeId"}));
-          if (shipmethod != null) {
-              newRow{"shipmentMethod"} = shipmethod{"description"};
-          }
+          if (UtilValidate.isNotEmpty(carrier)) {
+            newRow{"carrierName"} = carrier{"groupName"};
+            shipmethod = delegator.findByPrimaryKeyCache("ShipmentMethodType", UtilMisc.toMap("shipmentMethodTypeId", row{"shipmentMethodTypeId"}));
+            if (shipmethod != null) {
+                newRow{"shipmentMethod"} = shipmethod{"description"};
+            }
           newPage.add(newRow);
+          }
       }
       return newPage;
   }
