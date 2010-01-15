@@ -123,7 +123,7 @@
     </service>
 
     <service name="financials.createGlAccountTransEntryFact" engine="pojo"
-        location="org.opentaps.financials.domain.ledger.FinancialReportServices" invoke="createGlAccountTransEntryFact" auth="true" use-transaction="false">
+        location="org.opentaps.financials.domain.ledger.FinancialReportServices" invoke="createGlAccountTransEntryFact" auth="true" use-transaction="false" transaction-timout="600">
         <description>
             Collects and put to GlAccountTransEntryFact entity summary data for comparison budget 
             versus actual transactions and encumbrances in financial reports.
