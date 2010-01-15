@@ -326,6 +326,9 @@ r14557 Fix InvoiceWorker and payment application services to account for invoice
 applications/manufacturing/webapp/manufacturing/jobshopmgt/ProductionRun.fo.ftl
 r14616 fix the ui label for production run report
 
+applications/manufacturing/widget/manufacturing/JobshopScreens.xml
+r14618 fix the ui label for production run report
+
 Other API Changes
 -----------------
 
