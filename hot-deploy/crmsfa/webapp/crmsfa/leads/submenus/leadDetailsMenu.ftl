@@ -59,4 +59,4 @@
 </#if>
 </#if>
 
-<@frameSectionHeader title="${uiLabelMap.CrmLead} (${partySummary.partyId})" extra="${converted_options?if_exists}${create_option?if_exists}${update_options?if_exists}" />
+<@frameSectionHeader title="${uiLabelMap.CrmLead}" extra="${converted_options?if_exists}${create_option?if_exists}${update_options?if_exists}" />

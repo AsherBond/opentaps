@@ -30,7 +30,7 @@
 </#assign>
 
 <#assign title>
-  ${uiLabelMap.CrmAccount} (${partySummary.partyId})
+  ${uiLabelMap.CrmAccount}
   <#if accountDeactivated?exists><span class="subSectionWarning">${uiLabelMap.CrmAccountDeactivated} ${getLocalizedDate(accountDeactivatedDate, "DATE_TIME")}</span></#if>
 </#assign>
 
@@ -39,7 +39,7 @@
 <table class="fourColumnForm" style="border:none">
   <tr>
     <@displayTitleCell title=uiLabelMap.CrmAccountName titleClass="requiredField" />
-    <@displayCell text=partySummary.groupName />
+    <@displayCell text="${partySummary.groupName}  (${partySummary.partyId})" />
     <@displayTitleCell title=uiLabelMap.CrmParentParty />
     <#if parentParty?has_content>
       <@displayLinkCell href="viewAccount?partyId=${parentParty.partyId}" text="${parentParty.groupName} (${parentParty.partyId})" blockClass="fieldWidth50pct"/>

@@ -107,6 +107,7 @@
     <!-- display details about a contact-->
     <form name="viewContact" type="single" default-map-name="partySummary" target="" title=""
         default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="fullName" title="${uiLabelMap.PartyName}" position="1" title-style="requiredField"><display description="${partySummary.firstName} ${partySummary.lastName} (${partySummary.partyId})"/></field>
         <field name="firstName" title="${uiLabelMap.PartyFirstName}" position="1" title-style="requiredField"><display/></field>
         <field name="lastName" title="${uiLabelMap.PartyLastName}" position="2" title-style="requiredField"><display/></field>
         <field name="firstNameLocal" title="${uiLabelMap.CrmFirstNameLocal}" position="1"><display/></field>

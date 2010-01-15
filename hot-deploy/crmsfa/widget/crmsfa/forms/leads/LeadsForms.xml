@@ -186,7 +186,7 @@
     <!-- display details about a lead-->
     <form name="viewLead" type="single" default-map-name="partySummary" target="" title=""
         default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
-        <field name="companyName" title="${uiLabelMap.CrmCompanyName}" position="1" title-style="requiredField"><display/></field>
+        <field name="companyName" title="${uiLabelMap.CrmCompanyName}" position="1" title-style="requiredField"><display description="${partySummary.companyName} (${partySummary.partyId})"/></field>
         <field name="parentPartyId" title="${uiLabelMap.CrmParentParty}" position="2" title-style="requiredField" 
             use-when="partySummary.get(&quot;parentPartyId&quot;)!=void&amp;&amp;partySummary.get(&quot;parentPartyId&quot;)!=null">
             <display-entity entity-name="PartySummaryCRMView" key-field-name="partyId" description="${groupName} (${partyId})">
