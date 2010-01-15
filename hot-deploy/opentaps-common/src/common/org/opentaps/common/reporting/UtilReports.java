@@ -519,4 +519,27 @@ public final class UtilReports {
 
         return null;
     }
+
+    /**
+     * Utility method to use inside JR report.
+     * Return empty string if given argument is null, adds prefix and suffix if specified.
+     * @param str base string to check
+     * @param prefix a string that will be added before base string
+     * @param suffix a string that will be added after base string
+     * @return A string that is concatenation of the arguments or empty string if str is null
+     */
+    public static String emptyIfNull(String str, String prefix, String suffix ) {
+        if (str == null) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        if (UtilValidate.isNotEmpty(prefix)) {
+            sb.append(prefix);
+        }
+        sb.append(str);
+        if (UtilValidate.isNotEmpty(suffix)) {
+            sb.append(suffix);
+        }
+        return sb.toString();
+    }
 }
