@@ -41,7 +41,7 @@
 <#assign closeButton><@submitFormLinkConfirm form="closeProductionRunForm" text=uiLabelMap.WarehouseCloseProductionRun /></#assign>
 
 <@form name="revertProductionRunForm" url="revertProductionRun" productionRunId="${productionRunId}" />
-<#assign revertButton><@submitFormLinkConfirm form="revertProducitonRunForm" text=uiLabelMap.WarehouseManufacturingRevert /></#assign>
+<#assign revertButton><@submitFormLinkConfirm form="revertProductionRunForm" text=uiLabelMap.WarehouseManufacturingRevert /></#assign>
 
 <#assign menuButtons = printButton />
 
