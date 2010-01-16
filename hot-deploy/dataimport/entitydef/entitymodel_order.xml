@@ -107,36 +107,38 @@
     <entity entity-name="DataImportOrderItem"
             package-name="org.opentaps.dataimport.orders"
             title="Intermediate import entity for order item data.">
-        <field name="orderId" type="id-ne"></field>
-        <field name="productId" type="id"></field>
-        <field name="quantity" type="floating-point"></field>
-        <field name="quantityShipped" type="floating-point">
+        <field name="orderId"               type="id-ne" />
+        <field name="productId"             type="id" />
+        <field name="productName"           type="description " />
+        <field name="productSku"            type="id"/>
+        <field name="quantity"              type="floating-point" />
+        <field name="quantityShipped"       type="floating-point">
             <description>Quantity of this order item already shipped, meaningful only for not closed orders.
             </description>
         </field>
-        <field name="price" type="currency-amount"></field>
-        <field name="itemTax" type="currency-amount">
+        <field name="price"                 type="currency-amount" />
+        <field name="itemTax"               type="currency-amount">
             <description>Line item tax. Recommended for invoicing and financials.</description>
         </field>
-        <field name="taxAuthPartyId" type="id">
+        <field name="taxAuthPartyId"        type="id">
             <description>The partyId of the tax authority in TaxAuthority. Recommended for invoicing and financials.
             </description>
         </field>
-        <field name="itemAdjustmentsTotal" type="currency-amount"></field>
-        <field name="customerPo" type="id"></field>
-        <field name="comments" type="comment"></field>
-        <field name="importStatusId" type="id-ne">
+        <field name="itemAdjustmentsTotal"  type="currency-amount" />
+        <field name="customerPo"            type="id" />
+        <field name="comments"              type="comment" />
+        <field name="importStatusId"        type="id-ne">
             <description>Status of record import. Null is the same as DATAIMP_NOT_PROC.</description>
         </field>
-        <field name="importError" type="very-long">
+        <field name="importError"           type="very-long">
             <description>Error report for failed imports.</description>
         </field>
-        <field name="processedTimestamp" type="date-time">
+        <field name="processedTimestamp"    type="date-time">
             <description>Special field for system to record when entry was successfully imported.
                 Do not use for any other purpose.
             </description>
         </field>
-        <field name="orderItemSeqId" type="id">
+        <field name="orderItemSeqId"        type="id">
             <description>Special field for system to record the primary orderItemSeqId created against this order item
                 record.
                 Do not use for any other purpose.
