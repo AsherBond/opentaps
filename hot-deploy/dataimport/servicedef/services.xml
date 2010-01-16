@@ -112,8 +112,7 @@
                 field or calculated from orderItems and orderAdjustments
         </description>
         <attribute type="String" mode="IN" name="companyPartyId" optional="false"/>
-        <!--todo make the below optional-->
-        <attribute type="Boolean" mode="IN" name="readProductStoreFromTable" optional="false"/>
+        <!--todo make the below optional-->        
         <attribute type="Boolean" mode="IN" name="readShippingAddressFromTable" optional="true"/>
         <attribute type="String" mode="IN" name="productStoreId" optional="true"/>
         <attribute type="String" mode="IN" name="prodCatalogId" optional="true"/>

@@ -31,6 +31,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.base.constants.ContactMechTypeConstants;
+import org.opentaps.base.constants.ProductTypeConstants;
 import org.opentaps.base.constants.StatusItemConstants;
 import org.opentaps.base.entities.*;
 import org.opentaps.common.party.PartyContactHelper;
@@ -69,7 +70,6 @@ public class OrderImportServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String companyPartyId = (String) context.get("companyPartyId");
-        Boolean readProductStoreFromTable = (Boolean) context.get("readProductStoreFromTable");
         String productStoreId = (String) context.get("productStoreId");
         String prodCatalogId = (String) context.get("prodCatalogId");
         // AG24012008: purchaseOrderShipToContactMechId is needed to get the MrpOrderInfo.shipGroupContactMechId used by the MRP run
@@ -146,8 +146,9 @@ public class OrderImportServices {
                     }
 
                     List<GenericValue> toStore = OrderImportServices.decodeOrder(orderHeader, companyPartyId, productStore, prodCatalogId, purchaseOrderShipToContactMechId, importEmptyOrders.booleanValue(), calculateGrandTotal.booleanValue(), reserveInventory, readShippingAddressFromTable.booleanValue(), delegator, dispatcher, userLogin);
-                    if (toStore == null) {
+                    if (toStore == null || toStore.size()==0) {
                         Debug.logWarning("Import of orderHeader[" + orderHeader.get("orderId") + "] was unsuccessful.", MODULE);
+                        continue;
                     }
 
                     TransactionUtil.begin();
@@ -295,10 +296,11 @@ public class OrderImportServices {
      */
     @SuppressWarnings("unchecked")
     private static List decodeOrder(GenericValue externalOrderHeader, String companyPartyId, GenericValue productStore, String prodCatalogId, String purchaseOrderShipToContactMechId, boolean importEmptyOrders, boolean calculateGrandTotal, boolean reserveInventory, boolean readShippingAddressFromTable, GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericEntityException, Exception {
+        List toStore = FastList.newInstance();
         //todo move this at the beginning of the class
         DataImportOrderHeader dataImportOrderHeader = new DataImportOrderHeader();
         dataImportOrderHeader.fromMap(externalOrderHeader);
-       
+
         String orderId = externalOrderHeader.getString("orderId");
         String orderTypeId = externalOrderHeader.getString("orderTypeId");
         if (UtilValidate.isEmpty(orderTypeId)) {
@@ -598,14 +600,26 @@ public class OrderImportServices {
             orderItemInput.put("orderItemTypeId", "PRODUCT_ORDER_ITEM");
             if (UtilValidate.isNotEmpty(externalOrderItem.get("productId"))) {
                 orderItemInput.put("productId", externalOrderItem.getString("productId"));
-                //todo we remove foreign key association to product so this won't work
-                // GenericValue product = externalOrderItem.getRelatedOneCache("Product");
                 GenericValue product = delegator.findByPrimaryKeyCache("Product", UtilMisc.toMap("productId", externalOrderItem.getString("productId")));
                 if (UtilValidate.isNotEmpty(product)) {
                     orderItemInput.put("itemDescription", product.getString("productName"));
                 } else {
-                    Debug.logError("Product [" + externalOrderItem.getString("productId") + "] does not exist", MODULE);
-                    return FastList.newInstance();
+                    Debug.logWarning("Product [" + externalOrderItem.getString("productId") + "] does not exist! Creating a new one from order items", MODULE);
+                    //in case the product in the order is not in Opentaps we create a default one
+                    Product newProduct = new Product();
+                    newProduct.setProductId(externalOrderItem.getString("productId"));
+                    newProduct.setInternalName(externalOrderItem.getString("productName"));
+                    newProduct.setProductName(externalOrderItem.getString("productName"));
+                    newProduct.setProductTypeId(ProductTypeConstants.Good.FINISHED_GOOD);
+                    product = delegator.makeValue(newProduct.getBaseEntityName(), newProduct.toMap());
+                    toStore.add(product);
+                    //We associate the Sku to the product
+                    GoodIdentification newProductSku = new GoodIdentification() ;
+                    newProductSku.setGoodIdentificationTypeId("SKU");
+                    newProductSku.setProductId(product.getString(Product.Fields.productId.toString()));
+                    newProductSku.setIdValue(externalOrderItem.getString("productSku"));
+                    GenericValue goodIdentification = delegator.makeValue(newProductSku.getBaseEntityName(), newProductSku.toMap());
+                    toStore.add(goodIdentification);
                 }
             }
             if (isSalesOrder && UtilValidate.isNotEmpty(prodCatalogId)) {
@@ -744,7 +758,7 @@ public class OrderImportServices {
         externalOrderHeader.set("importError", null); // clear this out in case it had an exception originally
 
         // Add everything to the store list here to avoid problems with having to derive more values for order header, etc.
-        List toStore = FastList.newInstance();
+
         toStore.add(delegator.makeValue("OrderHeader", orderHeaderInput));
         toStore.add(delegator.makeValue("OrderStatus", orderStatusInput));
         toStore.addAll(postalAddressEntities);

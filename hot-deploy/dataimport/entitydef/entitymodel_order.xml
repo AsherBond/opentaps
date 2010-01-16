@@ -109,7 +109,7 @@
             title="Intermediate import entity for order item data.">
         <field name="orderId"               type="id-ne" />
         <field name="productId"             type="id" />
-        <field name="productName"           type="description " />
+        <field name="productName"           type="description" />
         <field name="productSku"            type="id"/>
         <field name="quantity"              type="floating-point" />
         <field name="quantityShipped"       type="floating-point">
