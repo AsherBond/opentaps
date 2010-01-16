@@ -81,7 +81,7 @@ if (organizationPartyId != null) {
 
 //define sections in tab order from left to right
 sections = new ArrayList();
-sections.add(UtilMisc.toMap("uiLabel", "OpentapsMyHome", "uri", "/myHomeMain", "sectionName", "myHome", "hasPermission", true));
+sections.add(UtilMisc.toMap("uiLabel", "DataimportHome", "uri", "/myHomeMain", "sectionName", "myHome", "hasPermission", true));
 
 //show the ofbiz tab last if so desired
 showOfbizTab = UtilConfig.getPropertyBoolean("dataimport", "dataimport.tab.ofbiz.show", false);
