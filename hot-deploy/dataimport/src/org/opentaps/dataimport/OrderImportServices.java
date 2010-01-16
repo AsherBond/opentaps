@@ -590,7 +590,7 @@ public class OrderImportServices {
             GenericValue externalOrderItem = (GenericValue) externalOrderItems.get(count);
 
             String orderItemSeqId = UtilFormatOut.formatPaddedNumber(count + 1, 5);
-            Double quantity = UtilValidate.isEmpty(externalOrderItem.get("quantity")) ? new Double(0) : externalOrderItem.getDouble("quantity");
+            BigDecimal quantity = UtilValidate.isEmpty(externalOrderItem.get("quantity")) ? new BigDecimal(0) : externalOrderItem.getBigDecimal("quantity");
 
             Map orderItemInput = FastMap.newInstance();
             orderItemInput.put("orderId", orderId);
