@@ -472,8 +472,8 @@ public class OrderImportServices {
         }
 
         // handle the shipping total as a whole order one
-        Double shippingTotal = externalOrderHeader.getDouble("shippingTotal");
-        if (shippingTotal != null && shippingTotal > 0.0) {
+        BigDecimal shippingTotal = externalOrderHeader.getBigDecimal("shippingTotal");
+        if (shippingTotal != null && shippingTotal.doubleValue() > 0.0) {
             GenericValue adj = delegator.makeValue("OrderAdjustment");
             adj.put("orderAdjustmentId", delegator.getNextSeqId("OrderAdjustment"));
             adj.put("orderAdjustmentTypeId", "SHIPPING_CHARGES");
@@ -485,9 +485,9 @@ public class OrderImportServices {
         }
 
         // whole order tax, which must have orderTax and taxAuthPartyId defined
-        Double orderTax = externalOrderHeader.getDouble("orderTax");
+        BigDecimal orderTax = externalOrderHeader.getBigDecimal("orderTax");
         String taxAuthPartyId = externalOrderHeader.getString("taxAuthPartyId");
-        if (orderTax != null && orderTax > 0.0 && taxAuthPartyId != null) {
+        if (orderTax != null && orderTax.doubleValue() > 0.0 && taxAuthPartyId != null) {
             GenericValue taxAuth = EntityUtil.getFirst(delegator.findByAndCache("TaxAuthority", UtilMisc.toMap("taxAuthPartyId", taxAuthPartyId)));
             if (taxAuth == null) {
                 Debug.logWarning("Order [" + orderId + "] has a tax to an unknown tax authority.  No entry for taxAuthPartyId [" + taxAuthPartyId + "] found in TaxAuthority.", MODULE);
