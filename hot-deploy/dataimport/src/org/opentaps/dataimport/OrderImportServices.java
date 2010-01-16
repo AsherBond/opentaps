@@ -340,7 +340,7 @@ public class OrderImportServices {
         orderHeaderInput.put("entryDate", UtilDateTime.nowTimestamp());
         orderHeaderInput.put("statusId", orderStatusId);
         orderHeaderInput.put("currencyUom", externalOrderHeader.get("currencyUomId"));
-        orderHeaderInput.put("remainingSubTotal", new Double(0));
+        orderHeaderInput.put("remainingSubTotal", new BigDecimal(0));
         orderHeaderInput.put("productStoreId", isPurchaseOrder ? "PURCHASING" : productStore.getString("productStoreId"));
 
         // main customer and bill to party
@@ -613,13 +613,13 @@ public class OrderImportServices {
             }
             orderItemInput.put("isPromo", "N");
             orderItemInput.put("quantity", quantity);
-            orderItemInput.put("selectedAmount", new Double(0));
+            orderItemInput.put("selectedAmount", new BigDecimal(0));
             if (UtilValidate.isNotEmpty(externalOrderItem.get("price"))) {
-                orderItemInput.put("unitPrice", externalOrderItem.getDouble("price"));
-                orderItemInput.put("unitListPrice", externalOrderItem.getDouble("price"));
+                orderItemInput.put("unitPrice", externalOrderItem.getBigDecimal("price"));
+                orderItemInput.put("unitListPrice", externalOrderItem.getBigDecimal("price"));
             } else {
-                orderItemInput.put("unitPrice", new Double(0));
-                orderItemInput.put("unitListPrice", new Double(0));
+                orderItemInput.put("unitPrice", new BigDecimal(0));
+                orderItemInput.put("unitListPrice", new BigDecimal(0));
             }
             orderItemInput.put("isModifiedPrice", "N");
             if (UtilValidate.isNotEmpty(externalOrderItem.get("comments"))) {
@@ -644,9 +644,9 @@ public class OrderImportServices {
             }
 
             // line item tax, which must have itemTax and taxAuthPartyId defined
-            Double itemTax = externalOrderItem.getDouble("itemTax");
+            BigDecimal itemTax = externalOrderItem.getBigDecimal("itemTax");
             taxAuthPartyId = externalOrderItem.getString("taxAuthPartyId");
-            if (itemTax != null && itemTax > 0.0 && taxAuthPartyId != null) {
+            if (itemTax != null && itemTax.doubleValue() > 0.0 && taxAuthPartyId != null) {
                 GenericValue taxAuth = EntityUtil.getFirst(delegator.findByAndCache("TaxAuthority", UtilMisc.toMap("taxAuthPartyId", taxAuthPartyId)));
                 if (taxAuth == null) {
                     Debug.logWarning("Order Item [" + orderId + "," + orderItemSeqId + "] has a tax to an unknown tax authority.  No entry for taxAuthPartyId [" + taxAuthPartyId + "] found in TaxAuthority.", MODULE);
@@ -683,7 +683,7 @@ public class OrderImportServices {
         }
 
         // updade order header for total
-        orderHeaderInput.put("grandTotal", new Double(orderGrandTotal.doubleValue()));
+        orderHeaderInput.put("grandTotal", orderGrandTotal);
 
         // OrderRoles
 
