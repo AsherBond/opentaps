@@ -4070,6 +4070,8 @@ public interface CommonMessages extends Messages {
     String dataImportOrders();
     @DefaultMessage("Import Products")
     String dataImportProducts();
+    @DefaultMessage("Import Suppliers")
+    String dataImportSuppliers();
     @DefaultMessage("Data Source")
     String dataSource();
     @DefaultMessage("Create Data Source")
@@ -4084,6 +4086,8 @@ public interface CommonMessages extends Messages {
     String dataSourceType();
     @DefaultMessage("Create Data Source Type")
     String dataSourceTypeCreate();
+    @DefaultMessage("Data Import")
+    String dataimportHome();
     @DefaultMessage("Job Name")
     String dataimportJobName();
     @DefaultMessage("Opentaps DataImport Login")
@@ -5474,6 +5478,8 @@ public interface CommonMessages extends Messages {
     String financialsPleasePay();
     @DefaultMessage("Post Transactions")
     String financialsPostTransactions();
+    @DefaultMessage("Posted Amount")
+    String financialsPostedAmount();
     @DefaultMessage("Posted Balance")
     String financialsPostedBalance();
     @DefaultMessage("Posted Balances by GL Account")
@@ -8784,6 +8790,8 @@ public interface CommonMessages extends Messages {
     String opentapsAsOfDate();
     @DefaultMessage("Assign to me")
     String opentapsAssignToMe();
+    @DefaultMessage("No match found")
+    String opentapsAutocompletionNoMatch();
     @DefaultMessage("Begins With")
     String opentapsBeginsWith();
     @DefaultMessage("Billing Address")
@@ -9416,6 +9424,8 @@ public interface CommonMessages extends Messages {
     String opentapsReReserveProduct();
     @DefaultMessage("Received")
     String opentapsReceived();
+    @DefaultMessage("Reference")
+    String opentapsReference();
     @DefaultMessage("Region")
     String opentapsRegion();
     @DefaultMessage("1.4-Preview-3")
@@ -12142,6 +12152,8 @@ public interface CommonMessages extends Messages {
     String pagerExportToExcel();
     @DefaultMessage("First Page")
     String pagerFirstPage();
+    @DefaultMessage("More records per page")
+    String pagerGrowPage();
     @DefaultMessage("Last Page")
     String pagerLastPage();
     @DefaultMessage("Next Page")
@@ -12150,6 +12162,8 @@ public interface CommonMessages extends Messages {
     String pagerPageSize();
     @DefaultMessage("Previous Page")
     String pagerPreviousPage();
+    @DefaultMessage("Less records per page")
+    String pagerShrinkPage();
     @DefaultMessage("Partner Id")
     String partnerId();
     @DefaultMessage("Partner List")
@@ -15542,6 +15556,8 @@ public interface CommonMessages extends Messages {
     String productProductWidth();
     @DefaultMessage("Products")
     String productProducts();
+    @DefaultMessage("Products from Excel")
+    String productProductsExcel();
     @DefaultMessage("Products Last Viewed")
     String productProductsLastViewed();
     @DefaultMessage("Leave blank to auto-generate a unique promo code")
@@ -16736,6 +16752,8 @@ public interface CommonMessages extends Messages {
     String quoteReportItemSubtotal();
     @DefaultMessage("Unit Price")
     String quoteReportItemUnitPrice();
+    @DefaultMessage("Notice: Our acceptance of a purchase order does not necessarily constitute acceptance of all terms specified therein. Quotes are subject to all catalog terms and our approval when your order is placed. Terms are net 30. Shipping is FOB factory. There may be a variance in product dimensions and a +/- 10% over/underrun factor.")
+    String quoteReportNotice();
     @DefaultMessage("Quoted items")
     String quoteReportProductItemTitle();
     @DefaultMessage("Additional charges")
@@ -16824,6 +16842,8 @@ public interface CommonMessages extends Messages {
     String supplierList();
     @DefaultMessage("Supplier Name")
     String supplierName();
+    @DefaultMessage("Suppliers from Excel")
+    String suppliersExcel();
     @DefaultMessage("Agreement Termination")
     String termType_AGREEMENT_TERMINATIO();
     @DefaultMessage("Incoterm Cost and Freight")
