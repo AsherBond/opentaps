@@ -2,10 +2,10 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Invoice" pageWidth="612" pageHeight="792" columnWidth="500" leftMargin="56" rightMargin="56" topMargin="56" bottomMargin="28">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
-	<import value="org.opentaps.common.reporting.UtilReports"/>
 	<import value="net.sf.jasperreports.engine.*"/>
-	<import value="org.opentaps.base.entities.*"/>
+	<import value="org.opentaps.common.reporting.UtilReports"/>
 	<import value="java.util.*"/>
+	<import value="org.opentaps.base.entities.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<import value="org.opentaps.domain.billing.invoice.Invoice"/>
 	<parameter name="organizationLogoImageUrl" class="java.lang.String" isForPrompting="false"/>
@@ -115,7 +115,7 @@
 				<textElement>
 					<font pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[(((Map)$P{organizationPostalAddress}).get("city")) + ", " + $P{stateProvinceAbbrv} + " " + (((Map)$P{organizationPostalAddress}).get("postalCode")) + ", " + $P{countryName}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[(((Map) $P{organizationPostalAddress}).get("city")) + UtilReports.emptyIfNull($P{stateProvinceAbbrv}, ", ", null) + " " + (((Map) $P{organizationPostalAddress}).get("postalCode")) + UtilReports.emptyIfNull($P{countryName}, ", ", null)]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="textField-5" x="0" y="106" width="241" height="13" isRemoveLineWhenBlank="true"/>
@@ -307,11 +307,11 @@
 				<subreportParameter name="firstLine">
 					<subreportParameterExpression><![CDATA[$P{firstLine}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="REPORT_DATA_SOURCE">
-					<subreportParameterExpression><![CDATA[$P{extraDetails}]]></subreportParameterExpression>
-				</subreportParameter>
 				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
 					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="REPORT_DATA_SOURCE">
+					<subreportParameterExpression><![CDATA[$P{extraDetails}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://financials/webapp/financials/reports/repository/InvoiceFirstLine.jrxml")]]></subreportExpression>
 			</subreport>
@@ -594,11 +594,11 @@
 				<subreportParameter name="paymentListLabel">
 					<subreportParameterExpression><![CDATA[$P{paymentListLabel}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="REPORT_DATA_SOURCE">
-					<subreportParameterExpression><![CDATA[$P{paymentList}]]></subreportParameterExpression>
-				</subreportParameter>
 				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
 					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="REPORT_DATA_SOURCE">
+					<subreportParameterExpression><![CDATA[$P{paymentList}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://financials/webapp/financials/reports/repository/InvoicePayments.jrxml")]]></subreportExpression>
 			</subreport>
@@ -609,11 +609,11 @@
 				<subreportParameter name="REPORT_LOCALE">
 					<subreportParameterExpression><![CDATA[$P{REPORT_LOCALE}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="REPORT_DATA_SOURCE">
-					<subreportParameterExpression><![CDATA[$P{adjustmentList}]]></subreportParameterExpression>
-				</subreportParameter>
 				<subreportParameter name="REPORT_RESOURCE_BUNDLE">
 					<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="REPORT_DATA_SOURCE">
+					<subreportParameterExpression><![CDATA[$P{adjustmentList}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://financials/webapp/financials/reports/repository/InvoiceAdjustments.jrxml")]]></subreportExpression>
 			</subreport>

@@ -3,6 +3,7 @@
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="org.opentaps.common.reporting.UtilReports"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<style name="Statement Style" isDefault="true" fontName="Courier"/>
@@ -227,10 +228,8 @@ from invoice]]>
 					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{org_city} +
-", " +
-$P{org_state_province_abbrv} +
-" " +
-$P{org_postal_code}]]></textFieldExpression>
+UtilReports.emptyIfNull($P{org_state_province_abbrv}, ", ", null) +
+" " + $P{org_postal_code}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="textField-7" style="Statement Style" x="154" y="57" width="145" height="9"/>
@@ -283,9 +282,8 @@ $P{org_postal_code}]]></textFieldExpression>
 					<font size="8" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{org_city} +
-", " +
-$P{org_state_province_abbrv} +
-$P{org_postal_code}]]></textFieldExpression>
+UtilReports.emptyIfNull($P{org_state_province_abbrv}, ", ", null) +
+" " + $P{org_postal_code}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="textField-11" style="Statement Style" x="464" y="57" width="145" height="9"/>

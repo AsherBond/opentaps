@@ -2,9 +2,10 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PostalAddress" pageWidth="535" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="org.opentaps.common.reporting.UtilReports"/>
 	<import value="net.sf.jasperreports.engine.*"/>
-	<import value="java.util.*"/>
 	<import value="org.opentaps.base.entities.*"/>
+	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<parameter name="postalAddress" class="java.lang.Object" isForPrompting="false">
 		<parameterDescription><![CDATA[Instance of PostalAddress class that has to be appear in the subreport.]]></parameterDescription>
@@ -107,7 +108,7 @@
 				<textElement>
 					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[((PostalAddress)$P{postalAddress}).getCity() + " " + ((Geo)$V{stateGeo}).getAbbreviation() + " " + ((PostalAddress)$P{postalAddress}).getPostalCode()]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[((PostalAddress) $P{postalAddress}).getCity() + ($V{stateGeo} != null ? UtilReports.emptyIfNull(((Geo) $V{stateGeo}).getAbbreviation(), " ", null) : "") + " " + ((PostalAddress) $P{postalAddress}).getPostalCode()]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="textField-6" x="0" y="65" width="530" height="13" isRemoveLineWhenBlank="true"/>
@@ -120,7 +121,7 @@
 				<textElement>
 					<font size="9" pdfFontName="DejaVuSans.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[((Geo)$V{countryGeo}).getAbbreviation()]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{countryGeo} != null ? UtilReports.emptyIfNull(((Geo)$V{countryGeo}).getAbbreviation(), null, null) : null]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="defaultPartyNameField" x="0" y="0" width="530" height="13">
