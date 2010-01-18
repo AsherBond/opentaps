@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<project name="ofbiz applications deploymemt" default="package-applications-jboss" basedir=".">
+
+    <!-- ================================================================== -->
+    <!-- set the applications properties                                       -->
+    <!-- ================================================================== -->
+
+    <property name="applications.dir" value="${basedir}/applications"/>
+
+    <!-- ================================================================== -->
+    <!-- copy the applications libs into the ear directory                  -->
+    <!-- ================================================================== -->
+
+    <target name="copy-applications-libs">
+        <copy todir="${ear.lib.dir}" flatten="true" overwrite="true">
+            <fileset dir="${applications.dir}/party/build/lib/" includes="ofbiz-party.jar"/>
+            <fileset dir="${applications.dir}/securityext/build/lib/" includes="ofbiz-securityext.jar"/>
+            <fileset dir="${applications.dir}/content/lib/" includes="lucene-2.2.0.jar"/>
+            <fileset dir="${applications.dir}/content/lib/" includes="poi-3.0.1.jar"/>             
+            <fileset dir="${applications.dir}/content/build/lib/" includes="ofbiz-content.jar"/>
+            <fileset dir="${applications.dir}/workeffort/build/lib/" includes="ofbiz-workeffort.jar"/>
+            <fileset dir="${applications.dir}/product/build/lib/" includes="ofbiz-product.jar"/>             
+            <fileset dir="${applications.dir}/manufacturing/build/lib/" includes="ofbiz-manufacturing.jar"/>
+            <fileset dir="${applications.dir}/accounting/build/lib/" includes="ofbiz-accounting.jar"/>             
+            <fileset dir="${applications.dir}/order/build/lib/" includes="ofbiz-order.jar"/>
+            <fileset dir="${applications.dir}/marketing/build/lib/" includes="ofbiz-marketing.jar"/>             
+            <!--<fileset dir="${applications.dir}/ecommerce/build/lib/" includes="ofbiz-ecommerce.jar"/>-->
+        </copy>
+    </target>
+	
+    <!-- ================================================================== -->
+    <!-- package the applications config jars in the ear directory          -->
+    <!-- ================================================================== -->
+
+    <target name="package-applications-config">
+        <jar destfile="${ear.lib.dir}/applications.party.config.jar">
+        	<fileset dir="${applications.dir}/party/config"/>
+        </jar>
+    	
+        <jar destfile="${ear.lib.dir}/applications.party.script.jar">
+            <fileset dir="${applications.dir}/party/script"/>
+        </jar>
+    	
+        <jar destfile="${ear.lib.dir}/applications.securityext.config.jar">
+            <fileset dir="${applications.dir}/securityext/config"/>
+        </jar>
+    	
+        <jar destfile="${ear.lib.dir}/applications.securityext.script.jar">
+            <fileset dir="${applications.dir}/securityext/script"/>
+        </jar>
+    	
+        <jar destfile="${ear.lib.dir}/applications.content.config.jar">
+            <fileset dir="${applications.dir}/content/config"/>
+        </jar>
+    	
+        <jar destfile="${ear.lib.dir}/applications.content.script.jar">
+            <fileset dir="${applications.dir}/content/script"/>
+        </jar>
+    	
+        <!--<jar destfile="${ear.lib.dir}/applications.content.dtd.jar">
+            <fileset dir="${applications.dir}/content/dtd"/>
+        </jar>-->
+    	
+        <jar destfile="${ear.lib.dir}/applications.workeffort.config.jar">
+            <fileset dir="${applications.dir}/workeffort/config"/>
+        </jar>
+    	
+        <jar destfile="${ear.lib.dir}/applications.workeffort.script.jar">
+            <fileset dir="${applications.dir}/workeffort/script"/>
+        </jar>
+
+        <jar destfile="${ear.lib.dir}/applications.humanres.config.jar">
+            <fileset dir="${applications.dir}/humanres/config"/>
+        </jar>
+    	
+        <jar destfile="${ear.lib.dir}/applications.product.config.jar">
+            <fileset dir="${applications.dir}/product/config"/>
+        </jar>
+    	
+        <jar destfile="${ear.lib.dir}/applications.product.script.jar">
+            <fileset dir="${applications.dir}/product/script"/>
+        </jar>
+
+        <jar destfile="${ear.lib.dir}/applications.manufacturing.config.jar">
+            <fileset dir="${applications.dir}/manufacturing/config"/>
+        </jar>
+    	
+        <jar destfile="${ear.lib.dir}/applications.manufacturing.script.jar">
+            <fileset dir="${applications.dir}/manufacturing/script"/>
+        </jar>
+    	
+        <jar destfile="${ear.lib.dir}/applications.accounting.script.jar">
+            <fileset dir="${applications.dir}/accounting/script"/>
+        </jar>
+    	
+        <jar destfile="${ear.lib.dir}/applications.accounting.config.jar">
+            <fileset dir="${applications.dir}/accounting/config"/>
+        </jar>
+    	
+        <jar destfile="${ear.lib.dir}/applications.order.config.jar">
+            <fileset dir="${applications.dir}/order/config"/>
+        </jar>
+    	
+        <jar destfile="${ear.lib.dir}/applications.order.script.jar">
+            <fileset dir="${applications.dir}/order/script"/>
+        </jar>
+    	
+        <jar destfile="${ear.lib.dir}/applications.order.email.jar">
+            <fileset dir="${applications.dir}/order/email"/>
+        </jar>
+    	
+        <jar destfile="${ear.lib.dir}/applications.marketing.script.jar">
+            <fileset dir="${applications.dir}/marketing/script"/>
+        </jar>
+    	
+        <jar destfile="${ear.lib.dir}/applications.marketing.config.jar">
+            <fileset dir="${applications.dir}/marketing/config"/>
+        </jar>
+    	
+        <!--<jar destfile="${ear.lib.dir}/applications.ecommerce.config.jar">
+            <fileset dir="${applications.dir}/ecommerce/config"/>
+        </jar>
+        
+        <jar destfile="${ear.lib.dir}/applications.ecommerce.script.jar">
+            <fileset dir="${applications.dir}/ecommerce/script"/>
+        </jar>-->
+	</target>
+
+    <!-- ================================================================== -->
+    <!-- package the applications webapps into the ear directory            -->
+    <!-- ================================================================== -->
+	
+    <target name="package-applications-webapp">    	
+    	<!-- party -->
+    	<mkdir dir="${ear.dir}/partymgr.war"/>
+    	
+        <copy todir="${ear.dir}/partymgr.war">
+        	<fileset dir="${applications.dir}/party/webapp/partymgr"/>
+        </copy>
+    	
+        <!-- content -->
+        <mkdir dir="${ear.dir}/content.war"/>
+         
+        <copy todir="${ear.dir}/content.war">
+            <fileset dir="${applications.dir}/content/webapp/content"/>
+        </copy>
+        
+        <!-- workeffort -->
+        <mkdir dir="${ear.dir}/workeffort.war"/>
+        
+        <copy todir="${ear.dir}/workeffort.war">
+            <fileset dir="${applications.dir}/workeffort/webapp/workeffort"/>
+        </copy>
+
+        <!-- product -->
+        <mkdir dir="${ear.dir}/catalog.war"/>
+        
+        <copy todir="${ear.dir}/catalog.war">
+            <fileset dir="${applications.dir}/product/webapp/catalog"/>
+        </copy>
+
+        <mkdir dir="${ear.dir}/facility.war"/>
+         
+        <copy todir="${ear.dir}/facility.war">
+            <fileset dir="${applications.dir}/product/webapp/facility"/>
+        </copy>
+
+        <!-- manufacturing -->
+        <mkdir dir="${ear.dir}/manufacturing.war"/>
+         
+        <copy todir="${ear.dir}/manufacturing.war">
+            <fileset dir="${applications.dir}/manufacturing/webapp/manufacturing"/>
+        </copy>
+        
+        <!-- accounting -->
+        <mkdir dir="${ear.dir}/accounting.war"/>
+        
+        <copy todir="${ear.dir}/accounting.war">
+            <fileset dir="${applications.dir}/accounting/webapp/accounting"/>
+        </copy>
+
+        <!-- order -->
+        <mkdir dir="${ear.dir}/ordermgr.war"/>
+         
+        <copy todir="${ear.dir}/ordermgr.war">
+            <fileset dir="${applications.dir}/order/webapp/ordermgr"/>
+        </copy>
+        
+        <!-- marketing -->
+        <mkdir dir="${ear.dir}/marketing.war"/>
+        
+        <copy todir="${ear.dir}/marketing.war">
+            <fileset dir="${applications.dir}/marketing/webapp/marketing"/>
+        </copy>
+
+        <!-- ecommerce -->
+        <!--<mkdir dir="${ear.dir}/ecommerce.war"/>
+        
+        <copy todir="${ear.dir}/ecommerce.war">
+            <fileset dir="${applications.dir}/ecommerce/webapp/ecommerce"/>
+        </copy>
+
+        <mkdir dir="${ear.dir}/ecomclone.war"/>
+         
+        <copy todir="${ear.dir}/ecomclone.war">
+            <fileset dir="${applications.dir}/ecommerce/webapp/ecomclone"/>
+        </copy>-->    	
+    </target>
+        	
+    <!-- ================================================================== -->
+    <!-- package ofbiz applications                                         -->
+    <!-- ================================================================== -->
+
+    <target name="package-applications-jboss" depends="">
+
+        <echo message="[package-applications-jboss] =========== start =========="/>
+    	
+        <antcall target="copy-applications-libs"/>
+
+        <antcall target="package-applications-config"/>
+    	
+        <antcall target="package-applications-webapp"/>
+
+        <echo message="[package-applications-jboss] ============ end ==========="/>
+    	
+    </target>
+
+</project>

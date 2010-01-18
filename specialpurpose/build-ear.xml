@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<project name="ofbiz specialpurpose deploymemt" default="package-specialpurpose-jboss" basedir=".">
+
+    <!-- ================================================================== -->
+    <!-- set the specialpurpose properties                                  -->
+    <!-- ================================================================== -->
+
+    <property name="specialpurpose.dir" value="${basedir}/specialpurpose"/>
+
+    <!-- ================================================================== -->
+    <!-- copy the specialpurpose libs into the ear directory                -->
+    <!-- ================================================================== -->
+
+    <target name="copy-specialpurpose-libs">
+        <copy todir="${ear.lib.dir}" flatten="true" overwrite="true">
+            <fileset dir="${specialpurpose.dir}/pos/lib/" includes="jpos18-controls.jar"/>
+            <fileset dir="${specialpurpose.dir}/pos/lib/" includes="jcl.jar"/>
+            <fileset dir="${specialpurpose.dir}/pos/lib/" includes="looks-2.0.2.jar"/>
+            <fileset dir="${specialpurpose.dir}/pos/build/lib/" includes="ofbiz-pos.jar"/>             
+            <fileset dir="${specialpurpose.dir}/hhfacility/build/lib/" includes="ofbiz-hhfacility.jar"/>
+            <fileset dir="${specialpurpose.dir}/assetmaint/build/lib/" includes="ofbiz-assetmaint.jar"/>           
+            <fileset dir="${specialpurpose.dir}/googlebase/build/lib/" includes="ofbiz-googlebase.jar"/>
+            <fileset dir="${specialpurpose.dir}/ebay/build/lib/" includes="ofbiz-ebay.jar"/>
+        </copy>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- package the specialpurpose config jars in the ear directory        -->
+    <!-- ================================================================== -->
+
+    <target name="package-specialpurpose-config">
+        <jar destfile="${ear.lib.dir}/specialpurpose.pos.config.jar">
+            <fileset dir="${specialpurpose.dir}/pos/config"/>
+        </jar>
+
+        <jar destfile="${ear.lib.dir}/specialpurpose.pos.styles.jar">
+            <fileset dir="${specialpurpose.dir}/pos/styles"/>
+        </jar>
+
+        <jar destfile="${ear.lib.dir}/specialpurpose.pos.screens.jar">
+            <fileset dir="${specialpurpose.dir}/pos/screens"/>
+        </jar>
+
+        <jar destfile="${ear.lib.dir}/specialpurpose.hhfacility.script.jar">
+            <fileset dir="${specialpurpose.dir}/hhfacility/script"/>
+        </jar>
+
+        <jar destfile="${ear.lib.dir}/specialpurpose.assetmaint.config.jar">
+            <fileset dir="${specialpurpose.dir}/assetmaint/config"/>
+        </jar>
+
+        <jar destfile="${ear.lib.dir}/specialpurpose.assetmaint.script.jar">
+            <fileset dir="${specialpurpose.dir}/assetmaint/script"/>
+        </jar>
+
+        <jar destfile="${ear.lib.dir}/specialpurpose.googlebase.config.jar">
+            <fileset dir="${specialpurpose.dir}/googlebase/config"/>
+        </jar>
+
+        <jar destfile="${ear.lib.dir}/specialpurpose.ebay.config.jar">
+            <fileset dir="${specialpurpose.dir}/ebay/config"/>
+        </jar>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- package the specialpurpose webapps into the ear directory          -->
+    <!-- ================================================================== -->
+
+    <target name="package-specialpurpose-webapp">    	
+    	  <!-- hhfacility -->
+    	  <mkdir dir="${ear.dir}/hhfacility.war"/>
+
+        <copy todir="${ear.dir}/hhfacility.war">
+            <fileset dir="${specialpurpose.dir}/hhfacility/webapp/hhfacility"/>
+        </copy>
+
+        <!-- assetmaint -->
+        <mkdir dir="${ear.dir}/assetmaint.war"/>
+
+        <copy todir="${ear.dir}/assetmaint.war">
+            <fileset dir="${specialpurpose.dir}/assetmaint/webapp/assetmaint"/>
+        </copy>
+
+        <!-- cmssite -->
+        <mkdir dir="${ear.dir}/cmssite.war"/>
+
+        <copy todir="${ear.dir}/cmssite.war">
+            <fileset dir="${specialpurpose.dir}/cmssite/webapp/cmssite"/>
+        </copy>
+
+        <!-- googlebase -->
+        <mkdir dir="${ear.dir}/googlebase.war"/>
+
+        <copy todir="${ear.dir}/googlebase.war">
+            <fileset dir="${specialpurpose.dir}/googlebase/webapp/googlebase"/>
+        </copy>
+
+        <!-- ebay -->
+        <mkdir dir="${ear.dir}/ebay.war"/>
+
+        <copy todir="${ear.dir}/ebay.war">
+            <fileset dir="${specialpurpose.dir}/ebay/webapp/ebay"/>
+        </copy>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- package ofbiz specialpurpose                                       -->
+    <!-- ================================================================== -->
+
+    <target name="package-specialpurpose-jboss" depends="">
+        <echo message="[package-specialpurpose-jboss] =========== start =========="/>
+    	
+        <antcall target="copy-specialpurpose-libs"/>
+
+        <antcall target="package-specialpurpose-config"/>
+
+        <antcall target="package-specialpurpose-webapp"/>
+
+        <echo message="[package-specialpurpose-jboss] ============ end ==========="/>
+    </target>
+
+</project>
