@@ -31,7 +31,7 @@ public class StateAutocomplete extends EntityAutocomplete {
      * @param fieldWidth the field size in pixels
      */
     public StateAutocomplete(String fieldLabel, String name, int fieldWidth) {
-        super(fieldLabel, name, fieldWidth, CountryStateLookupConfiguration.URL_SUGGEST_STATES);
+        super(fieldLabel, name, fieldWidth, CountryStateLookupConfiguration.URL_SUGGEST_STATES, CountryStateLookupConfiguration.OUT_GEO_NAME);
     }
 
     /**
