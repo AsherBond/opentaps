@@ -30,49 +30,17 @@
   <target name="copy-framework-libs">
     <copy todir="${ear.lib.dir}" flatten="true" overwrite="true">
       <!-- base -->
-      <fileset dir="${framework.dir}/base/lib/commons/" includes="commons-modeler-2.0.jar"/>
-      <fileset dir="${framework.dir}/base/lib/commons/" includes="commons-pool-1.3.jar"/>
-      <fileset dir="${framework.dir}/base/lib/commons/" includes="commons-vfs-20070730.jar"/>
-      <fileset dir="${framework.dir}/base/lib/commons/" includes="commons-validator-1.3.1.jar"/>
-      <fileset dir="${framework.dir}/base/lib/commons/" includes="commons-fileupload-1.2.jar"/>
-      <fileset dir="${framework.dir}/base/lib/commons/" includes="commons-io-1.3.1.jar"/>
-      <fileset dir="${framework.dir}/base/lib/commons/" includes="commons-cli-1.0.jar"/>
-      <fileset dir="${framework.dir}/base/lib/commons/" includes="commons-primitives-1.0.jar"/>
-      <fileset dir="${framework.dir}/base/lib/commons/" includes="commons-lang-2.3.jar"/>
-      <fileset dir="${framework.dir}/base/lib/commons/" includes="commons-beanutils-1.7.0.jar"/>
-      <fileset dir="${framework.dir}/base/lib/commons/" includes="commons-net-1.4.1.jar"/>
-      <fileset dir="${framework.dir}/base/lib/commons/" includes="commons-discovery-0.4.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="ant-1.7.0.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="xml-apis-2.8.1.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="javolution-5.2.3.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="icu4j_3_6.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="httpunit.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="jakarta-regexp-1.5.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="junitperf.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="scripting/antlr-2.7.6.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="scripting/asm-2.2.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="scripting/asm-analysis-2.2.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="scripting/asm-tree-2.2.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="scripting/asm-util-2.2.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="scripting/groovy-1.5.6.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="scripting/janino-2.5.15.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="scripting/jython-nooro.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="scripting/jakarta-oro-2.0.8.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="scripting/bsf-2.4.0.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="scripting/bsh-2.0b4.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="Tidy.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="xercesImpl-2.8.1.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="junit.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="resolver-2.8.1.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="jdbm-1.0.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="log4j-1.2.15.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="ant-launcher-1.7.0.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="avalon-util-exception-1.0.0.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="freemarker-2.3.15.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="owasp-esapi-full-java-1.4.jar"/>
-      <fileset dir="${framework.dir}/base/lib/" includes="antisamy-bin.1.2.jar"/>
-      <fileset dir="${framework.dir}/base/build/lib/" includes="ofbiz-base.jar"/>
-      <fileset dir="${framework.dir}/start/build/lib/" includes="ofbiz.jar"/>
+      <fileset dir="${framework.dir}/base/lib/">
+        <include name="**/*.jar"/>
+        <exclude name="**/avalon-framework*.jar"/>
+        <exclude name="**/commons-io-*.jar"/>
+      </fileset>
+      <fileset dir="${framework.dir}/base/build/lib/">
+        <include name="**/*.jar"/>
+      </fileset>
+      <fileset dir="${framework.dir}/start/build/lib/">
+        <include name="**/*.jar"/>
+      </fileset>
 
       <!-- entity -->
       <fileset dir="${framework.dir}/entity/lib/" includes="commons-dbcp-1.3-20080708-r674758.jar"/>
@@ -92,35 +60,20 @@
       <fileset dir="${framework.dir}/common/build/lib/" includes="ofbiz-common.jar"/>
 
       <!-- service -->
-      <fileset dir="${framework.dir}/service/lib/" includes="axis.jar"/>
-      <fileset dir="${framework.dir}/service/lib/" includes="wsdl4j.jar"/>
-      <fileset dir="${framework.dir}/service/lib/" includes="axis-ant.jar"/>
+      <fileset dir="${framework.dir}/service/lib/">
+        <include name="**/*.jar"/>
+      </fileset>
       <fileset dir="${framework.dir}/service/build/lib/" includes="ofbiz-service.jar"/>
 
       <!-- entityext -->
       <fileset dir="${framework.dir}/entityext/build/lib/" includes="ofbiz-entityext.jar"/>
 
       <!-- webapp -->
-      <fileset dir="${framework.dir}/webapp/lib/" includes="jasperreports-2.0.1.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="jasperreports-2.0.1-applet.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="MinML2.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="velocity-dep-1.3.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="rome-0.9.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="json-lib-0.9.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="xmlrpc-common-3.0.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="ezmorph-0.9.1.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="xmlrpc-client-3.0.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="jdom-1.0.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="xmlrpc-server-3.0.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="xmlgraphics-commons-1.1.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="ws-commons-util-1.0.1.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="batik-all-1.6.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="ws-commons-java5-1.0.1.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="DataVision.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="velocity-1.3.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="fop-0.93.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="itext-1.3.6.jar"/>
-      <fileset dir="${framework.dir}/webapp/lib/" includes="barcode4j-fop-ext-0.93.jar"/>
+      <fileset dir="${framework.dir}/webapp/lib/">
+        <include name="**/*.jar"/>
+        <exclude name="**/xalan*.jar"/>
+        <exclude name="**/serializer-*.jar"/>
+      </fileset>
       <fileset dir="${framework.dir}/webapp/build/lib/" includes="ofbiz-webapp.jar"/>
 
       <!-- guiapp -->

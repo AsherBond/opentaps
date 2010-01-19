@@ -40,6 +40,7 @@
         <exclude name="**/aspectwerkz/jrexx*.jar"/>
         <exclude name="**/aspectwerkz/qdox*.jar"/>
         <exclude name="**/aspectwerkz/trove*.jar"/>
+        <exclude name="**/ant/*.jar"/>
       </fileset>
 
       <!-- crmsfa -->
