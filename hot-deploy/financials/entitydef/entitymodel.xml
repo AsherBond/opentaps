@@ -465,7 +465,16 @@ under the License.
 
        <alias-all entity-alias="GRE"/>
        <alias-all entity-alias="A"/>
-       <alias-all entity-alias="ATE"/>
+       <alias-all entity-alias="ATE">
+         <exclude field="description"/>
+         <exclude field="voucherRef"/>
+         <exclude field="partyId"/>
+         <exclude field="roleTypeId"/>
+       </alias-all>
+       <alias entity-alias="ATE" name="entryDescription" field="description"/>
+       <alias entity-alias="ATE" name="entryVoucherRef" field="voucherRef"/>
+       <alias entity-alias="ATE" name="entryPartyId" field="partyId"/>
+       <alias entity-alias="ATE" name="entryRoleTypeId" field="roleTypeId"/>
        <view-link entity-alias="GRE" rel-entity-alias="A">
            <key-map field-name="acctgTransId"/>
        </view-link>
@@ -1435,7 +1444,7 @@ under the License.
         <key-map field-name="paymentId"/>
       </relation>
       <relation type="one-nofk" rel-entity-name="PaymentApplication">
-        <key-map field-name="applPaymentApplicationId"/>
+        <key-map field-name="applPaymentApplicationId" rel-field-name="paymentApplicationId"/>
       </relation>
       <relation type="one-nofk" rel-entity-name="StatusItem">
         <key-map field-name="statusId"/>

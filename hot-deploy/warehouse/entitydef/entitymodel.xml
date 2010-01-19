@@ -157,7 +157,10 @@
             <exclude field="statusId"/>
             <exclude field="facilityId"/>
         </alias-all>            
-        <alias-all entity-alias="OH"/>
+        <alias-all entity-alias="OH">
+          <!-- new field, using the one in OISGIR instead -->
+          <exclude field="priority"/>
+        </alias-all>
         <alias-all entity-alias="OISGIR"/>
         <alias-all entity-alias="II">
             <exclude field="statusId"/>
@@ -223,7 +226,12 @@
         <member-entity entity-alias="INV" entity-name="InventoryItem"/>
         <alias-all entity-alias="SHP"/>
         <alias-all entity-alias="II"/>
-        <alias-all entity-alias="INV"/>
+        <alias-all entity-alias="INV">
+          <exclude field="statusId"/>
+          <exclude field="currencyUomId"/>
+        </alias-all>
+        <alias entity-alias="INV" name="inventoryStatusId" field="statusId"/>
+        <alias entity-alias="INV" name="inventoryCurrencyUomId" field="currencyUomId"/>
         <view-link entity-alias="SHP" rel-entity-alias="II">
             <key-map field-name="shipmentId"/>
         </view-link>
@@ -263,8 +271,19 @@
         <member-entity entity-alias="SHRCP" entity-name="ShipmentReceipt"/>
         <member-entity entity-alias="INV" entity-name="InventoryItem"/>
         <alias-all entity-alias="SHP"/>
-        <alias-all entity-alias="SHRCP"/>
-        <alias-all entity-alias="INV"/>
+        <alias-all entity-alias="SHRCP">
+          <exclude field="returnId"/>
+        </alias-all>
+        <alias-all entity-alias="INV">
+          <exclude field="statusId"/>
+          <exclude field="currencyUomId"/>
+          <exclude field="datetimeReceived"/>
+          <exclude field="productId"/>
+        </alias-all>
+        <alias entity-alias="INV" name="inventoryStatusId" field="statusId"/>
+        <alias entity-alias="INV" name="inventoryCurrencyUomId" field="currencyUomId"/>
+        <alias entity-alias="INV" name="inventoryDatetimeReceived" field="datetimeReceived"/>
+        <alias entity-alias="INV" name="inventoryProductId" field="productId"/>
         <view-link entity-alias="SHP" rel-entity-alias="SHRCP">
             <key-map field-name="shipmentId"/>
         </view-link>
@@ -303,6 +322,7 @@
         </alias-all>
         <alias-all entity-alias="II">
             <exclude field="quantity"/>
+            <exclude field="productId"/>
         </alias-all>
         <alias name="packageContentQuantity" entity-alias="SPC" field="quantity"/>
         <alias name="itemIssuanceQuantity" entity-alias="IT" field="quantity"/>

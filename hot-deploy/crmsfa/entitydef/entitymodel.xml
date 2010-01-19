@@ -64,6 +64,8 @@
         <alias-all entity-alias="PSD"/>
         <alias-all entity-alias="PG">
             <exclude field="comments"/>
+            <exclude field="annualRevenue"/>
+            <exclude field="tickerSymbol"/>
         </alias-all>
         <alias-all entity-alias="PR">
             <exclude field="comments"/>
@@ -136,6 +138,8 @@
         <alias-all entity-alias="PSD"/>
         <alias-all entity-alias="PG">
             <exclude field="comments"/>
+            <exclude field="annualRevenue"/>
+            <exclude field="tickerSymbol"/>
         </alias-all>
         <alias-all entity-alias="PR">
             <exclude field="comments"/>
@@ -147,12 +151,20 @@
         <alias-all entity-alias="PA">
             <exclude field="contactMechId"/>
         </alias-all>
-        <alias-all entity-alias="PC"/>
-        <alias-all entity-alias="PCG"/>
+        <alias-all entity-alias="PC">
+            <exclude field="fromDate"/>
+            <exclude field="thruDate"/>
+        </alias-all>
+        <alias-all entity-alias="PCG">
+            <exclude field="description"/>
+        </alias-all>
         <alias entity-alias="PR" name="relationshipStatusId" field="statusId"/>
-        <alias entity-alias="PCM" name="partyContactMechFromDate" field="fromDate"/> 
-        <alias entity-alias="PCM" name="partyContactMechThruDate" field="thruDate"/> 
+        <alias entity-alias="PC" name="classificationFromDate" field="fromDate"/>
+        <alias entity-alias="PC" name="classificationThruDate" field="thruDate"/>
+        <alias entity-alias="PCM" name="partyContactMechFromDate" field="fromDate"/>
+        <alias entity-alias="PCM" name="partyContactMechThruDate" field="thruDate"/>
         <alias entity-alias="PCM" name="extension" field="extension"/>
+        <alias entity-alias="PCG" name="partyClassificationGroupDescription" field="description"/>
         <alias entity-alias="CM" name="contactMechId" field="contactMechId"/>
         <alias entity-alias="CM" name="contactMechTypeId" field="contactMechTypeId"/>
         <alias entity-alias="CM" name="infoString" field="infoString"/>
@@ -247,6 +259,8 @@
         <alias-all entity-alias="PSD"/>
         <alias-all entity-alias="PG">
             <exclude field="comments"/>
+            <exclude field="annualRevenue"/>
+            <exclude field="tickerSymbol"/>
         </alias-all>
         <alias-all entity-alias="PR">
             <exclude field="comments"/>
@@ -309,6 +323,8 @@
         <alias-all entity-alias="PSD"/>
         <alias-all entity-alias="PG">
             <exclude field="comments"/>
+            <exclude field="annualRevenue"/>
+            <exclude field="tickerSymbol"/>
         </alias-all>
         <alias-all entity-alias="PR">
             <exclude field="comments"/>
@@ -467,7 +483,10 @@
         <member-entity entity-alias="PT" entity-name="Party"/>
         <member-entity entity-alias="SI" entity-name="StatusItem"/>
         <alias-all entity-alias="PT"/>
-        <alias-all entity-alias="SI"/>
+        <alias-all entity-alias="SI">
+          <exclude field="description"/>
+        </alias-all>
+        <alias entity-alias="SI" name="statusDescription" field="description"/>
         <view-link entity-alias="PT" rel-entity-alias="SI">
             <key-map field-name="statusId"/>
         </view-link>
@@ -1004,12 +1023,14 @@
         <member-entity entity-alias="CRC" entity-name="CustRequestCategory"/>
         <member-entity entity-alias="CRR" entity-name="CustRequestRole"/>
         <member-entity entity-alias="PR" entity-name="PartyRelationship"/>        
-        <alias-all entity-alias="CR"/>
-		<alias entity-alias="SI" name="status" field="description"/>
-		<!-- this field value will replaced in CaseLookupService, I just want a field to contain the updated value -->
-		<alias entity-alias="SI" name="updated" field="statusCode"/>
-		<alias entity-alias="CRT" name="custRequestType" field="description"/>
-		<alias entity-alias="CRC" name="reason" field="description"/>
+        <alias-all entity-alias="CR">
+          <exclude field="reason"/>
+        </alias-all>
+        <alias entity-alias="SI" name="status" field="description"/>
+        <!-- this field value will replaced in CaseLookupService, I just want a field to contain the updated value -->
+        <alias entity-alias="SI" name="updated" field="statusCode"/>
+        <alias entity-alias="CRT" name="custRequestType" field="description"/>
+        <alias entity-alias="CRC" name="reason" field="description"/>
         <alias entity-alias="CRR" name="partyId"/>
         <alias entity-alias="CRR" name="roleTypeId"/>
         <alias entity-alias="PR" name="partyIdTo"/>

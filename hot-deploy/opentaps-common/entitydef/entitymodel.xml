@@ -805,6 +805,8 @@ under the License.
         </alias-all>
         <alias-all entity-alias="PTYGRP">
             <exclude field="comments"/>
+            <exclude field="annualRevenue"/>
+            <exclude field="tickerSymbol"/>
         </alias-all>
         <alias-all entity-alias="PSD"/>
         <alias entity-alias="PMPA" name="primaryToName" field="toName"/>
@@ -2148,7 +2150,7 @@ under the License.
       <field name="fromDate" type="date-time" />
       <field name="thruDate" type="date-time" /> 
       <prim-key field="autoId"/>
-      <relation type="one" fk-name="EXTERNALUSER_USERTYPE" rel-entity-name="ExternalUserType">
+      <relation type="one" fk-name="EX_USER_USERTYPE" rel-entity-name="ExternalUserType">
         <key-map field-name="externalUserTypeId"/>
       </relation>
     </entity>  
@@ -2269,8 +2271,11 @@ under the License.
                  title="The KeyboardShortcut and the associated Handler">
         <member-entity entity-alias="KB"  entity-name="KeyboardShortcut"/>
         <member-entity entity-alias="KBH" entity-name="KeyboardShortcutHandler"/>        
-       <alias-all entity-alias="KB"/>
-        <alias-all entity-alias="KBH"/>
+        <alias-all entity-alias="KB"/>
+        <alias-all entity-alias="KBH">
+          <exclude field="description"/>
+        </alias-all>
+        <alias name="handlerDescription" field="description" entity-alias="KBH"/>
 
         <view-link entity-alias="KB" rel-entity-alias="KBH">
             <key-map field-name="actionTypeId"/>

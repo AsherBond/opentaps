@@ -189,7 +189,7 @@
         <prim-key field="orderId"/>
         <prim-key field="orderPaymentPreferenceId"/>
 
-        <relation type="one" fk-name="PAYMENT_PMETH_TP" rel-entity-name="PaymentMethodType">
+        <relation type="one" fk-name="DIOP_PMETH_TP" rel-entity-name="PaymentMethodType">
             <key-map field-name="paymentMethodTypeId"/>
         </relation>
 

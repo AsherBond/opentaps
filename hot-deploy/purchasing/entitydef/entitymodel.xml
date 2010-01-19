@@ -48,7 +48,10 @@
       <member-entity entity-alias="ODS" entity-name="OrderDeliverySchedule"/>
       
       <alias-all entity-alias="OI"/>
-      <alias-all entity-alias="ODS"/>
+      <alias-all entity-alias="ODS">
+        <exclude field="statusId"/>
+      </alias-all>
+      <alias entity-alias="ODS" name="deliveryScheduleStatusId" field="statusId"/>
       <alias entity-alias="OH" name="orderTypeId"/>
       
       <view-link entity-alias="OI" rel-entity-alias="OH" rel-optional="false">
@@ -71,7 +74,10 @@
       <member-entity entity-alias="ODS" entity-name="OrderDeliverySchedule"/>
       
       <alias-all entity-alias="OI"/>
-      <alias-all entity-alias="ODS"/>
+      <alias-all entity-alias="ODS">
+        <exclude field="statusId"/>
+      </alias-all>
+      <alias entity-alias="ODS" name="deliveryScheduleStatusId" field="statusId"/>
       
       <view-link entity-alias="OI" rel-entity-alias="ODS" rel-optional="true">
         <key-map field-name="orderId"/>
