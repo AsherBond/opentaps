@@ -9428,7 +9428,7 @@ public interface CommonMessages extends Messages {
     String opentapsReference();
     @DefaultMessage("Region")
     String opentapsRegion();
-    @DefaultMessage("1.4-Preview-3")
+    @DefaultMessage("1.4-RC1")
     String opentapsReleaseVersion();
     @DefaultMessage("Reply")
     String opentapsReply();
