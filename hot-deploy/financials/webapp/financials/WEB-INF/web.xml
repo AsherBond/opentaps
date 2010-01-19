@@ -87,10 +87,6 @@
         <servlet-class>org.ofbiz.webapp.control.ControlServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>ControlServlet</servlet-name>
-        <url-pattern>/control/*</url-pattern>
-    </servlet-mapping>
     <servlet>
         <servlet-name>POIWorkbookServlet</servlet-name>
         <display-name>POIWorkbookServlet</display-name>
@@ -98,6 +94,10 @@
         <servlet-class>org.opentaps.common.util.POIWorkbookServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>ControlServlet</servlet-name>
+        <url-pattern>/control/*</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>POIWorkbookServlet</servlet-name>
         <url-pattern>/control/poi/*</url-pattern>
