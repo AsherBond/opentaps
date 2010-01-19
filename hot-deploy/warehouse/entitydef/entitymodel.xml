@@ -395,25 +395,6 @@
         </relation>
     </extend-entity>
 
-    <entity entity-name="FacilityPartyPermission"
-            package-name="org.opentaps.warehouse.facility"
-            title="Allows security to be checked on a per facility basis for parties.">
-        <field name="facilityId" type="id-ne"></field>
-        <field name="partyId" type="id-ne"></field>
-        <field name="securityGroupId" type="id-ne"></field>
-        <field name="fromDate" type="date-time"></field>
-        <field name="thruDate" type="date-time"></field>
-        <prim-key field="facilityId"/>
-        <prim-key field="partyId"/>
-        <prim-key field="fromDate"/>
-        <relation fk-name="FPP_FAC" rel-entity-name="Facility" type="one">
-            <key-map field-name="facilityId"/>
-        </relation>
-        <relation fk-name="FPP_PTY" rel-entity-name="Party" type="one">
-            <key-map field-name="partyId"/>
-        </relation>
-    </entity>
-
     <entity entity-name="InventoryItemTrace" 
         package-name="org.opentaps.warehouse.inventory" 
         title="Temporary store information about inventory item usage.">
