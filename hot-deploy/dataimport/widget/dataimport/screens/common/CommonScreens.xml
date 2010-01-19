@@ -23,6 +23,9 @@
             <actions>
                 <property-map global="true" resource="dataimport" map-name="configProperties"/>
                 <property-map resource="DataimportUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="OpentapsUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="PartyUiLabels" map-name="uiLabelMap" global="true"/>
                 <set field="opentapsApplicationName" value="dataimport" global="true"/>
                 <script location="component://dataimport/webapp/dataimport/WEB-INF/actions/includes/main-decorator.bsh"/>
             </actions>
