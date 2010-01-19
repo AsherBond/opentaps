@@ -6,13 +6,223 @@
     <description>Open For Business - Deployment</description>
     <display-name>OFBiz</display-name>
 
-    <#list webApps as webapp>
+    <module>
+      <web>
+        <web-uri>/webtools.war</web-uri>
+        <context-root>/webtools</context-root>
+      </web>
+    </module>
 
     <module>
-        <web>
-            <web-uri>${webapp.getContextRoot()}.war</web-uri>
-            <context-root>${webapp.getContextRoot()}</context-root>
-        </web>
+      <web>
+        <web-uri>/images.war</web-uri>
+        <context-root>/images</context-root>
+      </web>
     </module>
-    </#list>
-</application>
+
+    <module>
+      <web>
+        <web-uri>/partymgr.war</web-uri>
+        <context-root>/partymgr</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/content.war</web-uri>
+        <context-root>/content</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/workeffort.war</web-uri>
+        <context-root>/workeffort</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/catalog.war</web-uri>
+        <context-root>/catalog</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/facility.war</web-uri>
+        <context-root>/facility</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/manufacturing.war</web-uri>
+        <context-root>/manufacturing</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/accounting.war</web-uri>
+        <context-root>/accounting</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/ordermgr.war</web-uri>
+        <context-root>/ordermgr</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/marketing.war</web-uri>
+        <context-root>/marketing</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/ecommerce.war</web-uri>
+        <context-root>/ecommerce</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/ecomclone.war</web-uri>
+        <context-root>/ecomclone</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/hhfacility.war</web-uri>
+        <context-root>/hhfacility</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/assetmaint.war</web-uri>
+        <context-root>/assetmaint</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/cmssite.war</web-uri>
+        <context-root>/cmssite</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/googlebase.war</web-uri>
+        <context-root>/googlebase</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/ebay.war</web-uri>
+        <context-root>/ebay</context-root>
+      </web>
+    </module>
+
+    <!-- opentaps web apps -->
+
+    <module>
+      <web>
+        <web-uri>/opentaps_images.war</web-uri>
+        <context-root>/opentaps_images</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/opentaps_css.war</web-uri>
+        <context-root>/opentaps_css</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/opentaps_js.war</web-uri>
+        <context-root>/opentaps_js</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/opentaps_files.war</web-uri>
+        <context-root>/opentaps_files</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/resources.war</web-uri>
+        <context-root>/resources</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/crmsfa.war</web-uri>
+        <context-root>/crmsfa</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/crm_images.war</web-uri>
+        <context-root>/crm_images</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/crm_surveys.war</web-uri>
+        <context-root>/crm_surveys</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/financials.war</web-uri>
+        <context-root>/financials</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/purchasing.war</web-uri>
+        <context-root>/purchasing</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/warehouse.war</web-uri>
+        <context-root>/warehouse</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/dataimport.war</web-uri>
+        <context-root>/dataimport</context-root>
+      </web>
+    </module>
+
+    <module>
+      <web>
+        <web-uri>/livecatalog.war</web-uri>
+        <context-root>/livecatalog</context-root>
+      </web>
+    </module>
+
+  </application>
