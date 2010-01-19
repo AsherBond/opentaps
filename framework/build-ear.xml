@@ -69,6 +69,8 @@
       <fileset dir="${framework.dir}/base/lib/" includes="ant-launcher-1.7.0.jar"/>
       <fileset dir="${framework.dir}/base/lib/" includes="avalon-util-exception-1.0.0.jar"/>
       <fileset dir="${framework.dir}/base/lib/" includes="freemarker-2.3.15.jar"/>
+      <fileset dir="${framework.dir}/base/lib/" includes="owasp-esapi-full-java-1.4.jar"/>
+      <fileset dir="${framework.dir}/base/lib/" includes="antisamy-bin.1.2.jar"/>
       <fileset dir="${framework.dir}/base/build/lib/" includes="ofbiz-base.jar"/>
       <fileset dir="${framework.dir}/start/build/lib/" includes="ofbiz.jar"/>
 
