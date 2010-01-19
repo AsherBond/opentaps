@@ -35,6 +35,11 @@
         <include name="**/*.jar"/>
         <exclude name="**/poi-3.0.1.jar"/>
         <exclude name="**/spring-core*.jar"/>
+        <exclude name="**/aspectwerkz/dom4j*.jar"/>
+        <exclude name="**/aspectwerkz/concurrent*.jar"/>
+        <exclude name="**/aspectwerkz/jrexx*.jar"/>
+        <exclude name="**/aspectwerkz/qdox*.jar"/>
+        <exclude name="**/aspectwerkz/trove*.jar"/>
       </fileset>
 
       <!-- crmsfa -->
