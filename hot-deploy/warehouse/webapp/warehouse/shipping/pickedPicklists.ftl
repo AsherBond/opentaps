@@ -17,6 +17,9 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
+  <@form name="closePicklistsForm" url="closePicklists" picklistId="" />
+
+
 <@paginate name="pickedPicklists" list=picklists>
   <#noparse>
     <@navigationHeader/>
@@ -40,7 +43,7 @@
           <@displayCell text=picklistInfo.shipmentMethodTypeDescription/>
           <@displayCell text=picklistInfo.createdByUserLogin/>
           <@displayCell text=picklistInfo.description/>
-          <@displayLinkCell href="closePicklists?picklistId=${picklistInfo.picklistId}" text=uiLabelMap.WarehouseClosePicklists class="subMenuButton"/>
+          <@submitFormLinkConfirm form="closePicklistsForm" text=uiLabelMap.WarehouseClosePicklists picklistId=picklistInfo.picklistId  class="subMenuButton"/>
         </tr>
       </#list>
     </table>

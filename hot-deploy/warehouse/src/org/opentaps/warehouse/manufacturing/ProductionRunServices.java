@@ -256,12 +256,12 @@ public final class ProductionRunServices {
             // and any planned inventory transfers (requested, scheduled, en route) which are coming into the production warehouse for that product
             while (productsIt.hasNext()) {
                 String productId = (String) productsIt.next();
-                Double totalQuantity = (Double) products.get(productId);  // total quantity required for production run
+                BigDecimal totalQuantity = (BigDecimal) products.get(productId);  // total quantity required for production run
                 double existingAtp = 0.0;
                 try {
                     Map tmpResults = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("productId", productId, "facilityId", productionFacilityId, "userLogin", userLogin));
                     if (tmpResults.get("availableToPromiseTotal") != null) {
-                        existingAtp = ((Double) tmpResults.get("availableToPromiseTotal")).doubleValue();
+                        existingAtp = ((BigDecimal) tmpResults.get("availableToPromiseTotal")).doubleValue();
                     }
                 } catch (GenericServiceException e) {
                     Debug.logError(e, "Error counting inventory, assuming qoh = 0 for product [" + productId + "] in facility [" + productionFacilityId + "].", MODULE);
@@ -985,13 +985,13 @@ public final class ProductionRunServices {
                 }
                 if ("WEGS_COMPLETED".equals(wegs.get("statusId"))) {
                     if (wegs.getDouble("estimatedQuantity").doubleValue() != 0.0) {
-                        wegs.set("estimatedQuantity", new Double(0.0));
+                        wegs.set("estimatedQuantity", new BigDecimal("0.0"));
                         wegs.store();
                     }
                 } else {
                     BigDecimal requiredByWegs = wegs.getBigDecimal("estimatedQuantity");
                     if (requiredByWegs.compareTo(issued) <= 0 ) {
-                        wegs.set("estimatedQuantity", new Double(0));
+                        wegs.set("estimatedQuantity", new BigDecimal("0"));
                         wegs.set("statusId", "WEGS_COMPLETED");
                         wegs.store();
                     } else {
