@@ -75,5 +75,5 @@ if (UtilValidate.isNotEmpty(receipts)) {
     }
     context.put("receiptsAndBackOrders", receiptsAndBackOrders);
 } else {
-    UtilMessage.addError(request, "OpentapsError_OrderNotFound", UtilMisc.toMap("orderId", orderId));
+    UtilMessage.addError(request, "WarehouseNoShipmentReceiptsFound");
 }
