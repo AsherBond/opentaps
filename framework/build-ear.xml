@@ -70,7 +70,7 @@
       <fileset dir="${framework.dir}/base/lib/" includes="avalon-util-exception-1.0.0.jar"/>
       <fileset dir="${framework.dir}/base/lib/" includes="freemarker-2.3.15.jar"/>
       <fileset dir="${framework.dir}/base/build/lib/" includes="ofbiz-base.jar"/>
-      <fileset dir="${framework.dir}/base/build/lib/" includes="ofbiz.jar"/>
+      <fileset dir="${framework.dir}/start/build/lib/" includes="ofbiz.jar"/>
 
       <!-- entity -->
       <fileset dir="${framework.dir}/entity/lib/" includes="commons-dbcp-1.3-20080708-r674758.jar"/>
