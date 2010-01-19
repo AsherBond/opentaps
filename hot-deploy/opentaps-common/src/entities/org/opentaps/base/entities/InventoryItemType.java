@@ -72,7 +72,7 @@ fieldMapColumns.put("InventoryItemType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,44 +86,44 @@ fieldMapColumns.put("InventoryItemType", fields);
    @GeneratedValue(generator="InventoryItemType_GEN")
    @Id
    @Column(name="INVENTORY_ITEM_TYPE_ID")
-   protected String inventoryItemTypeId;
+   private String inventoryItemTypeId;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected InventoryItemType parentInventoryItemType = null;
+   private InventoryItemType parentInventoryItemType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_INVENTORY_ITEM_TYPE_ID")
    
-   protected List<Facility> defaultFacilitys = null;
+   private List<Facility> defaultFacilitys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_ITEM_TYPE_ID")
    
-   protected List<InventoryItem> inventoryItems = null;
+   private List<InventoryItem> inventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<InventoryItemType> childInventoryItemTypes = null;
+   private List<InventoryItemType> childInventoryItemTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="inventoryItemType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVENTORY_ITEM_TYPE_ID")
    
-   protected List<InventoryItemTypeAttr> inventoryItemTypeAttrs = null;
+   private List<InventoryItemTypeAttr> inventoryItemTypeAttrs = null;
 
   /**
    * Default constructor.

@@ -75,7 +75,7 @@ fieldMapColumns.put("PicklistBin", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -89,30 +89,30 @@ fieldMapColumns.put("PicklistBin", fields);
    @GeneratedValue(generator="PicklistBin_GEN")
    @Id
    @Column(name="PICKLIST_BIN_ID")
-   protected String picklistBinId;
+   private String picklistBinId;
    @Column(name="PICKLIST_ID")
-   protected String picklistId;
+   private String picklistId;
    @Column(name="BIN_LOCATION_NUMBER")
-   protected Long binLocationNumber;
+   private Long binLocationNumber;
    @Column(name="PRIMARY_ORDER_ID")
-   protected String primaryOrderId;
+   private String primaryOrderId;
    @Column(name="PRIMARY_SHIP_GROUP_SEQ_ID")
-   protected String primaryShipGroupSeqId;
+   private String primaryShipGroupSeqId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PICKLIST_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Picklist picklist = null;
+   private Picklist picklist = null;
    private transient OrderItemShipGroup primaryOrderItemShipGroup = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_ORDER_ID", insertable=false, updatable=false)
@@ -120,15 +120,15 @@ fieldMapColumns.put("PicklistBin", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderHeader primaryOrderHeader = null;
+   private OrderHeader primaryOrderHeader = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="picklistBin", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PICKLIST_BIN_ID")
    
-   protected List<PicklistItem> picklistItems = null;
+   private List<PicklistItem> picklistItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PICKLIST_BIN_ID")
    
-   protected List<Shipment> shipments = null;
+   private List<Shipment> shipments = null;
 
   /**
    * Default constructor.

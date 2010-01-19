@@ -74,7 +74,7 @@ fieldMapColumns.put("FacilityPartyPermission", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -87,7 +87,7 @@ fieldMapColumns.put("FacilityPartyPermission", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.FacilityPartyPermissionPkBridge.class)
-     protected FacilityPartyPermissionPk id = new FacilityPartyPermissionPk();
+     private FacilityPartyPermissionPk id = new FacilityPartyPermissionPk();
    
     /**
      * Auto generated Id accessor.
@@ -104,31 +104,31 @@ fieldMapColumns.put("FacilityPartyPermission", fields);
          this.id = id;
       }
    @Column(name="SECURITY_GROUP_ID")
-   protected String securityGroupId;
+   private String securityGroupId;
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Facility facility = null;
+   private Facility facility = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
 
   /**
    * Default constructor.

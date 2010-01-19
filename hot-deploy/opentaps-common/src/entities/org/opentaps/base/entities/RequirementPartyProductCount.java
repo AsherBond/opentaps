@@ -83,7 +83,7 @@ fieldMapColumns.put("RequirementPartyProductCount", fields);
     roleTypeId("roleTypeId"),
     fromDate("fromDate"),
     thruDate("thruDate");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

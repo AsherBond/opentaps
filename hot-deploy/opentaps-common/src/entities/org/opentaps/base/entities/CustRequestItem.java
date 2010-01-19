@@ -100,7 +100,7 @@ fieldMapColumns.put("CustRequestItem", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -113,7 +113,7 @@ fieldMapColumns.put("CustRequestItem", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.CustRequestItemPkBridge.class)
-     protected CustRequestItemPk id = new CustRequestItemPk();
+     private CustRequestItemPk id = new CustRequestItemPk();
    
     /**
      * Auto generated Id accessor.
@@ -130,71 +130,71 @@ fieldMapColumns.put("CustRequestItem", fields);
          this.id = id;
       }
    @Column(name="CUST_REQUEST_RESOLUTION_ID")
-   protected String custRequestResolutionId;
+   private String custRequestResolutionId;
    @Column(name="STATUS_ID")
-   protected String statusId;
+   private String statusId;
    @Column(name="PRIORITY")
-   protected Long priority;
+   private Long priority;
    @Column(name="SEQUENCE_NUM")
-   protected Long sequenceNum;
+   private Long sequenceNum;
    @Column(name="REQUIRED_BY_DATE")
-   protected Timestamp requiredByDate;
+   private Timestamp requiredByDate;
    @Column(name="PRODUCT_ID")
-   protected String productId;
+   private String productId;
    @Column(name="QUANTITY")
-   protected BigDecimal quantity;
+   private BigDecimal quantity;
    @Column(name="SELECTED_AMOUNT")
-   protected BigDecimal selectedAmount;
+   private BigDecimal selectedAmount;
    @Column(name="MAXIMUM_AMOUNT")
-   protected BigDecimal maximumAmount;
+   private BigDecimal maximumAmount;
    @Column(name="RESERV_START")
-   protected Timestamp reservStart;
+   private Timestamp reservStart;
    @Column(name="RESERV_LENGTH")
-   protected BigDecimal reservLength;
+   private BigDecimal reservLength;
    @Column(name="RESERV_PERSONS")
-   protected BigDecimal reservPersons;
+   private BigDecimal reservPersons;
    @Column(name="CONFIG_ID")
-   protected String configId;
+   private String configId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="STORY")
-   protected String story;
+   private String story;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected CustRequest custRequest = null;
+   private CustRequest custRequest = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem statusItem = null;
+   private StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_RESOLUTION_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected CustRequestResolution custRequestResolution = null;
+   private CustRequestResolution custRequestResolution = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product product = null;
+   private Product product = null;
    private transient List<CustRequestItemNote> custRequestItemNotes = null;
    private transient List<CustRequestItemWorkEffort> custRequestItemWorkEfforts = null;
    private transient List<CustRequestStatus> custRequestStatuses = null;

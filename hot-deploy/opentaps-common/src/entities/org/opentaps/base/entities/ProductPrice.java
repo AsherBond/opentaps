@@ -93,7 +93,7 @@ fieldMapColumns.put("ProductPrice", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -106,7 +106,7 @@ fieldMapColumns.put("ProductPrice", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductPricePkBridge.class)
-     protected ProductPricePk id = new ProductPricePk();
+     private ProductPricePk id = new ProductPricePk();
    
     /**
      * Auto generated Id accessor.
@@ -123,92 +123,92 @@ fieldMapColumns.put("ProductPrice", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="PRICE")
-   protected BigDecimal price;
+   private BigDecimal price;
    @Column(name="TERM_UOM_ID")
-   protected String termUomId;
+   private String termUomId;
    @Column(name="CUSTOM_PRICE_CALC_SERVICE")
-   protected String customPriceCalcService;
+   private String customPriceCalcService;
    @Column(name="CREATED_DATE")
-   protected Timestamp createdDate;
+   private Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   protected String createdByUserLogin;
+   private String createdByUserLogin;
    @Column(name="LAST_MODIFIED_DATE")
-   protected Timestamp lastModifiedDate;
+   private Timestamp lastModifiedDate;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   protected String lastModifiedByUserLogin;
+   private String lastModifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product product = null;
+   private Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PRICE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductPriceType productPriceType = null;
+   private ProductPriceType productPriceType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PRICE_PURPOSE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductPricePurpose productPricePurpose = null;
+   private ProductPricePurpose productPricePurpose = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom currencyUom = null;
+   private Uom currencyUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TERM_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom termUom = null;
+   private Uom termUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductStoreGroup productStoreGroup = null;
+   private ProductStoreGroup productStoreGroup = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CUSTOM_PRICE_CALC_SERVICE", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected CustomMethod customMethod = null;
+   private CustomMethod customMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserLogin relatedCreatedByUserLogin = null;
+   private UserLogin relatedCreatedByUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserLogin relatedLastModifiedByUserLogin = null;
+   private UserLogin relatedLastModifiedByUserLogin = null;
    private transient List<ProductPriceChange> productPriceChanges = null;
 
   /**

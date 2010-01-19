@@ -92,7 +92,7 @@ fieldMapColumns.put("SalesOpportunity", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -112,123 +112,123 @@ fieldMapColumns.put("SalesOpportunity", fields);
    } )
    @Boost(10f)
    @Column(name="SALES_OPPORTUNITY_ID")
-   protected String salesOpportunityId;
+   private String salesOpportunityId;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(5f)
    @Column(name="OPPORTUNITY_NAME")
-   protected String opportunityName;
+   private String opportunityName;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(1f)
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="NEXT_STEP")
-   protected String nextStep;
+   private String nextStep;
    @Column(name="ESTIMATED_AMOUNT")
-   protected BigDecimal estimatedAmount;
+   private BigDecimal estimatedAmount;
    @Column(name="ESTIMATED_PROBABILITY")
-   protected BigDecimal estimatedProbability;
+   private BigDecimal estimatedProbability;
    @Column(name="CURRENCY_UOM_ID")
-   protected String currencyUomId;
+   private String currencyUomId;
    @Column(name="MARKETING_CAMPAIGN_ID")
-   protected String marketingCampaignId;
+   private String marketingCampaignId;
    @Column(name="DATA_SOURCE_ID")
-   protected String dataSourceId;
+   private String dataSourceId;
    @Column(name="ESTIMATED_CLOSE_DATE")
-   protected Timestamp estimatedCloseDate;
+   private Timestamp estimatedCloseDate;
    @org.hibernate.search.annotations.Fields( {
        @Field(index=Index.TOKENIZED, store=Store.NO),
      @Field(index=Index.UN_TOKENIZED, store=Store.YES)
    } )
    @Boost(1f)
    @Column(name="OPPORTUNITY_STAGE_ID")
-   protected String opportunityStageId;
+   private String opportunityStageId;
    @Column(name="TYPE_ENUM_ID")
-   protected String typeEnumId;
+   private String typeEnumId;
    @Column(name="CREATED_BY_USER_LOGIN")
-   protected String createdByUserLogin;
+   private String createdByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom uom = null;
+   private Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="OPPORTUNITY_STAGE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SalesOpportunityStage salesOpportunityStage = null;
+   private SalesOpportunityStage salesOpportunityStage = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TYPE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration typeEnumeration = null;
+   private Enumeration typeEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MARKETING_CAMPAIGN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected MarketingCampaign marketingCampaign = null;
+   private MarketingCampaign marketingCampaign = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserLogin userLogin = null;
+   private UserLogin userLogin = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SALES_OPPORTUNITY_ID")
    
-   protected List<InvoiceItem> invoiceItems = null;
+   private List<InvoiceItem> invoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SALES_OPPORTUNITY_ID")
    
-   protected List<OrderItem> orderItems = null;
+   private List<OrderItem> orderItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="salesOpportunity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SALES_OPPORTUNITY_ID")
    
-   protected List<SalesOpportunityCompetitor> salesOpportunityCompetitors = null;
+   private List<SalesOpportunityCompetitor> salesOpportunityCompetitors = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="salesOpportunity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SALES_OPPORTUNITY_ID")
    
-   protected List<SalesOpportunityContent> salesOpportunityContents = null;
+   private List<SalesOpportunityContent> salesOpportunityContents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SALES_OPPORTUNITY_ID")
    
-   protected List<SalesOpportunityHistory> salesOpportunityHistorys = null;
+   private List<SalesOpportunityHistory> salesOpportunityHistorys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="salesOpportunity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SALES_OPPORTUNITY_ID")
    
-   protected List<SalesOpportunityQuote> salesOpportunityQuotes = null;
+   private List<SalesOpportunityQuote> salesOpportunityQuotes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="salesOpportunity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SALES_OPPORTUNITY_ID")
    @ContainedIn
-   protected List<SalesOpportunityRole> salesOpportunityRoles = null;
+   private List<SalesOpportunityRole> salesOpportunityRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="salesOpportunity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SALES_OPPORTUNITY_ID")
    
-   protected List<SalesOpportunityTrckCode> salesOpportunityTrckCodes = null;
+   private List<SalesOpportunityTrckCode> salesOpportunityTrckCodes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="salesOpportunity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SALES_OPPORTUNITY_ID")
    
-   protected List<SalesOpportunityWorkEffort> salesOpportunityWorkEfforts = null;
+   private List<SalesOpportunityWorkEffort> salesOpportunityWorkEfforts = null;
 
   /**
    * Default constructor.

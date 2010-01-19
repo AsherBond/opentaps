@@ -68,7 +68,7 @@ fieldMapColumns.put("MetaDataPredicate", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,25 +82,25 @@ fieldMapColumns.put("MetaDataPredicate", fields);
    @GeneratedValue(generator="MetaDataPredicate_GEN")
    @Id
    @Column(name="META_DATA_PREDICATE_ID")
-   protected String metaDataPredicateId;
+   private String metaDataPredicateId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="metaDataPredicate", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="META_DATA_PREDICATE_ID")
    
-   protected List<ContentMetaData> contentMetaDatas = null;
+   private List<ContentMetaData> contentMetaDatas = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="metaDataPredicate", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="META_DATA_PREDICATE_ID")
    
-   protected List<DataResourceMetaData> dataResourceMetaDatas = null;
+   private List<DataResourceMetaData> dataResourceMetaDatas = null;
 
   /**
    * Default constructor.

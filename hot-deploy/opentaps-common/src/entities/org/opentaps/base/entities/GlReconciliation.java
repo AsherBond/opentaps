@@ -83,7 +83,7 @@ fieldMapColumns.put("GlReconciliation", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -97,49 +97,49 @@ fieldMapColumns.put("GlReconciliation", fields);
    @GeneratedValue(generator="GlReconciliation_GEN")
    @Id
    @Column(name="GL_RECONCILIATION_ID")
-   protected String glReconciliationId;
+   private String glReconciliationId;
    @Column(name="GL_RECONCILIATION_NAME")
-   protected String glReconciliationName;
+   private String glReconciliationName;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="CREATED_BY_USER_LOGIN")
-   protected String createdByUserLogin;
+   private String createdByUserLogin;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   protected String lastModifiedByUserLogin;
+   private String lastModifiedByUserLogin;
    @Column(name="GL_ACCOUNT_ID")
-   protected String glAccountId;
+   private String glAccountId;
    @Column(name="ORGANIZATION_PARTY_ID")
-   protected String organizationPartyId;
+   private String organizationPartyId;
    @Column(name="RECONCILED_BALANCE")
-   protected BigDecimal reconciledBalance;
+   private BigDecimal reconciledBalance;
    @Column(name="RECONCILED_DATE")
-   protected Timestamp reconciledDate;
+   private Timestamp reconciledDate;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlAccount glAccount = null;
+   private GlAccount glAccount = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="glReconciliation", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GL_RECONCILIATION_ID")
    
-   protected List<GlReconciliationEntry> glReconciliationEntrys = null;
+   private List<GlReconciliationEntry> glReconciliationEntrys = null;
 
   /**
    * Default constructor.

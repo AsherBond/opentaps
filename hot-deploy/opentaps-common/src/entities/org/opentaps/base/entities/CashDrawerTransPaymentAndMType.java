@@ -164,7 +164,7 @@ fieldMapColumns.put("CashDrawerTransPaymentAndMType", fields);
     acctgTagEnumId8("acctgTagEnumId8"),
     acctgTagEnumId9("acctgTagEnumId9"),
     acctgTagEnumId10("acctgTagEnumId10");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -248,7 +248,7 @@ fieldMapColumns.put("CashDrawerTransPaymentAndMType", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PaymentType paymentType = null;
+   private PaymentType paymentType = null;
 
   /**
    * Default constructor.

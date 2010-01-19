@@ -70,7 +70,7 @@ fieldMapColumns.put("OrderAdjustmentAttribute", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -83,7 +83,7 @@ fieldMapColumns.put("OrderAdjustmentAttribute", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.OrderAdjustmentAttributePkBridge.class)
-     protected OrderAdjustmentAttributePk id = new OrderAdjustmentAttributePk();
+     private OrderAdjustmentAttributePk id = new OrderAdjustmentAttributePk();
    
     /**
      * Auto generated Id accessor.
@@ -100,23 +100,23 @@ fieldMapColumns.put("OrderAdjustmentAttribute", fields);
          this.id = id;
       }
    @Column(name="ATTR_VALUE")
-   protected String attrValue;
+   private String attrValue;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ADJUSTMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderAdjustment orderAdjustment = null;
-   protected transient List<OrderAdjustmentTypeAttr> orderAdjustmentTypeAttrs = null;
+   private OrderAdjustment orderAdjustment = null;
+   private transient List<OrderAdjustmentTypeAttr> orderAdjustmentTypeAttrs = null;
 
   /**
    * Default constructor.

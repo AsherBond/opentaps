@@ -81,7 +81,7 @@ fieldMapColumns.put("OpentapsWebApps", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -95,29 +95,29 @@ fieldMapColumns.put("OpentapsWebApps", fields);
    @GeneratedValue(generator="OpentapsWebApps_GEN")
    @Id
    @Column(name="APPLICATION_ID")
-   protected String applicationId;
+   private String applicationId;
    @Column(name="SHORT_NAME")
-   protected String shortName;
+   private String shortName;
    @Column(name="APPLICATION_NAME")
-   protected String applicationName;
+   private String applicationName;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="IMAGE_URL")
-   protected String imageUrl;
+   private String imageUrl;
    @Column(name="IMAGE_HOVER_URL")
-   protected String imageHoverUrl;
+   private String imageHoverUrl;
    @Column(name="LINK_URL")
-   protected String linkUrl;
+   private String linkUrl;
    @Column(name="SEQUENCE_NUM")
-   protected Long sequenceNum;
+   private Long sequenceNum;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
 
   /**
    * Default constructor.

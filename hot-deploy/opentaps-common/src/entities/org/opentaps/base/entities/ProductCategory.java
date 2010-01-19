@@ -86,7 +86,7 @@ fieldMapColumns.put("ProductCategory", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -100,149 +100,149 @@ fieldMapColumns.put("ProductCategory", fields);
    @GeneratedValue(generator="ProductCategory_GEN")
    @Id
    @Column(name="PRODUCT_CATEGORY_ID")
-   protected String productCategoryId;
+   private String productCategoryId;
    @Column(name="PRODUCT_CATEGORY_TYPE_ID")
-   protected String productCategoryTypeId;
+   private String productCategoryTypeId;
    @Column(name="PRIMARY_PARENT_CATEGORY_ID")
-   protected String primaryParentCategoryId;
+   private String primaryParentCategoryId;
    @Column(name="CATEGORY_NAME")
-   protected String categoryName;
+   private String categoryName;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LONG_DESCRIPTION")
-   protected String longDescription;
+   private String longDescription;
    @Column(name="CATEGORY_IMAGE_URL")
-   protected String categoryImageUrl;
+   private String categoryImageUrl;
    @Column(name="LINK_ONE_IMAGE_URL")
-   protected String linkOneImageUrl;
+   private String linkOneImageUrl;
    @Column(name="LINK_TWO_IMAGE_URL")
-   protected String linkTwoImageUrl;
+   private String linkTwoImageUrl;
    @Column(name="DETAIL_SCREEN")
-   protected String detailScreen;
+   private String detailScreen;
    @Column(name="SHOW_IN_SELECT")
-   protected String showInSelect;
+   private String showInSelect;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductCategoryType productCategoryType = null;
+   private ProductCategoryType productCategoryType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_TYPE_ID")
    
-   protected List<ProductCategoryTypeAttr> productCategoryTypeAttrs = null;
+   private List<ProductCategoryTypeAttr> productCategoryTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_PARENT_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductCategory primaryParentProductCategory = null;
+   private ProductCategory primaryParentProductCategory = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_PARENT_CATEGORY_ID")
    
-   protected List<ProductCategory> primaryChildProductCategorys = null;
+   private List<ProductCategory> primaryChildProductCategorys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<AgreementCategoryAppl> agreementCategoryAppls = null;
+   private List<AgreementCategoryAppl> agreementCategoryAppls = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<AgreementTerm> agreementTerms = null;
+   private List<AgreementTerm> agreementTerms = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<MarketInterest> marketInterests = null;
+   private List<MarketInterest> marketInterests = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<OldProductKeywordResult> oldProductKeywordResults = null;
+   private List<OldProductKeywordResult> oldProductKeywordResults = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<PartyNeed> partyNeeds = null;
+   private List<PartyNeed> partyNeeds = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<ProdCatalogCategory> prodCatalogCategorys = null;
+   private List<ProdCatalogCategory> prodCatalogCategorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_PRODUCT_CATEGORY_ID")
    
-   protected List<Product> primaryProducts = null;
+   private List<Product> primaryProducts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<ProductCategoryAttribute> productCategoryAttributes = null;
+   private List<ProductCategoryAttribute> productCategoryAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<ProductCategoryContent> productCategoryContents = null;
+   private List<ProductCategoryContent> productCategoryContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<ProductCategoryGlAccount> productCategoryGlAccounts = null;
+   private List<ProductCategoryGlAccount> productCategoryGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<ProductCategoryLink> productCategoryLinks = null;
+   private List<ProductCategoryLink> productCategoryLinks = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<ProductCategoryMember> productCategoryMembers = null;
+   private List<ProductCategoryMember> productCategoryMembers = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<ProductCategoryRole> productCategoryRoles = null;
+   private List<ProductCategoryRole> productCategoryRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="currentProductCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<ProductCategoryRollup> currentProductCategoryRollups = null;
+   private List<ProductCategoryRollup> currentProductCategoryRollups = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="parentProductCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARENT_PRODUCT_CATEGORY_ID")
    
-   protected List<ProductCategoryRollup> parentProductCategoryRollups = null;
+   private List<ProductCategoryRollup> parentProductCategoryRollups = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<ProductFeatureCatGrpAppl> productFeatureCatGrpAppls = null;
+   private List<ProductFeatureCatGrpAppl> productFeatureCatGrpAppls = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<ProductFeatureCategoryAppl> productFeatureCategoryAppls = null;
+   private List<ProductFeatureCategoryAppl> productFeatureCategoryAppls = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<ProductPromoCategory> productPromoCategorys = null;
+   private List<ProductPromoCategory> productPromoCategorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<ProductStoreSurveyAppl> productStoreSurveyAppls = null;
+   private List<ProductStoreSurveyAppl> productStoreSurveyAppls = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<SalesForecastDetail> salesForecastDetails = null;
+   private List<SalesForecastDetail> salesForecastDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<Subscription> subscriptions = null;
+   private List<Subscription> subscriptions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<TaxAuthorityCategory> taxAuthorityCategorys = null;
+   private List<TaxAuthorityCategory> taxAuthorityCategorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
-   protected List<TaxAuthorityRateProduct> taxAuthorityRateProducts = null;
+   private List<TaxAuthorityRateProduct> taxAuthorityRateProducts = null;
 
   /**
    * Default constructor.

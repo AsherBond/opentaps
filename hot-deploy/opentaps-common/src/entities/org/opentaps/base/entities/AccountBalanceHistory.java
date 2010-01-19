@@ -77,7 +77,7 @@ fieldMapColumns.put("AccountBalanceHistory", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -91,46 +91,46 @@ fieldMapColumns.put("AccountBalanceHistory", fields);
    @GeneratedValue(generator="AccountBalanceHistory_GEN")
    @Id
    @Column(name="ACCOUNT_BALANCE_HISTORY_ID")
-   protected String accountBalanceHistoryId;
+   private String accountBalanceHistoryId;
    @Column(name="ORGANIZATION_PARTY_ID")
-   protected String organizationPartyId;
+   private String organizationPartyId;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="AS_OF_DATETIME")
-   protected Timestamp asOfDatetime;
+   private Timestamp asOfDatetime;
    @Column(name="BALANCE_TYPE_ENUM_ID")
-   protected String balanceTypeEnumId;
+   private String balanceTypeEnumId;
    @Column(name="TOTAL_BALANCE")
-   protected BigDecimal totalBalance;
+   private BigDecimal totalBalance;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party organizationParty = null;
+   private Party organizationParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BALANCE_TYPE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration balanceTypeEnumeration = null;
+   private Enumeration balanceTypeEnumeration = null;
 
   /**
    * Default constructor.

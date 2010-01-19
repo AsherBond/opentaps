@@ -79,7 +79,7 @@ fieldMapColumns.put("ConfigOptionProductOption", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,7 +92,7 @@ fieldMapColumns.put("ConfigOptionProductOption", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ConfigOptionProductOptionPkBridge.class)
-     protected ConfigOptionProductOptionPk id = new ConfigOptionProductOptionPk();
+     private ConfigOptionProductOptionPk id = new ConfigOptionProductOptionPk();
    
     /**
      * Auto generated Id accessor.
@@ -109,17 +109,17 @@ fieldMapColumns.put("ConfigOptionProductOption", fields);
          this.id = id;
       }
    @Column(name="PRODUCT_OPTION_ID")
-   protected String productOptionId;
+   private String productOptionId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    private transient ProductConfigConfig configProductConfigConfig = null;
    private transient ProductConfigProduct productProductConfigProduct = null;
 

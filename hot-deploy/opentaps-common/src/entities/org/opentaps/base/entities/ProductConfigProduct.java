@@ -76,7 +76,7 @@ fieldMapColumns.put("ProductConfigProduct", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -89,7 +89,7 @@ fieldMapColumns.put("ProductConfigProduct", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductConfigProductPkBridge.class)
-     protected ProductConfigProductPk id = new ProductConfigProductPk();
+     private ProductConfigProductPk id = new ProductConfigProductPk();
    
     /**
      * Auto generated Id accessor.
@@ -106,24 +106,24 @@ fieldMapColumns.put("ProductConfigProduct", fields);
          this.id = id;
       }
    @Column(name="QUANTITY")
-   protected BigDecimal quantity;
+   private BigDecimal quantity;
    @Column(name="SEQUENCE_NUM")
-   protected Long sequenceNum;
+   private Long sequenceNum;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONFIG_ITEM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductConfigItem configItemProductConfigItem = null;
+   private ProductConfigItem configItemProductConfigItem = null;
    private transient ProductConfigOption configOptionProductConfigOption = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
@@ -131,7 +131,7 @@ fieldMapColumns.put("ProductConfigProduct", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product productProduct = null;
+   private Product productProduct = null;
    private transient List<ConfigOptionProductOption> productConfigOptionProductOptions = null;
 
   /**

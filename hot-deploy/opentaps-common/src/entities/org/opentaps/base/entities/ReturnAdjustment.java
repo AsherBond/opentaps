@@ -123,7 +123,7 @@ fieldMapColumns.put("ReturnAdjustment", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -137,92 +137,92 @@ fieldMapColumns.put("ReturnAdjustment", fields);
    @GeneratedValue(generator="ReturnAdjustment_GEN")
    @Id
    @Column(name="RETURN_ADJUSTMENT_ID")
-   protected String returnAdjustmentId;
+   private String returnAdjustmentId;
    @Column(name="RETURN_ADJUSTMENT_TYPE_ID")
-   protected String returnAdjustmentTypeId;
+   private String returnAdjustmentTypeId;
    @Column(name="RETURN_ID")
-   protected String returnId;
+   private String returnId;
    @Column(name="RETURN_ITEM_SEQ_ID")
-   protected String returnItemSeqId;
+   private String returnItemSeqId;
    @Column(name="SHIP_GROUP_SEQ_ID")
-   protected String shipGroupSeqId;
+   private String shipGroupSeqId;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="RETURN_TYPE_ID")
-   protected String returnTypeId;
+   private String returnTypeId;
    @Column(name="ORDER_ADJUSTMENT_ID")
-   protected String orderAdjustmentId;
+   private String orderAdjustmentId;
    @Column(name="AMOUNT")
-   protected BigDecimal amount;
+   private BigDecimal amount;
    @Column(name="PRODUCT_PROMO_ID")
-   protected String productPromoId;
+   private String productPromoId;
    @Column(name="PRODUCT_PROMO_RULE_ID")
-   protected String productPromoRuleId;
+   private String productPromoRuleId;
    @Column(name="PRODUCT_PROMO_ACTION_SEQ_ID")
-   protected String productPromoActionSeqId;
+   private String productPromoActionSeqId;
    @Column(name="PRODUCT_FEATURE_ID")
-   protected String productFeatureId;
+   private String productFeatureId;
    @Column(name="CORRESPONDING_PRODUCT_ID")
-   protected String correspondingProductId;
+   private String correspondingProductId;
    @Column(name="TAX_AUTHORITY_RATE_SEQ_ID")
-   protected String taxAuthorityRateSeqId;
+   private String taxAuthorityRateSeqId;
    @Column(name="SOURCE_REFERENCE_ID")
-   protected String sourceReferenceId;
+   private String sourceReferenceId;
    @Column(name="SOURCE_PERCENTAGE")
-   protected BigDecimal sourcePercentage;
+   private BigDecimal sourcePercentage;
    @Column(name="CUSTOMER_REFERENCE_ID")
-   protected String customerReferenceId;
+   private String customerReferenceId;
    @Column(name="PRIMARY_GEO_ID")
-   protected String primaryGeoId;
+   private String primaryGeoId;
    @Column(name="SECONDARY_GEO_ID")
-   protected String secondaryGeoId;
+   private String secondaryGeoId;
    @Column(name="EXEMPT_AMOUNT")
-   protected BigDecimal exemptAmount;
+   private BigDecimal exemptAmount;
    @Column(name="TAX_AUTH_GEO_ID")
-   protected String taxAuthGeoId;
+   private String taxAuthGeoId;
    @Column(name="TAX_AUTH_PARTY_ID")
-   protected String taxAuthPartyId;
+   private String taxAuthPartyId;
    @Column(name="OVERRIDE_GL_ACCOUNT_ID")
-   protected String overrideGlAccountId;
+   private String overrideGlAccountId;
    @Column(name="INCLUDE_IN_TAX")
-   protected String includeInTax;
+   private String includeInTax;
    @Column(name="INCLUDE_IN_SHIPPING")
-   protected String includeInShipping;
+   private String includeInShipping;
    @Column(name="CREATED_DATE")
-   protected Timestamp createdDate;
+   private Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   protected String createdByUserLogin;
+   private String createdByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_ADJUSTMENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ReturnAdjustmentType returnAdjustmentType = null;
+   private ReturnAdjustmentType returnAdjustmentType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ReturnHeader returnHeader = null;
+   private ReturnHeader returnHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserLogin userLogin = null;
+   private UserLogin userLogin = null;
    private transient ReturnItem returnItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PROMO_ID", insertable=false, updatable=false)
@@ -230,7 +230,7 @@ fieldMapColumns.put("ReturnAdjustment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductPromo productPromo = null;
+   private ProductPromo productPromo = null;
    private transient ProductPromoRule productPromoRule = null;
    private transient ProductPromoAction productPromoAction = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -239,14 +239,14 @@ fieldMapColumns.put("ReturnAdjustment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Geo primaryGeo = null;
+   private Geo primaryGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SECONDARY_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Geo secondaryGeo = null;
+   private Geo secondaryGeo = null;
    private transient TaxAuthority taxAuthority = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="OVERRIDE_GL_ACCOUNT_ID", insertable=false, updatable=false)
@@ -254,28 +254,28 @@ fieldMapColumns.put("ReturnAdjustment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlAccount overrideGlAccount = null;
+   private GlAccount overrideGlAccount = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ReturnType returnType = null;
+   private ReturnType returnType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ADJUSTMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderAdjustment orderAdjustment = null;
+   private OrderAdjustment orderAdjustment = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TAX_AUTHORITY_RATE_SEQ_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected TaxAuthorityRateProduct taxAuthorityRateProduct = null;
+   private TaxAuthorityRateProduct taxAuthorityRateProduct = null;
 
   /**
    * Default constructor.

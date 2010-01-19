@@ -107,7 +107,7 @@ fieldMapColumns.put("QuoteItem", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     description("description");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -120,7 +120,7 @@ fieldMapColumns.put("QuoteItem", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.QuoteItemPkBridge.class)
-     protected QuoteItemPk id = new QuoteItemPk();
+     private QuoteItemPk id = new QuoteItemPk();
    
     /**
      * Auto generated Id accessor.
@@ -137,107 +137,107 @@ fieldMapColumns.put("QuoteItem", fields);
          this.id = id;
       }
    @Column(name="PRODUCT_ID")
-   protected String productId;
+   private String productId;
    @Column(name="PRODUCT_FEATURE_ID")
-   protected String productFeatureId;
+   private String productFeatureId;
    @Column(name="DELIVERABLE_TYPE_ID")
-   protected String deliverableTypeId;
+   private String deliverableTypeId;
    @Column(name="SKILL_TYPE_ID")
-   protected String skillTypeId;
+   private String skillTypeId;
    @Column(name="UOM_ID")
-   protected String uomId;
+   private String uomId;
    @Column(name="WORK_EFFORT_ID")
-   protected String workEffortId;
+   private String workEffortId;
    @Column(name="CUST_REQUEST_ID")
-   protected String custRequestId;
+   private String custRequestId;
    @Column(name="CUST_REQUEST_ITEM_SEQ_ID")
-   protected String custRequestItemSeqId;
+   private String custRequestItemSeqId;
    @Column(name="QUANTITY")
-   protected BigDecimal quantity;
+   private BigDecimal quantity;
    @Column(name="SELECTED_AMOUNT")
-   protected BigDecimal selectedAmount;
+   private BigDecimal selectedAmount;
    @Column(name="QUOTE_UNIT_PRICE")
-   protected BigDecimal quoteUnitPrice;
+   private BigDecimal quoteUnitPrice;
    @Column(name="RESERV_START")
-   protected Timestamp reservStart;
+   private Timestamp reservStart;
    @Column(name="RESERV_LENGTH")
-   protected BigDecimal reservLength;
+   private BigDecimal reservLength;
    @Column(name="RESERV_PERSONS")
-   protected BigDecimal reservPersons;
+   private BigDecimal reservPersons;
    @Column(name="CONFIG_ID")
-   protected String configId;
+   private String configId;
    @Column(name="ESTIMATED_DELIVERY_DATE")
-   protected Timestamp estimatedDeliveryDate;
+   private Timestamp estimatedDeliveryDate;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="IS_PROMO")
-   protected String isPromo;
+   private String isPromo;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="QUOTE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Quote quote = null;
+   private Quote quote = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product product = null;
+   private Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_FEATURE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductFeature productFeature = null;
+   private ProductFeature productFeature = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DELIVERABLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected DeliverableType deliverableType = null;
+   private DeliverableType deliverableType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SKILL_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SkillType skillType = null;
+   private SkillType skillType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom uom = null;
+   private Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WorkEffort workEffort = null;
+   private WorkEffort workEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected CustRequest custRequest = null;
+   private CustRequest custRequest = null;
    private transient CustRequestItem custRequestItem = null;
    private transient List<OrderItem> orderItems = null;
    private transient List<QuoteAdjustment> quoteAdjustments = null;

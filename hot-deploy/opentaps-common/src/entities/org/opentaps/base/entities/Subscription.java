@@ -129,7 +129,7 @@ fieldMapColumns.put("Subscription", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -143,133 +143,133 @@ fieldMapColumns.put("Subscription", fields);
    @GeneratedValue(generator="Subscription_GEN")
    @Id
    @Column(name="SUBSCRIPTION_ID")
-   protected String subscriptionId;
+   private String subscriptionId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="SUBSCRIPTION_RESOURCE_ID")
-   protected String subscriptionResourceId;
+   private String subscriptionResourceId;
    @Column(name="COMMUNICATION_EVENT_ID")
-   protected String communicationEventId;
+   private String communicationEventId;
    @Column(name="CONTACT_MECH_ID")
-   protected String contactMechId;
+   private String contactMechId;
    @Column(name="ORIGINATED_FROM_PARTY_ID")
-   protected String originatedFromPartyId;
+   private String originatedFromPartyId;
    @Column(name="ORIGINATED_FROM_ROLE_TYPE_ID")
-   protected String originatedFromRoleTypeId;
+   private String originatedFromRoleTypeId;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="ROLE_TYPE_ID")
-   protected String roleTypeId;
+   private String roleTypeId;
    @Column(name="PARTY_NEED_ID")
-   protected String partyNeedId;
+   private String partyNeedId;
    @Column(name="NEED_TYPE_ID")
-   protected String needTypeId;
+   private String needTypeId;
    @Column(name="ORDER_ID")
-   protected String orderId;
+   private String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   protected String orderItemSeqId;
+   private String orderItemSeqId;
    @Column(name="PRODUCT_ID")
-   protected String productId;
+   private String productId;
    @Column(name="PRODUCT_CATEGORY_ID")
-   protected String productCategoryId;
+   private String productCategoryId;
    @Column(name="INVENTORY_ITEM_ID")
-   protected String inventoryItemId;
+   private String inventoryItemId;
    @Column(name="SUBSCRIPTION_TYPE_ID")
-   protected String subscriptionTypeId;
+   private String subscriptionTypeId;
    @Column(name="EXTERNAL_SUBSCRIPTION_ID")
-   protected String externalSubscriptionId;
+   private String externalSubscriptionId;
    @Column(name="FROM_DATE")
-   protected Timestamp fromDate;
+   private Timestamp fromDate;
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="PURCHASE_FROM_DATE")
-   protected Timestamp purchaseFromDate;
+   private Timestamp purchaseFromDate;
    @Column(name="PURCHASE_THRU_DATE")
-   protected Timestamp purchaseThruDate;
+   private Timestamp purchaseThruDate;
    @Column(name="MAX_LIFE_TIME")
-   protected Long maxLifeTime;
+   private Long maxLifeTime;
    @Column(name="MAX_LIFE_TIME_UOM_ID")
-   protected String maxLifeTimeUomId;
+   private String maxLifeTimeUomId;
    @Column(name="AVAILABLE_TIME")
-   protected Long availableTime;
+   private Long availableTime;
    @Column(name="AVAILABLE_TIME_UOM_ID")
-   protected String availableTimeUomId;
+   private String availableTimeUomId;
    @Column(name="USE_COUNT_LIMIT")
-   protected Long useCountLimit;
+   private Long useCountLimit;
    @Column(name="USE_TIME")
-   protected Long useTime;
+   private Long useTime;
    @Column(name="USE_TIME_UOM_ID")
-   protected String useTimeUomId;
+   private String useTimeUomId;
    @Column(name="AUTOMATIC_EXTEND")
-   protected String automaticExtend;
+   private String automaticExtend;
    @Column(name="CANCL_AUTM_EXT_TIME")
-   protected Long canclAutmExtTime;
+   private Long canclAutmExtTime;
    @Column(name="CANCL_AUTM_EXT_TIME_UOM_ID")
-   protected String canclAutmExtTimeUomId;
+   private String canclAutmExtTimeUomId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SUBSCRIPTION_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SubscriptionResource subscriptionResource = null;
+   private SubscriptionResource subscriptionResource = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ContactMech contactMech = null;
+   private ContactMech contactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="USE_TIME_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom useTimeUom = null;
+   private Uom useTimeUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CANCL_AUTM_EXT_TIME_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom cancelTimeUom = null;
+   private Uom cancelTimeUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AVAILABLE_TIME_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom availableTimeUom = null;
+   private Uom availableTimeUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MAX_LIFE_TIME_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom maxLifeTimeUom = null;
+   private Uom maxLifeTimeUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RoleType roleType = null;
+   private RoleType roleType = null;
    private transient PartyRole partyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGINATED_FROM_PARTY_ID", insertable=false, updatable=false)
@@ -277,14 +277,14 @@ fieldMapColumns.put("Subscription", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party originatedFromParty = null;
+   private Party originatedFromParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGINATED_FROM_ROLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RoleType originatedFromRoleType = null;
+   private RoleType originatedFromRoleType = null;
    private transient PartyRole originatedFromPartyRole = null;
    private transient PartyNeed partyNeed = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -293,14 +293,14 @@ fieldMapColumns.put("Subscription", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected NeedType needType = null;
+   private NeedType needType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderHeader orderHeader = null;
+   private OrderHeader orderHeader = null;
    private transient OrderItem orderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
@@ -308,44 +308,44 @@ fieldMapColumns.put("Subscription", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product product = null;
+   private Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductCategory productCategory = null;
+   private ProductCategory productCategory = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_ITEM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected InventoryItem inventoryItem = null;
+   private InventoryItem inventoryItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SUBSCRIPTION_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SubscriptionType subscriptionType = null;
+   private SubscriptionType subscriptionType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SUBSCRIPTION_TYPE_ID")
    
-   protected List<SubscriptionTypeAttr> subscriptionTypeAttrs = null;
+   private List<SubscriptionTypeAttr> subscriptionTypeAttrs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="subscription", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SUBSCRIPTION_ID")
    
-   protected List<SubscriptionAttribute> subscriptionAttributes = null;
+   private List<SubscriptionAttribute> subscriptionAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="subscription", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SUBSCRIPTION_ID")
    
-   protected List<SubscriptionCommEvent> subscriptionCommEvents = null;
+   private List<SubscriptionCommEvent> subscriptionCommEvents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="subscription", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SUBSCRIPTION_ID")
    
-   protected List<SubscriptionFulfillmentPiece> subscriptionFulfillmentPieces = null;
+   private List<SubscriptionFulfillmentPiece> subscriptionFulfillmentPieces = null;
 
   /**
    * Default constructor.

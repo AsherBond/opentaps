@@ -75,7 +75,7 @@ fieldMapColumns.put("ExampleItem", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,7 +88,7 @@ fieldMapColumns.put("ExampleItem", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ExampleItemPkBridge.class)
-     protected ExampleItemPk id = new ExampleItemPk();
+     private ExampleItemPk id = new ExampleItemPk();
    
     /**
      * Auto generated Id accessor.
@@ -105,33 +105,33 @@ fieldMapColumns.put("ExampleItem", fields);
          this.id = id;
       }
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="AMOUNT")
-   protected BigDecimal amount;
+   private BigDecimal amount;
    @Column(name="AMOUNT_UOM_ID")
-   protected String amountUomId;
+   private String amountUomId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AMOUNT_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom amountUom = null;
+   private Uom amountUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EXAMPLE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Example example = null;
+   private Example example = null;
 
   /**
    * Default constructor.

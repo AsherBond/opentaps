@@ -77,7 +77,7 @@ fieldMapColumns.put("ProdCatalogCategory", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -90,7 +90,7 @@ fieldMapColumns.put("ProdCatalogCategory", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProdCatalogCategoryPkBridge.class)
-     protected ProdCatalogCategoryPk id = new ProdCatalogCategoryPk();
+     private ProdCatalogCategoryPk id = new ProdCatalogCategoryPk();
    
     /**
      * Auto generated Id accessor.
@@ -107,38 +107,38 @@ fieldMapColumns.put("ProdCatalogCategory", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="SEQUENCE_NUM")
-   protected Long sequenceNum;
+   private Long sequenceNum;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PROD_CATALOG_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProdCatalog prodCatalog = null;
+   private ProdCatalog prodCatalog = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductCategory productCategory = null;
+   private ProductCategory productCategory = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PROD_CATALOG_CATEGORY_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProdCatalogCategoryType prodCatalogCategoryType = null;
+   private ProdCatalogCategoryType prodCatalogCategoryType = null;
 
   /**
    * Default constructor.

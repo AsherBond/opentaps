@@ -83,7 +83,7 @@ fieldMapColumns.put("ContentApproval", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -97,38 +97,38 @@ fieldMapColumns.put("ContentApproval", fields);
    @GeneratedValue(generator="ContentApproval_GEN")
    @Id
    @Column(name="CONTENT_APPROVAL_ID")
-   protected String contentApprovalId;
+   private String contentApprovalId;
    @Column(name="CONTENT_ID")
-   protected String contentId;
+   private String contentId;
    @Column(name="CONTENT_REVISION_SEQ_ID")
-   protected String contentRevisionSeqId;
+   private String contentRevisionSeqId;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="ROLE_TYPE_ID")
-   protected String roleTypeId;
+   private String roleTypeId;
    @Column(name="APPROVAL_STATUS_ID")
-   protected String approvalStatusId;
+   private String approvalStatusId;
    @Column(name="APPROVAL_DATE")
-   protected Timestamp approvalDate;
+   private Timestamp approvalDate;
    @Column(name="SEQUENCE_NUM")
-   protected Long sequenceNum;
+   private Long sequenceNum;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Content content = null;
+   private Content content = null;
    private transient ContentRevision contentRevision = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
@@ -136,21 +136,21 @@ fieldMapColumns.put("ContentApproval", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RoleType roleType = null;
+   private RoleType roleType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="APPROVAL_STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem approvalStatusItem = null;
+   private StatusItem approvalStatusItem = null;
 
   /**
    * Default constructor.

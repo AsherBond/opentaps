@@ -146,7 +146,7 @@ fieldMapColumns.put("InvoiceAndType", fields);
     processingStatusId("processingStatusId"),
     parentTypeId("parentTypeId"),
     hasTable("hasTable");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -215,15 +215,15 @@ fieldMapColumns.put("InvoiceAndType", fields);
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ID")
    
-   protected transient List<InvoiceItem> invoiceItems = null;
+   private transient List<InvoiceItem> invoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ID")
    
-   protected transient List<PaymentApplication> paymentApplications = null;
+   private transient List<PaymentApplication> paymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ID")
    
-   protected transient List<AcctgTrans> acctgTranses = null;
+   private transient List<AcctgTrans> acctgTranses = null;
 
   /**
    * Default constructor.

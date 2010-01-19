@@ -79,7 +79,7 @@ fieldMapColumns.put("ShipmentPackage", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,7 +92,7 @@ fieldMapColumns.put("ShipmentPackage", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ShipmentPackagePkBridge.class)
-     protected ShipmentPackagePk id = new ShipmentPackagePk();
+     private ShipmentPackagePk id = new ShipmentPackagePk();
    
     /**
      * Auto generated Id accessor.
@@ -109,45 +109,45 @@ fieldMapColumns.put("ShipmentPackage", fields);
          this.id = id;
       }
    @Column(name="SHIPMENT_BOX_TYPE_ID")
-   protected String shipmentBoxTypeId;
+   private String shipmentBoxTypeId;
    @Column(name="DATE_CREATED")
-   protected Timestamp dateCreated;
+   private Timestamp dateCreated;
    @Column(name="WEIGHT")
-   protected BigDecimal weight;
+   private BigDecimal weight;
    @Column(name="WEIGHT_UOM_ID")
-   protected String weightUomId;
+   private String weightUomId;
    @Column(name="INSURED_VALUE")
-   protected BigDecimal insuredValue;
+   private BigDecimal insuredValue;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Shipment shipment = null;
+   private Shipment shipment = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_BOX_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ShipmentBoxType shipmentBoxType = null;
-   protected transient List<CarrierShipmentBoxType> carrierShipmentBoxTypes = null;
+   private ShipmentBoxType shipmentBoxType = null;
+   private transient List<CarrierShipmentBoxType> carrierShipmentBoxTypes = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WEIGHT_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom weightUom = null;
+   private Uom weightUom = null;
    private transient List<ShipmentPackageContent> shipmentPackageContents = null;
    private transient List<ShipmentPackageRouteSeg> shipmentPackageRouteSegs = null;
    private transient List<ShipmentReceipt> shipmentReceipts = null;

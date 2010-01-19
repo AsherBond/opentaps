@@ -102,7 +102,7 @@ fieldMapColumns.put("InventoryItemTraceDetail", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -115,7 +115,7 @@ fieldMapColumns.put("InventoryItemTraceDetail", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.InventoryItemTraceDetailPkBridge.class)
-     protected InventoryItemTraceDetailPk id = new InventoryItemTraceDetailPk();
+     private InventoryItemTraceDetailPk id = new InventoryItemTraceDetailPk();
    
     /**
      * Auto generated Id accessor.
@@ -132,80 +132,80 @@ fieldMapColumns.put("InventoryItemTraceDetail", fields);
          this.id = id;
       }
    @Column(name="TRACE_LEVEL")
-   protected Long traceLevel;
+   private Long traceLevel;
    @Column(name="INVENTORY_ITEM_ID")
-   protected String inventoryItemId;
+   private String inventoryItemId;
    @Column(name="INVENTORY_ITEM_USAGE_TYPE_ID")
-   protected String inventoryItemUsageTypeId;
+   private String inventoryItemUsageTypeId;
    @Column(name="USAGE_DATETIME")
-   protected Timestamp usageDatetime;
+   private Timestamp usageDatetime;
    @Column(name="TO_INVENTORY_ITEM_ID")
-   protected String toInventoryItemId;
+   private String toInventoryItemId;
    @Column(name="QUANTITY")
-   protected BigDecimal quantity;
+   private BigDecimal quantity;
    @Column(name="RECEIPT_ID")
-   protected String receiptId;
+   private String receiptId;
    @Column(name="INVENTORY_TRANSFER_ID")
-   protected String inventoryTransferId;
+   private String inventoryTransferId;
    @Column(name="ITEM_ISSUANCE_ID")
-   protected String itemIssuanceId;
+   private String itemIssuanceId;
    @Column(name="ORDER_ID")
-   protected String orderId;
+   private String orderId;
    @Column(name="SHIP_GROUP_SEQ_ID")
-   protected String shipGroupSeqId;
+   private String shipGroupSeqId;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   protected String orderItemSeqId;
+   private String orderItemSeqId;
    @Column(name="ASSIGN_WORK_EFFORT_ID")
-   protected String assignWorkEffortId;
+   private String assignWorkEffortId;
    @Column(name="PRODUCED_WORK_EFFORT_ID")
-   protected String producedWorkEffortId;
+   private String producedWorkEffortId;
    @Column(name="PHYSICAL_INVENTORY_ID")
-   protected String physicalInventoryId;
+   private String physicalInventoryId;
    @Column(name="VARIANCE_REASON_ID")
-   protected String varianceReasonId;
+   private String varianceReasonId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_ITEM_TRACE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected InventoryItemTrace inventoryItemTrace = null;
+   private InventoryItemTrace inventoryItemTrace = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_ITEM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected InventoryItem inventoryItem = null;
+   private InventoryItem inventoryItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TO_INVENTORY_ITEM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected InventoryItem toInventoryItem = null;
+   private InventoryItem toInventoryItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_ITEM_USAGE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected InventoryItemUsageType inventoryItemUsageType = null;
+   private InventoryItemUsageType inventoryItemUsageType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ITEM_ISSUANCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ItemIssuance itemIssuance = null;
+   private ItemIssuance itemIssuance = null;
    private transient WorkEffortInventoryProduced workEffortInventoryProduced = null;
    private transient InventoryItemVariance inventoryItemVariance = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -214,7 +214,7 @@ fieldMapColumns.put("InventoryItemTraceDetail", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected VarianceReason varianceReason = null;
+   private VarianceReason varianceReason = null;
 
   /**
    * Default constructor.

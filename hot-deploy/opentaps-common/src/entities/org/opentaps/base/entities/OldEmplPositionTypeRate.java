@@ -80,7 +80,7 @@ fieldMapColumns.put("OldEmplPositionTypeRate", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -93,7 +93,7 @@ fieldMapColumns.put("OldEmplPositionTypeRate", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.OldEmplPositionTypeRatePkBridge.class)
-     protected OldEmplPositionTypeRatePk id = new OldEmplPositionTypeRatePk();
+     private OldEmplPositionTypeRatePk id = new OldEmplPositionTypeRatePk();
    
     /**
      * Auto generated Id accessor.
@@ -110,37 +110,37 @@ fieldMapColumns.put("OldEmplPositionTypeRate", fields);
          this.id = id;
       }
    @Column(name="PAY_GRADE_ID")
-   protected String payGradeId;
+   private String payGradeId;
    @Column(name="SALARY_STEP_SEQ_ID")
-   protected String salaryStepSeqId;
+   private String salaryStepSeqId;
    @Column(name="RATE_TYPE_ID")
-   protected String rateTypeId;
+   private String rateTypeId;
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="RATE")
-   protected String rate;
+   private String rate;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EMPL_POSITION_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected EmplPositionType emplPositionType = null;
+   private EmplPositionType emplPositionType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PERIOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PeriodType periodType = null;
+   private PeriodType periodType = null;
    private transient SalaryStep salaryStep = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RATE_TYPE_ID", insertable=false, updatable=false)
@@ -148,7 +148,7 @@ fieldMapColumns.put("OldEmplPositionTypeRate", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RateType rateType = null;
+   private RateType rateType = null;
 
   /**
    * Default constructor.

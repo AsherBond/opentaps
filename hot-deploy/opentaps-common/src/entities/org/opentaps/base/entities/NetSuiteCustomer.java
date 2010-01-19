@@ -186,7 +186,7 @@ fieldMapColumns.put("NetSuiteCustomer", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -200,133 +200,133 @@ fieldMapColumns.put("NetSuiteCustomer", fields);
    @GeneratedValue(generator="NetSuiteCustomer_GEN")
    @Id
    @Column(name="CUSTOMER_ID")
-   protected Long customerId;
+   private Long customerId;
    @Column(name="CUSTOMER_TYPE_ID")
-   protected String customerTypeId;
+   private String customerTypeId;
    @Column(name="ACCOUNTNUMBER")
-   protected String accountnumber;
+   private String accountnumber;
    @Column(name="EMAIL")
-   protected String email;
+   private String email;
    @Column(name="ALTEMAIL")
-   protected String altemail;
+   private String altemail;
    @Column(name="PHONE")
-   protected String phone;
+   private String phone;
    @Column(name="HOME_PHONE")
-   protected String homePhone;
+   private String homePhone;
    @Column(name="MOBILE_PHONE")
-   protected String mobilePhone;
+   private String mobilePhone;
    @Column(name="ALTPHONE")
-   protected String altphone;
+   private String altphone;
    @Column(name="FAX")
-   protected String fax;
+   private String fax;
    @Column(name="CATEGORY_0")
-   protected String category_0;
+   private String category_0;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="COMPANY_NAME")
-   protected String companyName;
+   private String companyName;
    @Column(name="CREDITLIMIT")
-   protected BigDecimal creditlimit;
+   private BigDecimal creditlimit;
    @Column(name="CURRENCY_ID")
-   protected String currencyId;
+   private String currencyId;
    @Column(name="EXPECTED_CLOSE")
-   protected Timestamp expectedClose;
+   private Timestamp expectedClose;
    @Column(name="PROJECTED_END")
-   protected Timestamp projectedEnd;
+   private Timestamp projectedEnd;
    @Column(name="FIRST_NAME")
-   protected String firstName;
+   private String firstName;
    @Column(name="MIDDLENAME")
-   protected String middlename;
+   private String middlename;
    @Column(name="LAST_NAME")
-   protected String lastName;
+   private String lastName;
    @Column(name="SALUTATION")
-   protected String salutation;
+   private String salutation;
    @Column(name="FULL_NAME")
-   protected String fullName;
+   private String fullName;
    @Column(name="CUSTOMER_NAME")
-   protected String customerName;
+   private String customerName;
    @Column(name="ISEMAILHTML")
-   protected String isemailhtml;
+   private String isemailhtml;
    @Column(name="ISEMAILPDF")
-   protected String isemailpdf;
+   private String isemailpdf;
    @Column(name="ISINACTIVE")
-   protected String isinactive;
+   private String isinactive;
    @Column(name="ISTAXABLE")
-   protected String istaxable;
+   private String istaxable;
    @Column(name="IS_JOB")
-   protected String isJob;
+   private String isJob;
    @Column(name="IS_PERSON")
-   protected String isPerson;
+   private String isPerson;
    @Column(name="LOGINACCESS")
-   protected String loginaccess;
+   private String loginaccess;
    @Column(name="MULTIPLE_PRICE_ID")
-   protected String multiplePriceId;
+   private String multiplePriceId;
    @Column(name="OPENBALANCE")
-   protected BigDecimal openbalance;
+   private BigDecimal openbalance;
    @Column(name="COST_ESTIMATE")
-   protected BigDecimal costEstimate;
+   private BigDecimal costEstimate;
    @Column(name="AMOUNT_COMPLETE")
-   protected BigDecimal amountComplete;
+   private BigDecimal amountComplete;
    @Column(name="PARENT_ID")
-   protected String parentId;
+   private String parentId;
    @Column(name="PARTNER_ID")
-   protected String partnerId;
+   private String partnerId;
    @Column(name="PAYMENT_TERMS_ID")
-   protected String paymentTermsId;
+   private String paymentTermsId;
    @Column(name="PROBABILITY")
-   protected BigDecimal probability;
+   private BigDecimal probability;
    @Column(name="REMINDERDAYS")
-   protected Long reminderdays;
+   private Long reminderdays;
    @Column(name="RENEWAL")
-   protected Timestamp renewal;
+   private Timestamp renewal;
    @Column(name="RESALENUMBER")
-   protected String resalenumber;
+   private String resalenumber;
    @Column(name="SALES_REP_ID")
-   protected String salesRepId;
+   private String salesRepId;
    @Column(name="SALES_TERRITORY_ID")
-   protected String salesTerritoryId;
+   private String salesTerritoryId;
    @Column(name="STATE_PROVINCE")
-   protected String stateProvince;
+   private String stateProvince;
    @Column(name="COUNTRY")
-   protected String country;
+   private String country;
    @Column(name="STATUS_ID")
-   protected String statusId;
+   private String statusId;
    @Column(name="STATUS_PROBABILITY")
-   protected BigDecimal statusProbability;
+   private BigDecimal statusProbability;
    @Column(name="STATUS_READ_ONLY")
-   protected String statusReadOnly;
+   private String statusReadOnly;
    @Column(name="SUBSIDIARY_ID")
-   protected String subsidiaryId;
+   private String subsidiaryId;
    @Column(name="TAX_ITEM_ID")
-   protected String taxItemId;
+   private String taxItemId;
    @Column(name="DEALER_AGREEMENT_RECEIVED")
-   protected String dealerAgreementReceived;
+   private String dealerAgreementReceived;
    @Column(name="CREDIT_APPLICATION_RECEIVED")
-   protected String creditApplicationReceived;
+   private String creditApplicationReceived;
    @Column(name="INTERNET_APPROVED")
-   protected String internetApproved;
+   private String internetApproved;
    @Column(name="DEALER_APPROVEDOPEN")
-   protected String dealerApprovedopen;
+   private String dealerApprovedopen;
    @Column(name="CUSTOMER_WAREHOUSE_LOCATION_ID")
-   protected String customerWarehouseLocationId;
+   private String customerWarehouseLocationId;
    @Column(name="IMPORT_STATUS_ID")
-   protected String importStatusId;
+   private String importStatusId;
    @Column(name="IMPORT_ERROR")
-   protected String importError;
+   private String importError;
    @Column(name="PROCESSED_TIMESTAMP")
-   protected Timestamp processedTimestamp;
+   private Timestamp processedTimestamp;
    @Column(name="CONTACT_PARTY_ID")
-   protected String contactPartyId;
+   private String contactPartyId;
    @Column(name="ACCOUNT_PARTY_ID")
-   protected String accountPartyId;
+   private String accountPartyId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
 
   /**
    * Default constructor.

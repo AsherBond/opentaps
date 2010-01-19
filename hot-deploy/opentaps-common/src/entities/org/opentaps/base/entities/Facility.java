@@ -97,7 +97,7 @@ fieldMapColumns.put("Facility", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     inventoryReserveOrderEnumId("inventoryReserveOrderEnumId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -111,300 +111,300 @@ fieldMapColumns.put("Facility", fields);
    @GeneratedValue(generator="Facility_GEN")
    @Id
    @Column(name="FACILITY_ID")
-   protected String facilityId;
+   private String facilityId;
    @Column(name="FACILITY_TYPE_ID")
-   protected String facilityTypeId;
+   private String facilityTypeId;
    @Column(name="PARENT_FACILITY_ID")
-   protected String parentFacilityId;
+   private String parentFacilityId;
    @Column(name="OWNER_PARTY_ID")
-   protected String ownerPartyId;
+   private String ownerPartyId;
    @Column(name="DEFAULT_INVENTORY_ITEM_TYPE_ID")
-   protected String defaultInventoryItemTypeId;
+   private String defaultInventoryItemTypeId;
    @Column(name="FACILITY_NAME")
-   protected String facilityName;
+   private String facilityName;
    @Column(name="PRIMARY_FACILITY_GROUP_ID")
-   protected String primaryFacilityGroupId;
+   private String primaryFacilityGroupId;
    @Column(name="SQUARE_FOOTAGE")
-   protected Long squareFootage;
+   private Long squareFootage;
    @Column(name="PRODUCT_STORE_ID")
-   protected String productStoreId;
+   private String productStoreId;
    @Column(name="DEFAULT_DAYS_TO_SHIP")
-   protected Long defaultDaysToShip;
+   private Long defaultDaysToShip;
    @Column(name="OPENED_DATE")
-   protected Timestamp openedDate;
+   private Timestamp openedDate;
    @Column(name="CLOSED_DATE")
-   protected Timestamp closedDate;
+   private Timestamp closedDate;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="DEFAULT_WEIGHT_UOM_ID")
-   protected String defaultWeightUomId;
+   private String defaultWeightUomId;
    @Column(name="GEO_POINT_ID")
-   protected String geoPointId;
+   private String geoPointId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @Column(name="RESERVE_ORDER_ENUM_ID")
-   protected String inventoryReserveOrderEnumId;
+   private String inventoryReserveOrderEnumId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected FacilityType facilityType = null;
+   private FacilityType facilityType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Facility parentFacility = null;
+   private Facility parentFacility = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_FACILITY_GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected FacilityGroup facilityGroup = null;
+   private FacilityGroup facilityGroup = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="OWNER_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party ownerParty = null;
+   private Party ownerParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_INVENTORY_ITEM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected InventoryItemType defaultInventoryItemType = null;
+   private InventoryItemType defaultInventoryItemType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_WEIGHT_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom uom = null;
+   private Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductStore productStore = null;
+   private ProductStore productStore = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_TYPE_ID")
    
-   protected List<FacilityTypeAttr> facilityTypeAttrs = null;
+   private List<FacilityTypeAttr> facilityTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_POINT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GeoPoint geoPoint = null;
+   private GeoPoint geoPoint = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RESERVE_ORDER_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration enumeration = null;
+   private Enumeration enumeration = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<Container> containers = null;
+   private List<Container> containers = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<DataImportInventory> dataImportInventorys = null;
+   private List<DataImportInventory> dataImportInventorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_FACILITY_ID")
    
-   protected List<Delivery> originDeliverys = null;
+   private List<Delivery> originDeliverys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEST_FACILITY_ID")
    
-   protected List<Delivery> destDeliverys = null;
+   private List<Delivery> destDeliverys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_FACILITY_ID")
    
-   protected List<Facility> childFacilitys = null;
+   private List<Facility> childFacilitys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fromFacility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<FacilityAssoc> fromFacilityAssocs = null;
+   private List<FacilityAssoc> fromFacilityAssocs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="toFacility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_ID_TO")
    
-   protected List<FacilityAssoc> toFacilityAssocs = null;
+   private List<FacilityAssoc> toFacilityAssocs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<FacilityAttribute> facilityAttributes = null;
+   private List<FacilityAttribute> facilityAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<FacilityCarrierShipment> facilityCarrierShipments = null;
+   private List<FacilityCarrierShipment> facilityCarrierShipments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<FacilityContactMech> facilityContactMeches = null;
+   private List<FacilityContactMech> facilityContactMeches = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<FacilityContactMechPurpose> facilityContactMechPurposes = null;
+   private List<FacilityContactMechPurpose> facilityContactMechPurposes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<FacilityGroupMember> facilityGroupMembers = null;
+   private List<FacilityGroupMember> facilityGroupMembers = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<FacilityLocation> facilityLocations = null;
+   private List<FacilityLocation> facilityLocations = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<FacilityParty> facilityPartys = null;
+   private List<FacilityParty> facilityPartys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<FacilityPartyPermission> facilityPartyPermissions = null;
+   private List<FacilityPartyPermission> facilityPartyPermissions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<FacilityRole> facilityRoles = null;
+   private List<FacilityRole> facilityRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID_FROM")
    
-   protected List<FacilityTransferPlan> fromFacilityTransferPlans = null;
+   private List<FacilityTransferPlan> fromFacilityTransferPlans = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID_TO")
    
-   protected List<FacilityTransferPlan> toFacilityTransferPlans = null;
+   private List<FacilityTransferPlan> toFacilityTransferPlans = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="LOCATED_AT_FACILITY_ID")
    
-   protected List<FixedAsset> locatedAtFixedAssets = null;
+   private List<FixedAsset> locatedAtFixedAssets = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<InventoryEventPlanned> inventoryEventPlanneds = null;
+   private List<InventoryEventPlanned> inventoryEventPlanneds = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<InventoryItem> inventoryItems = null;
+   private List<InventoryItem> inventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<InventoryTransfer> inventoryTransfers = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="FACILITY_ID_TO")
-   
-   protected List<InventoryTransfer> toInventoryTransfers = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="FACILITY_ID")
-   
-   protected List<MrpEvent> mrpEvents = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="FACILITY_ID")
-   
-   protected List<MrpInventoryEvent> mrpInventoryEvents = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="ORIGIN_FACILITY_ID")
-   
-   protected List<OrderHeader> originOrderHeaders = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="FACILITY_ID")
-   
-   protected List<OrderItemShipGroup> orderItemShipGroups = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="FACILITY_ID")
-   
-   protected List<OrderSummaryEntry> orderSummaryEntrys = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="FACILITY_ID")
-   
-   protected List<Picklist> picklists = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="FACILITY_ID")
-   
-   protected List<ProdCatalogInvFacility> prodCatalogInvFacilitys = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="FACILITY_ID")
-   
-   protected List<Product> products = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="FACILITY_ID")
-   
-   protected List<ProductFacility> productFacilitys = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="FACILITY_ID")
-   
-   protected List<ProductFacility> resplenishFromFacilityProductFacilitys = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="FACILITY_ID")
-   
-   protected List<ProductFacilityLocation> productFacilityLocations = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="FACILITY_ID")
-   
-   protected List<ProductStoreFacility> productStoreFacilitys = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="FACILITY_ID")
-   
-   protected List<ProductStoreFacilityByAddress> productStoreFacilityByAddresses = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="FACILITY_ID")
-   
-   protected List<ReorderGuideline> reorderGuidelines = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="FACILITY_ID")
-   
-   protected List<Requirement> requirements = null;
+   private List<InventoryTransfer> inventoryTransfers = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID_TO")
    
-   protected List<Requirement> toRequirements = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="DESTINATION_FACILITY_ID")
-   
-   protected List<ReturnHeader> returnHeaders = null;
+   private List<InventoryTransfer> toInventoryTransfers = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<SalesForecastItem> salesForecastItems = null;
+   private List<MrpEvent> mrpEvents = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<MrpInventoryEvent> mrpInventoryEvents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_FACILITY_ID")
    
-   protected List<Shipment> originShipments = null;
+   private List<OrderHeader> originOrderHeaders = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<OrderItemShipGroup> orderItemShipGroups = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<OrderSummaryEntry> orderSummaryEntrys = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<Picklist> picklists = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<ProdCatalogInvFacility> prodCatalogInvFacilitys = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<Product> products = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<ProductFacility> productFacilitys = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<ProductFacility> resplenishFromFacilityProductFacilitys = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<ProductFacilityLocation> productFacilityLocations = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<ProductStoreFacility> productStoreFacilitys = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<ProductStoreFacilityByAddress> productStoreFacilityByAddresses = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<ReorderGuideline> reorderGuidelines = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<Requirement> requirements = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="FACILITY_ID_TO")
+   
+   private List<Requirement> toRequirements = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DESTINATION_FACILITY_ID")
    
-   protected List<Shipment> destinationShipments = null;
+   private List<ReturnHeader> returnHeaders = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<SalesForecastItem> salesForecastItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_FACILITY_ID")
    
-   protected List<ShipmentRouteSegment> originShipmentRouteSegments = null;
+   private List<Shipment> originShipments = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="DESTINATION_FACILITY_ID")
+   
+   private List<Shipment> destinationShipments = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ORIGIN_FACILITY_ID")
+   
+   private List<ShipmentRouteSegment> originShipmentRouteSegments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEST_FACILITY_ID")
    
-   protected List<ShipmentRouteSegment> destShipmentRouteSegments = null;
+   private List<ShipmentRouteSegment> destShipmentRouteSegments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<WorkEffort> workEfforts = null;
+   private List<WorkEffort> workEfforts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID")
    
-   protected List<WorkEffortPartyAssignment> workEffortPartyAssignments = null;
+   private List<WorkEffortPartyAssignment> workEffortPartyAssignments = null;
 
   /**
    * Default constructor.

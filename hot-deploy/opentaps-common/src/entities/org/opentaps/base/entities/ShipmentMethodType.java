@@ -71,7 +71,7 @@ fieldMapColumns.put("ShipmentMethodType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -85,59 +85,59 @@ fieldMapColumns.put("ShipmentMethodType", fields);
    @GeneratedValue(generator="ShipmentMethodType_GEN")
    @Id
    @Column(name="SHIPMENT_METHOD_TYPE_ID")
-   protected String shipmentMethodTypeId;
+   private String shipmentMethodTypeId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="SEQUENCE_NUM")
-   protected Long sequenceNum;
+   private Long sequenceNum;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   protected List<AmazonOrderItemFulfillment> amazonOrderItemFulfillments = null;
+   private List<AmazonOrderItemFulfillment> amazonOrderItemFulfillments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   protected List<CarrierReturnService> carrierReturnServices = null;
+   private List<CarrierReturnService> carrierReturnServices = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipmentMethodType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   protected List<CarrierShipmentMethod> carrierShipmentMethods = null;
+   private List<CarrierShipmentMethod> carrierShipmentMethods = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipmentMethodType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   protected List<FacilityCarrierShipment> facilityCarrierShipments = null;
+   private List<FacilityCarrierShipment> facilityCarrierShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   protected List<OldOrderShipmentPreference> oldOrderShipmentPreferences = null;
+   private List<OldOrderShipmentPreference> oldOrderShipmentPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   protected List<OrderItemShipGroup> orderItemShipGroups = null;
+   private List<OrderItemShipGroup> orderItemShipGroups = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   protected List<Picklist> picklists = null;
+   private List<Picklist> picklists = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_SHIP_METHOD_ID")
    
-   protected List<ProductStore> productStores = null;
+   private List<ProductStore> productStores = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipmentMethodType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   protected List<ProductStoreVendorShipment> productStoreVendorShipments = null;
+   private List<ProductStoreVendorShipment> productStoreVendorShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
-   protected List<ShipmentRouteSegment> shipmentRouteSegments = null;
+   private List<ShipmentRouteSegment> shipmentRouteSegments = null;
 
   /**
    * Default constructor.

@@ -100,7 +100,7 @@ fieldMapColumns.put("OagisMessageInfo", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -113,7 +113,7 @@ fieldMapColumns.put("OagisMessageInfo", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.OagisMessageInfoPkBridge.class)
-     protected OagisMessageInfoPk id = new OagisMessageInfoPk();
+     private OagisMessageInfoPk id = new OagisMessageInfoPk();
    
     /**
      * Auto generated Id accessor.
@@ -130,48 +130,48 @@ fieldMapColumns.put("OagisMessageInfo", fields);
          this.id = id;
       }
    @Column(name="AUTH_ID")
-   protected String authId;
+   private String authId;
    @Column(name="OUTGOING_MESSAGE")
-   protected String outgoingMessage;
+   private String outgoingMessage;
    @Column(name="SENT_DATE")
-   protected Timestamp sentDate;
+   private Timestamp sentDate;
    @Column(name="RECEIVED_DATE")
-   protected Timestamp receivedDate;
+   private Timestamp receivedDate;
    @Column(name="CONFIRMATION")
-   protected String confirmation;
+   private String confirmation;
    @Column(name="BSR_VERB")
-   protected String bsrVerb;
+   private String bsrVerb;
    @Column(name="BSR_NOUN")
-   protected String bsrNoun;
+   private String bsrNoun;
    @Column(name="BSR_REVISION")
-   protected String bsrRevision;
+   private String bsrRevision;
    @Column(name="PROCESSING_STATUS_ID")
-   protected String processingStatusId;
+   private String processingStatusId;
    @Column(name="ORDER_ID")
-   protected String orderId;
+   private String orderId;
    @Column(name="RETURN_ID")
-   protected String returnId;
+   private String returnId;
    @Column(name="SHIPMENT_ID")
-   protected String shipmentId;
+   private String shipmentId;
    @Column(name="ORIG_REF")
-   protected String origRef;
+   private String origRef;
    @Column(name="FULL_MESSAGE_XML")
-   protected String fullMessageXml;
+   private String fullMessageXml;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PROCESSING_STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem processingStatusItem = null;
+   private StatusItem processingStatusItem = null;
    private transient List<OagisMessageErrorInfo> oagisMessageErrorInfoes = null;
 
   /**

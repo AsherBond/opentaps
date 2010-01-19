@@ -73,7 +73,7 @@ fieldMapColumns.put("SalaryStep", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,7 +86,7 @@ fieldMapColumns.put("SalaryStep", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.SalaryStepPkBridge.class)
-     protected SalaryStepPk id = new SalaryStepPk();
+     private SalaryStepPk id = new SalaryStepPk();
    
     /**
      * Auto generated Id accessor.
@@ -103,24 +103,24 @@ fieldMapColumns.put("SalaryStep", fields);
          this.id = id;
       }
    @Column(name="DATE_MODIFIED")
-   protected Timestamp dateModified;
+   private Timestamp dateModified;
    @Column(name="AMOUNT")
-   protected BigDecimal amount;
+   private BigDecimal amount;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAY_GRADE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PayGrade payGrade = null;
+   private PayGrade payGrade = null;
    private transient List<EmplPositionTypeRate> emplPositionTypeRates = null;
    private transient List<OldEmplPositionTypeRate> oldEmplPositionTypeRates = null;
    private transient List<PayHistory> payHistorys = null;

@@ -94,7 +94,7 @@ fieldMapColumns.put("NetSuiteItemPrice", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -108,41 +108,41 @@ fieldMapColumns.put("NetSuiteItemPrice", fields);
    @GeneratedValue(generator="NetSuiteItemPrice_GEN")
    @Id
    @Column(name="PRICE_ID")
-   protected Long priceId;
+   private Long priceId;
    @Column(name="ISINACTIVE")
-   protected String isinactive;
+   private String isinactive;
    @Column(name="ITEM_PRICE_NAME")
-   protected String itemPriceName;
+   private String itemPriceName;
    @Column(name="ISONLINE")
-   protected String isonline;
+   private String isonline;
    @Column(name="CURRENCY_ID")
-   protected String currencyId;
+   private String currencyId;
    @Column(name="DISCOUNT_PERCENTAGE")
-   protected Long discountPercentage;
+   private Long discountPercentage;
    @Column(name="ITEM_ID")
-   protected Long itemId;
+   private Long itemId;
    @Column(name="ITEM_PRICE_EXTID")
-   protected String itemPriceExtid;
+   private String itemPriceExtid;
    @Column(name="ITEM_PRICE_ID")
-   protected Long itemPriceId;
+   private Long itemPriceId;
    @Column(name="ITEM_QUANTITY_ID")
-   protected Long itemQuantityId;
+   private Long itemQuantityId;
    @Column(name="ITEM_UNIT_PRICE")
-   protected BigDecimal itemUnitPrice;
+   private BigDecimal itemUnitPrice;
    @Column(name="IMPORT_STATUS_ID")
-   protected String importStatusId;
+   private String importStatusId;
    @Column(name="IMPORT_ERROR")
-   protected String importError;
+   private String importError;
    @Column(name="PROCESSED_TIMESTAMP")
-   protected Timestamp processedTimestamp;
+   private Timestamp processedTimestamp;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
 
   /**
    * Default constructor.

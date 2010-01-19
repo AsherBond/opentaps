@@ -95,7 +95,7 @@ fieldMapColumns.put("ShipmentPackageRouteSeg", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -108,7 +108,7 @@ fieldMapColumns.put("ShipmentPackageRouteSeg", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ShipmentPackageRouteSegPkBridge.class)
-     protected ShipmentPackageRouteSegPk id = new ShipmentPackageRouteSegPk();
+     private ShipmentPackageRouteSegPk id = new ShipmentPackageRouteSegPk();
    
     /**
      * Auto generated Id accessor.
@@ -125,37 +125,37 @@ fieldMapColumns.put("ShipmentPackageRouteSeg", fields);
          this.id = id;
       }
    @Column(name="TRACKING_CODE")
-   protected String trackingCode;
+   private String trackingCode;
    @Column(name="BOX_NUMBER")
-   protected String boxNumber;
+   private String boxNumber;
    @Column(name="LABEL_IMAGE")
-   protected byte[] labelImage;
+   private byte[] labelImage;
    @Column(name="LABEL_INTL_SIGN_IMAGE")
-   protected byte[] labelIntlSignImage;
+   private byte[] labelIntlSignImage;
    @Column(name="LABEL_HTML")
-   protected String labelHtml;
+   private String labelHtml;
    @Column(name="LABEL_PRINTED")
-   protected String labelPrinted;
+   private String labelPrinted;
    @Column(name="PACKAGE_TRANSPORT_COST")
-   protected BigDecimal packageTransportCost;
+   private BigDecimal packageTransportCost;
    @Column(name="PACKAGE_SERVICE_COST")
-   protected BigDecimal packageServiceCost;
+   private BigDecimal packageServiceCost;
    @Column(name="PACKAGE_OTHER_COST")
-   protected BigDecimal packageOtherCost;
+   private BigDecimal packageOtherCost;
    @Column(name="COD_AMOUNT")
-   protected BigDecimal codAmount;
+   private BigDecimal codAmount;
    @Column(name="INSURED_AMOUNT")
-   protected BigDecimal insuredAmount;
+   private BigDecimal insuredAmount;
    @Column(name="CURRENCY_UOM_ID")
-   protected String currencyUomId;
+   private String currencyUomId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    private transient ShipmentPackage shipmentPackage = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_ID", insertable=false, updatable=false)
@@ -163,7 +163,7 @@ fieldMapColumns.put("ShipmentPackageRouteSeg", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Shipment shipment = null;
+   private Shipment shipment = null;
    private transient ShipmentRouteSegment shipmentRouteSegment = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
@@ -171,7 +171,7 @@ fieldMapColumns.put("ShipmentPackageRouteSeg", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom currencyUom = null;
+   private Uom currencyUom = null;
 
   /**
    * Default constructor.

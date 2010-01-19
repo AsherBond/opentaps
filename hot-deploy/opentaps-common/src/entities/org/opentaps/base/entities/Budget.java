@@ -72,7 +72,7 @@ fieldMapColumns.put("Budget", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,79 +86,79 @@ fieldMapColumns.put("Budget", fields);
    @GeneratedValue(generator="Budget_GEN")
    @Id
    @Column(name="BUDGET_ID")
-   protected String budgetId;
+   private String budgetId;
    @Column(name="BUDGET_TYPE_ID")
-   protected String budgetTypeId;
+   private String budgetTypeId;
    @Column(name="CUSTOM_TIME_PERIOD_ID")
-   protected String customTimePeriodId;
+   private String customTimePeriodId;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BUDGET_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected BudgetType budgetType = null;
+   private BudgetType budgetType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CUSTOM_TIME_PERIOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected CustomTimePeriod customTimePeriod = null;
+   private CustomTimePeriod customTimePeriod = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BUDGET_TYPE_ID")
    
-   protected List<BudgetTypeAttr> budgetTypeAttrs = null;
+   private List<BudgetTypeAttr> budgetTypeAttrs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="budget", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BUDGET_ID")
    
-   protected List<BudgetAttribute> budgetAttributes = null;
+   private List<BudgetAttribute> budgetAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="budget", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BUDGET_ID")
    
-   protected List<BudgetItem> budgetItems = null;
+   private List<BudgetItem> budgetItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="budget", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BUDGET_ID")
    
-   protected List<BudgetReview> budgetReviews = null;
+   private List<BudgetReview> budgetReviews = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="budget", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BUDGET_ID")
    
-   protected List<BudgetRevision> budgetRevisions = null;
+   private List<BudgetRevision> budgetRevisions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="budget", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BUDGET_ID")
    
-   protected List<BudgetRevisionImpact> budgetRevisionImpacts = null;
+   private List<BudgetRevisionImpact> budgetRevisionImpacts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="budget", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BUDGET_ID")
    
-   protected List<BudgetRole> budgetRoles = null;
+   private List<BudgetRole> budgetRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BUDGET_ID")
    
-   protected List<BudgetScenarioApplication> budgetScenarioApplications = null;
+   private List<BudgetScenarioApplication> budgetScenarioApplications = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="budget", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BUDGET_ID")
    
-   protected List<BudgetStatus> budgetStatuses = null;
+   private List<BudgetStatus> budgetStatuses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="budget", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BUDGET_ID")
    
-   protected List<PaymentBudgetAllocation> paymentBudgetAllocations = null;
+   private List<PaymentBudgetAllocation> paymentBudgetAllocations = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="budget", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BUDGET_ID")
    
-   protected List<RequirementBudgetAllocation> requirementBudgetAllocations = null;
+   private List<RequirementBudgetAllocation> requirementBudgetAllocations = null;
 
   /**
    * Default constructor.

@@ -125,7 +125,7 @@ fieldMapColumns.put("FacilityAndContactMech", fields);
     thruDate("thruDate"),
     extension("extension"),
     comments("comments");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

@@ -95,7 +95,7 @@ fieldMapColumns.put("ContentAssoc", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -108,7 +108,7 @@ fieldMapColumns.put("ContentAssoc", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ContentAssocPkBridge.class)
-     protected ContentAssocPk id = new ContentAssocPk();
+     private ContentAssocPk id = new ContentAssocPk();
    
     /**
      * Auto generated Id accessor.
@@ -125,84 +125,84 @@ fieldMapColumns.put("ContentAssoc", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="CONTENT_ASSOC_PREDICATE_ID")
-   protected String contentAssocPredicateId;
+   private String contentAssocPredicateId;
    @Column(name="DATA_SOURCE_ID")
-   protected String dataSourceId;
+   private String dataSourceId;
    @Column(name="SEQUENCE_NUM")
-   protected Long sequenceNum;
+   private Long sequenceNum;
    @Column(name="MAP_KEY")
-   protected String mapKey;
+   private String mapKey;
    @Column(name="UPPER_COORDINATE")
-   protected Long upperCoordinate;
+   private Long upperCoordinate;
    @Column(name="LEFT_COORDINATE")
-   protected Long leftCoordinate;
+   private Long leftCoordinate;
    @Column(name="CREATED_DATE")
-   protected Timestamp createdDate;
+   private Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   protected String createdByUserLogin;
+   private String createdByUserLogin;
    @Column(name="LAST_MODIFIED_DATE")
-   protected Timestamp lastModifiedDate;
+   private Timestamp lastModifiedDate;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   protected String lastModifiedByUserLogin;
+   private String lastModifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Content fromContent = null;
+   private Content fromContent = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Content toContent = null;
+   private Content toContent = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ASSOC_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ContentAssocType contentAssocType = null;
+   private ContentAssocType contentAssocType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserLogin relatedCreatedByUserLogin = null;
+   private UserLogin relatedCreatedByUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserLogin relatedLastModifiedByUserLogin = null;
+   private UserLogin relatedLastModifiedByUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ASSOC_PREDICATE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ContentAssocPredicate contentAssocPredicate = null;
+   private ContentAssocPredicate contentAssocPredicate = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_SOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected DataSource dataSource = null;
+   private DataSource dataSource = null;
 
   /**
    * Default constructor.

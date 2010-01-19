@@ -74,7 +74,7 @@ fieldMapColumns.put("EncumbranceSnapshot", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,27 +88,27 @@ fieldMapColumns.put("EncumbranceSnapshot", fields);
    @GeneratedValue(generator="EncumbranceSnapshot_GEN")
    @Id
    @Column(name="ENCUMBRANCE_SNAPSHOT_ID")
-   protected String encumbranceSnapshotId;
+   private String encumbranceSnapshotId;
    @Column(name="SNAPSHOT_DATETIME")
-   protected Timestamp snapshotDatetime;
+   private Timestamp snapshotDatetime;
    @Column(name="CREATED_BY_USER_LOGIN_ID")
-   protected String createdByUserLoginId;
+   private String createdByUserLoginId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="encumbranceSnapshot", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ENCUMBRANCE_SNAPSHOT_ID")
    
-   protected List<EncumbranceDetail> encumbranceDetails = null;
+   private List<EncumbranceDetail> encumbranceDetails = null;
 
   /**
    * Default constructor.

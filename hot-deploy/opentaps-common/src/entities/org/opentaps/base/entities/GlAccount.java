@@ -87,7 +87,7 @@ fieldMapColumns.put("GlAccount", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -101,198 +101,198 @@ fieldMapColumns.put("GlAccount", fields);
    @GeneratedValue(generator="GlAccount_GEN")
    @Id
    @Column(name="GL_ACCOUNT_ID")
-   protected String glAccountId;
+   private String glAccountId;
    @Column(name="GL_ACCOUNT_TYPE_ID")
-   protected String glAccountTypeId;
+   private String glAccountTypeId;
    @Column(name="GL_ACCOUNT_CLASS_ID")
-   protected String glAccountClassId;
+   private String glAccountClassId;
    @Column(name="GL_RESOURCE_TYPE_ID")
-   protected String glResourceTypeId;
+   private String glResourceTypeId;
    @Column(name="GL_XBRL_CLASS_ID")
-   protected String glXbrlClassId;
+   private String glXbrlClassId;
    @Column(name="PARENT_GL_ACCOUNT_ID")
-   protected String parentGlAccountId;
+   private String parentGlAccountId;
    @Column(name="ACCOUNT_CODE")
-   protected String accountCode;
+   private String accountCode;
    @Column(name="ACCOUNT_NAME")
-   protected String accountName;
+   private String accountName;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="PRODUCT_ID")
-   protected String productId;
+   private String productId;
    @Column(name="POSTED_BALANCE")
-   protected BigDecimal postedBalance;
+   private BigDecimal postedBalance;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlAccountType glAccountType = null;
+   private GlAccountType glAccountType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_CLASS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlAccountClass glAccountClass = null;
+   private GlAccountClass glAccountClass = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GL_RESOURCE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlResourceType glResourceType = null;
+   private GlResourceType glResourceType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GL_XBRL_CLASS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlXbrlClass glXbrlClass = null;
+   private GlXbrlClass glXbrlClass = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_GL_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlAccount parentGlAccount = null;
+   private GlAccount parentGlAccount = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<AcctgTransEntry> acctgTransEntrys = null;
+   private List<AcctgTransEntry> acctgTransEntrys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="POST_TO_GL_ACCOUNT_ID")
    
-   protected List<FinAccount> postToFinAccounts = null;
+   private List<FinAccount> postToFinAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<FinAccountTypeGlAccount> finAccountTypeGlAccounts = null;
+   private List<FinAccountTypeGlAccount> finAccountTypeGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_GL_ACCOUNT_ID")
    
-   protected List<GlAccount> childGlAccounts = null;
+   private List<GlAccount> childGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="glAccount", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<GlAccountGroupMember> glAccountGroupMembers = null;
+   private List<GlAccountGroupMember> glAccountGroupMembers = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="glAccount", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<GlAccountHistory> glAccountHistorys = null;
+   private List<GlAccountHistory> glAccountHistorys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="glAccount", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<GlAccountOrganization> glAccountOrganizations = null;
+   private List<GlAccountOrganization> glAccountOrganizations = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="glAccount", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<GlAccountRole> glAccountRoles = null;
+   private List<GlAccountRole> glAccountRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<GlAccountTransEntryFact> glAccountTransEntryFacts = null;
+   private List<GlAccountTransEntryFact> glAccountTransEntryFacts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<GlAccountTypeDefault> glAccountTypeDefaults = null;
+   private List<GlAccountTypeDefault> glAccountTypeDefaults = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="glAccount", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<GlBudgetXref> glBudgetXrefs = null;
+   private List<GlBudgetXref> glBudgetXrefs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<GlReconciliation> glReconciliations = null;
+   private List<GlReconciliation> glReconciliations = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<InvoiceAdjustmentGlAccount> invoiceAdjustmentGlAccounts = null;
+   private List<InvoiceAdjustmentGlAccount> invoiceAdjustmentGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OVERRIDE_GL_ACCOUNT_ID")
    
-   protected List<InvoiceItem> overrideInvoiceItems = null;
+   private List<InvoiceItem> overrideInvoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_GL_ACCOUNT_ID")
    
-   protected List<InvoiceItemType> defaultInvoiceItemTypes = null;
+   private List<InvoiceItemType> defaultInvoiceItemTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<InvoiceItemTypeGlAccount> invoiceItemTypeGlAccounts = null;
+   private List<InvoiceItemTypeGlAccount> invoiceItemTypeGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OVERRIDE_GL_ACCOUNT_ID")
    
-   protected List<OrderAdjustment> overrideOrderAdjustments = null;
+   private List<OrderAdjustment> overrideOrderAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OVERRIDE_GL_ACCOUNT_ID")
    
-   protected List<OrderItem> overrideOrderItems = null;
+   private List<OrderItem> overrideOrderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<PartyGlAccount> partyGlAccounts = null;
+   private List<PartyGlAccount> partyGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEBIT_GL_ACCOUNT_ID")
    
-   protected List<PaycheckItemTypeGlAccount> debitPaycheckItemTypeGlAccounts = null;
+   private List<PaycheckItemTypeGlAccount> debitPaycheckItemTypeGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREDIT_GL_ACCOUNT_ID")
    
-   protected List<PaycheckItemTypeGlAccount> creditPaycheckItemTypeGlAccounts = null;
+   private List<PaycheckItemTypeGlAccount> creditPaycheckItemTypeGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OVERRIDE_GL_ACCOUNT_ID")
    
-   protected List<Payment> payments = null;
+   private List<Payment> payments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OVERRIDE_GL_ACCOUNT_ID")
    
-   protected List<PaymentApplication> paymentApplications = null;
+   private List<PaymentApplication> paymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<PaymentMethod> paymentMethods = null;
+   private List<PaymentMethod> paymentMethods = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_GL_ACCOUNT_ID")
    
-   protected List<PaymentMethodType> defaultPaymentMethodTypes = null;
+   private List<PaymentMethodType> defaultPaymentMethodTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<PaymentMethodTypeGlAccount> paymentMethodTypeGlAccounts = null;
+   private List<PaymentMethodTypeGlAccount> paymentMethodTypeGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<ProductCategoryGlAccount> productCategoryGlAccounts = null;
+   private List<ProductCategoryGlAccount> productCategoryGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<ProductGlAccount> productGlAccounts = null;
+   private List<ProductGlAccount> productGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OVERRIDE_GL_ACCOUNT_ID")
    
-   protected List<QuoteAdjustment> overrideQuoteAdjustments = null;
+   private List<QuoteAdjustment> overrideQuoteAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OVERRIDE_GL_ACCOUNT_ID")
    
-   protected List<ReturnAdjustment> overrideReturnAdjustments = null;
+   private List<ReturnAdjustment> overrideReturnAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<TaxAuthorityGlAccount> taxAuthorityGlAccounts = null;
+   private List<TaxAuthorityGlAccount> taxAuthorityGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID")
    
-   protected List<VarianceReasonGlAccount> varianceReasonGlAccounts = null;
+   private List<VarianceReasonGlAccount> varianceReasonGlAccounts = null;
 
   /**
    * Default constructor.

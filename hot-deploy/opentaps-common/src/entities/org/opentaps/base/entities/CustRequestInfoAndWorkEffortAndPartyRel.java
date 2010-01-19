@@ -149,7 +149,7 @@ fieldMapColumns.put("CustRequestInfoAndWorkEffortAndPartyRel", fields);
     lastModifiedByUserLogin("lastModifiedByUserLogin"),
     fulfilledDateTime("fulfilledDateTime"),
     workEffortId("workEffortId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -223,7 +223,7 @@ fieldMapColumns.put("CustRequestInfoAndWorkEffortAndPartyRel", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WorkEffort workEffort = null;
+   private WorkEffort workEffort = null;
 
   /**
    * Default constructor.

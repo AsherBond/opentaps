@@ -70,7 +70,7 @@ fieldMapColumns.put("ProductFeatureCategory", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,38 +84,38 @@ fieldMapColumns.put("ProductFeatureCategory", fields);
    @GeneratedValue(generator="ProductFeatureCategory_GEN")
    @Id
    @Column(name="PRODUCT_FEATURE_CATEGORY_ID")
-   protected String productFeatureCategoryId;
+   private String productFeatureCategoryId;
    @Column(name="PARENT_CATEGORY_ID")
-   protected String parentCategoryId;
+   private String parentCategoryId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductFeatureCategory parentProductFeatureCategory = null;
+   private ProductFeatureCategory parentProductFeatureCategory = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_FEATURE_CATEGORY_ID")
    
-   protected List<ProductFeature> productFeatures = null;
+   private List<ProductFeature> productFeatures = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_CATEGORY_ID")
    
-   protected List<ProductFeatureCategory> childProductFeatureCategorys = null;
+   private List<ProductFeatureCategory> childProductFeatureCategorys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productFeatureCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_FEATURE_CATEGORY_ID")
    
-   protected List<ProductFeatureCategoryAppl> productFeatureCategoryAppls = null;
+   private List<ProductFeatureCategoryAppl> productFeatureCategoryAppls = null;
 
   /**
    * Default constructor.

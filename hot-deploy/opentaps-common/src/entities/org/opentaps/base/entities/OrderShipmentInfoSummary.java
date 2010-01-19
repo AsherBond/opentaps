@@ -94,7 +94,7 @@ fieldMapColumns.put("OrderShipmentInfoSummary", fields);
     shipmentPackageSeqId("shipmentPackageSeqId"),
     trackingCode("trackingCode"),
     boxNumber("boxNumber");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -132,7 +132,7 @@ fieldMapColumns.put("OrderShipmentInfoSummary", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Shipment shipment = null;
+   private Shipment shipment = null;
 
   /**
    * Default constructor.

@@ -68,7 +68,7 @@ fieldMapColumns.put("PartyInvitationGroupAssoc", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -81,7 +81,7 @@ fieldMapColumns.put("PartyInvitationGroupAssoc", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.PartyInvitationGroupAssocPkBridge.class)
-     protected PartyInvitationGroupAssocPk id = new PartyInvitationGroupAssocPk();
+     private PartyInvitationGroupAssocPk id = new PartyInvitationGroupAssocPk();
    
     /**
      * Auto generated Id accessor.
@@ -98,13 +98,13 @@ fieldMapColumns.put("PartyInvitationGroupAssoc", fields);
          this.id = id;
       }
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    private transient PartyGroup toPartyGroup = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_TO", insertable=false, updatable=false)
@@ -112,14 +112,14 @@ fieldMapColumns.put("PartyInvitationGroupAssoc", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party toParty = null;
+   private Party toParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_INVITATION_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PartyInvitation partyInvitation = null;
+   private PartyInvitation partyInvitation = null;
 
   /**
    * Default constructor.

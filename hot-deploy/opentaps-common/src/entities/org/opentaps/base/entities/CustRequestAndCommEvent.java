@@ -137,7 +137,7 @@ fieldMapColumns.put("CustRequestAndCommEvent", fields);
     lastModifiedDate("lastModifiedDate"),
     lastModifiedByUserLogin("lastModifiedByUserLogin"),
     fulfilledDateTime("fulfilledDateTime");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -203,14 +203,14 @@ fieldMapColumns.put("CustRequestAndCommEvent", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected CustRequest custRequest = null;
+   private CustRequest custRequest = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COMMUNICATION_EVENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected CommunicationEvent communicationEvent = null;
+   private CommunicationEvent communicationEvent = null;
 
   /**
    * Default constructor.

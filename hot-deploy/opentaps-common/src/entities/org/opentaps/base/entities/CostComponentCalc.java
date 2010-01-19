@@ -84,7 +84,7 @@ fieldMapColumns.put("CostComponentCalc", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -98,67 +98,67 @@ fieldMapColumns.put("CostComponentCalc", fields);
    @GeneratedValue(generator="CostComponentCalc_GEN")
    @Id
    @Column(name="COST_COMPONENT_CALC_ID")
-   protected String costComponentCalcId;
+   private String costComponentCalcId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="COST_GL_ACCOUNT_TYPE_ID")
-   protected String costGlAccountTypeId;
+   private String costGlAccountTypeId;
    @Column(name="OFFSETTING_GL_ACCOUNT_TYPE_ID")
-   protected String offsettingGlAccountTypeId;
+   private String offsettingGlAccountTypeId;
    @Column(name="FIXED_COST")
-   protected BigDecimal fixedCost;
+   private BigDecimal fixedCost;
    @Column(name="VARIABLE_COST")
-   protected BigDecimal variableCost;
+   private BigDecimal variableCost;
    @Column(name="PER_MILLI_SECOND")
-   protected Long perMilliSecond;
+   private Long perMilliSecond;
    @Column(name="CURRENCY_UOM_ID")
-   protected String currencyUomId;
+   private String currencyUomId;
    @Column(name="COST_CUSTOM_METHOD_ID")
-   protected String costCustomMethodId;
+   private String costCustomMethodId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COST_GL_ACCOUNT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlAccountType costGlAccountType = null;
+   private GlAccountType costGlAccountType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="OFFSETTING_GL_ACCOUNT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlAccountType offsettingGlAccountType = null;
+   private GlAccountType offsettingGlAccountType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom uom = null;
+   private Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COST_CUSTOM_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected CustomMethod customMethod = null;
+   private CustomMethod customMethod = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="COST_COMPONENT_CALC_ID")
    
-   protected List<CostComponent> costComponents = null;
+   private List<CostComponent> costComponents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="COST_COMPONENT_CALC_ID")
    
-   protected List<WorkEffortCostCalc> workEffortCostCalcs = null;
+   private List<WorkEffortCostCalc> workEffortCostCalcs = null;
 
   /**
    * Default constructor.

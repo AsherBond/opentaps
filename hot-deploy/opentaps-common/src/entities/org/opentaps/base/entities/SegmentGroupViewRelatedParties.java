@@ -181,7 +181,7 @@ fieldMapColumns.put("SegmentGroupViewRelatedParties", fields);
     prPcPermissionsEnumId("prPcPermissionsEnumId"),
     prPcPositionTitle("prPcPositionTitle"),
     prPcComments("prPcComments");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

@@ -78,7 +78,7 @@ fieldMapColumns.put("Geo", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,162 +92,162 @@ fieldMapColumns.put("Geo", fields);
    @GeneratedValue(generator="Geo_GEN")
    @Id
    @Column(name="GEO_ID")
-   protected String geoId;
+   private String geoId;
    @Column(name="GEO_TYPE_ID")
-   protected String geoTypeId;
+   private String geoTypeId;
    @Column(name="GEO_NAME")
-   protected String geoName;
+   private String geoName;
    @Column(name="GEO_CODE")
-   protected String geoCode;
+   private String geoCode;
    @Column(name="GEO_SEC_CODE")
-   protected String geoSecCode;
+   private String geoSecCode;
    @Column(name="ABBREVIATION")
-   protected String abbreviation;
+   private String abbreviation;
    @Column(name="WELL_KNOWN_TEXT")
-   protected String wellKnownText;
+   private String wellKnownText;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GeoType geoType = null;
+   private GeoType geoType = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="geo", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GEO_ID")
    
-   protected List<AgreementGeographicalApplic> agreementGeographicalApplics = null;
+   private List<AgreementGeographicalApplic> agreementGeographicalApplics = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_ID")
    
-   protected List<CostComponent> costComponents = null;
+   private List<CostComponent> costComponents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="mainGeo", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GEO_ID")
    
-   protected List<GeoAssoc> mainGeoAssocs = null;
+   private List<GeoAssoc> mainGeoAssocs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="assocGeo", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GEO_ID_TO")
    
-   protected List<GeoAssoc> assocGeoAssocs = null;
+   private List<GeoAssoc> assocGeoAssocs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TAX_AUTH_GEO_ID")
    
-   protected List<InvoiceItem> taxInvoiceItems = null;
+   private List<InvoiceItem> taxInvoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="geo", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GEO_ID")
    
-   protected List<OldPartyTaxInfo> oldPartyTaxInfoes = null;
+   private List<OldPartyTaxInfo> oldPartyTaxInfoes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_GEO_ID")
    
-   protected List<OrderAdjustment> primaryOrderAdjustments = null;
+   private List<OrderAdjustment> primaryOrderAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SECONDARY_GEO_ID")
    
-   protected List<OrderAdjustment> secondaryOrderAdjustments = null;
+   private List<OrderAdjustment> secondaryOrderAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TAX_AUTH_GEO_ID")
    
-   protected List<PaymentApplication> paymentApplications = null;
+   private List<PaymentApplication> paymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="COUNTRY_GEO_ID")
    
-   protected List<PostalAddress> countryPostalAddresses = null;
+   private List<PostalAddress> countryPostalAddresses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATE_PROVINCE_GEO_ID")
    
-   protected List<PostalAddress> stateProvincePostalAddresses = null;
+   private List<PostalAddress> stateProvincePostalAddresses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="COUNTY_GEO_ID")
    
-   protected List<PostalAddress> countyPostalAddresses = null;
+   private List<PostalAddress> countyPostalAddresses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="POSTAL_CODE_GEO_ID")
    
-   protected List<PostalAddress> postalCodePostalAddresses = null;
+   private List<PostalAddress> postalCodePostalAddresses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="geo", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GEO_ID")
    
-   protected List<PostalAddressBoundary> postalAddressBoundarys = null;
+   private List<PostalAddressBoundary> postalAddressBoundarys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_GEO_ID")
    
-   protected List<Product> originProducts = null;
+   private List<Product> originProducts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="geo", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GEO_ID")
    
-   protected List<ProductGeo> productGeos = null;
+   private List<ProductGeo> productGeos = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INCLUDE_GEO_ID")
    
-   protected List<ProductStoreShipmentMeth> includeProductStoreShipmentMeths = null;
+   private List<ProductStoreShipmentMeth> includeProductStoreShipmentMeths = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="EXCLUDE_GEO_ID")
    
-   protected List<ProductStoreShipmentMeth> excludeProductStoreShipmentMeths = null;
+   private List<ProductStoreShipmentMeth> excludeProductStoreShipmentMeths = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_GEO_ID")
    
-   protected List<QuoteAdjustment> primaryQuoteAdjustments = null;
+   private List<QuoteAdjustment> primaryQuoteAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SECONDARY_GEO_ID")
    
-   protected List<QuoteAdjustment> secondaryQuoteAdjustments = null;
+   private List<QuoteAdjustment> secondaryQuoteAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_ID")
    
-   protected List<ReorderGuideline> reorderGuidelines = null;
+   private List<ReorderGuideline> reorderGuidelines = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_GEO_ID")
    
-   protected List<ReturnAdjustment> primaryReturnAdjustments = null;
+   private List<ReturnAdjustment> primaryReturnAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SECONDARY_GEO_ID")
    
-   protected List<ReturnAdjustment> secondaryReturnAdjustments = null;
+   private List<ReturnAdjustment> secondaryReturnAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="geo", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GEO_ID")
    
-   protected List<SegmentGroupGeo> segmentGroupGeos = null;
+   private List<SegmentGroupGeo> segmentGroupGeos = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_ID_TO")
    
-   protected List<ShipmentCostEstimate> toShipmentCostEstimates = null;
+   private List<ShipmentCostEstimate> toShipmentCostEstimates = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_ID_FROM")
    
-   protected List<ShipmentCostEstimate> fromShipmentCostEstimates = null;
+   private List<ShipmentCostEstimate> fromShipmentCostEstimates = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_ID")
    
-   protected List<SurveyQuestion> surveyQuestions = null;
+   private List<SurveyQuestion> surveyQuestions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="taxAuthGeo", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TAX_AUTH_GEO_ID")
    
-   protected List<TaxAuthority> taxAuthTaxAuthoritys = null;
+   private List<TaxAuthority> taxAuthTaxAuthoritys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATE_GEO_ID")
    
-   protected List<TestGeoData> stateTestGeoDatas = null;
+   private List<TestGeoData> stateTestGeoDatas = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="COUNTRY_GEO_ID")
    
-   protected List<TestGeoData> countryTestGeoDatas = null;
+   private List<TestGeoData> countryTestGeoDatas = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CLIENT_IP_STATE_PROV_GEO_ID")
    
-   protected List<Visit> clientIpStateProvVisits = null;
+   private List<Visit> clientIpStateProvVisits = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CLIENT_IP_COUNTRY_GEO_ID")
    
-   protected List<Visit> clientIpCountryVisits = null;
+   private List<Visit> clientIpCountryVisits = null;
 
   /**
    * Default constructor.

@@ -109,7 +109,7 @@ fieldMapColumns.put("PaymentGatewayResponse", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -123,107 +123,107 @@ fieldMapColumns.put("PaymentGatewayResponse", fields);
    @GeneratedValue(generator="PaymentGatewayResponse_GEN")
    @Id
    @Column(name="PAYMENT_GATEWAY_RESPONSE_ID")
-   protected String paymentGatewayResponseId;
+   private String paymentGatewayResponseId;
    @Column(name="PAYMENT_SERVICE_TYPE_ENUM_ID")
-   protected String paymentServiceTypeEnumId;
+   private String paymentServiceTypeEnumId;
    @Column(name="ORDER_PAYMENT_PREFERENCE_ID")
-   protected String orderPaymentPreferenceId;
+   private String orderPaymentPreferenceId;
    @Column(name="PAYMENT_METHOD_TYPE_ID")
-   protected String paymentMethodTypeId;
+   private String paymentMethodTypeId;
    @Column(name="PAYMENT_METHOD_ID")
-   protected String paymentMethodId;
+   private String paymentMethodId;
    @Column(name="TRANS_CODE_ENUM_ID")
-   protected String transCodeEnumId;
+   private String transCodeEnumId;
    @Column(name="AMOUNT")
-   protected BigDecimal amount;
+   private BigDecimal amount;
    @Column(name="CURRENCY_UOM_ID")
-   protected String currencyUomId;
+   private String currencyUomId;
    @Column(name="REFERENCE_NUM")
-   protected String referenceNum;
+   private String referenceNum;
    @Column(name="ALT_REFERENCE")
-   protected String altReference;
+   private String altReference;
    @Column(name="SUB_REFERENCE")
-   protected String subReference;
+   private String subReference;
    @Column(name="GATEWAY_CODE")
-   protected String gatewayCode;
+   private String gatewayCode;
    @Column(name="GATEWAY_FLAG")
-   protected String gatewayFlag;
+   private String gatewayFlag;
    @Column(name="GATEWAY_AVS_RESULT")
-   protected String gatewayAvsResult;
+   private String gatewayAvsResult;
    @Column(name="GATEWAY_CV_RESULT")
-   protected String gatewayCvResult;
+   private String gatewayCvResult;
    @Column(name="GATEWAY_SCORE_RESULT")
-   protected String gatewayScoreResult;
+   private String gatewayScoreResult;
    @Column(name="GATEWAY_MESSAGE")
-   protected String gatewayMessage;
+   private String gatewayMessage;
    @Column(name="TRANSACTION_DATE")
-   protected Timestamp transactionDate;
+   private Timestamp transactionDate;
    @Column(name="RESULT_DECLINED")
-   protected String resultDeclined;
+   private String resultDeclined;
    @Column(name="RESULT_NSF")
-   protected String resultNsf;
+   private String resultNsf;
    @Column(name="RESULT_BAD_EXPIRE")
-   protected String resultBadExpire;
+   private String resultBadExpire;
    @Column(name="RESULT_BAD_CARD_NUMBER")
-   protected String resultBadCardNumber;
+   private String resultBadCardNumber;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_SERVICE_TYPE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration serviceTypeEnumeration = null;
+   private Enumeration serviceTypeEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TRANS_CODE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tranCodeEnumeration = null;
+   private Enumeration tranCodeEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom uom = null;
+   private Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_PAYMENT_PREFERENCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderPaymentPreference orderPaymentPreference = null;
+   private OrderPaymentPreference orderPaymentPreference = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PaymentMethodType paymentMethodType = null;
+   private PaymentMethodType paymentMethodType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PaymentMethod paymentMethod = null;
+   private PaymentMethod paymentMethod = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_GATEWAY_RESPONSE_ID")
    
-   protected List<Payment> payments = null;
+   private List<Payment> payments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_GATEWAY_RESPONSE_ID")
    
-   protected List<PaymentGatewayRespMsg> paymentGatewayRespMsgs = null;
+   private List<PaymentGatewayRespMsg> paymentGatewayRespMsgs = null;
 
   /**
    * Default constructor.

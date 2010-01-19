@@ -445,7 +445,7 @@ fieldMapColumns.put("PartyFromByRelnAndContactInfoAndPartyClassification", field
     partyClassificationGroupId("partyClassificationGroupId"),
     partyClassificationTypeId("partyClassificationTypeId"),
     parentGroupId("parentGroupId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

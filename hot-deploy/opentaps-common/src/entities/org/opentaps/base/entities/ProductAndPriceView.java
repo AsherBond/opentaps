@@ -101,7 +101,7 @@ fieldMapColumns.put("ProductAndPriceView", fields);
     fromDate("fromDate"),
     thruDate("thruDate"),
     price("price");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

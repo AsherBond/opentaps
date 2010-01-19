@@ -74,7 +74,7 @@ fieldMapColumns.put("ShippingDocument", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,30 +88,30 @@ fieldMapColumns.put("ShippingDocument", fields);
    @GeneratedValue(generator="ShippingDocument_GEN")
    @Id
    @Column(name="DOCUMENT_ID")
-   protected String documentId;
+   private String documentId;
    @Column(name="SHIPMENT_ID")
-   protected String shipmentId;
+   private String shipmentId;
    @Column(name="SHIPMENT_ITEM_SEQ_ID")
-   protected String shipmentItemSeqId;
+   private String shipmentItemSeqId;
    @Column(name="SHIPMENT_PACKAGE_SEQ_ID")
-   protected String shipmentPackageSeqId;
+   private String shipmentPackageSeqId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DOCUMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Document document = null;
+   private Document document = null;
    private transient ShipmentItem shipmentItem = null;
    private transient ShipmentPackage shipmentPackage = null;
 

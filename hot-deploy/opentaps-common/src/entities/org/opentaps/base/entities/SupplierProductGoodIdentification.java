@@ -128,7 +128,7 @@ fieldMapColumns.put("SupplierProductGoodIdentification", fields);
     comments("comments"),
     goodIdentificationTypeId("goodIdentificationTypeId"),
     idValue("idValue");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -188,7 +188,7 @@ fieldMapColumns.put("SupplierProductGoodIdentification", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product product = null;
+   private Product product = null;
 
   /**
    * Default constructor.

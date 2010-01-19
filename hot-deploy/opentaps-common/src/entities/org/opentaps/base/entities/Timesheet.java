@@ -80,7 +80,7 @@ fieldMapColumns.put("Timesheet", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -94,65 +94,65 @@ fieldMapColumns.put("Timesheet", fields);
    @GeneratedValue(generator="Timesheet_GEN")
    @Id
    @Column(name="TIMESHEET_ID")
-   protected String timesheetId;
+   private String timesheetId;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="CLIENT_PARTY_ID")
-   protected String clientPartyId;
+   private String clientPartyId;
    @Column(name="FROM_DATE")
-   protected Timestamp fromDate;
+   private Timestamp fromDate;
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="STATUS_ID")
-   protected String statusId;
+   private String statusId;
    @Column(name="APPROVED_BY_USER_LOGIN_ID")
-   protected String approvedByUserLoginId;
+   private String approvedByUserLoginId;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CLIENT_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party clientParty = null;
+   private Party clientParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem statusItem = null;
+   private StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="APPROVED_BY_USER_LOGIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserLogin approvedByUserLogin = null;
+   private UserLogin approvedByUserLogin = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TIMESHEET_ID")
    
-   protected List<TimeEntry> timeEntrys = null;
+   private List<TimeEntry> timeEntrys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="timesheet", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TIMESHEET_ID")
    
-   protected List<TimesheetRole> timesheetRoles = null;
+   private List<TimesheetRole> timesheetRoles = null;
 
   /**
    * Default constructor.

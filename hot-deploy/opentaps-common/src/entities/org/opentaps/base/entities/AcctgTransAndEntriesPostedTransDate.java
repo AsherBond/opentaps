@@ -70,7 +70,7 @@ fieldMapColumns.put("AcctgTransAndEntriesPostedTransDate", fields);
     transactionDate("transactionDate"),
     isPosted("isPosted"),
     organizationPartyId("organizationPartyId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

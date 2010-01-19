@@ -87,7 +87,7 @@ fieldMapColumns.put("GeoAssocAndGeoTo", fields);
     geoSecCode("geoSecCode"),
     abbreviation("abbreviation"),
     wellKnownText("wellKnownText");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

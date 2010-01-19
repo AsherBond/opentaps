@@ -155,7 +155,7 @@ fieldMapColumns.put("WorkEffortOrderHeaderView", fields);
     grandTotal("grandTotal"),
     billFromPartyId("billFromPartyId"),
     billToPartyId("billToPartyId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -233,28 +233,28 @@ fieldMapColumns.put("WorkEffortOrderHeaderView", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WorkEffort workEffort = null;
+   private WorkEffort workEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderHeader orderHeader = null;
+   private OrderHeader orderHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderType orderType = null;
+   private OrderType orderType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem statusItem = null;
+   private StatusItem statusItem = null;
 
   /**
    * Default constructor.

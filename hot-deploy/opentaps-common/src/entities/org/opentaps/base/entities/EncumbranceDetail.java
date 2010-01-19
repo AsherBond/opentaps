@@ -119,7 +119,7 @@ fieldMapColumns.put("EncumbranceDetail", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -132,7 +132,7 @@ fieldMapColumns.put("EncumbranceDetail", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.EncumbranceDetailPkBridge.class)
-     protected EncumbranceDetailPk id = new EncumbranceDetailPk();
+     private EncumbranceDetailPk id = new EncumbranceDetailPk();
    
     /**
      * Auto generated Id accessor.
@@ -149,147 +149,147 @@ fieldMapColumns.put("EncumbranceDetail", fields);
          this.id = id;
       }
    @Column(name="ENCUMBRANCE_DETAIL_TYPE_ID")
-   protected String encumbranceDetailTypeId;
+   private String encumbranceDetailTypeId;
    @Column(name="ORGANIZATION_PARTY_ID")
-   protected String organizationPartyId;
+   private String organizationPartyId;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="ORDER_ID")
-   protected String orderId;
+   private String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   protected String orderItemSeqId;
+   private String orderItemSeqId;
    @Column(name="ORIGINAL_QUANTITY")
-   protected BigDecimal originalQuantity;
+   private BigDecimal originalQuantity;
    @Column(name="CANCEL_QUANTITY")
-   protected BigDecimal cancelQuantity;
+   private BigDecimal cancelQuantity;
    @Column(name="INVOICED_QUANTITY")
-   protected BigDecimal invoicedQuantity;
+   private BigDecimal invoicedQuantity;
    @Column(name="ENCUMBERED_QUANTITY")
-   protected BigDecimal encumberedQuantity;
+   private BigDecimal encumberedQuantity;
    @Column(name="UNIT_AMOUNT")
-   protected BigDecimal unitAmount;
+   private BigDecimal unitAmount;
    @Column(name="ACCTG_TRANS_ID")
-   protected String acctgTransId;
+   private String acctgTransId;
    @Column(name="ACCTG_TRANS_ENTRY_ID")
-   protected String acctgTransEntryId;
+   private String acctgTransEntryId;
    @Column(name="DEBIT_CREDIT_FLAG")
-   protected String debitCreditFlag;
+   private String debitCreditFlag;
    @Column(name="GL_ACCOUNT_ID")
-   protected String glAccountId;
+   private String glAccountId;
    @Column(name="ENCUMBERED_AMOUNT")
-   protected BigDecimal encumberedAmount;
+   private BigDecimal encumberedAmount;
    @Column(name="ACCTG_TAG_ENUM_ID1")
-   protected String acctgTagEnumId1;
+   private String acctgTagEnumId1;
    @Column(name="ACCTG_TAG_ENUM_ID2")
-   protected String acctgTagEnumId2;
+   private String acctgTagEnumId2;
    @Column(name="ACCTG_TAG_ENUM_ID3")
-   protected String acctgTagEnumId3;
+   private String acctgTagEnumId3;
    @Column(name="ACCTG_TAG_ENUM_ID4")
-   protected String acctgTagEnumId4;
+   private String acctgTagEnumId4;
    @Column(name="ACCTG_TAG_ENUM_ID5")
-   protected String acctgTagEnumId5;
+   private String acctgTagEnumId5;
    @Column(name="ACCTG_TAG_ENUM_ID6")
-   protected String acctgTagEnumId6;
+   private String acctgTagEnumId6;
    @Column(name="ACCTG_TAG_ENUM_ID7")
-   protected String acctgTagEnumId7;
+   private String acctgTagEnumId7;
    @Column(name="ACCTG_TAG_ENUM_ID8")
-   protected String acctgTagEnumId8;
+   private String acctgTagEnumId8;
    @Column(name="ACCTG_TAG_ENUM_ID9")
-   protected String acctgTagEnumId9;
+   private String acctgTagEnumId9;
    @Column(name="ACCTG_TAG_ENUM_ID10")
-   protected String acctgTagEnumId10;
+   private String acctgTagEnumId10;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ENCUMBRANCE_SNAPSHOT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected EncumbranceSnapshot encumbranceSnapshot = null;
+   private EncumbranceSnapshot encumbranceSnapshot = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ENCUMBRANCE_DETAIL_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected EncumbranceDetailType encumbranceDetailType = null;
+   private EncumbranceDetailType encumbranceDetailType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID1", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag1Enumeration = null;
+   private Enumeration tag1Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID2", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag2Enumeration = null;
+   private Enumeration tag2Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID3", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag3Enumeration = null;
+   private Enumeration tag3Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID4", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag4Enumeration = null;
+   private Enumeration tag4Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID5", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag5Enumeration = null;
+   private Enumeration tag5Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID6", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag6Enumeration = null;
+   private Enumeration tag6Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID7", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag7Enumeration = null;
+   private Enumeration tag7Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID8", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag8Enumeration = null;
+   private Enumeration tag8Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID9", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag9Enumeration = null;
+   private Enumeration tag9Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID10", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag10Enumeration = null;
+   private Enumeration tag10Enumeration = null;
 
   /**
    * Default constructor.

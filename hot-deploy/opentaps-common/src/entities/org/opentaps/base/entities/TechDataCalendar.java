@@ -70,7 +70,7 @@ fieldMapColumns.put("TechDataCalendar", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,38 +84,38 @@ fieldMapColumns.put("TechDataCalendar", fields);
    @GeneratedValue(generator="TechDataCalendar_GEN")
    @Id
    @Column(name="CALENDAR_ID")
-   protected String calendarId;
+   private String calendarId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="CALENDAR_WEEK_ID")
-   protected String calendarWeekId;
+   private String calendarWeekId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CALENDAR_WEEK_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected TechDataCalendarWeek techDataCalendarWeek = null;
+   private TechDataCalendarWeek techDataCalendarWeek = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CALENDAR_ID")
    
-   protected List<FixedAsset> fixedAssets = null;
+   private List<FixedAsset> fixedAssets = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="techDataCalendar", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CALENDAR_ID")
    
-   protected List<TechDataCalendarExcDay> techDataCalendarExcDays = null;
+   private List<TechDataCalendarExcDay> techDataCalendarExcDays = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="techDataCalendar", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CALENDAR_ID")
    
-   protected List<TechDataCalendarExcWeek> techDataCalendarExcWeeks = null;
+   private List<TechDataCalendarExcWeek> techDataCalendarExcWeeks = null;
 
   /**
    * Default constructor.

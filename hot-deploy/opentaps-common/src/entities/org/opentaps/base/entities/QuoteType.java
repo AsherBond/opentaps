@@ -72,7 +72,7 @@ fieldMapColumns.put("QuoteType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,40 +86,40 @@ fieldMapColumns.put("QuoteType", fields);
    @GeneratedValue(generator="QuoteType_GEN")
    @Id
    @Column(name="QUOTE_TYPE_ID")
-   protected String quoteTypeId;
+   private String quoteTypeId;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected QuoteType parentQuoteType = null;
+   private QuoteType parentQuoteType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="QUOTE_TYPE_ID")
    
-   protected List<Quote> quotes = null;
+   private List<Quote> quotes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<QuoteType> childQuoteTypes = null;
+   private List<QuoteType> childQuoteTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="quoteType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="QUOTE_TYPE_ID")
    
-   protected List<QuoteTypeAttr> quoteTypeAttrs = null;
+   private List<QuoteTypeAttr> quoteTypeAttrs = null;
 
   /**
    * Default constructor.

@@ -68,7 +68,7 @@ fieldMapColumns.put("TrackingCodeType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,29 +82,29 @@ fieldMapColumns.put("TrackingCodeType", fields);
    @GeneratedValue(generator="TrackingCodeType_GEN")
    @Id
    @Column(name="TRACKING_CODE_TYPE_ID")
-   protected String trackingCodeTypeId;
+   private String trackingCodeTypeId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TRACKING_CODE_TYPE_ID")
    
-   protected List<TrackingCode> trackingCodes = null;
+   private List<TrackingCode> trackingCodes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="trackingCodeType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TRACKING_CODE_TYPE_ID")
    
-   protected List<TrackingCodeOrder> trackingCodeOrders = null;
+   private List<TrackingCodeOrder> trackingCodeOrders = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="trackingCodeType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TRACKING_CODE_TYPE_ID")
    
-   protected List<TrackingCodeOrderReturn> trackingCodeOrderReturns = null;
+   private List<TrackingCodeOrderReturn> trackingCodeOrderReturns = null;
 
   /**
    * Default constructor.

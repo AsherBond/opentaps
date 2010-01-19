@@ -149,7 +149,7 @@ fieldMapColumns.put("InvoiceAndPartyClassificationReceipt", fields);
     pendingOpenAmount("pendingOpenAmount"),
     pendingAppliedAmount("pendingAppliedAmount"),
     processingStatusId("processingStatusId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -223,8 +223,8 @@ fieldMapColumns.put("InvoiceAndPartyClassificationReceipt", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Invoice invoice = null;
-   protected transient List<InvoiceItem> invoiceItems = null;
+   private Invoice invoice = null;
+   private transient List<InvoiceItem> invoiceItems = null;
 
   /**
    * Default constructor.

@@ -154,7 +154,7 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
     ccString("ccString"),
     bccString("bccString"),
     messageId("messageId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -232,14 +232,14 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RoleType roleType = null;
+   private RoleType roleType = null;
    private transient PartyRole partyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COMMUNICATION_EVENT_TYPE_ID", insertable=false, updatable=false)
@@ -247,22 +247,22 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected CommunicationEventType communicationEventType = null;
-   protected transient List<CommunicationEventPurpose> communicationEventPurposes = null;
+   private CommunicationEventType communicationEventType = null;
+   private transient List<CommunicationEventPurpose> communicationEventPurposes = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party toParty = null;
+   private Party toParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RoleType toRoleType = null;
+   private RoleType toRoleType = null;
    private transient PartyRole toPartyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_FROM", insertable=false, updatable=false)
@@ -270,14 +270,14 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party fromParty = null;
+   private Party fromParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID_FROM", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RoleType fromRoleType = null;
+   private RoleType fromRoleType = null;
    private transient PartyRole fromPartyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
@@ -285,17 +285,17 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem statusItem = null;
+   private StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ContactMechType contactMechType = null;
-   protected transient List<CommunicationEventRole> communicationEventRoles = null;
-   protected transient List<PartyNeed> partyNeeds = null;
-   protected transient List<CommunicationEventWorkEff> communicationEventWorkEffs = null;
+   private ContactMechType contactMechType = null;
+   private transient List<CommunicationEventRole> communicationEventRoles = null;
+   private transient List<PartyNeed> partyNeeds = null;
+   private transient List<CommunicationEventWorkEff> communicationEventWorkEffs = null;
 
   /**
    * Default constructor.

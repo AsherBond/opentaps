@@ -70,7 +70,7 @@ fieldMapColumns.put("InventoryItemDetailSummary", fields);
     inventoryItemId("inventoryItemId"),
     availableToPromiseTotal("availableToPromiseTotal"),
     quantityOnHandTotal("quantityOnHandTotal");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

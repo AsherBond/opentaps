@@ -70,7 +70,7 @@ fieldMapColumns.put("ExampleFeature", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,30 +84,30 @@ fieldMapColumns.put("ExampleFeature", fields);
    @GeneratedValue(generator="ExampleFeature_GEN")
    @Id
    @Column(name="EXAMPLE_FEATURE_ID")
-   protected String exampleFeatureId;
+   private String exampleFeatureId;
    @Column(name="FEATURE_SOURCE_ENUM_ID")
-   protected String featureSourceEnumId;
+   private String featureSourceEnumId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FEATURE_SOURCE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration enumeration = null;
+   private Enumeration enumeration = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="exampleFeature", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EXAMPLE_FEATURE_ID")
    
-   protected List<ExampleFeatureAppl> exampleFeatureAppls = null;
+   private List<ExampleFeatureAppl> exampleFeatureAppls = null;
 
   /**
    * Default constructor.

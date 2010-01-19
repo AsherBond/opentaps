@@ -76,7 +76,7 @@ fieldMapColumns.put("UserAgent", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -90,64 +90,64 @@ fieldMapColumns.put("UserAgent", fields);
    @GeneratedValue(generator="UserAgent_GEN")
    @Id
    @Column(name="USER_AGENT_ID")
-   protected String userAgentId;
+   private String userAgentId;
    @Column(name="BROWSER_TYPE_ID")
-   protected String browserTypeId;
+   private String browserTypeId;
    @Column(name="PLATFORM_TYPE_ID")
-   protected String platformTypeId;
+   private String platformTypeId;
    @Column(name="PROTOCOL_TYPE_ID")
-   protected String protocolTypeId;
+   private String protocolTypeId;
    @Column(name="USER_AGENT_TYPE_ID")
-   protected String userAgentTypeId;
+   private String userAgentTypeId;
    @Column(name="USER_AGENT_METHOD_TYPE_ID")
-   protected String userAgentMethodTypeId;
+   private String userAgentMethodTypeId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BROWSER_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected BrowserType browserType = null;
+   private BrowserType browserType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PLATFORM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PlatformType platformType = null;
+   private PlatformType platformType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PROTOCOL_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProtocolType protocolType = null;
+   private ProtocolType protocolType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="USER_AGENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserAgentType userAgentType = null;
+   private UserAgentType userAgentType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="USER_AGENT_METHOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserAgentMethodType userAgentMethodType = null;
+   private UserAgentMethodType userAgentMethodType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="USER_AGENT_ID")
    
-   protected List<Visit> visits = null;
+   private List<Visit> visits = null;
 
   /**
    * Default constructor.

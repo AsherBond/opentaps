@@ -94,7 +94,7 @@ fieldMapColumns.put("EntitySync", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -108,55 +108,55 @@ fieldMapColumns.put("EntitySync", fields);
    @GeneratedValue(generator="EntitySync_GEN")
    @Id
    @Column(name="ENTITY_SYNC_ID")
-   protected String entitySyncId;
+   private String entitySyncId;
    @Column(name="RUN_STATUS_ID")
-   protected String runStatusId;
+   private String runStatusId;
    @Column(name="LAST_SUCCESSFUL_SYNCH_TIME")
-   protected Timestamp lastSuccessfulSynchTime;
+   private Timestamp lastSuccessfulSynchTime;
    @Column(name="LAST_HISTORY_START_DATE")
-   protected Timestamp lastHistoryStartDate;
+   private Timestamp lastHistoryStartDate;
    @Column(name="PRE_OFFLINE_SYNCH_TIME")
-   protected Timestamp preOfflineSynchTime;
+   private Timestamp preOfflineSynchTime;
    @Column(name="OFFLINE_SYNC_SPLIT_MILLIS")
-   protected Long offlineSyncSplitMillis;
+   private Long offlineSyncSplitMillis;
    @Column(name="SYNC_SPLIT_MILLIS")
-   protected Long syncSplitMillis;
+   private Long syncSplitMillis;
    @Column(name="SYNC_END_BUFFER_MILLIS")
-   protected Long syncEndBufferMillis;
+   private Long syncEndBufferMillis;
    @Column(name="MAX_RUNNING_NO_UPDATE_MILLIS")
-   protected Long maxRunningNoUpdateMillis;
+   private Long maxRunningNoUpdateMillis;
    @Column(name="TARGET_SERVICE_NAME")
-   protected String targetServiceName;
+   private String targetServiceName;
    @Column(name="TARGET_DELEGATOR_NAME")
-   protected String targetDelegatorName;
+   private String targetDelegatorName;
    @Column(name="KEEP_REMOVE_INFO_HOURS")
-   protected BigDecimal keepRemoveInfoHours;
+   private BigDecimal keepRemoveInfoHours;
    @Column(name="FOR_PULL_ONLY")
-   protected String forPullOnly;
+   private String forPullOnly;
    @Column(name="FOR_PUSH_ONLY")
-   protected String forPushOnly;
+   private String forPushOnly;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    private transient List<EntitySyncInclGrpDetailView> entitySyncInclGrpDetailViews = null;
    private transient EntitySyncHistory lastEntitySyncHistory = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="entitySync", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ENTITY_SYNC_ID")
    
-   protected List<EntitySyncHistory> entitySyncHistorys = null;
+   private List<EntitySyncHistory> entitySyncHistorys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="entitySync", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ENTITY_SYNC_ID")
    
-   protected List<EntitySyncInclude> entitySyncIncludes = null;
+   private List<EntitySyncInclude> entitySyncIncludes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="entitySync", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ENTITY_SYNC_ID")
    
-   protected List<EntitySyncIncludeGroup> entitySyncIncludeGroups = null;
+   private List<EntitySyncIncludeGroup> entitySyncIncludeGroups = null;
 
   /**
    * Default constructor.

@@ -93,7 +93,7 @@ fieldMapColumns.put("GiftCardFulfillment", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -107,62 +107,62 @@ fieldMapColumns.put("GiftCardFulfillment", fields);
    @GeneratedValue(generator="GiftCardFulfillment_GEN")
    @Id
    @Column(name="FULFILLMENT_ID")
-   protected String fulfillmentId;
+   private String fulfillmentId;
    @Column(name="TYPE_ENUM_ID")
-   protected String typeEnumId;
+   private String typeEnumId;
    @Column(name="MERCHANT_ID")
-   protected String merchantId;
+   private String merchantId;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="ORDER_ID")
-   protected String orderId;
+   private String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   protected String orderItemSeqId;
+   private String orderItemSeqId;
    @Column(name="SURVEY_RESPONSE_ID")
-   protected String surveyResponseId;
+   private String surveyResponseId;
    @Column(name="CARD_NUMBER")
-   protected String cardNumber;
+   private String cardNumber;
    @Column(name="PIN_NUMBER")
-   protected String pinNumber;
+   private String pinNumber;
    @Column(name="AMOUNT")
-   protected BigDecimal amount;
+   private BigDecimal amount;
    @Column(name="RESPONSE_CODE")
-   protected String responseCode;
+   private String responseCode;
    @Column(name="REFERENCE_NUM")
-   protected String referenceNum;
+   private String referenceNum;
    @Column(name="AUTH_CODE")
-   protected String authCode;
+   private String authCode;
    @Column(name="FULFILLMENT_DATE")
-   protected Timestamp fulfillmentDate;
+   private Timestamp fulfillmentDate;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TYPE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration enumeration = null;
+   private Enumeration enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderHeader orderHeader = null;
+   private OrderHeader orderHeader = null;
    private transient OrderItem orderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_RESPONSE_ID", insertable=false, updatable=false)
@@ -170,7 +170,7 @@ fieldMapColumns.put("GiftCardFulfillment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SurveyResponse surveyResponse = null;
+   private SurveyResponse surveyResponse = null;
 
   /**
    * Default constructor.

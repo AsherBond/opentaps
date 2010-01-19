@@ -110,7 +110,7 @@ fieldMapColumns.put("CustRequestAndRole", fields);
     roleTypeId("roleTypeId"),
     fromDate("fromDate"),
     thruDate("thruDate");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -158,7 +158,7 @@ fieldMapColumns.put("CustRequestAndRole", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected CustRequest custRequest = null;
+   private CustRequest custRequest = null;
    private transient CustRequestParty custRequestParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
@@ -166,7 +166,7 @@ fieldMapColumns.put("CustRequestAndRole", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    private transient Person person = null;
    private transient PartyRole partyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -175,7 +175,7 @@ fieldMapColumns.put("CustRequestAndRole", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RoleType roleType = null;
+   private RoleType roleType = null;
 
   /**
    * Default constructor.

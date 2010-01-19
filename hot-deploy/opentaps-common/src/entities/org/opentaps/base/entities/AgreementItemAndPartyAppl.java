@@ -124,7 +124,7 @@ fieldMapColumns.put("AgreementItemAndPartyAppl", fields);
     defaultCurrencyUomId("defaultCurrencyUomId"),
     fromPartyClassGroupId("fromPartyClassGroupId"),
     toPartyClassGroupId("toPartyClassGroupId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

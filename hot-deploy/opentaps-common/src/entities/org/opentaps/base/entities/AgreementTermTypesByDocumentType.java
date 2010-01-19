@@ -66,7 +66,7 @@ fieldMapColumns.put("AgreementTermTypesByDocumentType", fields);
   public static enum Fields implements EntityFieldInterface<AgreementTermTypesByDocumentType> {
     documentTypeId("documentTypeId"),
     termTypeId("termTypeId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

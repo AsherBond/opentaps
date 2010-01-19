@@ -70,7 +70,7 @@ fieldMapColumns.put("CustRequestItemWorkEffort", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -83,7 +83,7 @@ fieldMapColumns.put("CustRequestItemWorkEffort", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.CustRequestItemWorkEffortPkBridge.class)
-     protected CustRequestItemWorkEffortPk id = new CustRequestItemWorkEffortPk();
+     private CustRequestItemWorkEffortPk id = new CustRequestItemWorkEffortPk();
    
     /**
      * Auto generated Id accessor.
@@ -100,13 +100,13 @@ fieldMapColumns.put("CustRequestItemWorkEffort", fields);
          this.id = id;
       }
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    private transient CustRequestItem custRequestItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_ID", insertable=false, updatable=false)
@@ -114,14 +114,14 @@ fieldMapColumns.put("CustRequestItemWorkEffort", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected CustRequest custRequest = null;
+   private CustRequest custRequest = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WorkEffort workEffort = null;
+   private WorkEffort workEffort = null;
 
   /**
    * Default constructor.

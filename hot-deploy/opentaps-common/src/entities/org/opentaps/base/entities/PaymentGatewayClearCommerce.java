@@ -86,7 +86,7 @@ fieldMapColumns.put("PaymentGatewayClearCommerce", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -100,42 +100,42 @@ fieldMapColumns.put("PaymentGatewayClearCommerce", fields);
    @GeneratedValue(generator="PaymentGatewayClearCommerce_GEN")
    @Id
    @Column(name="PAYMENT_GATEWAY_CONFIG_ID")
-   protected String paymentGatewayConfigId;
+   private String paymentGatewayConfigId;
    @Column(name="SOURCE_ID")
-   protected String sourceId;
+   private String sourceId;
    @Column(name="GROUP_ID")
-   protected String groupId;
+   private String groupId;
    @Column(name="CLIENT_ID")
-   protected String clientId;
+   private String clientId;
    @Column(name="USERNAME")
-   protected String username;
+   private String username;
    @Column(name="PWD")
-   protected String pwd;
+   private String pwd;
    @Column(name="USER_ALIAS")
-   protected String userAlias;
+   private String userAlias;
    @Column(name="EFFECTIVE_ALIAS")
-   protected String effectiveAlias;
+   private String effectiveAlias;
    @Column(name="PROCESS_MODE")
-   protected String processMode;
+   private String processMode;
    @Column(name="SERVER_U_R_L")
-   protected String serverURL;
+   private String serverURL;
    @Column(name="ENABLE_C_V_M")
-   protected String enableCVM;
+   private String enableCVM;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_GATEWAY_CONFIG_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PaymentGatewayConfig paymentGatewayConfig = null;
+   private PaymentGatewayConfig paymentGatewayConfig = null;
 
   /**
    * Default constructor.

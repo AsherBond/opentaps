@@ -258,7 +258,7 @@ fieldMapColumns.put("WorkEffortPartyAssignByRole", fields);
     mustRsvp("mustRsvp"),
     availabilityStatusId("availabilityStatusId"),
     partyId("partyId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -404,7 +404,7 @@ fieldMapColumns.put("WorkEffortPartyAssignByRole", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WorkEffort workEffort = null;
+   private WorkEffort workEffort = null;
    private transient WorkEffortPartyAssignment workEffortPartyAssignment = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
@@ -412,7 +412,7 @@ fieldMapColumns.put("WorkEffortPartyAssignByRole", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    private transient Person person = null;
    private transient PartyRole partyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -421,7 +421,7 @@ fieldMapColumns.put("WorkEffortPartyAssignByRole", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RoleType roleType = null;
+   private RoleType roleType = null;
 
   /**
    * Default constructor.

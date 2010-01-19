@@ -80,7 +80,7 @@ fieldMapColumns.put("PaymentMethod", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     emailAddress("emailAddress");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -94,99 +94,99 @@ fieldMapColumns.put("PaymentMethod", fields);
    @GeneratedValue(generator="PaymentMethod_GEN")
    @Id
    @Column(name="PAYMENT_METHOD_ID")
-   protected String paymentMethodId;
+   private String paymentMethodId;
    @Column(name="PAYMENT_METHOD_TYPE_ID")
-   protected String paymentMethodTypeId;
+   private String paymentMethodTypeId;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="GL_ACCOUNT_ID")
-   protected String glAccountId;
+   private String glAccountId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="FROM_DATE")
-   protected Timestamp fromDate;
+   private Timestamp fromDate;
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @Column(name="EMAIL_ADDRESS")
-   protected String emailAddress;
+   private String emailAddress;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PaymentMethodType paymentMethodType = null;
+   private PaymentMethodType paymentMethodType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlAccount glAccount = null;
+   private GlAccount glAccount = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected CreditCard creditCard = null;
+   private CreditCard creditCard = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected EftAccount eftAccount = null;
+   private EftAccount eftAccount = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REPLENISH_PAYMENT_ID")
    
-   protected List<FinAccount> replenishFinAccounts = null;
+   private List<FinAccount> replenishFinAccounts = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GiftCard giftCard = null;
+   private GiftCard giftCard = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID")
    
-   protected List<OrderPaymentPreference> orderPaymentPreferences = null;
+   private List<OrderPaymentPreference> orderPaymentPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REFUND_PAYMENT_METHOD_ID")
    
-   protected List<PartyAcctgPreference> partyAcctgPreferences = null;
+   private List<PartyAcctgPreference> partyAcctgPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID")
    
-   protected List<Payment> payments = null;
+   private List<Payment> payments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID")
    
-   protected List<PaymentGatewayResponse> paymentGatewayResponses = null;
+   private List<PaymentGatewayResponse> paymentGatewayResponses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID")
    
-   protected List<ReturnHeader> returnHeaders = null;
+   private List<ReturnHeader> returnHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_ID")
    
-   protected List<ShoppingList> shoppingLists = null;
+   private List<ShoppingList> shoppingLists = null;
 
   /**
    * Default constructor.

@@ -92,7 +92,7 @@ fieldMapColumns.put("Quote", fields);
     createdTxStamp("createdTxStamp"),
     contactPartyId("contactPartyId"),
     createdByPartyId("createdByPartyId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -106,145 +106,145 @@ fieldMapColumns.put("Quote", fields);
    @GeneratedValue(generator="Quote_GEN")
    @Id
    @Column(name="QUOTE_ID")
-   protected String quoteId;
+   private String quoteId;
    @Column(name="QUOTE_TYPE_ID")
-   protected String quoteTypeId;
+   private String quoteTypeId;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="ISSUE_DATE")
-   protected Timestamp issueDate;
+   private Timestamp issueDate;
    @Column(name="STATUS_ID")
-   protected String statusId;
+   private String statusId;
    @Column(name="CURRENCY_UOM_ID")
-   protected String currencyUomId;
+   private String currencyUomId;
    @Column(name="PRODUCT_STORE_ID")
-   protected String productStoreId;
+   private String productStoreId;
    @Column(name="SALES_CHANNEL_ENUM_ID")
-   protected String salesChannelEnumId;
+   private String salesChannelEnumId;
    @Column(name="VALID_FROM_DATE")
-   protected Timestamp validFromDate;
+   private Timestamp validFromDate;
    @Column(name="VALID_THRU_DATE")
-   protected Timestamp validThruDate;
+   private Timestamp validThruDate;
    @Column(name="QUOTE_NAME")
-   protected String quoteName;
+   private String quoteName;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @Column(name="CONTACT_PARTY_ID")
-   protected String contactPartyId;
+   private String contactPartyId;
    @Column(name="CREATED_BY_PARTY_ID")
-   protected String createdByPartyId;
+   private String createdByPartyId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="QUOTE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected QuoteType quoteType = null;
+   private QuoteType quoteType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="QUOTE_TYPE_ID")
    
-   protected List<QuoteTypeAttr> quoteTypeAttrs = null;
+   private List<QuoteTypeAttr> quoteTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem statusItem = null;
+   private StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom uom = null;
+   private Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductStore productStore = null;
+   private ProductStore productStore = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SALES_CHANNEL_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration salesChannelEnumeration = null;
+   private Enumeration salesChannelEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party createdByParty = null;
+   private Party createdByParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party contactParty = null;
+   private Party contactParty = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="QUOTE_ID")
    
-   protected List<QuoteAdjustment> quoteAdjustments = null;
+   private List<QuoteAdjustment> quoteAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="quote", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="QUOTE_ID")
    
-   protected List<QuoteAttribute> quoteAttributes = null;
+   private List<QuoteAttribute> quoteAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="quote", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="QUOTE_ID")
    
-   protected List<QuoteCoefficient> quoteCoefficients = null;
+   private List<QuoteCoefficient> quoteCoefficients = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="quote", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="QUOTE_ID")
    
-   protected List<QuoteContent> quoteContents = null;
+   private List<QuoteContent> quoteContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="quote", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="QUOTE_ID")
    
-   protected List<QuoteItem> quoteItems = null;
+   private List<QuoteItem> quoteItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="quote", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="QUOTE_ID")
    
-   protected List<QuoteItemOption> quoteItemOptions = null;
+   private List<QuoteItemOption> quoteItemOptions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="quote", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="QUOTE_ID")
    
-   protected List<QuoteNote> quoteNotes = null;
+   private List<QuoteNote> quoteNotes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="quote", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="QUOTE_ID")
    
-   protected List<QuoteRole> quoteRoles = null;
+   private List<QuoteRole> quoteRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="quote", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="QUOTE_ID")
    
-   protected List<QuoteTerm> quoteTerms = null;
+   private List<QuoteTerm> quoteTerms = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="quote", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="QUOTE_ID")
    
-   protected List<QuoteWorkEffort> quoteWorkEfforts = null;
+   private List<QuoteWorkEffort> quoteWorkEfforts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="quote", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="QUOTE_ID")
    
-   protected List<SalesOpportunityQuote> salesOpportunityQuotes = null;
+   private List<SalesOpportunityQuote> salesOpportunityQuotes = null;
 
   /**
    * Default constructor.

@@ -70,7 +70,7 @@ fieldMapColumns.put("ProductMeterType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,46 +84,46 @@ fieldMapColumns.put("ProductMeterType", fields);
    @GeneratedValue(generator="ProductMeterType_GEN")
    @Id
    @Column(name="PRODUCT_METER_TYPE_ID")
-   protected String productMeterTypeId;
+   private String productMeterTypeId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="DEFAULT_UOM_ID")
-   protected String defaultUomId;
+   private String defaultUomId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom defaultUom = null;
+   private Uom defaultUom = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INTERVAL_METER_TYPE_ID")
    
-   protected List<FixedAssetMaint> intervalFixedAssetMaints = null;
+   private List<FixedAssetMaint> intervalFixedAssetMaints = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productMeterType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_METER_TYPE_ID")
    
-   protected List<FixedAssetMaintMeter> fixedAssetMaintMeters = null;
+   private List<FixedAssetMaintMeter> fixedAssetMaintMeters = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productMeterType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_METER_TYPE_ID")
    
-   protected List<FixedAssetMeter> fixedAssetMeters = null;
+   private List<FixedAssetMeter> fixedAssetMeters = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INTERVAL_METER_TYPE_ID")
    
-   protected List<ProductMaint> intervalProductMaints = null;
+   private List<ProductMaint> intervalProductMaints = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productMeterType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_METER_TYPE_ID")
    
-   protected List<ProductMeter> productMeters = null;
+   private List<ProductMeter> productMeters = null;
 
   /**
    * Default constructor.

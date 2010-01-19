@@ -74,7 +74,7 @@ fieldMapColumns.put("TaxAuthority", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -87,7 +87,7 @@ fieldMapColumns.put("TaxAuthority", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.TaxAuthorityPkBridge.class)
-     protected TaxAuthorityPk id = new TaxAuthorityPk();
+     private TaxAuthorityPk id = new TaxAuthorityPk();
    
     /**
      * Auto generated Id accessor.
@@ -104,33 +104,33 @@ fieldMapColumns.put("TaxAuthority", fields);
          this.id = id;
       }
    @Column(name="REQUIRE_TAX_ID_FOR_EXEMPTION")
-   protected String requireTaxIdForExemption;
+   private String requireTaxIdForExemption;
    @Column(name="TAX_ID_FORMAT_PATTERN")
-   protected String taxIdFormatPattern;
+   private String taxIdFormatPattern;
    @Column(name="INCLUDE_TAX_IN_PRICE")
-   protected String includeTaxInPrice;
+   private String includeTaxInPrice;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TAX_AUTH_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Geo taxAuthGeo = null;
+   private Geo taxAuthGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TAX_AUTH_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party taxAuthParty = null;
+   private Party taxAuthParty = null;
    private transient List<AmazonOrderTaxJurisToAuth> amazonOrderTaxJurisToAuths = null;
    private transient List<OrderAdjustment> orderAdjustments = null;
    private transient List<PartyTaxAuthInfo> partyTaxAuthInfoes = null;

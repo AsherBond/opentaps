@@ -100,7 +100,7 @@ fieldMapColumns.put("PartyNameVisitView", fields);
     groupNameLocal("groupNameLocal"),
     webappName("webappName"),
     fromDate("fromDate");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -142,7 +142,7 @@ fieldMapColumns.put("PartyNameVisitView", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
 
   /**
    * Default constructor.

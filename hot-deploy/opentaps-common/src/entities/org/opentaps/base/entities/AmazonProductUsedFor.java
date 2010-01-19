@@ -68,7 +68,7 @@ fieldMapColumns.put("AmazonProductUsedFor", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,21 +82,21 @@ fieldMapColumns.put("AmazonProductUsedFor", fields);
    @GeneratedValue(generator="AmazonProductUsedFor_GEN")
    @Id
    @Column(name="USED_FOR_ID")
-   protected String usedForId;
+   private String usedForId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="amazonProductUsedFor", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="USED_FOR_ID")
    
-   protected List<AmazonUsedForValue> amazonUsedForValues = null;
+   private List<AmazonUsedForValue> amazonUsedForValues = null;
 
   /**
    * Default constructor.

@@ -92,7 +92,7 @@ fieldMapColumns.put("WorkEffortPartyAssignment", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -105,7 +105,7 @@ fieldMapColumns.put("WorkEffortPartyAssignment", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.WorkEffortPartyAssignmentPkBridge.class)
-     protected WorkEffortPartyAssignmentPk id = new WorkEffortPartyAssignmentPk();
+     private WorkEffortPartyAssignmentPk id = new WorkEffortPartyAssignmentPk();
    
     /**
      * Auto generated Id accessor.
@@ -122,47 +122,47 @@ fieldMapColumns.put("WorkEffortPartyAssignment", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="ASSIGNED_BY_USER_LOGIN_ID")
-   protected String assignedByUserLoginId;
+   private String assignedByUserLoginId;
    @Column(name="STATUS_ID")
-   protected String statusId;
+   private String statusId;
    @Column(name="STATUS_DATE_TIME")
-   protected Timestamp statusDateTime;
+   private Timestamp statusDateTime;
    @Column(name="EXPECTATION_ENUM_ID")
-   protected String expectationEnumId;
+   private String expectationEnumId;
    @Column(name="DELEGATE_REASON_ENUM_ID")
-   protected String delegateReasonEnumId;
+   private String delegateReasonEnumId;
    @Column(name="FACILITY_ID")
-   protected String facilityId;
+   private String facilityId;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="MUST_RSVP")
-   protected String mustRsvp;
+   private String mustRsvp;
    @Column(name="AVAILABILITY_STATUS_ID")
-   protected String availabilityStatusId;
+   private String availabilityStatusId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WorkEffort workEffort = null;
+   private WorkEffort workEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    private transient Person person = null;
    private transient PartyRole partyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -171,49 +171,49 @@ fieldMapColumns.put("WorkEffortPartyAssignment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RoleType roleType = null;
+   private RoleType roleType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ASSIGNED_BY_USER_LOGIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserLogin assignedByUserLogin = null;
+   private UserLogin assignedByUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem assignmentStatusItem = null;
+   private StatusItem assignmentStatusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EXPECTATION_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration expectationEnumeration = null;
+   private Enumeration expectationEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DELEGATE_REASON_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration delegateReasonEnumeration = null;
+   private Enumeration delegateReasonEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Facility facility = null;
+   private Facility facility = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AVAILABILITY_STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem availabilityStatusItem = null;
+   private StatusItem availabilityStatusItem = null;
    private transient List<ApplicationSandbox> applicationSandboxes = null;
 
   /**

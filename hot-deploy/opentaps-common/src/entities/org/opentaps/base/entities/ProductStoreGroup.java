@@ -74,7 +74,7 @@ fieldMapColumns.put("ProductStoreGroup", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,69 +88,69 @@ fieldMapColumns.put("ProductStoreGroup", fields);
    @GeneratedValue(generator="ProductStoreGroup_GEN")
    @Id
    @Column(name="PRODUCT_STORE_GROUP_ID")
-   protected String productStoreGroupId;
+   private String productStoreGroupId;
    @Column(name="PRODUCT_STORE_GROUP_TYPE_ID")
-   protected String productStoreGroupTypeId;
+   private String productStoreGroupTypeId;
    @Column(name="PRIMARY_PARENT_GROUP_ID")
-   protected String primaryParentGroupId;
+   private String primaryParentGroupId;
    @Column(name="PRODUCT_STORE_GROUP_NAME")
-   protected String productStoreGroupName;
+   private String productStoreGroupName;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_GROUP_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductStoreGroupType productStoreGroupType = null;
+   private ProductStoreGroupType productStoreGroupType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_PARENT_GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductStoreGroup primaryParentProductStoreGroup = null;
+   private ProductStoreGroup primaryParentProductStoreGroup = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStoreGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_GROUP_ID")
    
-   protected List<MrpProductStoreGroupMember> mrpProductStoreGroupMembers = null;
+   private List<MrpProductStoreGroupMember> mrpProductStoreGroupMembers = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStoreGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_GROUP_ID")
    
-   protected List<ProductPrice> productPrices = null;
+   private List<ProductPrice> productPrices = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_STORE_GROUP_ID")
    
-   protected List<ProductStore> primaryProductStores = null;
+   private List<ProductStore> primaryProductStores = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStoreGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_GROUP_ID")
    
-   protected List<ProductStoreGroupMember> productStoreGroupMembers = null;
+   private List<ProductStoreGroupMember> productStoreGroupMembers = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStoreGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_GROUP_ID")
    
-   protected List<ProductStoreGroupRole> productStoreGroupRoles = null;
+   private List<ProductStoreGroupRole> productStoreGroupRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="currentProductStoreGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_GROUP_ID")
    
-   protected List<ProductStoreGroupRollup> currentProductStoreGroupRollups = null;
+   private List<ProductStoreGroupRollup> currentProductStoreGroupRollups = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="parentProductStoreGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARENT_GROUP_ID")
    
-   protected List<ProductStoreGroupRollup> parentProductStoreGroupRollups = null;
+   private List<ProductStoreGroupRollup> parentProductStoreGroupRollups = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productStoreGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_STORE_GROUP_ID")
    
-   protected List<VendorProduct> vendorProducts = null;
+   private List<VendorProduct> vendorProducts = null;
 
   /**
    * Default constructor.

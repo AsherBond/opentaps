@@ -93,7 +93,7 @@ fieldMapColumns.put("CartAbandonedLine", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -106,7 +106,7 @@ fieldMapColumns.put("CartAbandonedLine", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.CartAbandonedLinePkBridge.class)
-     protected CartAbandonedLinePk id = new CartAbandonedLinePk();
+     private CartAbandonedLinePk id = new CartAbandonedLinePk();
    
     /**
      * Auto generated Id accessor.
@@ -123,58 +123,58 @@ fieldMapColumns.put("CartAbandonedLine", fields);
          this.id = id;
       }
    @Column(name="PRODUCT_ID")
-   protected String productId;
+   private String productId;
    @Column(name="PROD_CATALOG_ID")
-   protected String prodCatalogId;
+   private String prodCatalogId;
    @Column(name="QUANTITY")
-   protected BigDecimal quantity;
+   private BigDecimal quantity;
    @Column(name="RESERV_START")
-   protected Timestamp reservStart;
+   private Timestamp reservStart;
    @Column(name="RESERV_LENGTH")
-   protected BigDecimal reservLength;
+   private BigDecimal reservLength;
    @Column(name="RESERV_PERSONS")
-   protected BigDecimal reservPersons;
+   private BigDecimal reservPersons;
    @Column(name="UNIT_PRICE")
-   protected BigDecimal unitPrice;
+   private BigDecimal unitPrice;
    @Column(name="RESERV2ND_P_P_PERC")
-   protected BigDecimal reserv2ndPPPerc;
+   private BigDecimal reserv2ndPPPerc;
    @Column(name="RESERV_NTH_P_P_PERC")
-   protected BigDecimal reservNthPPPerc;
+   private BigDecimal reservNthPPPerc;
    @Column(name="CONFIG_ID")
-   protected String configId;
+   private String configId;
    @Column(name="TOTAL_WITH_ADJUSTMENTS")
-   protected BigDecimal totalWithAdjustments;
+   private BigDecimal totalWithAdjustments;
    @Column(name="WAS_RESERVED")
-   protected String wasReserved;
+   private String wasReserved;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="VISIT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Visit visit = null;
+   private Visit visit = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product product = null;
+   private Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PROD_CATALOG_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProdCatalog prodCatalog = null;
+   private ProdCatalog prodCatalog = null;
 
   /**
    * Default constructor.

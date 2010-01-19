@@ -89,7 +89,7 @@ fieldMapColumns.put("SurveyQuestionAppl", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -102,7 +102,7 @@ fieldMapColumns.put("SurveyQuestionAppl", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.SurveyQuestionApplPkBridge.class)
-     protected SurveyQuestionApplPk id = new SurveyQuestionApplPk();
+     private SurveyQuestionApplPk id = new SurveyQuestionApplPk();
    
     /**
      * Auto generated Id accessor.
@@ -119,45 +119,45 @@ fieldMapColumns.put("SurveyQuestionAppl", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="SURVEY_PAGE_SEQ_ID")
-   protected String surveyPageSeqId;
+   private String surveyPageSeqId;
    @Column(name="SURVEY_MULTI_RESP_ID")
-   protected String surveyMultiRespId;
+   private String surveyMultiRespId;
    @Column(name="SURVEY_MULTI_RESP_COL_ID")
-   protected String surveyMultiRespColId;
+   private String surveyMultiRespColId;
    @Column(name="REQUIRED_FIELD")
-   protected String requiredField;
+   private String requiredField;
    @Column(name="SEQUENCE_NUM")
-   protected Long sequenceNum;
+   private Long sequenceNum;
    @Column(name="EXTERNAL_FIELD_REF")
-   protected String externalFieldRef;
+   private String externalFieldRef;
    @Column(name="WITH_SURVEY_QUESTION_ID")
-   protected String withSurveyQuestionId;
+   private String withSurveyQuestionId;
    @Column(name="WITH_SURVEY_OPTION_SEQ_ID")
-   protected String withSurveyOptionSeqId;
+   private String withSurveyOptionSeqId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Survey survey = null;
+   private Survey survey = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_QUESTION_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SurveyQuestion surveyQuestion = null;
+   private SurveyQuestion surveyQuestion = null;
    private transient SurveyQuestionOption withSurveyQuestionOption = null;
    private transient SurveyPage surveyPage = null;
    private transient SurveyMultiResp surveyMultiResp = null;

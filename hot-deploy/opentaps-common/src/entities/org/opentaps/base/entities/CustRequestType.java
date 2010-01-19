@@ -74,7 +74,7 @@ fieldMapColumns.put("CustRequestType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,61 +88,61 @@ fieldMapColumns.put("CustRequestType", fields);
    @GeneratedValue(generator="CustRequestType_GEN")
    @Id
    @Column(name="CUST_REQUEST_TYPE_ID")
-   protected String custRequestTypeId;
+   private String custRequestTypeId;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected CustRequestType parentCustRequestType = null;
+   private CustRequestType parentCustRequestType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_FROM")
    
-   protected List<PartyRelationship> partyRelationships = null;
+   private List<PartyRelationship> partyRelationships = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_TYPE_ID")
    
-   protected List<CustRequest> custRequests = null;
+   private List<CustRequest> custRequests = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_TYPE_ID")
    
-   protected List<CustRequestCategory> custRequestCategorys = null;
+   private List<CustRequestCategory> custRequestCategorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_TYPE_ID")
    
-   protected List<CustRequestResolution> custRequestResolutions = null;
+   private List<CustRequestResolution> custRequestResolutions = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<CustRequestType> childCustRequestTypes = null;
+   private List<CustRequestType> childCustRequestTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="custRequestType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CUST_REQUEST_TYPE_ID")
    
-   protected List<CustRequestTypeAttr> custRequestTypeAttrs = null;
+   private List<CustRequestTypeAttr> custRequestTypeAttrs = null;
 
   /**
    * Default constructor.

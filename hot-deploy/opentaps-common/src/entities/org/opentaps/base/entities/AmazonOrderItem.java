@@ -77,7 +77,7 @@ fieldMapColumns.put("AmazonOrderItem", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -90,7 +90,7 @@ fieldMapColumns.put("AmazonOrderItem", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.AmazonOrderItemPkBridge.class)
-     protected AmazonOrderItemPk id = new AmazonOrderItemPk();
+     private AmazonOrderItemPk id = new AmazonOrderItemPk();
    
     /**
      * Auto generated Id accessor.
@@ -107,28 +107,28 @@ fieldMapColumns.put("AmazonOrderItem", fields);
          this.id = id;
       }
    @Column(name="SKU")
-   protected String sku;
+   private String sku;
    @Column(name="TITLE")
-   protected String title;
+   private String title;
    @Column(name="QUANTITY")
-   protected BigDecimal quantity;
+   private BigDecimal quantity;
    @Column(name="PRODUCT_TAX_CODE")
-   protected String productTaxCode;
+   private String productTaxCode;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AMAZON_ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected AmazonOrder amazonOrder = null;
+   private AmazonOrder amazonOrder = null;
    private transient List<AmazonOrderItemFee> amazonOrderItemFees = null;
    private transient List<AmazonOrderItemFulfillment> amazonOrderItemFulfillments = null;
    private transient AmazonOrderItemImport amazonOrderItemImport = null;

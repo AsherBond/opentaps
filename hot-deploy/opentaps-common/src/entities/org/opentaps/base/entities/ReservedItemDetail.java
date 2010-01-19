@@ -108,7 +108,7 @@ fieldMapColumns.put("ReservedItemDetail", fields);
     reservedDatetime("reservedDatetime"),
     promisedDatetime("promisedDatetime"),
     facilityId("facilityId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -154,14 +154,14 @@ fieldMapColumns.put("ReservedItemDetail", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem orderStatusItem = null;
+   private StatusItem orderStatusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ShipmentMethodType shipmentMethodType = null;
+   private ShipmentMethodType shipmentMethodType = null;
 
   /**
    * Default constructor.

@@ -72,7 +72,7 @@ fieldMapColumns.put("AgreementType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,56 +86,56 @@ fieldMapColumns.put("AgreementType", fields);
    @GeneratedValue(generator="AgreementType_GEN")
    @Id
    @Column(name="AGREEMENT_TYPE_ID")
-   protected String agreementTypeId;
+   private String agreementTypeId;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected AgreementType parentAgreementType = null;
+   private AgreementType parentAgreementType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AGREEMENT_TYPE_ID")
    
-   protected List<Agreement> agreements = null;
+   private List<Agreement> agreements = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AGREEMENT_TYPE_ID")
    
-   protected List<AgreementDocumentTypeMap> agreementDocumentTypeMaps = null;
+   private List<AgreementDocumentTypeMap> agreementDocumentTypeMaps = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="agreementType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="AGREEMENT_TYPE_ID")
    
-   protected List<AgreementInvoiceItemType> agreementInvoiceItemTypes = null;
+   private List<AgreementInvoiceItemType> agreementInvoiceItemTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="agreementType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="AGREEMENT_TYPE_ID")
    
-   protected List<AgreementToItemMap> agreementToItemMaps = null;
+   private List<AgreementToItemMap> agreementToItemMaps = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<AgreementType> childAgreementTypes = null;
+   private List<AgreementType> childAgreementTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="agreementType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="AGREEMENT_TYPE_ID")
    
-   protected List<AgreementTypeAttr> agreementTypeAttrs = null;
+   private List<AgreementTypeAttr> agreementTypeAttrs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="agreementType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="AGREEMENT_TYPE_ID")
    
-   protected List<AgreementTypeForRoleType> agreementTypeForRoleTypes = null;
+   private List<AgreementTypeForRoleType> agreementTypeForRoleTypes = null;
 
   /**
    * Default constructor.

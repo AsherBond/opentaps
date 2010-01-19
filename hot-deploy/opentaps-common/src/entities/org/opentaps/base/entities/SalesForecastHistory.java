@@ -97,7 +97,7 @@ fieldMapColumns.put("SalesForecastHistory", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -111,87 +111,87 @@ fieldMapColumns.put("SalesForecastHistory", fields);
    @GeneratedValue(generator="SalesForecastHistory_GEN")
    @Id
    @Column(name="SALES_FORECAST_HISTORY_ID")
-   protected String salesForecastHistoryId;
+   private String salesForecastHistoryId;
    @Column(name="SALES_FORECAST_ID")
-   protected String salesForecastId;
+   private String salesForecastId;
    @Column(name="PARENT_SALES_FORECAST_ID")
-   protected String parentSalesForecastId;
+   private String parentSalesForecastId;
    @Column(name="ORGANIZATION_PARTY_ID")
-   protected String organizationPartyId;
+   private String organizationPartyId;
    @Column(name="INTERNAL_PARTY_ID")
-   protected String internalPartyId;
+   private String internalPartyId;
    @Column(name="CUSTOM_TIME_PERIOD_ID")
-   protected String customTimePeriodId;
+   private String customTimePeriodId;
    @Column(name="CURRENCY_UOM_ID")
-   protected String currencyUomId;
+   private String currencyUomId;
    @Column(name="QUOTA_AMOUNT")
-   protected BigDecimal quotaAmount;
+   private BigDecimal quotaAmount;
    @Column(name="FORECAST_AMOUNT")
-   protected BigDecimal forecastAmount;
+   private BigDecimal forecastAmount;
    @Column(name="BEST_CASE_AMOUNT")
-   protected BigDecimal bestCaseAmount;
+   private BigDecimal bestCaseAmount;
    @Column(name="CLOSED_AMOUNT")
-   protected BigDecimal closedAmount;
+   private BigDecimal closedAmount;
    @Column(name="PERCENT_OF_QUOTA_FORECAST")
-   protected BigDecimal percentOfQuotaForecast;
+   private BigDecimal percentOfQuotaForecast;
    @Column(name="PERCENT_OF_QUOTA_CLOSED")
-   protected BigDecimal percentOfQuotaClosed;
+   private BigDecimal percentOfQuotaClosed;
    @Column(name="CHANGE_NOTE")
-   protected String changeNote;
+   private String changeNote;
    @Column(name="MODIFIED_BY_USER_LOGIN_ID")
-   protected String modifiedByUserLoginId;
+   private String modifiedByUserLoginId;
    @Column(name="MODIFIED_TIMESTAMP")
-   protected Timestamp modifiedTimestamp;
+   private Timestamp modifiedTimestamp;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SALES_FORECAST_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SalesForecast salesForecast = null;
+   private SalesForecast salesForecast = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party organizationParty = null;
+   private Party organizationParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INTERNAL_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party internalParty = null;
+   private Party internalParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CUSTOM_TIME_PERIOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected CustomTimePeriod customTimePeriod = null;
+   private CustomTimePeriod customTimePeriod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom uom = null;
+   private Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MODIFIED_BY_USER_LOGIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserLogin modifiedByUserLogin = null;
+   private UserLogin modifiedByUserLogin = null;
 
   /**
    * Default constructor.

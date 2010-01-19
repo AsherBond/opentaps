@@ -369,7 +369,7 @@ fieldMapColumns.put("ProductGoodInventoryItem", fields);
     acctgTagEnumId9("acctgTagEnumId9"),
     acctgTagEnumId10("acctgTagEnumId10"),
     parentInventoryItemId("parentInventoryItemId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -589,7 +589,7 @@ fieldMapColumns.put("ProductGoodInventoryItem", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product product = null;
+   private Product product = null;
 
   /**
    * Default constructor.

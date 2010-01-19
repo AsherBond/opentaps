@@ -122,7 +122,7 @@ fieldMapColumns.put("ProductVirtualAndVariantInfo", fields);
     variantPriceFromDate("variantPriceFromDate"),
     variantPriceThruDate("variantPriceThruDate"),
     variantPrice("variantPrice");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

@@ -83,7 +83,7 @@ fieldMapColumns.put("NetSuitePriceList", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -94,34 +94,34 @@ fieldMapColumns.put("NetSuitePriceList", fields);
   }
 
    @Column(name="ISINACTIVE")
-   protected String isinactive;
+   private String isinactive;
    @Column(name="PRICE_LIST_NAME")
-   protected String priceListName;
+   private String priceListName;
    @Column(name="DISCOUNT_PERCENTAGE")
-   protected Long discountPercentage;
+   private Long discountPercentage;
    @Column(name="ISONLINE")
-   protected String isonline;
+   private String isonline;
    @Column(name="PRICE_TYPE_EXTID")
-   protected String priceTypeExtid;
+   private String priceTypeExtid;
    @org.hibernate.annotations.GenericGenerator(name="NetSuitePriceList_GEN",  strategy="increment")
    @GeneratedValue(generator="NetSuitePriceList_GEN")
    @Id
    @Column(name="PRICE_TYPE_ID")
-   protected Long priceTypeId;
+   private Long priceTypeId;
    @Column(name="IMPORT_STATUS_ID")
-   protected String importStatusId;
+   private String importStatusId;
    @Column(name="IMPORT_ERROR")
-   protected String importError;
+   private String importError;
    @Column(name="PROCESSED_TIMESTAMP")
-   protected Timestamp processedTimestamp;
+   private Timestamp processedTimestamp;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
 
   /**
    * Default constructor.

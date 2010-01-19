@@ -255,7 +255,7 @@ fieldMapColumns.put("OrderHeaderItemAndOrderDeliverySchedule", fields);
     totalCubicUomId("totalCubicUomId"),
     totalWeight("totalWeight"),
     totalWeightUomId("totalWeightUomId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -399,7 +399,7 @@ fieldMapColumns.put("OrderHeaderItemAndOrderDeliverySchedule", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem statusItem = null;
+   private StatusItem statusItem = null;
 
   /**
    * Default constructor.

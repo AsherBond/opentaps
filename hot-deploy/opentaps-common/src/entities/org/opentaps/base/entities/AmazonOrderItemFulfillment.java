@@ -102,7 +102,7 @@ fieldMapColumns.put("AmazonOrderItemFulfillment", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -115,7 +115,7 @@ fieldMapColumns.put("AmazonOrderItemFulfillment", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.AmazonOrderItemFulfillmentPkBridge.class)
-     protected AmazonOrderItemFulfillmentPk id = new AmazonOrderItemFulfillmentPk();
+     private AmazonOrderItemFulfillmentPk id = new AmazonOrderItemFulfillmentPk();
    
     /**
      * Auto generated Id accessor.
@@ -132,37 +132,37 @@ fieldMapColumns.put("AmazonOrderItemFulfillment", fields);
          this.id = id;
       }
    @Column(name="QUANTITY")
-   protected BigDecimal quantity;
+   private BigDecimal quantity;
    @Column(name="FULFILLMENT_DATE")
-   protected Timestamp fulfillmentDate;
+   private Timestamp fulfillmentDate;
    @Column(name="CARRIER_PARTY_ID")
-   protected String carrierPartyId;
+   private String carrierPartyId;
    @Column(name="SHIPMENT_METHOD_TYPE_ID")
-   protected String shipmentMethodTypeId;
+   private String shipmentMethodTypeId;
    @Column(name="TRACKING_ID_NUMBER")
-   protected String trackingIdNumber;
+   private String trackingIdNumber;
    @Column(name="SHIPMENT_ROUTE_SEGMENT_ID")
-   protected String shipmentRouteSegmentId;
+   private String shipmentRouteSegmentId;
    @Column(name="ACK_STATUS_ID")
-   protected String ackStatusId;
+   private String ackStatusId;
    @Column(name="ACK_FAILURES")
-   protected Long ackFailures;
+   private Long ackFailures;
    @Column(name="PROCESSING_DOCUMENT_ID")
-   protected Long processingDocumentId;
+   private Long processingDocumentId;
    @Column(name="ACKNOWLEDGE_MESSAGE_ID")
-   protected String acknowledgeMessageId;
+   private String acknowledgeMessageId;
    @Column(name="ACKNOWLEDGE_TIMESTAMP")
-   protected Timestamp acknowledgeTimestamp;
+   private Timestamp acknowledgeTimestamp;
    @Column(name="ACKNOWLEDGE_ERROR_MESSAGE")
-   protected String acknowledgeErrorMessage;
+   private String acknowledgeErrorMessage;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    private transient AmazonOrderItem amazonOrderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID", insertable=false, updatable=false)
@@ -170,7 +170,7 @@ fieldMapColumns.put("AmazonOrderItemFulfillment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ShipmentMethodType shipmentMethodType = null;
+   private ShipmentMethodType shipmentMethodType = null;
 
   /**
    * Default constructor.

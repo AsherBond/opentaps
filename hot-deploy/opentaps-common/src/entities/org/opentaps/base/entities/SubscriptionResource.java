@@ -74,7 +74,7 @@ fieldMapColumns.put("SubscriptionResource", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,56 +88,56 @@ fieldMapColumns.put("SubscriptionResource", fields);
    @GeneratedValue(generator="SubscriptionResource_GEN")
    @Id
    @Column(name="SUBSCRIPTION_RESOURCE_ID")
-   protected String subscriptionResourceId;
+   private String subscriptionResourceId;
    @Column(name="PARENT_RESOURCE_ID")
-   protected String parentResourceId;
+   private String parentResourceId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="CONTENT_ID")
-   protected String contentId;
+   private String contentId;
    @Column(name="WEB_SITE_ID")
-   protected String webSiteId;
+   private String webSiteId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SubscriptionResource parentSubscriptionResource = null;
+   private SubscriptionResource parentSubscriptionResource = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Content content = null;
+   private Content content = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WEB_SITE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WebSite webSite = null;
+   private WebSite webSite = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="subscriptionResource", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SUBSCRIPTION_RESOURCE_ID")
    
-   protected List<ProductSubscriptionResource> productSubscriptionResources = null;
+   private List<ProductSubscriptionResource> productSubscriptionResources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SUBSCRIPTION_RESOURCE_ID")
    
-   protected List<Subscription> subscriptions = null;
+   private List<Subscription> subscriptions = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_RESOURCE_ID")
    
-   protected List<SubscriptionResource> childSubscriptionResources = null;
+   private List<SubscriptionResource> childSubscriptionResources = null;
 
   /**
    * Default constructor.

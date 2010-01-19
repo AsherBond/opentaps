@@ -84,7 +84,7 @@ fieldMapColumns.put("SurveyQuestionOption", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -97,7 +97,7 @@ fieldMapColumns.put("SurveyQuestionOption", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.SurveyQuestionOptionPkBridge.class)
-     protected SurveyQuestionOptionPk id = new SurveyQuestionOptionPk();
+     private SurveyQuestionOptionPk id = new SurveyQuestionOptionPk();
    
     /**
      * Auto generated Id accessor.
@@ -114,34 +114,34 @@ fieldMapColumns.put("SurveyQuestionOption", fields);
          this.id = id;
       }
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="SEQUENCE_NUM")
-   protected Long sequenceNum;
+   private Long sequenceNum;
    @Column(name="AMOUNT_BASE")
-   protected BigDecimal amountBase;
+   private BigDecimal amountBase;
    @Column(name="AMOUNT_BASE_UOM_ID")
-   protected String amountBaseUomId;
+   private String amountBaseUomId;
    @Column(name="WEIGHT_FACTOR")
-   protected BigDecimal weightFactor;
+   private BigDecimal weightFactor;
    @Column(name="DURATION")
-   protected Long duration;
+   private Long duration;
    @Column(name="DURATION_UOM_ID")
-   protected String durationUomId;
+   private String durationUomId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_QUESTION_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SurveyQuestion surveyQuestion = null;
+   private SurveyQuestion surveyQuestion = null;
    private transient List<SurveyQuestionAppl> withSurveyQuestionAppls = null;
    private transient List<SurveyResponseAnswer> surveyResponseAnswers = null;
 

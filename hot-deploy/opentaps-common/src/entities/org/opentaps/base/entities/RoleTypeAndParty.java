@@ -72,7 +72,7 @@ fieldMapColumns.put("RoleTypeAndParty", fields);
     roleTypeId("roleTypeId"),
     parentTypeId("parentTypeId"),
     description("description");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

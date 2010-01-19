@@ -109,7 +109,7 @@ fieldMapColumns.put("ZipSalesTaxLookup", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -122,7 +122,7 @@ fieldMapColumns.put("ZipSalesTaxLookup", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ZipSalesTaxLookupPkBridge.class)
-     protected ZipSalesTaxLookupPk id = new ZipSalesTaxLookupPk();
+     private ZipSalesTaxLookupPk id = new ZipSalesTaxLookupPk();
    
     /**
      * Auto generated Id accessor.
@@ -139,47 +139,47 @@ fieldMapColumns.put("ZipSalesTaxLookup", fields);
          this.id = id;
       }
    @Column(name="COUNTY_FIPS")
-   protected String countyFips;
+   private String countyFips;
    @Column(name="COUNTY_DEFAULT")
-   protected String countyDefault;
+   private String countyDefault;
    @Column(name="GENERAL_DEFAULT")
-   protected String generalDefault;
+   private String generalDefault;
    @Column(name="INSIDE_CITY")
-   protected String insideCity;
+   private String insideCity;
    @Column(name="GEO_CODE")
-   protected String geoCode;
+   private String geoCode;
    @Column(name="STATE_SALES_TAX")
-   protected BigDecimal stateSalesTax;
+   private BigDecimal stateSalesTax;
    @Column(name="CITY_SALES_TAX")
-   protected BigDecimal citySalesTax;
+   private BigDecimal citySalesTax;
    @Column(name="CITY_LOCAL_SALES_TAX")
-   protected BigDecimal cityLocalSalesTax;
+   private BigDecimal cityLocalSalesTax;
    @Column(name="COUNTY_SALES_TAX")
-   protected BigDecimal countySalesTax;
+   private BigDecimal countySalesTax;
    @Column(name="COUNTY_LOCAL_SALES_TAX")
-   protected BigDecimal countyLocalSalesTax;
+   private BigDecimal countyLocalSalesTax;
    @Column(name="COMBO_SALES_TAX")
-   protected BigDecimal comboSalesTax;
+   private BigDecimal comboSalesTax;
    @Column(name="STATE_USE_TAX")
-   protected BigDecimal stateUseTax;
+   private BigDecimal stateUseTax;
    @Column(name="CITY_USE_TAX")
-   protected BigDecimal cityUseTax;
+   private BigDecimal cityUseTax;
    @Column(name="CITY_LOCAL_USE_TAX")
-   protected BigDecimal cityLocalUseTax;
+   private BigDecimal cityLocalUseTax;
    @Column(name="COUNTY_USE_TAX")
-   protected BigDecimal countyUseTax;
+   private BigDecimal countyUseTax;
    @Column(name="COUNTY_LOCAL_USE_TAX")
-   protected BigDecimal countyLocalUseTax;
+   private BigDecimal countyLocalUseTax;
    @Column(name="COMBO_USE_TAX")
-   protected BigDecimal comboUseTax;
+   private BigDecimal comboUseTax;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
 
   /**
    * Default constructor.

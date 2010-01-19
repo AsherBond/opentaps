@@ -84,7 +84,7 @@ fieldMapColumns.put("WebSitePublishPoint", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -98,40 +98,40 @@ fieldMapColumns.put("WebSitePublishPoint", fields);
    @GeneratedValue(generator="WebSitePublishPoint_GEN")
    @Id
    @Column(name="CONTENT_ID")
-   protected String contentId;
+   private String contentId;
    @Column(name="TEMPLATE_TITLE")
-   protected String templateTitle;
+   private String templateTitle;
    @Column(name="STYLE_SHEET_FILE")
-   protected String styleSheetFile;
+   private String styleSheetFile;
    @Column(name="LOGO")
-   protected String logo;
+   private String logo;
    @Column(name="MEDALLION_LOGO")
-   protected String medallionLogo;
+   private String medallionLogo;
    @Column(name="LINE_LOGO")
-   protected String lineLogo;
+   private String lineLogo;
    @Column(name="LEFT_BAR_ID")
-   protected String leftBarId;
+   private String leftBarId;
    @Column(name="RIGHT_BAR_ID")
-   protected String rightBarId;
+   private String rightBarId;
    @Column(name="CONTENT_DEPT")
-   protected String contentDept;
+   private String contentDept;
    @Column(name="ABOUT_CONTENT_ID")
-   protected String aboutContentId;
+   private String aboutContentId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Content content = null;
+   private Content content = null;
 
   /**
    * Default constructor.

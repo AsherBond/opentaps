@@ -72,7 +72,7 @@ fieldMapColumns.put("AmazonProductBrowseNode", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,25 +86,25 @@ fieldMapColumns.put("AmazonProductBrowseNode", fields);
    @GeneratedValue(generator="AmazonProductBrowseNode_GEN")
    @Id
    @Column(name="NODE_ID")
-   protected String nodeId;
+   private String nodeId;
    @Column(name="PARENT_NODE_ID")
-   protected String parentNodeId;
+   private String parentNodeId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="PRODUCT_CATEGORY_ID")
-   protected String productCategoryId;
+   private String productCategoryId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="NODE_ID")
    
-   protected List<AmazonProduct> amazonProducts = null;
+   private List<AmazonProduct> amazonProducts = null;
 
   /**
    * Default constructor.

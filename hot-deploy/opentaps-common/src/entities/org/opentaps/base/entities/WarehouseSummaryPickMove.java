@@ -73,7 +73,7 @@ fieldMapColumns.put("WarehouseSummaryPickMove", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -87,21 +87,21 @@ fieldMapColumns.put("WarehouseSummaryPickMove", fields);
    @GeneratedValue(generator="WarehouseSummaryPickMove_GEN")
    @Id
    @Column(name="WSPICKMOVE_ID")
-   protected String wspickmoveId;
+   private String wspickmoveId;
    @Column(name="FACILITY_ID")
-   protected String facilityId;
+   private String facilityId;
    @Column(name="SHIPMENT_METHOD_TYPE")
-   protected String shipmentMethodType;
+   private String shipmentMethodType;
    @Column(name="ORDER_READY_TO_PICK_INFO")
-   protected Long orderReadyToPickInfo;
+   private Long orderReadyToPickInfo;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
 
   /**
    * Default constructor.

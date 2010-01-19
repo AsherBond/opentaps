@@ -70,7 +70,7 @@ fieldMapColumns.put("ReturnReason", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,23 +84,23 @@ fieldMapColumns.put("ReturnReason", fields);
    @GeneratedValue(generator="ReturnReason_GEN")
    @Id
    @Column(name="RETURN_REASON_ID")
-   protected String returnReasonId;
+   private String returnReasonId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="SEQUENCE_ID")
-   protected String sequenceId;
+   private String sequenceId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_REASON_ID")
    
-   protected List<ReturnItem> returnItems = null;
+   private List<ReturnItem> returnItems = null;
 
   /**
    * Default constructor.

@@ -74,7 +74,7 @@ fieldMapColumns.put("CarrierReturnService", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,41 +88,41 @@ fieldMapColumns.put("CarrierReturnService", fields);
    @GeneratedValue(generator="CarrierReturnService_GEN")
    @Id
    @Column(name="CARRIER_RETURN_SERVICE_ID")
-   protected String carrierReturnServiceId;
+   private String carrierReturnServiceId;
    @Column(name="CARRIER_PARTY_ID")
-   protected String carrierPartyId;
+   private String carrierPartyId;
    @Column(name="SHIPMENT_METHOD_TYPE_ID")
-   protected String shipmentMethodTypeId;
+   private String shipmentMethodTypeId;
    @Column(name="CARRIER_SERVICE_CODE")
-   protected String carrierServiceCode;
+   private String carrierServiceCode;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CARRIER_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ShipmentMethodType shipmentMethodType = null;
+   private ShipmentMethodType shipmentMethodType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CARRIER_RETURN_SERVICE_ID")
    
-   protected List<ReturnHeader> returnHeaders = null;
+   private List<ReturnHeader> returnHeaders = null;
 
   /**
    * Default constructor.

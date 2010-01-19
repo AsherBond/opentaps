@@ -122,7 +122,7 @@ fieldMapColumns.put("AcctgTransEntryAccountSum", fields);
     accountCode("accountCode"),
     accountName("accountName"),
     glAccountClassId("glAccountClassId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -178,7 +178,7 @@ fieldMapColumns.put("AcctgTransEntryAccountSum", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlAccountClass glAccountClass = null;
+   private GlAccountClass glAccountClass = null;
 
   /**
    * Default constructor.

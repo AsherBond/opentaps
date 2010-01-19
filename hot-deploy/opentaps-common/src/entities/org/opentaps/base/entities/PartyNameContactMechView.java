@@ -112,7 +112,7 @@ fieldMapColumns.put("PartyNameContactMechView", fields);
     thruDate("thruDate"),
     contactMechTypeId("contactMechTypeId"),
     infoString("infoString");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -162,7 +162,7 @@ fieldMapColumns.put("PartyNameContactMechView", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
 
   /**
    * Default constructor.

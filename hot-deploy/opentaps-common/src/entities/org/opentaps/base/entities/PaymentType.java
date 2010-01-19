@@ -74,7 +74,7 @@ fieldMapColumns.put("PaymentType", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     systemUse("systemUse");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,54 +88,54 @@ fieldMapColumns.put("PaymentType", fields);
    @GeneratedValue(generator="PaymentType_GEN")
    @Id
    @Column(name="PAYMENT_TYPE_ID")
-   protected String paymentTypeId;
+   private String paymentTypeId;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @Column(name="SYSTEM_USE")
-   protected String systemUse;
+   private String systemUse;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PaymentType parentPaymentType = null;
+   private PaymentType parentPaymentType = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="paymentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PAYMENT_TYPE_ID")
    
-   protected List<EmployeePaycheckType> employeePaycheckTypes = null;
+   private List<EmployeePaycheckType> employeePaycheckTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="paymentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PAYMENT_TYPE_ID")
    
-   protected List<PaycheckTypeItemTypeAssoc> paycheckTypeItemTypeAssocs = null;
+   private List<PaycheckTypeItemTypeAssoc> paycheckTypeItemTypeAssocs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_TYPE_ID")
    
-   protected List<Payment> payments = null;
+   private List<Payment> payments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="paymentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PAYMENT_TYPE_ID")
    
-   protected List<PaymentGlAccountTypeMap> paymentGlAccountTypeMaps = null;
+   private List<PaymentGlAccountTypeMap> paymentGlAccountTypeMaps = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<PaymentType> childPaymentTypes = null;
+   private List<PaymentType> childPaymentTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="paymentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PAYMENT_TYPE_ID")
    
-   protected List<PaymentTypeAttr> paymentTypeAttrs = null;
+   private List<PaymentTypeAttr> paymentTypeAttrs = null;
 
   /**
    * Default constructor.

@@ -76,7 +76,7 @@ fieldMapColumns.put("AmazonProductImageAck", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -89,7 +89,7 @@ fieldMapColumns.put("AmazonProductImageAck", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.AmazonProductImageAckPkBridge.class)
-     protected AmazonProductImageAckPk id = new AmazonProductImageAckPk();
+     private AmazonProductImageAckPk id = new AmazonProductImageAckPk();
    
     /**
      * Auto generated Id accessor.
@@ -106,35 +106,35 @@ fieldMapColumns.put("AmazonProductImageAck", fields);
          this.id = id;
       }
    @Column(name="ACKNOWLEDGE_MESSAGE_ID")
-   protected String acknowledgeMessageId;
+   private String acknowledgeMessageId;
    @Column(name="ACK_STATUS_ID")
-   protected String ackStatusId;
+   private String ackStatusId;
    @Column(name="ACKNOWLEDGE_TIMESTAMP")
-   protected Timestamp acknowledgeTimestamp;
+   private Timestamp acknowledgeTimestamp;
    @Column(name="ACKNOWLEDGE_ERROR_MESSAGE")
-   protected String acknowledgeErrorMessage;
+   private String acknowledgeErrorMessage;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected AmazonProductImage amazonProductImage = null;
+   private AmazonProductImage amazonProductImage = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CONTENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductContentType productContentType = null;
+   private ProductContentType productContentType = null;
 
   /**
    * Default constructor.

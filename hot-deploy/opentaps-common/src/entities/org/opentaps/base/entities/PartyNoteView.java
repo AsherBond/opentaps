@@ -79,7 +79,7 @@ fieldMapColumns.put("PartyNoteView", fields);
     noteInfo("noteInfo"),
     noteDateTime("noteDateTime"),
     noteParty("noteParty");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

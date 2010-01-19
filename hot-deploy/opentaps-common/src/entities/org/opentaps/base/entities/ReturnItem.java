@@ -95,7 +95,7 @@ fieldMapColumns.put("ReturnItem", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -108,7 +108,7 @@ fieldMapColumns.put("ReturnItem", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ReturnItemPkBridge.class)
-     protected ReturnItemPk id = new ReturnItemPk();
+     private ReturnItemPk id = new ReturnItemPk();
    
     /**
      * Auto generated Id accessor.
@@ -125,81 +125,81 @@ fieldMapColumns.put("ReturnItem", fields);
          this.id = id;
       }
    @Column(name="RETURN_REASON_ID")
-   protected String returnReasonId;
+   private String returnReasonId;
    @Column(name="RETURN_TYPE_ID")
-   protected String returnTypeId;
+   private String returnTypeId;
    @Column(name="RETURN_ITEM_TYPE_ID")
-   protected String returnItemTypeId;
+   private String returnItemTypeId;
    @Column(name="PRODUCT_ID")
-   protected String productId;
+   private String productId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="ORDER_ID")
-   protected String orderId;
+   private String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   protected String orderItemSeqId;
+   private String orderItemSeqId;
    @Column(name="STATUS_ID")
-   protected String statusId;
+   private String statusId;
    @Column(name="EXPECTED_ITEM_STATUS")
-   protected String expectedItemStatus;
+   private String expectedItemStatus;
    @Column(name="RETURN_QUANTITY")
-   protected BigDecimal returnQuantity;
+   private BigDecimal returnQuantity;
    @Column(name="RECEIVED_QUANTITY")
-   protected BigDecimal receivedQuantity;
+   private BigDecimal receivedQuantity;
    @Column(name="RETURN_PRICE")
-   protected BigDecimal returnPrice;
+   private BigDecimal returnPrice;
    @Column(name="RETURN_ITEM_RESPONSE_ID")
-   protected String returnItemResponseId;
+   private String returnItemResponseId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ReturnHeader returnHeader = null;
+   private ReturnHeader returnHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_REASON_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ReturnReason returnReason = null;
+   private ReturnReason returnReason = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ReturnType returnType = null;
+   private ReturnType returnType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_ITEM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ReturnItemType returnItemType = null;
+   private ReturnItemType returnItemType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_ITEM_RESPONSE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ReturnItemResponse returnItemResponse = null;
+   private ReturnItemResponse returnItemResponse = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderHeader orderHeader = null;
+   private OrderHeader orderHeader = null;
    private transient OrderItem orderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
@@ -207,21 +207,21 @@ fieldMapColumns.put("ReturnItem", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem statusItem = null;
+   private StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EXPECTED_ITEM_STATUS", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem inventoryStatusItem = null;
+   private StatusItem inventoryStatusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product product = null;
+   private Product product = null;
    private transient List<OrderItemShipGrpInvRes> orderItemShipGrpInvReses = null;
    private transient List<ReturnAdjustment> returnAdjustments = null;
    private transient List<ReturnItemBilling> returnItemBillings = null;

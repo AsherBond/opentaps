@@ -116,7 +116,7 @@ fieldMapColumns.put("FixedAsset", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -130,109 +130,109 @@ fieldMapColumns.put("FixedAsset", fields);
    @GeneratedValue(generator="FixedAsset_GEN")
    @Id
    @Column(name="FIXED_ASSET_ID")
-   protected String fixedAssetId;
+   private String fixedAssetId;
    @Column(name="FIXED_ASSET_TYPE_ID")
-   protected String fixedAssetTypeId;
+   private String fixedAssetTypeId;
    @Column(name="PARENT_FIXED_ASSET_ID")
-   protected String parentFixedAssetId;
+   private String parentFixedAssetId;
    @Column(name="INSTANCE_OF_PRODUCT_ID")
-   protected String instanceOfProductId;
+   private String instanceOfProductId;
    @Column(name="CLASS_ENUM_ID")
-   protected String classEnumId;
+   private String classEnumId;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="ROLE_TYPE_ID")
-   protected String roleTypeId;
+   private String roleTypeId;
    @Column(name="FIXED_ASSET_NAME")
-   protected String fixedAssetName;
+   private String fixedAssetName;
    @Column(name="ACQUIRE_ORDER_ID")
-   protected String acquireOrderId;
+   private String acquireOrderId;
    @Column(name="ACQUIRE_ORDER_ITEM_SEQ_ID")
-   protected String acquireOrderItemSeqId;
+   private String acquireOrderItemSeqId;
    @Column(name="DATE_ACQUIRED")
-   protected Timestamp dateAcquired;
+   private Timestamp dateAcquired;
    @Column(name="DATE_LAST_SERVICED")
-   protected Timestamp dateLastServiced;
+   private Timestamp dateLastServiced;
    @Column(name="DATE_NEXT_SERVICE")
-   protected Timestamp dateNextService;
+   private Timestamp dateNextService;
    @Column(name="EXPECTED_END_OF_LIFE")
-   protected Date expectedEndOfLife;
+   private Date expectedEndOfLife;
    @Column(name="ACTUAL_END_OF_LIFE")
-   protected Date actualEndOfLife;
+   private Date actualEndOfLife;
    @Column(name="PRODUCTION_CAPACITY")
-   protected BigDecimal productionCapacity;
+   private BigDecimal productionCapacity;
    @Column(name="UOM_ID")
-   protected String uomId;
+   private String uomId;
    @Column(name="CALENDAR_ID")
-   protected String calendarId;
+   private String calendarId;
    @Column(name="SERIAL_NUMBER")
-   protected String serialNumber;
+   private String serialNumber;
    @Column(name="LOCATED_AT_FACILITY_ID")
-   protected String locatedAtFacilityId;
+   private String locatedAtFacilityId;
    @Column(name="LOCATED_AT_LOCATION_SEQ_ID")
-   protected String locatedAtLocationSeqId;
+   private String locatedAtLocationSeqId;
    @Column(name="SALVAGE_VALUE")
-   protected BigDecimal salvageValue;
+   private BigDecimal salvageValue;
    @Column(name="DEPRECIATION")
-   protected BigDecimal depreciation;
+   private BigDecimal depreciation;
    @Column(name="PURCHASE_COST")
-   protected BigDecimal purchaseCost;
+   private BigDecimal purchaseCost;
    @Column(name="PURCHASE_COST_UOM_ID")
-   protected String purchaseCostUomId;
+   private String purchaseCostUomId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected FixedAssetType fixedAssetType = null;
+   private FixedAssetType fixedAssetType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_TYPE_ID")
    
-   protected List<FixedAssetTypeAttr> fixedAssetTypeAttrs = null;
+   private List<FixedAssetTypeAttr> fixedAssetTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_FIXED_ASSET_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected FixedAsset parentFixedAsset = null;
+   private FixedAsset parentFixedAsset = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INSTANCE_OF_PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product instanceOfProduct = null;
+   private Product instanceOfProduct = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CLASS_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration classEnumeration = null;
+   private Enumeration classEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RoleType roleType = null;
+   private RoleType roleType = null;
    private transient PartyRole partyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACQUIRE_ORDER_ID", insertable=false, updatable=false)
@@ -240,7 +240,7 @@ fieldMapColumns.put("FixedAsset", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderHeader acquireOrderHeader = null;
+   private OrderHeader acquireOrderHeader = null;
    private transient OrderItem acquireOrderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID", insertable=false, updatable=false)
@@ -248,94 +248,94 @@ fieldMapColumns.put("FixedAsset", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom uom = null;
+   private Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CALENDAR_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected TechDataCalendar techDataCalendar = null;
+   private TechDataCalendar techDataCalendar = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="LOCATED_AT_FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Facility locatedAtFacility = null;
+   private Facility locatedAtFacility = null;
    private transient FacilityLocation locatedAtFacilityLocation = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_ID")
    
-   protected List<AccommodationMap> accommodationMaps = null;
+   private List<AccommodationMap> accommodationMaps = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_ID")
    
-   protected List<AccommodationSpot> accommodationSpots = null;
+   private List<AccommodationSpot> accommodationSpots = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_ID")
    
-   protected List<AcctgTrans> acctgTranses = null;
+   private List<AcctgTrans> acctgTranses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_ID")
    
-   protected List<Delivery> deliverys = null;
+   private List<Delivery> deliverys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_FIXED_ASSET_ID")
    
-   protected List<FixedAsset> childFixedAssets = null;
+   private List<FixedAsset> childFixedAssets = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fixedAsset", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIXED_ASSET_ID")
    
-   protected List<FixedAssetAttribute> fixedAssetAttributes = null;
+   private List<FixedAssetAttribute> fixedAssetAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fixedAsset", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIXED_ASSET_ID")
    
-   protected List<FixedAssetDepMethod> fixedAssetDepMethods = null;
+   private List<FixedAssetDepMethod> fixedAssetDepMethods = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fixedAsset", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIXED_ASSET_ID")
    
-   protected List<FixedAssetGeoPoint> fixedAssetGeoPoints = null;
+   private List<FixedAssetGeoPoint> fixedAssetGeoPoints = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fixedAsset", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIXED_ASSET_ID")
    
-   protected List<FixedAssetIdent> fixedAssetIdents = null;
+   private List<FixedAssetIdent> fixedAssetIdents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fixedAsset", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIXED_ASSET_ID")
    
-   protected List<FixedAssetMaint> fixedAssetMaints = null;
+   private List<FixedAssetMaint> fixedAssetMaints = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fixedAsset", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIXED_ASSET_ID")
    
-   protected List<FixedAssetMaintOrder> fixedAssetMaintOrders = null;
+   private List<FixedAssetMaintOrder> fixedAssetMaintOrders = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fixedAsset", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIXED_ASSET_ID")
    
-   protected List<FixedAssetProduct> fixedAssetProducts = null;
+   private List<FixedAssetProduct> fixedAssetProducts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fixedAsset", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIXED_ASSET_ID")
    
-   protected List<FixedAssetRegistration> fixedAssetRegistrations = null;
+   private List<FixedAssetRegistration> fixedAssetRegistrations = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fixedAsset", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIXED_ASSET_ID")
    
-   protected List<FixedAssetStdCost> fixedAssetStdCosts = null;
+   private List<FixedAssetStdCost> fixedAssetStdCosts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fixedAsset", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIXED_ASSET_ID")
    
-   protected List<PartyFixedAssetAssignment> partyFixedAssetAssignments = null;
+   private List<PartyFixedAssetAssignment> partyFixedAssetAssignments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_ID")
    
-   protected List<Requirement> requirements = null;
+   private List<Requirement> requirements = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_ID")
    
-   protected List<WorkEffort> workEfforts = null;
+   private List<WorkEffort> workEfforts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fixedAsset", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIXED_ASSET_ID")
    
-   protected List<WorkEffortFixedAssetAssign> workEffortFixedAssetAssigns = null;
+   private List<WorkEffortFixedAssetAssign> workEffortFixedAssetAssigns = null;
 
   /**
    * Default constructor.

@@ -77,7 +77,7 @@ fieldMapColumns.put("BenefitType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -91,40 +91,40 @@ fieldMapColumns.put("BenefitType", fields);
    @GeneratedValue(generator="BenefitType_GEN")
    @Id
    @Column(name="BENEFIT_TYPE_ID")
-   protected String benefitTypeId;
+   private String benefitTypeId;
    @Column(name="BENEFIT_NAME")
-   protected String benefitName;
+   private String benefitName;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="EMPLOYER_PAID_PERCENTAGE")
-   protected BigDecimal employerPaidPercentage;
+   private BigDecimal employerPaidPercentage;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected BenefitType parentBenefitType = null;
+   private BenefitType parentBenefitType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<BenefitType> childBenefitTypes = null;
+   private List<BenefitType> childBenefitTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="benefitType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BENEFIT_TYPE_ID")
    
-   protected List<PartyBenefit> partyBenefits = null;
+   private List<PartyBenefit> partyBenefits = null;
 
   /**
    * Default constructor.

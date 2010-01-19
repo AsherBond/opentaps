@@ -72,7 +72,7 @@ fieldMapColumns.put("EmplPositionType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,56 +86,56 @@ fieldMapColumns.put("EmplPositionType", fields);
    @GeneratedValue(generator="EmplPositionType_GEN")
    @Id
    @Column(name="EMPL_POSITION_TYPE_ID")
-   protected String emplPositionTypeId;
+   private String emplPositionTypeId;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected EmplPositionType parentEmplPositionType = null;
+   private EmplPositionType parentEmplPositionType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="EMPL_POSITION_TYPE_ID")
    
-   protected List<EmplPosition> emplPositions = null;
+   private List<EmplPosition> emplPositions = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<EmplPositionType> childEmplPositionTypes = null;
+   private List<EmplPositionType> childEmplPositionTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="emplPositionType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EMPL_POSITION_TYPE_ID")
    
-   protected List<EmplPositionTypeClass> emplPositionTypeClasses = null;
+   private List<EmplPositionTypeClass> emplPositionTypeClasses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="emplPositionType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EMPL_POSITION_TYPE_ID")
    
-   protected List<EmplPositionTypeRate> emplPositionTypeRates = null;
+   private List<EmplPositionTypeRate> emplPositionTypeRates = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="emplPositionType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EMPL_POSITION_TYPE_ID")
    
-   protected List<OldEmplPositionTypeRate> oldEmplPositionTypeRates = null;
+   private List<OldEmplPositionTypeRate> oldEmplPositionTypeRates = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="emplPositionType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EMPL_POSITION_TYPE_ID")
    
-   protected List<RateAmount> rateAmounts = null;
+   private List<RateAmount> rateAmounts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="emplPositionType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EMPL_POSITION_TYPE_ID")
    
-   protected List<ValidResponsibility> validResponsibilitys = null;
+   private List<ValidResponsibility> validResponsibilitys = null;
 
   /**
    * Default constructor.

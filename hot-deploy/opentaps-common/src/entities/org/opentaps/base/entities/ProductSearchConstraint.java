@@ -86,7 +86,7 @@ fieldMapColumns.put("ProductSearchConstraint", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -99,7 +99,7 @@ fieldMapColumns.put("ProductSearchConstraint", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductSearchConstraintPkBridge.class)
-     protected ProductSearchConstraintPk id = new ProductSearchConstraintPk();
+     private ProductSearchConstraintPk id = new ProductSearchConstraintPk();
    
     /**
      * Auto generated Id accessor.
@@ -116,38 +116,38 @@ fieldMapColumns.put("ProductSearchConstraint", fields);
          this.id = id;
       }
    @Column(name="CONSTRAINT_NAME")
-   protected String constraintName;
+   private String constraintName;
    @Column(name="INFO_STRING")
-   protected String infoString;
+   private String infoString;
    @Column(name="INCLUDE_SUB_CATEGORIES")
-   protected String includeSubCategories;
+   private String includeSubCategories;
    @Column(name="IS_AND")
-   protected String isAnd;
+   private String isAnd;
    @Column(name="ANY_PREFIX")
-   protected String anyPrefix;
+   private String anyPrefix;
    @Column(name="ANY_SUFFIX")
-   protected String anySuffix;
+   private String anySuffix;
    @Column(name="REMOVE_STEMS")
-   protected String removeStems;
+   private String removeStems;
    @Column(name="LOW_VALUE")
-   protected String lowValue;
+   private String lowValue;
    @Column(name="HIGH_VALUE")
-   protected String highValue;
+   private String highValue;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_SEARCH_RESULT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductSearchResult productSearchResult = null;
+   private ProductSearchResult productSearchResult = null;
 
   /**
    * Default constructor.

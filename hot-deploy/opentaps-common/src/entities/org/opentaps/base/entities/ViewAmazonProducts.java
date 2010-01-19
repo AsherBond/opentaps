@@ -324,7 +324,7 @@ fieldMapColumns.put("ViewAmazonProducts", fields);
     lastModifiedByUserLogin("lastModifiedByUserLogin"),
     inShippingBox("inShippingBox"),
     defaultShipmentBoxTypeId("defaultShipmentBoxTypeId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -511,48 +511,48 @@ fieldMapColumns.put("ViewAmazonProducts", fields);
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   protected transient List<GoodIdentification> goodIdentifications = null;
+   private transient List<GoodIdentification> goodIdentifications = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem statusItem = null;
+   private StatusItem statusItem = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   protected transient List<AmazonProductBulletPoint> amazonProductBulletPoints = null;
+   private transient List<AmazonProductBulletPoint> amazonProductBulletPoints = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   protected transient List<AmazonProductSearchTerms> amazonProductSearchTermses = null;
+   private transient List<AmazonProductSearchTerms> amazonProductSearchTermses = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="NODE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected AmazonProductBrowseNode amazonProductBrowseNode = null;
+   private AmazonProductBrowseNode amazonProductBrowseNode = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ITEM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected AmazonProductItemType amazonProductItemType = null;
+   private AmazonProductItemType amazonProductItemType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   protected transient List<AmazonUsedForValue> amazonUsedForValues = null;
+   private transient List<AmazonUsedForValue> amazonUsedForValues = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   protected transient List<AmazonTargetAudienceValue> amazonTargetAudienceValues = null;
+   private transient List<AmazonTargetAudienceValue> amazonTargetAudienceValues = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   protected transient List<AmazonOtherItemAttrValue> amazonOtherItemAttrValues = null;
+   private transient List<AmazonOtherItemAttrValue> amazonOtherItemAttrValues = null;
 
   /**
    * Default constructor.

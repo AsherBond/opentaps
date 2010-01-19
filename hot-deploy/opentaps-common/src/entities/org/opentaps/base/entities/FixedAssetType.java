@@ -72,7 +72,7 @@ fieldMapColumns.put("FixedAssetType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,44 +86,44 @@ fieldMapColumns.put("FixedAssetType", fields);
    @GeneratedValue(generator="FixedAssetType_GEN")
    @Id
    @Column(name="FIXED_ASSET_TYPE_ID")
-   protected String fixedAssetTypeId;
+   private String fixedAssetTypeId;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected FixedAssetType parentFixedAssetType = null;
+   private FixedAssetType parentFixedAssetType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_TYPE_ID")
    
-   protected List<FixedAsset> fixedAssets = null;
+   private List<FixedAsset> fixedAssets = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<FixedAssetType> childFixedAssetTypes = null;
+   private List<FixedAssetType> childFixedAssetTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fixedAssetType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIXED_ASSET_TYPE_ID")
    
-   protected List<FixedAssetTypeAttr> fixedAssetTypeAttrs = null;
+   private List<FixedAssetTypeAttr> fixedAssetTypeAttrs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fixedAssetType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIXED_ASSET_TYPE_ID")
    
-   protected List<WorkEffortFixedAssetStd> workEffortFixedAssetStds = null;
+   private List<WorkEffortFixedAssetStd> workEffortFixedAssetStds = null;
 
   /**
    * Default constructor.

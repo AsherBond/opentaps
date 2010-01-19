@@ -78,7 +78,7 @@ fieldMapColumns.put("OrderSummaryEntry", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -91,7 +91,7 @@ fieldMapColumns.put("OrderSummaryEntry", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.OrderSummaryEntryPkBridge.class)
-     protected OrderSummaryEntryPk id = new OrderSummaryEntryPk();
+     private OrderSummaryEntryPk id = new OrderSummaryEntryPk();
    
     /**
      * Auto generated Id accessor.
@@ -108,33 +108,33 @@ fieldMapColumns.put("OrderSummaryEntry", fields);
          this.id = id;
       }
    @Column(name="TOTAL_QUANTITY")
-   protected BigDecimal totalQuantity;
+   private BigDecimal totalQuantity;
    @Column(name="GROSS_SALES")
-   protected BigDecimal grossSales;
+   private BigDecimal grossSales;
    @Column(name="PRODUCT_COST")
-   protected BigDecimal productCost;
+   private BigDecimal productCost;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product product = null;
+   private Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Facility facility = null;
+   private Facility facility = null;
 
   /**
    * Default constructor.

@@ -492,7 +492,7 @@ fieldMapColumns.put("OrderItemAndProductContentInfo", fields);
     configId("configId"),
     inShippingBox("inShippingBox"),
     defaultShipmentBoxTypeId("defaultShipmentBoxTypeId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -794,7 +794,7 @@ fieldMapColumns.put("OrderItemAndProductContentInfo", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product product = null;
+   private Product product = null;
 
   /**
    * Default constructor.

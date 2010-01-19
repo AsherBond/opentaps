@@ -76,7 +76,7 @@ fieldMapColumns.put("InventoryItemTrace", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -90,50 +90,50 @@ fieldMapColumns.put("InventoryItemTrace", fields);
    @GeneratedValue(generator="InventoryItemTrace_GEN")
    @Id
    @Column(name="INVENTORY_ITEM_TRACE_ID")
-   protected String inventoryItemTraceId;
+   private String inventoryItemTraceId;
    @Column(name="RUN_DATETIME")
-   protected Timestamp runDatetime;
+   private Timestamp runDatetime;
    @Column(name="RUN_BY_USER_LOGIN")
-   protected String runByUserLogin;
+   private String runByUserLogin;
    @Column(name="INVENTORY_ITEM_ID")
-   protected String inventoryItemId;
+   private String inventoryItemId;
    @Column(name="LOT_ID")
-   protected String lotId;
+   private String lotId;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_ITEM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected InventoryItem inventoryItem = null;
+   private InventoryItem inventoryItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RUN_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserLogin userLogin = null;
+   private UserLogin userLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="LOT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Lot lot = null;
+   private Lot lot = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="inventoryItemTrace", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVENTORY_ITEM_TRACE_ID")
    
-   protected List<InventoryItemTraceDetail> inventoryItemTraceDetails = null;
+   private List<InventoryItemTraceDetail> inventoryItemTraceDetails = null;
 
   /**
    * Default constructor.

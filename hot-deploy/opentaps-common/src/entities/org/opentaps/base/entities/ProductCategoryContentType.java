@@ -72,7 +72,7 @@ fieldMapColumns.put("ProductCategoryContentType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,36 +86,36 @@ fieldMapColumns.put("ProductCategoryContentType", fields);
    @GeneratedValue(generator="ProductCategoryContentType_GEN")
    @Id
    @Column(name="PROD_CAT_CONTENT_TYPE_ID")
-   protected String prodCatContentTypeId;
+   private String prodCatContentTypeId;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductCategoryContentType parentProductCategoryContentType = null;
+   private ProductCategoryContentType parentProductCategoryContentType = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productCategoryContentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PROD_CAT_CONTENT_TYPE_ID")
    
-   protected List<ProductCategoryContent> productCategoryContents = null;
+   private List<ProductCategoryContent> productCategoryContents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<ProductCategoryContentType> childProductCategoryContentTypes = null;
+   private List<ProductCategoryContentType> childProductCategoryContentTypes = null;
 
   /**
    * Default constructor.

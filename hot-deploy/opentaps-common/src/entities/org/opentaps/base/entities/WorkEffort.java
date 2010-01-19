@@ -168,7 +168,7 @@ fieldMapColumns.put("WorkEffort", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -182,404 +182,404 @@ fieldMapColumns.put("WorkEffort", fields);
    @GeneratedValue(generator="WorkEffort_GEN")
    @Id
    @Column(name="WORK_EFFORT_ID")
-   protected String workEffortId;
+   private String workEffortId;
    @Column(name="WORK_EFFORT_TYPE_ID")
-   protected String workEffortTypeId;
+   private String workEffortTypeId;
    @Column(name="CURRENT_STATUS_ID")
-   protected String currentStatusId;
+   private String currentStatusId;
    @Column(name="LAST_STATUS_UPDATE")
-   protected Timestamp lastStatusUpdate;
+   private Timestamp lastStatusUpdate;
    @Column(name="WORK_EFFORT_PURPOSE_TYPE_ID")
-   protected String workEffortPurposeTypeId;
+   private String workEffortPurposeTypeId;
    @Column(name="WORK_EFFORT_PARENT_ID")
-   protected String workEffortParentId;
+   private String workEffortParentId;
    @Column(name="SCOPE_ENUM_ID")
-   protected String scopeEnumId;
+   private String scopeEnumId;
    @Column(name="PRIORITY")
-   protected Long priority;
+   private Long priority;
    @Column(name="PERCENT_COMPLETE")
-   protected Long percentComplete;
+   private Long percentComplete;
    @Column(name="WORK_EFFORT_NAME")
-   protected String workEffortName;
+   private String workEffortName;
    @Column(name="SHOW_AS_ENUM_ID")
-   protected String showAsEnumId;
+   private String showAsEnumId;
    @Column(name="SEND_NOTIFICATION_EMAIL")
-   protected String sendNotificationEmail;
+   private String sendNotificationEmail;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LOCATION_DESC")
-   protected String locationDesc;
+   private String locationDesc;
    @Column(name="ESTIMATED_START_DATE")
-   protected Timestamp estimatedStartDate;
+   private Timestamp estimatedStartDate;
    @Column(name="ESTIMATED_COMPLETION_DATE")
-   protected Timestamp estimatedCompletionDate;
+   private Timestamp estimatedCompletionDate;
    @Column(name="ACTUAL_START_DATE")
-   protected Timestamp actualStartDate;
+   private Timestamp actualStartDate;
    @Column(name="ACTUAL_COMPLETION_DATE")
-   protected Timestamp actualCompletionDate;
+   private Timestamp actualCompletionDate;
    @Column(name="ESTIMATED_MILLI_SECONDS")
-   protected BigDecimal estimatedMilliSeconds;
+   private BigDecimal estimatedMilliSeconds;
    @Column(name="ESTIMATED_SETUP_MILLIS")
-   protected BigDecimal estimatedSetupMillis;
+   private BigDecimal estimatedSetupMillis;
    @Column(name="ESTIMATE_CALC_METHOD")
-   protected String estimateCalcMethod;
+   private String estimateCalcMethod;
    @Column(name="ACTUAL_MILLI_SECONDS")
-   protected BigDecimal actualMilliSeconds;
+   private BigDecimal actualMilliSeconds;
    @Column(name="ACTUAL_SETUP_MILLIS")
-   protected BigDecimal actualSetupMillis;
+   private BigDecimal actualSetupMillis;
    @Column(name="TOTAL_MILLI_SECONDS_ALLOWED")
-   protected BigDecimal totalMilliSecondsAllowed;
+   private BigDecimal totalMilliSecondsAllowed;
    @Column(name="TOTAL_MONEY_ALLOWED")
-   protected BigDecimal totalMoneyAllowed;
+   private BigDecimal totalMoneyAllowed;
    @Column(name="MONEY_UOM_ID")
-   protected String moneyUomId;
+   private String moneyUomId;
    @Column(name="SPECIAL_TERMS")
-   protected String specialTerms;
+   private String specialTerms;
    @Column(name="TIME_TRANSPARENCY")
-   protected Long timeTransparency;
+   private Long timeTransparency;
    @Column(name="UNIVERSAL_ID")
-   protected String universalId;
+   private String universalId;
    @Column(name="SOURCE_REFERENCE_ID")
-   protected String sourceReferenceId;
+   private String sourceReferenceId;
    @Column(name="FIXED_ASSET_ID")
-   protected String fixedAssetId;
+   private String fixedAssetId;
    @Column(name="FACILITY_ID")
-   protected String facilityId;
+   private String facilityId;
    @Column(name="INFO_URL")
-   protected String infoUrl;
+   private String infoUrl;
    @Column(name="RECURRENCE_INFO_ID")
-   protected String recurrenceInfoId;
+   private String recurrenceInfoId;
    @Column(name="TEMP_EXPR_ID")
-   protected String tempExprId;
+   private String tempExprId;
    @Column(name="RUNTIME_DATA_ID")
-   protected String runtimeDataId;
+   private String runtimeDataId;
    @Column(name="NOTE_ID")
-   protected String noteId;
+   private String noteId;
    @Column(name="SERVICE_LOADER_NAME")
-   protected String serviceLoaderName;
+   private String serviceLoaderName;
    @Column(name="QUANTITY_TO_PRODUCE")
-   protected BigDecimal quantityToProduce;
+   private BigDecimal quantityToProduce;
    @Column(name="QUANTITY_PRODUCED")
-   protected BigDecimal quantityProduced;
+   private BigDecimal quantityProduced;
    @Column(name="QUANTITY_REJECTED")
-   protected BigDecimal quantityRejected;
+   private BigDecimal quantityRejected;
    @Column(name="RESERV_PERSONS")
-   protected BigDecimal reservPersons;
+   private BigDecimal reservPersons;
    @Column(name="RESERV2ND_P_P_PERC")
-   protected BigDecimal reserv2ndPPPerc;
+   private BigDecimal reserv2ndPPPerc;
    @Column(name="RESERV_NTH_P_P_PERC")
-   protected BigDecimal reservNthPPPerc;
+   private BigDecimal reservNthPPPerc;
    @Column(name="ACCOMMODATION_MAP_ID")
-   protected String accommodationMapId;
+   private String accommodationMapId;
    @Column(name="ACCOMMODATION_SPOT_ID")
-   protected String accommodationSpotId;
+   private String accommodationSpotId;
    @Column(name="REVISION_NUMBER")
-   protected Long revisionNumber;
+   private Long revisionNumber;
    @Column(name="CREATED_DATE")
-   protected Timestamp createdDate;
+   private Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   protected String createdByUserLogin;
+   private String createdByUserLogin;
    @Column(name="LAST_MODIFIED_DATE")
-   protected Timestamp lastModifiedDate;
+   private Timestamp lastModifiedDate;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   protected String lastModifiedByUserLogin;
+   private String lastModifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WorkEffortType workEffortType = null;
+   private WorkEffortType workEffortType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_PURPOSE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WorkEffortPurposeType workEffortPurposeType = null;
+   private WorkEffortPurposeType workEffortPurposeType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_PARENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WorkEffort parentWorkEffort = null;
+   private WorkEffort parentWorkEffort = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_TYPE_ID")
    
-   protected List<WorkEffortTypeAttr> workEffortTypeAttrs = null;
+   private List<WorkEffortTypeAttr> workEffortTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENT_STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem currentStatusItem = null;
+   private StatusItem currentStatusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SCOPE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration scopeEnumeration = null;
+   private Enumeration scopeEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected FixedAsset fixedAsset = null;
+   private FixedAsset fixedAsset = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Facility facility = null;
+   private Facility facility = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MONEY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom moneyUom = null;
+   private Uom moneyUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RECURRENCE_INFO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RecurrenceInfo recurrenceInfo = null;
+   private RecurrenceInfo recurrenceInfo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TEMP_EXPR_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected TemporalExpression temporalExpression = null;
+   private TemporalExpression temporalExpression = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RUNTIME_DATA_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RuntimeData runtimeData = null;
+   private RuntimeData runtimeData = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="NOTE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected NoteData noteData = null;
+   private NoteData noteData = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ESTIMATE_CALC_METHOD", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected CustomMethod customMethod = null;
+   private CustomMethod customMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCOMMODATION_MAP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected AccommodationMap accommodationMap = null;
+   private AccommodationMap accommodationMap = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCOMMODATION_SPOT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected AccommodationSpot accommodationSpot = null;
+   private AccommodationSpot accommodationSpot = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<AcctgTrans> acctgTranses = null;
+   private List<AcctgTrans> acctgTranses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<AgreementWorkEffortAppl> agreementWorkEffortAppls = null;
+   private List<AgreementWorkEffortAppl> agreementWorkEffortAppls = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<CommunicationEventWorkEff> communicationEventWorkEffs = null;
+   private List<CommunicationEventWorkEff> communicationEventWorkEffs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<CostComponent> costComponents = null;
+   private List<CostComponent> costComponents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<CustRequestItemWorkEffort> custRequestItemWorkEfforts = null;
+   private List<CustRequestItemWorkEffort> custRequestItemWorkEfforts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<CustRequestWorkEffort> custRequestWorkEfforts = null;
+   private List<CustRequestWorkEffort> custRequestWorkEfforts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SCHEDULE_WORK_EFFORT_ID")
    
-   protected List<FixedAssetMaint> scheduleFixedAssetMaints = null;
+   private List<FixedAssetMaint> scheduleFixedAssetMaints = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<InventoryItemDetail> inventoryItemDetails = null;
+   private List<InventoryItemDetail> inventoryItemDetails = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<OldWorkEffortAssignmentRate> oldWorkEffortAssignmentRates = null;
+   private List<OldWorkEffortAssignmentRate> oldWorkEffortAssignmentRates = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<OrderHeaderWorkEffort> orderHeaderWorkEfforts = null;
+   private List<OrderHeaderWorkEffort> orderHeaderWorkEfforts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ROUTING_WORK_EFFORT_ID")
    
-   protected List<ProductAssoc> routingProductAssocs = null;
+   private List<ProductAssoc> routingProductAssocs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SPEC_ROU_WEFF_ID")
    
-   protected List<ProductAssoc> productAssocs = null;
+   private List<ProductAssoc> productAssocs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MAINT_TEMPLATE_WORK_EFFORT_ID")
    
-   protected List<ProductMaint> maintTemplateProductMaints = null;
+   private List<ProductMaint> maintTemplateProductMaints = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<QuoteItem> quoteItems = null;
+   private List<QuoteItem> quoteItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<QuoteWorkEffort> quoteWorkEfforts = null;
+   private List<QuoteWorkEffort> quoteWorkEfforts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<RateAmount> rateAmounts = null;
+   private List<RateAmount> rateAmounts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<SalesOpportunityWorkEffort> salesOpportunityWorkEfforts = null;
+   private List<SalesOpportunityWorkEffort> salesOpportunityWorkEfforts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ESTIMATED_SHIP_WORK_EFF_ID")
    
-   protected List<Shipment> estimatedShipShipments = null;
+   private List<Shipment> estimatedShipShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ESTIMATED_ARRIVAL_WORK_EFF_ID")
    
-   protected List<Shipment> estimatedArrivalShipments = null;
+   private List<Shipment> estimatedArrivalShipments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<ShoppingListWorkEffort> shoppingListWorkEfforts = null;
+   private List<ShoppingListWorkEffort> shoppingListWorkEfforts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<TimeEntry> timeEntrys = null;
+   private List<TimeEntry> timeEntrys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_PARENT_ID")
    
-   protected List<WorkEffort> childWorkEfforts = null;
+   private List<WorkEffort> childWorkEfforts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fromWorkEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID_FROM")
    
-   protected List<WorkEffortAssoc> fromWorkEffortAssocs = null;
+   private List<WorkEffortAssoc> fromWorkEffortAssocs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="toWorkEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID_TO")
    
-   protected List<WorkEffortAssoc> toWorkEffortAssocs = null;
+   private List<WorkEffortAssoc> toWorkEffortAssocs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortAttribute> workEffortAttributes = null;
+   private List<WorkEffortAttribute> workEffortAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortBilling> workEffortBillings = null;
+   private List<WorkEffortBilling> workEffortBillings = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortContactMech> workEffortContactMeches = null;
+   private List<WorkEffortContactMech> workEffortContactMeches = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortContent> workEffortContents = null;
+   private List<WorkEffortContent> workEffortContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortCostCalc> workEffortCostCalcs = null;
+   private List<WorkEffortCostCalc> workEffortCostCalcs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortDeliverableProd> workEffortDeliverableProds = null;
+   private List<WorkEffortDeliverableProd> workEffortDeliverableProds = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortEventReminder> workEffortEventReminders = null;
+   private List<WorkEffortEventReminder> workEffortEventReminders = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortFixedAssetAssign> workEffortFixedAssetAssigns = null;
+   private List<WorkEffortFixedAssetAssign> workEffortFixedAssetAssigns = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortFixedAssetStd> workEffortFixedAssetStds = null;
+   private List<WorkEffortFixedAssetStd> workEffortFixedAssetStds = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortGoodStandard> workEffortGoodStandards = null;
+   private List<WorkEffortGoodStandard> workEffortGoodStandards = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortInventoryAssign> workEffortInventoryAssigns = null;
+   private List<WorkEffortInventoryAssign> workEffortInventoryAssigns = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortInventoryProduced> workEffortInventoryProduceds = null;
+   private List<WorkEffortInventoryProduced> workEffortInventoryProduceds = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortKeyword> workEffortKeywords = null;
+   private List<WorkEffortKeyword> workEffortKeywords = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortNote> workEffortNotes = null;
+   private List<WorkEffortNote> workEffortNotes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortPartyAssignment> workEffortPartyAssignments = null;
+   private List<WorkEffortPartyAssignment> workEffortPartyAssignments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortReview> workEffortReviews = null;
+   private List<WorkEffortReview> workEffortReviews = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortSkillStandard> workEffortSkillStandards = null;
+   private List<WorkEffortSkillStandard> workEffortSkillStandards = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkEffortStatus> workEffortStatuses = null;
+   private List<WorkEffortStatus> workEffortStatuses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PROCESS_WORK_EFFORT_ID")
    
-   protected List<WorkEffortTransBox> workEffortTransBoxes = null;
+   private List<WorkEffortTransBox> workEffortTransBoxes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkOrderItemFulfillment> workOrderItemFulfillments = null;
+   private List<WorkOrderItemFulfillment> workOrderItemFulfillments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="workEffort", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="WORK_EFFORT_ID")
    
-   protected List<WorkRequirementFulfillment> workRequirementFulfillments = null;
+   private List<WorkRequirementFulfillment> workRequirementFulfillments = null;
 
   /**
    * Default constructor.

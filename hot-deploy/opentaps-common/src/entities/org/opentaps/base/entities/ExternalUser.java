@@ -78,7 +78,7 @@ fieldMapColumns.put("ExternalUser", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,34 +92,34 @@ fieldMapColumns.put("ExternalUser", fields);
    @GeneratedValue(generator="ExternalUser_GEN")
    @Id
    @Column(name="AUTO_ID")
-   protected String autoId;
+   private String autoId;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="EXTERNAL_USER_TYPE_ID")
-   protected String externalUserTypeId;
+   private String externalUserTypeId;
    @Column(name="EXTERNAL_USER_ID")
-   protected String externalUserId;
+   private String externalUserId;
    @Column(name="EXTERNAL_PASSWORD")
-   protected String externalPassword;
+   private String externalPassword;
    @Column(name="FROM_DATE")
-   protected Timestamp fromDate;
+   private Timestamp fromDate;
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EXTERNAL_USER_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ExternalUserType externalUserType = null;
+   private ExternalUserType externalUserType = null;
 
   /**
    * Default constructor.

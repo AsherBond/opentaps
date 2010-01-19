@@ -83,7 +83,7 @@ fieldMapColumns.put("ShoppingListItem", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -96,7 +96,7 @@ fieldMapColumns.put("ShoppingListItem", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ShoppingListItemPkBridge.class)
-     protected ShoppingListItemPk id = new ShoppingListItemPk();
+     private ShoppingListItemPk id = new ShoppingListItemPk();
    
     /**
      * Auto generated Id accessor.
@@ -113,41 +113,41 @@ fieldMapColumns.put("ShoppingListItem", fields);
          this.id = id;
       }
    @Column(name="PRODUCT_ID")
-   protected String productId;
+   private String productId;
    @Column(name="QUANTITY")
-   protected BigDecimal quantity;
+   private BigDecimal quantity;
    @Column(name="RESERV_START")
-   protected Timestamp reservStart;
+   private Timestamp reservStart;
    @Column(name="RESERV_LENGTH")
-   protected BigDecimal reservLength;
+   private BigDecimal reservLength;
    @Column(name="RESERV_PERSONS")
-   protected BigDecimal reservPersons;
+   private BigDecimal reservPersons;
    @Column(name="QUANTITY_PURCHASED")
-   protected BigDecimal quantityPurchased;
+   private BigDecimal quantityPurchased;
    @Column(name="CONFIG_ID")
-   protected String configId;
+   private String configId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHOPPING_LIST_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ShoppingList shoppingList = null;
+   private ShoppingList shoppingList = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product product = null;
+   private Product product = null;
    private transient List<ShoppingListItemSurvey> shoppingListItemSurveys = null;
 
   /**

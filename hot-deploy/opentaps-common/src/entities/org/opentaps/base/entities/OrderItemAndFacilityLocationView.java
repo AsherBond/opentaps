@@ -90,7 +90,7 @@ fieldMapColumns.put("OrderItemAndFacilityLocationView", fields);
     facilityId("facilityId"),
     locationTypeEnumId("locationTypeEnumId"),
     areaId("areaId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -126,7 +126,7 @@ fieldMapColumns.put("OrderItemAndFacilityLocationView", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ShipmentMethodType shipmentMethodType = null;
+   private ShipmentMethodType shipmentMethodType = null;
 
   /**
    * Default constructor.

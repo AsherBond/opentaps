@@ -80,7 +80,7 @@ fieldMapColumns.put("PartyCarrierAccount", fields);
     postalCode("postalCode"),
     countryGeoCode("countryGeoCode"),
     isDefault("isDefault");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -93,7 +93,7 @@ fieldMapColumns.put("PartyCarrierAccount", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.PartyCarrierAccountPkBridge.class)
-     protected PartyCarrierAccountPk id = new PartyCarrierAccountPk();
+     private PartyCarrierAccountPk id = new PartyCarrierAccountPk();
    
     /**
      * Auto generated Id accessor.
@@ -110,37 +110,37 @@ fieldMapColumns.put("PartyCarrierAccount", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="ACCOUNT_NUMBER")
-   protected String accountNumber;
+   private String accountNumber;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @Column(name="POSTAL_CODE")
-   protected String postalCode;
+   private String postalCode;
    @Column(name="COUNTRY_GEO_CODE")
-   protected String countryGeoCode;
+   private String countryGeoCode;
    @Column(name="IS_DEFAULT")
-   protected String isDefault;
+   private String isDefault;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CARRIER_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party carrierParty = null;
+   private Party carrierParty = null;
 
   /**
    * Default constructor.

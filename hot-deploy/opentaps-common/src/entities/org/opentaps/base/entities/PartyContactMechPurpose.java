@@ -74,7 +74,7 @@ fieldMapColumns.put("PartyContactMechPurpose", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -87,7 +87,7 @@ fieldMapColumns.put("PartyContactMechPurpose", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.PartyContactMechPurposePkBridge.class)
-     protected PartyContactMechPurposePk id = new PartyContactMechPurposePk();
+     private PartyContactMechPurposePk id = new PartyContactMechPurposePk();
    
     /**
      * Auto generated Id accessor.
@@ -104,15 +104,15 @@ fieldMapColumns.put("PartyContactMechPurpose", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    private transient List<PartyContactMech> partyContactMeches = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_PURPOSE_TYPE_ID", insertable=false, updatable=false)
@@ -120,14 +120,14 @@ fieldMapColumns.put("PartyContactMechPurpose", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ContactMechPurposeType contactMechPurposeType = null;
+   private ContactMechPurposeType contactMechPurposeType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    private transient Person person = null;
    private transient PartyGroup partyGroup = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -136,21 +136,21 @@ fieldMapColumns.put("PartyContactMechPurpose", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ContactMech contactMech = null;
+   private ContactMech contactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PostalAddress postalAddress = null;
+   private PostalAddress postalAddress = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected TelecomNumber telecomNumber = null;
+   private TelecomNumber telecomNumber = null;
 
   /**
    * Default constructor.

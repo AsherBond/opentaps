@@ -105,7 +105,7 @@ fieldMapColumns.put("ProductFeatureGroupAndAppl", fields);
     defaultSequenceNum("defaultSequenceNum"),
     abbrev("abbrev"),
     idCode("idCode");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

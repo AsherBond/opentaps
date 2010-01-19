@@ -77,7 +77,7 @@ fieldMapColumns.put("PartySkill", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -90,7 +90,7 @@ fieldMapColumns.put("PartySkill", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.PartySkillPkBridge.class)
-     protected PartySkillPk id = new PartySkillPk();
+     private PartySkillPk id = new PartySkillPk();
    
     /**
      * Auto generated Id accessor.
@@ -107,35 +107,35 @@ fieldMapColumns.put("PartySkill", fields);
          this.id = id;
       }
    @Column(name="YEARS_EXPERIENCE")
-   protected Long yearsExperience;
+   private Long yearsExperience;
    @Column(name="RATING")
-   protected Long rating;
+   private Long rating;
    @Column(name="SKILL_LEVEL")
-   protected Long skillLevel;
+   private Long skillLevel;
    @Column(name="STARTED_USING_DATE")
-   protected Timestamp startedUsingDate;
+   private Timestamp startedUsingDate;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SKILL_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SkillType skillType = null;
+   private SkillType skillType = null;
 
   /**
    * Default constructor.

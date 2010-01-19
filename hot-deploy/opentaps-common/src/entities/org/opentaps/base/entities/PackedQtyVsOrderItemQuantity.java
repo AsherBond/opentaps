@@ -82,7 +82,7 @@ fieldMapColumns.put("PackedQtyVsOrderItemQuantity", fields);
     orderId("orderId"),
     orderItemSeqId("orderItemSeqId"),
     orderedQuantity("orderedQuantity");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -112,7 +112,7 @@ fieldMapColumns.put("PackedQtyVsOrderItemQuantity", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderHeader orderHeader = null;
+   private OrderHeader orderHeader = null;
 
   /**
    * Default constructor.

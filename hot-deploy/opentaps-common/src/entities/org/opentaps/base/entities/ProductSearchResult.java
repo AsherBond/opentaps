@@ -80,7 +80,7 @@ fieldMapColumns.put("ProductSearchResult", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -94,38 +94,38 @@ fieldMapColumns.put("ProductSearchResult", fields);
    @GeneratedValue(generator="ProductSearchResult_GEN")
    @Id
    @Column(name="PRODUCT_SEARCH_RESULT_ID")
-   protected String productSearchResultId;
+   private String productSearchResultId;
    @Column(name="VISIT_ID")
-   protected String visitId;
+   private String visitId;
    @Column(name="ORDER_BY_NAME")
-   protected String orderByName;
+   private String orderByName;
    @Column(name="IS_ASCENDING")
-   protected String isAscending;
+   private String isAscending;
    @Column(name="NUM_RESULTS")
-   protected Long numResults;
+   private Long numResults;
    @Column(name="SECONDS_TOTAL")
-   protected BigDecimal secondsTotal;
+   private BigDecimal secondsTotal;
    @Column(name="SEARCH_DATE")
-   protected Timestamp searchDate;
+   private Timestamp searchDate;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="VISIT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Visit visit = null;
+   private Visit visit = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productSearchResult", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_SEARCH_RESULT_ID")
    
-   protected List<ProductSearchConstraint> productSearchConstraints = null;
+   private List<ProductSearchConstraint> productSearchConstraints = null;
 
   /**
    * Default constructor.

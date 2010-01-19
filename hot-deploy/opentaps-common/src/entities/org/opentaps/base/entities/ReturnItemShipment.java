@@ -75,7 +75,7 @@ fieldMapColumns.put("ReturnItemShipment", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,7 +88,7 @@ fieldMapColumns.put("ReturnItemShipment", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ReturnItemShipmentPkBridge.class)
-     protected ReturnItemShipmentPk id = new ReturnItemShipmentPk();
+     private ReturnItemShipmentPk id = new ReturnItemShipmentPk();
    
     /**
      * Auto generated Id accessor.
@@ -105,22 +105,22 @@ fieldMapColumns.put("ReturnItemShipment", fields);
          this.id = id;
       }
    @Column(name="QUANTITY")
-   protected BigDecimal quantity;
+   private BigDecimal quantity;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ReturnHeader returnHeader = null;
+   private ReturnHeader returnHeader = null;
    private transient ReturnItem returnItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_ID", insertable=false, updatable=false)
@@ -128,7 +128,7 @@ fieldMapColumns.put("ReturnItemShipment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Shipment shipment = null;
+   private Shipment shipment = null;
    private transient ShipmentItem shipmentItem = null;
 
   /**

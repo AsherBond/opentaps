@@ -96,7 +96,7 @@ fieldMapColumns.put("Agreement", fields);
     defaultCurrencyUomId("defaultCurrencyUomId"),
     fromPartyClassGroupId("fromPartyClassGroupId"),
     toPartyClassGroupId("toPartyClassGroupId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -110,66 +110,66 @@ fieldMapColumns.put("Agreement", fields);
    @GeneratedValue(generator="Agreement_GEN")
    @Id
    @Column(name="AGREEMENT_ID")
-   protected String agreementId;
+   private String agreementId;
    @Column(name="PRODUCT_ID")
-   protected String productId;
+   private String productId;
    @Column(name="PARTY_ID_FROM")
-   protected String partyIdFrom;
+   private String partyIdFrom;
    @Column(name="PARTY_ID_TO")
-   protected String partyIdTo;
+   private String partyIdTo;
    @Column(name="ROLE_TYPE_ID_FROM")
-   protected String roleTypeIdFrom;
+   private String roleTypeIdFrom;
    @Column(name="ROLE_TYPE_ID_TO")
-   protected String roleTypeIdTo;
+   private String roleTypeIdTo;
    @Column(name="AGREEMENT_TYPE_ID")
-   protected String agreementTypeId;
+   private String agreementTypeId;
    @Column(name="AGREEMENT_DATE")
-   protected Timestamp agreementDate;
+   private Timestamp agreementDate;
    @Column(name="FROM_DATE")
-   protected Timestamp fromDate;
+   private Timestamp fromDate;
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="TEXT_DATA")
-   protected String textData;
+   private String textData;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @Column(name="STATUS_ID")
-   protected String statusId;
+   private String statusId;
    @Column(name="DEFAULT_CURRENCY_UOM_ID")
-   protected String defaultCurrencyUomId;
+   private String defaultCurrencyUomId;
    @Column(name="FROM_PARTY_CLASS_GROUP_ID")
-   protected String fromPartyClassGroupId;
+   private String fromPartyClassGroupId;
    @Column(name="TO_PARTY_CLASS_GROUP_ID")
-   protected String toPartyClassGroupId;
+   private String toPartyClassGroupId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product product = null;
+   private Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_FROM", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party fromParty = null;
+   private Party fromParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID_FROM", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RoleType fromRoleType = null;
+   private RoleType fromRoleType = null;
    private transient PartyRole fromPartyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_TO", insertable=false, updatable=false)
@@ -177,14 +177,14 @@ fieldMapColumns.put("Agreement", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party toParty = null;
+   private Party toParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RoleType toRoleType = null;
+   private RoleType toRoleType = null;
    private transient PartyRole toPartyRole = null;
    private transient List<PartyRelationship> partyRelationships = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -193,84 +193,84 @@ fieldMapColumns.put("Agreement", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected AgreementType agreementType = null;
+   private AgreementType agreementType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AGREEMENT_TYPE_ID")
    
-   protected List<AgreementTypeAttr> agreementTypeAttrs = null;
+   private List<AgreementTypeAttr> agreementTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem statusItem = null;
+   private StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FROM_PARTY_CLASS_GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PartyClassificationGroup fromPartyClassificationGroup = null;
+   private PartyClassificationGroup fromPartyClassificationGroup = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TO_PARTY_CLASS_GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PartyClassificationGroup toPartyClassificationGroup = null;
+   private PartyClassificationGroup toPartyClassificationGroup = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AGREEMENT_ID")
    
-   protected List<Addendum> addendums = null;
+   private List<Addendum> addendums = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="agreement", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="AGREEMENT_ID")
    
-   protected List<AgreementAttribute> agreementAttributes = null;
+   private List<AgreementAttribute> agreementAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="agreement", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="AGREEMENT_ID")
    
-   protected List<AgreementCategoryAppl> agreementCategoryAppls = null;
+   private List<AgreementCategoryAppl> agreementCategoryAppls = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="agreement", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="AGREEMENT_ID")
    
-   protected List<AgreementGeographicalApplic> agreementGeographicalApplics = null;
+   private List<AgreementGeographicalApplic> agreementGeographicalApplics = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="agreement", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="AGREEMENT_ID")
    
-   protected List<AgreementItem> agreementItems = null;
+   private List<AgreementItem> agreementItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="agreement", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="AGREEMENT_ID")
    
-   protected List<AgreementPartyApplic> agreementPartyApplics = null;
+   private List<AgreementPartyApplic> agreementPartyApplics = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="agreement", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="AGREEMENT_ID")
    
-   protected List<AgreementProductAppl> agreementProductAppls = null;
+   private List<AgreementProductAppl> agreementProductAppls = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="agreement", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="AGREEMENT_ID")
    
-   protected List<AgreementPromoAppl> agreementPromoAppls = null;
+   private List<AgreementPromoAppl> agreementPromoAppls = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="agreement", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="AGREEMENT_ID")
    
-   protected List<AgreementRole> agreementRoles = null;
+   private List<AgreementRole> agreementRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AGREEMENT_ID")
    
-   protected List<AgreementTerm> agreementTerms = null;
+   private List<AgreementTerm> agreementTerms = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AGREEMENT_ID")
    
-   protected List<AgreementTermBilling> agreementTermBillings = null;
+   private List<AgreementTermBilling> agreementTermBillings = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="agreement", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="AGREEMENT_ID")
    
-   protected List<AgreementWorkEffortAppl> agreementWorkEffortAppls = null;
+   private List<AgreementWorkEffortAppl> agreementWorkEffortAppls = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AGREEMENT_ID")
    
-   protected List<InvoiceItemAssoc> invoiceItemAssocs = null;
+   private List<InvoiceItemAssoc> invoiceItemAssocs = null;
 
   /**
    * Default constructor.

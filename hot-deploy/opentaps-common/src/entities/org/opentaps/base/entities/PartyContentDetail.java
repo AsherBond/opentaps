@@ -146,7 +146,7 @@ fieldMapColumns.put("PartyContentDetail", fields);
     lastModifiedDate("lastModifiedDate"),
     lastModifiedByUserLogin("lastModifiedByUserLogin"),
     classificationEnumId("classificationEnumId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -218,14 +218,14 @@ fieldMapColumns.put("PartyContentDetail", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected DataResource dataResource = null;
+   private DataResource dataResource = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ContentType contentType = null;
+   private ContentType contentType = null;
 
   /**
    * Default constructor.

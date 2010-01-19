@@ -74,7 +74,7 @@ fieldMapColumns.put("ProductPriceCond", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -87,7 +87,7 @@ fieldMapColumns.put("ProductPriceCond", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductPriceCondPkBridge.class)
-     protected ProductPriceCondPk id = new ProductPriceCondPk();
+     private ProductPriceCondPk id = new ProductPriceCondPk();
    
     /**
      * Auto generated Id accessor.
@@ -104,40 +104,40 @@ fieldMapColumns.put("ProductPriceCond", fields);
          this.id = id;
       }
    @Column(name="INPUT_PARAM_ENUM_ID")
-   protected String inputParamEnumId;
+   private String inputParamEnumId;
    @Column(name="OPERATOR_ENUM_ID")
-   protected String operatorEnumId;
+   private String operatorEnumId;
    @Column(name="COND_VALUE")
-   protected String condValue;
+   private String condValue;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PRICE_RULE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductPriceRule productPriceRule = null;
+   private ProductPriceRule productPriceRule = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INPUT_PARAM_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration inputParamEnumeration = null;
+   private Enumeration inputParamEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="OPERATOR_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration operatorEnumeration = null;
+   private Enumeration operatorEnumeration = null;
 
   /**
    * Default constructor.

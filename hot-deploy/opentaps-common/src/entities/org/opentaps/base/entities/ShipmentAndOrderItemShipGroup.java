@@ -69,7 +69,7 @@ fieldMapColumns.put("ShipmentAndOrderItemShipGroup", fields);
     shipmentId("shipmentId"),
     orderId("orderId"),
     shipGroupSeqId("shipGroupSeqId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -91,7 +91,7 @@ fieldMapColumns.put("ShipmentAndOrderItemShipGroup", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Shipment shipment = null;
+   private Shipment shipment = null;
    private transient OrderItemShipGroup orderItemShipGroup = null;
 
   /**

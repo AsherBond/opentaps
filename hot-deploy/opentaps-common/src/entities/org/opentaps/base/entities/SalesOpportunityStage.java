@@ -74,7 +74,7 @@ fieldMapColumns.put("SalesOpportunityStage", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,29 +88,29 @@ fieldMapColumns.put("SalesOpportunityStage", fields);
    @GeneratedValue(generator="SalesOpportunityStage_GEN")
    @Id
    @Column(name="OPPORTUNITY_STAGE_ID")
-   protected String opportunityStageId;
+   private String opportunityStageId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="DEFAULT_PROBABILITY")
-   protected BigDecimal defaultProbability;
+   private BigDecimal defaultProbability;
    @Column(name="SEQUENCE_NUM")
-   protected Long sequenceNum;
+   private Long sequenceNum;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OPPORTUNITY_STAGE_ID")
    
-   protected List<SalesOpportunity> salesOpportunitys = null;
+   private List<SalesOpportunity> salesOpportunitys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OPPORTUNITY_STAGE_ID")
    
-   protected List<SalesOpportunityHistory> salesOpportunityHistorys = null;
+   private List<SalesOpportunityHistory> salesOpportunityHistorys = null;
 
   /**
    * Default constructor.

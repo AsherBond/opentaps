@@ -78,7 +78,7 @@ fieldMapColumns.put("MergeForm", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,35 +92,35 @@ fieldMapColumns.put("MergeForm", fields);
    @GeneratedValue(generator="MergeForm_GEN")
    @Id
    @Column(name="MERGE_FORM_ID")
-   protected String mergeFormId;
+   private String mergeFormId;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="MERGE_FORM_NAME")
-   protected String mergeFormName;
+   private String mergeFormName;
    @Column(name="SUBJECT")
-   protected String subject;
+   private String subject;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="MERGE_FORM_TEXT")
-   protected String mergeFormText;
+   private String mergeFormText;
    @Column(name="SHOW_IN_SELECT")
-   protected String showInSelect;
+   private String showInSelect;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
-   protected List<Party> partys = null;
+   private List<Party> partys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="mergeForm", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="MERGE_FORM_ID")
    
-   protected List<MergeFormToCategory> mergeFormToCategorys = null;
+   private List<MergeFormToCategory> mergeFormToCategorys = null;
 
   /**
    * Default constructor.

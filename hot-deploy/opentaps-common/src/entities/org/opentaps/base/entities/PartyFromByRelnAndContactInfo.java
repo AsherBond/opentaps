@@ -364,7 +364,7 @@ fieldMapColumns.put("PartyFromByRelnAndContactInfo", fields);
     countyGeoId("countyGeoId"),
     postalCodeGeoId("postalCodeGeoId"),
     geoPointId("geoPointId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

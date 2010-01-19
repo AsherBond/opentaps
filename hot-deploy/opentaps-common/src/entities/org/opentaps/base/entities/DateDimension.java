@@ -94,7 +94,7 @@ fieldMapColumns.put("DateDimension", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -108,41 +108,41 @@ fieldMapColumns.put("DateDimension", fields);
    @GeneratedValue(generator="DateDimension_GEN")
    @Id
    @Column(name="DIMENSION_ID")
-   protected String dimensionId;
+   private String dimensionId;
    @Column(name="DATE_VALUE")
-   protected Date dateValue;
+   private Date dateValue;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="DAY_NAME")
-   protected String dayName;
+   private String dayName;
    @Column(name="DAY_OF_MONTH")
-   protected Long dayOfMonth;
+   private Long dayOfMonth;
    @Column(name="DAY_OF_YEAR")
-   protected Long dayOfYear;
+   private Long dayOfYear;
    @Column(name="MONTH_NAME")
-   protected String monthName;
+   private String monthName;
    @Column(name="MONTH_OF_YEAR")
-   protected Long monthOfYear;
+   private Long monthOfYear;
    @Column(name="YEAR_NAME")
-   protected Long yearName;
+   private Long yearName;
    @Column(name="WEEK_OF_MONTH")
-   protected Long weekOfMonth;
+   private Long weekOfMonth;
    @Column(name="WEEK_OF_YEAR")
-   protected Long weekOfYear;
+   private Long weekOfYear;
    @Column(name="YEAR_MONTH_DAY")
-   protected String yearMonthDay;
+   private String yearMonthDay;
    @Column(name="YEAR_AND_MONTH")
-   protected String yearAndMonth;
+   private String yearAndMonth;
    @Column(name="WEEKDAY_TYPE")
-   protected String weekdayType;
+   private String weekdayType;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
 
   /**
    * Default constructor.

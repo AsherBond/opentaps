@@ -68,7 +68,7 @@ fieldMapColumns.put("BudgetScenario", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,25 +82,25 @@ fieldMapColumns.put("BudgetScenario", fields);
    @GeneratedValue(generator="BudgetScenario_GEN")
    @Id
    @Column(name="BUDGET_SCENARIO_ID")
-   protected String budgetScenarioId;
+   private String budgetScenarioId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="budgetScenario", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BUDGET_SCENARIO_ID")
    
-   protected List<BudgetScenarioApplication> budgetScenarioApplications = null;
+   private List<BudgetScenarioApplication> budgetScenarioApplications = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="budgetScenario", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BUDGET_SCENARIO_ID")
    
-   protected List<BudgetScenarioRule> budgetScenarioRules = null;
+   private List<BudgetScenarioRule> budgetScenarioRules = null;
 
   /**
    * Default constructor.

@@ -82,7 +82,7 @@ fieldMapColumns.put("WorkEffortAndInventoryAssign", fields);
     inventoryItemId("inventoryItemId"),
     statusId("statusId"),
     quantity("quantity");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

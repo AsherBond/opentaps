@@ -70,7 +70,7 @@ fieldMapColumns.put("FinAccountTypeAttr", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -83,7 +83,7 @@ fieldMapColumns.put("FinAccountTypeAttr", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.FinAccountTypeAttrPkBridge.class)
-     protected FinAccountTypeAttrPk id = new FinAccountTypeAttrPk();
+     private FinAccountTypeAttrPk id = new FinAccountTypeAttrPk();
    
     /**
      * Auto generated Id accessor.
@@ -100,24 +100,24 @@ fieldMapColumns.put("FinAccountTypeAttr", fields);
          this.id = id;
       }
    @Column(name="ATTR_VALUE")
-   protected String attrValue;
+   private String attrValue;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected FinAccountType finAccountType = null;
-   protected transient List<FinAccountAttribute> finAccountAttributes = null;
-   protected transient List<FinAccount> finAccounts = null;
+   private FinAccountType finAccountType = null;
+   private transient List<FinAccountAttribute> finAccountAttributes = null;
+   private transient List<FinAccount> finAccounts = null;
 
   /**
    * Default constructor.

@@ -77,7 +77,7 @@ fieldMapColumns.put("BudgetRevisionImpact", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -90,7 +90,7 @@ fieldMapColumns.put("BudgetRevisionImpact", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.BudgetRevisionImpactPkBridge.class)
-     protected BudgetRevisionImpactPk id = new BudgetRevisionImpactPk();
+     private BudgetRevisionImpactPk id = new BudgetRevisionImpactPk();
    
     /**
      * Auto generated Id accessor.
@@ -107,26 +107,26 @@ fieldMapColumns.put("BudgetRevisionImpact", fields);
          this.id = id;
       }
    @Column(name="REVISED_AMOUNT")
-   protected BigDecimal revisedAmount;
+   private BigDecimal revisedAmount;
    @Column(name="ADD_DELETE_FLAG")
-   protected String addDeleteFlag;
+   private String addDeleteFlag;
    @Column(name="REVISION_REASON")
-   protected String revisionReason;
+   private String revisionReason;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BUDGET_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Budget budget = null;
+   private Budget budget = null;
    private transient BudgetItem budgetItem = null;
    private transient BudgetRevision budgetRevision = null;
 

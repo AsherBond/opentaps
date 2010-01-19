@@ -93,7 +93,7 @@ fieldMapColumns.put("DataImportOrderPayment", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -106,7 +106,7 @@ fieldMapColumns.put("DataImportOrderPayment", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.DataImportOrderPaymentPkBridge.class)
-     protected DataImportOrderPaymentPk id = new DataImportOrderPaymentPk();
+     private DataImportOrderPaymentPk id = new DataImportOrderPaymentPk();
    
     /**
      * Auto generated Id accessor.
@@ -123,44 +123,44 @@ fieldMapColumns.put("DataImportOrderPayment", fields);
          this.id = id;
       }
    @Column(name="PAYMENT_METHOD_TYPE_ID")
-   protected String paymentMethodTypeId;
+   private String paymentMethodTypeId;
    @Column(name="MAX_AMOUNT")
-   protected BigDecimal maxAmount;
+   private BigDecimal maxAmount;
    @Column(name="STATUS_ID")
-   protected String statusId;
+   private String statusId;
    @Column(name="PAYMENT_TYPE_ID")
-   protected String paymentTypeId;
+   private String paymentTypeId;
    @Column(name="EFFECTIVE_DATE")
-   protected Timestamp effectiveDate;
+   private Timestamp effectiveDate;
    @Column(name="PAYMENT_REF_NUM")
-   protected String paymentRefNum;
+   private String paymentRefNum;
    @Column(name="AMOUNT")
-   protected BigDecimal amount;
+   private BigDecimal amount;
    @Column(name="CURRENCY_UOM_ID")
-   protected String currencyUomId;
+   private String currencyUomId;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="IMPORT_STATUS_ID")
-   protected String importStatusId;
+   private String importStatusId;
    @Column(name="IMPORT_ERROR")
-   protected String importError;
+   private String importError;
    @Column(name="PROCESSED_TIMESTAMP")
-   protected Timestamp processedTimestamp;
+   private Timestamp processedTimestamp;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PaymentMethodType paymentMethodType = null;
+   private PaymentMethodType paymentMethodType = null;
 
   /**
    * Default constructor.

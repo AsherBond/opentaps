@@ -92,7 +92,7 @@ fieldMapColumns.put("ProductCategoryRollupAndRole", fields);
     roleFromDate("roleFromDate"),
     roleThruDate("roleThruDate"),
     roleComments("roleComments");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -130,14 +130,14 @@ fieldMapColumns.put("ProductCategoryRollupAndRole", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductCategory productCategory = null;
+   private ProductCategory productCategory = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_PRODUCT_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductCategory parentProductCategory = null;
+   private ProductCategory parentProductCategory = null;
 
   /**
    * Default constructor.

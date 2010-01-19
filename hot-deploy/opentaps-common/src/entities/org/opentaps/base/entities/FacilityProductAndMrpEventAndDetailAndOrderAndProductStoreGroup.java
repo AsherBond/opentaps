@@ -132,7 +132,7 @@ fieldMapColumns.put("FacilityProductAndMrpEventAndDetailAndOrderAndProductStoreG
     fromDate("fromDate"),
     thruDate("thruDate"),
     sequenceNum("sequenceNum");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -194,14 +194,14 @@ fieldMapColumns.put("FacilityProductAndMrpEventAndDetailAndOrderAndProductStoreG
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product product = null;
+   private Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_EVENT_PLAN_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected InventoryEventPlannedType inventoryEventPlannedType = null;
+   private InventoryEventPlannedType inventoryEventPlannedType = null;
    private transient MrpInventoryEvent mrpInventoryEvent = null;
    private transient List<MrpInventoryEventDetail> mrpInventoryEventDetails = null;
 

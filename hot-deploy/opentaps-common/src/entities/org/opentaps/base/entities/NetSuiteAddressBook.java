@@ -102,7 +102,7 @@ fieldMapColumns.put("NetSuiteAddressBook", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -113,54 +113,54 @@ fieldMapColumns.put("NetSuiteAddressBook", fields);
   }
 
    @Column(name="ADDRESS")
-   protected String address;
+   private String address;
    @org.hibernate.annotations.GenericGenerator(name="NetSuiteAddressBook_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
    @GeneratedValue(generator="NetSuiteAddressBook_GEN")
    @Id
    @Column(name="ADDRESS_BOOK_ID")
-   protected String addressBookId;
+   private String addressBookId;
    @Column(name="ADDRESS_LINE1")
-   protected String addressLine1;
+   private String addressLine1;
    @Column(name="ADDRESS_LINE2")
-   protected String addressLine2;
+   private String addressLine2;
    @Column(name="ATTENTION")
-   protected String attention;
+   private String attention;
    @Column(name="CITY")
-   protected String city;
+   private String city;
    @Column(name="COMPANY")
-   protected String company;
+   private String company;
    @Column(name="COUNTRY")
-   protected String country;
+   private String country;
    @Column(name="ENTITY_ID")
-   protected String entityId;
+   private String entityId;
    @Column(name="IS_DEFAULT_BILL_ADDRESS")
-   protected String isDefaultBillAddress;
+   private String isDefaultBillAddress;
    @Column(name="IS_DEFAULT_SHIP_ADDRESS")
-   protected String isDefaultShipAddress;
+   private String isDefaultShipAddress;
    @Column(name="ADDRESS_NAME")
-   protected String addressName;
+   private String addressName;
    @Column(name="PHONE")
-   protected String phone;
+   private String phone;
    @Column(name="STATE_PROVINCE_NAME")
-   protected String stateProvinceName;
+   private String stateProvinceName;
    @Column(name="ZIP")
-   protected String zip;
+   private String zip;
    @Column(name="IMPORT_STATUS_ID")
-   protected String importStatusId;
+   private String importStatusId;
    @Column(name="IMPORT_ERROR")
-   protected String importError;
+   private String importError;
    @Column(name="PROCESSED_TIMESTAMP")
-   protected Timestamp processedTimestamp;
+   private Timestamp processedTimestamp;
    @Column(name="CONTACT_MECH_ID")
-   protected String contactMechId;
+   private String contactMechId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
 
   /**
    * Default constructor.

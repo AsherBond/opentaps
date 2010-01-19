@@ -99,7 +99,7 @@ fieldMapColumns.put("FinAccount", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -113,121 +113,121 @@ fieldMapColumns.put("FinAccount", fields);
    @GeneratedValue(generator="FinAccount_GEN")
    @Id
    @Column(name="FIN_ACCOUNT_ID")
-   protected String finAccountId;
+   private String finAccountId;
    @Column(name="FIN_ACCOUNT_TYPE_ID")
-   protected String finAccountTypeId;
+   private String finAccountTypeId;
    @Column(name="STATUS_ID")
-   protected String statusId;
+   private String statusId;
    @Column(name="FIN_ACCOUNT_NAME")
-   protected String finAccountName;
+   private String finAccountName;
    @Column(name="FIN_ACCOUNT_CODE")
-   protected String finAccountCode;
+   private String finAccountCode;
    @Column(name="FIN_ACCOUNT_PIN")
-   protected String finAccountPin;
+   private String finAccountPin;
    @Column(name="CURRENCY_UOM_ID")
-   protected String currencyUomId;
+   private String currencyUomId;
    @Column(name="ORGANIZATION_PARTY_ID")
-   protected String organizationPartyId;
+   private String organizationPartyId;
    @Column(name="OWNER_PARTY_ID")
-   protected String ownerPartyId;
+   private String ownerPartyId;
    @Column(name="POST_TO_GL_ACCOUNT_ID")
-   protected String postToGlAccountId;
+   private String postToGlAccountId;
    @Column(name="FROM_DATE")
-   protected Timestamp fromDate;
+   private Timestamp fromDate;
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="IS_REFUNDABLE")
-   protected String isRefundable;
+   private String isRefundable;
    @Column(name="REPLENISH_PAYMENT_ID")
-   protected String replenishPaymentId;
+   private String replenishPaymentId;
    @Column(name="REPLENISH_LEVEL")
-   protected BigDecimal replenishLevel;
+   private BigDecimal replenishLevel;
    @Column(name="ACTUAL_BALANCE")
-   protected BigDecimal actualBalance;
+   private BigDecimal actualBalance;
    @Column(name="AVAILABLE_BALANCE")
-   protected BigDecimal availableBalance;
+   private BigDecimal availableBalance;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected FinAccountType finAccountType = null;
+   private FinAccountType finAccountType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom currencyUom = null;
+   private Uom currencyUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party organizationParty = null;
+   private Party organizationParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="OWNER_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party ownerParty = null;
+   private Party ownerParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="POST_TO_GL_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlAccount postToGlAccount = null;
+   private GlAccount postToGlAccount = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REPLENISH_PAYMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PaymentMethod replenishPaymentMethod = null;
+   private PaymentMethod replenishPaymentMethod = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_TYPE_ID")
    
-   protected List<FinAccountTypeAttr> finAccountTypeAttrs = null;
+   private List<FinAccountTypeAttr> finAccountTypeAttrs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="finAccount", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIN_ACCOUNT_ID")
    
-   protected List<FinAccountAttribute> finAccountAttributes = null;
+   private List<FinAccountAttribute> finAccountAttributes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_ID")
    
-   protected List<FinAccountAuth> finAccountAuths = null;
+   private List<FinAccountAuth> finAccountAuths = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="finAccount", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIN_ACCOUNT_ID")
    
-   protected List<FinAccountRole> finAccountRoles = null;
+   private List<FinAccountRole> finAccountRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="finAccount", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIN_ACCOUNT_ID")
    
-   protected List<FinAccountStatus> finAccountStatuses = null;
+   private List<FinAccountStatus> finAccountStatuses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_ID")
    
-   protected List<FinAccountTrans> finAccountTranses = null;
+   private List<FinAccountTrans> finAccountTranses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_ID")
    
-   protected List<OrderPaymentPreference> orderPaymentPreferences = null;
+   private List<OrderPaymentPreference> orderPaymentPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_ID")
    
-   protected List<ReturnHeader> returnHeaders = null;
+   private List<ReturnHeader> returnHeaders = null;
 
   /**
    * Default constructor.

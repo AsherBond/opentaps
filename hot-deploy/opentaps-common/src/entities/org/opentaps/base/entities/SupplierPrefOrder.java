@@ -68,7 +68,7 @@ fieldMapColumns.put("SupplierPrefOrder", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,21 +82,21 @@ fieldMapColumns.put("SupplierPrefOrder", fields);
    @GeneratedValue(generator="SupplierPrefOrder_GEN")
    @Id
    @Column(name="SUPPLIER_PREF_ORDER_ID")
-   protected String supplierPrefOrderId;
+   private String supplierPrefOrderId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SUPPLIER_PREF_ORDER_ID")
    
-   protected List<SupplierProduct> supplierProducts = null;
+   private List<SupplierProduct> supplierProducts = null;
 
   /**
    * Default constructor.

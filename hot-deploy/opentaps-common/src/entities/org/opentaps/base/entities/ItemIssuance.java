@@ -91,7 +91,7 @@ fieldMapColumns.put("ItemIssuance", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -105,46 +105,46 @@ fieldMapColumns.put("ItemIssuance", fields);
    @GeneratedValue(generator="ItemIssuance_GEN")
    @Id
    @Column(name="ITEM_ISSUANCE_ID")
-   protected String itemIssuanceId;
+   private String itemIssuanceId;
    @Column(name="ORDER_ID")
-   protected String orderId;
+   private String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   protected String orderItemSeqId;
+   private String orderItemSeqId;
    @Column(name="SHIP_GROUP_SEQ_ID")
-   protected String shipGroupSeqId;
+   private String shipGroupSeqId;
    @Column(name="INVENTORY_ITEM_ID")
-   protected String inventoryItemId;
+   private String inventoryItemId;
    @Column(name="SHIPMENT_ID")
-   protected String shipmentId;
+   private String shipmentId;
    @Column(name="SHIPMENT_ITEM_SEQ_ID")
-   protected String shipmentItemSeqId;
+   private String shipmentItemSeqId;
    @Column(name="FIXED_ASSET_ID")
-   protected String fixedAssetId;
+   private String fixedAssetId;
    @Column(name="MAINT_HIST_SEQ_ID")
-   protected String maintHistSeqId;
+   private String maintHistSeqId;
    @Column(name="ISSUED_DATE_TIME")
-   protected Timestamp issuedDateTime;
+   private Timestamp issuedDateTime;
    @Column(name="ISSUED_BY_USER_LOGIN_ID")
-   protected String issuedByUserLoginId;
+   private String issuedByUserLoginId;
    @Column(name="QUANTITY")
-   protected BigDecimal quantity;
+   private BigDecimal quantity;
    @Column(name="CANCEL_QUANTITY")
-   protected BigDecimal cancelQuantity;
+   private BigDecimal cancelQuantity;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_ITEM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected InventoryItem inventoryItem = null;
+   private InventoryItem inventoryItem = null;
    private transient OrderItemShipGrpInvRes orderItemShipGrpInvRes = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_ID", insertable=false, updatable=false)
@@ -152,7 +152,7 @@ fieldMapColumns.put("ItemIssuance", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Shipment shipment = null;
+   private Shipment shipment = null;
    private transient ShipmentItem shipmentItem = null;
    private transient FixedAssetMaint fixedAssetMaint = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -161,7 +161,7 @@ fieldMapColumns.put("ItemIssuance", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderHeader orderHeader = null;
+   private OrderHeader orderHeader = null;
    private transient OrderItem orderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ISSUED_BY_USER_LOGIN_ID", insertable=false, updatable=false)
@@ -169,27 +169,27 @@ fieldMapColumns.put("ItemIssuance", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserLogin issuedByUserLogin = null;
+   private UserLogin issuedByUserLogin = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ITEM_ISSUANCE_ID")
    
-   protected List<InventoryItemDetail> inventoryItemDetails = null;
+   private List<InventoryItemDetail> inventoryItemDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ITEM_ISSUANCE_ID")
    
-   protected List<InventoryItemTraceDetail> inventoryItemTraceDetails = null;
+   private List<InventoryItemTraceDetail> inventoryItemTraceDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ITEM_ISSUANCE_ID")
    
-   protected List<InventoryTransfer> inventoryTransfers = null;
+   private List<InventoryTransfer> inventoryTransfers = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="itemIssuance", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ITEM_ISSUANCE_ID")
    
-   protected List<ItemIssuanceRole> itemIssuanceRoles = null;
+   private List<ItemIssuanceRole> itemIssuanceRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ITEM_ISSUANCE_ID")
    
-   protected List<OrderItemBilling> orderItemBillings = null;
+   private List<OrderItemBilling> orderItemBillings = null;
 
   /**
    * Default constructor.

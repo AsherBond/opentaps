@@ -72,7 +72,7 @@ fieldMapColumns.put("SubscriptionType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,40 +86,40 @@ fieldMapColumns.put("SubscriptionType", fields);
    @GeneratedValue(generator="SubscriptionType_GEN")
    @Id
    @Column(name="SUBSCRIPTION_TYPE_ID")
-   protected String subscriptionTypeId;
+   private String subscriptionTypeId;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SubscriptionType parentSubscriptionType = null;
+   private SubscriptionType parentSubscriptionType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SUBSCRIPTION_TYPE_ID")
    
-   protected List<Subscription> subscriptions = null;
+   private List<Subscription> subscriptions = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<SubscriptionType> childSubscriptionTypes = null;
+   private List<SubscriptionType> childSubscriptionTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="subscriptionType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SUBSCRIPTION_TYPE_ID")
    
-   protected List<SubscriptionTypeAttr> subscriptionTypeAttrs = null;
+   private List<SubscriptionTypeAttr> subscriptionTypeAttrs = null;
 
   /**
    * Default constructor.

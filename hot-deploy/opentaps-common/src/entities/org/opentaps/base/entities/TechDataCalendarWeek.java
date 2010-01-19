@@ -98,7 +98,7 @@ fieldMapColumns.put("TechDataCalendarWeek", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -112,53 +112,53 @@ fieldMapColumns.put("TechDataCalendarWeek", fields);
    @GeneratedValue(generator="TechDataCalendarWeek_GEN")
    @Id
    @Column(name="CALENDAR_WEEK_ID")
-   protected String calendarWeekId;
+   private String calendarWeekId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="MONDAY_START_TIME")
-   protected Time mondayStartTime;
+   private Time mondayStartTime;
    @Column(name="MONDAY_CAPACITY")
-   protected BigDecimal mondayCapacity;
+   private BigDecimal mondayCapacity;
    @Column(name="TUESDAY_START_TIME")
-   protected Time tuesdayStartTime;
+   private Time tuesdayStartTime;
    @Column(name="TUESDAY_CAPACITY")
-   protected BigDecimal tuesdayCapacity;
+   private BigDecimal tuesdayCapacity;
    @Column(name="WEDNESDAY_START_TIME")
-   protected Time wednesdayStartTime;
+   private Time wednesdayStartTime;
    @Column(name="WEDNESDAY_CAPACITY")
-   protected BigDecimal wednesdayCapacity;
+   private BigDecimal wednesdayCapacity;
    @Column(name="THURSDAY_START_TIME")
-   protected Time thursdayStartTime;
+   private Time thursdayStartTime;
    @Column(name="THURSDAY_CAPACITY")
-   protected BigDecimal thursdayCapacity;
+   private BigDecimal thursdayCapacity;
    @Column(name="FRIDAY_START_TIME")
-   protected Time fridayStartTime;
+   private Time fridayStartTime;
    @Column(name="FRIDAY_CAPACITY")
-   protected BigDecimal fridayCapacity;
+   private BigDecimal fridayCapacity;
    @Column(name="SATURDAY_START_TIME")
-   protected Time saturdayStartTime;
+   private Time saturdayStartTime;
    @Column(name="SATURDAY_CAPACITY")
-   protected BigDecimal saturdayCapacity;
+   private BigDecimal saturdayCapacity;
    @Column(name="SUNDAY_START_TIME")
-   protected Time sundayStartTime;
+   private Time sundayStartTime;
    @Column(name="SUNDAY_CAPACITY")
-   protected BigDecimal sundayCapacity;
+   private BigDecimal sundayCapacity;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CALENDAR_WEEK_ID")
    
-   protected List<TechDataCalendar> techDataCalendars = null;
+   private List<TechDataCalendar> techDataCalendars = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CALENDAR_WEEK_ID")
    
-   protected List<TechDataCalendarExcWeek> techDataCalendarExcWeeks = null;
+   private List<TechDataCalendarExcWeek> techDataCalendarExcWeeks = null;
 
   /**
    * Default constructor.

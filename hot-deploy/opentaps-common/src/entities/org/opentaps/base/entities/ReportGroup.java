@@ -75,7 +75,7 @@ fieldMapColumns.put("ReportGroup", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -89,27 +89,27 @@ fieldMapColumns.put("ReportGroup", fields);
    @GeneratedValue(generator="ReportGroup_GEN")
    @Id
    @Column(name="REPORT_GROUP_ID")
-   protected String reportGroupId;
+   private String reportGroupId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="APPLICATION")
-   protected String application;
+   private String application;
    @Column(name="SHOW_IN_SELECT")
-   protected String showInSelect;
+   private String showInSelect;
    @Column(name="SEQUENCE_NUM")
-   protected Long sequenceNum;
+   private Long sequenceNum;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REPORT_GROUP_ID")
    
-   protected List<ReportGroupMember> reportGroupMembers = null;
+   private List<ReportGroupMember> reportGroupMembers = null;
 
   /**
    * Default constructor.

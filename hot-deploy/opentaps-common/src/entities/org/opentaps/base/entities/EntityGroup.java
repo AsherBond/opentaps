@@ -68,7 +68,7 @@ fieldMapColumns.put("EntityGroup", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,25 +82,25 @@ fieldMapColumns.put("EntityGroup", fields);
    @GeneratedValue(generator="EntityGroup_GEN")
    @Id
    @Column(name="ENTITY_GROUP_ID")
-   protected String entityGroupId;
+   private String entityGroupId;
    @Column(name="ENTITY_GROUP_NAME")
-   protected String entityGroupName;
+   private String entityGroupName;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="entityGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ENTITY_GROUP_ID")
    
-   protected List<EntityGroupEntry> entityGroupEntrys = null;
+   private List<EntityGroupEntry> entityGroupEntrys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="entityGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ENTITY_GROUP_ID")
    
-   protected List<EntitySyncIncludeGroup> entitySyncIncludeGroups = null;
+   private List<EntitySyncIncludeGroup> entitySyncIncludeGroups = null;
 
   /**
    * Default constructor.

@@ -120,7 +120,7 @@ fieldMapColumns.put("ContactMechDetail", fields);
     tnAreaCode("tnAreaCode"),
     tnContactNumber("tnContactNumber"),
     tnAskForName("tnAskForName");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

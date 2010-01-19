@@ -68,7 +68,7 @@ fieldMapColumns.put("ContactMechPurposeType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,41 +82,41 @@ fieldMapColumns.put("ContactMechPurposeType", fields);
    @GeneratedValue(generator="ContactMechPurposeType_GEN")
    @Id
    @Column(name="CONTACT_MECH_PURPOSE_TYPE_ID")
-   protected String contactMechPurposeTypeId;
+   private String contactMechPurposeTypeId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="contactMechPurposeType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_MECH_PURPOSE_TYPE_ID")
    
-   protected List<ContactMechTypePurpose> contactMechTypePurposes = null;
+   private List<ContactMechTypePurpose> contactMechTypePurposes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="contactMechPurposeType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_MECH_PURPOSE_TYPE_ID")
    
-   protected List<FacilityContactMechPurpose> facilityContactMechPurposes = null;
+   private List<FacilityContactMechPurpose> facilityContactMechPurposes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="contactMechPurposeType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_MECH_PURPOSE_TYPE_ID")
    
-   protected List<InvoiceContactMech> invoiceContactMeches = null;
+   private List<InvoiceContactMech> invoiceContactMeches = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="contactMechPurposeType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_MECH_PURPOSE_TYPE_ID")
    
-   protected List<OrderContactMech> orderContactMeches = null;
+   private List<OrderContactMech> orderContactMeches = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="contactMechPurposeType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_MECH_PURPOSE_TYPE_ID")
    
-   protected List<OrderItemContactMech> orderItemContactMeches = null;
+   private List<OrderItemContactMech> orderItemContactMeches = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="contactMechPurposeType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_MECH_PURPOSE_TYPE_ID")
    
-   protected List<PartyContactMechPurpose> partyContactMechPurposes = null;
+   private List<PartyContactMechPurpose> partyContactMechPurposes = null;
 
   /**
    * Default constructor.

@@ -76,7 +76,7 @@ fieldMapColumns.put("ProductPriceRule", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -90,41 +90,41 @@ fieldMapColumns.put("ProductPriceRule", fields);
    @GeneratedValue(generator="ProductPriceRule_GEN")
    @Id
    @Column(name="PRODUCT_PRICE_RULE_ID")
-   protected String productPriceRuleId;
+   private String productPriceRuleId;
    @Column(name="RULE_NAME")
-   protected String ruleName;
+   private String ruleName;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="IS_SALE")
-   protected String isSale;
+   private String isSale;
    @Column(name="FROM_DATE")
-   protected Timestamp fromDate;
+   private Timestamp fromDate;
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productPriceRule", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_PRICE_RULE_ID")
    
-   protected List<MarketingCampaignPrice> marketingCampaignPrices = null;
+   private List<MarketingCampaignPrice> marketingCampaignPrices = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PRICE_RULE_ID")
    
-   protected List<OrderItemPriceInfo> orderItemPriceInfoes = null;
+   private List<OrderItemPriceInfo> orderItemPriceInfoes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productPriceRule", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_PRICE_RULE_ID")
    
-   protected List<ProductPriceAction> productPriceActions = null;
+   private List<ProductPriceAction> productPriceActions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productPriceRule", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_PRICE_RULE_ID")
    
-   protected List<ProductPriceCond> productPriceConds = null;
+   private List<ProductPriceCond> productPriceConds = null;
 
   /**
    * Default constructor.

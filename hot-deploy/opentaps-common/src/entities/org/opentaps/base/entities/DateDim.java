@@ -81,7 +81,7 @@ fieldMapColumns.put("DateDim", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -95,29 +95,29 @@ fieldMapColumns.put("DateDim", fields);
    @GeneratedValue(generator="DateDim_GEN")
    @Id
    @Column(name="DATE_DIM_ID")
-   protected Long dateDimId;
+   private Long dateDimId;
    @Column(name="DAY_OF_MONTH")
-   protected String dayOfMonth;
+   private String dayOfMonth;
    @Column(name="WEEK_OF_YEAR")
-   protected String weekOfYear;
+   private String weekOfYear;
    @Column(name="MONTH_OF_YEAR")
-   protected String monthOfYear;
+   private String monthOfYear;
    @Column(name="YEAR_NUMBER")
-   protected String yearNumber;
+   private String yearNumber;
    @Column(name="QUARTER")
-   protected String quarter;
+   private String quarter;
    @Column(name="NAME_DAY")
-   protected String nameDay;
+   private String nameDay;
    @Column(name="NAME_MONTH")
-   protected String nameMonth;
+   private String nameMonth;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
 
   /**
    * Default constructor.

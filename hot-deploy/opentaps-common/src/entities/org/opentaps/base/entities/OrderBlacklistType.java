@@ -68,7 +68,7 @@ fieldMapColumns.put("OrderBlacklistType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,21 +82,21 @@ fieldMapColumns.put("OrderBlacklistType", fields);
    @GeneratedValue(generator="OrderBlacklistType_GEN")
    @Id
    @Column(name="ORDER_BLACKLIST_TYPE_ID")
-   protected String orderBlacklistTypeId;
+   private String orderBlacklistTypeId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderBlacklistType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_BLACKLIST_TYPE_ID")
    
-   protected List<OrderBlacklist> orderBlacklists = null;
+   private List<OrderBlacklist> orderBlacklists = null;
 
   /**
    * Default constructor.

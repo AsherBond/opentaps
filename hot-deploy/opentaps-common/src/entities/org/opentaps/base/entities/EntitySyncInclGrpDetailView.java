@@ -72,7 +72,7 @@ fieldMapColumns.put("EntitySyncInclGrpDetailView", fields);
     entityGroupId("entityGroupId"),
     entityOrPackage("entityOrPackage"),
     applEnumId("applEnumId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

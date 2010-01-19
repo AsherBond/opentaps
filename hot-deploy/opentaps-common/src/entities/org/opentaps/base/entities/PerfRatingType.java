@@ -72,7 +72,7 @@ fieldMapColumns.put("PerfRatingType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,36 +86,36 @@ fieldMapColumns.put("PerfRatingType", fields);
    @GeneratedValue(generator="PerfRatingType_GEN")
    @Id
    @Column(name="PERF_RATING_TYPE_ID")
-   protected String perfRatingTypeId;
+   private String perfRatingTypeId;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PerfRatingType parentPerfRatingType = null;
+   private PerfRatingType parentPerfRatingType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<PerfRatingType> childPerfRatingTypes = null;
+   private List<PerfRatingType> childPerfRatingTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PERF_RATING_TYPE_ID")
    
-   protected List<PerfReviewItem> perfReviewItems = null;
+   private List<PerfReviewItem> perfReviewItems = null;
 
   /**
    * Default constructor.

@@ -222,7 +222,7 @@ fieldMapColumns.put("OrderPaymentPrefAndPayment", fields);
     paymentAcctgTagEnumId8("paymentAcctgTagEnumId8"),
     paymentAcctgTagEnumId9("paymentAcctgTagEnumId9"),
     paymentAcctgTagEnumId10("paymentAcctgTagEnumId10");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -344,7 +344,7 @@ fieldMapColumns.put("OrderPaymentPrefAndPayment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PaymentType paymentType = null;
+   private PaymentType paymentType = null;
 
   /**
    * Default constructor.

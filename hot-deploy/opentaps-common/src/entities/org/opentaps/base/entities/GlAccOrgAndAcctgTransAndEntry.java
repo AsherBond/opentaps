@@ -89,7 +89,7 @@ fieldMapColumns.put("GlAccOrgAndAcctgTransAndEntry", fields);
     totalAmount("totalAmount"),
     fromDate("fromDate"),
     thruDate("thruDate");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

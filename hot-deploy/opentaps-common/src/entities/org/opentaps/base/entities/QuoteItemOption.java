@@ -75,7 +75,7 @@ fieldMapColumns.put("QuoteItemOption", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,7 +88,7 @@ fieldMapColumns.put("QuoteItemOption", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.QuoteItemOptionPkBridge.class)
-     protected QuoteItemOptionPk id = new QuoteItemOptionPk();
+     private QuoteItemOptionPk id = new QuoteItemOptionPk();
    
     /**
      * Auto generated Id accessor.
@@ -105,24 +105,24 @@ fieldMapColumns.put("QuoteItemOption", fields);
          this.id = id;
       }
    @Column(name="QUANTITY")
-   protected BigDecimal quantity;
+   private BigDecimal quantity;
    @Column(name="QUOTE_UNIT_PRICE")
-   protected BigDecimal quoteUnitPrice;
+   private BigDecimal quoteUnitPrice;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="QUOTE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Quote quote = null;
+   private Quote quote = null;
    private transient QuoteItem quoteItem = null;
 
   /**

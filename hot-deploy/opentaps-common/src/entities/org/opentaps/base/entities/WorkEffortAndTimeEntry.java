@@ -246,7 +246,7 @@ fieldMapColumns.put("WorkEffortAndTimeEntry", fields);
     invoiceItemSeqId("invoiceItemSeqId"),
     hours("hours"),
     comments("comments");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -378,7 +378,7 @@ fieldMapColumns.put("WorkEffortAndTimeEntry", fields);
    private BigDecimal hours;
     
    private String comments;
-   protected transient List<WorkEffortSkillStandard> workEffortSkillStandards = null;
+   private transient List<WorkEffortSkillStandard> workEffortSkillStandards = null;
 
   /**
    * Default constructor.

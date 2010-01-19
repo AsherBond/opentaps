@@ -75,7 +75,7 @@ fieldMapColumns.put("SurveyMultiRespColumn", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,7 +88,7 @@ fieldMapColumns.put("SurveyMultiRespColumn", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.SurveyMultiRespColumnPkBridge.class)
-     protected SurveyMultiRespColumnPk id = new SurveyMultiRespColumnPk();
+     private SurveyMultiRespColumnPk id = new SurveyMultiRespColumnPk();
    
     /**
      * Auto generated Id accessor.
@@ -105,17 +105,17 @@ fieldMapColumns.put("SurveyMultiRespColumn", fields);
          this.id = id;
       }
    @Column(name="COLUMN_TITLE")
-   protected String columnTitle;
+   private String columnTitle;
    @Column(name="SEQUENCE_NUM")
-   protected Long sequenceNum;
+   private Long sequenceNum;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    private transient SurveyMultiResp surveyMultiResp = null;
    private transient List<SurveyQuestionAppl> surveyQuestionAppls = null;
 

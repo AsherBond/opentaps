@@ -84,7 +84,7 @@ fieldMapColumns.put("PortalPortlet", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -98,45 +98,45 @@ fieldMapColumns.put("PortalPortlet", fields);
    @GeneratedValue(generator="PortalPortlet_GEN")
    @Id
    @Column(name="PORTAL_PORTLET_ID")
-   protected String portalPortletId;
+   private String portalPortletId;
    @Column(name="PORTLET_NAME")
-   protected String portletName;
+   private String portletName;
    @Column(name="SCREEN_NAME")
-   protected String screenName;
+   private String screenName;
    @Column(name="SCREEN_LOCATION")
-   protected String screenLocation;
+   private String screenLocation;
    @Column(name="EDIT_FORM_NAME")
-   protected String editFormName;
+   private String editFormName;
    @Column(name="EDIT_FORM_LOCATION")
-   protected String editFormLocation;
+   private String editFormLocation;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="SCREENSHOT")
-   protected String screenshot;
+   private String screenshot;
    @Column(name="SECURITY_SERVICE_NAME")
-   protected String securityServiceName;
+   private String securityServiceName;
    @Column(name="SECURITY_MAIN_ACTION")
-   protected String securityMainAction;
+   private String securityMainAction;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="portalPortlet", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PORTAL_PORTLET_ID")
    
-   protected List<PortalPagePortlet> portalPagePortlets = null;
+   private List<PortalPagePortlet> portalPagePortlets = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="portalPortlet", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PORTAL_PORTLET_ID")
    
-   protected List<PortletAttribute> portletAttributes = null;
+   private List<PortletAttribute> portletAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="portalPortlet", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PORTAL_PORTLET_ID")
    
-   protected List<PortletPortletCategory> portletPortletCategorys = null;
+   private List<PortletPortletCategory> portletPortletCategorys = null;
 
   /**
    * Default constructor.

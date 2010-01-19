@@ -72,7 +72,7 @@ fieldMapColumns.put("WebPage", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     contentId("contentId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,35 +86,35 @@ fieldMapColumns.put("WebPage", fields);
    @GeneratedValue(generator="WebPage_GEN")
    @Id
    @Column(name="WEB_PAGE_ID")
-   protected String webPageId;
+   private String webPageId;
    @Column(name="PAGE_NAME")
-   protected String pageName;
+   private String pageName;
    @Column(name="WEB_SITE_ID")
-   protected String webSiteId;
+   private String webSiteId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @Column(name="CONTENT_ID")
-   protected String contentId;
+   private String contentId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WEB_SITE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WebSite webSite = null;
+   private WebSite webSite = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Content content = null;
+   private Content content = null;
 
   /**
    * Default constructor.

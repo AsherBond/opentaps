@@ -80,7 +80,7 @@ fieldMapColumns.put("ProductStorePaymentSetting", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -93,7 +93,7 @@ fieldMapColumns.put("ProductStorePaymentSetting", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductStorePaymentSettingPkBridge.class)
-     protected ProductStorePaymentSettingPk id = new ProductStorePaymentSettingPk();
+     private ProductStorePaymentSettingPk id = new ProductStorePaymentSettingPk();
    
     /**
      * Auto generated Id accessor.
@@ -110,58 +110,58 @@ fieldMapColumns.put("ProductStorePaymentSetting", fields);
          this.id = id;
       }
    @Column(name="PAYMENT_SERVICE")
-   protected String paymentService;
+   private String paymentService;
    @Column(name="PAYMENT_CUSTOM_METHOD_ID")
-   protected String paymentCustomMethodId;
+   private String paymentCustomMethodId;
    @Column(name="PAYMENT_GATEWAY_CONFIG_ID")
-   protected String paymentGatewayConfigId;
+   private String paymentGatewayConfigId;
    @Column(name="PAYMENT_PROPERTIES_PATH")
-   protected String paymentPropertiesPath;
+   private String paymentPropertiesPath;
    @Column(name="APPLY_TO_ALL_PRODUCTS")
-   protected String applyToAllProducts;
+   private String applyToAllProducts;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductStore productStore = null;
+   private ProductStore productStore = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PaymentMethodType paymentMethodType = null;
+   private PaymentMethodType paymentMethodType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_SERVICE_TYPE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration enumeration = null;
+   private Enumeration enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_GATEWAY_CONFIG_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PaymentGatewayConfig paymentGatewayConfig = null;
+   private PaymentGatewayConfig paymentGatewayConfig = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_CUSTOM_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected CustomMethod customMethod = null;
+   private CustomMethod customMethod = null;
 
   /**
    * Default constructor.

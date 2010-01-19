@@ -92,7 +92,7 @@ fieldMapColumns.put("PartyAndGeoPoint", fields);
     elevation("elevation"),
     elevationUomId("elevationUomId"),
     information("information");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -129,14 +129,14 @@ fieldMapColumns.put("PartyAndGeoPoint", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_POINT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GeoPoint geoPoint = null;
+   private GeoPoint geoPoint = null;
 
   /**
    * Default constructor.

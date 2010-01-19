@@ -128,7 +128,7 @@ fieldMapColumns.put("Person", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -148,118 +148,118 @@ fieldMapColumns.put("Person", fields);
    } )
    @Boost(10f)
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="SALUTATION")
-   protected String salutation;
+   private String salutation;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(5f)
    @Column(name="FIRST_NAME")
-   protected String firstName;
+   private String firstName;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(5f)
    @Column(name="MIDDLE_NAME")
-   protected String middleName;
+   private String middleName;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(5f)
    @Column(name="LAST_NAME")
-   protected String lastName;
+   private String lastName;
    @Column(name="PERSONAL_TITLE")
-   protected String personalTitle;
+   private String personalTitle;
    @Column(name="SUFFIX")
-   protected String suffix;
+   private String suffix;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(1f)
    @Column(name="NICKNAME")
-   protected String nickname;
+   private String nickname;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(5f)
    @Column(name="FIRST_NAME_LOCAL")
-   protected String firstNameLocal;
+   private String firstNameLocal;
    @Column(name="MIDDLE_NAME_LOCAL")
-   protected String middleNameLocal;
+   private String middleNameLocal;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(5f)
    @Column(name="LAST_NAME_LOCAL")
-   protected String lastNameLocal;
+   private String lastNameLocal;
    @Column(name="OTHER_LOCAL")
-   protected String otherLocal;
+   private String otherLocal;
    @Column(name="MEMBER_ID")
-   protected String memberId;
+   private String memberId;
    @Column(name="GENDER")
-   protected String gender;
+   private String gender;
    @Column(name="BIRTH_DATE")
-   protected Date birthDate;
+   private Date birthDate;
    @Column(name="HEIGHT")
-   protected BigDecimal height;
+   private BigDecimal height;
    @Column(name="WEIGHT")
-   protected BigDecimal weight;
+   private BigDecimal weight;
    @Column(name="MOTHERS_MAIDEN_NAME")
-   protected String mothersMaidenName;
+   private String mothersMaidenName;
    @Column(name="MARITAL_STATUS")
-   protected String maritalStatus;
+   private String maritalStatus;
    @Column(name="SOCIAL_SECURITY_NUMBER")
-   protected String socialSecurityNumber;
+   private String socialSecurityNumber;
    @Column(name="PASSPORT_NUMBER")
-   protected String passportNumber;
+   private String passportNumber;
    @Column(name="PASSPORT_EXPIRE_DATE")
-   protected Date passportExpireDate;
+   private Date passportExpireDate;
    @Column(name="TOTAL_YEARS_WORK_EXPERIENCE")
-   protected BigDecimal totalYearsWorkExperience;
+   private BigDecimal totalYearsWorkExperience;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="EMPLOYMENT_STATUS_ENUM_ID")
-   protected String employmentStatusEnumId;
+   private String employmentStatusEnumId;
    @Column(name="RESIDENCE_STATUS_ENUM_ID")
-   protected String residenceStatusEnumId;
+   private String residenceStatusEnumId;
    @Column(name="OCCUPATION")
-   protected String occupation;
+   private String occupation;
    @Column(name="YEARS_WITH_EMPLOYER")
-   protected Long yearsWithEmployer;
+   private Long yearsWithEmployer;
    @Column(name="MONTHS_WITH_EMPLOYER")
-   protected Long monthsWithEmployer;
+   private Long monthsWithEmployer;
    @Column(name="EXISTING_CUSTOMER")
-   protected String existingCustomer;
+   private String existingCustomer;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    @IndexedEmbedded(depth = 2)
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EMPLOYMENT_STATUS_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration employmentStatusEnumeration = null;
+   private Enumeration employmentStatusEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RESIDENCE_STATUS_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration residenceStatusEnumeration = null;
+   private Enumeration residenceStatusEnumeration = null;
    private transient List<AmazonParty> amazonPartys = null;
    private transient List<PartyContactMech> partyContactMeches = null;
    private transient List<PartyContactMechPurpose> partyContactMechPurposes = null;

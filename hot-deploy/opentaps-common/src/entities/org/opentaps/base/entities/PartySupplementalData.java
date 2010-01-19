@@ -101,7 +101,7 @@ fieldMapColumns.put("PartySupplementalData", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -121,111 +121,111 @@ fieldMapColumns.put("PartySupplementalData", fields);
    } )
    @Boost(1f)
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="PARENT_PARTY_ID")
-   protected String parentPartyId;
+   private String parentPartyId;
    @Column(name="DEPARTMENT_NAME")
-   protected String departmentName;
+   private String departmentName;
    @Column(name="GENERAL_PROF_TITLE")
-   protected String generalProfTitle;
+   private String generalProfTitle;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(5f)
    @Column(name="COMPANY_NAME")
-   protected String companyName;
+   private String companyName;
    @org.hibernate.search.annotations.Fields( {
      @Field(index=Index.TOKENIZED, store=Store.YES)
    } )
    @Boost(5f)
    @Column(name="COMPANY_NAME_LOCAL")
-   protected String companyNameLocal;
+   private String companyNameLocal;
    @Column(name="ANNUAL_REVENUE")
-   protected BigDecimal annualRevenue;
+   private BigDecimal annualRevenue;
    @Column(name="CURRENCY_UOM_ID")
-   protected String currencyUomId;
+   private String currencyUomId;
    @Column(name="NUMBER_EMPLOYEES")
-   protected Long numberEmployees;
+   private Long numberEmployees;
    @Column(name="INDUSTRY_ENUM_ID")
-   protected String industryEnumId;
+   private String industryEnumId;
    @Column(name="OWNERSHIP_ENUM_ID")
-   protected String ownershipEnumId;
+   private String ownershipEnumId;
    @Column(name="SIC_CODE")
-   protected String sicCode;
+   private String sicCode;
    @Column(name="TICKER_SYMBOL")
-   protected String tickerSymbol;
+   private String tickerSymbol;
    @Column(name="IMPORTANT_NOTE")
-   protected String importantNote;
+   private String importantNote;
    @Column(name="PRIMARY_POSTAL_ADDRESS_ID")
-   protected String primaryPostalAddressId;
+   private String primaryPostalAddressId;
    @Column(name="PRIMARY_TELECOM_NUMBER_ID")
-   protected String primaryTelecomNumberId;
+   private String primaryTelecomNumberId;
    @Column(name="PRIMARY_EMAIL_ID")
-   protected String primaryEmailId;
+   private String primaryEmailId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INDUSTRY_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration industryEnumeration = null;
+   private Enumeration industryEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="OWNERSHIP_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration ownershipEnumeration = null;
+   private Enumeration ownershipEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    @IndexedEmbedded(depth = 2)
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    @IndexedEmbedded(depth = 2)
-   protected Party parentParty = null;
+   private Party parentParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom uom = null;
+   private Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_POSTAL_ADDRESS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ContactMech contactMechPostalAddressContactMech = null;
+   private ContactMech contactMechPostalAddressContactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_TELECOM_NUMBER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ContactMech contactMechTelecomNumberContactMech = null;
+   private ContactMech contactMechTelecomNumberContactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_EMAIL_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ContactMech contactMechEmailContactMech = null;
+   private ContactMech contactMechEmailContactMech = null;
 
   /**
    * Default constructor.

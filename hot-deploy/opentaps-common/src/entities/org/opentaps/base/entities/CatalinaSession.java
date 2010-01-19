@@ -77,7 +77,7 @@ fieldMapColumns.put("CatalinaSession", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -91,25 +91,25 @@ fieldMapColumns.put("CatalinaSession", fields);
    @GeneratedValue(generator="CatalinaSession_GEN")
    @Id
    @Column(name="SESSION_ID")
-   protected String sessionId;
+   private String sessionId;
    @Column(name="SESSION_SIZE")
-   protected Long sessionSize;
+   private Long sessionSize;
    @Column(name="SESSION_INFO")
-   protected byte[] sessionInfo;
+   private byte[] sessionInfo;
    @Column(name="IS_VALID")
-   protected String isValid;
+   private String isValid;
    @Column(name="MAX_IDLE")
-   protected Long maxIdle;
+   private Long maxIdle;
    @Column(name="LAST_ACCESSED")
-   protected Long lastAccessed;
+   private Long lastAccessed;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
 
   /**
    * Default constructor.

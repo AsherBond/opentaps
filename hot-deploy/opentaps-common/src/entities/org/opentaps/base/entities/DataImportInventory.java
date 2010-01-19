@@ -89,7 +89,7 @@ fieldMapColumns.put("DataImportInventory", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -103,51 +103,51 @@ fieldMapColumns.put("DataImportInventory", fields);
    @GeneratedValue(generator="DataImportInventory_GEN")
    @Id
    @Column(name="ITEM_ID")
-   protected String itemId;
+   private String itemId;
    @Column(name="PRODUCT_ID")
-   protected String productId;
+   private String productId;
    @Column(name="FACILITY_ID")
-   protected String facilityId;
+   private String facilityId;
    @Column(name="AVAILABLE_TO_PROMISE")
-   protected BigDecimal availableToPromise;
+   private BigDecimal availableToPromise;
    @Column(name="ON_HAND")
-   protected BigDecimal onHand;
+   private BigDecimal onHand;
    @Column(name="MINIMUM_STOCK")
-   protected BigDecimal minimumStock;
+   private BigDecimal minimumStock;
    @Column(name="REORDER_QUANTITY")
-   protected BigDecimal reorderQuantity;
+   private BigDecimal reorderQuantity;
    @Column(name="DAYS_TO_SHIP")
-   protected BigDecimal daysToShip;
+   private BigDecimal daysToShip;
    @Column(name="INVENTORY_VALUE")
-   protected BigDecimal inventoryValue;
+   private BigDecimal inventoryValue;
    @Column(name="IMPORT_STATUS_ID")
-   protected String importStatusId;
+   private String importStatusId;
    @Column(name="IMPORT_ERROR")
-   protected String importError;
+   private String importError;
    @Column(name="PROCESSED_TIMESTAMP")
-   protected Timestamp processedTimestamp;
+   private Timestamp processedTimestamp;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product product = null;
+   private Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Facility facility = null;
+   private Facility facility = null;
 
   /**
    * Default constructor.

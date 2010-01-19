@@ -139,7 +139,7 @@ fieldMapColumns.put("PartyRelationshipAndDetail", fields);
     permissionsEnumId("permissionsEnumId"),
     positionTitle("positionTitle"),
     comments("comments");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -207,7 +207,7 @@ fieldMapColumns.put("PartyRelationshipAndDetail", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
 
   /**
    * Default constructor.

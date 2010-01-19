@@ -78,7 +78,7 @@ fieldMapColumns.put("PartyInvitation", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,49 +92,49 @@ fieldMapColumns.put("PartyInvitation", fields);
    @GeneratedValue(generator="PartyInvitation_GEN")
    @Id
    @Column(name="PARTY_INVITATION_ID")
-   protected String partyInvitationId;
+   private String partyInvitationId;
    @Column(name="PARTY_ID_FROM")
-   protected String partyIdFrom;
+   private String partyIdFrom;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="TO_NAME")
-   protected String toName;
+   private String toName;
    @Column(name="EMAIL_ADDRESS")
-   protected String emailAddress;
+   private String emailAddress;
    @Column(name="STATUS_ID")
-   protected String statusId;
+   private String statusId;
    @Column(name="LAST_INVITE_DATE")
-   protected Timestamp lastInviteDate;
+   private Timestamp lastInviteDate;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID_FROM", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem statusItem = null;
+   private StatusItem statusItem = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="partyInvitation", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_INVITATION_ID")
    
-   protected List<PartyInvitationGroupAssoc> partyInvitationGroupAssocs = null;
+   private List<PartyInvitationGroupAssoc> partyInvitationGroupAssocs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="partyInvitation", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_INVITATION_ID")
    
-   protected List<PartyInvitationRoleAssoc> partyInvitationRoleAssocs = null;
+   private List<PartyInvitationRoleAssoc> partyInvitationRoleAssocs = null;
 
   /**
    * Default constructor.

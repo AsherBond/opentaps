@@ -236,7 +236,7 @@ fieldMapColumns.put("ContentAssocDataResourceViewTo", fields);
     drCreatedByUserLogin("drCreatedByUserLogin"),
     drLastModifiedDate("drLastModifiedDate"),
     drLastModifiedByUserLogin("drLastModifiedByUserLogin");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -368,27 +368,27 @@ fieldMapColumns.put("ContentAssocDataResourceViewTo", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ElectronicText electronicText = null;
+   private ElectronicText electronicText = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DR_DATA_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ImageDataResource imageDataResource = null;
+   private ImageDataResource imageDataResource = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DR_DATA_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OtherDataResource otherDataResource = null;
+   private OtherDataResource otherDataResource = null;
    private transient List<ContentAssocDataResourceViewFrom> contentAssocDataResourceViewFroms = null;
    private transient List<ContentAssocDataResourceViewTo> contentAssocDataResourceViewToes = null;
-   protected transient List<ContentPurpose> contentPurposes = null;
-   protected transient List<ContentAssoc> fromContentAssocs = null;
-   protected transient List<ContentAssoc> toContentAssocs = null;
-   protected transient List<ContentRole> contentRoles = null;
+   private transient List<ContentPurpose> contentPurposes = null;
+   private transient List<ContentAssoc> fromContentAssocs = null;
+   private transient List<ContentAssoc> toContentAssocs = null;
+   private transient List<ContentRole> contentRoles = null;
 
   /**
    * Default constructor.

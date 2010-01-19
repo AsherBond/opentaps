@@ -102,7 +102,7 @@ fieldMapColumns.put("SurveyResponseAnswer", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -115,7 +115,7 @@ fieldMapColumns.put("SurveyResponseAnswer", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.SurveyResponseAnswerPkBridge.class)
-     protected SurveyResponseAnswerPk id = new SurveyResponseAnswerPk();
+     private SurveyResponseAnswerPk id = new SurveyResponseAnswerPk();
    
     /**
      * Auto generated Id accessor.
@@ -132,57 +132,57 @@ fieldMapColumns.put("SurveyResponseAnswer", fields);
          this.id = id;
       }
    @Column(name="SURVEY_MULTI_RESP_ID")
-   protected String surveyMultiRespId;
+   private String surveyMultiRespId;
    @Column(name="BOOLEAN_RESPONSE")
-   protected String booleanResponse;
+   private String booleanResponse;
    @Column(name="CURRENCY_RESPONSE")
-   protected BigDecimal currencyResponse;
+   private BigDecimal currencyResponse;
    @Column(name="FLOAT_RESPONSE")
-   protected BigDecimal floatResponse;
+   private BigDecimal floatResponse;
    @Column(name="NUMERIC_RESPONSE")
-   protected Long numericResponse;
+   private Long numericResponse;
    @Column(name="TEXT_RESPONSE")
-   protected String textResponse;
+   private String textResponse;
    @Column(name="SURVEY_OPTION_SEQ_ID")
-   protected String surveyOptionSeqId;
+   private String surveyOptionSeqId;
    @Column(name="CONTENT_ID")
-   protected String contentId;
+   private String contentId;
    @Column(name="ANSWERED_DATE")
-   protected Timestamp answeredDate;
+   private Timestamp answeredDate;
    @Column(name="AMOUNT_BASE")
-   protected BigDecimal amountBase;
+   private BigDecimal amountBase;
    @Column(name="AMOUNT_BASE_UOM_ID")
-   protected String amountBaseUomId;
+   private String amountBaseUomId;
    @Column(name="WEIGHT_FACTOR")
-   protected BigDecimal weightFactor;
+   private BigDecimal weightFactor;
    @Column(name="DURATION")
-   protected Long duration;
+   private Long duration;
    @Column(name="DURATION_UOM_ID")
-   protected String durationUomId;
+   private String durationUomId;
    @Column(name="SEQUENCE_NUM")
-   protected Long sequenceNum;
+   private Long sequenceNum;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_RESPONSE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SurveyResponse surveyResponse = null;
+   private SurveyResponse surveyResponse = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_QUESTION_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SurveyQuestion surveyQuestion = null;
+   private SurveyQuestion surveyQuestion = null;
    private transient SurveyQuestionOption surveyQuestionOption = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID", insertable=false, updatable=false)
@@ -190,7 +190,7 @@ fieldMapColumns.put("SurveyResponseAnswer", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Content content = null;
+   private Content content = null;
 
   /**
    * Default constructor.

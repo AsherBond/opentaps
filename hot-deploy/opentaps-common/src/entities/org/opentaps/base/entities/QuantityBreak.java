@@ -73,7 +73,7 @@ fieldMapColumns.put("QuantityBreak", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -87,40 +87,40 @@ fieldMapColumns.put("QuantityBreak", fields);
    @GeneratedValue(generator="QuantityBreak_GEN")
    @Id
    @Column(name="QUANTITY_BREAK_ID")
-   protected String quantityBreakId;
+   private String quantityBreakId;
    @Column(name="QUANTITY_BREAK_TYPE_ID")
-   protected String quantityBreakTypeId;
+   private String quantityBreakTypeId;
    @Column(name="FROM_QUANTITY")
-   protected BigDecimal fromQuantity;
+   private BigDecimal fromQuantity;
    @Column(name="THRU_QUANTITY")
-   protected BigDecimal thruQuantity;
+   private BigDecimal thruQuantity;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="QUANTITY_BREAK_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected QuantityBreakType quantityBreakType = null;
+   private QuantityBreakType quantityBreakType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WEIGHT_BREAK_ID")
    
-   protected List<ShipmentCostEstimate> weightShipmentCostEstimates = null;
+   private List<ShipmentCostEstimate> weightShipmentCostEstimates = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="QUANTITY_BREAK_ID")
    
-   protected List<ShipmentCostEstimate> quantityShipmentCostEstimates = null;
+   private List<ShipmentCostEstimate> quantityShipmentCostEstimates = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRICE_BREAK_ID")
    
-   protected List<ShipmentCostEstimate> priceShipmentCostEstimates = null;
+   private List<ShipmentCostEstimate> priceShipmentCostEstimates = null;
 
   /**
    * Default constructor.

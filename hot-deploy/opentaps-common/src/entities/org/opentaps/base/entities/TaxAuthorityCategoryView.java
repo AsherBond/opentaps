@@ -99,7 +99,7 @@ fieldMapColumns.put("TaxAuthorityCategoryView", fields);
     linkTwoImageUrl("linkTwoImageUrl"),
     detailScreen("detailScreen"),
     showInSelect("showInSelect");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

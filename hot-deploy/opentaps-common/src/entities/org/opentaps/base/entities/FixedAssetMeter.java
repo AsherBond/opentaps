@@ -79,7 +79,7 @@ fieldMapColumns.put("FixedAssetMeter", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,7 +92,7 @@ fieldMapColumns.put("FixedAssetMeter", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.FixedAssetMeterPkBridge.class)
-     protected FixedAssetMeterPk id = new FixedAssetMeterPk();
+     private FixedAssetMeterPk id = new FixedAssetMeterPk();
    
     /**
      * Auto generated Id accessor.
@@ -109,21 +109,21 @@ fieldMapColumns.put("FixedAssetMeter", fields);
          this.id = id;
       }
    @Column(name="METER_VALUE")
-   protected BigDecimal meterValue;
+   private BigDecimal meterValue;
    @Column(name="READING_REASON_ENUM_ID")
-   protected String readingReasonEnumId;
+   private String readingReasonEnumId;
    @Column(name="MAINT_HIST_SEQ_ID")
-   protected String maintHistSeqId;
+   private String maintHistSeqId;
    @Column(name="WORK_EFFORT_ID")
-   protected String workEffortId;
+   private String workEffortId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    private transient FixedAssetMaint fixedAssetMaint = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_METER_TYPE_ID", insertable=false, updatable=false)
@@ -131,7 +131,7 @@ fieldMapColumns.put("FixedAssetMeter", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductMeterType productMeterType = null;
+   private ProductMeterType productMeterType = null;
 
   /**
    * Default constructor.

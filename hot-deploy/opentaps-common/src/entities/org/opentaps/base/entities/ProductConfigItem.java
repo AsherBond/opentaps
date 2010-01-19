@@ -76,7 +76,7 @@ fieldMapColumns.put("ProductConfigItem", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -90,53 +90,53 @@ fieldMapColumns.put("ProductConfigItem", fields);
    @GeneratedValue(generator="ProductConfigItem_GEN")
    @Id
    @Column(name="CONFIG_ITEM_ID")
-   protected String configItemId;
+   private String configItemId;
    @Column(name="CONFIG_ITEM_TYPE_ID")
-   protected String configItemTypeId;
+   private String configItemTypeId;
    @Column(name="CONFIG_ITEM_NAME")
-   protected String configItemName;
+   private String configItemName;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LONG_DESCRIPTION")
-   protected String longDescription;
+   private String longDescription;
    @Column(name="IMAGE_URL")
-   protected String imageUrl;
+   private String imageUrl;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productConfigItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONFIG_ITEM_ID")
    
-   protected List<ProdConfItemContent> prodConfItemContents = null;
+   private List<ProdConfItemContent> prodConfItemContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="configItemProductConfigItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONFIG_ITEM_ID")
    
-   protected List<ProductConfig> configItemProductConfigs = null;
+   private List<ProductConfig> configItemProductConfigs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="configItemProductConfigItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONFIG_ITEM_ID")
    
-   protected List<ProductConfigConfig> configItemProductConfigConfigs = null;
+   private List<ProductConfigConfig> configItemProductConfigConfigs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="configItemProductConfigItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONFIG_ITEM_ID")
    
-   protected List<ProductConfigOption> configItemProductConfigOptions = null;
+   private List<ProductConfigOption> configItemProductConfigOptions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="configItemProductConfigItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONFIG_ITEM_ID")
    
-   protected List<ProductConfigOptionIactn> configItemProductConfigOptionIactns = null;
+   private List<ProductConfigOptionIactn> configItemProductConfigOptionIactns = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="configItemToProductConfigItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONFIG_ITEM_ID_TO")
    
-   protected List<ProductConfigOptionIactn> configItemToProductConfigOptionIactns = null;
+   private List<ProductConfigOptionIactn> configItemToProductConfigOptionIactns = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="configItemProductConfigItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONFIG_ITEM_ID")
    
-   protected List<ProductConfigProduct> configItemProductConfigProducts = null;
+   private List<ProductConfigProduct> configItemProductConfigProducts = null;
 
   /**
    * Default constructor.

@@ -98,7 +98,7 @@ fieldMapColumns.put("ContactList", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     parentContactListId("parentContactListId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -112,120 +112,120 @@ fieldMapColumns.put("ContactList", fields);
    @GeneratedValue(generator="ContactList_GEN")
    @Id
    @Column(name="CONTACT_LIST_ID")
-   protected String contactListId;
+   private String contactListId;
    @Column(name="CONTACT_LIST_TYPE_ID")
-   protected String contactListTypeId;
+   private String contactListTypeId;
    @Column(name="CONTACT_MECH_TYPE_ID")
-   protected String contactMechTypeId;
+   private String contactMechTypeId;
    @Column(name="MARKETING_CAMPAIGN_ID")
-   protected String marketingCampaignId;
+   private String marketingCampaignId;
    @Column(name="CONTACT_LIST_NAME")
-   protected String contactListName;
+   private String contactListName;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="IS_PUBLIC")
-   protected String isPublic;
+   private String isPublic;
    @Column(name="SINGLE_USE")
-   protected String singleUse;
+   private String singleUse;
    @Column(name="OWNER_PARTY_ID")
-   protected String ownerPartyId;
+   private String ownerPartyId;
    @Column(name="VERIFY_EMAIL_FROM")
-   protected String verifyEmailFrom;
+   private String verifyEmailFrom;
    @Column(name="VERIFY_EMAIL_SCREEN")
-   protected String verifyEmailScreen;
+   private String verifyEmailScreen;
    @Column(name="VERIFY_EMAIL_SUBJECT")
-   protected String verifyEmailSubject;
+   private String verifyEmailSubject;
    @Column(name="VERIFY_EMAIL_WEB_SITE_ID")
-   protected String verifyEmailWebSiteId;
+   private String verifyEmailWebSiteId;
    @Column(name="CREATED_BY_USER_LOGIN")
-   protected String createdByUserLogin;
+   private String createdByUserLogin;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   protected String lastModifiedByUserLogin;
+   private String lastModifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @Column(name="PARENT_CONTACT_LIST_ID")
-   protected String parentContactListId;
+   private String parentContactListId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MARKETING_CAMPAIGN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected MarketingCampaign marketingCampaign = null;
+   private MarketingCampaign marketingCampaign = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_LIST_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ContactListType contactListType = null;
+   private ContactListType contactListType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ContactMechType contactMechType = null;
+   private ContactMechType contactMechType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserLogin relatedCreatedByUserLogin = null;
+   private UserLogin relatedCreatedByUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserLogin relatedLastModifiedByUserLogin = null;
+   private UserLogin relatedLastModifiedByUserLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="OWNER_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party ownerParty = null;
+   private Party ownerParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_CONTACT_LIST_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ContactList parentContactList = null;
+   private ContactList parentContactList = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_LIST_ID")
    
-   protected List<CommunicationEvent> communicationEvents = null;
+   private List<CommunicationEvent> communicationEvents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_CONTACT_LIST_ID")
    
-   protected List<ContactList> childContactLists = null;
+   private List<ContactList> childContactLists = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="contactList", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_LIST_ID")
    
-   protected List<ContactListCommStatus> contactListCommStatuses = null;
+   private List<ContactListCommStatus> contactListCommStatuses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="contactList", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_LIST_ID")
    
-   protected List<ContactListParty> contactListPartys = null;
+   private List<ContactListParty> contactListPartys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_LIST_ID")
    
-   protected List<MarketingCampaignContactList> marketingCampaignContactLists = null;
+   private List<MarketingCampaignContactList> marketingCampaignContactLists = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_LIST_ID")
    
-   protected List<TrackingCode> trackingCodes = null;
+   private List<TrackingCode> trackingCodes = null;
 
   /**
    * Default constructor.

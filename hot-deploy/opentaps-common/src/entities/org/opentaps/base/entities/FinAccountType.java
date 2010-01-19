@@ -76,7 +76,7 @@ fieldMapColumns.put("FinAccountType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -90,59 +90,59 @@ fieldMapColumns.put("FinAccountType", fields);
    @GeneratedValue(generator="FinAccountType_GEN")
    @Id
    @Column(name="FIN_ACCOUNT_TYPE_ID")
-   protected String finAccountTypeId;
+   private String finAccountTypeId;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="REPLENISH_ENUM_ID")
-   protected String replenishEnumId;
+   private String replenishEnumId;
    @Column(name="IS_REFUNDABLE")
-   protected String isRefundable;
+   private String isRefundable;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected FinAccountType parentFinAccountType = null;
+   private FinAccountType parentFinAccountType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REPLENISH_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration replenishEnumeration = null;
+   private Enumeration replenishEnumeration = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_TYPE_ID")
    
-   protected List<FinAccount> finAccounts = null;
+   private List<FinAccount> finAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<FinAccountType> childFinAccountTypes = null;
+   private List<FinAccountType> childFinAccountTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="finAccountType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIN_ACCOUNT_TYPE_ID")
    
-   protected List<FinAccountTypeAttr> finAccountTypeAttrs = null;
+   private List<FinAccountTypeAttr> finAccountTypeAttrs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="finAccountType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIN_ACCOUNT_TYPE_ID")
    
-   protected List<FinAccountTypeGlAccount> finAccountTypeGlAccounts = null;
+   private List<FinAccountTypeGlAccount> finAccountTypeGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="finAccountType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIN_ACCOUNT_TYPE_ID")
    
-   protected List<ProductStoreFinActSetting> productStoreFinActSettings = null;
+   private List<ProductStoreFinActSetting> productStoreFinActSettings = null;
 
   /**
    * Default constructor.

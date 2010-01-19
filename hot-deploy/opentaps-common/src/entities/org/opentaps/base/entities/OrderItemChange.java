@@ -89,7 +89,7 @@ fieldMapColumns.put("OrderItemChange", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -103,44 +103,44 @@ fieldMapColumns.put("OrderItemChange", fields);
    @GeneratedValue(generator="OrderItemChange_GEN")
    @Id
    @Column(name="ORDER_ITEM_CHANGE_ID")
-   protected String orderItemChangeId;
+   private String orderItemChangeId;
    @Column(name="ORDER_ID")
-   protected String orderId;
+   private String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   protected String orderItemSeqId;
+   private String orderItemSeqId;
    @Column(name="CHANGE_TYPE_ENUM_ID")
-   protected String changeTypeEnumId;
+   private String changeTypeEnumId;
    @Column(name="CHANGE_DATETIME")
-   protected Timestamp changeDatetime;
+   private Timestamp changeDatetime;
    @Column(name="CHANGE_USER_LOGIN")
-   protected String changeUserLogin;
+   private String changeUserLogin;
    @Column(name="QUANTITY")
-   protected BigDecimal quantity;
+   private BigDecimal quantity;
    @Column(name="CANCEL_QUANTITY")
-   protected BigDecimal cancelQuantity;
+   private BigDecimal cancelQuantity;
    @Column(name="UNIT_PRICE")
-   protected BigDecimal unitPrice;
+   private BigDecimal unitPrice;
    @Column(name="ITEM_DESCRIPTION")
-   protected String itemDescription;
+   private String itemDescription;
    @Column(name="REASON_ENUM_ID")
-   protected String reasonEnumId;
+   private String reasonEnumId;
    @Column(name="CHANGE_COMMENTS")
-   protected String changeComments;
+   private String changeComments;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderHeader orderHeader = null;
+   private OrderHeader orderHeader = null;
    private transient OrderItem orderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CHANGE_TYPE_ENUM_ID", insertable=false, updatable=false)
@@ -148,21 +148,21 @@ fieldMapColumns.put("OrderItemChange", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration enumeration = null;
+   private Enumeration enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REASON_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration reasonEnumeration = null;
+   private Enumeration reasonEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CHANGE_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserLogin userLogin = null;
+   private UserLogin userLogin = null;
 
   /**
    * Default constructor.

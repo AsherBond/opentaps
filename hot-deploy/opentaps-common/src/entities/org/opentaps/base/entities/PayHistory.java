@@ -87,7 +87,7 @@ fieldMapColumns.put("PayHistory", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -100,7 +100,7 @@ fieldMapColumns.put("PayHistory", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.PayHistoryPkBridge.class)
-     protected PayHistoryPk id = new PayHistoryPk();
+     private PayHistoryPk id = new PayHistoryPk();
    
     /**
      * Auto generated Id accessor.
@@ -117,25 +117,25 @@ fieldMapColumns.put("PayHistory", fields);
          this.id = id;
       }
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="SALARY_STEP_SEQ_ID")
-   protected String salaryStepSeqId;
+   private String salaryStepSeqId;
    @Column(name="PAY_GRADE_ID")
-   protected String payGradeId;
+   private String payGradeId;
    @Column(name="PERIOD_TYPE_ID")
-   protected String periodTypeId;
+   private String periodTypeId;
    @Column(name="AMOUNT")
-   protected BigDecimal amount;
+   private BigDecimal amount;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    private transient Employment employment = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAY_GRADE_ID", insertable=false, updatable=false)
@@ -143,7 +143,7 @@ fieldMapColumns.put("PayHistory", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PayGrade payGrade = null;
+   private PayGrade payGrade = null;
    private transient SalaryStep salaryStep = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PERIOD_TYPE_ID", insertable=false, updatable=false)
@@ -151,7 +151,7 @@ fieldMapColumns.put("PayHistory", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PeriodType periodType = null;
+   private PeriodType periodType = null;
 
   /**
    * Default constructor.

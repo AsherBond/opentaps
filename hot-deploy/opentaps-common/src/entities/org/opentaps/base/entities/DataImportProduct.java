@@ -133,7 +133,7 @@ fieldMapColumns.put("DataImportProduct", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -147,81 +147,81 @@ fieldMapColumns.put("DataImportProduct", fields);
    @GeneratedValue(generator="DataImportProduct_GEN")
    @Id
    @Column(name="PRODUCT_ID")
-   protected String productId;
+   private String productId;
    @Column(name="PRODUCT_TYPE_ID")
-   protected String productTypeId;
+   private String productTypeId;
    @Column(name="IS_INACTIVE")
-   protected String isInactive;
+   private String isInactive;
    @Column(name="CUSTOM_ID1")
-   protected String customId1;
+   private String customId1;
    @Column(name="CUSTOM_ID2")
-   protected String customId2;
+   private String customId2;
    @Column(name="INTERNAL_NAME")
-   protected String internalName;
+   private String internalName;
    @Column(name="BRAND_NAME")
-   protected String brandName;
+   private String brandName;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="PRODUCT_NAME")
-   protected String productName;
+   private String productName;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LONG_DESCRIPTION")
-   protected String longDescription;
+   private String longDescription;
    @Column(name="WEIGHT")
-   protected BigDecimal weight;
+   private BigDecimal weight;
    @Column(name="WEIGHT_UOM_ID")
-   protected String weightUomId;
+   private String weightUomId;
    @Column(name="PRODUCT_LENGTH")
-   protected BigDecimal productLength;
+   private BigDecimal productLength;
    @Column(name="PRODUCT_LENGTH_UOM_ID")
-   protected String productLengthUomId;
+   private String productLengthUomId;
    @Column(name="WIDTH")
-   protected BigDecimal width;
+   private BigDecimal width;
    @Column(name="WIDTH_UOM_ID")
-   protected String widthUomId;
+   private String widthUomId;
    @Column(name="HEIGHT")
-   protected BigDecimal height;
+   private BigDecimal height;
    @Column(name="HEIGHT_UOM_ID")
-   protected String heightUomId;
+   private String heightUomId;
    @Column(name="PRICE")
-   protected BigDecimal price;
+   private BigDecimal price;
    @Column(name="PRICE_CURRENCY_UOM_ID")
-   protected String priceCurrencyUomId;
+   private String priceCurrencyUomId;
    @Column(name="PRODUCT_FEATURE1")
-   protected String productFeature1;
+   private String productFeature1;
    @Column(name="SUPPLIER_PARTY_ID")
-   protected String supplierPartyId;
+   private String supplierPartyId;
    @Column(name="SMALL_IMAGE_URL")
-   protected String smallImageUrl;
+   private String smallImageUrl;
    @Column(name="MEDIUM_IMAGE_URL")
-   protected String mediumImageUrl;
+   private String mediumImageUrl;
    @Column(name="LARGE_IMAGE_URL")
-   protected String largeImageUrl;
+   private String largeImageUrl;
    @Column(name="PURCHASE_PRICE")
-   protected BigDecimal purchasePrice;
+   private BigDecimal purchasePrice;
    @Column(name="TAXABLE")
-   protected String taxable;
+   private String taxable;
    @Column(name="STORE_ID")
-   protected String storeId;
+   private String storeId;
    @Column(name="CREATED_DATE")
-   protected Timestamp createdDate;
+   private Timestamp createdDate;
    @Column(name="IMPORT_STATUS_ID")
-   protected String importStatusId;
+   private String importStatusId;
    @Column(name="IMPORT_ERROR")
-   protected String importError;
+   private String importError;
    @Column(name="LAST_MODIFIED_DATE")
-   protected Timestamp lastModifiedDate;
+   private Timestamp lastModifiedDate;
    @Column(name="PROCESSED_TIMESTAMP")
-   protected Timestamp processedTimestamp;
+   private Timestamp processedTimestamp;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
 
   /**
    * Default constructor.

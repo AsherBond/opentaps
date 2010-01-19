@@ -72,7 +72,7 @@ fieldMapColumns.put("OrderAdjustmentType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,48 +86,48 @@ fieldMapColumns.put("OrderAdjustmentType", fields);
    @GeneratedValue(generator="OrderAdjustmentType_GEN")
    @Id
    @Column(name="ORDER_ADJUSTMENT_TYPE_ID")
-   protected String orderAdjustmentTypeId;
+   private String orderAdjustmentTypeId;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderAdjustmentType parentOrderAdjustmentType = null;
+   private OrderAdjustmentType parentOrderAdjustmentType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ADJUSTMENT_TYPE_ID")
    
-   protected List<OrderAdjustment> orderAdjustments = null;
+   private List<OrderAdjustment> orderAdjustments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<OrderAdjustmentType> childOrderAdjustmentTypes = null;
+   private List<OrderAdjustmentType> childOrderAdjustmentTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderAdjustmentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ADJUSTMENT_TYPE_ID")
    
-   protected List<OrderAdjustmentTypeAttr> orderAdjustmentTypeAttrs = null;
+   private List<OrderAdjustmentTypeAttr> orderAdjustmentTypeAttrs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ADJUSTMENT_TYPE_ID")
    
-   protected List<ProductPromoAction> productPromoActions = null;
+   private List<ProductPromoAction> productPromoActions = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="QUOTE_ADJUSTMENT_TYPE_ID")
    
-   protected List<QuoteAdjustment> quoteAdjustments = null;
+   private List<QuoteAdjustment> quoteAdjustments = null;
 
   /**
    * Default constructor.

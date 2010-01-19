@@ -123,7 +123,7 @@ fieldMapColumns.put("InvoiceItem", fields);
     acctgTagEnumId8("acctgTagEnumId8"),
     acctgTagEnumId9("acctgTagEnumId9"),
     acctgTagEnumId10("acctgTagEnumId10");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -136,7 +136,7 @@ fieldMapColumns.put("InvoiceItem", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.InvoiceItemPkBridge.class)
-     protected InvoiceItemPk id = new InvoiceItemPk();
+     private InvoiceItemPk id = new InvoiceItemPk();
    
     /**
      * Auto generated Id accessor.
@@ -153,103 +153,103 @@ fieldMapColumns.put("InvoiceItem", fields);
          this.id = id;
       }
    @Column(name="INVOICE_ITEM_TYPE_ID")
-   protected String invoiceItemTypeId;
+   private String invoiceItemTypeId;
    @Column(name="OVERRIDE_GL_ACCOUNT_ID")
-   protected String overrideGlAccountId;
+   private String overrideGlAccountId;
    @Column(name="OVERRIDE_ORG_PARTY_ID")
-   protected String overrideOrgPartyId;
+   private String overrideOrgPartyId;
    @Column(name="INVENTORY_ITEM_ID")
-   protected String inventoryItemId;
+   private String inventoryItemId;
    @Column(name="PRODUCT_ID")
-   protected String productId;
+   private String productId;
    @Column(name="PRODUCT_FEATURE_ID")
-   protected String productFeatureId;
+   private String productFeatureId;
    @Column(name="PARENT_INVOICE_ID")
-   protected String parentInvoiceId;
+   private String parentInvoiceId;
    @Column(name="PARENT_INVOICE_ITEM_SEQ_ID")
-   protected String parentInvoiceItemSeqId;
+   private String parentInvoiceItemSeqId;
    @Column(name="UOM_ID")
-   protected String uomId;
+   private String uomId;
    @Column(name="TAXABLE_FLAG")
-   protected String taxableFlag;
+   private String taxableFlag;
    @Column(name="QUANTITY")
-   protected BigDecimal quantity;
+   private BigDecimal quantity;
    @Column(name="AMOUNT")
-   protected BigDecimal amount;
+   private BigDecimal amount;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="TAX_AUTH_PARTY_ID")
-   protected String taxAuthPartyId;
+   private String taxAuthPartyId;
    @Column(name="TAX_AUTH_GEO_ID")
-   protected String taxAuthGeoId;
+   private String taxAuthGeoId;
    @Column(name="TAX_AUTHORITY_RATE_SEQ_ID")
-   protected String taxAuthorityRateSeqId;
+   private String taxAuthorityRateSeqId;
    @Column(name="SALES_OPPORTUNITY_ID")
-   protected String salesOpportunityId;
+   private String salesOpportunityId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @Column(name="ACCTG_TAG_ENUM_ID1")
-   protected String acctgTagEnumId1;
+   private String acctgTagEnumId1;
    @Column(name="ACCTG_TAG_ENUM_ID2")
-   protected String acctgTagEnumId2;
+   private String acctgTagEnumId2;
    @Column(name="ACCTG_TAG_ENUM_ID3")
-   protected String acctgTagEnumId3;
+   private String acctgTagEnumId3;
    @Column(name="ACCTG_TAG_ENUM_ID4")
-   protected String acctgTagEnumId4;
+   private String acctgTagEnumId4;
    @Column(name="ACCTG_TAG_ENUM_ID5")
-   protected String acctgTagEnumId5;
+   private String acctgTagEnumId5;
    @Column(name="ACCTG_TAG_ENUM_ID6")
-   protected String acctgTagEnumId6;
+   private String acctgTagEnumId6;
    @Column(name="ACCTG_TAG_ENUM_ID7")
-   protected String acctgTagEnumId7;
+   private String acctgTagEnumId7;
    @Column(name="ACCTG_TAG_ENUM_ID8")
-   protected String acctgTagEnumId8;
+   private String acctgTagEnumId8;
    @Column(name="ACCTG_TAG_ENUM_ID9")
-   protected String acctgTagEnumId9;
+   private String acctgTagEnumId9;
    @Column(name="ACCTG_TAG_ENUM_ID10")
-   protected String acctgTagEnumId10;
+   private String acctgTagEnumId10;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ITEM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected InvoiceItemType invoiceItemType = null;
-   protected transient List<InvoiceItemTypeAttr> invoiceItemTypeAttrs = null;
+   private InvoiceItemType invoiceItemType = null;
+   private transient List<InvoiceItemTypeAttr> invoiceItemTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Invoice invoice = null;
+   private Invoice invoice = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_ITEM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected InventoryItem inventoryItem = null;
+   private InventoryItem inventoryItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product product = null;
+   private Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_FEATURE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductFeature productFeature = null;
+   private ProductFeature productFeature = null;
    private transient InvoiceItem invoiceItem = null;
    private transient List<InvoiceItem> childrenInvoiceItems = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -258,119 +258,119 @@ fieldMapColumns.put("InvoiceItem", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom uom = null;
+   private Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="OVERRIDE_GL_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlAccount overrideGlAccount = null;
+   private GlAccount overrideGlAccount = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TAX_AUTH_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party taxAuthorityParty = null;
+   private Party taxAuthorityParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TAX_AUTH_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Geo taxGeo = null;
+   private Geo taxGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TAX_AUTHORITY_RATE_SEQ_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected TaxAuthorityRateProduct taxAuthorityRateProduct = null;
+   private TaxAuthorityRateProduct taxAuthorityRateProduct = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="OVERRIDE_ORG_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party overrideOrgParty = null;
+   private Party overrideOrgParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SALES_OPPORTUNITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SalesOpportunity salesOpportunity = null;
+   private SalesOpportunity salesOpportunity = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID1", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag1Enumeration = null;
+   private Enumeration tag1Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID2", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag2Enumeration = null;
+   private Enumeration tag2Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID3", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag3Enumeration = null;
+   private Enumeration tag3Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID4", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag4Enumeration = null;
+   private Enumeration tag4Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID5", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag5Enumeration = null;
+   private Enumeration tag5Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID6", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag6Enumeration = null;
+   private Enumeration tag6Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID7", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag7Enumeration = null;
+   private Enumeration tag7Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID8", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag8Enumeration = null;
+   private Enumeration tag8Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID9", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag9Enumeration = null;
+   private Enumeration tag9Enumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID10", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration tag10Enumeration = null;
+   private Enumeration tag10Enumeration = null;
    private transient List<AgreementTermBilling> agreementTermBillings = null;
    private transient List<AgreementTermBilling> originalAgreementTermBillings = null;
    private transient List<InvoiceItemAssoc> fromInvoiceItemAssocs = null;

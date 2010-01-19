@@ -76,7 +76,7 @@ fieldMapColumns.put("Addendum", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -90,32 +90,32 @@ fieldMapColumns.put("Addendum", fields);
    @GeneratedValue(generator="Addendum_GEN")
    @Id
    @Column(name="ADDENDUM_ID")
-   protected String addendumId;
+   private String addendumId;
    @Column(name="AGREEMENT_ID")
-   protected String agreementId;
+   private String agreementId;
    @Column(name="AGREEMENT_ITEM_SEQ_ID")
-   protected String agreementItemSeqId;
+   private String agreementItemSeqId;
    @Column(name="ADDENDUM_CREATION_DATE")
-   protected Timestamp addendumCreationDate;
+   private Timestamp addendumCreationDate;
    @Column(name="ADDENDUM_EFFECTIVE_DATE")
-   protected Timestamp addendumEffectiveDate;
+   private Timestamp addendumEffectiveDate;
    @Column(name="ADDENDUM_TEXT")
-   protected String addendumText;
+   private String addendumText;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AGREEMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Agreement agreement = null;
+   private Agreement agreement = null;
    private transient AgreementItem agreementItem = null;
 
   /**

@@ -105,7 +105,7 @@ fieldMapColumns.put("Requirement", fields);
     createdTxStamp("createdTxStamp"),
     orderItemTypeId("orderItemTypeId"),
     facilityIdTo("facilityIdTo");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -119,145 +119,145 @@ fieldMapColumns.put("Requirement", fields);
    @GeneratedValue(generator="Requirement_GEN")
    @Id
    @Column(name="REQUIREMENT_ID")
-   protected String requirementId;
+   private String requirementId;
    @Column(name="REQUIREMENT_TYPE_ID")
-   protected String requirementTypeId;
+   private String requirementTypeId;
    @Column(name="FACILITY_ID")
-   protected String facilityId;
+   private String facilityId;
    @Column(name="DELIVERABLE_ID")
-   protected String deliverableId;
+   private String deliverableId;
    @Column(name="FIXED_ASSET_ID")
-   protected String fixedAssetId;
+   private String fixedAssetId;
    @Column(name="PRODUCT_ID")
-   protected String productId;
+   private String productId;
    @Column(name="STATUS_ID")
-   protected String statusId;
+   private String statusId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="REQUIREMENT_START_DATE")
-   protected Timestamp requirementStartDate;
+   private Timestamp requirementStartDate;
    @Column(name="REQUIRED_BY_DATE")
-   protected Timestamp requiredByDate;
+   private Timestamp requiredByDate;
    @Column(name="ESTIMATED_BUDGET")
-   protected BigDecimal estimatedBudget;
+   private BigDecimal estimatedBudget;
    @Column(name="QUANTITY")
-   protected BigDecimal quantity;
+   private BigDecimal quantity;
    @Column(name="USE_CASE")
-   protected String useCase;
+   private String useCase;
    @Column(name="REASON")
-   protected String reason;
+   private String reason;
    @Column(name="CREATED_DATE")
-   protected Timestamp createdDate;
+   private Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   protected String createdByUserLogin;
+   private String createdByUserLogin;
    @Column(name="LAST_MODIFIED_DATE")
-   protected Timestamp lastModifiedDate;
+   private Timestamp lastModifiedDate;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   protected String lastModifiedByUserLogin;
+   private String lastModifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @Column(name="ORDER_ITEM_TYPE_ID")
-   protected String orderItemTypeId;
+   private String orderItemTypeId;
    @Column(name="FACILITY_ID_TO")
-   protected String facilityIdTo;
+   private String facilityIdTo;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REQUIREMENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RequirementType requirementType = null;
+   private RequirementType requirementType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REQUIREMENT_TYPE_ID")
    
-   protected List<RequirementTypeAttr> requirementTypeAttrs = null;
+   private List<RequirementTypeAttr> requirementTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Facility facility = null;
+   private Facility facility = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DELIVERABLE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Deliverable deliverable = null;
+   private Deliverable deliverable = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected FixedAsset fixedAsset = null;
+   private FixedAsset fixedAsset = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product product = null;
+   private Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem statusItem = null;
+   private StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ITEM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderItemType orderItemType = null;
+   private OrderItemType orderItemType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Facility toFacility = null;
+   private Facility toFacility = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="requirement", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="REQUIREMENT_ID")
    
-   protected List<DesiredFeature> desiredFeatures = null;
+   private List<DesiredFeature> desiredFeatures = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="requirement", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="REQUIREMENT_ID")
    
-   protected List<OrderRequirementCommitment> orderRequirementCommitments = null;
+   private List<OrderRequirementCommitment> orderRequirementCommitments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="requirement", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="REQUIREMENT_ID")
    
-   protected List<RequirementAttribute> requirementAttributes = null;
+   private List<RequirementAttribute> requirementAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="requirement", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="REQUIREMENT_ID")
    
-   protected List<RequirementBudgetAllocation> requirementBudgetAllocations = null;
+   private List<RequirementBudgetAllocation> requirementBudgetAllocations = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="requirement", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="REQUIREMENT_ID")
    
-   protected List<RequirementCustRequest> requirementCustRequests = null;
+   private List<RequirementCustRequest> requirementCustRequests = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="requirement", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="REQUIREMENT_ID")
    
-   protected List<RequirementRole> requirementRoles = null;
+   private List<RequirementRole> requirementRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="requirement", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="REQUIREMENT_ID")
    
-   protected List<RequirementStatus> requirementStatuses = null;
+   private List<RequirementStatus> requirementStatuses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="requirement", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="REQUIREMENT_ID")
    
-   protected List<WorkRequirementFulfillment> workRequirementFulfillments = null;
+   private List<WorkRequirementFulfillment> workRequirementFulfillments = null;
 
   /**
    * Default constructor.

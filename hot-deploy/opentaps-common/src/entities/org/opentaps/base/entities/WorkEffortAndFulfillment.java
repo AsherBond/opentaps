@@ -270,7 +270,7 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
     reason("reason"),
     orderItemTypeId("orderItemTypeId"),
     facilityIdTo("facilityIdTo");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -424,83 +424,83 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Requirement requirement = null;
+   private Requirement requirement = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WorkEffortType workEffortType = null;
+   private WorkEffortType workEffortType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_PARENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WorkEffort parentWorkEffort = null;
-   protected transient List<WorkEffortTypeAttr> workEffortTypeAttrs = null;
-   protected transient List<WorkEffortAttribute> workEffortAttributes = null;
-   protected transient List<WorkOrderItemFulfillment> workOrderItemFulfillments = null;
+   private WorkEffort parentWorkEffort = null;
+   private transient List<WorkEffortTypeAttr> workEffortTypeAttrs = null;
+   private transient List<WorkEffortAttribute> workEffortAttributes = null;
+   private transient List<WorkOrderItemFulfillment> workOrderItemFulfillments = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENT_STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem currentStatusItem = null;
+   private StatusItem currentStatusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SCOPE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration scopeEnumeration = null;
+   private Enumeration scopeEnumeration = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MONEY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom moneyUom = null;
+   private Uom moneyUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RECURRENCE_INFO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RecurrenceInfo recurrenceInfo = null;
+   private RecurrenceInfo recurrenceInfo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RUNTIME_DATA_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RuntimeData runtimeData = null;
+   private RuntimeData runtimeData = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="NOTE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected NoteData noteData = null;
-   protected transient List<WorkEffortAssoc> fromWorkEffortAssocs = null;
-   protected transient List<WorkEffortAssoc> toWorkEffortAssocs = null;
-   protected transient List<WorkEffortPartyAssignment> workEffortPartyAssignments = null;
-   protected transient List<WorkEffortStatus> workEffortStatuses = null;
-   protected transient List<QuoteItem> quoteItems = null;
-   protected transient List<WorkRequirementFulfillment> workRequirementFulfillments = null;
-   protected transient List<TimeEntry> timeEntrys = null;
-   protected transient List<WorkEffortDeliverableProd> workEffortDeliverableProds = null;
-   protected transient List<WorkEffortBilling> workEffortBillings = null;
-   protected transient List<RateAmount> rateAmounts = null;
-   protected transient List<CommunicationEventWorkEff> communicationEventWorkEffs = null;
-   protected transient List<WorkEffortGoodStandard> workEffortGoodStandards = null;
-   protected transient List<WorkEffortFixedAssetStd> workEffortFixedAssetStds = null;
-   protected transient List<WorkEffortFixedAssetAssign> workEffortFixedAssetAssigns = null;
-   protected transient List<WorkEffortInventoryProduced> workEffortInventoryProduceds = null;
-   protected transient List<WorkEffortInventoryAssign> workEffortInventoryAssigns = null;
-   protected transient List<WorkEffortSkillStandard> workEffortSkillStandards = null;
+   private NoteData noteData = null;
+   private transient List<WorkEffortAssoc> fromWorkEffortAssocs = null;
+   private transient List<WorkEffortAssoc> toWorkEffortAssocs = null;
+   private transient List<WorkEffortPartyAssignment> workEffortPartyAssignments = null;
+   private transient List<WorkEffortStatus> workEffortStatuses = null;
+   private transient List<QuoteItem> quoteItems = null;
+   private transient List<WorkRequirementFulfillment> workRequirementFulfillments = null;
+   private transient List<TimeEntry> timeEntrys = null;
+   private transient List<WorkEffortDeliverableProd> workEffortDeliverableProds = null;
+   private transient List<WorkEffortBilling> workEffortBillings = null;
+   private transient List<RateAmount> rateAmounts = null;
+   private transient List<CommunicationEventWorkEff> communicationEventWorkEffs = null;
+   private transient List<WorkEffortGoodStandard> workEffortGoodStandards = null;
+   private transient List<WorkEffortFixedAssetStd> workEffortFixedAssetStds = null;
+   private transient List<WorkEffortFixedAssetAssign> workEffortFixedAssetAssigns = null;
+   private transient List<WorkEffortInventoryProduced> workEffortInventoryProduceds = null;
+   private transient List<WorkEffortInventoryAssign> workEffortInventoryAssigns = null;
+   private transient List<WorkEffortSkillStandard> workEffortSkillStandards = null;
 
   /**
    * Default constructor.

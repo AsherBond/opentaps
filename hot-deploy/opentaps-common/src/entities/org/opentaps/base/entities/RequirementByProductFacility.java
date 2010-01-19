@@ -73,7 +73,7 @@ fieldMapColumns.put("RequirementByProductFacility", fields);
     productId("productId"),
     facilityId("facilityId"),
     quantity("quantity");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

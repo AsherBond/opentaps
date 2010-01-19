@@ -68,7 +68,7 @@ fieldMapColumns.put("TermTypeAttr", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -81,7 +81,7 @@ fieldMapColumns.put("TermTypeAttr", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.TermTypeAttrPkBridge.class)
-     protected TermTypeAttrPk id = new TermTypeAttrPk();
+     private TermTypeAttrPk id = new TermTypeAttrPk();
    
     /**
      * Auto generated Id accessor.
@@ -98,28 +98,28 @@ fieldMapColumns.put("TermTypeAttr", fields);
          this.id = id;
       }
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TERM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected TermType termType = null;
-   protected transient List<AgreementTermAttribute> agreementTermAttributes = null;
-   protected transient List<AgreementTerm> agreementTerms = null;
-   protected transient List<OrderTermAttribute> orderTermAttributes = null;
-   protected transient List<OrderTerm> orderTerms = null;
-   protected transient List<QuoteTermAttribute> quoteTermAttributes = null;
-   protected transient List<QuoteTerm> quoteTerms = null;
-   protected transient List<InvoiceTermAttribute> invoiceTermAttributes = null;
-   protected transient List<InvoiceTerm> invoiceTerms = null;
+   private TermType termType = null;
+   private transient List<AgreementTermAttribute> agreementTermAttributes = null;
+   private transient List<AgreementTerm> agreementTerms = null;
+   private transient List<OrderTermAttribute> orderTermAttributes = null;
+   private transient List<OrderTerm> orderTerms = null;
+   private transient List<QuoteTermAttribute> quoteTermAttributes = null;
+   private transient List<QuoteTerm> quoteTerms = null;
+   private transient List<InvoiceTermAttribute> invoiceTermAttributes = null;
+   private transient List<InvoiceTerm> invoiceTerms = null;
 
   /**
    * Default constructor.

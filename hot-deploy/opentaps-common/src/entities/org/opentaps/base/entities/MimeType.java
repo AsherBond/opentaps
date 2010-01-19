@@ -68,7 +68,7 @@ fieldMapColumns.put("MimeType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,40 +82,40 @@ fieldMapColumns.put("MimeType", fields);
    @GeneratedValue(generator="MimeType_GEN")
    @Id
    @Column(name="MIME_TYPE_ID")
-   protected String mimeTypeId;
+   private String mimeTypeId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_MIME_TYPE_ID")
    
-   protected List<CommunicationEvent> communicationEvents = null;
+   private List<CommunicationEvent> communicationEvents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MIME_TYPE_ID")
    
-   protected List<Content> contents = null;
+   private List<Content> contents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MIME_TYPE_ID")
    
-   protected List<DataResource> dataResources = null;
+   private List<DataResource> dataResources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MIME_TYPE_ID")
    
-   protected List<FileExtension> fileExtensions = null;
+   private List<FileExtension> fileExtensions = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="MIME_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected MimeTypeHtmlTemplate mimeTypeHtmlTemplate = null;
+   private MimeTypeHtmlTemplate mimeTypeHtmlTemplate = null;
 
   /**
    * Default constructor.

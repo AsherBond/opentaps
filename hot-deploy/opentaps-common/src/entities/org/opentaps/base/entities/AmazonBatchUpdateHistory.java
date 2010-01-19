@@ -72,7 +72,7 @@ fieldMapColumns.put("AmazonBatchUpdateHistory", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,21 +86,21 @@ fieldMapColumns.put("AmazonBatchUpdateHistory", fields);
    @GeneratedValue(generator="AmazonBatchUpdateHistory_GEN")
    @Id
    @Column(name="HISTORY_ID")
-   protected String historyId;
+   private String historyId;
    @Column(name="SERVICE_NAME")
-   protected String serviceName;
+   private String serviceName;
    @Column(name="USER_LOGIN_ID")
-   protected String userLoginId;
+   private String userLoginId;
    @Column(name="COMPLETED_TIMESTAMP")
-   protected Timestamp completedTimestamp;
+   private Timestamp completedTimestamp;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
 
   /**
    * Default constructor.

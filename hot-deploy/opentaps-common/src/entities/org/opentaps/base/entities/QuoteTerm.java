@@ -75,7 +75,7 @@ fieldMapColumns.put("QuoteTerm", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,7 +88,7 @@ fieldMapColumns.put("QuoteTerm", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.QuoteTermPkBridge.class)
-     protected QuoteTermPk id = new QuoteTermPk();
+     private QuoteTermPk id = new QuoteTermPk();
    
     /**
      * Auto generated Id accessor.
@@ -105,24 +105,24 @@ fieldMapColumns.put("QuoteTerm", fields);
          this.id = id;
       }
    @Column(name="TERM_VALUE")
-   protected Long termValue;
+   private Long termValue;
    @Column(name="UOM_ID")
-   protected String uomId;
+   private String uomId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="QUOTE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Quote quote = null;
+   private Quote quote = null;
    private transient QuoteItem quoteItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TERM_TYPE_ID", insertable=false, updatable=false)
@@ -130,7 +130,7 @@ fieldMapColumns.put("QuoteTerm", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected TermType termType = null;
+   private TermType termType = null;
    private transient List<QuoteTermAttribute> quoteTermAttributes = null;
 
   /**

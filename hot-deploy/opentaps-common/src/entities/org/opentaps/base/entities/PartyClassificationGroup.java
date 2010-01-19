@@ -72,7 +72,7 @@ fieldMapColumns.put("PartyClassificationGroup", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,63 +86,63 @@ fieldMapColumns.put("PartyClassificationGroup", fields);
    @GeneratedValue(generator="PartyClassificationGroup_GEN")
    @Id
    @Column(name="PARTY_CLASSIFICATION_GROUP_ID")
-   protected String partyClassificationGroupId;
+   private String partyClassificationGroupId;
    @Column(name="PARTY_CLASSIFICATION_TYPE_ID")
-   protected String partyClassificationTypeId;
+   private String partyClassificationTypeId;
    @Column(name="PARENT_GROUP_ID")
-   protected String parentGroupId;
+   private String parentGroupId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PartyClassificationGroup parentPartyClassificationGroup = null;
+   private PartyClassificationGroup parentPartyClassificationGroup = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_CLASSIFICATION_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PartyClassificationType partyClassificationType = null;
+   private PartyClassificationType partyClassificationType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FROM_PARTY_CLASS_GROUP_ID")
    
-   protected List<Agreement> fromAgreements = null;
+   private List<Agreement> fromAgreements = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TO_PARTY_CLASS_GROUP_ID")
    
-   protected List<Agreement> toAgreements = null;
+   private List<Agreement> toAgreements = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_CLASSIFICATION_GROUP_ID")
    
-   protected List<AgreementTerm> agreementTerms = null;
+   private List<AgreementTerm> agreementTerms = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="partyClassificationGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_CLASSIFICATION_GROUP_ID")
    
-   protected List<MarketInterest> marketInterests = null;
+   private List<MarketInterest> marketInterests = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="partyClassificationGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_CLASSIFICATION_GROUP_ID")
    
-   protected List<PartyClassification> partyClassifications = null;
+   private List<PartyClassification> partyClassifications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_GROUP_ID")
    
-   protected List<PartyClassificationGroup> childPartyClassificationGroups = null;
+   private List<PartyClassificationGroup> childPartyClassificationGroups = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="partyClassificationGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_CLASSIFICATION_GROUP_ID")
    
-   protected List<SegmentGroupClassification> segmentGroupClassifications = null;
+   private List<SegmentGroupClassification> segmentGroupClassifications = null;
 
   /**
    * Default constructor.

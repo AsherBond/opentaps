@@ -91,7 +91,7 @@ fieldMapColumns.put("FinAccountTrans", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -105,71 +105,71 @@ fieldMapColumns.put("FinAccountTrans", fields);
    @GeneratedValue(generator="FinAccountTrans_GEN")
    @Id
    @Column(name="FIN_ACCOUNT_TRANS_ID")
-   protected String finAccountTransId;
+   private String finAccountTransId;
    @Column(name="FIN_ACCOUNT_TRANS_TYPE_ID")
-   protected String finAccountTransTypeId;
+   private String finAccountTransTypeId;
    @Column(name="FIN_ACCOUNT_ID")
-   protected String finAccountId;
+   private String finAccountId;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="TRANSACTION_DATE")
-   protected Timestamp transactionDate;
+   private Timestamp transactionDate;
    @Column(name="ENTRY_DATE")
-   protected Timestamp entryDate;
+   private Timestamp entryDate;
    @Column(name="AMOUNT")
-   protected BigDecimal amount;
+   private BigDecimal amount;
    @Column(name="PAYMENT_ID")
-   protected String paymentId;
+   private String paymentId;
    @Column(name="ORDER_ID")
-   protected String orderId;
+   private String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   protected String orderItemSeqId;
+   private String orderItemSeqId;
    @Column(name="PERFORMED_BY_PARTY_ID")
-   protected String performedByPartyId;
+   private String performedByPartyId;
    @Column(name="REASON_ENUM_ID")
-   protected String reasonEnumId;
+   private String reasonEnumId;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_TRANS_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected FinAccountTransType finAccountTransType = null;
+   private FinAccountTransType finAccountTransType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_TRANS_TYPE_ID")
    
-   protected List<FinAccountTransTypeAttr> finAccountTransTypeAttrs = null;
+   private List<FinAccountTransTypeAttr> finAccountTransTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected FinAccount finAccount = null;
+   private FinAccount finAccount = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Payment payment = null;
+   private Payment payment = null;
    private transient OrderItem orderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PERFORMED_BY_PARTY_ID", insertable=false, updatable=false)
@@ -177,22 +177,22 @@ fieldMapColumns.put("FinAccountTrans", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party performedByParty = null;
+   private Party performedByParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REASON_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration reasonEnumeration = null;
+   private Enumeration reasonEnumeration = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_TRANS_ID")
    
-   protected List<AcctgTrans> acctgTranses = null;
+   private List<AcctgTrans> acctgTranses = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="finAccountTrans", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIN_ACCOUNT_TRANS_ID")
    
-   protected List<FinAccountTransAttribute> finAccountTransAttributes = null;
+   private List<FinAccountTransAttribute> finAccountTransAttributes = null;
 
   /**
    * Default constructor.

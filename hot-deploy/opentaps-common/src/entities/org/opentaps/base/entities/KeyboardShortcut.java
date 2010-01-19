@@ -83,7 +83,7 @@ fieldMapColumns.put("KeyboardShortcut", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -97,45 +97,45 @@ fieldMapColumns.put("KeyboardShortcut", fields);
    @GeneratedValue(generator="KeyboardShortcut_GEN")
    @Id
    @Column(name="SHORTCUT_ID")
-   protected String shortcutId;
+   private String shortcutId;
    @Column(name="USER_LOGIN_ID")
-   protected String userLoginId;
+   private String userLoginId;
    @Column(name="APPLICATION_NAME")
-   protected String applicationName;
+   private String applicationName;
    @Column(name="SCREEN_NAME")
-   protected String screenName;
+   private String screenName;
    @Column(name="SHORTCUT")
-   protected String shortcut;
+   private String shortcut;
    @Column(name="ACTION_TYPE_ID")
-   protected String actionTypeId;
+   private String actionTypeId;
    @Column(name="ACTION_TARGET")
-   protected String actionTarget;
+   private String actionTarget;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="SEQUENCE_NUM")
-   protected Long sequenceNum;
+   private Long sequenceNum;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="USER_LOGIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserLogin userLogin = null;
+   private UserLogin userLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACTION_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected KeyboardShortcutHandler keyboardShortcutHandler = null;
+   private KeyboardShortcutHandler keyboardShortcutHandler = null;
 
   /**
    * Default constructor.

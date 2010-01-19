@@ -73,7 +73,7 @@ fieldMapColumns.put("GlReconciliationEntry", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,7 +86,7 @@ fieldMapColumns.put("GlReconciliationEntry", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.GlReconciliationEntryPkBridge.class)
-     protected GlReconciliationEntryPk id = new GlReconciliationEntryPk();
+     private GlReconciliationEntryPk id = new GlReconciliationEntryPk();
    
     /**
      * Auto generated Id accessor.
@@ -103,22 +103,22 @@ fieldMapColumns.put("GlReconciliationEntry", fields);
          this.id = id;
       }
    @Column(name="RECONCILED_AMOUNT")
-   protected BigDecimal reconciledAmount;
+   private BigDecimal reconciledAmount;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GL_RECONCILIATION_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlReconciliation glReconciliation = null;
+   private GlReconciliation glReconciliation = null;
    private transient AcctgTransEntry acctgTransEntry = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TRANS_ID", insertable=false, updatable=false)
@@ -126,7 +126,7 @@ fieldMapColumns.put("GlReconciliationEntry", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected AcctgTrans acctgTrans = null;
+   private AcctgTrans acctgTrans = null;
 
   /**
    * Default constructor.

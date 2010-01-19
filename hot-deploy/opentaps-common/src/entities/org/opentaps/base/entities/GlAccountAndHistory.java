@@ -109,7 +109,7 @@ fieldMapColumns.put("GlAccountAndHistory", fields);
     postedDebits("postedDebits"),
     postedCredits("postedCredits"),
     endingBalance("endingBalance");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -157,14 +157,14 @@ fieldMapColumns.put("GlAccountAndHistory", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlAccount glAccount = null;
+   private GlAccount glAccount = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_CLASS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlAccountClass glAccountClass = null;
+   private GlAccountClass glAccountClass = null;
    private transient GlAccountHistory glAccountHistory = null;
 
   /**

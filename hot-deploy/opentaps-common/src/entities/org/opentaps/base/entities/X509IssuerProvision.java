@@ -80,7 +80,7 @@ fieldMapColumns.put("X509IssuerProvision", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -94,29 +94,29 @@ fieldMapColumns.put("X509IssuerProvision", fields);
    @GeneratedValue(generator="X509IssuerProvision_GEN")
    @Id
    @Column(name="CERT_PROVISION_ID")
-   protected String certProvisionId;
+   private String certProvisionId;
    @Column(name="COMMON_NAME")
-   protected String commonName;
+   private String commonName;
    @Column(name="ORGANIZATIONAL_UNIT")
-   protected String organizationalUnit;
+   private String organizationalUnit;
    @Column(name="ORGANIZATION_NAME")
-   protected String organizationName;
+   private String organizationName;
    @Column(name="CITY_LOCALITY")
-   protected String cityLocality;
+   private String cityLocality;
    @Column(name="STATE_PROVINCE")
-   protected String stateProvince;
+   private String stateProvince;
    @Column(name="COUNTRY")
-   protected String country;
+   private String country;
    @Column(name="SERIAL_NUMBER")
-   protected String serialNumber;
+   private String serialNumber;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
 
   /**
    * Default constructor.

@@ -68,7 +68,7 @@ fieldMapColumns.put("RuntimeData", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,29 +82,29 @@ fieldMapColumns.put("RuntimeData", fields);
    @GeneratedValue(generator="RuntimeData_GEN")
    @Id
    @Column(name="RUNTIME_DATA_ID")
-   protected String runtimeDataId;
+   private String runtimeDataId;
    @Column(name="RUNTIME_INFO")
-   protected String runtimeInfo;
+   private String runtimeInfo;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RUNTIME_DATA_ID")
    
-   protected List<ApplicationSandbox> applicationSandboxes = null;
+   private List<ApplicationSandbox> applicationSandboxes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RUNTIME_DATA_ID")
    
-   protected List<JobSandbox> jobSandboxes = null;
+   private List<JobSandbox> jobSandboxes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RUNTIME_DATA_ID")
    
-   protected List<WorkEffort> workEfforts = null;
+   private List<WorkEffort> workEfforts = null;
 
   /**
    * Default constructor.

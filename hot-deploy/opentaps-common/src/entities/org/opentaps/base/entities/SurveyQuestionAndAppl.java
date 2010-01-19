@@ -122,7 +122,7 @@ fieldMapColumns.put("SurveyQuestionAndAppl", fields);
     externalFieldRef("externalFieldRef"),
     withSurveyQuestionId("withSurveyQuestionId"),
     withSurveyOptionSeqId("withSurveyOptionSeqId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -178,30 +178,30 @@ fieldMapColumns.put("SurveyQuestionAndAppl", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SurveyQuestionCategory surveyQuestionCategory = null;
+   private SurveyQuestionCategory surveyQuestionCategory = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_QUESTION_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SurveyQuestionType surveyQuestionType = null;
+   private SurveyQuestionType surveyQuestionType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Survey survey = null;
-   protected transient List<SurveyQuestionOption> surveyQuestionOptions = null;
-   protected transient List<Enumeration> enumerations = null;
+   private Survey survey = null;
+   private transient List<SurveyQuestionOption> surveyQuestionOptions = null;
+   private transient List<Enumeration> enumerations = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Geo geo = null;
+   private Geo geo = null;
    private transient SurveyPage surveyPage = null;
    private transient SurveyMultiResp surveyMultiResp = null;
    private transient SurveyMultiRespColumn surveyMultiRespColumn = null;

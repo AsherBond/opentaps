@@ -82,7 +82,7 @@ fieldMapColumns.put("Affiliate", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -96,38 +96,38 @@ fieldMapColumns.put("Affiliate", fields);
    @GeneratedValue(generator="Affiliate_GEN")
    @Id
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="AFFILIATE_NAME")
-   protected String affiliateName;
+   private String affiliateName;
    @Column(name="AFFILIATE_DESCRIPTION")
-   protected String affiliateDescription;
+   private String affiliateDescription;
    @Column(name="YEAR_ESTABLISHED")
-   protected String yearEstablished;
+   private String yearEstablished;
    @Column(name="SITE_TYPE")
-   protected String siteType;
+   private String siteType;
    @Column(name="SITE_PAGE_VIEWS")
-   protected String sitePageViews;
+   private String sitePageViews;
    @Column(name="SITE_VISITORS")
-   protected String siteVisitors;
+   private String siteVisitors;
    @Column(name="DATE_TIME_CREATED")
-   protected Timestamp dateTimeCreated;
+   private Timestamp dateTimeCreated;
    @Column(name="DATE_TIME_APPROVED")
-   protected Timestamp dateTimeApproved;
+   private Timestamp dateTimeApproved;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    private transient PartyGroup partyGroup = null;
 
   /**

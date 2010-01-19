@@ -117,7 +117,7 @@ fieldMapColumns.put("EntitySyncHistory", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -130,7 +130,7 @@ fieldMapColumns.put("EntitySyncHistory", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.EntitySyncHistoryPkBridge.class)
-     protected EntitySyncHistoryPk id = new EntitySyncHistoryPk();
+     private EntitySyncHistoryPk id = new EntitySyncHistoryPk();
    
     /**
      * Auto generated Id accessor.
@@ -147,75 +147,75 @@ fieldMapColumns.put("EntitySyncHistory", fields);
          this.id = id;
       }
    @Column(name="RUN_STATUS_ID")
-   protected String runStatusId;
+   private String runStatusId;
    @Column(name="BEGINNING_SYNCH_TIME")
-   protected Timestamp beginningSynchTime;
+   private Timestamp beginningSynchTime;
    @Column(name="LAST_SUCCESSFUL_SYNCH_TIME")
-   protected Timestamp lastSuccessfulSynchTime;
+   private Timestamp lastSuccessfulSynchTime;
    @Column(name="LAST_CANDIDATE_END_TIME")
-   protected Timestamp lastCandidateEndTime;
+   private Timestamp lastCandidateEndTime;
    @Column(name="LAST_SPLIT_START_TIME")
-   protected Long lastSplitStartTime;
+   private Long lastSplitStartTime;
    @Column(name="TO_CREATE_INSERTED")
-   protected Long toCreateInserted;
+   private Long toCreateInserted;
    @Column(name="TO_CREATE_UPDATED")
-   protected Long toCreateUpdated;
+   private Long toCreateUpdated;
    @Column(name="TO_CREATE_NOT_UPDATED")
-   protected Long toCreateNotUpdated;
+   private Long toCreateNotUpdated;
    @Column(name="TO_STORE_INSERTED")
-   protected Long toStoreInserted;
+   private Long toStoreInserted;
    @Column(name="TO_STORE_UPDATED")
-   protected Long toStoreUpdated;
+   private Long toStoreUpdated;
    @Column(name="TO_STORE_NOT_UPDATED")
-   protected Long toStoreNotUpdated;
+   private Long toStoreNotUpdated;
    @Column(name="TO_REMOVE_DELETED")
-   protected Long toRemoveDeleted;
+   private Long toRemoveDeleted;
    @Column(name="TO_REMOVE_ALREADY_DELETED")
-   protected Long toRemoveAlreadyDeleted;
+   private Long toRemoveAlreadyDeleted;
    @Column(name="TOTAL_ROWS_EXPORTED")
-   protected Long totalRowsExported;
+   private Long totalRowsExported;
    @Column(name="TOTAL_ROWS_TO_CREATE")
-   protected Long totalRowsToCreate;
+   private Long totalRowsToCreate;
    @Column(name="TOTAL_ROWS_TO_STORE")
-   protected Long totalRowsToStore;
+   private Long totalRowsToStore;
    @Column(name="TOTAL_ROWS_TO_REMOVE")
-   protected Long totalRowsToRemove;
+   private Long totalRowsToRemove;
    @Column(name="TOTAL_SPLITS")
-   protected Long totalSplits;
+   private Long totalSplits;
    @Column(name="TOTAL_STORE_CALLS")
-   protected Long totalStoreCalls;
+   private Long totalStoreCalls;
    @Column(name="RUNNING_TIME_MILLIS")
-   protected Long runningTimeMillis;
+   private Long runningTimeMillis;
    @Column(name="PER_SPLIT_MIN_MILLIS")
-   protected Long perSplitMinMillis;
+   private Long perSplitMinMillis;
    @Column(name="PER_SPLIT_MAX_MILLIS")
-   protected Long perSplitMaxMillis;
+   private Long perSplitMaxMillis;
    @Column(name="PER_SPLIT_MIN_ITEMS")
-   protected Long perSplitMinItems;
+   private Long perSplitMinItems;
    @Column(name="PER_SPLIT_MAX_ITEMS")
-   protected Long perSplitMaxItems;
+   private Long perSplitMaxItems;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ENTITY_SYNC_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected EntitySync entitySync = null;
+   private EntitySync entitySync = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ENTITY_SYNC_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected EntitySync lastEntitySync = null;
+   private EntitySync lastEntitySync = null;
 
   /**
    * Default constructor.

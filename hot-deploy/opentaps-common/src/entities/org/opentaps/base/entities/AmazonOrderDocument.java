@@ -89,7 +89,7 @@ fieldMapColumns.put("AmazonOrderDocument", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -103,55 +103,55 @@ fieldMapColumns.put("AmazonOrderDocument", fields);
    @GeneratedValue(generator="AmazonOrderDocument_GEN")
    @Id
    @Column(name="DOCUMENT_ID")
-   protected String documentId;
+   private String documentId;
    @Column(name="GENERATED_TIMESTAMP")
-   protected Timestamp generatedTimestamp;
+   private Timestamp generatedTimestamp;
    @Column(name="DOCUMENT_XML")
-   protected String documentXml;
+   private String documentXml;
    @Column(name="STATUS_ID")
-   protected String statusId;
+   private String statusId;
    @Column(name="ACK_STATUS_ID")
-   protected String ackStatusId;
+   private String ackStatusId;
    @Column(name="DOWNLOAD_TIMESTAMP")
-   protected Timestamp downloadTimestamp;
+   private Timestamp downloadTimestamp;
    @Column(name="DOWNLOAD_ERROR_MESSAGE")
-   protected String downloadErrorMessage;
+   private String downloadErrorMessage;
    @Column(name="IMPORT_TIMESTAMP")
-   protected Timestamp importTimestamp;
+   private Timestamp importTimestamp;
    @Column(name="EXTRACTION_FAILURES")
-   protected Long extractionFailures;
+   private Long extractionFailures;
    @Column(name="IMPORT_ERROR_MESSAGE")
-   protected String importErrorMessage;
+   private String importErrorMessage;
    @Column(name="ACKNOWLEDGE_TIMESTAMP")
-   protected Timestamp acknowledgeTimestamp;
+   private Timestamp acknowledgeTimestamp;
    @Column(name="ACKNOWLEDGE_ERROR_MESSAGE")
-   protected String acknowledgeErrorMessage;
+   private String acknowledgeErrorMessage;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem statusItem = null;
+   private StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACK_STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem ackStatusItem = null;
+   private StatusItem ackStatusItem = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DOCUMENT_ID")
    
-   protected List<AmazonOrder> amazonOrders = null;
+   private List<AmazonOrder> amazonOrders = null;
 
   /**
    * Default constructor.

@@ -144,7 +144,7 @@ fieldMapColumns.put("SurveyResponseAndAnswer", fields);
     duration("duration"),
     durationUomId("durationUomId"),
     sequenceNum("sequenceNum");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -214,14 +214,14 @@ fieldMapColumns.put("SurveyResponseAndAnswer", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Survey survey = null;
+   private Survey survey = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_QUESTION_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SurveyQuestion surveyQuestion = null;
+   private SurveyQuestion surveyQuestion = null;
    private transient SurveyQuestionOption surveyQuestionOption = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_RESPONSE_ID", insertable=false, updatable=false)
@@ -229,14 +229,14 @@ fieldMapColumns.put("SurveyResponseAndAnswer", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SurveyResponse surveyResponse = null;
+   private SurveyResponse surveyResponse = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Content content = null;
+   private Content content = null;
    private transient SurveyMultiRespColumn surveyMultiRespColumn = null;
 
   /**

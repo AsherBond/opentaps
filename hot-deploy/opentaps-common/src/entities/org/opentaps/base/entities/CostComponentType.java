@@ -72,7 +72,7 @@ fieldMapColumns.put("CostComponentType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,44 +86,44 @@ fieldMapColumns.put("CostComponentType", fields);
    @GeneratedValue(generator="CostComponentType_GEN")
    @Id
    @Column(name="COST_COMPONENT_TYPE_ID")
-   protected String costComponentTypeId;
+   private String costComponentTypeId;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected CostComponentType parentCostComponentType = null;
+   private CostComponentType parentCostComponentType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="COST_COMPONENT_TYPE_ID")
    
-   protected List<CostComponent> costComponents = null;
+   private List<CostComponent> costComponents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<CostComponentType> childCostComponentTypes = null;
+   private List<CostComponentType> childCostComponentTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="costComponentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="COST_COMPONENT_TYPE_ID")
    
-   protected List<CostComponentTypeAttr> costComponentTypeAttrs = null;
+   private List<CostComponentTypeAttr> costComponentTypeAttrs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="costComponentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="COST_COMPONENT_TYPE_ID")
    
-   protected List<WorkEffortCostCalc> workEffortCostCalcs = null;
+   private List<WorkEffortCostCalc> workEffortCostCalcs = null;
 
   /**
    * Default constructor.

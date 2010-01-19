@@ -85,7 +85,7 @@ fieldMapColumns.put("AmazonProductPrice", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -99,44 +99,44 @@ fieldMapColumns.put("AmazonProductPrice", fields);
    @GeneratedValue(generator="AmazonProductPrice_GEN")
    @Id
    @Column(name="PRODUCT_ID")
-   protected String productId;
+   private String productId;
    @Column(name="STATUS_ID")
-   protected String statusId;
+   private String statusId;
    @Column(name="PROCESSING_DOCUMENT_ID")
-   protected Long processingDocumentId;
+   private Long processingDocumentId;
    @Column(name="POST_TIMESTAMP")
-   protected Timestamp postTimestamp;
+   private Timestamp postTimestamp;
    @Column(name="POST_ERROR_MESSAGE")
-   protected String postErrorMessage;
+   private String postErrorMessage;
    @Column(name="POST_FAILURES")
-   protected Long postFailures;
+   private Long postFailures;
    @Column(name="ACK_STATUS_ID")
-   protected String ackStatusId;
+   private String ackStatusId;
    @Column(name="ACKNOWLEDGE_TIMESTAMP")
-   protected Timestamp acknowledgeTimestamp;
+   private Timestamp acknowledgeTimestamp;
    @Column(name="ACKNOWLEDGE_ERROR_MESSAGE")
-   protected String acknowledgeErrorMessage;
+   private String acknowledgeErrorMessage;
    @Column(name="ACKNOWLEDGE_MESSAGE_ID")
-   protected String acknowledgeMessageId;
+   private String acknowledgeMessageId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID")
    
-   protected List<ProductPrice> productPrices = null;
+   private List<ProductPrice> productPrices = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected AmazonProduct amazonProduct = null;
+   private AmazonProduct amazonProduct = null;
 
   /**
    * Default constructor.

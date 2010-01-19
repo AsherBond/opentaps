@@ -123,7 +123,7 @@ fieldMapColumns.put("AcctgTrans", fields);
     invoiceAdjustmentId("invoiceAdjustmentId"),
     paymentApplicationId("paymentApplicationId"),
     postedAmount("postedAmount");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -137,120 +137,120 @@ fieldMapColumns.put("AcctgTrans", fields);
    @GeneratedValue(generator="AcctgTrans_GEN")
    @Id
    @Column(name="ACCTG_TRANS_ID")
-   protected String acctgTransId;
+   private String acctgTransId;
    @Column(name="ACCTG_TRANS_TYPE_ID")
-   protected String acctgTransTypeId;
+   private String acctgTransTypeId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="TRANSACTION_DATE")
-   protected Timestamp transactionDate;
+   private Timestamp transactionDate;
    @Column(name="IS_POSTED")
-   protected String isPosted;
+   private String isPosted;
    @Column(name="POSTED_DATE")
-   protected Timestamp postedDate;
+   private Timestamp postedDate;
    @Column(name="SCHEDULED_POSTING_DATE")
-   protected Timestamp scheduledPostingDate;
+   private Timestamp scheduledPostingDate;
    @Column(name="GL_JOURNAL_ID")
-   protected String glJournalId;
+   private String glJournalId;
    @Column(name="GL_FISCAL_TYPE_ID")
-   protected String glFiscalTypeId;
+   private String glFiscalTypeId;
    @Column(name="VOUCHER_REF")
-   protected String voucherRef;
+   private String voucherRef;
    @Column(name="VOUCHER_DATE")
-   protected Timestamp voucherDate;
+   private Timestamp voucherDate;
    @Column(name="GROUP_STATUS_ID")
-   protected String groupStatusId;
+   private String groupStatusId;
    @Column(name="FIXED_ASSET_ID")
-   protected String fixedAssetId;
+   private String fixedAssetId;
    @Column(name="INVENTORY_ITEM_ID")
-   protected String inventoryItemId;
+   private String inventoryItemId;
    @Column(name="PHYSICAL_INVENTORY_ID")
-   protected String physicalInventoryId;
+   private String physicalInventoryId;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="ROLE_TYPE_ID")
-   protected String roleTypeId;
+   private String roleTypeId;
    @Column(name="INVOICE_ID")
-   protected String invoiceId;
+   private String invoiceId;
    @Column(name="PAYMENT_ID")
-   protected String paymentId;
+   private String paymentId;
    @Column(name="FIN_ACCOUNT_TRANS_ID")
-   protected String finAccountTransId;
+   private String finAccountTransId;
    @Column(name="SHIPMENT_ID")
-   protected String shipmentId;
+   private String shipmentId;
    @Column(name="RECEIPT_ID")
-   protected String receiptId;
+   private String receiptId;
    @Column(name="WORK_EFFORT_ID")
-   protected String workEffortId;
+   private String workEffortId;
    @Column(name="THEIR_ACCTG_TRANS_ID")
-   protected String theirAcctgTransId;
+   private String theirAcctgTransId;
    @Column(name="CREATED_BY_USER_LOGIN")
-   protected String createdByUserLogin;
+   private String createdByUserLogin;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   protected String lastModifiedByUserLogin;
+   private String lastModifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @Column(name="INVOICE_ADJUSTMENT_ID")
-   protected String invoiceAdjustmentId;
+   private String invoiceAdjustmentId;
    @Column(name="PAYMENT_APPLICATION_ID")
-   protected String paymentApplicationId;
+   private String paymentApplicationId;
    @Column(name="POSTED_AMOUNT")
-   protected BigDecimal postedAmount;
+   private BigDecimal postedAmount;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TRANS_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected AcctgTransType acctgTransType = null;
+   private AcctgTransType acctgTransType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GL_JOURNAL_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlJournal glJournal = null;
+   private GlJournal glJournal = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GL_FISCAL_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlFiscalType glFiscalType = null;
+   private GlFiscalType glFiscalType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GROUP_STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem statusItem = null;
+   private StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected FixedAsset fixedAsset = null;
+   private FixedAsset fixedAsset = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PHYSICAL_INVENTORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PhysicalInventory physicalInventory = null;
+   private PhysicalInventory physicalInventory = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_ITEM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected InventoryItem inventoryItem = null;
+   private InventoryItem inventoryItem = null;
    private transient InventoryItemVariance inventoryItemVariance = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
@@ -258,14 +258,14 @@ fieldMapColumns.put("AcctgTrans", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RoleType roleType = null;
+   private RoleType roleType = null;
    private transient PartyRole partyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ID", insertable=false, updatable=false)
@@ -273,72 +273,72 @@ fieldMapColumns.put("AcctgTrans", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Invoice invoice = null;
+   private Invoice invoice = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Payment payment = null;
+   private Payment payment = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_TRANS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected FinAccountTrans finAccountTrans = null;
+   private FinAccountTrans finAccountTrans = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Shipment shipment = null;
+   private Shipment shipment = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RECEIPT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ShipmentReceipt shipmentReceipt = null;
+   private ShipmentReceipt shipmentReceipt = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WorkEffort workEffort = null;
+   private WorkEffort workEffort = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TRANS_TYPE_ID")
    
-   protected List<AcctgTransTypeAttr> acctgTransTypeAttrs = null;
+   private List<AcctgTransTypeAttr> acctgTransTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ADJUSTMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected InvoiceAdjustment invoiceAdjustment = null;
+   private InvoiceAdjustment invoiceAdjustment = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_APPLICATION_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PaymentApplication paymentApplication = null;
+   private PaymentApplication paymentApplication = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="acctgTrans", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ACCTG_TRANS_ID")
    
-   protected List<AcctgTransAttribute> acctgTransAttributes = null;
+   private List<AcctgTransAttribute> acctgTransAttributes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="acctgTrans", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ACCTG_TRANS_ID")
    
-   protected List<AcctgTransEntry> acctgTransEntrys = null;
+   private List<AcctgTransEntry> acctgTransEntrys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="acctgTrans", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ACCTG_TRANS_ID")
    
-   protected List<GlReconciliationEntry> glReconciliationEntrys = null;
+   private List<GlReconciliationEntry> glReconciliationEntrys = null;
 
   /**
    * Default constructor.

@@ -72,7 +72,7 @@ fieldMapColumns.put("EnumerationType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,80 +86,80 @@ fieldMapColumns.put("EnumerationType", fields);
    @GeneratedValue(generator="EnumerationType_GEN")
    @Id
    @Column(name="ENUM_TYPE_ID")
-   protected String enumTypeId;
+   private String enumTypeId;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected EnumerationType parentEnumerationType = null;
+   private EnumerationType parentEnumerationType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID1")
    
-   protected List<AcctgTagEnumType> tag1AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag1AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID2")
    
-   protected List<AcctgTagEnumType> tag2AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag2AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID3")
    
-   protected List<AcctgTagEnumType> tag3AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag3AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID4")
    
-   protected List<AcctgTagEnumType> tag4AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag4AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID5")
    
-   protected List<AcctgTagEnumType> tag5AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag5AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID6")
    
-   protected List<AcctgTagEnumType> tag6AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag6AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID7")
    
-   protected List<AcctgTagEnumType> tag7AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag7AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID8")
    
-   protected List<AcctgTagEnumType> tag8AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag8AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID9")
    
-   protected List<AcctgTagEnumType> tag9AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag9AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID10")
    
-   protected List<AcctgTagEnumType> tag10AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag10AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID")
    
-   protected List<Enumeration> enumerations = null;
+   private List<Enumeration> enumerations = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<EnumerationType> childEnumerationTypes = null;
+   private List<EnumerationType> childEnumerationTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="enumerationType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ENUM_TYPE_ID")
    
-   protected List<TermTypeToEnumTypeMap> termTypeToEnumTypeMaps = null;
+   private List<TermTypeToEnumTypeMap> termTypeToEnumTypeMaps = null;
 
   /**
    * Default constructor.

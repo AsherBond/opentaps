@@ -80,7 +80,7 @@ fieldMapColumns.put("ProductFacility", fields);
     createdTxStamp("createdTxStamp"),
     replenishMethodEnumId("replenishMethodEnumId"),
     replenishFromFacilityId("replenishFromFacilityId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -93,7 +93,7 @@ fieldMapColumns.put("ProductFacility", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductFacilityPkBridge.class)
-     protected ProductFacilityPk id = new ProductFacilityPk();
+     private ProductFacilityPk id = new ProductFacilityPk();
    
     /**
      * Auto generated Id accessor.
@@ -110,51 +110,51 @@ fieldMapColumns.put("ProductFacility", fields);
          this.id = id;
       }
    @Column(name="MINIMUM_STOCK")
-   protected BigDecimal minimumStock;
+   private BigDecimal minimumStock;
    @Column(name="REORDER_QUANTITY")
-   protected BigDecimal reorderQuantity;
+   private BigDecimal reorderQuantity;
    @Column(name="DAYS_TO_SHIP")
-   protected Long daysToShip;
+   private Long daysToShip;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @Column(name="REPLENISH_METHOD_ENUM_ID")
-   protected String replenishMethodEnumId;
+   private String replenishMethodEnumId;
    @Column(name="REPLENISH_FROM_FACILITY_ID")
-   protected String replenishFromFacilityId;
+   private String replenishFromFacilityId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Product product = null;
+   private Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Facility facility = null;
+   private Facility facility = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Facility resplenishFromFacilityFacility = null;
+   private Facility resplenishFromFacilityFacility = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REPLENISH_METHOD_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration resplenishMethodEnumeration = null;
+   private Enumeration resplenishMethodEnumeration = null;
    private transient List<InventoryItem> inventoryItems = null;
 
   /**

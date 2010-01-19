@@ -72,7 +72,7 @@ fieldMapColumns.put("ProdConfItemContentType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,36 +86,36 @@ fieldMapColumns.put("ProdConfItemContentType", fields);
    @GeneratedValue(generator="ProdConfItemContentType_GEN")
    @Id
    @Column(name="CONF_ITEM_CONTENT_TYPE_ID")
-   protected String confItemContentTypeId;
+   private String confItemContentTypeId;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProdConfItemContentType parentProdConfItemContentType = null;
+   private ProdConfItemContentType parentProdConfItemContentType = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="prodConfItemContentType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONF_ITEM_CONTENT_TYPE_ID")
    
-   protected List<ProdConfItemContent> prodConfItemContents = null;
+   private List<ProdConfItemContent> prodConfItemContents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<ProdConfItemContentType> childProdConfItemContentTypes = null;
+   private List<ProdConfItemContentType> childProdConfItemContentTypes = null;
 
   /**
    * Default constructor.

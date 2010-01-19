@@ -70,7 +70,7 @@ fieldMapColumns.put("DataSource", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,58 +84,58 @@ fieldMapColumns.put("DataSource", fields);
    @GeneratedValue(generator="DataSource_GEN")
    @Id
    @Column(name="DATA_SOURCE_ID")
-   protected String dataSourceId;
+   private String dataSourceId;
    @Column(name="DATA_SOURCE_TYPE_ID")
-   protected String dataSourceTypeId;
+   private String dataSourceTypeId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_SOURCE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected DataSourceType dataSourceType = null;
+   private DataSourceType dataSourceType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_SOURCE_ID")
    
-   protected List<Content> contents = null;
+   private List<Content> contents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_SOURCE_ID")
    
-   protected List<ContentAssoc> contentAssocs = null;
+   private List<ContentAssoc> contentAssocs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_SOURCE_ID")
    
-   protected List<ContentMetaData> contentMetaDatas = null;
+   private List<ContentMetaData> contentMetaDatas = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_SOURCE_ID")
    
-   protected List<DataResource> dataResources = null;
+   private List<DataResource> dataResources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_SOURCE_ID")
    
-   protected List<DataResourceMetaData> dataResourceMetaDatas = null;
+   private List<DataResourceMetaData> dataResourceMetaDatas = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_SOURCE_ID")
    
-   protected List<GeoPoint> geoPoints = null;
+   private List<GeoPoint> geoPoints = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_SOURCE_ID")
    
-   protected List<Party> partys = null;
+   private List<Party> partys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="dataSource", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="DATA_SOURCE_ID")
    
-   protected List<PartyDataSource> partyDataSources = null;
+   private List<PartyDataSource> partyDataSources = null;
 
   /**
    * Default constructor.

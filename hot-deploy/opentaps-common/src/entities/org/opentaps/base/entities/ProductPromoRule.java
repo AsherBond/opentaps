@@ -70,7 +70,7 @@ fieldMapColumns.put("ProductPromoRule", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -83,7 +83,7 @@ fieldMapColumns.put("ProductPromoRule", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.ProductPromoRulePkBridge.class)
-     protected ProductPromoRulePk id = new ProductPromoRulePk();
+     private ProductPromoRulePk id = new ProductPromoRulePk();
    
     /**
      * Auto generated Id accessor.
@@ -100,22 +100,22 @@ fieldMapColumns.put("ProductPromoRule", fields);
          this.id = id;
       }
    @Column(name="RULE_NAME")
-   protected String ruleName;
+   private String ruleName;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PROMO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductPromo productPromo = null;
+   private ProductPromo productPromo = null;
    private transient List<OrderAdjustment> orderAdjustments = null;
    private transient List<ProductPromoAction> productPromoActions = null;
    private transient List<ProductPromoCond> productPromoConds = null;

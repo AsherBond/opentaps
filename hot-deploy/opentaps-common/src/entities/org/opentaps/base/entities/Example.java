@@ -87,7 +87,7 @@ fieldMapColumns.put("Example", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -101,61 +101,61 @@ fieldMapColumns.put("Example", fields);
    @GeneratedValue(generator="Example_GEN")
    @Id
    @Column(name="EXAMPLE_ID")
-   protected String exampleId;
+   private String exampleId;
    @Column(name="EXAMPLE_TYPE_ID")
-   protected String exampleTypeId;
+   private String exampleTypeId;
    @Column(name="STATUS_ID")
-   protected String statusId;
+   private String statusId;
    @Column(name="EXAMPLE_NAME")
-   protected String exampleName;
+   private String exampleName;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LONG_DESCRIPTION")
-   protected String longDescription;
+   private String longDescription;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="EXAMPLE_SIZE")
-   protected Long exampleSize;
+   private Long exampleSize;
    @Column(name="EXAMPLE_DATE")
-   protected Timestamp exampleDate;
+   private Timestamp exampleDate;
    @Column(name="ANOTHER_DATE")
-   protected Timestamp anotherDate;
+   private Timestamp anotherDate;
    @Column(name="ANOTHER_TEXT")
-   protected String anotherText;
+   private String anotherText;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EXAMPLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ExampleType exampleType = null;
+   private ExampleType exampleType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem statusItem = null;
+   private StatusItem statusItem = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="example", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EXAMPLE_ID")
    
-   protected List<ExampleFeatureAppl> exampleFeatureAppls = null;
+   private List<ExampleFeatureAppl> exampleFeatureAppls = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="example", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EXAMPLE_ID")
    
-   protected List<ExampleItem> exampleItems = null;
+   private List<ExampleItem> exampleItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="example", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EXAMPLE_ID")
    
-   protected List<ExampleStatus> exampleStatuses = null;
+   private List<ExampleStatus> exampleStatuses = null;
 
   /**
    * Default constructor.

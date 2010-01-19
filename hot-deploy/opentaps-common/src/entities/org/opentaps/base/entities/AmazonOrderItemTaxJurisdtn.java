@@ -82,7 +82,7 @@ fieldMapColumns.put("AmazonOrderItemTaxJurisdtn", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -93,44 +93,44 @@ fieldMapColumns.put("AmazonOrderItemTaxJurisdtn", fields);
   }
 
    @Column(name="AMAZON_ORDER_ID")
-   protected String amazonOrderId;
+   private String amazonOrderId;
    @Column(name="AMAZON_ORDER_ITEM_CODE")
-   protected String amazonOrderItemCode;
+   private String amazonOrderItemCode;
    @org.hibernate.annotations.GenericGenerator(name="AmazonOrderItemTaxJurisdtn_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
    @GeneratedValue(generator="AmazonOrderItemTaxJurisdtn_GEN")
    @Id
    @Column(name="ITEM_TAX_JURIS_TYPE_ID")
-   protected String itemTaxJurisTypeId;
+   private String itemTaxJurisTypeId;
    @Column(name="TAX_TYPE")
-   protected String taxType;
+   private String taxType;
    @Column(name="TAX_LOCATION_CODE")
-   protected String taxLocationCode;
+   private String taxLocationCode;
    @Column(name="TAX_JURIS_DISTRICT")
-   protected String taxJurisDistrict;
+   private String taxJurisDistrict;
    @Column(name="TAX_JURIS_CITY")
-   protected String taxJurisCity;
+   private String taxJurisCity;
    @Column(name="TAX_JURIS_COUNTY")
-   protected String taxJurisCounty;
+   private String taxJurisCounty;
    @Column(name="TAX_JURIS_STATE")
-   protected String taxJurisState;
+   private String taxJurisState;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    private transient AmazonOrderItem amazonOrderItem = null;
    private transient AmazonOrderTaxJurisToAuth amazonOrderTaxJurisToAuth = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="amazonOrderItemTaxJurisdtn", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ITEM_TAX_JURIS_TYPE_ID")
    
-   protected List<AmazonOrderItemTaxAmount> amazonOrderItemTaxAmounts = null;
+   private List<AmazonOrderItemTaxAmount> amazonOrderItemTaxAmounts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="amazonOrderItemTaxJurisdtn", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ITEM_TAX_JURIS_TYPE_ID")
    
-   protected List<AmazonOrderItemTaxRate> amazonOrderItemTaxRates = null;
+   private List<AmazonOrderItemTaxRate> amazonOrderItemTaxRates = null;
 
   /**
    * Default constructor.

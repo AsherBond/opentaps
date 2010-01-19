@@ -264,7 +264,7 @@ fieldMapColumns.put("ProjectPhaseTaskAndTimeEntryTimeSheet", fields);
     invoiceItemSeqId("invoiceItemSeqId"),
     hours("hours"),
     comments("comments");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -408,15 +408,15 @@ fieldMapColumns.put("ProjectPhaseTaskAndTimeEntryTimeSheet", fields);
    private BigDecimal hours;
     
    private String comments;
-   protected transient List<WorkEffortSkillStandard> workEffortSkillStandards = null;
-   protected transient List<WorkEffortPartyAssignment> workEffortPartyAssignments = null;
+   private transient List<WorkEffortSkillStandard> workEffortSkillStandards = null;
+   private transient List<WorkEffortPartyAssignment> workEffortPartyAssignments = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Invoice invoice = null;
+   private Invoice invoice = null;
 
   /**
    * Default constructor.

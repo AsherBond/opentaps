@@ -104,7 +104,7 @@ fieldMapColumns.put("MarketingCampaign", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -118,108 +118,108 @@ fieldMapColumns.put("MarketingCampaign", fields);
    @GeneratedValue(generator="MarketingCampaign_GEN")
    @Id
    @Column(name="MARKETING_CAMPAIGN_ID")
-   protected String marketingCampaignId;
+   private String marketingCampaignId;
    @Column(name="PARENT_CAMPAIGN_ID")
-   protected String parentCampaignId;
+   private String parentCampaignId;
    @Column(name="STATUS_ID")
-   protected String statusId;
+   private String statusId;
    @Column(name="CAMPAIGN_NAME")
-   protected String campaignName;
+   private String campaignName;
    @Column(name="CAMPAIGN_SUMMARY")
-   protected String campaignSummary;
+   private String campaignSummary;
    @Column(name="BUDGETED_COST")
-   protected BigDecimal budgetedCost;
+   private BigDecimal budgetedCost;
    @Column(name="ACTUAL_COST")
-   protected BigDecimal actualCost;
+   private BigDecimal actualCost;
    @Column(name="ESTIMATED_COST")
-   protected BigDecimal estimatedCost;
+   private BigDecimal estimatedCost;
    @Column(name="CURRENCY_UOM_ID")
-   protected String currencyUomId;
+   private String currencyUomId;
    @Column(name="FROM_DATE")
-   protected Timestamp fromDate;
+   private Timestamp fromDate;
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="IS_ACTIVE")
-   protected String isActive;
+   private String isActive;
    @Column(name="CONVERTED_LEADS")
-   protected String convertedLeads;
+   private String convertedLeads;
    @Column(name="EXPECTED_RESPONSE_PERCENT")
-   protected BigDecimal expectedResponsePercent;
+   private BigDecimal expectedResponsePercent;
    @Column(name="EXPECTED_REVENUE")
-   protected BigDecimal expectedRevenue;
+   private BigDecimal expectedRevenue;
    @Column(name="NUM_SENT")
-   protected Long numSent;
+   private Long numSent;
    @Column(name="START_DATE")
-   protected Timestamp startDate;
+   private Timestamp startDate;
    @Column(name="CREATED_BY_USER_LOGIN")
-   protected String createdByUserLogin;
+   private String createdByUserLogin;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
-   protected String lastModifiedByUserLogin;
+   private String lastModifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_CAMPAIGN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected MarketingCampaign parentMarketingCampaign = null;
+   private MarketingCampaign parentMarketingCampaign = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem statusItem = null;
+   private StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom uom = null;
+   private Uom uom = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MARKETING_CAMPAIGN_ID")
    
-   protected List<ContactList> contactLists = null;
+   private List<ContactList> contactLists = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_CAMPAIGN_ID")
    
-   protected List<MarketingCampaign> childMarketingCampaigns = null;
+   private List<MarketingCampaign> childMarketingCampaigns = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MARKETING_CAMPAIGN_ID")
    
-   protected List<MarketingCampaignContactList> marketingCampaignContactLists = null;
+   private List<MarketingCampaignContactList> marketingCampaignContactLists = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="marketingCampaign", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="MARKETING_CAMPAIGN_ID")
    
-   protected List<MarketingCampaignNote> marketingCampaignNotes = null;
+   private List<MarketingCampaignNote> marketingCampaignNotes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="marketingCampaign", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="MARKETING_CAMPAIGN_ID")
    
-   protected List<MarketingCampaignPrice> marketingCampaignPrices = null;
+   private List<MarketingCampaignPrice> marketingCampaignPrices = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="marketingCampaign", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="MARKETING_CAMPAIGN_ID")
    
-   protected List<MarketingCampaignPromo> marketingCampaignPromoes = null;
+   private List<MarketingCampaignPromo> marketingCampaignPromoes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="marketingCampaign", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="MARKETING_CAMPAIGN_ID")
    
-   protected List<MarketingCampaignRole> marketingCampaignRoles = null;
+   private List<MarketingCampaignRole> marketingCampaignRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MARKETING_CAMPAIGN_ID")
    
-   protected List<SalesOpportunity> salesOpportunitys = null;
+   private List<SalesOpportunity> salesOpportunitys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MARKETING_CAMPAIGN_ID")
    
-   protected List<TrackingCode> trackingCodes = null;
+   private List<TrackingCode> trackingCodes = null;
 
   /**
    * Default constructor.

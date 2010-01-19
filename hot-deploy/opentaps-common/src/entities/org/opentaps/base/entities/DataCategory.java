@@ -70,7 +70,7 @@ fieldMapColumns.put("DataCategory", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,38 +84,38 @@ fieldMapColumns.put("DataCategory", fields);
    @GeneratedValue(generator="DataCategory_GEN")
    @Id
    @Column(name="DATA_CATEGORY_ID")
-   protected String dataCategoryId;
+   private String dataCategoryId;
    @Column(name="PARENT_CATEGORY_ID")
-   protected String parentCategoryId;
+   private String parentCategoryId;
    @Column(name="CATEGORY_NAME")
-   protected String categoryName;
+   private String categoryName;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected DataCategory parentDataCategory = null;
+   private DataCategory parentDataCategory = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_CATEGORY_ID")
    
-   protected List<DataCategory> siblingDataCategorys = null;
+   private List<DataCategory> siblingDataCategorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_CATEGORY_ID")
    
-   protected List<DataCategory> childDataCategorys = null;
+   private List<DataCategory> childDataCategorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_CATEGORY_ID")
    
-   protected List<DataResource> dataResources = null;
+   private List<DataResource> dataResources = null;
 
   /**
    * Default constructor.

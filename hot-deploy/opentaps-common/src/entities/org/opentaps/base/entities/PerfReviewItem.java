@@ -78,7 +78,7 @@ fieldMapColumns.put("PerfReviewItem", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -91,7 +91,7 @@ fieldMapColumns.put("PerfReviewItem", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.PerfReviewItemPkBridge.class)
-     protected PerfReviewItemPk id = new PerfReviewItemPk();
+     private PerfReviewItemPk id = new PerfReviewItemPk();
    
     /**
      * Auto generated Id accessor.
@@ -108,19 +108,19 @@ fieldMapColumns.put("PerfReviewItem", fields);
          this.id = id;
       }
    @Column(name="PERF_RATING_TYPE_ID")
-   protected String perfRatingTypeId;
+   private String perfRatingTypeId;
    @Column(name="PERF_REVIEW_ITEM_TYPE_ID")
-   protected String perfReviewItemTypeId;
+   private String perfReviewItemTypeId;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    private transient PerfReview perfReview = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EMPLOYEE_PARTY_ID", insertable=false, updatable=false)
@@ -128,7 +128,7 @@ fieldMapColumns.put("PerfReviewItem", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party employeeParty = null;
+   private Party employeeParty = null;
    private transient PartyRole employeePartyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PERF_RATING_TYPE_ID", insertable=false, updatable=false)
@@ -136,14 +136,14 @@ fieldMapColumns.put("PerfReviewItem", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PerfRatingType perfRatingType = null;
+   private PerfRatingType perfRatingType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PERF_REVIEW_ITEM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PerfReviewItemType perfReviewItemType = null;
+   private PerfReviewItemType perfReviewItemType = null;
 
   /**
    * Default constructor.

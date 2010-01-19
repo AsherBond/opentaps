@@ -105,7 +105,7 @@ fieldMapColumns.put("BalanceInventoryItemsView", fields);
     reserveOrderEnumId("reserveOrderEnumId"),
     reservedDatetime("reservedDatetime"),
     sequenceId("sequenceId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

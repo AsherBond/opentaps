@@ -71,7 +71,7 @@ fieldMapColumns.put("MarketingCampaignAndVisit", fields);
     marketingCampaignId("marketingCampaignId"),
     visitId("visitId"),
     fromDate("fromDate");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

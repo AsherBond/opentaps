@@ -95,7 +95,7 @@ fieldMapColumns.put("ProductionRunAndGoods", fields);
     workEffortGoodStdTypeId("workEffortGoodStdTypeId"),
     statusId("statusId"),
     estimatedQuantity("estimatedQuantity");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

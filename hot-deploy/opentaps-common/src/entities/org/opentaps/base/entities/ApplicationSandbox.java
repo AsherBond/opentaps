@@ -76,7 +76,7 @@ fieldMapColumns.put("ApplicationSandbox", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -90,25 +90,25 @@ fieldMapColumns.put("ApplicationSandbox", fields);
    @GeneratedValue(generator="ApplicationSandbox_GEN")
    @Id
    @Column(name="APPLICATION_ID")
-   protected String applicationId;
+   private String applicationId;
    @Column(name="WORK_EFFORT_ID")
-   protected String workEffortId;
+   private String workEffortId;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="ROLE_TYPE_ID")
-   protected String roleTypeId;
+   private String roleTypeId;
    @Column(name="FROM_DATE")
-   protected Timestamp fromDate;
+   private Timestamp fromDate;
    @Column(name="RUNTIME_DATA_ID")
-   protected String runtimeDataId;
+   private String runtimeDataId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    private transient WorkEffortPartyAssignment workEffortPartyAssignment = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RUNTIME_DATA_ID", insertable=false, updatable=false)
@@ -116,7 +116,7 @@ fieldMapColumns.put("ApplicationSandbox", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RuntimeData runtimeData = null;
+   private RuntimeData runtimeData = null;
 
   /**
    * Default constructor.

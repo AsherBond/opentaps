@@ -74,7 +74,7 @@ fieldMapColumns.put("TelecomNumber", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,70 +88,70 @@ fieldMapColumns.put("TelecomNumber", fields);
    @GeneratedValue(generator="TelecomNumber_GEN")
    @Id
    @Column(name="CONTACT_MECH_ID")
-   protected String contactMechId;
+   private String contactMechId;
    @Column(name="COUNTRY_CODE")
-   protected String countryCode;
+   private String countryCode;
    @Column(name="AREA_CODE")
-   protected String areaCode;
+   private String areaCode;
    @Column(name="CONTACT_NUMBER")
-   protected String contactNumber;
+   private String contactNumber;
    @Column(name="ASK_FOR_NAME")
-   protected String askForName;
+   private String askForName;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ContactMech contactMech = null;
+   private ContactMech contactMech = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="telecomNumber", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_MECH_ID")
    
-   protected List<FacilityContactMech> facilityContactMeches = null;
+   private List<FacilityContactMech> facilityContactMeches = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TELECOM_CONTACT_MECH_ID")
    
-   protected List<OrderItemShipGroup> telecomOrderItemShipGroups = null;
+   private List<OrderItemShipGroup> telecomOrderItemShipGroups = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="telecomNumber", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_MECH_ID")
    
-   protected List<PartyContactMech> partyContactMeches = null;
+   private List<PartyContactMech> partyContactMeches = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="telecomNumber", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_MECH_ID")
    
-   protected List<PartyContactMechPurpose> partyContactMechPurposes = null;
+   private List<PartyContactMechPurpose> partyContactMechPurposes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_PHONE_CONTACT_MECH_ID")
    
-   protected List<ReturnHeader> originReturnHeaders = null;
+   private List<ReturnHeader> originReturnHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_TELECOM_NUMBER_ID")
    
-   protected List<Shipment> originShipments = null;
+   private List<Shipment> originShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DESTINATION_TELECOM_NUMBER_ID")
    
-   protected List<Shipment> destinationShipments = null;
+   private List<Shipment> destinationShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_TELECOM_NUMBER_ID")
    
-   protected List<ShipmentRouteSegment> originShipmentRouteSegments = null;
+   private List<ShipmentRouteSegment> originShipmentRouteSegments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEST_TELECOM_NUMBER_ID")
    
-   protected List<ShipmentRouteSegment> destShipmentRouteSegments = null;
+   private List<ShipmentRouteSegment> destShipmentRouteSegments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="telecomNumber", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTACT_MECH_ID")
    
-   protected List<WorkEffortContactMech> workEffortContactMeches = null;
+   private List<WorkEffortContactMech> workEffortContactMeches = null;
 
   /**
    * Default constructor.

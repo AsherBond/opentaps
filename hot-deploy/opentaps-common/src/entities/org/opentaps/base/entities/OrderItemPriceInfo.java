@@ -81,7 +81,7 @@ fieldMapColumns.put("OrderItemPriceInfo", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -95,36 +95,36 @@ fieldMapColumns.put("OrderItemPriceInfo", fields);
    @GeneratedValue(generator="OrderItemPriceInfo_GEN")
    @Id
    @Column(name="ORDER_ITEM_PRICE_INFO_ID")
-   protected String orderItemPriceInfoId;
+   private String orderItemPriceInfoId;
    @Column(name="ORDER_ID")
-   protected String orderId;
+   private String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   protected String orderItemSeqId;
+   private String orderItemSeqId;
    @Column(name="PRODUCT_PRICE_RULE_ID")
-   protected String productPriceRuleId;
+   private String productPriceRuleId;
    @Column(name="PRODUCT_PRICE_ACTION_SEQ_ID")
-   protected String productPriceActionSeqId;
+   private String productPriceActionSeqId;
    @Column(name="MODIFY_AMOUNT")
-   protected BigDecimal modifyAmount;
+   private BigDecimal modifyAmount;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="RATE_CODE")
-   protected String rateCode;
+   private String rateCode;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderHeader orderHeader = null;
+   private OrderHeader orderHeader = null;
    private transient OrderItem orderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PRICE_RULE_ID", insertable=false, updatable=false)
@@ -132,7 +132,7 @@ fieldMapColumns.put("OrderItemPriceInfo", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ProductPriceRule productPriceRule = null;
+   private ProductPriceRule productPriceRule = null;
    private transient ProductPriceAction productPriceAction = null;
 
   /**

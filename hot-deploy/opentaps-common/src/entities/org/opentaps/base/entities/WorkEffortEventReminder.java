@@ -87,7 +87,7 @@ fieldMapColumns.put("WorkEffortEventReminder", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -100,7 +100,7 @@ fieldMapColumns.put("WorkEffortEventReminder", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.WorkEffortEventReminderPkBridge.class)
-     protected WorkEffortEventReminderPk id = new WorkEffortEventReminderPk();
+     private WorkEffortEventReminderPk id = new WorkEffortEventReminderPk();
    
     /**
      * Auto generated Id accessor.
@@ -117,45 +117,45 @@ fieldMapColumns.put("WorkEffortEventReminder", fields);
          this.id = id;
       }
    @Column(name="CONTACT_MECH_ID")
-   protected String contactMechId;
+   private String contactMechId;
    @Column(name="IS_POPUP")
-   protected String isPopup;
+   private String isPopup;
    @Column(name="REMINDER_DATE_TIME")
-   protected Timestamp reminderDateTime;
+   private Timestamp reminderDateTime;
    @Column(name="REPEAT_COUNT")
-   protected Long repeatCount;
+   private Long repeatCount;
    @Column(name="REPEAT_INTERVAL")
-   protected Long repeatInterval;
+   private Long repeatInterval;
    @Column(name="CURRENT_COUNT")
-   protected Long currentCount;
+   private Long currentCount;
    @Column(name="RECURRENCE_OFFSET")
-   protected Long recurrenceOffset;
+   private Long recurrenceOffset;
    @Column(name="LOCALE_ID")
-   protected String localeId;
+   private String localeId;
    @Column(name="TIME_ZONE_ID")
-   protected String timeZoneId;
+   private String timeZoneId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WorkEffort workEffort = null;
+   private WorkEffort workEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ContactMech contactMech = null;
+   private ContactMech contactMech = null;
 
   /**
    * Default constructor.

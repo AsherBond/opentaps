@@ -95,7 +95,7 @@ fieldMapColumns.put("AmazonProductImageAndAck", fields);
     ackStatusId("ackStatusId"),
     acknowledgeTimestamp("acknowledgeTimestamp"),
     acknowledgeErrorMessage("acknowledgeErrorMessage");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -133,7 +133,7 @@ fieldMapColumns.put("AmazonProductImageAndAck", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected AmazonProductImage amazonProductImage = null;
+   private AmazonProductImage amazonProductImage = null;
    private transient AmazonProductImageAck amazonProductImageAck = null;
 
   /**

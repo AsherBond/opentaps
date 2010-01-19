@@ -68,7 +68,7 @@ fieldMapColumns.put("ProductStoreGroupType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,21 +82,21 @@ fieldMapColumns.put("ProductStoreGroupType", fields);
    @GeneratedValue(generator="ProductStoreGroupType_GEN")
    @Id
    @Column(name="PRODUCT_STORE_GROUP_TYPE_ID")
-   protected String productStoreGroupTypeId;
+   private String productStoreGroupTypeId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_GROUP_TYPE_ID")
    
-   protected List<ProductStoreGroup> productStoreGroups = null;
+   private List<ProductStoreGroup> productStoreGroups = null;
 
   /**
    * Default constructor.

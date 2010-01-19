@@ -78,7 +78,7 @@ fieldMapColumns.put("EmploymentApp", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,62 +92,62 @@ fieldMapColumns.put("EmploymentApp", fields);
    @GeneratedValue(generator="EmploymentApp_GEN")
    @Id
    @Column(name="APPLICATION_ID")
-   protected String applicationId;
+   private String applicationId;
    @Column(name="EMPL_POSITION_ID")
-   protected String emplPositionId;
+   private String emplPositionId;
    @Column(name="STATUS_ID")
-   protected String statusId;
+   private String statusId;
    @Column(name="EMPLOYMENT_APP_SOURCE_TYPE_ID")
-   protected String employmentAppSourceTypeId;
+   private String employmentAppSourceTypeId;
    @Column(name="APPLYING_PARTY_ID")
-   protected String applyingPartyId;
+   private String applyingPartyId;
    @Column(name="REFERRED_BY_PARTY_ID")
-   protected String referredByPartyId;
+   private String referredByPartyId;
    @Column(name="APPLICATION_DATE")
-   protected Timestamp applicationDate;
+   private Timestamp applicationDate;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EMPL_POSITION_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected EmplPosition emplPosition = null;
+   private EmplPosition emplPosition = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected StatusItem statusItem = null;
+   private StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EMPLOYMENT_APP_SOURCE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected EmploymentAppSourceType employmentAppSourceType = null;
+   private EmploymentAppSourceType employmentAppSourceType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="APPLYING_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party applyingParty = null;
+   private Party applyingParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="REFERRED_BY_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party referredByParty = null;
+   private Party referredByParty = null;
 
   /**
    * Default constructor.

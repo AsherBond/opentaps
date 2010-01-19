@@ -78,7 +78,7 @@ fieldMapColumns.put("PartyRelationshipType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,56 +92,56 @@ fieldMapColumns.put("PartyRelationshipType", fields);
    @GeneratedValue(generator="PartyRelationshipType_GEN")
    @Id
    @Column(name="PARTY_RELATIONSHIP_TYPE_ID")
-   protected String partyRelationshipTypeId;
+   private String partyRelationshipTypeId;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="PARTY_RELATIONSHIP_NAME")
-   protected String partyRelationshipName;
+   private String partyRelationshipName;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="ROLE_TYPE_ID_VALID_FROM")
-   protected String roleTypeIdValidFrom;
+   private String roleTypeIdValidFrom;
    @Column(name="ROLE_TYPE_ID_VALID_TO")
-   protected String roleTypeIdValidTo;
+   private String roleTypeIdValidTo;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PartyRelationshipType parentPartyRelationshipType = null;
+   private PartyRelationshipType parentPartyRelationshipType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID_VALID_FROM", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RoleType validFromRoleType = null;
+   private RoleType validFromRoleType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID_VALID_TO", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected RoleType validToRoleType = null;
+   private RoleType validToRoleType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_RELATIONSHIP_TYPE_ID")
    
-   protected List<PartyRelationship> partyRelationships = null;
+   private List<PartyRelationship> partyRelationships = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<PartyRelationshipType> childPartyRelationshipTypes = null;
+   private List<PartyRelationshipType> childPartyRelationshipTypes = null;
 
   /**
    * Default constructor.

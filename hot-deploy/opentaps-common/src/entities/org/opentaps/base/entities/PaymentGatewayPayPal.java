@@ -82,7 +82,7 @@ fieldMapColumns.put("PaymentGatewayPayPal", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -96,38 +96,38 @@ fieldMapColumns.put("PaymentGatewayPayPal", fields);
    @GeneratedValue(generator="PaymentGatewayPayPal_GEN")
    @Id
    @Column(name="PAYMENT_GATEWAY_CONFIG_ID")
-   protected String paymentGatewayConfigId;
+   private String paymentGatewayConfigId;
    @Column(name="BUSINESS_EMAIL")
-   protected String businessEmail;
+   private String businessEmail;
    @Column(name="NOTIFY_URL")
-   protected String notifyUrl;
+   private String notifyUrl;
    @Column(name="RETURN_URL")
-   protected String returnUrl;
+   private String returnUrl;
    @Column(name="CANCEL_RETURN_URL")
-   protected String cancelReturnUrl;
+   private String cancelReturnUrl;
    @Column(name="IMAGE_URL")
-   protected String imageUrl;
+   private String imageUrl;
    @Column(name="CONFIRM_TEMPLATE")
-   protected String confirmTemplate;
+   private String confirmTemplate;
    @Column(name="REDIRECT_URL")
-   protected String redirectUrl;
+   private String redirectUrl;
    @Column(name="CONFIRM_URL")
-   protected String confirmUrl;
+   private String confirmUrl;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_GATEWAY_CONFIG_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PaymentGatewayConfig paymentGatewayConfig = null;
+   private PaymentGatewayConfig paymentGatewayConfig = null;
 
   /**
    * Default constructor.

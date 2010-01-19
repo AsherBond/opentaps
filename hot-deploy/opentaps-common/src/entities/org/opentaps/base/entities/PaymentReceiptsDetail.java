@@ -95,7 +95,7 @@ fieldMapColumns.put("PaymentReceiptsDetail", fields);
     transactionDate("transactionDate"),
     glAccountId("glAccountId"),
     debitCreditFlag("debitCreditFlag");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

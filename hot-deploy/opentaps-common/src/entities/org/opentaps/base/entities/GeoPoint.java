@@ -79,7 +79,7 @@ fieldMapColumns.put("GeoPoint", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -93,65 +93,65 @@ fieldMapColumns.put("GeoPoint", fields);
    @GeneratedValue(generator="GeoPoint_GEN")
    @Id
    @Column(name="GEO_POINT_ID")
-   protected String geoPointId;
+   private String geoPointId;
    @Column(name="DATA_SOURCE_ID")
-   protected String dataSourceId;
+   private String dataSourceId;
    @Column(name="LATITUDE")
-   protected BigDecimal latitude;
+   private BigDecimal latitude;
    @Column(name="LONGITUDE")
-   protected BigDecimal longitude;
+   private BigDecimal longitude;
    @Column(name="ELEVATION")
-   protected BigDecimal elevation;
+   private BigDecimal elevation;
    @Column(name="ELEVATION_UOM_ID")
-   protected String elevationUomId;
+   private String elevationUomId;
    @Column(name="INFORMATION")
-   protected String information;
+   private String information;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_SOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected DataSource dataSource = null;
+   private DataSource dataSource = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ELEVATION_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom elevationUom = null;
+   private Uom elevationUom = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="geoPoint", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GEO_POINT_ID")
    
-   protected List<ContainerGeoPoint> containerGeoPoints = null;
+   private List<ContainerGeoPoint> containerGeoPoints = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_POINT_ID")
    
-   protected List<Facility> facilitys = null;
+   private List<Facility> facilitys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="geoPoint", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GEO_POINT_ID")
    
-   protected List<FacilityLocationGeoPoint> facilityLocationGeoPoints = null;
+   private List<FacilityLocationGeoPoint> facilityLocationGeoPoints = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="geoPoint", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GEO_POINT_ID")
    
-   protected List<FixedAssetGeoPoint> fixedAssetGeoPoints = null;
+   private List<FixedAssetGeoPoint> fixedAssetGeoPoints = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="geoPoint", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GEO_POINT_ID")
    
-   protected List<PartyGeoPoint> partyGeoPoints = null;
+   private List<PartyGeoPoint> partyGeoPoints = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_POINT_ID")
    
-   protected List<PostalAddress> postalAddresses = null;
+   private List<PostalAddress> postalAddresses = null;
 
   /**
    * Default constructor.

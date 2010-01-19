@@ -77,7 +77,7 @@ fieldMapColumns.put("UspsContactListCountZip3", fields);
     zip3("zip3"),
     sortResult("sortResult"),
     processedTimestamp("processedTimestamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

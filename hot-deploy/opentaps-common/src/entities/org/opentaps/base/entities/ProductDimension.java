@@ -74,7 +74,7 @@ fieldMapColumns.put("ProductDimension", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,23 +88,23 @@ fieldMapColumns.put("ProductDimension", fields);
    @GeneratedValue(generator="ProductDimension_GEN")
    @Id
    @Column(name="DIMENSION_ID")
-   protected String dimensionId;
+   private String dimensionId;
    @Column(name="PRODUCT_ID")
-   protected String productId;
+   private String productId;
    @Column(name="PRODUCT_TYPE")
-   protected String productType;
+   private String productType;
    @Column(name="BRAND_NAME")
-   protected String brandName;
+   private String brandName;
    @Column(name="INTERNAL_NAME")
-   protected String internalName;
+   private String internalName;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
 
   /**
    * Default constructor.

@@ -112,7 +112,7 @@ fieldMapColumns.put("WebSiteAndContent", fields);
     webSiteContentTypeId("webSiteContentTypeId"),
     fromDate("fromDate"),
     thruDate("thruDate");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

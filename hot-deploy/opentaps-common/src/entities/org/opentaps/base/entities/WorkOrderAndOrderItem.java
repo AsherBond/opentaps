@@ -91,7 +91,7 @@ fieldMapColumns.put("WorkOrderAndOrderItem", fields);
     orderId("orderId"),
     orderItemSeqId("orderItemSeqId"),
     quantityFulfilled("quantityFulfilled");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -128,14 +128,14 @@ fieldMapColumns.put("WorkOrderAndOrderItem", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderHeader orderHeader = null;
+   private OrderHeader orderHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WorkEffort workEffort = null;
+   private WorkEffort workEffort = null;
 
   /**
    * Default constructor.

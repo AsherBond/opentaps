@@ -81,7 +81,7 @@ fieldMapColumns.put("BillingAccount", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -95,78 +95,78 @@ fieldMapColumns.put("BillingAccount", fields);
    @GeneratedValue(generator="BillingAccount_GEN")
    @Id
    @Column(name="BILLING_ACCOUNT_ID")
-   protected String billingAccountId;
+   private String billingAccountId;
    @Column(name="ACCOUNT_LIMIT")
-   protected BigDecimal accountLimit;
+   private BigDecimal accountLimit;
    @Column(name="ACCOUNT_CURRENCY_UOM_ID")
-   protected String accountCurrencyUomId;
+   private String accountCurrencyUomId;
    @Column(name="CONTACT_MECH_ID")
-   protected String contactMechId;
+   private String contactMechId;
    @Column(name="FROM_DATE")
-   protected Timestamp fromDate;
+   private Timestamp fromDate;
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="EXTERNAL_ACCOUNT_ID")
-   protected String externalAccountId;
+   private String externalAccountId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ContactMech contactMech = null;
+   private ContactMech contactMech = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCOUNT_CURRENCY_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Uom uom = null;
+   private Uom uom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PostalAddress postalAddress = null;
+   private PostalAddress postalAddress = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="billingAccount", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BILLING_ACCOUNT_ID")
    
-   protected List<BillingAccountRole> billingAccountRoles = null;
+   private List<BillingAccountRole> billingAccountRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BILLING_ACCOUNT_ID")
    
-   protected List<BillingAccountTerm> billingAccountTerms = null;
+   private List<BillingAccountTerm> billingAccountTerms = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BILLING_ACCOUNT_ID")
    
-   protected List<Invoice> invoices = null;
+   private List<Invoice> invoices = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BILLING_ACCOUNT_ID")
    
-   protected List<OrderHeader> orderHeaders = null;
+   private List<OrderHeader> orderHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BILLING_ACCOUNT_ID")
    
-   protected List<PaymentApplication> paymentApplications = null;
+   private List<PaymentApplication> paymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BILLING_ACCOUNT_ID")
    
-   protected List<ReturnHeader> returnHeaders = null;
+   private List<ReturnHeader> returnHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BILLING_ACCOUNT_ID")
    
-   protected List<ReturnItemResponse> returnItemResponses = null;
+   private List<ReturnItemResponse> returnItemResponses = null;
 
   /**
    * Default constructor.

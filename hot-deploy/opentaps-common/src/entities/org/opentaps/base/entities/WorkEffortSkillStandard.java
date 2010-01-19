@@ -75,7 +75,7 @@ fieldMapColumns.put("WorkEffortSkillStandard", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,7 +88,7 @@ fieldMapColumns.put("WorkEffortSkillStandard", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.WorkEffortSkillStandardPkBridge.class)
-     protected WorkEffortSkillStandardPk id = new WorkEffortSkillStandardPk();
+     private WorkEffortSkillStandardPk id = new WorkEffortSkillStandardPk();
    
     /**
      * Auto generated Id accessor.
@@ -105,33 +105,33 @@ fieldMapColumns.put("WorkEffortSkillStandard", fields);
          this.id = id;
       }
    @Column(name="ESTIMATED_NUM_PEOPLE")
-   protected BigDecimal estimatedNumPeople;
+   private BigDecimal estimatedNumPeople;
    @Column(name="ESTIMATED_DURATION")
-   protected BigDecimal estimatedDuration;
+   private BigDecimal estimatedDuration;
    @Column(name="ESTIMATED_COST")
-   protected BigDecimal estimatedCost;
+   private BigDecimal estimatedCost;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WorkEffort workEffort = null;
+   private WorkEffort workEffort = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SKILL_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SkillType skillType = null;
+   private SkillType skillType = null;
 
   /**
    * Default constructor.

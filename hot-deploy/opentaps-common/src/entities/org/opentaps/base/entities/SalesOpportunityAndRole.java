@@ -107,7 +107,7 @@ fieldMapColumns.put("SalesOpportunityAndRole", fields);
     createdByUserLogin("createdByUserLogin"),
     partyId("partyId"),
     roleTypeId("roleTypeId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

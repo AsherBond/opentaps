@@ -87,7 +87,7 @@ fieldMapColumns.put("MergeFormAndCategory", fields);
     showInSelect("showInSelect"),
     mergeFormCategoryId("mergeFormCategoryId"),
     mergeFormCategoryName("mergeFormCategoryName");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

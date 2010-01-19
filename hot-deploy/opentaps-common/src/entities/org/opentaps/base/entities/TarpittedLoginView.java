@@ -71,7 +71,7 @@ fieldMapColumns.put("TarpittedLoginView", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,7 +84,7 @@ fieldMapColumns.put("TarpittedLoginView", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.TarpittedLoginViewPkBridge.class)
-     protected TarpittedLoginViewPk id = new TarpittedLoginViewPk();
+     private TarpittedLoginViewPk id = new TarpittedLoginViewPk();
    
     /**
      * Auto generated Id accessor.
@@ -101,15 +101,15 @@ fieldMapColumns.put("TarpittedLoginView", fields);
          this.id = id;
       }
    @Column(name="TARPIT_RELEASE_DATE_TIME")
-   protected Long tarpitReleaseDateTime;
+   private Long tarpitReleaseDateTime;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
 
   /**
    * Default constructor.

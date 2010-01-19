@@ -145,7 +145,7 @@ fieldMapColumns.put("CommunicationEventAndOrder", fields);
     ccString("ccString"),
     bccString("bccString"),
     messageId("messageId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

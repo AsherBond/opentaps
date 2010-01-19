@@ -72,7 +72,7 @@ fieldMapColumns.put("TermType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -86,75 +86,75 @@ fieldMapColumns.put("TermType", fields);
    @GeneratedValue(generator="TermType_GEN")
    @Id
    @Column(name="TERM_TYPE_ID")
-   protected String termTypeId;
+   private String termTypeId;
    @Column(name="PARENT_TYPE_ID")
-   protected String parentTypeId;
+   private String parentTypeId;
    @Column(name="HAS_TABLE")
-   protected String hasTable;
+   private String hasTable;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected TermType parentTermType = null;
+   private TermType parentTermType = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="termType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TERM_TYPE_ID")
    
-   protected List<AgreementItemToTermMap> agreementItemToTermMaps = null;
+   private List<AgreementItemToTermMap> agreementItemToTermMaps = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TERM_TYPE_ID")
    
-   protected List<AgreementTerm> agreementTerms = null;
+   private List<AgreementTerm> agreementTerms = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TERM_TYPE_ID")
    
-   protected List<BillingAccountTerm> billingAccountTerms = null;
+   private List<BillingAccountTerm> billingAccountTerms = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TERM_TYPE_ID")
    
-   protected List<InvoiceTerm> invoiceTerms = null;
+   private List<InvoiceTerm> invoiceTerms = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="termType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TERM_TYPE_ID")
    
-   protected List<OrderTerm> orderTerms = null;
+   private List<OrderTerm> orderTerms = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="termType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TERM_TYPE_ID")
    
-   protected List<QuoteTerm> quoteTerms = null;
+   private List<QuoteTerm> quoteTerms = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_TYPE_ID")
    
-   protected List<TermType> childTermTypes = null;
+   private List<TermType> childTermTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="termType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TERM_TYPE_ID")
    
-   protected List<TermTypeAttr> termTypeAttrs = null;
+   private List<TermTypeAttr> termTypeAttrs = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TERM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected TermTypeFields termTypeFields = null;
+   private TermTypeFields termTypeFields = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="termType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TERM_TYPE_ID")
    
-   protected List<TermTypeToEnumTypeMap> termTypeToEnumTypeMaps = null;
+   private List<TermTypeToEnumTypeMap> termTypeToEnumTypeMaps = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="termType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TERM_TYPE_ID")
    
-   protected List<TermTypeToUomTypeMap> termTypeToUomTypeMaps = null;
+   private List<TermTypeToUomTypeMap> termTypeToUomTypeMaps = null;
 
   /**
    * Default constructor.

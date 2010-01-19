@@ -107,7 +107,7 @@ fieldMapColumns.put("PaymentGatewayPayflowPro", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -121,62 +121,62 @@ fieldMapColumns.put("PaymentGatewayPayflowPro", fields);
    @GeneratedValue(generator="PaymentGatewayPayflowPro_GEN")
    @Id
    @Column(name="PAYMENT_GATEWAY_CONFIG_ID")
-   protected String paymentGatewayConfigId;
+   private String paymentGatewayConfigId;
    @Column(name="CERTS_PATH")
-   protected String certsPath;
+   private String certsPath;
    @Column(name="HOST_ADDRESS")
-   protected String hostAddress;
+   private String hostAddress;
    @Column(name="HOST_PORT")
-   protected Long hostPort;
+   private Long hostPort;
    @Column(name="TIMEOUT")
-   protected Long timeout;
+   private Long timeout;
    @Column(name="PROXY_ADDRESS")
-   protected String proxyAddress;
+   private String proxyAddress;
    @Column(name="PROXY_PORT")
-   protected Long proxyPort;
+   private Long proxyPort;
    @Column(name="PROXY_LOGON")
-   protected String proxyLogon;
+   private String proxyLogon;
    @Column(name="PROXY_PASSWORD")
-   protected String proxyPassword;
+   private String proxyPassword;
    @Column(name="VENDOR")
-   protected String vendor;
+   private String vendor;
    @Column(name="USER_ID")
-   protected String userId;
+   private String userId;
    @Column(name="PWD")
-   protected String pwd;
+   private String pwd;
    @Column(name="PARTNER")
-   protected String partner;
+   private String partner;
    @Column(name="CHECK_AVS")
-   protected String checkAvs;
+   private String checkAvs;
    @Column(name="CHECK_CVV2")
-   protected String checkCvv2;
+   private String checkCvv2;
    @Column(name="PRE_AUTH")
-   protected String preAuth;
+   private String preAuth;
    @Column(name="ENABLE_TRANSMIT")
-   protected String enableTransmit;
+   private String enableTransmit;
    @Column(name="LOG_FILE_NAME")
-   protected String logFileName;
+   private String logFileName;
    @Column(name="LOGGING_LEVEL")
-   protected Long loggingLevel;
+   private Long loggingLevel;
    @Column(name="MAX_LOG_FILE_SIZE")
-   protected Long maxLogFileSize;
+   private Long maxLogFileSize;
    @Column(name="STACK_TRACE_ON")
-   protected String stackTraceOn;
+   private String stackTraceOn;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_GATEWAY_CONFIG_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected PaymentGatewayConfig paymentGatewayConfig = null;
+   private PaymentGatewayConfig paymentGatewayConfig = null;
 
   /**
    * Default constructor.

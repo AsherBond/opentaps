@@ -70,7 +70,7 @@ fieldMapColumns.put("AmazonParty", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,19 +84,19 @@ fieldMapColumns.put("AmazonParty", fields);
    @GeneratedValue(generator="AmazonParty_GEN")
    @Id
    @Column(name="BUYER_EMAIL_ADDRESS")
-   protected String buyerEmailAddress;
+   private String buyerEmailAddress;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @Column(name="EMAIL_CONTACT_MECH_ID")
-   protected String emailContactMechId;
+   private String emailContactMechId;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    private transient Person person = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EMAIL_CONTACT_MECH_ID", insertable=false, updatable=false)
@@ -104,11 +104,11 @@ fieldMapColumns.put("AmazonParty", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected ContactMech contactMech = null;
+   private ContactMech contactMech = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BUYER_EMAIL_ADDRESS")
    
-   protected List<AmazonOrder> amazonOrders = null;
+   private List<AmazonOrder> amazonOrders = null;
 
   /**
    * Default constructor.

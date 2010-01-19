@@ -132,7 +132,7 @@ fieldMapColumns.put("MrpOrderInfo", fields);
     facilityId("facilityId"),
     salesDiscontinuationDate("salesDiscontinuationDate"),
     introductionDate("introductionDate");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -194,7 +194,7 @@ fieldMapColumns.put("MrpOrderInfo", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected OrderType orderType = null;
+   private OrderType orderType = null;
    private transient OrderItem orderItem = null;
 
   /**

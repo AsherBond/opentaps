@@ -75,7 +75,7 @@ fieldMapColumns.put("TechDataCalendarExcDay", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -88,7 +88,7 @@ fieldMapColumns.put("TechDataCalendarExcDay", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.TechDataCalendarExcDayPkBridge.class)
-     protected TechDataCalendarExcDayPk id = new TechDataCalendarExcDayPk();
+     private TechDataCalendarExcDayPk id = new TechDataCalendarExcDayPk();
    
     /**
      * Auto generated Id accessor.
@@ -105,26 +105,26 @@ fieldMapColumns.put("TechDataCalendarExcDay", fields);
          this.id = id;
       }
    @Column(name="EXCEPTION_CAPACITY")
-   protected BigDecimal exceptionCapacity;
+   private BigDecimal exceptionCapacity;
    @Column(name="USED_CAPACITY")
-   protected BigDecimal usedCapacity;
+   private BigDecimal usedCapacity;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CALENDAR_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected TechDataCalendar techDataCalendar = null;
+   private TechDataCalendar techDataCalendar = null;
 
   /**
    * Default constructor.

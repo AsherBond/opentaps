@@ -77,7 +77,7 @@ fieldMapColumns.put("FinAccountAuthSum", fields);
     fromDate("fromDate"),
     thruDate("thruDate"),
     amount("amount");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

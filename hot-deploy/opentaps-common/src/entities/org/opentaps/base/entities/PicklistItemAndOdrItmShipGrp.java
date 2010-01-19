@@ -465,7 +465,7 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
     iiAcctgTagEnumId9("iiAcctgTagEnumId9"),
     iiAcctgTagEnumId10("iiAcctgTagEnumId10"),
     iiParentInventoryItemId("iiParentInventoryItemId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -749,7 +749,7 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Picklist picklist = null;
+   private Picklist picklist = null;
 
   /**
    * Default constructor.

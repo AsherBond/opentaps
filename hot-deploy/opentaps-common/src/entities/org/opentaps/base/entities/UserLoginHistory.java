@@ -78,7 +78,7 @@ fieldMapColumns.put("UserLoginHistory", fields);
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
     partyId("partyId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -91,7 +91,7 @@ fieldMapColumns.put("UserLoginHistory", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.UserLoginHistoryPkBridge.class)
-     protected UserLoginHistoryPk id = new UserLoginHistoryPk();
+     private UserLoginHistoryPk id = new UserLoginHistoryPk();
    
     /**
      * Auto generated Id accessor.
@@ -108,37 +108,37 @@ fieldMapColumns.put("UserLoginHistory", fields);
          this.id = id;
       }
    @Column(name="VISIT_ID")
-   protected String visitId;
+   private String visitId;
    @Column(name="THRU_DATE")
-   protected Timestamp thruDate;
+   private Timestamp thruDate;
    @Column(name="PASSWORD_USED")
-   protected String passwordUsed;
+   private String passwordUsed;
    @Column(name="SUCCESSFUL_LOGIN")
-   protected String successfulLogin;
+   private String successfulLogin;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @Column(name="PARTY_ID")
-   protected String partyId;
+   private String partyId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="USER_LOGIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UserLogin userLogin = null;
+   private UserLogin userLogin = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Party party = null;
+   private Party party = null;
 
   /**
    * Default constructor.

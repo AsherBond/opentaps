@@ -128,7 +128,7 @@ fieldMapColumns.put("AgreementItemAndProductAppl", fields);
     defaultCurrencyUomId("defaultCurrencyUomId"),
     fromPartyClassGroupId("fromPartyClassGroupId"),
     toPartyClassGroupId("toPartyClassGroupId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -188,7 +188,7 @@ fieldMapColumns.put("AgreementItemAndProductAppl", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Agreement agreement = null;
+   private Agreement agreement = null;
 
   /**
    * Default constructor.

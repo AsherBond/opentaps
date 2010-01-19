@@ -82,7 +82,7 @@ fieldMapColumns.put("SurveyQuestion", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -96,68 +96,68 @@ fieldMapColumns.put("SurveyQuestion", fields);
    @GeneratedValue(generator="SurveyQuestion_GEN")
    @Id
    @Column(name="SURVEY_QUESTION_ID")
-   protected String surveyQuestionId;
+   private String surveyQuestionId;
    @Column(name="SURVEY_QUESTION_CATEGORY_ID")
-   protected String surveyQuestionCategoryId;
+   private String surveyQuestionCategoryId;
    @Column(name="SURVEY_QUESTION_TYPE_ID")
-   protected String surveyQuestionTypeId;
+   private String surveyQuestionTypeId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="QUESTION")
-   protected String question;
+   private String question;
    @Column(name="HINT")
-   protected String hint;
+   private String hint;
    @Column(name="ENUM_TYPE_ID")
-   protected String enumTypeId;
+   private String enumTypeId;
    @Column(name="GEO_ID")
-   protected String geoId;
+   private String geoId;
    @Column(name="FORMAT_STRING")
-   protected String formatString;
+   private String formatString;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_QUESTION_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SurveyQuestionType surveyQuestionType = null;
+   private SurveyQuestionType surveyQuestionType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_QUESTION_CATEGORY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected SurveyQuestionCategory surveyQuestionCategory = null;
+   private SurveyQuestionCategory surveyQuestionCategory = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Geo geo = null;
+   private Geo geo = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID")
    
-   protected List<Enumeration> enumerations = null;
+   private List<Enumeration> enumerations = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="surveyQuestion", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SURVEY_QUESTION_ID")
    
-   protected List<SurveyQuestionAppl> surveyQuestionAppls = null;
+   private List<SurveyQuestionAppl> surveyQuestionAppls = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="surveyQuestion", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SURVEY_QUESTION_ID")
    
-   protected List<SurveyQuestionOption> surveyQuestionOptions = null;
+   private List<SurveyQuestionOption> surveyQuestionOptions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="surveyQuestion", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SURVEY_QUESTION_ID")
    
-   protected List<SurveyResponseAnswer> surveyResponseAnswers = null;
+   private List<SurveyResponseAnswer> surveyResponseAnswers = null;
 
   /**
    * Default constructor.

@@ -92,7 +92,7 @@ fieldMapColumns.put("TemporalExpressionChild", fields);
     integer2("integer2"),
     string1("string1"),
     string2("string2");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

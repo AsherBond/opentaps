@@ -78,7 +78,7 @@ fieldMapColumns.put("Enumeration", fields);
     createdTxStamp("createdTxStamp"),
     disabled("disabled"),
     parentEnumId("parentEnumId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -92,629 +92,629 @@ fieldMapColumns.put("Enumeration", fields);
    @GeneratedValue(generator="Enumeration_GEN")
    @Id
    @Column(name="ENUM_ID")
-   protected String enumId;
+   private String enumId;
    @Column(name="ENUM_TYPE_ID")
-   protected String enumTypeId;
+   private String enumTypeId;
    @Column(name="ENUM_CODE")
-   protected String enumCode;
+   private String enumCode;
    @Column(name="SEQUENCE_ID")
-   protected String sequenceId;
+   private String sequenceId;
    @Column(name="DESCRIPTION")
-   protected String description;
+   private String description;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @Column(name="DISABLED")
-   protected String disabled;
+   private String disabled;
    @Column(name="PARENT_ENUM_ID")
-   protected String parentEnumId;
+   private String parentEnumId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected EnumerationType enumerationType = null;
+   private EnumerationType enumerationType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARENT_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Enumeration enumeration = null;
+   private Enumeration enumeration = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BALANCE_TYPE_ENUM_ID")
    
-   protected List<AccountBalanceHistory> balanceTypeAccountBalanceHistorys = null;
+   private List<AccountBalanceHistory> balanceTypeAccountBalanceHistorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID1")
    
-   protected List<AcctgTagEnumType> tag1AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag1AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID2")
    
-   protected List<AcctgTagEnumType> tag2AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag2AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID3")
    
-   protected List<AcctgTagEnumType> tag3AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag3AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID4")
    
-   protected List<AcctgTagEnumType> tag4AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag4AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID5")
    
-   protected List<AcctgTagEnumType> tag5AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag5AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID6")
    
-   protected List<AcctgTagEnumType> tag6AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag6AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID7")
    
-   protected List<AcctgTagEnumType> tag7AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag7AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID8")
    
-   protected List<AcctgTagEnumType> tag8AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag8AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID9")
    
-   protected List<AcctgTagEnumType> tag9AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag9AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_TAG_ENUM_ID10")
    
-   protected List<AcctgTagEnumType> tag10AcctgTagEnumTypes = null;
+   private List<AcctgTagEnumType> tag10AcctgTagEnumTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID1")
    
-   protected List<AcctgTransEntry> tag1AcctgTransEntries = null;
+   private List<AcctgTransEntry> tag1AcctgTransEntries = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID2")
    
-   protected List<AcctgTransEntry> tag2AcctgTransEntries = null;
+   private List<AcctgTransEntry> tag2AcctgTransEntries = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID3")
    
-   protected List<AcctgTransEntry> tag3AcctgTransEntries = null;
+   private List<AcctgTransEntry> tag3AcctgTransEntries = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID4")
    
-   protected List<AcctgTransEntry> tag4AcctgTransEntries = null;
+   private List<AcctgTransEntry> tag4AcctgTransEntries = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID5")
    
-   protected List<AcctgTransEntry> tag5AcctgTransEntries = null;
+   private List<AcctgTransEntry> tag5AcctgTransEntries = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID6")
    
-   protected List<AcctgTransEntry> tag6AcctgTransEntries = null;
+   private List<AcctgTransEntry> tag6AcctgTransEntries = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID7")
    
-   protected List<AcctgTransEntry> tag7AcctgTransEntries = null;
+   private List<AcctgTransEntry> tag7AcctgTransEntries = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID8")
    
-   protected List<AcctgTransEntry> tag8AcctgTransEntries = null;
+   private List<AcctgTransEntry> tag8AcctgTransEntries = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID9")
    
-   protected List<AcctgTransEntry> tag9AcctgTransEntries = null;
+   private List<AcctgTransEntry> tag9AcctgTransEntries = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID10")
    
-   protected List<AcctgTransEntry> tag10AcctgTransEntries = null;
+   private List<AcctgTransEntry> tag10AcctgTransEntries = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="VALUE_ENUM_ID")
    
-   protected List<AgreementTerm> agreementTerms = null;
+   private List<AgreementTerm> agreementTerms = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REASON_ENUM_ID")
    
-   protected List<CommunicationEvent> communicationEvents = null;
+   private List<CommunicationEvent> communicationEvents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRIVILEGE_ENUM_ID")
    
-   protected List<Content> privilegeContents = null;
+   private List<Content> privilegeContents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CLASSIFICATION_ENUM_ID")
    
-   protected List<Content> classificationContents = null;
+   private List<Content> classificationContents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="enumeration", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRIVILEGE_ENUM_ID")
    
-   protected List<ContentPurposeOperation> contentPurposeOperations = null;
+   private List<ContentPurposeOperation> contentPurposeOperations = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SALES_CHANNEL_ENUM_ID")
    
-   protected List<CustRequest> salesChannelCustRequests = null;
+   private List<CustRequest> salesChannelCustRequests = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TRANSFORM_ENUM_ID")
    
-   protected List<DataWarehouseTransform> dataWarehouseTransforms = null;
+   private List<DataWarehouseTransform> dataWarehouseTransforms = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID1")
    
-   protected List<EncumbranceDetail> tag1EncumbranceDetails = null;
+   private List<EncumbranceDetail> tag1EncumbranceDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID2")
    
-   protected List<EncumbranceDetail> tag2EncumbranceDetails = null;
+   private List<EncumbranceDetail> tag2EncumbranceDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID3")
    
-   protected List<EncumbranceDetail> tag3EncumbranceDetails = null;
+   private List<EncumbranceDetail> tag3EncumbranceDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID4")
    
-   protected List<EncumbranceDetail> tag4EncumbranceDetails = null;
+   private List<EncumbranceDetail> tag4EncumbranceDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID5")
    
-   protected List<EncumbranceDetail> tag5EncumbranceDetails = null;
+   private List<EncumbranceDetail> tag5EncumbranceDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID6")
    
-   protected List<EncumbranceDetail> tag6EncumbranceDetails = null;
+   private List<EncumbranceDetail> tag6EncumbranceDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID7")
    
-   protected List<EncumbranceDetail> tag7EncumbranceDetails = null;
+   private List<EncumbranceDetail> tag7EncumbranceDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID8")
    
-   protected List<EncumbranceDetail> tag8EncumbranceDetails = null;
+   private List<EncumbranceDetail> tag8EncumbranceDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID9")
    
-   protected List<EncumbranceDetail> tag9EncumbranceDetails = null;
+   private List<EncumbranceDetail> tag9EncumbranceDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID10")
    
-   protected List<EncumbranceDetail> tag10EncumbranceDetails = null;
+   private List<EncumbranceDetail> tag10EncumbranceDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FEATURE_SOURCE_ENUM_ID")
    
-   protected List<ExampleFeature> exampleFeatures = null;
+   private List<ExampleFeature> exampleFeatures = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RESERVE_ORDER_ENUM_ID")
    
-   protected List<Facility> facilitys = null;
+   private List<Facility> facilitys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="LOCATION_TYPE_ENUM_ID")
    
-   protected List<FacilityLocation> typeFacilityLocations = null;
+   private List<FacilityLocation> typeFacilityLocations = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REASON_ENUM_ID")
    
-   protected List<FinAccountTrans> reasonFinAccountTranses = null;
+   private List<FinAccountTrans> reasonFinAccountTranses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REPLENISH_ENUM_ID")
    
-   protected List<FinAccountType> replenishFinAccountTypes = null;
+   private List<FinAccountType> replenishFinAccountTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CLASS_ENUM_ID")
    
-   protected List<FixedAsset> classFixedAssets = null;
+   private List<FixedAsset> classFixedAssets = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TYPE_ENUM_ID")
    
-   protected List<GiftCardFulfillment> giftCardFulfillments = null;
+   private List<GiftCardFulfillment> giftCardFulfillments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID1")
    
-   protected List<InventoryItem> tag1InventoryItems = null;
+   private List<InventoryItem> tag1InventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID2")
    
-   protected List<InventoryItem> tag2InventoryItems = null;
+   private List<InventoryItem> tag2InventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID3")
    
-   protected List<InventoryItem> tag3InventoryItems = null;
+   private List<InventoryItem> tag3InventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID4")
    
-   protected List<InventoryItem> tag4InventoryItems = null;
+   private List<InventoryItem> tag4InventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID5")
    
-   protected List<InventoryItem> tag5InventoryItems = null;
+   private List<InventoryItem> tag5InventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID6")
    
-   protected List<InventoryItem> tag6InventoryItems = null;
+   private List<InventoryItem> tag6InventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID7")
    
-   protected List<InventoryItem> tag7InventoryItems = null;
+   private List<InventoryItem> tag7InventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID8")
    
-   protected List<InventoryItem> tag8InventoryItems = null;
+   private List<InventoryItem> tag8InventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID9")
    
-   protected List<InventoryItem> tag9InventoryItems = null;
+   private List<InventoryItem> tag9InventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID10")
    
-   protected List<InventoryItem> tag10InventoryItems = null;
+   private List<InventoryItem> tag10InventoryItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REASON_ENUM_ID")
    
-   protected List<InventoryItemDetail> reasonInventoryItemDetails = null;
+   private List<InventoryItemDetail> reasonInventoryItemDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID1")
    
-   protected List<InvoiceItem> tag1InvoiceItems = null;
+   private List<InvoiceItem> tag1InvoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID2")
    
-   protected List<InvoiceItem> tag2InvoiceItems = null;
+   private List<InvoiceItem> tag2InvoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID3")
    
-   protected List<InvoiceItem> tag3InvoiceItems = null;
+   private List<InvoiceItem> tag3InvoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID4")
    
-   protected List<InvoiceItem> tag4InvoiceItems = null;
+   private List<InvoiceItem> tag4InvoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID5")
    
-   protected List<InvoiceItem> tag5InvoiceItems = null;
+   private List<InvoiceItem> tag5InvoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID6")
    
-   protected List<InvoiceItem> tag6InvoiceItems = null;
+   private List<InvoiceItem> tag6InvoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID7")
    
-   protected List<InvoiceItem> tag7InvoiceItems = null;
+   private List<InvoiceItem> tag7InvoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID8")
    
-   protected List<InvoiceItem> tag8InvoiceItems = null;
+   private List<InvoiceItem> tag8InvoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID9")
    
-   protected List<InvoiceItem> tag9InvoiceItems = null;
+   private List<InvoiceItem> tag9InvoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID10")
    
-   protected List<InvoiceItem> tag10InvoiceItems = null;
+   private List<InvoiceItem> tag10InvoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RELATIONSHIP_ENUM_ID")
    
-   protected List<KeywordThesaurus> relationshipKeywordThesauruses = null;
+   private List<KeywordThesaurus> relationshipKeywordThesauruses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TYPE_ENUM_ID")
    
-   protected List<OldValueLinkFulfillment> oldValueLinkFulfillments = null;
+   private List<OldValueLinkFulfillment> oldValueLinkFulfillments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SALES_CHANNEL_ENUM_ID")
    
-   protected List<OrderHeader> salesChannelOrderHeaders = null;
+   private List<OrderHeader> salesChannelOrderHeaders = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID1")
    
-   protected List<OrderItem> tag1OrderItems = null;
+   private List<OrderItem> tag1OrderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID2")
    
-   protected List<OrderItem> tag2OrderItems = null;
+   private List<OrderItem> tag2OrderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID3")
    
-   protected List<OrderItem> tag3OrderItems = null;
+   private List<OrderItem> tag3OrderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID4")
    
-   protected List<OrderItem> tag4OrderItems = null;
+   private List<OrderItem> tag4OrderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID5")
    
-   protected List<OrderItem> tag5OrderItems = null;
+   private List<OrderItem> tag5OrderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID6")
    
-   protected List<OrderItem> tag6OrderItems = null;
+   private List<OrderItem> tag6OrderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID7")
    
-   protected List<OrderItem> tag7OrderItems = null;
+   private List<OrderItem> tag7OrderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID8")
    
-   protected List<OrderItem> tag8OrderItems = null;
+   private List<OrderItem> tag8OrderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID9")
    
-   protected List<OrderItem> tag9OrderItems = null;
+   private List<OrderItem> tag9OrderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID10")
    
-   protected List<OrderItem> tag10OrderItems = null;
+   private List<OrderItem> tag10OrderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CHANGE_TYPE_ENUM_ID")
    
-   protected List<OrderItemChange> orderItemChanges = null;
+   private List<OrderItemChange> orderItemChanges = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REASON_ENUM_ID")
    
-   protected List<OrderItemChange> reasonOrderItemChanges = null;
+   private List<OrderItemChange> reasonOrderItemChanges = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="EMAIL_TYPE")
    
-   protected List<OrderNotification> orderNotifications = null;
+   private List<OrderNotification> orderNotifications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TAX_FORM_ID")
    
-   protected List<PartyAcctgPreference> taxFormPartyAcctgPreferences = null;
+   private List<PartyAcctgPreference> taxFormPartyAcctgPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="COGS_METHOD_ID")
    
-   protected List<PartyAcctgPreference> cogsPartyAcctgPreferences = null;
+   private List<PartyAcctgPreference> cogsPartyAcctgPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_SEQUENCE_ENUM_ID")
    
-   protected List<PartyAcctgPreference> invoiceSequencePartyAcctgPreferences = null;
+   private List<PartyAcctgPreference> invoiceSequencePartyAcctgPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="QUOTE_SEQUENCE_ENUM_ID")
    
-   protected List<PartyAcctgPreference> quoteSequencePartyAcctgPreferences = null;
+   private List<PartyAcctgPreference> quoteSequencePartyAcctgPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_SEQUENCE_ENUM_ID")
    
-   protected List<PartyAcctgPreference> orderSequencePartyAcctgPreferences = null;
+   private List<PartyAcctgPreference> orderSequencePartyAcctgPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="COSTING_METHOD_ID")
    
-   protected List<PartyAcctgPreference> costingMethodPartyAcctgPreferences = null;
+   private List<PartyAcctgPreference> costingMethodPartyAcctgPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_PURPOSE_ENUM_ID")
    
-   protected List<PartyContent> partyContents = null;
+   private List<PartyContent> partyContents = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INDUSTRY_ENUM_ID")
    
-   protected List<PartySupplementalData> industryPartySupplementalDatas = null;
+   private List<PartySupplementalData> industryPartySupplementalDatas = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OWNERSHIP_ENUM_ID")
    
-   protected List<PartySupplementalData> ownershipPartySupplementalDatas = null;
+   private List<PartySupplementalData> ownershipPartySupplementalDatas = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID1")
    
-   protected List<Payment> tag1Payments = null;
+   private List<Payment> tag1Payments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID2")
    
-   protected List<Payment> tag2Payments = null;
+   private List<Payment> tag2Payments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID3")
    
-   protected List<Payment> tag3Payments = null;
+   private List<Payment> tag3Payments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID4")
    
-   protected List<Payment> tag4Payments = null;
+   private List<Payment> tag4Payments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID5")
    
-   protected List<Payment> tag5Payments = null;
+   private List<Payment> tag5Payments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID6")
    
-   protected List<Payment> tag6Payments = null;
+   private List<Payment> tag6Payments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID7")
    
-   protected List<Payment> tag7Payments = null;
+   private List<Payment> tag7Payments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID8")
    
-   protected List<Payment> tag8Payments = null;
+   private List<Payment> tag8Payments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID9")
    
-   protected List<Payment> tag9Payments = null;
+   private List<Payment> tag9Payments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID10")
    
-   protected List<Payment> tag10Payments = null;
+   private List<Payment> tag10Payments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID1")
    
-   protected List<PaymentApplication> tag1PaymentApplications = null;
+   private List<PaymentApplication> tag1PaymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID2")
    
-   protected List<PaymentApplication> tag2PaymentApplications = null;
+   private List<PaymentApplication> tag2PaymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID3")
    
-   protected List<PaymentApplication> tag3PaymentApplications = null;
+   private List<PaymentApplication> tag3PaymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID4")
    
-   protected List<PaymentApplication> tag4PaymentApplications = null;
+   private List<PaymentApplication> tag4PaymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID5")
    
-   protected List<PaymentApplication> tag5PaymentApplications = null;
+   private List<PaymentApplication> tag5PaymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID6")
    
-   protected List<PaymentApplication> tag6PaymentApplications = null;
+   private List<PaymentApplication> tag6PaymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID7")
    
-   protected List<PaymentApplication> tag7PaymentApplications = null;
+   private List<PaymentApplication> tag7PaymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID8")
    
-   protected List<PaymentApplication> tag8PaymentApplications = null;
+   private List<PaymentApplication> tag8PaymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID9")
    
-   protected List<PaymentApplication> tag9PaymentApplications = null;
+   private List<PaymentApplication> tag9PaymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID10")
    
-   protected List<PaymentApplication> tag10PaymentApplications = null;
+   private List<PaymentApplication> tag10PaymentApplications = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_SERVICE_TYPE_ENUM_ID")
    
-   protected List<PaymentGatewayResponse> serviceTypePaymentGatewayResponses = null;
+   private List<PaymentGatewayResponse> serviceTypePaymentGatewayResponses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TRANS_CODE_ENUM_ID")
    
-   protected List<PaymentGatewayResponse> tranCodePaymentGatewayResponses = null;
+   private List<PaymentGatewayResponse> tranCodePaymentGatewayResponses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="EMPLOYMENT_STATUS_ENUM_ID")
    
-   protected List<Person> employmentStatuspeople = null;
+   private List<Person> employmentStatuspeople = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RESIDENCE_STATUS_ENUM_ID")
    
-   protected List<Person> residenceStatuspeople = null;
+   private List<Person> residenceStatuspeople = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REASON_ENUM_ID")
    
-   protected List<PosTerminalInternTx> posTerminalInternTxes = null;
+   private List<PosTerminalInternTx> posTerminalInternTxes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="VIRTUAL_VARIANT_METHOD_ENUM")
    
-   protected List<Product> vitualVariantMethodProducts = null;
+   private List<Product> vitualVariantMethodProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RATING_TYPE_ENUM")
    
-   protected List<Product> ratingProducts = null;
+   private List<Product> ratingProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REQUIREMENT_METHOD_ENUM_ID")
    
-   protected List<Product> requirementMethodProducts = null;
+   private List<Product> requirementMethodProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="LINK_TYPE_ENUM_ID")
    
-   protected List<ProductCategoryLink> linkTypeProductCategoryLinks = null;
+   private List<ProductCategoryLink> linkTypeProductCategoryLinks = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REPLENISH_METHOD_ENUM_ID")
    
-   protected List<ProductFacility> resplenishMethodProductFacilitys = null;
+   private List<ProductFacility> resplenishMethodProductFacilitys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_GEO_ENUM_ID")
    
-   protected List<ProductGeo> productGeos = null;
+   private List<ProductGeo> productGeos = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INPUT_PARAM_ENUM_ID")
    
-   protected List<ProductPriceCond> inputParamProductPriceConds = null;
+   private List<ProductPriceCond> inputParamProductPriceConds = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OPERATOR_ENUM_ID")
    
-   protected List<ProductPriceCond> operatorProductPriceConds = null;
+   private List<ProductPriceCond> operatorProductPriceConds = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PROMO_ACTION_ENUM_ID")
    
-   protected List<ProductPromoAction> actionProductPromoActions = null;
+   private List<ProductPromoAction> actionProductPromoActions = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PROMO_APPL_ENUM_ID")
    
-   protected List<ProductPromoCategory> applProductPromoCategorys = null;
+   private List<ProductPromoCategory> applProductPromoCategorys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INPUT_PARAM_ENUM_ID")
    
-   protected List<ProductPromoCond> inputParamProductPromoConds = null;
+   private List<ProductPromoCond> inputParamProductPromoConds = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OPERATOR_ENUM_ID")
    
-   protected List<ProductPromoCond> operatorProductPromoConds = null;
+   private List<ProductPromoCond> operatorProductPromoConds = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PROMO_APPL_ENUM_ID")
    
-   protected List<ProductPromoProduct> applProductPromoProducts = null;
+   private List<ProductPromoProduct> applProductPromoProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RESERVE_ORDER_ENUM_ID")
    
-   protected List<ProductStore> reserveOrderProductStores = null;
+   private List<ProductStore> reserveOrderProductStores = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REQUIREMENT_METHOD_ENUM_ID")
    
-   protected List<ProductStore> requirementMethodProductStores = null;
+   private List<ProductStore> requirementMethodProductStores = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_SALES_CHANNEL_ENUM_ID")
    
-   protected List<ProductStore> defaultSalesChannelProductStores = null;
+   private List<ProductStore> defaultSalesChannelProductStores = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="enumeration", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EMAIL_TYPE")
    
-   protected List<ProductStoreEmailSetting> productStoreEmailSettings = null;
+   private List<ProductStoreEmailSetting> productStoreEmailSettings = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REPLENISH_METHOD_ENUM_ID")
    
-   protected List<ProductStoreFinActSetting> replenishMethodProductStoreFinActSettings = null;
+   private List<ProductStoreFinActSetting> replenishMethodProductStoreFinActSettings = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TARGET_TYPE_ENUM_ID")
    
-   protected List<ProductStoreKeywordOvrd> productStoreKeywordOvrds = null;
+   private List<ProductStoreKeywordOvrd> productStoreKeywordOvrds = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="enumeration", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PAYMENT_SERVICE_TYPE_ENUM_ID")
    
-   protected List<ProductStorePaymentSetting> productStorePaymentSettings = null;
+   private List<ProductStorePaymentSetting> productStorePaymentSettings = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="creditCardEnumeration", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CREDIT_CARD_ENUM_ID")
    
-   protected List<ProductStoreVendorPayment> creditCardProductStoreVendorPayments = null;
+   private List<ProductStoreVendorPayment> creditCardProductStoreVendorPayments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SALES_CHANNEL_ENUM_ID")
    
-   protected List<Quote> salesChannelQuotes = null;
+   private List<Quote> salesChannelQuotes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TYPE_ENUM_ID")
    
-   protected List<SalesOpportunity> typeSalesOpportunitys = null;
+   private List<SalesOpportunity> typeSalesOpportunitys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ENUM_ID")
    
-   protected List<TestEntity> testEntitys = null;
+   private List<TestEntity> testEntitys = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SOURCE_ENUM_ID")
    
-   protected List<TrackingCodeVisit> trackingCodeVisits = null;
+   private List<TrackingCodeVisit> trackingCodeVisits = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PURPOSE_ENUM_ID")
    
-   protected List<UomConversionDated> purposeUomConversionDateds = null;
+   private List<UomConversionDated> purposeUomConversionDateds = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="VIEW_PREF_ENUM_ID")
    
-   protected List<ViewPreference> viewPreferences = null;
+   private List<ViewPreference> viewPreferences = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="enumeration", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="RESOURCE_TYPE_ENUM_ID")
    
-   protected List<VisualThemeResource> visualThemeResources = null;
+   private List<VisualThemeResource> visualThemeResources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SCOPE_ENUM_ID")
    
-   protected List<WorkEffort> scopeWorkEfforts = null;
+   private List<WorkEffort> scopeWorkEfforts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="EXPECTATION_ENUM_ID")
    
-   protected List<WorkEffortPartyAssignment> expectationWorkEffortPartyAssignments = null;
+   private List<WorkEffortPartyAssignment> expectationWorkEffortPartyAssignments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DELEGATE_REASON_ENUM_ID")
    
-   protected List<WorkEffortPartyAssignment> delegateReasonWorkEffortPartyAssignments = null;
+   private List<WorkEffortPartyAssignment> delegateReasonWorkEffortPartyAssignments = null;
 
   /**
    * Default constructor.

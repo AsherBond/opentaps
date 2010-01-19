@@ -156,7 +156,7 @@ fieldMapColumns.put("OrderTaskList", fields);
     thruDate("thruDate"),
     statusId("statusId"),
     statusDateTime("statusDateTime");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

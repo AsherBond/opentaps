@@ -217,7 +217,7 @@ fieldMapColumns.put("PartyRoleNameDetail", fields);
     isIncorporated("isIncorporated"),
     federalTaxId("federalTaxId"),
     requires1099("requires1099");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

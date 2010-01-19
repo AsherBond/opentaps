@@ -80,7 +80,7 @@ fieldMapColumns.put("ViewHistory", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -94,29 +94,29 @@ fieldMapColumns.put("ViewHistory", fields);
    @GeneratedValue(generator="ViewHistory_GEN")
    @Id
    @Column(name="VIEW_HISTORY_ID")
-   protected String viewHistoryId;
+   private String viewHistoryId;
    @Column(name="URI")
-   protected String uri;
+   private String uri;
    @Column(name="USER_LOGIN_ID")
-   protected String userLoginId;
+   private String userLoginId;
    @Column(name="APPLICATION_NAME")
-   protected String applicationName;
+   private String applicationName;
    @Column(name="WEB_APP_NAME")
-   protected String webAppName;
+   private String webAppName;
    @Column(name="CONTEXT_INFO")
-   protected String contextInfo;
+   private String contextInfo;
    @Column(name="EXPIRE_AT")
-   protected Timestamp expireAt;
+   private Timestamp expireAt;
    @Column(name="DIGEST")
-   protected String digest;
+   private String digest;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
 
   /**
    * Default constructor.

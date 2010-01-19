@@ -119,7 +119,7 @@ fieldMapColumns.put("GlAccountTransEntryFact", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -133,74 +133,74 @@ fieldMapColumns.put("GlAccountTransEntryFact", fields);
    @GeneratedValue(generator="GlAccountTransEntryFact_GEN")
    @Id
    @Column(name="GL_ACCOUNT_TRANS_ENTRY_FACT_ID")
-   protected String glAccountTransEntryFactId;
+   private String glAccountTransEntryFactId;
    @Column(name="TRANSACTION_DATE")
-   protected Timestamp transactionDate;
+   private Timestamp transactionDate;
    @Column(name="ORGANIZATION_PARTY_ID")
-   protected String organizationPartyId;
+   private String organizationPartyId;
    @Column(name="GL_ACCOUNT_ID")
-   protected String glAccountId;
+   private String glAccountId;
    @Column(name="ACCTG_TRANS_ID")
-   protected String acctgTransId;
+   private String acctgTransId;
    @Column(name="ACCTG_TRANS_ENTRY_SEQ_ID")
-   protected String acctgTransEntrySeqId;
+   private String acctgTransEntrySeqId;
    @Column(name="ORDER_ID")
-   protected String orderId;
+   private String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
-   protected String orderItemSeqId;
+   private String orderItemSeqId;
    @Column(name="BUDGET_DEBIT_AMOUNT")
-   protected BigDecimal budgetDebitAmount;
+   private BigDecimal budgetDebitAmount;
    @Column(name="BUDGET_CREDIT_AMOUNT")
-   protected BigDecimal budgetCreditAmount;
+   private BigDecimal budgetCreditAmount;
    @Column(name="ACTUAL_DEBIT_AMOUNT")
-   protected BigDecimal actualDebitAmount;
+   private BigDecimal actualDebitAmount;
    @Column(name="ACTUAL_CREDIT_AMOUNT")
-   protected BigDecimal actualCreditAmount;
+   private BigDecimal actualCreditAmount;
    @Column(name="ENCUMBERED_DEBIT_AMOUNT")
-   protected BigDecimal encumberedDebitAmount;
+   private BigDecimal encumberedDebitAmount;
    @Column(name="ENCUMBERED_CREDIT_AMOUNT")
-   protected BigDecimal encumberedCreditAmount;
+   private BigDecimal encumberedCreditAmount;
    @Column(name="BUDGET_NET_AMOUNT")
-   protected BigDecimal budgetNetAmount;
+   private BigDecimal budgetNetAmount;
    @Column(name="ACTUAL_NET_AMOUNT")
-   protected BigDecimal actualNetAmount;
+   private BigDecimal actualNetAmount;
    @Column(name="ENCUMBERED_NET_AMOUNT")
-   protected BigDecimal encumberedNetAmount;
+   private BigDecimal encumberedNetAmount;
    @Column(name="ACCTG_TAG_ENUM_ID1")
-   protected String acctgTagEnumId1;
+   private String acctgTagEnumId1;
    @Column(name="ACCTG_TAG_ENUM_ID2")
-   protected String acctgTagEnumId2;
+   private String acctgTagEnumId2;
    @Column(name="ACCTG_TAG_ENUM_ID3")
-   protected String acctgTagEnumId3;
+   private String acctgTagEnumId3;
    @Column(name="ACCTG_TAG_ENUM_ID4")
-   protected String acctgTagEnumId4;
+   private String acctgTagEnumId4;
    @Column(name="ACCTG_TAG_ENUM_ID5")
-   protected String acctgTagEnumId5;
+   private String acctgTagEnumId5;
    @Column(name="ACCTG_TAG_ENUM_ID6")
-   protected String acctgTagEnumId6;
+   private String acctgTagEnumId6;
    @Column(name="ACCTG_TAG_ENUM_ID7")
-   protected String acctgTagEnumId7;
+   private String acctgTagEnumId7;
    @Column(name="ACCTG_TAG_ENUM_ID8")
-   protected String acctgTagEnumId8;
+   private String acctgTagEnumId8;
    @Column(name="ACCTG_TAG_ENUM_ID9")
-   protected String acctgTagEnumId9;
+   private String acctgTagEnumId9;
    @Column(name="ACCTG_TAG_ENUM_ID10")
-   protected String acctgTagEnumId10;
+   private String acctgTagEnumId10;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected GlAccount glAccount = null;
+   private GlAccount glAccount = null;
    private transient AcctgTransEntry acctgTransEntry = null;
 
   /**

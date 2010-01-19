@@ -68,7 +68,7 @@ fieldMapColumns.put("UspsBPMZoneMap", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -82,24 +82,24 @@ fieldMapColumns.put("UspsBPMZoneMap", fields);
    @GeneratedValue(generator="UspsBPMZoneMap_GEN")
    @Id
    @Column(name="ZIP3")
-   protected String zip3;
+   private String zip3;
    @Column(name="USPS_B_P_M_RATE_ZONE")
-   protected String uspsBPMRateZone;
+   private String uspsBPMRateZone;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="USPS_B_P_M_RATE_ZONE", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected UspsBPMRatesByZone uspsBPMRatesByZone = null;
+   private UspsBPMRatesByZone uspsBPMRatesByZone = null;
 
   /**
    * Default constructor.

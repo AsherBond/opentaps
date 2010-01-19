@@ -79,7 +79,7 @@ fieldMapColumns.put("TestingNodeAndMember", fields);
     testingId("testingId"),
     fromDate("fromDate"),
     thruDate("thruDate");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -108,14 +108,14 @@ fieldMapColumns.put("TestingNodeAndMember", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected TestingNode testingNode = null;
+   private TestingNode testingNode = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="TESTING_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected Testing testing = null;
+   private Testing testing = null;
 
   /**
    * Default constructor.

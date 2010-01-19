@@ -70,7 +70,7 @@ fieldMapColumns.put("BrowserType", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -84,23 +84,23 @@ fieldMapColumns.put("BrowserType", fields);
    @GeneratedValue(generator="BrowserType_GEN")
    @Id
    @Column(name="BROWSER_TYPE_ID")
-   protected String browserTypeId;
+   private String browserTypeId;
    @Column(name="BROWSER_NAME")
-   protected String browserName;
+   private String browserName;
    @Column(name="BROWSER_VERSION")
-   protected String browserVersion;
+   private String browserVersion;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BROWSER_TYPE_ID")
    
-   protected List<UserAgent> userAgents = null;
+   private List<UserAgent> userAgents = null;
 
   /**
    * Default constructor.

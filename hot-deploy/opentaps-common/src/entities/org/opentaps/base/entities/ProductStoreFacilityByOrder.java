@@ -89,7 +89,7 @@ fieldMapColumns.put("ProductStoreFacilityByOrder", fields);
     storeName("storeName"),
     facilityName("facilityName"),
     facilityTypeId("facilityTypeId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }

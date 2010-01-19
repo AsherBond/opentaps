@@ -78,7 +78,7 @@ fieldMapColumns.put("PartyMergeCandidates", fields);
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -91,7 +91,7 @@ fieldMapColumns.put("PartyMergeCandidates", fields);
    @EmbeddedId
 
    @FieldBridge(impl = org.opentaps.base.entities.bridge.PartyMergeCandidatesPkBridge.class)
-     protected PartyMergeCandidatesPk id = new PartyMergeCandidatesPk();
+     private PartyMergeCandidatesPk id = new PartyMergeCandidatesPk();
    
     /**
      * Auto generated Id accessor.
@@ -108,23 +108,23 @@ fieldMapColumns.put("PartyMergeCandidates", fields);
          this.id = id;
       }
    @Column(name="PROCESSED_TIMESTAMP")
-   protected Timestamp processedTimestamp;
+   private Timestamp processedTimestamp;
    @Column(name="DO_NOT_MERGE")
-   protected String doNotMerge;
+   private String doNotMerge;
    @Column(name="HAS_ORDER_ROLES")
-   protected String hasOrderRoles;
+   private String hasOrderRoles;
    @Column(name="MERGE_RATIONALE")
-   protected String mergeRationale;
+   private String mergeRationale;
    @Column(name="COMMENTS")
-   protected String comments;
+   private String comments;
    @Column(name="LAST_UPDATED_STAMP")
-   protected Timestamp lastUpdatedStamp;
+   private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
-   protected Timestamp lastUpdatedTxStamp;
+   private Timestamp lastUpdatedTxStamp;
    @Column(name="CREATED_STAMP")
-   protected Timestamp createdStamp;
+   private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
-   protected Timestamp createdTxStamp;
+   private Timestamp createdTxStamp;
 
   /**
    * Default constructor.

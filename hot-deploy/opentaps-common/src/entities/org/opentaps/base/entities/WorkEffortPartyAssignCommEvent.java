@@ -333,7 +333,7 @@ fieldMapColumns.put("WorkEffortPartyAssignCommEvent", fields);
     ccString("ccString"),
     bccString("bccString"),
     messageId("messageId");
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -529,9 +529,9 @@ fieldMapColumns.put("WorkEffortPartyAssignCommEvent", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   protected WorkEffort workEffort = null;
-   protected transient List<CustRequestWorkEffort> custRequestWorkEfforts = null;
-   protected transient List<OrderHeaderWorkEffort> orderHeaderWorkEfforts = null;
+   private WorkEffort workEffort = null;
+   private transient List<CustRequestWorkEffort> custRequestWorkEfforts = null;
+   private transient List<OrderHeaderWorkEffort> orderHeaderWorkEfforts = null;
 
   /**
    * Default constructor.
