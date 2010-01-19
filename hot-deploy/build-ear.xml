@@ -34,7 +34,7 @@
       <fileset dir="${hot-deploy.dir}/opentaps-common/lib/">
         <include name="**/*.jar"/>
         <exclude name="**/poi-3.0.1.jar"/>
-        <exclude name="**/spring-core.jar"/>
+        <exclude name="**/spring-core*.jar"/>
       </fileset>
 
       <!-- crmsfa -->
@@ -51,7 +51,7 @@
       <fileset dir="${hot-deploy.dir}/warehouse/build/lib/" includes="*.jar"/>
 
       <!-- dataimport -->
-      <fileset dir="${hot-deploy.dir}/dataimport/build/lib/" includes="*.jar"/>
+      <!-- <fileset dir="${hot-deploy.dir}/dataimport/build/lib/" includes="*.jar"/> -->
 
       <!-- livecatalog -->
       <!--<fileset dir="${hot-deploy.dir}/livecatalog/build/lib/" includes="*.jar"/>-->
@@ -103,13 +103,13 @@
       <fileset dir="${hot-deploy.dir}/warehouse/config"/>
     </jar>
 
-    <jar destfile="${ear.lib.dir}/hot-deploy.dataimport.script.jar">
-      <fileset dir="${hot-deploy.dir}/dataimport/script"/>
-    </jar>
+    <!-- <jar destfile="${ear.lib.dir}/hot-deploy.dataimport.script.jar"> -->
+    <!--   <fileset dir="${hot-deploy.dir}/dataimport/script"/> -->
+    <!-- </jar> -->
 
-    <jar destfile="${ear.lib.dir}/hot-deploy.dataimport.config.jar">
-      <fileset dir="${hot-deploy.dir}/dataimport/config"/>
-    </jar>
+    <!-- <jar destfile="${ear.lib.dir}/hot-deploy.dataimport.config.jar"> -->
+    <!--   <fileset dir="${hot-deploy.dir}/dataimport/config"/> -->
+    <!-- </jar> -->
 
     <!--<jar destfile="${ear.lib.dir}/hot-deploy.livecatalog.config.jar">
         <fileset dir="${hot-deploy.dir}/livecatalog/config"/>
@@ -203,11 +203,11 @@
 
     <!-- dataimport -->
 
-    <mkdir dir="${ear.dir}/dataimport.war"/>
+    <!-- <mkdir dir="${ear.dir}/dataimport.war"/> -->
 
-    <copy todir="${ear.dir}/dataimport.war">
-      <fileset dir="${hot-deploy.dir}/dataimport/webapp/dataimport"/>
-    </copy>
+    <!-- <copy todir="${ear.dir}/dataimport.war"> -->
+    <!--   <fileset dir="${hot-deploy.dir}/dataimport/webapp/dataimport"/> -->
+    <!-- </copy> -->
 
     <!-- livecatalog -->
 
