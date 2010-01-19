@@ -90,7 +90,7 @@ fieldMapColumns.put("${name}", fields);
   <#list fields as field>
     ${field}("${field}")<#if field_has_next>,<#else>;</#if>
   </#list>
-    protected final String fieldName;
+    private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
     public String getName() { return fieldName; }
@@ -106,7 +106,7 @@ fieldMapColumns.put("${name}", fields);
 <#if isNeedIndex>   @DocumentId</#if>
    <#-- define field bridge for IdClass -->
    @FieldBridge(impl = org.opentaps.base.entities.bridge.${name}PkBridge.class)
-     protected ${name}Pk id = new ${name}Pk();
+     private ${name}Pk id = new ${name}Pk();
    
     /**
      * Auto generated Id accessor.
@@ -157,7 +157,7 @@ fieldMapColumns.put("${name}", fields);
 </#if>
    @Column(name="${columnNames.get(field)}")
 </#if> 
-   protected ${fieldTypes.get(field)} ${field};
+   private ${fieldTypes.get(field)} ${field};
   </#if>
   </#list>
   <#-- fields related to relations, used to cache -->
@@ -181,7 +181,7 @@ fieldMapColumns.put("${name}", fields);
      <#-- if not view entity and not one-to-one relation, then add IndexedEmbedded annotation -->
    <#if isNeedIndex && needIndexEntities.contains(relation.entityName)>@IndexedEmbedded(depth = 2)</#if>
     </#if>
-   protected <#if "many" == relation.type><#if (primaryKeys.size() > 1) || (isView && !fieldMapAlias.containsKey(relation.fieldName))>transient </#if>List<${relation.entityName}><#else>${relation.entityName}</#if> ${relation.fieldName} = null;
+   private <#if "many" == relation.type><#if (primaryKeys.size() > 1) || (isView && !fieldMapAlias.containsKey(relation.fieldName))>transient </#if>List<${relation.entityName}><#else>${relation.entityName}</#if> ${relation.fieldName} = null;
     <#else>
     <#-- multi assocation, cannot map manyToOne and oneToMany -->
    private transient <#if "many" == relation.type>List<${relation.entityName}><#else>${relation.entityName}</#if> ${relation.fieldName} = null;
