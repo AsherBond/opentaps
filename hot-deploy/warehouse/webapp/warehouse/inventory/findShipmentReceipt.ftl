@@ -21,7 +21,7 @@
   <table>
     <@inputLookupRow title=uiLabelMap.OrderPurchaseOrder name="orderId" lookup="LookupPurchaseOrder" form="findShipmentReceipt"/>
     <@inputAutoCompleteProductRow name="productId" title=uiLabelMap.ProductProductId />
-    <@inputIndicatorRow name="showAllocatedReceiptsOnly" title=uiLabelMap.WarehouseShowReceiptsWithAllocatedOrdersOnly required=true default="Y" titleClass="tableheadtext"/>
+    <@inputIndicatorRow name="showAllocatedReceiptsOnly" title=uiLabelMap.WarehouseShowReceiptsWithAllocatedOrdersOnly required=true default="N" titleClass="tableheadtext"/>
     <@inputButtonRow title=uiLabelMap.CommonFind />
   </table>
 </form>
