@@ -122,6 +122,7 @@ under the License.
         <key-map field-name="orderId"/>
       </view-link>
     </view-entity>
+    <!-- Redefined in Opentaps
     <view-entity entity-name="OrderHeaderAndRoles"
             package-name="org.ofbiz.order.order"
             never-cache="true"
@@ -206,6 +207,7 @@ under the License.
         <key-map field-name="orderId"/>
       </relation>
     </view-entity>
+    -->
     <view-entity entity-name="OrderHeaderItemAndInv"
             package-name="org.ofbiz.order.order"
             never-cache="true"
@@ -1367,6 +1369,7 @@ under the License.
         <key-map field-name="currentStatusId" rel-field-name="statusId"/>
       </relation>
     </view-entity>
+    <!-- Redefined in Opentaps
     <view-entity entity-name="RequirementAndRole"
             package-name="org.ofbiz.order.request"
             title="Requirement And Role View Entity">
@@ -1417,6 +1420,7 @@ under the License.
         <key-map field-name="roleTypeId"/>
       </relation>
     </view-entity>
+    -->
     <view-entity entity-name="RequirementCustRequestView"
             package-name="org.ofbiz.order.request"
             title="Requirement Customer Request View Entity">

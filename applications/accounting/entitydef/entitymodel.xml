@@ -1675,6 +1675,7 @@ under the License.
         <key-map field-name="settlementTermId"/>
       </relation>
     </entity>
+    <!-- Redefined in Opentaps
     <view-entity entity-name="AcctgTransAndEntries"
             package-name="org.ofbiz.accounting.ledger"
             title="View of AcctgTrans and Entries, for easier lookup and calculation">
@@ -1744,6 +1745,7 @@ under the License.
         <key-map field-name="glJournalId"/>
       </relation>
     </view-entity>
+    -->
     <view-entity entity-name="AcctgTransEntryProdSums"
             package-name="org.ofbiz.accounting.ledger"
             title="Sum of AcctgTransEntry entity amounts, grouped by glAccountId, productId, debitCreditFlag">
@@ -2195,6 +2197,7 @@ under the License.
             <key-map field-name="errorGlJournalId" rel-field-name="glJournalId"/>
         </relation>
     </entity>
+    <!-- Redefined in Opentaps
     <entity entity-name="ProductAverageCost"
             package-name="org.ofbiz.accounting.ledger"
             title="Running tally of average cost">
@@ -2224,6 +2227,7 @@ under the License.
            <key-map field-name="facilityId"/>
        </relation>
     </entity>
+    -->
     <entity entity-name="ProductAverageCostType"
             package-name="org.ofbiz.accounting.ledger"
             title="Product average cost type" default-resource-name="AccountingEntityLabels">
@@ -2656,6 +2660,7 @@ under the License.
         <key-map field-name="paymentId" rel-field-name="toPaymentId"/>
       </relation>
     </view-entity>
+    <!-- Redefined in Opentaps
     <view-entity entity-name="PaymentAndApplication"
             package-name="org.ofbiz.accounting.payment"
             never-cache="true"
@@ -2663,7 +2668,7 @@ under the License.
       <member-entity entity-alias="PY" entity-name="Payment"/>
       <member-entity entity-alias="PA" entity-name="PaymentApplication"/>
       <alias-all entity-alias="PY">
-        <exclude field="overrideGlAccountId"/><!-- already existing in PaymentApplication -->
+        <exclude field="overrideGlAccountId"/>
       </alias-all>
       <alias-all entity-alias="PA"/>
       <view-link entity-alias="PY" rel-entity-alias="PA">
@@ -2691,6 +2696,7 @@ under the License.
         <key-map field-name="taxAuthGeoId" rel-field-name="geoId"/>
       </relation>
     </view-entity>
+    -->
     <entity entity-name="PaymentApplication"
             package-name="org.ofbiz.accounting.payment"
             title="Payment Application Entity">
