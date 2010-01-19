@@ -1,0 +1,2 @@
+This folder used to temporarily store files that are larger than the configured size threshold.
+Please don't remove this folder, else might get the exception when upload the file large than 10KB.
