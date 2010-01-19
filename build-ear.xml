@@ -1,141 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
- * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the Honest Public License.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * Honest Public License for more details.
- * 
- * You should have received a copy of the Honest Public License
- * along with this program; if not, write to Funambol,
- * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+* Copyright (c) 2006 - 2010 Open Source Strategies, Inc.
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the Honest Public License.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* Honest Public License for more details.
+*
+* You should have received a copy of the Honest Public License
+* along with this program; if not, write to Funambol,
+* 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
 -->
 
 <project name="opentaps deploymemt" default="package-jboss" basedir=".">
 
-    <!-- ================================================================== -->
-    <!-- set the global properties                                          -->
-    <!-- ================================================================== -->
+  <!-- ================================================================== -->
+  <!-- set the global properties                                          -->
+  <!-- ================================================================== -->
 
-    <property file="build-ear.properties"/>
-	
-    <property name="app.name" value="opentaps"/>
-	
-    <property name="java.lib.dir" value="${JAVA_HOME}/lib"/>
-	
-    <property name="jboss.deploy.dir" value="${JBOSS_HOME}/server/default/deploy"/>
+  <property file="build-ear.properties"/>
+  <property name="app.name" value="opentaps"/>
+  <property name="java.lib.dir" value="${JAVA_HOME}/lib"/>
+  <property name="jboss.deploy.dir" value="${JBOSS_HOME}/server/default/deploy"/>
+  <property name="build.dir" value="${basedir}/build"/>
+  <property name="ear.dir" value="${build.dir}/${app.name}"/>
+  <property name="ear.lib.dir" value="${ear.dir}/lib"/>
 
-    <property name="build.dir" value="${basedir}/build"/>
+  <!-- ================================================================== -->
+  <!-- clean the build directory                                          -->
+  <!-- ================================================================== -->
 
-    <property name="ear.dir" value="${build.dir}/${app.name}"/>
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+    <echo message="[clean] ========== Done Cleaning =========="/>
+  </target>
 
-    <property name="ear.lib.dir" value="${ear.dir}/lib"/>
-	
-    <!-- ================================================================== -->
-    <!-- clean the build directory                                          -->
-    <!-- ================================================================== -->
+  <!-- ================================================================== -->
+  <!-- create the build directory                                         -->
+  <!-- ================================================================== -->
 
-    <target name="clean">
-        <delete dir="${build.dir}"/>
-        <echo message="[clean] ========== Done Cleaning =========="/>
-    </target>
+  <target name="init">
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${ear.dir}"/>
+    <mkdir dir="${ear.lib.dir}"/>
+  </target>
 
-    <!-- ================================================================== -->
-    <!-- create the build directory                                         -->
-    <!-- ================================================================== -->
+  <!-- ================================================================== -->
+  <!-- copy the JDK jars into the ear lib directory                 -->
+  <!-- ================================================================== -->
 
-    <target name="init">
-        <mkdir dir="${build.dir}"/>
-        <mkdir dir="${ear.dir}"/>
-        <mkdir dir="${ear.lib.dir}"/>
-    </target>
-	
-    <!-- ================================================================== -->
-    <!-- copy the JDK jars into the ear lib directory                 -->
-    <!-- ================================================================== -->
+  <target name="copy-jdk-libs">
+    <copy todir="${ear.lib.dir}" flatten="true" overwrite="true">
+      <fileset dir="${java.lib.dir}" includes="tools.jar"/>
+    </copy>
+  </target>
 
-    <target name="copy-jdk-libs">
-        <copy todir="${ear.lib.dir}" flatten="true" overwrite="true">
-            <fileset dir="${java.lib.dir}" includes="tools.jar"/>
-        </copy>
-    </target>
+  <!-- ================================================================== -->
+  <!-- create the ear                                                     -->
+  <!-- ================================================================== -->
 
-    <!-- ================================================================== -->
-    <!-- create the ear                                                     -->
-    <!-- ================================================================== -->
+  <target name="make-ear">
+    <ear basedir="${ear.dir}" destfile="${build.dir}/${app.name}.ear" appxml="${ear.dir}/META-INF/application.xml"/>
+  </target>
 
-    <target name="make-ear">
-        <ear basedir="${ear.dir}" destfile="${build.dir}/${app.name}.ear" appxml="${ear.dir}/META-INF/application.xml"/>
-    </target>
+  <!-- ================================================================== -->
+  <!-- package opentaps applications                                       -->
+  <!-- ================================================================== -->
 
-    <!-- ================================================================== -->
-    <!-- package opentaps applications                                       -->
-    <!-- ================================================================== -->
+  <target name="package-jboss" depends="init">
 
-    <target name="package-jboss" depends="init">
+    <echo message="[package-jboss] =========== start ==========="/>
 
-        <echo message="[package-jboss] =========== start ==========="/>
+    <antcall target="copy-jdk-libs"/>
 
-        <antcall target="copy-jdk-libs"/>
+    <subant inheritall="true">
+      <filelist dir="." files="framework/build-ear.xml"/>
+    </subant>
 
-        <subant inheritall="true">
-            <filelist dir="." files="framework/build-ear.xml"/>
-        </subant>
-    	
-        <subant inheritall="true">
-            <filelist dir="." files="applications/build-ear.xml"/>
-        </subant>
+    <subant inheritall="true">
+      <filelist dir="." files="applications/build-ear.xml"/>
+    </subant>
 
-        <subant inheritall="true">
-            <filelist dir="." files="specialpurpose/build-ear.xml"/>
-        </subant>
+    <subant inheritall="true">
+      <filelist dir="." files="specialpurpose/build-ear.xml"/>
+    </subant>
 
-        <subant inheritall="true">
-            <filelist dir="." files="hot-deploy/build-ear.xml"/>
-        </subant>
+    <subant inheritall="true">
+      <filelist dir="." files="hot-deploy/build-ear.xml"/>
+    </subant>
 
-        <!-- <antcall target="make-ear"/> -->
+    <!-- <antcall target="make-ear"/> -->
 
-        <echo message="[package-jboss] ============ end ============="/>
-    	
-    </target>
+    <echo message="[package-jboss] ============ end ============="/>
 
-	<!-- ================================================================== -->
-    <!-- install opentaps applications                                      -->
-    <!-- ================================================================== -->
+  </target>
 
-    <target name="install-jboss" depends="package-jboss">
+  <!-- ================================================================== -->
+  <!-- install opentaps applications                                      -->
+  <!-- ================================================================== -->
 
-        <echo message="[install-jboss] =========== start ==========="/>
+  <target name="install-jboss" depends="package-jboss">
 
-	<mkdir dir="${jboss.deploy.dir}/${app.name}"/>
-	
-        <copy todir="${jboss.deploy.dir}/${app.name}">
-        	<fileset dir="${ear.dir}"/>
-        </copy>
-		
-        <echo message="[install-jboss] ============ end ============="/>
+    <echo message="[install-jboss] =========== start ==========="/>
 
-	</target>
-	
-	<!-- ================================================================== -->
-    <!-- configure jboss to run opentaps                                       -->
-    <!-- ================================================================== -->
+    <mkdir dir="${jboss.deploy.dir}/${app.name}"/>
 
-    <target name="setup-jboss" depends="">
+    <copy todir="${jboss.deploy.dir}/${app.name}">
+      <fileset dir="${ear.dir}"/>
+    </copy>
 
-	    <echo message="[setup-jboss] =========== start ==========="/>
+    <echo message="[install-jboss] ============ end ============="/>
 
-        <subant inheritall="true" target="setup-framework-jboss">
-            <filelist dir="." files="framework/build-ear.xml"/>
-        </subant>
-		
-        <echo message="[setup-jboss] ============ end ============="/>
-				
-	</target>
-	
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- configure jboss to run opentaps                                       -->
+  <!-- ================================================================== -->
+
+  <target name="setup-jboss" depends="">
+
+    <echo message="[setup-jboss] =========== start ==========="/>
+
+    <subant inheritall="true" target="setup-framework-jboss">
+      <filelist dir="." files="framework/build-ear.xml"/>
+    </subant>
+
+    <echo message="[setup-jboss] ============ end ============="/>
+
+  </target>
+
 </project>
